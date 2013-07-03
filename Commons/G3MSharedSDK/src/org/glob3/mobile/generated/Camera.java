@@ -72,6 +72,7 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
+    //TODO: IMPROVE PERFORMANCE
     _width = that._width;
     _height = that._height;
   
@@ -118,6 +119,12 @@ public class Camera
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
+  }
+
+  public final void copyFromForcingMatrixCreation(Camera c)
+  {
+    forceMatrixCreation();
+    copyFrom(c);
   }
 
 
@@ -453,8 +460,8 @@ public class Camera
   {
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix();
-    getModelMatrix();
+    getProjectionMatrix().asMatrix44D();
+    getModelMatrix().asMatrix44D();
   }
 
   // opengl projection matrix

@@ -132,7 +132,8 @@ public abstract class AbstractMesh extends Mesh
       progState.setUniformValue(GPUUniformKey.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
       if (_translationMatrix != null)
       {
-        progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, _translationMatrix, true);
+        //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
+        _glState.setModelView(_translationMatrix.asMatrix44D(), true);
       }
       return;
     }
@@ -174,7 +175,8 @@ public abstract class AbstractMesh extends Mesh
   
     if (_translationMatrix != null)
     {
-      progState.setUniformMatrixValue(GPUUniformKey.MODELVIEW, _translationMatrix, true);
+      //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
+      _glState.setModelView(_translationMatrix.asMatrix44D(), true);
     }
   }
 

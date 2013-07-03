@@ -101,7 +101,9 @@ public class MeshRenderer extends LeafRenderer
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
+    _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
+  
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)

@@ -97,64 +97,73 @@ public class GPUProgramManager
 //    return getProgram(gl, "Default");
 //  }
 
-  public final GPUProgram getProgram(GL gl, GLState glState)
+  public final GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
-    boolean texture = false;
-    boolean flatColor = false;
-    boolean billboard = false;
-    boolean color = false;
-    boolean transformTC = false;
+    boolean texture = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
+    boolean flatColor = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
+    boolean billboard = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);
+    boolean color = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.COLOR);
+    boolean transformTC = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS);
   
+    /*
+  #ifdef C_CODE
+    const GLState* thisGLState = glState;
+  #endif
+  #ifdef JAVA_CODE
     GLState thisGLState = glState;
-    while (thisGLState != null)
-    {
-      java.util.ArrayList<Integer> ui = thisGLState.getGPUProgramState().getUniformsKeys();
-      int sizeI = ui.size();
-      for (int j = 0; j < sizeI; j++)
-      {
-        int key = ui.get(j);
-  
-        if (key == GPUUniformKey.VIEWPORT_EXTENT.getValue())
-        {
+  #endif
+    while (thisGLState != NULL) {
+      std::vector<int>* ui = thisGLState->getGPUProgramState()->getUniformsKeys();
+      int sizeI = ui->size();
+      for (int j = 0; j < sizeI; j++) {
+        int key = ui->at(j);
+    
+        if (key == VIEWPORT_EXTENT){
           billboard = true;
-        }
   
-        if (key == GPUUniformKey.FLAT_COLOR.getValue())
-        {
+          if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)){
+            int a = 0;
+            a++;
+          }
+  
+        }
+    
+        if (key == FLAT_COLOR){
           flatColor = true;
         }
-  
+    
   //      if (key == TRANSLATION_TEXTURE_COORDS){
   //        texture = true;
   //      }
-  
-        if (key == GPUUniformKey.TRANSLATION_TEXTURE_COORDS.getValue() || key == GPUUniformKey.SCALE_TEXTURE_COORDS.getValue())
-        {
+    
+        if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS){
           transformTC = true;
         }
       }
+    
+      std::vector<int>* ai = thisGLState->getGPUProgramState()->getAttributeKeys();
+      sizeI = ai->size();
+      for (int j = 0; j < sizeI; j++) {
+        int key = ai->at(j);
+    
+  //      if (key == TEXTURE_COORDS){
+  //        texture = true;
+  //      }
   
-      java.util.ArrayList<Integer> ai = thisGLState.getGPUProgramState().getAttributeKeys();
-      sizeI = ai.size();
-      for (int j = 0; j < sizeI; j++)
-      {
-        int key = ai.get(j);
-  
-        if (key == GPUAttributeKey.TEXTURE_COORDS.getValue())
-        {
-          texture = true;
-        }
-  
-        if (key == GPUAttributeKey.COLOR.getValue())
-        {
+        if (key == COLOR){
           color = true;
+  
+          if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)){
+            int a = 0;
+            a++;
+          }
         }
       }
-  
-      thisGLState = thisGLState.getParent();
+    
+      thisGLState = thisGLState->getParent();
     }
-  
+    */
     if (billboard)
     {
       return getProgram(gl, "Billboard");
@@ -185,9 +194,30 @@ public class GPUProgramManager
   
     }
   
-  
     return null;
-  
+  }
+
+  public final GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
+  {
+    for (java.util.Iterator<String, GPUProgram> it = _programs.iterator(); it.hasNext();)
+    {
+      GPUProgram p = it.next().getValue();
+      if (p.getUniformsCode() == uniformsCode && p.getAttributesCode() == attributesCode)
+      {
+        return p;
+      }
+    }
+    return null;
+  }
+
+  public final GPUProgram getProgram(GL gl, int uniformsCode, int attributesCode)
+  {
+    GPUProgram p = getCompiledProgram(uniformsCode, attributesCode);
+    if (p == null)
+    {
+      p = getNewProgram(gl, uniformsCode, attributesCode);
+    }
+    return p;
   }
 
 

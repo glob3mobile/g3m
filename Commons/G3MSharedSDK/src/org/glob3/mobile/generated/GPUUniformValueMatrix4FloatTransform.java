@@ -21,7 +21,7 @@ public class GPUUniformValueMatrix4FloatTransform extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniformMatrix4fv(id, false, _m);
+    gl.uniformMatrix4fv(id, false, _m.asMatrix44D());
   }
 
   public final boolean isEqualsTo(GPUUniformValue v)

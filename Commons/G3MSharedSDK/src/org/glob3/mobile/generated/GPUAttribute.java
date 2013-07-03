@@ -139,10 +139,6 @@ public class GPUAttribute extends GPUVariable
 
         _dirty = false;
       }
-      else
-      {
-
-      }
     }
   }
 }

@@ -1,6 +1,17 @@
 package org.glob3.mobile.generated; 
 public class TileTextureBuilder extends RCObject
 {
+
+  public void dispose()
+  {
+    if (!_finalized && !_canceled)
+    {
+      cancel();
+    }
+
+    deletePetitions();
+  }
+
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
@@ -37,6 +48,7 @@ public class TileTextureBuilder extends RCObject
 
   private java.util.ArrayList<Petition> cleanUpPetitions(java.util.ArrayList<Petition> petitions)
   {
+
     final int petitionsSize = petitions.size();
     if (petitionsSize <= 1)
     {
@@ -147,15 +159,7 @@ public class TileTextureBuilder extends RCObject
     }
   }
 
-  public void dispose()
-  {
-    if (!_finalized && !_canceled)
-    {
-      cancel();
-    }
 
-    deletePetitions();
-  }
 
   public final RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
   {

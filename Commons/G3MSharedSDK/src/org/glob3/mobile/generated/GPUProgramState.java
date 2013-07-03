@@ -27,10 +27,43 @@ public class GPUProgramState
   private GPUUniformValue[] _uniformValues = new GPUUniformValue[32];
   private GPUAttributeValue[] _attributeValues = new GPUAttributeValue[32];
 
+
+  //void GPUProgramState::linkToProgram(GPUProgram* prog) const{
+  //
+  //  if (_linkedProgram == prog){
+  //    return; //Already linked
+  //  }
+  //
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniformValue* u = _uniformValues[i];
+  //    if (u != NULL){
+  //      if (!u->linkToGPUProgram(prog, i)){
+  //        return;
+  //      }
+  //    }
+  //    GPUAttributeValue* a = _attributeValues[i];
+  //    if (a != NULL){
+  //      if (!a->linkToGPUProgram(prog, i)){
+  //        return;
+  //      }
+  //    }
+  //  }
+  //
+  //  _linkedProgram = prog;
+  //}
+  
+  //void GPUProgramState::applyChanges(GL* gl) const{
+  //  if (_linkedProgram == NULL){
+  //    ILogger::instance()->logError("Trying to use unlinked GPUProgramState.");
+  //  }
+  //  applyValuesToLinkedProgram();
+  //  _linkedProgram->applyChanges(gl);
+  //}
+  
   private boolean setGPUUniformValue(GPUUniformKey key, GPUUniformValue v)
   {
   
-    GPUUniform prevLinkedUniform = null;
+  //  GPUUniform* prevLinkedUniform = NULL;
     boolean uniformExisted = false;
   
     final int index = key.getValue();
@@ -38,13 +71,13 @@ public class GPUProgramState
     GPUUniformValue u = _uniformValues[index];
     if (u != null)
     {
-      prevLinkedUniform = u.getLinkedUniform();
+  //    prevLinkedUniform = u->getLinkedUniform();
       if (u != null)
          u.dispose();
       uniformExisted = true;
     }
   
-    v.linkToGPUUniform(prevLinkedUniform);
+  //  v->linkToGPUUniform(prevLinkedUniform);
     _uniformValues[index] = v;
   
     if (!uniformExisted)
@@ -56,7 +89,7 @@ public class GPUProgramState
   }
   private boolean setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue v)
   {
-    GPUAttribute prevLinkedAttribute = null;
+  //  GPUAttribute* prevLinkedAttribute = NULL;
     boolean attributeExisted = false;
   
     final int index = key.getValue();
@@ -64,13 +97,13 @@ public class GPUProgramState
     GPUAttributeValue a = _attributeValues[index];
     if (a != null)
     {
-      prevLinkedAttribute = a.getLinkedAttribute();
+  //    prevLinkedAttribute = a->getLinkedAttribute();
       if (a != null)
          a.dispose();
       attributeExisted = true;
     }
   
-    v.linkToGPUAttribute(prevLinkedAttribute);
+  //  v->linkToGPUAttribute(prevLinkedAttribute);
     _attributeValues[index] = v;
   
     if (!attributeExisted)
@@ -81,47 +114,70 @@ public class GPUProgramState
     return attributeExisted;
   }
 
-  private java.util.ArrayList<Integer> _uniformKeys;
+  private int _uniformsCode;
+  private int _attributeCode;
+
+  private int _highestUniformKey;
+  private int _highestAttributeKey;
+
+//  mutable std::vector<int>* _uniformKeys;
   private java.util.ArrayList<Integer> _attributeKeys;
 
-  private GPUProgram _linkedProgram;
+//  mutable GPUProgram* _linkedProgram;
 
   private void onStructureChanged()
   {
-    _uniformKeys = null;
-    _uniformKeys = null;
-    _linkedProgram = null;
-
-    if (_attributeKeys != null)
+  //  delete _uniformKeys;
+  //  _uniformKeys = NULL;
+    //    _linkedProgram = NULL;
+    _uniformsCode = 0;
+    _attributeCode = 0;
+  
+  //  if (_attributeKeys != NULL){
+  //    delete _attributeKeys;
+  //    _attributeKeys = NULL;
+  //  }
+  
+    _highestAttributeKey = 0;
+    _highestUniformKey = 0;
+    for (int i = 0; i < 32; i++)
     {
-      _attributeKeys = null;
-      _attributeKeys = null;
+      if (_uniformValues[i] != null)
+      {
+        _highestUniformKey = i;
+      }
+      if (_attributeValues[i] != null)
+      {
+        _highestAttributeKey = i;
+      }
     }
   }
 
 
-  public GPUProgramState()
+  public GPUProgramState() //_linkedProgram(NULL),
+//  _uniformKeys(NULL),
+//  _attributeKeys(NULL),
   {
-     _linkedProgram = null;
-     _uniformKeys = null;
-     _attributeKeys = null;
+     _uniformsCode = 0;
+     _attributeCode = 0;
+     _highestUniformKey = 0;
+     _highestAttributeKey = 0;
     for (int i = 0; i < 32; i++)
     {
       _uniformValues[i] = null;
       _attributeValues[i] = null;
     }
-
   }
 
   public void dispose()
   {
     clear();
-    _uniformKeys = null;
+  //  delete _uniformKeys;
   }
 
   public final void clear()
   {
-    _linkedProgram = null;
+  //  _linkedProgram = NULL;
   
     for (int i = 0; i < 32; i++)
     {
@@ -196,103 +252,28 @@ public class GPUProgramState
     setGPUAttributeValue(key, new GPUAttributeValueDisabled());
   }
 
-  public final void applyChanges(GL gl)
-  {
-    if (_linkedProgram == null)
-    {
-      ILogger.instance().logError("Trying to use unlinked GPUProgramState.");
-    }
-    applyValuesToLinkedProgram();
-    _linkedProgram.applyChanges(gl);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void applyChanges(GL gl);
 
-  public final void linkToProgram(GPUProgram prog)
-  {
-  
-    if (_linkedProgram == prog)
-    {
-      return; //Already linked
-    }
-  
-    for (int i = 0; i < 32; i++)
-    {
-      GPUUniformValue u = _uniformValues[i];
-      if (u != null)
-      {
-        if (!u.linkToGPUProgram(prog, i))
-        {
-          return;
-        }
-      }
-      GPUAttributeValue a = _attributeValues[i];
-      if (a != null)
-      {
-        if (!a.linkToGPUProgram(prog, i))
-        {
-          return;
-        }
-      }
-    }
-  
-    _linkedProgram = prog;
-  }
+//  void linkToProgram(GPUProgram* prog) const;
+//  
+//  bool isLinkedToProgram() const{
+//    return _linkedProgram != NULL;
+//  }
+//  
+//  GPUProgram* getLinkedProgram() const{
+//    return _linkedProgram;
+//  }
 
-  public final boolean isLinkedToProgram()
-  {
-    return _linkedProgram != null;
-  }
-
-  public final GPUProgram getLinkedProgram()
-  {
-    return _linkedProgram;
-  }
-
-  public final java.util.ArrayList<Integer> getUniformsKeys()
-  {
-  
-    if (_uniformKeys == null)
-    {
-  
-      _uniformKeys = new java.util.ArrayList<Integer>();
-  
-      for (int i = 0; i < 32; i++)
-      {
-        if (_uniformValues[i] != null)
-        {
-          _uniformKeys.add(i);
-        }
-      }
-  
-    }
-    return _uniformKeys;
-  }
-  public final java.util.ArrayList<Integer> getAttributeKeys()
-  {
-  
-    if (_attributeKeys == null)
-    {
-  
-      _attributeKeys = new java.util.ArrayList<Integer>();
-  
-      for (int i = 0; i < 32; i++)
-      {
-        if (_attributeValues[i] != null)
-        {
-          _attributeKeys.add(i);
-        }
-      }
-  
-  
-    }
-    return _attributeKeys;
-  }
+//  std::vector<int>* getUniformsKeys() const;
+//  std::vector<int>* getAttributeKeys() const;
 
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("PROGRAM STATE\n==========\n");
   
-    for(int i = 0; i < 32; i++)
+    for(int i = 0; i <= _highestUniformKey; i++)
     {
       GPUUniformValue v = _uniformValues[i];
       if (v != null)
@@ -304,7 +285,7 @@ public class GPUProgramState
       }
     }
   
-    for(int i = 0; i < 32; i++)
+    for(int i = 0; i <= _highestAttributeKey; i++)
     {
       GPUAttributeValue v = _attributeValues[i];
       if (v != null)
@@ -322,24 +303,42 @@ public class GPUProgramState
     return s;
   }
 
-  public final void applyValuesToLinkedProgram()
-  {
-  
-    for (int i = 0; i < 32; i++)
-    {
-      GPUUniformValue u = _uniformValues[i];
-      if (u != null)
-      {
-        u.setValueToLinkedUniform();
-      }
-      GPUAttributeValue a = _attributeValues[i];
-      if (a != null)
-      {
-        a.setValueToLinkedAttribute();
-      }
-    }
-  }
+//  void applyValuesToLinkedProgram() const;
 
+  /*
+  std::vector<int>* GPUProgramState::getUniformsKeys() const{
+  
+    if (_uniformKeys == NULL){
+  
+      _uniformKeys = new std::vector<int>();
+  
+      for (int i = 0; i <= _highestUniformKey; i++){
+        if (_uniformValues[i] != NULL){
+          _uniformKeys->push_back(i);
+        }
+      }
+  
+    }
+    return _uniformKeys;
+  }
+  
+  std::vector<int>* GPUProgramState::getAttributeKeys() const{
+  
+    if (_attributeKeys == NULL){
+  
+      _attributeKeys = new std::vector<int>();
+  
+      for (int i = 0; i <= _highestAttributeKey; i++){
+        if (_attributeValues[i] != NULL){
+          _attributeKeys->push_back(i);
+        }
+      }
+  
+  
+    }
+    return _attributeKeys;
+  }
+  */
   public final boolean removeGPUUniformValue(GPUUniformKey key)
   {
   
@@ -357,6 +356,36 @@ public class GPUProgramState
     {
       return false;
     }
+  }
+
+  public final int getUniformsCode()
+  {
+    if (_uniformsCode == 0)
+    {
+      for (int i = 0; i <= _highestUniformKey; i++)
+      {
+        if (_uniformValues[i] != null)
+        {
+          _uniformsCode = _uniformsCode | GPUVariable.getUniformCode(i);
+        }
+      }
+    }
+    return _uniformsCode;
+  }
+
+  public final int getAttributesCode()
+  {
+    if (_attributeCode == 0)
+    {
+      for (int i = 0; i <= _highestAttributeKey; i++)
+      {
+        if (_attributeValues[i] != null)
+        {
+          _attributeCode = _attributeCode | GPUVariable.getAttributeCode(i);
+        }
+      }
+    }
+    return _attributeCode;
   }
 
 
@@ -400,5 +429,53 @@ public class GPUProgramState
    setAttributeDisabled(getKeyForName(name, ATTRIBUTE));
    }
    */
+
+
+  //void GPUProgramState::applyValuesToLinkedProgram() const{
+  //
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniformValue* u = _uniformValues[i];
+  //    if (u != NULL){
+  //      u->setValueToLinkedUniform();
+  //    }
+  //    GPUAttributeValue* a = _attributeValues[i];
+  //    if (a != NULL){
+  //      a->setValueToLinkedAttribute();
+  //    }
+  //  }
+  //}
+  
+  public final void applyValuesToProgram(GPUProgram prog)
+  {
+  
+    for (int i = 0; i <= _highestUniformKey; i++)
+    {
+      GPUUniformValue u = _uniformValues[i];
+      if (u != null)
+      {
+        prog.setGPUUniformValue(i, u);
+      }
+    }
+  
+    for (int i = 0; i <= _highestAttributeKey; i++)
+    {
+      GPUAttributeValue a = _attributeValues[i];
+      if (a != null)
+      {
+        prog.setGPUAttributeValue(i, a);
+      }
+    }
+  
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniformValue* u = _uniformValues[i];
+  //    if (u != NULL){
+  //      prog->setGPUUniformValue(i, u);
+  //    }
+  //    GPUAttributeValue* a = _attributeValues[i];
+  //    if (a != NULL){
+  //      prog->setGPUAttributeValue(i, a);
+  //    }
+  //  }
+  }
 
 }

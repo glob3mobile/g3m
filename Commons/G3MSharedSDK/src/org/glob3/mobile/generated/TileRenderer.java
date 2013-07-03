@@ -376,7 +376,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   public final void render(G3MRenderContext rc)
   {
   
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
+    _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
     _glState.getGLGlobalState().enableDepthTest();
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)

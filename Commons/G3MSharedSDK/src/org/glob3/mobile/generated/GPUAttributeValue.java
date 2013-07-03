@@ -33,10 +33,12 @@ public abstract class GPUAttributeValue
 
   protected int _arrayElementSize;
 
-  protected GPUAttribute _attribute;
+//  mutable GPUAttribute* _attribute;
 
 
   public GPUAttributeValue(boolean enabled)
+//  ,
+//  _attribute(NULL)
   {
      _enabled = enabled;
      _type = 0;
@@ -45,10 +47,11 @@ public abstract class GPUAttributeValue
      _stride = 0;
      _normalized = false;
      _arrayElementSize = 0;
-     _attribute = null;
   }
 
   public GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
+  //,
+//  _attribute(NULL)
   {
      _enabled = true;
      _type = type;
@@ -57,7 +60,6 @@ public abstract class GPUAttributeValue
      _stride = stride;
      _normalized = normalized;
      _arrayElementSize = arrayElementSize;
-     _attribute = null;
   }
 
   public final void changeParameters(boolean enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
@@ -69,7 +71,7 @@ public abstract class GPUAttributeValue
     _stride = stride;
     _normalized = normalized;
     _arrayElementSize = arrayElementSize;
-    _attribute = null;
+//    _attribute = NULL;
   }
 
   public final int getType()
@@ -96,10 +98,7 @@ public abstract class GPUAttributeValue
   {
      return _enabled;
   }
-  public final GPUAttribute getLinkedAttribute()
-  {
-     return _attribute;
-  }
+//  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   public void dispose()
   {
   }
@@ -109,58 +108,17 @@ public abstract class GPUAttributeValue
 
   public abstract String description();
 
-  public final void linkToGPUAttribute(GPUAttribute a)
-  {
-    _attribute = a;
-  }
+//  void linkToGPUAttribute(GPUAttribute* a) const{
+//    _attribute = a;
+//  }
+//  
+//  void unLinkToGPUAttribute(){
+//    _attribute = NULL;
+//  }
 
-  public final void unLinkToGPUAttribute()
-  {
-    _attribute = null;
-  }
+//  void setValueToLinkedAttribute() const;
 
-  ////////
-  
-  
-  
-  public final void setValueToLinkedAttribute()
-  {
-    if (_attribute == null)
-    {
-      ILogger.instance().logError("Attribute unlinked");
-    }
-    else
-    {
-  //    _attribute->set((GPUAttributeValue*)this);
-      _attribute.set(this);
-      //    _attribute->applyChanges(gl);
-    }
-  }
-
-  public final boolean linkToGPUProgram(GPUProgram prog, int key)
-  {
-    if (_enabled)
-    {
-      if (_type == GLType.glFloat())
-      {
-        _attribute = prog.getGPUAttributeVecXFloat(key, _attributeSize);
-      }
-    }
-    else
-    {
-      _attribute = prog.getGPUAttribute(key);
-    }
-  
-    if (_attribute == null)
-    {
-      ILogger.instance().logError("ATTRIBUTE WITH KEY %d NOT FOUND ", key);
-      return false;
-    }
-    else
-    {
-      return true;
-    }
-  }
+//  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
 
   public abstract GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt);
 

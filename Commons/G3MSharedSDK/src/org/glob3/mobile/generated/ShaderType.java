@@ -29,6 +29,8 @@ package org.glob3.mobile.generated;
 //class GPUAttributeVec2Float;
 //class GPUAttributeVec3Float;
 //class GPUAttributeVec4Float;
+//class GPUUniformValue;
+//class GPUAttributeValue;
 
 
 

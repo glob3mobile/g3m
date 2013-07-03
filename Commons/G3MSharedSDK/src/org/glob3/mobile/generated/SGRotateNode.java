@@ -37,7 +37,8 @@ public class SGRotateNode extends SGNode
      _z = z;
      _angle = angle;
      _rotationMatrix = new MutableMatrix44D(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_angle), new Vector3D(_x, _y, _z)));
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _rotationMatrix, true);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _rotationMatrix, true);
+    _glState.setModelView(_rotationMatrix.asMatrix44D(), true);
   }
 
   public final GLState getGLState(GLState parentGLState)

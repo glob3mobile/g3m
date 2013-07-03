@@ -142,9 +142,10 @@ public class G3MWidget
     }
   
   
-    _nextCamera.forceMatrixCreation();
-  
-    _currentCamera.copyFrom(_nextCamera);
+  //  _nextCamera->forceMatrixCreation();
+  //
+  //  _currentCamera->copyFrom(*_nextCamera);
+    _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
   

@@ -13,6 +13,9 @@ public class GPUProgram
   private int _nAttributes;
   private int _nUniforms;
 
+  private GPUUniform[] _createdUniforms;
+  private GPUAttribute[] _createdAttributes;
+
   private int _uniformsCode;
   private int _attributesCode;
 
@@ -65,6 +68,10 @@ public class GPUProgram
     //Uniforms
     _uniformsCode = 0;
     _nUniforms = gl.getProgramiv(this, GLVariable.activeUniforms());
+  
+    int counter = 0;
+    _createdUniforms = new GPUUniform[_nUniforms];
+  
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
@@ -75,11 +82,17 @@ public class GPUProgram
         int code = GPUVariable.getUniformCode(u.getKey());
         _uniformsCode = _uniformsCode | code;
       }
+  
+      _createdUniforms[counter++] = u; //Adding to created uniforms array
     }
   
     //Attributes
     _attributesCode = 0;
     _nAttributes = gl.getProgramiv(this, GLVariable.activeAttributes());
+  
+    counter = 0;
+    _createdAttributes = new GPUAttribute[_nAttributes];
+  
     for (int i = 0; i < _nAttributes; i++)
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
@@ -90,6 +103,8 @@ public class GPUProgram
         int code = GPUVariable.getAttributeCode(a.getKey());
         _attributesCode = _attributesCode | code;
       }
+  
+      _createdAttributes[counter++] = a;
     }
   
     ILogger.instance().logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
@@ -97,6 +112,12 @@ public class GPUProgram
 
   private GPUProgram()
   {
+     _createdAttributes = null;
+     _createdUniforms = null;
+     _nUniforms = 0;
+     _nAttributes = 0;
+     _uniformsCode = 0;
+     _attributesCode = 0;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -168,6 +189,8 @@ public class GPUProgram
 
   public void dispose()
   {
+    _createdAttributes = null;
+    _createdUniforms = null;
   }
 
   public final String getName()
@@ -353,19 +376,29 @@ public class GPUProgram
   {
     //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
   
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < _nUniforms; i++)
     {
-      GPUUniform u = _uniforms[i];
-      GPUAttribute a = _attributes[i];
-      if (u != null)
+      if (_createdUniforms[i] != null) //Texture Samplers return null
       {
-        u.unset();
-      }
-      if (a != null)
-      {
-        a.unset(gl);
+        _createdUniforms[i].unset();
       }
     }
+  
+    for (int i = 0; i < _nAttributes; i++)
+    {
+      _createdAttributes[i].unset(gl);
+    }
+  
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniform* u = _uniforms[i];
+  //    GPUAttribute* a = _attributes[i];
+  //    if (u != NULL){
+  //      u->unset();
+  //    }
+  //    if (a != NULL){
+  //      a->unset(gl);
+  //    }
+  //  }
   }
 
   /**
@@ -374,19 +407,30 @@ public class GPUProgram
   public final void applyChanges(GL gl)
   {
   
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < _nUniforms; i++)
     {
-      GPUUniform u = _uniforms[i];
-      GPUAttribute a = _attributes[i];
-      if (u != null)
+      if (_createdUniforms[i] != null) //Texture Samplers return null
       {
-        u.applyChanges(gl);
-      }
-      if (a != null)
-      {
-        a.applyChanges(gl);
+        _createdUniforms[i].applyChanges(gl);
       }
     }
+  
+    for (int i = 0; i < _nAttributes; i++)
+    {
+      _createdAttributes[i].applyChanges(gl);
+    }
+  
+  
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniform* u = _uniforms[i];
+  //    GPUAttribute* a = _attributes[i];
+  //    if (u != NULL){
+  //      u->applyChanges(gl);
+  //    }
+  //    if (a != NULL){
+  //      a->applyChanges(gl);
+  //    }
+  //  }
   }
 
   public final GPUUniform getUniformOfType(String name, int type)
@@ -441,5 +485,35 @@ public class GPUProgram
       return a;
     }
     return null;
+  }
+
+  public final int getAttributesCode()
+  {
+     return _attributesCode;
+  }
+  public final int getUniformsCode()
+  {
+     return _uniformsCode;
+  }
+
+  public final void setGPUUniformValue(int key, GPUUniformValue v)
+  {
+    GPUUniform u = _uniforms[key];
+    if (u == null)
+    {
+      ILogger.instance().logError("Uniform not found");
+      return;
+    }
+    u.set(v);
+  }
+  public final void setGPUAttributeValue(int key, GPUAttributeValue v)
+  {
+    GPUAttribute a = _attributes[key];
+    if (a == null)
+    {
+      ILogger.instance().logError("Attribute not found");
+      return;
+    }
+    a.set(v);
   }
 }

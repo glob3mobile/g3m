@@ -23,12 +23,12 @@ public abstract class GPUUniformValue
 {
   private final int _type;
 
-  private GPUUniform _uniform;
+//  mutable GPUUniform* _uniform;
 
   public GPUUniformValue(int type)
+  //, _uniform(NULL)
   {
      _type = type;
-     _uniform = null;
   }
   public final int getType()
   {
@@ -40,53 +40,34 @@ public abstract class GPUUniformValue
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEqualsTo(GPUUniformValue v);
 
-  public final GPUUniform getLinkedUniform()
-  {
-     return _uniform;
-  }
+//  GPUUniform* getLinkedUniform() const { return _uniform;}
 
   public abstract String description();
 
-  public final void linkToGPUUniform(GPUUniform u)
-  {
-    _uniform = u;
-  }
+//  void linkToGPUUniform(GPUUniform* u) const{
+//    _uniform = u;
+//  }
+//  
+//  void unLinkToGPUUniform(){
+//    _uniform = NULL;
+//  }
 
-  public final void unLinkToGPUUniform()
-  {
-    _uniform = null;
-  }
+//  void setValueToLinkedUniform() const;
 
-  public final void setValueToLinkedUniform()
-  {
-    if (_uniform == null)
-    {
-      ILogger.instance().logError("Uniform value unlinked");
-    }
-    else
-    {
-      //_uniform->set((GPUUniformValue*)this);
-      _uniform.set(this);
-    }
-  }
+//  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    return value;
+//  }
 
-  public GPUUniformValue copyOrCreate(GPUUniformValue value)
-  {
-    return value;
-  }
+  public abstract GPUUniformValue copyOrCreate(GPUUniformValue value);
 
-  public final boolean linkToGPUProgram(GPUProgram prog, int key)
-  {
-    GPUUniform u = prog.getGPUUniform(key);
-    if (u == null)
-    {
-      ILogger.instance().logError("UNIFORM WITH KEY %d NOT FOUND", key);
-      return false;
-    }
-    else
-    {
-      _uniform = u;
-      return true;
-    }
-  }
+//  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
+//    GPUUniform* u = prog->getGPUUniform(key);
+//    if (u == NULL){
+//      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
+//      return false;
+//    } else{
+//      _uniform = u;
+//      return true;
+//    }
+//  }
 }

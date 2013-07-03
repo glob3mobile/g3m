@@ -54,7 +54,8 @@ public abstract class Shape implements EffectTarget
     if (_transformMatrix == null)
     {
       _transformMatrix = createTransformMatrix(planet);
-      _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _transformMatrix, true);
+      //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, *_transformMatrix, true);
+      _glState.setModelView(_transformMatrix.asMatrix44D(), true);
     }
     return _transformMatrix;
   }

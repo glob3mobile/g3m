@@ -59,6 +59,17 @@ public class GPUUniform extends GPUVariable
     return _key.getValue();
   }
 
+
+  //void GPUUniformValue::setValueToLinkedUniform() const {
+  //  if (_uniform == NULL) {
+  //    ILogger::instance()->logError("Uniform value unlinked");
+  //  }
+  //  else {
+  //    //_uniform->set((GPUUniformValue*)this);
+  //    _uniform->set(this);
+  //  }
+  //}
+  
   public final void unset()
   {
     if (_value != null)

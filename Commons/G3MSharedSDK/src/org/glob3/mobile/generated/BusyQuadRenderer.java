@@ -105,7 +105,8 @@ public abstract class BusyQuadRenderer extends LeafRenderer
   
     //Modelview and projection
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   }
 
 
@@ -186,7 +187,8 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   }
 
   public final void start(G3MRenderContext rc)

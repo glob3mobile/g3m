@@ -193,7 +193,8 @@ public class Trail
       if (mesh != null)
       {
   
-        _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, rc.getCurrentCamera().getModelViewMatrix(), false);
+        //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
+        _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
   
         mesh.render(rc, _glState);
       }

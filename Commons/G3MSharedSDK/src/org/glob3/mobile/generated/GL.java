@@ -131,6 +131,7 @@ public class GL
       ILogger.instance().logInfo("GL::clearScreen()");
     }
   
+    int ASK_JM;
     GLState glState = new GLState((GLGlobalState) state, null);
     glState.applyGlobalStateOnGPU(this);
   
@@ -361,9 +362,9 @@ public class GL
      _nativeGL.uniform1i(loc, v);
   }
 
-  public final void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix)
+  public final void uniformMatrix4fv(IGLUniformID location, boolean transpose, Matrix44D matrix)
   {
-     _nativeGL.uniformMatrix4fv(location, transpose, matrix);
+    _nativeGL.uniformMatrix4fv(location, transpose, matrix);
   }
 
   public final void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3)

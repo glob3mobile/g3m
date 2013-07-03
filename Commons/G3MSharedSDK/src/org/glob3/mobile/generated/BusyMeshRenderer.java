@@ -63,7 +63,9 @@ public class BusyMeshRenderer extends LeafRenderer
   
     //Modelview and projection
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW,
+    //                                                     _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   
   }
 
@@ -139,7 +141,8 @@ public class BusyMeshRenderer extends LeafRenderer
       final int halfHeight = currentViewport[3] / 2;
       _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   
-      _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+      //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+      _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
     }
   
     _glState.getGLGlobalState().setClearColor(_backgroundColor);
@@ -159,7 +162,8 @@ public class BusyMeshRenderer extends LeafRenderer
     final int halfHeight = height / 2;
     _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
 
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   }
 
   public void dispose()
@@ -177,7 +181,8 @@ public class BusyMeshRenderer extends LeafRenderer
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
 
-    _glState.getGPUProgramState().setUniformMatrixValue(GPUUniformKey.MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   }
 
   public final void start(G3MRenderContext rc)

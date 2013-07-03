@@ -98,6 +98,43 @@ public class GPUVariable
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
   }
 
+  public static int getUniformCode(GPUUniformKey u)
+  {
+    if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
+    {
+      return 0;
+    }
+    final int index = u.getValue();
+    return getUniformCode(index);
+  }
+  public static int getAttributeCode(GPUAttributeKey a)
+  {
+    if (a == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
+    {
+      return 0;
+    }
+    final int index = a.getValue();
+    return getUniformCode(index);
+  }
+
+  public static int getUniformCode(int u)
+  {
+    return 0x00000001 << u;
+  }
+  public static int getAttributeCode(int a)
+  {
+    return 0x00000001 << a;
+  }
+
+  public static boolean codeContainsUniform(int code, int u)
+  {
+    return (code >> u) & 0x00000001;
+  }
+  public static boolean codeContainsAttribute(int code, int a)
+  {
+    return (code >> a) & 0x00000001;
+  }
+
 
   //const int UNRECOGNIZED = -1;
   //const int FLAT_COLOR = 1;
@@ -122,24 +159,25 @@ public class GPUVariable
   //const int GROUP_NOGROUP = -1;
   //const int GROUP_COLOR = 1;
   
-  public static int getUniformCode(GPUUniformKey u)
+  public static boolean codeContainsUniform(int code, GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {
       return 0;
     }
     final int index = u.getValue();
-    return 0x00000001 << index;
+    return codeContainsUniform(code, index);
   }
-  public static int getAttributeCode(GPUAttributeKey a)
+  public static boolean codeContainsAttribute(int code, GPUAttributeKey a)
   {
     if (a == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
     {
       return 0;
     }
     final int index = a.getValue();
-    return 0x00000001 << index;
+    return codeContainsAttribute(code, index);
   }
+
 
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;

@@ -14,6 +14,7 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLUniformID;
 //class IGLTextureId;
+//class Matrix44D;
 
 
 
@@ -21,8 +22,6 @@ package org.glob3.mobile.generated;
 
 //class GPUUniform;
 //class GPUAttribute;
-
-//class MutableMatrix44D;
 
 public abstract class INativeGL
 {
@@ -39,7 +38,7 @@ public abstract class INativeGL
 
   public abstract void uniform1i(IGLUniformID loc, int v);
 
-  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix);
+  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, Matrix44D matrix);
 
   public abstract void clearColor(float red, float green, float blue, float alpha);
 
