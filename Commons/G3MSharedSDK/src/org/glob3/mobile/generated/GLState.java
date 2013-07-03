@@ -262,7 +262,7 @@ public class GLState
       if (modelview != null)
       {
         GPUUniformValueMatrix4Float valueModelview = new GPUUniformValueMatrix4Float(modelview);
-        _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW).set(valueModelview);
+        _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(valueModelview);
       }
   
       _lastGPUProgramUsed.applyChanges(gl);
