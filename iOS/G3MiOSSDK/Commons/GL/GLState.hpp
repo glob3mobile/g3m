@@ -37,11 +37,10 @@ class GLState{
   const Matrix44D* _modelview;
   mutable const Matrix44D* _accumulatedModelview;
   mutable const Matrix44D* _lastParentModelview;
-#endif
-#ifdef JAVA_CODE
-  private Matrix44D _modelview;
-  private Matrix44D _accumulatedModelview;
-  private Matrix44D _lastParentModelview;
+#else
+  Matrix44D* _modelview;
+  mutable Matrix44D* _accumulatedModelview;
+  mutable Matrix44D* _lastParentModelview;
 #endif
   bool _multiplyModelview;
 
