@@ -37,10 +37,11 @@ class GLState{
   const Matrix44D* _modelview;
   mutable const Matrix44D* _accumulatedModelview;
   mutable const Matrix44D* _lastParentModelview;
-#else
-  Matrix44D* _modelview;
-  mutable Matrix44D* _accumulatedModelview;
-  mutable Matrix44D* _lastParentModelview;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44D _modelview;
+  private Matrix44D _accumulatedModelview;
+  private Matrix44D _lastParentModelview;
 #endif
   bool _multiplyModelview;
 
@@ -64,22 +65,23 @@ class GLState{
   
   void applyStates(GL* gl, GPUProgram* prog) const;
  
-  explicit GLState(const GLState& state):
-  _programState(new GPUProgramState()),
-  _globalState(new GLGlobalState()),
-  _owner(true),
-  _parentGLState(NULL),
-  _uniformsCode(0),
-  _attributesCode(0),
-  _totalGPUProgramStateChanged(true),
-  _modelview(new Matrix44D(*state._modelview)),
-  _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
-  _multiplyModelview(state._multiplyModelview),
-  _lastParentModelview(new Matrix44D(*state._lastParentModelview))
-  {
-    
-  }
-  
+//  explicit GLState(const GLState& state):
+//  _programState(new GPUProgramState()),
+//  _globalState(new GLGlobalState()),
+//  _owner(true),
+//  _parentGLState(NULL),
+//  _uniformsCode(0),
+//  _attributesCode(0),
+//  _totalGPUProgramStateChanged(true),
+//  _modelview(new Matrix44D(*state._modelview)),
+//  _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
+//  _multiplyModelview(state._multiplyModelview),
+//  _lastParentModelview(new Matrix44D(*state._lastParentModelview))
+//  {
+//    
+//  }
+  GLState(const GLState& state);
+
 public:
   
   GLState():
