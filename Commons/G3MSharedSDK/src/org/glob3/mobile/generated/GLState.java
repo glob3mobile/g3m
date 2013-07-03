@@ -36,9 +36,9 @@ public class GLState
   private boolean _totalGPUProgramStateChanged;
   private GPUProgram _lastGPUProgramUsed;
 
-  private final Matrix44D _modelview;
-  private final Matrix44D _accumulatedModelview;
-  private final Matrix44D _lastParentModelview;
+  private Matrix44D _modelview;
+  private Matrix44D _accumulatedModelview;
+  private Matrix44D _lastParentModelview;
   private boolean _multiplyModelview;
 
 //  class ParentModelviewListener: public Matrix44DListener{
@@ -77,10 +77,10 @@ public class GLState
      _uniformsCode = 0;
      _attributesCode = 0;
      _totalGPUProgramStateChanged = true;
-     _modelview = new Matrix44D(state._modelview);
-     _accumulatedModelview = new Matrix44D(state._accumulatedModelview);
+     _modelview = new Matrix44D(*state._modelview);
+     _accumulatedModelview = new Matrix44D(*state._accumulatedModelview);
      _multiplyModelview = state._multiplyModelview;
-     _lastParentModelview = new Matrix44D(state._lastParentModelview);
+     _lastParentModelview = new Matrix44D(*state._lastParentModelview);
 
   }
 
@@ -180,7 +180,7 @@ public class GLState
               {
                 _accumulatedModelview._release();
               }
-              _accumulatedModelview = parentsM.createMultiplication(_modelview);
+              _accumulatedModelview = parentsM.createMultiplication(*_modelview);
   
               if (_lastParentModelview != null)
               {

@@ -128,11 +128,11 @@ public class GPUVariable
 
   public static boolean codeContainsUniform(int code, int u)
   {
-    return (code >> u) & 0x00000001;
+    return ((code >> u) & 0x00000001) != 0;
   }
   public static boolean codeContainsAttribute(int code, int a)
   {
-    return (code >> a) & 0x00000001;
+    return ((code >> a) & 0x00000001) != 0;
   }
 
 
@@ -163,7 +163,7 @@ public class GPUVariable
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {
-      return 0;
+      return false;
     }
     final int index = u.getValue();
     return codeContainsUniform(code, index);
@@ -172,7 +172,7 @@ public class GPUVariable
   {
     if (a == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
     {
-      return 0;
+      return false;
     }
     final int index = a.getValue();
     return codeContainsAttribute(code, index);
