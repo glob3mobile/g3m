@@ -338,7 +338,8 @@ public class G3MWebGLDemo
       /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
       layerSet.addLayer(mqlOSM);*/
 
-      final WMSLayer bingLayer = LayerBuilder.createBingLayer(true);
+      /*
+      final WMSLayer bingLayer = LayerBuilder.createOSMLayer(true);
       layerSet.addLayer(bingLayer);
       bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
     	  
@@ -357,13 +358,19 @@ public class G3MWebGLDemo
 
 			@Override
 			public void dispose() {}
-       });
+       });*/
+      
+
 
       
       builder.setInitializationTask(initializationTask);
-      builder.getTileRendererBuilder().setLayerSet(layerSet);
+      //builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
+      
+      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
+      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
+
 
    }
 
