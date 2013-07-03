@@ -119,7 +119,12 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     const Matrix44D* modelview = getAccumulatedModelView();
     if (modelview != NULL){
       GPUUniformValueMatrix4Float valueModelview(*modelview);
+#ifdef C_CODE
       _lastGPUProgramUsed->getGPUUniform(MODELVIEW)->set(&valueModelview);
+#endif
+#ifdef JAVA_CODE
+      _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(valueModelview);
+#endif
     }
 
     _lastGPUProgramUsed->applyChanges(gl);
