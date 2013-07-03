@@ -32,11 +32,13 @@ void GLState::setParent(const GLState* p) const{
   _parentGLState = p;
   if (p != NULL){
     //UNIFORMS AND ATTRIBUTES CODES
-    const int newUniformsCode = p->getUniformsCode() | _programState->getUniformsCode();
+    int __ASK_JM;
+    const int newUniformsCode   = p->getUniformsCode()   | _programState->getUniformsCode();
     const int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
 
-    _totalGPUProgramStateChanged = (newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode);
-    _uniformsCode = newUniformsCode;
+    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
+                                    (newUniformsCode   != _uniformsCode));
+    _uniformsCode   = newUniformsCode;
     _attributesCode = newAttributesCode;
 
     //MODELVIEW

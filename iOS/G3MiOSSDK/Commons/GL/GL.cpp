@@ -30,7 +30,8 @@ void GL::clearScreen(const GLGlobalState& state) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
-  
+
+  int ASK_JM;
   GLState glState((GLGlobalState*)&state, NULL);
   glState.applyGlobalStateOnGPU(this);
   

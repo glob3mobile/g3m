@@ -9,10 +9,7 @@
 #ifndef __G3MiOSSDK__Matrix44D__
 #define __G3MiOSSDK__Matrix44D__
 
-#include <iostream.h>
 #include "IFloatBuffer.hpp"
-
-#include <vector.h>
 
 #include "RCObject.hpp"
 

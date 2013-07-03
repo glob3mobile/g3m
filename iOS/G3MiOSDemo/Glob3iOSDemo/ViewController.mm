@@ -565,10 +565,10 @@ public:
                                                                      geoRenderer: geoRenderer
                                                                     meshRenderer: meshRenderer];
   builder.setInitializationTask(initializationTask, true);
-  
+
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
-  
+
   const bool logFPS = true;
   builder.setLogFPS(logFPS);
   
