@@ -12,9 +12,9 @@ GLGlobalState GLState::_currentGPUGlobalState;
 GPUProgram* GLState::_currentGPUProgram = NULL;
 
 GLState::~GLState(){
-  if (_lastParentsModelview != NULL){
-    //      _lastParentsModelview->removeListener(&_parentMatrixListener);
-    _lastParentsModelview->_release();
+  if (_lastParentModelview != NULL){
+    //      _lastParentModelview->removeListener(&_parentMatrixListener);
+    _lastParentModelview->_release();
   }
   if (_modelview != NULL){
     _modelview->_release();
@@ -47,22 +47,22 @@ void GLState::setParent(const GLState* p) const{
           ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
         } else{
 
-          if (_lastParentsModelview != parentsM){
+          if (_lastParentModelview != parentsM){
 
             if (_accumulatedModelview != NULL){
               _accumulatedModelview->_release();
             }
             _accumulatedModelview = parentsM->createMultiplication(*_modelview);
 
-            if (_lastParentsModelview != NULL){
-//              _lastParentsModelview->removeListener(&_parentMatrixListener);
-              _lastParentsModelview->_release();
+            if (_lastParentModelview != NULL){
+//              _lastParentModelview->removeListener(&_parentMatrixListener);
+              _lastParentModelview->_release();
             }
 
-            _lastParentsModelview = parentsM;
-            _lastParentsModelview->_retain();
+            _lastParentModelview = parentsM;
+            _lastParentModelview->_retain();
 
-//            _lastParentsModelview->addListener(&_parentMatrixListener);
+//            _lastParentModelview->addListener(&_parentMatrixListener);
           }
 //          else{
 //            ILogger::instance()->logInfo("REUSING MODELVIEW");
@@ -146,12 +146,12 @@ void GLState::setModelView(const Matrix44D* modelview, bool multiply){
 
 
     //Forcing matrix multiplication next time even when parent's modelview is the same
-    if (_lastParentsModelview != NULL){
-//      _lastParentsModelview->removeListener(&_parentMatrixListener);
-      _lastParentsModelview->_release();
+    if (_lastParentModelview != NULL){
+//      _lastParentModelview->removeListener(&_parentMatrixListener);
+      _lastParentModelview->_release();
     }
 
-    _lastParentsModelview = NULL;
+    _lastParentModelview = NULL;
   }
   //  else{
   //    ILogger::instance()->logInfo("Same modelview set.");

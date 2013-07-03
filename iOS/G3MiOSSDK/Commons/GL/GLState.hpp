@@ -35,7 +35,7 @@ class GLState{
 
   const Matrix44D* _modelview;
   mutable const Matrix44D* _accumulatedModelview;
-  mutable const Matrix44D* _lastParentsModelview;
+  mutable const Matrix44D* _lastParentModelview;
   bool _multiplyModelview;
 
 //  class ParentModelviewListener: public Matrix44DListener{
@@ -44,7 +44,7 @@ class GLState{
 //    ParentModelviewListener(GLState* state):_state(state){}
 //    void onMatrixBeingDeleted(const Matrix44D* m){
 //      //ILogger::instance()->logError("BORRADO");
-//      _state->_lastParentsModelview = NULL;
+//      _state->_lastParentModelview = NULL;
 //    }
 //  };
 //  mutable ParentModelviewListener _parentMatrixListener;
@@ -69,7 +69,7 @@ class GLState{
   _modelview(new Matrix44D(*state._modelview)),
   _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
   _multiplyModelview(state._multiplyModelview),
-  _lastParentsModelview(new Matrix44D(*state._lastParentsModelview))
+  _lastParentModelview(new Matrix44D(*state._lastParentModelview))
   {
     
   }
@@ -87,7 +87,7 @@ public:
   _modelview(NULL),
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
-  _lastParentsModelview(NULL){}
+  _lastParentModelview(NULL){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
@@ -103,7 +103,7 @@ public:
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
 //    _parentMatrixListener(this),
-  _lastParentsModelview(NULL){}
+  _lastParentModelview(NULL){}
   
   ~GLState();
   
