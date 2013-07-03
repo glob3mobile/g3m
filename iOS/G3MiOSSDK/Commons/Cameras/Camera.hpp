@@ -282,8 +282,8 @@ public:
   void forceMatrixCreation(){
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix();
-    getModelMatrix();
+    getProjectionMatrix().asMatrix44D();
+    getModelMatrix().asMatrix44D();
   }
   
   // opengl projection matrix

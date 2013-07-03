@@ -291,6 +291,11 @@ public:
 
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueMatrix4Float *v2 = (GPUUniformValueMatrix4Float *)v;
+    if (_m == v2->_m){
+      return true;
+    }
+
+
     return _m->isEqualsTo(*v2->_m);
   }
 

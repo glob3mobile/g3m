@@ -9,6 +9,8 @@
 #ifndef __G3MiOSSDK__RCObject__
 #define __G3MiOSSDK__RCObject__
 
+#include "ILogger.hpp"
+
 class RCObject {
 private:
   mutable long _referenceCounter;
@@ -30,7 +32,9 @@ protected:
   }
 
   virtual ~RCObject() {
-
+    if (_referenceCounter != 0){
+      ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
+    }
   }
 
 public:

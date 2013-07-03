@@ -43,8 +43,8 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 
     if (_matrix44D != NULL){
       _matrix44D->_release();
+      _matrix44D = NULL;
     }
-    _matrix44D = NULL;
   }
 
   return *this;
@@ -152,8 +152,8 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
 
   if (_matrix44D != NULL){
     _matrix44D->_release();
+    _matrix44D = NULL;
   }
-  _matrix44D = NULL;
 
 //  const double m00 = (m1_00 * m2_00) + (m1_01 * m2_10) + (m1_02 * m2_20) + (m1_03 * m2_30);
 //  const double m01 = (m1_00 * m2_01) + (m1_01 * m2_11) + (m1_02 * m2_21) + (m1_03 * m2_31);
@@ -577,6 +577,6 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
 
   if (_matrix44D != NULL){
     _matrix44D->_release();
+    _matrix44D = NULL;
   }
-  _matrix44D = NULL;
 }
