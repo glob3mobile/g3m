@@ -127,8 +127,7 @@ public:
   }
 
   MutableMatrix44D(const MutableMatrix44D &m):
-  _isValid(m._isValid),
-  _matrix44D(NULL)
+  _isValid(m._isValid)
   {
     _m00 = m._m00;
     _m01 = m._m01;
@@ -149,6 +148,11 @@ public:
     _m31 = m._m31;
     _m32 = m._m32;
     _m33 = m._m33;
+
+    _matrix44D = m._matrix44D;
+    if (_matrix44D != NULL){
+      _matrix44D->_retain();
+    }
 
   }
 

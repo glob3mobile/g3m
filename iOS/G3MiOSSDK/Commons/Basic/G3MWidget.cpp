@@ -372,9 +372,10 @@ void G3MWidget::render(int width, int height) {
   }
 
   
-  _nextCamera->forceMatrixCreation();
-  
-  _currentCamera->copyFrom(*_nextCamera);
+//  _nextCamera->forceMatrixCreation();
+//  
+//  _currentCamera->copyFrom(*_nextCamera);
+  _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
   G3MRenderContext rc(_frameTasksExecutor,
                       IFactory::instance(),

@@ -153,6 +153,11 @@ public:
 
   void copyFrom(const Camera &c);
 
+  void copyFromForcingMatrixCreation(const Camera &c){
+    forceMatrixCreation();
+    copyFrom(c);
+  }
+
   void resizeViewport(int width, int height);
 
   void render(const G3MRenderContext* rc,

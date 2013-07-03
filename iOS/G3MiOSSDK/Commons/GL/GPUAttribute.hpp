@@ -202,8 +202,6 @@ public:
         }
         
         _dirty = false;
-      } else{
-        
       }
     }
   }
