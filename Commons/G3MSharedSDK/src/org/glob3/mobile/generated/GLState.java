@@ -68,21 +68,23 @@ public class GLState
     _globalState.applyChanges(gl, _currentGPUGlobalState);
   }
 
-  private GLState(GLState state)
-  {
-     _programState = new GPUProgramState();
-     _globalState = new GLGlobalState();
-     _owner = true;
-     _parentGLState = null;
-     _uniformsCode = 0;
-     _attributesCode = 0;
-     _totalGPUProgramStateChanged = true;
-     _modelview = new Matrix44D(state._modelview);
-     _accumulatedModelview = new Matrix44D(state._accumulatedModelview);
-     _multiplyModelview = state._multiplyModelview;
-     _lastParentModelview = new Matrix44D(state._lastParentModelview);
-
-  }
+//  explicit GLState(const GLState& state):
+//  _programState(new GPUProgramState()),
+//  _globalState(new GLGlobalState()),
+//  _owner(true),
+//  _parentGLState(NULL),
+//  _uniformsCode(0),
+//  _attributesCode(0),
+//  _totalGPUProgramStateChanged(true),
+//  _modelview(new Matrix44D(*state._modelview)),
+//  _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
+//  _multiplyModelview(state._multiplyModelview),
+//  _lastParentModelview(new Matrix44D(*state._lastParentModelview))
+//  {
+//    
+//  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLState(GLState state);
 
 
   public GLState()
@@ -180,7 +182,7 @@ public class GLState
               {
                 _accumulatedModelview._release();
               }
-              _accumulatedModelview = parentsM.createMultiplication(_modelview);
+              _accumulatedModelview = parentsM.createMultiplication(*_modelview);
   
               if (_lastParentModelview != null)
               {
