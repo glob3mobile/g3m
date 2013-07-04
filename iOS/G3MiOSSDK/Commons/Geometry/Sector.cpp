@@ -95,12 +95,10 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
 
-  // compute angle with camera position
-  //const Vector3D centerCamera = camera->getCartesianPosition();
-  //double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
-  const double angle = IMathUtils::instance()->acos(camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
+  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  const double angleInRadians = IMathUtils::instance()->acos(dot);
 
-  return (angle-getDeltaRadius() > camera->getAngle2Horizon());
+  return ( (angleInRadians - getDeltaRadius()) > camera->getAngle2Horizon() );
 }
 
 /*
