@@ -67,13 +67,13 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
         (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       printf ("zoom..\n");
       cameraContext->setCurrentGesture(Zoom);
-    };
+    }
     
     if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) ||
         (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1)) {
       printf ("rotate..\n");
       cameraContext->setCurrentGesture(Rotate);
-    };
+    }
 
     
     /*
@@ -90,16 +90,19 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       //iprintf (" --- empiezo zoom. Fingersep0=%.2f. angle0=%.2f.  Gesture anterior=%d\n", fingerSep0, angle0, gesture);
       gesture=Zoom;*/
   }
+
   
   // call specific transformation
-  switch (cameraContext->getCurrentGesture()) {
-    case Zoom:
-      if (_processZoom) zoom();
-      break;
-      
-    case Rotate:
-      if (_processRotation) rotate();
-      break;
+  const Gesture gesture = cameraContext->getCurrentGesture();
+  if (gesture == Zoom) {
+    if (_processZoom) {
+      zoom();
+    }
+  }
+  else if (gesture == Rotate) {
+    if (_processRotation) {
+      rotate();
+    }
   }
 }
 
