@@ -285,8 +285,12 @@ public:
       return true;
     }
 
+    if (_m->isEqualsTo(*v2->_m)){
+      return true;
+    }
+    return false;
 
-    return _m->isEqualsTo(*v2->_m);
+//    return _m->isEqualsTo(*v2->_m);
   }
 
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;

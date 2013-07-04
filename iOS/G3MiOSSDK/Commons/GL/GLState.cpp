@@ -28,13 +28,13 @@ GLState::~GLState(){
   }
 }
 
-void GLState::setParent(const GLState* p) const{
-  _parentGLState = p;
-  if (p != NULL){
+void GLState::setParent(const GLState* parent) const{
+  _parentGLState = parent;
+  if (parent != NULL){
     //UNIFORMS AND ATTRIBUTES CODES
     int __ASK_JM;
-    const int newUniformsCode   = p->getUniformsCode()   | _programState->getUniformsCode();
-    const int newAttributesCode = p->getAttributesCode() | _programState->getAttributesCode();
+    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
+    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
 
     _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
                                     (newUniformsCode   != _uniformsCode));
@@ -44,7 +44,7 @@ void GLState::setParent(const GLState* p) const{
     //MODELVIEW
     if (_multiplyModelview){
       if (_modelview != NULL){
-        const Matrix44D* parentsM = p->getAccumulatedModelView();
+        const Matrix44D* parentsM = parent->getAccumulatedModelView();
         if (parentsM == NULL){
           ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
         } else{

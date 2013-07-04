@@ -50,7 +50,7 @@ void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{
                               (double)_baseColor->getBlue(),
                               (double) _baseColor->getGreen(),
                               (double) _baseColor->getAlpha());
-    const float colorsIntensity = 1;
+//    const float colorsIntensity = 1;
 //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
   }
 }

@@ -51,7 +51,7 @@ void SGGeometryNode::createGLState() const{
                                 0,            //Index 0
                                 false,        //Not normalized
                                 0);           //Stride 0
-    const float colorsIntensity = 1;
+//    const float colorsIntensity = 1;
 //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
   } else{
     progState.setAttributeEnabled(COLOR, false);

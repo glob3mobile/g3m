@@ -124,14 +124,14 @@ public:
   void setParent(const GLState* p) const;
 
   int getUniformsCode() const{
-    if (_uniformsCode == 0){
+    if (_parentGLState == NULL){
       return _programState->getUniformsCode();
     }
     return _uniformsCode;
   }
 
   int getAttributesCode() const{
-    if (_attributesCode == 0){
+    if (_parentGLState == NULL){
       return _programState->getAttributesCode();
     }
     return _attributesCode;
