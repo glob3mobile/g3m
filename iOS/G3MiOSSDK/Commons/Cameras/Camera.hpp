@@ -291,7 +291,7 @@ public:
     getModelMatrix();
   }
   
-  double getAngle2Horizon() const { return _angle2Horizon; }
+  double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
 
 private:

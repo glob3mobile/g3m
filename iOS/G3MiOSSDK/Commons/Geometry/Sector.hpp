@@ -33,7 +33,7 @@ private:
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
-  mutable double _deltaRadius;
+  mutable double _deltaRadiusInRadians;
 
   //const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
@@ -59,7 +59,7 @@ public:
   _deltaLongitude(upper.longitude().sub(lower.longitude())),
   _center(Angle::midAngle(lower.latitude(), upper.latitude()),
           Angle::midAngle(lower.longitude(), upper.longitude())),
-  _deltaRadius(-1.0),
+  _deltaRadiusInRadians(-1.0),
   /*
    _nwData(NULL),
   _neData(NULL),
@@ -77,7 +77,7 @@ public:
   _deltaLatitude(sector._deltaLatitude),
   _deltaLongitude(sector._deltaLongitude),
   _center(sector._center),
-  _deltaRadius(sector._deltaRadius)
+  _deltaRadiusInRadians(sector._deltaRadiusInRadians)
   /*
    _nwData(NULL),
   _neData(NULL),
@@ -214,7 +214,10 @@ public:
 
 
   bool isBackOriented(const G3MRenderContext *rc,
-                      double minHeight) const;
+                      double minHeight,
+                      const Planet* planet,
+                      const Vector3D& cameraNormalizedPosition,
+                      double cameraAngle2HorizonInRadians) const;
 
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 
@@ -252,10 +255,11 @@ public:
     return (_lower.latitude()._degrees <= -89.9);
   }
   
-  double getDeltaRadius() const {
-    if (_deltaRadius<0.0)
-      _deltaRadius = sqrt(_deltaLatitude.radians()*_deltaLatitude.radians()+_deltaLongitude.radians()*_deltaLongitude.radians())*0.5;
-    return _deltaRadius;
+  double getDeltaRadiusInRadians() const {
+    if (_deltaRadiusInRadians < 0)
+      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude.radians()  * _deltaLatitude.radians() +
+                                   _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+    return _deltaRadiusInRadians;
   }
   
   const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;

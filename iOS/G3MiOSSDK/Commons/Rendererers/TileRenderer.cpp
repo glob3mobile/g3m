@@ -500,6 +500,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
+  const Planet* planet = rc->getPlanet();
+  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+
   if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
@@ -510,7 +515,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
       tile->render(rc,
                    &trc,
                    parentState,
-                   NULL);
+                   NULL,
+                   planet,
+                   cameraNormalizedPosition,
+                   cameraAngle2HorizonInRadians,
+                   cameraFrustumInModelCoordinates);
     }
   }
   else {
@@ -530,7 +539,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
         tile->render(rc,
                      &trc,
                      parentState,
-                     &toVisitInNextIteration);
+                     &toVisitInNextIteration,
+                     planet,
+                     cameraNormalizedPosition,
+                     cameraAngle2HorizonInRadians,
+                     cameraFrustumInModelCoordinates);
       }
 
       toVisit = toVisitInNextIteration;

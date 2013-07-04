@@ -29,6 +29,7 @@ class ElevationData;
 class MeshHolder;
 class Vector2I;
 class TileElevationDataRequest;
+class Frustum;
 
 #include "ITexturizerData.hpp"
 
@@ -64,7 +65,11 @@ private:
                      const TileRenderContext* trc);
 
   inline bool isVisible(const G3MRenderContext* rc,
-                        const TileRenderContext* trc);
+                        const TileRenderContext* trc,
+                        const Planet* planet,
+                        const Vector3D& cameraNormalizedPosition,
+                        double cameraAngle2HorizonInRadians,
+                        const Frustum* cameraFrustumInModelCoordinates);
 
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
@@ -151,7 +156,11 @@ public:
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
               const GLState& parentState,
-              std::list<Tile*>* toVisitInNextIteration);
+              std::list<Tile*>* toVisitInNextIteration,
+              const Planet* planet,
+              const Vector3D& cameraNormalizedPosition,
+              double cameraAngle2HorizonInRadians,
+              const Frustum* cameraFrustumInModelCoordinates);
 
   const TileKey getKey() const;
 

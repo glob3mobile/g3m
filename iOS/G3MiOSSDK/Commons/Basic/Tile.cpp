@@ -254,9 +254,15 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
 }
 
 bool Tile::isVisible(const G3MRenderContext *rc,
-                     const TileRenderContext* trc) {
+                     const TileRenderContext* trc,
+                     const Planet* planet,
+                     const Vector3D& cameraNormalizedPosition,
+                     double cameraAngle2HorizonInRadians,
+                     const Frustum* cameraFrustumInModelCoordinates) {
   // test if sector is back oriented with respect to the camera
-  if (_sector.isBackOriented(rc, getMinHeight())) {
+
+  if (_sector.isBackOriented(rc, getMinHeight(),
+                             planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians)) {
     return false;
   }
 
@@ -271,7 +277,8 @@ bool Tile::isVisible(const G3MRenderContext *rc,
   //  printf("break point on me\n");
   //}
 
-  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
+//  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
+  return extent->touches( cameraFrustumInModelCoordinates );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
@@ -487,7 +494,11 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   const GLState& parentState,
-                  std::list<Tile*>* toVisitInNextIteration) {
+                  std::list<Tile*>* toVisitInNextIteration,
+                  const Planet* planet,
+                  const Vector3D& cameraNormalizedPosition,
+                  double cameraAngle2HorizonInRadians,
+                  const Frustum* cameraFrustumInModelCoordinates) {
 
   const float verticalExaggeration =  trc->getVerticalExaggeration();
   if (verticalExaggeration != _verticalExaggeration) {
@@ -499,7 +510,10 @@ void Tile::render(const G3MRenderContext* rc,
   TilesStatistics* statistics = trc->getStatistics();
   statistics->computeTileProcessed(this);
 
-  if (isVisible(rc, trc)) {
+  if (isVisible(rc, trc, planet,
+                cameraNormalizedPosition,
+                cameraAngle2HorizonInRadians,
+                cameraFrustumInModelCoordinates)) {
     setIsVisible(true, trc->getTexturizer());
 
     statistics->computeVisibleTile(this);
