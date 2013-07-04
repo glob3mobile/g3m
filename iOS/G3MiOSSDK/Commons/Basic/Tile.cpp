@@ -142,6 +142,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
   if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
+    int __ASK_JM;
     const TileTessellator* tessellator = trc->getTessellator();
     const bool renderDebug = trc->getParameters()->_renderDebug;
     const Planet* planet = rc->getPlanet();
@@ -192,7 +193,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
         meshHolder->setMesh(tessellatorMesh);
       }
     }
-
   }
 
   return _tessellatorMesh;
