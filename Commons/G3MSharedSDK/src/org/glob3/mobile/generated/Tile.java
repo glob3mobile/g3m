@@ -76,6 +76,7 @@ public class Tile
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
+      int __ASK_JM;
       final TileTessellator tessellator = trc.getTessellator();
       final boolean renderDebug = trc.getParameters()._renderDebug;
       final Planet planet = rc.getPlanet();
@@ -119,7 +120,6 @@ public class Tile
           meshHolder.setMesh(tessellatorMesh);
         }
       }
-  
     }
   
     return _tessellatorMesh;
@@ -204,13 +204,12 @@ public class Tile
     //    return true;
     //  }
     final Vector2I ex = extent.projectedExtent(rc);
-    //const double t = extent.maxAxis() * 2;
     final int t = (ex._x + ex._y);
-    if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
+    final double threshold = (parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75;
+    if (t <= threshold)
     {
       return true;
     }
-  
   
     if (trc.getParameters()._useTilesSplitBudget)
     {
