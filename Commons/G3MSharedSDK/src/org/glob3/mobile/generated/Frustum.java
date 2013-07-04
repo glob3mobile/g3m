@@ -241,87 +241,85 @@ public class Frustum
   
     final java.util.ArrayList<Vector3F> corners = box.getCornersF();
   
-    boolean outside;
+    return (!((_leftPlane.signedDistance(corners.get(0)) >= 0) && (_leftPlane.signedDistance(corners.get(1)) >= 0) && (_leftPlane.signedDistance(corners.get(2)) >= 0) && (_leftPlane.signedDistance(corners.get(3)) >= 0) && (_leftPlane.signedDistance(corners.get(4)) >= 0) && (_leftPlane.signedDistance(corners.get(5)) >= 0) && (_leftPlane.signedDistance(corners.get(6)) >= 0) && (_leftPlane.signedDistance(corners.get(7)) >= 0)) && !((_bottomPlane.signedDistance(corners.get(0)) >= 0) && (_bottomPlane.signedDistance(corners.get(1)) >= 0) && (_bottomPlane.signedDistance(corners.get(2)) >= 0) && (_bottomPlane.signedDistance(corners.get(3)) >= 0) && (_bottomPlane.signedDistance(corners.get(4)) >= 0) && (_bottomPlane.signedDistance(corners.get(5)) >= 0) && (_bottomPlane.signedDistance(corners.get(6)) >= 0) && (_bottomPlane.signedDistance(corners.get(7)) >= 0)) && !((_rightPlane.signedDistance(corners.get(0)) >= 0) && (_rightPlane.signedDistance(corners.get(1)) >= 0) && (_rightPlane.signedDistance(corners.get(2)) >= 0) && (_rightPlane.signedDistance(corners.get(3)) >= 0) && (_rightPlane.signedDistance(corners.get(4)) >= 0) && (_rightPlane.signedDistance(corners.get(5)) >= 0) && (_rightPlane.signedDistance(corners.get(6)) >= 0) && (_rightPlane.signedDistance(corners.get(7)) >= 0)) && !((_topPlane.signedDistance(corners.get(0)) >= 0) && (_topPlane.signedDistance(corners.get(1)) >= 0) && (_topPlane.signedDistance(corners.get(2)) >= 0) && (_topPlane.signedDistance(corners.get(3)) >= 0) && (_topPlane.signedDistance(corners.get(4)) >= 0) && (_topPlane.signedDistance(corners.get(5)) >= 0) && (_topPlane.signedDistance(corners.get(6)) >= 0) && (_topPlane.signedDistance(corners.get(7)) >= 0)) && !((_nearPlane.signedDistance(corners.get(0)) >= 0) && (_nearPlane.signedDistance(corners.get(1)) >= 0) && (_nearPlane.signedDistance(corners.get(2)) >= 0) && (_nearPlane.signedDistance(corners.get(3)) >= 0) && (_nearPlane.signedDistance(corners.get(4)) >= 0) && (_nearPlane.signedDistance(corners.get(5)) >= 0) && (_nearPlane.signedDistance(corners.get(6)) >= 0) && (_nearPlane.signedDistance(corners.get(7)) >= 0)) && !((_farPlane.signedDistance(corners.get(0)) >= 0) && (_farPlane.signedDistance(corners.get(1)) >= 0) && (_farPlane.signedDistance(corners.get(2)) >= 0) && (_farPlane.signedDistance(corners.get(3)) >= 0) && (_farPlane.signedDistance(corners.get(4)) >= 0) && (_farPlane.signedDistance(corners.get(5)) >= 0) && (_farPlane.signedDistance(corners.get(6)) >= 0) && (_farPlane.signedDistance(corners.get(7)) >= 0)));
+  
+    /*
+    bool outside;
   
     // test with left plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_leftPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_leftPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     // test with bottom plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_bottomPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_bottomPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     // test with right plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_rightPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_rightPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     // test with top plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_topPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_topPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     // test with near plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_nearPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_nearPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     // test with far plane
     outside = true;
-    for (int i = 0; i < 8; i++)
-    {
-      if (_farPlane.signedDistance(corners.get(i)) < 0)
-      {
+    for (int i = 0; i < 8; i++) {
+      if (_farPlane.signedDistance(corners[i]) < 0) {
         outside = false;
         break;
       }
     }
-    if (outside)
-       return false;
+    if (outside) {
+      return false;
+    }
   
     return true;
+     */
   }
 
   public final Frustum transformedBy_P(MutableMatrix44D matrix)
@@ -341,3 +339,4 @@ public class Frustum
   }
 
 }
+//#define testAllCornersInside(plane, corners) ( (plane.signedDistance(corners[0]) >= 0) && (plane.signedDistance(corners[1]) >= 0) && (plane.signedDistance(corners[2]) >= 0) && (plane.signedDistance(corners[3]) >= 0) && (plane.signedDistance(corners[4]) >= 0) && (plane.signedDistance(corners[5]) >= 0) && (plane.signedDistance(corners[6]) >= 0) && (plane.signedDistance(corners[7]) >= 0) )
