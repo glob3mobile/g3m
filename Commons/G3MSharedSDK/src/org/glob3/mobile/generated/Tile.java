@@ -65,24 +65,39 @@ public class Tile
   private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
   {
   
-    final TileTessellator tessellator = trc.getTessellator();
-    final boolean renderDebug = trc.getParameters()._renderDebug;
     ElevationDataProvider elevationDataProvider = trc.getElevationDataProvider();
-    final Planet planet = rc.getPlanet();
   
-    final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-    final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  //  const TileTessellator* tessellator = trc->getTessellator();
+  //  const bool renderDebug = trc->getParameters()->_renderDebug;
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+  //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
+      final TileTessellator tessellator = trc.getTessellator();
+      final boolean renderDebug = trc.getParameters()._renderDebug;
+      final Planet planet = rc.getPlanet();
+  
+      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
+      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  
       initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
     }
-  
-    final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
+  
+      final TileTessellator tessellator = trc.getTessellator();
+      final boolean renderDebug = trc.getParameters()._renderDebug;
+      final Planet planet = rc.getPlanet();
+  
+      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
+      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  
+      final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
   
       if (elevationDataProvider == null)
       {
