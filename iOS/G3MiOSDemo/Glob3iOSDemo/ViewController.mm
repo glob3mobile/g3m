@@ -1864,7 +1864,7 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      testWebSocket(context);
+      //testWebSocket(context);
       
       testCanvas(context->getFactory());
 
