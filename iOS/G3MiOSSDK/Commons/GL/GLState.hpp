@@ -43,6 +43,7 @@ class GLState{
   mutable Matrix44D* _lastParentModelview;
 #endif
   bool _multiplyModelview;
+  mutable GPUUniformValueMatrix4Float* _modelviewUniformValue;
 
 //  class ParentModelviewListener: public Matrix44DListener{
 //    const GLState* _state;
@@ -94,7 +95,8 @@ public:
   _modelview(NULL),
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
-  _lastParentModelview(NULL){}
+  _lastParentModelview(NULL),
+  _modelviewUniformValue(NULL){}
   
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
@@ -110,7 +112,8 @@ public:
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
 //    _parentMatrixListener(this),
-  _lastParentModelview(NULL){}
+  _lastParentModelview(NULL),
+  _modelviewUniformValue(NULL){}
   
   ~GLState();
   
@@ -158,6 +161,8 @@ public:
 
   void setModelView(const Matrix44D* modelview, bool modifiesParents);
   const Matrix44D* getAccumulatedModelView() const;
+
+  GPUUniformValueMatrix4Float* getModelviewUniformValue();
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

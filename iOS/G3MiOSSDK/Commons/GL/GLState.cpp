@@ -64,6 +64,9 @@ void GLState::setParent(const GLState* p) const{
             _lastParentModelview = parentsM;
             _lastParentModelview->_retain();
 
+            delete _modelviewUniformValue;
+            _modelviewUniformValue = NULL;
+
 //            _lastParentModelview->addListener(&_parentMatrixListener);
           }
 //          else{
@@ -159,6 +162,9 @@ void GLState::setModelView(const Matrix44D* modelview, bool multiply){
     }
 
     _lastParentModelview = NULL;
+
+    delete _modelviewUniformValue;
+    _modelviewUniformValue = NULL;
   }
   //  else{
   //    ILogger::instance()->logInfo("Same modelview set.");
@@ -181,3 +187,16 @@ const Matrix44D* GLState::getAccumulatedModelView() const{
     }
   }
 };
+
+GPUUniformValueMatrix4Float* GLState::getModelviewUniformValue(){
+
+  if (_modelviewUniformValue == NULL){
+    const Matrix44D* mv = getAccumulatedModelView();
+    if (mv == NULL){
+      return NULL;
+    }
+    _modelviewUniformValue = new GPUUniformValueMatrix4Float(*mv);
+  }
+  return _modelviewUniformValue;
+  
+}
