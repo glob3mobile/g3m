@@ -331,12 +331,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   //    return true;
   //  }
   const Vector2I ex = extent->projectedExtent(rc);
-  //const double t = extent.maxAxis() * 2;
   const int t = (ex._x + ex._y);
-  if ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75) ) {
+  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+  if ( t <= threshold ) {
     return true;
   }
-
 
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
