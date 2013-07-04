@@ -637,18 +637,19 @@ void GL::setState(const GLState& state) {
     if (_enableVertexColor) {
       _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 1);
       _nativeGL->enableVertexAttribArray(Attributes.Color);
-      IFloatBuffer* colors = state.getColors();
-      if ((_colors != colors) ||
-          (_colorsTimestamp != colors->timestamp()) ) {
-        _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
-        _colors = colors;
-        _colorsTimestamp = _colors->timestamp();
-      }
     }
     else {
       _nativeGL->disableVertexAttribArray(Attributes.Color);
       _nativeGL->uniform1i(Uniforms.EnableColorPerVertex, 0);
     }
+  }
+  IFloatBuffer* colors = state.getColors();
+  if (colors != NULL &&
+      ((_colors != colors) ||
+      (_colorsTimestamp != colors->timestamp())) ) {
+    _nativeGL->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+    _colors = colors;
+    _colorsTimestamp = _colors->timestamp();
   }
 
   // Vertices Position
@@ -687,15 +688,15 @@ void GL::setState(const GLState& state) {
     _enableCullFace = state.isEnabledCullFace();
     if (_enableCullFace) {
       _nativeGL->enable(GLFeature::cullFace());
-      const int face = state.getCulledFace();
-      if (_cullFace_face != face) {
-        _nativeGL->cullFace(face);
-        _cullFace_face = face;
-      }
     }
     else {
       _nativeGL->disable(GLFeature::cullFace());
     }
+  }
+  const int face = state.getCulledFace();
+  if (_cullFace_face != face) {
+    _nativeGL->cullFace(face);
+    _cullFace_face = face;
   }
 
   const float lineWidth = state.lineWidth();

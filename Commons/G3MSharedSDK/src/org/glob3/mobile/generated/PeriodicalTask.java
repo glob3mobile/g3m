@@ -42,6 +42,11 @@ public class PeriodicalTask
     IFactory.instance().deleteTimer(_timer);
   }
 
+  public final void resetTimeout()
+  {
+    _lastExecutionMS = 0;
+  }
+
   public final void executeIfNecessary(G3MContext context)
   {
     long now = getTimer().now().milliseconds();

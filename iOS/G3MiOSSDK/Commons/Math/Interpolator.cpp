@@ -17,7 +17,7 @@ double Interpolator::interpolation(const Geodetic2D& sw,
                                    double valueSE,
                                    double valueNE,
                                    double valueNW,
-                                   const Geodetic2D& position) {
+                                   const Geodetic2D& position) const {
   return interpolation(sw,
                        ne,
                        valueSW,
@@ -35,7 +35,7 @@ double Interpolator::interpolation(const Geodetic2D& sw,
                                    double valueNE,
                                    double valueNW,
                                    const Angle& latitude,
-                                   const Angle& longitude) {
+                                   const Angle& longitude) const {
 
   const double swLatRadians = sw.latitude().radians();
   const double swLonRadians = sw.longitude().radians();

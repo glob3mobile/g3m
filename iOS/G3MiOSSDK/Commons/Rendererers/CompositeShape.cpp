@@ -33,10 +33,11 @@ bool CompositeShape::isReadyToRender(const G3MRenderContext *rc) {
 }
 
 void CompositeShape::rawRender(const G3MRenderContext* rc,
-                               const GLState& parentState) {
+                               const GLState& parentState,
+                               bool renderNotReadyShapes) {
   int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
-    child->render(rc, parentState);
+    child->render(rc, parentState, renderNotReadyShapes);
   }
 }

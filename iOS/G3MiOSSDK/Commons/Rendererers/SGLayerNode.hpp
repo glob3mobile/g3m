@@ -73,6 +73,8 @@ public:
 
   }
 
+  bool isReadyToRender(const G3MRenderContext* rc);
+
   void onImageDownload(IImage* image);
 
   const GLState* createState(const G3MRenderContext* rc,

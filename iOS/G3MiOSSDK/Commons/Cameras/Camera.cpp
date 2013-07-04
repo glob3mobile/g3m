@@ -373,8 +373,6 @@ FrustumData Camera::calculateFrustumData() const {
   //                       bottom, top,
   //                       znear, zfar);
 
-  int __Testing_new_zNear_zFar_politic;
-
   const double height = getGeodeticPosition().height();
   double zNear = height * 0.1;
 

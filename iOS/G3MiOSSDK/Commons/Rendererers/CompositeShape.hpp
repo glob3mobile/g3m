@@ -38,7 +38,8 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
+                 const GLState& parentState,
+                 bool renderNotReadyShapes);
 
 };
 

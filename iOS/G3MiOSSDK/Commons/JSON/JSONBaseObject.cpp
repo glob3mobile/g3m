@@ -36,3 +36,7 @@ const JSONBoolean* JSONBaseObject::asBoolean() const {
   ILogger::instance()->logError("The requested Object is not of type JSONBoolean!");
   return NULL;
 }
+
+const JSONNull* JSONBaseObject::asNull() const {
+  return NULL;
+}

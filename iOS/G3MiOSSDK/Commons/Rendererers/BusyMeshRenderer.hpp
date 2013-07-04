@@ -55,9 +55,11 @@ public:
     delete _backgroundColor;
   }
   
-  void incDegrees(double value) { 
-    _degrees += value; 
-    if (_degrees>360) _degrees -= 360;
+  void incDegrees(double value) {
+    _degrees += value;
+    if (_degrees > 360) {
+      _degrees -= 360;
+    }
   }
 
   void start(const G3MRenderContext* rc);

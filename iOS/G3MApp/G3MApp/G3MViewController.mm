@@ -20,6 +20,7 @@
 #import <G3MiOSSDK/MercatorTiledLayer.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/MapQuestLayer.hpp>
+#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import "G3MToolbar.h"
 #import "G3MAppUserData.hpp"
 #import "G3MMarkerUserData.hpp"
@@ -52,7 +53,18 @@
   
   // Create a builder
   G3MBuilder_iOS builder([self g3mWidget]);
-  
+
+
+  const float verticalExaggeration = 6.0f;
+  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
+  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+
+
   G3MAppUserData* userData = new G3MAppUserData();
   userData->setSatelliteLayerEnabled(true);
   userData->setLayerSet([self createLayerSet: userData->getSatelliteLayerEnabled()]);
@@ -169,6 +181,7 @@
                                  true,
                                  NULL,
                                  TimeInterval::fromDays(30),
+                                 true,
                                  LayerTilesRenderParameters::createDefaultMercator(1, 19));
   csiro->setEnable(false);
   layers->addLayer(csiro);

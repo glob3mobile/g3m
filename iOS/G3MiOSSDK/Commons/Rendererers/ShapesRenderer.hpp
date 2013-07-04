@@ -15,6 +15,8 @@
 
 class ShapesRenderer : public LeafRenderer {
 private:
+  const bool _renderNotReadyShapes;
+  
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
@@ -26,7 +28,8 @@ private:
 
 public:
 
-  ShapesRenderer() :
+  ShapesRenderer(bool renderNotReadyShapes=true) :
+  _renderNotReadyShapes(renderNotReadyShapes),
   _context(NULL)
   {
 
@@ -46,6 +49,8 @@ public:
       shape->initialize(_context);
     }
   }
+
+  void removeAllShapes(bool deleteShapes=true);
 
   void onResume(const G3MContext* context) {
     _context = context;
@@ -69,10 +74,8 @@ public:
     }
   }
   
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
-  }
-
+  bool isReadyToRender(const G3MRenderContext* rc);
+  
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;

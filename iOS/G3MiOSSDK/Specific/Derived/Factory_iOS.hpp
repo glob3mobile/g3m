@@ -19,6 +19,8 @@
 #include "ShortBuffer_iOS.hpp"
 #include "IImageListener.hpp"
 #include "Canvas_iOS.hpp"
+#include "WebSocket_iOS.hpp"
+
 
 class Factory_iOS: public IFactory {
 public:
@@ -143,6 +145,16 @@ public:
 
   ICanvas* createCanvas() const {
     return new Canvas_iOS();
+  }
+
+  IWebSocket* createWebSocket(const URL& url,
+                              IWebSocketListener* listener,
+                              bool autodeleteListener,
+                              bool autodeleteWebSocket) const {
+    return new WebSocket_iOS(url,
+                             listener,
+                             autodeleteListener,
+                             autodeleteWebSocket);
   }
 
 };

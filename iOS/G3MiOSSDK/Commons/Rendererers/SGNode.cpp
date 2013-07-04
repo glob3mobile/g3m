@@ -75,7 +75,8 @@ const GLState* SGNode::createState(const G3MRenderContext* rc,
 
 
 void SGNode::render(const G3MRenderContext* rc,
-                    const GLState& parentState) {
+                    const GLState& parentState,
+                    bool renderNotReadyShapes) {
   const GLState* myState = createState(rc, parentState);
   const GLState* state;
   if (myState == NULL) {
@@ -92,7 +93,7 @@ void SGNode::render(const G3MRenderContext* rc,
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->render(rc, *state);
+    child->render(rc, *state, renderNotReadyShapes);
   }
 
   cleanUpRender(rc);

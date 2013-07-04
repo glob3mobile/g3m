@@ -43,6 +43,8 @@ public abstract class JSONVisitor
   public abstract void visitBoolean(JSONBoolean value);
   public abstract void visitString(JSONString value);
 
+  public abstract void visitNull();
+
   public abstract void visitArrayBeforeChildren(JSONArray value);
   public abstract void visitArrayInBetweenChildren(JSONArray value);
   public abstract void visitArrayBeforeChild(JSONArray value, int i);

@@ -140,13 +140,13 @@ public class MathUtils_JavaDesktop
 
 
    @Override
-   public double round(final double v) {
+   public long round(final double v) {
       return Math.round(v);
    }
 
 
    @Override
-   public float round(final float v) {
+   public int round(final float v) {
       return Math.round(v);
    }
 
@@ -393,5 +393,19 @@ public class MathUtils_JavaDesktop
    @Override
    public float floor(final float f) {
       return (float) Math.floor(f);
+   }
+
+
+   @Override
+   public double fmod(final double d1,
+                      final double d2) {
+      return d1 % d2;
+   }
+
+
+   @Override
+   public float fmod(final float f1,
+                     final float f2) {
+      return f1 % f2;
    }
 }

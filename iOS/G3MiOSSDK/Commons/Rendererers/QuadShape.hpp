@@ -77,7 +77,6 @@ public:
   {
 
   }
-
   virtual ~QuadShape();
 
   void imageDownloaded(IImage* image);

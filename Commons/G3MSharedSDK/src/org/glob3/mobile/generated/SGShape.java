@@ -57,9 +57,9 @@ public class SGShape extends Shape
     return _node.isReadyToRender(rc);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    _node.render(rc, parentState);
+    _node.render(rc, parentState, renderNotReadyShapes);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

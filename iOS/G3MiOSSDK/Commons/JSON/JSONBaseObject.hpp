@@ -14,10 +14,11 @@ class JSONArray;
 class JSONBoolean;
 class JSONNumber;
 class JSONString;
+class JSONNull;
+class JSONVisitor;
 
 #include <string>
 
-class JSONVisitor;
 
 class JSONBaseObject {
 
@@ -35,6 +36,9 @@ public:
   virtual const JSONBoolean* asBoolean() const;
   virtual const JSONNumber*  asNumber()  const;
   virtual const JSONString*  asString()  const;
+
+  virtual const JSONNull*    asNull() const;
+
 
   virtual JSONBaseObject* deepCopy() const = 0;
 

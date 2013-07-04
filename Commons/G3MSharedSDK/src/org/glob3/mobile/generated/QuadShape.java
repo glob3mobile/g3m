@@ -135,7 +135,6 @@ public class QuadShape extends AbstractMeshShape
      _color = color;
 
   }
-
   public void dispose()
   {
     if (_color != null)

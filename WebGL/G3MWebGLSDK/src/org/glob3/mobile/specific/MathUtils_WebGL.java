@@ -442,6 +442,4 @@ public final class MathUtils_WebGL
                      final float f2) {
       return f1 % f2;
    }
-
-
 }

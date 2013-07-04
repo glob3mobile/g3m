@@ -108,6 +108,11 @@ public class JSONGenerator extends JSONVisitor
     _isb.addString("\"");
   }
 
+  public final void visitNull()
+  {
+    _isb.addString("null");
+  }
+
   public final void visitArrayBeforeChildren(JSONArray value)
   {
     _isb.addString("[");

@@ -23,7 +23,7 @@ private:
   
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
-  
+
 public:
   
   virtual ~Image_iOS() {
@@ -61,15 +61,17 @@ public:
     return (_image == NULL) ? 0 : (int) _image.size.height;
   }
   
-  Vector2I getExtent() const {
+  const Vector2I getExtent() const {
     return Vector2I(getWidth(), getHeight());
   }
+
   
   unsigned char* createByteArrayRGBA8888() const;
-  
+
   const std::string description() const;
   
   IImage* shallowCopy() const;
+
 };
 
 #endif

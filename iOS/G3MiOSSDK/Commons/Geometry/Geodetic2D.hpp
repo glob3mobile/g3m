@@ -72,13 +72,19 @@ public:
                    to.latitude(),
                    to.longitude());
   }
-  
-  
+
+
   Geodetic2D(const Angle& latitude,
-             const Angle& longitude): _latitude(latitude), _longitude(longitude) {
+             const Angle& longitude) :
+  _latitude(latitude),
+  _longitude(longitude)
+  {
   }
-  
-  Geodetic2D(const Geodetic2D& g): _latitude(g._latitude), _longitude(g._longitude) {
+
+  Geodetic2D(const Geodetic2D& g) :
+  _latitude(g._latitude),
+  _longitude(g._longitude)
+  {
   }
   
   const Angle latitude() const {
@@ -156,38 +162,47 @@ public:
   
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-    + ((_latitude == null) ? 0 : _latitude.hashCode());
-		result = prime * result
-    + ((_longitude == null) ? 0 : _longitude.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Geodetic2D other = (Geodetic2D) obj;
-		if (_latitude == null) {
-			if (other._latitude != null)
-				return false;
-		} else if (!_latitude.equals(other._latitude))
-			return false;
-		if (_longitude == null) {
-			if (other._longitude != null)
-				return false;
-		} else if (!_longitude.equals(other._longitude))
-			return false;
-		return true;
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + ((_latitude == null) ? 0 : _latitude.hashCode());
+    result = (prime * result) + ((_longitude == null) ? 0 : _longitude.hashCode());
+    return result;
+  }
+
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Geodetic2D other = (Geodetic2D) obj;
+    if (_latitude == null) {
+      if (other._latitude != null) {
+        return false;
+      }
+    }
+    else if (!_latitude.equals(other._latitude)) {
+      return false;
+    }
+    if (_longitude == null) {
+      if (other._longitude != null) {
+        return false;
+      }
+    }
+    else if (!_longitude.equals(other._longitude)) {
+      return false;
+    }
+    return true;
+  }
 #endif
-  
+
 };
 
 

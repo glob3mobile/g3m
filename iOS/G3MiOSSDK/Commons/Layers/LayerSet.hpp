@@ -24,7 +24,7 @@ public:
 #ifdef JAVA_CODE
   public void dispose();
 #endif
-
+  
   virtual void changed(const LayerSet* layerSet) = 0;
 };
 
@@ -32,24 +32,34 @@ public:
 class LayerSet {
 private:
   std::vector<Layer*> _layers;
-
+  
   LayerSetChangedListener* _listener;
-
+  
   mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
-
-
+  
+  
   LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
   void layersChanged() const;
+
+#ifdef C_CODE
+  mutable const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
 
 public:
   LayerSet() :
   _listener(NULL),
-  _layerTilesRenderParameters(NULL)
+  _layerTilesRenderParameters(NULL),
+  _context(NULL)
   {
-
+    
   }
-
+  
   ~LayerSet();
+  
+  void removeAllLayers(const bool deleteLayers);
   
   void addLayer(Layer* layer);
   
@@ -61,30 +71,30 @@ public:
                            const Tile* tile) const;
   
   bool isReady() const;
-
+  
   void initialize(const G3MContext* context)const;
-
+  
   int size() const {
     return _layers.size();
   }
-
+  
   void layerChanged(const Layer* layer) const;
-
+  
   void setChangeListener(LayerSetChangedListener* listener) {
     if (_listener != NULL) {
       ILogger::instance()->logError("Listener already set");
     }
     _listener = listener;
   }
-
+  
   Layer* get(int index);
   
   Layer* getLayer(const std::string& name);
-
+  
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
-
-//  const Angle calculateSplitLatitude(const Tile* tile) const;
-
+  
+  //  const Angle calculateSplitLatitude(const Tile* tile) const;
+  
 };
 
 #endif

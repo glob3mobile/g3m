@@ -88,6 +88,10 @@ void JSONGenerator::visitString(const JSONString* value) {
   _isb->addString("\"");
 }
 
+void JSONGenerator::visitNull() {
+  _isb->addString("null");
+}
+
 void JSONGenerator::visitArrayBeforeChildren(const JSONArray* value) {
   _isb->addString("[");
 }

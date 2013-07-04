@@ -56,6 +56,8 @@ public abstract class Shape implements EffectTarget
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
+  private boolean _enable;
+
   protected void cleanTransformMatrix()
   {
     if (_transformMatrix != null)
@@ -72,6 +74,7 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
+     _enable = true;
 
   }
 
@@ -220,9 +223,19 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final boolean isEnable()
   {
-    if (isReadyToRender(rc))
+    return _enable;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _enable = enable;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  {
+    if (renderNotReadyShapes || isReadyToRender(rc))
     {
   
       final int pendingEffectsCount = _pendingEffects.size();
@@ -252,7 +265,7 @@ public abstract class Shape implements EffectTarget
   
       gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
-      rawRender(rc, parentState);
+      rawRender(rc, parentState, renderNotReadyShapes);
   
       gl.popMatrix();
     }
@@ -265,7 +278,7 @@ public abstract class Shape implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

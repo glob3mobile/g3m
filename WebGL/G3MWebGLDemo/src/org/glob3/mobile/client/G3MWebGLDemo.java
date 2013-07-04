@@ -20,12 +20,14 @@ import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MEventContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
@@ -36,12 +38,16 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -56,6 +62,8 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.TerrainTouchEvent;
+import org.glob3.mobile.generated.TerrainTouchEventListener;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
@@ -71,6 +79,7 @@ import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
@@ -112,87 +121,87 @@ public class G3MWebGLDemo
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      _markersRenderer = new MarksRenderer(true);
-      _markersRenderer.setMarkTouchListener(new MarkTouchListener() {
+      final boolean useMarkers = false;
+      if (useMarkers) {
+         // marks renderer
+         final boolean readyWhenMarksReady = true;
+         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-         @Override
-         public boolean touchedMark(final Mark mark) {
-            Window.alert(mark.getLabel());
-            return false;
-         }
-      }, true);
+         /*marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
+               Window.alert("Touched on mark: " + mark.getLabel());
+               return true;
+            }
+         }, true);*/
 
-      builder.addRenderer(_markersRenderer);
+
+         final Mark m1 = new Mark( //
+                  "Paris", 
+                  new URL("http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Left-Chartreuse-icon.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(48.859746), Angle.fromDegrees(2.352051), 0),
+                  0,
+                  true,
+                  15);
+         //m1->addTouchListener(listener);
+         marksRenderer.addMark(m1);
+
+         final Mark m2 = new Mark( //
+                  "Las Palmas", //
+                  new URL("http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Right-Pink-icon.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(28.116956), Angle.fromDegrees(-15.440453), 0), //
+                  0, //
+                  true,
+                  15);
+                  
+         //m2->addTouchListener(listener);
+         marksRenderer.addMark(m2);
+
+         builder.addRenderer(marksRenderer);
+      }
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-      builder.setInitializationTask(createMarkersInitializationTask());
+      //builder.setInitializationTask(createMarkersInitializationTask());
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
-            //            final ICanvas canvas = context.getFactory().createCanvas();
-            //
-            //
-            //            final String text = "Hello World!";
-            //            //final GFont font = GFont.serif();
-            //            //final GFont font = GFont.monospaced();
-            //            final GFont font = GFont.sansSerif();
-            //
-            //            canvas.setFont(font);
-            //
-            //            final Vector2F textExtent = canvas.textExtent(text);
-            //
-            //            canvas.initialize(256, 256);
-            //
-            //            canvas.setFillColor(Color.fromRGBA(1f, 1f, 1f, 0.75f));
-            //            canvas.fillRoundedRectangle(0, 0, 256, 256, 32);
-            //            //canvas.fillRectangle(0, 0, 256, 256);
-            //
-            //            canvas.setShadow(Color.black(), 5f, 3.5f, -3.5f);
-            //            canvas.setFillColor(Color.fromRGBA(1f, 0f, 0f, 0.5f));
-            //            canvas.fillRectangle(32, 64, 64, 128);
-            //            canvas.removeShadow();
-            //
-            //
-            //            canvas.setStrokeColor(Color.fromRGBA(1f, 0f, 1f, 0.9f));
-            //            canvas.setStrokeWidth(2.5f);
-            //            final float margin = 1.25f;
-            //            canvas.strokeRoundedRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2), 32);
-            //            //canvas.strokeRectangle(0 + margin, 0 + margin, 256 - (margin * 2), 256 - (margin * 2));
-            //
-            //            canvas.setFillColor(Color.fromRGBA(1, 1, 0, 0.9f));
-            //            canvas.setStrokeWidth(1.1f);
-            //            canvas.setStrokeColor(Color.fromRGBA(0, 0, 0, 0.9f));
-            //            canvas.fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-            //            //canvas.fillAndStrokeRectangle(128, 16, 64, 64);
-            //
-            //            final int __DGD_working_at_Canvas;
-            //
-            //
-            //            canvas.setFillColor(Color.white());
-            //            canvas.setShadow(Color.black(), 5, 1, -1);
-            //            canvas.fillText(text, 128 - (textExtent._x / 2), 128 - (textExtent._y / 2));
-            //
-            //            canvas.removeShadow();
-            //            canvas.setFillColor(Color.black());
-            //            canvas.fillRectangle(10, 10, 5, 5);
-            //
-            //            final IImageListener listener = new IImageListener() {
-            //
-            //               @Override
-            //               public void imageCreated(final IImage image) {
-            //                  final Shape quad = new QuadShape( //
-            //                           new Geodetic3D(Angle.fromDegrees(37.78333333), Angle.fromDegrees(-121.5), 8000), //
-            //                           image, //
-            //                           50000, 50000);
-            //                  shapesRenderer.addShape(quad);
-            //               }
-            //            };
-            //            canvas.createImage(listener, true);
-            //
-            //            canvas.dispose();
+            final URL url = new URL("ws://192.168.0.103:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+            final IWebSocketListener listener = new IWebSocketListener() {
+               @Override
+               public void onOpen(final IWebSocket ws) {
+                  ILogger.instance().logError(ws + " opened!");
+               }
+
+
+               @Override
+               public void onMesssage(final IWebSocket ws,
+                                      final String message) {
+                  ILogger.instance().logError(ws + " message \"" + message + "\"");
+               }
+
+
+               @Override
+               public void onError(final IWebSocket ws,
+                                   final String error) {
+                  ILogger.instance().logError(ws + " error \"" + error + "\"");
+               }
+
+
+               @Override
+               public void onClose(final IWebSocket ws) {
+                  ILogger.instance().logError(ws + " closed!");
+               }
+
+
+               @Override
+               public void dispose() {
+               }
+            };
+            context.getFactory().createWebSocket(url, listener, true, true);
+
 
          }
 
@@ -205,7 +214,7 @@ public class G3MWebGLDemo
 
       final LayerSet layerSet = new LayerSet();
 
-      final boolean blueMarble = true;
+ /*      final boolean blueMarble = false;
       if (blueMarble) {
          final WMSLayer blueMarbleL = new WMSLayer( //
                   "bmng200405", //
@@ -221,9 +230,21 @@ public class G3MWebGLDemo
                   TimeInterval.fromDays(30), //
                   true);
          layerSet.addLayer(blueMarbleL);
-      }
+         blueMarbleL.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+ 
+        	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+            	Window.alert("touching terrain blueMarble");
+   				return false;
+			}
 
-      final boolean useOrtoAyto = true;
+			@Override
+			public void dispose() {}
+          });
+      }*/
+
+      final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
 
          final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, new Vector2I(
@@ -246,10 +267,115 @@ public class G3MWebGLDemo
                   ltrp);
          layerSet.addLayer(ortoAyto);
       }
+      
+      final boolean useOsm = false;
+      if (useOsm) {
+    	  final WMSLayer osm = new WMSLayer(
+              "osm_auto:all",                                       // layer name
+              new URL("http://129.206.228.72/cached/osm", false),   // server url 
+              WMSServerVersion.WMS_1_1_0,                           // server version
+              Sector.fullSphere(),                                  // initial bounding box
+              "image/jpeg",                                         // image format
+              "EPSG:4326",                                          // SRS 
+              "",                                                   // style
+              false,                                                // include transparency
+              null,                                                 // layer condition
+              TimeInterval.fromDays(30),                            // time interval to cache
+              true);                                                // read expired
+    	  layerSet.addLayer(osm);
+          osm.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+        	  
+         	 @Override
+ 			public boolean onTerrainTouch(G3MEventContext context,
+ 					TerrainTouchEvent ev) {
+         		 Geodetic3D position = ev.getPosition();
+             	Window.alert("touching terrain on osm layer "+ Double.toString(position.latitude().degrees()) +
+             			","+Double.toString(position.longitude().degrees()));
+    				return false;
+ 			}
 
+ 			@Override
+ 			public void dispose() {}
+           });
+      }
+      
+      final boolean useLatlon = false;
+      if (useLatlon) {
+    	  final WMSLayer latlon = new WMSLayer("latlon",
+    		                                 new URL("http://wms.latlon.org/",false),
+    		                                 WMSServerVersion.WMS_1_1_0,
+    		                                 Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0),
+    		                                 "image/jpeg",
+    		                                 "EPSG:4326",
+    		                                 "",
+    		                                 false,
+    		                                 null,                                                 // layer condition
+    		                                 TimeInterval.fromDays(30),                            // time interval to cache
+    		                                 true);                                                // read expired
+    	  layerSet.addLayer(latlon);
+      }
+      
+      final boolean useBing = false;
+      if (useBing) {
+	      final WMSLayer bing = new WMSLayer( //
+	              "ve", //
+	              new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), //
+	              WMSServerVersion.WMS_1_1_0, //
+	              Sector.fullSphere(), //
+	              "image/jpeg", //
+	              "EPSG:4326", //
+	              "", //
+	              false, //
+	              null,                                                 // layer condition
+	              TimeInterval.fromDays(30),                            // time interval to cache
+	              true); 
+	     layerSet.addLayer(bing);
+      }
+
+      /*final WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30), true);
+      layerSet.addLayer(political);*/
+      
+      /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
+      layerSet.addLayer(mqlOSM);*/
+
+      /*
+      final WMSLayer bingLayer = LayerBuilder.createOSMLayer(true);
+      layerSet.addLayer(bingLayer);
+      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+    	  
+     	 @Override
+			public boolean onTerrainTouch(G3MEventContext context,
+					TerrainTouchEvent ev) {
+     		 Geodetic2D position = ev.getPosition().asGeodetic2D();
+     		 Window.alert("touching terrain at coords (" +
+      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
+     				NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
+     		 //URL url = bingLayer.getFeatureInfoURL(position, ev.getSector());
+     		 //Window.alert(url.toString());
+     		 
+				return false;
+			}
+
+			@Override
+			public void dispose() {}
+       });*/
+      
+
+      final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
+      layerSet.addLayer(blueMarble);
+      
+      final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
+      layerSet.addLayer(pnoa);
+
+      
       builder.setInitializationTask(initializationTask);
+      builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
+      
+      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
+      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
+
 
    }
 
@@ -743,10 +869,12 @@ public class G3MWebGLDemo
          final WidgetUserData userData = null;
 
 
+         final ICameraActivityListener cameraActivityListener = null;
          _widget.initWidget(//
                   storage, // 
                   downloader, //
                   threadUtils, //
+                  cameraActivityListener, //
                   planet, //
                   cameraConstraints, //
                   cameraRenderer, //

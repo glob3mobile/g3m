@@ -127,7 +127,7 @@ public class SGTextureNode extends SGNode
     return null;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     final GLState myState = createState(rc, parentState);
     final GLState state2;
@@ -166,7 +166,7 @@ public class SGTextureNode extends SGNode
       for (int j = 0; j < childrenCount; j++)
       {
         SGNode child = _children.get(j);
-        child.render(rc, state);
+        child.render(rc, state, renderNotReadyShapes);
       }
   
       if (layerState != null)

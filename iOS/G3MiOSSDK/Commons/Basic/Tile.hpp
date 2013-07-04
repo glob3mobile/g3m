@@ -28,6 +28,7 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class TileElevationDataRequest;
 
 #include "ITexturizerData.hpp"
 
@@ -41,16 +42,16 @@ private:
   const int       _column;
 
   Mesh* _tessellatorMesh;
-  ElevationData* _elevationData;
-  long long      _elevationRequestId;
+
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
+  TileElevationDataRequest* _elevationDataRequest;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;
+  bool _texturizerDirty;    //Texturizer needs to be called
 
   float _verticalExaggeration;
   double _minHeight;
@@ -102,7 +103,12 @@ private:
   Extent* _tileExtent;
   Extent* getTileExtent(const G3MRenderContext *rc);
 
-  void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  int                    _elevationDataLevel;
+  ElevationData*         _elevationData;
+  bool                   _mustActualizeMeshDueToNewElevationData;
+  ElevationDataProvider* _lastElevationDataProvider;
+  int _lastTileMeshResolutionX;
+  int _lastTileMeshResolutionY;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -186,12 +192,6 @@ public:
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
 
-  void onElevationData(ElevationData* elevationData,
-                       MeshHolder* meshHolder,
-                       const TileTessellator* tessellator,
-                       const Planet* planet,
-                       const Vector2I& tileMeshResolution,
-                       bool renderDebug);
   
   double getMinHeight() const;
   double getMaxHeight() const;
@@ -201,6 +201,28 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
+  
+  bool isElevationDataSolved() const {
+    return (_elevationDataLevel == _level);
+  }
+  
+  ElevationData* getElevationData() const {
+    return _elevationData;
+  }
+  
+  void setElevationData(ElevationData* ed, int level);
+  
+  void getElevationDataFromAncestor(const Vector2I& extent);
+  
+  void initializeElevationData(ElevationDataProvider* elevationDataProvider,
+                               const TileTessellator* tesselator,
+                               const Vector2I& tileMeshResolution,
+                               const Planet* planet,
+                               bool renderDebug);
+  
+  void ancestorChangedElevationData(Tile* ancestor);
+  
+  ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
 };
 

@@ -21,9 +21,10 @@ package org.glob3.mobile.generated;
 //class JSONBoolean;
 //class JSONNumber;
 //class JSONString;
-
-
+//class JSONNull;
 //class JSONVisitor;
+
+
 
 public abstract class JSONBaseObject
 {
@@ -63,6 +64,12 @@ public abstract class JSONBaseObject
     ILogger.instance().logError("The requested Object is not of type JSONString!");
     return null;
   }
+
+  public JSONNull asNull()
+  {
+    return null;
+  }
+
 
   public abstract JSONBaseObject deepCopy();
 

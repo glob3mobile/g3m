@@ -54,6 +54,15 @@ public:
   }
 };
 
+bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
+  if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
+
+  const IGLTextureId* textureId = getTextureId(rc);
+  return (textureId != NULL);
+}
 
 void SGLayerNode::onImageDownload(IImage* image) {
   if (_downloadedImage != NULL) {
@@ -108,8 +117,8 @@ const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
     requestImage(rc);
   }
 
-  const IGLTextureId* texId = getTextureId(rc);
-  if (texId == NULL) {
+  const IGLTextureId* textureId = getTextureId(rc);
+  if (textureId == NULL) {
     return NULL;
   }
 
@@ -117,10 +126,10 @@ const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
   state->enableTextures();
   state->enableTexture2D();
   state->enableBlend();
-  int __WORKING;
+  //int __WORKING;
 
   GL* gl = rc->getGL();
-  gl->bindTexture(texId);
+  gl->bindTexture(textureId);
 
   return state;
 }

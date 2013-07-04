@@ -20,17 +20,22 @@
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
 		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
 		CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */; };
+		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
+		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
+		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
-		CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */; };
+		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
+		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -94,11 +99,15 @@
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
 		CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_bil16_150x150.bil; sourceTree = "<group>"; };
+		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		CF4027E81770E8F900D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
-		CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
+		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -106,6 +115,7 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -148,13 +158,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
+				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
+				CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */,
+				CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */,
 				443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */,
 				44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */,
 				D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */,
 				D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */,
 				D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */,
 				D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */,
-				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,6 +196,9 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
+				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
+				CF4027EA1770E90000D5A80C /* Security.framework */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
 				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
 				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
@@ -233,33 +249,25 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E70B224C1700DBA300172DF3 /* A320.bson */,
-				CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */,
-				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
-				E736067C16F8D7BE000E32AD /* horizontal-gears.png */,
-				E7A1A99316F202B700D138D8 /* sand-clock.png */,
-				CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */,
-				E7A1A98F16F0E51A00D138D8 /* Shaders */,
-				E728385416E914D80037AA5C /* g3m-marker.png */,
-				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
-				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
-				CFB5274A16D53906008374C2 /* full-earth-2048x1024.bil */,
-				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
+				CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */,
+				CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */,
 				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
-				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
-				CF8EE55A16CE94E40033AB7A /* mercator_debug.png */,
-				CF186B0916B85A5F00A39478 /* textures-citation */,
-				CF186B0716B85A3600A39478 /* citation.json */,
-				CF186B0516B857DE00A39478 /* textures-A320 */,
+				E70B224C1700DBA300172DF3 /* A320.bson */,
 				CF186B0316B8572400A39478 /* A320.json */,
-				CF09A94D16A09F7000E72811 /* test.bson */,
-				CF0223821668318600024B73 /* geojson */,
-				CFEA76671666DCB000E89BC7 /* images */,
-				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
+				CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */,
+				CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */,
+				CF186B0716B85A3600A39478 /* citation.json */,
 				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
 				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
 				E71B152E1626D27F003D1013 /* Default-Portrait.png */,
 				E71B152F1626D27F003D1013 /* Default-Portrait@2x.png */,
+				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
+				D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */,
+				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
+				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
+				E728385416E914D80037AA5C /* g3m-marker.png */,
+				CF0223821668318600024B73 /* geojson */,
+				E736067C16F8D7BE000E32AD /* horizontal-gears.png */,
 				E71B15301626D27F003D1013 /* Icon-72.png */,
 				E71B15311626D27F003D1013 /* Icon-72@2x.png */,
 				E71B15321626D27F003D1013 /* Icon-Small-50.png */,
@@ -267,10 +275,20 @@
 				E71B15341626D27F003D1013 /* Icon-Small@2x.png */,
 				E71B15351626D27F003D1013 /* Icon.png */,
 				E71B15361626D27F003D1013 /* Icon@2x.png */,
-				A717C99515EBA71D00EEC830 /* mercator.jpg */,
-				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
+				CFEA76671666DCB000E89BC7 /* images */,
 				CF883B831591053100AEE39C /* mark.png */,
+				A717C99515EBA71D00EEC830 /* mercator.jpg */,
+				CF8EE55A16CE94E40033AB7A /* mercator_debug.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
+				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
+				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
+				E7A1A99316F202B700D138D8 /* sand-clock.png */,
+				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
+				E7A1A98F16F0E51A00D138D8 /* Shaders */,
+				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
+				CF09A94D16A09F7000E72811 /* test.bson */,
+				CF186B0516B857DE00A39478 /* textures-A320 */,
+				CF186B0916B85A5F00A39478 /* textures-citation */,
 				D8E93BDF1588A171009D497C /* world.jpg */,
 			);
 			name = Resources;
@@ -353,6 +371,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -384,7 +403,6 @@
 				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
 				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
 				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
-				CFB5274B16D53906008374C2 /* full-earth-2048x1024.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
@@ -396,6 +414,8 @@
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
+				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
+				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

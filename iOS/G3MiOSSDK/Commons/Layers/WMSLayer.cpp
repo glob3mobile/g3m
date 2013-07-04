@@ -23,7 +23,7 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const WMSServerVersion queryServerVersion,
                    const Sector& sector,
                    const std::string& format,
-                   const std::string srs,
+                   const std::string& srs,
                    const std::string& style,
                    const bool isTransparent,
                    LayerCondition* condition,
@@ -58,7 +58,7 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const WMSServerVersion mapServerVersion,
                    const Sector& sector,
                    const std::string& format,
-                   const std::string srs,
+                   const std::string& srs,
                    const std::string& style,
                    const bool isTransparent,
                    LayerCondition* condition,
@@ -110,6 +110,8 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       sector.getDeltaLongitude().isZero() ) {
     return petitions;
   }
+  
+  //TODO: MUST SCALE WIDTH,HEIGHT
 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 

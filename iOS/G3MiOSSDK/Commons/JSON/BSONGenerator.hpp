@@ -45,6 +45,8 @@ public:
 
   void visitString(const JSONString* value);
 
+  void visitNull();
+
   void visitArrayBeforeChildren(const JSONArray* value);
   void visitArrayInBetweenChildren(const JSONArray* value);
   void visitArrayBeforeChild(const JSONArray* value,

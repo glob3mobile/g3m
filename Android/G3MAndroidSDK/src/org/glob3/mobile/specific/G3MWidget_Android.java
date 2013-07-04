@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -373,6 +374,7 @@ public final class G3MWidget_Android
    public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
+                          final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
                           final ArrayList<ICameraConstrainer> cameraConstraints,
                           final CameraRenderer cameraRenderer,
@@ -391,6 +393,7 @@ public final class G3MWidget_Android
                storage, //
                downloader, //
                threadUtils, //
+               cameraActivityListener,//
                planet, //
                cameraConstraints, //
                cameraRenderer, //
@@ -480,7 +483,6 @@ public final class G3MWidget_Android
    public void stopCameraAnimation() {
       getG3MWidget().stopCameraAnimation();
    }
-
 
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);

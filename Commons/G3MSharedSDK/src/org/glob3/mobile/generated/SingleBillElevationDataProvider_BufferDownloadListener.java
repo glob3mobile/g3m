@@ -5,22 +5,22 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
   private final Sector _sector ;
   private final int _resolutionWidth;
   private final int _resolutionHeight;
-  private final double _noDataValue;
 
-  public SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider singleBillElevationDataProvider, Sector sector, int resolutionWidth, int resolutionHeight, double noDataValue)
+  public SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider singleBillElevationDataProvider, Sector sector, int resolutionWidth, int resolutionHeight)
   {
      _singleBillElevationDataProvider = singleBillElevationDataProvider;
      _sector = new Sector(sector);
      _resolutionWidth = resolutionWidth;
      _resolutionHeight = resolutionHeight;
-     _noDataValue = noDataValue;
 
   }
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_resolutionWidth, _resolutionHeight);
-    ElevationData elevationData = BilParser.parseBil16(_sector, resolution, _noDataValue, -9999, buffer);
+
+    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer);
+
     if (buffer != null)
        buffer.dispose();
 
@@ -39,6 +39,14 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
 
   public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
   {
-
   }
 }
+//ElevationData* SingleBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+//                                                                             const Sector& sector,
+//                                                                             const Vector2I& extent) const{
+//  return new SubviewElevationData(elevationData,
+//                                  false,
+//                                  sector,
+//                                  extent,
+//                                  false);
+//}

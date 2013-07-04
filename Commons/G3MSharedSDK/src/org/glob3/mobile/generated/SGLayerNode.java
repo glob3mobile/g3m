@@ -95,6 +95,18 @@ public class SGLayerNode extends SGNode
 
   }
 
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    return (textureId != null);
+  }
+
   public final void onImageDownload(IImage image)
   {
     if (_downloadedImage != null)
@@ -112,8 +124,8 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    final IGLTextureId texId = getTextureId(rc);
-    if (texId == null)
+    final IGLTextureId textureId = getTextureId(rc);
+    if (textureId == null)
     {
       return null;
     }
@@ -122,10 +134,10 @@ public class SGLayerNode extends SGNode
     state.enableTextures();
     state.enableTexture2D();
     state.enableBlend();
-    int __WORKING;
+    //int __WORKING;
   
     GL gl = rc.getGL();
-    gl.bindTexture(texId);
+    gl.bindTexture(textureId);
   
     return state;
   }
