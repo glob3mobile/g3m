@@ -48,6 +48,16 @@ bool Frustum::contains(const Vector3D& point) const {
   return true;
 }
 
+#define testAllCornersInside(plane, corners) \
+                        ( (plane.signedDistance(corners[0]) >= 0) && \
+                          (plane.signedDistance(corners[1]) >= 0) && \
+                          (plane.signedDistance(corners[2]) >= 0) && \
+                          (plane.signedDistance(corners[3]) >= 0) && \
+                          (plane.signedDistance(corners[4]) >= 0) && \
+                          (plane.signedDistance(corners[5]) >= 0) && \
+                          (plane.signedDistance(corners[6]) >= 0) && \
+                          (plane.signedDistance(corners[7]) >= 0) )
+
 
 bool Frustum::touchesWithBox(const Box *box) const {
   // test first if frustum extent intersect with box
@@ -74,6 +84,14 @@ bool Frustum::touchesWithBox(const Box *box) const {
   const std::vector<Vector3F> corners = box->getCornersF();
 #endif
 
+  return (!testAllCornersInside(_leftPlane,   corners) &&
+          !testAllCornersInside(_bottomPlane, corners) &&
+          !testAllCornersInside(_rightPlane,  corners) &&
+          !testAllCornersInside(_topPlane,    corners) &&
+          !testAllCornersInside(_nearPlane,   corners) &&
+          !testAllCornersInside(_farPlane,    corners));
+
+  /*
   bool outside;
 
   // test with left plane
@@ -84,7 +102,9 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   // test with bottom plane
   outside = true;
@@ -94,7 +114,9 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   // test with right plane
   outside = true;
@@ -104,7 +126,9 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   // test with top plane
   outside = true;
@@ -114,7 +138,9 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   // test with near plane
   outside = true;
@@ -124,7 +150,9 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   // test with far plane
   outside = true;
@@ -134,9 +162,12 @@ bool Frustum::touchesWithBox(const Box *box) const {
       break;
     }
   }
-  if (outside) return false;
+  if (outside) {
+    return false;
+  }
 
   return true;
+   */
 }
 
 
