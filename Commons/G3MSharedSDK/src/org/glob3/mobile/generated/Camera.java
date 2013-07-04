@@ -469,7 +469,7 @@ public class Camera
     getModelMatrix();
   }
 
-  public final double getAngle2Horizon()
+  public final double getAngle2HorizonInRadians()
   {
      return _angle2Horizon;
   }

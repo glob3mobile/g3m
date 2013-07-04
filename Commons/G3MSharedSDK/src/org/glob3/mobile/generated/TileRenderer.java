@@ -383,6 +383,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
+    final Planet planet = rc.getPlanet();
+    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
+    double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+    final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
     if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -392,7 +397,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, parentState, null);
+        tile.render(rc, trc, parentState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
       }
     }
     else
@@ -411,7 +416,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, parentState, toVisitInNextIteration);
+          tile.render(rc, trc, parentState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
         }
   
         toVisit = toVisitInNextIteration;

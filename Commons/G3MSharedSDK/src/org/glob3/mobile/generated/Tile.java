@@ -34,6 +34,7 @@ package org.glob3.mobile.generated;
 //class MeshHolder;
 //class Vector2I;
 //class TileElevationDataRequest;
+//class Frustum;
 
 
 public class Tile
@@ -122,10 +123,11 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
+  private boolean isVisible(G3MRenderContext rc, TileRenderContext trc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
     // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc, getMinHeight()))
+  
+    if (_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians))
     {
       return false;
     }
@@ -142,7 +144,8 @@ public class Tile
     //  printf("break point on me\n");
     //}
   
-    return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
+  //  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
+    return extent.touches(cameraFrustumInModelCoordinates);
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
@@ -606,7 +609,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
     final float verticalExaggeration = trc.getVerticalExaggeration();
@@ -620,7 +623,7 @@ public class Tile
     TilesStatistics statistics = trc.getStatistics();
     statistics.computeTileProcessed(this);
   
-    if (isVisible(rc, trc))
+    if (isVisible(rc, trc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates))
     {
       setIsVisible(true, trc.getTexturizer());
   

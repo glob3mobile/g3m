@@ -33,7 +33,7 @@ public class Sector
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
-  private double _deltaRadius;
+  private double _deltaRadiusInRadians;
 
   //const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
 
@@ -98,7 +98,7 @@ public class Sector
      _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
      _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
      _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
-     _deltaRadius = -1.0;
+     _deltaRadiusInRadians = -1.0;
      _normalizedCartesianCenter = null;
   }
 
@@ -116,7 +116,7 @@ public class Sector
      _deltaLatitude = new Angle(sector._deltaLatitude);
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
-     _deltaRadius = sector._deltaRadius;
+     _deltaRadiusInRadians = sector._deltaRadiusInRadians;
     if (sector._normalizedCartesianCenter == null)
       _normalizedCartesianCenter = null;
     else
@@ -467,17 +467,20 @@ public class Sector
   }
 
 
-  public final boolean isBackOriented(G3MRenderContext rc, double minHeight)
+  public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
   {
-    final Camera camera = rc.getCurrentCamera();
-    final Planet planet = rc.getPlanet();
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+  //
+  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
   
-    // compute angle with camera position
-    //const Vector3D centerCamera = camera->getCartesianPosition();
-    //double angle = centerCamera.angleBetween(getCartesianCenter(planet)).radians();
-    final double angle = IMathUtils.instance().acos(camera.getNormalizedPosition().dot(getNormalizedCartesianCenter(planet)));
+    final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+    final double angleInRadians = IMathUtils.instance().acos(dot);
   
-    return (angle-getDeltaRadius() > camera.getAngle2Horizon());
+    return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
   }
 
   public final Geodetic2D clamp(Geodetic2D position)
@@ -638,11 +641,11 @@ public class Sector
     return (_lower.latitude()._degrees <= -89.9);
   }
 
-  public final double getDeltaRadius()
+  public final double getDeltaRadiusInRadians()
   {
-    if (_deltaRadius<0.0)
-      _deltaRadius = Math.sqrt(_deltaLatitude.radians()*_deltaLatitude.radians()+_deltaLongitude.radians()*_deltaLongitude.radians())*0.5;
-    return _deltaRadius;
+    if (_deltaRadiusInRadians < 0)
+      _deltaRadiusInRadians = IMathUtils.instance().sqrt(_deltaLatitude.radians() * _deltaLatitude.radians() + _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+    return _deltaRadiusInRadians;
   }
 
 
