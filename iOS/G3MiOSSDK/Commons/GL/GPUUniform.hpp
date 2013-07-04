@@ -131,7 +131,7 @@ public:
 
 class GPUUniformValueBool:public GPUUniformValue{
 public:
-  bool _value;
+  const bool _value;
   
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b){}
   
@@ -147,12 +147,10 @@ public:
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value == NULL){
-      return new GPUUniformValueBool(_value);
-    } else{
-      ((GPUUniformValueBool*)value)->_value = _value;
-      return value;
+    if (value != NULL){
+      delete value;
     }
+    return new GPUUniformValueBool(_value);
   }
   
   std::string description() const{
@@ -174,7 +172,7 @@ public:
 
 class GPUUniformValueVec2Float:public GPUUniformValue{
 public:
-  double _x, _y;
+  const double _x, _y;
   
   GPUUniformValueVec2Float(double x, double y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y){}
   
@@ -188,12 +186,9 @@ public:
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
     if (value == NULL){
-      return new GPUUniformValueVec2Float(_x,_y);
-    } else{
-      ((GPUUniformValueVec2Float*)value)->_x = _x;
-      ((GPUUniformValueVec2Float*)value)->_y = _y;
-      return value;
+      delete value;
     }
+      return new GPUUniformValueVec2Float(_x,_y);
   }
   
   std::string description() const{
@@ -217,7 +212,7 @@ public:
 
 class GPUUniformValueVec4Float:public GPUUniformValue{
 public:
-  double _x, _y, _z, _w;
+  const double _x, _y, _z, _w;
   
   GPUUniformValueVec4Float(double x, double y, double z, double w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w){}
@@ -231,15 +226,10 @@ public:
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value == NULL){
-      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-    } else{
-      ((GPUUniformValueVec4Float*)value)->_x = _x;
-      ((GPUUniformValueVec4Float*)value)->_y = _y;
-      ((GPUUniformValueVec4Float*)value)->_z = _z;
-      ((GPUUniformValueVec4Float*)value)->_w = _w;
-      return value;
+    if (value != NULL){
+      delete value;
     }
+      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
   }
   
   std::string description() const{
@@ -312,45 +302,45 @@ public:
 
 
 
-class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
-  
-  GPUUniformValueMatrix4FloatTransform(const GPUUniformValueMatrix4FloatTransform* that):
-  GPUUniformValue(GLType::glMatrix4Float()),
-  _m(MutableMatrix44D(that->_m)),
-  _isTransform(that->_isTransform)
-  {}
-  
-public:
-  MutableMatrix44D _m;
-  bool _isTransform;
-  
-  GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
-  GPUUniformValue(GLType::glMatrix4Float()),_m(MutableMatrix44D(m)), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
-  
-  void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniformMatrix4fv(id, false, _m.asMatrix44D());
-  }
-  
-  bool isEqualsTo(const GPUUniformValue* v) const{
-    GPUUniformValueMatrix4FloatTransform *v2 = (GPUUniformValueMatrix4FloatTransform *)v;
-    return _m.isEqualsTo(v2->_m);
-  }
-  
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
-
-  std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->addString("Uniform Value Matrix44D.");
-    std::string s = isb->getString();
-    delete isb;
-    return s;
-  }
-  
-  const MutableMatrix44D* getValue() const{
-    //    return &_transformedMatrix;
-    return &_m;
-  }
-};
+//class GPUUniformValueMatrix4FloatTransform:public GPUUniformValue{
+//  
+//  GPUUniformValueMatrix4FloatTransform(const GPUUniformValueMatrix4FloatTransform* that):
+//  GPUUniformValue(GLType::glMatrix4Float()),
+//  _m(MutableMatrix44D(that->_m)),
+//  _isTransform(that->_isTransform)
+//  {}
+//  
+//public:
+//  MutableMatrix44D _m;
+//  bool _isTransform;
+//  
+//  GPUUniformValueMatrix4FloatTransform(const MutableMatrix44D& m, bool isTransform):
+//  GPUUniformValue(GLType::glMatrix4Float()),_m(MutableMatrix44D(m)), _isTransform(isTransform)/*, _transformedMatrix(m)*/{}
+//  
+//  void setUniform(GL* gl, const IGLUniformID* id) const{
+//    gl->uniformMatrix4fv(id, false, _m.asMatrix44D());
+//  }
+//  
+//  bool isEqualsTo(const GPUUniformValue* v) const{
+//    GPUUniformValueMatrix4FloatTransform *v2 = (GPUUniformValueMatrix4FloatTransform *)v;
+//    return _m.isEqualsTo(v2->_m);
+//  }
+//  
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
+//
+//  std::string description() const{
+//    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+//    isb->addString("Uniform Value Matrix44D.");
+//    std::string s = isb->getString();
+//    delete isb;
+//    return s;
+//  }
+//  
+//  const MutableMatrix44D* getValue() const{
+//    //    return &_transformedMatrix;
+//    return &_m;
+//  }
+//};
 
 
 class GPUUniformMatrix4Float: public GPUUniform{
@@ -361,7 +351,7 @@ public:
 
 class GPUUniformValueFloat:public GPUUniformValue{
 public:
-  double _value;
+  const double _value;
   
   GPUUniformValueFloat(double d):GPUUniformValue(GLType::glFloat()),_value(d){}
   
@@ -374,12 +364,10 @@ public:
   }
   
   GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value == NULL){
-      return new GPUUniformValueFloat(_value);
-    } else{
-      ((GPUUniformValueFloat*)value)->_value = _value;
-      return value;
+    if (value != NULL){
+      delete value;
     }
+    return new GPUUniformValueFloat(_value);
   }
   
   std::string description() const{

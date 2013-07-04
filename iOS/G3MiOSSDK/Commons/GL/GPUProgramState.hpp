@@ -72,8 +72,8 @@ public:
   
   bool setUniformValue(GPUUniformKey key, double x, double y, double z, double w);
   
-  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
-  
+//  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
+
   bool setAttributeValue(GPUAttributeKey key,
                          IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);

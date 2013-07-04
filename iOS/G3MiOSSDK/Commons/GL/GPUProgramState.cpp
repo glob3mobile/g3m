@@ -217,10 +217,10 @@ bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y){
   return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
 }
 
-bool GPUProgramState::setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform){
-  GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
-  return setGPUUniformValue(key, uv);
-}
+//bool GPUProgramState::setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform){
+//  GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
+//  return setGPUUniformValue(key, uv);
+//}
 
 void GPUProgramState::setAttributeEnabled(GPUAttributeKey key, bool enabled){
   //TODO: REMOVE FUNCTION
