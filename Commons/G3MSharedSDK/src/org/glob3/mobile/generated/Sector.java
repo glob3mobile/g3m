@@ -442,7 +442,7 @@ public class Sector
   }
   public final Angle getInnerPointLatitude(double v)
   {
-    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), 1.0 - v);
+    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v));
   }
 
 
@@ -638,7 +638,6 @@ public class Sector
     return (_lower.latitude()._degrees <= -89.9);
   }
 
-<<<<<<< HEAD
   public final double getDeltaRadius()
   {
     if (_deltaRadius<0.0)
@@ -661,7 +660,7 @@ public class Sector
     }
     return _normalizedCartesianCenter;
   }
-=======
+
 
   @Override
   public int hashCode() {
@@ -704,5 +703,4 @@ public class Sector
     return true;
   }
 
->>>>>>> webgl-port
 }

@@ -140,8 +140,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void incDegrees(double value)
   {
     _degrees += value;
-    if (_degrees>360)
-       _degrees -= 360;
+    if (_degrees > 360)
+    {
+      _degrees -= 360;
+    }
   }
 
   public final void start(G3MRenderContext rc)
