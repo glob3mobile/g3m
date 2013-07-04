@@ -132,22 +132,37 @@ void Tile::setTextureSolved(bool textureSolved) {
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
 
-  const TileTessellator* tessellator = trc->getTessellator();
-  const bool renderDebug = trc->getParameters()->_renderDebug;
   ElevationDataProvider* elevationDataProvider = trc->getElevationDataProvider();
-  const Planet* planet = rc->getPlanet();
 
-  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+//  const TileTessellator* tessellator = trc->getTessellator();
+//  const bool renderDebug = trc->getParameters()->_renderDebug;
+//  const Planet* planet = rc->getPlanet();
+//
+//  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+//  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
   if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
+    const TileTessellator* tessellator = trc->getTessellator();
+    const bool renderDebug = trc->getParameters()->_renderDebug;
+    const Planet* planet = rc->getPlanet();
+
+    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+
     initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
   }
 
-  const bool mercator = trc->getLayerTilesRenderParameters()->_mercator;
-
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
+
+    const TileTessellator* tessellator = trc->getTessellator();
+    const bool renderDebug = trc->getParameters()->_renderDebug;
+    const Planet* planet = rc->getPlanet();
+
+    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+
+    const bool mercator = trc->getLayerTilesRenderParameters()->_mercator;
 
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
