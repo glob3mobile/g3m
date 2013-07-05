@@ -162,7 +162,7 @@ public:
   void setModelView(const Matrix44D* modelview, bool modifiesParents);
   const Matrix44D* getAccumulatedModelView() const;
 
-  GPUUniformValueMatrix4Float* getModelviewUniformValue();
+  GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

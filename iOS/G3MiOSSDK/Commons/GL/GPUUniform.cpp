@@ -19,8 +19,10 @@
 //}
 
 void GPUUniform::unset() {
-  delete _value;
-  _value = NULL;
+  if (_value != NULL){
+    _value->_release();
+    _value = NULL;
+  }
   _dirty = false;
 }
 

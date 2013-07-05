@@ -41,8 +41,11 @@ void GPUProgramState::clear(){
 //  _linkedProgram = NULL;
 
   for (int i = 0; i < 32; i++) {
-    delete _uniformValues[i];
-    _uniformValues[i] = NULL;
+    //delete _uniformValues[i];
+    if (_uniformValues[i] != NULL){
+      _uniformValues[i]->_release();
+      _uniformValues[i] = NULL;
+    }
     delete _attributeValues[i];
     _attributeValues[i] = NULL;
   }
@@ -137,7 +140,8 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
   GPUUniformValue* u = _uniformValues[index];
   if (u != NULL){
 //    prevLinkedUniform = u->getLinkedUniform();
-    delete u;
+//    delete u;
+    u->_release();
     uniformExisted = true;
   }
 
@@ -305,7 +309,8 @@ bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 #endif
 
   if (_uniformValues[index] != NULL){
-    delete _uniformValues[index];
+//    delete _uniformValues[index];
+    _uniformValues[index]->_release();
     _uniformValues[index] = NULL;
     onStructureChanged();
     return true;

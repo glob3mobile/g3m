@@ -15,9 +15,11 @@
 #include "IStringBuilder.hpp"
 #include "GPUVariable.hpp"
 
+#include "RCObject.hpp"
+
 class GPUUniform;
 
-class GPUUniformValue{
+class GPUUniformValue: public RCObject{
   const int _type;
   
 //  mutable GPUUniform* _uniform;
@@ -69,7 +71,7 @@ protected:
   const IGLUniformID* _id;
 
   bool _dirty;
-  GPUUniformValue* _value;
+  const GPUUniformValue* _value;
   const int _type;
 
   const GPUUniformKey _key;
@@ -78,7 +80,9 @@ public:
 
   virtual ~GPUUniform(){
     delete _id;
-    delete _value;
+    if (_value != NULL){
+      _value->_release();
+    }
   }
 
   GPUUniform(const std::string& name,
@@ -97,7 +101,7 @@ public:
   const IGLUniformID* getID() const { return _id; }
   int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
-  GPUUniformValue* getSetValue() const { return _value; }
+  const GPUUniformValue* getSetValue() const { return _value; }
   GPUUniformKey getKey() const { return _key;}
 
   
@@ -116,7 +120,13 @@ public:
     if (_type == v->getType()) { //type checking
       if (_value == NULL || !_value->isEqualsTo(v)) {
         _dirty = true;
-        _value = v->copyOrCreate(_value);
+//        _value = v->copyOrCreate(_value);
+
+        v->_retain();
+        if (_value != NULL){
+          _value->_release();
+        }
+        _value = v;
       }
     }
     else {
@@ -264,7 +274,7 @@ class GPUUniformValueMatrix4Float:public GPUUniformValue{
   }
 
 public:
-  const Matrix44D* _m;
+  const Matrix44D* const _m;
 
   GPUUniformValueMatrix4Float(const Matrix44D& m):
   GPUUniformValue(GLType::glMatrix4Float()),_m(&m){
@@ -302,6 +312,8 @@ public:
     delete isb;
     return s;
   }
+
+  const Matrix44D* getMatrix() const { return _m;}
 };
 
 
