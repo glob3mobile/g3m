@@ -94,7 +94,7 @@ public class SGMaterialNode extends SGNode
     {
   //    progState.setUniformValue(EnableFlatColor, true);
       progState.setUniformValue(GPUUniformKey.FLAT_COLOR, (double)_baseColor.getRed(), (double)_baseColor.getBlue(), (double) _baseColor.getGreen(), (double) _baseColor.getAlpha());
-      final float colorsIntensity = 1F;
+  //    const float colorsIntensity = 1;
   //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
     }
   }

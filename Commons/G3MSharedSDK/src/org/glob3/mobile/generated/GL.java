@@ -33,6 +33,13 @@ public class GL
 {
   private final INativeGL _nativeGL;
 
+
+  /////////////////////////////////////////////////
+  //CURRENT GL STATUS
+  private GLGlobalState _currentGLGlobalState = new GLGlobalState();
+  private GPUProgram _currentGPUProgram;
+  /////////////////////////////////////////////////
+
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
 
@@ -99,13 +106,11 @@ public class GL
 
 
   public GL(INativeGL nativeGL, boolean verbose)
-  //  _program(NULL),
-  //  _currentState(NULL),
-  //  _currentGPUProgram(NULL)
   {
      _nativeGL = nativeGL;
      _verbose = verbose;
      _texturesIdAllocationCounter = 0;
+     _currentGPUProgram = null;
     //Init Constants
     GLCullFace.init(_nativeGL);
     GLBufferType.init(_nativeGL);
@@ -131,9 +136,11 @@ public class GL
       ILogger.instance().logInfo("GL::clearScreen()");
     }
   
-    int ASK_JM;
-    GLState glState = new GLState((GLGlobalState) state, null);
-    glState.applyGlobalStateOnGPU(this);
+  //  int ASK_JM;
+  //  GLState glState((GLGlobalState*)&state, NULL);
+  //  glState.applyGlobalStateOnGPU(this);
+  
+    state.applyChanges(this, _currentGLGlobalState);
   
     //setGLGlobalState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
@@ -222,14 +229,18 @@ public class GL
       int texture2D = GLTextureType.texture2D();
   
   //    GLGlobalState state(*GLState::getCurrentGLGlobalState());
-      GLGlobalState state = GLState.createCopyOfCurrentGLGlobalState();
-      state.setPixelStoreIAlignmentUnpack(1);
-      state.bindTexture(texId);
+  //    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
   
-      GLState glState = new GLState(state, null);
-      glState.applyGlobalStateOnGPU(this);
-      if (state != null)
-         state.dispose();
+      GLGlobalState newState = new GLGlobalState();
+  
+      newState.setPixelStoreIAlignmentUnpack(1);
+      newState.bindTexture(texId);
+  
+      newState.applyChanges(this, _currentGLGlobalState);
+  
+  //    GLState glState(state, NULL);
+  //    glState.applyGlobalStateOnGPU(this);
+  //    delete state;
   
   //    setGLGlobalState(state);
   
@@ -275,7 +286,12 @@ public class GL
            textureId.dispose();
       }
   
-      GLState.textureHasBeenDeleted(textureId);
+      if (_currentGLGlobalState.getBoundTexture() == textureId)
+      {
+         _currentGLGlobalState.bindTexture(null);
+      }
+  
+  //    GLState::textureHasBeenDeleted(textureId);
   
   //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
   //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
@@ -401,8 +417,19 @@ public class GL
 
   public final void useProgram(GPUProgram program)
   {
-    _nativeGL.useProgram(program);
-    program.onUsed();
+    if (program != null && _currentGPUProgram != program)
+    {
+  
+      if (_currentGPUProgram != null)
+      {
+        _currentGPUProgram.onUnused(this);
+      }
+  
+      _nativeGL.useProgram(program);
+      program.onUsed();
+      _currentGPUProgram = program;
+    }
+  
   }
 
   public final void enableVertexAttribArray(int location)
@@ -413,6 +440,11 @@ public class GL
   public final void disableVertexAttribArray(int location)
   {
     _nativeGL.disableVertexAttribArray(location);
+  }
+
+  public final GLGlobalState getCurrentGLGlobalState()
+  {
+    return _currentGLGlobalState;
   }
 
 

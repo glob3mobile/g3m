@@ -37,21 +37,14 @@ public class SGGeometryNode extends SGNode
   
     GPUProgramState progState = _glState.getGPUProgramState();
   
-    progState.setAttributeEnabled(GPUAttributeKey.POSITION, true);
     progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_colors != null)
     {
-      progState.setAttributeEnabled(GPUAttributeKey.COLOR, true);
   //    progState.setUniformValue(EnableColorPerVertex, true);
       progState.setAttributeValue(GPUAttributeKey.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
-      final float colorsIntensity = 1F;
+  //    const float colorsIntensity = 1;
   //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
-    }
-    else
-    {
-      progState.setAttributeEnabled(GPUAttributeKey.COLOR, false);
-  //    progState.setUniformValue(EnableColorPerVertex, false);
     }
   
     if (_uv != null)

@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
-  public double _x;
-  public double _y;
-  public double _z;
-  public double _w;
+  public final double _x;
+  public final double _y;
+  public final double _z;
+  public final double _w;
 
   public GPUUniformValueVec4Float(double x, double y, double z, double w)
   {
@@ -25,21 +25,12 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
 
-  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
-  {
-    if (value == null)
-    {
-      return new GPUUniformValueVec4Float(_x, _y, _z, _w);
-    }
-    else
-    {
-      ((GPUUniformValueVec4Float)value)._x = _x;
-      ((GPUUniformValueVec4Float)value)._y = _y;
-      ((GPUUniformValueVec4Float)value)._z = _z;
-      ((GPUUniformValueVec4Float)value)._w = _w;
-      return value;
-    }
-  }
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value != NULL){
+//      delete value;
+//    }
+//      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
+//  }
 
   public final String description()
   {

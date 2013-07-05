@@ -63,7 +63,7 @@ public class GPUProgramState
   private boolean setGPUUniformValue(GPUUniformKey key, GPUUniformValue v)
   {
   
-  //  GPUUniform* prevLinkedUniform = NULL;
+    //  GPUUniform* prevLinkedUniform = NULL;
     boolean uniformExisted = false;
   
     final int index = key.getValue();
@@ -71,25 +71,25 @@ public class GPUProgramState
     GPUUniformValue u = _uniformValues[index];
     if (u != null)
     {
-  //    prevLinkedUniform = u->getLinkedUniform();
-      if (u != null)
-         u.dispose();
+      //    prevLinkedUniform = u->getLinkedUniform();
+      //    delete u;
+      u._release();
       uniformExisted = true;
     }
   
-  //  v->linkToGPUUniform(prevLinkedUniform);
+    //  v->linkToGPUUniform(prevLinkedUniform);
     _uniformValues[index] = v;
   
     if (!uniformExisted)
     {
-      onStructureChanged();
+      onUniformsChanged();
     }
   
     return uniformExisted;
   }
   private boolean setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue v)
   {
-  //  GPUAttribute* prevLinkedAttribute = NULL;
+    //  GPUAttribute* prevLinkedAttribute = NULL;
     boolean attributeExisted = false;
   
     final int index = key.getValue();
@@ -97,18 +97,18 @@ public class GPUProgramState
     GPUAttributeValue a = _attributeValues[index];
     if (a != null)
     {
-  //    prevLinkedAttribute = a->getLinkedAttribute();
+      //    prevLinkedAttribute = a->getLinkedAttribute();
       if (a != null)
          a.dispose();
       attributeExisted = true;
     }
   
-  //  v->linkToGPUAttribute(prevLinkedAttribute);
+    //  v->linkToGPUAttribute(prevLinkedAttribute);
     _attributeValues[index] = v;
   
     if (!attributeExisted)
     {
-      onStructureChanged();
+      onAttributesChanged();
     }
   
     return attributeExisted;
@@ -121,31 +121,28 @@ public class GPUProgramState
   private int _highestAttributeKey;
 
 //  mutable std::vector<int>* _uniformKeys;
-  private java.util.ArrayList<Integer> _attributeKeys;
+//  mutable std::vector<int>* _attributeKeys;
 
 //  mutable GPUProgram* _linkedProgram;
 
-  private void onStructureChanged()
+//  void onStructureChanged();
+
+  private void onUniformsChanged()
   {
-  //  delete _uniformKeys;
-  //  _uniformKeys = NULL;
-    //    _linkedProgram = NULL;
     _uniformsCode = 0;
-    _attributeCode = 0;
-  
-  //  if (_attributeKeys != NULL){
-  //    delete _attributeKeys;
-  //    _attributeKeys = NULL;
-  //  }
-  
-    _highestAttributeKey = 0;
-    _highestUniformKey = 0;
     for (int i = 0; i < 32; i++)
     {
       if (_uniformValues[i] != null)
       {
         _highestUniformKey = i;
       }
+    }
+  }
+  private void onAttributesChanged()
+  {
+    _attributeCode = 0;
+    for (int i = 0; i < 32; i++)
+    {
       if (_attributeValues[i] != null)
       {
         _highestAttributeKey = i;
@@ -169,21 +166,49 @@ public class GPUProgramState
     }
   }
 
+
+  //void GPUProgramState::onStructureChanged(){
+  ////  delete _uniformKeys;
+  ////  _uniformKeys = NULL;
+  //  //    _linkedProgram = NULL;
+  //  _uniformsCode = 0;
+  //  _attributeCode = 0;
+  //
+  ////  if (_attributeKeys != NULL){
+  ////    delete _attributeKeys;
+  ////    _attributeKeys = NULL;
+  ////  }
+  //
+  //  _highestAttributeKey = 0;
+  //  _highestUniformKey = 0;
+  //  for (int i = 0; i < 32; i++) {
+  //    if (_uniformValues[i] != NULL){
+  //      _highestUniformKey = i;
+  //    }
+  //    if (_attributeValues[i] != NULL){
+  //      _highestAttributeKey = i;
+  //    }
+  //  }
+  //}
+  
   public void dispose()
   {
     clear();
-  //  delete _uniformKeys;
+    //  delete _uniformKeys;
   }
 
   public final void clear()
   {
-  //  _linkedProgram = NULL;
+    //  _linkedProgram = NULL;
   
     for (int i = 0; i < 32; i++)
     {
+      //delete _uniformValues[i];
       if (_uniformValues[i] != null)
-         _uniformValues[i].dispose();
-      _uniformValues[i] = null;
+      {
+        _uniformValues[i]._release();
+        _uniformValues[i] = null;
+      }
       if (_attributeValues[i] != null)
          _attributeValues[i].dispose();
       _attributeValues[i] = null;
@@ -215,11 +240,7 @@ public class GPUProgramState
     return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
   }
 
-  public final boolean setUniformMatrixValue(GPUUniformKey key, MutableMatrix44D m, boolean isTransform)
-  {
-    GPUUniformValueMatrix4FloatTransform uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
-    return setGPUUniformValue(key, uv);
-  }
+//  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
 
   public final boolean setAttributeValue(GPUAttributeKey key, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)
   {
@@ -239,14 +260,20 @@ public class GPUProgramState
     }
   }
 
-  public final void setAttributeEnabled(GPUAttributeKey key, boolean enabled)
-  {
-    //TODO: REMOVE FUNCTION
-    if (!enabled)
-    {
-      setAttributeDisabled(key);
-    }
-  }
+//  void setAttributeEnabled(GPUAttributeKey key, bool enabled);
+
+  //bool GPUProgramState::setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform){
+  //  GPUUniformValueMatrix4FloatTransform *uv = new GPUUniformValueMatrix4FloatTransform(m, isTransform);
+  //  return setGPUUniformValue(key, uv);
+  //}
+  
+  //void GPUProgramState::setAttributeEnabled(GPUAttributeKey key, bool enabled){
+  //  //TODO: REMOVE FUNCTION
+  //  if (!enabled){
+  //    setAttributeDisabled(key);
+  //  }
+  //}
+  
   public final void setAttributeDisabled(GPUAttributeKey key)
   {
     setGPUAttributeValue(key, new GPUAttributeValueDisabled());
@@ -305,40 +332,6 @@ public class GPUProgramState
 
 //  void applyValuesToLinkedProgram() const;
 
-  /*
-  std::vector<int>* GPUProgramState::getUniformsKeys() const{
-  
-    if (_uniformKeys == NULL){
-  
-      _uniformKeys = new std::vector<int>();
-  
-      for (int i = 0; i <= _highestUniformKey; i++){
-        if (_uniformValues[i] != NULL){
-          _uniformKeys->push_back(i);
-        }
-      }
-  
-    }
-    return _uniformKeys;
-  }
-  
-  std::vector<int>* GPUProgramState::getAttributeKeys() const{
-  
-    if (_attributeKeys == NULL){
-  
-      _attributeKeys = new std::vector<int>();
-  
-      for (int i = 0; i <= _highestAttributeKey; i++){
-        if (_attributeValues[i] != NULL){
-          _attributeKeys->push_back(i);
-        }
-      }
-  
-  
-    }
-    return _attributeKeys;
-  }
-  */
   public final boolean removeGPUUniformValue(GPUUniformKey key)
   {
   
@@ -346,16 +339,12 @@ public class GPUProgramState
   
     if (_uniformValues[index] != null)
     {
-      if (_uniformValues[index] != null)
-         _uniformValues[index].dispose();
+      _uniformValues[index]._release();
       _uniformValues[index] = null;
-      onStructureChanged();
+      onUniformsChanged();
       return true;
     }
-    else
-    {
-      return false;
-    }
+    return false;
   }
 
   public final int getUniformsCode()
@@ -466,16 +455,16 @@ public class GPUProgramState
       }
     }
   
-  //  for (int i = 0; i < 32; i++) {
-  //    GPUUniformValue* u = _uniformValues[i];
-  //    if (u != NULL){
-  //      prog->setGPUUniformValue(i, u);
-  //    }
-  //    GPUAttributeValue* a = _attributeValues[i];
-  //    if (a != NULL){
-  //      prog->setGPUAttributeValue(i, a);
-  //    }
-  //  }
+    //  for (int i = 0; i < 32; i++) {
+    //    GPUUniformValue* u = _uniformValues[i];
+    //    if (u != NULL){
+    //      prog->setGPUUniformValue(i, u);
+    //    }
+    //    GPUAttributeValue* a = _attributeValues[i];
+    //    if (a != NULL){
+    //      prog->setGPUAttributeValue(i, a);
+    //    }
+    //  }
   }
 
 }

@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GPUUniform;
 
-public abstract class GPUUniformValue
+public abstract class GPUUniformValue extends RCObject
 {
   private final int _type;
 
@@ -58,7 +59,7 @@ public abstract class GPUUniformValue
 //    return value;
 //  }
 
-  public abstract GPUUniformValue copyOrCreate(GPUUniformValue value);
+//  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const = 0;
 
 //  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
 //    GPUUniform* u = prog->getGPUUniform(key);

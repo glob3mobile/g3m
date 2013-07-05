@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueVec2Float extends GPUUniformValue
 {
-  public double _x;
-  public double _y;
+  public final double _x;
+  public final double _y;
 
   public GPUUniformValueVec2Float(double x, double y)
   {
@@ -21,19 +21,12 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y);
   }
 
-  public final GPUUniformValue copyOrCreate(GPUUniformValue value)
-  {
-    if (value == null)
-    {
-      return new GPUUniformValueVec2Float(_x, _y);
-    }
-    else
-    {
-      ((GPUUniformValueVec2Float)value)._x = _x;
-      ((GPUUniformValueVec2Float)value)._y = _y;
-      return value;
-    }
-  }
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value == NULL){
+//      delete value;
+//    }
+//      return new GPUUniformValueVec2Float(_x,_y);
+//  }
 
   public final String description()
   {

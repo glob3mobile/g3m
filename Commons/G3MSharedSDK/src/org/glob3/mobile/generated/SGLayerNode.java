@@ -140,10 +140,6 @@ public class SGLayerNode extends SGNode
     }
   
     _glState.setParent(parentGLState);
-  
-  //  _glState.getGPUProgramState()->setUniformValue(EnableTexture, true);
-    _glState.getGPUProgramState().setAttributeEnabled(GPUAttributeKey.TEXTURE_COORDS, true);
-    //_glState.getGLGlobalState()->enableTexture2D();
     _glState.getGLGlobalState().enableBlend();
     int __WORKING;
   

@@ -1,12 +1,8 @@
 package org.glob3.mobile.generated; 
 public class GPUProgram
 {
-
-  //INativeGL* _nativeGL;
   private int _programID;
   private boolean _programCreated;
-//  std::map<int, GPUAttribute*> _attributes;
-//  std::map<int, GPUUniform*> _uniforms;
 
   private GPUUniform[] _uniforms = new GPUUniform[32];
   private GPUAttribute[] _attributes = new GPUAttribute[32];
@@ -242,10 +238,7 @@ public class GPUProgram
     {
       return (GPUUniformBool)u;
     }
-    else
-    {
-      return null;
-    }
+    return null;
   }
   public final GPUUniformVec2Float getGPUUniformVec2Float(String name)
   {
@@ -254,10 +247,7 @@ public class GPUProgram
     {
       return (GPUUniformVec2Float)u;
     }
-    else
-    {
-      return null;
-    }
+    return null;
   }
   public final GPUUniformVec4Float getGPUUniformVec4Float(String name)
   {
@@ -266,10 +256,7 @@ public class GPUProgram
     {
       return (GPUUniformVec4Float)u;
     }
-    else
-    {
-      return null;
-    }
+    return null;
   }
   public final GPUUniformFloat getGPUUniformFloat(String name)
   {
@@ -278,10 +265,7 @@ public class GPUProgram
     {
       return (GPUUniformFloat)u;
     }
-    else
-    {
-      return null;
-    }
+    return null;
   }
   public final GPUUniformMatrix4Float getGPUUniformMatrix4Float(String name)
   {
@@ -290,10 +274,8 @@ public class GPUProgram
     {
       return (GPUUniformMatrix4Float)u;
     }
-    else
-    {
-      return null;
-    }
+    return null;
+  
   }
 
   public final GPUAttribute getGPUAttributeVecXFloat(String name, int x)
@@ -319,10 +301,8 @@ public class GPUProgram
     {
       return (GPUAttributeVec1Float)a;
     }
-    else
-    {
-      return null;
-    }
+    return null;
+  
   }
   public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
@@ -331,10 +311,8 @@ public class GPUProgram
     {
       return (GPUAttributeVec2Float)a;
     }
-    else
-    {
-      return null;
-    }
+    return null;
+  
   }
   public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
@@ -343,10 +321,8 @@ public class GPUProgram
     {
       return (GPUAttributeVec3Float)a;
     }
-    else
-    {
-      return null;
-    }
+    return null;
+  
   }
   public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
@@ -355,10 +331,8 @@ public class GPUProgram
     {
       return (GPUAttributeVec4Float)a;
     }
-    else
-    {
-      return null;
-    }
+    return null;
+  
   }
 
 
@@ -389,16 +363,16 @@ public class GPUProgram
       _createdAttributes[i].unset(gl);
     }
   
-  //  for (int i = 0; i < 32; i++) {
-  //    GPUUniform* u = _uniforms[i];
-  //    GPUAttribute* a = _attributes[i];
-  //    if (u != NULL){
-  //      u->unset();
-  //    }
-  //    if (a != NULL){
-  //      a->unset(gl);
-  //    }
-  //  }
+    //  for (int i = 0; i < 32; i++) {
+    //    GPUUniform* u = _uniforms[i];
+    //    GPUAttribute* a = _attributes[i];
+    //    if (u != NULL){
+    //      u->unset();
+    //    }
+    //    if (a != NULL){
+    //      a->unset(gl);
+    //    }
+    //  }
   }
 
   /**
@@ -421,16 +395,16 @@ public class GPUProgram
     }
   
   
-  //  for (int i = 0; i < 32; i++) {
-  //    GPUUniform* u = _uniforms[i];
-  //    GPUAttribute* a = _attributes[i];
-  //    if (u != NULL){
-  //      u->applyChanges(gl);
-  //    }
-  //    if (a != NULL){
-  //      a->applyChanges(gl);
-  //    }
-  //  }
+    //  for (int i = 0; i < 32; i++) {
+    //    GPUUniform* u = _uniforms[i];
+    //    GPUAttribute* a = _attributes[i];
+    //    if (u != NULL){
+    //      u->applyChanges(gl);
+    //    }
+    //    if (a != NULL){
+    //      a->applyChanges(gl);
+    //    }
+    //  }
   }
 
   public final GPUUniform getUniformOfType(String name, int type)

@@ -34,19 +34,13 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
     {
       return new GPUAttributeValueDisabled();
     }
-    else
+    if (oldAtt.getEnabled())
     {
-      if (oldAtt.getEnabled())
-      {
-        if (oldAtt != null)
-           oldAtt.dispose();
-        return new GPUAttributeValueDisabled();
-      }
-      else
-      {
-        return oldAtt;
-      }
+      if (oldAtt != null)
+         oldAtt.dispose();
+      return new GPUAttributeValueDisabled();
     }
+    return oldAtt;
 
   }
 

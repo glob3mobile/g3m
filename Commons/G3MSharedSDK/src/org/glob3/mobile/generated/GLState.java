@@ -21,12 +21,6 @@ package org.glob3.mobile.generated;
 public class GLState
 {
 
-  /////////////////////////////////////////////////
-  //CURRENT GL STATUS
-  private static GLGlobalState _currentGPUGlobalState = new GLGlobalState();
-  private static GPUProgram _currentGPUProgram = null;
-  /////////////////////////////////////////////////
-
   private GPUProgramState _programState;
   private GLGlobalState _globalState;
   private final boolean _owner;
@@ -40,6 +34,7 @@ public class GLState
   private Matrix44D _accumulatedModelview;
   private Matrix44D _lastParentModelview;
   private boolean _multiplyModelview;
+  private GPUUniformValueMatrix4Float _modelviewUniformValue;
 
 //  class ParentModelviewListener: public Matrix44DListener{
 //    const GLState* _state;
@@ -65,7 +60,7 @@ public class GLState
     //  _programState->applyValuesToLinkedProgram();
     _programState.applyValuesToProgram(prog);
   
-    _globalState.applyChanges(gl, _currentGPUGlobalState);
+    _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
   }
 
 //  explicit GLState(const GLState& state):
@@ -100,6 +95,7 @@ public class GLState
      _accumulatedModelview = null;
      _multiplyModelview = false;
      _lastParentModelview = null;
+     _modelviewUniformValue = null;
   }
 
   //For debugging purposes only
@@ -117,8 +113,13 @@ public class GLState
      _accumulatedModelview = null;
      _multiplyModelview = false;
      _lastParentModelview = null;
+     _modelviewUniformValue = null;
   }
 
+
+  //GLGlobalState GLState::_currentGPUGlobalState;
+  //GPUProgram* GLState::_currentGPUProgram = NULL;
+  
   public void dispose()
   {
     if (_lastParentModelview != null)
@@ -134,6 +135,12 @@ public class GLState
     {
       _accumulatedModelview._release();
     }
+  
+    if (_modelviewUniformValue != null)
+    {
+      _modelviewUniformValue._release();
+    }
+  
     if (_owner)
     {
       if (_programState != null)
@@ -148,15 +155,14 @@ public class GLState
     return _parentGLState;
   }
 
-  public final void setParent(GLState p)
+  public final void setParent(GLState parent)
   {
-    _parentGLState = p;
-    if (p != null)
+    _parentGLState = parent;
+    if (parent != null)
     {
       //UNIFORMS AND ATTRIBUTES CODES
-      int __ASK_JM;
-      final int newUniformsCode = p.getUniformsCode() | _programState.getUniformsCode();
-      final int newAttributesCode = p.getAttributesCode() | _programState.getAttributesCode();
+      final int newUniformsCode = parent.getUniformsCode() | _programState.getUniformsCode();
+      final int newAttributesCode = parent.getAttributesCode() | _programState.getAttributesCode();
   
       _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) || (newUniformsCode != _uniformsCode));
       _uniformsCode = newUniformsCode;
@@ -167,7 +173,7 @@ public class GLState
       {
         if (_modelview != null)
         {
-          final Matrix44D parentsM = p.getAccumulatedModelView();
+          final Matrix44D parentsM = parent.getAccumulatedModelView();
           if (parentsM == null)
           {
             ILogger.instance().logError("CAN'T MODIFY PARENTS MODELVIEW");
@@ -186,18 +192,23 @@ public class GLState
   
               if (_lastParentModelview != null)
               {
-  //              _lastParentModelview->removeListener(&_parentMatrixListener);
+                //              _lastParentModelview->removeListener(&_parentMatrixListener);
                 _lastParentModelview._release();
               }
   
               _lastParentModelview = parentsM;
               _lastParentModelview._retain();
   
-  //            _lastParentModelview->addListener(&_parentMatrixListener);
+  //            if (_modelviewUniformValue != NULL){
+  //              _modelviewUniformValue->_release();
+  //              _modelviewUniformValue = NULL;
+  //            }
+  
+              //            _lastParentModelview->addListener(&_parentMatrixListener);
             }
-  //          else{
-  //            ILogger::instance()->logInfo("REUSING MODELVIEW");
-  //          }
+            //          else{
+            //            ILogger::instance()->logInfo("REUSING MODELVIEW");
+            //          }
   
           }
         }
@@ -207,7 +218,7 @@ public class GLState
 
   public final int getUniformsCode()
   {
-    if (_uniformsCode == 0)
+    if (_parentGLState == null)
     {
       return _programState.getUniformsCode();
     }
@@ -216,7 +227,7 @@ public class GLState
 
   public final int getAttributesCode()
   {
-    if (_attributesCode == 0)
+    if (_parentGLState == null)
     {
       return _programState.getAttributesCode();
     }
@@ -231,7 +242,7 @@ public class GLState
       _parentGLState.applyGlobalStateOnGPU(gl);
     }
   
-    _globalState.applyChanges(gl, _currentGPUGlobalState);
+    _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
   }
 
   public final void applyOnGPU(GL gl, GPUProgramManager progManager)
@@ -245,24 +256,24 @@ public class GLState
   
     if (_lastGPUProgramUsed != null)
     {
-      if (_lastGPUProgramUsed != _currentGPUProgram)
-      {
-        if (_currentGPUProgram != null)
-        {
-          _currentGPUProgram.onUnused(gl);
-        }
-        _currentGPUProgram = _lastGPUProgramUsed;
-        gl.useProgram(_lastGPUProgramUsed);
-      }
+      gl.useProgram(_lastGPUProgramUsed);
+  //    if (_lastGPUProgramUsed != _currentGPUProgram){
+  //      if (_currentGPUProgram != NULL){
+  //        _currentGPUProgram->onUnused(gl);
+  //      }
+  //      _currentGPUProgram = _lastGPUProgramUsed;
+  //      gl->useProgram(_lastGPUProgramUsed);
+  //    }
   
       applyStates(gl, _lastGPUProgramUsed);
   
       //APPLY TO GPU STATE MODELVIEW
-      final Matrix44D modelview = getAccumulatedModelView();
-      if (modelview != null)
+  //    const Matrix44D* modelview = getAccumulatedModelView();
+      GPUUniformValueMatrix4Float modelviewValue = getModelviewUniformValue();
+      if (modelviewValue != null)
       {
-        GPUUniformValueMatrix4Float valueModelview = new GPUUniformValueMatrix4Float(modelview);
-        _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(valueModelview);
+        //      GPUUniformValueMatrix4Float valueModelview(*modelview);
+        _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(modelviewValue);
       }
   
       _lastGPUProgramUsed.applyChanges(gl);
@@ -286,18 +297,15 @@ public class GLState
     return _globalState;
   }
 
-  public static void textureHasBeenDeleted(IGLTextureId textureId)
-  {
-    if (_currentGPUGlobalState.getBoundTexture() == textureId)
-    {
-      _currentGPUGlobalState.bindTexture(null);
-    }
-  }
-
-  public static GLGlobalState createCopyOfCurrentGLGlobalState()
-  {
-    return _currentGPUGlobalState.createCopy();
-  }
+//  static void textureHasBeenDeleted(const IGLTextureId* textureId){
+//    if (_currentGPUGlobalState.getBoundTexture() == textureId){
+//      _currentGPUGlobalState.bindTexture(NULL);
+//    }
+//  }
+//  
+//  static GLGlobalState* createCopyOfCurrentGLGlobalState(){
+//    return _currentGPUGlobalState.createCopy();
+//  }
 
   public final void setModelView(Matrix44D modelview, boolean multiply)
   {
@@ -306,8 +314,8 @@ public class GLState
   
     if (_modelview == null || _modelview != modelview)
     {
-  //    delete _modelview;
-  //    _modelview = new Matrix44D(modelview);
+      //    delete _modelview;
+      //    _modelview = new Matrix44D(modelview);
   
       if (_modelview != null)
       {
@@ -321,11 +329,17 @@ public class GLState
       //Forcing matrix multiplication next time even when parent's modelview is the same
       if (_lastParentModelview != null)
       {
-  //      _lastParentModelview->removeListener(&_parentMatrixListener);
+        //      _lastParentModelview->removeListener(&_parentMatrixListener);
         _lastParentModelview._release();
       }
   
       _lastParentModelview = null;
+  
+      if (_modelviewUniformValue != null)
+      {
+        _modelviewUniformValue._release();
+        _modelviewUniformValue = null;
+      }
     }
     //  else{
     //    ILogger::instance()->logInfo("Same modelview set.");
@@ -354,5 +368,42 @@ public class GLState
         return null;
       }
     }
+  }
+
+  public final GPUUniformValueMatrix4Float getModelviewUniformValue()
+  {
+  
+    final Matrix44D mv = getAccumulatedModelView();
+  
+    if (_modelviewUniformValue == null)
+    {
+      _modelviewUniformValue = new GPUUniformValueMatrix4Float(mv);
+    }
+    else
+    {
+      if (mv != _modelviewUniformValue.getMatrix())
+      {
+        _modelviewUniformValue._release();
+        _modelviewUniformValue = new GPUUniformValueMatrix4Float(mv);
+  
+      }
+    }
+  
+  
+  
+  //  if (_modelviewUniformValue == NULL){
+  //    const Matrix44D* mv = getAccumulatedModelView();
+  //    if (mv == NULL){
+  //      return NULL;
+  //    }
+  //
+  //    if (_modelviewUniformValue != NULL){
+  //      _modelviewUniformValue->_release();
+  //    }
+  //
+  //    _modelviewUniformValue = new GPUUniformValueMatrix4Float(*mv);
+  //  }
+    return _modelviewUniformValue;
+  
   }
 }

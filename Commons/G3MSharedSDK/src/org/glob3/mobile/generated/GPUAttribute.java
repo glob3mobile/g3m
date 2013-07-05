@@ -95,10 +95,10 @@ public class GPUAttribute extends GPUVariable
     if (_value == null || !_value.isEqualsTo(v))
     {
       _dirty = true;
-//      if (_value != NULL){
-//        delete _value;
-//      }
-//      _value = v->shallowCopy();
+      //      if (_value != NULL){
+      //        delete _value;
+      //      }
+      //      _value = v->shallowCopy();
       _value = v.copyOrCreate(_value);
     }
   }

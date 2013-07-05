@@ -33,12 +33,12 @@ public abstract class GPUAttributeValue
 
   protected int _arrayElementSize;
 
-//  mutable GPUAttribute* _attribute;
+  //  mutable GPUAttribute* _attribute;
 
 
   public GPUAttributeValue(boolean enabled)
-//  ,
-//  _attribute(NULL)
+  //  ,
+  //  _attribute(NULL)
   {
      _enabled = enabled;
      _type = 0;
@@ -51,7 +51,7 @@ public abstract class GPUAttributeValue
 
   public GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
   //,
-//  _attribute(NULL)
+  //  _attribute(NULL)
   {
      _enabled = true;
      _type = type;
@@ -71,7 +71,7 @@ public abstract class GPUAttributeValue
     _stride = stride;
     _normalized = normalized;
     _arrayElementSize = arrayElementSize;
-//    _attribute = NULL;
+    //    _attribute = NULL;
   }
 
   public final int getType()
@@ -98,7 +98,7 @@ public abstract class GPUAttributeValue
   {
      return _enabled;
   }
-//  GPUAttribute* getLinkedAttribute() const { return _attribute;}
+  //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   public void dispose()
   {
   }
@@ -108,17 +108,17 @@ public abstract class GPUAttributeValue
 
   public abstract String description();
 
-//  void linkToGPUAttribute(GPUAttribute* a) const{
-//    _attribute = a;
-//  }
-//  
-//  void unLinkToGPUAttribute(){
-//    _attribute = NULL;
-//  }
+  //  void linkToGPUAttribute(GPUAttribute* a) const{
+  //    _attribute = a;
+  //  }
+  //
+  //  void unLinkToGPUAttribute(){
+  //    _attribute = NULL;
+  //  }
 
-//  void setValueToLinkedAttribute() const;
+  //  void setValueToLinkedAttribute() const;
 
-//  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
+  //  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
 
   public abstract GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt);
 

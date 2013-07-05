@@ -19,15 +19,12 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
       v._timeStamp = _timeStamp;
       return v;
     }
-    else
-    {
-      GPUAttributeValueVecFloat oldAttVF = (GPUAttributeValueVecFloat)oldAtt;
+    GPUAttributeValueVecFloat oldAttVF = (GPUAttributeValueVecFloat)oldAtt;
 
-      oldAttVF.changeParameters(_enabled, _type, _attributeSize, _arrayElementSize, _index, _stride, _normalized);
-      oldAttVF._buffer = _buffer;
-      oldAttVF._timeStamp = _timeStamp;
-      return oldAttVF;
-    }
+    oldAttVF.changeParameters(_enabled, _type, _attributeSize, _arrayElementSize, _index, _stride, _normalized);
+    oldAttVF._buffer = _buffer;
+    oldAttVF._timeStamp = _timeStamp;
+    return oldAttVF;
 
   }
 
@@ -49,11 +46,8 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     {
       return false; //Is a disabled value
     }
-    else
-    {
-      GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-      return (_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized());
-    }
+    GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
+    return (_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized());
   }
 
   public final GPUAttributeValue shallowCopy()

@@ -4,7 +4,7 @@ public class GPUUniform extends GPUVariable
   protected final IGLUniformID _id;
 
   protected boolean _dirty;
-  protected GPUUniformValue _value;
+  protected final GPUUniformValue _value;
   protected final int _type;
 
   protected final GPUUniformKey _key;
@@ -15,7 +15,9 @@ public class GPUUniform extends GPUVariable
     if (_id != null)
        _id.dispose();
     if (_value != null)
-       _value.dispose();
+    {
+      _value._release();
+    }
   }
 
   public GPUUniform(String name, IGLUniformID id, int type)
@@ -73,8 +75,10 @@ public class GPUUniform extends GPUVariable
   public final void unset()
   {
     if (_value != null)
-       _value.dispose();
-    _value = null;
+    {
+      _value._release();
+      _value = null;
+    }
     _dirty = false;
   }
 
@@ -85,7 +89,14 @@ public class GPUUniform extends GPUVariable
       if (_value == null || !_value.isEqualsTo(v))
       {
         _dirty = true;
-        _value = v.copyOrCreate(_value);
+//        _value = v->copyOrCreate(_value);
+
+        v._retain();
+        if (_value != null)
+        {
+          _value._release();
+        }
+        _value = v;
       }
     }
     else

@@ -462,12 +462,9 @@ public class MutableMatrix44D
     {
       return that;
     }
-    else
+    if (that.isIdentity())
     {
-      if (that.isIdentity())
-      {
-        return this;
-      }
+      return this;
     }
   
     final double that00 = that._m00;
