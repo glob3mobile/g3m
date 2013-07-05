@@ -240,8 +240,17 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 }
 
 void GL::useProgram(GPUProgram* program) {
-  _nativeGL->useProgram(program);
-  program->onUsed();
+  if (program != NULL && _currentGPUProgram != program){
+
+    if (_currentGPUProgram != NULL){
+      _currentGPUProgram->onUnused(this);
+    }
+
+    _nativeGL->useProgram(program);
+    program->onUsed();
+    _currentGPUProgram = program;
+  }
+
 }
 
 //void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState){

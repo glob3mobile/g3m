@@ -9,7 +9,7 @@
 #include "GLState.hpp"
 
 GLGlobalState GLState::_currentGPUGlobalState;
-GPUProgram* GLState::_currentGPUProgram = NULL;
+//GPUProgram* GLState::_currentGPUProgram = NULL;
 
 GLState::~GLState(){
   if (_lastParentModelview != NULL){
@@ -114,18 +114,19 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   }
 
   if (_lastGPUProgramUsed != NULL){
-    if (_lastGPUProgramUsed != _currentGPUProgram){
-      if (_currentGPUProgram != NULL){
-        _currentGPUProgram->onUnused(gl);
-      }
-      _currentGPUProgram = _lastGPUProgramUsed;
-      gl->useProgram(_lastGPUProgramUsed);
-    }
+    gl->useProgram(_lastGPUProgramUsed);
+//    if (_lastGPUProgramUsed != _currentGPUProgram){
+//      if (_currentGPUProgram != NULL){
+//        _currentGPUProgram->onUnused(gl);
+//      }
+//      _currentGPUProgram = _lastGPUProgramUsed;
+//      gl->useProgram(_lastGPUProgramUsed);
+//    }
 
     applyStates(gl, _lastGPUProgramUsed);
 
     //APPLY TO GPU STATE MODELVIEW
-    const Matrix44D* modelview = getAccumulatedModelView();
+//    const Matrix44D* modelview = getAccumulatedModelView();
     GPUUniformValueMatrix4Float* modelviewValue = getModelviewUniformValue();
     if (modelviewValue != NULL){
       //      GPUUniformValueMatrix4Float valueModelview(*modelview);

@@ -35,6 +35,8 @@ class GLState;
 class GL {
 private:
   INativeGL* const _nativeGL;
+
+  GPUProgram*   _currentGPUProgram;
   
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
@@ -60,10 +62,8 @@ public:
      bool verbose) :
   _nativeGL(nativeGL),
   _verbose(verbose),
-  _texturesIdAllocationCounter(0)
-  //  _program(NULL),
-  //  _currentState(NULL),
-  //  _currentGPUProgram(NULL)
+  _texturesIdAllocationCounter(0),
+  _currentGPUProgram(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);

@@ -21,7 +21,6 @@ class GLState{
   /////////////////////////////////////////////////
   //CURRENT GL STATUS
   static GLGlobalState _currentGPUGlobalState;
-  static GPUProgram*   _currentGPUProgram;
   /////////////////////////////////////////////////
   
   GPUProgramState* _programState;
