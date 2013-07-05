@@ -25,7 +25,7 @@ private:
   
   MutableVector3D _centralGlobePoint;
   
-  void zoom(const Planet* planet, Camera* camera, Vector2I difCurrentPixels);
+  void zoom(Camera* camera, Vector2I difCurrentPixels);
   void rotate();
   
   

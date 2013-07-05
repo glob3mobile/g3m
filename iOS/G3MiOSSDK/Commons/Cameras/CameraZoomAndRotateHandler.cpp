@@ -86,14 +86,14 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
     // test if starting a rotate action
     if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) ||
         (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1)) {
-      cameraContext->setCurrentGesture(Rotate);
+      //cameraContext->setCurrentGesture(Rotate);
     }
   }
 
   // call specific transformation
   switch (cameraContext->getCurrentGesture()) {
     case Zoom:
-      if (_processZoom) zoom(planet, cameraContext->getNextCamera(), difCurrentPixels);
+      if (_processZoom) zoom(cameraContext->getNextCamera(), difCurrentPixels);
       break;
       
     case Rotate:
@@ -158,69 +158,44 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-void CameraZoomAndRotateHandler::zoom(const Planet* planet, Camera* camera, Vector2I difCurrentPixels)
+void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
 {
-  const double MIN_CAMERA_HEIGHT = 65;
-  double R = planet->getRadii()._x;
+  const double MIN_CAMERA_HEIGHT = 30;
   
+  // compute angle params
   double angle = atan2(difCurrentPixels._y, difCurrentPixels._x);
   const double PI = IMathUtils::instance()->pi();
   while (fabs(_lastAngle-angle)>PI/2) {
     if (angle<_lastAngle) angle+=PI;  else  angle-=PI;
   }
   _lastAngle = angle;
+  angle -= _angle0;
   
-  // make zoom
+  // compute zoom params
   double fingerSep = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
   double factor = _fingerSep0 / fingerSep;
   double desp = 1-factor;
-  angle -= _angle0;
-
-  
-  //printf ("making zoom. fingersep=%.2f  angle=%.2f\n", fingerSep, angle);
-  
-          //camera.ZoomCamera (center, fingerSep0/fingerSep, angle-angle0, camera0);
-  
-          //********************************
-  
-          //void Camera::ZoomCamera (Point3D p0, double factor, double angle, const Camera &camera0)
-    
-          //Globe *g = SceneController::GetInstance()->getCurrentGlobe();
-          //double R = g->GetGlobeRadius();
-	
-	// we move the camera in that direction
   Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
   double dist = w.length();
     
 	// don't allow much closer
-	if (dist*factor<MIN_CAMERA_HEIGHT && factor<0.999) return;
+	if (dist*factor<MIN_CAMERA_HEIGHT && factor<0.999)
+    return;
 	
 	// don't allow much further away
-	if (dist*factor>11*R && factor>1.001) return;
+  double R = _centralGlobePoint.length();
+	if (dist*factor>11*R && factor>1.001)
+    return;
 	
-	// make rotation
+	// make zoom and rotation
   camera->copyFrom(_camera0);
   camera->rotateWithAxis(_centralGlobePoint.asVector3D(), Angle::fromRadians(angle));
   camera->moveForward(desp*dist);
   
-  /*
-	// save displacement and angle, in the case of zoom afterwards
-	zoomStep = desp*dist - zoomDesp;
-	zoomDesp = desp*dist;
-	
-  // update angle value
-	if (angle>5) angle-=2*PI;
-	if (angle<-5) angle+=2*PI;
-	rotStep = angle - rotAngle;
-	if (fabs(rotStep)>1) {
-		//iprintf ("rotstep grande = %f   angle=%f  rotangle=%f\n", rotStep, angle, rotAngle);
-		rotStep *= 1/fabs(rotStep);
-	}
-	rotAngle = angle;
-  
-
-  return true;*/
-
+  /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
+  printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
+          _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
+          _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
 }
 
 void CameraZoomAndRotateHandler::rotate()
