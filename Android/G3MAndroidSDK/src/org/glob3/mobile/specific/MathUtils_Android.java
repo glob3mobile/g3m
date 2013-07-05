@@ -9,22 +9,6 @@ public final class MathUtils_Android
          extends
             IMathUtils {
 
-   private static final double PI      = Math.PI;
-   private static final double HALF_PI = PI / 2;
-
-
-   @Override
-   public double pi() {
-      return PI;
-   }
-
-
-   @Override
-   public double halfPi() {
-      return HALF_PI;
-   }
-
-
    @Override
    public boolean isNan(final double v) {
       return (v != v);
