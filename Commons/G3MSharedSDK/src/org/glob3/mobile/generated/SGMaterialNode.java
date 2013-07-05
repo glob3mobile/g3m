@@ -64,10 +64,10 @@ public class SGMaterialNode extends SGNode
   //
   //GPUProgramState* SGMaterialNode::createGPUProgramState(const G3MRenderContext* rc,
   //                                                       const GPUProgramState* parentState){
-  //  
-  //  
+  //
+  //
   //  //  GPUProgramState* progState = new GPUProgramState(parentState);
-  //  
+  //
   //  //  if (_baseColor != NULL){
   //  //    progState->setUniformValue(EnableFlatColor, true);
   //  //    progState->setUniformValue(FLAT_COLOR,
@@ -92,11 +92,10 @@ public class SGMaterialNode extends SGNode
   
     if (_baseColor != null)
     {
-  //    progState.setUniformValue(EnableFlatColor, true);
-      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, _baseColor.getRed(),
-    		  _baseColor.getGreen(), _baseColor.getBlue(), _baseColor.getAlpha());
-  //    const float colorsIntensity = 1;
-  //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
+      //    progState.setUniformValue(EnableFlatColor, true);
+      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, _baseColor.getRed(), _baseColor.getGreen(), _baseColor.getBlue(), _baseColor.getAlpha());
+      //    const float colorsIntensity = 1;
+      //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
     }
   }
 

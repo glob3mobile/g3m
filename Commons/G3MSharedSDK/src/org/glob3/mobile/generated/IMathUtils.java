@@ -41,8 +41,14 @@ public abstract class IMathUtils
   {
   }
 
-  public abstract double pi();
-  public abstract double halfPi();
+  public static double pi()
+  {
+     return 3.14159265358979323846264338327950288;
+  }
+  public static double halfPi()
+  {
+     return 1.57079632679489661923132169163975144;
+  }
 
   public abstract boolean isNan(double v);
   public abstract boolean isNan(float v);

@@ -38,7 +38,7 @@ public class LayoutUtils
     java.util.ArrayList<Geodetic3D> result = new java.util.ArrayList<Geodetic3D>();
   
     final double startAngleInRadians = startAngle._radians;
-    final double deltaInRadians = (IMathUtils.instance().pi() * 2.0) / splits;
+    final double deltaInRadians = (IMathUtils.pi() * 2.0) / splits;
     final Vector3D cartesianCenter = ellipsoid.toCartesian(center);
     final Vector3D normal = ellipsoid.geodeticSurfaceNormal(center);
     final Vector3D northInPlane = Vector3D.upZ().projectionInPlane(normal).normalized().times(radiusInMeters);
