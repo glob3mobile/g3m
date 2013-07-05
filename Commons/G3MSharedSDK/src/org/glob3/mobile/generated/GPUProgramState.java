@@ -98,8 +98,7 @@ public class GPUProgramState
     if (a != null)
     {
       //    prevLinkedAttribute = a->getLinkedAttribute();
-      if (a != null)
-         a.dispose();
+      a._release();
       attributeExisted = true;
     }
   
@@ -204,14 +203,19 @@ public class GPUProgramState
     for (int i = 0; i < 32; i++)
     {
       //delete _uniformValues[i];
-      if (_uniformValues[i] != null)
+      GPUUniformValue u = _uniformValues[i];
+      if (u != null)
       {
-        _uniformValues[i]._release();
+        u._release();
         _uniformValues[i] = null;
       }
-      if (_attributeValues[i] != null)
-         _attributeValues[i].dispose();
-      _attributeValues[i] = null;
+      //    delete _attributeValues[i];
+      GPUAttributeValue a = _attributeValues[i];
+      if (a != null)
+      {
+        a._release();
+        _attributeValues[i] = null;
+      }
     }
   }
 

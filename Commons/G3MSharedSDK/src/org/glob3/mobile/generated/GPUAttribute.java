@@ -1,24 +1,23 @@
 package org.glob3.mobile.generated; 
 public class GPUAttribute extends GPUVariable
 {
-  protected final int _id;
+  private final int _id;
 
-  protected boolean _dirty;
-  protected GPUAttributeValue _value;
+  private boolean _dirty;
+  private GPUAttributeValue _value;
 
-  protected final int _type;
-  protected final int _size;
+  private final int _type;
+  private final int _size;
 
-  protected boolean _dirtyEnabled;
-  protected boolean _enabled;
+  private boolean _dirtyEnabled;
+  private boolean _enabled;
 
-  protected final GPUAttributeKey _key;
+  private final GPUAttributeKey _key;
 
 
   public void dispose()
   {
-    if (_value != null)
-       _value.dispose();
+    _value = null;
   }
 
   public GPUAttribute(String name, int id, int type, int size)
@@ -73,8 +72,8 @@ public class GPUAttribute extends GPUVariable
   {
     if (_value != null)
     {
-      if (_value != null)
-         _value.dispose();
+//      delete _value;
+      _value._release();
       _value = null;
     }
     _enabled = false;
@@ -86,6 +85,9 @@ public class GPUAttribute extends GPUVariable
 
   public final void set(GPUAttributeValue v)
   {
+    if (v != _value)
+    {
+
     if (v.getEnabled() && _type != v.getType()) //type checking
     {
       //delete v;
@@ -99,7 +101,16 @@ public class GPUAttribute extends GPUVariable
       //        delete _value;
       //      }
       //      _value = v->shallowCopy();
-      _value = v.copyOrCreate(_value);
+//      _value = v->copyOrCreate(_value);
+
+      if (_value != null)
+      {
+        _value._release();
+      }
+      _value = v;
+      _value._retain();
+
+    }
     }
   }
 

@@ -20,18 +20,19 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GPUAttribute;
 
-public abstract class GPUAttributeValue
+public abstract class GPUAttributeValue extends RCObject
 {
-  protected boolean _enabled;
-  protected int _type;
-  protected int _attributeSize;
-  protected int _index;
-  protected int _stride;
-  protected boolean _normalized;
+  protected final boolean _enabled;
+  protected final int _type;
+  protected final int _attributeSize;
+  protected final int _index;
+  protected final int _stride;
+  protected final boolean _normalized;
 
-  protected int _arrayElementSize;
+  protected final int _arrayElementSize;
 
   //  mutable GPUAttribute* _attribute;
 
@@ -62,17 +63,16 @@ public abstract class GPUAttributeValue
      _arrayElementSize = arrayElementSize;
   }
 
-  public final void changeParameters(boolean enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
-  {
-    _enabled = enabled;
-    _type = type;
-    _attributeSize = attributeSize;
-    _index = index;
-    _stride = stride;
-    _normalized = normalized;
-    _arrayElementSize = arrayElementSize;
-    //    _attribute = NULL;
-  }
+//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized){
+//    _enabled = enabled;
+//    _type = type;
+//    _attributeSize = attributeSize;
+//    _index = index;
+//    _stride = stride;
+//    _normalized = normalized;
+//    _arrayElementSize = arrayElementSize;
+//    //    _attribute = NULL;
+//  }
 
   public final int getType()
   {
@@ -104,7 +104,7 @@ public abstract class GPUAttributeValue
   }
   public abstract void setAttribute(GL gl, int id);
   public abstract boolean isEqualsTo(GPUAttributeValue v);
-  public abstract GPUAttributeValue shallowCopy();
+//  virtual GPUAttributeValue* shallowCopy() const = 0;
 
   public abstract String description();
 
@@ -120,6 +120,6 @@ public abstract class GPUAttributeValue
 
   //  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
 
-  public abstract GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt);
+//  virtual GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const = 0;
 
 }

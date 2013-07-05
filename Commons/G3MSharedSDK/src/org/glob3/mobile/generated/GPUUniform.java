@@ -4,7 +4,7 @@ public class GPUUniform extends GPUVariable
   private final IGLUniformID _id;
 
   private boolean _dirty;
-  protected GPUUniformValue _value;
+  private GPUUniformValue _value;
   private final int _type;
 
   private final GPUUniformKey _key;
