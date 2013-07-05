@@ -20,7 +20,7 @@ std::vector<Geodetic3D*> LayoutUtils::splitOverCircle(const Ellipsoid* ellipsoid
   std::vector<Geodetic3D*> result;
   
   const double startAngleInRadians = startAngle._radians;
-  const double deltaInRadians      = (IMathUtils::instance()->pi() * 2.0) / splits;
+  const double deltaInRadians      = (IMathUtils::pi() * 2.0) / splits;
   const Vector3D cartesianCenter   = ellipsoid->toCartesian(center);
   const Vector3D normal            = ellipsoid->geodeticSurfaceNormal(center);
   const Vector3D northInPlane      = Vector3D::upZ().projectionInPlane(normal).normalized().times(radiusInMeters);

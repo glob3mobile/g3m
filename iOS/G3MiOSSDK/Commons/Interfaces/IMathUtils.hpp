@@ -32,8 +32,8 @@ public:
 
   virtual ~IMathUtils() { }
 
-  virtual double pi() const = 0;
-  virtual double halfPi() const = 0;
+  static double pi() { return 3.14159265358979323846264338327950288;}
+  static double halfPi() { return 1.57079632679489661923132169163975144;}
 
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v)  const = 0;
