@@ -80,8 +80,8 @@ const Vector3D LeveledTexturedMesh::getVertex(int i) const {
   return _mesh->getVertex(i);
 }
 
-Extent* LeveledTexturedMesh::getExtent() const {
-  return (_mesh == NULL) ? NULL : _mesh->getExtent();
+BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
+  return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {

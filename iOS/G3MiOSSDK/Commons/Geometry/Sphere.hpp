@@ -12,21 +12,32 @@
 #include "Geometry.hpp"
 #include "Vector3D.hpp"
 
-class Sphere: public Geometry3D{
-  
+class Sphere: public Geometry3D {
+private:
   const Vector3D _center;
-  const double _radius;
-  
-  const double _radiusSquared;
-  
+  const double   _radius;
+  const double   _radiusSquared;
+
 public:
   Sphere(const Vector3D& center, double radius):
-  _center(center), _radius(radius), _radiusSquared(radius*radius){}
-  
-  Vector3D getCenter() const{ return _center;}
-  double getRadius() const { return _radius;}
-  double getRadiusSquared() const { return _radiusSquared;}
-  
+  _center(center),
+  _radius(radius),
+  _radiusSquared(radius*radius)
+  {
+  }
+
+  Vector3D getCenter() const{
+    return _center;
+  }
+
+  double getRadius() const {
+    return _radius;
+  }
+
+  double getRadiusSquared() const {
+    return _radiusSquared;
+  }
+
 };
 
-#endif /* defined(__G3MiOSSDK__Sphere__) */
+#endif

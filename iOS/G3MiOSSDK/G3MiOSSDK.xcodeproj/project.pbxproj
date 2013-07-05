@@ -388,7 +388,7 @@
 		E780A54C16D3AED9000F0395 /* NullStorage.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 382D4B92159DC26000FE9296 /* NullStorage.hpp */; };
 		E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD39F1577EE5A0012AC53 /* Angle.hpp */; };
 		E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3CB15B4651700B5581C /* Box.hpp */; };
-		E780A55016D3AED9000F0395 /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3C915B4649800B5581C /* Extent.hpp */; };
+		E780A55016D3AED9000F0395 /* BoundingVolume.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3C915B4649800B5581C /* BoundingVolume.hpp */; };
 		E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3B315B32D2E00B5581C /* Frustum.hpp */; };
 		E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */; };
 		E780A55316D3AED9000F0395 /* Geodetic3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */; };
@@ -607,7 +607,7 @@
 				E780A54C16D3AED9000F0395 /* NullStorage.hpp in CopyFiles */,
 				E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */,
 				E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */,
-				E780A55016D3AED9000F0395 /* Extent.hpp in CopyFiles */,
+				E780A55016D3AED9000F0395 /* BoundingVolume.hpp in CopyFiles */,
 				E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */,
 				E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */,
 				E780A55316D3AED9000F0395 /* Geodetic3D.hpp in CopyFiles */,
@@ -854,7 +854,7 @@
 		CC41E39F15B1FD5B00B5581C /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plane.cpp; path = Commons/Geometry/Plane.cpp; sourceTree = "<group>"; };
 		CC41E3B315B32D2E00B5581C /* Frustum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Frustum.hpp; path = Commons/Geometry/Frustum.hpp; sourceTree = "<group>"; };
 		CC41E3B515B32DFB00B5581C /* Frustum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Frustum.cpp; path = Commons/Geometry/Frustum.cpp; sourceTree = "<group>"; };
-		CC41E3C915B4649800B5581C /* Extent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Extent.hpp; path = Commons/Geometry/Extent.hpp; sourceTree = "<group>"; };
+		CC41E3C915B4649800B5581C /* BoundingVolume.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BoundingVolume.hpp; path = Commons/Geometry/BoundingVolume.hpp; sourceTree = "<group>"; };
 		CC41E3CB15B4651700B5581C /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Box.hpp; path = Commons/Geometry/Box.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraDoubleTapHandler.hpp; path = Commons/Cameras/CameraDoubleTapHandler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraDoubleTapHandler.cpp; path = Commons/Cameras/CameraDoubleTapHandler.cpp; sourceTree = "<group>"; };
@@ -1604,7 +1604,7 @@
 				CCB2566315B5F58500079B96 /* Box.cpp */,
 				CC41E3CB15B4651700B5581C /* Box.hpp */,
 				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
-				CC41E3C915B4649800B5581C /* Extent.hpp */,
+				CC41E3C915B4649800B5581C /* BoundingVolume.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
 				CC41E3B315B32D2E00B5581C /* Frustum.hpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,

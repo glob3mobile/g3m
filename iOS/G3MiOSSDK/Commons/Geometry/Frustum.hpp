@@ -12,7 +12,7 @@
 #include "Vector3D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Plane.hpp"
-#include "Extent.hpp"
+#include "BoundingVolume.hpp"
 
 class Box;
 
@@ -75,7 +75,7 @@ private:
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
-  Extent*   _extent;
+  BoundingVolume*   _boundingVolume;
   
   Frustum(const Frustum *that,
           const MutableMatrix44D& matrix,
@@ -95,10 +95,10 @@ private:
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
-    _extent = computeExtent();
+    _boundingVolume = computeBoundingVolume();
   }
   
-  Extent* computeExtent();
+  BoundingVolume* computeBoundingVolume();
   
   
 public:
@@ -117,7 +117,7 @@ public:
   _rtf(that._rtf),
   _lbf(that._lbf),
   _rbf(that._rbf),
-  _extent(NULL)
+  _boundingVolume(NULL)
   {
 
   }
@@ -147,7 +147,7 @@ public:
                               Vector3D(left, top, -znear))),
   _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
   _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
-  _extent(NULL)
+  _boundingVolume(NULL)
   {
   }
   
@@ -162,10 +162,12 @@ public:
   }
   
   ~Frustum(){
-    delete _extent;
+    delete _boundingVolume;
   }
   
-  Extent *getExtent() const { return _extent; }
+  BoundingVolume* getBoundingVolume() const {
+    return _boundingVolume;
+  }
 
 };
 

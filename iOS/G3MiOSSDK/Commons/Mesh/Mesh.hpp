@@ -10,7 +10,7 @@
 #define G3MiOSSDK_Mesh_hpp
 
 #include "Context.hpp"
-#include "Extent.hpp"
+#include "BoundingVolume.hpp"
 
 class Vector3D;
 
@@ -26,7 +26,7 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       const GLState& parentState) const = 0;
   
-  virtual Extent* getExtent() const = 0;
+  virtual BoundingVolume* getBoundingVolume() const = 0;
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
 

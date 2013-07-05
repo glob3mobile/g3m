@@ -134,7 +134,8 @@ bool Box::contains(const Vector3D& p) const {
   return true;
 }
 
-Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const {
+Vector3D Box::intersectionWithRay(const Vector3D& origin,
+                                  const Vector3D& direction) const {
   //MIN X
   {
     Plane p( Vector3D(1.0, 0.0, 0.0), _lower._x);
@@ -245,7 +246,7 @@ bool Box::touchesBox(const Box* box) const {
   return true;
 }
 
-Extent* Box::mergedWithBox(const Box* that) const {
+BoundingVolume* Box::mergedWithBox(const Box* that) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double lowerX = mu->min(_lower._x, that->_lower._x);
@@ -260,7 +261,7 @@ Extent* Box::mergedWithBox(const Box* that) const {
                  Vector3D(upperX, upperY, upperZ));
 }
 
-bool Box::fullContains(const Extent* that) const {
+bool Box::fullContains(const BoundingVolume* that) const {
   return that->fullContainedInBox(this);
 }
 

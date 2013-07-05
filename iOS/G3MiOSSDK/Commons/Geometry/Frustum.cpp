@@ -33,7 +33,7 @@ _topPlane(Plane::fromPoints(Vector3D::zero(),
                             Vector3D(data._left, data._top, -data._znear))),
 _nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
 _farPlane(Plane(Vector3D(0, 0, -1), -data._zfar)),
-_extent(NULL)
+_boundingVolume(NULL)
 {
 }
 
@@ -61,7 +61,7 @@ bool Frustum::contains(const Vector3D& point) const {
 
 bool Frustum::touchesWithBox(const Box *box) const {
   // test first if frustum extent intersect with box
-  if (!getExtent()->touchesBox(box)) {
+  if (!getBoundingVolume()->touchesBox(box)) {
     return false;
   }
 
@@ -171,7 +171,7 @@ bool Frustum::touchesWithBox(const Box *box) const {
 }
 
 
-Extent* Frustum::computeExtent() {
+BoundingVolume* Frustum::computeBoundingVolume() {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
 

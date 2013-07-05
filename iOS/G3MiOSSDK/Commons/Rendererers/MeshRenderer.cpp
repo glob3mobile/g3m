@@ -36,9 +36,8 @@ void MeshRenderer::render(const G3MRenderContext* rc,
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
-    const Extent* extent = mesh->getExtent();
-
-    if ( extent->touches(frustum) ) {
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume->touches(frustum) ) {
       mesh->render(rc, parentState);
     }
   }

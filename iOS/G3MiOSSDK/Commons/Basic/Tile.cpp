@@ -49,7 +49,7 @@ _subtiles(NULL),
 _justCreatedSubtiles(false),
 _isVisible(false),
 _texturizerData(NULL),
-_tileExtent(NULL),
+_tileBoundingVolume(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
@@ -83,8 +83,8 @@ Tile::~Tile() {
   delete _texturizedMesh;
   _texturizedMesh = NULL;
 
-  delete _tileExtent;
-  _tileExtent = NULL;
+  delete _tileBoundingVolume;
+  _tileBoundingVolume = NULL;
 
   delete _elevationData;
   _elevationData = NULL;
@@ -210,8 +210,8 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   return _debugMesh;
 }
 
-Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
-  if (_tileExtent == NULL) {
+BoundingVolume* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
+  if (_tileBoundingVolume == NULL) {
     const Planet* planet = rc->getPlanet();
 
     const double minHeight = getMinHeight() * _verticalExaggeration;
@@ -262,10 +262,10 @@ Extent* Tile::getTileExtent(const G3MRenderContext *rc) {
     if (v4._z > upperZ) { upperZ = v4._z; }
 
 
-    _tileExtent = new Box(Vector3D(lowerX, lowerY, lowerZ),
-                          Vector3D(upperX, upperY, upperZ));
+    _tileBoundingVolume = new Box(Vector3D(lowerX, lowerY, lowerZ),
+                                  Vector3D(upperX, upperY, upperZ));
   }
-  return _tileExtent;
+  return _tileBoundingVolume;
 }
 
 bool Tile::isVisible(const G3MRenderContext *rc,
@@ -281,8 +281,8 @@ bool Tile::isVisible(const G3MRenderContext *rc,
     return false;
   }
 
-  const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  if (extent == NULL) {
+  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  if (boundingVolume == NULL) {
     return false;
   }
 
@@ -293,7 +293,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
   //}
 
 //  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
-  return extent->touches( cameraFrustumInModelCoordinates );
+  return boundingVolume->touches( cameraFrustumInModelCoordinates );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
@@ -321,8 +321,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   }
 
   //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  const Extent* extent = getTileExtent(rc);
-  if (extent == NULL) {
+  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
+  if (boundingVolume == NULL) {
     return true;
   }
 
@@ -330,7 +330,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
   //    return true;
   //  }
-  const Vector2I ex = extent->projectedExtent(rc);
+  const Vector2I ex = boundingVolume->projectedExtent(rc);
   const int t = (ex._x + ex._y);
   const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
   if ( t <= threshold ) {

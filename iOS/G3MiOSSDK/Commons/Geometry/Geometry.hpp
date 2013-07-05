@@ -9,15 +9,15 @@
 #ifndef G3MiOSSDK_Geometry_hpp
 #define G3MiOSSDK_Geometry_hpp
 
-class Geometry{
+class Geometry {
   
 };
 
-class Geometry2D: public Geometry{
+class Geometry2D: public Geometry {
   
 };
 
-class Geometry3D: public Geometry{
+class Geometry3D: public Geometry {
   
 };
 

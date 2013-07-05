@@ -23,7 +23,7 @@ class TileRenderContext;
 class TileKey;
 class Vector3D;
 class GLState;
-class Extent;
+class BoundingVolume;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
@@ -105,8 +105,8 @@ private:
 
   ITexturizerData* _texturizerData;
 
-  Extent* _tileExtent;
-  Extent* getTileExtent(const G3MRenderContext *rc);
+  BoundingVolume* _tileBoundingVolume;
+  BoundingVolume* getTileBoundingVolume(const G3MRenderContext *rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;

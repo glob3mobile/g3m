@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Box_h
 #define G3MiOSSDK_Box_h
 
-#include "Extent.hpp"
+#include "BoundingVolume.hpp"
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
 #include "Frustum.hpp"
@@ -18,7 +18,7 @@ class Vector2D;
 class Mesh;
 class Color;
 
-class Box: public Extent {
+class Box: public BoundingVolume {
 private:
   const Vector3D _lower;
   const Vector3D _upper;
@@ -57,23 +57,24 @@ public:
 
   bool contains(const Vector3D& p) const;
 
-  Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
+  Vector3D intersectionWithRay(const Vector3D& origin,
+                               const Vector3D& direction) const;
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
 
   bool touchesBox(const Box* box) const;
 
-  Extent* mergedWith(const Extent* that) const {
+  BoundingVolume* mergedWith(const BoundingVolume* that) const {
     if (that == NULL) {
       return NULL;
     }
     return that->mergedWithBox(this);
   }
 
-  Extent* mergedWithBox(const Box* that) const;
+  BoundingVolume* mergedWithBox(const Box* that) const;
   
-  bool fullContains(const Extent* that) const;
+  bool fullContains(const BoundingVolume* that) const;
 
   bool fullContainedInBox(const Box* box) const;
 
