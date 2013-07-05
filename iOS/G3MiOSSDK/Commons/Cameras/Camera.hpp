@@ -281,6 +281,7 @@ public:
     getProjectionMatrix();
     getModelMatrix();
   }
+    
 
 private:
   const Angle getHeading(const Vector3D& normal) const;

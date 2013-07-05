@@ -19,6 +19,7 @@ private:
   const bool _processRotation;
   const bool _processZoom;
   
+  bool initZoom(const Planet* planet);
   void zoom();
   void rotate();
   

@@ -676,8 +676,8 @@ public:
   const bool processRotation = true;
   const bool processZoom = true;
   
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
   
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
