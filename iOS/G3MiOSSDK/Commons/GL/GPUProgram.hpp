@@ -40,12 +40,8 @@ enum ShaderType {
 };
 
 class GPUProgram{
-  
-  //INativeGL* _nativeGL;
   int _programID;
   bool _programCreated;
-//  std::map<int, GPUAttribute*> _attributes;
-//  std::map<int, GPUUniform*> _uniforms;
 
   GPUUniform* _uniforms[32];
   GPUAttribute* _attributes[32];

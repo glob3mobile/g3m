@@ -61,7 +61,7 @@ void GPUUniform::applyChanges(GL* gl) {
 //  }
 //}
 
-GPUUniformValue* GPUUniformValueMatrix4Float::copyOrCreate(GPUUniformValue* value) const{
-  delete value;
-  return new GPUUniformValueMatrix4Float(*_m);
-}
+//GPUUniformValue* GPUUniformValueMatrix4Float::copyOrCreate(GPUUniformValue* value) const{
+//  delete value;
+//  return new GPUUniformValueMatrix4Float(*_m);
+//}

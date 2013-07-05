@@ -51,7 +51,7 @@ public:
 //    return value;
 //  }
   
-  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const = 0;
+//  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const = 0;
 
 //  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
 //    GPUUniform* u = prog->getGPUUniform(key);
@@ -156,13 +156,13 @@ public:
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value != NULL){
-      delete value;
-    }
-    return new GPUUniformValueBool(_value);
-  }
-  
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value != NULL){
+//      delete value;
+//    }
+//    return new GPUUniformValueBool(_value);
+//  }
+
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
@@ -194,13 +194,13 @@ public:
     return (_x == v2->_x) && (_y == v2->_y);
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value == NULL){
-      delete value;
-    }
-      return new GPUUniformValueVec2Float(_x,_y);
-  }
-  
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value == NULL){
+//      delete value;
+//    }
+//      return new GPUUniformValueVec2Float(_x,_y);
+//  }
+
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec2Float: x:");
@@ -235,13 +235,13 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value != NULL){
-      delete value;
-    }
-      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-  }
-  
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value != NULL){
+//      delete value;
+//    }
+//      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
+//  }
+
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
@@ -303,7 +303,7 @@ public:
 //    return _m->isEqualsTo(*v2->_m);
   }
 
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
 
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -379,13 +379,13 @@ public:
     return _value == v2->_value;
   }
   
-  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-    if (value != NULL){
-      delete value;
-    }
-    return new GPUUniformValueFloat(_value);
-  }
-  
+//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+//    if (value != NULL){
+//      delete value;
+//    }
+//    return new GPUUniformValueFloat(_value);
+//  }
+
   std::string description() const{
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
