@@ -8,7 +8,7 @@
 
 #include "GLState.hpp"
 
-GLGlobalState GLState::_currentGPUGlobalState;
+//GLGlobalState GLState::_currentGPUGlobalState;
 //GPUProgram* GLState::_currentGPUProgram = NULL;
 
 GLState::~GLState(){
@@ -91,7 +91,7 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
     _parentGLState->applyGlobalStateOnGPU(gl);
   }
 
-  _globalState->applyChanges(gl, _currentGPUGlobalState);
+  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyStates(GL* gl, GPUProgram* prog) const{
@@ -103,7 +103,7 @@ void GLState::applyStates(GL* gl, GPUProgram* prog) const{
   //  _programState->applyValuesToLinkedProgram();
   _programState->applyValuesToProgram(prog);
 
-  _globalState->applyChanges(gl, _currentGPUGlobalState);
+  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{

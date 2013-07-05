@@ -36,8 +36,13 @@ class GL {
 private:
   INativeGL* const _nativeGL;
 
+
+  /////////////////////////////////////////////////
+  //CURRENT GL STATUS
+  GLGlobalState _currentGLGlobalState;
   GPUProgram*   _currentGPUProgram;
-  
+  /////////////////////////////////////////////////
+
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
   
@@ -223,6 +228,10 @@ public:
   
   void disableVertexAttribArray(int location) const{
     _nativeGL->disableVertexAttribArray(location);
+  }
+
+  GLGlobalState* getCurrentGLGlobalState(){
+    return &_currentGLGlobalState;
   }
   
   

@@ -31,9 +31,11 @@ void GL::clearScreen(const GLGlobalState& state) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
 
-  int ASK_JM;
-  GLState glState((GLGlobalState*)&state, NULL);
-  glState.applyGlobalStateOnGPU(this);
+//  int ASK_JM;
+//  GLState glState((GLGlobalState*)&state, NULL);
+//  glState.applyGlobalStateOnGPU(this);
+
+  state.applyChanges(this, _currentGLGlobalState);
   
   //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
@@ -141,14 +143,19 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     int texture2D = GLTextureType::texture2D();
     
 //    GLGlobalState state(*GLState::getCurrentGLGlobalState());
-    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
-    state->setPixelStoreIAlignmentUnpack(1);
-    state->bindTexture(texId);
+//    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
+
+    GLGlobalState newState;
+
+    newState.setPixelStoreIAlignmentUnpack(1);
+    newState.bindTexture(texId);
+
+    newState.applyChanges(this, _currentGLGlobalState);
     
-    GLState glState(state, NULL);
-    glState.applyGlobalStateOnGPU(this);
-    delete state;
-    
+//    GLState glState(state, NULL);
+//    glState.applyGlobalStateOnGPU(this);
+//    delete state;
+
 //    setGLGlobalState(state);
     
     int linear = GLTextureParameterValue::linear();
@@ -228,9 +235,13 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     else {
       delete textureId;
     }
+
+    if (_currentGLGlobalState.getBoundTexture() == textureId){
+       _currentGLGlobalState.bindTexture(NULL);
+    }
     
-    GLState::textureHasBeenDeleted(textureId);
-    
+//    GLState::textureHasBeenDeleted(textureId);
+
 //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
 //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
 //    }

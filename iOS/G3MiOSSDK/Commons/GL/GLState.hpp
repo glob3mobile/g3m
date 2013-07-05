@@ -17,11 +17,6 @@
 #include "GPUProgramManager.hpp"
 
 class GLState{
-
-  /////////////////////////////////////////////////
-  //CURRENT GL STATUS
-  static GLGlobalState _currentGPUGlobalState;
-  /////////////////////////////////////////////////
   
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;
@@ -148,15 +143,15 @@ public:
     return _globalState;
   }
   
-  static void textureHasBeenDeleted(const IGLTextureId* textureId){
-    if (_currentGPUGlobalState.getBoundTexture() == textureId){
-      _currentGPUGlobalState.bindTexture(NULL);
-    }
-  }
-  
-  static GLGlobalState* createCopyOfCurrentGLGlobalState(){
-    return _currentGPUGlobalState.createCopy();
-  }
+//  static void textureHasBeenDeleted(const IGLTextureId* textureId){
+//    if (_currentGPUGlobalState.getBoundTexture() == textureId){
+//      _currentGPUGlobalState.bindTexture(NULL);
+//    }
+//  }
+//  
+//  static GLGlobalState* createCopyOfCurrentGLGlobalState(){
+//    return _currentGPUGlobalState.createCopy();
+//  }
 
   void setModelView(const Matrix44D* modelview, bool modifiesParents);
   const Matrix44D* getAccumulatedModelView() const;
