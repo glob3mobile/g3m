@@ -115,8 +115,8 @@ private:
   Vector3D* _cartesianPosition;
   
   IFloatBuffer* _vertices;
-  IFloatBuffer* getVertices(const Planet* planet);
-  
+//  IFloatBuffer* getVertices(const Planet* planet);
+
   bool    _textureSolved;
   IImage* _textureImage;
   int     _textureWidth;

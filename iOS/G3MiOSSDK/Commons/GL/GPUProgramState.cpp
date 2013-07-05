@@ -239,6 +239,13 @@ bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y, dou
   return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
 }
 
+bool GPUProgramState::setUniformValue(GPUUniformKey key, const Color& color){
+  return setGPUUniformValue(key, new GPUUniformValueVec4Float(color.getRed(),
+                                                              color.getGreen(),
+                                                              color.getBlue(),
+                                                              color.getAlpha()));
+}
+
 bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y){
   return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
 }

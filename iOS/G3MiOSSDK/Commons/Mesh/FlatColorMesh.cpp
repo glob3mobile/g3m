@@ -22,11 +22,7 @@ void FlatColorMesh::createGLState(){
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
-  progState.setUniformValue(FLAT_COLOR,
-                            (double) _flatColor->getRed(),
-                            (double) _flatColor->getGreen(),
-                            (double) _flatColor->getBlue(),
-                            (double) _flatColor->getAlpha());
+  progState.setUniformValue(FLAT_COLOR, *_flatColor);
   
   
 }

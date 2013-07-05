@@ -74,6 +74,8 @@ public:
   bool setUniformValue(GPUUniformKey key, double x, double y);
   
   bool setUniformValue(GPUUniformKey key, double x, double y, double z, double w);
+
+  bool setUniformValue(GPUUniformKey key, const Color& color);
   
 //  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
 

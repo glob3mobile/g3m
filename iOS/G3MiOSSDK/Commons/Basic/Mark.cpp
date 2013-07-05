@@ -364,21 +364,6 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   return _cartesianPosition;
 }
 
-IFloatBuffer* Mark::getVertices(const Planet* planet) {
-  if (_vertices == NULL) {
-    const Vector3D* pos = getCartesianPosition(planet);
-    
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
-    
-    _vertices = vertex.create();
-  }
-  return _vertices;
-}
-
 bool Mark::touched() {
   return (_listener == NULL) ? false : _listener->touchedMark(this);
   //  if (_listener == NULL) {
@@ -432,10 +417,10 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   vertex.add(pos);
   vertex.add(pos);
   
-  IFloatBuffer* vertices = vertex.create();
+  _vertices = vertex.create();
   
   progState->setAttributeValue(POSITION,
-                               vertices, 4, //The attribute is a float vector of 4 elements
+                               _vertices, 4, //The attribute is a float vector of 4 elements
                                3,            //Our buffer contains elements of 3
                                0,            //Index 0
                                false,        //Not normalized

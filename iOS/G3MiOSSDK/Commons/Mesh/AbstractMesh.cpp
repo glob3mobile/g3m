@@ -146,11 +146,7 @@ void AbstractMesh::createGLState(){
                                 0,            //Index 0
                                 false,        //Not normalized
                                 0);           //Stride 0
-    progState.setUniformValue(FLAT_COLOR,
-                              (double)_flatColor->getRed(),
-                              (double)_flatColor->getGreen(),
-                              (double) _flatColor->getBlue(),
-                              (double) _flatColor->getAlpha());
+    progState.setUniformValue(FLAT_COLOR, *_flatColor);
     if (_translationMatrix != NULL){
       //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
       _glState.setModelView(_translationMatrix->asMatrix44D(), true);

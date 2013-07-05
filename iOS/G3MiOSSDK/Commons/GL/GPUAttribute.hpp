@@ -117,7 +117,7 @@ private:
   const int _type;
   const int _size;
 
-  bool _dirtyEnabled;
+//  bool _dirtyEnabled;
   bool _enabled;
 
   const GPUAttributeKey _key;
@@ -136,7 +136,7 @@ public:
   _type(type),
   _size(size),
   _enabled(false),
-  _dirtyEnabled(false),
+//  _dirtyEnabled(false),
   _key(getAttributeKey(name)){}
 
   const std::string getName() const{ return _name;}
@@ -165,7 +165,7 @@ public:
     }
     _enabled = false;
     _dirty = false;
-    _dirtyEnabled = false;
+//    _dirtyEnabled = false;
 
     gl->disableVertexAttribArray(_id);
   }
