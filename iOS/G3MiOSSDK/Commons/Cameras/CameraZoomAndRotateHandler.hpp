@@ -19,11 +19,13 @@ private:
   const bool _processRotation;
   const bool _processZoom;
   
-  float _fingerSep0;
+  double _fingerSep0;
   double _lastAngle;
   double _angle0;
   
-  void zoom(Vector2I difCurrentPixels);
+  MutableVector3D _centralGlobePoint;
+  
+  void zoom(const Planet* planet, Camera* camera, Vector2I difCurrentPixels);
   void rotate();
   
   
