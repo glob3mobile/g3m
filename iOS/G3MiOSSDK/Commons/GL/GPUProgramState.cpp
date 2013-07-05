@@ -59,12 +59,17 @@ void GPUProgramState::clear(){
 
   for (int i = 0; i < 32; i++) {
     //delete _uniformValues[i];
-    if (_uniformValues[i] != NULL){
-      _uniformValues[i]->_release();
+    GPUUniformValue* u = _uniformValues[i];
+    if (u != NULL){
+      u->_release();
       _uniformValues[i] = NULL;
     }
-    delete _attributeValues[i];
-    _attributeValues[i] = NULL;
+    //    delete _attributeValues[i];
+    GPUAttributeValue* a = _attributeValues[i];
+    if (a != NULL){
+      a->_release();
+      _attributeValues[i] = NULL;
+    }
   }
 }
 
@@ -186,7 +191,7 @@ bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValu
   GPUAttributeValue* a = _attributeValues[index];
   if (a != NULL){
     //    prevLinkedAttribute = a->getLinkedAttribute();
-    delete a;
+    a->_release();
     attributeExisted = true;
   }
 

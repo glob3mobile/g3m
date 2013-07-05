@@ -88,7 +88,7 @@ public:
                            int size,
                            bool normalized,
                            int stride,
-                           IFloatBuffer* buffer) const {
+                           const IFloatBuffer* buffer) const {
     const FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
     
     const float* pointer = buffer_iOS->getPointer();

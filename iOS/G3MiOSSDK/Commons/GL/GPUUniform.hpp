@@ -75,7 +75,7 @@ private:
   const GPUUniformValue* _value;
 #endif
 #ifdef JAVA_CODE
-  protected GPUUniformValue _value;
+  private GPUUniformValue _value;
 #endif
   const int _type;
 

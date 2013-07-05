@@ -198,7 +198,7 @@ public:
                            int size,
                            bool normalized,
                            int stride,
-                           IFloatBuffer* buffer) const{
+                           const IFloatBuffer* buffer) const{
     _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
   }
   

@@ -72,7 +72,7 @@ public:
                                    int size,
                                    bool normalized,
                                    int stride,
-                                   IFloatBuffer* buffer) const = 0;
+                                   const IFloatBuffer* buffer) const = 0;
 
   virtual void drawElements(int mode,
                             int count,
