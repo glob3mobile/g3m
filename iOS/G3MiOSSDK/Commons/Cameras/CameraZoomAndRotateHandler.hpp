@@ -19,7 +19,10 @@ private:
   const bool _processRotation;
   const bool _processZoom;
   
-  bool initZoom(const Planet* planet);
+  float _fingerSep0;
+  double _lastAngle;
+  double _angle0;
+  
   void zoom();
   void rotate();
   
