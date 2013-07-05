@@ -34,7 +34,6 @@ void SGGeometryNode::createGLState() const{
   
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
-  progState.setAttributeEnabled(POSITION, true);
   progState.setAttributeValue(POSITION,
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3
@@ -43,7 +42,6 @@ void SGGeometryNode::createGLState() const{
                               0);           //Stride 0
   
   if (_colors != NULL){
-    progState.setAttributeEnabled(COLOR, true);
 //    progState.setUniformValue(EnableColorPerVertex, true);
     progState.setAttributeValue(COLOR,
                                 _colors, 4,   //The attribute is a float vector of 4 elements RGBA
@@ -53,9 +51,6 @@ void SGGeometryNode::createGLState() const{
                                 0);           //Stride 0
 //    const float colorsIntensity = 1;
 //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
-  } else{
-    progState.setAttributeEnabled(COLOR, false);
-//    progState.setUniformValue(EnableColorPerVertex, false);
   }
   
   if (_uv != NULL){

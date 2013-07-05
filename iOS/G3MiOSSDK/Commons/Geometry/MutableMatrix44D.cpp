@@ -221,10 +221,9 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const 
 
   if (this->isIdentity()){
     return that;
-  } else{
-    if (that.isIdentity()){
-      return *this;
-    }
+  }
+  if (that.isIdentity()){
+    return *this;
   }
 
   const double that00 = that._m00;
@@ -570,12 +569,12 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
   _m21  = m._m21;
   _m22  = m._m22;
   _m23  = m._m23;
-  
+
   _m30  = m._m30;
   _m31  = m._m31;
   _m32  = m._m32;
   _m33  = m._m33;
-  
+
   if (_matrix44D != NULL){
     _matrix44D->_release();
   }

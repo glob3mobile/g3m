@@ -51,11 +51,11 @@ void GPUProgramState::onAttributesChanged(){
 
 GPUProgramState::~GPUProgramState(){
   clear();
-//  delete _uniformKeys;
+  //  delete _uniformKeys;
 }
 
 void GPUProgramState::clear(){
-//  _linkedProgram = NULL;
+  //  _linkedProgram = NULL;
 
   for (int i = 0; i < 32; i++) {
     //delete _uniformValues[i];
@@ -98,16 +98,16 @@ void GPUProgramState::applyValuesToProgram(GPUProgram* prog) const{
     }
   }
 
-//  for (int i = 0; i < 32; i++) {
-//    GPUUniformValue* u = _uniformValues[i];
-//    if (u != NULL){
-//      prog->setGPUUniformValue(i, u);
-//    }
-//    GPUAttributeValue* a = _attributeValues[i];
-//    if (a != NULL){
-//      prog->setGPUAttributeValue(i, a);
-//    }
-//  }
+  //  for (int i = 0; i < 32; i++) {
+  //    GPUUniformValue* u = _uniformValues[i];
+  //    if (u != NULL){
+  //      prog->setGPUUniformValue(i, u);
+  //    }
+  //    GPUAttributeValue* a = _attributeValues[i];
+  //    if (a != NULL){
+  //      prog->setGPUAttributeValue(i, a);
+  //    }
+  //  }
 }
 
 //void GPUProgramState::linkToProgram(GPUProgram* prog) const{
@@ -144,7 +144,7 @@ void GPUProgramState::applyValuesToProgram(GPUProgram* prog) const{
 
 bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
 
-//  GPUUniform* prevLinkedUniform = NULL;
+  //  GPUUniform* prevLinkedUniform = NULL;
   bool uniformExisted = false;
 
 #ifdef C_CODE
@@ -156,13 +156,13 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
 
   GPUUniformValue* u = _uniformValues[index];
   if (u != NULL){
-//    prevLinkedUniform = u->getLinkedUniform();
-//    delete u;
+    //    prevLinkedUniform = u->getLinkedUniform();
+    //    delete u;
     u->_release();
     uniformExisted = true;
   }
 
-//  v->linkToGPUUniform(prevLinkedUniform);
+  //  v->linkToGPUUniform(prevLinkedUniform);
   _uniformValues[index] = v;
 
   if (!uniformExisted){
@@ -173,7 +173,7 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
 }
 
 bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
-//  GPUAttribute* prevLinkedAttribute = NULL;
+  //  GPUAttribute* prevLinkedAttribute = NULL;
   bool attributeExisted = false;
 
 #ifdef C_CODE
@@ -185,12 +185,12 @@ bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValu
 
   GPUAttributeValue* a = _attributeValues[index];
   if (a != NULL){
-//    prevLinkedAttribute = a->getLinkedAttribute();
+    //    prevLinkedAttribute = a->getLinkedAttribute();
     delete a;
     attributeExisted = true;
   }
 
-//  v->linkToGPUAttribute(prevLinkedAttribute);
+  //  v->linkToGPUAttribute(prevLinkedAttribute);
   _attributeValues[index] = v;
 
   if (!attributeExisted){
@@ -243,12 +243,12 @@ bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y){
 //  return setGPUUniformValue(key, uv);
 //}
 
-void GPUProgramState::setAttributeEnabled(GPUAttributeKey key, bool enabled){
-  //TODO: REMOVE FUNCTION
-  if (!enabled){
-    setAttributeDisabled(key);
-  }
-}
+//void GPUProgramState::setAttributeEnabled(GPUAttributeKey key, bool enabled){
+//  //TODO: REMOVE FUNCTION
+//  if (!enabled){
+//    setAttributeDisabled(key);
+//  }
+//}
 
 void GPUProgramState::setAttributeDisabled(GPUAttributeKey key){
   setGPUAttributeValue(key, new GPUAttributeValueDisabled());
@@ -282,40 +282,7 @@ std::string GPUProgramState::description() const{
   delete isb;
   return s;
 }
-/*
-std::vector<int>* GPUProgramState::getUniformsKeys() const{
 
-  if (_uniformKeys == NULL){
-
-    _uniformKeys = new std::vector<int>();
-
-    for (int i = 0; i <= _highestUniformKey; i++){
-      if (_uniformValues[i] != NULL){
-        _uniformKeys->push_back(i);
-      }
-    }
-
-  }
-  return _uniformKeys;
-}
-
-std::vector<int>* GPUProgramState::getAttributeKeys() const{
-
-  if (_attributeKeys == NULL){
-
-    _attributeKeys = new std::vector<int>();
-
-    for (int i = 0; i <= _highestAttributeKey; i++){
-      if (_attributeValues[i] != NULL){
-        _attributeKeys->push_back(i);
-      }
-    }
-
-
-  }
-  return _attributeKeys;
-}
-*/
 bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 
 #ifdef C_CODE
@@ -326,14 +293,12 @@ bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 #endif
 
   if (_uniformValues[index] != NULL){
-//    delete _uniformValues[index];
     _uniformValues[index]->_release();
     _uniformValues[index] = NULL;
     onUniformsChanged();
     return true;
-  } else{
-    return false;
   }
+  return false;
 }
 
 int GPUProgramState::getUniformsCode() const{

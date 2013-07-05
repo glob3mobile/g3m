@@ -99,7 +99,6 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   GLState glState;
   GPUProgramState& progState = *glState.getGPUProgramState();
 
-  progState.setAttributeEnabled(POSITION, true);
   progState.setAttributeValue(POSITION,
                               _vertices, 4, //The attribute is a float vector of 4 elements
                               3,            //Our buffer contains elements of 3

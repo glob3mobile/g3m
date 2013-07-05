@@ -37,8 +37,8 @@ class GPUProgramState{
   int _highestAttributeKey;
   
 //  mutable std::vector<int>* _uniformKeys;
-  mutable std::vector<int>* _attributeKeys;
-  
+//  mutable std::vector<int>* _attributeKeys;
+
 //  mutable GPUProgram* _linkedProgram;
 
 //  void onStructureChanged();
@@ -81,7 +81,7 @@ public:
                          IFloatBuffer* buffer, int attributeSize,
                          int arrayElementSize, int index, bool normalized, int stride);
   
-  void setAttributeEnabled(GPUAttributeKey key, bool enabled);
+//  void setAttributeEnabled(GPUAttributeKey key, bool enabled);
   void setAttributeDisabled(GPUAttributeKey key);
   
   void applyChanges(GL* gl) const;
