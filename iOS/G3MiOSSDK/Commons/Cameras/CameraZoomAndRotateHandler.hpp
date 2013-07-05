@@ -23,7 +23,7 @@ private:
   double _lastAngle;
   double _angle0;
   
-  void zoom();
+  void zoom(Vector2I difCurrentPixels);
   void rotate();
   
   

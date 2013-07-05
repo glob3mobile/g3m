@@ -60,8 +60,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  const Planet *planet = eventContext->getPlanet();
-
+  Vector2I difCurrentPixels = pixel1.sub(pixel0);
 
   // if it is the first move, let's decide if make zoom or rotate
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
@@ -73,11 +72,10 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
             (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       
       // compute intersection of view direction with the globe
-      Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+      Vector3D intersection = eventContext->getPlanet()->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
       if (!intersection.isNan()) {
-        Vector2I dif = pixel1.sub(pixel0);
-        _fingerSep0 = (float) sqrt((float)(dif._x*dif._x+dif._y*dif._y));
-        _lastAngle = _angle0 = atan2(dif._y, dif._x);
+        _fingerSep0 = (float) sqrt((float)(difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
+        _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
         cameraContext->setCurrentGesture(Zoom);
       }
       else
@@ -94,7 +92,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   // call specific transformation
   switch (cameraContext->getCurrentGesture()) {
     case Zoom:
-      if (_processZoom) zoom();
+      if (_processZoom) zoom(difCurrentPixels);
       break;
       
     case Rotate:
@@ -159,24 +157,21 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-void CameraZoomAndRotateHandler::zoom()
+void CameraZoomAndRotateHandler::zoom(Vector2I difCurrentPixels)
 {
-  printf ("zooming.....\n");
-  
-  static double lastAngle=0;
-  
-/*
-  // compute angle value
-  double angle = atan2(c2y-c1y, c2x-c1x);
-  while (fabs(lastAngle-angle)>PI/2) {
-    if (angle<lastAngle) angle+=PI;  else  angle-=PI;
+  double angle = atan2(difCurrentPixels._y, difCurrentPixels._x);
+  const double PI = IMathUtils::instance()->pi();
+  while (fabs(_lastAngle-angle)>PI/2) {
+    if (angle<_lastAngle) angle+=PI;  else  angle-=PI;
   }
-  lastAngle = angle;
+  _lastAngle = angle;
   
   // make zoom
-  float fingerSep = (float) sqrt((float)((c2x-c1x)*(c2x-c1x)+(c2y-c1y)*(c2y-c1y)));
+  float fingerSep = (float) sqrt((float)(difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
   
-  //iprintf ("haciendo zoom. fingersep=%.2f  angle=%.2f\n", fingerSep, angle);
+  printf ("haciendo zoom. fingersep=%.2f  angle=%.2f\n", fingerSep, angle);
+  
+  /*
   
   camera.ZoomCamera (center, fingerSep0/fingerSep, angle-angle0, camera0);
   
