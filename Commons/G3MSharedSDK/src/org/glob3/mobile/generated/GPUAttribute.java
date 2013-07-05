@@ -9,7 +9,7 @@ public class GPUAttribute extends GPUVariable
   private final int _type;
   private final int _size;
 
-  private boolean _dirtyEnabled;
+//  bool _dirtyEnabled;
   private boolean _enabled;
 
   private final GPUAttributeKey _key;
@@ -21,6 +21,7 @@ public class GPUAttribute extends GPUVariable
   }
 
   public GPUAttribute(String name, int id, int type, int size)
+//  _dirtyEnabled(false),
   {
      super(name, GPUVariableType.ATTRIBUTE);
      _id = id;
@@ -29,7 +30,6 @@ public class GPUAttribute extends GPUVariable
      _type = type;
      _size = size;
      _enabled = false;
-     _dirtyEnabled = false;
      _key = getAttributeKey(name);
   }
 
@@ -78,7 +78,7 @@ public class GPUAttribute extends GPUVariable
     }
     _enabled = false;
     _dirty = false;
-    _dirtyEnabled = false;
+//    _dirtyEnabled = false;
 
     gl.disableVertexAttribArray(_id);
   }

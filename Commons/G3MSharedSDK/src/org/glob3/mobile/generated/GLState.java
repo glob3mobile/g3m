@@ -199,10 +199,10 @@ public class GLState
               _lastParentModelview = parentsM;
               _lastParentModelview._retain();
   
-  //            if (_modelviewUniformValue != NULL){
-  //              _modelviewUniformValue->_release();
-  //              _modelviewUniformValue = NULL;
-  //            }
+              //            if (_modelviewUniformValue != NULL){
+              //              _modelviewUniformValue->_release();
+              //              _modelviewUniformValue = NULL;
+              //            }
   
               //            _lastParentModelview->addListener(&_parentMatrixListener);
             }
@@ -257,18 +257,18 @@ public class GLState
     if (_lastGPUProgramUsed != null)
     {
       gl.useProgram(_lastGPUProgramUsed);
-  //    if (_lastGPUProgramUsed != _currentGPUProgram){
-  //      if (_currentGPUProgram != NULL){
-  //        _currentGPUProgram->onUnused(gl);
-  //      }
-  //      _currentGPUProgram = _lastGPUProgramUsed;
-  //      gl->useProgram(_lastGPUProgramUsed);
-  //    }
+      //    if (_lastGPUProgramUsed != _currentGPUProgram){
+      //      if (_currentGPUProgram != NULL){
+      //        _currentGPUProgram->onUnused(gl);
+      //      }
+      //      _currentGPUProgram = _lastGPUProgramUsed;
+      //      gl->useProgram(_lastGPUProgramUsed);
+      //    }
   
       applyStates(gl, _lastGPUProgramUsed);
   
       //APPLY TO GPU STATE MODELVIEW
-  //    const Matrix44D* modelview = getAccumulatedModelView();
+      //    const Matrix44D* modelview = getAccumulatedModelView();
       GPUUniformValueMatrix4Float modelviewValue = getModelviewUniformValue();
       if (modelviewValue != null)
       {
@@ -357,17 +357,12 @@ public class GLState
     {
       return _accumulatedModelview;
     }
-    else
+    if (_parentGLState != null)
     {
-      if (_parentGLState != null)
-      {
-        return _parentGLState.getAccumulatedModelView();
-      }
-      else
-      {
-        return null;
-      }
+      return _parentGLState.getAccumulatedModelView();
     }
+    return null;
+  
   }
 
   public final GPUUniformValueMatrix4Float getModelviewUniformValue()
@@ -385,24 +380,8 @@ public class GLState
       {
         _modelviewUniformValue._release();
         _modelviewUniformValue = new GPUUniformValueMatrix4Float(mv);
-  
       }
     }
-  
-  
-  
-  //  if (_modelviewUniformValue == NULL){
-  //    const Matrix44D* mv = getAccumulatedModelView();
-  //    if (mv == NULL){
-  //      return NULL;
-  //    }
-  //
-  //    if (_modelviewUniformValue != NULL){
-  //      _modelviewUniformValue->_release();
-  //    }
-  //
-  //    _modelviewUniformValue = new GPUUniformValueMatrix4Float(*mv);
-  //  }
     return _modelviewUniformValue;
   
   }

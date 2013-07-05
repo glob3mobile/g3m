@@ -75,22 +75,7 @@ public class Mark
   private Vector3D _cartesianPosition;
 
   private IFloatBuffer _vertices;
-  private IFloatBuffer getVertices(Planet planet)
-  {
-    if (_vertices == null)
-    {
-      final Vector3D pos = getCartesianPosition(planet);
-  
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      _vertices = vertex.create();
-    }
-    return _vertices;
-  }
+//  IFloatBuffer* getVertices(const Planet* planet);
 
   private boolean _textureSolved;
   private IImage _textureImage;
@@ -140,9 +125,9 @@ public class Mark
     vertex.add(pos);
     vertex.add(pos);
   
-    IFloatBuffer vertices = vertex.create();
+    _vertices = vertex.create();
   
-    progState.setAttributeValue(GPUAttributeKey.POSITION, vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     progState.setUniformValue(GPUUniformKey.TEXTURE_EXTENT, _textureWidth, _textureHeight);
   }
