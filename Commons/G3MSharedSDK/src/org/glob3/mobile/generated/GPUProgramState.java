@@ -244,6 +244,11 @@ public class GPUProgramState
     return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
   }
 
+  public final boolean setUniformValue(GPUUniformKey key, Color color)
+  {
+    return setGPUUniformValue(key, new GPUUniformValueVec4Float(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+  }
+
 //  bool setUniformMatrixValue(GPUUniformKey key, const MutableMatrix44D& m, bool isTransform);
 
   public final boolean setAttributeValue(GPUAttributeKey key, IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, boolean normalized, int stride)

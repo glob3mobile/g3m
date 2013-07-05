@@ -129,7 +129,7 @@ public abstract class AbstractMesh extends Mesh
     if (_flatColor != null && _colors == null) //FlatColorMesh Shader
     {
       progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, (double)_flatColor.getRed(), (double)_flatColor.getGreen(), (double) _flatColor.getBlue(), (double) _flatColor.getAlpha());
+      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, _flatColor);
       if (_translationMatrix != null)
       {
         //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
