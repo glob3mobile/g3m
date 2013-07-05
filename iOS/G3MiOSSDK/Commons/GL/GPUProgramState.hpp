@@ -41,7 +41,10 @@ class GPUProgramState{
   
 //  mutable GPUProgram* _linkedProgram;
 
-  void onStructureChanged();
+//  void onStructureChanged();
+
+  void onUniformsChanged();
+  void onAttributesChanged();
   
 public:
   

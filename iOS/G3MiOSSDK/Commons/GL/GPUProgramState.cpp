@@ -8,29 +8,46 @@
 
 #include "GPUProgramState.hpp"
 
-void GPUProgramState::onStructureChanged(){
-//  delete _uniformKeys;
-//  _uniformKeys = NULL;
-  //    _linkedProgram = NULL;
+void GPUProgramState::onUniformsChanged(){
   _uniformsCode = 0;
-  _attributeCode = 0;
-
-//  if (_attributeKeys != NULL){
-//    delete _attributeKeys;
-//    _attributeKeys = NULL;
-//  }
-
-  _highestAttributeKey = 0;
-  _highestUniformKey = 0;
   for (int i = 0; i < 32; i++) {
     if (_uniformValues[i] != NULL){
       _highestUniformKey = i;
     }
+  }
+}
+void GPUProgramState::onAttributesChanged(){
+  _attributeCode = 0;
+  for (int i = 0; i < 32; i++) {
     if (_attributeValues[i] != NULL){
       _highestAttributeKey = i;
     }
   }
 }
+
+//void GPUProgramState::onStructureChanged(){
+////  delete _uniformKeys;
+////  _uniformKeys = NULL;
+//  //    _linkedProgram = NULL;
+//  _uniformsCode = 0;
+//  _attributeCode = 0;
+//
+////  if (_attributeKeys != NULL){
+////    delete _attributeKeys;
+////    _attributeKeys = NULL;
+////  }
+//
+//  _highestAttributeKey = 0;
+//  _highestUniformKey = 0;
+//  for (int i = 0; i < 32; i++) {
+//    if (_uniformValues[i] != NULL){
+//      _highestUniformKey = i;
+//    }
+//    if (_attributeValues[i] != NULL){
+//      _highestAttributeKey = i;
+//    }
+//  }
+//}
 
 GPUProgramState::~GPUProgramState(){
   clear();
@@ -149,7 +166,7 @@ bool GPUProgramState::setGPUUniformValue(GPUUniformKey key, GPUUniformValue* v){
   _uniformValues[index] = v;
 
   if (!uniformExisted){
-    onStructureChanged();
+    onUniformsChanged();
   }
 
   return uniformExisted;
@@ -177,7 +194,7 @@ bool GPUProgramState::setGPUAttributeValue(GPUAttributeKey key, GPUAttributeValu
   _attributeValues[index] = v;
 
   if (!attributeExisted){
-    onStructureChanged();
+    onAttributesChanged();
   }
 
   return attributeExisted;
@@ -312,7 +329,7 @@ bool GPUProgramState::removeGPUUniformValue(GPUUniformKey key){
 //    delete _uniformValues[index];
     _uniformValues[index]->_release();
     _uniformValues[index] = NULL;
-    onStructureChanged();
+    onUniformsChanged();
     return true;
   } else{
     return false;
