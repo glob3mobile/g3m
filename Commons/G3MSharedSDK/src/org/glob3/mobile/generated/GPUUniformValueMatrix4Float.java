@@ -9,7 +9,7 @@ public class GPUUniformValueMatrix4Float extends GPUUniformValue
     that._m._retain();
   }
 
-  public final Matrix44D _const _m;
+  public final Matrix44D _m;
 
   public GPUUniformValueMatrix4Float(Matrix44D m)
   {
@@ -30,22 +30,14 @@ public class GPUUniformValueMatrix4Float extends GPUUniformValue
 
   public final boolean isEqualsTo(GPUUniformValue v)
   {
-    GPUUniformValueMatrix4Float v2 = (GPUUniformValueMatrix4Float)v;
-    if (_m == v2._m)
+    final Matrix44D m = ((GPUUniformValueMatrix4Float)v)._m;
+    if (_m == m)
     {
       return true;
     }
 
-    if (_m.isEqualsTo(*v2._m))
-    {
-      return true;
-    }
-    return false;
-
-//    return _m->isEqualsTo(*v2->_m);
+    return _m.isEqualsTo(m);
   }
-
-//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const;
 
   public final String description()
   {

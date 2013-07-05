@@ -1,13 +1,13 @@
 package org.glob3.mobile.generated; 
 public class GPUUniform extends GPUVariable
 {
-  protected final IGLUniformID _id;
+  private final IGLUniformID _id;
 
-  protected boolean _dirty;
-  protected final GPUUniformValue _value;
-  protected final int _type;
+  private boolean _dirty;
+  protected GPUUniformValue _value;
+  private final int _type;
 
-  protected final GPUUniformKey _key;
+  private final GPUUniformKey _key;
 
 
   public void dispose()
@@ -84,24 +84,27 @@ public class GPUUniform extends GPUVariable
 
   public final void set(GPUUniformValue v)
   {
-    if (_type == v.getType()) //type checking
+    if (v != _value)
     {
-      if (_value == null || !_value.isEqualsTo(v))
+      if (_type == v.getType()) //type checking
       {
-        _dirty = true;
-//        _value = v->copyOrCreate(_value);
-
-        v._retain();
-        if (_value != null)
+        if (_value == null || !_value.isEqualsTo(v))
         {
-          _value._release();
+          _dirty = true;
+          //        _value = v->copyOrCreate(_value);
+
+          v._retain();
+          if (_value != null)
+          {
+            _value._release();
+          }
+          _value = v;
         }
-        _value = v;
       }
-    }
-    else
-    {
-      ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+      else
+      {
+        ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+      }
     }
   }
 

@@ -21,12 +21,12 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y);
   }
 
-//  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-//    if (value == NULL){
-//      delete value;
-//    }
-//      return new GPUUniformValueVec2Float(_x,_y);
-//  }
+  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+  //    if (value == NULL){
+  //      delete value;
+  //    }
+  //      return new GPUUniformValueVec2Float(_x,_y);
+  //  }
 
   public final String description()
   {
