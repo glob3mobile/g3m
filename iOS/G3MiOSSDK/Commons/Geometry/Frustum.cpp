@@ -209,3 +209,9 @@ BoundingVolume* Frustum::computeBoundingVolume() {
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
+
+
+Vector3D Frustum::closestPoint(const Vector3D& point) const
+{
+  //double dist =
+}

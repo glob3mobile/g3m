@@ -175,6 +175,8 @@ public:
   Plane getRightPlane() const  { return _rightPlane; }
   Plane getNearPlane() const   { return _nearPlane; }
   Plane getFarPlane() const    { return _farPlane; }
+  
+  Vector3D closestPoint(const Vector3D& point) const;
 
 };
 
