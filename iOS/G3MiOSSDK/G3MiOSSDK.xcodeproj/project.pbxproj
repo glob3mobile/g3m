@@ -31,6 +31,7 @@
 		A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE001B161B245600C77604 /* JSONBaseObject.cpp */; };
 		A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE001F161B274300C77604 /* JSONArray.cpp */; };
 		CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */; };
+		CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC0DFA6D178B49E6001F6355 /* Frustum.hpp */; };
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
 		CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */; };
@@ -388,7 +389,6 @@
 		E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD39F1577EE5A0012AC53 /* Angle.hpp */; };
 		E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3CB15B4651700B5581C /* Box.hpp */; };
 		E780A55016D3AED9000F0395 /* BoundingVolume.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3C915B4649800B5581C /* BoundingVolume.hpp */; };
-		E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E3B315B32D2E00B5581C /* Frustum.hpp */; };
 		E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */; };
 		E780A55316D3AED9000F0395 /* Geodetic3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */; };
 		E780A55416D3AED9000F0395 /* MutableMatrix44D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */; };
@@ -523,6 +523,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */,
 				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
 				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
@@ -606,7 +607,6 @@
 				E780A54D16D3AED9000F0395 /* Angle.hpp in CopyFiles */,
 				E780A54E16D3AED9000F0395 /* Box.hpp in CopyFiles */,
 				E780A55016D3AED9000F0395 /* BoundingVolume.hpp in CopyFiles */,
-				E780A55116D3AED9000F0395 /* Frustum.hpp in CopyFiles */,
 				E780A55216D3AED9000F0395 /* Geodetic2D.hpp in CopyFiles */,
 				E780A55316D3AED9000F0395 /* Geodetic3D.hpp in CopyFiles */,
 				E780A55416D3AED9000F0395 /* MutableMatrix44D.hpp in CopyFiles */,
@@ -847,10 +847,10 @@
 		A7EE001F161B274300C77604 /* JSONArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONArray.cpp; sourceTree = "<group>"; };
 		CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BusyQuadRenderer.hpp; path = Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BusyQuadRenderer.cpp; path = Commons/Rendererers/BusyQuadRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CC0DFA6D178B49E6001F6355 /* Frustum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Frustum.hpp; path = Commons/Geometry/Frustum.hpp; sourceTree = "<group>"; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CC41E39D15B1FD1300B5581C /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Plane.hpp; path = Commons/Geometry/Plane.hpp; sourceTree = "<group>"; };
 		CC41E39F15B1FD5B00B5581C /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plane.cpp; path = Commons/Geometry/Plane.cpp; sourceTree = "<group>"; };
-		CC41E3B315B32D2E00B5581C /* Frustum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Frustum.hpp; path = Commons/Geometry/Frustum.hpp; sourceTree = "<group>"; };
 		CC41E3B515B32DFB00B5581C /* Frustum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Frustum.cpp; path = Commons/Geometry/Frustum.cpp; sourceTree = "<group>"; };
 		CC41E3C915B4649800B5581C /* BoundingVolume.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BoundingVolume.hpp; path = Commons/Geometry/BoundingVolume.hpp; sourceTree = "<group>"; };
 		CC41E3CB15B4651700B5581C /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Box.hpp; path = Commons/Geometry/Box.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1588,6 +1588,7 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
 				D8B749AC175E04FA00046B96 /* Sphere.cpp */,
 				D8B749AD175E04FA00046B96 /* Sphere.hpp */,
 				D8B749A9175E040800046B96 /* Ellipsoid.cpp */,
@@ -1602,7 +1603,6 @@
 				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
 				CC41E3C915B4649800B5581C /* BoundingVolume.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
-				CC41E3B315B32D2E00B5581C /* Frustum.hpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
 				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
 				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,

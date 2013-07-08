@@ -168,6 +168,13 @@ public:
   BoundingVolume* getBoundingVolume() const {
     return _boundingVolume;
   }
+  
+  Plane getTopPlane() const    { return _topPlane; }
+  Plane getBottomPlane() const { return _bottomPlane; }
+  Plane getLeftPlane() const   { return _leftPlane; }
+  Plane getRightPlane() const  { return _rightPlane; }
+  Plane getNearPlane() const   { return _nearPlane; }
+  Plane getFarPlane() const    { return _farPlane; }
 
 };
 

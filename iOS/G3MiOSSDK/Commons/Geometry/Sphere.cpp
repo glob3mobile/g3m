@@ -28,7 +28,13 @@ void Sphere::render(const G3MRenderContext* rc,
 
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
-//  AGUSTIN_TODO;
+  if (frustum->getNearPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getFarPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getLeftPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getRightPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getTopPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getBottomPlane().signedDistance(_center)>_radius) return false;
+  return true;
 }
 
 
@@ -64,6 +70,16 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
   if (upper._z > maxZ) maxZ = upper._z;
   
   return new Box(Vector3D(minX, minY, minZ), Vector3D(maxX, maxY, maxZ));
+  
+  /* Diego: creo que este test ya no hace falta, porque el coste del método
+   fullContainedInBox es casi tanto es casi similar a todo lo anterior
+   if (fullContainedInBox(that)) {
+   return new Box(*that);
+   }
+   if (that->fullContainedInSphere(this)) {
+   return new Sphere(*this);
+   }*/
+
 }
 
 
