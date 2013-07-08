@@ -60,6 +60,7 @@ public:
   
   GLState* getGLState(GLState* parentGLState){
     _glState.setParent(parentGLState);
+    _glState.getGLGlobalState()->enableDepthTest();
     return &_glState;
   }
 
