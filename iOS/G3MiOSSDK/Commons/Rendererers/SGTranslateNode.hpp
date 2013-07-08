@@ -45,6 +45,10 @@ public:
     return &_glState;
   }
 
+  std::string description(){
+    return "SGTranslateNode";
+  }
+
 };
 
 #endif

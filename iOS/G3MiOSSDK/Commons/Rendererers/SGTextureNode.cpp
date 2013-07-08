@@ -62,7 +62,7 @@ void SGTextureNode::render(const G3MRenderContext* rc,
 //    state2 = myState;
 //  }
 
-  prepareRender(rc);
+//  prepareRender(rc);
 
   //  rawRender(rc, *state);
 
@@ -70,7 +70,7 @@ void SGTextureNode::render(const G3MRenderContext* rc,
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
 
-    GLState* layerState = layer->createGLState(rc, state2);
+    GLState* layerState = layer->createGLState(rc, state2); //TODO: This is getGLState
     GLState* state;
     if (layerState == NULL) {
       state = state2;
@@ -87,10 +87,10 @@ void SGTextureNode::render(const G3MRenderContext* rc,
       child->render(rc, state, renderNotReadyShapes);
     }
 
-    delete layerState;
+//    delete layerState;
   }
   
-  cleanUpRender(rc);
-  
+//  cleanUpRender(rc);
+
 //  delete myState;
 }

@@ -84,6 +84,10 @@ public:
   virtual GLState* getGLState(GLState* parentGLState){ return parentGLState;}
   
   virtual void rawRender(const G3MRenderContext* rc, GLState* parentGLState){}
+
+  virtual std::string description(){
+    return "SGNode";
+  };
 };
 
 #endif

@@ -189,12 +189,12 @@ public:
 
 class GPUUniformValueVec2Float:public GPUUniformValue{
 public:
-  const double _x, _y;
+  const float _x, _y;
 
-  GPUUniformValueVec2Float(double x, double y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y){}
+  GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y){}
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniform2f(id, (float)_x, (float)_y);
+    gl->uniform2f(id, _x, _y);
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
@@ -229,13 +229,13 @@ public:
 
 class GPUUniformValueVec4Float:public GPUUniformValue{
 public:
-  const double _x, _y, _z, _w;
+  const float _x, _y, _z, _w;
 
-  GPUUniformValueVec4Float(double x, double y, double z, double w):
+  GPUUniformValueVec4Float(float x, float y, float z, float w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w){}
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniform4f(id, (float)_x, (float)_y, (float)_z, (float)_w);
+    gl->uniform4f(id, _x, _y, _z, _w);
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
@@ -372,12 +372,12 @@ public:
 
 class GPUUniformValueFloat:public GPUUniformValue{
 public:
-  const double _value;
+  const float _value;
 
-  GPUUniformValueFloat(double d):GPUUniformValue(GLType::glFloat()),_value(d){}
+  GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d){}
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniform1f(id, (float)_value);
+    gl->uniform1f(id, _value);
   }
   bool isEqualsTo(const GPUUniformValue* v) const{
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;

@@ -86,6 +86,10 @@ public:
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   
   GLState* createGLState(const G3MRenderContext* rc, GLState* parentGLState);
+
+  std::string description(){
+    return "SGLayerNode";
+  }
 };
 
 #endif

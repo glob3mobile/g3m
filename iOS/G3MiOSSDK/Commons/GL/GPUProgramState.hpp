@@ -71,9 +71,9 @@ public:
   
   bool setUniformValue(GPUUniformKey key, const Vector2D& v);
   
-  bool setUniformValue(GPUUniformKey key, double x, double y);
+  bool setUniformValue(GPUUniformKey key, float x, float y);
   
-  bool setUniformValue(GPUUniformKey key, double x, double y, double z, double w);
+  bool setUniformValue(GPUUniformKey key, float x, float y, float z, float w);
 
   bool setUniformValue(GPUUniformKey key, const Color& color);
   

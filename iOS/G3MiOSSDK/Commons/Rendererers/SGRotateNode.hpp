@@ -46,7 +46,11 @@ public:
     _glState.setParent(parentGLState);
     return &_glState;
   }
-  
+
+  std::string description(){
+    return "SGRotateNode";
+  }
+
   
 };
 

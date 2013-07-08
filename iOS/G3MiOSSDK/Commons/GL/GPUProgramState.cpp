@@ -232,10 +232,10 @@ bool GPUProgramState::setUniformValue(GPUUniformKey key, float f){
 }
 
 bool GPUProgramState::setUniformValue(GPUUniformKey key, const Vector2D& v){
-  return setGPUUniformValue(key, new GPUUniformValueVec2Float(v._x, v._y));
+  return setGPUUniformValue(key, new GPUUniformValueVec2Float((float)v._x, (float)v._y));
 }
 
-bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y, double z, double w){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, float x, float y, float z, float w){
   return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
 }
 
@@ -246,7 +246,7 @@ bool GPUProgramState::setUniformValue(GPUUniformKey key, const Color& color){
                                                               color.getAlpha()));
 }
 
-bool GPUProgramState::setUniformValue(GPUUniformKey key, double x, double y){
+bool GPUProgramState::setUniformValue(GPUUniformKey key, float x, float y){
   return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
 }
 

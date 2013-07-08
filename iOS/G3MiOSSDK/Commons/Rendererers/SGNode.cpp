@@ -92,6 +92,8 @@ const GLState* SGNode::createState(const G3MRenderContext* rc,
 //}
 
 void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState, bool renderNotReadyShapes) {
+
+  ILogger::instance()->logInfo("Rendering " + description());
   
   GLState* glState = getGLState(parentGLState);
   
@@ -104,4 +106,6 @@ void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState, bool ren
     SGNode* child = _children[i];
     child->render(rc, glState, renderNotReadyShapes);
   }
+
+  cleanUpRender(rc);
 }
