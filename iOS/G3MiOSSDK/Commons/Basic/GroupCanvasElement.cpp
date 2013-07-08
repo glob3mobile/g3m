@@ -14,6 +14,8 @@ GroupCanvasElement::~GroupCanvasElement() {
     CanvasElement* child = _children[i];
     delete child;
   }
+
+  delete _extent;
 }
 
 void GroupCanvasElement::add(CanvasElement* child) {
