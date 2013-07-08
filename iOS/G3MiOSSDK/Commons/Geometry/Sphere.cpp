@@ -10,7 +10,7 @@
 #include "Box.hpp"
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
-  AGUSTIN_TODO;
+//  AGUSTIN_TODO;
 }
 
 Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
@@ -20,11 +20,11 @@ Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
 
 void Sphere::render(const G3MRenderContext* rc,
                     const GLState& parentState) {
-  AGUSTIN_TODO;
+//  AGUSTIN_TODO;
 }
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
-  AGUSTIN_TODO;
+//  AGUSTIN_TODO;
 }
 
 bool Sphere::touchesBox(const Box* that) const {
@@ -49,7 +49,7 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
     return new Sphere(*this);
   }
 
-  AGUSTIN_TODO;
+//  AGUSTIN_TODO;
 }
 
 BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
@@ -74,7 +74,15 @@ bool Sphere::contains(const Vector3D& point) const {
 }
 
 bool Sphere::fullContainedInBox(const Box* that) const {
-  AGUSTIN_TODO;
+  const Vector3D upper = that->getUpper();
+  const Vector3D lower = that->getLower();
+  if (_center._x+_radius>upper._x) return false;
+  if (_center._x-_radius<lower._x) return false;
+  if (_center._y+_radius>upper._y) return false;
+  if (_center._y-_radius<lower._y) return false;
+  if (_center._z+_radius>upper._z) return false;
+  if (_center._z-_radius<lower._z) return false;
+  return true;
 }
 
 bool Sphere::fullContainedInSphere(const Sphere* that) const {

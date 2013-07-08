@@ -444,8 +444,20 @@ public:
 }
 
 
+#include "Box.hpp"
+#include "Sphere.hpp"
+
+
 - (void) initCustomizedWithBuilder
 {
+  
+  
+  const Box box(Vector3D(-3,-3,-5), Vector3D(4,5,7));
+  Sphere sphere(Vector3D(1,2,1), 3);
+  bool value = sphere.fullContainedInBox(&box);
+
+  
+  
   G3MBuilder_iOS builder([self G3MWidget]);
   
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
