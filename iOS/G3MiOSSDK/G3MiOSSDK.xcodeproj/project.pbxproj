@@ -301,7 +301,6 @@
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
 		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
-		D8B749B1175E186200046B96 /* Geometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AF175E051300046B96 /* Geometry.hpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
@@ -526,7 +525,6 @@
 			files = (
 				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
-				D8B749B1175E186200046B96 /* Geometry.hpp in CopyFiles */,
 				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
 				CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */,
 				CCF45F531743AD320037CA28 /* SphericalPlanet.hpp in CopyFiles */,
@@ -1273,7 +1271,6 @@
 		D8B749AA175E040800046B96 /* Ellipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
 		D8B749AC175E04FA00046B96 /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sphere.cpp; path = Commons/Geometry/Sphere.cpp; sourceTree = "<group>"; };
 		D8B749AD175E04FA00046B96 /* Sphere.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Sphere.hpp; path = Commons/Geometry/Sphere.hpp; sourceTree = "<group>"; };
-		D8B749AF175E051300046B96 /* Geometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geometry.hpp; path = Commons/Geometry/Geometry.hpp; sourceTree = "<group>"; };
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -1591,7 +1588,6 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				D8B749AF175E051300046B96 /* Geometry.hpp */,
 				D8B749AC175E04FA00046B96 /* Sphere.cpp */,
 				D8B749AD175E04FA00046B96 /* Sphere.hpp */,
 				D8B749A9175E040800046B96 /* Ellipsoid.cpp */,

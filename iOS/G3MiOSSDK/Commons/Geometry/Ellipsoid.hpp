@@ -9,11 +9,9 @@
 #ifndef __G3MiOSSDK__Ellipsoid__
 #define __G3MiOSSDK__Ellipsoid__
 
-#include "Geometry.hpp"
-
 #include "Vector3D.hpp"
 
-class Ellipsoid: public Geometry3D {
+class Ellipsoid {
 private:
   const Vector3D _center;
   const Vector3D _radii;

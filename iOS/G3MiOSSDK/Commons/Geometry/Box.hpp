@@ -42,7 +42,7 @@ public:
 
   ~Box();
   
-  bool touches(const Frustum* frustum) const {
+  bool touchesFrustum(const Frustum* frustum) const {
     return frustum->touchesWithBox(this);
   };
 
@@ -52,10 +52,10 @@ public:
   inline const std::vector<Vector3D> getCorners() const;
   inline const std::vector<Vector3F> getCornersF() const;
 
-  double squaredProjectedArea(const G3MRenderContext* rc) const;
+
+  double projectedArea(const G3MRenderContext* rc) const;
   Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
-  bool contains(const Vector3D& p) const;
 
   Vector3D intersectionWithRay(const Vector3D& origin,
                                const Vector3D& direction) const;
@@ -63,7 +63,15 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState);
 
-  bool touchesBox(const Box* box) const;
+  bool touches(const BoundingVolume* that) const {
+    if (that == NULL) {
+      return false;
+    }
+    return that->touchesBox(this);
+  }
+
+  bool touchesBox(const Box* that) const;
+  bool touchesSphere(const Sphere* that) const;
 
   BoundingVolume* mergedWith(const BoundingVolume* that) const {
     if (that == NULL) {
@@ -73,10 +81,18 @@ public:
   }
 
   BoundingVolume* mergedWithBox(const Box* that) const;
-  
-  bool fullContains(const BoundingVolume* that) const;
+  BoundingVolume* mergedWithSphere(const Sphere* that) const;
 
-  bool fullContainedInBox(const Box* box) const;
+  Vector3D closestPoint(const Vector3D& point) const;
+
+  bool contains(const Vector3D& p) const;
+
+  bool fullContains(const BoundingVolume* that) const {
+    return that->fullContainedInBox(this);
+  }
+  
+  bool fullContainedInBox(const Box* that) const;
+  bool fullContainedInSphere(const Sphere* that) const;
 
   
 };

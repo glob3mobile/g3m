@@ -293,7 +293,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
   //}
 
 //  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
-  return boundingVolume->touches( cameraFrustumInModelCoordinates );
+  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates );
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 

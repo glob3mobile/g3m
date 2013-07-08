@@ -9,20 +9,29 @@
 #ifndef __G3MiOSSDK__Sphere__
 #define __G3MiOSSDK__Sphere__
 
-#include "Geometry.hpp"
 #include "Vector3D.hpp"
+#include "BoundingVolume.hpp"
 
-class Sphere: public Geometry3D {
+class Sphere : public BoundingVolume {
 private:
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;
 
+ 
 public:
-  Sphere(const Vector3D& center, double radius):
+  Sphere(const Vector3D& center,
+         double radius):
   _center(center),
   _radius(radius),
-  _radiusSquared(radius*radius)
+  _radiusSquared(radius * radius)
+  {
+  }
+
+  Sphere(const Sphere& that) :
+  _center(that._center),
+  _radius(that._radius),
+  _radiusSquared(that._radiusSquared)
   {
   }
 
@@ -37,6 +46,43 @@ public:
   double getRadiusSquared() const {
     return _radiusSquared;
   }
+
+  double projectedArea(const G3MRenderContext* rc) const;
+  Vector2I projectedExtent(const G3MRenderContext* rc) const;
+
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
+
+  bool touches(const BoundingVolume* that) const {
+    if (that == NULL) {
+      return false;
+    }
+    return that->touchesSphere(this);
+  }
+
+  bool touchesBox(const Box* that) const;
+  bool touchesFrustum(const Frustum* frustum) const;
+  bool touchesSphere(const Sphere* that) const;
+
+  BoundingVolume* mergedWith(const BoundingVolume* that) const {
+    if (that == NULL) {
+      return NULL;
+    }
+    return that->mergedWithSphere(this);
+  }
+
+  BoundingVolume* mergedWithBox(const Box* that) const;
+  BoundingVolume* mergedWithSphere(const Sphere* that) const;
+
+  bool contains(const Vector3D& point) const;
+
+  bool fullContains(const BoundingVolume* that) const {
+    return that->fullContainedInSphere(this);
+  }
+
+  bool fullContainedInBox(const Box* that) const;
+  bool fullContainedInSphere(const Sphere* that) const;
+
 
 };
 

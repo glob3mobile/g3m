@@ -14,6 +14,7 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
+#include "Sphere.hpp"
 
 Box::~Box() {
   delete _mesh;
@@ -115,7 +116,7 @@ Vector2I Box::projectedExtent(const G3MRenderContext *rc) const {
   return Vector2I(width, height);
 }
 
-double Box::squaredProjectedArea(const G3MRenderContext* rc) const {
+double Box::projectedArea(const G3MRenderContext* rc) const {
   const Vector2I extent = projectedExtent(rc);
   return extent._x * extent._y;
 }
@@ -236,15 +237,20 @@ void Box::render(const G3MRenderContext* rc,
   _mesh->render(rc, parentState);
 }
 
-bool Box::touchesBox(const Box* box) const {
-  if (_lower._x > box->_upper._x) { return false; }
-  if (_upper._x < box->_lower._x) { return false; }
-  if (_lower._y > box->_upper._y) { return false; }
-  if (_upper._y < box->_lower._y) { return false; }
-  if (_lower._z > box->_upper._z) { return false; }
-  if (_upper._z < box->_lower._z) { return false; }
+bool Box::touchesBox(const Box* that) const {
+  if (_lower._x > that->_upper._x) { return false; }
+  if (_upper._x < that->_lower._x) { return false; }
+  if (_lower._y > that->_upper._y) { return false; }
+  if (_upper._y < that->_lower._y) { return false; }
+  if (_lower._z > that->_upper._z) { return false; }
+  if (_upper._z < that->_lower._z) { return false; }
   return true;
 }
+
+bool Box::touchesSphere(const Sphere* that) const {
+  return that->touchesBox(this);
+}
+
 
 BoundingVolume* Box::mergedWithBox(const Box* that) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -261,11 +267,19 @@ BoundingVolume* Box::mergedWithBox(const Box* that) const {
                  Vector3D(upperX, upperY, upperZ));
 }
 
-bool Box::fullContains(const BoundingVolume* that) const {
-  return that->fullContainedInBox(this);
+BoundingVolume* Box::mergedWithSphere(const Sphere* that) const {
+  return that->mergedWithBox(this);
 }
 
 bool Box::fullContainedInBox(const Box* box) const {
 //  return contains(box->_upper) && contains(box->_lower);
   return box->contains(_upper) && box->contains(_lower);
+}
+
+bool Box::fullContainedInSphere(const Sphere* that) const {
+  return that->contains(_lower) && that->contains(_upper);
+}
+
+Vector3D Box::closestPoint(const Vector3D& point) const {
+  return point.clamp(_lower, _upper);
 }

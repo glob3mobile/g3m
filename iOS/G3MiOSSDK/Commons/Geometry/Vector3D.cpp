@@ -120,3 +120,26 @@ const std::string Vector3D::description() const {
   delete isb;
   return s;
 }
+
+const Vector3D Vector3D::clamp(const Vector3D& min,
+                               const Vector3D& max) const {
+
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const double x = mu->clamp(_x, min._x, max._x);
+  const double y = mu->clamp(_y, min._y, max._y);
+  const double z = mu->clamp(_z, min._z, max._z);
+
+  return Vector3D(x, y, z);
+}
+
+const double Vector3D::distanceTo(const Vector3D& that) const {
+  return IMathUtils::instance()->sqrt( squaredDistanceTo(that) );
+}
+
+const double Vector3D::squaredDistanceTo(const Vector3D& that) const {
+  const double dx = _x - that._x;
+  const double dy = _y - that._y;
+  const double dz = _z - that._z;
+  return (dx * dx) + (dy * dy) + (dz * dz);
+}

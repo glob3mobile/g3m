@@ -59,16 +59,16 @@ bool Frustum::contains(const Vector3D& point) const {
                           (plane.signedDistance(corners[7]) >= 0) )
 
 
-bool Frustum::touchesWithBox(const Box *box) const {
+bool Frustum::touchesWithBox(const Box* that) const {
   // test first if frustum extent intersect with box
-  if (!getBoundingVolume()->touchesBox(box)) {
+  if (!getBoundingVolume()->touchesBox(that)) {
     return false;
   }
 
 #ifdef C_CODE
   // create an array with the 8 corners of the box
-  const Vector3D min = box->getLower();
-  const Vector3D max = box->getUpper();
+  const Vector3D min = that->getLower();
+  const Vector3D max = that->getUpper();
 
   Vector3F corners[8] = {
     Vector3F((float) min._x, (float) min._y, (float) min._z),
@@ -81,7 +81,7 @@ bool Frustum::touchesWithBox(const Box *box) const {
     Vector3F((float) max._x, (float) max._y, (float) max._z)
   };
 #else
-  const std::vector<Vector3F> corners = box->getCornersF();
+  const std::vector<Vector3F> corners = that->getCornersF();
 #endif
 
   return (!testAllCornersInside(_leftPlane,   corners) &&
