@@ -231,15 +231,15 @@ public class GPUProgramState
 
   public final boolean setUniformValue(GPUUniformKey key, Vector2D v)
   {
-    return setGPUUniformValue(key, new GPUUniformValueVec2Float(v._x, v._y));
+    return setGPUUniformValue(key, new GPUUniformValueVec2Float((float)v._x, (float)v._y));
   }
 
-  public final boolean setUniformValue(GPUUniformKey key, double x, double y)
+  public final boolean setUniformValue(GPUUniformKey key, float x, float y)
   {
     return setGPUUniformValue(key, new GPUUniformValueVec2Float(x, y));
   }
 
-  public final boolean setUniformValue(GPUUniformKey key, double x, double y, double z, double w)
+  public final boolean setUniformValue(GPUUniformKey key, float x, float y, float z, float w)
   {
     return setGPUUniformValue(key, new GPUUniformValueVec4Float(x,y,z,w));
   }

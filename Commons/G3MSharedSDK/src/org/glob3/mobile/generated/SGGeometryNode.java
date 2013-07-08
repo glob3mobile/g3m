@@ -102,4 +102,9 @@ public class SGGeometryNode extends SGNode
     return _glState;
   }
 
+  public final String description()
+  {
+    return "SGGeometryNode";
+  }
+
 }

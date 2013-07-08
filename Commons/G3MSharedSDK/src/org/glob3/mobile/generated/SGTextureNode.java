@@ -77,11 +77,9 @@ public class SGTextureNode extends SGNode
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void prepareRender(G3MRenderContext rc);
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void cleanUpRender(G3MRenderContext rc);
+//  void prepareRender(const G3MRenderContext* rc);
+//
+//  void cleanUpRender(const G3MRenderContext* rc);
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
@@ -99,7 +97,7 @@ public class SGTextureNode extends SGNode
   //    state2 = myState;
   //  }
   
-    prepareRender(rc);
+  //  prepareRender(rc);
   
     //  rawRender(rc, *state);
   
@@ -108,7 +106,7 @@ public class SGTextureNode extends SGNode
     {
       SGLayerNode layer = _layers.get(i);
   
-      GLState layerState = layer.createGLState(rc, state2);
+      GLState layerState = layer.createGLState(rc, state2); //TODO: This is getGLState
       GLState state;
       if (layerState == null)
       {
@@ -128,13 +126,17 @@ public class SGTextureNode extends SGNode
         child.render(rc, state, renderNotReadyShapes);
       }
   
-      if (layerState != null)
-         layerState.dispose();
+  //    delete layerState;
     }
   
-    cleanUpRender(rc);
+  //  cleanUpRender(rc);
   
   //  delete myState;
+  }
+
+  public final String description()
+  {
+    return "SGTextureNode";
   }
 
 }

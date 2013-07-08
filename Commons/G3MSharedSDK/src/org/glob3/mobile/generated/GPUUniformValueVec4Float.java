@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
-  public final double _x;
-  public final double _y;
-  public final double _z;
-  public final double _w;
+  public final float _x;
+  public final float _y;
+  public final float _z;
+  public final float _w;
 
-  public GPUUniformValueVec4Float(double x, double y, double z, double w)
+  public GPUUniformValueVec4Float(float x, float y, float z, float w)
   {
      super(GLType.glVec4Float());
      _x = x;
@@ -17,7 +17,7 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniform4f(id, (float)_x, (float)_y, (float)_z, (float)_w);
+    gl.uniform4f(id, _x, _y, _z, _w);
   }
   public final boolean isEqualsTo(GPUUniformValue v)
   {

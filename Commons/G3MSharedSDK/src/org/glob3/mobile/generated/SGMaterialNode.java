@@ -99,4 +99,9 @@ public class SGMaterialNode extends SGNode
     }
   }
 
+  public final String description()
+  {
+    return "SGMaterialNode";
+  }
+
 }

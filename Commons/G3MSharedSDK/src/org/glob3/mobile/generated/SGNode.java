@@ -135,6 +135,8 @@ public class SGNode
   public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
   
+    ILogger.instance().logInfo("Rendering " + description());
+  
     GLState glState = getGLState(parentGLState);
   
     prepareRender(rc);
@@ -147,6 +149,8 @@ public class SGNode
       SGNode child = _children.get(i);
       child.render(rc, glState, renderNotReadyShapes);
     }
+  
+    cleanUpRender(rc);
   }
 
   public GLState createState(G3MRenderContext rc, GLState parentState)
@@ -171,5 +175,10 @@ public class SGNode
 
   public void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
+  }
+
+  public String description()
+  {
+    return "SGNode";
   }
 }

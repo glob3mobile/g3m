@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueFloat extends GPUUniformValue
 {
-  public final double _value;
+  public final float _value;
 
-  public GPUUniformValueFloat(double d)
+  public GPUUniformValueFloat(float d)
   {
      super(GLType.glFloat());
      _value = d;
@@ -11,7 +11,7 @@ public class GPUUniformValueFloat extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniform1f(id, (float)_value);
+    gl.uniform1f(id, _value);
   }
   public final boolean isEqualsTo(GPUUniformValue v)
   {
