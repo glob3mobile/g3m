@@ -12,7 +12,6 @@
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
 #include "IFactory.hpp"
-#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "ShortBufferBuilder.hpp"
