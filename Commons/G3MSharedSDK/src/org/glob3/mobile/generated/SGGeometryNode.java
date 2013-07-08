@@ -99,6 +99,7 @@ public class SGGeometryNode extends SGNode
   public final GLState getGLState(GLState parentGLState)
   {
     _glState.setParent(parentGLState);
+    _glState.getGLGlobalState().enableDepthTest();
     return _glState;
   }
 

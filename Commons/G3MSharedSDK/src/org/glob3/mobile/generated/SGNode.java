@@ -135,7 +135,7 @@ public class SGNode
   public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
   
-    ILogger.instance().logInfo("Rendering " + description());
+    ILogger.instance().logInfo("Rendering SG: " + description());
   
     GLState glState = getGLState(parentGLState);
   
