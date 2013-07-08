@@ -9,29 +9,35 @@
 #include "Sphere.hpp"
 #include "Box.hpp"
 
+
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
 //  AGUSTIN_TODO;
 }
+
 
 Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
   int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
   return Vector2I::zero();
 }
 
+
 void Sphere::render(const G3MRenderContext* rc,
                     const GLState& parentState) {
 //  AGUSTIN_TODO;
 }
 
+
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
 //  AGUSTIN_TODO;
 }
+
 
 bool Sphere::touchesBox(const Box* that) const {
   const Vector3D p = that->closestPoint(_center);
   const Vector3D v = p.sub(_center);
   return v.dot(v) <= (_radius * _radius);
 }
+
 
 bool Sphere::touchesSphere(const Sphere* that) const {
   const Vector3D d = _center.sub(that->_center);
@@ -40,17 +46,26 @@ bool Sphere::touchesSphere(const Sphere* that) const {
   return squaredDist <= (radiusSum * radiusSum);
 }
 
+
 BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
-  if (fullContainedInBox(that)) {
-    return new Box(*that);
-  }
-
-  if (that->fullContainedInSphere(this)) {
-    return new Sphere(*this);
-  }
-
-//  AGUSTIN_TODO;
+  const Vector3D upper = that->getUpper();
+  const Vector3D lower = that->getLower();
+  double minX = _center._x - _radius;
+  if (lower._x < minX) minX = lower._x;
+  double maxX = _center._x + _radius;
+  if (upper._x > maxX) maxX = upper._x;
+  double minY = _center._y - _radius;
+  if (lower._y < minY) minY = lower._y;
+  double maxY = _center._y + _radius;
+  if (upper._y > maxY) maxY = upper._y;
+  double minZ = _center._z - _radius;
+  if (lower._z < minZ) minZ = lower._z;
+  double maxZ = _center._z + _radius;
+  if (upper._z > maxZ) maxZ = upper._z;
+  
+  return new Box(Vector3D(minX, minY, minZ), Vector3D(maxX, maxY, maxZ));
 }
+
 
 BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);
@@ -69,21 +84,24 @@ BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
   return new Sphere(center, radius);
 }
 
+
 bool Sphere::contains(const Vector3D& point) const {
   return _center.squaredDistanceTo(point) <= _radiusSquared;
 }
 
+
 bool Sphere::fullContainedInBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
-  if (_center._x+_radius>upper._x) return false;
-  if (_center._x-_radius<lower._x) return false;
-  if (_center._y+_radius>upper._y) return false;
-  if (_center._y-_radius<lower._y) return false;
-  if (_center._z+_radius>upper._z) return false;
-  if (_center._z-_radius<lower._z) return false;
+  if (_center._x+_radius > upper._x) return false;
+  if (_center._x-_radius < lower._x) return false;
+  if (_center._y+_radius > upper._y) return false;
+  if (_center._y-_radius < lower._y) return false;
+  if (_center._z+_radius > upper._z) return false;
+  if (_center._z-_radius < lower._z) return false;
   return true;
 }
+
 
 bool Sphere::fullContainedInSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);

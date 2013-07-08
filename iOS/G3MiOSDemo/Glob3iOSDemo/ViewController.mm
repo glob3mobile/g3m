@@ -453,8 +453,8 @@ public:
   
   
   const Box box(Vector3D(-3,-3,-5), Vector3D(4,5,7));
-  Sphere sphere(Vector3D(1,2,1), 3);
-  bool value = sphere.fullContainedInBox(&box);
+  Sphere sphere(Vector3D(1,5,1), 3);
+  BoundingVolume* volume = sphere.mergedWith(&box);
 
   
   
