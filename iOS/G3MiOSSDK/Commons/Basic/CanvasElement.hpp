@@ -31,6 +31,8 @@ public:
   virtual void drawAt(float left,
                       float top,
                       ICanvas* canvas) = 0;
+
+  virtual void drawCentered(ICanvas* canvas);
   
 };
 

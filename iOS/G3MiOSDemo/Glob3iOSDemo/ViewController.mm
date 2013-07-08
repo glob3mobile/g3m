@@ -104,6 +104,9 @@
 #import <G3MiOSSDK/G3MCSceneDescription.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 
+#import <G3MiOSSDK/TileRasterizer.hpp>
+#import <G3MiOSSDK/DebugTileRasterizer.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -444,9 +447,30 @@ public:
 }
 
 
+class TestTileRasterizer : public TileRasterizer {
+public:
+  std::string getId() const {
+    return "Test";
+  }
+
+  void rasterize(IImage* image,
+                 const Tile* tile,
+                 IImageListener* listener,
+                 bool autodelete) const {
+    listener->imageCreated(image);
+    if (autodelete) {
+      delete listener;
+    }
+  }
+
+};
+
+
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
+
+  builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
   
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);

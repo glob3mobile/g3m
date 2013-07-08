@@ -19,6 +19,8 @@ class TileRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
+  TileRasterizer* _tileRasterizer;
+
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
   bool _showStatistics;
@@ -35,6 +37,8 @@ private:
   
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
+  TileRasterizer* getTileRasterizer();
+
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
   bool getShowStatistics();
@@ -59,6 +63,7 @@ public:
   TileRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
+  void setTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setTileRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);

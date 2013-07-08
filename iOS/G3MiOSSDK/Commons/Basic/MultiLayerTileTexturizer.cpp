@@ -28,6 +28,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "RectangleF.hpp"
 #include "IImageUtils.hpp"
+#include "TileRasterizer.hpp"
 
 enum TileTextureBuilder_PetitionStatus {
   STATUS_PENDING,
@@ -40,6 +41,7 @@ class BuilderDownloadStepDownloadListener : public IImageDownloadListener {
 private:
   TileTextureBuilder* _builder;
   const int           _position;
+
 public:
   BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
                                       int position);
@@ -160,6 +162,9 @@ public:
 class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
+  const Tile* _tile;
+
+  TileRasterizer* _tileRasterizer;
 
 #ifdef C_CODE
   const std::vector<RectangleF*> _srcRects;
@@ -174,10 +179,14 @@ private:
 
 public:
   TextureUploader(TileTextureBuilder* builder,
+                  const Tile* tile,
+                  TileRasterizer* tileRasterizer,
                   std::vector<RectangleF*> srcRects,
                   std::vector<RectangleF*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
+  _tile(tile),
+  _tileRasterizer(tileRasterizer),
   _srcRects(srcRects),
   _dstRects(dstRects),
   _textureId(textureId)
@@ -192,6 +201,7 @@ public:
 class TileTextureBuilder : public RCObject {
 private:
   MultiLayerTileTexturizer* _texturizer;
+  TileRasterizer*           _tileRasterizer;
   Tile*                     _tile;
 
   std::vector<Petition*> _petitions;
@@ -270,6 +280,7 @@ public:
   LeveledTexturedMesh* _mesh;
 
   TileTextureBuilder(MultiLayerTileTexturizer* texturizer,
+                     TileRasterizer*           tileRasterizer,
                      const G3MRenderContext*   rc,
                      const LayerSet*           layerSet,
                      IDownloader*              downloader,
@@ -278,6 +289,7 @@ public:
                      const TileTessellator*    tessellator,
                      long long                 texturePriority) :
   _texturizer(texturizer),
+  _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
@@ -295,7 +307,7 @@ public:
   _alreadyStarted(false),
   _texturePriority(texturePriority)
   {
-    _petitions = cleanUpPetitions(layerSet->createTileMapPetitions(rc, tile));
+    _petitions = cleanUpPetitions( layerSet->createTileMapPetitions(rc, tile) );
 
     _petitionsCount = _petitions.size();
 
@@ -414,11 +426,19 @@ public:
       }
 
       if (images.size() > 0) {
+
+        if (_tileRasterizer != NULL) {
+          textureId += "_";
+          textureId += _tileRasterizer->getId();
+        }
+
         IImageUtils::combine(_tileTextureResolution,
                              images,
                              sourceRects,
                              destRects,
                              new TextureUploader(this,
+                                                 _tile,
+                                                 _tileRasterizer,
                                                  sourceRects,
                                                  destRects,
                                                  textureId),
@@ -640,10 +660,23 @@ public:
 };
 
 void TextureUploader::imageCreated(IImage* image) {
-  _builder->imageCreated(image,
-                         _srcRects,
-                         _dstRects,
-                         _textureId);
+  if (_tileRasterizer == NULL) {
+    _builder->imageCreated(image,
+                           _srcRects,
+                           _dstRects,
+                           _textureId);
+  }
+  else {
+    _tileRasterizer->rasterize(image,
+                               _tile,
+                               new TextureUploader(_builder,
+                                                   _tile,
+                                                   NULL,
+                                                   _srcRects,
+                                                   _dstRects,
+                                                   _textureId),
+                               true);
+  }
 }
 
 BuilderDownloadStepDownloadListener::BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
@@ -743,6 +776,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
 
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
+                                                                        trc->getTileRasterizer(),
                                                                         rc,
                                                                         trc->getLayerSet(),
                                                                         rc->getDownloader(),
