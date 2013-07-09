@@ -15,6 +15,7 @@
 #include "Plane.hpp"
 #include "GL.hpp"
 #include "Vector2F.hpp"
+#include "Sphere.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -419,4 +420,13 @@ FrustumData Camera::calculateFrustumData() const {
                      bottom, top,
                      zNear, zFar);
 }
+
+
+double Camera::getProjectedSphereRadius(const Sphere& sphere) const
+{
+  double z = sphere.getCenter().sub(getCartesianPosition()).length();
+  double r = sphere.getRadius() * _frustumData._znear / z;
+  return r * _height / (_frustumData._top-_frustumData._bottom);
+}
+
 

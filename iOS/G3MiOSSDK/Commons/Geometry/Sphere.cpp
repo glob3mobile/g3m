@@ -8,10 +8,14 @@
 
 #include "Sphere.hpp"
 #include "Box.hpp"
+#include "Camera.hpp"
 
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
-//  AGUSTIN_TODO;
+  // this implementation is not right exact, but it's faster.
+  const IMathUtils* mu = IMathUtils::instance();
+  double r = rc->getCurrentCamera()->getProjectedSphereRadius(*this);
+  return mu->pi() * r * r;
 }
 
 
@@ -28,6 +32,7 @@ void Sphere::render(const G3MRenderContext* rc,
 
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
+  // this implementation is not right exact, but it's faster.
   if (frustum->getNearPlane().signedDistance(_center)>_radius) return false;
   if (frustum->getFarPlane().signedDistance(_center)>_radius) return false;
   if (frustum->getLeftPlane().signedDistance(_center)>_radius) return false;

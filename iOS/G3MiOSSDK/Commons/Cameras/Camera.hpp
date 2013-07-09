@@ -293,6 +293,8 @@ public:
   
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
+  double getProjectedSphereRadius(const Sphere& sphere) const;
+  
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
