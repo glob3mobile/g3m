@@ -59,7 +59,6 @@ void GEORenderer::render(const G3MRenderContext* rc,
                          const GLState& parentState) {
   const int childrenCount = _children.size();
   if (childrenCount > 0) {
-
     for (int i = 0; i < childrenCount; i++) {
       const GEORenderer_ObjectSymbolizerPair* pair = _children[i];
 

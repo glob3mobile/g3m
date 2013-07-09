@@ -19,14 +19,15 @@ GEOMarkSymbol::~GEOMarkSymbol() {
 
 void GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
                               const GEOSymbolizationContext& sc) const {
-
-  MarksRenderer* marksRenderer = sc.getMarksRenderer();
-  if (marksRenderer == NULL) {
-    ILogger::instance()->logError("Can't simbolize with Mark, MarksRenderer was not set");
-    delete _mark;
+  if (_mark != NULL) {
+    MarksRenderer* marksRenderer = sc.getMarksRenderer();
+    if (marksRenderer == NULL) {
+      ILogger::instance()->logError("Can't simbolize with Mark, MarksRenderer was not set");
+      delete _mark;
+    }
+    else {
+      marksRenderer->addMark(_mark);
+    }
+    _mark = NULL;
   }
-  else {
-    marksRenderer->addMark(_mark);
-  }
-  _mark = NULL;
 }

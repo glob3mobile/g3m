@@ -11,6 +11,11 @@
 #include "GEOSymbolizationContext.hpp"
 #include "ShapesRenderer.hpp"
 
+GEOShapeSymbol::~GEOShapeSymbol() {
+  delete _shape;
+}
+
+
 void GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
                                const GEOSymbolizationContext& sc) const {
   if (_shape != NULL) {
@@ -22,5 +27,6 @@ void GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
     else {
       shapeRenderer->addShape(_shape);
     }
+    _shape = NULL;
   }
 }

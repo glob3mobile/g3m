@@ -14,7 +14,7 @@ class Shape;
 
 class GEOShapeSymbol : public GEOSymbol {
 private:
-  Shape* _shape;
+  mutable Shape* _shape;
 
 public:
   GEOShapeSymbol(Shape* shape) :
@@ -22,6 +22,8 @@ public:
   {
 
   }
+
+  ~GEOShapeSymbol();
 
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
