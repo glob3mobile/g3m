@@ -455,6 +455,7 @@ public class Camera
     getModelMatrix();
   }
 
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);

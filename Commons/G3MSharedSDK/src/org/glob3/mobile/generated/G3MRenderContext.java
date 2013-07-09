@@ -12,12 +12,11 @@ public class G3MRenderContext extends G3MContext
   private final Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
-  private TextureBuilder _textureBuilder;
   private ITimer _frameStartTimer;
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
   {
      super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
      _frameTasksExecutor = frameTasksExecutor;
@@ -25,7 +24,6 @@ public class G3MRenderContext extends G3MContext
      _currentCamera = currentCamera;
      _nextCamera = nextCamera;
      _texturesHandler = texturesHandler;
-     _textureBuilder = textureBuilder;
      _frameStartTimer = frameStartTimer;
      _orderedRenderables = null;
 
@@ -49,11 +47,6 @@ public class G3MRenderContext extends G3MContext
   public final TexturesHandler getTexturesHandler()
   {
     return _texturesHandler;
-  }
-
-  public final TextureBuilder getTextureBuilder()
-  {
-    return _textureBuilder;
   }
 
   public final ITimer getFrameStartTimer()

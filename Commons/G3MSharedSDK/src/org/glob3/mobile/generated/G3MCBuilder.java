@@ -20,7 +20,6 @@ public abstract class G3MCBuilder
 
 
   private GL _gl;
-//  bool _glob3Created;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
@@ -35,6 +34,7 @@ public abstract class G3MCBuilder
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
     TileTexturizer texturizer = new MultiLayerTileTexturizer();
+    TileRasterizer tileRasterizer = null;
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -48,7 +48,7 @@ public abstract class G3MCBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, texturePriority);
+    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority);
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
@@ -102,7 +102,6 @@ public abstract class G3MCBuilder
     return new URL(serverPath + "/scenes/", false);
   }
 
-//  LayerSet* getLayerSet();
   private void recreateLayerSet()
   {
     _layerSet.removeAllLayers(false);

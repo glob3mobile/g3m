@@ -4,6 +4,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
+  private TileRasterizer _tileRasterizer;
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
@@ -206,7 +207,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
+        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
@@ -293,12 +294,13 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private EllipsoidShape _incompleteShape;
 
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
+     _tileRasterizer = tileRasterizer;
      _layerSet = layerSet;
      _parameters = parameters;
      _showStatistics = showStatistics;
@@ -379,7 +381,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
+    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   

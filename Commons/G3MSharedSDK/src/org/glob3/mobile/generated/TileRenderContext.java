@@ -28,11 +28,14 @@ package org.glob3.mobile.generated;
 
 //class EllipsoidShape;
 
+//class TileRasterizer;
+
 public class TileRenderContext
 {
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
+  private TileRasterizer _tileRasterizer;
 
   private final TilesRenderParameters _parameters;
   private TilesStatistics _statistics;
@@ -47,11 +50,12 @@ public class TileRenderContext
 
   private long _texturePriority;
 
-  public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
+  public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _texturizer = texturizer;
+     _tileRasterizer = tileRasterizer;
      _layerSet = layerSet;
      _parameters = parameters;
      _statistics = statistics;
@@ -60,6 +64,11 @@ public class TileRenderContext
      _texturePriority = texturePriority;
      _verticalExaggeration = verticalExaggeration;
 
+  }
+
+  public final TileRasterizer getTileRasterizer()
+  {
+    return _tileRasterizer;
   }
 
   public final float getVerticalExaggeration()
