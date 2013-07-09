@@ -293,7 +293,7 @@ public:
   
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
-  double getProjectedSphereRadius(const Sphere& sphere) const;
+  double getProjectedSphereArea(const Sphere& sphere) const;
   
 
 private:

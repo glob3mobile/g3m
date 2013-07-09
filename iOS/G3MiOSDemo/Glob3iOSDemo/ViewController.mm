@@ -444,10 +444,6 @@ public:
 }
 
 
-#include "Box.hpp"
-#include "Sphere.hpp"
-
-
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -542,16 +538,6 @@ public:
   
   // initialization
   builder.initializeWidget();
-  
-  
-  const Box box(Vector3D(-3,-3,-5), Vector3D(4,5,7));
-  const Sphere sphere(Vector3D(0,10,-13), 3);
-  const Frustum frustum(-1,1,-1,1,2,10);
-  bool value = sphere.touchesFrustum(&frustum);
-  
-  
-  
-
 }
 
 - (void)createInterpolationTest: (MeshRenderer*) meshRenderer

@@ -9,25 +9,80 @@
 #include "Sphere.hpp"
 #include "Box.hpp"
 #include "Camera.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IndexedMesh.hpp"
+#include "GLConstants.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
-  // this implementation is not right exact, but it's faster.
-  const IMathUtils* mu = IMathUtils::instance();
-  double r = rc->getCurrentCamera()->getProjectedSphereRadius(*this);
-  return mu->pi() * r * r;
+  return rc->getCurrentCamera()->getProjectedSphereArea(*this);
 }
-
 
 Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
   int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
   return Vector2I::zero();
 }
 
+void Sphere::createWireframeMesh(Color* color, short resolution)
+{
+  IMathUtils* mu = IMathUtils::instance();
+  const double pi = mu->pi();
+  const double delta = pi / (resolution-1);
+
+  // create vertices
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero());
+  for (int i=0; i<2*resolution-2; i++) {
+    const double longitude = -pi + i*delta;
+    for (int j=0; j<resolution; j++) {
+      const double latitude = -pi/2 + j*delta;
+      const double h = mu->cos(latitude);
+      const double x = h * mu->cos(longitude);
+      const double y = h * mu->sin(longitude);
+      const double z = mu->sin(latitude);
+      vertices.add(Vector3D(x,y,z).times(_radius).add(_center));
+    }
+  }
+
+  // create border indices for vertical lines
+  ShortBufferBuilder indices;
+  for (short i=0; i<2*resolution-2; i++) {
+    for (short j=0; j<resolution-1; j++) {
+      indices.add(j+i*resolution);
+      indices.add(j+1+i*resolution);
+    }
+  }
+  
+  // create border indices for horizontal lines
+  for (short j=1; j<resolution-1; j++) {
+    for (short i=0; i<2*resolution-3; i++){
+      indices.add(j+i*resolution);
+      indices.add(j+(i+1)*resolution);
+    }
+  }
+  for (short j=1; j<resolution-1; j++) {
+    short i = 2*resolution-3;
+    indices.add(j+i*resolution);
+    indices.add(j);
+  }
+    
+  _mesh = new IndexedMesh(GLPrimitive::lines(),
+                         true,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create(),
+                         1,
+                         1,
+                         color);
+}
+
 
 void Sphere::render(const G3MRenderContext* rc,
-                    const GLState& parentState) {
-//  AGUSTIN_TODO;
+                 const GLState& parentState) {
+  if (_mesh == NULL) {
+    createWireframeMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), 6);
+  }
+  _mesh->render(rc, parentState);
 }
 
 

@@ -6,10 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "Sphere.hpp"
-
-
-
 #include "Tile.hpp"
 #include "Mesh.hpp"
 #include "Camera.hpp"
@@ -330,15 +326,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     return true;
   }
   
-  
-  
-  const Sphere sphere(Vector3D(2e6,0,0), 6e6);
-  double area = sphere.projectedArea(rc);
-  printf ("area esfera proyectada = %f\n", area);
-  
-  
-  
-
   //  const double projectedSize = extent->squaredProjectedArea(rc);
   //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
   //    return true;

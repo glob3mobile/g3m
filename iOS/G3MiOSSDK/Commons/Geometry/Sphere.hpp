@@ -11,12 +11,18 @@
 
 #include "Vector3D.hpp"
 #include "BoundingVolume.hpp"
+#include "Mesh.hpp"
+#include "Color.hpp"
+
 
 class Sphere : public BoundingVolume {
 private:
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;
+  
+  Mesh *_mesh;
+  void createWireframeMesh(Color* flatColor, short resolution);
 
  
 public:
@@ -24,14 +30,16 @@ public:
          double radius):
   _center(center),
   _radius(radius),
-  _radiusSquared(radius * radius)
+  _radiusSquared(radius * radius),
+  _mesh(NULL)
   {
   }
 
   Sphere(const Sphere& that) :
   _center(that._center),
   _radius(that._radius),
-  _radiusSquared(that._radiusSquared)
+  _radiusSquared(that._radiusSquared),
+  _mesh(NULL)
   {
   }
 
