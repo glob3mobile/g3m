@@ -34,8 +34,6 @@ void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 }
 
 
-#include "Sphere.hpp"
-
 void CameraRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
   // create the CameraContext
@@ -50,13 +48,6 @@ void CameraRenderer::render(const G3MRenderContext* rc,
   for (unsigned int i = 0; i < handlersSize; i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
-  
-  
-  double r=8e6;
-  Sphere sphere(Vector3D(0,0,0), r);
-  sphere.render(rc, parentState);
-  double area = sphere.projectedArea(rc);
-  printf ("radio proyectada = %f\n",sqrt(area/3.1415));
 }
 
 bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
