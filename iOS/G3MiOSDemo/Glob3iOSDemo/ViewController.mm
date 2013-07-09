@@ -446,26 +446,6 @@ public:
    */
 }
 
-
-class TestTileRasterizer : public TileRasterizer {
-public:
-  std::string getId() const {
-    return "Test";
-  }
-
-  void rasterize(IImage* image,
-                 const Tile* tile,
-                 IImageListener* listener,
-                 bool autodelete) const {
-    listener->imageCreated(image);
-    if (autodelete) {
-      delete listener;
-    }
-  }
-
-};
-
-
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -1884,7 +1864,7 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      testWebSocket(context);
+      //testWebSocket(context);
       
       testCanvas(context->getFactory());
 

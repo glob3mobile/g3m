@@ -12,15 +12,27 @@
 #include "ICanvas.hpp"
 #include "IImage.hpp"
 #include "IImageListener.hpp"
-#include "Color.hpp"
-#include "GFont.hpp"
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
 
-std::string DebugTileRasterizer::getTileLabel1(const Tile* tile) const {
+DebugTileRasterizer::DebugTileRasterizer() :
+_canvas(NULL),
+_canvasWidth(-1),
+_canvasHeight(-1),
+_font(GFont::monospaced(15)),
+_color(Color::white())
+{
+}
+
+
+DebugTileRasterizer::~DebugTileRasterizer() {
+  delete _canvas;
+}
+
+std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
   isb->addInt( tile->getLevel() );
@@ -36,20 +48,39 @@ std::string DebugTileRasterizer::getTileLabel1(const Tile* tile) const {
   return s;
 }
 
-std::string DebugTileRasterizer::getTileLabel2(const Tile* tile) const {
-  return "Lower lat: " + tile->getSector().lower().latitude().description();
+std::string DebugTileRasterizer::getSectorLabel1(const Sector& sector) const {
+  return "Lower lat: " + sector.lower().latitude().description();
 }
 
-std::string DebugTileRasterizer::getTileLabel3(const Tile* tile) const {
-  return "Lower lon: " + tile->getSector().lower().longitude().description();
+std::string DebugTileRasterizer::getSectorLabel2(const Sector& sector) const {
+  return "Lower lon: " + sector.lower().longitude().description();
 }
 
-std::string DebugTileRasterizer::getTileLabel4(const Tile* tile) const {
-  return "Upper lat: " + tile->getSector().upper().latitude().description();
+std::string DebugTileRasterizer::getSectorLabel3(const Sector& sector) const {
+  return "Upper lat: " + sector.upper().latitude().description();
 }
 
-std::string DebugTileRasterizer::getTileLabel5(const Tile* tile) const {
-  return "Upper lon: " + tile->getSector().upper().longitude().description();
+std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
+  return "Upper lon: " + sector.upper().longitude().description();
+}
+
+ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
+  if ((_canvas == NULL) ||
+      (_canvasWidth  != width) ||
+      (_canvasHeight != height)) {
+    delete _canvas;
+
+    _canvas = IFactory::instance()->createCanvas();
+    _canvas->initialize(width, height);
+
+    _canvasWidth  = width;
+    _canvasHeight = height;
+  }
+  else {
+    _canvas->setFillColor(Color::transparent());
+    _canvas->fillRectangle(0, 0, width, height);
+  }
+  return _canvas;
 }
 
 void DebugTileRasterizer::rasterize(IImage* image,
@@ -60,34 +91,34 @@ void DebugTileRasterizer::rasterize(IImage* image,
   const int width  = image->getWidth();
   const int height = image->getHeight();
 
-  ICanvas* canvas = IFactory::instance()->createCanvas();
-  canvas->initialize(width, height);
+  ICanvas* canvas = getCanvas(width, height);
+
+  canvas->removeShadow();
 
   canvas->drawImage(image, 0, 0);
 
-  canvas->setStrokeColor(Color::yellow());
-  canvas->setStrokeWidth(2);
+  canvas->setStrokeColor(_color);
+  canvas->setStrokeWidth(1);
   canvas->strokeRectangle(0, 0, width, height);
 
 
+  canvas->setShadow(Color::black(), 2, 1, -1);
   ColumnCanvasElement col;
-  col.add( new TextCanvasElement(getTileLabel1(tile), GFont::serif(), Color::yellow()) );
+  col.add( new TextCanvasElement(getTileKeyLabel(tile), _font, _color) );
 
-  const GFont sectorFont = GFont::monospaced(14);
-  const Color sectorColor = Color::yellow();
-  col.add( new TextCanvasElement(getTileLabel2(tile), sectorFont, sectorColor) );
-  col.add( new TextCanvasElement(getTileLabel3(tile), sectorFont, sectorColor) );
-  col.add( new TextCanvasElement(getTileLabel4(tile), sectorFont, sectorColor) );
-  col.add( new TextCanvasElement(getTileLabel5(tile), sectorFont, sectorColor) );
+  const Sector sectorTile = tile->getSector();
+  col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
+  col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
+  col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );
+  col.add( new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color) );
 
   const Vector2F colExtent = col.getExtent(canvas);
   col.drawAt((width  - colExtent._x) / 2,
              (height - colExtent._y) / 2,
              canvas);
 
-  canvas->createImage(listener, autodelete);
 
-  delete canvas;
+  canvas->createImage(listener, autodelete);
   
   delete image;
 }

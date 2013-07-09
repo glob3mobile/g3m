@@ -10,19 +10,36 @@
 #define __G3MiOSSDK__DebugTileRasterizer__
 
 #include "TileRasterizer.hpp"
+#include "GFont.hpp"
+#include "Color.hpp"
+
+class ICanvas;
+class Sector;
 
 class DebugTileRasterizer : public TileRasterizer {
-
 private:
+  mutable ICanvas* _canvas;
+  mutable int      _canvasWidth;
+  mutable int      _canvasHeight;
 
-  std::string getTileLabel1(const Tile* tile) const;
+  const GFont _font;
+  const Color _color;
 
-  std::string getTileLabel2(const Tile* tile) const;
-  std::string getTileLabel3(const Tile* tile) const;
-  std::string getTileLabel4(const Tile* tile) const;
-  std::string getTileLabel5(const Tile* tile) const;
+
+  std::string getTileKeyLabel(const Tile* tile) const;
+
+  std::string getSectorLabel1(const Sector& sector) const;
+  std::string getSectorLabel2(const Sector& sector) const;
+  std::string getSectorLabel3(const Sector& sector) const;
+  std::string getSectorLabel4(const Sector& sector) const;
+
+  ICanvas* getCanvas(int width, int height) const;
 
 public:
+  DebugTileRasterizer();
+
+  ~DebugTileRasterizer();
+
   std::string getId() const {
     return "DebugTileRasterizer";
   }
@@ -31,7 +48,7 @@ public:
                  const Tile* tile,
                  IImageListener* listener,
                  bool autodelete) const;
-
+  
 };
 
 #endif
