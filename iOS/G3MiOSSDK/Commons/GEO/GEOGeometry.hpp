@@ -30,7 +30,9 @@ public:
 
   }
 
-  ~GEOGeometry();
+  virtual ~GEOGeometry() {
+
+  }
 
   void setFeature(GEOFeature* feature);
 
@@ -40,7 +42,7 @@ public:
 
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
-
+  
 };
 
 #endif

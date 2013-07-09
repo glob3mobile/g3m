@@ -11,10 +11,6 @@
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
 
-GEOGeometry::~GEOGeometry() {
-
-}
-
 void GEOGeometry::setFeature(GEOFeature* feature) {
   if (_feature != feature) {
     delete _feature;
