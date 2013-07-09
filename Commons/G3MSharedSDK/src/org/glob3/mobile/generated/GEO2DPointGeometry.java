@@ -18,8 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class GEO2DPointGeometry extends GEOPointGeometry, GEOGeometry2D
+public class GEO2DPointGeometry extends GEOGeometry2D
 {
   private final Geodetic2D _position ;
 

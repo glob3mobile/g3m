@@ -26,9 +26,6 @@ package org.glob3.mobile.generated;
 //class GEOFeatureCollection;
 //class GEOFeature;
 //class GEOGeometry;
-//class GEOLineStringGeometry;
-//class GEOMultiLineStringGeometry;
-//class GEOPointGeometry;
 //class Geodetic2D;
 
 public class GEOJSONParser
@@ -181,7 +178,7 @@ public class GEOJSONParser
   
     return geo;
   }
-  private GEOLineStringGeometry createLineStringGeometry(JSONObject jsonObject)
+  private GEOGeometry createLineStringGeometry(JSONObject jsonObject)
   {
   
     final JSONArray jsCoordinates = jsonObject.getAsArray("coordinates");
@@ -198,7 +195,7 @@ public class GEOJSONParser
       return null;
     }
   
-    GEOLineStringGeometry geo = null;
+    GEOGeometry geo = null;
   
     final int dimensions = jsCoordinates.getAsArray(0).size();
     if (dimensions == 2)
@@ -223,7 +220,7 @@ public class GEOJSONParser
   
     return geo;
   }
-  private GEOMultiLineStringGeometry createMultiLineStringGeometry(JSONObject jsonObject)
+  private GEOGeometry createMultiLineStringGeometry(JSONObject jsonObject)
   {
   
     final JSONArray jsCoordinatesArray = jsonObject.getAsArray("coordinates");
@@ -253,7 +250,7 @@ public class GEOJSONParser
       return null;
     }
   
-    GEOMultiLineStringGeometry geo = null;
+    GEOGeometry geo = null;
   
     final int dimensions = jsFirstCoordinates.getAsArray(0).size();
     if (dimensions == 2)
@@ -287,7 +284,7 @@ public class GEOJSONParser
   
     return geo;
   }
-  private GEOPointGeometry createPointGeometry(JSONObject jsonObject)
+  private GEOGeometry createPointGeometry(JSONObject jsonObject)
   {
     final JSONArray jsCoordinates = jsonObject.getAsArray("coordinates");
     if (jsCoordinates == null)
@@ -296,7 +293,7 @@ public class GEOJSONParser
       return null;
     }
   
-    GEOPointGeometry geo = null;
+    GEOGeometry geo = null;
   
     final int dimensions = jsCoordinates.size();
     if (dimensions == 2)

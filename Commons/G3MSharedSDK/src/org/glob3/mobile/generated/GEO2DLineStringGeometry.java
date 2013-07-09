@@ -19,8 +19,7 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class GEO2DLineStringGeometry extends GEOLineStringGeometry, GEOGeometry2D
+public class GEO2DLineStringGeometry extends GEOGeometry2D
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
