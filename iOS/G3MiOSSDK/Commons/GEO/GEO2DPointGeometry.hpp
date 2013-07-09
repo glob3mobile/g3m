@@ -10,10 +10,11 @@
 #define __G3MiOSSDK__GEO2DPointGeometry__
 
 #include "GEOPointGeometry.hpp"
+#include "GEOGeometry2D.hpp"
 
 #include "Geodetic2D.hpp"
 
-class GEO2DPointGeometry : public GEOPointGeometry {
+class GEO2DPointGeometry : public GEOPointGeometry, GEOGeometry2D {
 private:
   const Geodetic2D _position;
 

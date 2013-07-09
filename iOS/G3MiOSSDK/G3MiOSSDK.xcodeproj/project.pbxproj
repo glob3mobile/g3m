@@ -111,6 +111,10 @@
 		CF5363E4178B44DD00EE3D49 /* DebugTileRasterizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5363E2178B44AC00EE3D49 /* DebugTileRasterizer.hpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
+		CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1193178C76F2000ED715 /* BoundingArea.cpp */; };
+		CF5C1196178C773E000ED715 /* BoundingArea.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5C1194178C76F2000ED715 /* BoundingArea.hpp */; };
+		CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1197178C7E33000ED715 /* GEOGeometry2D.cpp */; };
+		CF5C119A178C7F34000ED715 /* GEOGeometry2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */; };
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
@@ -391,7 +395,7 @@
 		E780A55716D3AED9000F0395 /* MutableVector3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; };
 		E780A55816D3AED9000F0395 /* Plane.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC41E39D15B1FD1300B5581C /* Plane.hpp */; };
 		E780A55916D3AED9000F0395 /* Planet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A61577EE5A0012AC53 /* Planet.hpp */; };
-		E780A55A16D3AED9000F0395 /* RectangleD.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* RectangleD.hpp */; };
+		E780A55A16D3AED9000F0395 /* Rectangle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* Rectangle.hpp */; };
 		E780A55B16D3AED9000F0395 /* RectangleI.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */; };
 		E780A55C16D3AED9000F0395 /* Sector.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 38D786E71587B52F003BBC75 /* Sector.hpp */; };
 		E780A55D16D3AED9000F0395 /* Vector2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3A81577EE5A0012AC53 /* Vector2D.hpp */; };
@@ -517,6 +521,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF5C119A178C7F34000ED715 /* GEOGeometry2D.hpp in CopyFiles */,
+				CF5C1196178C773E000ED715 /* BoundingArea.hpp in CopyFiles */,
 				CF5363E4178B44DD00EE3D49 /* DebugTileRasterizer.hpp in CopyFiles */,
 				CF5363E0178B43F200EE3D49 /* TileRasterizer.hpp in CopyFiles */,
 				CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */,
@@ -608,7 +614,7 @@
 				E780A55716D3AED9000F0395 /* MutableVector3D.hpp in CopyFiles */,
 				E780A55816D3AED9000F0395 /* Plane.hpp in CopyFiles */,
 				E780A55916D3AED9000F0395 /* Planet.hpp in CopyFiles */,
-				E780A55A16D3AED9000F0395 /* RectangleD.hpp in CopyFiles */,
+				E780A55A16D3AED9000F0395 /* Rectangle.hpp in CopyFiles */,
 				E780A55B16D3AED9000F0395 /* RectangleI.hpp in CopyFiles */,
 				E780A55C16D3AED9000F0395 /* Sector.hpp in CopyFiles */,
 				E780A55D16D3AED9000F0395 /* Vector2D.hpp in CopyFiles */,
@@ -971,6 +977,10 @@
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF5A8A301656B67F00508C38 /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoxShape.cpp; path = Commons/Rendererers/BoxShape.cpp; sourceTree = "<group>"; };
 		CF5A8A311656B67F00508C38 /* BoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BoxShape.hpp; path = Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; };
+		CF5C1193178C76F2000ED715 /* BoundingArea.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoundingArea.cpp; path = Commons/Geometry/BoundingArea.cpp; sourceTree = "<group>"; };
+		CF5C1194178C76F2000ED715 /* BoundingArea.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BoundingArea.hpp; path = Commons/Geometry/BoundingArea.hpp; sourceTree = "<group>"; };
+		CF5C1197178C7E33000ED715 /* GEOGeometry2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOGeometry2D.cpp; path = Commons/GEO/GEOGeometry2D.cpp; sourceTree = "<group>"; };
+		CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry2D.hpp; path = Commons/GEO/GEOGeometry2D.hpp; sourceTree = "<group>"; };
 		CF5EA5D2163DDC7900D8F797 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shape.cpp; path = Commons/Rendererers/Shape.cpp; sourceTree = "<group>"; };
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
@@ -1227,7 +1237,7 @@
 		D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayerSet.hpp; sourceTree = "<group>"; };
 		D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WMSLayer.cpp; sourceTree = "<group>"; };
 		D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WMSLayer.hpp; sourceTree = "<group>"; };
-		D87EC5D215BEC73400E38C36 /* RectangleD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
+		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
 		D882B1CE171D8D6100C2AD9C /* LeveledMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeveledMesh.cpp; sourceTree = "<group>"; };
 		D882B1CF171D8D6100C2AD9C /* LeveledMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LeveledMesh.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
@@ -1573,7 +1583,6 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				CCB2566315B5F58500079B96 /* Box.cpp */,
@@ -1587,8 +1596,8 @@
 				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
 				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,
 				383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */,
-				FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */,
 				FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */,
+				FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */,
 				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
@@ -1600,23 +1609,26 @@
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
-				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
+				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
+				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
 				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
+				CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */,
+				CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */,
 				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
 				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
-				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
-				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */,
 				CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */,
-				CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */,
-				CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */,
+				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
+				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
+				CF5C1193178C76F2000ED715 /* BoundingArea.cpp */,
+				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -1829,6 +1841,8 @@
 				CF1871C2170389AA00092888 /* GEOSymbolizationContext.hpp */,
 				CF8AE0041702049F00FE9F56 /* GEOSymbolizer.cpp */,
 				CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */,
+				CF5C1197178C7E33000ED715 /* GEOGeometry2D.cpp */,
+				CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2328,6 +2342,8 @@
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 				CF5363DF178B3D1A00EE3D49 /* TileRasterizer.cpp in Sources */,
 				CF5363E3178B44AC00EE3D49 /* DebugTileRasterizer.cpp in Sources */,
+				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
+				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
