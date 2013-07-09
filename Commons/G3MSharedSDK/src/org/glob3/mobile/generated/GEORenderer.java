@@ -121,7 +121,6 @@ public class GEORenderer extends LeafRenderer
     final int childrenCount = _children.size();
     if (childrenCount > 0)
     {
-  
       for (int i = 0; i < childrenCount; i++)
       {
         final GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
