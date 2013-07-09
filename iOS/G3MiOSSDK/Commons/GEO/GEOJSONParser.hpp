@@ -20,9 +20,6 @@ class GEOObject;
 class GEOFeatureCollection;
 class GEOFeature;
 class GEOGeometry;
-class GEOLineStringGeometry;
-class GEOMultiLineStringGeometry;
-class GEOPointGeometry;
 class Geodetic2D;
 #include <vector>
 
@@ -60,10 +57,10 @@ private:
   GEOFeatureCollection* createFeaturesCollection(const JSONObject* jsonObject) const;
   GEOFeature*           createFeature(const JSONObject* jsonObject) const;
 
-  GEOGeometry*                createGeometry(const JSONObject* jsonObject) const;
-  GEOLineStringGeometry*      createLineStringGeometry(const JSONObject* jsonObject) const;
-  GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
-  GEOPointGeometry*           createPointGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createLineStringGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createPointGeometry(const JSONObject* jsonObject) const;
 
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;

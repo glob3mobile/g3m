@@ -9,7 +9,9 @@
 #ifndef __G3MiOSSDK__GEOGeometry2D__
 #define __G3MiOSSDK__GEOGeometry2D__
 
-class GEOGeometry2D {
+#include "GEOGeometry.hpp"
+
+class GEOGeometry2D : public GEOGeometry  {
 public:
 #ifdef C_CODE
   virtual ~GEOGeometry2D() { }

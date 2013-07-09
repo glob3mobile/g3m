@@ -16,9 +16,7 @@
 #include "GEOFeatureCollection.hpp"
 #include "GEOFeature.hpp"
 #include "GEOGeometry.hpp"
-#include "GEOLineStringGeometry.hpp"
 #include "GEO2DLineStringGeometry.hpp"
-#include "GEOMultiLineStringGeometry.hpp"
 #include "GEO2DMultiLineStringGeometry.hpp"
 #include "GEO2DPointGeometry.hpp"
 
@@ -92,14 +90,14 @@ std::vector<Geodetic2D*>* GEOJSONParser::create2DCoordinates(const JSONArray* js
   return coordinates;
 }
 
-GEOPointGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) const {
   const JSONArray* jsCoordinates = jsonObject->getAsArray("coordinates");
   if (jsCoordinates == NULL) {
     ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
     return NULL;
   }
 
-  GEOPointGeometry* geo = NULL;
+  GEOGeometry* geo = NULL;
   
   const int dimensions = jsCoordinates->size();
   if (dimensions == 2) {
@@ -122,7 +120,7 @@ GEOPointGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObjec
   return geo;
 }
 
-GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
 
   const JSONArray* jsCoordinates = jsonObject->getAsArray("coordinates");
   if (jsCoordinates == NULL) {
@@ -136,7 +134,7 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
     return NULL;
   }
 
-  GEOLineStringGeometry* geo = NULL;
+  GEOGeometry* geo = NULL;
 
   const int dimensions = jsCoordinates->getAsArray(0)->size();
   if (dimensions == 2) {
@@ -159,7 +157,7 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
   return geo;
 }
 
-GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* jsonObject) const {
 
   const JSONArray* jsCoordinatesArray = jsonObject->getAsArray("coordinates");
   if (jsCoordinatesArray == NULL) {
@@ -184,7 +182,7 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
     return NULL;
   }
 
-  GEOMultiLineStringGeometry* geo = NULL;
+  GEOGeometry* geo = NULL;
 
   const int dimensions = jsFirstCoordinates->getAsArray(0)->size();
   if (dimensions == 2) {

@@ -9,13 +9,12 @@
 #ifndef __G3MiOSSDK__GEO2DLineStringGeometry__
 #define __G3MiOSSDK__GEO2DLineStringGeometry__
 
-#include "GEOLineStringGeometry.hpp"
 #include "GEOGeometry2D.hpp"
 class Geodetic2D;
 #include <vector>
 
 
-class GEO2DLineStringGeometry : public GEOLineStringGeometry, GEOGeometry2D {
+class GEO2DLineStringGeometry : public GEOGeometry2D {
 private:
   std::vector<Geodetic2D*>* _coordinates;
 
