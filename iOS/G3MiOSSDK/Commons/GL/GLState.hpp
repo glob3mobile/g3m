@@ -21,7 +21,7 @@
 
 class GLState{
 
-  GLFeatureSet _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
+  GLFeatureSet* _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
 
   
   GPUProgramState* _programState;
@@ -70,8 +70,14 @@ public:
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
   _lastParentModelview(NULL),
-  _modelviewUniformValue(NULL){}
-  
+  _modelviewUniformValue(NULL){
+
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+      _featuresSets[i] = NULL;
+    }
+
+  }
+  /*
   //For debugging purposes only
   GLState(GLGlobalState*   globalState,
           GPUProgramState* programState):
@@ -88,7 +94,7 @@ public:
 //    _parentMatrixListener(this),
   _lastParentModelview(NULL),
   _modelviewUniformValue(NULL){}
-  
+  */
   ~GLState();
   
   const GLState* getParent() const{
@@ -141,8 +147,14 @@ public:
 
   void addGLFeature(const GLFeature* f){
     GLFeatureGroupName g = f->getGroup();
-    _featuresSets[g].add(f);
+    if (_featuresSets[g] == NULL){
+      _featuresSets[g] = new GLFeatureSet();
+    }
+
+    _featuresSets[g]->add(f);
   }
+
+  GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

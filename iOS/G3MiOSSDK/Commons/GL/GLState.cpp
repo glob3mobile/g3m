@@ -32,6 +32,10 @@ GLState::~GLState(){
     delete _programState;
     delete _globalState;
   }
+
+  for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+    delete _featuresSets[i];
+  }
 }
 
 void GLState::setParent(const GLState* parent) const{
@@ -109,21 +113,41 @@ void GLState::applyStates(GL* gl, GPUProgram* prog) const{
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
+
+  int uniformsCode = getUniformsCode();
+  int attributesCode = getAttributesCode();
+
+  /////////////////////////// FEATURES
+  GPUVariableValueSet values;
+  for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+
+    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
+    if (fs != NULL){
+
+      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
+      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(fs);
+      delete fs;
+      if (variables != NULL){
+        values.combineWith(variables);
+        delete variables;
+      }
+    }
+  }
+
+  uniformsCode = uniformsCode | values.getUniformsCode();
+  attributesCode = attributesCode | values.getAttributesCode();
+
+  /////////////////////////// FEATURES
+
+
+
   if (_lastGPUProgramUsed == NULL || _totalGPUProgramStateChanged){
     //ILogger::instance()->logInfo("Total State for GPUProgram has changed since last apply");
-    _lastGPUProgramUsed = progManager.getProgram(gl, getUniformsCode(), getAttributesCode());
+    _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
   }
 
   if (_lastGPUProgramUsed != NULL){
     gl->useProgram(_lastGPUProgramUsed);
-    //    if (_lastGPUProgramUsed != _currentGPUProgram){
-    //      if (_currentGPUProgram != NULL){
-    //        _currentGPUProgram->onUnused(gl);
-    //      }
-    //      _currentGPUProgram = _lastGPUProgramUsed;
-    //      gl->useProgram(_lastGPUProgramUsed);
-    //    }
-
     applyStates(gl, _lastGPUProgramUsed);
 
     //APPLY TO GPU STATE MODELVIEW
@@ -141,17 +165,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
     /////////////////////////// FEATURES
-    GPUVariableValueSet values;
-    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
-      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
-      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(&_featuresSets[i]);
-      if (variables != NULL){
-        values.combineWith(variables);
-        delete variables;
-      }
-    }
     values.applyValuesToProgram(_lastGPUProgramUsed);
-
     /////////////////////////// FEATURES
 
 
@@ -230,5 +244,27 @@ GPUUniformValueMatrix4Float* GLState::getModelviewUniformValue() const{
     }
   }
   return _modelviewUniformValue;
+  
+}
+
+GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const{
+
+  GLFeatureSet* pfs = NULL;
+  if (_parentGLState != NULL){
+    _parentGLState->createAccumulatedGLFeaturesForGroup(g);
+  }
+  
+  const int index = g;
+  if (_featuresSets[index] == NULL){
+    return pfs;
+  } else{
+    GLFeatureSet* fs = new GLFeatureSet();
+    fs->add(_featuresSets[index]);
+    if (pfs != NULL){
+      fs->add(pfs);
+      delete pfs;
+    }
+    return fs;
+  }
   
 }

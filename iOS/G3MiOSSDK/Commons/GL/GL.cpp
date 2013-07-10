@@ -41,28 +41,28 @@ void GL::clearScreen(const GLGlobalState& state) {
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
-void GL::drawElements(int mode,
-                      IShortBuffer* indices, const GLGlobalState& state,
-                      GPUProgramManager& progManager,
-                      const GPUProgramState* gpuState) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-                                 mode,
-                                 indices->description().c_str());
-  }
-  
-  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  glState.applyOnGPU(this, progManager);
-  
-  //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  
-  _nativeGL->drawElements(mode,
-                          indices->size(),
-                          indices);
-  
-  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //progManager.getProgram(*gpuState)->onUnused();
-}
+//void GL::drawElements(int mode,
+//                      IShortBuffer* indices, const GLGlobalState& state,
+//                      GPUProgramManager& progManager,
+//                      const GPUProgramState* gpuState) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
+//  
+////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
+////  glState.applyOnGPU(this, progManager);
+////  
+////  //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
+////  
+////  _nativeGL->drawElements(mode,
+////                          indices->size(),
+////                          indices);
+////  
+//  //TODO: CHECKING GPU STATUS BY DELETING ALL
+//  //progManager.getProgram(*gpuState)->onUnused();
+//}
 
 void GL::drawElements(int mode,
                   IShortBuffer* indices, const GLState* state,
@@ -80,31 +80,31 @@ void GL::drawElements(int mode,
                           indices);
 }
 
-void GL::drawArrays(int mode,
-                    int first,
-                    int count, const GLGlobalState& state,
-                    GPUProgramManager& progManager,
-                    const GPUProgramState* gpuState) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-                                 mode,
-                                 first,
-                                 count);
-  }
-  
-  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  glState.applyOnGPU(this, progManager);
-  
-//  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  
-  
-  _nativeGL->drawArrays(mode,
-                        first,
-                        count);
-  
-  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //progManager.getProgram(*gpuState)->onUnused();
-}
+//void GL::drawArrays(int mode,
+//                    int first,
+//                    int count, const GLGlobalState& state,
+//                    GPUProgramManager& progManager,
+//                    const GPUProgramState* gpuState) {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+//                                 mode,
+//                                 first,
+//                                 count);
+//  }
+//  
+////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
+////  glState.applyOnGPU(this, progManager);
+////  
+//////  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
+////  
+////  
+////  _nativeGL->drawArrays(mode,
+////                        first,
+////                        count);
+////  
+//  //TODO: CHECKING GPU STATUS BY DELETING ALL
+//  //progManager.getProgram(*gpuState)->onUnused();
+//}
 
 void GL::drawArrays(int mode,
                 int first,

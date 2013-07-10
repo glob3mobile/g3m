@@ -22,6 +22,8 @@
 #include "GPUProgramState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
+#include "GLFeature.hpp"
+
 class MarkLabelImageListener : public IImageListener {
 private:
   IImage* _iconImage;
@@ -380,9 +382,9 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeigth){
+void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight){
   
-  _viewportHeight = viewportHeigth;
+  _viewportHeight = viewportHeight;
   _viewportWidth = viewportWidth;
   
   GLGlobalState *globalState = _glState.getGLGlobalState();
@@ -426,7 +428,10 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                false,        //Not normalized
                                0);           //Stride 0
   
-  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
+//  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
+
+  _glState.addGLFeature(new BillboardFeature(_textureWidth, _textureHeight,
+                                             viewportWidth, viewportHeight));
 }
 
 void Mark::render(const G3MRenderContext* rc,

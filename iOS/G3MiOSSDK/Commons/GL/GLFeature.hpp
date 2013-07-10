@@ -20,7 +20,7 @@ public:
   virtual ~GLFeature(){}
 
   virtual void applyGLGlobalState(GL* gl) = 0;
-  GPUVariableValueSet* getGPUVariableValueSet(){
+  const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
 

@@ -23,11 +23,10 @@ class GLFeatureSet{
 
 public:
 
-  GLFeatureSet():_nFeatures(0){
-  }
+  GLFeatureSet():_nFeatures(0){}
 
-  GLFeature const* get(int i){
-    if (_nFeatures >= i){
+  GLFeature const* get(int i) const{
+    if (_nFeatures < i){
       return NULL;
     }
     return _features[i];
@@ -35,6 +34,17 @@ public:
 
   void add(const GLFeature* f){
     _features[_nFeatures++] = f;
+  }
+
+  void add(const GLFeatureSet* fs){
+    const int size = fs->size();
+    for (int i = 0; i < size; i++) {
+      add(fs->get(i));
+    }
+  }
+
+  int size() const{
+    return _nFeatures;
   }
 
 };
@@ -58,6 +68,7 @@ public:
 
   static GLFeatureGroup* getGroup(GLFeatureGroupName name);
   static GLFeatureGroup* getGroup(int i);
+  static GLFeatureGroupName getGroupName(int i);
 
   virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features)= 0;
 };

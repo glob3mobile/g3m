@@ -7,6 +7,7 @@
 //
 
 #include "GLFeatureGroup.hpp"
+#include "GLFeature.hpp"
 
 GLFeatureGroup* GLFeatureGroup::_noGroup = NULL;
 GLFeatureGroup* GLFeatureGroup::_cameraGroup = NULL;
@@ -24,6 +25,19 @@ GLFeatureGroup* GLFeatureGroup::getGroup(int i){
       return getGroup(COLOR_GROUP);
     default:
       return NULL;
+  }
+}
+
+GLFeatureGroupName GLFeatureGroup::getGroupName(int i){
+  switch (i) {
+    case 0:
+      return NO_GROUP;
+    case 1:
+      return CAMERA_GROUP;
+    case 2:
+      return COLOR_GROUP;
+    default:
+      return UNRECOGNIZED_GROUP;
   }
 }
 
@@ -54,7 +68,15 @@ GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
 
 
 GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
-  return NULL;
+  GPUVariableValueSet* vs = new GPUVariableValueSet();
+  int size = features->size();
+  for(int i = 0; i < size; i++){
+    const GLFeature* f = features->get(i);
+    if (f != NULL){
+      vs->combineWith(f->getGPUVariableValueSet());
+    }
+  }
+  return vs;
 }
 
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){

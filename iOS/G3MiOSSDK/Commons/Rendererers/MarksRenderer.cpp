@@ -264,5 +264,5 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   //progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
   _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
   
-  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
+//  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
 }

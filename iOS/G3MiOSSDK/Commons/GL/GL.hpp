@@ -90,21 +90,21 @@ public:
   
   void clearScreen(const GLGlobalState& state);
   
-  void drawElements(int mode,
-                    IShortBuffer* indices, const GLGlobalState& state,
-                    GPUProgramManager& progManager,
-                    const GPUProgramState* gpuState);
-  
+//  void drawElements(int mode,
+//                    IShortBuffer* indices, const GLGlobalState& state,
+//                    GPUProgramManager& progManager,
+//                    const GPUProgramState* gpuState);
+
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState* state,
                     GPUProgramManager& progManager);
   
-  void drawArrays(int mode,
-                  int first,
-                  int count, const GLGlobalState& state,
-                  GPUProgramManager& progManager,
-                  const GPUProgramState* gpuState);
-  
+//  void drawArrays(int mode,
+//                  int first,
+//                  int count, const GLGlobalState& state,
+//                  GPUProgramManager& progManager,
+//                  const GPUProgramState* gpuState);
+
   void drawArrays(int mode,
                   int first,
                   int count, const GLState* state,
