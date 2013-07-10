@@ -156,16 +156,14 @@ public class Tile
       return false;
     }
   
-    final BoundingVolume narrowBoundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume();
-    if (narrowBoundingVolume == null)
-    {
-      return false;
-    }
-  
-    if (!narrowBoundingVolume.touchesFrustum(cameraFrustumInModelCoordinates))
-    {
-      return false;
-    }
+  //  const BoundingVolume* narrowBoundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  //  if (narrowBoundingVolume == NULL) {
+  //    return false;
+  //  }
+  //
+  //  if (!narrowBoundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+  //    return false;
+  //  }
   
     // test if sector is back oriented with respect to the camera
     return !_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians);
