@@ -26,7 +26,7 @@ public class DebugTileRasterizer extends TileRasterizer
   private int _canvasWidth;
   private int _canvasHeight;
 
-  private final GFont _font = new GFont();
+  private final GFont _font;
   private final Color _color ;
 
 
@@ -91,7 +91,7 @@ public class DebugTileRasterizer extends TileRasterizer
      _canvas = null;
      _canvasWidth = -1;
      _canvasHeight = -1;
-     _font = new GFont(GFont.monospaced(15));
+     _font = GFont.monospaced(15);
      _color = new Color(Color.white());
   }
 

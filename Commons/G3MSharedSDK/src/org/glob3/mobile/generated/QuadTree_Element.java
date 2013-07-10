@@ -10,4 +10,9 @@ public class QuadTree_Element
      _element = element;
   }
 
+  public void dispose()
+  {
+
+  }
+
 }
