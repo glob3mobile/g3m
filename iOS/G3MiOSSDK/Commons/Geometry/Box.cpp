@@ -147,13 +147,7 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   }
 
   const float width = upperX - lowerX;
-//  if (width < 0) {
-//    width *= -1;
-//  }
   const float height = upperY - lowerY;
-//  if (height < 0) {
-//    height *= -1;
-//  }
 
   return width * height;
 }
@@ -309,7 +303,6 @@ BoundingVolume* Box::mergedWithSphere(const Sphere* that) const {
 }
 
 bool Box::fullContainedInBox(const Box* box) const {
-//  return contains(box->_upper) && contains(box->_lower);
   return box->contains(_upper) && box->contains(_lower);
 }
 
