@@ -16,7 +16,13 @@
 #include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
+#include "GLFeatureGroup.hpp"
+#include "GLFeature.hpp"
+
 class GLState{
+
+  GLFeatureSet _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
+
   
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;
@@ -39,17 +45,6 @@ class GLState{
   bool _multiplyModelview;
   mutable GPUUniformValueMatrix4Float* _modelviewUniformValue;
 
-//  class ParentModelviewListener: public Matrix44DListener{
-//    const GLState* _state;
-//  public:
-//    ParentModelviewListener(GLState* state):_state(state){}
-//    void onMatrixBeingDeleted(const Matrix44D* m){
-//      //ILogger::instance()->logError("BORRADO");
-//      _state->_lastParentModelview = NULL;
-//    }
-//  };
-//  mutable ParentModelviewListener _parentMatrixListener;
-
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
 #endif
@@ -58,22 +53,7 @@ class GLState{
 #endif
   
   void applyStates(GL* gl, GPUProgram* prog) const;
- 
-//  explicit GLState(const GLState& state):
-//  _programState(new GPUProgramState()),
-//  _globalState(new GLGlobalState()),
-//  _owner(true),
-//  _parentGLState(NULL),
-//  _uniformsCode(0),
-//  _attributesCode(0),
-//  _totalGPUProgramStateChanged(true),
-//  _modelview(new Matrix44D(*state._modelview)),
-//  _accumulatedModelview(new Matrix44D(*state._accumulatedModelview)),
-//  _multiplyModelview(state._multiplyModelview),
-//  _lastParentModelview(new Matrix44D(*state._lastParentModelview))
-//  {
-//    
-//  }
+
   GLState(const GLState& state);
 
 public:
@@ -157,6 +137,12 @@ public:
   const Matrix44D* getAccumulatedModelView() const;
 
   GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
+
+
+  void addGLFeature(const GLFeature* f){
+    GLFeatureGroupName g = f->getGroup();
+    _featuresSets[g].add(f);
+  }
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

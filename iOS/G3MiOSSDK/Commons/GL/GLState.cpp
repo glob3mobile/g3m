@@ -7,6 +7,7 @@
 //
 
 #include "GLState.hpp"
+#include "GPUVariableValueSet.hpp"
 
 //GLGlobalState GLState::_currentGPUGlobalState;
 //GPUProgram* GLState::_currentGPUProgram = NULL;
@@ -138,12 +139,31 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 #endif
     }
 
+
+    /////////////////////////// FEATURES
+    GPUVariableValueSet values;
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
+      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(&_featuresSets[i]);
+      if (variables != NULL){
+        values.combineWith(variables);
+        delete variables;
+      }
+    }
+    values.applyValuesToProgram(_lastGPUProgramUsed);
+
+    /////////////////////////// FEATURES
+
+
     _lastGPUProgramUsed->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   } else{
     ILogger::instance()->logError("No GPUProgram found.");
   }
+
+
+
 
 }
 

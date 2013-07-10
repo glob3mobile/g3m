@@ -11,12 +11,14 @@
 
 #include <iostream>
 
-#include "GLFeature.hpp"
+
 #include "GPUVariableValueSet.hpp"
+
+class GLFeature;
 
 class GLFeatureSet{
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 10
-  GLFeature* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
+  GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
   int _nFeatures;
 
 public:
@@ -24,14 +26,14 @@ public:
   GLFeatureSet():_nFeatures(0){
   }
 
-  GLFeature* get(int i){
+  GLFeature const* get(int i){
     if (_nFeatures >= i){
       return NULL;
     }
     return _features[i];
   }
 
-  void add(GLFeature* f){
+  void add(const GLFeature* f){
     _features[_nFeatures++] = f;
   }
 
@@ -44,38 +46,39 @@ enum GLFeatureGroupName{
   COLOR_GROUP = 2,
 };
 
+#define N_GLFEATURES_GROUPS 3
 class GLFeatureGroup{
-public:
-
-  virtual ~GLFeatureGroup(){}
 
   static GLFeatureGroup* _noGroup;
   static GLFeatureGroup* _cameraGroup;
   static GLFeatureGroup* _colorGroup;
+public:
+
+  virtual ~GLFeatureGroup(){}
 
   static GLFeatureGroup* getGroup(GLFeatureGroupName name);
+  static GLFeatureGroup* getGroup(int i);
 
-  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GLFeatureSet* features) = 0;
-
-
-  
-
+  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features)= 0;
 };
 
 class GLFeatureNoGroup: public GLFeatureGroup{
-  ~GLFeatureNoGroup();
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GLFeatureSet* features){}
+public:
+  ~GLFeatureNoGroup(){}
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
-  ~GLFeatureCameraGroup();
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GLFeatureSet* features){}
+public:
+  ~GLFeatureCameraGroup(){}
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
 };
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
-  ~GLFeatureColorGroup();
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GLFeatureSet* features){}
+public:
+  ~GLFeatureColorGroup(){}
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
 };
 
 #endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */

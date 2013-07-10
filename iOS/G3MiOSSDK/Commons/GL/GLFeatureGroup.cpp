@@ -12,6 +12,21 @@ GLFeatureGroup* GLFeatureGroup::_noGroup = NULL;
 GLFeatureGroup* GLFeatureGroup::_cameraGroup = NULL;
 GLFeatureGroup* GLFeatureGroup::_colorGroup = NULL;
 
+GLFeatureGroup* GLFeatureGroup::getGroup(int i){
+  switch (i) {
+    case -1:
+      return getGroup(UNRECOGNIZED_GROUP);
+    case 0:
+      return getGroup(NO_GROUP);
+    case 1:
+      return getGroup(CAMERA_GROUP);
+    case 2:
+      return getGroup(COLOR_GROUP);
+    default:
+      return NULL;
+  }
+}
+
 GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
   switch (name) {
     case UNRECOGNIZED_GROUP:
@@ -35,4 +50,17 @@ GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
     default:
       return NULL;
   }
+}
+
+
+GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+  return NULL;
+}
+
+GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+  return NULL;
+}
+
+GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+  return NULL;
 }
