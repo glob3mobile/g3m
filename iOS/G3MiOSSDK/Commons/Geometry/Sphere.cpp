@@ -48,22 +48,22 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
   ShortBufferBuilder indices;
   for (short i=0; i<2*resolution-2; i++) {
     for (short j=0; j<resolution-1; j++) {
-      indices.add(j+i*resolution);
-      indices.add(j+1+i*resolution);
+      indices.add((short) (j+i*resolution));
+      indices.add((short) (j+1+i*resolution));
     }
   }
   
   // create border indices for horizontal lines
   for (short j=1; j<resolution-1; j++) {
     for (short i=0; i<2*resolution-3; i++){
-      indices.add(j+i*resolution);
-      indices.add(j+(i+1)*resolution);
+      indices.add((short) (j+i*resolution));
+      indices.add((short) (j+(i+1)*resolution));
     }
   }
   for (short j=1; j<resolution-1; j++) {
     short i = 2*resolution-3;
-    indices.add(j+i*resolution);
-    indices.add(j);
+    indices.add((short) (j+i*resolution));
+    indices.add((short) (j));
   }
     
   _mesh = new IndexedMesh(GLPrimitive::lines(),
@@ -80,7 +80,7 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
 void Sphere::render(const G3MRenderContext* rc,
                  const GLState& parentState) {
   if (_mesh == NULL) {
-    createWireframeMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), 6);
+    createWireframeMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), (short) 6);
   }
   _mesh->render(rc, parentState);
 }
