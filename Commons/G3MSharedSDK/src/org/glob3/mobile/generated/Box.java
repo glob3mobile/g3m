@@ -390,5 +390,11 @@ public class Box extends BoundingVolume
     return that.contains(_lower) && that.contains(_upper);
   }
 
+  public final Sphere createSphere()
+  {
+    final Vector3D center = _lower.add(_upper).div(2);
+    final double radius = center.distanceTo(_upper);
+    return new Sphere(center, radius);
+  }
 
 }

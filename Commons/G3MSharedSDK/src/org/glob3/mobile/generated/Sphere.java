@@ -291,5 +291,9 @@ public class Sphere extends BoundingVolume
     return (d + _radius <= that._radius);
   }
 
+  public final Sphere createSphere()
+  {
+    return new Sphere(this);
+  }
 
 }

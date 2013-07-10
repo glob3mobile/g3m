@@ -62,6 +62,8 @@ public class Tile
   private double _minHeight;
   private double _maxHeight;
 
+  private BoundingVolume _boundingVolume;
+
   private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
   {
   
@@ -141,7 +143,8 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
-    final BoundingVolume boundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume();
+  //  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+    final BoundingVolume boundingVolume = getBoundingVolume(rc, trc);
     if (boundingVolume == null)
     {
       return false;
@@ -507,6 +510,16 @@ public class Tile
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
+  private BoundingVolume getBoundingVolume(G3MRenderContext rc, TileRenderContext trc)
+  {
+    if (_boundingVolume == null)
+    {
+      _boundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume().createSphere();
+    }
+    return _boundingVolume;
+  }
+
+
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -534,6 +547,7 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
+     _boundingVolume = null;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -545,6 +559,9 @@ public class Tile
   public void dispose()
   {
     prune(null, null);
+  
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
   
     if (_debugMesh != null)
        _debugMesh.dispose();
