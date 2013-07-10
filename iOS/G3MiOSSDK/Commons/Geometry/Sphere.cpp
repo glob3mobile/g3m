@@ -61,7 +61,7 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
     }
   }
   for (short j=1; j<resolution-1; j++) {
-    short i = 2*resolution-3;
+    const short i = (short) (2*resolution-3);
     indices.add((short) (j+i*resolution));
     indices.add((short) (j));
   }
