@@ -1973,7 +1973,8 @@ public:
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
 
-      // go to Grand Canyon
+      /*
+       // go to Grand Canyon
       [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                                      Geodetic3D(Angle::fromDegreesMinutes(36, 6),
                                                                 Angle::fromDegreesMinutes(-112, 6),
@@ -1981,6 +1982,7 @@ public:
                                                      Angle::zero(),
                                                      Angle::fromDegrees(75)
                                                      );
+       */
 
 
       /*

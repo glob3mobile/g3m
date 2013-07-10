@@ -74,6 +74,8 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
+  virtual bool isFlat() const = 0;
+  
 };
 
 #endif

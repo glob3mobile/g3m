@@ -120,6 +120,8 @@ public:
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
+  bool isFlat() const { return false; }
+  
 };
 
 

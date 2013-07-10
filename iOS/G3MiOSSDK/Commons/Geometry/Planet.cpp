@@ -25,7 +25,6 @@ const Planet* Planet::createSphericalEarth() {
 }
 
 const Planet* Planet::createFlatEarth() {
-//  return new FlatPlanet(Plane(Vector3D(0,0,1),0));
-  return new SphericalPlanet(Sphere(Vector3D::zero(),
+  return new FlatPlanet(Sphere(Vector3D::zero(),
                                     6378137.0));
 }
