@@ -224,7 +224,6 @@ const Vector2F Camera::point2Pixel(const Vector3D& point) const {
                                                   0, 0, _width, _height);
 
   return Vector2F((float) p._x, (float) (_height - p._y) );
-
 }
 
 const Vector2F Camera::point2Pixel(const Vector3F& point) const {
@@ -232,7 +231,6 @@ const Vector2F Camera::point2Pixel(const Vector3F& point) const {
                                                   0, 0, _width, _height);
 
   return Vector2F(p._x, (_height - p._y) );
-
 }
 
 //const Vector2I Camera::point2Pixel(const Vector3D& point) const {
