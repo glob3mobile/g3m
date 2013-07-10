@@ -6,6 +6,8 @@
 //
 //
 
+#include <math.h>
+
 #include "CameraZoomAndRotateHandler.hpp"
 
 #include "GL.hpp"
@@ -54,10 +56,11 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
 void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
-  //const IMathUtils* mu = IMathUtils::instance();
   
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector2I difCurrentPixels = pixel1.sub(pixel0);
+  const Planet* planet = eventContext->getPlanet();
 
   // if it is the first move, let's decide if make zoom or rotate
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
@@ -69,40 +72,38 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       cameraContext->setCurrentGesture(Zoom);
     }
     
+    // test if starting a zoom action
+    if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
+            (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
+      
+      // compute intersection of view direction with the globe
+      Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+      if (!intersection.isNan()) {
+        _centralGlobePoint = intersection.asMutableVector3D();
+        _fingerSep0 = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
+        _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
+        cameraContext->setCurrentGesture(Zoom);
+      }
+      else
+        ILogger::instance()->logInfo("Zoom is no possible. View direction does not intersect the globe");
+    }
+
+    // test if starting a rotate action
     if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) ||
         (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1)) {
-      printf ("rotate..\n");
-      cameraContext->setCurrentGesture(Rotate);
+      //cameraContext->setCurrentGesture(Rotate);
     }
-
-    
-    /*
-      // compute intersection of view direction with the globe
-      validFingerPos = camera.IntersectionViewWithGlobe (center);
-      if (!validFingerPos) return false;
-      // save the initial two points
-      fingerSep0 = (float) sqrt((float)((c2x-c1x)*(c2x-c1x)+(c2y-c1y)*(c2y-c1y)));
-      lastAngle = angle0 = atan2(c2y-c1y, c2x-c1x);
-      camera0 = Camera(camera);//camera0 = camera;
-      //WARNING: probably, when viewer be very close to the ground, looking at horizon,
-      // the intersection with a point of lower scanlines must be found
-      
-      //iprintf (" --- empiezo zoom. Fingersep0=%.2f. angle0=%.2f.  Gesture anterior=%d\n", fingerSep0, angle0, gesture);
-      gesture=Zoom;*/
   }
 
-  
   // call specific transformation
-  const Gesture gesture = cameraContext->getCurrentGesture();
-  if (gesture == Zoom) {
-    if (_processZoom) {
-      zoom();
-    }
-  }
-  else if (gesture == Rotate) {
-    if (_processRotation) {
-      rotate();
-    }
+  switch (cameraContext->getCurrentGesture()) {
+    case Zoom:
+      if (_processZoom) zoom(cameraContext->getNextCamera(), difCurrentPixels);
+      break;
+      
+    case Rotate:
+      if (_processRotation) rotate();
+      break;
   }
 }
 
@@ -160,9 +161,46 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
   
 }
 
-void CameraZoomAndRotateHandler::zoom()
+
+
+void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
 {
-  printf ("zooming.....\n");
+  const double MIN_CAMERA_HEIGHT = 30;
+  
+  // compute angle params
+  double angle = atan2(difCurrentPixels._y, difCurrentPixels._x);
+  const double PI = IMathUtils::instance()->pi();
+  while (fabs(_lastAngle-angle)>PI/2) {
+    if (angle<_lastAngle) angle+=PI;  else  angle-=PI;
+  }
+  _lastAngle = angle;
+  angle -= _angle0;
+  
+  // compute zoom params
+  double fingerSep = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
+  double factor = _fingerSep0 / fingerSep;
+  double desp = 1-factor;
+  Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+  double dist = w.length();
+    
+	// don't allow much closer
+	if (dist*factor<MIN_CAMERA_HEIGHT && factor<0.999)
+    return;
+	
+	// don't allow much further away
+  double R = _centralGlobePoint.length();
+	if (dist*factor>11*R && factor>1.001)
+    return;
+	
+	// make zoom and rotation
+  camera->copyFrom(_camera0);
+  camera->rotateWithAxis(_centralGlobePoint.asVector3D(), Angle::fromRadians(angle));
+  camera->moveForward(desp*dist);
+  
+  /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
+  printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
+          _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
+          _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
 }
 
 void CameraZoomAndRotateHandler::rotate()
