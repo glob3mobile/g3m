@@ -11,15 +11,31 @@
 
 #include "GEOSymbol.hpp"
 
+#include "Sector.hpp"
+
 class GEORasterSymbol : public GEOSymbol {
-private:
+protected:
+  const Sector* _sector;
+
+protected:
+  GEORasterSymbol(const Sector* sector) :
+  _sector(sector)
+  {
+  }
+
 public:
-  ~GEORasterSymbol() {
+  virtual ~GEORasterSymbol() {
   }
 
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
 
+  const Sector* getSector() const {
+    return _sector;
+  }
+
+  virtual GEORasterSymbol* createSymbol() const = 0;
+  
 };
 
 #endif

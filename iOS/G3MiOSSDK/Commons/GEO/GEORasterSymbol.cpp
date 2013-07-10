@@ -8,7 +8,12 @@
 
 #include "GEORasterSymbol.hpp"
 
+#include "GEOSymbolizationContext.hpp"
+#include "GEOTileRasterizer.hpp"
+
 void GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizationContext& sc) const {
-  aa;
+  if (_sector != NULL) {
+    sc.getGEOTileRasterizer()->addSymbol( createSymbol() );
+  }
 }

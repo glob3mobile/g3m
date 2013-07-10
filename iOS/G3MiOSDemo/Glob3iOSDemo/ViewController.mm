@@ -106,6 +106,9 @@
 
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
+#import <G3MiOSSDK/GEOTileRasterizer.hpp>
+#import <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -450,8 +453,11 @@ public:
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
-  builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
-  
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+
+  //builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
+  builder.getTileRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
   
@@ -513,7 +519,8 @@ public:
   
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
-                                                   marksRenderer: marksRenderer];
+                                                   marksRenderer: marksRenderer
+                                               geoTileRasterizer: geoTileRasterizer];
   builder.addRenderer(geoRenderer);
   
   
@@ -1421,10 +1428,12 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     
-    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
-                                                createLineStyle(geometry),
-                                                30000) );
-    
+//    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
+//                                                createLineStyle(geometry),
+//                                                30000) );
+
+    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates()) );
+
     return symbols;
   }
   
@@ -1432,9 +1441,11 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     
-    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
-                                                     createLineStyle(geometry)) );
-    
+//    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
+//                                                     createLineStyle(geometry)) );
+
+    symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray()) );
+
     return symbols;
   }
   
@@ -1459,6 +1470,7 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
+                             geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer();
   
@@ -1466,7 +1478,8 @@ public:
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
-                                             marksRenderer);
+                                             marksRenderer,
+                                             geoTileRasterizer);
   
   return geoRenderer;
 }
@@ -2099,11 +2112,11 @@ public:
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
       //                                                                  ofType: @"geojson"];
       
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
-      //                                                                  ofType: @"geojson"];
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
                                                                   ofType: @"geojson"];
-      
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
+//                                                                  ofType: @"geojson"];
+
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
       //                                                                  ofType: @"geojson"];
       

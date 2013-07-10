@@ -1,0 +1,113 @@
+//
+//  QuadTree.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 7/10/13.
+//
+//
+
+#ifndef __G3MiOSSDK__QuadTree__
+#define __G3MiOSSDK__QuadTree__
+
+#include "Sector.hpp"
+
+class QuadTreeVisitor {
+public:
+  virtual ~QuadTreeVisitor() {
+
+  }
+
+  virtual bool visitElement(const Sector& sector,
+                            const void*   element) const = 0;
+};
+
+
+class QuadTree_Element {
+public:
+  const Sector _sector;
+  const void*  _element;
+
+  QuadTree_Element(const Sector& sector,
+                   const void*   element) :
+  _sector(sector),
+  _element(element)
+  {
+  }
+
+};
+
+
+class QuadTree_Node {
+private:
+  const int     _depth;
+  const Sector  _sector;
+  std::vector<QuadTree_Element*> _elements;
+
+  QuadTree_Node** _children;
+
+public:
+  QuadTree_Node(const Sector& sector) :
+  _sector(sector),
+  _depth(1)
+  {
+  }
+
+  QuadTree_Node(const Sector& sector,
+                QuadTree_Node* parent) :
+  _sector(sector),
+  _depth( parent->_depth + 1 )
+  {
+  }
+
+  ~QuadTree_Node();
+
+  void add(const Sector& sector,
+           const void* element,
+           int maxElementsPerNode,
+           int maxDepth);
+
+  bool visitElements(const Sector& sector,
+                     const QuadTreeVisitor& visitor) const;
+
+};
+
+
+
+
+class QuadTree {
+private:
+  const Sector  _sector;
+  QuadTree_Node _root;
+
+  const int _maxElementsPerNode;
+  const int _maxDepth;
+
+public:
+
+  QuadTree(const Sector& sector) :
+  _sector( sector ),
+  _root( sector ),
+  _maxElementsPerNode(16),
+  _maxDepth(12)
+  {
+  }
+
+  QuadTree() :
+  _sector( Sector::fullSphere() ),
+  _root( Sector::fullSphere() ),
+  _maxElementsPerNode(16),
+  _maxDepth(12)
+  {
+  }
+
+  ~QuadTree();
+
+  void add(const Sector& sector,
+           const void* element);
+
+  void visitElements(const Sector& sector,
+                     const QuadTreeVisitor& visitor) const;
+  
+};
+
+#endif

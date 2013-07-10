@@ -17,6 +17,7 @@ class GEOSymbolizer;
 class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
+class GEOTileRasterizer;
 class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public LeafRenderer {
@@ -25,10 +26,11 @@ private:
 
   const GEOSymbolizer* _defaultSymbolizer;
 
-  MeshRenderer*   _meshRenderer;
-  ShapesRenderer* _shapesRenderer;
-  MarksRenderer*  _marksRenderer;
-
+  MeshRenderer*      _meshRenderer;
+  ShapesRenderer*    _shapesRenderer;
+  MarksRenderer*     _marksRenderer;
+  GEOTileRasterizer* _geoTileRasterizer;
+  
 public:
 
   /**
@@ -42,13 +44,15 @@ public:
 
    */
   GEORenderer(const GEOSymbolizer* defaultSymbolizer,
-              MeshRenderer*   meshRenderer,
-              ShapesRenderer* shapesRenderer,
-              MarksRenderer*  marksRenderer) :
+              MeshRenderer*        meshRenderer,
+              ShapesRenderer*      shapesRenderer,
+              MarksRenderer*       marksRenderer,
+              GEOTileRasterizer*   geoTileRasterizer) :
   _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
-  _marksRenderer(marksRenderer)
+  _marksRenderer(marksRenderer),
+  _geoTileRasterizer(geoTileRasterizer)
   {
 
   }

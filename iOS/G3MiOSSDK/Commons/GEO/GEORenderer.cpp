@@ -68,7 +68,8 @@ void GEORenderer::render(const G3MRenderContext* rc,
         const GEOSymbolizationContext sc(symbolizer,
                                          _meshRenderer,
                                          _shapesRenderer,
-                                         _marksRenderer);
+                                         _marksRenderer,
+                                         _geoTileRasterizer);
         pair->_geoObject->symbolize(rc, sc);
       }
 
