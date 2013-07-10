@@ -22,7 +22,12 @@ private:
   mutable int      _canvasWidth;
   mutable int      _canvasHeight;
 
+#ifdef C_CODE
   const GFont _font;
+#endif
+#ifdef JAVA_CODE
+  private final GFont _font;
+#endif
   const Color _color;
 
 

@@ -18,6 +18,7 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
 }
 
 class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
+public:
   bool visitElement(const Sector& sector,
                     const void*   element) const {
 

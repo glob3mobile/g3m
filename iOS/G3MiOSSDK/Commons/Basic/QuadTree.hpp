@@ -34,6 +34,10 @@ public:
   {
   }
 
+  ~QuadTree_Element() {
+
+  }
+
 };
 
 
@@ -77,7 +81,12 @@ public:
 class QuadTree {
 private:
   const Sector  _sector;
+#ifdef C_CODE
   QuadTree_Node _root;
+#endif
+#ifdef JAVA_CODE
+  private QuadTree_Node _root;
+#endif
 
   const int _maxElementsPerNode;
   const int _maxDepth;
