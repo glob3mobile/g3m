@@ -10,6 +10,9 @@
 
 #include "EllipsoidalPlanet.hpp"
 #include "SphericalPlanet.hpp"
+#include "FlatPlanet.hpp"
+#include "Plane.hpp"
+
 
 const Planet* Planet::createEarth() {
   return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero(),
@@ -17,6 +20,12 @@ const Planet* Planet::createEarth() {
 }
 
 const Planet* Planet::createSphericalEarth() {
+  return new SphericalPlanet(Sphere(Vector3D::zero(),
+                                    6378137.0));
+}
+
+const Planet* Planet::createFlatEarth() {
+//  return new FlatPlanet(Plane(Vector3D(0,0,1),0));
   return new SphericalPlanet(Sphere(Vector3D::zero(),
                                     6378137.0));
 }

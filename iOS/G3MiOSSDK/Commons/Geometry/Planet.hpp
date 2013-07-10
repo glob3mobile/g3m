@@ -19,6 +19,7 @@ public:
   
   static const Planet* createEarth();
   static const Planet* createSphericalEarth();
+  static const Planet* createFlatEarth();
   
   virtual ~Planet() {}
   

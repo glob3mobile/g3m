@@ -514,6 +514,7 @@
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
+		FB960A89178DCB4600A37B5B /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB960A87178DCB4600A37B5B /* FlatPlanet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1312,6 +1313,8 @@
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
+		FB960A86178DCAAE00A37B5B /* FlatPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FlatPlanet.hpp; path = Commons/Geometry/FlatPlanet.hpp; sourceTree = "<group>"; };
+		FB960A87178DCB4600A37B5B /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1592,13 +1595,13 @@
 				D8B749AD175E04FA00046B96 /* Sphere.hpp */,
 				D8B749A9175E040800046B96 /* Ellipsoid.cpp */,
 				D8B749AA175E040800046B96 /* Ellipsoid.hpp */,
+				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
 				D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */,
 				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				CCB2566315B5F58500079B96 /* Box.cpp */,
 				CC41E3CB15B4651700B5581C /* Box.hpp */,
-				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
 				CC41E3C915B4649800B5581C /* BoundingVolume.hpp */,
 				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
@@ -1627,6 +1630,8 @@
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */,
 				CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */,
+				FB960A87178DCB4600A37B5B /* FlatPlanet.cpp */,
+				FB960A86178DCAAE00A37B5B /* FlatPlanet.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
 				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
@@ -2354,6 +2359,7 @@
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
+				FB960A89178DCB4600A37B5B /* FlatPlanet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
