@@ -10,5 +10,5 @@
 
 void GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizationContext& sc) const {
-  int __Diego_at_work;
+  aa;
 }
