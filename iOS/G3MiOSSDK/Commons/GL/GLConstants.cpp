@@ -15,10 +15,10 @@ int GLCullFace::_frontAndBack = 0;
 int GLBufferType::_colorBuffer = 0;
 int GLBufferType::_depthBuffer = 0;
 
-int GLFeature::_polygonOffsetFill = 0;
-int GLFeature::_depthTest = 0;
-int GLFeature::_blend = 0;
-int GLFeature::_cullFace = 0;
+int GLStage::_polygonOffsetFill = 0;
+int GLStage::_depthTest = 0;
+int GLStage::_blend = 0;
+int GLStage::_cullFace = 0;
 
 int GLType::_float = 0;
 int GLType::_unsignedByte = 0;

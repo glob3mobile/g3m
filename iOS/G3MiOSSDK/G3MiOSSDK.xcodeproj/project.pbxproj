@@ -313,6 +313,9 @@
 		D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
+		D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE86178D636000EE1B97 /* GLFeature.cpp */; };
+		D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */; };
+		D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */; };
 		D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D894EB17731870007E41A5 /* GPUVariable.cpp */; };
@@ -1312,6 +1315,12 @@
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
+		D8B8CE86178D636000EE1B97 /* GLFeature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFeature.cpp; sourceTree = "<group>"; };
+		D8B8CE87178D636000EE1B97 /* GLFeature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLFeature.hpp; sourceTree = "<group>"; };
+		D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFeatureGroup.cpp; sourceTree = "<group>"; };
+		D8B8CE8A178D63C400EE1B97 /* GLFeatureGroup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLFeatureGroup.hpp; sourceTree = "<group>"; };
+		D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUVariableValueSet.cpp; sourceTree = "<group>"; };
+		D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUVariableValueSet.hpp; sourceTree = "<group>"; };
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -1987,6 +1996,8 @@
 		D892FBCD15C930E600E69254 /* GL */ = {
 			isa = PBXGroup;
 			children = (
+				D8B8CE86178D636000EE1B97 /* GLFeature.cpp */,
+				D8B8CE87178D636000EE1B97 /* GLFeature.hpp */,
 				D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
 				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
@@ -2009,6 +2020,10 @@
 				D80A28701746572E0058CEC3 /* GLState.hpp */,
 				D8D894EB17731870007E41A5 /* GPUVariable.cpp */,
 				D8D894EC17731870007E41A5 /* GPUVariable.hpp */,
+				D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */,
+				D8B8CE8A178D63C400EE1B97 /* GLFeatureGroup.hpp */,
+				D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */,
+				D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -2433,6 +2448,9 @@
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
+				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
+				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
+				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

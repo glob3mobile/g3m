@@ -24,10 +24,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   if (_depthTestChanged){
     if (_depthTest != currentState._depthTest) {
       if (_depthTest) {
-        nativeGL->enable(GLFeature::depthTest());
+        nativeGL->enable(GLStage::depthTest());
       }
       else {
-        nativeGL->disable(GLFeature::depthTest());
+        nativeGL->disable(GLStage::depthTest());
       }
       currentState._depthTest = _depthTest;
     }
@@ -37,10 +37,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   if (_blendChanged){
     if (_blend != currentState._blend) {
       if (_blend) {
-        nativeGL->enable(GLFeature::blend());
+        nativeGL->enable(GLStage::blend());
       }
       else {
-        nativeGL->disable(GLFeature::blend());
+        nativeGL->disable(GLStage::blend());
       }
       currentState._blend = _blend;
     }
@@ -51,14 +51,14 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     if (_cullFace != currentState._cullFace) {
       currentState._cullFace = _cullFace;
       if (_cullFace) {
-        nativeGL->enable(GLFeature::cullFace());
+        nativeGL->enable(GLStage::cullFace());
         if (_culledFace != currentState._culledFace) {
           nativeGL->cullFace(_culledFace);
           currentState._culledFace = _culledFace;
         }
       }
       else {
-        nativeGL->disable(GLFeature::cullFace());
+        nativeGL->disable(GLStage::cullFace());
       }
     }
   }
@@ -75,7 +75,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     if (_polygonOffsetFill != currentState._polygonOffsetFill){
       currentState._polygonOffsetFill = _polygonOffsetFill;
       if (_polygonOffsetFill){
-        nativeGL->enable(GLFeature::polygonOffsetFill());
+        nativeGL->enable(GLStage::polygonOffsetFill());
         
         if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
             _polygonOffsetUnits != currentState._polygonOffsetUnits){
@@ -86,7 +86,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         }
         
       } else{
-        nativeGL->disable(GLFeature::polygonOffsetFill());
+        nativeGL->disable(GLStage::polygonOffsetFill());
       }
     }
   }

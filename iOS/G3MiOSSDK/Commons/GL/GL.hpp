@@ -73,7 +73,7 @@ public:
     //Init Constants
     GLCullFace::init(_nativeGL);
     GLBufferType::init(_nativeGL);
-    GLFeature::init(_nativeGL);
+    GLStage::init(_nativeGL);
     GLType::init(_nativeGL);
     GLPrimitive::init(_nativeGL);
     GLBlendFactor::init(_nativeGL);

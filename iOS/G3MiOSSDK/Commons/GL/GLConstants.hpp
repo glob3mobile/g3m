@@ -42,7 +42,7 @@ public:
   }
 };
 
-class GLFeature {
+class GLStage {
   static int _polygonOffsetFill;
   static int _depthTest;
   static int _blend;
