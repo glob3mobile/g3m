@@ -21,8 +21,9 @@ private:
   const double   _radius;
   const double   _radiusSquared;
   
-  Mesh *_mesh;
-  void createWireframeMesh(Color* flatColor, short resolution);
+  mutable Mesh *_mesh;
+  void createWireframeMesh(Color* flatColor,
+                           short resolution) const;
 
  
 public:
@@ -59,7 +60,7 @@ public:
 //  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState) const;
 
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

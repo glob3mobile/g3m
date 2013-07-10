@@ -30,6 +30,7 @@ class MeshHolder;
 class Vector2I;
 class TileElevationDataRequest;
 class Frustum;
+class Box;
 
 #include "ITexturizerData.hpp"
 
@@ -107,8 +108,8 @@ private:
 
   ITexturizerData* _texturizerData;
 
-  BoundingVolume* _tileBoundingVolume;
-  BoundingVolume* getTileBoundingVolume(const G3MRenderContext *rc);
+  Box* _tileBoundingVolume;
+  Box* getTileBoundingVolume(const G3MRenderContext *rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;

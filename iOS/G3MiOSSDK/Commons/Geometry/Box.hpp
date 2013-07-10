@@ -28,8 +28,8 @@ private:
   private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 #endif
 
-  Mesh *_mesh;
-  void createMesh(Color* flatColor);
+  mutable Mesh *_mesh;
+  void createMesh(Color* flatColor) const;
 
 public:
   Box(const Vector3D& lower,
@@ -61,7 +61,7 @@ public:
                                const Vector3D& direction) const;
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState) const;
 
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

@@ -24,8 +24,8 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
 //  return Vector2I::zero();
 //}
 
-void Sphere::createWireframeMesh(Color* color, short resolution)
-{
+void Sphere::createWireframeMesh(Color* color,
+                                 short resolution) const {
   IMathUtils* mu = IMathUtils::instance();
   const double pi = mu->pi();
   const double delta = pi / (resolution-1);
@@ -78,9 +78,9 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
 
 
 void Sphere::render(const G3MRenderContext* rc,
-                    const GLState& parentState) {
+                    const GLState& parentState) const {
   if (_mesh == NULL) {
-    createWireframeMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), (short) 6);
+    createWireframeMesh(Color::newFromRGBA(1.0f, 1.0f, 0.0f, 1.0f), (short) 16);
   }
   _mesh->render(rc, parentState);
 }

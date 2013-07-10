@@ -220,7 +220,7 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 }
 
 
-void Box::createMesh(Color* color) {
+void Box::createMesh(Color* color) const {
   
   float v[] = {
     (float) _lower._x, (float) _lower._y, (float) _lower._z,
@@ -267,7 +267,7 @@ void Box::createMesh(Color* color) {
 }
 
 void Box::render(const G3MRenderContext* rc,
-                 const GLState& parentState) {
+                 const GLState& parentState) const {
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }

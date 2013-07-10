@@ -26,7 +26,7 @@
 #include "SubviewElevationData.hpp"
 #include "TileElevationDataRequest.hpp"
 #include "Sphere.hpp"
-
+#include "Vector2F.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -213,7 +213,7 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   return _debugMesh;
 }
 
-BoundingVolume* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
+Box* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
   if (_tileBoundingVolume == NULL) {
     const Planet* planet = rc->getPlanet();
 
@@ -274,7 +274,10 @@ BoundingVolume* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
 const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext *rc,
                                               const TileRenderContext* trc) {
   if (_boundingVolume == NULL) {
-    _boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume()->createSphere();
+    Mesh* mesh = getTessellatorMesh(rc, trc);
+    if (mesh != NULL) {
+      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+    }
   }
   return _boundingVolume;
 }
@@ -293,6 +296,15 @@ bool Tile::isVisible(const G3MRenderContext *rc,
   }
 
   if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+    return false;
+  }
+
+  const BoundingVolume* narrowBoundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  if (narrowBoundingVolume == NULL) {
+    return false;
+  }
+
+  if (!narrowBoundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
     return false;
   }
 
@@ -340,24 +352,30 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
-  if (boundingVolume == NULL) {
-    return true;
-  }
-  
-  const double projectedArea = boundingVolume->projectedArea(rc);
-  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 5) ) {
-    return true;
-  }
-  /*
-  const Vector2I ex = boundingVolume->projectedExtent(rc);
-  const int t = (ex._x + ex._y);
+//  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
+//  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+//  if (boundingVolume == NULL) {
+//    return true;
+//  }
+//  
+//  const double projectedArea = boundingVolume->projectedArea(rc);
+////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
+////    return true;
+////  }
+//  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
+////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+//  if ( projectedArea <= (threshold*threshold) ) {
+//    return true;
+//  }
+
+  const Box* boundingVolume = getTileBoundingVolume(rc);
+  const Vector2F ex = boundingVolume->projectedExtent(rc);
+  const float t = (ex._x + ex._y);
   const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
   if ( t <= threshold ) {
     return true;
   }
-   */
 
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
@@ -429,6 +447,9 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
   }
 
+
+//  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+//  boundingVolume->render(rc, parentState);
 }
 
 void Tile::debugRender(const G3MRenderContext* rc,
