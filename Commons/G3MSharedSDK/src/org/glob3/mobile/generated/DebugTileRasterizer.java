@@ -17,11 +17,20 @@ package org.glob3.mobile.generated;
 
 
 
+//class ICanvas;
+//class Sector;
+
 public class DebugTileRasterizer extends TileRasterizer
 {
+  private ICanvas _canvas;
+  private int _canvasWidth;
+  private int _canvasHeight;
+
+  private final GFont _font = new GFont();
+  private final Color _color ;
 
 
-  private String getTileLabel1(Tile tile)
+  private String getTileKeyLabel(Tile tile)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("L:");
@@ -39,21 +48,57 @@ public class DebugTileRasterizer extends TileRasterizer
     return s;
   }
 
-  private String getTileLabel2(Tile tile)
+  private String getSectorLabel1(Sector sector)
   {
-    return "Lower lat: " + tile.getSector().lower().latitude().description();
+    return "Lower lat: " + sector.lower().latitude().description();
   }
-  private String getTileLabel3(Tile tile)
+  private String getSectorLabel2(Sector sector)
   {
-    return "Lower lon: " + tile.getSector().lower().longitude().description();
+    return "Lower lon: " + sector.lower().longitude().description();
   }
-  private String getTileLabel4(Tile tile)
+  private String getSectorLabel3(Sector sector)
   {
-    return "Upper lat: " + tile.getSector().upper().latitude().description();
+    return "Upper lat: " + sector.upper().latitude().description();
   }
-  private String getTileLabel5(Tile tile)
+  private String getSectorLabel4(Sector sector)
   {
-    return "Upper lon: " + tile.getSector().upper().longitude().description();
+    return "Upper lon: " + sector.upper().longitude().description();
+  }
+
+  private ICanvas getCanvas(int width, int height)
+  {
+    if ((_canvas == null) || (_canvasWidth != width) || (_canvasHeight != height))
+    {
+      if (_canvas != null)
+         _canvas.dispose();
+  
+      _canvas = IFactory.instance().createCanvas();
+      _canvas.initialize(width, height);
+  
+      _canvasWidth = width;
+      _canvasHeight = height;
+    }
+    else
+    {
+      _canvas.setFillColor(Color.transparent());
+      _canvas.fillRectangle(0, 0, width, height);
+    }
+    return _canvas;
+  }
+
+  public DebugTileRasterizer()
+  {
+     _canvas = null;
+     _canvasWidth = -1;
+     _canvasHeight = -1;
+     _font = new GFont(GFont.monospaced(15));
+     _color = new Color(Color.white());
+  }
+
+  public void dispose()
+  {
+    if (_canvas != null)
+       _canvas.dispose();
   }
 
   public final String getId()
@@ -67,33 +112,32 @@ public class DebugTileRasterizer extends TileRasterizer
     final int width = image.getWidth();
     final int height = image.getHeight();
   
-    ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize(width, height);
+    ICanvas canvas = getCanvas(width, height);
+  
+    canvas.removeShadow();
   
     canvas.drawImage(image, 0, 0);
   
-    canvas.setStrokeColor(Color.yellow());
-    canvas.setStrokeWidth(2);
+    canvas.setStrokeColor(_color);
+    canvas.setStrokeWidth(1);
     canvas.strokeRectangle(0, 0, width, height);
   
   
+    canvas.setShadow(Color.black(), 2, 1, -1);
     ColumnCanvasElement col = new ColumnCanvasElement();
-    col.add(new TextCanvasElement(getTileLabel1(tile), GFont.serif(), Color.yellow()));
+    col.add(new TextCanvasElement(getTileKeyLabel(tile), _font, _color));
   
-    final GFont sectorFont = GFont.monospaced(14);
-    final Color sectorColor = Color.yellow();
-    col.add(new TextCanvasElement(getTileLabel2(tile), sectorFont, sectorColor));
-    col.add(new TextCanvasElement(getTileLabel3(tile), sectorFont, sectorColor));
-    col.add(new TextCanvasElement(getTileLabel4(tile), sectorFont, sectorColor));
-    col.add(new TextCanvasElement(getTileLabel5(tile), sectorFont, sectorColor));
+    final Sector sectorTile = tile.getSector();
+    col.add(new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color));
+    col.add(new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color));
+    col.add(new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color));
+    col.add(new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color));
   
     final Vector2F colExtent = col.getExtent(canvas);
     col.drawAt((width - colExtent._x) / 2, (height - colExtent._y) / 2, canvas);
   
-    canvas.createImage(listener, autodelete);
   
-    if (canvas != null)
-       canvas.dispose();
+    canvas.createImage(listener, autodelete);
   
     if (image != null)
        image.dispose();
