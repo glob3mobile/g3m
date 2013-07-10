@@ -211,17 +211,17 @@ public class MarksRenderer extends LeafRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
-          final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+          final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
-          final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {
-            final double distance = markPixel.sub(touchedPixel).squaredLength();
-            if (distance < minSqDistance)
+            final double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
+            if (sqDistance < minSqDistance)
             {
               nearestMark = mark;
-              minSqDistance = distance;
+              minSqDistance = sqDistance;
             }
           }
         }

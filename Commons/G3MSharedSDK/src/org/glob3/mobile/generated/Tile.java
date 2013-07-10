@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 //class TileKey;
 //class Vector3D;
 //class GLState;
-//class Extent;
+//class BoundingVolume;
 //class ElevationDataProvider;
 //class ElevationData;
 //class MeshHolder;
@@ -147,8 +147,8 @@ public class Tile
       return false;
     }
   
-    final Extent extent = getTessellatorMesh(rc, trc).getExtent();
-    if (extent == null)
+    final BoundingVolume boundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume();
+    if (boundingVolume == null)
     {
       return false;
     }
@@ -160,7 +160,7 @@ public class Tile
     //}
   
   //  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
-    return extent.touches(cameraFrustumInModelCoordinates);
+    return boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates);
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
@@ -193,23 +193,25 @@ public class Tile
     }
   
     //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-    final Extent extent = getTileExtent(rc);
-    if (extent == null)
+    final BoundingVolume boundingVolume = getTileBoundingVolume(rc);
+    if (boundingVolume == null)
     {
       return true;
     }
   
-    //  const double projectedSize = extent->squaredProjectedArea(rc);
-    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    //    return true;
-    //  }
-    final Vector2I ex = extent.projectedExtent(rc);
-    final int t = (ex._x + ex._y);
-    final double threshold = (parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75;
-    if (t <= threshold)
+    final double projectedArea = boundingVolume.projectedArea(rc);
+    if (projectedArea <= (parameters._tileTextureResolution._x * parameters._tileTextureResolution._y * 5))
     {
       return true;
     }
+    /*
+    const Vector2I ex = boundingVolume->projectedExtent(rc);
+    const int t = (ex._x + ex._y);
+    const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+    if ( t <= threshold ) {
+      return true;
+    }
+     */
   
     if (trc.getParameters()._useTilesSplitBudget)
     {
@@ -361,10 +363,10 @@ public class Tile
 
   private ITexturizerData _texturizerData;
 
-  private Extent _tileExtent;
-  private Extent getTileExtent(G3MRenderContext rc)
+  private BoundingVolume _tileBoundingVolume;
+  private BoundingVolume getTileBoundingVolume(G3MRenderContext rc)
   {
-    if (_tileExtent == null)
+    if (_tileBoundingVolume == null)
     {
       final Planet planet = rc.getPlanet();
   
@@ -488,9 +490,9 @@ public class Tile
       }
   
   
-      _tileExtent = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
+      _tileBoundingVolume = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     }
-    return _tileExtent;
+    return _tileBoundingVolume;
   }
 
   private int _elevationDataLevel;
@@ -517,7 +519,7 @@ public class Tile
      _justCreatedSubtiles = false;
      _isVisible = false;
      _texturizerData = null;
-     _tileExtent = null;
+     _tileBoundingVolume = null;
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
@@ -555,9 +557,9 @@ public class Tile
        _texturizedMesh.dispose();
     _texturizedMesh = null;
   
-    if (_tileExtent != null)
-       _tileExtent.dispose();
-    _tileExtent = null;
+    if (_tileBoundingVolume != null)
+       _tileBoundingVolume.dispose();
+    _tileBoundingVolume = null;
   
     if (_elevationData != null)
        _elevationData.dispose();

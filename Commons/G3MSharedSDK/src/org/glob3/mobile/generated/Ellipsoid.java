@@ -17,8 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-
-public class Ellipsoid extends Geometry3D
+public class Ellipsoid
 {
   private final Vector3D _center ;
   private final Vector3D _radii ;

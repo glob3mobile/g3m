@@ -18,7 +18,7 @@ public class Frustum
   private final Vector3D _lbf ;
   private final Vector3D _rbf ;
 
-  private Extent _extent;
+  private BoundingVolume _boundingVolume;
 
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
   {
@@ -36,10 +36,10 @@ public class Frustum
      _topPlane = new Plane(that._topPlane.transformedByTranspose(matrix));
      _nearPlane = new Plane(that._nearPlane.transformedByTranspose(matrix));
      _farPlane = new Plane(that._farPlane.transformedByTranspose(matrix));
-    _extent = computeExtent();
+    _boundingVolume = computeBoundingVolume();
   }
 
-  private Extent computeExtent()
+  private BoundingVolume computeBoundingVolume()
   {
     double minx = 1e10;
     double miny = 1e10;
@@ -172,7 +172,7 @@ public class Frustum
      _rtf = new Vector3D(that._rtf);
      _lbf = new Vector3D(that._lbf);
      _rbf = new Vector3D(that._rbf);
-     _extent = null;
+     _boundingVolume = null;
 
   }
 
@@ -192,7 +192,7 @@ public class Frustum
      _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear)));
      _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), znear));
      _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -zfar));
-     _extent = null;
+     _boundingVolume = null;
   }
 
   public Frustum (FrustumData data)
@@ -211,7 +211,7 @@ public class Frustum
      _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear)));
      _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), data._znear));
      _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -data._zfar));
-     _extent = null;
+     _boundingVolume = null;
   }
 
   public final boolean contains(Vector3D point)
@@ -231,15 +231,15 @@ public class Frustum
     return true;
   }
 
-  public final boolean touchesWithBox(Box box)
+  public final boolean touchesWithBox(Box that)
   {
     // test first if frustum extent intersect with box
-    if (!getExtent().touchesBox(box))
+    if (!getBoundingVolume().touchesBox(that))
     {
       return false;
     }
   
-    final java.util.ArrayList<Vector3F> corners = box.getCornersF();
+    final java.util.ArrayList<Vector3F> corners = that.getCornersF();
   
     return (!((_leftPlane.signedDistance(corners.get(0)) >= 0) && (_leftPlane.signedDistance(corners.get(1)) >= 0) && (_leftPlane.signedDistance(corners.get(2)) >= 0) && (_leftPlane.signedDistance(corners.get(3)) >= 0) && (_leftPlane.signedDistance(corners.get(4)) >= 0) && (_leftPlane.signedDistance(corners.get(5)) >= 0) && (_leftPlane.signedDistance(corners.get(6)) >= 0) && (_leftPlane.signedDistance(corners.get(7)) >= 0)) && !((_bottomPlane.signedDistance(corners.get(0)) >= 0) && (_bottomPlane.signedDistance(corners.get(1)) >= 0) && (_bottomPlane.signedDistance(corners.get(2)) >= 0) && (_bottomPlane.signedDistance(corners.get(3)) >= 0) && (_bottomPlane.signedDistance(corners.get(4)) >= 0) && (_bottomPlane.signedDistance(corners.get(5)) >= 0) && (_bottomPlane.signedDistance(corners.get(6)) >= 0) && (_bottomPlane.signedDistance(corners.get(7)) >= 0)) && !((_rightPlane.signedDistance(corners.get(0)) >= 0) && (_rightPlane.signedDistance(corners.get(1)) >= 0) && (_rightPlane.signedDistance(corners.get(2)) >= 0) && (_rightPlane.signedDistance(corners.get(3)) >= 0) && (_rightPlane.signedDistance(corners.get(4)) >= 0) && (_rightPlane.signedDistance(corners.get(5)) >= 0) && (_rightPlane.signedDistance(corners.get(6)) >= 0) && (_rightPlane.signedDistance(corners.get(7)) >= 0)) && !((_topPlane.signedDistance(corners.get(0)) >= 0) && (_topPlane.signedDistance(corners.get(1)) >= 0) && (_topPlane.signedDistance(corners.get(2)) >= 0) && (_topPlane.signedDistance(corners.get(3)) >= 0) && (_topPlane.signedDistance(corners.get(4)) >= 0) && (_topPlane.signedDistance(corners.get(5)) >= 0) && (_topPlane.signedDistance(corners.get(6)) >= 0) && (_topPlane.signedDistance(corners.get(7)) >= 0)) && !((_nearPlane.signedDistance(corners.get(0)) >= 0) && (_nearPlane.signedDistance(corners.get(1)) >= 0) && (_nearPlane.signedDistance(corners.get(2)) >= 0) && (_nearPlane.signedDistance(corners.get(3)) >= 0) && (_nearPlane.signedDistance(corners.get(4)) >= 0) && (_nearPlane.signedDistance(corners.get(5)) >= 0) && (_nearPlane.signedDistance(corners.get(6)) >= 0) && (_nearPlane.signedDistance(corners.get(7)) >= 0)) && !((_farPlane.signedDistance(corners.get(0)) >= 0) && (_farPlane.signedDistance(corners.get(1)) >= 0) && (_farPlane.signedDistance(corners.get(2)) >= 0) && (_farPlane.signedDistance(corners.get(3)) >= 0) && (_farPlane.signedDistance(corners.get(4)) >= 0) && (_farPlane.signedDistance(corners.get(5)) >= 0) && (_farPlane.signedDistance(corners.get(6)) >= 0) && (_farPlane.signedDistance(corners.get(7)) >= 0)));
   
@@ -329,14 +329,40 @@ public class Frustum
 
   public void dispose()
   {
-    if (_extent != null)
-       _extent.dispose();
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
   }
 
-  public final Extent getExtent()
+  public final BoundingVolume getBoundingVolume()
   {
-     return _extent;
+    return _boundingVolume;
+  }
+
+  public final Plane getTopPlane()
+  {
+     return _topPlane;
+  }
+  public final Plane getBottomPlane()
+  {
+     return _bottomPlane;
+  }
+  public final Plane getLeftPlane()
+  {
+     return _leftPlane;
+  }
+  public final Plane getRightPlane()
+  {
+     return _rightPlane;
+  }
+  public final Plane getNearPlane()
+  {
+     return _nearPlane;
+  }
+  public final Plane getFarPlane()
+  {
+     return _farPlane;
   }
 
 }
 //#define testAllCornersInside(plane, corners) ( (plane.signedDistance(corners[0]) >= 0) && (plane.signedDistance(corners[1]) >= 0) && (plane.signedDistance(corners[2]) >= 0) && (plane.signedDistance(corners[3]) >= 0) && (plane.signedDistance(corners[4]) >= 0) && (plane.signedDistance(corners[5]) >= 0) && (plane.signedDistance(corners[6]) >= 0) && (plane.signedDistance(corners[7]) >= 0) )
+

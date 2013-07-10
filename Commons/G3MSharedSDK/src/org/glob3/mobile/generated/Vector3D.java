@@ -131,9 +131,19 @@ public class Vector3D
     return new Vector3D(_x + v._x, _y + v._y, _z + v._z);
   }
 
+  public final Vector3D add(double d)
+  {
+    return new Vector3D(_x + d, _y + d, _z + d);
+  }
+
   public final Vector3D sub(Vector3D v)
   {
     return new Vector3D(_x - v._x, _y - v._y, _z - v._z);
+  }
+
+  public final Vector3D sub(double d)
+  {
+    return new Vector3D(_x - d, _y - d, _z - d);
   }
 
   public final Vector3D times(Vector3D v)
@@ -269,6 +279,31 @@ public class Vector3D
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final Vector3D clamp(Vector3D min, Vector3D max)
+  {
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final double x = mu.clamp(_x, min._x, max._x);
+    final double y = mu.clamp(_y, min._y, max._y);
+    final double z = mu.clamp(_z, min._z, max._z);
+  
+    return new Vector3D(x, y, z);
+  }
+
+  public final double squaredDistanceTo(Vector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final double distanceTo(Vector3D that)
+  {
+    return IMathUtils.instance().sqrt(squaredDistanceTo(that));
   }
 
 }

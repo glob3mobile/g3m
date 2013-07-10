@@ -191,26 +191,21 @@ public class Camera
     return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
 
-  public final Vector2I point2Pixel(Vector3D point)
+//  const Vector2I point2Pixel(const Vector3D& point) const;
+//  const Vector2I point2Pixel(const Vector3F& point) const;
+  public final Vector2F point2Pixel(Vector3D point)
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-  //  const IMathUtils* mu = IMathUtils::instance();
-  //
-  //  return Vector2I(mu->round( (float) p._x ),
-  //                  mu->round( (float) ((double) _height - p._y) ) );
-  //
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    return new Vector2F((float) p._x, (float)(_height - p._y));
+  
   }
-  public final Vector2I point2Pixel(Vector3F point)
+  public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-  //  const IMathUtils* mu = IMathUtils::instance();
-  //
-  //  return Vector2I(mu->round( p._x ),
-  //                  mu->round( (float) _height - p._y ) );
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    return new Vector2F(p._x, (_height - p._y));
+  
   }
 
   public final int getWidth()
@@ -474,6 +469,15 @@ public class Camera
      return _angle2Horizon;
   }
 
+  public final double getProjectedSphereArea(Sphere sphere)
+  {
+    // this implementation is not right exact, but it's faster.
+    final double z = sphere.getCenter().distanceTo(getCartesianPosition());
+    final double rWorld = sphere.getRadius() * _frustumData._znear / z;
+    final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
+    return IMathUtils.instance().pi() * rScreen * rScreen;
+  }
+
 
   private Angle getHeading(Vector3D normal)
   {
@@ -524,6 +528,32 @@ public class Camera
 
   private CameraEffectTarget _camEffectTarget;
 
+
+  //const Vector2I Camera::point2Pixel(const Vector3D& point) const {
+  //  const Vector2D p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( (float) p._x ),
+  ////                  mu->round( (float) ((double) _height - p._y) ) );
+  ////
+  //  return Vector2I((int) p._x,
+  //                  (int) (_height - p._y) );
+  //}
+  
+  //const Vector2I Camera::point2Pixel(const Vector3F& point) const {
+  //  const Vector2F p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( p._x ),
+  ////                  mu->round( (float) _height - p._y ) );
+  //  return Vector2I((int) p._x ,
+  //                  (int) (_height - p._y ) );
+  //}
+  
   private void applyTransform(MutableMatrix44D M)
   {
     setCartesianPosition(_position.transformedBy(M, 1.0));
