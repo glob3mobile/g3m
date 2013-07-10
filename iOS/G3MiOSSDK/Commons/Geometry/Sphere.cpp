@@ -88,12 +88,12 @@ void Sphere::render(const G3MRenderContext* rc,
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
   // this implementation is not right exact, but it's faster.
-  if (frustum->getNearPlane().signedDistance(_center)>_radius) return false;
-  if (frustum->getFarPlane().signedDistance(_center)>_radius) return false;
-  if (frustum->getLeftPlane().signedDistance(_center)>_radius) return false;
-  if (frustum->getRightPlane().signedDistance(_center)>_radius) return false;
-  if (frustum->getTopPlane().signedDistance(_center)>_radius) return false;
-  if (frustum->getBottomPlane().signedDistance(_center)>_radius) return false;
+  if (frustum->getNearPlane().signedDistance(_center)   > _radius) return false;
+  if (frustum->getFarPlane().signedDistance(_center)    > _radius) return false;
+  if (frustum->getLeftPlane().signedDistance(_center)   > _radius) return false;
+  if (frustum->getRightPlane().signedDistance(_center)  > _radius) return false;
+  if (frustum->getTopPlane().signedDistance(_center)    > _radius) return false;
+  if (frustum->getBottomPlane().signedDistance(_center) > _radius) return false;
   return true;
 }
 
@@ -116,20 +116,27 @@ bool Sphere::touchesSphere(const Sphere* that) const {
 BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
+
   double minX = _center._x - _radius;
-  if (lower._x < minX) minX = lower._x;
+  if (lower._x < minX) { minX = lower._x; }
+
   double maxX = _center._x + _radius;
-  if (upper._x > maxX) maxX = upper._x;
+  if (upper._x > maxX) { maxX = upper._x; }
+
   double minY = _center._y - _radius;
-  if (lower._y < minY) minY = lower._y;
+  if (lower._y < minY) { minY = lower._y; }
+
   double maxY = _center._y + _radius;
-  if (upper._y > maxY) maxY = upper._y;
+  if (upper._y > maxY) { maxY = upper._y; }
+
   double minZ = _center._z - _radius;
-  if (lower._z < minZ) minZ = lower._z;
+  if (lower._z < minZ) { minZ = lower._z; }
+
   double maxZ = _center._z + _radius;
-  if (upper._z > maxZ) maxZ = upper._z;
+  if (upper._z > maxZ) { maxZ = upper._z; }
   
-  return new Box(Vector3D(minX, minY, minZ), Vector3D(maxX, maxY, maxZ));
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
   
   /* Diego: creo que este test ya no hace falta, porque el coste del método
    fullContainedInBox es casi tanto es casi similar a todo lo anterior
@@ -169,12 +176,12 @@ bool Sphere::contains(const Vector3D& point) const {
 bool Sphere::fullContainedInBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
-  if (_center._x+_radius > upper._x) return false;
-  if (_center._x-_radius < lower._x) return false;
-  if (_center._y+_radius > upper._y) return false;
-  if (_center._y-_radius < lower._y) return false;
-  if (_center._z+_radius > upper._z) return false;
-  if (_center._z-_radius < lower._z) return false;
+  if (_center._x + _radius > upper._x) return false;
+  if (_center._x - _radius < lower._x) return false;
+  if (_center._y + _radius > upper._y) return false;
+  if (_center._y - _radius < lower._y) return false;
+  if (_center._z + _radius > upper._z) return false;
+  if (_center._z - _radius < lower._z) return false;
   return true;
 }
 

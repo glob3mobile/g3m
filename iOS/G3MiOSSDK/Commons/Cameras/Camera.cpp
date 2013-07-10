@@ -422,13 +422,10 @@ FrustumData Camera::calculateFrustumData() const {
 }
 
 
-double Camera::getProjectedSphereArea(const Sphere& sphere) const
-{
+double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.
-  double z = sphere.getCenter().sub(getCartesianPosition()).length();
-  double rWorld = sphere.getRadius() * _frustumData._znear / z;
-  double rScreen = rWorld * _height / (_frustumData._top-_frustumData._bottom);
+  const double z = sphere.getCenter().distanceTo(getCartesianPosition());
+  const double rWorld = sphere.getRadius() * _frustumData._znear / z;
+  const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
   return IMathUtils::instance()->pi() * rScreen * rScreen;
 }
-
-
