@@ -59,8 +59,8 @@ public class Sphere extends BoundingVolume
     {
       for (short j = 0; j<resolution-1; j++)
       {
-        indices.add(j+i *resolution);
-        indices.add(j+1+i *resolution);
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+1+i *resolution));
       }
     }
   
@@ -69,15 +69,15 @@ public class Sphere extends BoundingVolume
     {
       for (short i = 0; i<2 *resolution-3; i++)
       {
-        indices.add(j+i *resolution);
-        indices.add(j+(i+1)*resolution);
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+(i+1)*resolution));
       }
     }
     for (short j = 1; j<resolution-1; j++)
     {
       short i = 2 *resolution-3;
-      indices.add(j+i *resolution);
-      indices.add(j);
+      indices.add((short)(j+i *resolution));
+      indices.add((short)(j));
     }
   
     _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
@@ -125,7 +125,7 @@ public class Sphere extends BoundingVolume
   {
     if (_mesh == null)
     {
-      createWireframeMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), 6);
+      createWireframeMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), (short) 6);
     }
     _mesh.render(rc, parentState);
   }
