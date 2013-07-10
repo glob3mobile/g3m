@@ -326,16 +326,18 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     return true;
   }
   
-  //  const double projectedSize = extent->squaredProjectedArea(rc);
-  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-  //    return true;
-  //  }
+  const double projectedArea = boundingVolume->projectedArea(rc);
+  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 5) ) {
+    return true;
+  }
+  /*
   const Vector2I ex = boundingVolume->projectedExtent(rc);
   const int t = (ex._x + ex._y);
   const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
   if ( t <= threshold ) {
     return true;
   }
+   */
 
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles

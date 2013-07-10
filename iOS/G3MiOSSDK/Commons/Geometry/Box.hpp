@@ -54,7 +54,7 @@ public:
 
 
   double projectedArea(const G3MRenderContext* rc) const;
-  Vector2I projectedExtent(const G3MRenderContext* rc) const;
+  Vector2F projectedExtent(const G3MRenderContext* rc) const;
 
 
   Vector3D intersectionWithRay(const Vector3D& origin,

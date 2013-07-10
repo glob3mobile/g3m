@@ -162,8 +162,10 @@ public:
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-  const Vector2I point2Pixel(const Vector3D& point) const;
-  const Vector2I point2Pixel(const Vector3F& point) const;
+//  const Vector2I point2Pixel(const Vector3D& point) const;
+//  const Vector2I point2Pixel(const Vector3F& point) const;
+  const Vector2F point2Pixel(const Vector3D& point) const;
+  const Vector2F point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }

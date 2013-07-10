@@ -27,7 +27,7 @@ public:
   }
 
   virtual double projectedArea(const G3MRenderContext* rc) const = 0;
-  virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
+//  virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
 
 //  virtual Vector3D intersectionWithRay(const Vector3D& origin,
 //                                       const Vector3D& direction) const = 0;

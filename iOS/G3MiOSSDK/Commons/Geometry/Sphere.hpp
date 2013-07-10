@@ -56,7 +56,7 @@ public:
   }
 
   double projectedArea(const G3MRenderContext* rc) const;
-  Vector2I projectedExtent(const G3MRenderContext* rc) const;
+//  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState);

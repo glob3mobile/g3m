@@ -19,10 +19,10 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);
 }
 
-Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-  return Vector2I::zero();
-}
+//Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
+//  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
+//  return Vector2I::zero();
+//}
 
 void Sphere::createWireframeMesh(Color* color, short resolution)
 {
@@ -114,6 +114,10 @@ bool Sphere::touchesSphere(const Sphere* that) const {
 
 
 BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
+  if (that->fullContainedInSphere(this)) {
+    return new Sphere(*this);
+  }
+
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
 

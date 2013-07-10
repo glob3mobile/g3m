@@ -15,6 +15,7 @@
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Sphere.hpp"
+#include "Vector2F.hpp"
 
 Box::~Box() {
   delete _mesh;
@@ -84,24 +85,24 @@ const std::vector<Vector3F> Box::getCornersF() const {
 #endif
 }
 
-Vector2I Box::projectedExtent(const G3MRenderContext *rc) const {
+Vector2F Box::projectedExtent(const G3MRenderContext *rc) const {
   const std::vector<Vector3F> corners = getCornersF();
 
   const Camera* currentCamera = rc->getCurrentCamera();
   
-  const Vector2I pixel0 = currentCamera->point2Pixel(corners[0]);
+  const Vector2F pixel0 = currentCamera->point2Pixel(corners[0]);
 
-  int lowerX = pixel0._x;
-  int upperX = pixel0._x;
-  int lowerY = pixel0._y;
-  int upperY = pixel0._y;
+  float lowerX = pixel0._x;
+  float upperX = pixel0._x;
+  float lowerY = pixel0._y;
+  float upperY = pixel0._y;
   
   const int cornersSize = corners.size();
   for (int i = 1; i < cornersSize; i++) {
-    const Vector2I pixel = currentCamera->point2Pixel(corners[i]);
+    const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
     
-    const int x = pixel._x;
-    const int y = pixel._y;
+    const float x = pixel._x;
+    const float y = pixel._y;
     
     if (x < lowerX) { lowerX = x; }
     if (y < lowerY) { lowerY = y; }
@@ -110,15 +111,51 @@ Vector2I Box::projectedExtent(const G3MRenderContext *rc) const {
     if (y > upperY) { upperY = y; }
   }
   
-  const int width = upperX - lowerX;
-  const int height = upperY - lowerY;
-  
-  return Vector2I(width, height);
+  const float width = upperX - lowerX;
+  const float height = upperY - lowerY;
+
+  return Vector2F(width, height);
 }
 
 double Box::projectedArea(const G3MRenderContext* rc) const {
-  const Vector2I extent = projectedExtent(rc);
-  return extent._x * extent._y;
+//  const Vector2I extent = projectedExtent(rc);
+//  return extent._x * extent._y;
+
+  const std::vector<Vector3F> corners = getCornersF();
+
+  const Camera* currentCamera = rc->getCurrentCamera();
+
+  const Vector2F pixel0 = currentCamera->point2Pixel(corners[0]);
+
+  float lowerX = pixel0._x;
+  float upperX = pixel0._x;
+  float lowerY = pixel0._y;
+  float upperY = pixel0._y;
+
+  const int cornersSize = corners.size();
+  for (int i = 1; i < cornersSize; i++) {
+    const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
+
+    const float x = pixel._x;
+    const float y = pixel._y;
+
+    if (x < lowerX) { lowerX = x; }
+    if (y < lowerY) { lowerY = y; }
+
+    if (x > upperX) { upperX = x; }
+    if (y > upperY) { upperY = y; }
+  }
+
+  const float width = upperX - lowerX;
+//  if (width < 0) {
+//    width *= -1;
+//  }
+  const float height = upperY - lowerY;
+//  if (height < 0) {
+//    height *= -1;
+//  }
+
+  return width * height;
 }
 
 bool Box::contains(const Vector3D& p) const {

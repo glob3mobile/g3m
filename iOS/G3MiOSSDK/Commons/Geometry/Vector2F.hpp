@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__Vector2F__
 
 #include "IMathUtils.hpp"
+class Vector2I;
 
 class Vector2F {
 private:
@@ -49,6 +50,10 @@ public:
     return Vector2F(mu->NanF(),
                     mu->NanF());
   }
+
+  const double squaredDistanceTo(const Vector2I& that) const;
+  
+  const double squaredDistanceTo(const Vector2F& that) const;
 
 };
 
