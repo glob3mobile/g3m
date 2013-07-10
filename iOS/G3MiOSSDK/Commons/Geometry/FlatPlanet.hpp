@@ -12,41 +12,35 @@
 #include "MutableVector3D.hpp"
 #include "Geodetic3D.hpp"
 #include "Planet.hpp"
+#include "Vector2D.hpp"
 
-#include "Sphere.hpp"
 
 class FlatPlanet: public Planet {
 private:
-#ifdef C_CODE
-  const Sphere _sphere;
-#endif
-#ifdef JAVA_CODE
-  private Sphere _sphere;
-#endif
-  
+  const Vector2D _size;
   
 public:
   
-  FlatPlanet(const Sphere& sphere);
+  FlatPlanet(const Vector2D& size);
   
   ~FlatPlanet() {
     
   }
   
   Vector3D getRadii() const{
-    return Vector3D(_sphere.getRadius(), _sphere.getRadius(), _sphere.getRadius());
+    return Vector3D(_size._x, _size._y, 0);
   }
   
   Vector3D centricSurfaceNormal(const Vector3D& position) const {
-    return position.normalized();
+    return Vector3D(0, 0, 1);
   }
   
   Vector3D geodeticSurfaceNormal(const Vector3D& position) const {
-    return position.normalized();
+    return Vector3D(0, 0, 1);
   }
   
   Vector3D geodeticSurfaceNormal(const MutableVector3D& position) const {
-    return position.normalized().asVector3D();
+    return Vector3D(0, 0, 1);
   }
   
   
@@ -54,11 +48,11 @@ public:
                                  const Angle& longitude) const;
   
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return Vector3D(0, 0, 1);
   }
   
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return Vector3D(0, 0, 1);
   }
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
@@ -69,11 +63,12 @@ public:
                        const double height) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
-                       geodetic.height());
+    const double x = geodetic.longitude().degrees() * _size._x / 360.0;
+    const double y = geodetic.latitude().degrees() * _size._y / 180.0;
+    return Vector3D(x, y, geodetic.height());
   }
   
+    
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
     return toCartesian(geodetic.latitude(),
                        geodetic.longitude(),
