@@ -22,6 +22,7 @@
 #import <G3MiOSSDK/DirectMesh.hpp>
 #import <G3MiOSSDK/WMSLayer.hpp>
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
+#import <G3MiOSSDK/CameraFlatSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
 #import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
@@ -451,12 +452,15 @@ public:
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
   
-  builder.setCameraRenderer([self createCameraRenderer]);
+  const bool flatEarth = true;
+  builder.setCameraRenderer([self createCameraRenderer: flatEarth]);
+  if (!flatEarth) {
+    builder.setPlanet(Planet::createEarth());
+    //builder.setPlanet(Planet::createSphericalEarth());
+  } else {
+    builder.setPlanet((Planet::createFlatEarth()));
+  }
   
-  //builder.setPlanet(Planet::createEarth());
-  //builder.setPlanet(Planet::createSphericalEarth());
-  builder.setPlanet((Planet::createFlatEarth()));
-
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
   builder.setBackgroundColor(bgColor);
@@ -671,19 +675,26 @@ public:
                         colors.create());
 }
 
-- (CameraRenderer*) createCameraRenderer
+- (CameraRenderer*) createCameraRenderer: (bool)flat
 {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool processRotation = true;
   const bool processZoom = true;
   
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
-  
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  if (!flat) {
+    cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+    cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));  
+    cameraRenderer->addHandler(new CameraRotationHandler());
+    cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  } else {
+    cameraRenderer->addHandler(new CameraFlatSingleDragHandler(useInertia));
+    cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+    cameraRenderer->addHandler(new CameraRotationHandler());
+    cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  }
   
   return cameraRenderer;
 }

@@ -515,6 +515,9 @@
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FB960A89178DCB4600A37B5B /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB960A87178DCB4600A37B5B /* FlatPlanet.cpp */; };
+		FB960A8F178DECAC00A37B5B /* CameraFlatSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB960A8D178DECAC00A37B5B /* CameraFlatSingleDragHandler.cpp */; };
+		FB960A91178DEE0D00A37B5B /* SingleDragEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB960A90178DED2F00A37B5B /* SingleDragEffect.hpp */; };
+		FB960A92178DEEAD00A37B5B /* CameraFlatSingleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB960A8C178DEC8700A37B5B /* CameraFlatSingleDragHandler.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -524,6 +527,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB960A92178DEEAD00A37B5B /* CameraFlatSingleDragHandler.hpp in CopyFiles */,
+				FB960A91178DEE0D00A37B5B /* SingleDragEffect.hpp in CopyFiles */,
 				CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */,
 				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
@@ -1315,6 +1320,9 @@
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FB960A86178DCAAE00A37B5B /* FlatPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FlatPlanet.hpp; path = Commons/Geometry/FlatPlanet.hpp; sourceTree = "<group>"; };
 		FB960A87178DCB4600A37B5B /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; };
+		FB960A8C178DEC8700A37B5B /* CameraFlatSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraFlatSingleDragHandler.hpp; path = Commons/Cameras/CameraFlatSingleDragHandler.hpp; sourceTree = "<group>"; };
+		FB960A8D178DECAC00A37B5B /* CameraFlatSingleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraFlatSingleDragHandler.cpp; path = Commons/Cameras/CameraFlatSingleDragHandler.cpp; sourceTree = "<group>"; };
+		FB960A90178DED2F00A37B5B /* SingleDragEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SingleDragEffect.hpp; path = Commons/Cameras/SingleDragEffect.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1746,6 +1754,8 @@
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
+				FB960A8D178DECAC00A37B5B /* CameraFlatSingleDragHandler.cpp */,
+				FB960A8C178DEC8700A37B5B /* CameraFlatSingleDragHandler.hpp */,
 				385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */,
 				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
 				CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */,
@@ -1758,6 +1768,7 @@
 				CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */,
 				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
 				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
+				FB960A90178DED2F00A37B5B /* SingleDragEffect.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -2360,6 +2371,7 @@
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 				FB960A89178DCB4600A37B5B /* FlatPlanet.cpp in Sources */,
+				FB960A8F178DECAC00A37B5B /* CameraFlatSingleDragHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

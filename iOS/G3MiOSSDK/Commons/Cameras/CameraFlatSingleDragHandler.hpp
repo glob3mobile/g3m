@@ -1,14 +1,13 @@
 //
-//  CameraSingleDragHandler.hpp
+//  CameraFlatSingleDragHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Agustín Trujillo on 10/07/13.
+//
 //
 
-#ifndef G3MiOSSDK_CameraSingleDragHandler_h
-#define G3MiOSSDK_CameraSingleDragHandler_h
-
+#ifndef G3MiOSSDK_CameraFlatSingleDragHandler_hpp
+#define G3MiOSSDK_CameraFlatSingleDragHandler_hpp
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
@@ -17,17 +16,17 @@
 #include "SingleDragEffect.hpp"
 
 
-class CameraSingleDragHandler: public CameraEventHandler {
+class CameraFlatSingleDragHandler: public CameraEventHandler {
   
 public:
-  CameraSingleDragHandler(bool useInertia):
+  CameraFlatSingleDragHandler(bool useInertia):
   _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
-//  _initialPixel(0,0),
+  //  _initialPixel(0,0),
   _useInertia(useInertia)
   {}
   
-  ~CameraSingleDragHandler() {}
+  ~CameraFlatSingleDragHandler() {}
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,
@@ -59,6 +58,7 @@ private:
   double          _radiansStep;
   
 };
+
 
 
 #endif
