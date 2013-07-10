@@ -194,3 +194,7 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);
   return (d + _radius <= that->_radius);
 }
+
+Sphere* Sphere::createSphere() const {
+  return new Sphere(*this);
+}

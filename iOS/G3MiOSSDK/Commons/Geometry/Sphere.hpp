@@ -91,6 +91,7 @@ public:
   bool fullContainedInBox(const Box* that) const;
   bool fullContainedInSphere(const Sphere* that) const;
 
+  Sphere* createSphere() const;
 
 };
 

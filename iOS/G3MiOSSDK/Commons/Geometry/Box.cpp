@@ -320,3 +320,9 @@ bool Box::fullContainedInSphere(const Sphere* that) const {
 Vector3D Box::closestPoint(const Vector3D& point) const {
   return point.clamp(_lower, _upper);
 }
+
+Sphere* Box::createSphere() const {
+  const Vector3D center = _lower.add(_upper).div(2);
+  const double radius = center.distanceTo(_upper);
+  return new Sphere(center, radius);
+}

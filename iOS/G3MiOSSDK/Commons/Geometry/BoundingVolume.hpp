@@ -27,10 +27,10 @@ public:
   }
 
   virtual double projectedArea(const G3MRenderContext* rc) const = 0;
-//  virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
+  //virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
 
-//  virtual Vector3D intersectionWithRay(const Vector3D& origin,
-//                                       const Vector3D& direction) const = 0;
+  //virtual Vector3D intersectionWithRay(const Vector3D& origin,
+  //                                     const Vector3D& direction) const = 0;
 
   virtual void render(const G3MRenderContext* rc,
                       const GLState& parentState) = 0;
@@ -51,6 +51,8 @@ public:
   virtual BoundingVolume* mergedWithBox(const Box* that) const = 0;
   virtual BoundingVolume* mergedWithSphere(const Sphere* that) const = 0;
 
+  virtual Sphere* createSphere() const = 0;
+  
 };
 
 #endif

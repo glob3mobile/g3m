@@ -23,10 +23,10 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
 #include "MercatorUtils.hpp"
-
 #include "SubviewElevationData.hpp"
-
 #include "TileElevationDataRequest.hpp"
+#include "Sphere.hpp"
+
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -58,7 +58,8 @@ _maxHeight(0),
 _verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
-_lastTileMeshResolutionY(-1)
+_lastTileMeshResolutionY(-1),
+_boundingVolume(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -70,6 +71,8 @@ _lastTileMeshResolutionY(-1)
 
 Tile::~Tile() {
   prune(NULL, NULL);
+
+  delete _boundingVolume;
 
   delete _debugMesh;
   _debugMesh = NULL;
@@ -268,6 +271,14 @@ BoundingVolume* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
   return _tileBoundingVolume;
 }
 
+const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext *rc,
+                                              const TileRenderContext* trc) {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume()->createSphere();
+  }
+  return _boundingVolume;
+}
+
 bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc,
                      const Planet* planet,
@@ -275,7 +286,8 @@ bool Tile::isVisible(const G3MRenderContext *rc,
                      double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates) {
 
-  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+//  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
   if (boundingVolume == NULL) {
     return false;
   }

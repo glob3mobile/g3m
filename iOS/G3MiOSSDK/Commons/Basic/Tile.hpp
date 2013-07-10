@@ -58,6 +58,8 @@ private:
   double _minHeight;
   double _maxHeight;
 
+  BoundingVolume* _boundingVolume;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -114,6 +116,10 @@ private:
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
+
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+                                          const TileRenderContext* trc);
+
 
 public:
   Tile(TileTexturizer* texturizer,
