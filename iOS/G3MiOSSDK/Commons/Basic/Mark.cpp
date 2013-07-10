@@ -389,7 +389,7 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   
   GLGlobalState *globalState = _glState.getGLGlobalState();
   
-  globalState->disableDepthTest();
+//  globalState->disableDepthTest();
   globalState->enableBlend();
   globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
   globalState->bindTexture(_textureId);
@@ -421,17 +421,28 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   
   _vertices = vertex.create();
   
-  progState->setAttributeValue(POSITION,
-                               _vertices, 4, //The attribute is a float vector of 4 elements
-                               3,            //Our buffer contains elements of 3
-                               0,            //Index 0
-                               false,        //Not normalized
-                               0);           //Stride 0
-  
+//  progState->setAttributeValue(POSITION,
+//                               _vertices, 4, //The attribute is a float vector of 4 elements
+//                               3,            //Our buffer contains elements of 3
+//                               0,            //Index 0
+//                               false,        //Not normalized
+//                               0);           //Stride 0
+
 //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
 
-  _glState.addGLFeature(new BillboardFeature(_textureWidth, _textureHeight,
+  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
                                              viewportWidth, viewportHeight));
+
+  _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,
+                                              false,        //NO DEPTH TEST
+                                              false, 0,     //NO CULLING
+                                              false, 0, 0,  //NO POLYGON OFFSET
+                                              1.0)          //LINE WIDTH
+                        );
 }
 
 void Mark::render(const G3MRenderContext* rc,

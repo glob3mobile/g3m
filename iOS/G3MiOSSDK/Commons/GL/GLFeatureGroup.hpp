@@ -70,26 +70,26 @@ public:
   static GLFeatureGroup* getGroup(int i);
   static GLFeatureGroupName getGroupName(int i);
 
-  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features)= 0;
+  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features)= 0;
 };
 
 class GLFeatureNoGroup: public GLFeatureGroup{
 public:
   ~GLFeatureNoGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
   ~GLFeatureCameraGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
 };
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
 public:
   ~GLFeatureColorGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
 };
 
 #endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */

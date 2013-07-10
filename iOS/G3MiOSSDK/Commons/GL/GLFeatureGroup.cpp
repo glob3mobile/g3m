@@ -67,22 +67,23 @@ GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
 }
 
 
-GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
   GPUVariableValueSet* vs = new GPUVariableValueSet();
   int size = features->size();
   for(int i = 0; i < size; i++){
     const GLFeature* f = features->get(i);
     if (f != NULL){
+      f->applyGLGlobalState(gl);
       vs->combineWith(f->getGPUVariableValueSet());
     }
   }
   return vs;
 }
 
-GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
   return NULL;
 }
 
-GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(const GLFeatureSet* features){
+GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
   return NULL;
 }

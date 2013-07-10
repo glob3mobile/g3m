@@ -34,7 +34,13 @@ GLState::~GLState(){
   }
 
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-    delete _featuresSets[i];
+    GLFeatureSet* fs = _featuresSets[i];
+    if (fs != NULL){
+      for (int i = 0; fs->size(); i++) {
+        delete fs->get(i);
+      }
+      delete _featuresSets[i];
+    }
   }
 }
 
@@ -125,7 +131,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     if (fs != NULL){
 
       GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
-      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(fs);
+      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
       delete fs;
       if (variables != NULL){
         values.combineWith(variables);

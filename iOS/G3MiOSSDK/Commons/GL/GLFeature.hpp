@@ -11,6 +11,7 @@
 
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
+#include "GPUAttribute.hpp"
 
 class GLFeature {
 public:
@@ -19,7 +20,9 @@ public:
 
   virtual ~GLFeature(){}
 
-  virtual void applyGLGlobalState(GL* gl) = 0;
+  void applyGLGlobalState(GL* gl) const{
+    _globalState.applyChanges(gl, *gl->getCurrentGLGlobalState());
+  }
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
@@ -31,10 +34,11 @@ public:
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
+  GLGlobalState _globalState;
 
 };
 
-class BillboardFeature: public GLFeature{
+class BillboardGLFeature: public GLFeature{
 
   GPUUniformValueVec2Float* _texExtent;
   GPUUniformValueVec2Float* _viewportExtent;
@@ -42,23 +46,31 @@ class BillboardFeature: public GLFeature{
 
 public:
 
-  BillboardFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight):
-  GLFeature(NO_GROUP){
+  BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight);
 
-    _texExtent = new GPUUniformValueVec2Float(textureWidth, textureHeight);
-    _values.addUniformValue(TEXTURE_EXTENT, _texExtent);
-
-    _viewportExtent = new GPUUniformValueVec2Float(viewportWidth, viewportHeight);
-    _values.addUniformValue(VIEWPORT_EXTENT, _viewportExtent);
-  }
-
-  ~BillboardFeature(){
-    _texExtent->_release();
-    _viewportExtent->_release();
-  }
+  ~BillboardGLFeature();
 
   void applyGLGlobalState(GL* gl){}
 
+};
+
+
+class GeometryGLFeature: public GLFeature{
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec4Float* _position;
+
+public:
+
+  GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
+                    bool depthTestEnabled,
+                    bool cullFace, int culledFace,
+                    bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
+                    float lineWidth);
+
+  ~GeometryGLFeature();
+
+  void applyGLGlobalState(GL* gl){}
+  
 };
 
 #endif
