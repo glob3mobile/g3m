@@ -274,27 +274,35 @@ bool Tile::isVisible(const G3MRenderContext *rc,
                      const Vector3D& cameraNormalizedPosition,
                      double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates) {
-  // test if sector is back oriented with respect to the camera
-
-  if (_sector.isBackOriented(rc, getMinHeight(),
-                             planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians)) {
-    return false;
-  }
 
   const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
   if (boundingVolume == NULL) {
     return false;
   }
 
-  ////const Extent* extent = getTileExtent(rc);
-  //const Extent* tileExtent = getTileExtent(rc);
-  //if (!tileExtent->fullContains(extent)) {
-  //  printf("break point on me\n");
-  //}
+  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+    return false;
+  }
 
-//  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
-  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates );
-  //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
+  // test if sector is back oriented with respect to the camera
+  return !_sector.isBackOriented(rc,
+                                 getMinHeight(),
+                                 planet,
+                                 cameraNormalizedPosition,
+                                 cameraAngle2HorizonInRadians);
+
+//  if (_sector.isBackOriented(rc, getMinHeight(),
+//                             planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians)) {
+//    return false;
+//  }
+//
+//  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+//  if (boundingVolume == NULL) {
+//    return false;
+//  }
+//
+//  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates );
+//  //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,

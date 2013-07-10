@@ -52,7 +52,7 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
       indices.add((short) (j+1+i*resolution));
     }
   }
-  
+
   // create border indices for horizontal lines
   for (short j=1; j<resolution-1; j++) {
     for (short i=0; i<2*resolution-3; i++){
@@ -65,20 +65,20 @@ void Sphere::createWireframeMesh(Color* color, short resolution)
     indices.add((short) (j+i*resolution));
     indices.add((short) (j));
   }
-    
+
   _mesh = new IndexedMesh(GLPrimitive::lines(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         1,
-                         1,
-                         color);
+                          true,
+                          vertices.getCenter(),
+                          vertices.create(),
+                          indices.create(),
+                          1,
+                          1,
+                          color);
 }
 
 
 void Sphere::render(const G3MRenderContext* rc,
-                 const GLState& parentState) {
+                    const GLState& parentState) {
   if (_mesh == NULL) {
     createWireframeMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), (short) 6);
   }
@@ -138,10 +138,10 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
 
   double maxZ = _center._z + _radius;
   if (upper._z > maxZ) { maxZ = upper._z; }
-  
+
   return new Box(Vector3D(minX, minY, minZ),
                  Vector3D(maxX, maxY, maxZ));
-  
+
   /* Diego: creo que este test ya no hace falta, porque el coste del método
    fullContainedInBox es casi tanto es casi similar a todo lo anterior
    if (fullContainedInBox(that)) {
