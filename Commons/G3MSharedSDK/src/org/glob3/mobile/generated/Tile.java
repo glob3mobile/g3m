@@ -35,6 +35,7 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class TileElevationDataRequest;
 //class Frustum;
+//class Box;
 
 
 public class Tile
@@ -155,6 +156,17 @@ public class Tile
       return false;
     }
   
+    final BoundingVolume narrowBoundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume();
+    if (narrowBoundingVolume == null)
+    {
+      return false;
+    }
+  
+    if (!narrowBoundingVolume.touchesFrustum(cameraFrustumInModelCoordinates))
+    {
+      return false;
+    }
+  
     // test if sector is back oriented with respect to the camera
     return !_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians);
   
@@ -200,26 +212,31 @@ public class Tile
       }
     }
   
-    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-    final BoundingVolume boundingVolume = getTileBoundingVolume(rc);
-    if (boundingVolume == null)
-    {
-      return true;
-    }
+  //  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  ////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
+  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  //  if (boundingVolume == NULL) {
+  //    return true;
+  //  }
+  //
+  //  const double projectedArea = boundingVolume->projectedArea(rc);
+  ////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
+  ////    return true;
+  ////  }
+  //  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
+  ////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+  //  if ( projectedArea <= (threshold*threshold) ) {
+  //    return true;
+  //  }
   
-    final double projectedArea = boundingVolume.projectedArea(rc);
-    if (projectedArea <= (parameters._tileTextureResolution._x * parameters._tileTextureResolution._y * 5))
+    final Box boundingVolume = getTileBoundingVolume(rc);
+    final Vector2F ex = boundingVolume.projectedExtent(rc);
+    final float t = (ex._x + ex._y);
+    final double threshold = (parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75;
+    if (t <= threshold)
     {
       return true;
     }
-    /*
-    const Vector2I ex = boundingVolume->projectedExtent(rc);
-    const int t = (ex._x + ex._y);
-    const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-    if ( t <= threshold ) {
-      return true;
-    }
-     */
   
     if (trc.getParameters()._useTilesSplitBudget)
     {
@@ -275,6 +292,9 @@ public class Tile
       }
     }
   
+  
+  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  //  boundingVolume->render(rc, parentState);
   }
 
   private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
@@ -371,8 +391,8 @@ public class Tile
 
   private ITexturizerData _texturizerData;
 
-  private BoundingVolume _tileBoundingVolume;
-  private BoundingVolume getTileBoundingVolume(G3MRenderContext rc)
+  private Box _tileBoundingVolume;
+  private Box getTileBoundingVolume(G3MRenderContext rc)
   {
     if (_tileBoundingVolume == null)
     {
@@ -514,7 +534,11 @@ public class Tile
   {
     if (_boundingVolume == null)
     {
-      _boundingVolume = getTessellatorMesh(rc, trc).getBoundingVolume().createSphere();
+      Mesh mesh = getTessellatorMesh(rc, trc);
+      if (mesh != null)
+      {
+        _boundingVolume = mesh.getBoundingVolume().createSphere();
+      }
     }
     return _boundingVolume;
   }

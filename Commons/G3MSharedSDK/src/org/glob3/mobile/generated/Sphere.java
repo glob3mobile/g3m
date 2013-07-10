@@ -125,7 +125,7 @@ public class Sphere extends BoundingVolume
   {
     if (_mesh == null)
     {
-      createWireframeMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f), (short) 6);
+      createWireframeMesh(Color.newFromRGBA(1.0f, 1.0f, 0.0f, 1.0f), (short) 16);
     }
     _mesh.render(rc, parentState);
   }
