@@ -433,6 +433,10 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
                                              viewportWidth, viewportHeight));
 
+  //TODO: TEST
+  MutableMatrix44D id = MutableMatrix44D::identity();
+  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
+
   _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0

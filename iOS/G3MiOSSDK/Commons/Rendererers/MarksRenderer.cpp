@@ -188,6 +188,10 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   
   updateGLState(rc);
 
+  _glState.clearGLFeatureGroup(CAMERA_GROUP);
+  _glState.addGLFeature(new ProjectionGLFeature(camera->getProjectionMatrix().asMatrix44D()));
+  _glState.addGLFeature(new ModelGLFeature(camera->getModelMatrix().asMatrix44D()));
+
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
@@ -262,7 +266,7 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   GPUProgramState* progState = _glState.getGPUProgramState();
   const Camera* cc = rc->getCurrentCamera();
   //progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
-  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
-  
+//  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
+
 //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
 }

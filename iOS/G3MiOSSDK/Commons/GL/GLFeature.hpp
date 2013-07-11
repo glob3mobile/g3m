@@ -55,8 +55,6 @@ public:
 
   ~BillboardGLFeature();
 
-  void applyGLGlobalState(GL* gl){}
-
 };
 
 
@@ -73,9 +71,35 @@ public:
                     float lineWidth);
 
   ~GeometryGLFeature();
-
-  void applyGLGlobalState(GL* gl){}
   
 };
+
+class GLCameraGroupFeature: public GLFeature{
+  Matrix44D const* _matrix;
+public:
+  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrix(matrix){
+    _matrix->_retain();
+  }
+  ~GLCameraGroupFeature(){_matrix->_release();}
+  const Matrix44D* getMatrix() const{ return _matrix;}
+};
+
+
+class ModelGLFeature: public GLCameraGroupFeature{
+public:
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model){}
+};
+
+class ProjectionGLFeature: public GLCameraGroupFeature{
+public:
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection){}
+};
+
+class ModelTransformGLFeature: public GLCameraGroupFeature{
+public:
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform){}
+};
+
+
 
 #endif

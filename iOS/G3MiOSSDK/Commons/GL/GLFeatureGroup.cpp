@@ -81,7 +81,24 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl, cons
 }
 
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
-  return NULL;
+  const Matrix44D* m = ((GLCameraGroupFeature*) features->get(0))->getMatrix();
+  m->_retain();
+
+  const int size = features->size();
+  for (int i = 1; i < size; i++){
+    const Matrix44D* m2 = ((GLCameraGroupFeature*) features->get(i))->getMatrix();
+
+    Matrix44D* m3 = m->createMultiplication(*m2);
+
+    m->_release();
+    m = m3;
+  }
+
+  GPUVariableValueSet* fs = new GPUVariableValueSet();
+  fs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4Float(*m));
+  m->_release();
+
+  return fs;
 }
 
 GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){

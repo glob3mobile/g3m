@@ -242,6 +242,9 @@ GPUUniformValueMatrix4Float* GLState::getModelviewUniformValue() const{
   const Matrix44D* mv = getAccumulatedModelView();
 
   if (_modelviewUniformValue == NULL){
+    if (mv == NULL){
+      return NULL;
+    }
     _modelviewUniformValue = new GPUUniformValueMatrix4Float(*mv);
   } else{
     if (mv != _modelviewUniformValue->getMatrix()){
@@ -257,20 +260,33 @@ GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g)
 
   GLFeatureSet* pfs = NULL;
   if (_parentGLState != NULL){
-    _parentGLState->createAccumulatedGLFeaturesForGroup(g);
+    pfs = _parentGLState->createAccumulatedGLFeaturesForGroup(g);
   }
   
   const int index = g;
-  if (_featuresSets[index] == NULL){
+  const GLFeatureSet* const thisFS = _featuresSets[index];
+  if (thisFS == NULL){
     return pfs;
   } else{
     GLFeatureSet* fs = new GLFeatureSet();
-    fs->add(_featuresSets[index]);
     if (pfs != NULL){
       fs->add(pfs);
       delete pfs;
     }
+    fs->add(thisFS);
     return fs;
   }
   
 }
+
+void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
+  GLFeatureSet* fs = _featuresSets[g];
+  if (fs != NULL){
+    for (int i = 0; i < fs->size(); i++) {
+      delete fs->get(i);
+    }
+    delete fs;
+    _featuresSets[g] = NULL;
+  }
+}
+

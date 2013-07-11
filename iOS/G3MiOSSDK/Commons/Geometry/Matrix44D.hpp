@@ -23,7 +23,7 @@
 
 class Matrix44D: public RCObject {
 
-private:
+public:
 
   //_m23 -> row 2, column 3
   const double _m00;
