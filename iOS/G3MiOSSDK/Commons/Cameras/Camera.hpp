@@ -318,6 +318,16 @@ public:
     return _modelViewMatrix;
   }
 
+  void setProjectionAndModelGLFeatures(GLState& glState){
+    glState.clearGLFeatureGroup(CAMERA_GROUP);
+    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+    glState.addGLFeature(p);
+    p->_release();
+    ModelGLFeature* m = new ModelGLFeature(getModelMatrix().asMatrix44D());
+    glState.addGLFeature(m);
+    m->_release();
+  }
+
 private:
   const Angle getHeading(const Vector3D& normal) const;
 

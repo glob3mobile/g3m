@@ -126,3 +126,21 @@ GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl, c
     return NULL;
   }
 }
+
+void GLFeatureSet::add(const GLFeature* f){
+  _features[_nFeatures++] = f;
+  f->_retain();
+}
+
+void GLFeatureSet::add(const GLFeatureSet* fs){
+  const int size = fs->size();
+  for (int i = 0; i < size; i++) {
+    add(fs->get(i));
+  }
+}
+
+GLFeatureSet::~GLFeatureSet(){
+  for (int i = 0; i < _nFeatures; i++) {
+    _features[i]->_release();
+  }
+}

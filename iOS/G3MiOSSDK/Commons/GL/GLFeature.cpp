@@ -79,3 +79,13 @@ GLColorGroupFeature(3, blend, sFactor, dFactor)
   _values.addAttributeValue(COLOR, value);
 }
 
+FlatColorGLFeature::FlatColorGLFeature(const Color& color,
+                                       bool blend, int sFactor, int dFactor):
+GLColorGroupFeature(2, blend, sFactor, dFactor)
+{
+  _values.addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
+                                                           color.getGreen(),
+                                                           color.getBlue(),
+                                                           color.getAlpha()));
+}
+

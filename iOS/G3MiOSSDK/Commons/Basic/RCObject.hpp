@@ -31,11 +31,7 @@ protected:
 
   }
 
-  virtual ~RCObject() {
-    if (_referenceCounter != 0){
-      ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
-    }
-  }
+  virtual ~RCObject();
 
 public:
 

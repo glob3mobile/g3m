@@ -23,6 +23,11 @@ class GLState{
 
   GLFeatureSet* _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
 
+  
+  GLFeatureNoGroup _featureNoGroup;
+  GLFeatureCameraGroup _featureCameraGroup;
+  GLFeatureColorGroup _featureColorGroup;
+
 
   GPUProgramState* _programState;
   GLGlobalState*   _globalState;

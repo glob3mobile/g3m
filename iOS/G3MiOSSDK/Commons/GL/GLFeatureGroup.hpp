@@ -29,6 +29,8 @@ public:
     }
   }
 
+  ~GLFeatureSet();
+
   GLFeature const* get(int i) const{
     if (_nFeatures < i){
       return NULL;
@@ -36,16 +38,9 @@ public:
     return _features[i];
   }
 
-  void add(const GLFeature* f){
-    _features[_nFeatures++] = f;
-  }
+  void add(const GLFeature* f);
 
-  void add(const GLFeatureSet* fs){
-    const int size = fs->size();
-    for (int i = 0; i < size; i++) {
-      add(fs->get(i));
-    }
-  }
+  void add(const GLFeatureSet* fs);
 
   int size() const{
     return _nFeatures;
@@ -61,7 +56,7 @@ enum GLFeatureGroupName{
 };
 
 #define N_GLFEATURES_GROUPS 3
-class GLFeatureGroup{
+class GLFeatureGroup: public GLFeatureSet{
 
   static GLFeatureGroup* _noGroup;
   static GLFeatureGroup* _cameraGroup;

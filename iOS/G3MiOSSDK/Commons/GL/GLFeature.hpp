@@ -13,7 +13,9 @@
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
 
-class GLFeature {
+#include "RCObject.hpp"
+
+class GLFeature: public RCObject {
 public:
 
   GLFeature(GLFeatureGroupName group): _group(group), _globalState(NULL){}
@@ -125,6 +127,12 @@ public:
 class ColorGLFeature: public GLColorGroupFeature{
 public:
   ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
+                 bool blend, int sFactor, int dFactor);
+};
+
+class FlatColorGLFeature: public GLColorGroupFeature{
+public:
+  FlatColorGLFeature(const Color& color,
                  bool blend, int sFactor, int dFactor);
 };
 

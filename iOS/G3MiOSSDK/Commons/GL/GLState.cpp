@@ -36,9 +36,6 @@ GLState::~GLState(){
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
     GLFeatureSet* fs = _featuresSets[i];
     if (fs != NULL){
-      for (int i = 0; fs->size(); i++) {
-        delete fs->get(i);
-      }
       delete _featuresSets[i];
     }
   }
@@ -139,6 +136,22 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
       }
     }
   }
+
+//  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
+//  for (int i = 0; i < 3; i++){
+//
+//    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
+//    if (fs != NULL){
+//
+//      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
+//      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
+//      delete fs;
+//      if (variables != NULL){
+//        values.combineWith(variables);
+//        delete variables;
+//      }
+//    }
+//  }
 
   uniformsCode = uniformsCode | values.getUniformsCode();
   attributesCode = attributesCode | values.getAttributesCode();
@@ -282,9 +295,6 @@ GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g)
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
   GLFeatureSet* fs = _featuresSets[g];
   if (fs != NULL){
-    for (int i = 0; i < fs->size(); i++) {
-      delete fs->get(i);
-    }
     delete fs;
     _featuresSets[g] = NULL;
   }
