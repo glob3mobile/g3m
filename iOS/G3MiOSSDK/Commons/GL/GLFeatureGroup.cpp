@@ -81,12 +81,15 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl, cons
 }
 
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
+
   const Matrix44D* m = ((GLCameraGroupFeature*) features->get(0))->getMatrix();
   m->_retain();
-
+  features->get(0)->applyGLGlobalState(gl);
   const int size = features->size();
   for (int i = 1; i < size; i++){
-    const Matrix44D* m2 = ((GLCameraGroupFeature*) features->get(i))->getMatrix();
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) features->get(i));
+    f->applyGLGlobalState(gl);
+    const Matrix44D* m2 = f->getMatrix();
 
     Matrix44D* m3 = m->createMultiplication(*m2);
 
@@ -102,5 +105,24 @@ GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl, 
 }
 
 GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features){
-  return NULL;
+
+  int priority = -1;
+  GLColorGroupFeature* topPriorityFeature = NULL;
+  const int size = features->size();
+  for (int i = 0; i < size; i++){
+    GLColorGroupFeature* f = ((GLColorGroupFeature*) features->get(i));
+    if (f->getPriority() > priority){
+      topPriorityFeature = f;
+      priority = f->getPriority();
+    }
+  }
+
+  if (topPriorityFeature != NULL){
+    GPUVariableValueSet* fs = new GPUVariableValueSet();
+    fs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+    topPriorityFeature->applyGLGlobalState(gl);
+    return fs;
+  } else{
+    return NULL;
+  }
 }

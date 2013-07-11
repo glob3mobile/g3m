@@ -13,6 +13,7 @@ void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs){
     for (int i = 0; i <= vs->_highestUniformKey; i++) {
       if (vs->_uniformValues[i] != NULL){
         _uniformValues[i] = vs->_uniformValues[i];
+        _uniformValues[i]->_retain();
         if (i > _highestUniformKey){
           _highestUniformKey = i;
         }
@@ -22,6 +23,7 @@ void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs){
     for (int i = 0; i <= vs->_highestAttributeKey; i++) {
       if (vs->_attributeValues[i] != NULL){
         _attributeValues[i] = vs->_attributeValues[i];
+        _attributeValues[i]->_retain();
         if (i > _highestAttributeKey){
           _highestAttributeKey = i;
         }
@@ -47,13 +49,12 @@ void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{
   }
 }
 
-void GPUVariableValueSet::releaseContainedValues(){
+GPUVariableValueSet::~GPUVariableValueSet(){
 
   for (int i = 0; i <= _highestUniformKey; i++) {
     GPUUniformValue* u = _uniformValues[i];
     if (u != NULL){
       u->_release();
-      _uniformValues[i] = NULL;
     }
   }
 
@@ -61,7 +62,6 @@ void GPUVariableValueSet::releaseContainedValues(){
     GPUAttributeValue* a = _attributeValues[i];
     if (a != NULL){
       a->_release();
-      _uniformValues[i] = NULL;
     }
   }
 }

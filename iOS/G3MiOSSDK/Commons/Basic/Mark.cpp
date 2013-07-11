@@ -392,26 +392,19 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
 //  globalState->disableDepthTest();
   globalState->enableBlend();
   globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  globalState->bindTexture(_textureId);
+//  globalState->bindTexture(_textureId);
+
+//  GPUProgramState* progState = _glState.getGPUProgramState();
+
+ 
   
-  GPUProgramState* progState = _glState.getGPUProgramState();
-  
-  if (_billboardTexCoord == NULL){
-    FloatBufferBuilderFromCartesian2D texCoor;
-    texCoor.add(1,1);
-    texCoor.add(1,0);
-    texCoor.add(0,1);
-    texCoor.add(0,0);
-    _billboardTexCoord = texCoor.create();
-  }
-  
-  progState->setAttributeValue(TEXTURE_COORDS,
-                               _billboardTexCoord, 2,
-                               2,
-                               0,
-                               false,
-                               0);
-  
+//  progState->setAttributeValue(TEXTURE_COORDS,
+//                               _billboardTexCoord, 2,
+//                               2,
+//                               0,
+//                               false,
+//                               0);
+
   const Vector3D pos( planet->toCartesian(_position) );
   FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
   vertex.add(pos);
@@ -434,8 +427,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                              viewportWidth, viewportHeight));
 
   //TODO: TEST
-  MutableMatrix44D id = MutableMatrix44D::identity();
-  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
+//  MutableMatrix44D id = MutableMatrix44D::identity();
+//  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
@@ -447,6 +440,18 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                               false, 0, 0,  //NO POLYGON OFFSET
                                               1.0)          //LINE WIDTH
                         );
+}
+
+IFloatBuffer* Mark::getBillboardTexCoords(){
+  if (_billboardTexCoord == NULL){
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
+  }
+  return _billboardTexCoord;
 }
 
 void Mark::render(const G3MRenderContext* rc,
@@ -482,6 +487,14 @@ void Mark::render(const G3MRenderContext* rc,
           
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
+
+          _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                                     getBillboardTexCoords(),
+                                                     2,
+                                                     0,
+                                                     false,
+                                                     0,
+                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||

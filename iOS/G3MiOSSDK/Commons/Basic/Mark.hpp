@@ -132,6 +132,8 @@ private:
   GLState _glState;
   
   void createGLState(const Planet* planet, int viewportWidth, int viewportHeight);
+
+  IFloatBuffer* getBillboardTexCoords();
   
 public:
   /**

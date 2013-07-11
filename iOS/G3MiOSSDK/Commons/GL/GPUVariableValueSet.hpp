@@ -36,9 +36,11 @@ public:
       _attributeValues[i] = NULL;
     }
   }
+  ~GPUVariableValueSet();
 
   void addUniformValue(GPUUniformKey key, GPUUniformValue* v){
     _uniformValues[key] = v;
+    v->_retain();
     if (key > _highestUniformKey){
       _highestUniformKey = key;
     }
@@ -46,6 +48,7 @@ public:
 
   void addAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
     _attributeValues[key] = v;
+    v->_retain();
     if (key > _highestAttributeKey){
       _highestAttributeKey = key;
     }
@@ -66,9 +69,6 @@ public:
   int getUniformsCode() const;
 
   int getAttributesCode() const;
-
-  void releaseContainedValues();
-
   
 };
 

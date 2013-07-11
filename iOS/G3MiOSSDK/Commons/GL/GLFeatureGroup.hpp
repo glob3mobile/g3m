@@ -23,7 +23,11 @@ class GLFeatureSet{
 
 public:
 
-  GLFeatureSet():_nFeatures(0){}
+  GLFeatureSet():_nFeatures(0){
+    for (int i = 0; i < MAX_CONCURRENT_FEATURES_PER_GROUP; i++) {
+      _features[i] = NULL;
+    }
+  }
 
   GLFeature const* get(int i) const{
     if (_nFeatures < i){

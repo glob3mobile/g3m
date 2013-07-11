@@ -59,3 +59,22 @@ GLFeature(NO_GROUP){
 GeometryGLFeature::~GeometryGLFeature(){
 //  _position->_release();
 }
+
+TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
+                                   IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
+                                   bool blend, int sFactor, int dFactor):
+GLColorGroupFeature(4)
+{
+  _globalState = new GLGlobalState();
+  _globalState->bindTexture(texID);
+
+  if (blend){
+    _globalState->enableBlend();
+    _globalState->setBlendFactors(sFactor, dFactor);
+  } else{
+    _globalState->disableBlend();
+  }
+
+  GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
+  _values.addAttributeValue(TEXTURE_COORDS, value);
+}

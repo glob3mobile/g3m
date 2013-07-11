@@ -67,6 +67,7 @@ public:
   _attributesCode(0),
   _totalGPUProgramStateChanged(true),
   _modelview(NULL),
+  _lastGPUProgramUsed(NULL),
   _accumulatedModelview(NULL),
   _multiplyModelview(false),
   _lastParentModelview(NULL),

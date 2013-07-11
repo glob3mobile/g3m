@@ -20,7 +20,6 @@ public:
 
   virtual ~GLFeature(){
     delete _globalState;
-    _values.releaseContainedValues();
   }
 
   void applyGLGlobalState(GL* gl) const{
@@ -73,7 +72,7 @@ public:
   ~GeometryGLFeature();
   
 };
-
+///////////////////////////////////////////////////////////////////////////////////////////
 class GLCameraGroupFeature: public GLFeature{
   Matrix44D const* _matrix;
 public:
@@ -83,7 +82,6 @@ public:
   ~GLCameraGroupFeature(){_matrix->_release();}
   const Matrix44D* getMatrix() const{ return _matrix;}
 };
-
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
@@ -99,7 +97,20 @@ class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
   ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform){}
 };
+///////////////////////////////////////////////////////////////////////////////////////////
+class GLColorGroupFeature: public GLFeature{
+  const int _priority;
+public:
+  GLColorGroupFeature(int p): GLFeature(COLOR_GROUP), _priority(p) {}
+  int getPriority() const { return _priority;}
+};
 
+class TextureGLFeature: public GLColorGroupFeature{
+public:
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
+                   bool blend, int sFactor, int dFactor);
+};
 
 
 #endif

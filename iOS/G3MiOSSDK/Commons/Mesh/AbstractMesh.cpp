@@ -16,6 +16,8 @@
 #include "GPUProgramState.hpp"
 #include "Camera.hpp"
 
+#include "GLFeature.hpp"
+
 AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
@@ -200,6 +202,16 @@ void AbstractMesh::createGLState(){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
     _glState.setModelView(_translationMatrix->asMatrix44D(), true);
   }
+
+
+//  _glState.addGLFeature(new GeometryGLFeature(_vertices, 4, //The attribute is a float vector of 4 elements
+//                                              3,            //Our buffer contains elements of 3
+//                                              0,            //Index 0
+//                                              false,        //Not normalized
+//                                              0,            //Stride 0
+//                                              false, 0,
+//                                              false, 0.0, 0.0,
+//                                              _lineWidth));
 }
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
