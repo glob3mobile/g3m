@@ -24,73 +24,72 @@ QuadTree_Node::~QuadTree_Node() {
 }
 
 
-void QuadTree_Node::add(const Sector& sector,
+bool QuadTree_Node::add(const Sector& sector,
                         const void* element,
                         int maxElementsPerNode,
                         int maxDepth) {
 
-
   if (_elements.size() < maxElementsPerNode || _depth >= maxDepth) {
     _elements.push_back( new QuadTree_Element(sector, element) );
+    return true;
   }
-  else {
-    if (_children == NULL) {
-      _children = new QuadTree_Node*[4];
 
-      const Geodetic2D lower = _sector.lower();
-      const Geodetic2D upper = _sector.upper();
+  if (_children == NULL) {
+    _children = new QuadTree_Node*[4];
 
-      const Angle splitLongitude = Angle::midAngle(lower.longitude(), upper.longitude());
-      const Angle splitLatitude  = Angle::midAngle(lower.latitude(),  upper.latitude());
+    const Geodetic2D lower = _sector.lower();
+    const Geodetic2D upper = _sector.upper();
 
-      const Sector sector0(lower,
-                           Geodetic2D(splitLatitude, splitLongitude));
+    const Angle splitLongitude = Angle::midAngle(lower.longitude(), upper.longitude());
+    const Angle splitLatitude  = Angle::midAngle(lower.latitude(),  upper.latitude());
 
-      const Sector sector1(Geodetic2D(lower.latitude(), splitLongitude),
-                           Geodetic2D(splitLatitude, upper.longitude()));
+    const Sector sector0(lower,
+                         Geodetic2D(splitLatitude, splitLongitude));
 
-      const Sector sector2(Geodetic2D(splitLatitude, lower.longitude()),
-                           Geodetic2D(upper.latitude(), splitLongitude));
+    const Sector sector1(Geodetic2D(lower.latitude(), splitLongitude),
+                         Geodetic2D(splitLatitude, upper.longitude()));
 
-      const Sector sector3(Geodetic2D(splitLatitude, splitLongitude),
-                           upper);
+    const Sector sector2(Geodetic2D(splitLatitude, lower.longitude()),
+                         Geodetic2D(upper.latitude(), splitLongitude));
 
-      _children[0] = new QuadTree_Node(sector0, this);
-      _children[1] = new QuadTree_Node(sector1, this);
-      _children[2] = new QuadTree_Node(sector2, this);
-      _children[3] = new QuadTree_Node(sector3, this);
-    }
+    const Sector sector3(Geodetic2D(splitLatitude, splitLongitude),
+                         upper);
 
-    int selectedChildrenIndex = -1;
-    bool keepHere = false;
-    for (int i = 0; i < 4; i++) {
-      QuadTree_Node* child = _children[i];
-      if (child->_sector.touchesWith(sector)) {
-        if (selectedChildrenIndex == -1) {
-          selectedChildrenIndex = i;
-        }
-        else {
-          keepHere = true;
-          break;
-        }
-      }
-    }
+    _children[0] = new QuadTree_Node(sector0, this);
+    _children[1] = new QuadTree_Node(sector1, this);
+    _children[2] = new QuadTree_Node(sector2, this);
+    _children[3] = new QuadTree_Node(sector3, this);
+  }
 
-    if (keepHere) {
-      _elements.push_back( new QuadTree_Element(sector, element) );
-    }
-    else {
+  int selectedChildrenIndex = -1;
+  bool keepHere = false;
+  for (int i = 0; i < 4; i++) {
+    QuadTree_Node* child = _children[i];
+    if (child->_sector.touchesWith(sector)) {
       if (selectedChildrenIndex == -1) {
-        ILogger::instance()->logError("Logic error in QuadTree");
+        selectedChildrenIndex = i;
       }
       else {
-        _children[selectedChildrenIndex]->add(sector,
-                                              element,
-                                              maxElementsPerNode,
-                                              maxDepth);
+        keepHere = true;
+        break;
       }
     }
   }
+
+  if (keepHere) {
+    _elements.push_back( new QuadTree_Element(sector, element) );
+    return true;
+  }
+
+  if (selectedChildrenIndex >= 0) {
+    return _children[selectedChildrenIndex]->add(sector,
+                                                 element,
+                                                 maxElementsPerNode,
+                                                 maxDepth);
+  }
+
+  ILogger::instance()->logError("Logic error in QuadTree");
+  return false;
 }
 
 bool QuadTree_Node::visitElements(const Sector& sector,
@@ -127,9 +126,9 @@ QuadTree::~QuadTree() {
 
 }
 
-void QuadTree::add(const Sector& sector,
+bool QuadTree::add(const Sector& sector,
                    const void* element) {
-  _root->add(sector, element, _maxElementsPerNode, _maxDepth);
+  return _root->add(sector, element, _maxElementsPerNode, _maxDepth);
 }
 
 void QuadTree::visitElements(const Sector& sector,

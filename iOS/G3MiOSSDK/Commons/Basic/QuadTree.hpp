@@ -52,20 +52,22 @@ private:
 public:
   QuadTree_Node(const Sector& sector) :
   _sector(sector),
-  _depth(1)
+  _depth(1),
+  _children(NULL)
   {
   }
 
   QuadTree_Node(const Sector& sector,
                 QuadTree_Node* parent) :
   _sector(sector),
-  _depth( parent->_depth + 1 )
+  _depth( parent->_depth + 1 ),
+  _children(NULL)
   {
   }
 
   ~QuadTree_Node();
 
-  void add(const Sector& sector,
+  bool add(const Sector& sector,
            const void* element,
            int maxElementsPerNode,
            int maxDepth);
@@ -111,7 +113,7 @@ public:
 
   ~QuadTree();
 
-  void add(const Sector& sector,
+  bool add(const Sector& sector,
            const void* element);
 
   void visitElements(const Sector& sector,

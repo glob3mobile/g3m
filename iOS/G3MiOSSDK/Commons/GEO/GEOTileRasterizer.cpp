@@ -10,11 +10,14 @@
 #include "GEORasterSymbol.hpp"
 
 #include "Tile.hpp"
-
+#include "IImageListener.hpp"
 
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
-  _quadTree.add(*symbol->getSector(),
-                symbol);
+  const bool added = _quadTree.add(*symbol->getSector(),
+                                   symbol);
+  if (!added) {
+    delete symbol;
+  }
 }
 
 class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
@@ -32,4 +35,9 @@ void GEOTileRasterizer::rasterize(IImage* image,
                                   bool autodelete) const {
   _quadTree.visitElements(tile->getSector(),
                           GEOTileRasterizer_QuadTreeVisitor());
+
+  listener->imageCreated(image);
+  if (autodelete) {
+    delete listener;
+  }
 }
