@@ -194,6 +194,7 @@ public:
                       const Angle& delta);
   void moveForward(double d);
   void translateCamera(const Vector3D& p0, const Vector3D& p1);
+  void translateCamera(const Vector3D& desp);
 
   //Pivot
   void pivotOnCenter(const Angle& a);

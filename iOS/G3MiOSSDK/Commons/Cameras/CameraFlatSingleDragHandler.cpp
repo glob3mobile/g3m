@@ -45,16 +45,16 @@ void CameraFlatSingleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag);
-  _axis = MutableVector3D::nan();
-  _lastRadians = _radiansStep = 0.0;
+  _lastDesp = _despStep = 0.0;
   
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   Vector3D origin = _camera0.getCartesianPosition();
   Vector3D ray = _camera0.pixel2Ray(pixel);
   _initialPoint = Plane::intersectionXYPlaneWithRay(origin, ray).asMutableVector3D();
+  _lastFinalPoint = _initialPoint;
   
-  printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+  //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
 void CameraFlatSingleDragHandler::onMove(const G3MEventContext *eventContext,
@@ -76,14 +76,10 @@ void CameraFlatSingleDragHandler::onMove(const G3MEventContext *eventContext,
   camera->copyFrom(_camera0);
   camera->translateCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
-  
-  
-  // save drag parameters
-  _axis = _initialPoint.cross(finalPoint);
-  
-  const double radians = - IMathUtils::instance()->asin(_axis.length()/_initialPoint.length()/finalPoint.length());
-  _radiansStep = radians - _lastRadians;
-  _lastRadians = radians;
+  _lastDirection = _lastFinalPoint.sub(finalPoint);
+  _lastFinalPoint = finalPoint;
+
+  //printf ("_lastdirection=%.2f, %.2f, %.2f)  length=%.2f\n", _lastDirection.x(), _lastDirection.y(), _lastDirection.z(), _lastDirection.length());
 }
 
 
@@ -97,9 +93,9 @@ void CameraFlatSingleDragHandler::onUp(const G3MEventContext *eventContext,
     Vector2I prevPixel = touch->getPrevPos();
     double desp        = currPixel.sub(prevPixel).length();
     
-    if (cameraContext->getCurrentGesture()==Drag && !_axis.isNan() && desp>2) {
+    if (cameraContext->getCurrentGesture()==Drag && desp>2) {
       // start inertial effect
-      Effect *effect = new SingleDragEffect(_axis.asVector3D(), Angle::fromRadians(_radiansStep));
+      Effect *effect = new SingleTranslationEffect(_lastDirection.asVector3D());
       
       EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
       eventContext->getEffectsScheduler()->startEffect(effect, target);
@@ -113,26 +109,4 @@ void CameraFlatSingleDragHandler::onUp(const G3MEventContext *eventContext,
 
 void CameraFlatSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)
 {
-  //  // TEMP TO DRAW A POINT WHERE USER PRESS
-  //  if (false) {
-  //    if (cameraContext->getCurrentGesture() == Drag) {
-  //      GL* gl = rc->getGL();
-  //      float vertices[] = { 0,0,0};
-  //      int indices[] = {0};
-  //      gl->enableVerticesPosition();
-  //      gl->disableTexture2D();
-  //      gl->disableTextures();
-  //      gl->vertexPointer(3, 0, vertices);
-  //      gl->color((float) 0, (float) 1, (float) 0, 1);
-  //      gl->pointSize(60);
-  //      gl->pushMatrix();
-  //      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  //      gl->multMatrixf(T);
-  //      gl->drawPoints(1, indices);
-  //      gl->popMatrix();
-  //
-  //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-  //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
-  //    }
-  //  }
 }

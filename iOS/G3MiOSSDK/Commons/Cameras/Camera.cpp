@@ -289,9 +289,15 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 }
 
 
+void Camera::translateCamera(const Vector3D &desp)
+{
+  applyTransform(MutableMatrix44D::createTranslationMatrix(desp));
+}
+
+
 void Camera::translateCamera(const Vector3D& p0, const Vector3D& p1)
 {
-  applyTransform(MutableMatrix44D::createTranslationMatrix(p0.sub(p1)));
+  translateCamera(p0.sub(p1));
 }
 
 

@@ -13,7 +13,39 @@
 #include "Camera.hpp"
 #include "Effects.hpp"
 #include "MutableVector2I.hpp"
-#include "SingleDragEffect.hpp"
+
+
+class SingleTranslationEffect : public EffectWithForce {
+public:
+  
+  SingleTranslationEffect(const Vector3D& desp):
+  EffectWithForce(1, 0.92),
+  _direction(desp){
+  }
+  
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when) {
+  }
+  
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when) {
+    EffectWithForce::doStep(rc, when);
+    rc->getNextCamera()->translateCamera(_direction.times(getForce()));
+  }
+  
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when) {
+    rc->getNextCamera()->translateCamera(_direction.times(getForce()));
+  }
+  
+  virtual void cancel(const TimeInterval& when) {
+    // do nothing, just leave the effect in the intermediate state
+  }
+  
+private:
+  Vector3D _direction;
+};
+
 
 
 class CameraFlatSingleDragHandler: public CameraEventHandler {
@@ -22,7 +54,6 @@ public:
   CameraFlatSingleDragHandler(bool useInertia):
   _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
-  //  _initialPixel(0,0),
   _useInertia(useInertia)
   {}
   
@@ -51,11 +82,11 @@ private:
   Camera _camera0;         //Initial Camera saved on Down event
   
   MutableVector3D _initialPoint;  //Initial point at dragging
-  //MutableVector2I _initialPixel;  //Initial pixel at start of gesture
   
-  MutableVector3D _axis;
-  double          _lastRadians;
-  double          _radiansStep;
+  double          _lastDesp;
+  double          _despStep;
+  MutableVector3D _lastDirection;
+  MutableVector3D _lastFinalPoint;
   
 };
 
