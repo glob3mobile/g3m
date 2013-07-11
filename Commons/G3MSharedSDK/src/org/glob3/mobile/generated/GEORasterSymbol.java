@@ -29,6 +29,8 @@ public abstract class GEORasterSymbol extends GEOSymbol
 
   public void dispose()
   {
+    if (_sector != null)
+       _sector.dispose();
   }
 
   public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)

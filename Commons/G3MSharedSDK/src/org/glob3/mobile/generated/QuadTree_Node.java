@@ -11,12 +11,14 @@ public class QuadTree_Node
   {
      _sector = new Sector(sector);
      _depth = 1;
+     _children = null;
   }
 
   public QuadTree_Node(Sector sector, QuadTree_Node parent)
   {
      _sector = new Sector(sector);
      _depth = parent._depth + 1;
+     _children = null;
   }
 
   public void dispose()
@@ -39,75 +41,71 @@ public class QuadTree_Node
     }
   }
 
-  public final void add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)
+  public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)
   {
-  
   
     if (_elements.size() < maxElementsPerNode || _depth >= maxDepth)
     {
       _elements.add(new QuadTree_Element(sector, element));
+      return true;
     }
-    else
+  
+    if (_children == null)
     {
-      if (_children == null)
-      {
-        _children = new QuadTree_Node[4];
+      _children = new QuadTree_Node[4];
   
-        final Geodetic2D lower = _sector.lower();
-        final Geodetic2D upper = _sector.upper();
+      final Geodetic2D lower = _sector.lower();
+      final Geodetic2D upper = _sector.upper();
   
-        final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
-        final Angle splitLatitude = Angle.midAngle(lower.latitude(), upper.latitude());
+      final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+      final Angle splitLatitude = Angle.midAngle(lower.latitude(), upper.latitude());
   
-        final Sector sector0 = new Sector(lower, new Geodetic2D(splitLatitude, splitLongitude));
+      final Sector sector0 = new Sector(lower, new Geodetic2D(splitLatitude, splitLongitude));
   
-        final Sector sector1 = new Sector(new Geodetic2D(lower.latitude(), splitLongitude), new Geodetic2D(splitLatitude, upper.longitude()));
+      final Sector sector1 = new Sector(new Geodetic2D(lower.latitude(), splitLongitude), new Geodetic2D(splitLatitude, upper.longitude()));
   
-        final Sector sector2 = new Sector(new Geodetic2D(splitLatitude, lower.longitude()), new Geodetic2D(upper.latitude(), splitLongitude));
+      final Sector sector2 = new Sector(new Geodetic2D(splitLatitude, lower.longitude()), new Geodetic2D(upper.latitude(), splitLongitude));
   
-        final Sector sector3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), upper);
+      final Sector sector3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), upper);
   
-        _children[0] = new QuadTree_Node(sector0, this);
-        _children[1] = new QuadTree_Node(sector1, this);
-        _children[2] = new QuadTree_Node(sector2, this);
-        _children[3] = new QuadTree_Node(sector3, this);
-      }
+      _children[0] = new QuadTree_Node(sector0, this);
+      _children[1] = new QuadTree_Node(sector1, this);
+      _children[2] = new QuadTree_Node(sector2, this);
+      _children[3] = new QuadTree_Node(sector3, this);
+    }
   
-      int selectedChildrenIndex = -1;
-      boolean keepHere = false;
-      for (int i = 0; i < 4; i++)
-      {
-        QuadTree_Node child = _children[i];
-        if (child._sector.touchesWith(sector))
-        {
-          if (selectedChildrenIndex == -1)
-          {
-            selectedChildrenIndex = i;
-          }
-          else
-          {
-            keepHere = true;
-            break;
-          }
-        }
-      }
-  
-      if (keepHere)
-      {
-        _elements.add(new QuadTree_Element(sector, element));
-      }
-      else
+    int selectedChildrenIndex = -1;
+    boolean keepHere = false;
+    for (int i = 0; i < 4; i++)
+    {
+      QuadTree_Node child = _children[i];
+      if (child._sector.touchesWith(sector))
       {
         if (selectedChildrenIndex == -1)
         {
-          ILogger.instance().logError("Logic error in QuadTree");
+          selectedChildrenIndex = i;
         }
         else
         {
-          _children[selectedChildrenIndex].add(sector, element, maxElementsPerNode, maxDepth);
+          keepHere = true;
+          break;
         }
       }
     }
+  
+    if (keepHere)
+    {
+      _elements.add(new QuadTree_Element(sector, element));
+      return true;
+    }
+  
+    if (selectedChildrenIndex >= 0)
+    {
+      return _children[selectedChildrenIndex].add(sector, element, maxElementsPerNode, maxDepth);
+    }
+  
+    ILogger.instance().logError("Logic error in QuadTree");
+    return false;
   }
 
   public final boolean visitElements(Sector sector, QuadTreeVisitor visitor)

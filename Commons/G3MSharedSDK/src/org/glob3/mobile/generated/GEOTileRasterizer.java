@@ -32,11 +32,23 @@ public class GEOTileRasterizer extends TileRasterizer
   public final void rasterize(IImage image, Tile tile, IImageListener listener, boolean autodelete)
   {
     _quadTree.visitElements(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor());
+  
+    listener.imageCreated(image);
+    if (autodelete)
+    {
+      if (listener != null)
+         listener.dispose();
+    }
   }
 
   public final void addSymbol(GEORasterSymbol symbol)
   {
-    _quadTree.add(symbol.getSector(), symbol);
+    final boolean added = _quadTree.add(symbol.getSector(), symbol);
+    if (!added)
+    {
+      if (symbol != null)
+         symbol.dispose();
+    }
   }
 
 }
