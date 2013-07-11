@@ -19,8 +19,8 @@ GLFeature(NO_GROUP){
 }
 
 BillboardGLFeature::~BillboardGLFeature(){
-  _texExtent->_release();
-  _viewportExtent->_release();
+//  _texExtent->_release();
+//  _viewportExtent->_release();
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
@@ -29,31 +29,33 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize,
                   bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
                   float lineWidth):
 GLFeature(NO_GROUP){
+  
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(POSITION, _position);
 
+  _globalState = new GLGlobalState();
   if (depthTestEnabled){
-    _globalState.enableDepthTest();
+    _globalState->enableDepthTest();
   } else{
-    _globalState.disableDepthTest();
+    _globalState->disableDepthTest();
   }
 
   if (cullFace){
-    _globalState.enableCullFace(culledFace);
+    _globalState->enableCullFace(culledFace);
   } else{
-    _globalState.disableCullFace();
+    _globalState->disableCullFace();
   }
 
   if (polygonOffsetFill){
-    _globalState.enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
+    _globalState->enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
   } else{
-    _globalState.disPolygonOffsetFill();
+    _globalState->disPolygonOffsetFill();
   }
 
-  _globalState.setLineWidth(lineWidth);
+  _globalState->setLineWidth(lineWidth);
 }
 
 
 GeometryGLFeature::~GeometryGLFeature(){
-  _position->_release();
+//  _position->_release();
 }

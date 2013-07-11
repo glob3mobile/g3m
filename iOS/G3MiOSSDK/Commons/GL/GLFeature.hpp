@@ -16,12 +16,17 @@
 class GLFeature {
 public:
 
-  GLFeature(GLFeatureGroupName group): _group(group){}
+  GLFeature(GLFeatureGroupName group): _group(group), _globalState(NULL){}
 
-  virtual ~GLFeature(){}
+  virtual ~GLFeature(){
+    delete _globalState;
+    _values.releaseContainedValues();
+  }
 
   void applyGLGlobalState(GL* gl) const{
-    _globalState.applyChanges(gl, *gl->getCurrentGLGlobalState());
+    if (_globalState != NULL){
+      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+    }
   }
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
@@ -34,7 +39,7 @@ public:
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
-  GLGlobalState _globalState;
+  GLGlobalState* _globalState;
 
 };
 

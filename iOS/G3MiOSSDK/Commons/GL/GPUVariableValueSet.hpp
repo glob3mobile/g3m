@@ -67,6 +67,8 @@ public:
 
   int getAttributesCode() const;
 
+  void releaseContainedValues();
+
   
 };
 

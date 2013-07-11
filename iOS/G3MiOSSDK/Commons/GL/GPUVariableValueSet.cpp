@@ -47,6 +47,25 @@ void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{
   }
 }
 
+void GPUVariableValueSet::releaseContainedValues(){
+
+  for (int i = 0; i <= _highestUniformKey; i++) {
+    GPUUniformValue* u = _uniformValues[i];
+    if (u != NULL){
+      u->_release();
+      _uniformValues[i] = NULL;
+    }
+  }
+
+  for (int i = 0; i <= _highestAttributeKey; i++) {
+    GPUAttributeValue* a = _attributeValues[i];
+    if (a != NULL){
+      a->_release();
+      _uniformValues[i] = NULL;
+    }
+  }
+}
+
 int GPUVariableValueSet::getUniformsCode() const{
   if (_uniformsCode == 0){
     for (int i = 0; i <= _highestUniformKey; i++){
