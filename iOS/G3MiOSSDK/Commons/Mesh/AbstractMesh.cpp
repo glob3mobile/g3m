@@ -141,13 +141,25 @@ void AbstractMesh::createGLState(){
 
   GPUProgramState& progState = *_glState.getGPUProgramState();
 
+
+
+  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true,         //Depth test
+                                              false, 0,
+                                              false, 0.0, 0.0,
+                                              _lineWidth));
+
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
-    progState.setAttributeValue(POSITION,
-                                _vertices, 4, //The attribute is a float vector of 4 elements
-                                3,            //Our buffer contains elements of 3
-                                0,            //Index 0
-                                false,        //Not normalized
-                                0);           //Stride 0
+//    progState.setAttributeValue(POSITION,
+//                                _vertices, 4, //The attribute is a float vector of 4 elements
+//                                3,            //Our buffer contains elements of 3
+//                                0,            //Index 0
+//                                false,        //Not normalized
+//                                0);           //Stride 0
     //progState.setUniformValue(FLAT_COLOR, *_flatColor);
 
     FlatColorGLFeature* flatColorF = new FlatColorGLFeature(*_flatColor, _flatColor->isTransparent(), GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
@@ -166,12 +178,12 @@ void AbstractMesh::createGLState(){
 
   progState.setUniformValue(POINT_SIZE, _pointSize);
 
-  progState.setAttributeValue(POSITION,
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
+//  progState.setAttributeValue(POSITION,
+//                              _vertices, 4, //The attribute is a float vector of 4 elements
+//                              3,            //Our buffer contains elements of 3
+//                              0,            //Index 0
+//                              false,        //Not normalized
+//                              0);           //Stride 0
 
   if (_colors != NULL){
     //    progState.setUniformValue(EnableColorPerVertex, true);
@@ -218,16 +230,6 @@ void AbstractMesh::createGLState(){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
     _glState.setModelView(_translationMatrix->asMatrix44D(), true);
   }
-
-
-  //  _glState.addGLFeature(new GeometryGLFeature(_vertices, 4, //The attribute is a float vector of 4 elements
-  //                                              3,            //Our buffer contains elements of 3
-  //                                              0,            //Index 0
-  //                                              false,        //Not normalized
-  //                                              0,            //Stride 0
-  //                                              false, 0,
-  //                                              false, 0.0, 0.0,
-  //                                              _lineWidth));
 }
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
