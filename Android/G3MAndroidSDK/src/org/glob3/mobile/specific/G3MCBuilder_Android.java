@@ -23,11 +23,14 @@ public class G3MCBuilder_Android
 
    public G3MCBuilder_Android(final Context context,
                               final URL serverURL,
-                              final String sceneID,
+                              final URL tubesURL,
+                              final boolean useWebSockets,
+                              final String sceneId,
                               final G3MCSceneChangeListener sceneListener) {
-      super(serverURL, sceneID, sceneListener);
+      super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
 
       _nativeWidget = new G3MWidget_Android(context);
+
    }
 
 

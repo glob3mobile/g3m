@@ -115,7 +115,10 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
-    rc.getNextCamera().setGeodeticPosition(_toPosition);
+    Camera camera = rc.getNextCamera();
+    camera.setGeodeticPosition(_toPosition);
+    camera.setPitch(_toPitch);
+    camera.setHeading(_toHeading);
   }
 
   public void cancel(TimeInterval when)

@@ -142,6 +142,13 @@ public class BSONGenerator extends JSONVisitor
     _builder.addStringZeroTerminated(str);
   }
 
+  public final void visitNull()
+  {
+    _builder.add((byte) 0x0A); // null string
+  
+    addCurrentKey();
+  }
+
   public final void visitArrayBeforeChildren(JSONArray value)
   {
   //  _builder->add((unsigned char) 0x04); // type array

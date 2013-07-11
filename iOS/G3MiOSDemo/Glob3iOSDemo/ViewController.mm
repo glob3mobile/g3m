@@ -22,6 +22,7 @@
 #import <G3MiOSSDK/WMSLayer.hpp>
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
@@ -100,6 +101,7 @@
 
 #import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
 #import <G3MiOSSDK/G3MCSceneDescription.hpp>
+#import <G3MiOSSDK/IWebSocketListener.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -240,9 +242,12 @@ public:
 - (void) initWithG3MCBuilder
 {
   G3MCSceneChangeListener* sceneListener = NULL;
+  const bool useWebSockets = true;
   
   _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
-                                      URL("http://localhost:8080/g3mc-server", false),
+                                      URL("http://192.168.0.103:8080/g3mc-server", false),
+                                      URL("ws://192.168.0.103:8888/tube", false),
+                                      useWebSockets,
                                       "2g59wh610g6c1kmkt0l",
                                       sceneListener);
 
@@ -669,8 +674,10 @@ public:
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool processRotation = true;
   const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
+  
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -737,13 +744,37 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
   
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           BingMapType::AerialWithLabels(),
                                           //BingMapType::Aerial(),
                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
+  }
+
+  const bool useOSMEditMap = false;
+  if (useOSMEditMap) {
+    // http://d.tiles.mapbox.com/v3/enf.osm-edit-date/4/4/5.png
+
+    std::vector<std::string> subdomains;
+    subdomains.push_back("a.");
+    subdomains.push_back("b.");
+    subdomains.push_back("c.");
+    subdomains.push_back("d.");
+
+    MercatorTiledLayer* osmEditMapLayer = new MercatorTiledLayer("osm-edit-map",
+                                                                 "http://",
+                                                                 "tiles.mapbox.com/v3/enf.osm-edit-date",
+                                                                 subdomains,
+                                                                 "png",
+                                                                 TimeInterval::fromDays(30),
+                                                                 true,
+                                                                 Sector::fullSphere(),
+                                                                 2,
+                                                                 11,
+                                                                 NULL);
+    layerSet->addLayer(osmEditMapLayer);
   }
   
   const bool blueMarble = false;
@@ -979,6 +1010,42 @@ public:
     
     layerSet->addLayer(catastro);
   }
+  
+  if (true) {
+    WMSLayer* bing = LayerBuilder::createBingLayer(true);
+    layerSet->addLayer(bing);
+  }
+
+  if (false) {
+    WMSLayer* temp = new WMSLayer("temp",
+                                  URL("http://wms.openweathermap.org/service", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::zero(),
+                                  true);
+    layerSet->addLayer(temp);
+    
+    class TempTerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("touched Temperature. Feature info = %s\n", url.getPath().c_str());
+        
+        return true;
+      }
+    };
+    
+    temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+  }
+
   
   return layerSet;
 }
@@ -1758,8 +1825,41 @@ public:
       delete canvas;
     }
 
+    void testWebSocket(const G3MContext* context) {
+
+      class WSListener : public IWebSocketListener {
+        void onOpen(IWebSocket* ws) {
+
+        }
+
+        void onError(IWebSocket* ws,
+                     const std::string& error) {
+
+        }
+
+        void onMesssage(IWebSocket* ws,
+                        const std::string& message) {
+
+        }
+
+        void onClose(IWebSocket* ws) {
+
+        }
+
+      };
+
+      const URL wsURL("ws://127.0.0.1:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+      context->getFactory()->createWebSocket(wsURL,
+                                             new WSListener(),
+                                             true,
+                                             true);
+
+    }
+
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
+
+      testWebSocket(context);
       
       testCanvas(context->getFactory());
 
@@ -1867,12 +1967,14 @@ public:
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
 
-//      // go to Grand Canyon
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
-//                                                                Angle::fromDegreesMinutes(-112, 6),
-//                                                                250000)
-//                                                     );
+      // go to Grand Canyon
+      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+                                                                Angle::fromDegreesMinutes(-112, 6),
+                                                                25000),
+                                                     Angle::zero(),
+                                                     Angle::fromDegrees(75)
+                                                     );
 
 
       /*

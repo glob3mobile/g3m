@@ -26,6 +26,9 @@ package org.glob3.mobile.generated;
 //class ILogger;
 //class IImageListener;
 //class ICanvas;
+//class IWebSocket;
+//class IWebSocketListener;
+//class URL;
 
 public abstract class IFactory
 {
@@ -80,5 +83,7 @@ public abstract class IFactory
   public abstract IByteBuffer createByteBuffer(byte[] data, int length);
 
   public abstract ICanvas createCanvas();
+
+  public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
 }

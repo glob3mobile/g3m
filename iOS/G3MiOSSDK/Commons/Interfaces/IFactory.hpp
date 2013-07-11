@@ -20,6 +20,9 @@ class IByteBuffer;
 class ILogger;
 class IImageListener;
 class ICanvas;
+class IWebSocket;
+class IWebSocketListener;
+class URL;
 
 class IFactory {
 private:
@@ -89,6 +92,11 @@ public:
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
 
   virtual ICanvas* createCanvas() const = 0;
+
+  virtual IWebSocket* createWebSocket(const URL& url,
+                                      IWebSocketListener* listener,
+                                      bool autodeleteListener,
+                                      bool autodeleteWebSocket) const = 0;
 
 };
 
