@@ -61,29 +61,21 @@ void CameraFlatSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
-  if (cameraContext->getCurrentGesture()!=Drag) {
-    return;
-  }
+  if (cameraContext->getCurrentGesture()!=Drag) return;
+  if (_initialPoint.isNan()) return;
   
-  if (_initialPoint.isNan()) {
-    return;
-  }
-  
+  // compute final point
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-    
-  MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-  if (finalPoint.isNan()) {
-    //INVALID FINAL POINT
-    //printf ("--invalid final point in drag!!\n");
-    Vector3D ray = _camera0.pixel2Ray(pixel);
-    Vector3D pos = _camera0.getCartesianPosition();
-    finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
-  }
+  Vector3D origin = _camera0.getCartesianPosition();
+  Vector3D ray = _camera0.pixel2Ray(pixel);
+  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, ray).asMutableVector3D();
+  if (finalPoint.isNan()) return;
   
   // make drag
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
+  camera->translateCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
+  
   
   
   // save drag parameters
