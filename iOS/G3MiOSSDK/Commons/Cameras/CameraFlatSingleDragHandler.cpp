@@ -11,6 +11,7 @@
 #include "TouchEvent.hpp"
 #include "CameraRenderer.hpp"
 #include "GL.hpp"
+#include "Plane.hpp"
 
 
 bool CameraFlatSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
@@ -49,19 +50,11 @@ void CameraFlatSingleDragHandler::onDown(const G3MEventContext *eventContext,
   
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  //_initialPixel = pixel.asMutableVector2I();
-  _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
+  Vector3D origin = _camera0.getCartesianPosition();
+  Vector3D ray = _camera0.pixel2Ray(pixel);
+  _initialPoint = Plane::intersectionXYPlaneWithRay(origin, ray).asMutableVector3D();
   
-  /*
-   // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
-   if (pixel._x<50) {
-   Geodetic3D center(Angle::fromDegrees(39.78), Angle::fromDegrees(-122), 0);
-   camera->setPointOfView(center, 1e6, Angle::fromDegrees(180), Angle::fromDegrees(90));
-   }*/
-  
-  
-  
-  //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+  printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
 void CameraFlatSingleDragHandler::onMove(const G3MEventContext *eventContext,
@@ -77,9 +70,7 @@ void CameraFlatSingleDragHandler::onMove(const G3MEventContext *eventContext,
   }
   
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  
-  //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
-  
+    
   MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   if (finalPoint.isNan()) {
     //INVALID FINAL POINT
