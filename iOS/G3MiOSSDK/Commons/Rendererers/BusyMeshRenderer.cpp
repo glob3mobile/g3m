@@ -106,7 +106,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
     _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
   }
   
-  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
+//  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
   gl->clearScreen(*_backgroundColor);
   
   _mesh->render(rc, &_glState);

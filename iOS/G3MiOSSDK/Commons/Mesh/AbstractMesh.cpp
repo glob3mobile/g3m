@@ -168,12 +168,19 @@ void AbstractMesh::createGLState(){
   
   if (_colors != NULL){
 //    progState.setUniformValue(EnableColorPerVertex, true);
-    progState.setAttributeValue(COLOR,
-                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
-                                4,            //Our buffer contains elements of 4
-                                0,            //Index 0
-                                false,        //Not normalized
-                                0);           //Stride 0
+//    progState.setAttributeValue(COLOR,
+//                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+//                                4,            //Our buffer contains elements of 4
+//                                0,            //Index 0
+//                                false,        //Not normalized
+//                                0);           //Stride 0
+
+    _glState.addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
+                                             4,            //Our buffer contains elements of 4
+                                             0,            //Index 0
+                                             false,        //Not normalized
+                                             0,            //Stride 0
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
     
 //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
   } else{
