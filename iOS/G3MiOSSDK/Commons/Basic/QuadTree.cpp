@@ -129,10 +129,10 @@ QuadTree::~QuadTree() {
 
 void QuadTree::add(const Sector& sector,
                    const void* element) {
-  _root.add(sector, element, _maxElementsPerNode, _maxDepth);
+  _root->add(sector, element, _maxElementsPerNode, _maxDepth);
 }
 
 void QuadTree::visitElements(const Sector& sector,
                              const QuadTreeVisitor& visitor) const {
-  _root.visitElements(sector, visitor);
+  _root->visitElements(sector, visitor);
 }

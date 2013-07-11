@@ -17,3 +17,7 @@ void GEORasterSymbol::symbolize(const G3MRenderContext* rc,
     sc.getGEOTileRasterizer()->addSymbol( createSymbol() );
   }
 }
+
+GEORasterSymbol::~GEORasterSymbol() {
+  delete _sector;
+}

@@ -81,12 +81,12 @@ public:
 class QuadTree {
 private:
   const Sector  _sector;
-#ifdef C_CODE
-  QuadTree_Node _root;
-#endif
-#ifdef JAVA_CODE
-  private QuadTree_Node _root;
-#endif
+//#ifdef C_CODE
+  QuadTree_Node* _root;
+//#endif
+//#ifdef JAVA_CODE
+//  private QuadTree_Node _root;
+//#endif
 
   const int _maxElementsPerNode;
   const int _maxDepth;
@@ -95,7 +95,7 @@ public:
 
   QuadTree(const Sector& sector) :
   _sector( sector ),
-  _root( sector ),
+  _root( new QuadTree_Node(sector) ),
   _maxElementsPerNode(16),
   _maxDepth(12)
   {
@@ -103,7 +103,7 @@ public:
 
   QuadTree() :
   _sector( Sector::fullSphere() ),
-  _root( Sector::fullSphere() ),
+  _root( new QuadTree_Node(Sector::fullSphere()) ),
   _maxElementsPerNode(16),
   _maxDepth(12)
   {

@@ -24,8 +24,7 @@ protected:
   }
 
 public:
-  virtual ~GEORasterSymbol() {
-  }
+  virtual ~GEORasterSymbol();
 
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
