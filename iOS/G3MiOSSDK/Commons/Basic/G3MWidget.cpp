@@ -434,9 +434,7 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->start(&rc);
   }
 
-  GLGlobalState state;
-  state.setClearColor(*_backgroundColor);
-  _gl->clearScreen(state);
+  _gl->clearScreen(*_backgroundColor);
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc);

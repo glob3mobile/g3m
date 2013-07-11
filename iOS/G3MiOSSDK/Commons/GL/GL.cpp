@@ -26,7 +26,7 @@
 
 #include "GLState.hpp"
 
-void GL::clearScreen(const GLGlobalState& state) {
+void GL::clearScreen(const Color& color) {
   if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
@@ -35,6 +35,9 @@ void GL::clearScreen(const GLGlobalState& state) {
 //  GLState glState((GLGlobalState*)&state, NULL);
 //  glState.applyGlobalStateOnGPU(this);
 
+
+  GLGlobalState state;
+  state.setClearColor(color);
   state.applyChanges(this, _currentGLGlobalState);
   
   //setGLGlobalState(state);

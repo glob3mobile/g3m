@@ -88,7 +88,7 @@ public:
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
   
-  void clearScreen(const GLGlobalState& state);
+  void clearScreen(const Color& color);
   
 //  void drawElements(int mode,
 //                    IShortBuffer* indices, const GLGlobalState& state,

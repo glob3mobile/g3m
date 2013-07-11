@@ -118,7 +118,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   }
   
   // clear screen
-  gl->clearScreen(*_glState.getGLGlobalState());
+  gl->clearScreen(*_backgroundColor);
 
   // draw mesh
   _quadMesh->render(rc, &_glState);

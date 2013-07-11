@@ -387,11 +387,11 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   _viewportHeight = viewportHeight;
   _viewportWidth = viewportWidth;
   
-  GLGlobalState *globalState = _glState.getGLGlobalState();
-  
+//  GLGlobalState *globalState = _glState.getGLGlobalState();
+
 //  globalState->disableDepthTest();
-  globalState->enableBlend();
-  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//  globalState->enableBlend();
+//  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 //  globalState->bindTexture(_textureId);
 
 //  GPUProgramState* progState = _glState.getGPUProgramState();

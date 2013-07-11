@@ -101,7 +101,17 @@ public:
 class GLColorGroupFeature: public GLFeature{
   const int _priority;
 public:
-  GLColorGroupFeature(int p): GLFeature(COLOR_GROUP), _priority(p) {}
+  GLColorGroupFeature(int p, bool blend, int sFactor, int dFactor): GLFeature(COLOR_GROUP), _priority(p) {
+    _globalState = new GLGlobalState();
+
+    if (blend){
+      _globalState->enableBlend();
+      _globalState->setBlendFactors(sFactor, dFactor);
+    } else{
+      _globalState->disableBlend();
+    }
+
+  }
   int getPriority() const { return _priority;}
 };
 
@@ -110,6 +120,12 @@ public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
                    bool blend, int sFactor, int dFactor);
+};
+
+class ColorGLFeature: public GLColorGroupFeature{
+public:
+  ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
+                 bool blend, int sFactor, int dFactor);
 };
 
 
