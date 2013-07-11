@@ -24,6 +24,7 @@
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraFlatSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#import <G3MiOSSDK/CameraFlatDoubleDragHandler.hpp>
 #import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
@@ -690,10 +691,7 @@ public:
     cameraRenderer->addHandler(new CameraDoubleTapHandler());
   } else {
     cameraRenderer->addHandler(new CameraFlatSingleDragHandler(useInertia));
-    cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
-    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
-    cameraRenderer->addHandler(new CameraRotationHandler());
-    cameraRenderer->addHandler(new CameraDoubleTapHandler());
+    cameraRenderer->addHandler(new CameraFlatDoubleDragHandler(processRotation, processZoom));
   }
   
   return cameraRenderer;
