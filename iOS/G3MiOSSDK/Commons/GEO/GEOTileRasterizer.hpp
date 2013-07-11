@@ -9,13 +9,13 @@
 #ifndef __G3MiOSSDK__GEOTileRasterizer__
 #define __G3MiOSSDK__GEOTileRasterizer__
 
-#include "TileRasterizer.hpp"
+#include "CanvasTileRasterizer.hpp"
 #include "QuadTree.hpp"
 
 class GEORasterSymbol;
 
 
-class GEOTileRasterizer : public TileRasterizer {
+class GEOTileRasterizer : public CanvasTileRasterizer {
 private:
   QuadTree _quadTree;
 
@@ -26,6 +26,7 @@ public:
 
   void rasterize(IImage* image,
                  const Tile* tile,
+                 bool mercator,
                  IImageListener* listener,
                  bool autodelete) const;
 

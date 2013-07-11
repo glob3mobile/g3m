@@ -8,44 +8,38 @@
 
 #include "GEORasterLineSymbol.hpp"
 
-Sector* GEORasterLineSymbol::calculateSector(const std::vector<Geodetic2D*>* coordinates) {
-  const int size = coordinates->size();
-  if (size == 0) {
-    return NULL;
+#include "Tile.hpp"
+#include "ICanvas.hpp"
+
+GEORasterLineSymbol::~GEORasterLineSymbol() {
+  if (_coordinates != NULL) {
+    const int size = _coordinates->size();
+
+    for (int i = 0; i < size; i++) {
+      const Geodetic2D* coordinate = _coordinates->at(i);
+      delete coordinate;
+    }
+
+    delete _coordinates;
   }
-
-  const Geodetic2D* coordinate0 = coordinates->at(0);
-
-  double minLatInDegrees = coordinate0->latitude().degrees();
-  double maxLatInDegrees = minLatInDegrees;
-
-  double minLonInDegrees = coordinate0->longitude().degrees();
-  double maxLonInDegrees = minLatInDegrees;
-
-  for (int i = 1; i < size; i++) {
-    const Geodetic2D* coordinate = coordinates->at(i);
-
-    const double latInDegrees = coordinate->latitude().degrees();
-    if (latInDegrees < minLatInDegrees) {
-      minLatInDegrees = latInDegrees;
-    }
-    else if (latInDegrees > maxLatInDegrees) {
-      maxLatInDegrees = latInDegrees;
-    }
-
-    const double lonInDegrees = coordinate->longitude().degrees();
-    if (lonInDegrees < minLonInDegrees) {
-      minLonInDegrees = lonInDegrees;
-    }
-    else if (lonInDegrees > maxLonInDegrees) {
-      maxLonInDegrees = lonInDegrees;
-    }
-  }
-
-  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
 }
 
 GEORasterLineSymbol* GEORasterLineSymbol::createSymbol() const {
-  return new GEORasterLineSymbol(_coordinates, new Sector(*_sector));
+  GEORasterLineSymbol* result = new GEORasterLineSymbol(_coordinates,
+                                                        new Sector(*_sector),
+                                                        _lineColor,
+                                                        _lineWidth);
+  _coordinates = NULL;
+  return result;
+}
+
+void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
+                                    const GEORasterProjection* projection) const {
+
+  canvas->setStrokeColor(_lineColor);
+  canvas->setStrokeWidth(_lineWidth);
+
+  rasterLine(_coordinates,
+             canvas,
+             projection);
 }

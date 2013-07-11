@@ -54,6 +54,12 @@ public:
   _swData(NULL),
   _seData(NULL)
   {
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 

@@ -1357,10 +1357,10 @@ private:
     const std::string type = properties->getAsString("type", "");
     
     if (type.compare("Water Indicator") == 0) {
-      return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 4);
+      return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 1.5);
     }
     
-    return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 2);
+    return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 1.5);
   }
   
   CircleShape* createCircleShape(const GEO2DPointGeometry* geometry) const {
@@ -1432,7 +1432,8 @@ public:
 //                                                createLineStyle(geometry),
 //                                                30000) );
 
-    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates()) );
+    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
+                                                createLineStyle(geometry)) );
 
     return symbols;
   }
@@ -1444,7 +1445,8 @@ public:
 //    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
 //                                                     createLineStyle(geometry)) );
 
-    symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray()) );
+    symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray(),
+                                                     createLineStyle(geometry)) );
 
     return symbols;
   }

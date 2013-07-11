@@ -19,9 +19,6 @@
 #include "ColumnCanvasElement.hpp"
 
 DebugTileRasterizer::DebugTileRasterizer() :
-_canvas(NULL),
-_canvasWidth(-1),
-_canvasHeight(-1),
 _font(GFont::monospaced(15)),
 _color(Color::white())
 {
@@ -29,7 +26,7 @@ _color(Color::white())
 
 
 DebugTileRasterizer::~DebugTileRasterizer() {
-  delete _canvas;
+
 }
 
 std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
@@ -64,27 +61,28 @@ std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
   return "Upper lon: " + sector.upper().longitude().description();
 }
 
-ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
-  if ((_canvas == NULL) ||
-      (_canvasWidth  != width) ||
-      (_canvasHeight != height)) {
-    delete _canvas;
-
-    _canvas = IFactory::instance()->createCanvas();
-    _canvas->initialize(width, height);
-
-    _canvasWidth  = width;
-    _canvasHeight = height;
-  }
-  else {
-    _canvas->setFillColor(Color::transparent());
-    _canvas->fillRectangle(0, 0, width, height);
-  }
-  return _canvas;
-}
+//ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
+//  if ((_canvas == NULL) ||
+//      (_canvasWidth  != width) ||
+//      (_canvasHeight != height)) {
+//    delete _canvas;
+//
+//    _canvas = IFactory::instance()->createCanvas();
+//    _canvas->initialize(width, height);
+//
+//    _canvasWidth  = width;
+//    _canvasHeight = height;
+//  }
+//  else {
+//    _canvas->setFillColor(Color::transparent());
+//    _canvas->fillRectangle(0, 0, width, height);
+//  }
+//  return _canvas;
+//}
 
 void DebugTileRasterizer::rasterize(IImage* image,
                                     const Tile* tile,
+                                    bool mercator,
                                     IImageListener* listener,
                                     bool autodelete) const {
 

@@ -89,7 +89,17 @@ protected:
   virtual void _drawImage(const IImage* image,
                           float srcLeft, float srcTop, float srcWidth, float srcHeight,
                           float destLeft, float destTop, float destWidth, float destHeight) = 0;
+
   
+  virtual void _beginPath() = 0;
+
+  virtual void _stroke() = 0;
+
+  virtual void _moveTo(float x, float y) = 0;
+
+  virtual void _lineTo(float x, float y) = 0;
+
+
 public:
   ICanvas() :
   _canvasWidth(-1),
@@ -180,7 +190,23 @@ public:
   int getHeight() const {
     return _canvasHeight;
   }
-  
+
+
+  void beginPath();
+
+  void stroke();
+
+  void moveTo(const Vector2F& position) {
+    moveTo(position._x, position._y);
+  }
+  void moveTo(float x, float y);
+
+  void lineTo(const Vector2F& position) {
+    lineTo(position._x, position._y);
+  }
+  void lineTo(float x, float y);
+
+
 };
 
 #endif

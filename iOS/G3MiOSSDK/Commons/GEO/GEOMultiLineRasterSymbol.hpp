@@ -10,29 +10,46 @@
 #define __G3MiOSSDK__GEOMultiLineRasterSymbol__
 
 #include "GEORasterSymbol.hpp"
-#include <vector>
+#include "Color.hpp"
+#include "GEOLine2DStyle.hpp"
+class GEOLine2DStyle;
+
 
 class GEOMultiLineRasterSymbol : public GEORasterSymbol {
 private:
-  const std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
+  mutable const std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
 
-  static Sector* calculateSector(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+  const Color _lineColor;
+  const float _lineWidth;
 
   GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
-                           const Sector* sector) :
+                           const Sector* sector,
+                           const Color&  lineColor,
+                           const float   lineWidth) :
   GEORasterSymbol(sector),
-  _coordinatesArray(coordinatesArray)
+  _coordinatesArray(coordinatesArray),
+  _lineColor(lineColor),
+  _lineWidth(lineWidth)
   {
   }
   
 public:
-  GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :
+  GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+                           const GEOLine2DStyle& style) :
   GEORasterSymbol( calculateSector(coordinatesArray) ),
-  _coordinatesArray(coordinatesArray)
+  _coordinatesArray( copy(coordinatesArray) ),
+  _lineColor( style.getColor() ),
+  _lineWidth( style.getWidth() )
   {
   }
 
+  ~GEOMultiLineRasterSymbol();
+
   GEOMultiLineRasterSymbol* createSymbol() const;
+
+
+  void rasterize(ICanvas*                   canvas,
+                 const GEORasterProjection* projection) const;
 
 };
 

@@ -26,6 +26,7 @@ public:
 
   virtual void rasterize(IImage* image,
                          const Tile* tile,
+                         bool mercator,
                          IImageListener* listener,
                          bool autodelete) const = 0;
 

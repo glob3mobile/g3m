@@ -163,6 +163,7 @@ class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
   const Tile* _tile;
+  const bool  _mercator;
 
   TileRasterizer* _tileRasterizer;
 
@@ -180,12 +181,14 @@ private:
 public:
   TextureUploader(TileTextureBuilder* builder,
                   const Tile* tile,
+                  bool mercator,
                   TileRasterizer* tileRasterizer,
                   std::vector<RectangleF*> srcRects,
                   std::vector<RectangleF*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
   _tile(tile),
+  _mercator(mercator),
   _tileRasterizer(tileRasterizer),
   _srcRects(srcRects),
   _dstRects(dstRects),
@@ -438,6 +441,7 @@ public:
                              destRects,
                              new TextureUploader(this,
                                                  _tile,
+                                                 _mercator,
                                                  _tileRasterizer,
                                                  sourceRects,
                                                  destRects,
@@ -669,8 +673,10 @@ void TextureUploader::imageCreated(IImage* image) {
   else {
     _tileRasterizer->rasterize(image,
                                _tile,
+                               _mercator,
                                new TextureUploader(_builder,
                                                    _tile,
+                                                   _mercator,
                                                    NULL,
                                                    _srcRects,
                                                    _dstRects,

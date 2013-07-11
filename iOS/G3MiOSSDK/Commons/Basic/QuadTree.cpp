@@ -92,7 +92,7 @@ bool QuadTree_Node::add(const Sector& sector,
   return false;
 }
 
-bool QuadTree_Node::visitElements(const Sector& sector,
+bool QuadTree_Node::acceptVisitor(const Sector& sector,
                                   const QuadTreeVisitor& visitor) const {
   if (!_sector.touchesWith(sector)) {
     return false;
@@ -112,7 +112,7 @@ bool QuadTree_Node::visitElements(const Sector& sector,
   if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       QuadTree_Node* child = _children[i];
-      const bool abort = child->visitElements(sector, visitor);
+      const bool abort = child->acceptVisitor(sector, visitor);
       if (abort) {
         return true;
       }
@@ -123,7 +123,7 @@ bool QuadTree_Node::visitElements(const Sector& sector,
 }
 
 QuadTree::~QuadTree() {
-
+  delete _root;
 }
 
 bool QuadTree::add(const Sector& sector,
@@ -131,7 +131,9 @@ bool QuadTree::add(const Sector& sector,
   return _root->add(sector, element, _maxElementsPerNode, _maxDepth);
 }
 
-void QuadTree::visitElements(const Sector& sector,
+bool QuadTree::acceptVisitor(const Sector& sector,
                              const QuadTreeVisitor& visitor) const {
-  _root->visitElements(sector, visitor);
+  const bool aborted = _root->acceptVisitor(sector, visitor);
+  visitor.endVisit(aborted);
+  return aborted;
 }

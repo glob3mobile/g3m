@@ -91,7 +91,16 @@ protected:
                   float srcLeft, float srcTop, float srcWidth, float srcHeight,
                   float destLeft, float destTop, float destWidth, float destHeight);
   
-  
+
+  void _beginPath();
+
+  void _stroke();
+
+  void _moveTo(float x, float y);
+
+  void _lineTo(float x, float y);
+
+
 public:
   Canvas_iOS() :
   _context(NULL),

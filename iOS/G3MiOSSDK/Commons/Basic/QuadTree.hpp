@@ -19,6 +19,9 @@ public:
 
   virtual bool visitElement(const Sector& sector,
                             const void*   element) const = 0;
+
+  virtual void endVisit(bool aborted) const = 0;
+
 };
 
 
@@ -35,7 +38,6 @@ public:
   }
 
   ~QuadTree_Element() {
-
   }
 
 };
@@ -72,7 +74,7 @@ public:
            int maxElementsPerNode,
            int maxDepth);
 
-  bool visitElements(const Sector& sector,
+  bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
 
 };
@@ -82,13 +84,8 @@ public:
 
 class QuadTree {
 private:
-  const Sector  _sector;
-//#ifdef C_CODE
+  const Sector   _sector;
   QuadTree_Node* _root;
-//#endif
-//#ifdef JAVA_CODE
-//  private QuadTree_Node _root;
-//#endif
 
   const int _maxElementsPerNode;
   const int _maxDepth;
@@ -116,7 +113,7 @@ public:
   bool add(const Sector& sector,
            const void* element);
 
-  void visitElements(const Sector& sector,
+  bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
   
 };

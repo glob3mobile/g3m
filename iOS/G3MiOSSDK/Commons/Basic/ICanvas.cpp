@@ -171,3 +171,24 @@ void ICanvas::drawImage(const IImage* image,
              srcLeft, srcTop, srcWidth, srcHeight,
              destLeft, destTop, destWidth, destHeight);
 }
+
+void ICanvas::beginPath() {
+  checkInitialized();
+  _beginPath();
+}
+
+
+void ICanvas::stroke() {
+  checkInitialized();
+  _stroke();
+}
+
+void ICanvas::moveTo(float x, float y) {
+  checkInitialized();
+  _moveTo(x, y);
+}
+
+void ICanvas::lineTo(float x, float y) {
+  checkInitialized();
+  _lineTo(x, y);
+}

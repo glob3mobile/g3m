@@ -8,56 +8,44 @@
 
 #include "GEOMultiLineRasterSymbol.hpp"
 
-Sector* GEOMultiLineRasterSymbol::calculateSector(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
+#include "ICanvas.hpp"
 
-  const IMathUtils* mu = IMathUtils::instance();
-
-  const double maxDouble = mu->maxDouble();
-  const double minDouble = mu->minDouble();
-
-  double minLatInDegrees = maxDouble;
-  double maxLatInDegrees = minDouble;
-
-  double minLonInDegrees = maxDouble;
-  double maxLonInDegrees = minDouble;
-
-  const int coordinatesArrayCount = coordinatesArray->size();
-  for (int i = 0; i < coordinatesArrayCount; i++) {
-    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
-    const int coordinatesCount = coordinates->size();
-    for (int j = 0; j < coordinatesCount; j++) {
-      const Geodetic2D* coordinate = coordinates->at(j);
-
-      const double latInDegrees = coordinate->latitude().degrees();
-      if (latInDegrees < minLatInDegrees) {
-        minLatInDegrees = latInDegrees;
+GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
+  if (_coordinatesArray != NULL) {
+    const int coordinatesArrayCount = _coordinatesArray->size();
+    for (int i = 0; i < coordinatesArrayCount; i++) {
+      std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
+      const int coordinatesCount = coordinates->size();
+      for (int j = 0; j < coordinatesCount; j++) {
+        const Geodetic2D* coordinate = coordinates->at(j);
+        delete coordinate;
       }
-      else if (latInDegrees > maxLatInDegrees) {
-        maxLatInDegrees = latInDegrees;
-      }
-
-      const double lonInDegrees = coordinate->longitude().degrees();
-      if (lonInDegrees < minLonInDegrees) {
-        minLonInDegrees = lonInDegrees;
-      }
-      else if (lonInDegrees > maxLonInDegrees) {
-        maxLonInDegrees = lonInDegrees;
-      }
+      delete coordinates;
     }
+    delete _coordinatesArray;
   }
-
-  if ((minLatInDegrees == maxDouble) ||
-      (maxLatInDegrees == minDouble) ||
-      (minLonInDegrees == maxDouble) ||
-      (maxLonInDegrees == minDouble)) {
-    return NULL;
-  }
-
-  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-  
 }
 
 GEOMultiLineRasterSymbol* GEOMultiLineRasterSymbol::createSymbol() const {
-  return new GEOMultiLineRasterSymbol(_coordinatesArray, new Sector(*_sector) );
+  GEOMultiLineRasterSymbol* result = new GEOMultiLineRasterSymbol(_coordinatesArray,
+                                                                  new Sector(*_sector),
+                                                                  _lineColor,
+                                                                  _lineWidth);
+  _coordinatesArray = NULL;
+  return result;
+}
+
+
+void GEOMultiLineRasterSymbol::rasterize(ICanvas*                   canvas,
+                                         const GEORasterProjection* projection) const {
+  canvas->setStrokeColor(_lineColor);
+  canvas->setStrokeWidth(_lineWidth);
+
+  const int coordinatesArrayCount = _coordinatesArray->size();
+  for (int i = 0; i < coordinatesArrayCount; i++) {
+    std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
+    rasterLine(coordinates,
+               canvas,
+               projection);
+  }
 }

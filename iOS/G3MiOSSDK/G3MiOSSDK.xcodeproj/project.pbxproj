@@ -69,6 +69,10 @@
 		CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */; };
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
 		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
+		CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */; };
+		CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */; };
+		CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2A47C3178F211200901857 /* GEORasterProjection.cpp */; };
+		CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2A47C4178F211200901857 /* GEORasterProjection.hpp */; };
 		CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */; };
 		CF2D85DE17526A7B00F4BEC9 /* G3MCSceneDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */; };
 		CF2D85DF17526AA800F4BEC9 /* G3MCSceneDescription.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2D85DD17526A7B00F4BEC9 /* G3MCSceneDescription.hpp */; };
@@ -525,6 +529,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */,
+				CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */,
 				CF2DF7DA178DED1100FF5FF0 /* GEORasterLineSymbol.hpp in CopyFiles */,
 				CF2DF7DB178DED1100FF5FF0 /* GEOMultiLineRasterSymbol.hpp in CopyFiles */,
 				CF2DF7D3178DEAC900FF5FF0 /* QuadTree.hpp in CopyFiles */,
@@ -920,6 +926,10 @@
 		CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferElevationData.hpp; path = Commons/Basic/BufferElevationData.hpp; sourceTree = "<group>"; };
 		CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferElevationData.cpp; path = Commons/Basic/ShortBufferElevationData.cpp; sourceTree = "<group>"; };
 		CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferElevationData.hpp; path = Commons/Basic/ShortBufferElevationData.hpp; sourceTree = "<group>"; };
+		CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasTileRasterizer.cpp; path = Commons/Basic/CanvasTileRasterizer.cpp; sourceTree = "<group>"; };
+		CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CanvasTileRasterizer.hpp; path = Commons/Basic/CanvasTileRasterizer.hpp; sourceTree = "<group>"; };
+		CF2A47C3178F211200901857 /* GEORasterProjection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterProjection.cpp; path = Commons/GEO/GEORasterProjection.cpp; sourceTree = "<group>"; };
+		CF2A47C4178F211200901857 /* GEORasterProjection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterProjection.hpp; path = Commons/GEO/GEORasterProjection.hpp; sourceTree = "<group>"; };
 		CF2CDD971678292E002A78A9 /* GInitializationTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GInitializationTask.cpp; path = Commons/Basic/GInitializationTask.cpp; sourceTree = "<group>"; };
 		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
 		CF2D85DC17526A7B00F4BEC9 /* G3MCSceneDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MCSceneDescription.cpp; path = Commons/Basic/G3MCSceneDescription.cpp; sourceTree = "<group>"; };
@@ -1588,6 +1598,8 @@
 				CF5363E2178B44AC00EE3D49 /* DebugTileRasterizer.hpp */,
 				CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */,
 				CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */,
+				CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */,
+				CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1857,6 +1869,8 @@
 				CF2DF7D5178DECC400FF5FF0 /* GEORasterLineSymbol.hpp */,
 				CF2DF7D7178DECF000FF5FF0 /* GEOMultiLineRasterSymbol.cpp */,
 				CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */,
+				CF2A47C3178F211200901857 /* GEORasterProjection.cpp */,
+				CF2A47C4178F211200901857 /* GEORasterProjection.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2360,6 +2374,8 @@
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEORasterLineSymbol.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
+				CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */,
+				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
