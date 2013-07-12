@@ -148,5 +148,9 @@ void BusyQuadRenderer::createGLState(){
   //Modelview and projection
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-  _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
+//  _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
+
+  _glState.clearGLFeatureGroup(CAMERA_GROUP);
+  _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
+  _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
 }

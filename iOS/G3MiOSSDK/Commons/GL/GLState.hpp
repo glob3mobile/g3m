@@ -38,17 +38,17 @@ class GLState{
   mutable bool _totalGPUProgramStateChanged;
   mutable GPUProgram* _lastGPUProgramUsed;
 
-#ifdef C_CODE
-  const Matrix44D* _modelview;
-  mutable const Matrix44D* _accumulatedModelview;
-  mutable const Matrix44D* _lastParentModelview;
-#else
-  Matrix44D* _modelview;
-  mutable Matrix44D* _accumulatedModelview;
-  mutable Matrix44D* _lastParentModelview;
-#endif
-  bool _multiplyModelview;
-  mutable GPUUniformValueMatrix4Float* _modelviewUniformValue;
+//#ifdef C_CODE
+//  const Matrix44D* _modelview;
+//  mutable const Matrix44D* _accumulatedModelview;
+//  mutable const Matrix44D* _lastParentModelview;
+//#else
+//  Matrix44D* _modelview;
+//  mutable Matrix44D* _accumulatedModelview;
+//  mutable Matrix44D* _lastParentModelview;
+//#endif
+//  bool _multiplyModelview;
+//  mutable GPUUniformValueMatrix4Float* _modelviewUniformValue;
 
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -71,12 +71,13 @@ public:
   _uniformsCode(0),
   _attributesCode(0),
   _totalGPUProgramStateChanged(true),
-  _modelview(NULL),
-  _lastGPUProgramUsed(NULL),
-  _accumulatedModelview(NULL),
-  _multiplyModelview(false),
-  _lastParentModelview(NULL),
-  _modelviewUniformValue(NULL){
+//  _modelview(NULL),
+  _lastGPUProgramUsed(NULL)//,
+//  _accumulatedModelview(NULL),
+//  _multiplyModelview(false),
+//  _lastParentModelview(NULL),
+//  _modelviewUniformValue(NULL)
+  {
 
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
       _featuresSets[i] = NULL;
@@ -145,10 +146,10 @@ public:
   //    return _currentGPUGlobalState.createCopy();
   //  }
 
-  void setModelView(const Matrix44D* modelview, bool modifiesParents);
-  const Matrix44D* getAccumulatedModelView() const;
+//  void setModelView(const Matrix44D* modelview, bool modifiesParents);
+//  const Matrix44D* getAccumulatedModelView() const;
 
-  GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
+//  GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
 
 
   void addGLFeature(const GLFeature* f){

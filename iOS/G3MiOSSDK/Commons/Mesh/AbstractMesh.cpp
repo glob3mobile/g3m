@@ -139,7 +139,7 @@ void AbstractMesh::createGLState(){
 //    globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 //  }
 
-  GPUProgramState& progState = *_glState.getGPUProgramState();
+//  GPUProgramState& progState = *_glState.getGPUProgramState();
 
 
 

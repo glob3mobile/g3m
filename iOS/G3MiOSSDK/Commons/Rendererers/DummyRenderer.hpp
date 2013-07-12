@@ -31,8 +31,7 @@ private:
 
   void drawFace(GL* gl, const GLState& parentState,
                 const Color& color, const Vector3D& translation, const Angle& a,
-                const Vector3D& rotationAxis, GPUProgramManager &manager,
-                const GPUProgramState* parentProgramState) const;
+                const Vector3D& rotationAxis, GPUProgramManager &manager) const;
 
 public:
   ~DummyRenderer();

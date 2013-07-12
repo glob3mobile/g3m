@@ -37,7 +37,8 @@ public:
   _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z))
   {
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _translationMatrix, true);
-    _glState.setModelView(_translationMatrix.asMatrix44D(), true);
+//    _glState.setModelView(_translationMatrix.asMatrix44D(), true);
+    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()));
   }
   
   GLState* getGLState(GLState* parentGLState){

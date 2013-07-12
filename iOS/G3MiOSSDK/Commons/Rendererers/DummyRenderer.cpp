@@ -72,23 +72,29 @@ bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
 
 void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
                              const Color& color, const Vector3D& translation, const Angle& a,
-                             const Vector3D& rotationAxis, GPUProgramManager &manager,
-                             const GPUProgramState* parentProgramState) const
+                             const Vector3D& rotationAxis, GPUProgramManager &manager) const
 {
 
   GLState glState;
   glState.setParent(&parentState);
   
-  GPUProgramState& progState = *glState.getGPUProgramState();
-  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//  GPUProgramState& progState = *glState.getGPUProgramState();
+//  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+
+  glState.addGLFeatureAndRelease(new FlatColorGLFeature(color,
+                                                        color.isTransparent(),
+                                                        GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
 
   MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
   MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
-  
+
   MutableMatrix44D TR = T.multiply(R);
   
-  glState.setModelView(TR.asMatrix44D(), true);
-  
+//  glState.setModelView(TR.asMatrix44D(), true);
+
+  glState.clearGLFeatureGroup(CAMERA_GROUP);
+  glState.addGLFeatureAndRelease(new ModelTransformGLFeature(TR.asMatrix44D()));
+
   gl->drawElements(GLPrimitive::triangleStrip(), _indices, &glState, manager);
 }
 
@@ -97,15 +103,28 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   
   //TODO: IMPLEMENT
   GLState glState;
-  GPUProgramState& progState = *glState.getGPUProgramState();
+//  GPUProgramState& progState = *glState.getGPUProgramState();
 
-  progState.setAttributeValue(POSITION,
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
-  glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+  glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                                                  3,            //Our buffer contains elements of 3
+                                                                  0,            //Index 0
+                                                                  false,        //Not normalized
+                                                                  0,            //Stride 0
+                                                                  true,         //Depth test
+                                                                  false, 0,
+                                                                  false, 0.0, 0.0,
+                                                                  1.0,
+                                                                  false, 1.0));
+
+//  progState.setAttributeValue(POSITION,
+//                              _vertices, 4, //The attribute is a float vector of 4 elements
+//                              3,            //Our buffer contains elements of 3
+//                              0,            //Index 0
+//                              false,        //Not normalized
+//                              0);           //Stride 0
+//  glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+
+  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(glState);
   
 //  GLGlobalState state(parentState);
 
@@ -114,30 +133,30 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   drawFace(gl, glState,
            Color::fromRGBA((float) 1,(float)  0, (float) 0, (float) 1),
            Vector3D(_halfSize,0,0),
-           Angle::fromDegrees(0), Vector3D(0,0,1), *manager, &progState);
+           Angle::fromDegrees(0), Vector3D(0,0,1), *manager);
   
   drawFace(gl, glState,
            Color::fromRGBA((float) 0,(float)  1, (float) 0, (float) 1),
            Vector3D(0,_halfSize,0),
-           Angle::fromDegrees(90), Vector3D(0,0,1), *manager, &progState);
+           Angle::fromDegrees(90), Vector3D(0,0,1), *manager);
   
   drawFace(gl, glState,
            Color::fromRGBA((float) 0,(float)  0, (float) 1, (float) 1),
            Vector3D(0,-_halfSize,0),
-           Angle::fromDegrees(-90), Vector3D(0,0,1), *manager, &progState);
+           Angle::fromDegrees(-90), Vector3D(0,0,1), *manager);
   
   drawFace(gl, glState,
            Color::fromRGBA((float) 1,(float)  0, (float) 1, (float) 1),
            Vector3D(0,0,-_halfSize),
-           Angle::fromDegrees(90), Vector3D(0,1,0), *manager, &progState);
+           Angle::fromDegrees(90), Vector3D(0,1,0), *manager);
   
   drawFace(gl, glState,
            Color::fromRGBA((float) 0,(float) 1, (float) 1, (float) 1),
            Vector3D(0,0,_halfSize),
-           Angle::fromDegrees(-90), Vector3D(0,1,0), *manager, &progState);
+           Angle::fromDegrees(-90), Vector3D(0,1,0), *manager);
   
   drawFace(gl, glState,
            Color::fromRGBA((float) 0.5,(float)  0.5, (float) 0.5, (float) 1),
            Vector3D(-_halfSize,0,0),
-           Angle::fromDegrees(180), Vector3D(0,0,1), *manager, &progState);
+           Angle::fromDegrees(180), Vector3D(0,0,1), *manager);
 }
