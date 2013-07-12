@@ -70,8 +70,8 @@ void CameraFlatDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   _initialFingerSeparation = difPixel.length();
   _initialFingerInclination = difPixel.orientation()._radians;
   
-  printf ("down 2 finger  (%.2f, %.2f)  y (%.2f, %.2f)\n", g0.latitude().degrees(), g0.longitude().degrees(),
-          g1.latitude().degrees(), g1.longitude().degrees());
+  /*printf ("down 2 finger  (%.2f, %.2f)  y (%.2f, %.2f)\n", g0.latitude().degrees(), g0.longitude().degrees(),
+          g1.latitude().degrees(), g1.longitude().degrees());*/
 }
 
 
@@ -117,7 +117,7 @@ void CameraFlatDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     
     // iterations
         int iter=0;
-    double precision = mu->pow(10, mu->log10(distance)-8.5) * 6e6;
+    double precision = mu->pow(10, mu->log10(distance)-8.5);
     while (mu->abs(distance_n-_initialFingerDistance) > precision) {
             iter++;
       if ((distance_n1-distance_n)/(distance_n-_initialFingerDistance) < 0) d*=-0.5;
@@ -126,9 +126,10 @@ void CameraFlatDoubleDragHandler::onMove(const G3MEventContext *eventContext,
       distance_n1 = distance_n;
       distance_n = tempCamera.compute3DFlatCartesianDistance(pixel0, pixel1);
     }
-    printf("-----------  iteraciones=%d  precision=%f distance_n=%.4f  distancia final=%.1f\n", iter, precision, distance_n, dAccum);
+    /*if (iter>5)
+      printf("-----------  iteraciones=%d  precision=%f distance_n=%.4f  distancia final=%.1f\n", iter, precision, distance_n, dAccum);*/
   }
-  
+    
   // create temp camera to test gesture first
   Camera tempCamera(_camera0);
   
@@ -173,7 +174,10 @@ void CameraFlatDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   //tempCamera.updateModelMatrix();
   cameraContext->getNextCamera()->copyFrom(tempCamera);
   
-  //printf ("moving 2 fingers\n");
+/*  static double lastDistance=0;
+  double newDistance = tempCamera.getCartesianPosition().z();
+  printf ("distancia actual=%.2f.  Relativa ultimo movimiento=%.2f\n", newDistance, newDistance-lastDistance);
+  lastDistance = newDistance;*/
 }
 
 
