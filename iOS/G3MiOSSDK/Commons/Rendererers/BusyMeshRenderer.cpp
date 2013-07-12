@@ -141,4 +141,8 @@ void BusyMeshRenderer::createGLState(){
   //                                                     _projectionMatrix.multiply(_modelviewMatrix), false);
 //  _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
+  _glState.clearGLFeatureGroup(CAMERA_GROUP);
+  _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
+  _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+
 }

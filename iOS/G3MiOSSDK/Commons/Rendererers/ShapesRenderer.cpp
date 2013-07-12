@@ -61,10 +61,15 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
-  MutableMatrix44D m = rc->getCurrentCamera()->getModelViewMatrix();
-  _glState.setModelView(m.asMatrix44D(), false);
-  _glStateTransparent.setModelView(m.asMatrix44D(), false);
+//  MutableMatrix44D m = rc->getCurrentCamera()->getModelViewMatrix();
+//  _glState.setModelView(m.asMatrix44D(), false);
+//  _glStateTransparent.setModelView(m.asMatrix44D(), false);
+
+  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glStateTransparent);
+  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+
   
+
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];

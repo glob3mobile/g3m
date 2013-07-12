@@ -88,7 +88,7 @@ GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl, 
   const int size = features->size();
   for (int i = 1; i < size; i++){
     GLCameraGroupFeature* f = ((GLCameraGroupFeature*) features->get(i));
-    f->applyGLGlobalState(gl);
+    //f->applyGLGlobalState(gl);
     const Matrix44D* m2 = f->getMatrix();
 
     Matrix44D* m3 = m->createMultiplication(*m2);
@@ -130,6 +130,10 @@ GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl, c
 void GLFeatureSet::add(const GLFeature* f){
   _features[_nFeatures++] = f;
   f->_retain();
+
+  if (_nFeatures >= MAX_CONCURRENT_FEATURES_PER_GROUP){
+    ILogger::instance()->logError("MAX_CONCURRENT_FEATURES_PER_GROUP REACHED");
+  }
 }
 
 void GLFeatureSet::add(const GLFeatureSet* fs){

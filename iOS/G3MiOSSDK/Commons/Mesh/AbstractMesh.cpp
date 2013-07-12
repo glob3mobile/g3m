@@ -154,6 +154,13 @@ void AbstractMesh::createGLState(){
                                               _lineWidth,
                                               true, _pointSize));   //POINT SIZE
 
+  if (_translationMatrix != NULL){
+    //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
+//    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
+
+    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()));
+  }
+
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
 //    progState.setAttributeValue(POSITION,
 //                                _vertices, 4, //The attribute is a float vector of 4 elements
@@ -169,10 +176,7 @@ void AbstractMesh::createGLState(){
 
 
 
-    if (_translationMatrix != NULL){
-      //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-      _glState.setModelView(_translationMatrix->asMatrix44D(), true);
-    }
+
     return;
   }
 
@@ -224,11 +228,6 @@ void AbstractMesh::createGLState(){
   //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
   //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
   //  }
-
-  if (_translationMatrix != NULL){
-    //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
-  }
 }
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {

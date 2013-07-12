@@ -270,6 +270,23 @@ GPUUniformValueMatrix4Float* GLState::getModelviewUniformValue() const{
 }
 
 GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const{
+//TODO: WHY THIS DOES NOT WORK????
+//  GLFeatureSet* fs = NULL;
+//  const GLState* state = this;
+//  const int index = g;
+//  while (state != NULL) {
+//    const GLFeatureSet* const thisFS = state->_featuresSets[index];
+//    if (thisFS != NULL){
+//      if (fs == NULL){
+//        fs = new GLFeatureSet();
+//      }
+//      fs->add(thisFS);
+//    }
+//    state = state->getParent();
+//  }
+//  return fs;
+
+  
 
   GLFeatureSet* pfs = NULL;
   if (_parentGLState != NULL){
@@ -289,7 +306,7 @@ GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g)
     fs->add(thisFS);
     return fs;
   }
-  
+
 }
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g){

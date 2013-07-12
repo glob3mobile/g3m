@@ -17,7 +17,7 @@
 class GLFeature;
 
 class GLFeatureSet{
-#define MAX_CONCURRENT_FEATURES_PER_GROUP 10
+#define MAX_CONCURRENT_FEATURES_PER_GROUP 20
   GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
   int _nFeatures;
 
