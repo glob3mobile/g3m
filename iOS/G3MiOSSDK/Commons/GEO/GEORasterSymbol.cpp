@@ -14,7 +14,7 @@
 #include "GEORasterProjection.hpp"
 
 
-std::vector<Geodetic2D*>* GEORasterSymbol::copy(const std::vector<Geodetic2D*>* coordinates) {
+std::vector<Geodetic2D*>* GEORasterSymbol::copyCoordinates(const std::vector<Geodetic2D*>* coordinates) {
 #ifdef C_CODE
   std::vector<Geodetic2D*>* result = new std::vector<Geodetic2D*>();
   
@@ -30,13 +30,13 @@ std::vector<Geodetic2D*>* GEORasterSymbol::copy(const std::vector<Geodetic2D*>* 
 #endif
 }
 
-std::vector<std::vector<Geodetic2D*>*>* GEORasterSymbol::copy(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
+std::vector<std::vector<Geodetic2D*>*>* GEORasterSymbol::copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
 #ifdef C_CODE
   std::vector<std::vector<Geodetic2D*>*>* result = new std::vector<std::vector<Geodetic2D*>*>();
   const int coordinatesArrayCount = coordinatesArray->size();
   for (int i = 0; i < coordinatesArrayCount; i++) {
     std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
-    result->push_back( copy(coordinates) );
+    result->push_back( copyCoordinates(coordinates) );
   }
 
   return result;
@@ -47,7 +47,7 @@ std::vector<std::vector<Geodetic2D*>*>* GEORasterSymbol::copy(const std::vector<
 }
 
 
-Sector* GEORasterSymbol::calculateSector(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
+Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -97,7 +97,7 @@ Sector* GEORasterSymbol::calculateSector(const std::vector<std::vector<Geodetic2
   
 }
 
-Sector* GEORasterSymbol::calculateSector(const std::vector<Geodetic2D*>* coordinates) {
+Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates) {
   const int size = coordinates->size();
   if (size == 0) {
     return NULL;

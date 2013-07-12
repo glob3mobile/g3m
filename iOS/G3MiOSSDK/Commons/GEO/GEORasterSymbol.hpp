@@ -21,11 +21,11 @@ class GEORasterSymbol : public GEOSymbol {
 protected:
   const Sector* _sector;
 
-  static std::vector<Geodetic2D*>* copy(const std::vector<Geodetic2D*>* coordinates);
-  static std::vector<std::vector<Geodetic2D*>*>* copy(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
+  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  static Sector* calculateSector(const std::vector<Geodetic2D*>* coordinates);
-  static Sector* calculateSector(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
+  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
 protected:
   GEORasterSymbol(const Sector* sector) :

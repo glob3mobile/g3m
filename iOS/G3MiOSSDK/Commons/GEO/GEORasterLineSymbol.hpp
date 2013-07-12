@@ -19,7 +19,12 @@ class GEOLine2DStyle;
 
 class GEORasterLineSymbol : public GEORasterSymbol {
 private:
+#if C_CODE
   mutable const std::vector<Geodetic2D*>* _coordinates;
+#endif
+#ifdef JAVA_CODE
+  private java.util.ArrayList<Geodetic2D> _coordinates;
+#endif
 
   const Color _lineColor;
   const float _lineWidth;
@@ -38,8 +43,8 @@ private:
 public:
   GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
                       const GEOLine2DStyle& style):
-  GEORasterSymbol( calculateSector(coordinates) ),
-  _coordinates( copy(coordinates) ),
+  GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
+  _coordinates( copyCoordinates(coordinates) ),
   _lineColor( style.getColor() ),
   _lineWidth( style.getWidth() )
 
