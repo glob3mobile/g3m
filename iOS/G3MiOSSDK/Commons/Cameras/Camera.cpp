@@ -436,7 +436,7 @@ FrustumData Camera::calculateFrustumData() const {
   double zFar = 10000 * zNear;
   const double distance2ToPlanetCenter = _position.squaredLength();
   if ((zFar * zFar) > distance2ToPlanetCenter) {
-    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
+    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter) * 1.001;
   }
 
   const double goalRatio = 1000;
@@ -445,7 +445,7 @@ FrustumData Camera::calculateFrustumData() const {
     zNear = zFar / goalRatio;
     //ratio = zFar / zNear;
   }
-
+  
 //  int __TODO_remove_debug_code;
 //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
 //         height,

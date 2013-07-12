@@ -234,7 +234,7 @@ public:
   //  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v){
-    if (!v.equalTo(_position)){
+    if (!v.isNan() && !v.equalTo(_position)){
       _position = MutableVector3D(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
