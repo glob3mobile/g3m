@@ -31,6 +31,6 @@ public abstract class TileRasterizer
 
   public abstract String getId();
 
-  public abstract void rasterize(IImage image, Tile tile, IImageListener listener, boolean autodelete);
+  public abstract void rasterize(IImage image, Tile tile, boolean mercator, IImageListener listener, boolean autodelete);
 
 }

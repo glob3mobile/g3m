@@ -7,17 +7,17 @@ public class QuadTree_Node
 
   private QuadTree_Node[] _children;
 
+  private QuadTree_Node(Sector sector, QuadTree_Node parent)
+  {
+     _sector = new Sector(sector);
+     _depth = parent._depth + 1;
+     _children = null;
+  }
+
   public QuadTree_Node(Sector sector)
   {
      _sector = new Sector(sector);
      _depth = 1;
-     _children = null;
-  }
-
-  public QuadTree_Node(Sector sector, QuadTree_Node parent)
-  {
-     _sector = new Sector(sector);
-     _depth = parent._depth + 1;
      _children = null;
   }
 
@@ -108,7 +108,7 @@ public class QuadTree_Node
     return false;
   }
 
-  public final boolean visitElements(Sector sector, QuadTreeVisitor visitor)
+  public final boolean acceptVisitor(Sector sector, QuadTreeVisitor visitor)
   {
     if (!_sector.touchesWith(sector))
     {
@@ -134,7 +134,7 @@ public class QuadTree_Node
       for (int i = 0; i < 4; i++)
       {
         QuadTree_Node child = _children[i];
-        final boolean abort = child.visitElements(sector, visitor);
+        final boolean abort = child.acceptVisitor(sector, visitor);
         if (abort)
         {
           return true;

@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class GEORasterSymbol;
 
 
-public class GEOTileRasterizer extends TileRasterizer
+public class GEOTileRasterizer extends CanvasTileRasterizer
 {
   private QuadTree _quadTree = new QuadTree();
 
@@ -29,16 +29,34 @@ public class GEOTileRasterizer extends TileRasterizer
     return "GEOTileRasterizer";
   }
 
-  public final void rasterize(IImage image, Tile tile, IImageListener listener, boolean autodelete)
+  public final void rasterize(IImage image, Tile tile, boolean mercator, IImageListener listener, boolean autodelete)
   {
-    _quadTree.visitElements(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor());
   
-    listener.imageCreated(image);
-    if (autodelete)
-    {
-      if (listener != null)
-         listener.dispose();
-    }
+    final int width = image.getWidth();
+    final int height = image.getHeight();
+  
+    GEORasterProjection projection = new GEORasterProjection(tile.getSector(), mercator, width, height);
+  
+    ICanvas canvas = getCanvas(width, height);
+  
+    canvas.drawImage(image, 0, 0);
+  
+  //  canvas->setFillColor(Color::yellow());
+  
+    canvas.setStrokeColor(Color.white());
+    canvas.setStrokeWidth(1);
+    canvas.strokeRectangle(0, 0, width, height);
+  
+  
+    _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection));
+  
+    canvas.createImage(listener, autodelete);
+  
+    if (image != null)
+       image.dispose();
+  
+    if (projection != null)
+       projection.dispose();
   }
 
   public final void addSymbol(GEORasterSymbol symbol)

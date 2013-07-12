@@ -25,4 +25,7 @@ public abstract class QuadTreeVisitor
   }
 
   public abstract boolean visitElement(Sector sector, Object element);
+
+  public abstract void endVisit(boolean aborted);
+
 }

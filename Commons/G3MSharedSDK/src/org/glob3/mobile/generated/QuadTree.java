@@ -2,12 +2,7 @@ package org.glob3.mobile.generated;
 public class QuadTree
 {
   private final Sector _sector ;
-///#ifdef C_CODE
   private QuadTree_Node _root;
-///#endif
-///#ifdef JAVA_CODE
-//  private QuadTree_Node _root;
-///#endif
 
   private final int _maxElementsPerNode;
   private final int _maxDepth;
@@ -31,7 +26,8 @@ public class QuadTree
 
   public void dispose()
   {
-  
+    if (_root != null)
+       _root.dispose();
   }
 
   public final boolean add(Sector sector, Object element)
@@ -39,9 +35,11 @@ public class QuadTree
     return _root.add(sector, element, _maxElementsPerNode, _maxDepth);
   }
 
-  public final void visitElements(Sector sector, QuadTreeVisitor visitor)
+  public final boolean acceptVisitor(Sector sector, QuadTreeVisitor visitor)
   {
-    _root.visitElements(sector, visitor);
+    final boolean aborted = _root.acceptVisitor(sector, visitor);
+    visitor.endVisit(aborted);
+    return aborted;
   }
 
 }

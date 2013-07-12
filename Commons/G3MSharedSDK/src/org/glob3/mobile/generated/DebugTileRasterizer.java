@@ -20,11 +20,8 @@ package org.glob3.mobile.generated;
 //class ICanvas;
 //class Sector;
 
-public class DebugTileRasterizer extends TileRasterizer
+public class DebugTileRasterizer extends CanvasTileRasterizer
 {
-  private ICanvas _canvas;
-  private int _canvasWidth;
-  private int _canvasHeight;
 
   private final GFont _font;
   private final Color _color ;
@@ -65,40 +62,15 @@ public class DebugTileRasterizer extends TileRasterizer
     return "Upper lon: " + sector.upper().longitude().description();
   }
 
-  private ICanvas getCanvas(int width, int height)
-  {
-    if ((_canvas == null) || (_canvasWidth != width) || (_canvasHeight != height))
-    {
-      if (_canvas != null)
-         _canvas.dispose();
-  
-      _canvas = IFactory.instance().createCanvas();
-      _canvas.initialize(width, height);
-  
-      _canvasWidth = width;
-      _canvasHeight = height;
-    }
-    else
-    {
-      _canvas.setFillColor(Color.transparent());
-      _canvas.fillRectangle(0, 0, width, height);
-    }
-    return _canvas;
-  }
-
   public DebugTileRasterizer()
   {
-     _canvas = null;
-     _canvasWidth = -1;
-     _canvasHeight = -1;
      _font = GFont.monospaced(15);
      _color = new Color(Color.white());
   }
 
   public void dispose()
   {
-    if (_canvas != null)
-       _canvas.dispose();
+  
   }
 
   public final String getId()
@@ -106,7 +78,27 @@ public class DebugTileRasterizer extends TileRasterizer
     return "DebugTileRasterizer";
   }
 
-  public final void rasterize(IImage image, Tile tile, IImageListener listener, boolean autodelete)
+
+  //ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
+  //  if ((_canvas == NULL) ||
+  //      (_canvasWidth  != width) ||
+  //      (_canvasHeight != height)) {
+  //    delete _canvas;
+  //
+  //    _canvas = IFactory::instance()->createCanvas();
+  //    _canvas->initialize(width, height);
+  //
+  //    _canvasWidth  = width;
+  //    _canvasHeight = height;
+  //  }
+  //  else {
+  //    _canvas->setFillColor(Color::transparent());
+  //    _canvas->fillRectangle(0, 0, width, height);
+  //  }
+  //  return _canvas;
+  //}
+  
+  public final void rasterize(IImage image, Tile tile, boolean mercator, IImageListener listener, boolean autodelete)
   {
   
     final int width = image.getWidth();

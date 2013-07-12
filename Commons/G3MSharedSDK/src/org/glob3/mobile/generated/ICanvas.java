@@ -90,6 +90,16 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
 
+
+  protected abstract void _beginPath();
+
+  protected abstract void _stroke();
+
+  protected abstract void _moveTo(float x, float y);
+
+  protected abstract void _lineTo(float x, float y);
+
+
   public ICanvas()
   {
      _canvasWidth = -1;
@@ -265,5 +275,39 @@ public abstract class ICanvas
   {
     return _canvasHeight;
   }
+
+
+  public final void beginPath()
+  {
+    checkInitialized();
+    _beginPath();
+  }
+
+  public final void stroke()
+  {
+    checkInitialized();
+    _stroke();
+  }
+
+  public final void moveTo(Vector2F position)
+  {
+    moveTo(position._x, position._y);
+  }
+  public final void moveTo(float x, float y)
+  {
+    checkInitialized();
+    _moveTo(x, y);
+  }
+
+  public final void lineTo(Vector2F position)
+  {
+    lineTo(position._x, position._y);
+  }
+  public final void lineTo(float x, float y)
+  {
+    checkInitialized();
+    _lineTo(x, y);
+  }
+
 
 }

@@ -136,6 +136,12 @@ public class Sector
      _neData = null;
      _swData = null;
      _seData = null;
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 

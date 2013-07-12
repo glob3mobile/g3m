@@ -227,7 +227,7 @@ public class TileTextureBuilder extends RCObject
           textureId += _tileRasterizer.getId();
         }
 
-        IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, _tile, _tileRasterizer, sourceRects, destRects, textureId), true);
+        IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
       }
 
     }

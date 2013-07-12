@@ -16,80 +16,72 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GEOLine2DStyle;
+
 
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
   private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  private static Sector calculateSector(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
-  {
-  
-    final IMathUtils mu = IMathUtils.instance();
-  
-    final double maxDouble = mu.maxDouble();
-    final double minDouble = mu.minDouble();
-  
-    double minLatInDegrees = maxDouble;
-    double maxLatInDegrees = minDouble;
-  
-    double minLonInDegrees = maxDouble;
-    double maxLonInDegrees = minDouble;
-  
-    final int coordinatesArrayCount = coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++)
-    {
-      java.util.ArrayList<Geodetic2D> coordinates = coordinatesArray.get(i);
-      final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++)
-      {
-        final Geodetic2D coordinate = coordinates.get(j);
-  
-        final double latInDegrees = coordinate.latitude().degrees();
-        if (latInDegrees < minLatInDegrees)
-        {
-          minLatInDegrees = latInDegrees;
-        }
-        else if (latInDegrees > maxLatInDegrees)
-        {
-          maxLatInDegrees = latInDegrees;
-        }
-  
-        final double lonInDegrees = coordinate.longitude().degrees();
-        if (lonInDegrees < minLonInDegrees)
-        {
-          minLonInDegrees = lonInDegrees;
-        }
-        else if (lonInDegrees > maxLonInDegrees)
-        {
-          maxLonInDegrees = lonInDegrees;
-        }
-      }
-    }
-  
-    if ((minLatInDegrees == maxDouble) || (maxLatInDegrees == minDouble) || (minLonInDegrees == maxDouble) || (maxLonInDegrees == minDouble))
-    {
-      return null;
-    }
-  
-    return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
-  
-  }
+  private final Color _lineColor ;
+  private final float _lineWidth;
 
-  private GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Sector sector)
+  private GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Sector sector, Color lineColor, float lineWidth)
   {
      super(sector);
      _coordinatesArray = coordinatesArray;
+     _lineColor = new Color(lineColor);
+     _lineWidth = lineWidth;
   }
 
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEOLine2DStyle style)
   {
      super(calculateSector(coordinatesArray));
-     _coordinatesArray = coordinatesArray;
+     _coordinatesArray = copy(coordinatesArray);
+     _lineColor = new Color(style.getColor());
+     _lineWidth = style.getWidth();
+  }
+
+  public void dispose()
+  {
+    if (_coordinatesArray != null)
+    {
+      final int coordinatesArrayCount = _coordinatesArray.size();
+      for (int i = 0; i < coordinatesArrayCount; i++)
+      {
+        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+        final int coordinatesCount = coordinates.size();
+        for (int j = 0; j < coordinatesCount; j++)
+        {
+          final Geodetic2D coordinate = coordinates.get(j);
+          if (coordinate != null)
+             coordinate.dispose();
+        }
+        coordinates = null;
+      }
+      _coordinatesArray = null;
+    }
   }
 
   public final GEOMultiLineRasterSymbol createSymbol()
   {
-    return new GEOMultiLineRasterSymbol(_coordinatesArray, new Sector(_sector));
+    GEOMultiLineRasterSymbol result = new GEOMultiLineRasterSymbol(_coordinatesArray, new Sector(_sector), _lineColor, _lineWidth);
+    _coordinatesArray = null;
+    return result;
+  }
+
+
+  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  {
+    canvas.setStrokeColor(_lineColor);
+    canvas.setStrokeWidth(_lineWidth);
+  
+    final int coordinatesArrayCount = _coordinatesArray.size();
+    for (int i = 0; i < coordinatesArrayCount; i++)
+    {
+      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+      rasterLine(coordinates, canvas, projection);
+    }
   }
 
 }

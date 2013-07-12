@@ -12,7 +12,6 @@ public class QuadTree_Element
 
   public void dispose()
   {
-
   }
 
 }
