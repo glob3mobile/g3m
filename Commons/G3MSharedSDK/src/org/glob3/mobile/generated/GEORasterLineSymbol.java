@@ -23,10 +23,6 @@ package org.glob3.mobile.generated;
 
 public class GEORasterLineSymbol extends GEORasterSymbol
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final java.util.ArrayList<Geodetic2D> _coordinates;
-//#endif
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
   private final Color _lineColor ;
