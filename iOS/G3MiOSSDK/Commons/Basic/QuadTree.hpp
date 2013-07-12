@@ -51,18 +51,18 @@ private:
 
   QuadTree_Node** _children;
 
-public:
-  QuadTree_Node(const Sector& sector) :
-  _sector(sector),
-  _depth(1),
-  _children(NULL)
-  {
-  }
-
   QuadTree_Node(const Sector& sector,
                 QuadTree_Node* parent) :
   _sector(sector),
   _depth( parent->_depth + 1 ),
+  _children(NULL)
+  {
+  }
+
+public:
+  QuadTree_Node(const Sector& sector) :
+  _sector(sector),
+  _depth(1),
   _children(NULL)
   {
   }
