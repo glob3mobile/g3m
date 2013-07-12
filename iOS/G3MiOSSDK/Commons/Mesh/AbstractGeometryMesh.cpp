@@ -103,23 +103,34 @@ int AbstractGeometryMesh::getVertexCount() const {
 
 void AbstractGeometryMesh::createGLState(){
 
-  GLGlobalState* globalState = _glState.getGLGlobalState();
+//  GLGlobalState* globalState = _glState.getGLGlobalState();
 
-  globalState->setLineWidth(_lineWidth);
-  if (_depthTest){
-    globalState->enableDepthTest();
-  } else{
-    globalState->disableDepthTest();
-  }
+//  globalState->setLineWidth(_lineWidth);
+//  if (_depthTest){
+//    globalState->enableDepthTest();
+//  } else{
+//    globalState->disableDepthTest();
+//  }
 
   GPUProgramState& progState = *_glState.getGPUProgramState();
 
-  progState.setAttributeValue(POSITION,
-                              _vertices, 4, //The attribute is a float vector of 4 elements
-                              3,            //Our buffer contains elements of 3
-                              0,            //Index 0
-                              false,        //Not normalized
-                              0);           //Stride 0
+//  progState.setAttributeValue(POSITION,
+//                              _vertices, 4, //The attribute is a float vector of 4 elements
+//                              3,            //Our buffer contains elements of 3
+//                              0,            //Index 0
+//                              false,        //Not normalized
+//                              0);           //Stride 0
+
+  _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true,         //Depth test
+                                              false, 0,
+                                              false, 0.0, 0.0,
+                                              _lineWidth,
+                                              true, _pointSize));
 
   if (_translationMatrix != NULL){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
@@ -127,7 +138,7 @@ void AbstractGeometryMesh::createGLState(){
   }
 
 
-  progState.setUniformValue(POINT_SIZE, _pointSize);
+//  progState.setUniformValue(POINT_SIZE, _pointSize);
 }
 
 void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {

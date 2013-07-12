@@ -69,8 +69,8 @@ public:
 //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
     _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+    _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
+    _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
   }
   
   virtual ~BusyMeshRenderer() {
@@ -87,8 +87,8 @@ public:
 //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
     _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+    _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
+    _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
   }
 
   void start(const G3MRenderContext* rc);

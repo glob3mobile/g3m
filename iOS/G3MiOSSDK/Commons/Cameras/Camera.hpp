@@ -318,14 +318,12 @@ public:
     return _modelViewMatrix;
   }
 
-  void setProjectionAndModelGLFeatures(GLState& glState){
+  void addProjectionAndModelGLFeatures(GLState& glState) const{
     glState.clearGLFeatureGroup(CAMERA_GROUP);
     ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-    glState.addGLFeature(p);
-    p->_release();
+    glState.addGLFeatureAndRelease(p);
     ModelGLFeature* m = new ModelGLFeature(getModelMatrix().asMatrix44D());
-    glState.addGLFeature(m);
-    m->_release();
+    glState.addGLFeatureAndRelease(m);
   }
 
 private:

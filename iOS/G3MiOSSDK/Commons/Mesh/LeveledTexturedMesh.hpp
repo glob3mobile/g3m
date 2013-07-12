@@ -110,7 +110,7 @@ public:
     return _glTextureId;
   }
   
-  bool isTransparent(const G3MRenderContext* rc) const {
+  bool isTransparent() const {
     return _transparent;
   }
   

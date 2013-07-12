@@ -26,7 +26,7 @@ public:
   virtual ~TextureMapping() {
   }
   
-  virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
+  virtual bool isTransparent() const = 0;
   
   virtual void modifyGLState(GLState& state) const = 0;
 };
@@ -79,7 +79,7 @@ public:
   
 //  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
 
-  bool isTransparent(const G3MRenderContext* rc) const {
+  bool isTransparent() const {
     return _isTransparent;
   }
   

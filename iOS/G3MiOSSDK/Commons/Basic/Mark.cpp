@@ -23,6 +23,7 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
 #include "GLFeature.hpp"
+#include "Vector2D.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -423,14 +424,14 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
 
 //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
 
-  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+  _glState.addGLFeatureAndRelease(new BillboardGLFeature(_textureWidth, _textureHeight,
                                              viewportWidth, viewportHeight));
 
   //TODO: TEST
 //  MutableMatrix44D id = MutableMatrix44D::identity();
 //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
+  _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -438,7 +439,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                               false,        //NO DEPTH TEST
                                               false, 0,     //NO CULLING
                                               false, 0, 0,  //NO POLYGON OFFSET
-                                              1.0)          //LINE WIDTH
+                                              1.0,          //LINE WIDTH
+                                              false, 1.0)   //POINT SIZE
                         );
 }
 
@@ -488,13 +490,14 @@ void Mark::render(const G3MRenderContext* rc,
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
 
-          _glState.addGLFeature(new TextureGLFeature(_textureId,
+          _glState.addGLFeatureAndRelease(new TextureGLFeature(_textureId,
                                                      getBillboardTexCoords(),
                                                      2,
                                                      0,
                                                      false,
                                                      0,
-                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                                     false, Vector2D::zero(), Vector2D::zero()));
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||

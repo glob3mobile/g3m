@@ -69,7 +69,8 @@ public:
                     bool depthTestEnabled,
                     bool cullFace, int culledFace,
                     bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
-                    float lineWidth);
+                    float lineWidth,
+                    bool needsPointSize, float pointSize);
 
   ~GeometryGLFeature();
   
@@ -121,7 +122,8 @@ class TextureGLFeature: public GLColorGroupFeature{
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
-                   bool blend, int sFactor, int dFactor);
+                   bool blend, int sFactor, int dFactor,
+                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
 };
 
 class ColorGLFeature: public GLColorGroupFeature{

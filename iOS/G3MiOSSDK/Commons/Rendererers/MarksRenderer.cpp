@@ -188,9 +188,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   
   updateGLState(rc);
 
-  _glState.clearGLFeatureGroup(CAMERA_GROUP);
-  _glState.addGLFeature(new ProjectionGLFeature(camera->getProjectionMatrix().asMatrix44D()));
-  _glState.addGLFeature(new ModelGLFeature(camera->getModelMatrix().asMatrix44D()));
+  camera->addProjectionAndModelGLFeatures(_glState);
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {

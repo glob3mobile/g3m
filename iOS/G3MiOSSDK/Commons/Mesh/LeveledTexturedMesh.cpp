@@ -18,46 +18,66 @@
 #include "Camera.hpp"
 
 void LazyTextureMapping::modifyGLState(GLState& state) const{
-  
-  GLGlobalState* glGlobalState = state.getGLGlobalState();
-  GPUProgramState* progState = state.getGPUProgramState();
-  
+
+//  GLGlobalState* glGlobalState = state.getGLGlobalState();
+//  GPUProgramState* progState = state.getGPUProgramState();
+
   if (!_initialized) {
     _initializer->initialize();
-    
+
     _scale       = _initializer->getScale();
     _translation = _initializer->getTranslation();
     _texCoords   = _initializer->createTextCoords();
-    
+
     delete _initializer;
     _initializer = NULL;
-    
+
     _initialized = true;
   }
-  
+
   if (_texCoords != NULL) {
-    glGlobalState->bindTexture(_glTextureId);
-    
+//    glGlobalState->bindTexture(_glTextureId);
+//
+//    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+//      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
+//      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+//    } else{
+//      //ILogger::instance()->logInfo("No transformed TC");
+//      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
+//      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
+//    }
+//
+//    progState->setAttributeValue(TEXTURE_COORDS,
+//                                 _texCoords, 2,
+//                                 2,
+//                                 0,
+//                                 false,
+//                                 0);
+//
+    state.clearGLFeatureGroup(COLOR_GROUP);
+
     if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
-      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
-      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+
+      state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId,
+                                                        _texCoords, 2, 0, false, 0,
+                                                        isTransparent(),
+                                                        GLBlendFactor::srcAlpha(),
+                                                        GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                                        true, _translation.asVector2D(), _scale.asVector2D())); //TRANSFORM
     } else{
-      //ILogger::instance()->logInfo("No transformed TC");
-      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
-      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
+      state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId,
+                                                        _texCoords, 2, 0, false, 0,
+                                                        isTransparent(),
+                                                        GLBlendFactor::srcAlpha(),
+                                                        GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                                        false, Vector2D::zero(), Vector2D::zero() )); //TRANSFORM
     }
-    
-    progState->setAttributeValue(TEXTURE_COORDS,
-                                 _texCoords, 2,
-                                 2,
-                                 0,
-                                 false,
-                                 0);
+
   }
   else {
     ILogger::instance()->logError("LazyTextureMapping::bind() with _texCoords == NULL");
   }
-  
+
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
@@ -73,21 +93,21 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #ifdef JAVA_CODE
   synchronized (this) {
 #endif
-    
+
     if (_ownedMesh) {
       delete _mesh;
     }
-    
+
     if (_mappings != NULL) {
       for (int i = 0; i < _mappings->size(); i++) {
         LazyTextureMapping* mapping = _mappings->at(i);
         delete mapping;
       }
-      
+
       delete _mappings;
       _mappings = NULL;
     }
-    
+
 #ifdef JAVA_CODE
   }
 #endif
@@ -109,11 +129,11 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   if (_mappings == NULL) {
     return NULL;
   }
-  
+
   if (!_currentLevelIsValid) {
-    
+
     int newCurrentLevel = 0;
-    
+
     for (int i = 0; i < _levelsCount; i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
@@ -125,11 +145,11 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
         }
       }
     }
-    
+
     if (newCurrentLevel != _currentLevel){
       _currentLevel = newCurrentLevel;
       //MESH SHOULD BE NOTIFIED TO CHANGE STATE FROM TILE
-      
+
       if (_currentLevelIsValid) {
         for (int i = _currentLevel+1; i < _levelsCount; i++) {
           LazyTextureMapping* mapping = _mappings->at(i);
@@ -140,10 +160,10 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
         }
       }
     }
-    
-    
+
+
   }
-  
+
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
@@ -154,7 +174,7 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
       return mapping->getGLTextureId();
     }
   }
-  
+
   return NULL;
 }
 
@@ -181,7 +201,7 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -195,14 +215,14 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   if (_mesh->isTransparent(rc)) {
     return true;
   }
-  
+
   LazyTextureMapping* mapping = getCurrentTextureMapping();
-  
+
   if (mapping == NULL) {
     return false;
   }
-  
-  return mapping->isTransparent(rc);
+
+  return mapping->isTransparent();
 }
 
 void LeveledTexturedMesh::updateGLState(){
@@ -211,9 +231,9 @@ void LeveledTexturedMesh::updateGLState(){
 }
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState){
-  
+
   updateGLState();
-  
+
   _glState.setParent(parentGLState);
   ((Mesh*)_mesh)->render(rc, &_glState);
 }

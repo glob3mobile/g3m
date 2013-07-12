@@ -23,8 +23,12 @@ void FlatColorMesh::createGLState(){
   GPUProgramState& progState = *_glState.getGPUProgramState();
   
   progState.setUniformValue(FLAT_COLOR, *_flatColor);
-  
-  
+
+  _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_flatColor,
+                                                          _flatColor->isTransparent(),
+                                                          GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+
+
 }
 
 void FlatColorMesh::render(const G3MRenderContext* rc, const GLState* parentState){

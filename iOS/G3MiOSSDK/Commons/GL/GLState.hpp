@@ -160,6 +160,16 @@ public:
     _featuresSets[g]->add(f);
   }
 
+  void addGLFeatureAndRelease(const GLFeature* f){
+    GLFeatureGroupName g = f->getGroup();
+    if (_featuresSets[g] == NULL){
+      _featuresSets[g] = new GLFeatureSet();
+    }
+
+    _featuresSets[g]->add(f);
+    f->_release();
+  }
+
   GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
 
   void clearGLFeatureGroup(GLFeatureGroupName g);

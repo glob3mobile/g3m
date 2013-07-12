@@ -27,7 +27,8 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize,
                   bool depthTestEnabled,
                   bool cullFace, int culledFace,
                   bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
-                  float lineWidth):
+                  float lineWidth,
+                  bool needsPointSize, float pointSize):
 GLFeature(NO_GROUP){
   
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
@@ -53,6 +54,10 @@ GLFeature(NO_GROUP){
   }
 
   _globalState->setLineWidth(lineWidth);
+
+  if (needsPointSize){
+    _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize));
+  }
 }
 
 
@@ -62,13 +67,21 @@ GeometryGLFeature::~GeometryGLFeature(){
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
-                                   bool blend, int sFactor, int dFactor):
+                                   bool blend, int sFactor, int dFactor,
+                                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
 GLColorGroupFeature(4, blend, sFactor, dFactor)
 {
   _globalState->bindTexture(texID);
 
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value);
+
+  if (coordsTransformed){
+    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)translate._x, (float)translate._y));
+    _values.addUniformValue(SCALE_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)scale._x, (float)scale._y));
+  }
 }
 
 ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
