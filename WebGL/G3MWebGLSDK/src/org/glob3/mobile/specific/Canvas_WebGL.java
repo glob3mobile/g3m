@@ -320,4 +320,34 @@ public class Canvas_WebGL
    }-*/;
 
 
+   @Override
+   protected native void _beginPath() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.beginPath();
+   }-*/;
+
+
+   @Override
+   protected native void _stroke() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.stroke();
+   }-*/;
+
+
+   @Override
+   protected native void _moveTo(final float x,
+                                 final float y) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.moveTo(x, y);
+   }-*/;
+
+
+   @Override
+   protected native void _lineTo(final float x,
+                                 final float y) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.lineTo(x, y);
+   }-*/;
+
+
 }
