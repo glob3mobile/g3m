@@ -32,7 +32,10 @@ public class GEORasterProjection
      _mercator = mercator;
      _imageWidth = imageWidth;
      _imageHeight = imageHeight;
+  }
 
+  public void dispose()
+  {
   }
 
   public final Vector2F project(Geodetic2D position)

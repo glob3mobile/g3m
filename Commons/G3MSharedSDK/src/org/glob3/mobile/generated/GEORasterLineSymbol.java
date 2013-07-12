@@ -23,7 +23,11 @@ package org.glob3.mobile.generated;
 
 public class GEORasterLineSymbol extends GEORasterSymbol
 {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
   private final java.util.ArrayList<Geodetic2D> _coordinates;
+//#endif
+  private java.util.ArrayList<Geodetic2D> _coordinates;
 
   private final Color _lineColor ;
   private final float _lineWidth;
@@ -39,8 +43,8 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style)
 
   {
-     super(calculateSector(coordinates));
-     _coordinates = copy(coordinates);
+     super(calculateSectorFromCoordinates(coordinates));
+     _coordinates = copyCoordinates(coordinates);
      _lineColor = new Color(style.getColor());
      _lineWidth = style.getWidth();
   }

@@ -24,16 +24,59 @@ public abstract class GEORasterSymbol extends GEOSymbol
 {
   protected final Sector _sector;
 
-  protected static java.util.ArrayList<Geodetic2D> copy(java.util.ArrayList<Geodetic2D> coordinates)
+  protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
   {
     return coordinates;
   }
-  protected static java.util.ArrayList<java.util.ArrayList<Geodetic2D>> copy(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+  protected static java.util.ArrayList<java.util.ArrayList<Geodetic2D>> copyCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
     return coordinatesArray;
   }
 
-  protected static Sector calculateSector(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
+  protected static Sector calculateSectorFromCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
+  {
+    final int size = coordinates.size();
+    if (size == 0)
+    {
+      return null;
+    }
+  
+    final Geodetic2D coordinate0 = coordinates.get(0);
+  
+    double minLatInDegrees = coordinate0.latitude().degrees();
+    double maxLatInDegrees = minLatInDegrees;
+  
+    double minLonInDegrees = coordinate0.longitude().degrees();
+    double maxLonInDegrees = minLonInDegrees;
+  
+    for (int i = 1; i < size; i++)
+    {
+      final Geodetic2D coordinate = coordinates.get(i);
+  
+      final double latInDegrees = coordinate.latitude().degrees();
+      if (latInDegrees < minLatInDegrees)
+      {
+        minLatInDegrees = latInDegrees;
+      }
+      else if (latInDegrees > maxLatInDegrees)
+      {
+        maxLatInDegrees = latInDegrees;
+      }
+  
+      final double lonInDegrees = coordinate.longitude().degrees();
+      if (lonInDegrees < minLonInDegrees)
+      {
+        minLonInDegrees = lonInDegrees;
+      }
+      else if (lonInDegrees > maxLonInDegrees)
+      {
+        maxLonInDegrees = lonInDegrees;
+      }
+    }
+  
+    return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
+  }
+  protected static Sector calculateSectorFromCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
   
     final IMathUtils mu = IMathUtils.instance();
@@ -85,49 +128,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
   
     return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
   
-  }
-  protected static Sector calculateSector(java.util.ArrayList<Geodetic2D> coordinates)
-  {
-    final int size = coordinates.size();
-    if (size == 0)
-    {
-      return null;
-    }
-  
-    final Geodetic2D coordinate0 = coordinates.get(0);
-  
-    double minLatInDegrees = coordinate0.latitude().degrees();
-    double maxLatInDegrees = minLatInDegrees;
-  
-    double minLonInDegrees = coordinate0.longitude().degrees();
-    double maxLonInDegrees = minLonInDegrees;
-  
-    for (int i = 1; i < size; i++)
-    {
-      final Geodetic2D coordinate = coordinates.get(i);
-  
-      final double latInDegrees = coordinate.latitude().degrees();
-      if (latInDegrees < minLatInDegrees)
-      {
-        minLatInDegrees = latInDegrees;
-      }
-      else if (latInDegrees > maxLatInDegrees)
-      {
-        maxLatInDegrees = latInDegrees;
-      }
-  
-      final double lonInDegrees = coordinate.longitude().degrees();
-      if (lonInDegrees < minLonInDegrees)
-      {
-        minLonInDegrees = lonInDegrees;
-      }
-      else if (lonInDegrees > maxLonInDegrees)
-      {
-        maxLonInDegrees = lonInDegrees;
-      }
-    }
-  
-    return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
   }
 
   protected GEORasterSymbol(Sector sector)
