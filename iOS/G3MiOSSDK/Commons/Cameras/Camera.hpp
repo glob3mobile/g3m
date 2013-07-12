@@ -226,6 +226,8 @@ public:
 
   Angle compute3DAngularDistance(const Vector2I& pixel0,
                                  const Vector2I& pixel1);
+  double compute3DFlatCartesianDistance(const Vector2I& pixel0,
+                                    const Vector2I& pixel1);
 
   void initialize(const G3MContext* context);
 

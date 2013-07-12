@@ -351,6 +351,20 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
   return point0.angleBetween(point1);
 }
 
+
+double Camera::compute3DFlatCartesianDistance(const Vector2I& pixel0,
+                                          const Vector2I& pixel1)
+{
+  const Vector3D point0 = Plane::intersectionXYPlaneWithRay(_position.asVector3D(),
+                                                            pixel2Ray(pixel0));
+  if (point0.isNan()) return -1;
+  const Vector3D point1 = Plane::intersectionXYPlaneWithRay(_position.asVector3D(),
+                                                            pixel2Ray(pixel1));
+  if (point1.isNan()) return -1;
+  return point0.sub(point1).length();
+}
+
+
 void Camera::setPointOfView(const Geodetic3D& center,
                             double distance,
                             const Angle& azimuth,
