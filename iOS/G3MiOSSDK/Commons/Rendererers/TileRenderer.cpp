@@ -483,8 +483,11 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
 void TileRenderer::render(const G3MRenderContext* rc) {
   
   //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-  _glState.getGLGlobalState()->enableDepthTest();
+//  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+//  _glState.getGLGlobalState()->enableDepthTest();
+
+  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+  
 
   if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
     renderIncompletePlanet(rc);

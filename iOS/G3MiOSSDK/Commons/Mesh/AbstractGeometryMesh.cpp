@@ -112,7 +112,7 @@ void AbstractGeometryMesh::createGLState(){
 //    globalState->disableDepthTest();
 //  }
 
-  GPUProgramState& progState = *_glState.getGPUProgramState();
+//  GPUProgramState& progState = *_glState.getGPUProgramState();
 
 //  progState.setAttributeValue(POSITION,
 //                              _vertices, 4, //The attribute is a float vector of 4 elements
@@ -134,7 +134,9 @@ void AbstractGeometryMesh::createGLState(){
 
   if (_translationMatrix != NULL){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
+//    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
+
+    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()));
   }
 
 
