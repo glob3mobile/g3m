@@ -126,10 +126,10 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
 
 void BusyQuadRenderer::createGLState(){
   
-  _glState.getGLGlobalState()->enableBlend();
-  _glState.getGLGlobalState()->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
-  
+//  _glState.getGLGlobalState()->enableBlend();
+//  _glState.getGLGlobalState()->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
+
 //  GPUProgramState& progState = *_glState.getGPUProgramState();
 
 //  progState.setUniformValue(EnableTexture, false);

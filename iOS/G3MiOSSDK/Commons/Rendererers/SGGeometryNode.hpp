@@ -27,7 +27,7 @@ private:
   IShortBuffer* _indices;
   
   GLState _glState;
-  void createGLState() const;
+  void createGLState();
 
 public:
 
@@ -60,7 +60,7 @@ public:
   
   GLState* getGLState(GLState* parentGLState){
     _glState.setParent(parentGLState);
-    _glState.getGLGlobalState()->enableDepthTest();
+//    _glState.getGLGlobalState()->enableDepthTest();
     return &_glState;
   }
 

@@ -51,8 +51,8 @@ void MeshRenderer::render(const G3MRenderContext* rc) {
 
 void MeshRenderer::createGLState() const{
   
-  _glState.getGLGlobalState()->enableDepthTest();
-  
+//  _glState.getGLGlobalState()->enableDepthTest();
+
 //  GPUProgramState& progState = *_glState.getGPUProgramState();
 //  progState.setUniformValue(EnableTexture, false);
 //  progState.setUniformValue(POINT_SIZE, (float)1.0);

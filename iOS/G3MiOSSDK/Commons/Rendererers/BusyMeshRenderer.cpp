@@ -114,12 +114,12 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
 
 void BusyMeshRenderer::createGLState(){
   
-  GLGlobalState& globalState = * _glState.getGLGlobalState();
-  
-  globalState.enableBlend();
-  globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  globalState.setClearColor(*_backgroundColor);
-  
+//  GLGlobalState& globalState = * _glState.getGLGlobalState();
+
+//  globalState.enableBlend();
+//  globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//  globalState.setClearColor(*_backgroundColor);
+
 //  GPUProgramState& progState = * _glState.getGPUProgramState();
 
 //  progState.setUniformValue(EnableTexture, false);
