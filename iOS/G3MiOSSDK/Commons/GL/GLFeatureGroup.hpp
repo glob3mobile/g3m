@@ -17,6 +17,7 @@
 class GLFeature;
 
 class GLFeatureSet{
+protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
   GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
   int _nFeatures;
@@ -65,30 +66,31 @@ public:
 
   virtual ~GLFeatureGroup(){}
 
+  static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroup* getGroup(GLFeatureGroupName name);
   static GLFeatureGroup* getGroup(int i);
   static GLFeatureGroupName getGroupName(int i);
 
-  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features)= 0;
+  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl)= 0;
 };
 
 class GLFeatureNoGroup: public GLFeatureGroup{
 public:
   ~GLFeatureNoGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
   ~GLFeatureCameraGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
 };
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
 public:
   ~GLFeatureColorGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl, const GLFeatureSet* features);
+  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
 };
 
 #endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */

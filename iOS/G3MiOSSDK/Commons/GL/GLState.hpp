@@ -21,8 +21,8 @@
 
 class GLState{
 
-  GLFeatureSet* _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
-  mutable GLFeatureSet* _accumulatedFeaturesSets[N_GLFEATURES_GROUPS]; //1 set for group of features
+  GLFeatureGroup* _featuresGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
+  mutable GLFeatureGroup* _accumulatedGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
 
 //  GLFeatureNoGroup _featureNoGroup;
 //  GLFeatureCameraGroup _featureCameraGroup;
@@ -87,16 +87,19 @@ public:
   {
 
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      _featuresSets[i] = NULL;
-      _accumulatedFeaturesSets[i] = NULL;
+      _featuresGroups[i] = NULL;
+      _accumulatedGroups[i] = NULL;
     }
 
   }
 
   int getTimeStamp() const { return _timeStamp;}
 
-  GLFeatureSet* getAccumulatedFeatureSet(int i) const{
-    return _accumulatedFeaturesSets[i];
+  GLFeatureGroup* getAccumulatedGroup(int i) const{
+    if (_accumulatedGroups[i] == NULL){
+      return _featuresGroups[i];
+    }
+    return _accumulatedGroups[i];
   }
   /*
    //For debugging purposes only
@@ -168,11 +171,11 @@ public:
 
   void addGLFeature(const GLFeature* f){
     GLFeatureGroupName g = f->getGroup();
-    if (_featuresSets[g] == NULL){
-      _featuresSets[g] = new GLFeatureSet();
+    if (_featuresGroups[g] == NULL){
+      _featuresGroups[g] = GLFeatureGroup::createGroup(g);
     }
 
-    _featuresSets[g]->add(f);
+    _featuresGroups[g]->add(f);
     _timeStamp++;
   }
 

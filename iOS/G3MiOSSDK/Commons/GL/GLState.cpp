@@ -34,11 +34,8 @@ GLState::~GLState(){
 //  }
 
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-    GLFeatureSet* fs = _featuresSets[i];
-    if (fs != NULL){
-      delete _featuresSets[i];
-      delete _accumulatedFeaturesSets[i];
-    }
+      delete _featuresGroups[i];
+      delete _accumulatedGroups[i];
   }
 }
 
@@ -48,16 +45,16 @@ void GLState::setParent(const GLState* parent) const{
 
     _parentGLState = parent;
     _parentsTimeStamp = parent->getTimeStamp();
-
+    
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
-      delete _accumulatedFeaturesSets[i];
-      _accumulatedFeaturesSets[i] = new GLFeatureSet();
-      if (_featuresSets[i] != NULL){
-        _accumulatedFeaturesSets[i]->add(_featuresSets[i]);
+      delete _accumulatedGroups[i];
+      _accumulatedGroups[i] = GLFeatureGroup::createGroup((GLFeatureGroupName)i);
+      GLFeatureSet* pfs = parent->getAccumulatedGroup(i);
+      if (pfs != NULL){                                 //PARENT'S FEATURES
+        _accumulatedGroups[i]->add(pfs);
       }
-      GLFeatureSet* pfs = parent->getAccumulatedFeatureSet(i);
-      if (pfs != NULL){
-        _accumulatedFeaturesSets[i]->add(pfs);
+      if (_featuresGroups[i] != NULL){                  //THIS'S FEATURES
+        _accumulatedGroups[i]->add(_featuresGroups[i]);
       }
     }
 
@@ -148,17 +145,26 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   GPUVariableValueSet values;
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
 
-    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
-    if (fs != NULL){
-
-      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
-      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
-      delete fs;
+    GLFeatureGroup* group = _accumulatedGroups[i];
+    if (group != NULL){
+      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl);
       if (variables != NULL){
         values.combineWith(variables);
         delete variables;
       }
     }
+
+    //    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
+    //    if (fs != NULL){
+    //      GLFeatureGroupName gName = (GLFeatureGroupName)i;
+    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(gName);
+    //      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
+    //      delete fs;
+    //      if (variables != NULL){
+    //        values.combineWith(variables);
+    //        delete variables;
+    //      }
+    //    }
   }
 
 //  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
@@ -299,52 +305,58 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 //  
 //}
 
-GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const{
-//TODO: WHY THIS DOES NOT WORK???? -> SOLVED: NOT TOP-BOTTOM
-//  GLFeatureSet* fs = NULL;
-//  const GLState* state = this;
-//  const int index = g;
-//  while (state != NULL) {
-//    const GLFeatureSet* const thisFS = state->_featuresSets[index];
-//    if (thisFS != NULL){
-//      if (fs == NULL){
-//        fs = new GLFeatureSet();
-//      }
-//      fs->add(thisFS);
-//    }
-//    state = state->getParent();
+//GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const{
+////TODO: WHY THIS DOES NOT WORK???? -> SOLVED: NOT TOP-BOTTOM
+////  GLFeatureSet* fs = NULL;
+////  const GLState* state = this;
+////  const int index = g;
+////  while (state != NULL) {
+////    const GLFeatureSet* const thisFS = state->_featuresSets[index];
+////    if (thisFS != NULL){
+////      if (fs == NULL){
+////        fs = new GLFeatureSet();
+////      }
+////      fs->add(thisFS);
+////    }
+////    state = state->getParent();
+////  }
+////  return fs;
+//
+//  
+//
+//  GLFeatureSet* pfs = NULL;
+//  if (_parentGLState != NULL){
+//    pfs = _parentGLState->createAccumulatedGLFeaturesForGroup(g);
 //  }
-//  return fs;
-
-  
-
-  GLFeatureSet* pfs = NULL;
-  if (_parentGLState != NULL){
-    pfs = _parentGLState->createAccumulatedGLFeaturesForGroup(g);
-  }
-  
-  const int index = g;
-  const GLFeatureSet* const thisFS = _featuresSets[index];
-  if (thisFS == NULL){
-    return pfs;
-  } else{
-    GLFeatureSet* fs = new GLFeatureSet();
-    if (pfs != NULL){
-      fs->add(pfs);
-      delete pfs;
-    }
-    fs->add(thisFS);
-    return fs;
-  }
-
-}
+//  
+//  const int index = g;
+//  const GLFeatureSet* const thisFS = _featuresSets[index];
+//  if (thisFS == NULL){
+//    return pfs;
+//  } else{
+//    GLFeatureSet* fs = new GLFeatureSet();
+//    if (pfs != NULL){
+//      fs->add(pfs);
+//      delete pfs;
+//    }
+//    fs->add(thisFS);
+//    return fs;
+//  }
+//
+//}
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
-  GLFeatureSet* fs = _featuresSets[g];
-  if (fs != NULL){
-    delete fs;
-    _featuresSets[g] = NULL;
+  GLFeatureGroup* group = _featuresGroups[g];
+  if (group != NULL){
+    delete group;
+    _featuresGroups[g] = NULL;
     _timeStamp++;
+  }
+
+  GLFeatureGroup* aGroup = _accumulatedGroups[g];
+  if (aGroup != NULL){
+    delete aGroup;
+    _accumulatedGroups[g] = NULL;
   }
 }
 
