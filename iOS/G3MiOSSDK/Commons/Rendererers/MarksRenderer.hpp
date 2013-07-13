@@ -45,6 +45,9 @@ private:
   GLState _glState;
   
   void updateGLState(const G3MRenderContext* rc);
+
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
   
 public:
 

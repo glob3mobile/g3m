@@ -35,7 +35,9 @@ _context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
-_downloadPriority(DownloadPriority::MEDIUM)
+_downloadPriority(DownloadPriority::MEDIUM),
+_model(NULL),
+_projection(NULL)
 {
 }
 
@@ -185,9 +187,9 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
-  
-  updateGLState(rc);
 
+  //TODO: AT_WORK
+  //updateGLState(rc);
   camera->addProjectionAndModelGLFeatures(_glState);
 
   const int marksSize = _marks.size();
@@ -267,4 +269,17 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
 //  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
 
 //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL){
+    _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
+  }
+
+  if (_model == NULL){
+    _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
+  } else{
+    _model->setMatrix(cam->getModelMatrix().asMatrix44D());
+  }
 }

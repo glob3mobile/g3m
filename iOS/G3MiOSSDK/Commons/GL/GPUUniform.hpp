@@ -295,12 +295,13 @@ public:
 
     if (_modelview != NULL){
       for (int i = 0; i < _nMatrix; i++) {
-        if (_matrix[i] != _matrixHolders[i]->getMatrix()){
+        const Matrix44D* m = _matrixHolders[i]->getMatrix();
+        if (_matrix[i] != m){
           _modelview->_release();//NEW MODELVIEW NEEDED
           _modelview = NULL;
 
           for (int i = 0; i < _nMatrix; i++) {
-            _matrix[i] = _matrixHolders[i]->getMatrix();
+            _matrix[i] = m;
           }
           break;
         }
