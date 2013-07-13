@@ -46,7 +46,7 @@ public:
   mutable float*        _columnMajorFloatArray;
   mutable IFloatBuffer* _columnMajorFloatBuffer;
 
-//  std::vector<Matrix44DListener*> _listeners;
+  //  std::vector<Matrix44DListener*> _listeners;
 
 public:
 
@@ -62,55 +62,81 @@ public:
   Matrix44D* createMultiplication(const Matrix44D &that) const;
 
 #ifdef C_CODE
-  float* getColumnMajorFloatArray() const {
+  float* getColumnMajorFloatArray() const
 #else
-    float[] getColumnMajorFloatArray() const {
+  float[] getColumnMajorFloatArray() const
 #endif
-      if (_columnMajorFloatArray == NULL) {
-        _columnMajorFloatArray = new float[16];
+  {
+    if (_columnMajorFloatArray == NULL) {
+      _columnMajorFloatArray = new float[16];
 
-        _columnMajorFloatArray[ 0] = (float) _m00;
-        _columnMajorFloatArray[ 1] = (float) _m10;
-        _columnMajorFloatArray[ 2] = (float) _m20;
-        _columnMajorFloatArray[ 3] = (float) _m30;
+      _columnMajorFloatArray[ 0] = (float) _m00;
+      _columnMajorFloatArray[ 1] = (float) _m10;
+      _columnMajorFloatArray[ 2] = (float) _m20;
+      _columnMajorFloatArray[ 3] = (float) _m30;
 
-        _columnMajorFloatArray[ 4] = (float) _m01;
-        _columnMajorFloatArray[ 5] = (float) _m11;
-        _columnMajorFloatArray[ 6] = (float) _m21;
-        _columnMajorFloatArray[ 7] = (float) _m31;
+      _columnMajorFloatArray[ 4] = (float) _m01;
+      _columnMajorFloatArray[ 5] = (float) _m11;
+      _columnMajorFloatArray[ 6] = (float) _m21;
+      _columnMajorFloatArray[ 7] = (float) _m31;
 
-        _columnMajorFloatArray[ 8] = (float) _m02;
-        _columnMajorFloatArray[ 9] = (float) _m12;
-        _columnMajorFloatArray[10] = (float) _m22;
-        _columnMajorFloatArray[11] = (float) _m32;
+      _columnMajorFloatArray[ 8] = (float) _m02;
+      _columnMajorFloatArray[ 9] = (float) _m12;
+      _columnMajorFloatArray[10] = (float) _m22;
+      _columnMajorFloatArray[11] = (float) _m32;
 
-        _columnMajorFloatArray[12] = (float) _m03;
-        _columnMajorFloatArray[13] = (float) _m13;
-        _columnMajorFloatArray[14] = (float) _m23;
-        _columnMajorFloatArray[15] = (float) _m33;
-      }
-
-      return _columnMajorFloatArray;
+      _columnMajorFloatArray[12] = (float) _m03;
+      _columnMajorFloatArray[13] = (float) _m13;
+      _columnMajorFloatArray[14] = (float) _m23;
+      _columnMajorFloatArray[15] = (float) _m33;
     }
 
-    const IFloatBuffer* getColumnMajorFloatBuffer() const;
+    return _columnMajorFloatArray;
+  }
 
-    bool isEqualsTo(const Matrix44D& m) const;
+  const IFloatBuffer* getColumnMajorFloatBuffer() const;
 
-//    void addListener(Matrix44DListener* l){
-//      _listeners.push_back(l);
-//    }
-//
-//    void removeListener(Matrix44DListener* l){
-//      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
-//           it != _listeners.end(); it++) {
-//        if (*it == l){
-//          _listeners.erase(it);
-//          return;
-//        }
-//      }
-//    }
+  bool isEqualsTo(const Matrix44D& m) const;
 
+  //    void addListener(Matrix44DListener* l){
+  //      _listeners.push_back(l);
+  //    }
+  //
+  //    void removeListener(Matrix44DListener* l){
+  //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
+  //           it != _listeners.end(); it++) {
+  //        if (*it == l){
+  //          _listeners.erase(it);
+  //          return;
+  //        }
+  //      }
+  //    }
+
+};
+
+
+class Matrix44DHolder{
+  const Matrix44D* _matrix;
+public:
+  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
+    matrix->_retain();
+  }
+
+  ~Matrix44DHolder(){
+    _matrix->_release();
+  }
+
+  void setMatrix(const Matrix44D* matrix){
+    if (matrix != _matrix){
+      _matrix->_release();
+      _matrix = matrix;
+      _matrix->_retain();
+    }
+  }
+
+  const Matrix44D* getMatrix() const{
+    return _matrix;
+  }
 };
 
 
