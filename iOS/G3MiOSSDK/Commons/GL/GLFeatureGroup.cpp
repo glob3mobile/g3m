@@ -94,12 +94,60 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl){
   return vs;
 }
 
+class ModelviewMatrixHolder{
+  const Matrix44D** _matrix;
+  Matrix44DHolder** _matrixHolders;
+  int _nMatrix;
+  Matrix44D* _modelview;
+public:
+  ModelviewMatrixHolder(Matrix44DHolder* matrixHolders[], int nMatrix):
+  _matrixHolders(matrixHolders),
+  _nMatrix(nMatrix),
+  _modelview(NULL)
+  {
+    _matrix = new const Matrix44D*[nMatrix];
+    for (int i = 0; i < _nMatrix; i++) {
+      _matrix[i] = matrixHolders[i]->getMatrix();
+    }
+  }
+
+  Matrix44D* getModelview(){
+
+    if (_modelview != NULL){
+      for (int i = 0; i < _nMatrix; i++) {
+        if (_matrix[i] != _matrixHolders[i]->getMatrix()){
+          _modelview->_release();//NEW MODELVIEW NEEDED
+          _modelview = NULL;
+
+          for (int i = 0; i < _nMatrix; i++) {
+            _matrix[i] = _matrixHolders[i]->getMatrix();
+          }
+          break;
+        }
+      }
+    }
+
+
+    if (_modelview == NULL){
+      _modelview = new Matrix44D(*_matrix[0]);
+      for (int i = 1; i < _nMatrix; i++){
+        const Matrix44D* m2 = _matrix[i];
+        Matrix44D* m3 = _modelview->createMultiplication(*m2);
+        _modelview->_release();
+        _modelview = m3;
+      }
+    }
+    return _modelview;
+  }
+
+};
+
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl){
 
   const Matrix44D* m = ((GLCameraGroupFeature*) _features[0])->getMatrix();
   m->_retain();
   _features[0]->applyGLGlobalState(gl);
-  
+
   for (int i = 1; i < _nFeatures; i++){
     GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
     //f->applyGLGlobalState(gl);

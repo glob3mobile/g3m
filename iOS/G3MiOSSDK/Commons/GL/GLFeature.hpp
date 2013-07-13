@@ -79,7 +79,7 @@ public:
 
 class Matrix44DHolder{
   const Matrix44D* _matrix;
-private:
+public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
     matrix->_retain();
   }
@@ -95,16 +95,19 @@ private:
       _matrix->_retain();
     }
   }
+
+  const Matrix44D* getMatrix() const{
+    return _matrix;
+  }
 };
 
 class GLCameraGroupFeature: public GLFeature{
-  Matrix44D const* _matrix;
+  Matrix44DHolder _matrixHolder;
 public:
-  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrix(matrix){
-    _matrix->_retain();
-  }
-  ~GLCameraGroupFeature(){_matrix->_release();}
-  const Matrix44D* getMatrix() const{ return _matrix;}
+  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix){}
+  ~GLCameraGroupFeature(){}
+  const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
+  const void setMatrix(const Matrix44D* matrix){ return _matrixHolder.setMatrix(matrix);}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
