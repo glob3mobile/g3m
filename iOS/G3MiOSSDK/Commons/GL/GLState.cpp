@@ -28,10 +28,10 @@ GLState::~GLState(){
 //    _modelviewUniformValue->_release();
 //  }
 
-  if (_owner){
-    delete _programState;
-    delete _globalState;
-  }
+//  if (_owner){
+//    delete _programState;
+//    delete _globalState;
+//  }
 
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
     GLFeatureSet* fs = _featuresSets[i];
@@ -42,16 +42,22 @@ GLState::~GLState(){
 }
 
 void GLState::setParent(const GLState* parent) const{
-  _parentGLState = parent;
+
+  if (parent != _parentGLState || _parentsTimeStamp != parent->getTimeStamp()){
+
+    _parentGLState = parent;
+    _parentsTimeStamp = parent->getTimeStamp();
+  }
+
   if (parent != NULL){
     //UNIFORMS AND ATTRIBUTES CODES
-    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
-    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
-
-    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
-                                    (newUniformsCode   != _uniformsCode));
-    _uniformsCode   = newUniformsCode;
-    _attributesCode = newAttributesCode;
+//    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
+////    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
+//
+//    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
+//                                    (newUniformsCode   != _uniformsCode));
+//    _uniformsCode   = newUniformsCode;
+//    _attributesCode = newAttributesCode;
 
 //    //MODELVIEW
 //    if (_multiplyModelview){
@@ -99,7 +105,7 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
     _parentGLState->applyGlobalStateOnGPU(gl);
   }
 
-  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+//  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyStates(GL* gl, GPUProgram* prog) const{
@@ -109,16 +115,16 @@ void GLState::applyStates(GL* gl, GPUProgram* prog) const{
 
   //  _programState->linkToProgram(prog);
   //  _programState->applyValuesToLinkedProgram();
-  _programState->applyValuesToProgram(prog);
-
-  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+//  _programState->applyValuesToProgram(prog);
+//
+//  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
-  int uniformsCode = getUniformsCode();
-  int attributesCode = getAttributesCode();
+//  int uniformsCode = getUniformsCode();
+//  int attributesCode = getAttributesCode();
 
   /////////////////////////// FEATURES
   GPUVariableValueSet values;
@@ -153,8 +159,8 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 //    }
 //  }
 
-  uniformsCode = uniformsCode | values.getUniformsCode();
-  attributesCode = attributesCode | values.getAttributesCode();
+  int uniformsCode = values.getUniformsCode();
+  int attributesCode = values.getAttributesCode();
   if (uniformsCode != _uniformsCode || attributesCode != _attributesCode){
     _uniformsCode = uniformsCode;
     _attributesCode = attributesCode;

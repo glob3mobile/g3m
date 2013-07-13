@@ -28,10 +28,13 @@ class GLState{
   GLFeatureCameraGroup _featureCameraGroup;
   GLFeatureColorGroup _featureColorGroup;
 
+  int _timeStamp;
+  mutable int _parentsTimeStamp;
 
-  GPUProgramState* _programState;
-  GLGlobalState*   _globalState;
-  const bool _owner;
+
+//  GPUProgramState* _programState;
+//  GLGlobalState*   _globalState;
+//  const bool _owner;
 
   mutable int _uniformsCode;
   mutable int _attributesCode;
@@ -64,15 +67,19 @@ class GLState{
 public:
 
   GLState():
-  _programState(new GPUProgramState()),
-  _globalState(new GLGlobalState()),
-  _owner(true),
+//  _programState(new GPUProgramState()),
+//  _globalState(new GLGlobalState()),
+//  _owner(true),
   _parentGLState(NULL),
   _uniformsCode(0),
   _attributesCode(0),
   _totalGPUProgramStateChanged(true),
 //  _modelview(NULL),
-  _lastGPUProgramUsed(NULL)//,
+  _lastGPUProgramUsed(NULL),
+  _parentsTimeStamp(0),
+  _timeStamp(0)
+  
+  //,
 //  _accumulatedModelview(NULL),
 //  _multiplyModelview(false),
 //  _lastParentModelview(NULL),
@@ -84,6 +91,8 @@ public:
     }
 
   }
+
+  int getTimeStamp() const { return _timeStamp;}
   /*
    //For debugging purposes only
    GLState(GLGlobalState*   globalState,
@@ -110,31 +119,31 @@ public:
 
   void setParent(const GLState* p) const;
 
-  int getUniformsCode() const{
-    if (_parentGLState == NULL){
-      return _programState->getUniformsCode();
-    }
-    return _uniformsCode;
-  }
-
-  int getAttributesCode() const{
-    if (_parentGLState == NULL){
-      return _programState->getAttributesCode();
-    }
-    return _attributesCode;
-  }
+//  int getUniformsCode() const{
+//    if (_parentGLState == NULL){
+//      return _programState->getUniformsCode();
+//    }
+//    return _uniformsCode;
+//  }
+//
+//  int getAttributesCode() const{
+//    if (_parentGLState == NULL){
+//      return _programState->getAttributesCode();
+//    }
+//    return _attributesCode;
+//  }
 
   void applyGlobalStateOnGPU(GL* gl) const;
 
   void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
-  GPUProgramState* getGPUProgramState() const{
-    return _programState;
-  }
-
-  GLGlobalState* getGLGlobalState() const{
-    return _globalState;
-  }
+//  GPUProgramState* getGPUProgramState() const{
+//    return _programState;
+//  }
+//
+//  GLGlobalState* getGLGlobalState() const{
+//    return _globalState;
+//  }
 
   //  static void textureHasBeenDeleted(const IGLTextureId* textureId){
   //    if (_currentGPUGlobalState.getBoundTexture() == textureId){
