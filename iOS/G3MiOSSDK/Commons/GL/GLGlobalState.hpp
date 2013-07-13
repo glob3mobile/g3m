@@ -130,6 +130,8 @@ public:
   _clearColorChanged(false)
   {
   }
+
+  //GLGlobalState* createCombinationWithMorePriorityGLGlobalState(const GLGlobalState* that);
   
   static GLGlobalState* newDefault() {
     return new GLGlobalState();

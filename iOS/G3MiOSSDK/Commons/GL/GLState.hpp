@@ -22,13 +22,13 @@
 class GLState{
 
   GLFeatureSet* _featuresSets[N_GLFEATURES_GROUPS]; //1 set for group of features
+  mutable GLFeatureSet* _accumulatedFeaturesSets[N_GLFEATURES_GROUPS]; //1 set for group of features
 
-  
-  GLFeatureNoGroup _featureNoGroup;
-  GLFeatureCameraGroup _featureCameraGroup;
-  GLFeatureColorGroup _featureColorGroup;
+//  GLFeatureNoGroup _featureNoGroup;
+//  GLFeatureCameraGroup _featureCameraGroup;
+//  GLFeatureColorGroup _featureColorGroup;
 
-  int _timeStamp;
+  mutable int _timeStamp;
   mutable int _parentsTimeStamp;
 
 
@@ -88,11 +88,16 @@ public:
 
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
       _featuresSets[i] = NULL;
+      _accumulatedFeaturesSets[i] = NULL;
     }
 
   }
 
   int getTimeStamp() const { return _timeStamp;}
+
+  GLFeatureSet* getAccumulatedFeatureSet(int i) const{
+    return _accumulatedFeaturesSets[i];
+  }
   /*
    //For debugging purposes only
    GLState(GLGlobalState*   globalState,
@@ -168,15 +173,11 @@ public:
     }
 
     _featuresSets[g]->add(f);
+    _timeStamp++;
   }
 
   void addGLFeatureAndRelease(const GLFeature* f){
-    GLFeatureGroupName g = f->getGroup();
-    if (_featuresSets[g] == NULL){
-      _featuresSets[g] = new GLFeatureSet();
-    }
-
-    _featuresSets[g]->add(f);
+    addGLFeature(f);
     f->_release();
   }
 

@@ -37,6 +37,7 @@ GLState::~GLState(){
     GLFeatureSet* fs = _featuresSets[i];
     if (fs != NULL){
       delete _featuresSets[i];
+      delete _accumulatedFeaturesSets[i];
     }
   }
 }
@@ -47,56 +48,73 @@ void GLState::setParent(const GLState* parent) const{
 
     _parentGLState = parent;
     _parentsTimeStamp = parent->getTimeStamp();
+
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+      delete _accumulatedFeaturesSets[i];
+      _accumulatedFeaturesSets[i] = new GLFeatureSet();
+      if (_featuresSets[i] != NULL){
+        _accumulatedFeaturesSets[i]->add(_featuresSets[i]);
+      }
+      GLFeatureSet* pfs = parent->getAccumulatedFeatureSet(i);
+      if (pfs != NULL){
+        _accumulatedFeaturesSets[i]->add(pfs);
+      }
+    }
+
+    _timeStamp++;
+
+  } else{
+    ILogger::instance()->logInfo("Reusing GLState Parent");
   }
 
-  if (parent != NULL){
-    //UNIFORMS AND ATTRIBUTES CODES
-//    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
-////    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
+//  if (parent != NULL){
+//    //UNIFORMS AND ATTRIBUTES CODES
+////    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
+//////    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
+////
+////    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
+////                                    (newUniformsCode   != _uniformsCode));
+////    _uniformsCode   = newUniformsCode;
+////    _attributesCode = newAttributesCode;
 //
-//    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
-//                                    (newUniformsCode   != _uniformsCode));
-//    _uniformsCode   = newUniformsCode;
-//    _attributesCode = newAttributesCode;
-
-//    //MODELVIEW
-//    if (_multiplyModelview){
-//      if (_modelview != NULL){
-//        const Matrix44D* parentsM = parent->getAccumulatedModelView();
-//        if (parentsM == NULL){
-//          ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
-//        } else{
-//
-//          if (_lastParentModelview != parentsM){
-//
-//            if (_accumulatedModelview != NULL){
-//              _accumulatedModelview->_release();
-//            }
-//            _accumulatedModelview = parentsM->createMultiplication(*_modelview);
-//
-//            if (_lastParentModelview != NULL){
-//              //              _lastParentModelview->removeListener(&_parentMatrixListener);
-//              _lastParentModelview->_release();
-//            }
-//
-//            _lastParentModelview = parentsM;
-//            _lastParentModelview->_retain();
-//
-//            //            if (_modelviewUniformValue != NULL){
-//            //              _modelviewUniformValue->_release();
-//            //              _modelviewUniformValue = NULL;
-//            //            }
-//
-//            //            _lastParentModelview->addListener(&_parentMatrixListener);
-//          }
-//          //          else{
-//          //            ILogger::instance()->logInfo("REUSING MODELVIEW");
-//          //          }
-//
-//        }
-//      }
-//    }
-  }
+////    //MODELVIEW
+////    if (_multiplyModelview){
+////      if (_modelview != NULL){
+////        const Matrix44D* parentsM = parent->getAccumulatedModelView();
+////        if (parentsM == NULL){
+////          ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
+////        } else{
+////
+////          if (_lastParentModelview != parentsM){
+////
+////            if (_accumulatedModelview != NULL){
+////              _accumulatedModelview->_release();
+////            }
+////            _accumulatedModelview = parentsM->createMultiplication(*_modelview);
+////
+////            if (_lastParentModelview != NULL){
+////              //              _lastParentModelview->removeListener(&_parentMatrixListener);
+////              _lastParentModelview->_release();
+////            }
+////
+////            _lastParentModelview = parentsM;
+////            _lastParentModelview->_retain();
+////
+////            //            if (_modelviewUniformValue != NULL){
+////            //              _modelviewUniformValue->_release();
+////            //              _modelviewUniformValue = NULL;
+////            //            }
+////
+////            //            _lastParentModelview->addListener(&_parentMatrixListener);
+////          }
+////          //          else{
+////          //            ILogger::instance()->logInfo("REUSING MODELVIEW");
+////          //          }
+////
+////        }
+////      }
+////    }
+//  }
 }
 
 void GLState::applyGlobalStateOnGPU(GL* gl) const{
@@ -326,6 +344,7 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
   if (fs != NULL){
     delete fs;
     _featuresSets[g] = NULL;
+    _timeStamp++;
   }
 }
 
