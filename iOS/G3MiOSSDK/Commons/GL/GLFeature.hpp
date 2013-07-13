@@ -76,6 +76,27 @@ public:
   
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+class Matrix44DHolder{
+  const Matrix44D* _matrix;
+private:
+  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
+    matrix->_retain();
+  }
+
+  ~Matrix44DHolder(){
+    _matrix->_release();
+  }
+
+  void setMatrix(const Matrix44D* matrix){
+    if (matrix != _matrix){
+      _matrix->_release();
+      _matrix = matrix;
+      _matrix->_retain();
+    }
+  }
+};
+
 class GLCameraGroupFeature: public GLFeature{
   Matrix44D const* _matrix;
 public:
