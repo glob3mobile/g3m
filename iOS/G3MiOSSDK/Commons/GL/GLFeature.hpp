@@ -84,6 +84,7 @@ public:
   ~GLCameraGroupFeature(){}
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
   const void setMatrix(const Matrix44D* matrix){ return _matrixHolder.setMatrix(matrix);}
+  const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{

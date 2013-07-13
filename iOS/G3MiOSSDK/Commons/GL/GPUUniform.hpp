@@ -276,11 +276,11 @@ public:
 
 class ModelviewMatrixHolder{
   const Matrix44D** _matrix;
-  Matrix44DHolder** _matrixHolders;
+  const Matrix44DHolder** _matrixHolders;
   int _nMatrix;
-  Matrix44D* _modelview;
+  mutable Matrix44D* _modelview;
 public:
-  ModelviewMatrixHolder(Matrix44DHolder* matrixHolders[], int nMatrix):
+  ModelviewMatrixHolder(const Matrix44DHolder* matrixHolders[], int nMatrix):
   _matrixHolders(matrixHolders),
   _nMatrix(nMatrix),
   _modelview(NULL)
@@ -291,7 +291,7 @@ public:
     }
   }
 
-  Matrix44D* getModelview(){
+  Matrix44D* getModelview() const {
 
     if (_modelview != NULL){
       for (int i = 0; i < _nMatrix; i++) {
@@ -323,6 +323,44 @@ public:
 };
 
 /////////////////////
+
+class GPUUniformValueModelview:public GPUUniformValue{
+protected:
+
+  const ModelviewMatrixHolder _holder;
+public:
+
+  GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _holder(matrixHolders, nMatrix)
+  {
+  }
+
+  ~GPUUniformValueModelview(){
+  }
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniformMatrix4fv(id, false, _holder.getModelview());
+  }
+
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    if (_holder.getModelview() == ((GPUUniformValueModelview *)v)->_holder.getModelview()){
+      return true;
+    }
+
+    return false;
+  }
+
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+
+//  const Matrix44D* getMatrix() const { return _m;}
+};
 
 class GPUUniformValueMatrix4Float:public GPUUniformValue{
 

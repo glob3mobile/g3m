@@ -95,7 +95,7 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl){
 }
 
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl){
-
+/*
   const Matrix44D* m = ((GLCameraGroupFeature*) _features[0])->getMatrix();
   m->_retain();
   _features[0]->applyGLGlobalState(gl);
@@ -114,6 +114,21 @@ GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl){
   GPUVariableValueSet* fs = new GPUVariableValueSet();
   fs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4Float(*m));
   m->_release();
+
+  return fs;
+ */
+
+  const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    matrixHolders[i] = f->getMatrixHolder();
+    if (matrixHolders[i] == NULL){
+      ILogger::instance()->logError("MatrixHolder NULL");
+    }
+  }
+  
+  GPUVariableValueSet* fs = new GPUVariableValueSet();
+  fs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures));
 
   return fs;
 }
