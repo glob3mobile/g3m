@@ -31,11 +31,17 @@ private:
   GLState _glStateTransparent;
 //  void createGLState();
 
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
+
 public:
 
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
-  _context(NULL)
+  _context(NULL),
+  _projection(NULL),
+  _model(NULL)
   {
 //    createGLState();
   }

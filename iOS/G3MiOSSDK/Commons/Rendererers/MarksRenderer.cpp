@@ -189,8 +189,8 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = camera->getCartesianPosition();
 
   //TODO: AT_WORK
-  //updateGLState(rc);
-  camera->addProjectionAndModelGLFeatures(_glState);
+  updateGLState(rc);
+  //camera->addProjectionAndModelGLFeatures(_glState);
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -273,12 +273,14 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL){
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
+    _glState.addGLFeature(_projection);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
   }
 
   if (_model == NULL){
     _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
+    _glState.addGLFeature(_model);
   } else{
     _model->setMatrix(cam->getModelMatrix().asMatrix44D());
   }

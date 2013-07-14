@@ -28,6 +28,24 @@ MeshRenderer::~MeshRenderer() {
   }
 }
 
+void MeshRenderer::updateGLState(const G3MRenderContext* rc){
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL){
+    _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
+    _glState.addGLFeature(_projection);
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
+  }
+
+  if (_model == NULL){
+    _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
+    _glState.addGLFeature(_model);
+  } else{
+    _model->setMatrix(cam->getModelMatrix().asMatrix44D());
+  }
+}
+
 void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
 
@@ -35,7 +53,8 @@ void MeshRenderer::render(const G3MRenderContext* rc) {
 //  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
 
 
-  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+  //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+  updateGLState(rc);
 
 
   const int meshesCount = _meshes.size();

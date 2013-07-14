@@ -7,35 +7,35 @@
 //
 
 #include "GLState.hpp"
-#include "GPUVariableValueSet.hpp"
+
 
 //GLGlobalState GLState::_currentGPUGlobalState;
 //GPUProgram* GLState::_currentGPUProgram = NULL;
 
 GLState::~GLState(){
-//  if (_lastParentModelview != NULL){
-//    //      _lastParentModelview->removeListener(&_parentMatrixListener);
-//    _lastParentModelview->_release();
-//  }
-//  if (_modelview != NULL){
-//    _modelview->_release();
-//  }
-//  if (_accumulatedModelview != NULL){
-//    _accumulatedModelview->_release();
-//  }
-//
-//  if (_modelviewUniformValue != NULL){
-//    _modelviewUniformValue->_release();
-//  }
+  //  if (_lastParentModelview != NULL){
+  //    //      _lastParentModelview->removeListener(&_parentMatrixListener);
+  //    _lastParentModelview->_release();
+  //  }
+  //  if (_modelview != NULL){
+  //    _modelview->_release();
+  //  }
+  //  if (_accumulatedModelview != NULL){
+  //    _accumulatedModelview->_release();
+  //  }
+  //
+  //  if (_modelviewUniformValue != NULL){
+  //    _modelviewUniformValue->_release();
+  //  }
 
-//  if (_owner){
-//    delete _programState;
-//    delete _globalState;
-//  }
+  //  if (_owner){
+  //    delete _programState;
+  //    delete _globalState;
+  //  }
 
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      delete _featuresGroups[i];
-      delete _accumulatedGroups[i];
+    delete _featuresGroups[i];
+    delete _accumulatedGroups[i];
   }
 }
 
@@ -45,7 +45,7 @@ void GLState::setParent(const GLState* parent) const{
 
     _parentGLState = parent;
     _parentsTimeStamp = parent->getTimeStamp();
-    
+
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
       delete _accumulatedGroups[i];
       _accumulatedGroups[i] = GLFeatureGroup::createGroup((GLFeatureGroupName)i);
@@ -58,60 +58,63 @@ void GLState::setParent(const GLState* parent) const{
       }
     }
 
+    delete _valuesSet;
+    _valuesSet = NULL;
+
     _timeStamp++;
 
   } else{
-    ILogger::instance()->logInfo("Reusing GLState Parent");
+    //ILogger::instance()->logInfo("Reusing GLState Parent");
   }
 
-//  if (parent != NULL){
-//    //UNIFORMS AND ATTRIBUTES CODES
-////    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
-//////    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
-////
-////    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
-////                                    (newUniformsCode   != _uniformsCode));
-////    _uniformsCode   = newUniformsCode;
-////    _attributesCode = newAttributesCode;
-//
-////    //MODELVIEW
-////    if (_multiplyModelview){
-////      if (_modelview != NULL){
-////        const Matrix44D* parentsM = parent->getAccumulatedModelView();
-////        if (parentsM == NULL){
-////          ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
-////        } else{
-////
-////          if (_lastParentModelview != parentsM){
-////
-////            if (_accumulatedModelview != NULL){
-////              _accumulatedModelview->_release();
-////            }
-////            _accumulatedModelview = parentsM->createMultiplication(*_modelview);
-////
-////            if (_lastParentModelview != NULL){
-////              //              _lastParentModelview->removeListener(&_parentMatrixListener);
-////              _lastParentModelview->_release();
-////            }
-////
-////            _lastParentModelview = parentsM;
-////            _lastParentModelview->_retain();
-////
-////            //            if (_modelviewUniformValue != NULL){
-////            //              _modelviewUniformValue->_release();
-////            //              _modelviewUniformValue = NULL;
-////            //            }
-////
-////            //            _lastParentModelview->addListener(&_parentMatrixListener);
-////          }
-////          //          else{
-////          //            ILogger::instance()->logInfo("REUSING MODELVIEW");
-////          //          }
-////
-////        }
-////      }
-////    }
-//  }
+  //  if (parent != NULL){
+  //    //UNIFORMS AND ATTRIBUTES CODES
+  ////    const int newUniformsCode   = parent->getUniformsCode()   | _programState->getUniformsCode();
+  //////    const int newAttributesCode = parent->getAttributesCode() | _programState->getAttributesCode();
+  ////
+  ////    _totalGPUProgramStateChanged = ((newAttributesCode != _attributesCode) ||
+  ////                                    (newUniformsCode   != _uniformsCode));
+  ////    _uniformsCode   = newUniformsCode;
+  ////    _attributesCode = newAttributesCode;
+  //
+  ////    //MODELVIEW
+  ////    if (_multiplyModelview){
+  ////      if (_modelview != NULL){
+  ////        const Matrix44D* parentsM = parent->getAccumulatedModelView();
+  ////        if (parentsM == NULL){
+  ////          ILogger::instance()->logError("CAN'T MODIFY PARENTS MODELVIEW");
+  ////        } else{
+  ////
+  ////          if (_lastParentModelview != parentsM){
+  ////
+  ////            if (_accumulatedModelview != NULL){
+  ////              _accumulatedModelview->_release();
+  ////            }
+  ////            _accumulatedModelview = parentsM->createMultiplication(*_modelview);
+  ////
+  ////            if (_lastParentModelview != NULL){
+  ////              //              _lastParentModelview->removeListener(&_parentMatrixListener);
+  ////              _lastParentModelview->_release();
+  ////            }
+  ////
+  ////            _lastParentModelview = parentsM;
+  ////            _lastParentModelview->_retain();
+  ////
+  ////            //            if (_modelviewUniformValue != NULL){
+  ////            //              _modelviewUniformValue->_release();
+  ////            //              _modelviewUniformValue = NULL;
+  ////            //            }
+  ////
+  ////            //            _lastParentModelview->addListener(&_parentMatrixListener);
+  ////          }
+  ////          //          else{
+  ////          //            ILogger::instance()->logInfo("REUSING MODELVIEW");
+  ////          //          }
+  ////
+  ////        }
+  ////      }
+  ////    }
+  //  }
 }
 
 void GLState::applyGlobalStateOnGPU(GL* gl) const{
@@ -120,7 +123,7 @@ void GLState::applyGlobalStateOnGPU(GL* gl) const{
     _parentGLState->applyGlobalStateOnGPU(gl);
   }
 
-//  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+  //  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyStates(GL* gl, GPUProgram* prog) const{
@@ -130,27 +133,29 @@ void GLState::applyStates(GL* gl, GPUProgram* prog) const{
 
   //  _programState->linkToProgram(prog);
   //  _programState->applyValuesToLinkedProgram();
-//  _programState->applyValuesToProgram(prog);
-//
-//  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+  //  _programState->applyValuesToProgram(prog);
+  //
+  //  _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
-//  int uniformsCode = getUniformsCode();
-//  int attributesCode = getAttributesCode();
+  //  int uniformsCode = getUniformsCode();
+  //  int attributesCode = getAttributesCode();
 
   /////////////////////////// FEATURES
   GPUVariableValueSet values;
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
 
-    GLFeatureGroup* group = _accumulatedGroups[i];
-    if (group != NULL){
-      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl);
-      if (variables != NULL){
-        values.combineWith(variables);
-        delete variables;
+    if (_valuesSet == NULL){
+      GLFeatureGroup* group = _accumulatedGroups[i];
+      if (group != NULL){
+        GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl);
+        if (variables != NULL){
+          values.combineWith(variables);
+          delete variables;
+        }
       }
     }
 
@@ -167,21 +172,21 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     //    }
   }
 
-//  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
-//  for (int i = 0; i < 3; i++){
-//
-//    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
-//    if (fs != NULL){
-//
-//      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
-//      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
-//      delete fs;
-//      if (variables != NULL){
-//        values.combineWith(variables);
-//        delete variables;
-//      }
-//    }
-//  }
+  //  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
+  //  for (int i = 0; i < 3; i++){
+  //
+  //    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
+  //    if (fs != NULL){
+  //
+  //      GLFeatureGroup* group = GLFeatureGroup::getGroup(i);
+  //      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
+  //      delete fs;
+  //      if (variables != NULL){
+  //        values.combineWith(variables);
+  //        delete variables;
+  //      }
+  //    }
+  //  }
 
   int uniformsCode = values.getUniformsCode();
   int attributesCode = values.getAttributesCode();
@@ -207,16 +212,16 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     //APPLY TO GPU STATE MODELVIEW
     //    const Matrix44D* modelview = getAccumulatedModelView();
-//    GPUUniformValueMatrix4Float* modelviewValue = getModelviewUniformValue();
-//    if (modelviewValue != NULL){
-//      //      GPUUniformValueMatrix4Float valueModelview(*modelview);
-//#ifdef C_CODE
-//      _lastGPUProgramUsed->getGPUUniform(MODELVIEW)->set(modelviewValue);
-//#endif
-//#ifdef JAVA_CODE
-//      _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(modelviewValue);
-//#endif
-//    }
+    //    GPUUniformValueMatrix4Float* modelviewValue = getModelviewUniformValue();
+    //    if (modelviewValue != NULL){
+    //      //      GPUUniformValueMatrix4Float valueModelview(*modelview);
+    //#ifdef C_CODE
+    //      _lastGPUProgramUsed->getGPUUniform(MODELVIEW)->set(modelviewValue);
+    //#endif
+    //#ifdef JAVA_CODE
+    //      _lastGPUProgramUsed.getGPUUniform(GPUUniformKey.MODELVIEW.getValue()).set(modelviewValue);
+    //#endif
+    //    }
 
 
     /////////////////////////// FEATURES
@@ -302,7 +307,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 //    }
 //  }
 //  return _modelviewUniformValue;
-//  
+//
 //}
 
 //GLFeatureSet* GLState::createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const{
@@ -322,13 +327,13 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 ////  }
 ////  return fs;
 //
-//  
+//
 //
 //  GLFeatureSet* pfs = NULL;
 //  if (_parentGLState != NULL){
 //    pfs = _parentGLState->createAccumulatedGLFeaturesForGroup(g);
 //  }
-//  
+//
 //  const int index = g;
 //  const GLFeatureSet* const thisFS = _featuresSets[index];
 //  if (thisFS == NULL){
@@ -352,7 +357,7 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
     _featuresGroups[g] = NULL;
     _timeStamp++;
   }
-
+  
   GLFeatureGroup* aGroup = _accumulatedGroups[g];
   if (aGroup != NULL){
     delete aGroup;

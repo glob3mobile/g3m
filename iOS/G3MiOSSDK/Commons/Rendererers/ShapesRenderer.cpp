@@ -57,6 +57,26 @@ bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
 }
 
 
+void ShapesRenderer::updateGLState(const G3MRenderContext* rc){
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL){
+    _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
+    _glState.addGLFeature(_projection);
+    _glStateTransparent.addGLFeature(_projection);
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
+  }
+
+  if (_model == NULL){
+    _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
+    _glState.addGLFeature(_model);
+    _glStateTransparent.addGLFeature(_model);
+  } else{
+    _model->setMatrix(cam->getModelMatrix().asMatrix44D());
+  }
+}
+
 void ShapesRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
@@ -65,9 +85,10 @@ void ShapesRenderer::render(const G3MRenderContext* rc) {
 //  _glState.setModelView(m.asMatrix44D(), false);
 //  _glStateTransparent.setModelView(m.asMatrix44D(), false);
 
-  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glStateTransparent);
-  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+  //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glStateTransparent);
+  //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
 
+  updateGLState(rc);
   
 
   const int shapesCount = _shapes.size();

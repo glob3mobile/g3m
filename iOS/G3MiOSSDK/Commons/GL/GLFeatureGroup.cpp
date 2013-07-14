@@ -94,6 +94,15 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl){
   return vs;
 }
 
+void GLFeatureNoGroup::applyGlobalGLState(GL* gl){
+  for(int i = 0; i < _nFeatures; i++){
+    const GLFeature* f = _features[i];
+    if (f != NULL){
+      f->applyGLGlobalState(gl);
+    }
+  }
+}
+
 GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl){
 /*
   const Matrix44D* m = ((GLCameraGroupFeature*) _features[0])->getMatrix();
@@ -154,6 +163,75 @@ GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl){
     return NULL;
   }
 }
+
+void GLFeatureColorGroup::applyGlobalGLState(GL* gl){
+
+  int priority = -1;
+  GLColorGroupFeature* topPriorityFeature = NULL;
+  for (int i = 0; i < _nFeatures; i++){
+    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+    if (f->getPriority() > priority){
+      topPriorityFeature = f;
+      priority = f->getPriority();
+    }
+  }
+
+  if (topPriorityFeature != NULL){
+    topPriorityFeature->applyGLGlobalState(gl);
+  }
+}
+
+
+
+GPUVariableValueSet* GLFeatureNoGroup::createGPUVariableSet(GL* gl){
+  GPUVariableValueSet* vs = new GPUVariableValueSet();
+  for(int i = 0; i < _nFeatures; i++){
+    const GLFeature* f = _features[i];
+    if (f != NULL){
+      vs->combineWith(f->getGPUVariableValueSet());
+    }
+  }
+  return vs;
+}
+
+GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(GL* gl){
+
+  const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    matrixHolders[i] = f->getMatrixHolder();
+    if (matrixHolders[i] == NULL){
+      ILogger::instance()->logError("MatrixHolder NULL");
+    }
+  }
+
+  GPUVariableValueSet* fs = new GPUVariableValueSet();
+  fs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures));
+
+  return fs;
+}
+
+GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(GL* gl){
+
+  int priority = -1;
+  GLColorGroupFeature* topPriorityFeature = NULL;
+  for (int i = 0; i < _nFeatures; i++){
+    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+    if (f->getPriority() > priority){
+      topPriorityFeature = f;
+      priority = f->getPriority();
+    }
+  }
+
+  if (topPriorityFeature != NULL){
+    GPUVariableValueSet* fs = new GPUVariableValueSet();
+    fs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+    return fs;
+  } else{
+    return NULL;
+  }
+}
+
 
 void GLFeatureSet::add(const GLFeature* f){
   _features[_nFeatures++] = f;

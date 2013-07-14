@@ -136,6 +136,7 @@ private:
   
   GLState _glState;
   void updateGLState();
+  LazyTextureMapping* _mappingOnGLState;
   
 public:
   LeveledTexturedMesh(const Mesh* mesh,
@@ -146,7 +147,8 @@ public:
   _mappings(mappings),
   _levelsCount(mappings->size()),
   _currentLevel(mappings->size() + 1),
-  _currentLevelIsValid(false)
+  _currentLevelIsValid(false),
+  _mappingOnGLState(NULL)
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LOGIC ERROR\n");

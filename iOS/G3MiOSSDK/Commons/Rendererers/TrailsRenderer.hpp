@@ -38,6 +38,10 @@ private:
   GLState _glState;
   void createGLState() const;
 
+  void updateGLState(const G3MRenderContext* rc);
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+
 public:
   Trail(int maxSteps,
         Color color,
@@ -47,7 +51,9 @@ public:
   _positionsDirty(true),
   _mesh(NULL),
   _color(color),
-  _ribbonWidth(ribbonWidth)
+  _ribbonWidth(ribbonWidth),
+  _projection(NULL),
+  _model(NULL)
   {
     createGLState();
   }

@@ -25,9 +25,16 @@ private:
   
   GLState _glState;
   void createGLState() const;
+
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 public:
   
-  MeshRenderer(){
+  MeshRenderer():
+  _projection(NULL),
+  _model(NULL)
+  {
     createGLState();
   }
   

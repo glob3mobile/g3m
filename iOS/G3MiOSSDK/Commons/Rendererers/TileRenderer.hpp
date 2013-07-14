@@ -325,13 +325,18 @@ private:
   long long _texturePriority;
 
   float _verticalExaggeration;
-  
-  GLState _glState;
+
 
   bool isReadyToRenderTiles(const G3MRenderContext* rc);
   void renderIncompletePlanet(const G3MRenderContext* rc);
 
   EllipsoidShape* _incompleteShape;
+
+
+  GLState _glState;
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 
 
 public:

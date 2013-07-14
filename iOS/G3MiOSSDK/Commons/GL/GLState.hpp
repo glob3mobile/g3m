@@ -18,6 +18,7 @@
 
 #include "GLFeatureGroup.hpp"
 #include "GLFeature.hpp"
+#include "GPUVariableValueSet.hpp"
 
 class GLState{
 
@@ -30,6 +31,8 @@ class GLState{
 
   mutable int _timeStamp;
   mutable int _parentsTimeStamp;
+
+  mutable GPUVariableValueSet* _valuesSet;
 
 
 //  GPUProgramState* _programState;
@@ -77,7 +80,8 @@ public:
 //  _modelview(NULL),
   _lastGPUProgramUsed(NULL),
   _parentsTimeStamp(0),
-  _timeStamp(0)
+  _timeStamp(0),
+  _valuesSet(NULL)
   
   //,
 //  _accumulatedModelview(NULL),
