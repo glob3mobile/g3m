@@ -128,7 +128,7 @@ void AbstractGeometryMesh::createGLState(){
                                               0,            //Stride 0
                                               true,         //Depth test
                                               false, 0,
-                                              false, 0.0, 0.0,
+                                              false, (float)0.0, (float)0.0,
                                               _lineWidth,
                                               true, _pointSize));
 

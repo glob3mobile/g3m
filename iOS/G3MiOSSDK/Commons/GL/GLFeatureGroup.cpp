@@ -195,8 +195,12 @@ GPUVariableValueSet* GLFeatureNoGroup::createGPUVariableSet(){
 }
 
 GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(){
-
+#ifdef C_CODE
   const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
+#endif
+#ifdef JAVA_CODE
+  final Matrix44DHolder[] matrixHolders = new Matrix44DHolder[_nFeatures];
+#endif
   for (int i = 0; i < _nFeatures; i++){
     GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
     matrixHolders[i] = f->getMatrixHolder();

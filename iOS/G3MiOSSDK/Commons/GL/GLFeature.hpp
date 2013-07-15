@@ -94,12 +94,17 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 class GLCameraGroupFeature: public GLFeature{
+#ifdef C_CODE
   Matrix44DHolder _matrixHolder;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44DHolder _matrixHolder = null;
+#endif
 public:
   GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix){}
   ~GLCameraGroupFeature(){}
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
-  const void setMatrix(const Matrix44D* matrix){ return _matrixHolder.setMatrix(matrix);}
+  const void setMatrix(const Matrix44D* matrix){_matrixHolder.setMatrix(matrix);}
   const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };

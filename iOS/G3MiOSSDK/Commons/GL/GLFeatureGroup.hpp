@@ -19,7 +19,12 @@ class GLFeature;
 class GLFeatureSet{
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
+#ifdef C_CODE
   GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
+#endif
+#ifdef JAVA_CODE
+  protected static final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
+#endif
   int _nFeatures;
 
 public:
@@ -32,7 +37,12 @@ public:
 
   virtual ~GLFeatureSet();
 
-  GLFeature const* get(int i) const{
+#ifdef C_CODE
+  GLFeature const* get(int i) const
+#else
+  GLFeature* get(int i) const
+#endif
+  {
     if (_nFeatures < i){
       return NULL;
     }

@@ -82,7 +82,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
   }
 
   if (_polygonOffsetFill){
-    state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetFill);
+    state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
   } else{
     state->disPolygonOffsetFill();
   }

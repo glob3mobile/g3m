@@ -112,9 +112,9 @@ void DummyRenderer::render(const G3MRenderContext* rc,
                                                                   0,            //Stride 0
                                                                   true,         //Depth test
                                                                   false, 0,
-                                                                  false, 0.0, 0.0,
-                                                                  1.0,
-                                                                  false, 1.0));
+                                                                  false, (float)0.0, (float)0.0,
+                                                                  (float)1.0,
+                                                                  false, (float)1.0));
 
 //  progState.setAttributeValue(POSITION,
 //                              _vertices, 4, //The attribute is a float vector of 4 elements
