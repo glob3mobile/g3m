@@ -584,9 +584,11 @@ public class GLState
   
   public final void clearGLFeatureGroup(GLFeatureGroupName g)
   {
-    GLFeatureGroup group = _featuresGroups[(int)g];
+  
   
     final int index = g.getValue();
+  
+    GLFeatureGroup group = _featuresGroups[index];
   
   
     if (group != null)
