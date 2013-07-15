@@ -356,13 +356,20 @@ protected:
   protected ModelviewMatrixHolder _holder = null;
 #endif
 public:
-
+#ifdef C_CODE
   GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _holder(matrixHolders, nMatrix)
   {
   }
-
+#endif
+#ifdef JAVA_CODE
+  public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
+  {
+    super(GLType.glMatrix4Float());
+    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
+  }
+#endif
   ~GPUUniformValueModelview(){
   }
 

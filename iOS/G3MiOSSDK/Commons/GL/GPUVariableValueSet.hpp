@@ -50,7 +50,7 @@ public:
     if (mustRetain){
     v->_retain();
     }
-    if (key > _highestUniformKey){
+    if (index > _highestUniformKey){
       _highestUniformKey = index;
     }
   }
@@ -66,7 +66,7 @@ public:
     if (mustRetain){
       v->_retain();
     }
-    if (key > _highestAttributeKey){
+    if (index > _highestAttributeKey){
       _highestAttributeKey = index;
     }
   }

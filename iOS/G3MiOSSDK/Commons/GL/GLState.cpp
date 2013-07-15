@@ -358,7 +358,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 //}
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
-  GLFeatureGroup* group = _featuresGroups[g];
+
 
 #ifdef C_CODE
   const int index = g;
@@ -366,6 +366,8 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
 #ifdef JAVA_CODE
   final int index = g.getValue();
 #endif
+
+  GLFeatureGroup* group = _featuresGroups[index];
 
 
   if (group != NULL){
