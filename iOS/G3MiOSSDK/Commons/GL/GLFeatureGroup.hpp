@@ -30,7 +30,7 @@ public:
     }
   }
 
-  ~GLFeatureSet();
+  virtual ~GLFeatureSet();
 
   GLFeature const* get(int i) const{
     if (_nFeatures < i){
@@ -71,7 +71,7 @@ public:
   static GLFeatureGroup* getGroup(int i);
   static GLFeatureGroupName getGroupName(int i);
 
-  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl)= 0;
+//  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl)= 0;
 
   virtual GPUVariableValueSet* createGPUVariableSet()= 0;
   virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
@@ -79,16 +79,14 @@ public:
 
 class GLFeatureNoGroup: public GLFeatureGroup{
 public:
-  ~GLFeatureNoGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
+//  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
   GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
-  ~GLFeatureCameraGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
+//  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
   GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state){}
 };
@@ -96,8 +94,7 @@ public:
 
 class GLFeatureColorGroup: public GLFeatureGroup{
 public:
-  ~GLFeatureColorGroup(){}
-  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
+//  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
   GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state);
 };

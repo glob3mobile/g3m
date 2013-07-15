@@ -54,6 +54,20 @@ public:
     }
   }
 
+  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
+    _attributeValues[key] = v;
+    if (key > _highestAttributeKey){
+      _highestAttributeKey = key;
+    }
+  }
+
+  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v){
+    _uniformValues[key] = v;
+    if (key > _highestUniformKey){
+      _highestUniformKey = key;
+    }
+  }
+
   GPUAttributeValue* getAttributeValue(int key) const{
     return _attributeValues[key];
   }

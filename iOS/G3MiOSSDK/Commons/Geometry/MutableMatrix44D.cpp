@@ -553,6 +553,10 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
   //    return;
   //  }
 
+  if (_matrix44D != NULL && _matrix44D == m._matrix44D){
+    return;
+  }
+
   _isValid = m._isValid;
 
   _m00  = m._m00;

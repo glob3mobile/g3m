@@ -154,7 +154,7 @@ public:
   void copyFrom(const Camera &c);
 
   void copyFromForcingMatrixCreation(const Camera &c){
-    forceMatrixCreation();
+    c.forceMatrixCreation();
     copyFrom(c);
   }
 
@@ -284,15 +284,16 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation(){
+  void forceMatrixCreation() const{
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
     getProjectionMatrix().asMatrix44D();
     getModelMatrix().asMatrix44D();
+    getModelViewMatrix().asMatrix44D();
   }
   
   // opengl projection matrix
-  MutableMatrix44D getProjectionMatrix() const{
+  const MutableMatrix44D& getProjectionMatrix() const{
     if (_dirtyFlags._projectionMatrixDirty) {
       _dirtyFlags._projectionMatrixDirty = false;
       _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
@@ -301,7 +302,7 @@ public:
   }
   
   // Model matrix, computed in CPU in double precision
-  MutableMatrix44D getModelMatrix() const {
+  const MutableMatrix44D& getModelMatrix() const {
     if (_dirtyFlags._modelMatrixDirty) {
       _dirtyFlags._modelMatrixDirty = false;
       _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
@@ -310,7 +311,7 @@ public:
   }
   
   // multiplication of model * projection
-  MutableMatrix44D getModelViewMatrix() const {
+  const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
       _dirtyFlags._modelViewMatrixDirty = false;
       _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());

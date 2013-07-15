@@ -30,7 +30,7 @@ public:
   {}
 
   virtual ~GPUUniformValue(){
-    ILogger::instance()->logInfo("Deleting Uniform Value");
+//    ILogger::instance()->logInfo("Deleting Uniform Value");
   }
 
   
@@ -293,6 +293,12 @@ public:
     _matrix = new const Matrix44D*[nMatrix];
     for (int i = 0; i < _nMatrix; i++) {
       _matrix[i] = matrixHolders[i]->getMatrix();
+    }
+  }
+
+  ~ModelviewMatrixHolder(){
+    if (_modelview != NULL){
+      _modelview->_release();
     }
   }
 
