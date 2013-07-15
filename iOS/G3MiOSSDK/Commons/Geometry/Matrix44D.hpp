@@ -127,6 +127,10 @@ public:
   }
 
   void setMatrix(const Matrix44D* matrix){
+    if (matrix == NULL){
+      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+    }
+
     if (matrix != _matrix){
       _matrix->_release();
       _matrix = matrix;

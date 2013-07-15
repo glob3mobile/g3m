@@ -171,15 +171,15 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
   if (_globalState == NULL){
-  _globalState = new GLGlobalState();
-  for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+    _globalState = new GLGlobalState();
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
 
-    GLFeatureGroup* group = _accumulatedGroups[i];
-    if (group != NULL){
-//      group->applyGlobalGLState(gl);
-      group->applyOnGlobalGLState(_globalState);
+      GLFeatureGroup* group = _accumulatedGroups[i];
+      if (group != NULL){
+        //      group->applyGlobalGLState(gl);
+        group->applyOnGlobalGLState(_globalState);
+      }
     }
-  }
   }
 
   //  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
@@ -231,8 +231,8 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
     _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 
-    delete _valuesSet;
-    _valuesSet = NULL;
+//    delete _valuesSet;
+//    _valuesSet = NULL;
     /////////////////////////// FEATURES
 
 
@@ -363,13 +363,13 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
     delete group;
     _featuresGroups[g] = NULL;
   }
-  
+
   GLFeatureGroup* aGroup = _accumulatedGroups[g];
   if (aGroup != NULL){
     delete aGroup;
     _accumulatedGroups[g] = NULL;
   }
-
+  
   hasChangedStructure();
 }
 

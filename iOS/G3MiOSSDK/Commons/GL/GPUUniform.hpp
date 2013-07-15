@@ -28,8 +28,13 @@ public:
   GPUUniformValue(int type):_type(type)
   //, _uniform(NULL)
   {}
+
+  virtual ~GPUUniformValue(){
+    ILogger::instance()->logInfo("Deleting Uniform Value");
+  }
+
+  
   int getType() const { return _type;}
-  virtual ~GPUUniformValue(){}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
 
@@ -296,12 +301,18 @@ public:
     if (_modelview != NULL){
       for (int i = 0; i < _nMatrix; i++) {
         const Matrix44D* m = _matrixHolders[i]->getMatrix();
+        if (m == NULL){
+          ILogger::instance()->logError("Modelview multiplication failure");
+        }
+
         if (_matrix[i] != m){
+
+          //If one matrix differs we have to raplace all matrixes on Holders and recalculate modelview
           _modelview->_release();//NEW MODELVIEW NEEDED
           _modelview = NULL;
 
           for (int i = 0; i < _nMatrix; i++) {
-            _matrix[i] = m;
+            _matrix[i] = _matrixHolders[i]->getMatrix();
           }
           break;
         }
