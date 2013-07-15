@@ -218,7 +218,7 @@ public class G3MWidget
     final TimeInterval elapsedTime = _timer.elapsedTime();
     if (elapsedTime.milliseconds() > 100)
     {
-      ILogger.instance().logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
+      //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
     }
   
     if (_logFPS)
