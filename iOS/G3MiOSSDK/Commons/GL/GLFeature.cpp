@@ -29,7 +29,15 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize,
                   bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
                   float lineWidth,
                   bool needsPointSize, float pointSize):
-GLFeature(NO_GROUP){
+GLFeature(NO_GROUP),
+_depthTestEnabled(depthTestEnabled),
+_cullFace(cullFace),
+_culledFace(culledFace),
+_polygonOffsetFill(polygonOffsetFill),
+_polygonOffsetFactor(polygonOffsetFactor),
+_polygonOffsetUnits(polygonOffsetUnits),
+_lineWidth(lineWidth)
+{
   
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(POSITION, _position);
@@ -60,6 +68,28 @@ GLFeature(NO_GROUP){
   }
 }
 
+void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+  if (_depthTestEnabled){
+    state->enableDepthTest();
+  } else{
+    state->disableDepthTest();
+  }
+
+  if (_cullFace){
+    state->enableCullFace(_culledFace);
+  } else{
+    state->disableCullFace();
+  }
+
+  if (_polygonOffsetFill){
+    state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetFill);
+  } else{
+    state->disPolygonOffsetFill();
+  }
+
+  state->setLineWidth(_lineWidth);
+}
+
 
 GeometryGLFeature::~GeometryGLFeature(){
 //  _position->_release();
@@ -69,7 +99,8 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
                                    bool blend, int sFactor, int dFactor,
                                    bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
-GLColorGroupFeature(4, blend, sFactor, dFactor)
+GLColorGroupFeature(4, blend, sFactor, dFactor),
+_texID(texID)
 {
   _globalState->bindTexture(texID);
 
@@ -82,6 +113,11 @@ GLColorGroupFeature(4, blend, sFactor, dFactor)
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
                             new GPUUniformValueVec2Float((float)scale._x, (float)scale._y));
   }
+}
+
+void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+  blendingOnGlobalGLState(state);
+  state->bindTexture(_texID);
 }
 
 ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,

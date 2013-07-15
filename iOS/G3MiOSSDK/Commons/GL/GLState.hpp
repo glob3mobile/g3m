@@ -33,6 +33,7 @@ class GLState{
   mutable int _parentsTimeStamp;
 
   mutable GPUVariableValueSet* _valuesSet;
+  mutable GLGlobalState*   _globalState;
 
 
 //  GPUProgramState* _programState;
@@ -67,6 +68,14 @@ class GLState{
 
   GLState(const GLState& state);
 
+  void hasChangedStructure() const {
+    _timeStamp++;
+    delete _valuesSet;
+    _valuesSet = NULL;
+    delete _globalState;
+    _globalState = NULL;
+  }
+
 public:
 
   GLState():
@@ -81,7 +90,8 @@ public:
   _lastGPUProgramUsed(NULL),
   _parentsTimeStamp(0),
   _timeStamp(0),
-  _valuesSet(NULL)
+  _valuesSet(NULL),
+  _globalState(NULL)
   
   //,
 //  _accumulatedModelview(NULL),
@@ -180,7 +190,7 @@ public:
     }
 
     _featuresGroups[g]->add(f);
-    _timeStamp++;
+    hasChangedStructure();
   }
 
   void addGLFeatureAndRelease(const GLFeature* f){
@@ -188,7 +198,7 @@ public:
     f->_release();
   }
 
-  GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
+//  GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 };

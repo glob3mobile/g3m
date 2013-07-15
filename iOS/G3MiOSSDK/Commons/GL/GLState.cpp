@@ -58,10 +58,7 @@ void GLState::setParent(const GLState* parent) const{
       }
     }
 
-    delete _valuesSet;
-    _valuesSet = NULL;
-
-    _timeStamp++;
+    hasChangedStructure();
 
   } else{
     //ILogger::instance()->logInfo("Reusing GLState Parent");
@@ -145,32 +142,42 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   //  int attributesCode = getAttributesCode();
 
   /////////////////////////// FEATURES
-  GPUVariableValueSet values;
-  for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+  if (_valuesSet == NULL){
+    _valuesSet = new GPUVariableValueSet();
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
 
-    if (_valuesSet == NULL){
       GLFeatureGroup* group = _accumulatedGroups[i];
       if (group != NULL){
-        GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl);
+        GPUVariableValueSet* variables = group->createGPUVariableSet(gl);
         if (variables != NULL){
-          values.combineWith(variables);
+          _valuesSet->combineWith(variables);
           delete variables;
         }
       }
     }
 
-    //    GLFeatureSet* fs = createAccumulatedGLFeaturesForGroup(GLFeatureGroup::getGroupName(i));
-    //    if (fs != NULL){
-    //      GLFeatureGroupName gName = (GLFeatureGroupName)i;
-    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(gName);
-    //      GPUVariableValueSet* variables = group->applyAndCreateGPUVariableSet(gl, fs);
-    //      delete fs;
-    //      if (variables != NULL){
-    //        values.combineWith(variables);
-    //        delete variables;
-    //      }
-    //    }
+
+    int uniformsCode = _valuesSet->getUniformsCode();
+    int attributesCode = _valuesSet->getAttributesCode();
+    if (uniformsCode != _uniformsCode || attributesCode != _attributesCode){
+      _uniformsCode = uniformsCode;
+      _attributesCode = attributesCode;
+      _totalGPUProgramStateChanged = true;
+    }
   }
+
+
+  GLGlobalState* globalState = new GLGlobalState();
+  for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+
+    GLFeatureGroup* group = _accumulatedGroups[i];
+    if (group != NULL){
+//      group->applyGlobalGLState(gl);
+      group->applyOnGlobalGLState(globalState);
+    }
+  }
+  globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+  delete globalState;
 
   //  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
   //  for (int i = 0; i < 3; i++){
@@ -188,13 +195,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   //    }
   //  }
 
-  int uniformsCode = values.getUniformsCode();
-  int attributesCode = values.getAttributesCode();
-  if (uniformsCode != _uniformsCode || attributesCode != _attributesCode){
-    _uniformsCode = uniformsCode;
-    _attributesCode = attributesCode;
-    _totalGPUProgramStateChanged = true;
-  }
 
   /////////////////////////// FEATURES
 
@@ -202,7 +202,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
   if (_lastGPUProgramUsed == NULL || _totalGPUProgramStateChanged){
     //ILogger::instance()->logInfo("Total State for GPUProgram has changed since last apply");
-    _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+    _lastGPUProgramUsed = progManager.getProgram(gl, _uniformsCode, _attributesCode);
     _totalGPUProgramStateChanged = false;
   }
 
@@ -225,7 +225,10 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
     /////////////////////////// FEATURES
-    values.applyValuesToProgram(_lastGPUProgramUsed);
+    _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
+
+    delete _valuesSet;
+    _valuesSet = NULL;
     /////////////////////////// FEATURES
 
 
@@ -355,7 +358,6 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
   if (group != NULL){
     delete group;
     _featuresGroups[g] = NULL;
-    _timeStamp++;
   }
   
   GLFeatureGroup* aGroup = _accumulatedGroups[g];
@@ -363,5 +365,7 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
     delete aGroup;
     _accumulatedGroups[g] = NULL;
   }
+
+  hasChangedStructure();
 }
 

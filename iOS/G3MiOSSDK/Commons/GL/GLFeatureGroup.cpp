@@ -94,11 +94,11 @@ GPUVariableValueSet* GLFeatureNoGroup::applyAndCreateGPUVariableSet(GL* gl){
   return vs;
 }
 
-void GLFeatureNoGroup::applyGlobalGLState(GL* gl){
+void GLFeatureNoGroup::applyOnGlobalGLState(GLGlobalState* state){
   for(int i = 0; i < _nFeatures; i++){
     const GLFeature* f = _features[i];
     if (f != NULL){
-      f->applyGLGlobalState(gl);
+      f->applyOnGlobalGLState(state);
     }
   }
 }
@@ -164,7 +164,7 @@ GPUVariableValueSet* GLFeatureColorGroup::applyAndCreateGPUVariableSet(GL* gl){
   }
 }
 
-void GLFeatureColorGroup::applyGlobalGLState(GL* gl){
+void GLFeatureColorGroup::applyOnGlobalGLState(GLGlobalState* state){
 
   int priority = -1;
   GLColorGroupFeature* topPriorityFeature = NULL;
@@ -177,7 +177,7 @@ void GLFeatureColorGroup::applyGlobalGLState(GL* gl){
   }
 
   if (topPriorityFeature != NULL){
-    topPriorityFeature->applyGLGlobalState(gl);
+    topPriorityFeature->applyOnGlobalGLState(state);
   }
 }
 
