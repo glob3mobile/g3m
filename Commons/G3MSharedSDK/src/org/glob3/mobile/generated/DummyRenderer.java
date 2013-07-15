@@ -118,7 +118,7 @@ public abstract class DummyRenderer extends LeafRenderer
     GLState glState = new GLState();
   //  GPUProgramState& progState = *glState.getGPUProgramState();
   
-    glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0.0, 0.0, 1.0, false, 1.0)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, false, (float)1.0)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
   //  progState.setAttributeValue(POSITION,
   //                              _vertices, 4, //The attribute is a float vector of 4 elements

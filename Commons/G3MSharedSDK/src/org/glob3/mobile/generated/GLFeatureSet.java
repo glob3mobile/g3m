@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 public class GLFeatureSet
 {
    protected static final int MAX_CONCURRENT_FEATURES_PER_GROUP = 20;
-  protected static final GLFeature[] _const* _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
+  protected static final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
   protected int _nFeatures;
 
 
@@ -45,7 +45,7 @@ public class GLFeatureSet
     }
   }
 
-  public final GLFeature _const get(int i)
+  public final GLFeature get(int i)
   {
     if (_nFeatures < i)
     {

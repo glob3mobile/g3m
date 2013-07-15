@@ -4,8 +4,7 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
 //  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
   public final GPUVariableValueSet createGPUVariableSet()
   {
-  
-    Matrix44DHolder[] matrixHolders = new const Matrix44DHolder[_nFeatures];
+    final Matrix44DHolder[] matrixHolders = new Matrix44DHolder[_nFeatures];
     for (int i = 0; i < _nFeatures; i++)
     {
       GLCameraGroupFeature f = ((GLCameraGroupFeature) _features[i]);

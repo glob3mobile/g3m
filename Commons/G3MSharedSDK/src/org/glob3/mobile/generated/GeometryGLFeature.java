@@ -81,7 +81,7 @@ public class GeometryGLFeature extends GLFeature
   
     if (_polygonOffsetFill)
     {
-      state.enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetFill);
+      state.enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
     }
     else
     {
