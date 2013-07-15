@@ -93,14 +93,14 @@ public:
 
   QuadTree(const Sector& sector) :
   _root( new QuadTree_Node(sector) ),
-  _maxElementsPerNode(8),
+  _maxElementsPerNode(1),
   _maxDepth(12)
   {
   }
 
   QuadTree() :
   _root( new QuadTree_Node(Sector::fullSphere()) ),
-  _maxElementsPerNode(8),
+  _maxElementsPerNode(1),
   _maxDepth(12)
   {
   }

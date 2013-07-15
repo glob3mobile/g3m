@@ -2113,9 +2113,13 @@ public:
       /**/
       //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
       //                                                                  ofType: @"geojson"];
-      
+
+//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/test"
+//                                                                  ofType: @"geojson"];
+
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
                                                                   ofType: @"geojson"];
+
 //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
 //                                                                  ofType: @"geojson"];
 
