@@ -78,6 +78,7 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Random;
@@ -364,20 +365,52 @@ public class G3MWebGLDemo
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);
       
-      final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
-      layerSet.addLayer(pnoa);
-
+      /*final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
+      layerSet.addLayer(pnoa);*/
       
       builder.setInitializationTask(initializationTask);
       builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
       
-      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
+      /*Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
       _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
+      */
 
 
-   }
+      // testing downloading from url
+      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
+
+          @Override
+          public void onDownload(final URL url, final IByteBuffer buffer, boolean expired) {
+        	  final String response = buffer.getAsString();
+        	  Window.alert("Downloaded text: " + response);
+          }
+
+
+          @Override
+          public void onError(final URL url) {
+          }
+
+
+          @Override
+          public void onCancel(final URL url) {
+             // TODO Auto-generated method stub
+          }
+
+
+          @Override
+          public void onCanceledDownload(final URL url,
+                                         final IByteBuffer data, boolean expired) {
+          }
+
+       };
+
+      final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
+      myDownloader.requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/sample.txt", false), (long)0,
+TimeInterval.fromHours(1.0), false, myListener, false);
+
+  }
 
 
    public void initCustomizedWithBuilder() {
