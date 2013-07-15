@@ -11,10 +11,16 @@
 
 #include "ICameraConstrainer.hpp"
 
+class Camera;
+
 
 class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
 
+  SimpleCameraConstrainer():
+  _lastValidCamera(NULL)
+  {}
+  
   ~SimpleCameraConstrainer() {
 
   }
@@ -23,6 +29,8 @@ public:
                               const Camera* previousCamera,
                               Camera* nextCamera) const;
 
+private:
+  Camera* _lastValidCamera;
 };
 
 #endif
