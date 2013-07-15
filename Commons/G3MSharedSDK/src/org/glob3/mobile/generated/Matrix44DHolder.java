@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class Matrix44DHolder
 {
-  private final Matrix44D _matrix;
+  private Matrix44D _matrix;
   public Matrix44DHolder(Matrix44D matrix)
   {
      _matrix = matrix;

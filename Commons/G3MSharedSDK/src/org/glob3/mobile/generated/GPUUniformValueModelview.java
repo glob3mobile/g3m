@@ -3,13 +3,12 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueModelview extends GPUUniformValue
 {
-
-  protected final ModelviewMatrixHolder _holder = new ModelviewMatrixHolder();
+  protected ModelviewMatrixHolder _holder = null;
 
   public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
   {
      super(GLType.glMatrix4Float());
-     _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
+     _holder = new <type missing>(matrixHolders, nMatrix);
   }
 
   public void dispose()

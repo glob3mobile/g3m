@@ -12,7 +12,7 @@ public class ModelviewMatrixHolder
      _matrixHolders = matrixHolders;
      _nMatrix = nMatrix;
      _modelview = null;
-    _matrix = new const Matrix44D[nMatrix];
+    _matrix = new Matrix44D[nMatrix];
     for (int i = 0; i < _nMatrix; i++)
     {
       _matrix[i] = matrixHolders[i].getMatrix();
@@ -47,9 +47,9 @@ public class ModelviewMatrixHolder
           _modelview._release(); //NEW MODELVIEW NEEDED
           _modelview = null;
 
-          for (int i = 0; i < _nMatrix; i++)
+          for (int j = 0; j < _nMatrix; j++)
           {
-            _matrix[i] = _matrixHolders[i].getMatrix();
+            _matrix[j] = _matrixHolders[j].getMatrix();
           }
           break;
         }

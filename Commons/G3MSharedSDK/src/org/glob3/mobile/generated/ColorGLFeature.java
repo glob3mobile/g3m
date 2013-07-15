@@ -5,7 +5,7 @@ public class ColorGLFeature extends GLColorGroupFeature
   {
      super(3, blend, sFactor, dFactor);
     GPUAttributeValueVec4Float value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
-    _values.addNewAttributeValue(GPUAttributeKey.COLOR, value);
+    _values.addAttributeValue(GPUAttributeKey.COLOR, value, false);
   }
   public final void applyOnGlobalGLState(GLGlobalState state)
   {

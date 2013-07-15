@@ -139,7 +139,7 @@ public class Mark
   //  MutableMatrix44D id = MutableMatrix44D::identity();
   //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
   
-    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0, false, 1.0)); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0)); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   }
 
   private IFloatBuffer getBillboardTexCoords()

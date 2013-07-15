@@ -453,12 +453,14 @@ public class GLState
   public final void addGLFeature(GLFeature f)
   {
     GLFeatureGroupName g = f.getGroup();
-    if (_featuresGroups[(int)g] == null)
+    final int index = g.getValue();
+
+    if (_featuresGroups[index] == null)
     {
-      _featuresGroups[(int)g] = GLFeatureGroup.createGroup(g);
+      _featuresGroups[index] = GLFeatureGroup.createGroup(g);
     }
 
-    _featuresGroups[(int)g].add(f);
+    _featuresGroups[index].add(f);
     hasChangedStructure();
   }
 
@@ -583,19 +585,23 @@ public class GLState
   public final void clearGLFeatureGroup(GLFeatureGroupName g)
   {
     GLFeatureGroup group = _featuresGroups[(int)g];
+  
+    final int index = g.getValue();
+  
+  
     if (group != null)
     {
       if (group != null)
          group.dispose();
-      _featuresGroups[(int)g] = null;
+      _featuresGroups[index] = null;
     }
   
-    GLFeatureGroup aGroup = _accumulatedGroups[(int)g];
+    GLFeatureGroup aGroup = _accumulatedGroups[index];
     if (aGroup != null)
     {
       if (aGroup != null)
          aGroup.dispose();
-      _accumulatedGroups[(int)g] = null;
+      _accumulatedGroups[index] = null;
     }
   
     hasChangedStructure();

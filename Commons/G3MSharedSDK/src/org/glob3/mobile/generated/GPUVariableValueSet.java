@@ -63,43 +63,60 @@ public class GPUVariableValueSet
     }
   }
 
-  public final void addUniformValue(GPUUniformKey key, GPUUniformValue v)
+  public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)
   {
-    _uniformValues[(int)key] = v;
+    final int index = key.getValue();
+
+    _uniformValues[index] = v;
+    if (mustRetain)
+    {
     v._retain();
+    }
     if (key > _highestUniformKey)
     {
-      _highestUniformKey = (int)key;
+      _highestUniformKey = index;
     }
   }
 
-  public final void addAttributeValue(GPUAttributeKey key, GPUAttributeValue v)
+  public final void addAttributeValue(GPUAttributeKey key, GPUAttributeValue v, boolean mustRetain)
   {
-    _attributeValues[(int)key] = v;
-    v._retain();
+    final int index = key.getValue();
+    _attributeValues[index] = v;
+    if (mustRetain)
+    {
+      v._retain();
+    }
     if (key > _highestAttributeKey)
     {
-      _highestAttributeKey = (int)key;
+      _highestAttributeKey = index;
     }
   }
 
-  public final void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue v)
-  {
-    _attributeValues[(int)key] = v;
-    if (key > _highestAttributeKey)
-    {
-      _highestAttributeKey = (int)key;
-    }
-  }
-
-  public final void addNewUniformValue(GPUUniformKey key, GPUUniformValue v)
-  {
-    _uniformValues[(int)key] = v;
-    if (key > _highestUniformKey)
-    {
-      _highestUniformKey = (int)key;
-    }
-  }
+//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
+///#ifdef C_CODE
+//    const int index = key;
+///#endif
+///#ifdef JAVA_CODE
+//    final int index = key.getValue();
+///#endif
+//    _attributeValues[key] = v;
+//    if (key > _highestAttributeKey){
+//      _highestAttributeKey = key;
+//    }
+//  }
+//
+//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v){
+///#ifdef C_CODE
+//    const int index = key;
+///#endif
+///#ifdef JAVA_CODE
+//    final int index = key.getValue();
+///#endif
+//    _uniformValues[key] = v;
+//    if (key > _highestUniformKey){
+//      _highestUniformKey = key;
+//    }
+//  }
 
   public final GPUAttributeValue getAttributeValue(int key)
   {

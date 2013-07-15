@@ -25,7 +25,7 @@ public class GeometryGLFeature extends GLFeature
      _lineWidth = lineWidth;
   
     _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
-    _values.addAttributeValue(GPUAttributeKey.POSITION, _position);
+    _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
   
   //  _globalState = new GLGlobalState();
   //  if (depthTestEnabled){
@@ -50,13 +50,13 @@ public class GeometryGLFeature extends GLFeature
   
     if (needsPointSize)
     {
-      _values.addNewUniformValue(GPUUniformKey.POINT_SIZE, new GPUUniformValueFloat(pointSize));
+      _values.addUniformValue(GPUUniformKey.POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
     }
   }
 
   public void dispose()
   {
-    _position._release();
+  //  _position->_release();
   }
 
   public final void applyOnGlobalGLState(GLGlobalState state)

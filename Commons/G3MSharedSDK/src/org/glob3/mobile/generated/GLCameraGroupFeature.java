@@ -6,8 +6,8 @@ public class GLCameraGroupFeature extends GLFeature
   private Matrix44DHolder _matrixHolder = null;
   public GLCameraGroupFeature(Matrix44D matrix)
   {
-     super(GLFeatureGroupName.CAMERA_GROUP);
-     _matrixHolder = matrix;
+    super(GLFeatureGroupName.CAMERA_GROUP);
+    _matrixHolder = new Matrix44DHolder(matrix);
   }
   public void dispose()
   {

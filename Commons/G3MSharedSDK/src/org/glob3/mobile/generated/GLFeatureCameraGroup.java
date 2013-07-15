@@ -16,7 +16,7 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
     }
   
     GPUVariableValueSet fs = new GPUVariableValueSet();
-    fs.addNewUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures));
+    fs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
   
     return fs;
   }
