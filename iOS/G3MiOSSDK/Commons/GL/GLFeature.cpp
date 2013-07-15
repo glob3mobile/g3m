@@ -19,8 +19,8 @@ GLFeature(NO_GROUP){
 }
 
 BillboardGLFeature::~BillboardGLFeature(){
-//  _texExtent->_release();
-//  _viewportExtent->_release();
+  _texExtent->_release();
+  _viewportExtent->_release();
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
@@ -64,7 +64,7 @@ _lineWidth(lineWidth)
 //  _globalState->setLineWidth(lineWidth);
 
   if (needsPointSize){
-    _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize));
+    _values.addNewUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize));
   }
 }
 
@@ -92,7 +92,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 
 
 GeometryGLFeature::~GeometryGLFeature(){
-//  _position->_release();
+  _position->_release();
 }
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
@@ -105,12 +105,12 @@ _texID(texID)
 //  _globalState->bindTexture(texID);
 
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
-  _values.addAttributeValue(TEXTURE_COORDS, value);
+  _values.addNewAttributeValue(TEXTURE_COORDS, value);
 
   if (coordsTransformed){
-    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
+    _values.addNewUniformValue(TRANSLATION_TEXTURE_COORDS,
                             new GPUUniformValueVec2Float((float)translate._x, (float)translate._y));
-    _values.addUniformValue(SCALE_TEXTURE_COORDS,
+    _values.addNewUniformValue(SCALE_TEXTURE_COORDS,
                             new GPUUniformValueVec2Float((float)scale._x, (float)scale._y));
   }
 }
@@ -125,14 +125,14 @@ ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int i
 GLColorGroupFeature(3, blend, sFactor, dFactor)
 {
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
-  _values.addAttributeValue(COLOR, value);
+  _values.addNewAttributeValue(COLOR, value);
 }
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,
                                        bool blend, int sFactor, int dFactor):
 GLColorGroupFeature(2, blend, sFactor, dFactor)
 {
-  _values.addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
+  _values.addNewUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
                                                            color.getGreen(),
                                                            color.getBlue(),
                                                            color.getAlpha()));
