@@ -37,6 +37,9 @@ GLState::~GLState(){
     delete _featuresGroups[i];
     delete _accumulatedGroups[i];
   }
+
+  delete _valuesSet;
+  delete _globalState;
 }
 
 void GLState::setParent(const GLState* parent) const{
@@ -167,17 +170,17 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   }
 
 
-  GLGlobalState* globalState = new GLGlobalState();
+  if (_globalState == NULL){
+  _globalState = new GLGlobalState();
   for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
 
     GLFeatureGroup* group = _accumulatedGroups[i];
     if (group != NULL){
 //      group->applyGlobalGLState(gl);
-      group->applyOnGlobalGLState(globalState);
+      group->applyOnGlobalGLState(_globalState);
     }
   }
-  globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
-  delete globalState;
+  }
 
   //  const GLFeatureGroup* _groups[] = {&_featureNoGroup, &_featureCameraGroup, &_featureColorGroup};
   //  for (int i = 0; i < 3; i++){
@@ -226,6 +229,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     /////////////////////////// FEATURES
     _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
+    _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 
     delete _valuesSet;
     _valuesSet = NULL;
