@@ -439,8 +439,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                               false,        //NO DEPTH TEST
                                               false, 0,     //NO CULLING
                                               false, 0, 0,  //NO POLYGON OFFSET
-                                              1.0,          //LINE WIDTH
-                                              false, 1.0)   //POINT SIZE
+                                              (float)1.0,          //LINE WIDTH
+                                              false, (float)1.0)   //POINT SIZE
                         );
 }
 

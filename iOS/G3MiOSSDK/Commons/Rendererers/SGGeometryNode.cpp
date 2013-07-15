@@ -50,9 +50,9 @@ void SGGeometryNode::createGLState(){
                                                         0,            //Stride 0
                                                         true,         //Depth test
                                                         false, 0,
-                                                        false, 0.0, 0.0,
-                                                        1.0,
-                                                        false, 1.0));
+                                                        false, (float)0.0, (float)0.0,
+                                                        (float)1.0,
+                                                        false, (float)1.0));
 
   //TODO:....
   int WARNING_TODO_SG;

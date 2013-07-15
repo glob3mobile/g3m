@@ -185,11 +185,18 @@ public:
 
   void addGLFeature(const GLFeature* f){
     GLFeatureGroupName g = f->getGroup();
-    if (_featuresGroups[g] == NULL){
-      _featuresGroups[g] = GLFeatureGroup::createGroup(g);
+#ifdef C_CODE
+    const int index = g;
+#endif
+#ifdef JAVA_CODE
+    final int index = g.getValue();
+#endif
+
+    if (_featuresGroups[index] == NULL){
+      _featuresGroups[index] = GLFeatureGroup::createGroup(g);
     }
 
-    _featuresGroups[g]->add(f);
+    _featuresGroups[index]->add(f);
     hasChangedStructure();
   }
 

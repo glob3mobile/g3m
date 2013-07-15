@@ -116,7 +116,12 @@ public:
 
 
 class Matrix44DHolder{
+#ifdef C_CODE
   const Matrix44D* _matrix;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44D _matrix;
+#endif
 public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
     matrix->_retain();

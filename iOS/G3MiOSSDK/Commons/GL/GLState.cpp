@@ -359,15 +359,24 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g){
   GLFeatureGroup* group = _featuresGroups[g];
+
+#ifdef C_CODE
+  const int index = g;
+#endif
+#ifdef JAVA_CODE
+  final int index = g.getValue();
+#endif
+
+
   if (group != NULL){
     delete group;
-    _featuresGroups[g] = NULL;
+    _featuresGroups[index] = NULL;
   }
 
-  GLFeatureGroup* aGroup = _accumulatedGroups[g];
+  GLFeatureGroup* aGroup = _accumulatedGroups[index];
   if (aGroup != NULL){
     delete aGroup;
-    _accumulatedGroups[g] = NULL;
+    _accumulatedGroups[index] = NULL;
   }
   
   hasChangedStructure();

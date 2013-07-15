@@ -101,7 +101,16 @@ class GLCameraGroupFeature: public GLFeature{
   private Matrix44DHolder _matrixHolder = null;
 #endif
 public:
+#ifdef C_CODE
   GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix){}
+#endif
+#ifdef JAVA_CODE
+  public GLCameraGroupFeature(Matrix44D matrix)
+  {
+    super(GLFeatureGroupName.CAMERA_GROUP);
+    _matrixHolder = new Matrix44DHolder(matrix);
+  }
+#endif
   ~GLCameraGroupFeature(){}
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
   const void setMatrix(const Matrix44D* matrix){_matrixHolder.setMatrix(matrix);}
@@ -159,7 +168,12 @@ public:
 };
 
 class TextureGLFeature: public GLColorGroupFeature{
+#ifdef C_CODE
   IGLTextureId const* _texID;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texID = null;
+#endif
   
 public:
   TextureGLFeature(const IGLTextureId* texID,

@@ -12,15 +12,15 @@ BillboardGLFeature::BillboardGLFeature(int textureWidth, int textureHeight, int 
 GLFeature(NO_GROUP){
 
   _texExtent = new GPUUniformValueVec2Float(textureWidth, textureHeight);
-  _values.addUniformValue(TEXTURE_EXTENT, _texExtent);
+  _values.addUniformValue(TEXTURE_EXTENT, _texExtent, false);
 
   _viewportExtent = new GPUUniformValueVec2Float(viewportWidth, viewportHeight);
-  _values.addUniformValue(VIEWPORT_EXTENT, _viewportExtent);
+  _values.addUniformValue(VIEWPORT_EXTENT, _viewportExtent, false);
 }
 
 BillboardGLFeature::~BillboardGLFeature(){
-  _texExtent->_release();
-  _viewportExtent->_release();
+//  _texExtent->_release();
+//  _viewportExtent->_release();
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
@@ -40,7 +40,7 @@ _lineWidth(lineWidth)
 {
   
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
-  _values.addAttributeValue(POSITION, _position);
+  _values.addAttributeValue(POSITION, _position, false);
 
 //  _globalState = new GLGlobalState();
 //  if (depthTestEnabled){
@@ -64,7 +64,7 @@ _lineWidth(lineWidth)
 //  _globalState->setLineWidth(lineWidth);
 
   if (needsPointSize){
-    _values.addNewUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize));
+    _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
 }
 
@@ -92,7 +92,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 
 
 GeometryGLFeature::~GeometryGLFeature(){
-  _position->_release();
+//  _position->_release();
 }
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
@@ -105,13 +105,13 @@ _texID(texID)
 //  _globalState->bindTexture(texID);
 
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
-  _values.addNewAttributeValue(TEXTURE_COORDS, value);
+  _values.addAttributeValue(TEXTURE_COORDS, value, false);
 
   if (coordsTransformed){
-    _values.addNewUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float)translate._x, (float)translate._y));
-    _values.addNewUniformValue(SCALE_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float)scale._x, (float)scale._y));
+    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
+    _values.addUniformValue(SCALE_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
   }
 }
 
@@ -125,16 +125,16 @@ ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int i
 GLColorGroupFeature(3, blend, sFactor, dFactor)
 {
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
-  _values.addNewAttributeValue(COLOR, value);
+  _values.addAttributeValue(COLOR, value, false);
 }
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,
                                        bool blend, int sFactor, int dFactor):
 GLColorGroupFeature(2, blend, sFactor, dFactor)
 {
-  _values.addNewUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
+  _values.addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
                                                            color.getGreen(),
                                                            color.getBlue(),
-                                                           color.getAlpha()));
+                                                           color.getAlpha()), false);
 }
 

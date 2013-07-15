@@ -290,7 +290,12 @@ public:
   _nMatrix(nMatrix),
   _modelview(NULL)
   {
+#ifdef C_CODE
     _matrix = new const Matrix44D*[nMatrix];
+#endif
+#ifdef JAVA_CODE
+    _matrix = new Matrix44D[nMatrix];
+#endif
     for (int i = 0; i < _nMatrix; i++) {
       _matrix[i] = matrixHolders[i]->getMatrix();
     }
@@ -317,8 +322,8 @@ public:
           _modelview->_release();//NEW MODELVIEW NEEDED
           _modelview = NULL;
 
-          for (int i = 0; i < _nMatrix; i++) {
-            _matrix[i] = _matrixHolders[i]->getMatrix();
+          for (int j = 0; j < _nMatrix; j++) {
+            _matrix[j] = _matrixHolders[j]->getMatrix();
           }
           break;
         }
@@ -344,8 +349,12 @@ public:
 
 class GPUUniformValueModelview:public GPUUniformValue{
 protected:
-
+#ifdef C_CODE
   const ModelviewMatrixHolder _holder;
+#endif
+#ifdef JAVA_CODE
+  protected ModelviewMatrixHolder _holder = null;
+#endif
 public:
 
   GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):

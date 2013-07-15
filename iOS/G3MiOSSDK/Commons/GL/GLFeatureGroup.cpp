@@ -210,7 +210,7 @@ GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(){
   }
 
   GPUVariableValueSet* fs = new GPUVariableValueSet();
-  fs->addNewUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures));
+  fs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
 
   return fs;
 }
