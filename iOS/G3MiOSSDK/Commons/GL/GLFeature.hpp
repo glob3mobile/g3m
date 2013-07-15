@@ -18,17 +18,19 @@
 class GLFeature: public RCObject {
 public:
 
-  GLFeature(GLFeatureGroupName group): _group(group), _globalState(NULL){}
+  GLFeature(GLFeatureGroupName group): _group(group)
+  //, _globalState(NULL)
+  {}
 
-  virtual ~GLFeature(){
-    delete _globalState;
-  }
+//  virtual ~GLFeature(){
+//    delete _globalState;
+//  }
 
-  void applyGLGlobalState(GL* gl) const{
-    if (_globalState != NULL){
-      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
-    }
-  }
+//  void applyGLGlobalState(GL* gl) const{
+//    if (_globalState != NULL){
+//      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+//    }
+//  }
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
@@ -42,7 +44,7 @@ public:
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
-  GLGlobalState* _globalState;
+//  GLGlobalState* _globalState;
 
 };
 
@@ -129,14 +131,14 @@ public:
   _sFactor(sFactor),
   _dFactor(dFactor)
   {
-    _globalState = new GLGlobalState();
-
-    if (blend){
-      _globalState->enableBlend();
-      _globalState->setBlendFactors(sFactor, dFactor);
-    } else{
-      _globalState->disableBlend();
-    }
+//    _globalState = new GLGlobalState();
+//
+//    if (blend){
+//      _globalState->enableBlend();
+//      _globalState->setBlendFactors(sFactor, dFactor);
+//    } else{
+//      _globalState->disableBlend();
+//    }
 
   }
   int getPriority() const { return _priority;}
