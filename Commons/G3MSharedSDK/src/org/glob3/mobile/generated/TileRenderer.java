@@ -181,7 +181,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private float _verticalExaggeration;
 
-  private GLState _glState = new GLState();
 
   private boolean isReadyToRenderTiles(G3MRenderContext rc)
   {
@@ -295,6 +294,35 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private EllipsoidShape _incompleteShape;
 
 
+  private GLState _glState = new GLState();
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _glState.addGLFeature(_projection);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _glState.addGLFeature(_model);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+    }
+  }
+
+
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -313,6 +341,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _incompleteShape = null;
+     _projection = null;
+     _model = null;
     _layerSet.setChangeListener(this);
   }
 
@@ -377,8 +407,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   {
   
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-    _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
-    _glState.getGLGlobalState().enableDepthTest();
+  //  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+  //  _glState.getGLGlobalState()->enableDepthTest();
+  
+    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+    updateGLState(rc);
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {

@@ -31,27 +31,27 @@ public class Matrix44D extends RCObject
 
 
   //_m23 -> row 2, column 3
-  private final double _m00;
-  private final double _m01;
-  private final double _m02;
-  private final double _m03;
-  private final double _m10;
-  private final double _m11;
-  private final double _m12;
-  private final double _m13;
-  private final double _m20;
-  private final double _m21;
-  private final double _m22;
-  private final double _m23;
-  private final double _m30;
-  private final double _m31;
-  private final double _m32;
-  private final double _m33;
+  public final double _m00;
+  public final double _m01;
+  public final double _m02;
+  public final double _m03;
+  public final double _m10;
+  public final double _m11;
+  public final double _m12;
+  public final double _m13;
+  public final double _m20;
+  public final double _m21;
+  public final double _m22;
+  public final double _m23;
+  public final double _m30;
+  public final double _m31;
+  public final double _m32;
+  public final double _m33;
 
-  private float[] _columnMajorFloatArray;
-  private IFloatBuffer _columnMajorFloatBuffer;
+  public float[] _columnMajorFloatArray;
+  public IFloatBuffer _columnMajorFloatBuffer;
 
-//  std::vector<Matrix44DListener*> _listeners;
+  //  std::vector<Matrix44DListener*> _listeners;
 
 
   public Matrix44D(Matrix44D m)
@@ -157,62 +157,62 @@ public class Matrix44D extends RCObject
     return new Matrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-    public final float[] getColumnMajorFloatArray()
+  public final float[] getColumnMajorFloatArray()
+  {
+    if (_columnMajorFloatArray == null)
     {
-      if (_columnMajorFloatArray == null)
-      {
-        _columnMajorFloatArray = new float[16];
+      _columnMajorFloatArray = new float[16];
 
-        _columnMajorFloatArray[0] = (float) _m00;
-        _columnMajorFloatArray[1] = (float) _m10;
-        _columnMajorFloatArray[2] = (float) _m20;
-        _columnMajorFloatArray[3] = (float) _m30;
+      _columnMajorFloatArray[0] = (float) _m00;
+      _columnMajorFloatArray[1] = (float) _m10;
+      _columnMajorFloatArray[2] = (float) _m20;
+      _columnMajorFloatArray[3] = (float) _m30;
 
-        _columnMajorFloatArray[4] = (float) _m01;
-        _columnMajorFloatArray[5] = (float) _m11;
-        _columnMajorFloatArray[6] = (float) _m21;
-        _columnMajorFloatArray[7] = (float) _m31;
+      _columnMajorFloatArray[4] = (float) _m01;
+      _columnMajorFloatArray[5] = (float) _m11;
+      _columnMajorFloatArray[6] = (float) _m21;
+      _columnMajorFloatArray[7] = (float) _m31;
 
-        _columnMajorFloatArray[8] = (float) _m02;
-        _columnMajorFloatArray[9] = (float) _m12;
-        _columnMajorFloatArray[10] = (float) _m22;
-        _columnMajorFloatArray[11] = (float) _m32;
+      _columnMajorFloatArray[8] = (float) _m02;
+      _columnMajorFloatArray[9] = (float) _m12;
+      _columnMajorFloatArray[10] = (float) _m22;
+      _columnMajorFloatArray[11] = (float) _m32;
 
-        _columnMajorFloatArray[12] = (float) _m03;
-        _columnMajorFloatArray[13] = (float) _m13;
-        _columnMajorFloatArray[14] = (float) _m23;
-        _columnMajorFloatArray[15] = (float) _m33;
-      }
-
-      return _columnMajorFloatArray;
+      _columnMajorFloatArray[12] = (float) _m03;
+      _columnMajorFloatArray[13] = (float) _m13;
+      _columnMajorFloatArray[14] = (float) _m23;
+      _columnMajorFloatArray[15] = (float) _m33;
     }
 
-    public final IFloatBuffer getColumnMajorFloatBuffer()
-    {
-      if (_columnMajorFloatBuffer == null)
-      {
-        _columnMajorFloatBuffer = IFactory.instance().createFloatBuffer((float) _m00, (float) _m10, (float) _m20, (float) _m30, (float) _m01, (float) _m11, (float) _m21, (float) _m31, (float) _m02, (float) _m12, (float) _m22, (float) _m32, (float) _m03, (float) _m13, (float) _m23, (float) _m33);
-      }
-      return _columnMajorFloatBuffer;
-    }
+    return _columnMajorFloatArray;
+  }
 
-    public final boolean isEqualsTo(Matrix44D m)
+  public final IFloatBuffer getColumnMajorFloatBuffer()
+  {
+    if (_columnMajorFloatBuffer == null)
     {
-      return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
+      _columnMajorFloatBuffer = IFactory.instance().createFloatBuffer((float) _m00, (float) _m10, (float) _m20, (float) _m30, (float) _m01, (float) _m11, (float) _m21, (float) _m31, (float) _m02, (float) _m12, (float) _m22, (float) _m32, (float) _m03, (float) _m13, (float) _m23, (float) _m33);
     }
+    return _columnMajorFloatBuffer;
+  }
 
-//    void addListener(Matrix44DListener* l){
-//      _listeners.push_back(l);
-//    }
-//
-//    void removeListener(Matrix44DListener* l){
-//      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
-//           it != _listeners.end(); it++) {
-//        if (*it == l){
-//          _listeners.erase(it);
-//          return;
-//        }
-//      }
-//    }
+  public final boolean isEqualsTo(Matrix44D m)
+  {
+    return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
+  }
+
+  //    void addListener(Matrix44DListener* l){
+  //      _listeners.push_back(l);
+  //    }
+  //
+  //    void removeListener(Matrix44DListener* l){
+  //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
+  //           it != _listeners.end(); it++) {
+  //        if (*it == l){
+  //          _listeners.erase(it);
+  //          return;
+  //        }
+  //      }
+  //    }
 
 }

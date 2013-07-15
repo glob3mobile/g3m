@@ -43,13 +43,37 @@ public class MarksRenderer extends LeafRenderer
 
   private void updateGLState(G3MRenderContext rc)
   {
-    GPUProgramState progState = _glState.getGPUProgramState();
-    final Camera cc = rc.getCurrentCamera();
+  //  GPUProgramState* progState = _glState.getGPUProgramState();
+  //  const Camera* cc = rc->getCurrentCamera();
     //progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
-    _glState.setModelView(cc.getModelViewMatrix().asMatrix44D(), false);
+  //  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
   
-    progState.setUniformValue(GPUUniformKey.VIEWPORT_EXTENT, cc.getWidth(), cc.getHeight());
+  //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _glState.addGLFeature(_projection);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _glState.addGLFeature(_model);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+    }
   }
+
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
@@ -60,6 +84,8 @@ public class MarksRenderer extends LeafRenderer
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
+     _model = null;
+     _projection = null;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -117,7 +143,9 @@ public class MarksRenderer extends LeafRenderer
     final Camera camera = rc.getCurrentCamera();
     final Vector3D cameraPosition = camera.getCartesianPosition();
   
+    //TODO: AT_WORK
     updateGLState(rc);
+    //camera->addProjectionAndModelGLFeatures(_glState);
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)

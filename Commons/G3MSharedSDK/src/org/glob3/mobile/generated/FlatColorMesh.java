@@ -31,17 +31,18 @@ public class FlatColorMesh extends Mesh
 
   private void createGLState()
   {
-    GLGlobalState globalState = _glState.getGLGlobalState();
+  //  GLGlobalState& globalState = *_glState.getGLGlobalState();
+  //
+  //  if (isTransparent(NULL)) {
+  //    globalState.enableBlend();
+  //    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  //  }
   
-    if (isTransparent(null))
-    {
-      globalState.enableBlend();
-      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    }
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
   
-    GPUProgramState progState = _glState.getGPUProgramState();
+  //  progState.setUniformValue(FLAT_COLOR, *_flatColor);
   
-    progState.setUniformValue(GPUUniformKey.FLAT_COLOR, _flatColor);
+    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
   
   
   }

@@ -31,12 +31,16 @@ public abstract class GPUUniformValue extends RCObject
   {
      _type = type;
   }
+
+  public void dispose()
+  {
+//    ILogger::instance()->logInfo("Deleting Uniform Value");
+  }
+
+
   public final int getType()
   {
      return _type;
-  }
-  public void dispose()
-  {
   }
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEqualsTo(GPUUniformValue v);

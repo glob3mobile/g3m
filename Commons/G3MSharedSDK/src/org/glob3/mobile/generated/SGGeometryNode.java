@@ -35,25 +35,43 @@ public class SGGeometryNode extends SGNode
   private void createGLState()
   {
   
-    GPUProgramState progState = _glState.getGPUProgramState();
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
   
-    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  //  progState.setAttributeValue(POSITION,
+  //                              _vertices, 4, //The attribute is a float vector of 4 elements
+  //                              3,            //Our buffer contains elements of 3
+  //                              0,            //Index 0
+  //                              false,        //Not normalized
+  //                              0);           //Stride 0
   
-    if (_colors != null)
-    {
-  //    progState.setUniformValue(EnableColorPerVertex, true);
-      progState.setAttributeValue(GPUAttributeKey.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
-  //    const float colorsIntensity = 1;
-  //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
-    }
+    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0.0, 0.0, 1.0, false, 1.0)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
-    if (_uv != null)
-    {
-      progState.setAttributeValue(GPUAttributeKey.TEXTURE_COORDS, _uv, 2, 2, 0, false, 0);
+    //TODO:....
+    int WARNING_TODO_SG;
+  
+  //  if (_colors != NULL){
+  ////    progState.setUniformValue(EnableColorPerVertex, true);
+  //    progState.setAttributeValue(COLOR,
+  //                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+  //                                4,            //Our buffer contains elements of 4
+  //                                0,            //Index 0
+  //                                false,        //Not normalized
+  //                                0);           //Stride 0
+  ////    const float colorsIntensity = 1;
+  ////    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
+  //  }
+  //
+  //  if (_uv != NULL){
+  //    progState.setAttributeValue(TEXTURE_COORDS,
+  //                                _uv, 2,
+  //                                2,
+  //                                0,
+  //                                false,
+  //                                0);
   
   //    progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0, 1.0));
   //    progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
-    }
+  //  }
   }
 
 
@@ -86,8 +104,8 @@ public class SGGeometryNode extends SGNode
 
   public final void rawRender(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState parentProgramState)
   {
-    GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, parentState, rc.getGPUProgramManager(), parentProgramState);
+  //  GL* gl = rc->getGL();
+  //  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)
@@ -99,7 +117,7 @@ public class SGGeometryNode extends SGNode
   public final GLState getGLState(GLState parentGLState)
   {
     _glState.setParent(parentGLState);
-    _glState.getGLGlobalState().enableDepthTest();
+//    _glState.getGLGlobalState()->enableDepthTest();
     return _glState;
   }
 

@@ -153,6 +153,33 @@ public class MutableMatrix44D
 
   }
 
+  public MutableMatrix44D(Matrix44D m)
+  {
+     _isValid = true;
+    _m00 = m._m00;
+    _m01 = m._m01;
+    _m02 = m._m02;
+    _m03 = m._m03;
+
+    _m10 = m._m10;
+    _m11 = m._m11;
+    _m12 = m._m12;
+    _m13 = m._m13;
+
+    _m20 = m._m20;
+    _m21 = m._m21;
+    _m22 = m._m22;
+    _m23 = m._m23;
+
+    _m30 = m._m30;
+    _m31 = m._m31;
+    _m32 = m._m32;
+    _m33 = m._m33;
+
+    _matrix44D = null;
+
+  }
+
   public final Matrix44D asMatrix44D()
   {
     if (_matrix44D == null)
@@ -167,6 +194,11 @@ public class MutableMatrix44D
     //  if (isEqualsTo(m)) {
     //    return;
     //  }
+  
+    if (_matrix44D != null && _matrix44D == m._matrix44D)
+    {
+      return;
+    }
   
     _isValid = m._isValid;
   

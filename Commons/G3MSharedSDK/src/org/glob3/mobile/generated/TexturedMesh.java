@@ -31,12 +31,11 @@ public class TexturedMesh extends Mesh
 
   private void createGLState()
   {
-    GLGlobalState globalState = _glState.getGLGlobalState();
-    if (_transparent)
-    {
-      globalState.enableBlend();
-      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    }
+  //  GLGlobalState& globalState = *_glState.getGLGlobalState();
+  //  if (_transparent) {
+  //    globalState.enableBlend();
+  //    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  //  }
   
     _textureMapping.modifyGLState(_glState);
   }

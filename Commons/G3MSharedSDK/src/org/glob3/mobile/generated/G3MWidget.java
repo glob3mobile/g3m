@@ -189,9 +189,7 @@ public class G3MWidget
       _selectedRenderer.start(rc);
     }
   
-    GLGlobalState state = new GLGlobalState();
-    state.setClearColor(_backgroundColor);
-    _gl.clearScreen(state);
+    _gl.clearScreen(_backgroundColor);
   
     if (_mainRendererReady)
     {

@@ -30,7 +30,7 @@ public class MeshRenderer extends LeafRenderer
   private void createGLState()
   {
   
-    _glState.getGLGlobalState().enableDepthTest();
+  //  _glState.getGLGlobalState()->enableDepthTest();
   
   //  GPUProgramState& progState = *_glState.getGPUProgramState();
   //  progState.setUniformValue(EnableTexture, false);
@@ -39,8 +39,37 @@ public class MeshRenderer extends LeafRenderer
   //  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
   }
 
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _glState.addGLFeature(_projection);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _glState.addGLFeature(_model);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+    }
+  }
+
   public MeshRenderer()
   {
+     _projection = null;
+     _model = null;
     createGLState();
   }
 
@@ -102,7 +131,11 @@ public class MeshRenderer extends LeafRenderer
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-    _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
+  //  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+  
+  
+    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+    updateGLState(rc);
   
   
     final int meshesCount = _meshes.size();

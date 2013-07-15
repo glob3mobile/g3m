@@ -123,7 +123,7 @@ public class Camera
 
   public final void copyFromForcingMatrixCreation(Camera c)
   {
-    forceMatrixCreation();
+    c.forceMatrixCreation();
     copyFrom(c);
   }
 
@@ -462,6 +462,7 @@ public class Camera
     //getFrustumData();
     getProjectionMatrix().asMatrix44D();
     getModelMatrix().asMatrix44D();
+    getModelViewMatrix().asMatrix44D();
   }
 
   // opengl projection matrix
@@ -495,6 +496,15 @@ public class Camera
       _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
     }
     return _modelViewMatrix;
+  }
+
+  public final void addProjectionAndModelGLFeatures(GLState glState)
+  {
+    glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+    ProjectionGLFeature p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+    glState.addGLFeatureAndRelease(p);
+    ModelGLFeature m = new ModelGLFeature(getModelMatrix().asMatrix44D());
+    glState.addGLFeatureAndRelease(m);
   }
 
   private Angle getHeading(Vector3D normal)

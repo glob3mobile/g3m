@@ -106,78 +106,98 @@ public abstract class AbstractMesh extends Mesh
   protected final void createGLState()
   {
   
-    GLGlobalState globalState = _glState.getGLGlobalState();
+  //  GLGlobalState* globalState = _glState.getGLGlobalState();
   
-    globalState.setLineWidth(_lineWidth);
-    if (_depthTest)
-    {
-      globalState.enableDepthTest();
-    }
-    else
-    {
-      globalState.disableDepthTest();
-    }
-  
-    if (_flatColor != null && _flatColor.isTransparent())
-    {
-      globalState.enableBlend();
-      globalState.setBlendFactors(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-    }
-  
-    GPUProgramState progState = _glState.getGPUProgramState();
-  
-    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
-    {
-      progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-      progState.setUniformValue(GPUUniformKey.FLAT_COLOR, _flatColor);
-      if (_translationMatrix != null)
-      {
-        //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-        _glState.setModelView(_translationMatrix.asMatrix44D(), true);
-      }
-      return;
-    }
-  
-  
-    progState.setUniformValue(GPUUniformKey.POINT_SIZE, _pointSize);
-  
-    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-    if (_colors != null)
-    {
-  //    progState.setUniformValue(EnableColorPerVertex, true);
-      progState.setAttributeValue(GPUAttributeKey.COLOR, _colors, 4, 4, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
-  
-  //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
-    }
-    else
-    {
-  //    progState.setAttributeDisabled(COLOR);
-  //    progState.setUniformValue(EnableColorPerVertex, false);
-  //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-    }
-  
-  //  if (_flatColor != NULL){
-  //    progState.setUniformValue(EnableFlatColor, true);
-  //    progState.setUniformValue(FLAT_COLOR,
-  //                              (double)_flatColor->getRed(),
-  //                              (double)_flatColor->getGreen(),
-  //                              (double) _flatColor->getBlue(),
-  //                              (double) _flatColor->getAlpha());
-  //
-  //    progState.setUniformValue(FlatColorIntensity, _colorsIntensity);
+  //  globalState->setLineWidth(_lineWidth);
+  //  if (_depthTest){
+  //    globalState->enableDepthTest();
   //  } else{
-  //    progState.setUniformValue(EnableFlatColor, false);
-  //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-  //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
+  //    globalState->disableDepthTest();
   //  }
+  
+  //  if (_flatColor != NULL && _flatColor->isTransparent()){
+  //    globalState->enableBlend();
+  //    globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  //  }
+  
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
+  
+  
+  
+    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0.0, 0.0, _lineWidth, true, _pointSize)); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_translationMatrix != null)
     {
       //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-      _glState.setModelView(_translationMatrix.asMatrix44D(), true);
+  //    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
+  
+      _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()));
     }
+  
+    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
+    {
+  //    progState.setAttributeValue(POSITION,
+  //                                _vertices, 4, //The attribute is a float vector of 4 elements
+  //                                3,            //Our buffer contains elements of 3
+  //                                0,            //Index 0
+  //                                false,        //Not normalized
+  //                                0);           //Stride 0
+      //progState.setUniformValue(FLAT_COLOR, *_flatColor);
+  
+      _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
+  
+  
+  
+  
+      return;
+    }
+  
+  
+  //  progState.setUniformValue(POINT_SIZE, _pointSize);
+  
+  //  progState.setAttributeValue(POSITION,
+  //                              _vertices, 4, //The attribute is a float vector of 4 elements
+  //                              3,            //Our buffer contains elements of 3
+  //                              0,            //Index 0
+  //                              false,        //Not normalized
+  //                              0);           //Stride 0
+  
+    if (_colors != null)
+    {
+      //    progState.setUniformValue(EnableColorPerVertex, true);
+      //    progState.setAttributeValue(COLOR,
+      //                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
+      //                                4,            //Our buffer contains elements of 4
+      //                                0,            //Index 0
+      //                                false,        //Not normalized
+      //                                0);           //Stride 0
+  
+      _glState.addGLFeatureAndRelease(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha())); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  
+      //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
+    }
+    else
+    {
+      //    progState.setAttributeDisabled(COLOR);
+      //    progState.setUniformValue(EnableColorPerVertex, false);
+      //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
+    }
+  
+    //  if (_flatColor != NULL){
+    //    progState.setUniformValue(EnableFlatColor, true);
+    //    progState.setUniformValue(FLAT_COLOR,
+    //                              (double)_flatColor->getRed(),
+    //                              (double)_flatColor->getGreen(),
+    //                              (double) _flatColor->getBlue(),
+    //                              (double) _flatColor->getAlpha());
+    //
+    //    progState.setUniformValue(FlatColorIntensity, _colorsIntensity);
+    //  } else{
+    //    progState.setUniformValue(EnableFlatColor, false);
+    //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
+    //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
+    //  }
   }
 
   public void dispose()

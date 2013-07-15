@@ -98,30 +98,36 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected final void createGLState()
   {
   
-    GLGlobalState globalState = _glState.getGLGlobalState();
+  //  GLGlobalState* globalState = _glState.getGLGlobalState();
   
-    globalState.setLineWidth(_lineWidth);
-    if (_depthTest)
-    {
-      globalState.enableDepthTest();
-    }
-    else
-    {
-      globalState.disableDepthTest();
-    }
+  //  globalState->setLineWidth(_lineWidth);
+  //  if (_depthTest){
+  //    globalState->enableDepthTest();
+  //  } else{
+  //    globalState->disableDepthTest();
+  //  }
   
-    GPUProgramState progState = _glState.getGPUProgramState();
+  //  GPUProgramState& progState = *_glState.getGPUProgramState();
   
-    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  //  progState.setAttributeValue(POSITION,
+  //                              _vertices, 4, //The attribute is a float vector of 4 elements
+  //                              3,            //Our buffer contains elements of 3
+  //                              0,            //Index 0
+  //                              false,        //Not normalized
+  //                              0);           //Stride 0
+  
+    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0.0, 0.0, _lineWidth, true, _pointSize)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_translationMatrix != null)
     {
       //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-      _glState.setModelView(_translationMatrix.asMatrix44D(), true);
+  //    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
+  
+      _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()));
     }
   
   
-    progState.setUniformValue(GPUUniformKey.POINT_SIZE, _pointSize);
+  //  progState.setUniformValue(POINT_SIZE, _pointSize);
   }
 
   protected abstract void rawRender(G3MRenderContext rc);

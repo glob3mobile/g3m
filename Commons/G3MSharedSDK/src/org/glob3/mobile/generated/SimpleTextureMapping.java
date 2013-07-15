@@ -50,7 +50,7 @@ public class SimpleTextureMapping extends TextureMapping
 
 //  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
 
-  public final boolean isTransparent(G3MRenderContext rc)
+  public final boolean isTransparent()
   {
     return _isTransparent;
   }
@@ -62,25 +62,39 @@ public class SimpleTextureMapping extends TextureMapping
   public final void modifyGLState(GLState state)
   {
   
-    GLGlobalState glGlobalState = state.getGLGlobalState();
-    GPUProgramState progState = state.getGPUProgramState();
+  //  GLGlobalState* glGlobalState = state.getGLGlobalState();
+  //  GPUProgramState* progState = state.getGPUProgramState();
   
     if (_texCoords != null)
     {
-      glGlobalState.bindTexture(_glTextureId);
+  //    glGlobalState->bindTexture(_glTextureId);
+  //
+  //    progState->setAttributeValue(TEXTURE_COORDS,
+  //                                _texCoords, 2,
+  //                                2,
+  //                                0,
+  //                                false,
+  //                                0);
+  //
+  //    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+  //      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
+  //      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+  //    } else{
+  //      //ILogger::instance()->logInfo("No transformed TC");
+  //      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
+  //      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
+  //    }
   
-      progState.setAttributeValue(GPUAttributeKey.TEXTURE_COORDS, _texCoords, 2, 2, 0, false, 0);
+      state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
       if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0))
       {
-        progState.setUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, _scale.asVector2D());
-        progState.setUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
+  
+        state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D())); //TRANSFORM - BLEND
       }
       else
       {
-        //ILogger::instance()->logInfo("No transformed TC");
-        progState.removeGPUUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS);
-        progState.removeGPUUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS);
+        state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero())); //TRANSFORM - BLEND
       }
   
   //    progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());

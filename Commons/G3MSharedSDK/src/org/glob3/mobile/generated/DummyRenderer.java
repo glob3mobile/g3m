@@ -34,21 +34,26 @@ public abstract class DummyRenderer extends LeafRenderer
   private IShortBuffer _indices;
   private IFloatBuffer _vertices;
 
-  private void drawFace(GL gl, GLState parentState, Color color, Vector3D translation, Angle a, Vector3D rotationAxis, GPUProgramManager manager, GPUProgramState parentProgramState)
+  private void drawFace(GL gl, GLState parentState, Color color, Vector3D translation, Angle a, Vector3D rotationAxis, GPUProgramManager manager)
   {
   
     GLState glState = new GLState();
     glState.setParent(parentState);
   
-    GPUProgramState progState = glState.getGPUProgramState();
-    progState.setUniformValue(GPUUniformKey.FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+  //  GPUProgramState& progState = *glState.getGPUProgramState();
+  //  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+  
+    glState.addGLFeatureAndRelease(new FlatColorGLFeature(color, color.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
   
     MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(translation);
     MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(a, rotationAxis);
   
     MutableMatrix44D TR = T.multiply(R);
   
-    glState.setModelView(TR.asMatrix44D(), true);
+  //  glState.setModelView(TR.asMatrix44D(), true);
+  
+    glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+    glState.addGLFeatureAndRelease(new ModelTransformGLFeature(TR.asMatrix44D()));
   
     gl.drawElements(GLPrimitive.triangleStrip(), _indices, glState, manager);
   }
@@ -111,26 +116,35 @@ public abstract class DummyRenderer extends LeafRenderer
   
     //TODO: IMPLEMENT
     GLState glState = new GLState();
-    GPUProgramState progState = glState.getGPUProgramState();
+  //  GPUProgramState& progState = *glState.getGPUProgramState();
   
-    progState.setAttributeValue(GPUAttributeKey.POSITION, _vertices, 4, 3, 0, false, 0); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-    glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
+    glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0.0, 0.0, 1.0, false, 1.0)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+  //  progState.setAttributeValue(POSITION,
+  //                              _vertices, 4, //The attribute is a float vector of 4 elements
+  //                              3,            //Our buffer contains elements of 3
+  //                              0,            //Index 0
+  //                              false,        //Not normalized
+  //                              0);           //Stride 0
+  //  glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+  
+    rc.getCurrentCamera().addProjectionAndModelGLFeatures(glState);
   
   //  GLGlobalState state(parentState);
   
     GL gl = rc.getGL();
     GPUProgramManager manager = rc.getGPUProgramManager();
-    drawFace(gl, glState, Color.fromRGBA((float) 1, (float) 0, (float) 0, (float) 1), new Vector3D(_halfSize,0,0), Angle.fromDegrees(0), new Vector3D(0,0,1), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 1, (float) 0, (float) 0, (float) 1), new Vector3D(_halfSize,0,0), Angle.fromDegrees(0), new Vector3D(0,0,1), manager);
   
-    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 1, (float) 0, (float) 1), new Vector3D(0,_halfSize,0), Angle.fromDegrees(90), new Vector3D(0,0,1), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 1, (float) 0, (float) 1), new Vector3D(0,_halfSize,0), Angle.fromDegrees(90), new Vector3D(0,0,1), manager);
   
-    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 0, (float) 1, (float) 1), new Vector3D(0,-_halfSize,0), Angle.fromDegrees(-90), new Vector3D(0,0,1), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 0, (float) 1, (float) 1), new Vector3D(0,-_halfSize,0), Angle.fromDegrees(-90), new Vector3D(0,0,1), manager);
   
-    drawFace(gl, glState, Color.fromRGBA((float) 1, (float) 0, (float) 1, (float) 1), new Vector3D(0,0,-_halfSize), Angle.fromDegrees(90), new Vector3D(0,1,0), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 1, (float) 0, (float) 1, (float) 1), new Vector3D(0,0,-_halfSize), Angle.fromDegrees(90), new Vector3D(0,1,0), manager);
   
-    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 1, (float) 1, (float) 1), new Vector3D(0,0,_halfSize), Angle.fromDegrees(-90), new Vector3D(0,1,0), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 0, (float) 1, (float) 1, (float) 1), new Vector3D(0,0,_halfSize), Angle.fromDegrees(-90), new Vector3D(0,1,0), manager);
   
-    drawFace(gl, glState, Color.fromRGBA((float) 0.5, (float) 0.5, (float) 0.5, (float) 1), new Vector3D(-_halfSize,0,0), Angle.fromDegrees(180), new Vector3D(0,0,1), manager, progState);
+    drawFace(gl, glState, Color.fromRGBA((float) 0.5, (float) 0.5, (float) 0.5, (float) 1), new Vector3D(-_halfSize,0,0), Angle.fromDegrees(180), new Vector3D(0,0,1), manager);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

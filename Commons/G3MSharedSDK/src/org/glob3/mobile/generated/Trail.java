@@ -167,6 +167,33 @@ public class Trail
   //  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
   }
 
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _glState.addGLFeature(_projection);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _glState.addGLFeature(_model);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+    }
+  }
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+
   public Trail(int maxSteps, Color color, float ribbonWidth)
   {
      _maxSteps = maxSteps;
@@ -175,6 +202,8 @@ public class Trail
      _mesh = null;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
+     _projection = null;
+     _model = null;
     createGLState();
   }
 
@@ -194,7 +223,9 @@ public class Trail
       {
   
         //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-        _glState.setModelView(rc.getCurrentCamera().getModelViewMatrix().asMatrix44D(), false);
+  //      _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+  //      rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+        updateGLState(rc);
   
         mesh.render(rc, _glState);
       }

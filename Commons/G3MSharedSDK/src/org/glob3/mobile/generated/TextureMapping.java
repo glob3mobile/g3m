@@ -33,7 +33,7 @@ public abstract class TextureMapping
   {
   }
 
-  public abstract boolean isTransparent(G3MRenderContext rc);
+  public abstract boolean isTransparent();
 
   public abstract void modifyGLState(GLState state);
 }

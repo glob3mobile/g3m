@@ -139,13 +139,15 @@ public class SGLayerNode extends SGNode
       return null;
     }
   
+    int SG_TODO;
+  
     _glState.setParent(parentGLState);
-    _glState.getGLGlobalState().enableBlend();
+  //  _glState.getGLGlobalState()->enableBlend();
     int __WORKING;
   
   //  GL* gl = rc->getGL();
   //  gl->bindTexture(textureId);
-    _glState.getGLGlobalState().bindTexture(textureId);
+  //  _glState.getGLGlobalState()->bindTexture(textureId);
   
     return _glState;
   }

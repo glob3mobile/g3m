@@ -55,7 +55,9 @@ public abstract class Shape implements EffectTarget
     {
       _transformMatrix = createTransformMatrix(planet);
       //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, *_transformMatrix, true);
-      _glState.setModelView(_transformMatrix.asMatrix44D(), true);
+  //    _glState.setModelView(_transformMatrix->asMatrix44D(), true);
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+      _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()));
     }
     return _transformMatrix;
   }

@@ -69,8 +69,13 @@ public class LeveledTexturedMesh extends Mesh
   private void updateGLState()
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
-    mapping.modifyGLState(_glState);
+    if (mapping != null && mapping != _mappingOnGLState)
+    {
+      _mappingOnGLState = mapping;
+      mapping.modifyGLState(_glState);
+    }
   }
+  private LazyTextureMapping _mappingOnGLState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
@@ -80,6 +85,7 @@ public class LeveledTexturedMesh extends Mesh
      _levelsCount = mappings.size();
      _currentLevel = mappings.size() + 1;
      _currentLevelIsValid = false;
+     _mappingOnGLState = null;
     if (_mappings.size() <= 0)
     {
       ILogger.instance().logError("LOGIC ERROR\n");
@@ -197,7 +203,7 @@ public class LeveledTexturedMesh extends Mesh
       return false;
     }
   
-    return mapping.isTransparent(rc);
+    return mapping.isTransparent();
   }
 
   public final void render(G3MRenderContext rc, GLState parentGLState)

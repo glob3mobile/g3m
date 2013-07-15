@@ -29,6 +29,35 @@ public class ShapesRenderer extends LeafRenderer
   private GLState _glStateTransparent = new GLState();
 //  void createGLState();
 
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _glState.addGLFeature(_projection);
+      _glStateTransparent.addGLFeature(_projection);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _glState.addGLFeature(_model);
+      _glStateTransparent.addGLFeature(_model);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+    }
+  }
+
 
   public ShapesRenderer()
   {
@@ -38,6 +67,8 @@ public class ShapesRenderer extends LeafRenderer
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
+     _projection = null;
+     _model = null;
 //    createGLState();
   }
 
@@ -150,9 +181,15 @@ public class ShapesRenderer extends LeafRenderer
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
-    MutableMatrix44D m = rc.getCurrentCamera().getModelViewMatrix();
-    _glState.setModelView(m.asMatrix44D(), false);
-    _glStateTransparent.setModelView(m.asMatrix44D(), false);
+  //  MutableMatrix44D m = rc->getCurrentCamera()->getModelViewMatrix();
+  //  _glState.setModelView(m.asMatrix44D(), false);
+  //  _glStateTransparent.setModelView(m.asMatrix44D(), false);
+  
+    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glStateTransparent);
+    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
+  
+    updateGLState(rc);
+  
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)

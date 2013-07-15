@@ -125,6 +125,8 @@ public class GLGlobalState
      _clearColorChanged = false;
   }
 
+  //GLGlobalState* createCombinationWithMorePriorityGLGlobalState(const GLGlobalState* that);
+
   public static GLGlobalState newDefault()
   {
     return new GLGlobalState();
@@ -298,11 +300,11 @@ public class GLGlobalState
       {
         if (_depthTest)
         {
-          nativeGL.enable(GLFeature.depthTest());
+          nativeGL.enable(GLStage.depthTest());
         }
         else
         {
-          nativeGL.disable(GLFeature.depthTest());
+          nativeGL.disable(GLStage.depthTest());
         }
         currentState._depthTest = _depthTest;
       }
@@ -315,11 +317,11 @@ public class GLGlobalState
       {
         if (_blend)
         {
-          nativeGL.enable(GLFeature.blend());
+          nativeGL.enable(GLStage.blend());
         }
         else
         {
-          nativeGL.disable(GLFeature.blend());
+          nativeGL.disable(GLStage.blend());
         }
         currentState._blend = _blend;
       }
@@ -333,7 +335,7 @@ public class GLGlobalState
         currentState._cullFace = _cullFace;
         if (_cullFace)
         {
-          nativeGL.enable(GLFeature.cullFace());
+          nativeGL.enable(GLStage.cullFace());
           if (_culledFace != currentState._culledFace)
           {
             nativeGL.cullFace(_culledFace);
@@ -342,7 +344,7 @@ public class GLGlobalState
         }
         else
         {
-          nativeGL.disable(GLFeature.cullFace());
+          nativeGL.disable(GLStage.cullFace());
         }
       }
     }
@@ -364,7 +366,7 @@ public class GLGlobalState
         currentState._polygonOffsetFill = _polygonOffsetFill;
         if (_polygonOffsetFill)
         {
-          nativeGL.enable(GLFeature.polygonOffsetFill());
+          nativeGL.enable(GLStage.polygonOffsetFill());
   
           if (_polygonOffsetFactor != currentState._polygonOffsetFactor || _polygonOffsetUnits != currentState._polygonOffsetUnits)
           {
@@ -377,7 +379,7 @@ public class GLGlobalState
         }
         else
         {
-          nativeGL.disable(GLFeature.polygonOffsetFill());
+          nativeGL.disable(GLStage.polygonOffsetFill());
         }
       }
     }
@@ -431,8 +433,6 @@ public class GLGlobalState
         currentState._clearColorA = _clearColorA;
       }
     }
-  
-  
   
   }
 }
