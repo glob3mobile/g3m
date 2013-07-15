@@ -367,9 +367,13 @@ void Canvas_iOS::_stroke() {
 }
 
 void Canvas_iOS::_moveTo(float x, float y) {
-  CGContextMoveToPoint(_context, x, y);
+  CGContextMoveToPoint(_context,
+                       x,
+                       _canvasHeight - y);
 }
 
 void Canvas_iOS::_lineTo(float x, float y) {
-  CGContextAddLineToPoint(_context, x, y);
+  CGContextAddLineToPoint(_context,
+                          x,
+                          _canvasHeight - y);
 }

@@ -18,6 +18,10 @@
 
 class Sector_Geodetic2DCachedData;
 
+class ICanvas;
+class GEORasterProjection;
+
+
 class Sector {
 
 private:
@@ -233,6 +237,9 @@ public:
   bool touchesSouthPole() const {
     return (_lower.latitude()._degrees <= -89.9);
   }
+  
+  void rasterize(ICanvas*                   canvas,
+                 const GEORasterProjection* projection) const;
 
 
 #ifdef JAVA_CODE

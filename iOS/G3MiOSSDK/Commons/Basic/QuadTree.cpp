@@ -14,6 +14,7 @@ QuadTree_Node::~QuadTree_Node() {
   for (int i = 0; i < elementsSize; i++) {
     delete _elements[i];
   }
+
   if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       delete _children[i];
@@ -28,8 +29,15 @@ bool QuadTree_Node::add(const Sector& sector,
                         const void* element,
                         int maxElementsPerNode,
                         int maxDepth) {
+  if (!_sector.fullContains(sector)) {
+    return false;
+  }
+  if (!_sector.touchesWith(sector)) {
+    return false;
+  }
 
-  if (_elements.size() < maxElementsPerNode || _depth >= maxDepth) {
+  if ((_elements.size() < maxElementsPerNode) ||
+      (_depth >= maxDepth)) {
     _elements.push_back( new QuadTree_Element(sector, element) );
     return true;
   }

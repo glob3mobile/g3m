@@ -20,19 +20,16 @@ private:
   const int    _imageWidth;
   const int    _imageHeight;
 
+  double _mercatorUpperGlobalV;
+  double _mercatorDeltaGlobalV;
+
 public:
 
   GEORasterProjection(const Sector& sector,
                       bool mercator,
                       int imageWidth,
-                      int imageHeight) :
-  _sector(sector),
-  _mercator(mercator),
-  _imageWidth(imageWidth),
-  _imageHeight(imageHeight)
-  {
-  }
-
+                      int imageHeight);
+  
   ~GEORasterProjection() {
   }
 

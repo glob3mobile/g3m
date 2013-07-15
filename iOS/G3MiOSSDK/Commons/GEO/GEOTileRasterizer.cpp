@@ -44,6 +44,11 @@ public:
                     const void*   element) const {
     GEORasterSymbol* symbol = (GEORasterSymbol*) element;
 
+//    int __REMOVE_DEBUG_CODE;
+//    _canvas->setStrokeWidth(2);
+//    _canvas->setStrokeColor(Color::fromRGBA(1, 1, 0, 0.5f));
+//    sector.rasterize(_canvas, _projection);
+
     symbol->rasterize(_canvas, _projection);
 
     return false;
@@ -72,9 +77,9 @@ void GEOTileRasterizer::rasterize(IImage* image,
 
 //  canvas->setFillColor(Color::yellow());
 
-  canvas->setStrokeColor(Color::white());
-  canvas->setStrokeWidth(1);
-  canvas->strokeRectangle(0, 0, width, height);
+//  canvas->setStrokeColor(Color::white());
+//  canvas->setStrokeWidth(1);
+//  canvas->strokeRectangle(0, 0, width, height);
 
 
   _quadTree.acceptVisitor(tile->getSector(),

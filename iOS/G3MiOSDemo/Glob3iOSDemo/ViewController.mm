@@ -1357,10 +1357,10 @@ private:
     const std::string type = properties->getAsString("type", "");
     
     if (type.compare("Water Indicator") == 0) {
-      return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 1.5);
+      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
     }
     
-    return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 1.5);
+    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
   }
   
   CircleShape* createCircleShape(const GEO2DPointGeometry* geometry) const {

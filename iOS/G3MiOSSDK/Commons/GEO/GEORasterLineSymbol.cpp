@@ -36,6 +36,8 @@ GEORasterLineSymbol* GEORasterLineSymbol::createSymbol() const {
 void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
                                     const GEORasterProjection* projection) const {
 
+//  int __REMOVE_DEBUG_CODE;
+//  canvas->setStrokeColor(Color::magenta());
   canvas->setStrokeColor(_lineColor);
   canvas->setStrokeWidth(_lineWidth);
 

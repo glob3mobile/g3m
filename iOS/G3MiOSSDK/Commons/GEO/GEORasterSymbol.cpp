@@ -54,11 +54,11 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
   const double maxDouble = mu->maxDouble();
   const double minDouble = mu->minDouble();
 
-  double minLatInDegrees = maxDouble;
-  double maxLatInDegrees = minDouble;
+  double minLatInRadians = maxDouble;
+  double maxLatInRadians = minDouble;
 
-  double minLonInDegrees = maxDouble;
-  double maxLonInDegrees = minDouble;
+  double minLonInRadians = maxDouble;
+  double maxLonInRadians = minDouble;
 
   const int coordinatesArrayCount = coordinatesArray->size();
   for (int i = 0; i < coordinatesArrayCount; i++) {
@@ -67,34 +67,51 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      const double latInDegrees = coordinate->latitude().degrees();
-      if (latInDegrees < minLatInDegrees) {
-        minLatInDegrees = latInDegrees;
+      const double latInRadians = coordinate->latitude().radians();
+      if (latInRadians < minLatInRadians) {
+        minLatInRadians = latInRadians;
       }
-      else if (latInDegrees > maxLatInDegrees) {
-        maxLatInDegrees = latInDegrees;
+      if (latInRadians > maxLatInRadians) {
+        maxLatInRadians = latInRadians;
       }
 
-      const double lonInDegrees = coordinate->longitude().degrees();
-      if (lonInDegrees < minLonInDegrees) {
-        minLonInDegrees = lonInDegrees;
+      const double lonInRadians = coordinate->longitude().radians();
+      if (lonInRadians < minLonInRadians) {
+        minLonInRadians = lonInRadians;
       }
-      else if (lonInDegrees > maxLonInDegrees) {
-        maxLonInDegrees = lonInDegrees;
+      if (lonInRadians > maxLonInRadians) {
+        maxLonInRadians = lonInRadians;
       }
     }
   }
 
-  if ((minLatInDegrees == maxDouble) ||
-      (maxLatInDegrees == minDouble) ||
-      (minLonInDegrees == maxDouble) ||
-      (maxLonInDegrees == minDouble)) {
+  if ((minLatInRadians == maxDouble) ||
+      (maxLatInRadians == minDouble) ||
+      (minLonInRadians == maxDouble) ||
+      (maxLonInRadians == minDouble)) {
     return NULL;
   }
 
-  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-  
+//  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+//                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+
+
+  Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
+                              Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+
+//  int __REMOVE_DEBUG_CODE;
+//  for (int i = 0; i < coordinatesArrayCount; i++) {
+//    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+//    const int coordinatesCount = coordinates->size();
+//    for (int j = 0; j < coordinatesCount; j++) {
+//      const Geodetic2D* coordinate = coordinates->at(j);
+//      if (!result->contains(*coordinate)) {
+//        printf("xxx\n");
+//      }
+//    }
+//  }
+
+  return result;
 }
 
 Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates) {
@@ -105,34 +122,48 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
   const Geodetic2D* coordinate0 = coordinates->at(0);
 
-  double minLatInDegrees = coordinate0->latitude().degrees();
-  double maxLatInDegrees = minLatInDegrees;
+  double minLatInRadians = coordinate0->latitude().radians();
+  double maxLatInRadians = minLatInRadians;
 
-  double minLonInDegrees = coordinate0->longitude().degrees();
-  double maxLonInDegrees = minLonInDegrees;
+  double minLonInRadians = coordinate0->longitude().radians();
+  double maxLonInRadians = minLonInRadians;
 
   for (int i = 1; i < size; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
 
-    const double latInDegrees = coordinate->latitude().degrees();
-    if (latInDegrees < minLatInDegrees) {
-      minLatInDegrees = latInDegrees;
+    const double latInRadians = coordinate->latitude().radians();
+    if (latInRadians < minLatInRadians) {
+      minLatInRadians = latInRadians;
     }
-    else if (latInDegrees > maxLatInDegrees) {
-      maxLatInDegrees = latInDegrees;
+    if (latInRadians > maxLatInRadians) {
+      maxLatInRadians = latInRadians;
     }
 
-    const double lonInDegrees = coordinate->longitude().degrees();
-    if (lonInDegrees < minLonInDegrees) {
-      minLonInDegrees = lonInDegrees;
+    const double lonInRadians = coordinate->longitude().radians();
+    if (lonInRadians < minLonInRadians) {
+      minLonInRadians = lonInRadians;
     }
-    else if (lonInDegrees > maxLonInDegrees) {
-      maxLonInDegrees = lonInDegrees;
+    if (lonInRadians > maxLonInRadians) {
+      maxLonInRadians = lonInRadians;
     }
   }
 
-  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+//  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+//                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+
+
+  Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
+                              Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+
+//  int __REMOVE_DEBUG_CODE;
+//  for (int i = 0; i < size; i++) {
+//    const Geodetic2D* coordinate = coordinates->at(i);
+//    if (!result->contains(*coordinate)) {
+//      printf("xxx\n");
+//    }
+//  }
+
+  return result;
 }
 
 

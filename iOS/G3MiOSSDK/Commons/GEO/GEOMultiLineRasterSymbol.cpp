@@ -38,6 +38,8 @@ GEOMultiLineRasterSymbol* GEOMultiLineRasterSymbol::createSymbol() const {
 
 void GEOMultiLineRasterSymbol::rasterize(ICanvas*                   canvas,
                                          const GEORasterProjection* projection) const {
+//  int __REMOVE_DEBUG_CODE;
+//  canvas->setStrokeColor(Color::green());
   canvas->setStrokeColor(_lineColor);
   canvas->setStrokeWidth(_lineWidth);
 
