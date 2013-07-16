@@ -203,7 +203,7 @@ public class Tile
   
   
     int __Testing_DGD;
-    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 250))
+    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 500))
     {
       return _lastLodTest;
     }
