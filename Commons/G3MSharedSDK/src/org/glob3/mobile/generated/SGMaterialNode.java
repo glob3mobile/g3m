@@ -40,7 +40,7 @@ public class SGMaterialNode extends SGNode
      super(id, sId);
      _baseColor = baseColor;
      _specularColor = specularColor;
-    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_baseColor, false, 0, 0));
+    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_baseColor, false, 0, 0));
   }
 
   public final GLState getGLState(GLState parentGLState)

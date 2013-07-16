@@ -32,6 +32,13 @@ public class SGGeometryNode extends SGNode
   private IShortBuffer _indices;
 
   private GLState _glState = new GLState();
+
+  //void SGGeometryNode::rawRender(const G3MRenderContext* rc,
+  //                               const GLGlobalState& parentState, const GPUProgramState* parentProgramState) {
+  ////  GL* gl = rc->getGL();
+  ////  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
+  //}
+  
   private void createGLState()
   {
   
@@ -106,11 +113,8 @@ public class SGGeometryNode extends SGNode
   }
 
 
-  public final void rawRender(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState parentProgramState)
-  {
-  //  GL* gl = rc->getGL();
-  //  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
-  }
+//  void rawRender(const G3MRenderContext* rc,
+//                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
 
   public final void rawRender(G3MRenderContext rc, GLState glState)
   {
