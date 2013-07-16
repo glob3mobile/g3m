@@ -2,6 +2,10 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
   {
     if (ILogger.instance() == null)
@@ -217,7 +221,7 @@ public class G3MWidget
     final TimeInterval elapsedTime = _timer.elapsedTime();
     if (elapsedTime.milliseconds() > 100)
     {
-      ILogger.instance().logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
+      //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
     }
   
     if (_logFPS)

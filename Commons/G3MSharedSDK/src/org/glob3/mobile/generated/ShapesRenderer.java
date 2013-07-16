@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "GPUProgramState.hpp"
 
 public class ShapesRenderer extends LeafRenderer
 {

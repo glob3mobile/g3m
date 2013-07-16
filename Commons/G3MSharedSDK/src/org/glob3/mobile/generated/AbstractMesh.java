@@ -200,6 +200,10 @@ public abstract class AbstractMesh extends Mesh
     //  }
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     if (_owner)

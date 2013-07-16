@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class LayerTilesRenderParameters;
 
+///#include "GPUProgramState.hpp"
 
 //class EllipsoidShape;
 

@@ -87,6 +87,10 @@ public class SGGeometryNode extends SGNode
     createGLState();
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     if (_vertices != null)

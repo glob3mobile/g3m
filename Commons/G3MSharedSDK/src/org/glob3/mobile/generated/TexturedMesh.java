@@ -67,6 +67,9 @@ public class TexturedMesh extends Mesh
     }
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public final void render(G3MRenderContext rc)
   {
     _mesh.render(rc);

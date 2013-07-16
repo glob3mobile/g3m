@@ -58,6 +58,9 @@ public abstract class DummyRenderer extends LeafRenderer
     gl.drawElements(GLPrimitive.triangleStrip(), _indices, glState, manager);
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public void dispose()
   {
     if (_indices != null)

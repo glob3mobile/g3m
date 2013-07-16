@@ -132,6 +132,9 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   protected abstract void rawRender(G3MRenderContext rc);
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public void dispose()
   {
     if (_owner)

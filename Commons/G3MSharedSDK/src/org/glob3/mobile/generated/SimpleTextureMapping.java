@@ -29,6 +29,10 @@ public class SimpleTextureMapping extends TextureMapping
     _scale = scale.asMutableVector2D();
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     if (_ownedTexCoords)

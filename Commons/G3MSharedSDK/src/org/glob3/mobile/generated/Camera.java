@@ -354,6 +354,9 @@ public class Camera
     return point0.angleBetween(point1);
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
@@ -506,6 +509,7 @@ public class Camera
     ModelGLFeature m = new ModelGLFeature(getModelMatrix().asMatrix44D());
     glState.addGLFeatureAndRelease(m);
   }
+
 
   private Angle getHeading(Vector3D normal)
   {

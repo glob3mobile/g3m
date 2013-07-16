@@ -32,6 +32,9 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public void dispose()
   {
   }

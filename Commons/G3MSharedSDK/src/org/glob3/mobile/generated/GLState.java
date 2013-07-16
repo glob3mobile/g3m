@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "GPUProgramState.hpp"
 
 
 public class GLState
@@ -319,13 +320,12 @@ public class GLState
         GLFeatureGroup group = _accumulatedGroups[i];
         if (group != null)
         {
-          GPUVariableValueSet variables = group.createGPUVariableSet();
-          if (variables != null)
-          {
-            _valuesSet.combineWith(variables);
-            if (variables != null)
-               variables.dispose();
-          }
+  //        GPUVariableValueSet* variables = group->createGPUVariableSet();
+  //        if (variables != NULL){
+  //          _valuesSet->combineWith(variables);
+  //          delete variables;
+  //        }
+          group.addToGPUVariableSet(_valuesSet);
         }
       }
   

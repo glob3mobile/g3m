@@ -49,6 +49,10 @@ public class SGNode
      _shape = null;
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     final int childrenCount = _children.size();

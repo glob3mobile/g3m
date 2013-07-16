@@ -20,7 +20,6 @@ public abstract class G3MCBuilder
 
 
   private GL _gl;
-//  bool _glob3Created;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
@@ -102,7 +101,6 @@ public abstract class G3MCBuilder
     return new URL(serverPath + "/scenes/", false);
   }
 
-//  LayerSet* getLayerSet();
   private void recreateLayerSet()
   {
     _layerSet.removeAllLayers(false);

@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+///#include "GPUProgramState.hpp"
+
+
 //#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 

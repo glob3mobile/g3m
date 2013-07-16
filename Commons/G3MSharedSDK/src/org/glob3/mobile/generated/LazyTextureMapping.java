@@ -90,6 +90,9 @@ public class LazyTextureMapping extends TextureMapping
     return _transparent;
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public final void modifyGLState(GLState state)
   {
   

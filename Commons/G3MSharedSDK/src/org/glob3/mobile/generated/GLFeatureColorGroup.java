@@ -2,32 +2,7 @@ package org.glob3.mobile.generated;
 public class GLFeatureColorGroup extends GLFeatureGroup
 {
 //  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
-  public final GPUVariableValueSet createGPUVariableSet()
-  {
-  
-    int priority = -1;
-    GLColorGroupFeature topPriorityFeature = null;
-    for (int i = 0; i < _nFeatures; i++)
-    {
-      GLColorGroupFeature f = ((GLColorGroupFeature) _features[i]);
-      if (f.getPriority() > priority)
-      {
-        topPriorityFeature = f;
-        priority = f.getPriority();
-      }
-    }
-  
-    if (topPriorityFeature != null)
-    {
-      GPUVariableValueSet fs = new GPUVariableValueSet();
-      fs.combineWith(topPriorityFeature.getGPUVariableValueSet());
-      return fs;
-    }
-    else
-    {
-      return null;
-    }
-  }
+//  GPUVariableValueSet* createGPUVariableSet();
 
   //GPUVariableValueSet* GLFeatureCameraGroup::applyAndCreateGPUVariableSet(GL* gl){
   ///*
@@ -108,6 +83,48 @@ public class GLFeatureColorGroup extends GLFeatureGroup
     if (topPriorityFeature != null)
     {
       topPriorityFeature.applyOnGlobalGLState(state);
+    }
+  }
+
+  //GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(){
+  //
+  //  int priority = -1;
+  //  GLColorGroupFeature* topPriorityFeature = NULL;
+  //  for (int i = 0; i < _nFeatures; i++){
+  //    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+  //    if (f->getPriority() > priority){
+  //      topPriorityFeature = f;
+  //      priority = f->getPriority();
+  //    }
+  //  }
+  //
+  //  if (topPriorityFeature != NULL){
+  //    GPUVariableValueSet* fs = new GPUVariableValueSet();
+  //    fs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+  //    return fs;
+  //  } else{
+  //    return NULL;
+  //  }
+  //}
+  
+  public final void addToGPUVariableSet(GPUVariableValueSet vs)
+  {
+  
+    int priority = -1;
+    GLColorGroupFeature topPriorityFeature = null;
+    for (int i = 0; i < _nFeatures; i++)
+    {
+      GLColorGroupFeature f = ((GLColorGroupFeature) _features[i]);
+      if (f.getPriority() > priority)
+      {
+        topPriorityFeature = f;
+        priority = f.getPriority();
+      }
+    }
+  
+    if (topPriorityFeature != null)
+    {
+      vs.combineWith(topPriorityFeature.getGPUVariableValueSet());
     }
   }
 }

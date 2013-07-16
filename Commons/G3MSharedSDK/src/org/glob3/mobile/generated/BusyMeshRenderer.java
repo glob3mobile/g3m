@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "GPUProgramState.hpp"
 
 
 
@@ -39,33 +40,6 @@ public class BusyMeshRenderer extends LeafRenderer
 
   private void createGLState()
   {
-  
-  //  GLGlobalState& globalState = * _glState.getGLGlobalState();
-  
-  //  globalState.enableBlend();
-  //  globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  //  globalState.setClearColor(*_backgroundColor);
-  
-  //  GPUProgramState& progState = * _glState.getGPUProgramState();
-  
-  //  progState.setUniformValue(EnableTexture, false);
-  //  progState.setUniformValue(POINT_SIZE, (float)1.0);
-  //  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
-  //  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
-  
-  //  progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-  //  progState.setUniformValue(EnableFlatColor, false);
-  //  progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //  progState.setUniformValue(FlatColorIntensity, (float)0.0);
-  
-  //  progState.setAttributeEnabled(TEXTURE_COORDS, false);
-  //  progState.setAttributeEnabled(COLOR, false);
-  
-    //Modelview and projection
-  //  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW,
-    //                                                     _projectionMatrix.multiply(_modelviewMatrix), false);
-  //  _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
@@ -192,9 +166,6 @@ public class BusyMeshRenderer extends LeafRenderer
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-//    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
