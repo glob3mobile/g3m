@@ -69,21 +69,29 @@ public class GLFeatureColorGroup extends GLFeatureGroup
   {
   
     int priority = -1;
-    GLColorGroupFeature topPriorityFeature = null;
+  //  GLColorGroupFeature* topPriorityFeature = NULL;
     for (int i = 0; i < _nFeatures; i++)
     {
-      GLColorGroupFeature f = ((GLColorGroupFeature) _features[i]);
+      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
       if (f.getPriority() > priority)
       {
-        topPriorityFeature = f;
+  //      topPriorityFeature = f;
         priority = f.getPriority();
       }
     }
   
-    if (topPriorityFeature != null)
+    for (int i = 0; i < _nFeatures; i++)
     {
-      topPriorityFeature.applyOnGlobalGLState(state);
+      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
+      if (f.getPriority() == priority)
+      {
+        f.applyOnGlobalGLState(state);
+      }
     }
+  
+  //  if (topPriorityFeature != NULL){
+  //    topPriorityFeature->applyOnGlobalGLState(state);
+  //  }
   }
 
   //GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(){

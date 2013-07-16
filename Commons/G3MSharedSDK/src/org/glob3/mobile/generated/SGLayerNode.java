@@ -143,7 +143,9 @@ public class SGLayerNode extends SGNode
   
     _glState.setParent(parentGLState);
   //  _glState.getGLGlobalState()->enableBlend();
-    int __WORKING;
+  
+    _glState.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
+  
   
   //  GL* gl = rc->getGL();
   //  gl->bindTexture(textureId);
