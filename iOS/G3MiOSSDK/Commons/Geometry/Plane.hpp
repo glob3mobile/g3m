@@ -28,13 +28,13 @@ private:
 
 public:
 
-  Plane() :
-  _normal(0, 0, 0),
-  _d(0),
-  _normalF(0, 0, 0),
-  _dF(0)
-  {
-  }
+//  Plane() :
+//  _normal(0, 0, 0),
+//  _d(0),
+//  _normalF(0, 0, 0),
+//  _dF(0)
+//  {
+//  }
 
   static Plane fromPoints(const Vector3D& point0,
                           const Vector3D& point1,
