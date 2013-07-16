@@ -18,7 +18,12 @@ private:
   const double   _d;
 
 
+#ifdef C_CODE
   const Vector3F _normalF;
+#endif
+#ifdef JAVA_CODE
+  private final Vector3F _normalF;
+#endif
   const float    _dF;
 
 public:
