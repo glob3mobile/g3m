@@ -390,4 +390,21 @@ public class Box extends BoundingVolume
     return new Sphere(center, radius);
   }
 
+  private Vector3F[] _cornersArray = null;
+  public Vector3F[] getCornersArray() {
+    if (_cornersArray == null) {
+      _cornersArray = new Vector3F[8];
+
+      _cornersArray[0] = new Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z);
+      _cornersArray[1] = new Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z);
+      _cornersArray[2] = new Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z);
+      _cornersArray[3] = new Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z);
+      _cornersArray[4] = new Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z);
+      _cornersArray[5] = new Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z);
+      _cornersArray[6] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z);
+      _cornersArray[7] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z);
+    }
+    return _cornersArray;
+  }
+
 }
