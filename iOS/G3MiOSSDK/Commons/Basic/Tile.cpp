@@ -303,34 +303,12 @@ bool Tile::isVisible(const G3MRenderContext *rc,
     return false;
   }
 
-//  const BoundingVolume* narrowBoundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-//  if (narrowBoundingVolume == NULL) {
-//    return false;
-//  }
-//
-//  if (!narrowBoundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
-//    return false;
-//  }
-
   // test if sector is back oriented with respect to the camera
   return !_sector.isBackOriented(rc,
                                  getMinHeight(),
                                  planet,
                                  cameraNormalizedPosition,
                                  cameraAngle2HorizonInRadians);
-
-//  if (_sector.isBackOriented(rc, getMinHeight(),
-//                             planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians)) {
-//    return false;
-//  }
-//
-//  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-//  if (boundingVolume == NULL) {
-//    return false;
-//  }
-//
-//  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates );
-//  //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
@@ -339,10 +317,9 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   const LayerTilesRenderParameters* parameters = trc->getLayerTilesRenderParameters();
 
-  if (_level >= parameters->_maxLevelForPoles) {
-    if (_sector.touchesNorthPole() || _sector.touchesSouthPole()) {
-      return true;
-    }
+  if ((_level >= parameters->_maxLevelForPoles) &&
+      (_sector.touchesPoles())) {
+    return true;
   }
 
   if (_level >= parameters->_maxLevel) {
@@ -355,35 +332,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
       return true;
     }
   }
-
-//<<<<<<< HEAD
-////  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-//////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
-////  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-////  if (boundingVolume == NULL) {
-////    return true;
-////  }
-////  
-////  const double projectedArea = boundingVolume->projectedArea(rc);
-//////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
-//////    return true;
-//////  }
-////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
-//////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-////  if ( projectedArea <= (threshold*threshold) ) {
-////    return true;
-////  }
-//
-//  const Box* boundingVolume = getTileBoundingVolume(rc);
-//  const Vector2F ex = boundingVolume->projectedExtent(rc);
-//  const float t = (ex._x + ex._y);
-//  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-//  if ( t <= threshold ) {
-//    return true;
-//  }
-//
-//=======
-//>>>>>>> webgl-port
   
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
@@ -405,7 +353,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     return true;
   }
 
-
   int __Testing_DGD;
   if ((_lodTimer != NULL) &&
       (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
@@ -424,10 +371,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   //    return true;
   //  }
   const Vector2F ex = boundingVolume->projectedExtent(rc);
-  //const double t = extent.maxAxis() * 2;
   const float t = (ex._x + ex._y);
   _lastLodTest = ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75f) );
-
   return _lastLodTest;
 }
 

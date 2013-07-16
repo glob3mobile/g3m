@@ -254,7 +254,12 @@ public:
   bool touchesSouthPole() const {
     return (_lower.latitude()._degrees <= -89.9);
   }
-  
+
+  bool touchesPoles() const {
+    return ((_upper.latitude()._degrees >=  89.9) ||
+            (_lower.latitude()._degrees <= -89.9));
+  }
+
   double getDeltaRadiusInRadians() const {
     if (_deltaRadiusInRadians < 0)
       _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude.radians()  * _deltaLatitude.radians() +

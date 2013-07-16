@@ -17,16 +17,17 @@ private:
   const Vector3D _normal;
   const double   _d;
 
-//  const Vector3F _normalF;
-//  const float    _dF;
+
+  const Vector3F _normalF;
+  const float    _dF;
 
 public:
 
   Plane() :
   _normal(0, 0, 0),
-  _d(0)
-//  _normalF(0, 0, 0),
-//  _dF(0)
+  _d(0),
+  _normalF(0, 0, 0),
+  _dF(0)
   {
   }
 
@@ -41,25 +42,25 @@ public:
   Plane(const Vector3D& normal,
         double d):
   _normal(normal.normalized()),
-  _d(d)
-//  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
-//  _dF((float) d)
+  _d(d),
+  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+  _dF((float) d)
   {
   }
 
   Plane(double a, double b, double c, double d):
   _normal(Vector3D(a,b,c).normalized()),
-  _d(d)
-//  _normalF(Vector3F((float) a, (float) b, (float) c).normalized()),
-//  _dF((float) d)
+  _d(d),
+  _normalF(Vector3F((float) a, (float) b, (float) c).normalized()),
+  _dF((float) d)
   {
   }
 
   Plane(const Plane& that) :
   _normal(that._normal),
-  _d(that._d)
-//  _normalF(that._normalF),
-//  _dF(that._dF)
+  _d(that._d),
+  _normalF(that._normalF),
+  _dF(that._dF)
   {
   }
 
@@ -70,7 +71,7 @@ public:
   }
 
   float signedDistance(const Vector3F& point) const {
-    return point.dot(_normal) + (float) _d;
+    return point.dot(_normalF) + _dF;
   }
 
   Vector3D intersectionWithRay(const Vector3D& origin,

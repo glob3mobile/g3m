@@ -10,7 +10,7 @@ public final class Timer_WebGL
          extends
             ITimer {
 
-   private long _startTime;
+   private long _startTimeInMilliseconds;
 
 
    public Timer_WebGL() {
@@ -20,24 +20,25 @@ public final class Timer_WebGL
 
    @Override
    public TimeInterval now() {
-      //      final double currentTime = Duration.currentTimeMillis();
-      //      return TimeInterval.fromSeconds(currentTime / 1000);
       return TimeInterval.fromMilliseconds(System.currentTimeMillis());
    }
 
 
    @Override
    public void start() {
-      //      _startTime = Duration.currentTimeMillis();
-      _startTime = System.currentTimeMillis();
+      _startTimeInMilliseconds = System.currentTimeMillis();
    }
 
 
    @Override
    public TimeInterval elapsedTime() {
-      //      final double currentTime = Duration.currentTimeMillis();
-      //      return TimeInterval.fromSeconds((currentTime - _startTime) / 1000);
-      return TimeInterval.fromMilliseconds(System.currentTimeMillis() - _startTime);
+      return TimeInterval.fromMilliseconds(System.currentTimeMillis() - _startTimeInMilliseconds);
+   }
+
+
+   @Override
+   public long elapsedTimeInMilliseconds() {
+      return System.currentTimeMillis() - _startTimeInMilliseconds;
    }
 
 }
