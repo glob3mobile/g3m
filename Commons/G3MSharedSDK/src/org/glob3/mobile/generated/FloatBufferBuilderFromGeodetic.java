@@ -82,17 +82,17 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final void add(Geodetic3D position)
   {
-    add(position.latitude(), position.longitude(), position.height());
+    add(position._latitude, position._longitude, position._height);
   }
 
   public final void add(Geodetic2D position)
   {
-    add(position.latitude(), position.longitude(), 0.0);
+    add(position._latitude, position._longitude, 0.0);
   }
 
   public final void add(Geodetic2D position, double height)
   {
-    add(position.latitude(), position.longitude(), height);
+    add(position._latitude, position._longitude, height);
   }
 
   public final Vector3D getCenter()

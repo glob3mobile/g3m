@@ -692,12 +692,12 @@ public class Tile
       }
       else
       {
-        final Geodetic2D lower = _sector.lower();
-        final Geodetic2D upper = _sector.upper();
+        final Geodetic2D lower = _sector._lower;
+        final Geodetic2D upper = _sector._upper;
   
-        final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+        final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-        final Angle splitLatitude = trc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+        final Angle splitLatitude = trc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
         /*                               */
         /*                               */
   
@@ -891,8 +891,8 @@ public class Tile
 
   public final java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude, boolean setParent)
   {
-    final Geodetic2D lower = _sector.lower();
-    final Geodetic2D upper = _sector.upper();
+    final Geodetic2D lower = _sector._lower;
+    final Geodetic2D upper = _sector._upper;
   
     final int nextLevel = _level + 1;
   
@@ -901,13 +901,13 @@ public class Tile
   
     java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
   
-    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+    subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
   
-    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1, setParent));
+    subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
   
-    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2, setParent));
+    subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
   
-    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
+    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
   
     return subTiles;
   }

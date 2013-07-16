@@ -47,7 +47,7 @@ public class Trail
       final Geodetic3D current = _positions.get(i);
       final Geodetic3D previous = _positions.get(i - 1);
   
-      final Angle angle = Geodetic2D.bearing(previous.latitude(), previous.longitude(), current.latitude(), current.longitude());
+      final Angle angle = Geodetic2D.bearing(previous._latitude, previous._longitude, current._latitude, current._longitude);
   
       final double angleInDegrees = angle.degrees();
       if (i == 1)

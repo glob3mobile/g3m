@@ -673,12 +673,12 @@ public class MutableMatrix44D
 
     public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
     {
-      return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
     public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
     {
-      return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
   }

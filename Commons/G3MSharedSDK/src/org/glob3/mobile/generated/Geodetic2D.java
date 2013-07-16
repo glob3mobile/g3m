@@ -39,7 +39,7 @@ public class Geodetic2D
 
   public static Geodetic2D linearInterpolation(Geodetic2D from, Geodetic2D to, double alpha)
   {
-    return new Geodetic2D(Angle.linearInterpolation(from.latitude(), to.latitude(), alpha), Angle.linearInterpolation(from.longitude(), to.longitude(), alpha));
+    return new Geodetic2D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha));
   }
 
 
@@ -66,7 +66,7 @@ public class Geodetic2D
    */
   public static Angle bearing(Geodetic2D from, Geodetic2D to)
   {
-    return bearing(from.latitude(), from.longitude(), to.latitude(), to.longitude());
+    return bearing(from._latitude, from._longitude, to._latitude, to._longitude);
   }
 
 
@@ -129,7 +129,7 @@ public class Geodetic2D
 
   public final boolean isBetween(Geodetic2D min, Geodetic2D max)
   {
-    return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
+    return _latitude.isBetween(min._latitude, max._latitude) && _longitude.isBetween(min._longitude, max._longitude);
   }
 
   public final Angle angleTo(Geodetic2D other)

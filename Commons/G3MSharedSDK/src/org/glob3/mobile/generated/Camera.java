@@ -367,7 +367,7 @@ public class Camera
       _geodeticPosition = null;
       _dirtyFlags.setAll(true);
       final double distanceToPlanetCenter = _position.length();
-      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
+      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
       _normalizedPosition = _position.normalized();
     }
@@ -426,7 +426,7 @@ public class Camera
 
   public final void setGeodeticPosition(Geodetic2D g2d, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
+    _setGeodeticPosition(_planet.toCartesian(g2d._latitude, g2d._longitude, height));
   }
 
   /**
@@ -736,7 +736,7 @@ public class Camera
     //                       bottom, top,
     //                       znear, zfar);
   
-    final double height = getGeodeticPosition().height();
+    final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
   
     /*

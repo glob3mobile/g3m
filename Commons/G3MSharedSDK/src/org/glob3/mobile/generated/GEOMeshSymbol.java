@@ -34,7 +34,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     for (int i = 0; i < coordinatesCount; i++)
     {
       final Geodetic2D coordinate = coordinates.get(i);
-      vertices.add(coordinate.latitude(), coordinate.longitude(), deltaHeight);
+      vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
     }
   
     return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
@@ -56,7 +56,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       {
         final Geodetic2D coordinate = coordinates.get(j);
   
-        vertices.add(coordinate.latitude(), coordinate.longitude(), deltaHeight);
+        vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
   
         indices.add(index);
         if ((j > 0) && (j < (coordinatesCount-1)))

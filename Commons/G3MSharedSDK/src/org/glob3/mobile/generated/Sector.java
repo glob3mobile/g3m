@@ -23,8 +23,6 @@ package org.glob3.mobile.generated;
 public class Sector
 {
 
-  private final Geodetic2D _lower ;
-  private final Geodetic2D _upper ;
   private final Geodetic2D _center ;
 
   private final Angle _deltaLatitude ;
@@ -46,6 +44,9 @@ public class Sector
    */
 
   private Vector3D _normalizedCartesianCenter;
+
+  public final Geodetic2D _lower ;
+  public final Geodetic2D _upper ;
 
 
 
@@ -95,9 +96,9 @@ public class Sector
   {
      _lower = new Geodetic2D(lower);
      _upper = new Geodetic2D(upper);
-     _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
-     _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
-     _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
+     _deltaLatitude = new Angle(upper._latitude.sub(lower._latitude));
+     _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
+     _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
      _deltaRadiusInRadians = -1.0;
      _normalizedCartesianCenter = null;
   }
@@ -146,7 +147,7 @@ public class Sector
 
   public final boolean fullContains(Sector that)
   {
-    //return contains(that.upper()) && contains(that.lower());
+    //return contains(that._upper) && contains(that._lower);
     return (contains(that._upper._latitude, that._upper._longitude) && contains(that._lower._latitude, that._lower._longitude));
   }
 
@@ -298,12 +299,12 @@ public class Sector
   
   public final Sector intersection(Sector that)
   {
-    final Angle lowLat = Angle.max(lower().latitude(), that.lower().latitude());
-    final Angle lowLon = Angle.max(lower().longitude(), that.lower().longitude());
+    final Angle lowLat = Angle.max(_lower._latitude, that._lower._latitude);
+    final Angle lowLon = Angle.max(_lower._longitude, that._lower._longitude);
     final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-    final Angle upLat = Angle.min(upper().latitude(), that.upper().latitude());
-    final Angle upLon = Angle.min(upper().longitude(), that.upper().longitude());
+    final Angle upLat = Angle.min(_upper._latitude, that._upper._latitude);
+    final Angle upLon = Angle.min(_upper._longitude, that._upper._longitude);
     final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
     return new Sector(low, up);
@@ -311,12 +312,12 @@ public class Sector
 
   public final Sector mergedWith(Sector that)
   {
-    final Angle lowLat = Angle.min(lower().latitude(), that.lower().latitude());
-    final Angle lowLon = Angle.min(lower().longitude(), that.lower().longitude());
+    final Angle lowLat = Angle.min(_lower._latitude, that._lower._latitude);
+    final Angle lowLon = Angle.min(_lower._longitude, that._lower._longitude);
     final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-    final Angle upLat = Angle.max(upper().latitude(), that.upper().latitude());
-    final Angle upLon = Angle.max(upper().longitude(), that.upper().longitude());
+    final Angle upLat = Angle.max(_upper._latitude, that._upper._latitude);
+    final Angle upLon = Angle.max(_upper._longitude, that._upper._longitude);
     final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
     return new Sector(low, up);
@@ -334,12 +335,12 @@ public class Sector
 
   public final Angle lowerLatitude()
   {
-    return _lower.latitude();
+    return _lower._latitude;
   }
 
   public final Angle lowerLongitude()
   {
-    return _lower.longitude();
+    return _lower._longitude;
   }
 
   public final Geodetic2D upper()
@@ -349,28 +350,28 @@ public class Sector
 
   public final Angle upperLatitude()
   {
-    return _upper.latitude();
+    return _upper._latitude;
   }
 
   public final Angle upperLongitude()
   {
-    return _upper.longitude();
+    return _upper._longitude;
   }
 
 
   public final boolean contains(Angle latitude, Angle longitude)
   {
-    return (latitude.isBetween(_lower.latitude(), _upper.latitude()) && longitude.isBetween(_lower.longitude(), _upper.longitude()));
+    return (latitude.isBetween(_lower._latitude, _upper._latitude) && longitude.isBetween(_lower._longitude, _upper._longitude));
   }
 
   public final boolean contains(Geodetic2D position)
   {
-    return contains(position.latitude(), position.longitude());
+    return contains(position._latitude, position._longitude);
   }
 
   public final boolean contains(Geodetic3D position)
   {
-    return contains(position.latitude(), position.longitude());
+    return contains(position._latitude, position._longitude);
   }
 
   public final boolean touchesWith(Sector that)
@@ -379,11 +380,11 @@ public class Sector
     //   page 79
   
     // Exit with no intersection if separated along an axis
-    if (_upper.latitude().lowerThan(that._lower.latitude()) || _lower.latitude().greaterThan(that._upper.latitude()))
+    if (_upper._latitude.lowerThan(that._lower._latitude) || _lower._latitude.greaterThan(that._upper._latitude))
     {
       return false;
     }
-    if (_upper.longitude().lowerThan(that._lower.longitude()) || _lower.longitude().greaterThan(that._upper.longitude()))
+    if (_upper._longitude.lowerThan(that._lower._longitude) || _lower._longitude.greaterThan(that._upper._longitude))
     {
       return false;
     }
@@ -414,12 +415,12 @@ public class Sector
 
   public final Geodetic2D getNW()
   {
-    return new Geodetic2D(_upper.latitude(), _lower.longitude());
+    return new Geodetic2D(_upper._latitude, _lower._longitude);
   }
 
   public final Geodetic2D getSE()
   {
-    return new Geodetic2D(_lower.latitude(), _upper.longitude());
+    return new Geodetic2D(_lower._latitude, _upper._longitude);
   }
 
   public final Geodetic2D getCenter()
@@ -434,22 +435,22 @@ public class Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-    return new Geodetic2D(Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), 1.0 - v), Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), u));
+    return new Geodetic2D(Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v), Angle.linearInterpolation(_lower._longitude, _upper._longitude, u));
   }
 
   public final Angle getInnerPointLongitude(double u)
   {
-    return Angle.linearInterpolation(_lower.longitude(), _upper.longitude(), u);
+    return Angle.linearInterpolation(_lower._longitude, _upper._longitude, u);
   }
   public final Angle getInnerPointLatitude(double v)
   {
-    return Angle.linearInterpolation(_lower.latitude(), _upper.latitude(), (float)(1.0-v));
+    return Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v);
   }
 
 
   public final Vector2D getUVCoordinates(Geodetic2D point)
   {
-    return getUVCoordinates(point.latitude(), point.longitude());
+    return getUVCoordinates(point._latitude, point._longitude);
   }
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
@@ -459,12 +460,12 @@ public class Sector
 
   public final double getUCoordinate(Angle longitude)
   {
-    return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+    return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
   }
 
   public final double getVCoordinate(Angle latitude)
   {
-    return (_upper.latitude()._radians - latitude._radians) / _deltaLatitude._radians;
+    return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
   }
 
 
@@ -491,28 +492,28 @@ public class Sector
       return position;
     }
   
-    double latitudeInDegrees = position.latitude().degrees();
-    double longitudeInDegrees = position.longitude().degrees();
+    double latitudeInDegrees = position._latitude.degrees();
+    double longitudeInDegrees = position._longitude.degrees();
   
-    final double upperLatitudeInDegrees = _upper.latitude().degrees();
+    final double upperLatitudeInDegrees = _upper._latitude.degrees();
     if (latitudeInDegrees > upperLatitudeInDegrees)
     {
       latitudeInDegrees = upperLatitudeInDegrees;
     }
   
-    final double upperLongitudeInDegrees = _upper.longitude().degrees();
+    final double upperLongitudeInDegrees = _upper._longitude.degrees();
     if (longitudeInDegrees > upperLongitudeInDegrees)
     {
       longitudeInDegrees = upperLongitudeInDegrees;
     }
   
-    final double lowerLatitudeInDegrees = _lower.latitude().degrees();
+    final double lowerLatitudeInDegrees = _lower._latitude.degrees();
     if (latitudeInDegrees < lowerLatitudeInDegrees)
     {
       latitudeInDegrees = lowerLatitudeInDegrees;
     }
   
-    final double lowerLongitudeInDegrees = _lower.longitude().degrees();
+    final double lowerLongitudeInDegrees = _lower._longitude.degrees();
     if (longitudeInDegrees < lowerLongitudeInDegrees)
     {
       longitudeInDegrees = lowerLongitudeInDegrees;
@@ -531,16 +532,16 @@ public class Sector
   
     // test longitude
     Geodetic2D center = getCenter();
-    double lon        = pos.longitude()._degrees;
-    double centerLon  = center.longitude()._degrees;
+    double lon        = pos._longitude._degrees;
+    double centerLon  = center._longitude._degrees;
     double oppLon1    = centerLon - 180;
     double oppLon2    = centerLon + 180;
     if (lon<oppLon1)
       lon+=360;
     if (lon>oppLon2)
       lon-=360;
-    double minLon     = _lower.longitude()._degrees;
-    double maxLon     = _upper.longitude()._degrees;
+    double minLon     = _lower._longitude._degrees;
+    double maxLon     = _upper._longitude._degrees;
     //bool insideLon    = true;
     if (lon < minLon) {
       lon = minLon;
@@ -552,9 +553,9 @@ public class Sector
     }
   
     // test latitude
-    double lat        = pos.latitude()._degrees;
-    double minLat     = _lower.latitude()._degrees;
-    double maxLat     = _upper.latitude()._degrees;
+    double lat        = pos._latitude._degrees;
+    double minLat     = _lower._latitude._degrees;
+    double maxLat     = _upper._latitude._degrees;
     //bool insideLat    = true;
     if (lat < minLat) {
       lat = minLat;
@@ -588,8 +589,8 @@ public class Sector
     return point;*/
   
     /*
-     const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-     const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+     const Angle lat = pos._latitude.nearestAngleInInterval(_lower._latitude, _upper._latitude);
+     const Angle lon = pos._longitude.nearestAngleInInterval(_lower._longitude, _upper._longitude);
      return Geodetic2D(lat, lon);*/
   //}
   
@@ -634,17 +635,17 @@ public class Sector
 
   public final boolean touchesNorthPole()
   {
-    return (_upper.latitude()._degrees >= 89.9);
+    return (_upper._latitude._degrees >= 89.9);
   }
 
   public final boolean touchesSouthPole()
   {
-    return (_lower.latitude()._degrees <= -89.9);
+    return (_lower._latitude._degrees <= -89.9);
   }
 
   public final boolean touchesPoles()
   {
-    return ((_upper.latitude()._degrees >= 89.9) || (_lower.latitude()._degrees <= -89.9));
+    return ((_upper._latitude._degrees >= 89.9) || (_lower._latitude._degrees <= -89.9));
   }
 
   public final double getDeltaRadiusInRadians()

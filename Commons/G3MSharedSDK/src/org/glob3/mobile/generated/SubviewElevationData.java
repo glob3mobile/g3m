@@ -31,8 +31,8 @@ public class SubviewElevationData extends ElevationData
   {
     IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
   
-    final Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector.lower());
-    final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector.upper());
+    final Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
+    final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
     final Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
   
     IMathUtils mu = IMathUtils.instance();
@@ -176,11 +176,11 @@ public class SubviewElevationData extends ElevationData
   private Vector2D getParentXYAt(ElevationData elevationData, Geodetic2D position)
   {
     final Sector parentSector = elevationData.getSector();
-    final Geodetic2D parentLower = parentSector.lower();
+    final Geodetic2D parentLower = parentSector._lower;
   
-    final double parentX = ((position.longitude().radians() - parentLower.longitude().radians()) / parentSector.getDeltaLongitude().radians() * elevationData.getExtentWidth());
+    final double parentX = ((position._longitude.radians() - parentLower._longitude.radians()) / parentSector.getDeltaLongitude().radians() * elevationData.getExtentWidth());
   
-    final double parentY = ((position.latitude().radians() - parentLower.latitude().radians()) / parentSector.getDeltaLatitude().radians() * elevationData.getExtentHeight());
+    final double parentY = ((position._latitude.radians() - parentLower._latitude.radians()) / parentSector.getDeltaLatitude().radians() * elevationData.getExtentHeight());
   
     return new Vector2D(parentX, parentY);
   }
@@ -244,8 +244,8 @@ public class SubviewElevationData extends ElevationData
     //  const double v = (double) y / (_height - 1);
     //  const Geodetic2D position = _sector.getInnerPoint(u, v);
     //
-    //  return getElevationAt(position.latitude(),
-    //                        position.longitude());
+    //  return getElevationAt(position._latitude,
+    //                        position._longitude);
   }
 
   public final String description(boolean detailed)

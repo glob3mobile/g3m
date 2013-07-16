@@ -132,7 +132,7 @@ public abstract class ElevationData
   
         final Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
   
-        vertices.add(position, positionOffset.height() + (elevation * verticalExaggeration));
+        vertices.add(position, positionOffset._height + (elevation * verticalExaggeration));
   
       }
     }
@@ -190,7 +190,7 @@ public abstract class ElevationData
         final float b = alpha;
         colors.add(r, g, b, 1);
   
-        vertices.add(position.add(positionOffset2D), positionOffset.height() + (elevation * verticalExaggeration));
+        vertices.add(position.add(positionOffset2D), positionOffset._height + (elevation * verticalExaggeration));
       }
     }
   
@@ -210,7 +210,7 @@ public abstract class ElevationData
   //      }
   //
   //      vertices.add(position.add(positionOffset2D),
-  //                   positionOffset.height() + (elevation * verticalExaggeration));
+  //                   positionOffset._height + (elevation * verticalExaggeration));
   //
   //
   //      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
@@ -347,7 +347,7 @@ public abstract class ElevationData
 
   public final double getElevationAt(Geodetic2D position)
   {
-    return getElevationAt(position.latitude(), position.longitude());
+    return getElevationAt(position._latitude, position._longitude);
   }
 
   //  bool isEquivalentTo(const ElevationData* ed){

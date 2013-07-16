@@ -69,12 +69,12 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
   {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
@@ -138,17 +138,17 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), geodetic.height());
+    return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
   }
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
+    return toCartesian(geodetic._latitude, geodetic._longitude, 0.0);
   }
 
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+    return toCartesian(geodetic._latitude, geodetic._longitude, height);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoidalPlanet)
@@ -281,10 +281,10 @@ public class EllipsoidalPlanet extends Planet
     // spheric distance from P to Q
     // this is the right form, but it's the most complex
     // theres is a minimum error considering sphere instead of EllipsoidalPlanet
-    final double latP = g2.latitude()._radians;
-    final double lonP = g2.longitude()._radians;
-    final double latQ = g1.latitude()._radians;
-    final double lonQ = g1.longitude()._radians;
+    final double latP = g2._latitude._radians;
+    final double lonP = g2._longitude._radians;
+    final double latQ = g1._latitude._radians;
+    final double lonQ = g1._longitude._radians;
     final double coslatP = mu.cos(latP);
     final double sinlatP = mu.sin(latP);
     final double coslonP = mu.cos(lonP);
@@ -306,18 +306,18 @@ public class EllipsoidalPlanet extends Planet
     final Vector3D radius = _ellipsoid.getRadii();
     final double R = (radius._x + radius._y + radius._z) / 3;
   
-    final double medLat = g1.latitude()._degrees;
-    final double medLon = g1.longitude()._degrees;
+    final double medLat = g1._latitude._degrees;
+    final double medLon = g1._longitude._degrees;
   
     // this way is faster, and works properly further away from the poles
-    //double diflat = fabs(g.latitude()-medLat);
-    double diflat = mu.abs(g2.latitude()._degrees - medLat);
+    //double diflat = fabs(g._latitude-medLat);
+    double diflat = mu.abs(g2._latitude._degrees - medLat);
     if (diflat > 180)
     {
       diflat = 360 - diflat;
     }
   
-    double diflon = mu.abs(g2.longitude()._degrees - medLon);
+    double diflon = mu.abs(g2._longitude._degrees - medLon);
     if (diflon > 180)
     {
       diflon = 360 - diflon;

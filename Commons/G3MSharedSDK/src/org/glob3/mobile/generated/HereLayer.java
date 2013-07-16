@@ -84,18 +84,18 @@ public class HereLayer extends Layer
     isb.addInt(_parameters._tileTextureResolution._y);
   
     isb.addString("&ctr=");
-    isb.addDouble(tileSector.getCenter().latitude().degrees());
+    isb.addDouble(tileSector.getCenter()._latitude.degrees());
     isb.addString(",");
-    isb.addDouble(tileSector.getCenter().longitude().degrees());
+    isb.addDouble(tileSector.getCenter()._longitude.degrees());
   
   //  isb->addString("&poi=");
-  //  isb->addDouble(tileSector.lower().latitude().degrees());
+  //  isb->addDouble(tileSector._lower._latitude.degrees());
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.lower().longitude().degrees());
+  //  isb->addDouble(tileSector._lower._longitude.degrees());
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.upper().latitude().degrees());
+  //  isb->addDouble(tileSector._upper._latitude.degrees());
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.upper().longitude().degrees());
+  //  isb->addDouble(tileSector._upper._longitude.degrees());
   //  isb->addString("&nomrk");
   
     isb.addString("&z=");

@@ -487,8 +487,8 @@ public class G3MWidget
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch, boolean linearTiming, boolean linearHeight)
   {
-    double finalLatInDegrees = toPosition.latitude()._degrees;
-    double finalLonInDegrees = toPosition.longitude()._degrees;
+    double finalLatInDegrees = toPosition._latitude._degrees;
+    double finalLonInDegrees = toPosition._longitude._degrees;
   
     //Fixing final latitude
     while (finalLatInDegrees > 90)
@@ -509,12 +509,12 @@ public class G3MWidget
     {
       finalLonInDegrees += 360;
     }
-    if (Math.abs(finalLonInDegrees - fromPosition.longitude()._degrees) > 180)
+    if (Math.abs(finalLonInDegrees - fromPosition._longitude._degrees) > 180)
     {
       finalLonInDegrees -= 360;
     }
   
-    final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition.height());
+    final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition._height);
   
     stopCameraAnimation();
   
