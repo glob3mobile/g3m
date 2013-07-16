@@ -251,7 +251,7 @@ public class Tile
           return true;
         }
   
-        if (trc.getLastSplitTimer().elapsedTime().milliseconds() < 25)
+        if (trc.getLastSplitTimer().elapsedTimeInMilliseconds() < 25)
         {
           // there are not more time-budget to spend
           return true;
@@ -268,7 +268,7 @@ public class Tile
   
   
     int __Testing_DGD;
-    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 500))
+    if ((_lodTimer != null) && (_lodTimer.elapsedTimeInMilliseconds() < 500))
     {
       return _lastLodTest;
     }
@@ -572,12 +572,16 @@ public class Tile
       Mesh mesh = getTessellatorMesh(rc, trc);
       if (mesh != null)
       {
-        _boundingVolume = mesh.getBoundingVolume().createSphere();
+  //      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+        _boundingVolume = mesh.getBoundingVolume();
       }
     }
     return _boundingVolume;
   }
 
+
+  ///#include "Sphere.hpp"
+  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -619,8 +623,7 @@ public class Tile
   {
     prune(null, null);
   
-    if (_boundingVolume != null)
-       _boundingVolume.dispose();
+  //  delete _boundingVolume;
   
     if (_debugMesh != null)
        _debugMesh.dispose();

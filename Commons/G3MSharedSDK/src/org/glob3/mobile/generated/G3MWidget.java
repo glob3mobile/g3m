@@ -215,15 +215,14 @@ public class G3MWidget
       }
     }
   
-    final TimeInterval elapsedTime = _timer.elapsedTime();
-    if (elapsedTime.milliseconds() > 100)
-    {
-      //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
-    }
+    final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
+  //  if (elapsedTimeMS > 100) {
+  //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
+  //  }
   
     if (_logFPS)
     {
-      _totalRenderTime += elapsedTime.milliseconds();
+      _totalRenderTime += elapsedTimeMS;
   
       if ((_renderStatisticsTimer == null) || (_renderStatisticsTimer.elapsedTime().seconds() > 2))
       {
