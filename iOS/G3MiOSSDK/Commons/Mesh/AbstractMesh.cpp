@@ -13,7 +13,7 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 
 #include "GLFeature.hpp"

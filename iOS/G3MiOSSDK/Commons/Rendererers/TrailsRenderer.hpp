@@ -13,7 +13,7 @@
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "GLState.hpp"
 
 class Mesh;

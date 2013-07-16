@@ -16,7 +16,7 @@
 #include "GL.hpp"
 #include "Vector2F.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {

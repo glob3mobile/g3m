@@ -21,7 +21,7 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 
-//#include "GPUProgramState.hpp"
+////#include "GPUProgramState.hpp"
 
 #include "GLState.hpp"
 class ILogger;
@@ -326,6 +326,7 @@ public:
     ModelGLFeature* m = new ModelGLFeature(getModelMatrix().asMatrix44D());
     glState.addGLFeatureAndRelease(m);
   }
+    
 
 private:
   const Angle getHeading(const Vector3D& normal) const;

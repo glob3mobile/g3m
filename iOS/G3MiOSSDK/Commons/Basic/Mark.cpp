@@ -19,7 +19,7 @@
 #include "ITextUtils.hpp"
 #include "IImageListener.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
 #include "GLFeature.hpp"

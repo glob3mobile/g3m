@@ -14,7 +14,7 @@
 
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 
 void LazyTextureMapping::modifyGLState(GLState& state) const{

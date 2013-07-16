@@ -10,7 +10,7 @@
 
 #include "GL.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 void TexturedMesh::render(const G3MRenderContext* rc) const {
   _mesh->render(rc);

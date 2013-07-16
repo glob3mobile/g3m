@@ -16,7 +16,7 @@
 #include "Color.hpp"
 #include "DirectMesh.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include "MutableMatrix44D.hpp"
 

@@ -25,7 +25,7 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class EllipsoidShape;
 

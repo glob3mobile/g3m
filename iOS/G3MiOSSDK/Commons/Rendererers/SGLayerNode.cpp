@@ -19,7 +19,7 @@
 
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000

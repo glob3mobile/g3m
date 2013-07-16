@@ -10,7 +10,7 @@
 
 #include "Context.hpp"
 #include "GLGlobalState.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 //GLGlobalState* SGMaterialNode::createState(const G3MRenderContext* rc,
 //                                     const GLGlobalState& parentState) {
@@ -38,18 +38,18 @@
 //}
 
 
-void SGMaterialNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
-
-}
-void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{
-
-  if (_baseColor != NULL){
-    //    progState.setUniformValue(EnableFlatColor, true);
-    progState.setUniformValue(FLAT_COLOR, _baseColor->getRed(),
-                              _baseColor->getGreen(),
-                              _baseColor->getBlue(),
-                              _baseColor->getAlpha());
-    //    const float colorsIntensity = 1;
-    //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
-  }
-}
+//void SGMaterialNode::modifyGLGlobalState(GLGlobalState& GLGlobalState) const{
+//
+//}
+//void SGMaterialNode::modifyGPUProgramState(GPUProgramState& progState) const{
+//
+//  if (_baseColor != NULL){
+//    //    progState.setUniformValue(EnableFlatColor, true);
+//    progState.setUniformValue(FLAT_COLOR, _baseColor->getRed(),
+//                              _baseColor->getGreen(),
+//                              _baseColor->getBlue(),
+//                              _baseColor->getAlpha());
+//    //    const float colorsIntensity = 1;
+//    //    progState.setUniformValue(FlatColorIntensity, colorsIntensity);
+//  }
+//}

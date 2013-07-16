@@ -17,7 +17,7 @@
 #include "ShortBufferBuilder.hpp"
 #include "IShortBuffer.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 
 DummyRenderer::~DummyRenderer() {

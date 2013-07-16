@@ -35,7 +35,7 @@
 #include "GPUProgramManager.hpp"
 
 #include "GLGlobalState.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "GLGlobalState.hpp"
 
 #include "ICameraActivityListener.hpp"
@@ -456,8 +456,7 @@ void G3MWidget::render(int width, int height) {
 
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    ILogger::instance()->logWarning("Frame took too much time: %dms",
-                                    elapsedTime.milliseconds());
+    //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
   }
 
   if (_logFPS) {

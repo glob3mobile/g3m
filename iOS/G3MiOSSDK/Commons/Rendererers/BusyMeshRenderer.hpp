@@ -14,7 +14,7 @@
 #include "Effects.hpp"
 #include "Color.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include "GLState.hpp"
 
@@ -77,14 +77,11 @@ public:
     delete _mesh;
     delete _backgroundColor;
   }
-  
-  void incDegrees(double value) { 
+
+  void incDegrees(double value) {
     _degrees += value; 
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-    
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-//    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
     _glState.clearGLFeatureGroup(CAMERA_GROUP);
     _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));

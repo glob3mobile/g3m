@@ -14,7 +14,7 @@
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include "GLState.hpp"
 

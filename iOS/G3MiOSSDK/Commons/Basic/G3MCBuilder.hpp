@@ -108,7 +108,6 @@ private:
 
 
   GL* _gl;
-//  bool _glob3Created;
   G3MWidget* _g3mWidget;
   IStorage* _storage;
 
@@ -128,7 +127,6 @@ private:
 
   const URL createScenesDescriptionsURL() const;
 
-//  LayerSet* getLayerSet();
   void recreateLayerSet();
 
   IThreadUtils* _threadUtils;

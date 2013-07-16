@@ -22,7 +22,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
 

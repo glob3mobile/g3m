@@ -18,7 +18,7 @@
 
 #include "GPUProgram.hpp"
 #include "GL.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class GPUProgramManager{
   

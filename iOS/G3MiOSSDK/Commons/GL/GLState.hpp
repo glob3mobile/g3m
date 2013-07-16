@@ -13,7 +13,7 @@
 
 #include "GLGlobalState.hpp"
 #include "GPUProgram.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLFeatureGroup.hpp"

@@ -274,6 +274,7 @@
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */; };
 		D80A28711746572E0058CEC3 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286F1746572E0058CEC3 /* GLState.cpp */; };
 		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
 		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
@@ -288,11 +289,9 @@
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
 		D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */; };
 		D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */; };
-		D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87BF6D8170F0333004D467D /* GPUProgramState.cpp */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
 		D87EC5CE15BEB31000E38C36 /* CPUTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */; };
-		D87F26F11713075F0048AD70 /* GPUProgramState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6D9170F0333004D467D /* GPUProgramState.hpp */; };
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
@@ -395,7 +394,6 @@
 		E780A53D16D3AE37000F0395 /* TouchEvent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3941577EE500012AC53 /* TouchEvent.hpp */; };
 		E780A53E16D3AE37000F0395 /* URL.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFEC12415C2EB96003FA986 /* URL.hpp */; };
 		E780A54016D3AED9000F0395 /* Camera.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
-		E780A54116D3AED9000F0395 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */; };
 		E780A54316D3AED9000F0395 /* CameraDoubleTapHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */; };
 		E780A54416D3AED9000F0395 /* CameraEventHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */; };
 		E780A54516D3AED9000F0395 /* CameraRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */; };
@@ -531,6 +529,8 @@
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
 		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
 		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
+		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
+		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
@@ -558,7 +558,8 @@
 				D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */,
 				D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */,
 				D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */,
-				D87F26F11713075F0048AD70 /* GPUProgramState.hpp in CopyFiles */,
+				CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */,
+				FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */,
 				CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */,
 				CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */,
 				CF4027D31770DE7B00D5A80C /* IWebSocketListener.hpp in CopyFiles */,
@@ -622,7 +623,6 @@
 				CFD15C4516E7930A004DC360 /* OSMLayer.hpp in CopyFiles */,
 				E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */,
 				E780A54016D3AED9000F0395 /* Camera.hpp in CopyFiles */,
-				E780A54116D3AED9000F0395 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				E780A54316D3AED9000F0395 /* CameraDoubleTapHandler.hpp in CopyFiles */,
 				E780A54416D3AED9000F0395 /* CameraEventHandler.hpp in CopyFiles */,
 				E780A54516D3AED9000F0395 /* CameraRenderer.hpp in CopyFiles */,
@@ -891,7 +891,6 @@
 		CC596F1C15C46D4F008FC230 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Camera.cpp; path = Commons/Cameras/Camera.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F1D15C46D4F008FC230 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Camera.hpp; path = Commons/Cameras/Camera.hpp; sourceTree = "<group>"; };
 		CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraDoubleDragHandler.cpp; path = Commons/Cameras/CameraDoubleDragHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraSingleDragHandler.hpp; path = Commons/Cameras/CameraSingleDragHandler.hpp; sourceTree = "<group>"; };
 		CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraSingleDragHandler.cpp; path = Commons/Cameras/CameraSingleDragHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationHandler.hpp; path = Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
@@ -1278,8 +1277,6 @@
 		D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledMesh.hpp; path = Commons/Mesh/LeveledMesh.hpp; sourceTree = "<group>"; };
 		D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatColorMesh.cpp; path = Commons/Mesh/FlatColorMesh.cpp; sourceTree = "<group>"; };
 		D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FlatColorMesh.hpp; path = Commons/Mesh/FlatColorMesh.hpp; sourceTree = "<group>"; };
-		D87BF6D8170F0333004D467D /* GPUProgramState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramState.cpp; sourceTree = "<group>"; };
-		D87BF6D9170F0333004D467D /* GPUProgramState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramState.hpp; sourceTree = "<group>"; };
 		D87BF6DB170F0628004D467D /* GPUUniform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUUniform.hpp; sourceTree = "<group>"; };
 		D87EC5C115BEB12F00E38C36 /* Layer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Layer.hpp; sourceTree = "<group>"; };
 		D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerSet.cpp; sourceTree = "<group>"; };
@@ -1369,6 +1366,9 @@
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		E87557C516E915D10031FBB3 /* TMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMSLayer.cpp; sourceTree = "<group>"; };
 		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
+		FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
+		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
+		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
@@ -1792,8 +1792,7 @@
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
-				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
-				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
+				FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
@@ -1803,6 +1802,8 @@
 				CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */,
 				CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */,
 				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
+				FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */,
+				FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */,
 				CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */,
 				CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */,
 				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
@@ -2017,8 +2018,6 @@
 				D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */,
 				D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */,
 				D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */,
-				D87BF6D8170F0333004D467D /* GPUProgramState.cpp */,
-				D87BF6D9170F0333004D467D /* GPUProgramState.hpp */,
 				D87BF6DB170F0628004D467D /* GPUUniform.hpp */,
 				D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */,
 				D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */,
@@ -2410,7 +2409,6 @@
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
-				D87BF6DA170F0333004D467D /* GPUProgramState.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BB170353DB00092888 /* GEOPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
@@ -2457,6 +2455,7 @@
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
 				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
+				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

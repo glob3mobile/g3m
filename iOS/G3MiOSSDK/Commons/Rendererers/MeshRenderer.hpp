@@ -12,7 +12,7 @@
 #include "LeafRenderer.hpp"
 #include <vector>
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include "GLState.hpp"
 

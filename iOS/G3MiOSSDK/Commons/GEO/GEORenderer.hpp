@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include <vector>
 class GEOObject;

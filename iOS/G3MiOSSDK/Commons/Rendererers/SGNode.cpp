@@ -9,7 +9,7 @@
 #include "SGNode.hpp"
 
 #include "GLGlobalState.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 #include "SGShape.hpp"
 

@@ -16,7 +16,7 @@
 #include "ShapeFullPositionEffect.hpp"
 
 #include "Camera.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:

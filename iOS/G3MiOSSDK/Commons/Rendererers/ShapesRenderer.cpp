@@ -11,7 +11,7 @@
 #include "OrderedRenderable.hpp"
 #include "Camera.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class TransparentShapeWrapper : public OrderedRenderable {
 private:

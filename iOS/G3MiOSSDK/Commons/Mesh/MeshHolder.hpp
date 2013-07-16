@@ -12,7 +12,7 @@
 #include "Mesh.hpp"
 #include "Vector3D.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 class MeshHolder : public Mesh {
 private:

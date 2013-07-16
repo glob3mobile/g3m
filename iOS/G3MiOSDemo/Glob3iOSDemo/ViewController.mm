@@ -23,6 +23,7 @@
 #import <G3MiOSSDK/WMSLayer.hpp>
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
@@ -740,8 +741,10 @@ public:
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool processRotation = true;
   const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
+  
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -807,7 +810,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           BingMapType::AerialWithLabels(),
@@ -1000,6 +1003,21 @@ public:
                                   TimeInterval::fromDays(30),
                                   true);
     layerSet->addLayer(pnoa);
+    
+    class PNOATerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("PNOA touched. Feature info = %s\n", url.getPath().c_str());
+        
+        return true;
+      }
+    };
+    
+    pnoa->addTerrainTouchEventListener(new PNOATerrainTouchEventListener());
   }
   
   const bool testURLescape = false;
@@ -1073,6 +1091,42 @@ public:
     
     layerSet->addLayer(catastro);
   }
+  
+  if (true) {
+    WMSLayer* bing = LayerBuilder::createBingLayer(true);
+    layerSet->addLayer(bing);
+  }
+
+  if (false) {
+    WMSLayer* temp = new WMSLayer("temp",
+                                  URL("http://wms.openweathermap.org/service", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::zero(),
+                                  true);
+    layerSet->addLayer(temp);
+    
+    class TempTerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("touched Temperature. Feature info = %s\n", url.getPath().c_str());
+        
+        return true;
+      }
+    };
+    
+    temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+  }
+
   
   return layerSet;
 }

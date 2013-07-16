@@ -11,7 +11,7 @@
 
 #include "LeafRenderer.hpp"
 #include "Shape.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include <vector>
 
 class ShapesRenderer : public LeafRenderer {

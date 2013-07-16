@@ -10,7 +10,7 @@
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
 
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 
 GEOGeometry::~GEOGeometry() {
 }

@@ -21,7 +21,7 @@
 
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
-#include "GPUProgramState.hpp"
+//#include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"
