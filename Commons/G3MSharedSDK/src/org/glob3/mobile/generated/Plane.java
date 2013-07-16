@@ -22,18 +22,9 @@ public class Plane
   private final Vector3D _normal ;
   private final double _d;
 
-
   private final Vector3F _normalF;
   private final float _dF;
 
-
-//  Plane() :
-//  _normal(0, 0, 0),
-//  _d(0),
-//  _normalF(0, 0, 0),
-//  _dF(0)
-//  {
-//  }
 
   public static Plane fromPoints(Vector3D point0, Vector3D point1, Vector3D point2)
   {
