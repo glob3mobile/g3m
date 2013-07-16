@@ -65,6 +65,32 @@ bool Frustum::touchesWithBox(const Box* that) const {
     return false;
   }
 
+//#ifdef C_CODE
+//  // create an array with the 8 corners of the box
+//  const Vector3D min = that->getLower();
+//  const Vector3D max = that->getUpper();
+//
+//  Vector3F corners[8] = {
+//    Vector3F((float) min._x, (float) min._y, (float) min._z),
+//    Vector3F((float) min._x, (float) min._y, (float) max._z),
+//    Vector3F((float) min._x, (float) max._y, (float) min._z),
+//    Vector3F((float) min._x, (float) max._y, (float) max._z),
+//    Vector3F((float) max._x, (float) min._y, (float) min._z),
+//    Vector3F((float) max._x, (float) min._y, (float) max._z),
+//    Vector3F((float) max._x, (float) max._y, (float) min._z),
+//    Vector3F((float) max._x, (float) max._y, (float) max._z)
+//  };
+//#else
+//  const std::vector<Vector3F> corners = that->getCornersF();
+//#endif
+//
+//  return (!testAllCornersInside(_leftPlane,   corners) &&
+//          !testAllCornersInside(_bottomPlane, corners) &&
+//          !testAllCornersInside(_rightPlane,  corners) &&
+//          !testAllCornersInside(_topPlane,    corners) &&
+//          !testAllCornersInside(_nearPlane,   corners) &&
+//          !testAllCornersInside(_farPlane,    corners));
+
 #ifdef C_CODE
   // create an array with the 8 corners of the box
   const Vector3D min = that->getLower();
@@ -80,9 +106,6 @@ bool Frustum::touchesWithBox(const Box* that) const {
     Vector3F((float) max._x, (float) max._y, (float) min._z),
     Vector3F((float) max._x, (float) max._y, (float) max._z)
   };
-#else
-  const std::vector<Vector3F> corners = that->getCornersF();
-#endif
 
   return (!testAllCornersInside(_leftPlane,   corners) &&
           !testAllCornersInside(_bottomPlane, corners) &&
@@ -90,84 +113,35 @@ bool Frustum::touchesWithBox(const Box* that) const {
           !testAllCornersInside(_topPlane,    corners) &&
           !testAllCornersInside(_nearPlane,   corners) &&
           !testAllCornersInside(_farPlane,    corners));
+#endif
+#ifdef JAVA_CODE
+  final Vector3F[] corners = that.getCornersArray();
 
-  /*
-  bool outside;
-
-  // test with left plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_leftPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  // test with bottom plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_bottomPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  // test with right plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_rightPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  // test with top plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_topPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  // test with near plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_nearPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  // test with far plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_farPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) {
-    return false;
-  }
-
-  return true;
-   */
+  return !((_leftPlane.signedDistance(corners[0]) >= 0) && (_leftPlane.signedDistance(corners[1]) >= 0)
+           && (_leftPlane.signedDistance(corners[2]) >= 0) && (_leftPlane.signedDistance(corners[3]) >= 0)
+           && (_leftPlane.signedDistance(corners[4]) >= 0) && (_leftPlane.signedDistance(corners[5]) >= 0)
+           && (_leftPlane.signedDistance(corners[6]) >= 0) && (_leftPlane.signedDistance(corners[7]) >= 0])
+           && !((_bottomPlane.signedDistance(corners[0]) >= 0) && (_bottomPlane.signedDistance(corners[1]) >= 0)
+                && (_bottomPlane.signedDistance(corners[2]) >= 0) && (_bottomPlane.signedDistance(corners[3]) >= 0)
+                && (_bottomPlane.signedDistance(corners[4]) >= 0) && (_bottomPlane.signedDistance(corners[5]) >= 0)
+                && (_bottomPlane.signedDistance(corners[6]) >= 0) && (_bottomPlane.signedDistance(corners[7]) >= 0))
+           && !((_rightPlane.signedDistance(corners[0]) >= 0) && (_rightPlane.signedDistance(corners[1]) >= 0)
+                && (_rightPlane.signedDistance(corners[2]) >= 0) && (_rightPlane.signedDistance(corners[3]) >= 0)
+                && (_rightPlane.signedDistance(corners[4]) >= 0) && (_rightPlane.signedDistance(corners[5]) >= 0)
+                && (_rightPlane.signedDistance(corners[6]) >= 0) && (_rightPlane.signedDistance(corners[7]) >= 0))
+           && !((_topPlane.signedDistance(corners[0]) >= 0) && (_topPlane.signedDistance(corners[1]) >= 0)
+                && (_topPlane.signedDistance(corners[2]) >= 0) && (_topPlane.signedDistance(corners[3]) >= 0)
+                && (_topPlane.signedDistance(corners[4]) >= 0) && (_topPlane.signedDistance(corners[5]) >= 0)
+                && (_topPlane.signedDistance(corners[6]) >= 0) && (_topPlane.signedDistance(corners[7]) >= 0))
+           && !((_nearPlane.signedDistance(corners[0]) >= 0) && (_nearPlane.signedDistance(corners[1]) >= 0)
+                && (_nearPlane.signedDistance(corners[2]) >= 0) && (_nearPlane.signedDistance(corners[3]) >= 0)
+                && (_nearPlane.signedDistance(corners[4]) >= 0) && (_nearPlane.signedDistance(corners[5]) >= 0)
+                && (_nearPlane.signedDistance(corners[6]) >= 0) && (_nearPlane.signedDistance(corners[7]) >= 0))
+           && !((_farPlane.signedDistance(corners[0]) >= 0) && (_farPlane.signedDistance(corners[1]) >= 0)
+                && (_farPlane.signedDistance(corners[2]) >= 0) && (_farPlane.signedDistance(corners[3]) >= 0)
+                && (_farPlane.signedDistance(corners[4]) >= 0) && (_farPlane.signedDistance(corners[5]) >= 0)
+                && (_farPlane.signedDistance(corners[6]) >= 0) && (_farPlane.signedDistance(corners[7]) >= 0));
+#endif
 }
 
 
