@@ -65,13 +65,23 @@ public:
 
 class Frustum {
 private:
+#ifdef C_CODE
   const Plane _leftPlane;
   const Plane _rightPlane;
   const Plane _bottomPlane;
   const Plane _topPlane;
   const Plane _nearPlane;
   const Plane _farPlane;
-  
+#endif
+#ifdef JAVA_CODE
+  private final Plane _leftPlane;
+  private final Plane _rightPlane;
+  private final Plane _bottomPlane;
+  private final Plane _topPlane;
+  private final Plane _nearPlane;
+  private final Plane _farPlane;
+#endif
+
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
