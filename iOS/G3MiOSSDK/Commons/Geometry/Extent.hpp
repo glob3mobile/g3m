@@ -18,8 +18,7 @@ class Vector3D;
 
 class Frustum;
 class Box;
-class GLGlobalState;
-class GPUProgramState;
+class GLState;
 
 class Extent {
 public:
@@ -37,8 +36,7 @@ public:
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLGlobalState& parentState, const GPUProgramState* parentProgramState) = 0;
+  virtual void render(const G3MRenderContext* rc, const GLState* parentState) = 0;
 
   virtual bool touches(const Frustum *frustum) const = 0;
 

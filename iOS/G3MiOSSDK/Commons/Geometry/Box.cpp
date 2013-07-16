@@ -227,12 +227,11 @@ void Box::createMesh(Color* color) {
                           color);
 }
 
-void Box::render(const G3MRenderContext* rc,
-                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState) {
+void Box::render(const G3MRenderContext* rc, const GLState* parentState) {
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }
-  _mesh->render(rc);
+  _mesh->render(rc, parentState);
 }
 
 bool Box::touchesBox(const Box* box) const {
