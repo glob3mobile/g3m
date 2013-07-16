@@ -62,16 +62,16 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc){
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL){
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
-    _glState.addGLFeature(_projection);
-    _glStateTransparent.addGLFeature(_projection);
+    _glState.addGLFeature(_projection, true);
+    _glStateTransparent.addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
   }
 
   if (_model == NULL){
     _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
-    _glState.addGLFeature(_model);
-    _glStateTransparent.addGLFeature(_model);
+    _glState.addGLFeature(_model, true);
+    _glStateTransparent.addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix().asMatrix44D());
   }

@@ -47,6 +47,7 @@ public class G3MShowMarkersActivity
       builder.setInitializationTask(getWeatherMarkerLayersTask());
 
       builder.addRenderer(_weatherMarkers);
+      builder.setLogFPS(true);
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();

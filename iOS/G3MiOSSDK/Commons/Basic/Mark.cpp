@@ -424,14 +424,14 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
 
 //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
 
-  _glState.addGLFeatureAndRelease(new BillboardGLFeature(_textureWidth, _textureHeight,
-                                             viewportWidth, viewportHeight));
+  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+                                             viewportWidth, viewportHeight), false);
 
   //TODO: TEST
 //  MutableMatrix44D id = MutableMatrix44D::identity();
 //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
 
-  _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
+  _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -440,8 +440,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                               false, 0,     //NO CULLING
                                               false, 0, 0,  //NO POLYGON OFFSET
                                               (float)1.0,          //LINE WIDTH
-                                              false, (float)1.0)   //POINT SIZE
-                        );
+                                              false, (float)1.0),   //POINT SIZE
+                        false);
 }
 
 IFloatBuffer* Mark::getBillboardTexCoords(){
@@ -490,14 +490,15 @@ void Mark::render(const G3MRenderContext* rc,
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
 
-          _glState.addGLFeatureAndRelease(new TextureGLFeature(_textureId,
+          _glState.addGLFeature(new TextureGLFeature(_textureId,
                                                      getBillboardTexCoords(),
                                                      2,
                                                      0,
                                                      false,
                                                      0,
                                                      true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                                     false, Vector2D::zero(), Vector2D::zero()));
+                                                     false, Vector2D::zero(), Vector2D::zero()),
+                                false);
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||

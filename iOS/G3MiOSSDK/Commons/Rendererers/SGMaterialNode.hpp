@@ -50,10 +50,10 @@ public:
 //  _emit(emit)
   {
 #ifdef C_CODE
-    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_baseColor, false, 0, 0));
+    _glState.addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
 #endif
 #ifdef JAVA_CODE
-    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_baseColor, false, 0, 0));
+    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
 #endif
   }
 

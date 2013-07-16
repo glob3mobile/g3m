@@ -41,7 +41,7 @@ public:
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _rotationMatrix, true);
 //    _glState.setModelView(_rotationMatrix.asMatrix44D(), true);
 
-    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()));
+    _glState.addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
   }
 
   GLState* getGLState(GLState* parentGLState){

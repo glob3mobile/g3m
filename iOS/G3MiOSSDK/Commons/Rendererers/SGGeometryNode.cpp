@@ -43,7 +43,7 @@ void SGGeometryNode::createGLState(){
 //                              false,        //Not normalized
 //                              0);           //Stride 0
 
-  _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                                         3,            //Our buffer contains elements of 3
                                                         0,            //Index 0
                                                         false,        //Not normalized
@@ -52,7 +52,8 @@ void SGGeometryNode::createGLState(){
                                                         false, 0,
                                                         false, (float)0.0, (float)0.0,
                                                         (float)1.0,
-                                                        false, (float)1.0));
+                                                        false, (float)1.0),
+                        false);
 
   //TODO:....
   int WARNING_TODO_SG;

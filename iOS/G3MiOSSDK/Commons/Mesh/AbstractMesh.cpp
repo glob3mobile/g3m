@@ -143,7 +143,7 @@ void AbstractMesh::createGLState(){
 
 
 
-  _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -152,13 +152,14 @@ void AbstractMesh::createGLState(){
                                               false, 0,
                                               false, (float)0.0, (float)0.0,
                                               _lineWidth,
-                                              true, _pointSize));   //POINT SIZE
+                                              true, _pointSize),
+                        false);   //POINT SIZE
 
   if (_translationMatrix != NULL){
     //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
 //    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
 
-    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()));
+    _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
@@ -170,9 +171,10 @@ void AbstractMesh::createGLState(){
 //                                0);           //Stride 0
     //progState.setUniformValue(FLAT_COLOR, *_flatColor);
 
-    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_flatColor,
+    _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                            _flatColor->isTransparent(),
-                                                           GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+                                                           GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
 
 
 
@@ -199,12 +201,12 @@ void AbstractMesh::createGLState(){
     //                                false,        //Not normalized
     //                                0);           //Stride 0
 
-    _glState.addGLFeatureAndRelease(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
+    _glState.addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
                                                        4,            //Our buffer contains elements of 4
                                                        0,            //Index 0
                                                        false,        //Not normalized
                                                        0,            //Stride 0
-                                                       true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+                                                       true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
     //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
   } else{

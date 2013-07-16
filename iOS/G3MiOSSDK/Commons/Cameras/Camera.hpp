@@ -322,9 +322,9 @@ public:
   void addProjectionAndModelGLFeatures(GLState& glState) const{
     glState.clearGLFeatureGroup(CAMERA_GROUP);
     ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-    glState.addGLFeatureAndRelease(p);
+    glState.addGLFeature(p, false);
     ModelGLFeature* m = new ModelGLFeature(getModelMatrix().asMatrix44D());
-    glState.addGLFeatureAndRelease(m);
+    glState.addGLFeature(m, false);
   }
     
 

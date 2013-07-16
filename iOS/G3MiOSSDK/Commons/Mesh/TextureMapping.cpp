@@ -51,19 +51,19 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
 
     if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
 
-      state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId,
+      state.addGLFeature(new TextureGLFeature(_glTextureId,
                                                         _texCoords, 2, 0, false, 0,
                                                         isTransparent(),
                                                         GLBlendFactor::srcAlpha(),
                                                         GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        true, _translation.asVector2D(), _scale.asVector2D())); //TRANSFORM
+                                                        true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM
     } else{
-      state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId,
+      state.addGLFeature(new TextureGLFeature(_glTextureId,
                                                         _texCoords, 2, 0, false, 0,
                                                         isTransparent(),
                                                         GLBlendFactor::srcAlpha(),
                                                         GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        false, Vector2D::zero(), Vector2D::zero() )); //TRANSFORM
+                                                        false, Vector2D::zero(), Vector2D::zero() ), false); //TRANSFORM
     }
     
 //    progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());

@@ -81,9 +81,9 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
 //  GPUProgramState& progState = *glState.getGPUProgramState();
 //  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 
-  glState.addGLFeatureAndRelease(new FlatColorGLFeature(color,
+  glState.addGLFeature(new FlatColorGLFeature(color,
                                                         color.isTransparent(),
-                                                        GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+                                                        GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
   MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(translation);
   MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(a, rotationAxis);
@@ -93,7 +93,7 @@ void DummyRenderer::drawFace(GL* gl, const GLState& parentState,
 //  glState.setModelView(TR.asMatrix44D(), true);
 
   glState.clearGLFeatureGroup(CAMERA_GROUP);
-  glState.addGLFeatureAndRelease(new ModelTransformGLFeature(TR.asMatrix44D()));
+  glState.addGLFeature(new ModelTransformGLFeature(TR.asMatrix44D()), false);
 
   gl->drawElements(GLPrimitive::triangleStrip(), _indices, &glState, manager);
 }
@@ -105,7 +105,7 @@ void DummyRenderer::render(const G3MRenderContext* rc,
   GLState glState;
 //  GPUProgramState& progState = *glState.getGPUProgramState();
 
-  glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                                                   3,            //Our buffer contains elements of 3
                                                                   0,            //Index 0
                                                                   false,        //Not normalized
@@ -114,7 +114,8 @@ void DummyRenderer::render(const G3MRenderContext* rc,
                                                                   false, 0,
                                                                   false, (float)0.0, (float)0.0,
                                                                   (float)1.0,
-                                                                  false, (float)1.0));
+                                                                  false, (float)1.0),
+                       false);
 
 //  progState.setAttributeValue(POSITION,
 //                              _vertices, 4, //The attribute is a float vector of 4 elements

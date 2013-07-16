@@ -183,7 +183,7 @@ public:
 //  GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
 
 
-  void addGLFeature(const GLFeature* f){
+  void addGLFeature(const GLFeature* f, bool mustRetain){
     GLFeatureGroupName g = f->getGroup();
 #ifdef C_CODE
     const int index = g;
@@ -197,13 +197,17 @@ public:
     }
 
     _featuresGroups[index]->add(f);
+    if (!mustRetain){
+      f->_release();
+    }
+
     hasChangedStructure();
   }
 
-  void addGLFeatureAndRelease(const GLFeature* f){
-    addGLFeature(f);
-    f->_release();
-  }
+//  void addGLFeatureAndRelease(const GLFeature* f){
+//    addGLFeature(f);
+//    f->_release();
+//  }
 
 //  GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
 

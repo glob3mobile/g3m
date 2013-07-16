@@ -24,9 +24,9 @@ void FlatColorMesh::createGLState(){
 
 //  progState.setUniformValue(FLAT_COLOR, *_flatColor);
 
-  _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_flatColor,
+  _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                           _flatColor->isTransparent(),
-                                                          GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()));
+                                                          GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
 
 }
