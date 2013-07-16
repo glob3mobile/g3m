@@ -17,11 +17,10 @@
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
 class Geodetic2D {
-private:
+public:
   const Angle _latitude;
   const Angle _longitude;
-  
-public:
+
   
   static Geodetic2D zero() {
     return Geodetic2D(Angle::zero(),

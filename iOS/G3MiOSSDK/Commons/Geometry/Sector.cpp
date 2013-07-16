@@ -14,13 +14,14 @@
 
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
-  return
-  latitude.isBetween(_lower.latitude(), _upper.latitude()) &&
-  longitude.isBetween(_lower.longitude(), _upper.longitude());
+  return (latitude.isBetween(_lower.latitude(), _upper.latitude()) &&
+          longitude.isBetween(_lower.longitude(), _upper.longitude()));
 }
 
-bool Sector::fullContains(const Sector &s) const {
-  return contains(s.upper()) && contains(s.lower());
+bool Sector::fullContains(const Sector& that) const {
+  //return contains(that.upper()) && contains(that.lower());
+  return (contains(that._upper._latitude, that._upper._longitude) &&
+          contains(that._lower._latitude, that._lower._longitude));
 }
 
 bool Sector::touchesWith(const Sector &that) const {
