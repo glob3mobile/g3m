@@ -9,24 +9,24 @@
 #include "GLFeatureGroup.hpp"
 #include "GLFeature.hpp"
 
-GLFeatureGroup* GLFeatureGroup::_noGroup = NULL;
-GLFeatureGroup* GLFeatureGroup::_cameraGroup = NULL;
-GLFeatureGroup* GLFeatureGroup::_colorGroup = NULL;
-
-GLFeatureGroup* GLFeatureGroup::getGroup(int i){
-  switch (i) {
-    case -1:
-      return getGroup(UNRECOGNIZED_GROUP);
-    case 0:
-      return getGroup(NO_GROUP);
-    case 1:
-      return getGroup(CAMERA_GROUP);
-    case 2:
-      return getGroup(COLOR_GROUP);
-    default:
-      return NULL;
-  }
-}
+//GLFeatureGroup* GLFeatureGroup::_noGroup = NULL;
+//GLFeatureGroup* GLFeatureGroup::_cameraGroup = NULL;
+//GLFeatureGroup* GLFeatureGroup::_colorGroup = NULL;
+//
+//GLFeatureGroup* GLFeatureGroup::getGroup(int i){
+//  switch (i) {
+//    case -1:
+//      return getGroup(UNRECOGNIZED_GROUP);
+//    case 0:
+//      return getGroup(NO_GROUP);
+//    case 1:
+//      return getGroup(CAMERA_GROUP);
+//    case 2:
+//      return getGroup(COLOR_GROUP);
+//    default:
+//      return NULL;
+//  }
+//}
 
 GLFeatureGroupName GLFeatureGroup::getGroupName(int i){
   switch (i) {
@@ -41,30 +41,30 @@ GLFeatureGroupName GLFeatureGroup::getGroupName(int i){
   }
 }
 
-GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
-  switch (name) {
-    case UNRECOGNIZED_GROUP:
-      return NULL;
-    case NO_GROUP:
-      if (_noGroup == NULL){
-        _noGroup = new GLFeatureNoGroup();
-      }
-      return _noGroup;
-    case CAMERA_GROUP:
-      if (_cameraGroup == NULL){
-        _cameraGroup = new GLFeatureCameraGroup();
-      }
-      return _cameraGroup;
-
-    case COLOR_GROUP:
-      if (_colorGroup == NULL){
-        _colorGroup = new GLFeatureColorGroup();
-      }
-      return _colorGroup;
-    default:
-      return NULL;
-  }
-}
+//GLFeatureGroup* GLFeatureGroup::getGroup(GLFeatureGroupName name){
+//  switch (name) {
+//    case UNRECOGNIZED_GROUP:
+//      return NULL;
+//    case NO_GROUP:
+//      if (_noGroup == NULL){
+//        _noGroup = new GLFeatureNoGroup();
+//      }
+//      return _noGroup;
+//    case CAMERA_GROUP:
+//      if (_cameraGroup == NULL){
+//        _cameraGroup = new GLFeatureCameraGroup();
+//      }
+//      return _cameraGroup;
+//
+//    case COLOR_GROUP:
+//      if (_colorGroup == NULL){
+//        _colorGroup = new GLFeatureColorGroup();
+//      }
+//      return _colorGroup;
+//    default:
+//      return NULL;
+//  }
+//}
 
 GLFeatureGroup* GLFeatureGroup::createGroup(GLFeatureGroupName name){
   switch (name) {
@@ -183,18 +183,49 @@ void GLFeatureColorGroup::applyOnGlobalGLState(GLGlobalState* state){
 
 
 
-GPUVariableValueSet* GLFeatureNoGroup::createGPUVariableSet(){
-  GPUVariableValueSet* vs = new GPUVariableValueSet();
+//GPUVariableValueSet* GLFeatureNoGroup::createGPUVariableSet(){
+//  GPUVariableValueSet* vs = new GPUVariableValueSet();
+//  for(int i = 0; i < _nFeatures; i++){
+//    const GLFeature* f = _features[i];
+//    if (f != NULL){
+//      vs->combineWith(f->getGPUVariableValueSet());
+//    }
+//  }
+//  return vs;
+//}
+
+
+void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
   for(int i = 0; i < _nFeatures; i++){
     const GLFeature* f = _features[i];
     if (f != NULL){
       vs->combineWith(f->getGPUVariableValueSet());
     }
   }
-  return vs;
 }
 
-GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(){
+//GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(){
+//#ifdef C_CODE
+//  const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
+//#endif
+//#ifdef JAVA_CODE
+//  final Matrix44DHolder[] matrixHolders = new Matrix44DHolder[_nFeatures];
+//#endif
+//  for (int i = 0; i < _nFeatures; i++){
+//    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+//    matrixHolders[i] = f->getMatrixHolder();
+//    if (matrixHolders[i] == NULL){
+//      ILogger::instance()->logError("MatrixHolder NULL");
+//    }
+//  }
+//
+//  GPUVariableValueSet* fs = new GPUVariableValueSet();
+//  fs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
+//
+//  return fs;
+//}
+
+void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 #ifdef C_CODE
   const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
 #endif
@@ -209,13 +240,31 @@ GPUVariableValueSet* GLFeatureCameraGroup::createGPUVariableSet(){
     }
   }
 
-  GPUVariableValueSet* fs = new GPUVariableValueSet();
-  fs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
-
-  return fs;
+  vs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
 }
 
-GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(){
+//GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(){
+//
+//  int priority = -1;
+//  GLColorGroupFeature* topPriorityFeature = NULL;
+//  for (int i = 0; i < _nFeatures; i++){
+//    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+//    if (f->getPriority() > priority){
+//      topPriorityFeature = f;
+//      priority = f->getPriority();
+//    }
+//  }
+//
+//  if (topPriorityFeature != NULL){
+//    GPUVariableValueSet* fs = new GPUVariableValueSet();
+//    fs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+//    return fs;
+//  } else{
+//    return NULL;
+//  }
+//}
+
+void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs){
 
   int priority = -1;
   GLColorGroupFeature* topPriorityFeature = NULL;
@@ -228,11 +277,7 @@ GPUVariableValueSet* GLFeatureColorGroup::createGPUVariableSet(){
   }
 
   if (topPriorityFeature != NULL){
-    GPUVariableValueSet* fs = new GPUVariableValueSet();
-    fs->combineWith(topPriorityFeature->getGPUVariableValueSet());
-    return fs;
-  } else{
-    return NULL;
+    vs->combineWith(topPriorityFeature->getGPUVariableValueSet());
   }
 }
 

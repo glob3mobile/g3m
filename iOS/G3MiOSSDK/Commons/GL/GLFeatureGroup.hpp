@@ -69,44 +69,48 @@ enum GLFeatureGroupName{
 #define N_GLFEATURES_GROUPS 3
 class GLFeatureGroup: public GLFeatureSet{
 
-  static GLFeatureGroup* _noGroup;
-  static GLFeatureGroup* _cameraGroup;
-  static GLFeatureGroup* _colorGroup;
+//  static GLFeatureGroup* _noGroup;
+//  static GLFeatureGroup* _cameraGroup;
+//  static GLFeatureGroup* _colorGroup;
 public:
 
   virtual ~GLFeatureGroup(){}
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
-  static GLFeatureGroup* getGroup(GLFeatureGroupName name);
-  static GLFeatureGroup* getGroup(int i);
+//  static GLFeatureGroup* getGroup(GLFeatureGroupName name);
+//  static GLFeatureGroup* getGroup(int i);
   static GLFeatureGroupName getGroupName(int i);
 
 //  virtual GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl)= 0;
 
-  virtual GPUVariableValueSet* createGPUVariableSet()= 0;
+//  virtual GPUVariableValueSet* createGPUVariableSet()= 0;
+  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
   virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
 };
 
 class GLFeatureNoGroup: public GLFeatureGroup{
 public:
 //  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
-  GPUVariableValueSet* createGPUVariableSet();
+//  GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state);
+  void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
 //  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
-  GPUVariableValueSet* createGPUVariableSet();
+//  GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state){}
+  void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
 public:
 //  GPUVariableValueSet* applyAndCreateGPUVariableSet(GL* gl);
-  GPUVariableValueSet* createGPUVariableSet();
+//  GPUVariableValueSet* createGPUVariableSet();
   void applyOnGlobalGLState(GLGlobalState* state);
+  void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
 #endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */

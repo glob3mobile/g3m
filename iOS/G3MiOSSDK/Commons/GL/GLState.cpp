@@ -151,11 +151,12 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
       GLFeatureGroup* group = _accumulatedGroups[i];
       if (group != NULL){
-        GPUVariableValueSet* variables = group->createGPUVariableSet();
-        if (variables != NULL){
-          _valuesSet->combineWith(variables);
-          delete variables;
-        }
+//        GPUVariableValueSet* variables = group->createGPUVariableSet();
+//        if (variables != NULL){
+//          _valuesSet->combineWith(variables);
+//          delete variables;
+//        }
+        group->addToGPUVariableSet(_valuesSet);
       }
     }
 
