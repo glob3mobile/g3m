@@ -1,16 +1,14 @@
 package org.glob3.mobile.generated; 
-///////////////////////////////////////////////////////////////////////////////////////////
-public abstract class GLColorGroupFeature extends GLFeature
+public abstract class GLColorGroupFeature extends PriorityGLFeature
 {
-  private final int _priority;
+
   private final boolean _blend;
   private final int _sFactor;
   private final int _dFactor;
 
   public GLColorGroupFeature(int p, boolean blend, int sFactor, int dFactor)
   {
-     super(GLFeatureGroupName.COLOR_GROUP);
-     _priority = p;
+     super(GLFeatureGroupName.COLOR_GROUP, p);
      _blend = blend;
      _sFactor = sFactor;
      _dFactor = dFactor;
@@ -23,10 +21,6 @@ public abstract class GLColorGroupFeature extends GLFeature
 //      _globalState->disableBlend();
 //    }
 
-  }
-  public final int getPriority()
-  {
-     return _priority;
   }
 
   public final void blendingOnGlobalGLState(GLGlobalState state)

@@ -56,6 +56,8 @@ public class SGGeometryNode extends SGNode
     //TODO:....
     int WARNING_TODO_SG;
   
+    _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2D.zero(), Vector2D.zero()), false);
+  
   //  if (_colors != NULL){
   ////    progState.setUniformValue(EnableColorPerVertex, true);
   //    progState.setAttributeValue(COLOR,
