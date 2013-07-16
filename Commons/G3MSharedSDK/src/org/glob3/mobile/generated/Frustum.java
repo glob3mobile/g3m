@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
 public class Frustum
 {
-  private Plane _leftPlane = new Plane();
-  private Plane _rightPlane = new Plane();
-  private Plane _bottomPlane = new Plane();
-  private Plane _topPlane = new Plane();
-  private Plane _nearPlane = new Plane();
-  private Plane _farPlane = new Plane();
+  private final Plane _leftPlane;
+  private final Plane _rightPlane;
+  private final Plane _bottomPlane;
+  private final Plane _topPlane;
+  private final Plane _nearPlane;
+  private final Plane _farPlane;
 
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   private final Vector3D _ltn ;
@@ -30,12 +30,12 @@ public class Frustum
      _rtf = new Vector3D(that._rtf.transformedBy(inverse, 1));
      _lbf = new Vector3D(that._lbf.transformedBy(inverse, 1));
      _rbf = new Vector3D(that._rbf.transformedBy(inverse, 1));
-     _leftPlane = new Plane(that._leftPlane.transformedByTranspose(matrix));
-     _rightPlane = new Plane(that._rightPlane.transformedByTranspose(matrix));
-     _bottomPlane = new Plane(that._bottomPlane.transformedByTranspose(matrix));
-     _topPlane = new Plane(that._topPlane.transformedByTranspose(matrix));
-     _nearPlane = new Plane(that._nearPlane.transformedByTranspose(matrix));
-     _farPlane = new Plane(that._farPlane.transformedByTranspose(matrix));
+     _leftPlane = that._leftPlane.transformedByTranspose(matrix);
+     _rightPlane = that._rightPlane.transformedByTranspose(matrix);
+     _bottomPlane = that._bottomPlane.transformedByTranspose(matrix);
+     _topPlane = that._topPlane.transformedByTranspose(matrix);
+     _nearPlane = that._nearPlane.transformedByTranspose(matrix);
+     _farPlane = that._farPlane.transformedByTranspose(matrix);
     _boundingVolume = computeBoundingVolume();
   }
 
@@ -158,12 +158,12 @@ public class Frustum
 
   public Frustum(Frustum that)
   {
-     _leftPlane = new Plane(that._leftPlane);
-     _rightPlane = new Plane(that._rightPlane);
-     _bottomPlane = new Plane(that._bottomPlane);
-     _topPlane = new Plane(that._topPlane);
-     _nearPlane = new Plane(that._nearPlane);
-     _farPlane = new Plane(that._farPlane);
+     _leftPlane = that._leftPlane;
+     _rightPlane = that._rightPlane;
+     _bottomPlane = that._bottomPlane;
+     _topPlane = that._topPlane;
+     _nearPlane = that._nearPlane;
+     _farPlane = that._farPlane;
      _ltn = new Vector3D(that._ltn);
      _rtn = new Vector3D(that._rtn);
      _lbn = new Vector3D(that._lbn);
@@ -186,12 +186,12 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
      _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
      _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
-     _leftPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear)));
-     _bottomPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear)));
-     _rightPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear)));
-     _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear)));
-     _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), znear));
-     _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -zfar));
+     _leftPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
+     _bottomPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
+     _rightPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear));
+     _topPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear));
+     _nearPlane = new Plane(new Vector3D(0, 0, 1), znear);
+     _farPlane = new Plane(new Vector3D(0, 0, -1), -zfar);
      _boundingVolume = null;
   }
 
@@ -205,12 +205,12 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
      _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
      _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
-     _leftPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear)));
-     _bottomPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear)));
-     _rightPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear)));
-     _topPlane = new Plane(Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear)));
-     _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), data._znear));
-     _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -data._zfar));
+     _leftPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
+     _bottomPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
+     _rightPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear));
+     _topPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear));
+     _nearPlane = new Plane(new Vector3D(0, 0, 1), data._znear);
+     _farPlane = new Plane(new Vector3D(0, 0, -1), -data._zfar);
      _boundingVolume = null;
   }
 
