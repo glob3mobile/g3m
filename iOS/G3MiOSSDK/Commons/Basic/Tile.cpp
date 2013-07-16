@@ -324,7 +324,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   int __Testing_DGD;
   if ((_lodTimer != NULL) &&
-      (_lodTimer->elapsedTime().milliseconds() < 250)) {
+      (_lodTimer->elapsedTime().milliseconds() < 500)) {
     return _lastLodTest;
   }
 
