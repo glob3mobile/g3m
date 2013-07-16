@@ -272,6 +272,7 @@ public final class NativeGL2_Android
                                    final int stride,
                                    final IFloatBuffer buffer) {
       checkOpenGLThread();
+
       final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
 
       //      System.err.println("vertexAttribPointer(index=" + index + //
@@ -281,6 +282,17 @@ public final class NativeGL2_Android
       //                         ", floatBuffer=" + floatBuffer + ")");
 
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
+
+
+      //      final FloatBuffer_Android bufferAndroid = (FloatBuffer_Android) buffer;
+      //      final int webGLBuffer = bufferAndroid.getGLBuffer();
+      //      GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, webGLBuffer);
+      //
+      //
+      //      final FloatBuffer array = bufferAndroid.getBuffer();
+      //      GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, size, array, GLES20.GL_STATIC_DRAW);
+      //
+      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
    }
 
 
@@ -289,6 +301,7 @@ public final class NativeGL2_Android
                             final int count,
                             final IShortBuffer indices) {
       checkOpenGLThread();
+
       final ShortBuffer indexBuffer = ((ShortBuffer_Android) indices).getBuffer();
 
       //      System.err.println("drawElements(mode=" + mode + //
@@ -296,6 +309,16 @@ public final class NativeGL2_Android
       //                         ", indexBuffer=" + indexBuffer + ")");
 
       GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
+
+
+      //      final ShortBuffer_Android bufferAndroid = (ShortBuffer_Android) indices;
+      //      final int webGLBuffer = bufferAndroid.getGLBuffer();
+      //      GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, webGLBuffer);
+      //
+      //      final Buffer array = bufferAndroid.getBuffer();
+      //      GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, count, array, GLES20.GL_STATIC_DRAW);
+      //
+      //      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, 0);
    }
 
 
