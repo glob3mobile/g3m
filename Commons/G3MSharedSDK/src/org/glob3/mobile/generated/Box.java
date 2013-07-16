@@ -160,13 +160,7 @@ public class Box extends BoundingVolume
     }
   
     final float width = upperX - lowerX;
-  //  if (width < 0) {
-  //    width *= -1;
-  //  }
     final float height = upperY - lowerY;
-  //  if (height < 0) {
-  //    height *= -1;
-  //  }
   
     return width * height;
   }
@@ -382,7 +376,6 @@ public class Box extends BoundingVolume
 
   public final boolean fullContainedInBox(Box box)
   {
-  //  return contains(box->_upper) && contains(box->_lower);
     return box.contains(_upper) && box.contains(_lower);
   }
   public final boolean fullContainedInSphere(Sphere that)

@@ -198,14 +198,12 @@ public class Camera
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
     return new Vector2F((float) p._x, (float)(_height - p._y));
-  
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
     return new Vector2F(p._x, (_height - p._y));
-  
   }
 
   public final int getWidth()
@@ -464,7 +462,6 @@ public class Camera
     getModelMatrix();
   }
 
-<<<<<<< HEAD
   public final double getAngle2HorizonInRadians()
   {
      return _angle2Horizon;
@@ -479,8 +476,6 @@ public class Camera
     return IMathUtils.instance().pi() * rScreen * rScreen;
   }
 
-=======
->>>>>>> webgl-port
 
   private Angle getHeading(Vector3D normal)
   {

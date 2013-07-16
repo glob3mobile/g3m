@@ -7,10 +7,7 @@ package org.glob3.mobile.generated;
 //
 //
 
-<<<<<<< HEAD
-=======
 
->>>>>>> webgl-port
 //
 //  CameraZoomAndRotateHandler.h
 //  G3MiOSSDK
@@ -28,11 +25,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   private final boolean _processRotation;
   private final boolean _processZoom;
 
-<<<<<<< HEAD
-  private void zoom()
-  {
-    System.out.print("zooming.....\n");
-=======
   private double _fingerSep0;
   private double _lastAngle;
   private double _angle0;
@@ -81,7 +73,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
             _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
             _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
->>>>>>> webgl-port
   }
   private void rotate()
   {
@@ -179,70 +170,22 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-<<<<<<< HEAD
-    //const IMathUtils* mu = IMathUtils::instance();
-  
-    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-=======
   
     Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     Vector2I pixel1 = touchEvent.getTouch(1).getPos();
     Vector2I difCurrentPixels = pixel1.sub(pixel0);
     final Planet planet = eventContext.getPlanet();
->>>>>>> webgl-port
   
     // if it is the first move, let's decide if make zoom or rotate
     if (cameraContext.getCurrentGesture() == Gesture.DoubleDrag)
     {
       Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
       Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
-<<<<<<< HEAD
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
       {
         System.out.print("zoom..\n");
         cameraContext.setCurrentGesture(Gesture.Zoom);
       }
-  
-      if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) || (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1))
-      {
-        System.out.print("rotate..\n");
-        cameraContext.setCurrentGesture(Gesture.Rotate);
-      }
-  
-  
-      /*
-        // compute intersection of view direction with the globe
-        validFingerPos = camera.IntersectionViewWithGlobe (center);
-        if (!validFingerPos) return false;
-        // save the initial two points
-        fingerSep0 = (float) sqrt((float)((c2x-c1x)*(c2x-c1x)+(c2y-c1y)*(c2y-c1y)));
-        lastAngle = angle0 = atan2(c2y-c1y, c2x-c1x);
-        camera0 = Camera(camera); //camera0 = camera;
-        //WARNING: probably, when viewer be very close to the ground, looking at horizon,
-        // the intersection with a point of lower scanlines must be found
-      
-        //iprintf (" --- empiezo zoom. Fingersep0=%.2f. angle0=%.2f.  Gesture anterior=%d\n", fingerSep0, angle0, gesture);
-        gesture=Zoom;*/
-    }
-  
-  
-    // call specific transformation
-    final Gesture gesture = cameraContext.getCurrentGesture();
-    if (gesture == Gesture.Zoom)
-    {
-      if (_processZoom)
-      {
-        zoom();
-      }
-    }
-    else if (gesture == Gesture.Rotate)
-    {
-      if (_processRotation)
-      {
-        rotate();
-      }
-=======
   
       // test if starting a zoom action
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
@@ -280,7 +223,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         if (_processRotation)
            rotate();
         break;
->>>>>>> webgl-port
     }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

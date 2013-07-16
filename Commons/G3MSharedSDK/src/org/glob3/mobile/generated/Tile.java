@@ -212,35 +212,35 @@ public class Tile
       }
     }
   
-<<<<<<< HEAD
-  //  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  ////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
-  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  //  if (boundingVolume == NULL) {
+  //<<<<<<< HEAD
+  ////  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  //////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
+  ////  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  ////  if (boundingVolume == NULL) {
+  ////    return true;
+  ////  }
+  ////
+  ////  const double projectedArea = boundingVolume->projectedArea(rc);
+  //////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
+  //////    return true;
+  //////  }
+  ////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
+  //////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+  ////  if ( projectedArea <= (threshold*threshold) ) {
+  ////    return true;
+  ////  }
+  //
+  //  const Box* boundingVolume = getTileBoundingVolume(rc);
+  //  const Vector2F ex = boundingVolume->projectedExtent(rc);
+  //  const float t = (ex._x + ex._y);
+  //  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+  //  if ( t <= threshold ) {
   //    return true;
   //  }
   //
-  //  const double projectedArea = boundingVolume->projectedArea(rc);
-  ////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
-  ////    return true;
-  ////  }
-  //  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
-  ////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-  //  if ( projectedArea <= (threshold*threshold) ) {
-  //    return true;
-  //  }
+  //=======
+  //>>>>>>> webgl-port
   
-    final Box boundingVolume = getTileBoundingVolume(rc);
-    final Vector2F ex = boundingVolume.projectedExtent(rc);
-    final float t = (ex._x + ex._y);
-    final double threshold = (parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75;
-    if (t <= threshold)
-    {
-      return true;
-    }
-  
-=======
->>>>>>> webgl-port
     if (trc.getParameters()._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
@@ -260,15 +260,15 @@ public class Tile
     }
   
     //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-    final Extent extent = getTileExtent(rc);
-    if (extent == null)
+    final Box boundingVolume = getTileBoundingVolume(rc);
+    if (boundingVolume == null)
     {
       return true;
     }
   
   
     int __Testing_DGD;
-    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 250))
+    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 500))
     {
       return _lastLodTest;
     }
@@ -286,10 +286,10 @@ public class Tile
     //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
     //    return true;
     //  }
-    final Vector2I ex = extent.projectedExtent(rc);
+    final Vector2F ex = boundingVolume.projectedExtent(rc);
     //const double t = extent.maxAxis() * 2;
-    final int t = (ex._x + ex._y);
-    _lastLodTest = (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75));
+    final float t = (ex._x + ex._y);
+    _lastLodTest = (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75f));
   
     return _lastLodTest;
   }
@@ -565,7 +565,6 @@ public class Tile
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
-<<<<<<< HEAD
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, TileRenderContext trc)
   {
     if (_boundingVolume == null)
@@ -578,9 +577,6 @@ public class Tile
     }
     return _boundingVolume;
   }
-
-=======
->>>>>>> webgl-port
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
@@ -609,11 +605,8 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
-<<<<<<< HEAD
      _boundingVolume = null;
-=======
      _lodTimer = null;
->>>>>>> webgl-port
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
