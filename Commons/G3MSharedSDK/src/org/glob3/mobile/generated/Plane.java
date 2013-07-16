@@ -71,12 +71,14 @@ public class Plane
 
   public final double signedDistance(Vector3D point)
   {
-    return point.dot(_normal) + _d;
+    // return point.dot(_normal) + _d;
+    return ((_normal._x * point._x) + (_normal._y * point._y) + (_normal._z * point._z) + _d);
   }
 
   public final float signedDistance(Vector3F point)
   {
-    return point.dot(_normalF) + _dF;
+    // return point.dot(_normalF) + _dF;
+    return ((_normalF._x * point._x) + (_normalF._y * point._y) + (_normalF._z * point._z) + _dF);
   }
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
