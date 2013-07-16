@@ -74,6 +74,8 @@ private:
                         double cameraAngle2HorizonInRadians,
                         const Frustum* cameraFrustumInModelCoordinates);
 
+  ITimer* _lodTimer;
+  bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -120,7 +122,6 @@ private:
 
   const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
                                           const TileRenderContext* trc);
-
 
 public:
   Tile(TileTexturizer* texturizer,

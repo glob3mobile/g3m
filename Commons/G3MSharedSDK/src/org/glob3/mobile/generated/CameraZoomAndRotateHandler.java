@@ -7,6 +7,10 @@ package org.glob3.mobile.generated;
 //
 //
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> webgl-port
 //
 //  CameraZoomAndRotateHandler.h
 //  G3MiOSSDK
@@ -24,9 +28,60 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   private final boolean _processRotation;
   private final boolean _processZoom;
 
+<<<<<<< HEAD
   private void zoom()
   {
     System.out.print("zooming.....\n");
+=======
+  private double _fingerSep0;
+  private double _lastAngle;
+  private double _angle0;
+
+  private MutableVector3D _centralGlobePoint = new MutableVector3D();
+
+  private void zoom(Camera camera, Vector2I difCurrentPixels)
+  {
+    final double MIN_CAMERA_HEIGHT = 30;
+  
+    // compute angle params
+    double angle = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
+    final double PI = IMathUtils.instance().pi();
+    while (Math.abs(_lastAngle-angle)>PI/2)
+    {
+      if (angle<_lastAngle)
+         angle+=PI;
+         else
+            angle-=PI;
+    }
+    _lastAngle = angle;
+    angle -= _angle0;
+  
+    // compute zoom params
+    double fingerSep = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
+    double factor = _fingerSep0 / fingerSep;
+    double desp = 1-factor;
+    Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+    double dist = w.length();
+  
+     // don't allow much closer
+     if (dist *factor<MIN_CAMERA_HEIGHT && factor<0.999)
+      return;
+  
+     // don't allow much further away
+    double R = _centralGlobePoint.length();
+     if (dist *factor>11 *R && factor>1.001)
+      return;
+  
+     // make zoom and rotation
+    camera.copyFrom(_camera0);
+    camera.rotateWithAxis(_centralGlobePoint.asVector3D(), Angle.fromRadians(angle));
+    camera.moveForward(desp *dist);
+  
+    /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
+    printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
+            _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
+            _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
+>>>>>>> webgl-port
   }
   private void rotate()
   {
@@ -124,16 +179,25 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+<<<<<<< HEAD
     //const IMathUtils* mu = IMathUtils::instance();
   
     Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+=======
+  
+    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+    Vector2I difCurrentPixels = pixel1.sub(pixel0);
+    final Planet planet = eventContext.getPlanet();
+>>>>>>> webgl-port
   
     // if it is the first move, let's decide if make zoom or rotate
     if (cameraContext.getCurrentGesture() == Gesture.DoubleDrag)
     {
       Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
       Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+<<<<<<< HEAD
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
       {
         System.out.print("zoom..\n");
@@ -178,6 +242,45 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       {
         rotate();
       }
+=======
+  
+      // test if starting a zoom action
+      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
+      {
+  
+        // compute intersection of view direction with the globe
+        Vector3D intersection = planet.closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        if (!intersection.isNan())
+        {
+          _centralGlobePoint = intersection.asMutableVector3D();
+          _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
+          _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
+          cameraContext.setCurrentGesture(Gesture.Zoom);
+        }
+        else
+          ILogger.instance().logInfo("Zoom is no possible. View direction does not intersect the globe");
+      }
+  
+      // test if starting a rotate action
+      if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) || (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1))
+      {
+        //cameraContext->setCurrentGesture(Rotate);
+      }
+    }
+  
+    // call specific transformation
+    switch (cameraContext.getCurrentGesture())
+    {
+      case Zoom:
+        if (_processZoom)
+           zoom(cameraContext.getNextCamera(), difCurrentPixels);
+        break;
+  
+      case Rotate:
+        if (_processRotation)
+           rotate();
+        break;
+>>>>>>> webgl-port
     }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

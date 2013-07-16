@@ -77,6 +77,7 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
@@ -358,18 +359,94 @@ public class G3MWebGLDemo
 
       final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
       layerSet.addLayer(pnoa);
+<<<<<<< HEAD
 
 
+=======
+      
+      // testing getfeatureinfo
+      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
+          @Override
+          public void onDownload(final URL url, final IByteBuffer buffer, boolean expired) {
+        	  final String response = buffer.getAsString();
+        	  Window.alert("GetFeatureInfo URL: " + response);
+          }
+          @Override
+          public void onError(final URL url) {}
+          @Override
+          public void onCancel(final URL url) {}
+          @Override
+          public void onCanceledDownload(final URL url,final IByteBuffer data, boolean expired) {}
+       };
+
+      pnoa.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+
+    	  @Override 
+    	  public boolean onTerrainTouch(G3MEventContext context, TerrainTouchEvent event) {
+    	    URL url = event.getLayer().getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                    event.getSector());
+    	    Window.alert("Get Feature Info URL for this position: " + url.getPath());
+    	    /*final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
+    	    myDownloader.requestBuffer(url, (long)0,
+    	TimeInterval.fromHours(1.0), false, myListener, false);*/
+    	    return false;
+    	  }
+
+    	  @Override
+    	  public void dispose() {}
+    	});
+      
+>>>>>>> webgl-port
       builder.setInitializationTask(initializationTask);
       builder.getTileRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
+<<<<<<< HEAD
 
       final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6);
       _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
+=======
+      
+      /*Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
+      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));*/
+      
+>>>>>>> webgl-port
 
 
-   }
+      /*// testing downloading from url
+      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
+
+          @Override
+          public void onDownload(final URL url, final IByteBuffer buffer, boolean expired) {
+        	  final String response = buffer.getAsString();
+        	  Window.alert("Downloaded text: " + response);
+          }
+
+
+          @Override
+          public void onError(final URL url) {
+          }
+
+
+          @Override
+          public void onCancel(final URL url) {
+             // TODO Auto-generated method stub
+          }
+
+
+          @Override
+          public void onCanceledDownload(final URL url,
+                                         final IByteBuffer data, boolean expired) {
+          }
+
+       };
+
+      final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
+      myDownloader.requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/sample.txt", false), (long)0,
+TimeInterval.fromHours(1.0), false, myListener, false);
+*/
+
+  }
 
 
    public void initCustomizedWithBuilder() {

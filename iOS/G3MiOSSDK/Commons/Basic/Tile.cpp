@@ -59,7 +59,8 @@ _verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
-_boundingVolume(NULL)
+_boundingVolume(NULL),
+_lodTimer(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -97,6 +98,8 @@ Tile::~Tile() {
     delete _elevationDataRequest;
     _elevationDataRequest = NULL;
   }
+
+  delete _lodTimer;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -352,31 +355,35 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-//  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
-//  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-//  if (boundingVolume == NULL) {
-//    return true;
-//  }
-//  
-//  const double projectedArea = boundingVolume->projectedArea(rc);
-////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
+//<<<<<<< HEAD
+////  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+//////  const BoundingVolume* boundingVolume = getTileBoundingVolume(rc);
+////  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+////  if (boundingVolume == NULL) {
 ////    return true;
 ////  }
-//  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
-////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-//  if ( projectedArea <= (threshold*threshold) ) {
+////  
+////  const double projectedArea = boundingVolume->projectedArea(rc);
+//////  if (projectedArea <= (parameters->_tileTextureResolution._x * parameters->_tileTextureResolution._y * 75) ) {
+//////    return true;
+//////  }
+////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 2.5;
+//////  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+////  if ( projectedArea <= (threshold*threshold) ) {
+////    return true;
+////  }
+//
+//  const Box* boundingVolume = getTileBoundingVolume(rc);
+//  const Vector2F ex = boundingVolume->projectedExtent(rc);
+//  const float t = (ex._x + ex._y);
+//  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
+//  if ( t <= threshold ) {
 //    return true;
 //  }
-
-  const Box* boundingVolume = getTileBoundingVolume(rc);
-  const Vector2F ex = boundingVolume->projectedExtent(rc);
-  const float t = (ex._x + ex._y);
-  const double threshold = (parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75;
-  if ( t <= threshold ) {
-    return true;
-  }
-
+//
+//=======
+//>>>>>>> webgl-port
+  
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
@@ -391,7 +398,36 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-  return false;
+  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  const Box* boundingVolume = getTileBoundingVolume(rc);
+  if (boundingVolume == NULL) {
+    return true;
+  }
+
+
+  int __Testing_DGD;
+  if ((_lodTimer != NULL) &&
+      (_lodTimer->elapsedTime().milliseconds() < 500)) {
+    return _lastLodTest;
+  }
+
+  if (_lodTimer == NULL) {
+    _lodTimer = rc->getFactory()->createTimer();
+  }
+  else {
+    _lodTimer->start();
+  }
+
+  //  const double projectedSize = extent->squaredProjectedArea(rc);
+  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+  //    return true;
+  //  }
+  const Vector2F ex = boundingVolume->projectedExtent(rc);
+  //const double t = extent.maxAxis() * 2;
+  const float t = (ex._x + ex._y);
+  _lastLodTest = ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75f) );
+
+  return _lastLodTest;
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,

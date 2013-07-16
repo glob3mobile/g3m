@@ -464,6 +464,7 @@ public class Camera
     getModelMatrix();
   }
 
+<<<<<<< HEAD
   public final double getAngle2HorizonInRadians()
   {
      return _angle2Horizon;
@@ -478,6 +479,8 @@ public class Camera
     return IMathUtils.instance().pi() * rScreen * rScreen;
   }
 
+=======
+>>>>>>> webgl-port
 
   private Angle getHeading(Vector3D normal)
   {
