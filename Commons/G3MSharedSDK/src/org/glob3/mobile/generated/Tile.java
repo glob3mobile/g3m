@@ -146,6 +146,8 @@ public class Tile
     //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
+  private ITimer _lodTimer;
+  private boolean _lastLodTest;
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileRenderContext trc)
   {
     //  const TilesRenderParameters* parameters = trc->getParameters();
@@ -174,26 +176,6 @@ public class Tile
       }
     }
   
-    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-    final Extent extent = getTileExtent(rc);
-    if (extent == null)
-    {
-      return true;
-    }
-  
-    //  const double projectedSize = extent->squaredProjectedArea(rc);
-    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    //    return true;
-    //  }
-    final Vector2I ex = extent.projectedExtent(rc);
-    //const double t = extent.maxAxis() * 2;
-    final int t = (ex._x + ex._y);
-    if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
-    {
-      return true;
-    }
-  
-  
     if (trc.getParameters()._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
@@ -212,7 +194,39 @@ public class Tile
       }
     }
   
-    return false;
+    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+    final Extent extent = getTileExtent(rc);
+    if (extent == null)
+    {
+      return true;
+    }
+  
+  
+    int __Testing_DGD;
+    if ((_lodTimer != null) && (_lodTimer.elapsedTime().milliseconds() < 250))
+    {
+      return _lastLodTest;
+    }
+  
+    if (_lodTimer == null)
+    {
+      _lodTimer = rc.getFactory().createTimer();
+    }
+    else
+    {
+      _lodTimer.start();
+    }
+  
+    //  const double projectedSize = extent->squaredProjectedArea(rc);
+    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+    //    return true;
+    //  }
+    final Vector2I ex = extent.projectedExtent(rc);
+    //const double t = extent.maxAxis() * 2;
+    final int t = (ex._x + ex._y);
+    _lastLodTest = (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75));
+  
+    return _lastLodTest;
   }
 
   private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
@@ -483,6 +497,7 @@ public class Tile
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
+
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -510,6 +525,7 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
+     _lodTimer = null;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -553,6 +569,9 @@ public class Tile
          _elevationDataRequest.dispose();
       _elevationDataRequest = null;
     }
+  
+    if (_lodTimer != null)
+       _lodTimer.dispose();
   }
 
 
