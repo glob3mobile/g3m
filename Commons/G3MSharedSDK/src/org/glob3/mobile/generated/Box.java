@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class Vector2D;
 //class Mesh;
 //class Color;
@@ -240,13 +241,13 @@ public class Box extends Extent
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState parentProgramState)
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
     if (_mesh == null)
     {
       createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
     }
-    _mesh.render(rc);
+    _mesh.render(rc, parentState);
   }
 
   public final boolean touchesBox(Box box)

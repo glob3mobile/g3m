@@ -14,8 +14,7 @@ package org.glob3.mobile.generated;
 
 //class Frustum;
 //class Box;
-//class GLGlobalState;
-//class GPUProgramState;
+//class GLState;
 
 public abstract class Extent
 {
@@ -36,7 +35,7 @@ public abstract class Extent
 
   public abstract Vector3D intersectionWithRay(Vector3D origin, Vector3D direction);
 
-  public abstract void render(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState parentProgramState);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
   public abstract boolean touches(Frustum frustum);
 
