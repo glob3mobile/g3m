@@ -144,9 +144,10 @@ public class Sector
 
 //  Vector2D getTranslationFactor(const Sector& that) const;
 
-  public final boolean fullContains(Sector s)
+  public final boolean fullContains(Sector that)
   {
-    return contains(s.upper()) && contains(s.lower());
+    //return contains(that.upper()) && contains(that.lower());
+    return (contains(that._upper._latitude, that._upper._longitude) && contains(that._lower._latitude, that._lower._longitude));
   }
 
 
@@ -359,7 +360,7 @@ public class Sector
 
   public final boolean contains(Angle latitude, Angle longitude)
   {
-    return latitude.isBetween(_lower.latitude(), _upper.latitude()) && longitude.isBetween(_lower.longitude(), _upper.longitude());
+    return (latitude.isBetween(_lower.latitude(), _upper.latitude()) && longitude.isBetween(_lower.longitude(), _upper.longitude()));
   }
 
   public final boolean contains(Geodetic2D position)
