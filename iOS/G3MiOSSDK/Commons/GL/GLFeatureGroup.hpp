@@ -23,7 +23,7 @@ protected:
   GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
 #endif
 #ifdef JAVA_CODE
-  protected static final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
+  protected final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
 #endif
   int _nFeatures;
 
