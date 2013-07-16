@@ -27,13 +27,13 @@ public class Plane
   private final float _dF;
 
 
-  public Plane()
-  {
-     _normal = new Vector3D(0, 0, 0);
-     _d = 0;
-     _normalF = new <type missing>(0, 0, 0);
-     _dF = 0F;
-  }
+//  Plane() :
+//  _normal(0, 0, 0),
+//  _d(0),
+//  _normalF(0, 0, 0),
+//  _dF(0)
+//  {
+//  }
 
   public static Plane fromPoints(Vector3D point0, Vector3D point1, Vector3D point2)
   {
