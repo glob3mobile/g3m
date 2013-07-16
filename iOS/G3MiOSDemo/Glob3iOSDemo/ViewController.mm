@@ -937,6 +937,21 @@ public:
                                   TimeInterval::fromDays(30),
                                   true);
     layerSet->addLayer(pnoa);
+    
+    class PNOATerrainTouchEventListener : public TerrainTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const TerrainTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("PNOA touched. Feature info = %s\n", url.getPath().c_str());
+        
+        return true;
+      }
+    };
+    
+    pnoa->addTerrainTouchEventListener(new PNOATerrainTouchEventListener());
   }
   
   const bool testURLescape = false;

@@ -66,6 +66,8 @@ private:
   inline bool isVisible(const G3MRenderContext* rc,
                         const TileRenderContext* trc);
 
+  ITimer* _lodTimer;
+  bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -109,6 +111,7 @@ private:
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
+
 
 public:
   Tile(TileTexturizer* texturizer,
