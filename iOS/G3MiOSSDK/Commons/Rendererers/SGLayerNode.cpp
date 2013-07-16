@@ -130,6 +130,9 @@ GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, GLState* parentG
   _glState.setParent(parentGLState);
 //  _glState.getGLGlobalState()->enableBlend();
 
+  int TODO_CHECK;
+  _glState.clearGLFeatureGroup(COLOR_GROUP);
+
   _glState.addGLFeature(new TextureIDGLFeature(textureId,
                                                false, 0,0), false);
 

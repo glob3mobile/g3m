@@ -274,18 +274,27 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs){
 
   int priority = -1;
-  GLColorGroupFeature* topPriorityFeature = NULL;
+//  GLColorGroupFeature* topPriorityFeature = NULL;
   for (int i = 0; i < _nFeatures; i++){
-    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
     if (f->getPriority() > priority){
-      topPriorityFeature = f;
+//      topPriorityFeature = f;
       priority = f->getPriority();
     }
   }
 
-  if (topPriorityFeature != NULL){
-    vs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+  for (int i = 0; i < _nFeatures; i++){
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
+    if (f->getPriority() == priority){
+      //      topPriorityFeature = f;
+      priority = f->getPriority();
+      vs->combineWith(f->getGPUVariableValueSet());
+    }
   }
+
+//  if (topPriorityFeature != NULL){
+//    vs->combineWith(topPriorityFeature->getGPUVariableValueSet());
+//  }
 }
 
 
