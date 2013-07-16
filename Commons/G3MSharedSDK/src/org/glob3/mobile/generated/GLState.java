@@ -450,7 +450,7 @@ public class GLState
 //  GPUUniformValueMatrix4Float* getModelviewUniformValue() const;
 
 
-  public final void addGLFeature(GLFeature f)
+  public final void addGLFeature(GLFeature f, boolean mustRetain)
   {
     GLFeatureGroupName g = f.getGroup();
     final int index = g.getValue();
@@ -461,14 +461,18 @@ public class GLState
     }
 
     _featuresGroups[index].add(f);
+    if (!mustRetain)
+    {
+      f._release();
+    }
+
     hasChangedStructure();
   }
 
-  public final void addGLFeatureAndRelease(GLFeature f)
-  {
-    addGLFeature(f);
-    f._release();
-  }
+//  void addGLFeatureAndRelease(const GLFeature* f){
+//    addGLFeature(f);
+//    f->_release();
+//  }
 
 //  GLFeatureSet* createAccumulatedGLFeaturesForGroup(GLFeatureGroupName g) const;
 

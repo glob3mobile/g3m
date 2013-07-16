@@ -42,7 +42,7 @@ public class FlatColorMesh extends Mesh
   
   //  progState.setUniformValue(FLAT_COLOR, *_flatColor);
   
-    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
+    _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   
   
   }

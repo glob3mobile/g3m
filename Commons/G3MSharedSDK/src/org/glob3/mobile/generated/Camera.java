@@ -505,9 +505,9 @@ public class Camera
   {
     glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     ProjectionGLFeature p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-    glState.addGLFeatureAndRelease(p);
+    glState.addGLFeature(p, false);
     ModelGLFeature m = new ModelGLFeature(getModelMatrix().asMatrix44D());
-    glState.addGLFeatureAndRelease(m);
+    glState.addGLFeature(m, false);
   }
 
 

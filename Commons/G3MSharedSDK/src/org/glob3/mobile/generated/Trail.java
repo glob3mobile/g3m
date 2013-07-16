@@ -175,7 +175,7 @@ public class Trail
     if (_projection == null)
     {
       _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
-      _glState.addGLFeature(_projection);
+      _glState.addGLFeature(_projection, true);
     }
     else
     {
@@ -185,7 +185,7 @@ public class Trail
     if (_model == null)
     {
       _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
-      _glState.addGLFeature(_model);
+      _glState.addGLFeature(_model, true);
     }
     else
     {

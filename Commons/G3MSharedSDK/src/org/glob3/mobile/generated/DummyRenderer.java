@@ -43,7 +43,7 @@ public abstract class DummyRenderer extends LeafRenderer
   //  GPUProgramState& progState = *glState.getGPUProgramState();
   //  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
   
-    glState.addGLFeatureAndRelease(new FlatColorGLFeature(color, color.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
+    glState.addGLFeature(new FlatColorGLFeature(color, color.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   
     MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(translation);
     MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(a, rotationAxis);
@@ -53,7 +53,7 @@ public abstract class DummyRenderer extends LeafRenderer
   //  glState.setModelView(TR.asMatrix44D(), true);
   
     glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    glState.addGLFeatureAndRelease(new ModelTransformGLFeature(TR.asMatrix44D()));
+    glState.addGLFeature(new ModelTransformGLFeature(TR.asMatrix44D()), false);
   
     gl.drawElements(GLPrimitive.triangleStrip(), _indices, glState, manager);
   }
@@ -121,7 +121,7 @@ public abstract class DummyRenderer extends LeafRenderer
     GLState glState = new GLState();
   //  GPUProgramState& progState = *glState.getGPUProgramState();
   
-    glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, false, (float)1.0)); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, false, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
   //  progState.setAttributeValue(POSITION,
   //                              _vertices, 4, //The attribute is a float vector of 4 elements

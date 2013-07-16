@@ -40,7 +40,7 @@ public class SGRotateNode extends SGNode
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _rotationMatrix, true);
 //    _glState.setModelView(_rotationMatrix.asMatrix44D(), true);
 
-    _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()));
+    _glState.addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
   }
 
   public final GLState getGLState(GLState parentGLState)

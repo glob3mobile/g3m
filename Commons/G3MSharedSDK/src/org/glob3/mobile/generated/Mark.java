@@ -133,13 +133,13 @@ public class Mark
   
   //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
   
-    _glState.addGLFeatureAndRelease(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight));
+    _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
   
     //TODO: TEST
   //  MutableMatrix44D id = MutableMatrix44D::identity();
   //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
   
-    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0)); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -581,7 +581,7 @@ public class Mark
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
   
-            _glState.addGLFeatureAndRelease(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()));
+            _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
           }
         }
         else

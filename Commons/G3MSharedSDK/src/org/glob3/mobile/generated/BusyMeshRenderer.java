@@ -42,8 +42,8 @@ public class BusyMeshRenderer extends LeafRenderer
   {
   
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-    _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   
   }
 
@@ -123,8 +123,8 @@ public class BusyMeshRenderer extends LeafRenderer
   //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
   
       _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-      _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-      _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+      _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+      _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
     }
   
   //  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
@@ -148,8 +148,8 @@ public class BusyMeshRenderer extends LeafRenderer
 //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-    _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public void dispose()
@@ -168,8 +168,8 @@ public class BusyMeshRenderer extends LeafRenderer
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
 
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeatureAndRelease(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()));
-    _glState.addGLFeatureAndRelease(new ModelGLFeature(_modelviewMatrix.asMatrix44D()));
+    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public final void start(G3MRenderContext rc)

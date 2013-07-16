@@ -94,11 +94,11 @@ public class SimpleTextureMapping extends TextureMapping
       if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0))
       {
   
-        state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D())); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
       }
       else
       {
-        state.addGLFeatureAndRelease(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero())); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
       }
   
   //    progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());

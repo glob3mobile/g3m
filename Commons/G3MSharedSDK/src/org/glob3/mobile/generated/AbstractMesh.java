@@ -124,14 +124,14 @@ public abstract class AbstractMesh extends Mesh
   
   
   
-    _glState.addGLFeatureAndRelease(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize)); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_translationMatrix != null)
     {
       //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
   //    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
   
-      _glState.addGLFeatureAndRelease(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()));
+      _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
     }
   
     if (_flatColor != null && _colors == null) //FlatColorMesh Shader
@@ -144,7 +144,7 @@ public abstract class AbstractMesh extends Mesh
   //                                0);           //Stride 0
       //progState.setUniformValue(FLAT_COLOR, *_flatColor);
   
-      _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()));
+      _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   
   
   
@@ -172,7 +172,7 @@ public abstract class AbstractMesh extends Mesh
       //                                false,        //Not normalized
       //                                0);           //Stride 0
   
-      _glState.addGLFeatureAndRelease(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha())); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
   
       //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
     }
