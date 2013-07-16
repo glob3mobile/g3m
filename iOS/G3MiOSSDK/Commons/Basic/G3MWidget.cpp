@@ -450,13 +450,13 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  const TimeInterval elapsedTime = _timer->elapsedTime();
-  if (elapsedTime.milliseconds() > 100) {
-    //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
-  }
+  const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
+//  if (elapsedTimeMS > 100) {
+//    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
+//  }
 
   if (_logFPS) {
-    _totalRenderTime += elapsedTime.milliseconds();
+    _totalRenderTime += elapsedTimeMS;
 
     if ((_renderStatisticsTimer == NULL) ||
         (_renderStatisticsTimer->elapsedTime().seconds() > 2)) {

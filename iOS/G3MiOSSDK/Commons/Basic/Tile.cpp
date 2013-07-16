@@ -25,7 +25,7 @@
 #include "MercatorUtils.hpp"
 #include "SubviewElevationData.hpp"
 #include "TileElevationDataRequest.hpp"
-#include "Sphere.hpp"
+//#include "Sphere.hpp"
 #include "Vector2F.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
@@ -73,7 +73,7 @@ _lodTimer(NULL)
 Tile::~Tile() {
   prune(NULL, NULL);
 
-  delete _boundingVolume;
+//  delete _boundingVolume;
 
   delete _debugMesh;
   _debugMesh = NULL;
@@ -279,7 +279,8 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext *rc,
   if (_boundingVolume == NULL) {
     Mesh* mesh = getTessellatorMesh(rc, trc);
     if (mesh != NULL) {
-      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+//      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+      _boundingVolume = mesh->getBoundingVolume();
     }
   }
   return _boundingVolume;
@@ -391,7 +392,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
         return true;
       }
 
-      if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
+      if (trc->getLastSplitTimer()->elapsedTimeInMilliseconds() < 25) {
         // there are not more time-budget to spend
         return true;
       }
@@ -407,7 +408,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   int __Testing_DGD;
   if ((_lodTimer != NULL) &&
-      (_lodTimer->elapsedTime().milliseconds() < 500)) {
+      (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
     return _lastLodTest;
   }
 
