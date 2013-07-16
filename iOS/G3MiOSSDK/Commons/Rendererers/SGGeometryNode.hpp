@@ -53,8 +53,8 @@ public:
   ~SGGeometryNode();
 
 
-  void rawRender(const G3MRenderContext* rc,
-                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
+//  void rawRender(const G3MRenderContext* rc,
+//                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
 
   void rawRender(const G3MRenderContext* rc, GLState* glState);
   

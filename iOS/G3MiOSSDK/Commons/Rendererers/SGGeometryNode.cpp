@@ -26,11 +26,11 @@ SGGeometryNode::~SGGeometryNode() {
   delete _indices;
 }
 
-void SGGeometryNode::rawRender(const G3MRenderContext* rc,
-                               const GLGlobalState& parentState, const GPUProgramState* parentProgramState) {
-//  GL* gl = rc->getGL();
-//  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
-}
+//void SGGeometryNode::rawRender(const G3MRenderContext* rc,
+//                               const GLGlobalState& parentState, const GPUProgramState* parentProgramState) {
+////  GL* gl = rc->getGL();
+////  gl->drawElements(_primitive, _indices, parentState, *rc->getGPUProgramManager(), parentProgramState);
+//}
 
 void SGGeometryNode::createGLState(){
   

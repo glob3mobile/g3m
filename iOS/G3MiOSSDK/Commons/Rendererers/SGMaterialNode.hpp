@@ -49,7 +49,12 @@ public:
 //  _alpha(alpha),
 //  _emit(emit)
   {
+#ifdef C_CODE
     _glState.addGLFeatureAndRelease(new FlatColorGLFeature(*_baseColor, false, 0, 0));
+#endif
+#ifdef JAVA_CODE
+    _glState.addGLFeatureAndRelease(new FlatColorGLFeature(_baseColor, false, 0, 0));
+#endif
   }
 
   GLState* getGLState(GLState* parentGLState){
