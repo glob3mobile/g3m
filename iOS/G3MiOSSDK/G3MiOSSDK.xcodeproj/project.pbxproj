@@ -503,7 +503,6 @@
 		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
 		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
 		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
-		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FBC1647DD0E00B0E481 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB81647DD0D00B0E481 /* SceneParser.cpp */; };
 		E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; };
 		E8B610F516DD2619003F653B /* SceneParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8891FB91647DD0D00B0E481 /* SceneParser.hpp */; };
@@ -1296,8 +1295,6 @@
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		E87557C516E915D10031FBB3 /* TMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMSLayer.cpp; sourceTree = "<group>"; };
 		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
-		E8891FB11647DCF500B0E481 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
-		E8891FB21647DCF500B0E481 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
 		E8891FB81647DD0D00B0E481 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
 		E8891FB91647DD0D00B0E481 /* SceneParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneParser.hpp; sourceTree = "<group>"; };
 		FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
@@ -1674,8 +1671,6 @@
 				E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */,
 				E8891FB81647DD0D00B0E481 /* SceneParser.cpp */,
 				E8891FB91647DD0D00B0E481 /* SceneParser.hpp */,
-				E8891FB11647DCF500B0E481 /* AppParser.cpp */,
-				E8891FB21647DCF500B0E481 /* AppParser.hpp */,
 				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
 				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 				CF7EDA081694914A002C760A /* BSONParser.cpp */,
@@ -2213,7 +2208,6 @@
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
-				E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */,
 				E8891FBC1647DD0E00B0E481 /* SceneParser.cpp in Sources */,
 				E745CC7916484A9A00819711 /* IStorage.cpp in Sources */,
 				CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */,
