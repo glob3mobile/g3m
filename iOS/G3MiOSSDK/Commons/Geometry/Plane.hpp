@@ -63,11 +63,17 @@ public:
   Plane transformedByTranspose(const MutableMatrix44D& M) const;
 
   double signedDistance(const Vector3D& point) const {
-    return point.dot(_normal) + _d;
+    // return point.dot(_normal) + _d;
+    return ((_normal._x * point._x) +
+            (_normal._y * point._y) +
+            (_normal._z * point._z) + _d);
   }
 
   float signedDistance(const Vector3F& point) const {
-    return point.dot(_normalF) + _dF;
+    // return point.dot(_normalF) + _dF;
+    return ((_normalF._x * point._x) +
+            (_normalF._y * point._y) +
+            (_normalF._z * point._z) + _dF);
   }
 
   Vector3D intersectionWithRay(const Vector3D& origin,
