@@ -133,14 +133,23 @@ public:
   ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform){}
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
-class GLColorGroupFeature: public GLFeature{
+
+class PriorityGLFeature: public GLFeature{
   const int _priority;
+public:
+  PriorityGLFeature(GLFeatureGroupName g, int p): GLFeature(g), _priority(p){}
+
+  int getPriority() const { return _priority;}
+};
+
+class GLColorGroupFeature: public PriorityGLFeature{
+
   const bool _blend;
   const int _sFactor;
   const int _dFactor;
   
 public:
-  GLColorGroupFeature(int p, bool blend, int sFactor, int dFactor): GLFeature(COLOR_GROUP), _priority(p),
+  GLColorGroupFeature(int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, p),
   _blend(blend),
   _sFactor(sFactor),
   _dFactor(dFactor)
@@ -155,7 +164,6 @@ public:
 //    }
 
   }
-  int getPriority() const { return _priority;}
 
   void blendingOnGlobalGLState(GLGlobalState* state) const {
     if (_blend){
@@ -199,6 +207,27 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const{
     blendingOnGlobalGLState(state);
   }
+};
+
+class TextureIDGLFeature: public GLColorGroupFeature{
+#ifdef C_CODE
+  IGLTextureId const* _texID;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texID = null;
+#endif
+
+public:
+  TextureIDGLFeature(const IGLTextureId* texID,
+                   bool blend, int sFactor, int dFactor);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class TextureCoordsGLFeature: public PriorityGLFeature{
+public:
+  TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
+                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
 

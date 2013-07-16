@@ -167,18 +167,25 @@ void GLFeatureNoGroup::applyOnGlobalGLState(GLGlobalState* state){
 void GLFeatureColorGroup::applyOnGlobalGLState(GLGlobalState* state){
 
   int priority = -1;
-  GLColorGroupFeature* topPriorityFeature = NULL;
+//  GLColorGroupFeature* topPriorityFeature = NULL;
   for (int i = 0; i < _nFeatures; i++){
-    GLColorGroupFeature* f = ((GLColorGroupFeature*) _features[i]);
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
     if (f->getPriority() > priority){
-      topPriorityFeature = f;
+//      topPriorityFeature = f;
       priority = f->getPriority();
     }
   }
 
-  if (topPriorityFeature != NULL){
-    topPriorityFeature->applyOnGlobalGLState(state);
+  for (int i = 0; i < _nFeatures; i++){
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
+    if (f->getPriority() == priority){
+      f->applyOnGlobalGLState(state);
+    }
   }
+
+//  if (topPriorityFeature != NULL){
+//    topPriorityFeature->applyOnGlobalGLState(state);
+//  }
 }
 
 

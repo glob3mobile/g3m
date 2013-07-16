@@ -138,3 +138,40 @@ GLColorGroupFeature(2, blend, sFactor, dFactor)
                                                            color.getAlpha()), false);
 }
 
+
+
+//////////////////////////////////////////
+
+TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID,
+                                       bool blend, int sFactor, int dFactor):
+GLColorGroupFeature(4, blend, sFactor, dFactor),
+_texID(texID){
+
+  
+}
+void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+  blendingOnGlobalGLState(state);
+  state->bindTexture(_texID);
+}
+
+TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized,
+                                           int stride,
+                                               bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
+PriorityGLFeature(COLOR_GROUP, 4)
+{
+
+  GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
+  _values.addAttributeValue(TEXTURE_COORDS, value, false);
+
+  if (coordsTransformed){
+    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
+    _values.addUniformValue(SCALE_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
+  }
+
+}
+void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+
+}
+
