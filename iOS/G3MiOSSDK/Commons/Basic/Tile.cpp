@@ -58,7 +58,8 @@ _maxHeight(0),
 _verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
-_lastTileMeshResolutionY(-1)
+_lastTileMeshResolutionY(-1),
+_lodTimer(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -94,6 +95,8 @@ Tile::~Tile() {
     delete _elevationDataRequest;
     _elevationDataRequest = NULL;
   }
+
+  delete _lodTimer;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -298,24 +301,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  const Extent* extent = getTileExtent(rc);
-  if (extent == NULL) {
-    return true;
-  }
-
-  //  const double projectedSize = extent->squaredProjectedArea(rc);
-  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-  //    return true;
-  //  }
-  const Vector2I ex = extent->projectedExtent(rc);
-  //const double t = extent.maxAxis() * 2;
-  const int t = (ex._x + ex._y);
-  if ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75) ) {
-    return true;
-  }
-
-
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
@@ -330,7 +315,36 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-  return false;
+  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+  const Extent* extent = getTileExtent(rc);
+  if (extent == NULL) {
+    return true;
+  }
+
+
+  int __Testing_DGD;
+  if ((_lodTimer != NULL) &&
+      (_lodTimer->elapsedTime().milliseconds() < 250)) {
+    return _lastLodTest;
+  }
+
+  if (_lodTimer == NULL) {
+    _lodTimer = rc->getFactory()->createTimer();
+  }
+  else {
+    _lodTimer->start();
+  }
+
+  //  const double projectedSize = extent->squaredProjectedArea(rc);
+  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+  //    return true;
+  //  }
+  const Vector2I ex = extent->projectedExtent(rc);
+  //const double t = extent.maxAxis() * 2;
+  const int t = (ex._x + ex._y);
+  _lastLodTest = ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75) );
+
+  return _lastLodTest;
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
