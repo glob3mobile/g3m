@@ -14,12 +14,12 @@
 
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
-  return (latitude.isBetween(_lower.latitude(), _upper.latitude()) &&
-          longitude.isBetween(_lower.longitude(), _upper.longitude()));
+  return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
+          longitude.isBetween(_lower._longitude, _upper._longitude));
 }
 
 bool Sector::fullContains(const Sector& that) const {
-  //return contains(that.upper()) && contains(that.lower());
+  //return contains(that._upper) && contains(that._lower);
   return (contains(that._upper._latitude, that._upper._longitude) &&
           contains(that._lower._latitude, that._lower._longitude));
 }
@@ -29,12 +29,12 @@ bool Sector::touchesWith(const Sector &that) const {
   //   page 79
 
   // Exit with no intersection if separated along an axis
-  if (_upper.latitude().lowerThan(that._lower.latitude()) ||
-      _lower.latitude().greaterThan(that._upper.latitude())) {
+  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+      _lower._latitude.greaterThan(that._upper._latitude)) {
     return false;
   }
-  if (_upper.longitude().lowerThan(that._lower.longitude()) ||
-      _lower.longitude().greaterThan(that._upper.longitude())) {
+  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+      _lower._longitude.greaterThan(that._upper._longitude)) {
     return false;
   }
 
@@ -45,16 +45,16 @@ bool Sector::touchesWith(const Sector &that) const {
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 const Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  return Geodetic2D(Angle::linearInterpolation( _lower.latitude(),  _upper.latitude(),  1.0 - v ),
-                    Angle::linearInterpolation( _lower.longitude(), _upper.longitude(),       u ) );
+  return Geodetic2D(Angle::linearInterpolation( _lower._latitude,  _upper._latitude,  1.0 - v ),
+                    Angle::linearInterpolation( _lower._longitude, _upper._longitude,       u ) );
 }
 
 const Angle Sector::getInnerPointLongitude(double u) const {
-  return Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), u );
+  return Angle::linearInterpolation( _lower._longitude, _upper._longitude, u );
 }
 
 const Angle Sector::getInnerPointLatitude(double v) const {
-  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(),  (float) (1.0-v) );
+  return Angle::linearInterpolation( _lower._latitude, _upper._latitude,  1.0 - v);
 }
 
 /*
@@ -256,24 +256,24 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
 */
 
 Sector Sector::intersection(const Sector& that) const {
-  const Angle lowLat = Angle::max(lower().latitude(),  that.lower().latitude());
-  const Angle lowLon = Angle::max(lower().longitude(), that.lower().longitude());
+  const Angle lowLat = Angle::max(_lower._latitude,  that._lower._latitude);
+  const Angle lowLon = Angle::max(_lower._longitude, that._lower._longitude);
   const Geodetic2D low(lowLat, lowLon);
 
-  const Angle upLat = Angle::min(upper().latitude(),  that.upper().latitude());
-  const Angle upLon = Angle::min(upper().longitude(), that.upper().longitude());
+  const Angle upLat = Angle::min(_upper._latitude,  that._upper._latitude);
+  const Angle upLon = Angle::min(_upper._longitude, that._upper._longitude);
   const Geodetic2D up(upLat, upLon);
 
   return Sector(low, up);
 }
 
 Sector Sector::mergedWith(const Sector& that) const {
-  const Angle lowLat = Angle::min(lower().latitude(),  that.lower().latitude());
-  const Angle lowLon = Angle::min(lower().longitude(), that.lower().longitude());
+  const Angle lowLat = Angle::min(_lower._latitude,  that._lower._latitude);
+  const Angle lowLon = Angle::min(_lower._longitude, that._lower._longitude);
   const Geodetic2D low(lowLat, lowLon);
 
-  const Angle upLat = Angle::max(upper().latitude(),  that.upper().latitude());
-  const Angle upLon = Angle::max(upper().longitude(), that.upper().longitude());
+  const Angle upLat = Angle::max(_upper._latitude,  that._upper._latitude);
+  const Angle upLon = Angle::max(_upper._longitude, that._upper._longitude);
   const Geodetic2D up(upLat, upLon);
 
   return Sector(low, up);
@@ -284,25 +284,25 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
     return position;
   }
 
-  double latitudeInDegrees = position.latitude().degrees();
-  double longitudeInDegrees = position.longitude().degrees();
+  double latitudeInDegrees = position._latitude.degrees();
+  double longitudeInDegrees = position._longitude.degrees();
 
-  const double upperLatitudeInDegrees  = _upper.latitude().degrees();
+  const double upperLatitudeInDegrees  = _upper._latitude.degrees();
   if (latitudeInDegrees > upperLatitudeInDegrees) {
     latitudeInDegrees = upperLatitudeInDegrees;
   }
 
-  const double upperLongitudeInDegrees = _upper.longitude().degrees();
+  const double upperLongitudeInDegrees = _upper._longitude.degrees();
   if (longitudeInDegrees > upperLongitudeInDegrees) {
     longitudeInDegrees = upperLongitudeInDegrees;
   }
 
-  const double lowerLatitudeInDegrees  = _lower.latitude().degrees();
+  const double lowerLatitudeInDegrees  = _lower._latitude.degrees();
   if (latitudeInDegrees < lowerLatitudeInDegrees) {
     latitudeInDegrees = lowerLatitudeInDegrees;
   }
 
-  const double lowerLongitudeInDegrees  = _lower.longitude().degrees();
+  const double lowerLongitudeInDegrees  = _lower._longitude.degrees();
   if (longitudeInDegrees < lowerLongitudeInDegrees) {
     longitudeInDegrees = lowerLongitudeInDegrees;
   }
@@ -319,16 +319,16 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
 
   // test longitude
   Geodetic2D center = getCenter();
-  double lon        = pos.longitude()._degrees;
-  double centerLon  = center.longitude()._degrees;
+  double lon        = pos._longitude._degrees;
+  double centerLon  = center._longitude._degrees;
   double oppLon1    = centerLon - 180;
   double oppLon2    = centerLon + 180;
   if (lon<oppLon1)
     lon+=360;
   if (lon>oppLon2)
     lon-=360;
-  double minLon     = _lower.longitude()._degrees;
-  double maxLon     = _upper.longitude()._degrees;
+  double minLon     = _lower._longitude._degrees;
+  double maxLon     = _upper._longitude._degrees;
   //bool insideLon    = true;
   if (lon < minLon) {
     lon = minLon;
@@ -340,9 +340,9 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   }
 
   // test latitude
-  double lat        = pos.latitude()._degrees;
-  double minLat     = _lower.latitude()._degrees;
-  double maxLat     = _upper.latitude()._degrees;
+  double lat        = pos._latitude._degrees;
+  double minLat     = _lower._latitude._degrees;
+  double maxLat     = _upper._latitude._degrees;
   //bool insideLat    = true;
   if (lat < minLat) {
     lat = minLat;
@@ -376,8 +376,8 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   return point;*/
 
   /*
-   const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-   const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+   const Angle lat = pos._latitude.nearestAngleInInterval(_lower._latitude, _upper._latitude);
+   const Angle lon = pos._longitude.nearestAngleInInterval(_lower._longitude, _upper._longitude);
    return Geodetic2D(lat, lon);*/
 //}
 

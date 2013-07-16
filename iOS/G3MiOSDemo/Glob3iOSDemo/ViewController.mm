@@ -579,20 +579,20 @@ public:
   vertices.add(sector.getNE(), heightNE);  colors.add(1, 0, 0, 1);
   vertices.add(sector.getNW(), heightNW);  colors.add(1, 0, 0, 1);
   
-  for (double lat = sector.lower().latitude().degrees();
-       lat <= sector.upper().latitude().degrees();
+  for (double lat = sector._lower._latitude.degrees();
+       lat <= sector._upper._latitude.degrees();
        lat += 0.025) {
     const Angle latitude(Angle::fromDegrees(lat));
-    for (double lon = sector.lower().longitude().degrees();
-         lon <= sector.upper().longitude().degrees();
+    for (double lon = sector._lower._longitude.degrees();
+         lon <= sector._upper._longitude.degrees();
          lon += 0.025) {
       
       const Angle longitude(Angle::fromDegrees(lon));
       //      const Geodetic2D position(latitude,
       //                                longitude);
       
-      const double height = interpolator->interpolation(sector.lower(),
-                                                        sector.upper(),
+      const double height = interpolator->interpolation(sector._lower,
+                                                        sector._upper,
                                                         heightSW,
                                                         heightSE,
                                                         heightNE,
@@ -1716,8 +1716,8 @@ public:
       
       IMathUtils* mu = IMathUtils::instance();
       
-      const double deltaLatInDegrees = fromPosition.latitude()._degrees  - toPosition.latitude()._degrees;
-      const double deltaLonInDegrees = fromPosition.longitude()._degrees - toPosition.longitude()._degrees;
+      const double deltaLatInDegrees = fromPosition._latitude._degrees  - toPosition._latitude._degrees;
+      const double deltaLonInDegrees = fromPosition._longitude._degrees - toPosition._longitude._degrees;
       
       const double distanceInDegrees = mu->sqrt((deltaLatInDegrees * deltaLatInDegrees) +
                                                 (deltaLonInDegrees * deltaLonInDegrees)  );
@@ -2228,9 +2228,9 @@ public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
     _trail(trail),
-    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
-    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
-    _lastHeight(lastPosition.height()),
+    _lastLatitudeDegrees(lastPosition._latitude._degrees),
+    _lastLongitudeDegrees(lastPosition._longitude._degrees),
+    _lastHeight(lastPosition._height),
     _odd(true)
     {
       

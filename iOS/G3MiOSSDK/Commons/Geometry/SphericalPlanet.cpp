@@ -153,10 +153,10 @@ double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
   // theres is a minimum error considering SphericalPlanet instead of ellipsoid
-  const double latP = g2.latitude()._radians;
-  const double lonP = g2.longitude()._radians;
-  const double latQ = g1.latitude()._radians;
-  const double lonQ = g1.longitude()._radians;
+  const double latP = g2._latitude._radians;
+  const double lonP = g2._longitude._radians;
+  const double latQ = g1._latitude._radians;
+  const double lonQ = g1._longitude._radians;
   const double coslatP = mu->cos(latP);
   const double sinlatP = mu->sin(latP);
   const double coslonP = mu->cos(lonP);
@@ -179,17 +179,17 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   
   const double R = _sphere.getRadius();
 
-  const double medLat = g1.latitude()._degrees;
-  const double medLon = g1.longitude()._degrees;
+  const double medLat = g1._latitude._degrees;
+  const double medLon = g1._longitude._degrees;
 
   // this way is faster, and works properly further away from the poles
-  //double diflat = fabs(g.latitude()-medLat);
-  double diflat = mu->abs(g2.latitude()._degrees - medLat);
+  //double diflat = fabs(g._latitude-medLat);
+  double diflat = mu->abs(g2._latitude._degrees - medLat);
   if (diflat > 180) {
     diflat = 360 - diflat;
   }
 
-  double diflon = mu->abs(g2.longitude()._degrees - medLon);
+  double diflon = mu->abs(g2._longitude._degrees - medLon);
   if (diflon > 180) {
     diflon = 360 - diflon;
   }

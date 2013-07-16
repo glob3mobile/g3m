@@ -221,7 +221,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
       vertices.add(innerPoint);
       
-      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint.latitude()) : v;
+      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
     }

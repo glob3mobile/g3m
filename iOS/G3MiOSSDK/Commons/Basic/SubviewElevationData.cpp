@@ -44,16 +44,16 @@ ElevationData(sector, extent)
 const Vector2D SubviewElevationData::getParentXYAt(const ElevationData* elevationData,
                                                    const Geodetic2D& position) const {
   const Sector parentSector = elevationData->getSector();
-  const Geodetic2D parentLower = parentSector.lower();
+  const Geodetic2D parentLower = parentSector._lower;
 
   const double parentX = (
-                          ( position.longitude().radians() - parentLower.longitude().radians() )
+                          ( position._longitude.radians() - parentLower._longitude.radians() )
                           / parentSector.getDeltaLongitude().radians()
                           * elevationData->getExtentWidth()
                           );
 
   const double parentY = (
-                          ( position.latitude().radians() - parentLower.latitude().radians() )
+                          ( position._latitude.radians() - parentLower._latitude.radians() )
                           / parentSector.getDeltaLatitude().radians()
                           * elevationData->getExtentHeight()
                           );
@@ -125,8 +125,8 @@ double SubviewElevationData::getElevationBoxAt(const ElevationData* elevationDat
 IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* elevationData) {
   IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
 
-  const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector.lower());
-  const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector.upper());
+  const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
+  const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
   const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
 
   IMathUtils *mu = IMathUtils::instance();
@@ -219,8 +219,8 @@ double SubviewElevationData::getElevationAt(int x, int y) const {
   //  const double v = (double) y / (_height - 1);
   //  const Geodetic2D position = _sector.getInnerPoint(u, v);
   //
-  //  return getElevationAt(position.latitude(),
-  //                        position.longitude());
+  //  return getElevationAt(position._latitude,
+  //                        position._longitude);
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {

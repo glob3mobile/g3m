@@ -54,11 +54,11 @@ public:
                                  const Angle& longitude) const;
   
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic.latitude(), geodetic.longitude());
+    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
@@ -69,21 +69,21 @@ public:
                        const double height) const;
 
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
-                       geodetic.height());
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
+                       geodetic._height);
   }
 
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        0.0);
   }
 
   Vector3D toCartesian(const Geodetic2D& geodetic,
                        const double height) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        height);
   }
 

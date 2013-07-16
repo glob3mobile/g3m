@@ -576,17 +576,17 @@ void Tile::render(const G3MRenderContext* rc,
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
-      const Geodetic2D lower = _sector.lower();
-      const Geodetic2D upper = _sector.upper();
+      const Geodetic2D lower = _sector._lower;
+      const Geodetic2D upper = _sector._upper;
 
-      const Angle splitLongitude = Angle::midAngle(lower.longitude(),
-                                                   upper.longitude());
+      const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                                   upper._longitude);
 
       const Angle splitLatitude = trc->getLayerTilesRenderParameters()->_mercator
-      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower.latitude(),
-                                                                                  upper.latitude())
-      /*                               */ : Angle::midAngle(lower.latitude(),
-                                                            upper.latitude());
+      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                                  upper._latitude)
+      /*                               */ : Angle::midAngle(lower._latitude,
+                                                            upper._latitude);
 
       std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
       if (_justCreatedSubtiles) {
@@ -627,8 +627,8 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
 std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
                                          const Angle& splitLongitude,
                                          bool setParent) {
-  const Geodetic2D lower = _sector.lower();
-  const Geodetic2D upper = _sector.upper();
+  const Geodetic2D lower = _sector._lower;
+  const Geodetic2D upper = _sector._upper;
 
   const int nextLevel = _level + 1;
 
@@ -637,29 +637,29 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
 
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
 
-  subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),
+  subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
                                      splitLatitude, splitLongitude,
                                      nextLevel,
                                      row2,
                                      column2,
                                      setParent) );
 
-  subTiles->push_back( createSubTile(lower.latitude(), splitLongitude,
-                                     splitLatitude, upper.longitude(),
+  subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
+                                     splitLatitude, upper._longitude,
                                      nextLevel,
                                      row2,
                                      column2 + 1,
                                      setParent) );
 
-  subTiles->push_back( createSubTile(splitLatitude, lower.longitude(),
-                                     upper.latitude(), splitLongitude,
+  subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
+                                     upper._latitude, splitLongitude,
                                      nextLevel,
                                      row2 + 1,
                                      column2,
                                      setParent) );
 
   subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
-                                     upper.latitude(), upper.longitude(),
+                                     upper._latitude, upper._longitude,
                                      nextLevel,
                                      row2 + 1,
                                      column2 + 1,

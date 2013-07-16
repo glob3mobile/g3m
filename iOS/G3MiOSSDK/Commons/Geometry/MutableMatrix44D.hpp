@@ -338,11 +338,11 @@ public:
                                                          const Angle& longitude);
 
     static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
     static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
   };

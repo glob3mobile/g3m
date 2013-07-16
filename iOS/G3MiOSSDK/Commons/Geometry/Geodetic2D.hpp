@@ -36,8 +36,8 @@ public:
   static Geodetic2D linearInterpolation(const Geodetic2D& from,
                                         const Geodetic2D& to,
                                         double alpha){
-    return Geodetic2D(Angle::linearInterpolation(from.latitude(),  to.latitude(),  alpha),
-                      Angle::linearInterpolation(from.longitude(), to.longitude(), alpha));
+    return Geodetic2D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
+                      Angle::linearInterpolation(from._longitude, to._longitude, alpha));
   }
   
   
@@ -66,10 +66,10 @@ public:
    */
   static Angle bearing(const Geodetic2D& from,
                        const Geodetic2D& to) {
-    return bearing(from.latitude(),
-                   from.longitude(),
-                   to.latitude(),
-                   to.longitude());
+    return bearing(from._latitude,
+                   from._longitude,
+                   to._latitude,
+                   to._longitude);
   }
 
 

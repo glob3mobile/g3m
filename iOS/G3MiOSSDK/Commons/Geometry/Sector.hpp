@@ -23,8 +23,6 @@
 class Sector {
 
 private:
-  const Geodetic2D _lower;
-  const Geodetic2D _upper;
   const Geodetic2D _center;
 
   const Angle _deltaLatitude;
@@ -48,6 +46,9 @@ private:
   mutable Vector3D* _normalizedCartesianCenter;
 
 public:
+  const Geodetic2D _lower;
+  const Geodetic2D _upper;
+
 
   ~Sector();
 
@@ -55,10 +56,10 @@ public:
          const Geodetic2D& upper) :
   _lower(lower),
   _upper(upper),
-  _deltaLatitude(upper.latitude().sub(lower.latitude())),
-  _deltaLongitude(upper.longitude().sub(lower.longitude())),
-  _center(Angle::midAngle(lower.latitude(), upper.latitude()),
-          Angle::midAngle(lower.longitude(), upper.longitude())),
+  _deltaLatitude(upper._latitude.sub(lower._latitude)),
+  _deltaLongitude(upper._longitude.sub(lower._longitude)),
+  _center(Angle::midAngle(lower._latitude, upper._latitude),
+          Angle::midAngle(lower._longitude, upper._longitude)),
   _deltaRadiusInRadians(-1.0),
   /*
    _nwData(NULL),
@@ -121,11 +122,11 @@ public:
   }
 
   const Angle lowerLatitude() const {
-    return _lower.latitude();
+    return _lower._latitude;
   }
 
   const Angle lowerLongitude() const {
-    return _lower.longitude();
+    return _lower._longitude;
   }
 
   const Geodetic2D upper() const {
@@ -133,11 +134,11 @@ public:
   }
 
   const Angle upperLatitude() const {
-    return _upper.latitude();
+    return _upper._latitude;
   }
 
   const Angle upperLongitude() const {
-    return _upper.longitude();
+    return _upper._longitude;
   }
 
   
@@ -145,13 +146,13 @@ public:
                 const Angle& longitude) const;
   
   bool contains(const Geodetic2D& position) const {
-    return contains(position.latitude(),
-                    position.longitude());
+    return contains(position._latitude,
+                    position._longitude);
   }
 
   bool contains(const Geodetic3D& position) const {
-    return contains(position.latitude(),
-                    position.longitude());
+    return contains(position._latitude,
+                    position._longitude);
   }
 
   bool touchesWith(const Sector& that) const;
@@ -173,13 +174,13 @@ public:
   }
 
   const Geodetic2D getNW() const {
-    return Geodetic2D(_upper.latitude(),
-                      _lower.longitude());
+    return Geodetic2D(_upper._latitude,
+                      _lower._longitude);
   }
 
   const Geodetic2D getSE() const {
-    return Geodetic2D(_lower.latitude(),
-                      _upper.longitude());
+    return Geodetic2D(_lower._latitude,
+                      _upper._longitude);
   }
 
   const Geodetic2D getCenter() const {
@@ -195,7 +196,7 @@ public:
 
 
   const Vector2D getUVCoordinates(const Geodetic2D& point) const {
-    return getUVCoordinates(point.latitude(), point.longitude());
+    return getUVCoordinates(point._latitude, point._longitude);
   }
 
   Vector2D getUVCoordinates(const Angle& latitude,
@@ -205,11 +206,11 @@ public:
   }
 
   double getUCoordinate(const Angle& longitude) const {
-    return (longitude._radians - _lower.longitude()._radians) / _deltaLongitude._radians;
+    return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
   }
 
   double getVCoordinate(const Angle& latitude) const {
-    return (_upper.latitude()._radians - latitude._radians)   / _deltaLatitude._radians;
+    return (_upper._latitude._radians - latitude._radians)   / _deltaLatitude._radians;
   }
 
 
@@ -248,16 +249,16 @@ public:
   }
   
   bool touchesNorthPole() const {
-    return (_upper.latitude()._degrees >= 89.9);
+    return (_upper._latitude._degrees >= 89.9);
   }
   
   bool touchesSouthPole() const {
-    return (_lower.latitude()._degrees <= -89.9);
+    return (_lower._latitude._degrees <= -89.9);
   }
 
   bool touchesPoles() const {
-    return ((_upper.latitude()._degrees >=  89.9) ||
-            (_lower.latitude()._degrees <= -89.9));
+    return ((_upper._latitude._degrees >=  89.9) ||
+            (_lower._latitude._degrees <= -89.9));
   }
 
   double getDeltaRadiusInRadians() const {

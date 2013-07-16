@@ -108,11 +108,11 @@ public:
       const Sector tileSector = _tile->getSector();
       
       const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
-                                                                   tileSector.lower(),
+                                                                   tileSector._lower,
                                                                    _mercator);
       
       const Vector2D upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
-                                                                   tileSector.upper(),
+                                                                   tileSector._upper,
                                                                    _mercator);
       
       _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,

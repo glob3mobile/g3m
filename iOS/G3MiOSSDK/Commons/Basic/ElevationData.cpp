@@ -93,7 +93,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
       colors.add(r, g, b, 1);
 
       vertices.add(position.add(positionOffset2D),
-                   positionOffset.height() + (elevation * verticalExaggeration));
+                   positionOffset._height + (elevation * verticalExaggeration));
     }
   }
 
@@ -113,7 +113,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 //      }
 //
 //      vertices.add(position.add(positionOffset2D),
-//                   positionOffset.height() + (elevation * verticalExaggeration));
+//                   positionOffset._height + (elevation * verticalExaggeration));
 //
 //
 //      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
@@ -184,7 +184,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
       const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
 
       vertices.add(position,
-                   positionOffset.height() + (elevation * verticalExaggeration));
+                   positionOffset._height + (elevation * verticalExaggeration));
 
     }
   }

@@ -66,21 +66,21 @@ public:
            const double height);
 
   void add(const Geodetic3D& position) {
-    add(position.latitude(),
-        position.longitude(),
-        position.height());
+    add(position._latitude,
+        position._longitude,
+        position._height);
   }
 
   void add(const Geodetic2D& position) {
-    add(position.latitude(),
-        position.longitude(),
+    add(position._latitude,
+        position._longitude,
         0.0);
   }
 
   void add(const Geodetic2D& position,
            const double height) {
-    add(position.latitude(),
-        position.longitude(),
+    add(position._latitude,
+        position._longitude,
         height);
   }
 

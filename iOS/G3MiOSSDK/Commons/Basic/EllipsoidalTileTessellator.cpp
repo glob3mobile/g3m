@@ -38,7 +38,7 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
   return rawResolution;
 
 //  /* testing for dynamic latitude-resolution */
-//  const double cos = sector.getCenter().latitude().cosinus();
+//  const double cos = sector.getCenter()._latitude.cosinus();
 //
 //  int resolutionY = (int) (rawResolution._y * cos);
 //  if (resolutionY < 8) {
@@ -189,8 +189,8 @@ const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
     return linearUV;
   }
 
-  const double lowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
-  const double upperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double lowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
+  const double upperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
   const double deltaGlobalV = lowerGlobalV - upperGlobalV;
 
   const double globalV = MercatorUtils::getMercatorV(latitude);
@@ -210,8 +210,8 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
 
   const Sector sector = tile->getSector();
   
-  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
-  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   for (int j = 0; j < tileResolution._y; j++) {

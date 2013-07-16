@@ -33,8 +33,8 @@ Mesh* Trail::createMesh(const Planet* planet) {
     const Geodetic3D* current  = _positions[i];
     const Geodetic3D* previous = _positions[i - 1];
 
-    const Angle angle = Geodetic2D::bearing(previous->latitude(), previous->longitude(),
-                                            current->latitude(), current->longitude());
+    const Angle angle = Geodetic2D::bearing(previous->_latitude, previous->_longitude,
+                                            current->_latitude, current->_longitude);
 
     const double angleInDegrees = angle.degrees();
     if (i == 1) {

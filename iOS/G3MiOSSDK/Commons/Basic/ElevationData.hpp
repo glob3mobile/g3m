@@ -86,8 +86,8 @@ public:
                         const Angle& longitude) const;
 
   double getElevationAt(const Geodetic2D& position) const {
-    return getElevationAt(position.latitude(),
-                          position.longitude());
+    return getElevationAt(position._latitude,
+                          position._longitude);
   }
 
   //  bool isEquivalentTo(const ElevationData* ed){

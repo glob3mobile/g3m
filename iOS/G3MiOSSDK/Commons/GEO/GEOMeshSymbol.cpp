@@ -30,8 +30,8 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(coordinate->latitude(),
-                 coordinate->longitude(),
+    vertices.add(coordinate->_latitude,
+                 coordinate->_longitude,
                  deltaHeight);
   }
 
@@ -66,8 +66,8 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      vertices.add(coordinate->latitude(),
-                   coordinate->longitude(),
+      vertices.add(coordinate->_latitude,
+                   coordinate->_longitude,
                    deltaHeight);
 
       indices.add(index);

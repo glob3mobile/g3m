@@ -236,7 +236,7 @@ public:
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
       const double distanceToPlanetCenter = _position.length();
-      const double planetRadius = distanceToPlanetCenter - getGeodeticPosition().height();
+      const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
       _normalizedPosition = _position.normalized();
     }
@@ -270,7 +270,7 @@ public:
 
   void setGeodeticPosition(const Geodetic2D &g2d,
                            const double height) {
-    _setGeodeticPosition( _planet->toCartesian(g2d.latitude(), g2d.longitude(), height) );
+    _setGeodeticPosition( _planet->toCartesian(g2d._latitude, g2d._longitude, height) );
   }
 
   /**

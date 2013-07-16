@@ -14,7 +14,7 @@ const Vector2D TileTessellator::getTextCoord(const Tile* tile,
                                              const Geodetic2D& position,
                                              bool mercator) const {
   return getTextCoord(tile,
-                      position.latitude(),
-                      position.longitude(),
+                      position._latitude,
+                      position._longitude,
                       mercator);
 }
