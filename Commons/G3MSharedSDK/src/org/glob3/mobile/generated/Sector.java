@@ -641,6 +641,11 @@ public class Sector
     return (_lower.latitude()._degrees <= -89.9);
   }
 
+  public final boolean touchesPoles()
+  {
+    return ((_upper.latitude()._degrees >= 89.9) || (_lower.latitude()._degrees <= -89.9));
+  }
+
   public final double getDeltaRadiusInRadians()
   {
     if (_deltaRadiusInRadians < 0)
