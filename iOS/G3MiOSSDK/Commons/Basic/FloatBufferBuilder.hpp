@@ -32,8 +32,13 @@ public:
 
 class FloatBufferBuilder {
 protected:
+#ifdef C_CODE
   std::vector<float> _values;
-  
+#endif
+#ifdef JAVA_CODE
+  protected final FloatArrayList _values = new FloatArrayList();
+#endif
+
 public:
   IFloatBuffer* create() const;
 };
