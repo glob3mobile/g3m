@@ -1051,7 +1051,7 @@ public class Tile
   //                                                                                      Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   //    return subView;
   
-      return new SubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY), true);
+      return new SubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
                                       //bool ownsElevationData,
     }
   
