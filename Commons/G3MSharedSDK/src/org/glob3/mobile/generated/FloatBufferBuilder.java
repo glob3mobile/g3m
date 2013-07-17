@@ -52,6 +52,6 @@ public class FloatBufferBuilder
 
   public final IFloatBuffer create()
   {
-    return IFactory::instance()->createFloatBuffer(_values->toArray());
+    return IFactory.instance().createFloatBuffer( _values.toArray() );
   }
 }
