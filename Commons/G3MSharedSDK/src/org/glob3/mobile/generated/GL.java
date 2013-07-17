@@ -81,20 +81,18 @@ public class GL
 
   private void loadModelView()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::loadModelView()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::loadModelView()");
+  //  }
   
     _nativeGL.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
   }
 
   private IGLTextureId getGLTextureId()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getGLTextureId()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+  //  }
   
     if (_texturesIdBag.size() == 0)
     {
@@ -140,10 +138,9 @@ public class GL
   private boolean _errorGettingLocationOcurred;
   private int checkedGetAttribLocation(ShaderProgram program, String name)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::checkedGetAttribLocation()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
+  //  }
     int l = _nativeGL.getAttribLocation(program, name);
     if (l == -1)
     {
@@ -154,10 +151,10 @@ public class GL
   }
   private IGLUniformID checkedGetUniformLocation(ShaderProgram program, String name)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::checkedGetUniformLocation()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
+  //  }
+  
     IGLUniformID uID = _nativeGL.getUniformLocation(program, name);
     if (!uID.isValid())
     {
@@ -170,10 +167,9 @@ public class GL
   private IFloatBuffer _billboardTexCoord;
   private IFloatBuffer getBillboardTexCoord()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getBillboardTexCoord()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
+  //  }
   
     if (_billboardTexCoord == null)
     {
@@ -188,18 +184,18 @@ public class GL
     return _billboardTexCoord;
   }
 
-  private final boolean _verbose;
+//  const bool _verbose;
 
 
 
   public GL(INativeGL nativeGL, boolean verbose)
+//  _verbose(verbose),
   //  _enableFlatColor(false),
   //  _texturesIdGetCounter(0),
   //  _texturesIdTakeCounter(0),
 //  _boundTextureId(NULL)
   {
      _nativeGL = nativeGL;
-     _verbose = verbose;
      _enableTextures = false;
      _enableTexture2D = false;
      _enableVertexColor = false;
@@ -249,10 +245,9 @@ public class GL
 
   public final void clearScreen(float r, float g, float b, float a)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::clearScreen()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::clearScreen()");
+  //  }
   
     _nativeGL.clearColor(r, g, b, a);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
@@ -260,10 +255,9 @@ public class GL
 
   public final void color(float r, float g, float b, float a)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::color()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::color()");
+  //  }
   
     if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
     {
@@ -278,20 +272,18 @@ public class GL
 
   public final void pushMatrix()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::pushMatrix()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::pushMatrix()");
+  //  }
   
     _matrixStack.addLast(_modelView);
   }
 
   public final void popMatrix()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::popMatrix()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::popMatrix()");
+  //  }
   
     _modelView = _matrixStack.getLast();
     _matrixStack.removeLast();
@@ -301,10 +293,9 @@ public class GL
 
   public final void loadMatrixf(MutableMatrix44D modelView)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::loadMatrixf()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::loadMatrixf()");
+  //  }
   
     _modelView = modelView;
   
@@ -313,10 +304,9 @@ public class GL
 
   public final void multMatrixf(MutableMatrix44D m)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::multMatrixf()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::multMatrixf()");
+  //  }
   
     _modelView = _modelView.multiply(m);
   
@@ -325,10 +315,12 @@ public class GL
 
   public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)", size, stride, vertices.description());
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)",
+  //                                 size,
+  //                                 stride,
+  //                                 vertices->description().c_str());
+  //  }
   
     if ((_vertices != vertices) || (_verticesTimestamp != vertices.timestamp()))
     {
@@ -355,40 +347,41 @@ public class GL
   //}
   public final void drawElements(int mode, IShortBuffer indices)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawElements(%d, %s)", mode, indices.description());
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+  //                                 mode,
+  //                                 indices->description().c_str());
+  //  }
   
     _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
   public final void drawArrays(int mode, int first, int count)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawArrays(%d, %d, %d)", mode, first, count);
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+  //                                 mode,
+  //                                 first,
+  //                                 count);
+  //  }
   
     _nativeGL.drawArrays(mode, first, count);
   }
 
   public final void setProjection(MutableMatrix44D projection)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setProjection()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::setProjection()");
+  //  }
   
     _nativeGL.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection);
   }
 
   public final boolean useProgram(ShaderProgram program)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::useProgram()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::useProgram()");
+  //  }
   
     if (_program == program)
     {
@@ -444,10 +437,9 @@ public class GL
 
   public final void enablePolygonOffset(float factor, float units)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::enablePolygonOffset()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
+  //  }
   
     _nativeGL.enable(GLFeature.polygonOffsetFill());
     _nativeGL.polygonOffset(factor, units);
@@ -455,10 +447,9 @@ public class GL
 
   public final void disablePolygonOffset()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::disablePolygonOffset()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
+  //  }
   
     _nativeGL.disable(GLFeature.polygonOffsetFill());
   }
@@ -469,20 +460,18 @@ public class GL
 
   public final int getError()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getError()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getError()");
+  //  }
   
     return _nativeGL.getError();
   }
 
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::uploadTexture()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::uploadTexture()");
+  //  }
   
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
@@ -513,10 +502,12 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)", size, stride, textureCoordinates.description());
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)",
+  //                                 size,
+  //                                 stride,
+  //                                 textureCoordinates->description().c_str());
+  //  }
   
     if ((_textureCoordinates != textureCoordinates) || (_textureCoordinatesTimestamp != textureCoordinates.timestamp()))
     {
@@ -528,10 +519,9 @@ public class GL
 
   public final void bindTexture(IGLTextureId textureId)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::bindTexture()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::bindTexture()");
+  //  }
   
     if (textureId == null)
     {
@@ -565,10 +555,9 @@ public class GL
 
   public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, int textureWidth, int textureHeight)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawBillBoard()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawBillBoard()");
+  //  }
   
     int TODO_refactor_billboard;
   
@@ -583,10 +572,9 @@ public class GL
 
   public final void deleteTexture(IGLTextureId textureId)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::deleteTexture()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::deleteTexture()");
+  //  }
   
     if (textureId != null)
     {
@@ -612,10 +600,9 @@ public class GL
 
   public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::transformTexCoords()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::transformTexCoords()");
+  //  }
   
     if ((_scaleX != scaleX) || (_scaleY != scaleY))
     {
@@ -634,24 +621,21 @@ public class GL
 
   public final void transformTexCoords(double scaleX, double scaleY, double translationX, double translationY)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scaleX, (float) scaleY, (float) translationX, (float) translationY);
   }
 
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale._x, (float) scale._y, (float) translation._x, (float) translation._y);
   }
 
   public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
   }
@@ -659,16 +643,14 @@ public class GL
 
   public final void color(Color col)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::color()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::color()");
 
     color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
   public final void clearScreen(Color col)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::clearScreen()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
 
     clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
@@ -680,18 +662,16 @@ public class GL
 
   public final void setBlendFuncSrcAlpha()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setBlendFuncSrcAlpha()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
+  //  }
   
     _nativeGL.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   }
 
   public final void getViewport(int[] v)
   {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::getViewport()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
 
     _nativeGL.getIntegerv(GLVariable.viewport(), v);
   }
