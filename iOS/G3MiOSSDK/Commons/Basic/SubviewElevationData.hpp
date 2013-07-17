@@ -22,27 +22,21 @@ private:
 
 //  const Geodetic2D _realResolution;
 
-#ifdef C_CODE
-  float* createDecimatedBuffer(const ElevationData* elevationData);
-  float* createInterpolatedBuffer(const ElevationData* elevationData);
-#else
-  float[] createDecimatedBuffer(const ElevationData* elevationData);
-  float[] createInterpolatedBuffer(const ElevationData* elevationData);
-#endif
-
-  double getElevationBoxAt(const ElevationData* elevationData,
-                           double x0, double y0,
-                           double x1, double y1) const;
-
-  const Vector2D getParentXYAt(const ElevationData* elevationData,
-                               const Geodetic2D& position) const;
+//  float* createDecimatedBuffer(const ElevationData* elevationData);
+//  float* createInterpolatedBuffer(const ElevationData* elevationData);
+//
+//  double getElevationBoxAt(const ElevationData* elevationData,
+//                           double x0, double y0,
+//                           double x1, double y1) const;
+//
+//  const Vector2D getParentXYAt(const ElevationData* elevationData,
+//                               const Geodetic2D& position) const;
 
 public:
   SubviewElevationData(const ElevationData* elevationData,
                        //bool ownsElevationData,
                        const Sector& sector,
-                       const Vector2I& extent,
-                       bool useDecimation);
+                       const Vector2I& extent);
 
   ~SubviewElevationData();
 

@@ -835,8 +835,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
     return new SubviewElevationData(ed,
                                     //bool ownsElevationData,
                                     getSector(),
-                                    Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY),
-                                    true);
+                                    Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
 
   ILogger::instance()->logError("Can't create subview of elevation data from ancestor");
