@@ -101,14 +101,14 @@ public class SubviewElevationData extends ElevationData
   //  const Geodetic2D parentLower = parentSector._lower;
   //
   //  const double parentX = (
-  //                          ( position._longitude.radians() - parentLower._longitude.radians() )
-  //                          / parentSector.getDeltaLongitude().radians()
+  //                          ( position._longitude._radians - parentLower._longitude._radians )
+  //                          / parentSector.getDeltaLongitude()._radians
   //                          * elevationData->getExtentWidth()
   //                          );
   //
   //  const double parentY = (
-  //                          ( position._latitude.radians() - parentLower._latitude.radians() )
-  //                          / parentSector.getDeltaLatitude().radians()
+  //                          ( position._latitude._radians - parentLower._latitude._radians )
+  //                          / parentSector.getDeltaLatitude()._radians
   //                          * elevationData->getExtentHeight()
   //                          );
   //
