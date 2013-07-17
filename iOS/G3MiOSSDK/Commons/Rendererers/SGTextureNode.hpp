@@ -17,10 +17,13 @@ class SGTextureNode : public SGNode {
 private:
   std::vector<SGLayerNode*> _layers;
 
+  GLState* _glState;
+
 public:
   SGTextureNode(const std::string& id,
                 const std::string& sId) :
-  SGNode(id, sId)
+  SGNode(id, sId),
+  _glState(NULL)
   {
 
   }
@@ -39,13 +42,11 @@ public:
 //  void cleanUpRender(const G3MRenderContext* rc);
 
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState& parentState) {
-    return  NULL;
-  }
+                             const GLState* parentState);
 
-  void render(const G3MRenderContext* rc,
-              GLState* parentState,
-              bool renderNotReadyShapes);
+//  void render(const G3MRenderContext* rc,
+//              GLState* parentState,
+//              bool renderNotReadyShapes);
 
   std::string description(){
     return "SGTextureNode";

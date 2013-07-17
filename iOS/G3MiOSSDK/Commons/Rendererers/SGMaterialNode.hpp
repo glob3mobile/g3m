@@ -57,8 +57,9 @@ public:
 #endif
   }
 
-  GLState* getGLState(GLState* parentGLState){
-    _glState.setParent(parentGLState);
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState* parentState){
+    _glState.setParent(parentState);
     return &_glState;
   }
 

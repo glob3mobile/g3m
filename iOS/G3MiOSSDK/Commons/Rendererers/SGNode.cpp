@@ -26,7 +26,7 @@ void SGNode::initialize(const G3MContext* context,
                         SGShape *shape) {
   _context = context;
   _shape = shape;
-  
+
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
@@ -50,7 +50,7 @@ bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -62,10 +62,10 @@ void SGNode::cleanUpRender(const G3MRenderContext* rc) {
 
 }
 
-const GLState* SGNode::createState(const G3MRenderContext* rc,
-                                   const GLState& parentState) {
-  return  NULL;
-}
+//const GLState* SGNode::createState(const G3MRenderContext* rc,
+//                                   const GLState& parentState) {
+//  return  NULL;
+//}
 
 
 //void SGNode::render(const G3MRenderContext* rc,
@@ -87,25 +87,29 @@ const GLState* SGNode::createState(const G3MRenderContext* rc,
 //  const int childrenCount = _children.size();
 //  for (int i = 0; i < childrenCount; i++) {
 //    SGNode* child = _children[i];
-//    child->render(rc, *state, renderNotReadyShapes);
+//    child->render(rc, *stuuujuuate, renderNotReadyShapes);
 //  }
 //}
 
-void SGNode::render(const G3MRenderContext* rc, GLState* parentGLState, bool renderNotReadyShapes) {
+void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bool renderNotReadyShapes) {
 
   ILogger::instance()->logInfo("Rendering SG: " + description());
-  
-  GLState* glState = getGLState(parentGLState);
-  
-  prepareRender(rc);
-  
-  rawRender(rc, glState);
-  
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    SGNode* child = _children[i];
-    child->render(rc, glState, renderNotReadyShapes);
-  }
 
-  cleanUpRender(rc);
+  const GLState* glState = createState(rc, parentGLState);
+  if (glState != NULL){
+
+    prepareRender(rc);
+
+    rawRender(rc, glState);
+
+    const int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++) {
+      SGNode* child = _children[i];
+      child->render(rc, glState, renderNotReadyShapes);
+    }
+
+    cleanUpRender(rc);
+  } else{
+    ILogger::instance()->logError("NO GLSTATE");
+  }
 }

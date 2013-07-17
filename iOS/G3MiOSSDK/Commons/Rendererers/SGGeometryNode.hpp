@@ -58,8 +58,9 @@ public:
 
   void rawRender(const G3MRenderContext* rc, GLState* glState);
   
-  GLState* getGLState(GLState* parentGLState){
-    _glState.setParent(parentGLState);
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState* parentState){
+    _glState.setParent(parentState);
 //    _glState.getGLGlobalState()->enableDepthTest();
     return &_glState;
   }

@@ -29,22 +29,22 @@ class MarkLabelImageListener : public IImageListener {
 private:
   IImage* _iconImage;
   Mark*   _mark;
-  
+
 public:
   MarkLabelImageListener(IImage* iconImage,
                          Mark* mark) :
   _iconImage(iconImage),
   _mark(mark)
   {
-    
+
   }
-  
+
   void imageCreated(IImage* image) {
     if (_iconImage != NULL) {
       IFactory::instance()->deleteImage(_iconImage);
       _iconImage = NULL;
     }
-    
+
     if (image == NULL) {
       _mark->onTextureDownloadError();
     }
@@ -65,7 +65,7 @@ private:
   const Color*       _labelFontColor;
   const Color*       _labelShadowColor;
   const int          _labelGapSize;
-  
+
 public:
   IconDownloadListener(Mark* mark,
                        const std::string& label,
@@ -82,14 +82,14 @@ public:
   _labelShadowColor(labelShadowColor),
   _labelGapSize(labelGapSize)
   {
-    
+
   }
-  
+
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
     const bool hasLabel = ( _label.length() != 0 );
-    
+
     if (hasLabel) {
 #ifdef C_CODE
       LabelPosition labelPosition = _labelBottom ? Bottom : Right;
@@ -97,7 +97,7 @@ public:
 #ifdef JAVA_CODE
       LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
 #endif
-      
+
       ITextUtils::instance()->labelImage(image,
                                          _label,
                                          labelPosition,
@@ -117,17 +117,17 @@ public:
       _mark->onTextureDownload(image);
     }
   }
-  
+
   void onError(const URL& url) {
     ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
-  
+
   void onCancel(const URL& url) {
     // ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
-  
+
   void onCanceledDownload(const URL& url,
                           IImage* image,
                           bool expired) {
@@ -175,7 +175,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label )
 {
-  
+
 }
 
 Mark::Mark(const std::string& label,
@@ -211,7 +211,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label )
 {
-  
+
 }
 
 Mark::Mark(const URL          iconURL,
@@ -244,7 +244,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" )
 {
-  
+
 }
 
 Mark::Mark(IImage*            image,
@@ -278,7 +278,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID )
 {
-  
+
 }
 
 void Mark::initialize(const G3MContext* context,
@@ -286,10 +286,10 @@ void Mark::initialize(const G3MContext* context,
   if (!_textureSolved) {
     const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
-    
+
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
-      
+
       downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),
@@ -321,10 +321,10 @@ void Mark::initialize(const G3MContext* context,
 
 void Mark::onTextureDownloadError() {
   _textureSolved = true;
-  
+
   delete _labelFontColor;
   delete _labelShadowColor;
-  
+
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
                                 _iconURL.getPath().c_str(),
                                 _label.c_str());
@@ -332,7 +332,7 @@ void Mark::onTextureDownloadError() {
 
 void Mark::onTextureDownload(IImage* image) {
   _textureSolved = true;
-  
+
   delete _labelFontColor;
   delete _labelShadowColor;
   //  _textureImage = image->shallowCopy();
@@ -384,52 +384,55 @@ double Mark::getMinDistanceToCamera() {
 }
 
 void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight){
-  
+
   _viewportHeight = viewportHeight;
   _viewportWidth = viewportWidth;
-  
-//  GLGlobalState *globalState = _glState.getGLGlobalState();
 
-//  globalState->disableDepthTest();
-//  globalState->enableBlend();
-//  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-//  globalState->bindTexture(_textureId);
+  //  GLGlobalState *globalState = _glState.getGLGlobalState();
 
-//  GPUProgramState* progState = _glState.getGPUProgramState();
+  //  globalState->disableDepthTest();
+  //  globalState->enableBlend();
+  //  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  //  globalState->bindTexture(_textureId);
 
- 
-  
-//  progState->setAttributeValue(TEXTURE_COORDS,
-//                               _billboardTexCoord, 2,
-//                               2,
-//                               0,
-//                               false,
-//                               0);
+  //  GPUProgramState* progState = _glState.getGPUProgramState();
 
-  const Vector3D pos( planet->toCartesian(_position) );
-  FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-  vertex.add(pos);
-  vertex.add(pos);
-  vertex.add(pos);
-  vertex.add(pos);
-  
-  _vertices = vertex.create();
-  
-//  progState->setAttributeValue(POSITION,
-//                               _vertices, 4, //The attribute is a float vector of 4 elements
-//                               3,            //Our buffer contains elements of 3
-//                               0,            //Index 0
-//                               false,        //Not normalized
-//                               0);           //Stride 0
 
-//  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
 
+  //  progState->setAttributeValue(TEXTURE_COORDS,
+  //                               _billboardTexCoord, 2,
+  //                               2,
+  //                               0,
+  //                               false,
+  //                               0);
+
+  if (_vertices == NULL){
+    const Vector3D pos( planet->toCartesian(_position) );
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+
+    _vertices = vertex.create();
+  }
+
+  //  progState->setAttributeValue(POSITION,
+  //                               _vertices, 4, //The attribute is a float vector of 4 elements
+  //                               3,            //Our buffer contains elements of 3
+  //                               0,            //Index 0
+  //                               false,        //Not normalized
+  //                               0);           //Stride 0
+
+  //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
+
+  _glState.clearGLFeatureGroup(NO_GROUP);
   _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
-                                             viewportWidth, viewportHeight), false);
+                                               viewportWidth, viewportHeight), false);
 
   //TODO: TEST
-//  MutableMatrix44D id = MutableMatrix44D::identity();
-//  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
+  //  MutableMatrix44D id = MutableMatrix44D::identity();
+  //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
@@ -459,11 +462,11 @@ IFloatBuffer* Mark::getBillboardTexCoords(){
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition, const GLState* parentGLState) {
   const Planet* planet = rc->getPlanet();
-  
+
   const Vector3D* markPosition = getCartesianPosition(planet);
-  
+
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  
+
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
   if (_minDistanceToCamera == 0) {
@@ -473,20 +476,20 @@ void Mark::render(const G3MRenderContext* rc,
     const double squaredDistanceToCamera = markCameraVector.squaredLength();
     renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
   }
-  
+
   _renderedMark = false;
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
-    
+
     if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
-      
+
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                 GLFormat::rgba(),
                                                                 _imageID,
                                                                 false);
-          
+
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
 
@@ -505,13 +508,13 @@ void Mark::render(const G3MRenderContext* rc,
             rc->getCurrentCamera()->getHeight() != _viewportHeight){
           createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
         }
-        
+
         GL* gl = rc->getGL();
-        
+
         GPUProgramManager& progManager = *rc->getGPUProgramManager();
-        
+
         _glState.setParent(parentGLState); //Linking with parent
-        
+
         gl->drawArrays(GLPrimitive::triangleStrip(),
                        0,
                        4,
