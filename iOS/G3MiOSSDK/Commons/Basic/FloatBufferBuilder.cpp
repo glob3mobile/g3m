@@ -13,12 +13,12 @@
 
 IFloatBuffer* FloatBufferBuilder::create() const {
   const int size = _values.size();
-  
+
   IFloatBuffer* result = IFactory::instance()->createFloatBuffer(size);
-  
+
   for (int i = 0; i < size; i++) {
-    result->rawPut(i, _values[i]);
+    result->rawPut(i, _values.at(i));
   }
-  
+
   return result;
 }
