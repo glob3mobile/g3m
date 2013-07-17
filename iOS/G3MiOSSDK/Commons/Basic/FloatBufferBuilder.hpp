@@ -36,6 +36,7 @@ protected:
   std::vector<float> _values;
 #endif
 #ifdef JAVA_CODE
+  
   public final class FloatArrayList {
     private float[] _array;
     private int     _size;
@@ -56,7 +57,7 @@ protected:
       return _size;
     }
 
-    public float at(final int index) {
+    public float get(final int index) {
       return _array[index];
     }
 
@@ -65,7 +66,7 @@ protected:
       _array[_size++] = element;
     }
 
-    public void ensureCapacity(final int mincap) {
+    private void ensureCapacity(final int mincap) {
       if (mincap > _array.length) {
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
