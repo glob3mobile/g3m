@@ -24,6 +24,6 @@ IFloatBuffer* FloatBufferBuilder::create() const {
   return result;
 #endif
 #ifdef JAVA_CODE
-  return IFactory::instance()->createFloatBuffer(_values->toArray());
+  return IFactory.instance().createFloatBuffer( _values.toArray() );
 #endif
 }
