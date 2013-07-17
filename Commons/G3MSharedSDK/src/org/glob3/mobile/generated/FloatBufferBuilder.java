@@ -1,4 +1,8 @@
 package org.glob3.mobile.generated; 
+public class FloatArrayList {
+
+}
+
 public class FloatBufferBuilder
 {
   protected final FloatArrayList _values = new FloatArrayList();
