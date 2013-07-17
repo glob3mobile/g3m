@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class FloatBufferBuilder
 {
-  public class FloatArrayList {
+  public final class FloatArrayList {
     private float[] _array;
     private int     _size;
     
@@ -21,19 +21,24 @@ public class FloatBufferBuilder
       return _size;
     }
 
+    public float at(final int index) {
+      return _array[index];
+    }
+
     public void push_back(final float element) {
       ensureCapacity(_size + 1);
       _array[_size++] = element;
     }
 
-    public void ensureCapacity(int mincap) {
+    public void ensureCapacity(final int mincap) {
       if (mincap > _array.length) {
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
-        System.arraycopy(olddata, 0, _array, 0, size);
+        System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
+
   }
 
   protected final FloatArrayList _values = new FloatArrayList();
@@ -46,7 +51,7 @@ public class FloatBufferBuilder
   
     for (int i = 0; i < size; i++)
     {
-      result.rawPut(i, _values[i]);
+      result.rawPut(i, _values.get(i));
     }
   
     return result;
