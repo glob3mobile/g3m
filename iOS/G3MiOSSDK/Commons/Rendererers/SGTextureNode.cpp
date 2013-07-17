@@ -64,7 +64,7 @@ const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLSt
       if (!layer->modifyGLState(rc, _glState)){
         delete _glState;
         _glState = NULL;
-        break;
+        return parentState;
       }
     }
 
