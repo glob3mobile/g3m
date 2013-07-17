@@ -20,18 +20,19 @@ ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
                                                    const Sector& realSector,
                                                    const Vector2I& realExtent,
-                                                   IShortBuffer* buffer) :
-BufferElevationData(sector, extent, realSector, realExtent, buffer->size()),
+                                                   short* buffer,
+                                                   int bufferSize) :
+BufferElevationData(sector, extent, realSector, realExtent, bufferSize),
 _buffer(buffer)
 {
-  if (_buffer->size() != (_width * _height) ) {
+  if (_bufferSize != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
   
-  const int size = buffer->size();
+  const int size = _bufferSize;
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
-    if (buffer->get(i) == NO_DATA_VALUE){
+    if (buffer[i] == NO_DATA_VALUE){
       _hasNoData = true;
       break;
     }
@@ -39,11 +40,11 @@ _buffer(buffer)
 }
 
 ShortBufferElevationData::~ShortBufferElevationData() {
-  delete _buffer;
+  delete [] _buffer;
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
-  const short value = _buffer->get(index);
+  const short value = _buffer[index];
   if (value == NO_DATA_VALUE){
     return IMathUtils::instance()->NanD();
   }
@@ -81,9 +82,9 @@ Vector3D ShortBufferElevationData::getMinMaxAverageElevations() const {
   short maxHeight = mu->minInt16();
   double sumHeight = 0.0;
   
-  const int bufferSize = _buffer->size();
+  const int bufferSize = _bufferSize;
   for (int i = 0; i < bufferSize; i++) {
-    const short height = _buffer->get(i);
+    const short height = _buffer[i];
     if (height != NO_DATA_VALUE) {
       if (height < minHeight) {
         minHeight = height;

@@ -12,12 +12,9 @@
 #include "ElevationData.hpp"
 
 class BufferElevationData : public ElevationData {
-private:
+protected:
   const int _bufferSize;
 
-//  const Geodetic2D _realResolution;
-
-protected:
   virtual double getValueInBufferAt(int index) const = 0;
 
 public:
