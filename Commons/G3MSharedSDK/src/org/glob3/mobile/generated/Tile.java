@@ -144,20 +144,33 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, TileRenderContext trc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
-  //  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-    final BoundingVolume boundingVolume = getBoundingVolume(rc, trc);
-    if (boundingVolume == null)
-    {
-      return false;
-    }
+  ////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  //  if (boundingVolume == NULL) {
+  //    return false;
+  //  }
+  //
+  //  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+  //    return false;
+  //  }
+  //
+  //  // test if sector is back oriented with respect to the camera
+  //  return !_sector.isBackOriented(rc,
+  //                                 getMinHeight(),
+  //                                 planet,
+  //                                 cameraNormalizedPosition,
+  //                                 cameraAngle2HorizonInRadians);
   
-    if (!boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates))
-    {
-      return false;
-    }
   
     // test if sector is back oriented with respect to the camera
-    return !_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians);
+    if (_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians))
+    {
+      return false;
+    }
+  
+    final BoundingVolume boundingVolume = getBoundingVolume(rc, trc);
+  
+    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
 
   private ITimer _lodTimer;
