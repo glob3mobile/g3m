@@ -60,6 +60,12 @@ public class ShortBufferBuilder
       }
     }
 
+    public short[] toArray() {
+      final short[] result = new short[_size];
+      System.arraycopy(_array, 0, result, 0, _size);
+      return result;
+    }
+
   }
 
   protected final ShortArrayList _values = new ShortArrayList();
@@ -72,16 +78,7 @@ public class ShortBufferBuilder
 
   public final IShortBuffer create()
   {
-    final int size = _values.size();
-  
-    IShortBuffer result = IFactory.instance().createShortBuffer(size);
-  
-    for (int i = 0; i < size; i++)
-    {
-      result.rawPut(i, _values.get(i));
-    }
-  
-    return result;
+    return IFactory::instance()->createShortBuffer(_values->toArray());
   }
 
 }

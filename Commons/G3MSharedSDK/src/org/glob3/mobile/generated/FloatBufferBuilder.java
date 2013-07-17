@@ -39,6 +39,12 @@ public class FloatBufferBuilder
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
+    
+    public float[] toArray() {
+      final float[] result = new float[_size];
+      System.arraycopy(_array, 0, result, 0, _size);
+      return result;
+    }
 
   }
 
@@ -46,15 +52,6 @@ public class FloatBufferBuilder
 
   public final IFloatBuffer create()
   {
-    final int size = _values.size();
-  
-    IFloatBuffer result = IFactory.instance().createFloatBuffer(size);
-  
-    for (int i = 0; i < size; i++)
-    {
-      result.rawPut(i, _values.get(i));
-    }
-  
-    return result;
+    return IFactory::instance()->createFloatBuffer(_values->toArray());
   }
 }
