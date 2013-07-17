@@ -293,22 +293,37 @@ bool Tile::isVisible(const G3MRenderContext *rc,
                      double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates) {
 
-//  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  if (boundingVolume == NULL) {
-    return false;
-  }
+////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+//  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+//  if (boundingVolume == NULL) {
+//    return false;
+//  }
+//
+//  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+//    return false;
+//  }
+//
+//  // test if sector is back oriented with respect to the camera
+//  return !_sector.isBackOriented(rc,
+//                                 getMinHeight(),
+//                                 planet,
+//                                 cameraNormalizedPosition,
+//                                 cameraAngle2HorizonInRadians);
 
-  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
-    return false;
-  }
 
   // test if sector is back oriented with respect to the camera
-  return !_sector.isBackOriented(rc,
-                                 getMinHeight(),
-                                 planet,
-                                 cameraNormalizedPosition,
-                                 cameraAngle2HorizonInRadians);
+  if (_sector.isBackOriented(rc,
+                             getMinHeight(),
+                             planet,
+                             cameraNormalizedPosition,
+                             cameraAngle2HorizonInRadians)) {
+    return false;
+  }
+
+  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+
+  return ((boundingVolume != NULL)  &&
+          boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
