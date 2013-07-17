@@ -473,7 +473,9 @@ public:
   //                                  NULL)
   //                     );
   
-  [self initializeElevationDataProvider: builder];
+  bool useElevations = false;
+  if (useElevations)
+    [self initializeElevationDataProvider: builder];
   
   builder.getTileRendererBuilder()->setLayerSet(layerSet);
   builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);

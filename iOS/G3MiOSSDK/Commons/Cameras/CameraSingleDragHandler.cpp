@@ -45,38 +45,21 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag); 
-//  _axis = MutableVector3D::nan();
-//  _lastRadians = _radiansStep = 0.0;
-  
+
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   _origin = _camera0.getCartesianPosition().asMutableVector3D();
   _initialRay = _camera0.pixel2Ray(pixel).asMutableVector3D();
-
-  //_initialPixel = pixel.asMutableVector2I();
-  //_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-  
-/*
-  // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
-  if (pixel._x<50) {
-    Geodetic3D center(Angle::fromDegrees(39.78), Angle::fromDegrees(-122), 0);
-    camera->setPointOfView(center, 1e6, Angle::fromDegrees(180), Angle::fromDegrees(90));
-  }*/
-  
-
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
+
 
 void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   
   if (cameraContext->getCurrentGesture()!=Drag) return;
-  
- /* if (_initialPoint.isNan()) {
-    return;
-  }*/
   
   // get final ray
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
@@ -93,14 +76,6 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->applyTransform(matrix);
-
-/*
-  // save drag parameters
-  _axis = _initialPoint.cross(finalPoint);
-  
-  const double radians = - IMathUtils::instance()->asin(_axis.length()/_initialPoint.length()/finalPoint.length());
-  _radiansStep = radians - _lastRadians;
-  _lastRadians = radians;*/
 }
 
 
