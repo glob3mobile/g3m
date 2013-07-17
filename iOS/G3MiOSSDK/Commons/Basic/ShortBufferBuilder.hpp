@@ -58,6 +58,12 @@ private:
       }
     }
 
+    public short[] toArray() {
+      final short[] result = new short[_size];
+      System.arraycopy(_array, 0, result, 0, _size);
+      return result;
+    }
+
   }
 
   protected final ShortArrayList _values = new ShortArrayList();

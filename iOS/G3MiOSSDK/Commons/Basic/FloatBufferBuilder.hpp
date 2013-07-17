@@ -74,6 +74,12 @@ protected:
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
+    
+    public float[] toArray() {
+      final float[] result = new float[_size];
+      System.arraycopy(_array, 0, result, 0, _size);
+      return result;
+    }
 
   }
 

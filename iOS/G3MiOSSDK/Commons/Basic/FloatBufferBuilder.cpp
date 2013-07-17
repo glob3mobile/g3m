@@ -12,6 +12,7 @@
 #include "IFactory.hpp"
 
 IFloatBuffer* FloatBufferBuilder::create() const {
+#ifdef C_CODE
   const int size = _values.size();
 
   IFloatBuffer* result = IFactory::instance()->createFloatBuffer(size);
@@ -21,4 +22,8 @@ IFloatBuffer* FloatBufferBuilder::create() const {
   }
 
   return result;
+#endif
+#ifdef JAVA_CODE
+  return IFactory::instance()->createFloatBuffer(_values->toArray());
+#endif
 }

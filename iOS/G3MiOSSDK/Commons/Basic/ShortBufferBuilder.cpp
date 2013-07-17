@@ -12,6 +12,7 @@
 #include "IShortBuffer.hpp"
 
 IShortBuffer* ShortBufferBuilder::create() const {
+#ifdef C_CODE
   const int size = _values.size();
 
   IShortBuffer* result = IFactory::instance()->createShortBuffer(size);
@@ -21,4 +22,8 @@ IShortBuffer* ShortBufferBuilder::create() const {
   }
 
   return result;
+#endif
+#ifdef JAVA_CODE
+  return IFactory::instance()->createShortBuffer(_values->toArray());
+#endif
 }
