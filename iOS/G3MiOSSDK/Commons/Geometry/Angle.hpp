@@ -44,7 +44,7 @@ public:
   }
 
   static Angle fromRadians(double radians) {
-    return Angle::fromDegrees(radians / IMathUtils::instance()->pi() * 180.0);
+    return Angle(radians / 3.14159265358979323846264338327950288 * 180.0);
   }
 
   static Angle min(const Angle& a1,
