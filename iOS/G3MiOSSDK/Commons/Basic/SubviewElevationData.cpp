@@ -206,10 +206,10 @@ double SubviewElevationData::getElevationAt(int x, int y) const {
   //  if (_buffer != NULL) {
   const int index = ((_height-1-y) * _width) + x;
 
-  if ( (index < 0) || (index >= _buffer->size()) ) {
-    printf("break point on me\n");
-    return IMathUtils::instance()->NanD();
-  }
+//  if ( (index < 0) || (index >= _buffer->size()) ) {
+//    printf("break point on me\n");
+//    return IMathUtils::instance()->NanD();
+//  }
 
   return _buffer->get(index);
   //  }

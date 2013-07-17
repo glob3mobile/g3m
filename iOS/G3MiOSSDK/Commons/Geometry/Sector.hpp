@@ -201,8 +201,10 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    return Vector2D(getUCoordinate(longitude),
-                    getVCoordinate(latitude));
+//    return Vector2D(getUCoordinate(longitude),
+//                    getVCoordinate(latitude));
+    return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
+                    (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
   }
 
   double getUCoordinate(const Angle& longitude) const {
