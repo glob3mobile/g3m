@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class FloatBufferBuilder
 {
-  protected java.util.ArrayList<Float> _values = new java.util.ArrayList<Float>();
+  protected final FloatArrayList _values = new FloatArrayList();
 
   public final IFloatBuffer create()
   {
@@ -11,7 +11,7 @@ public class FloatBufferBuilder
   
     for (int i = 0; i < size; i++)
     {
-      result.rawPut(i, _values.get(i));
+      result.rawPut(i, _values[i]);
     }
   
     return result;

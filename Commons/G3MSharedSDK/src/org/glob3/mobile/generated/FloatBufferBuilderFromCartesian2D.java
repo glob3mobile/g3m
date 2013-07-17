@@ -13,14 +13,14 @@ public class FloatBufferBuilderFromCartesian2D extends FloatBufferBuilder
 {
   public final void add(Vector2D vector)
   {
-    _values.add((float) vector._x);
-    _values.add((float) vector._y);
+    _values.push_back((float) vector._x);
+    _values.push_back((float) vector._y);
   }
 
   public final void add(float x, float y)
   {
-    _values.add(x);
-    _values.add(y);
+    _values.push_back(x);
+    _values.push_back(y);
   }
 
 }
