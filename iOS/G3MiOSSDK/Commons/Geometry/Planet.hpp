@@ -73,6 +73,10 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
+  virtual MutableMatrix44D transform(const Vector3D& origin,
+                                     const Vector3D& initialRay,
+                                     const Vector3D& finalRay) const = 0;
+  
 };
 
 #endif

@@ -255,3 +255,12 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 
   return translation.multiply(rotation);
 }
+
+
+MutableMatrix44D SphericalPlanet::transform(const Vector3D& origin,
+                                            const Vector3D& initialRay,
+                                            const Vector3D& finalRay) const
+{
+   
+}
+

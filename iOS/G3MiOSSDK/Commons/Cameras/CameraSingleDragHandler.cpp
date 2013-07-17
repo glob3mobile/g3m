@@ -45,13 +45,16 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag); 
-  _axis = MutableVector3D::nan();
-  _lastRadians = _radiansStep = 0.0;
+//  _axis = MutableVector3D::nan();
+//  _lastRadians = _radiansStep = 0.0;
   
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  _origin = _camera0.getCartesianPosition().asMutableVector3D();
+  _initialRay = _camera0.pixel2Ray(pixel).asMutableVector3D();
+
   //_initialPixel = pixel.asMutableVector2I();
-  _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
+  //_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 /*
   // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
@@ -69,46 +72,43 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   
-  if (cameraContext->getCurrentGesture()!=Drag) {
-    return;
-  }
+  if (cameraContext->getCurrentGesture()!=Drag) return;
   
-  if (_initialPoint.isNan()) {
+ /* if (_initialPoint.isNan()) {
     return;
-  }
-      
+  }*/
+  
+  // get final ray
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  Vector3D finalRay = _camera0.pixel2Ray(pixel);
   
-//  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
+  // compute transformation matrix
+  const Planet* planet = eventContext->getPlanet();
+  MutableMatrix44D matrix = planet->transform(_origin.asVector3D(),
+                                              _initialRay.asVector3D(),
+                                              finalRay);
+  if (!matrix.isValid()) return;
   
-  MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-  if (finalPoint.isNan()) {
-    //INVALID FINAL POINT
-    //printf ("--invalid final point in drag!!\n");
-    Vector3D ray = _camera0.pixel2Ray(pixel);
-    Vector3D pos = _camera0.getCartesianPosition();
-    finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
-  }
-
-  // make drag
+  // apply transformation
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
-  
-  
+  camera->applyTransform(matrix);
+
+/*
   // save drag parameters
   _axis = _initialPoint.cross(finalPoint);
   
   const double radians = - IMathUtils::instance()->asin(_axis.length()/_initialPoint.length()/finalPoint.length());
   _radiansStep = radians - _lastRadians;
-  _lastRadians = radians;
+  _lastRadians = radians;*/
 }
 
 
 void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) {
-  if (_useInertia) {
+  /*
+   if (_useInertia) {
     // test if animation is needed
     const Touch *touch = touchEvent.getTouch(0);
     Vector2I currPixel = touch->getPos();
@@ -122,7 +122,7 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
       EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
       eventContext->getEffectsScheduler()->startEffect(effect, target);
     }
-  }
+  }*/
   
   // update gesture
   cameraContext->setCurrentGesture(None);

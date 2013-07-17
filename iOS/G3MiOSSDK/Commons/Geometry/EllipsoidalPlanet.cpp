@@ -336,3 +336,33 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 
   return translation.multiply(rotation);
 }
+
+
+MutableMatrix44D EllipsoidalPlanet::transform(const Vector3D& origin,
+                                            const Vector3D& initialRay,
+                                            const Vector3D& finalRay) const
+{
+  // compute initial point
+  const Vector3D initialPoint = closestIntersection(origin, initialRay);
+  if (initialPoint.isNan()) return MutableMatrix44D::invalid();
+  
+  // compute final point
+  MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+  if (finalPoint.isNan()) {
+    //printf ("--invalid final point in drag!!\n");
+    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+  }
+  
+  // compute the rotation axis
+  const Vector3D rotationAxis = initialPoint.cross(finalPoint.asVector3D());
+  
+  // compute the angle
+  double sinus = rotationAxis.length()/initialPoint.length()/finalPoint.length();
+  const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
+  if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
+  
+  // return rotation matrix
+  return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
+}
+
+

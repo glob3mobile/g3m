@@ -297,6 +297,9 @@ public:
   
   double getProjectedSphereArea(const Sphere& sphere) const;
   
+  void applyTransform(const MutableMatrix44D& mat);
+
+  
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -341,8 +344,6 @@ private:
   };
 
   CameraEffectTarget* _camEffectTarget;
-
-  void applyTransform(const MutableMatrix44D& mat);
 
   Vector3D centerOfViewOnPlanet() const;
 
