@@ -84,9 +84,9 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  MutableMatrix44D matrix = planet->transform(_origin.asVector3D(),
-                                              _initialRay.asVector3D(),
-                                              finalRay);
+  MutableMatrix44D matrix = planet->dragBetweenIntersections(_origin.asVector3D(),
+                                                             _initialRay.asVector3D(),
+                                                             finalRay);
   if (!matrix.isValid()) return;
   
   // apply transformation
@@ -107,7 +107,6 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
 void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) {
-  /*
    if (_useInertia) {
     // test if animation is needed
     const Touch *touch = touchEvent.getTouch(0);
@@ -115,18 +114,17 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
     Vector2I prevPixel = touch->getPrevPos();
     double desp        = currPixel.sub(prevPixel).length();
 
-    if (cameraContext->getCurrentGesture()==Drag && !_axis.isNan() && desp>2) {
-      // start inertial effect
-      Effect *effect = new SingleDragEffect(_axis.asVector3D(), Angle::fromRadians(_radiansStep));
-      
-      EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
-      eventContext->getEffectsScheduler()->startEffect(effect, target);
+    if (cameraContext->getCurrentGesture()==Drag && desp>2) {
+      Effect* effect = eventContext->getPlanet()->createEffectFromLastDrag();
+      if (effect != NULL) {
+        EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
+        eventContext->getEffectsScheduler()->startEffect(effect, target);
+      }
     }
-  }*/
+  }
   
   // update gesture
   cameraContext->setCurrentGesture(None);
-  //_initialPixel = MutableVector2I::zero();
 }
 
 void CameraSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)

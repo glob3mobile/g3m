@@ -29,6 +29,11 @@ private:
   private final Ellipsoid _ellipsoid;
 #endif
 
+  mutable MutableVector3D _lastDragAxis;
+  mutable double          _lastDragRadians;
+  mutable double          _lastDragRadiansStep;
+  mutable bool            _lastValidDrag;
+
 
 public:
   
@@ -120,10 +125,11 @@ public:
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
-  MutableMatrix44D transform(const Vector3D& origin,
-                             const Vector3D& initialRay,
-                             const Vector3D& finalRay) const;
-  
+  MutableMatrix44D dragBetweenIntersections(const Vector3D& origin,
+                                            const Vector3D& initialRay,
+                                            const Vector3D& finalRay) const;
+
+  Effect* createEffectFromLastDrag() const;
     
 };
 

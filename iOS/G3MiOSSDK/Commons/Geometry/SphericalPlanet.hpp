@@ -115,11 +115,11 @@ public:
 
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
-  MutableMatrix44D transform(const Vector3D& origin,
+  MutableMatrix44D dragBetweenIntersections(const Vector3D& origin,
                              const Vector3D& initialRay,
                              const Vector3D& finalRay) const;
   
-
+  Effect* createEffectFromLastDrag() const;
   
 };
 

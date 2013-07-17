@@ -13,6 +13,8 @@
 #include <list>
 #include <vector>
 #include "Vector3D.hpp"
+#include "Effects.hpp"
+
 
 class Planet {
 public:
@@ -73,10 +75,11 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
-  virtual MutableMatrix44D transform(const Vector3D& origin,
+  virtual MutableMatrix44D dragBetweenIntersections(const Vector3D& origin,
                                      const Vector3D& initialRay,
                                      const Vector3D& finalRay) const = 0;
   
+  virtual Effect* createEffectFromLastDrag() const = 0;
 };
 
 #endif

@@ -9,10 +9,12 @@
 #include <stdio.h>
 
 #include "EllipsoidalPlanet.hpp"
+#include "Camera.hpp"
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
-_ellipsoid(ellipsoid)
+_ellipsoid(ellipsoid),
+_lastValidDrag(false)
 {
 
 }
@@ -338,7 +340,7 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 }
 
 
-MutableMatrix44D EllipsoidalPlanet::transform(const Vector3D& origin,
+MutableMatrix44D EllipsoidalPlanet::dragBetweenIntersections(const Vector3D& origin,
                                             const Vector3D& initialRay,
                                             const Vector3D& finalRay) const
 {
@@ -361,8 +363,24 @@ MutableMatrix44D EllipsoidalPlanet::transform(const Vector3D& origin,
   const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
   
+  // save params for possible inertial animations
+  _lastDragAxis = rotationAxis.asMutableVector3D();
+  double radians = rotationDelta.radians();
+  _lastDragRadiansStep = radians - _lastDragRadians;
+  _lastDragRadians = radians;
+  
   // return rotation matrix
+  _lastValidDrag = true;
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
+
+
+Effect* EllipsoidalPlanet::createEffectFromLastDrag() const
+{
+  if (!_lastValidDrag || _lastDragAxis.isNan()) return NULL;
+  _lastValidDrag = false;
+  return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
+}
+
 
 

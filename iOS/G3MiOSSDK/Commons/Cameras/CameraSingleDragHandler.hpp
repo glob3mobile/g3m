@@ -16,39 +16,6 @@
 #include "MutableVector2I.hpp"
 
 
-class SingleDragEffect : public EffectWithForce {
-public:
-  
-  SingleDragEffect(const Vector3D& axis,
-                   const Angle& angle):
-  EffectWithForce(angle._degrees, 0.975),
-  _axis(axis)
-  {
-  }
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when) {
-  }
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
-    rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
-  }
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
-    rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
-  }
-  
-  virtual void cancel(const TimeInterval& when) {
-    // do nothing, just leave the effect in the intermediate state
-  }
-  
-private:
-  Vector3D _axis;
-};
-
 
 class CameraSingleDragHandler: public CameraEventHandler {
   

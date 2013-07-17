@@ -257,10 +257,17 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 }
 
 
-MutableMatrix44D SphericalPlanet::transform(const Vector3D& origin,
+MutableMatrix44D SphericalPlanet::dragBetweenIntersections(const Vector3D& origin,
                                             const Vector3D& initialRay,
                                             const Vector3D& finalRay) const
 {
    
 }
+
+
+Effect* SphericalPlanet::createEffectFromLastDrag() const
+{
+  
+}
+
 
