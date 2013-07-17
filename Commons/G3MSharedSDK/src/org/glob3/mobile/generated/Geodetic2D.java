@@ -49,6 +49,15 @@ public class Geodetic2D
    */
   public static Angle bearing(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
   {
+    return Angle.fromRadians(bearingInRadians(fromLatitude, fromLongitude, toLatitude, toLongitude));
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+  public static double bearingInRadians(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
     final Angle dLon = toLongitude.sub(fromLongitude);
 
     final double toLatCos = toLatitude.cosinus();
@@ -57,7 +66,7 @@ public class Geodetic2D
     final double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos *dLon.cosinus();
     final double radians = IMathUtils.instance().atan2(y, x);
 
-    return Angle.fromRadians(radians);
+    return radians;
   }
 
   /**

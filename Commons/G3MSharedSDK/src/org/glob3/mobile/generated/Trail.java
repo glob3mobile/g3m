@@ -41,25 +41,23 @@ public class Trail
     }
   
   
-    java.util.ArrayList<Double> anglesInDegrees = new java.util.ArrayList<Double>();
+    java.util.ArrayList<Double> anglesInRadians = new java.util.ArrayList<Double>();
     for (int i = 1; i < positionsSize; i++)
     {
       final Geodetic3D current = _positions.get(i);
       final Geodetic3D previous = _positions.get(i - 1);
   
-      final Angle angle = Geodetic2D.bearing(previous._latitude, previous._longitude, current._latitude, current._longitude);
-  
-      final double angleInDegrees = angle.degrees();
+      final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
       if (i == 1)
       {
-        anglesInDegrees.add(angleInDegrees);
-        anglesInDegrees.add(angleInDegrees);
+        anglesInRadians.add(angleInRadians);
+        anglesInRadians.add(angleInRadians);
       }
       else
       {
-        anglesInDegrees.add(angleInDegrees);
-        final double avr = (angleInDegrees + anglesInDegrees.get(i - 1)) / 2.0;
-        anglesInDegrees.set(i - 1, avr);
+        anglesInRadians.add(angleInRadians);
+        final double avr = (angleInRadians + anglesInRadians.get(i - 1)) / 2.0;
+        anglesInRadians.set(i - 1, avr);
       }
     }
   
@@ -77,7 +75,7 @@ public class Trail
     {
       final Geodetic3D position = _positions.get(i);
   
-      final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(anglesInDegrees.get(i)), rotationAxis);
+      final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(anglesInRadians.get(i)), rotationAxis);
       final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
       final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
   
@@ -104,23 +102,22 @@ public class Trail
     Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, center, vertices, 1, 1, new Color(_color));
   
     // Debug unions
-    //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
-    //                                   false,
-    //                                   center,
-    //                                   vertices,
-    //                                   2,
-    //                                   1,
-    //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-    //
-    //  CompositeMesh* cm = new CompositeMesh();
-    //
-    //  cm->addMesh(surfaceMesh);
-    //  cm->addMesh(edgesMesh);
-    //
-    //  return cm;
+  //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
+  //                                   false,
+  //                                   center,
+  //                                   vertices,
+  //                                   2,
+  //                                   1,
+  //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
+  //
+  //  CompositeMesh* cm = new CompositeMesh();
+  //
+  //  cm->addMesh(surfaceMesh);
+  //  cm->addMesh(edgesMesh);
+  //
+  //  return cm;
   
     return surfaceMesh;
-  
   
     //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
     //                                          planet,
@@ -168,10 +165,21 @@ public class Trail
      _ribbonWidth = ribbonWidth;
   }
 
+
+  ///#include "CompositeMesh.hpp"
+  
   public void dispose()
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    final int positionsSize = _positions.size();
+    for (int i = 0; i < positionsSize; i++)
+    {
+      final Geodetic3D position = _positions.get(i);
+      if (position != null)
+         position.dispose();
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState parentState)
