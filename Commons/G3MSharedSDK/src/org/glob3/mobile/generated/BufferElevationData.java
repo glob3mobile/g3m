@@ -19,9 +19,7 @@ package org.glob3.mobile.generated;
 
 public abstract class BufferElevationData extends ElevationData
 {
-  private final int _bufferSize;
-
-//  const Geodetic2D _realResolution;
+  protected final int _bufferSize;
 
   protected abstract double getValueInBufferAt(int index);
 
