@@ -265,8 +265,8 @@ public:
 
   double getDeltaRadiusInRadians() const {
     if (_deltaRadiusInRadians < 0)
-      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude.radians()  * _deltaLatitude.radians() +
-                                   _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude._radians  * _deltaLatitude._radians +
+                                   _deltaLongitude._radians * _deltaLongitude._radians) * 0.5;
     return _deltaRadiusInRadians;
   }
   

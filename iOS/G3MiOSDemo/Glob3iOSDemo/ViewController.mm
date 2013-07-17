@@ -579,12 +579,12 @@ public:
   vertices.add(sector.getNE(), heightNE);  colors.add(1, 0, 0, 1);
   vertices.add(sector.getNW(), heightNW);  colors.add(1, 0, 0, 1);
   
-  for (double lat = sector._lower._latitude.degrees();
-       lat <= sector._upper._latitude.degrees();
+  for (double lat = sector._lower._latitude._degrees;
+       lat <= sector._upper._latitude._degrees;
        lat += 0.025) {
     const Angle latitude(Angle::fromDegrees(lat));
-    for (double lon = sector._lower._longitude.degrees();
-         lon <= sector._upper._longitude.degrees();
+    for (double lon = sector._lower._longitude._degrees;
+         lon <= sector._upper._longitude._degrees;
          lon += 0.025) {
       
       const Angle longitude(Angle::fromDegrees(lon));
@@ -1584,7 +1584,7 @@ public:
 //
 //    _meshRenderer->addMesh( subElevationData->createMesh(planet,
 //                                                         verticalExaggeration,
-//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude()._degrees + 0.1,
 //                                                                                 0,
 //                                                                                 0),
 //                                                         pointSize) );

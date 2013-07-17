@@ -37,16 +37,16 @@ double Interpolator::interpolation(const Geodetic2D& sw,
                                    const Angle& latitude,
                                    const Angle& longitude) const {
 
-  const double swLatRadians = sw._latitude.radians();
-  const double swLonRadians = sw._longitude.radians();
-  const double neLatRadians = ne._latitude.radians();
-  const double neLonRadians = ne._longitude.radians();
+  const double swLatRadians = sw._latitude._radians;
+  const double swLonRadians = sw._longitude._radians;
+  const double neLatRadians = ne._latitude._radians;
+  const double neLonRadians = ne._longitude._radians;
 
   const double deltaLonRadians = neLonRadians - swLonRadians;
   const double deltaLatRadians = neLatRadians - swLatRadians;
 
-  const double u = (longitude.radians() - swLonRadians) / deltaLonRadians;
-  const double v = (neLatRadians -  latitude.radians()) / deltaLatRadians;
+  const double u = (longitude._radians - swLonRadians) / deltaLonRadians;
+  const double v = (neLatRadians -  latitude._radians) / deltaLatRadians;
 
   return interpolation(valueSW,
                        valueSE,

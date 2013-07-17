@@ -156,7 +156,7 @@ void Camera::setHeading(const Angle& angle) {
   const Angle currentHeading = getHeading(normal);
   const Angle delta          = currentHeading.sub(angle);
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-  //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+  //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
 }
 
 const Angle Camera::getPitch() const {
@@ -169,7 +169,7 @@ void Camera::setPitch(const Angle& angle) {
   const Angle currentPitch  = getPitch();
   const Vector3D u          = getHorizontalVector();
   rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
 }
 
 void Camera::_setGeodeticPosition(const Vector3D& pos) {

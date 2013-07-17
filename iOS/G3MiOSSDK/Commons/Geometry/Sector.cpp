@@ -284,25 +284,25 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
     return position;
   }
 
-  double latitudeInDegrees = position._latitude.degrees();
-  double longitudeInDegrees = position._longitude.degrees();
+  double latitudeInDegrees = position._latitude._degrees;
+  double longitudeInDegrees = position._longitude._degrees;
 
-  const double upperLatitudeInDegrees  = _upper._latitude.degrees();
+  const double upperLatitudeInDegrees  = _upper._latitude._degrees;
   if (latitudeInDegrees > upperLatitudeInDegrees) {
     latitudeInDegrees = upperLatitudeInDegrees;
   }
 
-  const double upperLongitudeInDegrees = _upper._longitude.degrees();
+  const double upperLongitudeInDegrees = _upper._longitude._degrees;
   if (longitudeInDegrees > upperLongitudeInDegrees) {
     longitudeInDegrees = upperLongitudeInDegrees;
   }
 
-  const double lowerLatitudeInDegrees  = _lower._latitude.degrees();
+  const double lowerLatitudeInDegrees  = _lower._latitude._degrees;
   if (latitudeInDegrees < lowerLatitudeInDegrees) {
     latitudeInDegrees = lowerLatitudeInDegrees;
   }
 
-  const double lowerLongitudeInDegrees  = _lower._longitude.degrees();
+  const double lowerLongitudeInDegrees  = _lower._longitude._degrees;
   if (longitudeInDegrees < lowerLongitudeInDegrees) {
     longitudeInDegrees = lowerLongitudeInDegrees;
   }
