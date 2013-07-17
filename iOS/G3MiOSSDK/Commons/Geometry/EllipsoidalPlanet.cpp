@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #include "EllipsoidalPlanet.hpp"
-#include "Camera.hpp"
+#include "CameraEffects.hpp"
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):

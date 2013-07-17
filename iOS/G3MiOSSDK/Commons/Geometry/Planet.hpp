@@ -13,7 +13,9 @@
 #include <list>
 #include <vector>
 #include "Vector3D.hpp"
-#include "Effects.hpp"
+
+
+class Effect;
 
 
 class Planet {
