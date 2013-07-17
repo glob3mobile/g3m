@@ -29,6 +29,11 @@ public:
   static int givenCenter() { return _givenCenter; }
 };
 
+#ifdef JAVA_CODE
+public class FloatArrayList {
+
+}
+#endif
 
 class FloatBufferBuilder {
 protected:
