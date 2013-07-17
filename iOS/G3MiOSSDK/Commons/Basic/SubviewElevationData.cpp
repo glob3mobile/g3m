@@ -122,8 +122,9 @@ double SubviewElevationData::getElevationBoxAt(const ElevationData* elevationDat
   return heightSum/area;
 }
 
-IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* elevationData) {
-  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+float* SubviewElevationData::createDecimatedBuffer(const ElevationData* elevationData) {
+//  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+  float* buffer = new float[_width * _height];
 
   const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
   const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
@@ -148,7 +149,8 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* e
       const double height = getElevationBoxAt(elevationData,
                                               x0, y0,
                                               x1, y1);
-      buffer->rawPut(index, (float) height);
+//      buffer->rawPut(index, (float) height);
+      buffer[index] = (float) height;
 
       if (!_hasNoData) {
         if (mu->isNan(height)){
@@ -161,8 +163,9 @@ IFloatBuffer* SubviewElevationData::createDecimatedBuffer(const ElevationData* e
   return buffer;
 }
 
-IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData* elevationData) {
-  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+float* SubviewElevationData::createInterpolatedBuffer(const ElevationData* elevationData) {
+//  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+  float* buffer = new float[_width * _height];
 
   IMathUtils *mu = IMathUtils::instance();
 
@@ -181,7 +184,8 @@ IFloatBuffer* SubviewElevationData::createInterpolatedBuffer(const ElevationData
       const double height = elevationData->getElevationAt(latitude,
                                                           longitude);
 
-      buffer->rawPut(index, (float) height);
+//      buffer->rawPut(index, (float) height);
+      buffer[index] = (float) height;
 
       if (!_hasNoData) {
         if ( mu->isNan(height) ) {
@@ -198,7 +202,7 @@ SubviewElevationData::~SubviewElevationData() {
   //  if (_ownsElevationData) {
 //  delete _elevationData;
   //  }
-  delete _buffer;
+  delete [] _buffer;
 }
 
 double SubviewElevationData::getElevationAt(int x, int y) const {
@@ -211,7 +215,9 @@ double SubviewElevationData::getElevationAt(int x, int y) const {
 //    return IMathUtils::instance()->NanD();
 //  }
 
-  return _buffer->get(index);
+//  return _buffer->get(index);
+  return _buffer[index];
+
   //  }
   //
   //
