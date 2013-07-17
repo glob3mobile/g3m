@@ -2201,14 +2201,13 @@ public:
 {
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   
-  Trail* trail = new Trail(50,
-                           //Color::yellow(),
+  Trail* trail = new Trail(100,
                            Color::fromRGBA(0, 1, 1, 0.6f),
-                           1000);
+                           5000);
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
-                      7500);
+                      25000);
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
@@ -2222,42 +2221,23 @@ public:
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
-    double _odd;
-    
+
   public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
     _trail(trail),
     _lastLatitudeDegrees(lastPosition._latitude._degrees),
     _lastLongitudeDegrees(lastPosition._longitude._degrees),
-    _lastHeight(lastPosition._height),
-    _odd(true)
+    _lastHeight(lastPosition._height)
     {
-      
     }
     
     void run(const G3MContext* context) {
-      // _lastLatitudeDegrees += 0.025;
-      // _lastLongitudeDegrees += 0.025;
-      // _lastHeight += 200;
+      const double latStep = 2.0 / ((arc4random() % 100) + 50);
+      const double lonStep = 2.0 / ((arc4random() % 100) + 50);
       
-      const double latStep = 1.0 / ((arc4random() % 100) + 50);
-      const double lonStep = 1.0 / ((arc4random() % 100) + 50);
-      
-      //      if (_odd) {
-      _lastLatitudeDegrees  += latStep;
+      _lastLatitudeDegrees  -= latStep;
       _lastLongitudeDegrees += lonStep;
-      //      }
-      //      else {
-      //        _lastLatitudeDegrees  -= latStep;
-      //        _lastLongitudeDegrees -= lonStep;
-      //      }
-      _odd = !_odd;
-      
-      //      _lastHeight += (arc4random() % 200) - 100;
-      
-      //      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      //      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
       
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
                                      Angle::fromDegrees(_lastLongitudeDegrees),

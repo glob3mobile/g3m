@@ -49,15 +49,29 @@ public:
                        const Angle& fromLongitude,
                        const Angle& toLatitude,
                        const Angle& toLongitude) {
+    return Angle::fromRadians( bearingInRadians(fromLatitude,
+                                                fromLongitude,
+                                                toLatitude,
+                                                toLongitude) );
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http://williams.best.vwh.net/avform.htm#Crs
+   */
+  static double bearingInRadians(const Angle& fromLatitude,
+                                 const Angle& fromLongitude,
+                                 const Angle& toLatitude,
+                                 const Angle& toLongitude) {
     const Angle dLon = toLongitude.sub(fromLongitude);
-    
+
     const double toLatCos = toLatitude.cosinus();
-    
+
     const double y = dLon.sinus() * toLatCos;
     const double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos*dLon.cosinus();
     const double radians = IMathUtils::instance()->atan2(y, x);
-    
-    return Angle::fromRadians(radians);
+
+    return radians;
   }
   
   /**
