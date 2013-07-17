@@ -62,6 +62,13 @@ public final class FloatBuffer_Android
    }
 
 
+   public FloatBuffer_Android(final float[] array) {
+      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer.put(array);
+      _buffer.rewind();
+   }
+
+
    @Override
    public int size() {
       return _buffer.capacity();

@@ -25,7 +25,7 @@ private:
     private int     _size;
 
     public ShortArrayList() {
-      this(10);
+      this(256);
     }
 
     public ShortArrayList(final int initialCapacity) {

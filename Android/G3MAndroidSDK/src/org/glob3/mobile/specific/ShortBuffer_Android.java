@@ -25,6 +25,11 @@ public class ShortBuffer_Android
    }
 
 
+   public ShortBuffer_Android(final short[] array) {
+      _buffer = ShortBuffer.wrap(array);
+   }
+
+
    @Override
    public int size() {
       return _buffer.capacity();
