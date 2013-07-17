@@ -103,9 +103,9 @@ struct AttributesStruct {
 
 int GL::checkedGetAttribLocation(ShaderProgram* program,
                                  const std::string& name) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
+//  }
   int l = _nativeGL->getAttribLocation(program, name);
   if (l == -1) {
     ILogger::instance()->logError("Error fetching Attribute, Program=%s, Variable=\"%s\"",
@@ -118,9 +118,10 @@ int GL::checkedGetAttribLocation(ShaderProgram* program,
 
 IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
                                             const std::string& name) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
+//  }
+
   IGLUniformID* uID = _nativeGL->getUniformLocation(program, name);
   if (!uID->isValid()) {
     ILogger::instance()->logError("Error fetching Uniform, Program=%s, Variable=\"%s\"",
@@ -132,9 +133,9 @@ IGLUniformID* GL::checkedGetUniformLocation(ShaderProgram* program,
 }
 
 bool GL::useProgram(ShaderProgram* program) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::useProgram()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::useProgram()");
+//  }
 
   if (_program == program) {
     return true;
@@ -188,9 +189,9 @@ bool GL::useProgram(ShaderProgram* program) {
 }
 
 void GL::loadModelView() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::loadModelView()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::loadModelView()");
+//  }
 
   _nativeGL->uniformMatrix4fv(Uniforms.Modelview,
                               false,
@@ -198,9 +199,9 @@ void GL::loadModelView() {
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setProjection()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::setProjection()");
+//  }
 
   _nativeGL->uniformMatrix4fv(Uniforms.Projection,
                               false,
@@ -208,9 +209,9 @@ void GL::setProjection(const MutableMatrix44D &projection) {
 }
 
 void GL::loadMatrixf(const MutableMatrix44D &modelView) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::loadMatrixf()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::loadMatrixf()");
+//  }
 
   _modelView = modelView;
 
@@ -218,9 +219,9 @@ void GL::loadMatrixf(const MutableMatrix44D &modelView) {
 }
 
 void GL::multMatrixf(const MutableMatrix44D &m) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::multMatrixf()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::multMatrixf()");
+//  }
 
   _modelView = _modelView.multiply(m);
 
@@ -228,9 +229,9 @@ void GL::multMatrixf(const MutableMatrix44D &m) {
 }
 
 void GL::popMatrix() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::popMatrix()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::popMatrix()");
+//  }
 
   _modelView = _matrixStack.back();
   _matrixStack.pop_back();
@@ -239,26 +240,26 @@ void GL::popMatrix() {
 }
 
 void GL::pushMatrix() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::pushMatrix()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::pushMatrix()");
+//  }
 
   _matrixStack.push_back(_modelView);
 }
 
 void GL::clearScreen(float r, float g, float b, float a) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::clearScreen()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::clearScreen()");
+//  }
 
   _nativeGL->clearColor(r, g, b, a);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::color(float r, float g, float b, float a) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::color()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::color()");
+//  }
 
   if (
       (_flatColorR != r) ||
@@ -279,9 +280,9 @@ void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
                             float translationY) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::transformTexCoords()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::transformTexCoords()");
+//  }
 
   if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
     _nativeGL->uniform2f(Uniforms.ScaleTexCoord,
@@ -301,18 +302,18 @@ void GL::transformTexCoords(float scaleX,
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::enablePolygonOffset()");
+//  }
 
   _nativeGL->enable(GLFeature::polygonOffsetFill());
   _nativeGL->polygonOffset(factor, units);
 }
 
 void GL::disablePolygonOffset() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::disablePolygonOffset()");
+//  }
 
   _nativeGL->disable(GLFeature::polygonOffsetFill());
 }
@@ -320,12 +321,12 @@ void GL::disablePolygonOffset() {
 void GL::vertexPointer(int size,
                        int stride,
                        IFloatBuffer* vertices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)",
-                                 size,
-                                 stride,
-                                 vertices->description().c_str());
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)",
+//                                 size,
+//                                 stride,
+//                                 vertices->description().c_str());
+//  }
 
   if ((_vertices != vertices) ||
       (_verticesTimestamp != vertices->timestamp()) ) {
@@ -349,11 +350,11 @@ void GL::vertexPointer(int size,
 //}
 void GL::drawElements(int mode,
                       IShortBuffer* indices) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-                                 mode,
-                                 indices->description().c_str());
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
 
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -363,12 +364,12 @@ void GL::drawElements(int mode,
 void GL::drawArrays(int mode,
                     int first,
                     int count) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-                                 mode,
-                                 first,
-                                 count);
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+//                                 mode,
+//                                 first,
+//                                 count);
+//  }
 
   _nativeGL->drawArrays(mode,
                         first,
@@ -376,9 +377,9 @@ void GL::drawArrays(int mode,
 }
 
 int GL::getError() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getError()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getError()");
+//  }
 
   return _nativeGL->getError();
 }
@@ -386,9 +387,9 @@ int GL::getError() {
 const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap){
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::uploadTexture()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::uploadTexture()");
+//  }
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
@@ -425,12 +426,12 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 void GL::setTextureCoordinates(int size,
                                int stride,
                                IFloatBuffer* textureCoordinates) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)",
-                                 size,
-                                 stride,
-                                 textureCoordinates->description().c_str());
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)",
+//                                 size,
+//                                 stride,
+//                                 textureCoordinates->description().c_str());
+//  }
 
   if ((_textureCoordinates != textureCoordinates) ||
       (_textureCoordinatesTimestamp != textureCoordinates->timestamp()) ) {
@@ -441,9 +442,9 @@ void GL::setTextureCoordinates(int size,
 }
 
 void GL::bindTexture(const IGLTextureId* textureId) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::bindTexture()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::bindTexture()");
+//  }
 
   if (textureId == NULL) {
     ILogger::instance()->logError("Can't bind a NULL texture");
@@ -460,9 +461,9 @@ void GL::bindTexture(const IGLTextureId* textureId) {
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
+//  }
 
   if (_billboardTexCoord == NULL) {
     FloatBufferBuilderFromCartesian2D texCoor;
@@ -495,9 +496,9 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
                        int textureWidth,
                        int textureHeight) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawBillBoard()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawBillBoard()");
+//  }
 
   int TODO_refactor_billboard;
 
@@ -511,17 +512,17 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 }
 
 void GL::setBlendFuncSrcAlpha() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
+//  }
 
   _nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
 const IGLTextureId* GL::getGLTextureId() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getGLTextureId()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getGLTextureId()");
+//  }
 
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
@@ -563,9 +564,9 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* textureId) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::deleteTexture()");
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::deleteTexture()");
+//  }
 
   if (textureId != NULL) {
     if ( _nativeGL->deleteTexture(textureId) ) {

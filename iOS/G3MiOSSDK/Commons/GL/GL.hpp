@@ -95,7 +95,7 @@ private:
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
 
-  const bool _verbose;
+//  const bool _verbose;
 
 public:
 
@@ -103,7 +103,7 @@ public:
   GL(INativeGL* const nativeGL,
      bool verbose) :
   _nativeGL(nativeGL),
-  _verbose(verbose),
+//  _verbose(verbose),
   _enableTextures(false),
   _enableTexture2D(false),
   _enableVertexColor(false),
@@ -224,7 +224,7 @@ public:
                           double scaleY,
                           double translationX,
                           double translationY) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scaleX,
                        (float) scaleY,
@@ -234,7 +234,7 @@ public:
 
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale._x,
                        (float) scale._y,
@@ -244,7 +244,7 @@ public:
 
   void transformTexCoords(const MutableVector2D& scale,
                           const MutableVector2D& translation) {
-    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale.x(),
                        (float) scale.y(),
@@ -254,7 +254,7 @@ public:
 
 
   void color(const Color& col) {
-    if (_verbose) ILogger::instance()->logInfo("GL::color()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::color()");
 
     color(col.getRed(),
           col.getGreen(),
@@ -263,7 +263,7 @@ public:
   }
 
   void clearScreen(const Color& col) {
-    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
 
     clearScreen(col.getRed(),
                 col.getGreen(),
@@ -279,7 +279,7 @@ public:
   void setBlendFuncSrcAlpha();
 
   void getViewport(int v[]) {
-    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
+//    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
 
     _nativeGL->getIntegerv(GLVariable::viewport(), v);
   }
