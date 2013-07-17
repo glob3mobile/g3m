@@ -21,15 +21,17 @@ package org.glob3.mobile.generated;
 
 public class SubviewElevationData extends ElevationData
 {
-  private final IFloatBuffer _buffer;
+  //const IFloatBuffer*              _buffer;
+  private float[] _buffer;
 
   private boolean _hasNoData;
 
 //  const Geodetic2D _realResolution;
 
-  private IFloatBuffer createDecimatedBuffer(ElevationData elevationData)
+  private float createDecimatedBuffer(ElevationData elevationData)
   {
-    IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
+  //  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+    float[] buffer = new float[_width * _height];
   
     final Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
     final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
@@ -54,7 +56,8 @@ public class SubviewElevationData extends ElevationData
         final int index = ((_height-1-y) * _width) + x;
   
         final double height = getElevationBoxAt(elevationData, x0, y0, x1, y1);
-        buffer.rawPut(index, (float) height);
+  //      buffer->rawPut(index, (float) height);
+        buffer[index] = (float) height;
   
         if (!_hasNoData)
         {
@@ -68,9 +71,10 @@ public class SubviewElevationData extends ElevationData
   
     return buffer;
   }
-  private IFloatBuffer createInterpolatedBuffer(ElevationData elevationData)
+  private float createInterpolatedBuffer(ElevationData elevationData)
   {
-    IFloatBuffer buffer = IFactory.instance().createFloatBuffer(_width * _height);
+  //  IFloatBuffer* buffer = IFactory::instance()->createFloatBuffer(_width * _height);
+    float[] buffer = new float[_width * _height];
   
     IMathUtils mu = IMathUtils.instance();
   
@@ -90,7 +94,8 @@ public class SubviewElevationData extends ElevationData
   
         final double height = elevationData.getElevationAt(latitude, longitude);
   
-        buffer.rawPut(index, (float) height);
+  //      buffer->rawPut(index, (float) height);
+        buffer[index] = (float) height;
   
         if (!_hasNoData)
         {
@@ -216,8 +221,7 @@ public class SubviewElevationData extends ElevationData
     //  if (_ownsElevationData) {
   //  delete _elevationData;
     //  }
-    if (_buffer != null)
-       _buffer.dispose();
+    _buffer = null;
   }
 
 //  const Geodetic2D getRealResolution() const {
@@ -235,7 +239,9 @@ public class SubviewElevationData extends ElevationData
   //    return IMathUtils::instance()->NanD();
   //  }
   
-    return _buffer.get(index);
+  //  return _buffer->get(index);
+    return _buffer[index];
+  
     //  }
     //
     //
