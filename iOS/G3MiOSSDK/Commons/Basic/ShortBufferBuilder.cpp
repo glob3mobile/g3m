@@ -17,7 +17,7 @@ IShortBuffer* ShortBufferBuilder::create() const {
   IShortBuffer* result = IFactory::instance()->createShortBuffer(size);
 
   for (int i = 0; i < size; i++) {
-    result->rawPut(i, _values[i]);
+    result->rawPut(i, _values.at(i));
   }
 
   return result;
