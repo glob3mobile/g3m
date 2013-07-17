@@ -103,17 +103,17 @@ public class Angle
 
   public final double sinus()
   {
-    return IMathUtils.instance().sin(_radians);
+    return java.lang.Math.sin( _radians );
   }
 
   public final double cosinus()
   {
-    return IMathUtils.instance().cos(_radians);
+    return java.lang.Math.cos( _radians );
   }
 
   public final double tangent()
   {
-    return IMathUtils.instance().tan(_radians);
+    return java.lang.Math.tan( _radians );
   }
 
   public final double degrees()
