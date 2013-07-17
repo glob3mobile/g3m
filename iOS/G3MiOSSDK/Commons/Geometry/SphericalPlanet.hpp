@@ -24,6 +24,11 @@ private:
   private Sphere _sphere;
 #endif
 
+  mutable MutableVector3D _lastDragAxis;
+  mutable double          _lastDragRadians;
+  mutable double          _lastDragRadiansStep;
+  mutable bool            _lastValidDrag;
+  
 
 public:
 

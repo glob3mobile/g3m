@@ -7,10 +7,12 @@
 //
 
 #include "SphericalPlanet.hpp"
+#include "CameraEffects.hpp"
 
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
-_sphere(sphere)
+_sphere(sphere),
+_lastValidDrag(false)
 {
 
 }
@@ -258,16 +260,45 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 
 
 MutableMatrix44D SphericalPlanet::dragBetweenIntersections(const Vector3D& origin,
-                                            const Vector3D& initialRay,
-                                            const Vector3D& finalRay) const
+                                                             const Vector3D& initialRay,
+                                                             const Vector3D& finalRay) const
 {
-   
+  // compute initial point
+  const Vector3D initialPoint = closestIntersection(origin, initialRay);
+  if (initialPoint.isNan()) return MutableMatrix44D::invalid();
+  
+  // compute final point
+  MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+  if (finalPoint.isNan()) {
+    //printf ("--invalid final point in drag!!\n");
+    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+  }
+  
+  // compute the rotation axis
+  const Vector3D rotationAxis = initialPoint.cross(finalPoint.asVector3D());
+  
+  // compute the angle
+  double sinus = rotationAxis.length()/initialPoint.length()/finalPoint.length();
+  const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
+  if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
+  
+  // save params for possible inertial animations
+  _lastDragAxis = rotationAxis.asMutableVector3D();
+  double radians = rotationDelta.radians();
+  _lastDragRadiansStep = radians - _lastDragRadians;
+  _lastDragRadians = radians;
+  
+  // return rotation matrix
+  _lastValidDrag = true;
+  return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
 
 
 Effect* SphericalPlanet::createEffectFromLastDrag() const
 {
-  
+  if (!_lastValidDrag || _lastDragAxis.isNan()) return NULL;
+  _lastValidDrag = false;
+  return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
 
