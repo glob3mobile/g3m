@@ -212,17 +212,20 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   
     // call specific transformation
-    switch (cameraContext.getCurrentGesture())
+    final Gesture gesture = cameraContext.getCurrentGesture();
+    if (gesture == Gesture.Zoom)
     {
-      case Zoom:
-        if (_processZoom)
-           zoom(cameraContext.getNextCamera(), difCurrentPixels);
-        break;
-  
-      case Rotate:
-        if (_processRotation)
-           rotate();
-        break;
+      if (_processZoom)
+      {
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
+      }
+    }
+    else if (gesture == Gesture.Rotate)
+    {
+      if (_processRotation)
+      {
+        rotate();
+      }
     }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
