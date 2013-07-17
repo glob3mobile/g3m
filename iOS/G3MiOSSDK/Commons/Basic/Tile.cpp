@@ -332,7 +332,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
       return true;
     }
   }
-  
+
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
@@ -353,7 +353,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     return true;
   }
 
-  int __Testing_DGD;
   if ((_lodTimer != NULL) &&
       (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
     return _lastLodTest;

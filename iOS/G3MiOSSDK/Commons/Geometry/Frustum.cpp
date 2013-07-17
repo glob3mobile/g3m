@@ -65,32 +65,6 @@ bool Frustum::touchesWithBox(const Box* that) const {
     return false;
   }
 
-//#ifdef C_CODE
-//  // create an array with the 8 corners of the box
-//  const Vector3D min = that->getLower();
-//  const Vector3D max = that->getUpper();
-//
-//  Vector3F corners[8] = {
-//    Vector3F((float) min._x, (float) min._y, (float) min._z),
-//    Vector3F((float) min._x, (float) min._y, (float) max._z),
-//    Vector3F((float) min._x, (float) max._y, (float) min._z),
-//    Vector3F((float) min._x, (float) max._y, (float) max._z),
-//    Vector3F((float) max._x, (float) min._y, (float) min._z),
-//    Vector3F((float) max._x, (float) min._y, (float) max._z),
-//    Vector3F((float) max._x, (float) max._y, (float) min._z),
-//    Vector3F((float) max._x, (float) max._y, (float) max._z)
-//  };
-//#else
-//  const std::vector<Vector3F> corners = that->getCornersF();
-//#endif
-//
-//  return (!testAllCornersInside(_leftPlane,   corners) &&
-//          !testAllCornersInside(_bottomPlane, corners) &&
-//          !testAllCornersInside(_rightPlane,  corners) &&
-//          !testAllCornersInside(_topPlane,    corners) &&
-//          !testAllCornersInside(_nearPlane,   corners) &&
-//          !testAllCornersInside(_farPlane,    corners));
-
 #ifdef C_CODE
   // create an array with the 8 corners of the box
   const Vector3D min = that->getLower();
