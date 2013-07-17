@@ -389,7 +389,7 @@ public class Camera
     final Angle currentHeading = getHeading(normal);
     final Angle delta = currentHeading.sub(angle);
     rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-    //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+    //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
   }
   public final Angle getPitch()
   {
@@ -402,7 +402,7 @@ public class Camera
     final Angle currentPitch = getPitch();
     final Vector3D u = getHorizontalVector();
     rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
   }
 
   public final Geodetic3D getGeodeticPosition()

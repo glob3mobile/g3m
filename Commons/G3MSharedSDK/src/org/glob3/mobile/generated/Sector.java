@@ -494,28 +494,28 @@ public class Sector
       return position;
     }
   
-    double latitudeInDegrees = position._latitude.degrees();
-    double longitudeInDegrees = position._longitude.degrees();
+    double latitudeInDegrees = position._latitude._degrees;
+    double longitudeInDegrees = position._longitude._degrees;
   
-    final double upperLatitudeInDegrees = _upper._latitude.degrees();
+    final double upperLatitudeInDegrees = _upper._latitude._degrees;
     if (latitudeInDegrees > upperLatitudeInDegrees)
     {
       latitudeInDegrees = upperLatitudeInDegrees;
     }
   
-    final double upperLongitudeInDegrees = _upper._longitude.degrees();
+    final double upperLongitudeInDegrees = _upper._longitude._degrees;
     if (longitudeInDegrees > upperLongitudeInDegrees)
     {
       longitudeInDegrees = upperLongitudeInDegrees;
     }
   
-    final double lowerLatitudeInDegrees = _lower._latitude.degrees();
+    final double lowerLatitudeInDegrees = _lower._latitude._degrees;
     if (latitudeInDegrees < lowerLatitudeInDegrees)
     {
       latitudeInDegrees = lowerLatitudeInDegrees;
     }
   
-    final double lowerLongitudeInDegrees = _lower._longitude.degrees();
+    final double lowerLongitudeInDegrees = _lower._longitude._degrees;
     if (longitudeInDegrees < lowerLongitudeInDegrees)
     {
       longitudeInDegrees = lowerLongitudeInDegrees;
@@ -653,7 +653,7 @@ public class Sector
   public final double getDeltaRadiusInRadians()
   {
     if (_deltaRadiusInRadians < 0)
-      _deltaRadiusInRadians = IMathUtils.instance().sqrt(_deltaLatitude.radians() * _deltaLatitude.radians() + _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+      _deltaRadiusInRadians = IMathUtils.instance().sqrt(_deltaLatitude._radians * _deltaLatitude._radians + _deltaLongitude._radians * _deltaLongitude._radians) * 0.5;
     return _deltaRadiusInRadians;
   }
 
