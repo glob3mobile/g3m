@@ -96,14 +96,17 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   }
 
   // call specific transformation
-  switch (cameraContext->getCurrentGesture()) {
-    case Zoom:
-      if (_processZoom) zoom(cameraContext->getNextCamera(), difCurrentPixels);
-      break;
-      
-    case Rotate:
-      if (_processRotation) rotate();
-      break;
+
+  const Gesture gesture = cameraContext->getCurrentGesture();
+  if (gesture == Zoom) {
+    if (_processZoom) {
+      zoom(cameraContext->getNextCamera(), difCurrentPixels);
+    }
+  }
+  else if (gesture == Rotate) {
+    if (_processRotation) {
+      rotate();
+    }
   }
 }
 
