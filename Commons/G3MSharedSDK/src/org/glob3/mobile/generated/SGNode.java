@@ -113,6 +113,12 @@ public class SGNode
   }
 
 
+  //const GLState* SGNode::createState(const G3MRenderContext* rc,
+  //                                   const GLState& parentState) {
+  //  return  NULL;
+  //}
+  
+  
   //void SGNode::render(const G3MRenderContext* rc,
   //                    const GLState& parentState,
   //                    bool renderNotReadyShapes) {
@@ -132,7 +138,7 @@ public class SGNode
   //  const int childrenCount = _children.size();
   //  for (int i = 0; i < childrenCount; i++) {
   //    SGNode* child = _children[i];
-  //    child->render(rc, *state, renderNotReadyShapes);
+  //    child->render(rc, *stuuujuuate, renderNotReadyShapes);
   //  }
   //}
   
@@ -141,25 +147,32 @@ public class SGNode
   
     ILogger.instance().logInfo("Rendering SG: " + description());
   
-    GLState glState = getGLState(parentGLState);
-  
-    prepareRender(rc);
-  
-    rawRender(rc, glState);
-  
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
+    final GLState glState = createState(rc, parentGLState);
+    if (glState != null)
     {
-      SGNode child = _children.get(i);
-      child.render(rc, glState, renderNotReadyShapes);
-    }
   
-    cleanUpRender(rc);
+      prepareRender(rc);
+  
+      rawRender(rc, glState);
+  
+      final int childrenCount = _children.size();
+      for (int i = 0; i < childrenCount; i++)
+      {
+        SGNode child = _children.get(i);
+        child.render(rc, glState, renderNotReadyShapes);
+      }
+  
+      cleanUpRender(rc);
+    }
+    else
+    {
+      ILogger.instance().logError("NO GLSTATE");
+    }
   }
 
   public GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    return null;
+     return parentState;
   }
 
   public final int getChildrenCount()
@@ -172,10 +185,7 @@ public class SGNode
     return _children.get(i);
   }
 
-  public GLState getGLState(GLState parentGLState)
-  {
-     return parentGLState;
-  }
+//  virtual const GLState* getGLState(const GLState* parentGLState){ return parentGLState;}
 
   public void rawRender(G3MRenderContext rc, GLState parentGLState)
   {

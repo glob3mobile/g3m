@@ -43,9 +43,9 @@ public class SGMaterialNode extends SGNode
     _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
   }
 
-  public final GLState getGLState(GLState parentGLState)
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    _glState.setParent(parentGLState);
+    _glState.setParent(parentState);
     return _glState;
   }
 

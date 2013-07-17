@@ -144,6 +144,9 @@ public class SGLayerNode extends SGNode
     _glState.setParent(parentGLState);
   //  _glState.getGLGlobalState()->enableBlend();
   
+    int TODO_CHECK;
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
+  
     _glState.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
   
   
@@ -152,6 +155,31 @@ public class SGLayerNode extends SGNode
   //  _glState.getGLGlobalState()->bindTexture(textureId);
   
     return _glState;
+  }
+
+  public final boolean modifyGLState(G3MRenderContext rc, GLState state)
+  {
+  
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    if (textureId == null)
+    {
+      return false;
+    }
+  
+    int TODO_CHECK;
+    state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
+  
+    state.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
+  
+  
+    return true;
+  
   }
 
   public final String description()
