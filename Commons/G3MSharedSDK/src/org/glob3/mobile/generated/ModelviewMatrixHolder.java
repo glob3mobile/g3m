@@ -21,7 +21,6 @@ public class ModelviewMatrixHolder
 
   public void dispose()
   {
-    _matrix = null;
     if (_modelview != null)
     {
       _modelview._release();
