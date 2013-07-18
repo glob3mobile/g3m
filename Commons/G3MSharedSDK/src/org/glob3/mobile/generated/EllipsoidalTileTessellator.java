@@ -270,23 +270,13 @@ public class EllipsoidalTileTessellator extends TileTessellator
       }
     }
   
-  //  int textCoordsSize = (tileResolution._x * tileResolution._y) * 2;
-  //  if (_skirted) {
-  //    textCoordsSize += ((tileResolution._x-1) * (tileResolution._y-1) * 4) * 2;
-  //  }
-  
-    //IFloatBuffer* textCoords = IFactory::instance()->createFloatBuffer(textCoordsSize);
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
-  
-  //  int textCoordsIndex = 0;
   
     for (int j = 0; j < tileResolution._y; j++)
     {
       for (int i = 0; i < tileResolution._x; i++)
       {
         final int pos = j *tileResolution._x + i;
-  //      textCoords->rawPut(textCoordsIndex++, u[pos]);
-  //      textCoords->rawPut(textCoordsIndex++, v[pos]);
         textCoords.add(u[pos], v[pos]);
       }
     }
@@ -298,8 +288,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int j = tileResolution._y-1; j > 0; j--)
       {
         final int pos = j *tileResolution._x + tileResolution._x-1;
-  //      textCoords->rawPut(textCoordsIndex++, u[pos]);
-  //      textCoords->rawPut(textCoordsIndex++, v[pos]);
         textCoords.add(u[pos], v[pos]);
       }
   
@@ -307,8 +295,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int i = tileResolution._x-1; i > 0; i--)
       {
         final int pos = i;
-  //      textCoords->rawPut(textCoordsIndex++, u[pos]);
-  //      textCoords->rawPut(textCoordsIndex++, v[pos]);
         textCoords.add(u[pos], v[pos]);
       }
   
@@ -316,8 +302,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int j = 0; j < tileResolution._y-1; j++)
       {
         final int pos = j *tileResolution._x;
-  //      textCoords->rawPut(textCoordsIndex++, u[pos]);
-  //      textCoords->rawPut(textCoordsIndex++, v[pos]);
         textCoords.add(u[pos], v[pos]);
       }
   
@@ -325,8 +309,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int i = 0; i < tileResolution._x-1; i++)
       {
         final int pos = (tileResolution._y-1) * tileResolution._x + i;
-  //      textCoords->rawPut(textCoordsIndex++, u[pos]);
-  //      textCoords->rawPut(textCoordsIndex++, v[pos]);
         textCoords.add(u[pos], v[pos]);
       }
     }
