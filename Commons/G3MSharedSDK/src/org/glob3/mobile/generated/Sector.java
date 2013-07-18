@@ -483,7 +483,7 @@ public class Sector
   //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
   
     final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
-    final double angleInRadians = IMathUtils.instance().acos(dot);
+    final double angleInRadians = java.lang.Math.acos(dot);
   
     return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
   }
