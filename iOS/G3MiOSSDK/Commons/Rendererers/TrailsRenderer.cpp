@@ -19,6 +19,8 @@
 #include "Camera.hpp"
 //#include "CompositeMesh.hpp"
 
+#define MAX_POSITIONS_PER_SEGMENT 64
+
 TrailSegment::~TrailSegment() {
   delete _previousSegmentLastPosition;
   delete _nextSegmentFirstPosition;
@@ -168,7 +170,7 @@ void Trail::addPosition(const Geodetic3D& position) {
 
   TrailSegment* currentSegment;
   if ((lastSegmentIndex < 0) ||
-      (_segments[lastSegmentIndex]->getSize() > 32)) {
+      (_segments[lastSegmentIndex]->getSize() > MAX_POSITIONS_PER_SEGMENT)) {
 
     TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
     if (lastSegmentIndex >= 0) {
