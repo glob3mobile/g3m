@@ -55,13 +55,9 @@ Mesh* Trail::createMesh(const Planet* planet) {
   }
 
 
-  float centerX = 0;
-  float centerY = 0;
-  float centerZ = 0;
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
-//  IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(positionsSize * 3 * 2);
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
                                              Vector3D::zero());
 
@@ -74,34 +70,10 @@ Mesh* Trail::createMesh(const Planet* planet) {
     const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
     const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
 
-//    const int i6 = i * 6;
-//    const Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
-//    if (i == 0) {
-//      centerX = (float) offsetNTransformed._x;
-//      centerY = (float) offsetNTransformed._y;
-//      centerZ = (float) offsetNTransformed._z;
-//    }
-//    vertices->rawPut(i6    , (float) offsetNTransformed._x - centerX);
-//    vertices->rawPut(i6 + 1, (float) offsetNTransformed._y - centerY);
-//    vertices->rawPut(i6 + 2, (float) offsetNTransformed._z - centerZ);
     vertices.add(offsetN.transformedBy(matrix, 1));
-
-
-//    const Vector3D offsetPTransformed = offsetP.transformedBy(matrix, 1);
-//    vertices->rawPut(i6 + 3, (float) offsetPTransformed._x - centerX);
-//    vertices->rawPut(i6 + 4, (float) offsetPTransformed._y - centerY);
-//    vertices->rawPut(i6 + 5, (float) offsetPTransformed._z - centerZ);
     vertices.add(offsetP.transformedBy(matrix, 1));
   }
 
-  const Vector3D center(centerX, centerY, centerZ);
-//  Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
-//                                     true,
-//                                     center,
-//                                     vertices,
-//                                     1,
-//                                     1,
-//                                     new Color(_color));
   Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
                                      true,
                                      vertices.getCenter(),

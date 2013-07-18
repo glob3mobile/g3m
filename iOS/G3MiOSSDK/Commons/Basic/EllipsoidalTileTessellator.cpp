@@ -235,21 +235,11 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
     }
   }
 
-//  int textCoordsSize = (tileResolution._x * tileResolution._y) * 2;
-//  if (_skirted) {
-//    textCoordsSize += ((tileResolution._x-1) * (tileResolution._y-1) * 4) * 2;
-//  }
-
-  //IFloatBuffer* textCoords = IFactory::instance()->createFloatBuffer(textCoordsSize);
   FloatBufferBuilderFromCartesian2D textCoords;
-
-//  int textCoordsIndex = 0;
 
   for (int j = 0; j < tileResolution._y; j++) {
     for (int i = 0; i < tileResolution._x; i++) {
       const int pos = j*tileResolution._x + i;
-//      textCoords->rawPut(textCoordsIndex++, u[pos]);
-//      textCoords->rawPut(textCoordsIndex++, v[pos]);
       textCoords.add(u[pos], v[pos]);
     }
   }
@@ -259,32 +249,24 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
     // east side
     for (int j = tileResolution._y-1; j > 0; j--) {
       const int pos = j*tileResolution._x + tileResolution._x-1;
-//      textCoords->rawPut(textCoordsIndex++, u[pos]);
-//      textCoords->rawPut(textCoordsIndex++, v[pos]);
       textCoords.add(u[pos], v[pos]);
     }
     
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
       const int pos = i;
-//      textCoords->rawPut(textCoordsIndex++, u[pos]);
-//      textCoords->rawPut(textCoordsIndex++, v[pos]);
       textCoords.add(u[pos], v[pos]);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       const int pos = j*tileResolution._x;
-//      textCoords->rawPut(textCoordsIndex++, u[pos]);
-//      textCoords->rawPut(textCoordsIndex++, v[pos]);
       textCoords.add(u[pos], v[pos]);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       const int pos = (tileResolution._y-1) * tileResolution._x + i;
-//      textCoords->rawPut(textCoordsIndex++, u[pos]);
-//      textCoords->rawPut(textCoordsIndex++, v[pos]);
       textCoords.add(u[pos], v[pos]);
     }
   }
