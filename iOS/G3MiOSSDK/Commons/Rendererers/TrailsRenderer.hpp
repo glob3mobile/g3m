@@ -70,11 +70,21 @@ public:
   }
 
   Geodetic3D getLastPosition() const {
+#ifdef C_CODE
     return *(_positions[ _positions.size() - 1]);
+#endif
+#ifdef JAVA_CODE
+    return _positions.get(_positions.size() - 1);
+#endif
   }
 
   Geodetic3D getPreLastPosition() const {
+#ifdef C_CODE
     return *(_positions[ _positions.size() - 2]);
+#endif
+#ifdef JAVA_CODE
+    return _positions.get(_positions.size() - 2);
+#endif
   }
 
   void render(const G3MRenderContext* rc,
