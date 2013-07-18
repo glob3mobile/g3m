@@ -284,15 +284,15 @@ public final class NativeGL2_Android
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
 
 
-      //      final FloatBuffer_Android bufferAndroid = (FloatBuffer_Android) buffer;
-      //      final int webGLBuffer = bufferAndroid.getGLBuffer();
-      //      GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, webGLBuffer);
-      //
-      //
-      //      final FloatBuffer array = bufferAndroid.getBuffer();
-      //      GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, size, array, GLES20.GL_STATIC_DRAW);
-      //
-      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
+//            final FloatBuffer_Android bufferAndroid = (FloatBuffer_Android) buffer;
+//            final int webGLBuffer = bufferAndroid.getGLBuffer();
+//            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, webGLBuffer);
+//      
+//      
+//            final FloatBuffer array = bufferAndroid.getBuffer();
+//            GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, size, array, GLES20.GL_STATIC_DRAW);
+//      
+//            GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
    }
 
 

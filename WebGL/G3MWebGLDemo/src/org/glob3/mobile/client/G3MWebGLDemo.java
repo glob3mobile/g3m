@@ -120,9 +120,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      final MeshRenderer meshRenderer = new MeshRenderer();
-      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-      builder.addRenderer(meshRenderer);
+//      final MeshRenderer meshRenderer = new MeshRenderer();
+//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+//      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
