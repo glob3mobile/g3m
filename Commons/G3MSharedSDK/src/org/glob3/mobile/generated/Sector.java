@@ -23,10 +23,6 @@ package org.glob3.mobile.generated;
 public class Sector
 {
 
-  private final Geodetic2D _center ;
-
-  private final Angle _deltaLatitude ;
-  private final Angle _deltaLongitude ;
 
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
@@ -47,6 +43,11 @@ public class Sector
 
   public final Geodetic2D _lower ;
   public final Geodetic2D _upper ;
+
+  public final Geodetic2D _center ;
+
+  public final Angle _deltaLatitude ;
+  public final Angle _deltaLongitude ;
 
 
 

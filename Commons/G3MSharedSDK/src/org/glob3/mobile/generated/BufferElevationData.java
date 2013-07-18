@@ -24,8 +24,8 @@ public abstract class BufferElevationData extends ElevationData
   protected abstract double getValueInBufferAt(int index);
 
   public BufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, int bufferSize)
-  //_realResolution(realSector.getDeltaLatitude().div(realExtent._y),
-  //                realSector.getDeltaLongitude().div(realExtent._x))
+  //_realResolution(realSector._deltaLatitude.div(realExtent._y),
+  //                realSector._deltaLongitude.div(realExtent._x))
   {
      super(sector, extent);
      _bufferSize = bufferSize;

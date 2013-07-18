@@ -27,7 +27,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return rawResolution;
   
   //  /* testing for dynamic latitude-resolution */
-  //  const double cos = sector.getCenter()._latitude.cosinus();
+  //  const double cos = sector._center._latitude.cosinus();
   //
   //  int resolutionY = (int) (rawResolution._y * cos);
   //  if (resolutionY < 8) {
@@ -66,7 +66,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minElevation = 0;
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     final IMathUtils mu = IMathUtils.instance();
   
@@ -191,7 +191,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector3D nw = planet.toCartesian(sector.getNW());
     final double offset = nw.sub(sw).length() * 1e-3;
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     ShortBufferBuilder indices = new ShortBufferBuilder();
   

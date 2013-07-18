@@ -47,8 +47,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     final Angle fromLatitude = parameters._topSector._lower._latitude;
     final Angle fromLongitude = parameters._topSector._lower._longitude;
   
-    final Angle deltaLan = parameters._topSector.getDeltaLatitude();
-    final Angle deltaLon = parameters._topSector.getDeltaLongitude();
+    final Angle deltaLan = parameters._topSector._deltaLatitude;
+    final Angle deltaLon = parameters._topSector._deltaLongitude;
   
     final int topSectorSplitsByLatitude = parameters._topSectorSplitsByLatitude;
     final int topSectorSplitsByLongitude = parameters._topSectorSplitsByLongitude;
