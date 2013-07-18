@@ -10,14 +10,14 @@
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
-#include "RectangleI.hpp"
+#include "RectangleF.hpp"
 #include "Mark.hpp"
 #include "MarkTouchListener.hpp"
 #include "DownloadPriority.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
+#include "Vector2F.hpp"
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
@@ -138,18 +138,24 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         }
         
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
-        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
-        
-        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
+//<<<<<<< HEAD
+//        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
+//        
+//        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
+//=======
+        const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
+
+        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
+//>>>>>>> webgl-port
                                          markPixel._y - (textureHeight / 2),
                                          textureWidth,
                                          textureHeight);
         
         if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
-          const double distance = markPixel.sub(touchedPixel).squaredLength();
-          if (distance < minSqDistance) {
+          const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
+          if (sqDistance < minSqDistance) {
             nearestMark = mark;
-            minSqDistance = distance;
+            minSqDistance = sqDistance;
           }
         }
       }
@@ -235,9 +241,10 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
         }
         
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
-        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
+        const Vector2F markPixelF = _lastCamera->point2Pixel(*cartesianMarkPosition);
+        const Vector2I markPixel((int)markPixelF._x, (int)markPixelF._y);
         
-        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
+        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
                                          markPixel._y - (textureHeight / 2),
                                          textureWidth,
                                          textureHeight);

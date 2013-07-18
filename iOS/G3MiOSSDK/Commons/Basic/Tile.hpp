@@ -22,14 +22,16 @@ class TilesStatistics;
 class TileRenderContext;
 class TileKey;
 class Vector3D;
-class GLGlobalState;
-class Extent;
+class GLState;
+class BoundingVolume;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
 class GPUProgramState;
 class TileElevationDataRequest;
+class Frustum;
+class Box;
 
 #include "ITexturizerData.hpp"
 
@@ -62,6 +64,8 @@ private:
   double _minHeight;
   double _maxHeight;
 
+  BoundingVolume* _boundingVolume;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
@@ -69,17 +73,23 @@ private:
                      const TileRenderContext* trc);
 
   inline bool isVisible(const G3MRenderContext* rc,
-                        const TileRenderContext* trc);
+                        const TileRenderContext* trc,
+                        const Planet* planet,
+                        const Vector3D& cameraNormalizedPosition,
+                        double cameraAngle2HorizonInRadians,
+                        const Frustum* cameraFrustumInModelCoordinates);
 
+  ITimer* _lodTimer;
+  bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
-                        GLState* glState);
+                        const GLState* glState);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc, GLState* glState);
+                   const TileRenderContext* trc, const GLState* glState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -104,8 +114,8 @@ private:
 
   ITexturizerData* _texturizerData;
 
-  Extent* _tileExtent;
-  Extent* getTileExtent(const G3MRenderContext *rc);
+  Box* _tileBoundingVolume;
+  Box* getTileBoundingVolume(const G3MRenderContext *rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
@@ -113,6 +123,9 @@ private:
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
+
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+                                          const TileRenderContext* trc);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -154,8 +167,12 @@ public:
 
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
+              const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration,
-              GLState* glState);
+              const Planet* planet,
+              const Vector3D& cameraNormalizedPosition,
+              double cameraAngle2HorizonInRadians,
+              const Frustum* cameraFrustumInModelCoordinates);
 
   const TileKey getKey() const;
 

@@ -77,9 +77,9 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   isb->addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
 
   isb->addString("&center=");
-  isb->addDouble(tileSector.getCenter().latitude().degrees());
+  isb->addDouble(tileSector.getCenter()._latitude._degrees);
   isb->addString(",");
-  isb->addDouble(tileSector.getCenter().longitude().degrees());
+  isb->addDouble(tileSector.getCenter()._longitude._degrees);
 
   const int level = tile->getLevel();
   isb->addString("&zoom=");

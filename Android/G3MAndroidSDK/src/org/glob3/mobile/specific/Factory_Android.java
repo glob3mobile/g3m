@@ -197,4 +197,16 @@ public final class Factory_Android
       return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket);
    }
 
+
+   @Override
+   public IShortBuffer createShortBuffer(final short[] array) {
+      return new ShortBuffer_Android(array);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float[] array) {
+      return new FloatBuffer_Android(array);
+   }
+
 }

@@ -26,12 +26,11 @@ _bufferSize(bufferSize)
 double BufferElevationData::getElevationAt(int x,
                                            int y) const {
   const int index = ((_height-1-y) * _width) + x;
-  //const int index = ((_width-1-x) * _height) + y;
 
-  if ( (index < 0) || (index >= _bufferSize) ) {
-    printf("break point on me\n");
-    return IMathUtils::instance()->NanD();
-  }
+//  if ( (index < 0) || (index >= _bufferSize) ) {
+//    printf("break point on me\n");
+//    return IMathUtils::instance()->NanD();
+//  }
 
   return getValueInBufferAt( index );
 }

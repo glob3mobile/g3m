@@ -143,9 +143,8 @@ public class MeshRenderer extends LeafRenderer
     for (int i = 0; i < meshesCount; i++)
     {
       Mesh mesh = _meshes.get(i);
-      final Extent extent = mesh.getExtent();
-  
-      if (extent.touches(frustum))
+      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+      if (boundingVolume.touchesFrustum(frustum))
       {
         mesh.render(rc, _glState);
       }

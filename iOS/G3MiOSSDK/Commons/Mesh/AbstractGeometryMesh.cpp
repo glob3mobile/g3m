@@ -47,7 +47,7 @@ _depthTest(depthTest)
   createGLState();
 }
 
-Extent* AbstractGeometryMesh::computeExtent() const {
+BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
   const int vertexCount = getVertexCount();
 
   if (vertexCount <= 0) {
@@ -83,9 +83,9 @@ Extent* AbstractGeometryMesh::computeExtent() const {
                  Vector3D(maxX, maxY, maxZ));
 }
 
-Extent* AbstractGeometryMesh::getExtent() const {
+BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   if (_extent == NULL) {
-    _extent = computeExtent();
+    _extent = computeBoundingVolume();
   }
   return _extent;
 }

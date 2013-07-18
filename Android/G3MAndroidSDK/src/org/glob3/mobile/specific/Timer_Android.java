@@ -12,7 +12,7 @@ public final class Timer_Android
          extends
             ITimer {
 
-   private long _startTime;
+   private long _startTimeInMilliseconds;
 
 
    public Timer_Android() {
@@ -22,21 +22,25 @@ public final class Timer_Android
 
    @Override
    public TimeInterval now() {
-      final long t = SystemClock.uptimeMillis();
-      return TimeInterval.fromMilliseconds(t);
+      return TimeInterval.fromMilliseconds(SystemClock.uptimeMillis());
    }
 
 
    @Override
    public void start() {
-      _startTime = SystemClock.uptimeMillis();
+      _startTimeInMilliseconds = SystemClock.uptimeMillis();
    }
 
 
    @Override
    public TimeInterval elapsedTime() {
-      final long t = SystemClock.uptimeMillis();
-      return TimeInterval.fromMilliseconds(t - _startTime);
+      return TimeInterval.fromMilliseconds(SystemClock.uptimeMillis() - _startTimeInMilliseconds);
+   }
+
+
+   @Override
+   public long elapsedTimeInMilliseconds() {
+      return SystemClock.uptimeMillis() - _startTimeInMilliseconds;
    }
 
 }

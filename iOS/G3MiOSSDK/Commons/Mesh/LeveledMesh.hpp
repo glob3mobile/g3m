@@ -51,8 +51,8 @@ public:
     _mesh->render(rc, parentState);
   }
   
-  Extent* getExtent() const {
-    return _mesh->getExtent();
+  BoundingVolume* getBoundingVolume() const {
+    return _mesh->getBoundingVolume();
   }
   
   bool isTransparent(const G3MRenderContext* rc) const {

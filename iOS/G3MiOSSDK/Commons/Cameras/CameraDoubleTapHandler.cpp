@@ -41,7 +41,7 @@ void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
   const Angle angle   = Angle::fromRadians(- IMathUtils::instance()->asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double height   = camera->getGeodeticPosition().height();
+  const double height   = camera->getGeodeticPosition()._height;
   const double distance = height * 0.6;
   
   // create effect

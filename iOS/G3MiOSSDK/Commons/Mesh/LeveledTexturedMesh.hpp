@@ -163,8 +163,9 @@ public:
   
   void render(const G3MRenderContext* rc) const;
   
-  Extent* getExtent() const;
-  
+
+  BoundingVolume* getBoundingVolume() const;
+
   bool setGLTextureIdForLevel(int level,
                               const IGLTextureId* glTextureId);
   

@@ -9,7 +9,10 @@ public class TrailsRenderer extends LeafRenderer
 
   public final void addTrail(Trail trail)
   {
-    _trails.add(trail);
+    if (trail != null)
+    {
+      _trails.add(trail);
+    }
   }
 
   public void dispose()

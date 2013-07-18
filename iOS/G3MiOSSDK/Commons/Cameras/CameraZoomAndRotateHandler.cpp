@@ -66,6 +66,11 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
     Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
     Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+    if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
+        (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
+      printf ("zoom..\n");
+      cameraContext->setCurrentGesture(Zoom);
+    }
     
     // test if starting a zoom action
     if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
@@ -91,14 +96,16 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   }
 
   // call specific transformation
-  switch (cameraContext->getCurrentGesture()) {
-    case Zoom:
-      if (_processZoom) zoom(cameraContext->getNextCamera(), difCurrentPixels);
-      break;
-      
-    case Rotate:
-      if (_processRotation) rotate();
-      break;
+  const Gesture gesture = cameraContext->getCurrentGesture();
+  if (gesture == Zoom) {
+    if (_processZoom) {
+      zoom(cameraContext->getNextCamera(), difCurrentPixels);
+    }
+  }
+  else if (gesture == Rotate) {
+    if (_processRotation) {
+      rotate();
+    }
   }
 }
 
@@ -150,7 +157,7 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
   //
   //
   //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-  //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+  //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
   //    }
   //  }
   

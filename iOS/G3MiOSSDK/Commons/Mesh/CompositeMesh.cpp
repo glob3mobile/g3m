@@ -17,7 +17,7 @@ CompositeMesh::~CompositeMesh() {
     delete child;
   }
 
-  delete _extent;
+  delete _boundingVolume;
 }
 
 int CompositeMesh::getVertexCount() const {
@@ -64,31 +64,31 @@ const Vector3D CompositeMesh::getVertex(int index) const {
   return Vector3D::nan();
 }
 
-Extent* CompositeMesh::calculateExtent() const {
+BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   const int childrenCount = _children.size();
   if (childrenCount == 0) {
     return NULL;
   }
 
-  Extent* result = _children[0]->getExtent();
+  BoundingVolume* result = _children[0]->getBoundingVolume();
   for (int i = 1; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result = result->mergedWith( child->getExtent() );
+    result = result->mergedWith( child->getBoundingVolume() );
   }
 
   return result;
 }
 
-Extent* CompositeMesh::getExtent() const {
-  if (_extent == NULL) {
-    _extent = calculateExtent();
+BoundingVolume* CompositeMesh::getBoundingVolume() const {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = calculateBoundingVolume();
   }
-  return _extent;
+  return _boundingVolume;
 }
 
 void CompositeMesh::addMesh(Mesh* mesh) {
-  delete _extent;
-  _extent = NULL;
+  delete _boundingVolume;
+  _boundingVolume = NULL;
 
   _children.push_back(mesh);
 }

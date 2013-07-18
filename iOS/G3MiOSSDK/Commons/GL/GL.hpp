@@ -52,21 +52,26 @@ private:
   inline void loadModelView();
   
   const IGLTextureId* getGLTextureId();
-  
-  const bool _verbose;
-  
-  //  void setGLGlobalState(const GLGlobalState& state);
-  //  void setProgramState(GPUProgramManager& progManager, const GPUProgramState& progState);
-  //
-  //  void applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState);
-  
+
+  //Get Locations warning of errors
+  bool _errorGettingLocationOcurred;
+  int checkedGetAttribLocation(GPUProgram* program,
+                               const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
+                                          const std::string& name);
+
+  IFloatBuffer* _billboardTexCoord;
+  IFloatBuffer* getBillboardTexCoord();
+
+//  const bool _verbose;
+
 public:
   
   
   GL(INativeGL* const nativeGL,
      bool verbose) :
   _nativeGL(nativeGL),
-  _verbose(verbose),
+//  _verbose(verbose),
   _texturesIdAllocationCounter(0),
   _currentGPUProgram(NULL)
   {
@@ -117,10 +122,9 @@ public:
                                     bool generateMipmap);
   
   void deleteTexture(const IGLTextureId* textureId);
-  
+
   void getViewport(int v[]) {
-    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-    
+//    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
     _nativeGL->getIntegerv(GLVariable::viewport(), v);
   }
   

@@ -27,7 +27,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return rawResolution;
   
   //  /* testing for dynamic latitude-resolution */
-  //  const double cos = sector.getCenter().latitude().cosinus();
+  //  const double cos = sector.getCenter()._latitude.cosinus();
   //
   //  int resolutionY = (int) (rawResolution._y * cos);
   //  if (resolutionY < 8) {
@@ -253,8 +253,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     final Sector sector = tile.getSector();
   
-    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
-    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     for (int j = 0; j < tileResolution._y; j++)
@@ -354,8 +354,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
       return linearUV;
     }
   
-    final double lowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
-    final double upperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double lowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double upperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
     final double deltaGlobalV = lowerGlobalV - upperGlobalV;
   
     final double globalV = MercatorUtils.getMercatorV(latitude);

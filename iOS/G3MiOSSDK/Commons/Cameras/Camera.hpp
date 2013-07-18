@@ -10,6 +10,8 @@
 #ifndef CAMERA
 #define CAMERA
 
+#include <math.h>
+
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
@@ -135,7 +137,9 @@ public:
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
-  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition))
+  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
+  _angle2Horizon(that._angle2Horizon),
+  _normalizedPosition(that._normalizedPosition)
   {
   }
 
@@ -167,8 +171,10 @@ public:
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-  const Vector2I point2Pixel(const Vector3D& point) const;
-  const Vector2I point2Pixel(const Vector3F& point) const;
+//  const Vector2I point2Pixel(const Vector3D& point) const;
+//  const Vector2I point2Pixel(const Vector3F& point) const;
+  const Vector2F point2Pixel(const Vector3D& point) const;
+  const Vector2F point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
@@ -182,6 +188,7 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
@@ -237,6 +244,10 @@ public:
       delete _geodeticPosition;
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
+      const double distanceToPlanetCenter = _position.length();
+      const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+      _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition = _position.normalized();
     }
   }
 
@@ -268,7 +279,7 @@ public:
 
   void setGeodeticPosition(const Geodetic2D &g2d,
                            const double height) {
-    _setGeodeticPosition( _planet->toCartesian(g2d.latitude(), g2d.longitude(), height) );
+    _setGeodeticPosition( _planet->toCartesian(g2d._latitude, g2d._longitude, height) );
   }
 
   /**
@@ -310,7 +321,10 @@ public:
     return getProjectionMatrix().asMatrix44D();
   }
 
-
+  double getAngle2HorizonInRadians() const { return _angle2Horizon; }
+  
+  double getProjectedSphereArea(const Sphere& sphere) const;
+  
 private:
   const Angle getHeading(const Vector3D& normal) const;
 
@@ -325,6 +339,13 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+
+  // this value is only used in the method Sector::isBackOriented
+  // it's stored in double instead of Angle class to optimize performance in android
+  // Must be updated when changing position
+  mutable double          _angle2Horizon;
+  MutableVector3D         _normalizedPosition;
+  
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;

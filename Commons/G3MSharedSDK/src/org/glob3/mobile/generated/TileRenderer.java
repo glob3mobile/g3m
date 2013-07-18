@@ -44,8 +44,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     java.util.ArrayList<Tile> topLevelTiles = new java.util.ArrayList<Tile>();
   
-    final Angle fromLatitude = parameters._topSector.lower().latitude();
-    final Angle fromLongitude = parameters._topSector.lower().longitude();
+    final Angle fromLatitude = parameters._topSector._lower._latitude;
+    final Angle fromLongitude = parameters._topSector._lower._longitude;
   
     final Angle deltaLan = parameters._topSector.getDeltaLatitude();
     final Angle deltaLon = parameters._topSector.getDeltaLongitude();
@@ -107,12 +107,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     else
     {
       final Sector sector = tile.getSector();
-      final Geodetic2D lower = sector.lower();
-      final Geodetic2D upper = sector.upper();
+      final Geodetic2D lower = sector._lower;
+      final Geodetic2D upper = sector._upper;
   
-      final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+      final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-      final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+      final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
       /*                               */
       /*                               */
   
@@ -428,6 +428,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
+    final Planet planet = rc.getPlanet();
+    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
+    double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+    final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
     if (_firstRender && _parameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -437,7 +442,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
+<<<<<<< HEAD
         tile.render(rc, trc, null, _glState);
+=======
+        tile.render(rc, trc, parentState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+>>>>>>> webgl-port
       }
     }
     else
@@ -456,7 +465,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
+<<<<<<< HEAD
           tile.render(rc, trc, toVisitInNextIteration, _glState);
+=======
+          tile.render(rc, trc, parentState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+>>>>>>> webgl-port
         }
   
         toVisit = toVisitInNextIteration;

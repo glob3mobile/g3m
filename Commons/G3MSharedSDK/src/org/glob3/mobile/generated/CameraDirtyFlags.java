@@ -21,7 +21,10 @@ package org.glob3.mobile.generated;
 
 
 
+<<<<<<< HEAD
 ////#include "GPUProgramState.hpp"
+=======
+>>>>>>> webgl-port
 
 //class ILogger;
 //class GPUProgramState;

@@ -75,9 +75,9 @@ public class TexturedMesh extends Mesh
     _mesh.render(rc);
   }
 
-  public final Extent getExtent()
+  public final BoundingVolume getBoundingVolume()
   {
-    return (_mesh == null) ? null : _mesh.getExtent();
+    return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
   public final int getVertexCount()

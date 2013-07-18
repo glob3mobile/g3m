@@ -30,8 +30,8 @@ protected:
   const float             _pointSize;
   const bool              _depthTest;
   
-  mutable Extent* _extent;
-  Extent* computeExtent() const;
+  mutable BoundingVolume* _extent;
+  BoundingVolume* computeBoundingVolume() const;
   
   AbstractGeometryMesh(const int primitive,
                        bool owner,
@@ -52,7 +52,7 @@ public:
   
   void render(const G3MRenderContext* rc) const{}
   
-  Extent* getExtent() const;
+  BoundingVolume* getBoundingVolume() const;
   
   int getVertexCount() const;
   

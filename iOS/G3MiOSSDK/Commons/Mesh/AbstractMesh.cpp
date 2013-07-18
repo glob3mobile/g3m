@@ -25,7 +25,7 @@ AbstractMesh::~AbstractMesh() {
     delete _flatColor;
   }
 
-  delete _extent;
+  delete _boundingVolume;
   delete _translationMatrix;
 }
 
@@ -45,7 +45,7 @@ _vertices(vertices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
-_extent(NULL),
+_boundingVolume(NULL),
 _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
@@ -57,7 +57,7 @@ _depthTest(depthTest)
   createGLState();
 }
 
-Extent* AbstractMesh::computeExtent() const {
+BoundingVolume* AbstractMesh::computeBoundingVolume() const {
   const int vertexCount = getVertexCount();
 
   if (vertexCount <= 0) {
@@ -93,11 +93,11 @@ Extent* AbstractMesh::computeExtent() const {
                  Vector3D(maxX, maxY, maxZ));
 }
 
-Extent* AbstractMesh::getExtent() const {
-  if (_extent == NULL) {
-    _extent = computeExtent();
+BoundingVolume* AbstractMesh::getBoundingVolume() const {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = computeBoundingVolume();
   }
-  return _extent;
+  return _boundingVolume;
 }
 
 const Vector3D AbstractMesh::getVertex(int i) const {

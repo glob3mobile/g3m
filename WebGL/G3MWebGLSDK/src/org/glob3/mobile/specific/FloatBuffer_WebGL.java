@@ -81,6 +81,14 @@ public final class FloatBuffer_WebGL
    }
 
 
+   public FloatBuffer_WebGL(final float[] array) {
+      _buffer = jsCreateBuffer(array.length);
+      for (int i = 0; i < array.length; i++) {
+         rawPut(i, array[i]);
+      }
+   }
+
+
    private native JavaScriptObject jsCreateBuffer(final float f0,
                                                   final float f1,
                                                   final float f2,

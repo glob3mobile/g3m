@@ -499,8 +499,10 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
   
   builder.setPlanet(Planet::createEarth());
+//  builder.setPlanet(Planet::createSphericalEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+
   builder.setBackgroundColor(bgColor);
   
   LayerSet* layerSet = [self createLayerSet];
@@ -643,20 +645,20 @@ public:
   vertices.add(sector.getNE(), heightNE);  colors.add(1, 0, 0, 1);
   vertices.add(sector.getNW(), heightNW);  colors.add(1, 0, 0, 1);
   
-  for (double lat = sector.lower().latitude().degrees();
-       lat <= sector.upper().latitude().degrees();
+  for (double lat = sector._lower._latitude._degrees;
+       lat <= sector._upper._latitude._degrees;
        lat += 0.025) {
     const Angle latitude(Angle::fromDegrees(lat));
-    for (double lon = sector.lower().longitude().degrees();
-         lon <= sector.upper().longitude().degrees();
+    for (double lon = sector._lower._longitude._degrees;
+         lon <= sector._upper._longitude._degrees;
          lon += 0.025) {
       
       const Angle longitude(Angle::fromDegrees(lon));
       //      const Geodetic2D position(latitude,
       //                                longitude);
       
-      const double height = interpolator->interpolation(sector.lower(),
-                                                        sector.upper(),
+      const double height = interpolator->interpolation(sector._lower,
+                                                        sector._upper,
                                                         heightSW,
                                                         heightSE,
                                                         heightNE,
@@ -1647,7 +1649,7 @@ public:
 //
 //    _meshRenderer->addMesh( subElevationData->createMesh(planet,
 //                                                         verticalExaggeration,
-//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude().degrees() + 0.1,
+//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude()._degrees + 0.1,
 //                                                                                 0,
 //                                                                                 0),
 //                                                         pointSize) );
@@ -1694,25 +1696,26 @@ public:
     SGShape* radarModel = (SGShape*) SceneJSShapesParser::parseFromBSON(buffer,
                                                                         "http://radar3d.glob3mobile.com/models/",
                                                                         true);
-    
-    SGNode* node  = radarModel->getNode();
-    
-    const int childrenCount = node->getChildrenCount();
-    for (int i = 0; i < childrenCount; i++) {
-      SGNode* child = node->getChild(i);
-      SGMaterialNode* material = (SGMaterialNode*) child;
-      material->setBaseColor( NULL );
+
+    if (radarModel != NULL) {
+      SGNode* node  = radarModel->getNode();
+
+      const int childrenCount = node->getChildrenCount();
+      for (int i = 0; i < childrenCount; i++) {
+        SGNode* child = node->getChild(i);
+        SGMaterialNode* material = (SGMaterialNode*) child;
+        material->setBaseColor( NULL );
+      }
+
+      //    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
+      radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
+      //    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
+      //                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
+      //                                           10000));
+      //radarModel->setScale(10);
+
+      _shapesRenderer->addShape(radarModel);
     }
-    
-    //    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
-    radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
-    //    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
-    //                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
-    //                                           10000));
-    //radarModel->setScale(10);
-    
-    //_shapesRenderer->addShape(radarModel);
-    
     delete buffer;
   }
   
@@ -1775,8 +1778,8 @@ public:
       
       IMathUtils* mu = IMathUtils::instance();
       
-      const double deltaLatInDegrees = fromPosition.latitude()._degrees  - toPosition.latitude()._degrees;
-      const double deltaLonInDegrees = fromPosition.longitude()._degrees - toPosition.longitude()._degrees;
+      const double deltaLatInDegrees = fromPosition._latitude._degrees  - toPosition._latitude._degrees;
+      const double deltaLonInDegrees = fromPosition._longitude._degrees - toPosition._longitude._degrees;
       
       const double distanceInDegrees = mu->sqrt((deltaLatInDegrees * deltaLatInDegrees) +
                                                 (deltaLonInDegrees * deltaLonInDegrees)  );
@@ -1938,7 +1941,7 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      testWebSocket(context);
+      //testWebSocket(context);
       
       testCanvas(context->getFactory());
 
@@ -2239,14 +2242,13 @@ public:
 {
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   
-  Trail* trail = new Trail(50,
-                           //Color::yellow(),
+  Trail* trail = new Trail(100,
                            Color::fromRGBA(0, 1, 1, 0.6f),
-                           1000);
+                           5000);
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
-                      7500);
+                      25000);
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
@@ -2260,42 +2262,23 @@ public:
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
-    double _odd;
-    
+
   public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
     _trail(trail),
-    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
-    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
-    _lastHeight(lastPosition.height()),
-    _odd(true)
+    _lastLatitudeDegrees(lastPosition._latitude._degrees),
+    _lastLongitudeDegrees(lastPosition._longitude._degrees),
+    _lastHeight(lastPosition._height)
     {
-      
     }
     
     void run(const G3MContext* context) {
-      // _lastLatitudeDegrees += 0.025;
-      // _lastLongitudeDegrees += 0.025;
-      // _lastHeight += 200;
+      const double latStep = 2.0 / ((arc4random() % 100) + 50);
+      const double lonStep = 2.0 / ((arc4random() % 100) + 50);
       
-      const double latStep = 1.0 / ((arc4random() % 100) + 50);
-      const double lonStep = 1.0 / ((arc4random() % 100) + 50);
-      
-      //      if (_odd) {
-      _lastLatitudeDegrees  += latStep;
+      _lastLatitudeDegrees  -= latStep;
       _lastLongitudeDegrees += lonStep;
-      //      }
-      //      else {
-      //        _lastLatitudeDegrees  -= latStep;
-      //        _lastLongitudeDegrees -= lonStep;
-      //      }
-      _odd = !_odd;
-      
-      //      _lastHeight += (arc4random() % 200) - 100;
-      
-      //      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      //      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
       
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
                                      Angle::fromDegrees(_lastLongitudeDegrees),

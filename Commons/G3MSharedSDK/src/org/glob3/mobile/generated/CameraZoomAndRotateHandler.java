@@ -152,7 +152,11 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     //
     //
     //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+<<<<<<< HEAD
     //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+=======
+    //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
+>>>>>>> webgl-port
     //    }
     //  }
   
@@ -181,6 +185,14 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     {
       Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
       Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+<<<<<<< HEAD
+=======
+      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
+      {
+        System.out.print("zoom..\n");
+        cameraContext.setCurrentGesture(Gesture.Zoom);
+      }
+>>>>>>> webgl-port
   
       // test if starting a zoom action
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
@@ -207,6 +219,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   
     // call specific transformation
+<<<<<<< HEAD
     switch (cameraContext.getCurrentGesture())
     {
       case Zoom:
@@ -218,6 +231,22 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         if (_processRotation)
            rotate();
         break;
+=======
+    final Gesture gesture = cameraContext.getCurrentGesture();
+    if (gesture == Gesture.Zoom)
+    {
+      if (_processZoom)
+      {
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
+      }
+    }
+    else if (gesture == Gesture.Rotate)
+    {
+      if (_processRotation)
+      {
+        rotate();
+      }
+>>>>>>> webgl-port
     }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

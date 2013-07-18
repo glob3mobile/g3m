@@ -97,7 +97,13 @@ public:
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,
                                       bool autodeleteWebSocket) const = 0;
+#ifdef JAVA_CODE
 
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+#endif
+  
 };
 
 #endif

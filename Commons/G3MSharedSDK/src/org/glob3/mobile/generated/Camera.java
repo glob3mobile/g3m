@@ -25,6 +25,8 @@ public class Camera
      _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
+     _angle2Horizon = that._angle2Horizon;
+     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
   }
 
   public Camera(int width, int height)
@@ -48,6 +50,8 @@ public class Camera
      _halfFrustum = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
+     _angle2Horizon = -99;
+     _normalizedPosition = new MutableVector3D(0, 0, 0);
     resizeViewport(width, height);
     _dirtyFlags.setAll(true);
   }
@@ -81,6 +85,7 @@ public class Camera
     _position = new MutableVector3D(that._position);
     _center = new MutableVector3D(that._center);
     _up = new MutableVector3D(that._up);
+    _normalizedPosition = new MutableVector3D(that._normalizedPosition);
   
     _dirtyFlags.copyFrom(that._dirtyFlags);
   
@@ -119,6 +124,7 @@ public class Camera
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
+    _angle2Horizon = that._angle2Horizon;
   }
 
   public final void copyFromForcingMatrixCreation(Camera c)
@@ -194,26 +200,19 @@ public class Camera
     return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
 
-  public final Vector2I point2Pixel(Vector3D point)
+//  const Vector2I point2Pixel(const Vector3D& point) const;
+//  const Vector2I point2Pixel(const Vector3F& point) const;
+  public final Vector2F point2Pixel(Vector3D point)
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-  //  const IMathUtils* mu = IMathUtils::instance();
-  //
-  //  return Vector2I(mu->round( (float) p._x ),
-  //                  mu->round( (float) ((double) _height - p._y) ) );
-  //
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    return new Vector2F((float) p._x, (float)(_height - p._y));
   }
-  public final Vector2I point2Pixel(Vector3F point)
+  public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-  //  const IMathUtils* mu = IMathUtils::instance();
-  //
-  //  return Vector2I(mu->round( p._x ),
-  //                  mu->round( (float) _height - p._y ) );
-    return new Vector2I((int) p._x, (int)(_height - p._y));
+    return new Vector2F(p._x, (_height - p._y));
   }
 
   public final int getWidth()
@@ -238,6 +237,10 @@ public class Camera
   public final Vector3D getCartesianPosition()
   {
      return _position.asVector3D();
+  }
+  public final Vector3D getNormalizedPosition()
+  {
+     return _normalizedPosition.asVector3D();
   }
   public final Vector3D getCenter()
   {
@@ -334,7 +337,7 @@ public class Camera
   {
     int todo_remove_get_in_matrix;
     final MutableMatrix44D M = getModelMatrix();
-    return new Vector3D(M.get(0), M.get(4), M.get(8));
+    return new Vector3D(M.get0(), M.get4(), M.get8());
   }
 
   public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
@@ -375,6 +378,10 @@ public class Camera
          _geodeticPosition.dispose();
       _geodeticPosition = null;
       _dirtyFlags.setAll(true);
+      final double distanceToPlanetCenter = _position.length();
+      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+      _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition = _position.normalized();
     }
   }
 
@@ -394,7 +401,7 @@ public class Camera
     final Angle currentHeading = getHeading(normal);
     final Angle delta = currentHeading.sub(angle);
     rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-    //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+    //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
   }
   public final Angle getPitch()
   {
@@ -407,7 +414,7 @@ public class Camera
     final Angle currentPitch = getPitch();
     final Vector3D u = getHorizontalVector();
     rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
   }
 
   public final Geodetic3D getGeodeticPosition()
@@ -431,7 +438,7 @@ public class Camera
 
   public final void setGeodeticPosition(Geodetic2D g2d, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(g2d.latitude(), g2d.longitude(), height));
+    _setGeodeticPosition(_planet.toCartesian(g2d._latitude, g2d._longitude, height));
   }
 
   /**
@@ -501,13 +508,18 @@ public class Camera
     return _modelViewMatrix;
   }
 
-  public final void addProjectionAndModelGLFeatures(GLState glState)
+  public final double getAngle2HorizonInRadians()
   {
-    glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    ProjectionGLFeature p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-    glState.addGLFeature(p, false);
-    ModelGLFeature m = new ModelGLFeature(getModelMatrix().asMatrix44D());
-    glState.addGLFeature(m, false);
+     return _angle2Horizon;
+  }
+
+  public final double getProjectedSphereArea(Sphere sphere)
+  {
+    // this implementation is not right exact, but it's faster.
+    final double z = sphere.getCenter().distanceTo(getCartesianPosition());
+    final double rWorld = sphere.getRadius() * _frustumData._znear / z;
+    final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
+    return IMathUtils.instance().pi() * rScreen * rScreen;
   }
 
 
@@ -529,6 +541,13 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
+
+  // this value is only used in the method Sector::isBackOriented
+  // it's stored in double instead of Angle class to optimize performance in android
+  // Must be updated when changing position
+  private double _angle2Horizon;
+  private MutableVector3D _normalizedPosition = new MutableVector3D();
+
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
   private FrustumData _frustumData = new FrustumData();
@@ -553,6 +572,32 @@ public class Camera
 
   private CameraEffectTarget _camEffectTarget;
 
+
+  //const Vector2I Camera::point2Pixel(const Vector3D& point) const {
+  //  const Vector2D p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( (float) p._x ),
+  ////                  mu->round( (float) ((double) _height - p._y) ) );
+  ////
+  //  return Vector2I((int) p._x,
+  //                  (int) (_height - p._y) );
+  //}
+  
+  //const Vector2I Camera::point2Pixel(const Vector3F& point) const {
+  //  const Vector2F p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( p._x ),
+  ////                  mu->round( (float) _height - p._y ) );
+  //  return Vector2I((int) p._x ,
+  //                  (int) (_height - p._y ) );
+  //}
+  
   private void applyTransform(MutableMatrix44D M)
   {
     setCartesianPosition(_position.transformedBy(M, 1.0));
@@ -704,7 +749,7 @@ public class Camera
     //                       bottom, top,
     //                       znear, zfar);
   
-    final double height = getGeodeticPosition().height();
+    final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
   
     /*

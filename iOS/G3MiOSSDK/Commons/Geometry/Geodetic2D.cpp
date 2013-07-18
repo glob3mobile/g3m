@@ -16,8 +16,8 @@
 bool Geodetic2D::isBetween(const Geodetic2D& min,
                            const Geodetic2D& max) const {
   return
-  _latitude.isBetween(min.latitude(), max.latitude()) &&
-  _longitude.isBetween(min.longitude(), max.longitude());
+  _latitude.isBetween(min._latitude, max._latitude) &&
+  _longitude.isBetween(min._longitude, max._longitude);
 }
 
 bool Geodetic2D::closeTo(const Geodetic2D &other) const {

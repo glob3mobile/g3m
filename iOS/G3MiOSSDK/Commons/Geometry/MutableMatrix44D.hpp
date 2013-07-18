@@ -254,6 +254,24 @@ public:
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
+  double get0() const { return _m00; }
+  double get1() const { return _m10; }
+  double get2() const { return _m20; }
+  double get3() const { return _m30; }
+  double get4() const { return _m01; }
+  double get5() const { return _m11; }
+  double get6() const { return _m21; }
+  double get7() const { return _m31; }
+  double get8() const { return _m02; }
+  double get9() const { return _m12; }
+  double get10() const { return _m22; }
+  double get11() const { return _m32; }
+  double get12() const { return _m03; }
+  double get13() const { return _m13; }
+  double get14() const { return _m23; }
+  double get15() const { return _m33; }
+  
+  /*
   //Returns values from 0..15 in column mayor order
   double get(int i) const {
     switch (i) {
@@ -293,7 +311,7 @@ public:
         ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
         return 0;
     }
-  }
+  }*/
 
   void print(const std::string& name, const ILogger* log) const;
 
@@ -342,7 +360,6 @@ public:
                                                              double bottom, double top,
                                                              double znear, double zfar);
 
-
   static MutableMatrix44D createScaleMatrix(double scaleX,
                                             double scaleY,
                                             double scaleZ) {
@@ -353,18 +370,18 @@ public:
 
   }
 
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
+    return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  }
+
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
+    return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  }
+
   static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
 
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
-
-  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
-    return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
-  }
-
-  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
-    return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
-  }
   
 };
 

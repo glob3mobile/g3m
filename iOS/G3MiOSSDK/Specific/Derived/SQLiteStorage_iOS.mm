@@ -245,11 +245,6 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
 
     expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
 
-//    if (expired) {
-//      int __Remove_debug_code;
-//      printf("break point on me\n");
-//    }
-
     if (readExpired || !expired) {
       UIImage* uiImage = [UIImage imageWithData:data];
       if (uiImage) {
@@ -281,11 +276,6 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
     NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
     expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
-
-//    if (expired) {
-//      int __Remove_debug_code;
-//      printf("break point on me\n");
-//    }
 
     if (readExpired || !expired) {
       NSUInteger length = [nsData length];

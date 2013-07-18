@@ -34,7 +34,8 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
 
   const short minValue = IMathUtils::instance()->minInt16();
 
-  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
+//  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
+  short* shortBuffer = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
@@ -45,12 +46,14 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
       height = ShortBufferElevationData::NO_DATA_VALUE;
     }
 
-    shortBuffer->rawPut(i, height);
+    //shortBuffer->rawPut(i, height);
+    shortBuffer[i] = height;
   }
 
   return new ShortBufferElevationData(sector,
                                       extent,
                                       sector,
                                       extent,
-                                      shortBuffer);
+                                      shortBuffer,
+                                      size);
 }

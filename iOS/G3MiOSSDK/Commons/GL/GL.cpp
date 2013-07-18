@@ -27,22 +27,18 @@
 #include "GLState.hpp"
 
 void GL::clearScreen(const Color& color) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::clearScreen()");
-  }
-
-//  int ASK_JM;
-//  GLState glState((GLGlobalState*)&state, NULL);
-//  glState.applyGlobalStateOnGPU(this);
-
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::clearScreen()");
+//  }
 
   GLGlobalState state;
   state.setClearColor(color);
   state.applyChanges(this, _currentGLGlobalState);
-  
+
   //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
+
 
 //void GL::drawElements(int mode,
 //                      IShortBuffer* indices, const GLGlobalState& state,
@@ -67,17 +63,16 @@ void GL::clearScreen(const Color& color) {
 //  //progManager.getProgram(*gpuState)->onUnused();
 //}
 
-void GL::drawElements(int mode,
-                  IShortBuffer* indices, const GLState* state,
+void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
                   GPUProgramManager& progManager){
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-                                 mode,
-                                 indices->description().c_str());
-  }
-  
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
+//                                 mode,
+//                                 indices->description().c_str());
+//  }
+
   state->applyOnGPU(this, progManager);
-  
+
   _nativeGL->drawElements(mode,
                           indices->size(),
                           indices);
@@ -113,34 +108,36 @@ void GL::drawArrays(int mode,
                 int first,
                 int count, const GLState* state,
                 GPUProgramManager& progManager){
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-                                 mode,
-                                 first,
-                                 count);
-  }
-  
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+//                                 mode,
+//                                 first,
+//                                 count);
+//  }
+
   state->applyOnGPU(this, progManager);
+
   _nativeGL->drawArrays(mode,
                         first,
                         count);
 }
 
 int GL::getError() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getError()");
-  }
-  
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getError()");
+//  }
+
   return _nativeGL->getError();
 }
 
 const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap){
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::uploadTexture()");
-  }
-  
+
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::uploadTexture()");
+//  }
+
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
     int texture2D = GLTextureType::texture2D();
@@ -183,10 +180,10 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 }
 
 const IGLTextureId* GL::getGLTextureId() {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::getGLTextureId()");
-  }
-  
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getGLTextureId()");
+//  }
+
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
     const int bugdetSize = 1024;
@@ -227,10 +224,11 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* textureId) {
-  if (_verbose) {
-    ILogger::instance()->logInfo("GL::deleteTexture()");
-  }
-  
+
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::deleteTexture()");
+//  }
+
   if (textureId != NULL) {
     if ( _nativeGL->deleteTexture(textureId) ) {
       _texturesIdBag.push_back(textureId);

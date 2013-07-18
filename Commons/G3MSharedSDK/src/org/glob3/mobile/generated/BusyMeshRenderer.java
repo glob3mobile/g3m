@@ -163,6 +163,7 @@ public class BusyMeshRenderer extends LeafRenderer
   public final void incDegrees(double value)
   {
     _degrees += value;
+<<<<<<< HEAD
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
@@ -170,6 +171,12 @@ public class BusyMeshRenderer extends LeafRenderer
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
     _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+=======
+    if (_degrees > 360)
+    {
+      _degrees -= 360;
+    }
+>>>>>>> webgl-port
   }
 
   public final void start(G3MRenderContext rc)

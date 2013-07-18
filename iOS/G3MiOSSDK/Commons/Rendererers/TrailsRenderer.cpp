@@ -19,6 +19,12 @@
 
 Trail::~Trail() {
   delete _mesh;
+
+  const int positionsSize = _positions.size();
+  for (int i = 0; i < positionsSize; i++) {
+    const Geodetic3D* position = _positions[i];
+    delete position;
+  }
 }
 
 Mesh* Trail::createMesh(const Planet* planet) {
@@ -29,23 +35,21 @@ Mesh* Trail::createMesh(const Planet* planet) {
   }
 
 
-  std::vector<double> anglesInDegrees = std::vector<double>();
+  std::vector<double> anglesInRadians = std::vector<double>();
   for (int i = 1; i < positionsSize; i++) {
     const Geodetic3D* current  = _positions[i];
     const Geodetic3D* previous = _positions[i - 1];
 
-    const Angle angle = Geodetic2D::bearing(previous->latitude(), previous->longitude(),
-                                            current->latitude(), current->longitude());
-
-    const double angleInDegrees = angle.degrees();
+    const double angleInRadians =  Geodetic2D::bearingInRadians(previous->_latitude, previous->_longitude,
+                                                                current->_latitude, current->_longitude);
     if (i == 1) {
-      anglesInDegrees.push_back(angleInDegrees);
-      anglesInDegrees.push_back(angleInDegrees);
+      anglesInRadians.push_back(angleInRadians);
+      anglesInRadians.push_back(angleInRadians);
     }
     else {
-      anglesInDegrees.push_back(angleInDegrees);
-      const double avr = (angleInDegrees + anglesInDegrees[i - 1]) / 2.0;
-      anglesInDegrees[i - 1] = avr;
+      anglesInRadians.push_back(angleInRadians);
+      const double avr = (angleInRadians + anglesInRadians[i - 1]) / 2.0;
+      anglesInRadians[i - 1] = avr;
     }
   }
 
@@ -62,7 +66,7 @@ Mesh* Trail::createMesh(const Planet* planet) {
   for (int i = 0; i < positionsSize; i++) {
     const Geodetic3D* position = _positions[i];
 
-    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(anglesInDegrees[i]),
+    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(anglesInRadians[i]),
                                                                                    rotationAxis);
     const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
     const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
@@ -95,23 +99,22 @@ Mesh* Trail::createMesh(const Planet* planet) {
                                      new Color(_color));
 
   // Debug unions
-  //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
-  //                                   false,
-  //                                   center,
-  //                                   vertices,
-  //                                   2,
-  //                                   1,
-  //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-  //
-  //  CompositeMesh* cm = new CompositeMesh();
-  //
-  //  cm->addMesh(surfaceMesh);
-  //  cm->addMesh(edgesMesh);
-  //
-  //  return cm;
+//  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
+//                                   false,
+//                                   center,
+//                                   vertices,
+//                                   2,
+//                                   1,
+//                                   Color::newFromRGBA(1, 1, 1, 0.7f));
+//
+//  CompositeMesh* cm = new CompositeMesh();
+//
+//  cm->addMesh(surfaceMesh);
+//  cm->addMesh(edgesMesh);
+//
+//  return cm;
 
   return surfaceMesh;
-
 
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
   //                                          planet,
@@ -198,7 +201,9 @@ TrailsRenderer::~TrailsRenderer() {
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {
-  _trails.push_back(trail);
+  if (trail != NULL) {
+    _trails.push_back(trail);
+  }
 }
 
 void TrailsRenderer::render(const G3MRenderContext* rc) {

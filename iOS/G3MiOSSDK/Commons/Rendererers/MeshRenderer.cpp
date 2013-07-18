@@ -60,10 +60,16 @@ void MeshRenderer::render(const G3MRenderContext* rc) {
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
-    const Extent* extent = mesh->getExtent();
-
-    if ( extent->touches(frustum) ) {
+//<<<<<<< HEAD
+//    const Extent* extent = mesh->getExtent();
+//
+//    if ( extent->touches(frustum) ) {
+//      mesh->render(rc, &_glState);
+//=======
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume->touchesFrustum(frustum) ) {
       mesh->render(rc, &_glState);
+//>>>>>>> webgl-port
     }
   }
 }

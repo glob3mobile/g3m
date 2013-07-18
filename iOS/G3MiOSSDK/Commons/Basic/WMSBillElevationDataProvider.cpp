@@ -122,22 +122,22 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
 
 
   isb->addString("&BBOX=");
-  isb->addDouble(sector.lower().latitude()._degrees);
+  isb->addDouble(sector._lower._latitude._degrees);
   isb->addString(",");
-  isb->addDouble(sector.lower().longitude()._degrees);
+  isb->addDouble(sector._lower._longitude._degrees);
   isb->addString(",");
-  isb->addDouble(sector.upper().latitude()._degrees);
+  isb->addDouble(sector._upper._latitude._degrees);
   isb->addString(",");
-  isb->addDouble(sector.upper().longitude()._degrees);
+  isb->addDouble(sector._upper._longitude._degrees);
 
 int TODO_WMS_1_1_1;
-//  isb->addDouble(sector.lower().longitude()._degrees);
+//  isb->addDouble(sector._lower._longitude._degrees);
 //  isb->addString(",");
-//  isb->addDouble(sector.lower().latitude()._degrees);
+//  isb->addDouble(sector._lower._latitude._degrees);
 //  isb->addString(",");
-//  isb->addDouble(sector.upper().longitude()._degrees);
+//  isb->addDouble(sector._upper._longitude._degrees);
 //  isb->addString(",");
-//  isb->addDouble(sector.upper().latitude()._degrees);
+//  isb->addDouble(sector._upper._latitude._degrees);
 
   isb->addString("&WIDTH=");
   isb->addInt(extent._x);
