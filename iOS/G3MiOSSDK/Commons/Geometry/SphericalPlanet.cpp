@@ -34,7 +34,7 @@ std::vector<double> SphericalPlanet::intersectionsDistances(const Vector3D& orig
 
   const double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
 
-  const double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere.getRadiusSquared();
+  const double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -70,7 +70,7 @@ std::vector<double> SphericalPlanet::intersectionsDistances(const Vector3D& orig
 Vector3D SphericalPlanet::toCartesian(const Angle& latitude,
                                 const Angle& longitude,
                                 const double height) const {
-  return geodeticSurfaceNormal(latitude, longitude).times( _sphere.getRadius() + height);
+  return geodeticSurfaceNormal(latitude, longitude).times( _sphere._radius + height);
 }
 
 Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
@@ -93,7 +93,7 @@ Geodetic3D SphericalPlanet::toGeodetic3D(const Vector3D& position) const {
 
 
 Vector3D SphericalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
-  return geodeticSurfaceNormal(position).times( _sphere.getRadius() );
+  return geodeticSurfaceNormal(position).times( _sphere._radius );
 }
 
 
@@ -148,7 +148,7 @@ double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const double R = _sphere.getRadius();
+  const double R = _sphere._radius;
 
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
@@ -177,7 +177,7 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
   
-  const double R = _sphere.getRadius();
+  const double R = _sphere._radius;
 
   const double medLat = g1._latitude._degrees;
   const double medLon = g1._longitude._degrees;
@@ -213,7 +213,7 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
   double t = 0;
 
   // compute radius for the rotation
-  const double R0 = _sphere.getRadius();
+  const double R0 = _sphere._radius;
 
   // compute the point in this ray that are to a distance R from the origin.
   const double U2 = ray.squaredLength();

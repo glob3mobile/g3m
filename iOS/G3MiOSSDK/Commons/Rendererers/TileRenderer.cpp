@@ -300,8 +300,8 @@ void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
   const Angle fromLatitude  = parameters->_topSector._lower._latitude;
   const Angle fromLongitude = parameters->_topSector._lower._longitude;
 
-  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
+  const Angle deltaLan = parameters->_topSector._deltaLatitude;
+  const Angle deltaLon = parameters->_topSector._deltaLongitude;
 
   const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
   const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;

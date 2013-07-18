@@ -23,10 +23,6 @@
 class Sector {
 
 private:
-  const Geodetic2D _center;
-
-  const Angle _deltaLatitude;
-  const Angle _deltaLongitude;
   
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
@@ -48,6 +44,11 @@ private:
 public:
   const Geodetic2D _lower;
   const Geodetic2D _upper;
+  
+  const Geodetic2D _center;
+
+  const Angle _deltaLatitude;
+  const Angle _deltaLongitude;
 
 
   ~Sector();

@@ -38,7 +38,7 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
   return rawResolution;
 
 //  /* testing for dynamic latitude-resolution */
-//  const double cos = sector.getCenter()._latitude.cosinus();
+//  const double cos = sector._center._latitude.cosinus();
 //
 //  int resolutionY = (int) (rawResolution._y * cos);
 //  if (resolutionY < 8) {
@@ -67,7 +67,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   double minElevation = 0;
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
-                                          sector.getCenter());
+                                          sector._center);
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -306,7 +306,7 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
-                                          sector.getCenter());
+                                          sector._center);
 
   ShortBufferBuilder indices;
 

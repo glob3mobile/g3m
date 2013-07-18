@@ -124,7 +124,7 @@ Mesh* createSectorMesh(const Planet* planet,
   // create vectors
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
-                                          sector.getCenter());
+                                          sector._center);
 
   // create indices
   ShortBufferBuilder indices;
@@ -1584,7 +1584,7 @@ public:
 //
 //    _meshRenderer->addMesh( subElevationData->createMesh(planet,
 //                                                         verticalExaggeration,
-//                                                         Geodetic3D::fromDegrees(meshSector.getDeltaLatitude()._degrees + 0.1,
+//                                                         Geodetic3D::fromDegrees(meshSector._deltaLatitude._degrees + 0.1,
 //                                                                                 0,
 //                                                                                 0),
 //                                                         pointSize) );

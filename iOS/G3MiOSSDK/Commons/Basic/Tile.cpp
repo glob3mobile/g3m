@@ -65,8 +65,8 @@ _lodTimer(NULL)
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
   //         getKey().description().c_str(),
-  //         _sector.getDeltaLatitude().description().c_str(),
-  //         _sector.getDeltaLongitude().description().c_str()
+  //         _sector._deltaLatitude.description().c_str(),
+  //         _sector._deltaLongitude.description().c_str()
   //         );
 }
 
@@ -223,7 +223,7 @@ Box* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
     const double minHeight = getMinHeight() * _verticalExaggeration;
     const double maxHeight = getMaxHeight() * _verticalExaggeration;
 
-    const Vector3D v0 = planet->toCartesian( _sector.getCenter(), maxHeight );
+    const Vector3D v0 = planet->toCartesian( _sector._center, maxHeight );
     const Vector3D v1 = planet->toCartesian( _sector.getNE(),     minHeight );
     const Vector3D v2 = planet->toCartesian( _sector.getNW(),     minHeight );
     const Vector3D v3 = planet->toCartesian( _sector.getSE(),     minHeight );
