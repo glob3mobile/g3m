@@ -302,6 +302,7 @@ public:
   }
 
   ~ModelviewMatrixHolder(){
+    delete _matrix;
     if (_modelview != NULL){
       _modelview->_release();
     }

@@ -93,7 +93,7 @@ void SGGeometryNode::createGLState(){
   //  }
 }
 
-void SGGeometryNode::rawRender(const G3MRenderContext* rc, GLState* glState){
+void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glState){
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, glState, *rc->getGPUProgramManager());
 }
