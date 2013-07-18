@@ -48,22 +48,22 @@ public class MeshRenderer extends LeafRenderer
     final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _projection = new ProjectionGLFeature(cam);
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+      _projection.setMatrix(cam.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+      _model.setMatrix(cam.getModelMatrix44D());
     }
   }
 
@@ -143,10 +143,17 @@ public class MeshRenderer extends LeafRenderer
     for (int i = 0; i < meshesCount; i++)
     {
       Mesh mesh = _meshes.get(i);
+  //<<<<<<< HEAD
+  //    const Extent* extent = mesh->getExtent();
+  //
+  //    if ( extent->touches(frustum) ) {
+  //      mesh->render(rc, &_glState);
+  //=======
       final BoundingVolume boundingVolume = mesh.getBoundingVolume();
       if (boundingVolume.touchesFrustum(frustum))
       {
         mesh.render(rc, _glState);
+  //>>>>>>> webgl-port
       }
     }
   }

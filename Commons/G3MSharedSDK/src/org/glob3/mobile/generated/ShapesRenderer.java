@@ -38,24 +38,24 @@ public class ShapesRenderer extends LeafRenderer
     final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
       _glState.addGLFeature(_projection, true);
       _glStateTransparent.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+      _projection.setMatrix(cam.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
       _glStateTransparent.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+      _model.setMatrix(cam.getModelMatrix44D());
     }
   }
 

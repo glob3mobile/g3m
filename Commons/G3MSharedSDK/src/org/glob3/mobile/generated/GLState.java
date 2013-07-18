@@ -258,4 +258,15 @@ public class GLState
   
     hasChangedStructure();
   }
+
+  public final int getGLFeatureSize(GLFeatureGroupName g)
+  {
+    final int index = g.getValue();
+
+    if (_featuresGroups[index] == null)
+    {
+      return 0;
+    }
+    return _featuresGroups[index].size();
+  }
 }

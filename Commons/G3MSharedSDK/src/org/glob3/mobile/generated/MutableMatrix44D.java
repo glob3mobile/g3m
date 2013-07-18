@@ -871,11 +871,20 @@ public class MutableMatrix44D
     return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
   }
 
-
   public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)
   {
     return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
 
+  }
+
+  public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
+  {
+    return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
+  }
+
+  public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
+  {
+    return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
   }
 
   public static MutableMatrix44D createScaleMatrix(Vector3D scale)
@@ -894,16 +903,6 @@ public class MutableMatrix44D
     final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
   
     return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
-  }
-
-  public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
-  {
-    return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
-  }
-
-  public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
-  {
-    return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
   }
 
 }

@@ -51,25 +51,31 @@ public class MarksRenderer extends LeafRenderer
   
   //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
   
+  //  if (_glState.getGLFeatureSize(CAMERA_GROUP) < 2){
+  //    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures(_glState);
+  //  } else{
+  //    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures();
+  //  }
+  
     final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _projection = new ProjectionGLFeature(cam);
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+      _projection.setMatrix(cam.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _model = new ModelGLFeature(cam);
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+      _model.setMatrix(cam.getModelMatrix44D());
     }
   }
 
@@ -239,9 +245,15 @@ public class MarksRenderer extends LeafRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
+  //<<<<<<< HEAD
+  //        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
+  //
+  //        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
+  //=======
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
           final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+  //>>>>>>> webgl-port
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {
@@ -380,9 +392,10 @@ public class MarksRenderer extends LeafRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
-          final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+          final Vector2F markPixelF = _lastCamera.point2Pixel(cartesianMarkPosition);
+          final Vector2I markPixel = new Vector2I((int)markPixelF._x, (int)markPixelF._y);
   
-          final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {

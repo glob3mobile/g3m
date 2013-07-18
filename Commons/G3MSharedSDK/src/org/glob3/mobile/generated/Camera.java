@@ -470,42 +470,29 @@ public class Camera
   {
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix().asMatrix44D();
-    getModelMatrix().asMatrix44D();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
 
-  // opengl projection matrix
-  public final MutableMatrix44D getProjectionMatrix()
+
+
+//  void addProjectionAndModelGLFeatures(GLState& glState) const{
+//    glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+//    glState.addGLFeature(p, false);
+//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
+//    glState.addGLFeature(m, false);
+//  }
+
+  public final Matrix44D getModelMatrix44D()
   {
-    if (_dirtyFlags._projectionMatrixDirty)
-    {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
+    return getModelMatrix().asMatrix44D();
   }
 
-  // Model matrix, computed in CPU in double precision
-  public final MutableMatrix44D getModelMatrix()
+  public final Matrix44D getProjectionMatrix44D()
   {
-    if (_dirtyFlags._modelMatrixDirty)
-    {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
-  }
-
-  // multiplication of model * projection
-  public final MutableMatrix44D getModelViewMatrix()
-  {
-    if (_dirtyFlags._modelViewMatrixDirty)
-    {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
+    return getProjectionMatrix().asMatrix44D();
   }
 
   public final double getAngle2HorizonInRadians()
@@ -521,7 +508,6 @@ public class Camera
     final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
     return IMathUtils.instance().pi() * rScreen * rScreen;
   }
-
 
   private Angle getHeading(Vector3D normal)
   {
@@ -817,6 +803,39 @@ public class Camera
   
     setHeading(heading);
     setPitch(pitch);
+  }
+
+  // opengl projection matrix
+  private MutableMatrix44D getProjectionMatrix()
+  {
+    if (_dirtyFlags._projectionMatrixDirty)
+    {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+
+  // Model matrix, computed in CPU in double precision
+  private MutableMatrix44D getModelMatrix()
+  {
+    if (_dirtyFlags._modelMatrixDirty)
+    {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
+
+  // multiplication of model * projection
+  private MutableMatrix44D getModelViewMatrix()
+  {
+    if (_dirtyFlags._modelViewMatrixDirty)
+    {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
   }
 
 }

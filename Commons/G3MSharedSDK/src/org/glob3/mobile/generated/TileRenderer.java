@@ -303,22 +303,22 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix().asMatrix44D());
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix().asMatrix44D());
+      _projection.setMatrix(cam.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix().asMatrix44D());
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix().asMatrix44D());
+      _model.setMatrix(cam.getModelMatrix44D());
     }
   }
 
@@ -442,11 +442,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
-        tile.render(rc, trc, null, _glState);
-=======
-        tile.render(rc, trc, parentState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
->>>>>>> webgl-port
+        tile.render(rc, trc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
       }
     }
     else
@@ -465,11 +461,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
         {
           Tile tile = iter.next();
   
-<<<<<<< HEAD
-          tile.render(rc, trc, toVisitInNextIteration, _glState);
-=======
-          tile.render(rc, trc, parentState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
->>>>>>> webgl-port
+          tile.render(rc, trc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
         }
   
         toVisit = toVisitInNextIteration;

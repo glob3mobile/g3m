@@ -40,8 +40,8 @@ public abstract class DummyRenderer extends LeafRenderer
     GLState glState = new GLState();
     glState.setParent(parentState);
   
-  //  GPUProgramState& progState = *glState.getGPUProgramState();
-  //  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    //  GPUProgramState& progState = *glState.getGPUProgramState();
+    //  progState.setUniformValue(FLAT_COLOR, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
   
     glState.addGLFeature(new FlatColorGLFeature(color, color.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   
@@ -50,7 +50,7 @@ public abstract class DummyRenderer extends LeafRenderer
   
     MutableMatrix44D TR = T.multiply(R);
   
-  //  glState.setModelView(TR.asMatrix44D(), true);
+    //  glState.setModelView(TR.asMatrix44D(), true);
   
     glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     glState.addGLFeature(new ModelTransformGLFeature(TR.asMatrix44D()), false);
@@ -119,21 +119,27 @@ public abstract class DummyRenderer extends LeafRenderer
   
     //TODO: IMPLEMENT
     GLState glState = new GLState();
-  //  GPUProgramState& progState = *glState.getGPUProgramState();
+    //  GPUProgramState& progState = *glState.getGPUProgramState();
   
     glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, false, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
-  //  progState.setAttributeValue(POSITION,
-  //                              _vertices, 4, //The attribute is a float vector of 4 elements
-  //                              3,            //Our buffer contains elements of 3
-  //                              0,            //Index 0
-  //                              false,        //Not normalized
-  //                              0);           //Stride 0
-  //  glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
+    //  progState.setAttributeValue(POSITION,
+    //                              _vertices, 4, //The attribute is a float vector of 4 elements
+    //                              3,            //Our buffer contains elements of 3
+    //                              0,            //Index 0
+    //                              false,        //Not normalized
+    //                              0);           //Stride 0
+    //  glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
   
-    rc.getCurrentCamera().addProjectionAndModelGLFeatures(glState);
+    //  rc->getCurrentCamera()->addProjectionAndModelGLFeatures(glState);
   
-  //  GLGlobalState state(parentState);
+    glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+    glState.addGLFeature(new ProjectionGLFeature(rc.getCurrentCamera().getProjectionMatrix44D()), false);
+  
+    glState.addGLFeature(new ModelGLFeature(rc.getCurrentCamera().getModelMatrix44D()), true);
+  
+  
+    //  GLGlobalState state(parentState);
   
     GL gl = rc.getGL();
     GPUProgramManager manager = rc.getGPUProgramManager();

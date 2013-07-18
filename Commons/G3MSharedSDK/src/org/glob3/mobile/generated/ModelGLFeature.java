@@ -5,4 +5,8 @@ public class ModelGLFeature extends GLCameraGroupFeature
   {
      super(model);
   }
+  public ModelGLFeature(Camera cam)
+  {
+     super(cam.getModelMatrix44D());
+  }
 }

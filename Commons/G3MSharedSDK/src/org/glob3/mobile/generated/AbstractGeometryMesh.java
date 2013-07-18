@@ -34,8 +34,8 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected final float _pointSize;
   protected final boolean _depthTest;
 
-  protected Extent _extent;
-  protected final Extent computeExtent()
+  protected BoundingVolume _extent;
+  protected final BoundingVolume computeBoundingVolume()
   {
     final int vertexCount = getVertexCount();
   
@@ -153,11 +153,11 @@ public abstract class AbstractGeometryMesh extends Mesh
   {
   }
 
-  public final Extent getExtent()
+  public final BoundingVolume getBoundingVolume()
   {
     if (_extent == null)
     {
-      _extent = computeExtent();
+      _extent = computeBoundingVolume();
     }
     return _extent;
   }

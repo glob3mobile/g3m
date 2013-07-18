@@ -36,6 +36,7 @@ public class CameraRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc)
   {
+  
     // create the CameraContext
     if (_cameraContext == null)
     {

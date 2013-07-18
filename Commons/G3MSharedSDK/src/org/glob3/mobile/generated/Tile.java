@@ -15,6 +15,31 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
+
+//class G3MRenderContext;
+//class Mesh;
+//class TileTessellator;
+//class TileTexturizer;
+//class TilesRenderParameters;
+//class ITimer;
+//class TilesStatistics;
+//class TileRenderContext;
+//class TileKey;
+//class Vector3D;
+//class GLState;
+//class BoundingVolume;
+//class ElevationDataProvider;
+//class ElevationData;
+//class MeshHolder;
+//class Vector2I;
+//class GPUProgramState;
+//class TileElevationDataRequest;
+//class Frustum;
+//class Box;
+
+
+
 public class Tile
 {
   private TileTexturizer _texturizer;
@@ -523,6 +548,7 @@ public class Tile
 
   ///#include "Sphere.hpp"
   
+  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -658,11 +684,7 @@ public class Tile
     }
   }
 
-<<<<<<< HEAD
-  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration, GLState glState)
-=======
   public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
->>>>>>> webgl-port
   {
   
     final float verticalExaggeration = trc.getVerticalExaggeration();
@@ -686,10 +708,10 @@ public class Tile
   
       if (isRawRender)
       {
-        rawRender(rc, trc, glState);
+        rawRender(rc, trc, parentState);
         if (trc.getParameters()._renderDebug)
         {
-          debugRender(rc, trc, glState);
+          debugRender(rc, trc, parentState);
         }
   
         statistics.computeTileRendered(this);

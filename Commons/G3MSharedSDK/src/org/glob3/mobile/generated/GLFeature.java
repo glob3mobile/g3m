@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class Camera;
+
 public abstract class GLFeature extends RCObject
 {
 
