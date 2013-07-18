@@ -115,28 +115,6 @@ Mesh* Trail::createMesh(const Planet* planet) {
 //  return cm;
 
   return surfaceMesh;
-
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-  //                                          planet,
-  //                                          Geodetic3D::fromDegrees(0, 0, 0));
-  //
-  //  const int positionsSize = _positions.size();
-  //  for (int i = 0; i < positionsSize; i++) {
-  //#ifdef C_CODE
-  //    vertices.add( *(_positions[i]) );
-  //#endif
-  //#ifdef JAVA_CODE
-  //	  vertices.add( _positions.get(i) );
-  //#endif
-  //  }
-  //
-  //  return new DirectMesh(GLPrimitive::lineStrip(),
-  //                        true,
-  //                        vertices.getCenter(),
-  //                        vertices.create(),
-  //                        _lineWidth,
-  //                        1,
-  //                        new Color(_color));
 }
 
 Mesh* Trail::getMesh(const Planet* planet) {
@@ -172,21 +150,11 @@ void Trail::render(const G3MRenderContext* rc) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
       
-      //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-//      _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-//      rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
       updateGLState(rc);
 
       mesh->render(rc, &_glState);
     }
   }
-}
-
-void Trail::createGLState() const{
-//  GPUProgramState& progState = *_glState.getGPUProgramState();
-//  progState.setUniformValue(EnableTexture, false);
-//  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0, 1.0));
-//  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0, 0.0));
 }
 
 #pragma mark TrailsRenderer

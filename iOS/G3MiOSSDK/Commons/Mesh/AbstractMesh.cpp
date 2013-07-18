@@ -125,24 +125,6 @@ void AbstractMesh::render(const G3MRenderContext *rc) const {
 
 void AbstractMesh::createGLState(){
 
-//  GLGlobalState* globalState = _glState.getGLGlobalState();
-
-//  globalState->setLineWidth(_lineWidth);
-//  if (_depthTest){
-//    globalState->enableDepthTest();
-//  } else{
-//    globalState->disableDepthTest();
-//  }
-
-//  if (_flatColor != NULL && _flatColor->isTransparent()){
-//    globalState->enableBlend();
-//    globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-//  }
-
-//  GPUProgramState& progState = *_glState.getGPUProgramState();
-
-
-
   _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
@@ -156,24 +138,14 @@ void AbstractMesh::createGLState(){
                         false);   //POINT SIZE
 
   if (_translationMatrix != NULL){
-    //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-//    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
-
     _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 
   if (_flatColor != NULL && _colors == NULL){  //FlatColorMesh Shader
-//    progState.setAttributeValue(POSITION,
-//                                _vertices, 4, //The attribute is a float vector of 4 elements
-//                                3,            //Our buffer contains elements of 3
-//                                0,            //Index 0
-//                                false,        //Not normalized
-//                                0);           //Stride 0
-    //progState.setUniformValue(FLAT_COLOR, *_flatColor);
 
     _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                           _flatColor->isTransparent(),
-                                                           GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                                                 _flatColor->isTransparent(),
+                                                 GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                           false);
 
 
@@ -182,58 +154,19 @@ void AbstractMesh::createGLState(){
     return;
   }
 
-
-//  progState.setUniformValue(POINT_SIZE, _pointSize);
-
-//  progState.setAttributeValue(POSITION,
-//                              _vertices, 4, //The attribute is a float vector of 4 elements
-//                              3,            //Our buffer contains elements of 3
-//                              0,            //Index 0
-//                              false,        //Not normalized
-//                              0);           //Stride 0
-
   if (_colors != NULL){
-    //    progState.setUniformValue(EnableColorPerVertex, true);
-    //    progState.setAttributeValue(COLOR,
-    //                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
-    //                                4,            //Our buffer contains elements of 4
-    //                                0,            //Index 0
-    //                                false,        //Not normalized
-    //                                0);           //Stride 0
-
     _glState.addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
-                                                       4,            //Our buffer contains elements of 4
-                                                       0,            //Index 0
-                                                       false,        //Not normalized
-                                                       0,            //Stride 0
-                                                       true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+                                             4,            //Our buffer contains elements of 4
+                                             0,            //Index 0
+                                             false,        //Not normalized
+                                             0,            //Stride 0
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
-    //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
-  } else{
-    //    progState.setAttributeDisabled(COLOR);
-    //    progState.setUniformValue(EnableColorPerVertex, false);
-    //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
   }
-
-  //  if (_flatColor != NULL){
-  //    progState.setUniformValue(EnableFlatColor, true);
-  //    progState.setUniformValue(FLAT_COLOR,
-  //                              (double)_flatColor->getRed(),
-  //                              (double)_flatColor->getGreen(),
-  //                              (double) _flatColor->getBlue(),
-  //                              (double) _flatColor->getAlpha());
-  //
-  //    progState.setUniformValue(FlatColorIntensity, _colorsIntensity);
-  //  } else{
-  //    progState.setUniformValue(EnableFlatColor, false);
-  //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-  //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
-  //  }
 }
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
-  
+
   _glState.setParent(parentGLState);
   rawRender(rc);
 }

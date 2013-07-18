@@ -11,7 +11,6 @@
 
 #include "LeafRenderer.hpp"
 #include "Shape.hpp"
-//#include "GPUProgramState.hpp"
 #include <vector>
 
 class ShapesRenderer : public LeafRenderer {
@@ -29,7 +28,6 @@ private:
   
   GLState _glState;
   GLState _glStateTransparent;
-//  void createGLState();
 
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
@@ -43,7 +41,6 @@ public:
   _projection(NULL),
   _model(NULL)
   {
-//    createGLState();
   }
 
   ~ShapesRenderer() {

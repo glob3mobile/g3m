@@ -8,21 +8,11 @@
 
 #include "TexturedMesh.hpp"
 
-#include "GL.hpp"
-
-//#include "GPUProgramState.hpp"
-
 void TexturedMesh::render(const G3MRenderContext* rc) const {
   _mesh->render(rc);
 }
 
 void TexturedMesh::createGLState(){
-//  GLGlobalState& globalState = *_glState.getGLGlobalState();
-//  if (_transparent) {
-//    globalState.enableBlend();
-//    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-//  }
-
   _textureMapping->modifyGLState(_glState);
 }
 

@@ -73,7 +73,7 @@ public:
   
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   
-  const GLState* createGLState(const G3MRenderContext* rc, const GLState* parentGLState);
+//  const GLState* createGLState(const G3MRenderContext* rc, const GLState* parentGLState);
 
   bool modifyGLState(const G3MRenderContext* rc, GLState* state);
 

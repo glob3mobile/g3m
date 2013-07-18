@@ -43,7 +43,6 @@ public:
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
   {
-    //addChild((Mesh*)mesh); //New and only child (not const)!!
     createGLState();
   }
   

@@ -11,9 +11,6 @@
 
 #include "LeafRenderer.hpp"
 #include <vector>
-
-//#include "GPUProgramState.hpp"
-
 #include "GLState.hpp"
 
 class Mesh;
@@ -24,7 +21,6 @@ private:
   std::vector<Mesh*> _meshes;
   
   GLState _glState;
-  void createGLState() const;
 
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
@@ -35,7 +31,6 @@ public:
   _projection(NULL),
   _model(NULL)
   {
-    createGLState();
   }
   
   ~MeshRenderer();

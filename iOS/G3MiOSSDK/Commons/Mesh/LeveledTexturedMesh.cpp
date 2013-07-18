@@ -18,10 +18,6 @@
 #include "Camera.hpp"
 
 void LazyTextureMapping::modifyGLState(GLState& state) const{
-
-//  GLGlobalState* glGlobalState = state.getGLGlobalState();
-//  GPUProgramState* progState = state.getGPUProgramState();
-
   if (!_initialized) {
     _initializer->initialize();
 
@@ -36,24 +32,6 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   }
 
   if (_texCoords != NULL) {
-//    glGlobalState->bindTexture(_glTextureId);
-//
-//    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
-//      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
-//      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
-//    } else{
-//      //ILogger::instance()->logInfo("No transformed TC");
-//      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
-//      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
-//    }
-//
-//    progState->setAttributeValue(TEXTURE_COORDS,
-//                                 _texCoords, 2,
-//                                 2,
-//                                 0,
-//                                 false,
-//                                 0);
-//
     state.clearGLFeatureGroup(COLOR_GROUP);
 
     if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
@@ -206,12 +184,6 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
 
   return false;
 }
-
-//void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-//                                                         const const GLTextureId*glTextureId) {
-//  const int level = _mappings->size() - inversedLevel - 1;
-//  setGLTextureIdForLevel(level, glTextureId);
-//}
 
 bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   if (_mesh->isTransparent(rc)) {

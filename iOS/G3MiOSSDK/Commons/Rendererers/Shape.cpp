@@ -71,8 +71,6 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, *_transformMatrix, true);
-//    _glState.setModelView(_transformMatrix->asMatrix44D(), true);
     _glState.clearGLFeatureGroup(CAMERA_GROUP);
     _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
   }

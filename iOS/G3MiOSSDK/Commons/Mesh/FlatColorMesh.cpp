@@ -13,22 +13,9 @@ void FlatColorMesh::render(const G3MRenderContext* rc) const {
 }
 
 void FlatColorMesh::createGLState(){
-//  GLGlobalState& globalState = *_glState.getGLGlobalState();
-//  
-//  if (isTransparent(NULL)) {
-//    globalState.enableBlend();
-//    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-//  }
-
-//  GPUProgramState& progState = *_glState.getGPUProgramState();
-
-//  progState.setUniformValue(FLAT_COLOR, *_flatColor);
-
   _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                          _flatColor->isTransparent(),
-                                                          GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
-
-
+                                               _flatColor->isTransparent(),
+                                               GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 }
 
 void FlatColorMesh::render(const G3MRenderContext* rc, const GLState* parentState){

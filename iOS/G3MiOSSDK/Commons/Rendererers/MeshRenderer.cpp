@@ -48,39 +48,15 @@ void MeshRenderer::updateGLState(const G3MRenderContext* rc){
 
 void MeshRenderer::render(const G3MRenderContext* rc) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
-
-  //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-//  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-
-
-  //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
   updateGLState(rc);
 
 
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
-//<<<<<<< HEAD
-//    const Extent* extent = mesh->getExtent();
-//
-//    if ( extent->touches(frustum) ) {
-//      mesh->render(rc, &_glState);
-//=======
     const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
     if ( boundingVolume->touchesFrustum(frustum) ) {
       mesh->render(rc, &_glState);
-//>>>>>>> webgl-port
     }
   }
-}
-
-void MeshRenderer::createGLState() const{
-  
-//  _glState.getGLGlobalState()->enableDepthTest();
-
-//  GPUProgramState& progState = *_glState.getGPUProgramState();
-//  progState.setUniformValue(EnableTexture, false);
-//  progState.setUniformValue(POINT_SIZE, (float)1.0);
-//  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
-//  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
 }

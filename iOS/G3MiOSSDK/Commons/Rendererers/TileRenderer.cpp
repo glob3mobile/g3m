@@ -363,13 +363,6 @@ void TileRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
-  
-  //Initializing program State
-//  _programState.setUniformValue("BillBoard", false);
-//  _programState.setUniformValue(EnableTexture, false);
-//  _programState.setUniformValue(POINT_SIZE, (float)1.0);
-//  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-//  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
 }
 
 bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
@@ -457,18 +450,6 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
     const bool texturedInside = false;
     const bool mercator = false;
 
-//    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
-//    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
-
-//    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-//                                          rc->getPlanet()->getRadii(),
-//                                          resolution,
-//                                          borderWidth,
-//                                          texturedInside,
-//                                          mercator,
-//                                          surfaceColor,
-//                                          borderColor);
-
     _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
                                           _parameters->_incompletePlanetTexureURL,
                                           rc->getPlanet()->getRadii(),
@@ -501,12 +482,7 @@ void TileRenderer::updateGLState(const G3MRenderContext* rc){
 }
 
 void TileRenderer::render(const G3MRenderContext* rc) {
-  
-  //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-//  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-//  _glState.getGLGlobalState()->enableDepthTest();
 
-  //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
   updateGLState(rc);
 
   if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {

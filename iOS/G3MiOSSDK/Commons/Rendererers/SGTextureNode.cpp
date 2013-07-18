@@ -60,7 +60,6 @@ const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLSt
     const int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++) {
       SGLayerNode* layer = _layers[i];
-//      layer->createGLState(rc, _glState);
       if (!layer->modifyGLState(rc, _glState)){
         delete _glState;
         _glState = NULL;

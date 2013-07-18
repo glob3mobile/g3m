@@ -138,15 +138,9 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         }
         
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
-//<<<<<<< HEAD
-//        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
-//        
-//        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
-//=======
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
         const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
-//>>>>>>> webgl-port
                                          markPixel._y - (textureHeight / 2),
                                          textureWidth,
                                          textureHeight);
@@ -194,9 +188,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
 
-  //TODO: AT_WORK
   updateGLState(rc);
-  //camera->addProjectionAndModelGLFeatures(_glState);
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -270,19 +262,6 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
 }
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc){
-//  GPUProgramState* progState = _glState.getGPUProgramState();
-//  const Camera* cc = rc->getCurrentCamera();
-  //progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
-//  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
-
-//  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
-
-//  if (_glState.getGLFeatureSize(CAMERA_GROUP) < 2){
-//    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures(_glState);
-//  } else{
-//    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures();
-//  }
-
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL){
     _projection = new ProjectionGLFeature(cam);

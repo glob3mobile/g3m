@@ -92,8 +92,6 @@ public:
     releaseGLTextureId();
   }
   
-  //void bind(const G3MRenderContext* rc, const GLGlobalState& parentState) const;
-  
   bool isValid() const {
     return _glTextureId != NULL;
   }
@@ -168,9 +166,6 @@ public:
 
   bool setGLTextureIdForLevel(int level,
                               const IGLTextureId* glTextureId);
-  
-  //  void setGLTextureIdForInversedLevel(int inversedLevel,
-  //                                      const const GLTextureId*glTextureId);
   
   const IGLTextureId* getTopLevelGLTextureId() const;
   

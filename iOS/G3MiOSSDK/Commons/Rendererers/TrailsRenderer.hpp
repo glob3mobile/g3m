@@ -13,7 +13,6 @@
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
-//#include "GPUProgramState.hpp"
 #include "GLState.hpp"
 
 class Mesh;
@@ -36,7 +35,6 @@ private:
   Mesh* getMesh(const Planet* planet);
   
   GLState _glState;
-  void createGLState() const;
 
   void updateGLState(const G3MRenderContext* rc);
   ProjectionGLFeature* _projection;
@@ -55,7 +53,6 @@ public:
   _projection(NULL),
   _model(NULL)
   {
-    createGLState();
   }
 
   ~Trail();

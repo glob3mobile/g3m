@@ -112,29 +112,24 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
-const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
-  if (!_initialized) {
-    _initialized = true;
-    requestImage(rc);
-  }
-
-  const IGLTextureId* textureId = getTextureId(rc);
-  if (textureId == NULL) {
-    return NULL;
-  }
-
-  int SG_TODO;
-  
-  _glState.setParent(parentGLState);
-
-  int TODO_CHECK;
-  _glState.clearGLFeatureGroup(COLOR_GROUP);
-
-  _glState.addGLFeature(new TextureIDGLFeature(textureId,
-                                               false, 0,0), false);
-
-  return &_glState;
-}
+//const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
+//  if (!_initialized) {
+//    _initialized = true;
+//    requestImage(rc);
+//  }
+//
+//  const IGLTextureId* textureId = getTextureId(rc);
+//  if (textureId == NULL) {
+//    return NULL;
+//  }
+//  _glState.setParent(parentGLState);
+//  _glState.clearGLFeatureGroup(COLOR_GROUP);
+//
+//  _glState.addGLFeature(new TextureIDGLFeature(textureId,
+//                                               false, 0,0), false);
+//
+//  return &_glState;
+//}
 
 bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state){
 
@@ -147,8 +142,6 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state){
   if (textureId == NULL) {
     return false;
   }
-
-  int TODO_CHECK;
   state->clearGLFeatureGroup(COLOR_GROUP);
 
   state->addGLFeature(new TextureIDGLFeature(textureId,
