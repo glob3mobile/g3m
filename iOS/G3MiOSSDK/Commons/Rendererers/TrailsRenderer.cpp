@@ -16,9 +16,13 @@
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "Camera.hpp"
 //#include "CompositeMesh.hpp"
 
-Trail::~Trail() {
+TrailSegment::~TrailSegment() {
+  delete _previousSegmentLastPosition;
+  delete _nextSegmentFirstPosition;
+
   delete _mesh;
 
   const int positionsSize = _positions.size();
@@ -28,7 +32,16 @@ Trail::~Trail() {
   }
 }
 
-Mesh* Trail::createMesh(const Planet* planet) {
+Mesh* TrailSegment::getMesh(const Planet* planet) {
+  if (_positionsDirty || (_mesh == NULL)) {
+    delete _mesh;
+    _mesh = createMesh(planet);
+    _positionsDirty = false;
+  }
+  return _mesh;
+}
+
+Mesh* TrailSegment::createMesh(const Planet* planet) {
   const int positionsSize = _positions.size();
 
   if (positionsSize < 2) {
@@ -41,11 +54,25 @@ Mesh* Trail::createMesh(const Planet* planet) {
     const Geodetic3D* current  = _positions[i];
     const Geodetic3D* previous = _positions[i - 1];
 
-    const double angleInRadians =  Geodetic2D::bearingInRadians(previous->_latitude, previous->_longitude,
-                                                                current->_latitude, current->_longitude);
+    const double angleInRadians = Geodetic2D::bearingInRadians(previous->_latitude,
+                                                               previous->_longitude,
+                                                               current->_latitude,
+                                                               current->_longitude);
     if (i == 1) {
-      anglesInRadians.push_back(angleInRadians);
-      anglesInRadians.push_back(angleInRadians);
+      if (_previousSegmentLastPosition == NULL) {
+        anglesInRadians.push_back(angleInRadians);
+        anglesInRadians.push_back(angleInRadians);
+      }
+      else {
+        const double angle2InRadians = Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
+                                                                    _previousSegmentLastPosition->_longitude,
+                                                                    previous->_latitude,
+                                                                    previous->_longitude);
+        const double avr = (angleInRadians + angle2InRadians) / 2.0;
+
+        anglesInRadians.push_back(avr);
+        anglesInRadians.push_back(avr);
+      }
     }
     else {
       anglesInRadians.push_back(angleInRadians);
@@ -54,7 +81,19 @@ Mesh* Trail::createMesh(const Planet* planet) {
     }
   }
 
+  if (_nextSegmentFirstPosition != NULL) {
+    const int lastPositionIndex = positionsSize - 1;
+    const Geodetic3D* lastPosition = _positions[lastPositionIndex];
+    const double angleInRadians =  Geodetic2D::bearingInRadians(lastPosition->_latitude,
+                                                                lastPosition->_longitude,
+                                                                _nextSegmentFirstPosition->_latitude,
+                                                                _nextSegmentFirstPosition->_longitude);
 
+    const double avr = (angleInRadians + anglesInRadians[lastPositionIndex]) / 2.0;
+    anglesInRadians[lastPositionIndex] = avr;
+  }
+
+  
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
@@ -123,21 +162,76 @@ Mesh* Trail::createMesh(const Planet* planet) {
   //                        new Color(_color));
 }
 
-Mesh* Trail::getMesh(const Planet* planet) {
-  if (_positionsDirty || (_mesh == NULL)) {
-    delete _mesh;
-    _mesh = createMesh(planet);
-    _positionsDirty = false;
+void Trail::addPosition(const Geodetic3D& position) {
+
+  const int lastSegmentIndex = _segments.size() - 1;
+
+  TrailSegment* currentSegment;
+  if ((lastSegmentIndex < 0) ||
+      (_segments[lastSegmentIndex]->getSize() > 32)) {
+
+    TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
+    if (lastSegmentIndex >= 0) {
+      TrailSegment* previousSegment = _segments[lastSegmentIndex];
+      previousSegment->setNextSegmentFirstPosition( position );
+      newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
+      newSegment->addPosition( previousSegment->getLastPosition() );
+    }
+    _segments.push_back(newSegment);
+    currentSegment = newSegment;
   }
-  return _mesh;
+  else {
+    currentSegment = _segments[lastSegmentIndex];
+  }
+
+  currentSegment->addPosition(position);
 }
 
+Trail::~Trail() {
+  //  delete _mesh;
+  //
+  //  const int positionsSize = _positions.size();
+  //  for (int i = 0; i < positionsSize; i++) {
+  //    const Geodetic3D* position = _positions[i];
+  //    delete position;
+  //  }
+  const int segmentsSize = _segments.size();
+  for (int i = 0; i < segmentsSize; i++) {
+    TrailSegment* segment = _segments[i];
+    delete segment;
+  }
+}
+
+void TrailSegment::render(const G3MRenderContext* rc,
+                          const GLState& parentState,
+                          const Frustum* frustum) {
+  Mesh* mesh = getMesh(rc->getPlanet());
+  if (mesh != NULL) {
+    BoundingVolume* bounding = mesh->getBoundingVolume();
+    if (bounding != NULL) {
+      if (bounding->touchesFrustum(frustum)) {
+        mesh->render(rc, parentState);
+      }
+    }
+  }
+}
+
+
 void Trail::render(const G3MRenderContext* rc,
-                   const GLState& parentState) {
+                   const GLState& parentState,
+                   const Frustum* frustum) {
+//  if (_visible) {
+//    Mesh* mesh = getMesh(rc->getPlanet());
+//    if (mesh != NULL) {
+//      mesh->render(rc, parentState);
+//    }
+//  }
+
   if (_visible) {
-    Mesh* mesh = getMesh(rc->getPlanet());
-    if (mesh != NULL) {
-      mesh->render(rc, parentState);
+    const int segmentsSize = _segments.size();
+    for (int i = 0; i < segmentsSize; i++) {
+      TrailSegment* segment = _segments[i];
+      segment->render(rc, parentState, frustum);
     }
   }
 }
@@ -160,8 +254,11 @@ void TrailsRenderer::addTrail(Trail* trail) {
 void TrailsRenderer::render(const G3MRenderContext* rc,
                             const GLState& parentState) {
   const int trailsCount = _trails.size();
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
-    trail->render(rc, parentState);
+    if (trail != NULL) {
+      trail->render(rc, parentState, frustum);
+    }
   }
 }

@@ -2201,8 +2201,7 @@ public:
 {
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   
-  Trail* trail = new Trail(100,
-                           Color::fromRGBA(0, 1, 1, 0.6f),
+  Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
                            5000);
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
@@ -2245,7 +2244,7 @@ public:
     }
   };
   
-  PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(1),
+  PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(0.25),
                                                       new TestTrailTask(trail, position));
   return periodicalTask;
 }

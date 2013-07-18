@@ -16,31 +16,87 @@
 
 class Mesh;
 class Planet;
+class Frustum;
 
-class Trail {
+class TrailSegment {
 private:
-  bool _visible;
-  const unsigned long _maxSteps;
-  bool _positionsDirty;
-
   Color _color;
   const float _ribbonWidth;
 
+  bool _positionsDirty;
   std::vector<Geodetic3D*> _positions;
+  Geodetic3D* _nextSegmentFirstPosition;
+  Geodetic3D* _previousSegmentLastPosition;
 
   Mesh* createMesh(const Planet* planet);
 
   Mesh* _mesh;
   Mesh* getMesh(const Planet* planet);
-
+  
 public:
-  Trail(int maxSteps,
-        Color color,
-        float ribbonWidth):
-  _maxSteps(maxSteps),
-  _visible(true),
+  TrailSegment(Color color,
+               float ribbonWidth) :
+  _color(color),
+  _ribbonWidth(ribbonWidth),
   _positionsDirty(true),
   _mesh(NULL),
+  _nextSegmentFirstPosition(NULL),
+  _previousSegmentLastPosition(NULL)
+  {
+
+  }
+
+  ~TrailSegment();
+
+  int getSize() const {
+    return _positions.size();
+  }
+
+  void addPosition(const Geodetic3D& position) {
+    _positionsDirty = true;
+    _positions.push_back(new Geodetic3D(position));
+  }
+
+  void setNextSegmentFirstPosition(const Geodetic3D& position) {
+    _positionsDirty = true;
+    delete _nextSegmentFirstPosition;
+    _nextSegmentFirstPosition = new Geodetic3D(position);
+  }
+
+  void setPreviousSegmentLastPosition(const Geodetic3D& position) {
+    _positionsDirty = true;
+    delete _previousSegmentLastPosition;
+    _previousSegmentLastPosition = new Geodetic3D(position);
+  }
+
+  Geodetic3D getLastPosition() const {
+    return *(_positions[ _positions.size() - 1]);
+  }
+
+  Geodetic3D getPreLastPosition() const {
+    return *(_positions[ _positions.size() - 2]);
+  }
+
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState,
+              const Frustum* frustum);
+
+};
+
+class Trail {
+private:
+  bool _visible;
+
+  Color _color;
+  const float _ribbonWidth;
+
+  std::vector<TrailSegment*> _segments;
+
+
+public:
+  Trail(Color color,
+        float ribbonWidth):
+  _visible(true),
   _color(color),
   _ribbonWidth(ribbonWidth)
   {
@@ -49,7 +105,8 @@ public:
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              const GLState& parentState,
+              const Frustum* frustum);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -59,26 +116,8 @@ public:
     return _visible;
   }
 
-  void addPosition(const Geodetic3D& position) {
-    _positionsDirty = true;
-
-    if (_maxSteps > 0) {
-      while (_positions.size() >= _maxSteps) {
-        const int index = 0;
-        delete _positions[index];
-
-#ifdef C_CODE
-        _positions.erase( _positions.begin() + index );
-#endif
-#ifdef JAVA_CODE
-        _positions.remove( index );
-#endif
-      }
-    }
-
-    _positions.push_back(new Geodetic3D(position));
-  }
-
+  void addPosition(const Geodetic3D& position);
+  
 };
 
 
