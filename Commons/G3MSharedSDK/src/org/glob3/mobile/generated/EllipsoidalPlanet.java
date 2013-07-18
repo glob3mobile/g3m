@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  EllipsoidalPlanet.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 15/05/13.
+//  Created by Agustin Trujillo Pino on 15/05/13.
 //
 //
 

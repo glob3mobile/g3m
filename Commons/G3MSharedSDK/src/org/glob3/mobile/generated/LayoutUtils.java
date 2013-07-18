@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  LayoutUtils.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  LayoutUtils.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 
