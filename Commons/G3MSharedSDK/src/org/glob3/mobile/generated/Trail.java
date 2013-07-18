@@ -68,7 +68,8 @@ public class Trail
     final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
     final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
-    IFloatBuffer vertices = IFactory.instance().createFloatBuffer(positionsSize * 3 * 2);
+  //  IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(positionsSize * 3 * 2);
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
   
     final Vector3D rotationAxis = Vector3D.downZ();
     for (int i = 0; i < positionsSize; i++)
@@ -79,27 +80,35 @@ public class Trail
       final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
       final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
   
-      final int i6 = i * 6;
-      final Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
-      if (i == 0)
-      {
-        centerX = (float) offsetNTransformed._x;
-        centerY = (float) offsetNTransformed._y;
-        centerZ = (float) offsetNTransformed._z;
-      }
-      vertices.rawPut(i6, (float) offsetNTransformed._x - centerX);
-      vertices.rawPut(i6 + 1, (float) offsetNTransformed._y - centerY);
-      vertices.rawPut(i6 + 2, (float) offsetNTransformed._z - centerZ);
+  //    const int i6 = i * 6;
+  //    const Vector3D offsetNTransformed = offsetN.transformedBy(matrix, 1);
+  //    if (i == 0) {
+  //      centerX = (float) offsetNTransformed._x;
+  //      centerY = (float) offsetNTransformed._y;
+  //      centerZ = (float) offsetNTransformed._z;
+  //    }
+  //    vertices->rawPut(i6    , (float) offsetNTransformed._x - centerX);
+  //    vertices->rawPut(i6 + 1, (float) offsetNTransformed._y - centerY);
+  //    vertices->rawPut(i6 + 2, (float) offsetNTransformed._z - centerZ);
+      vertices.add(offsetN.transformedBy(matrix, 1));
   
   
-      final Vector3D offsetPTransformed = offsetP.transformedBy(matrix, 1);
-      vertices.rawPut(i6 + 3, (float) offsetPTransformed._x - centerX);
-      vertices.rawPut(i6 + 4, (float) offsetPTransformed._y - centerY);
-      vertices.rawPut(i6 + 5, (float) offsetPTransformed._z - centerZ);
+  //    const Vector3D offsetPTransformed = offsetP.transformedBy(matrix, 1);
+  //    vertices->rawPut(i6 + 3, (float) offsetPTransformed._x - centerX);
+  //    vertices->rawPut(i6 + 4, (float) offsetPTransformed._y - centerY);
+  //    vertices->rawPut(i6 + 5, (float) offsetPTransformed._z - centerZ);
+      vertices.add(offsetP.transformedBy(matrix, 1));
     }
   
     final Vector3D center = new Vector3D(centerX, centerY, centerZ);
-    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, center, vertices, 1, 1, new Color(_color));
+  //  Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
+  //                                     true,
+  //                                     center,
+  //                                     vertices,
+  //                                     1,
+  //                                     1,
+  //                                     new Color(_color));
+    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color));
   
     // Debug unions
   //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),

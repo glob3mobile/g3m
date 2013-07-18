@@ -26,18 +26,11 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
-//  Angle(const double degrees) :
-//  _degrees( degrees ),
-//  _radians( degrees / 180.0 * 3.14159265358979323846264338327950288 )
-//  {
-//  }
-
   private Angle(double degrees, double radians)
   {
      _degrees = degrees;
      _radians = radians;
   }
-
 
   public final double _degrees;
   public final double _radians;
@@ -61,7 +54,6 @@ public class Angle
 
   public static Angle fromRadians(double radians)
   {
-//    return Angle(radians / 3.14159265358979323846264338327950288 * 180.0);
     return new Angle(((radians) * (180.0 / 3.14159265358979323846264338327950288)), radians);
   }
 
@@ -92,13 +84,11 @@ public class Angle
 
   public static Angle midAngle(Angle angle1, Angle angle2)
   {
-    //return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
     return Angle.fromRadians((angle1._radians + angle2._radians) / 2);
   }
 
   public static Angle linearInterpolation(Angle from, Angle to, double alpha)
   {
-    //return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
     return Angle.fromRadians((1.0-alpha) * from._radians + alpha * to._radians);
   }
 
