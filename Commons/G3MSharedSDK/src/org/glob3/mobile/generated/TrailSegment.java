@@ -219,12 +219,12 @@ public class TrailSegment
 
   public final Geodetic3D getLastPosition()
   {
-    return *(_positions.get(_positions.size() - 1));
+    return _positions.get(_positions.size() - 1);
   }
 
   public final Geodetic3D getPreLastPosition()
   {
-    return *(_positions.get(_positions.size() - 2));
+    return _positions.get(_positions.size() - 2);
   }
 
   public final void render(G3MRenderContext rc, GLState parentState, Frustum frustum)
