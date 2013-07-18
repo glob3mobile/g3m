@@ -287,46 +287,29 @@ public:
   void forceMatrixCreation() const{
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix().asMatrix44D();
-    getModelMatrix().asMatrix44D();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
   
-  // opengl projection matrix
-  const MutableMatrix44D& getProjectionMatrix() const{
-    if (_dirtyFlags._projectionMatrixDirty) {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-  
-  // Model matrix, computed in CPU in double precision
-  const MutableMatrix44D& getModelMatrix() const {
-    if (_dirtyFlags._modelMatrixDirty) {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
-  }
-  
-  // multiplication of model * projection
-  const MutableMatrix44D& getModelViewMatrix() const {
-    if (_dirtyFlags._modelViewMatrixDirty) {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
+
+
+//  void addProjectionAndModelGLFeatures(GLState& glState) const{
+//    glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+//    glState.addGLFeature(p, false);
+//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
+//    glState.addGLFeature(m, false);
+//  }
+
+  Matrix44D* getModelMatrix44D() const{
+    return getModelMatrix().asMatrix44D();
   }
 
-  void addProjectionAndModelGLFeatures(GLState& glState) const{
-    glState.clearGLFeatureGroup(CAMERA_GROUP);
-    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-    glState.addGLFeature(p, false);
-    ModelGLFeature* m = new ModelGLFeature(getModelMatrix().asMatrix44D());
-    glState.addGLFeature(m, false);
+  Matrix44D* getProjectionMatrix44D() const{
+    return getProjectionMatrix().asMatrix44D();
   }
-    
+
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -446,7 +429,34 @@ private:
   FrustumData calculateFrustumData() const;
   
   void _setGeodeticPosition(const Vector3D& pos);
-  
+
+  // opengl projection matrix
+  const MutableMatrix44D& getProjectionMatrix() const{
+    if (_dirtyFlags._projectionMatrixDirty) {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+
+  // Model matrix, computed in CPU in double precision
+  const MutableMatrix44D& getModelMatrix() const {
+    if (_dirtyFlags._modelMatrixDirty) {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
+
+  // multiplication of model * projection
+  const MutableMatrix44D& getModelViewMatrix() const {
+    if (_dirtyFlags._modelViewMatrixDirty) {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
+  }
+
 };
 
 #endif

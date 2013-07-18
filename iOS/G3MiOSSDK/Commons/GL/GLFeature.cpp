@@ -7,6 +7,7 @@
 //
 
 #include "GLFeature.hpp"
+#include "Camera.hpp"
 
 BillboardGLFeature::BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight):
 GLFeature(NO_GROUP){
@@ -174,4 +175,10 @@ PriorityGLFeature(COLOR_GROUP, 4)
 void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 
 }
+
+ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
+GLCameraGroupFeature(cam->getProjectionMatrix44D()){}
+
+ModelGLFeature::ModelGLFeature(const Camera* cam):
+GLCameraGroupFeature(cam->getModelMatrix44D()){}
 

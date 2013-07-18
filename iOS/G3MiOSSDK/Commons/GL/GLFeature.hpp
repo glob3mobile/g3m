@@ -15,6 +15,8 @@
 
 #include "RCObject.hpp"
 
+class Camera;
+
 class GLFeature: public RCObject {
 public:
 
@@ -121,11 +123,13 @@ public:
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
   ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model){}
+  ModelGLFeature(const Camera* cam);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
   ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection){}
+  ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{

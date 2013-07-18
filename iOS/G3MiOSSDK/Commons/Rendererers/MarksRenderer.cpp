@@ -270,18 +270,24 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
 
 //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
 
+//  if (_glState.getGLFeatureSize(CAMERA_GROUP) < 2){
+//    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures(_glState);
+//  } else{
+//    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures();
+//  }
+
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL){
-    _projection = new ProjectionGLFeature(cam->getProjectionMatrix().asMatrix44D());
+    _projection = new ProjectionGLFeature(cam);
     _glState.addGLFeature(_projection, true);
   } else{
-    _projection->setMatrix(cam->getProjectionMatrix().asMatrix44D());
+    _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL){
-    _model = new ModelGLFeature(cam->getModelMatrix().asMatrix44D());
+    _model = new ModelGLFeature(cam);
     _glState.addGLFeature(_model, true);
   } else{
-    _model->setMatrix(cam->getModelMatrix().asMatrix44D());
+    _model->setMatrix(cam->getModelMatrix44D());
   }
 }

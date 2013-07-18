@@ -129,6 +129,20 @@ public:
   }
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
+
+  int getGLFeatureSize(GLFeatureGroupName g) const{
+#ifdef C_CODE
+    const int index = g;
+#endif
+#ifdef JAVA_CODE
+    final int index = g.getValue();
+#endif
+
+    if (_featuresGroups[index] == NULL){
+      return 0;
+    }
+    return _featuresGroups[index]->size();
+  }
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */
