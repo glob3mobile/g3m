@@ -75,9 +75,6 @@ public:
     delete _specularColor;
   }
 
-//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-//  void modifyGPUProgramState(GPUProgramState& progState) const;
-
   std::string description(){
     return "SGMaterialNode";
   }

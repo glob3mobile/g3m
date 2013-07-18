@@ -61,27 +61,15 @@ public:
               const std::string& wrapT) :
   SGNode(id, sId),
   _uri(uri),
-//  _applyTo(applyTo),
-//  _blendMode(blendMode),
-//  _flipY(flipY),
-//  _magFilter(magFilter),
-//  _minFilter(minFilter),
-//  _wrapS(wrapS),
-//  _wrapT(wrapT),
   _downloadedImage(NULL),
   _textureId(NULL),
   _initialized(false)
   {
   }
   
-  //TODO: Implement
-
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void onImageDownload(IImage* image);
-
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                             const GLGlobalState& parentState);
   
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   

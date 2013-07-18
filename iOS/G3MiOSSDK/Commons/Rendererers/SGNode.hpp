@@ -80,8 +80,6 @@ public:
   SGNode* getChild(int i) const {
     return _children[i];
   }
-  
-//  virtual const GLState* getGLState(const GLState* parentGLState){ return parentGLState;}
 
   virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState){}
 

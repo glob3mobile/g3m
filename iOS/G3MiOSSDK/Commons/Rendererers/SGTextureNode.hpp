@@ -37,16 +37,8 @@ public:
   void initialize(const G3MContext* context,
                   SGShape *shape);
 
-//  void prepareRender(const G3MRenderContext* rc);
-//
-//  void cleanUpRender(const G3MRenderContext* rc);
-
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState);
-
-//  void render(const G3MRenderContext* rc,
-//              GLState* parentState,
-//              bool renderNotReadyShapes);
 
   std::string description(){
     return "SGTextureNode";

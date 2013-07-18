@@ -52,16 +52,11 @@ public:
 
   ~SGGeometryNode();
 
-
-//  void rawRender(const G3MRenderContext* rc,
-//                 const GLGlobalState& parentState, const GPUProgramState* parentProgramState);
-
   void rawRender(const G3MRenderContext* rc, const GLState* glState);
   
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState){
     _glState.setParent(parentState);
-//    _glState.getGLGlobalState()->enableDepthTest();
     return &_glState;
   }
 

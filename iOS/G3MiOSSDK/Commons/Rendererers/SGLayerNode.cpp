@@ -19,8 +19,6 @@
 
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
-//#include "GPUProgramState.hpp"
-
 
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
@@ -128,18 +126,12 @@ const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLSt
   int SG_TODO;
   
   _glState.setParent(parentGLState);
-//  _glState.getGLGlobalState()->enableBlend();
 
   int TODO_CHECK;
   _glState.clearGLFeatureGroup(COLOR_GROUP);
 
   _glState.addGLFeature(new TextureIDGLFeature(textureId,
                                                false, 0,0), false);
-
-
-//  GL* gl = rc->getGL();
-//  gl->bindTexture(textureId);
-//  _glState.getGLGlobalState()->bindTexture(textureId);
 
   return &_glState;
 }
