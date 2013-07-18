@@ -168,9 +168,6 @@ public class TrailSegment
 
   }
 
-
-  ///#include "CompositeMesh.hpp"
-  
   public void dispose()
   {
     if (_previousSegmentLastPosition != null)

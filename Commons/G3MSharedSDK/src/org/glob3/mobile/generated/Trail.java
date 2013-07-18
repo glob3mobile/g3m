@@ -70,7 +70,7 @@ public class Trail
     final int lastSegmentIndex = _segments.size() - 1;
   
     TrailSegment currentSegment;
-    if ((lastSegmentIndex < 0) || (_segments.get(lastSegmentIndex).getSize() > 32))
+    if ((lastSegmentIndex < 0) || (_segments.get(lastSegmentIndex).getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT))
     {
   
       TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);

@@ -87,3 +87,6 @@ public class TrailsRenderer extends LeafRenderer
   }
 
 }
+///#include "CompositeMesh.hpp"
+
+//#define MAX_POSITIONS_PER_SEGMENT 64
