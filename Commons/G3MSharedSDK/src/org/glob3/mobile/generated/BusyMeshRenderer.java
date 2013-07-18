@@ -119,15 +119,11 @@ public class BusyMeshRenderer extends LeafRenderer
       final int halfHeight = currentViewport[3] / 2;
       _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   
-      //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-  //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
-  
       _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
       _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
       _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
     }
   
-  //  _glState.getGLGlobalState()->setClearColor(*_backgroundColor);
     gl.clearScreen(_backgroundColor);
   
     _mesh.render(rc, _glState);

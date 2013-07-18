@@ -166,9 +166,6 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-  //  void setGLTextureIdForInversedLevel(int inversedLevel,
-  //                                      const const GLTextureId*glTextureId);
-
   public final IGLTextureId getTopLevelGLTextureId()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
@@ -183,13 +180,6 @@ public class LeveledTexturedMesh extends Mesh
     return null;
   }
 
-
-  //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-  //                                                         const const GLTextureId*glTextureId) {
-  //  const int level = _mappings->size() - inversedLevel - 1;
-  //  setGLTextureIdForLevel(level, glTextureId);
-  //}
-  
   public final boolean isTransparent(G3MRenderContext rc)
   {
     if (_mesh.isTransparent(rc))

@@ -84,10 +84,6 @@ public class SGTextureNode extends SGNode
     }
   }
 
-//  void prepareRender(const G3MRenderContext* rc);
-//
-//  void cleanUpRender(const G3MRenderContext* rc);
-
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
     if (_glState == null)
@@ -98,7 +94,6 @@ public class SGTextureNode extends SGNode
       for (int i = 0; i < layersCount; i++)
       {
         SGLayerNode layer = _layers.get(i);
-  //      layer->createGLState(rc, _glState);
         if (!layer.modifyGLState(rc, _glState))
         {
           if (_glState != null)
@@ -116,70 +111,9 @@ public class SGTextureNode extends SGNode
     return _glState;
   }
 
-//  void render(const G3MRenderContext* rc,
-//              GLState* parentState,
-//              bool renderNotReadyShapes);
-
   public final String description()
   {
     return "SGTextureNode";
   }
 
 }
-//void SGTextureNode::render(const G3MRenderContext* rc,
-//                           GLState* parentState,
-//                           bool renderNotReadyShapes) {
-//
-//  const GLState* glState = createState(rc, *parentState);
-//
-//  const int childrenCount = _children.size();
-//  for (int j = 0; j < childrenCount; j++) {
-//    SGNode* child = _children[j];
-//    child->render(rc, glState, renderNotReadyShapes);
-//  }
-//
-///*
-//
-////  const GLState* myState = createState(rc, parentState);
-//  GLState* state2 = parentState;
-////  if (myState == NULL) {
-////    state2 = parentState;
-////  }
-////  else {
-////    state2 = myState;
-////  }
-//
-////  prepareRender(rc);
-//
-//  //  rawRender(rc, *state);
-//
-//  const int layersCount = _layers.size();
-//  for (int i = 0; i < layersCount; i++) {
-//    SGLayerNode* layer = _layers[i];
-//
-//    GLState* layerState = layer->createGLState(rc, state2); //TODO: This is getGLState
-//    GLState* state;
-//    if (layerState == NULL) {
-//      state = state2;
-//    }
-//    else {
-//      state = layerState;
-//    }
-//
-//    layer->rawRender(rc, state);
-//
-//    const int childrenCount = _children.size();
-//    for (int j = 0; j < childrenCount; j++) {
-//      SGNode* child = _children[j];
-//      child->render(rc, state, renderNotReadyShapes);
-//    }
-//
-////    delete layerState;
-//  }
-//  
-////  cleanUpRender(rc);
-//
-////  delete myState;
-// 
-// */
-//}

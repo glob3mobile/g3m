@@ -44,19 +44,6 @@ public class MarksRenderer extends LeafRenderer
 
   private void updateGLState(G3MRenderContext rc)
   {
-  //  GPUProgramState* progState = _glState.getGPUProgramState();
-  //  const Camera* cc = rc->getCurrentCamera();
-    //progState->setUniformMatrixValue(MODELVIEW, cc->getModelViewMatrix(), false);
-  //  _glState.setModelView(cc->getModelViewMatrix().asMatrix44D(), false);
-  
-  //  progState->setUniformValue(VIEWPORT_EXTENT, cc->getWidth(), cc->getHeight());
-  
-  //  if (_glState.getGLFeatureSize(CAMERA_GROUP) < 2){
-  //    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures(_glState);
-  //  } else{
-  //    rc->getCurrentCamera()->updateProjectionAndModelGLFeatures();
-  //  }
-  
     final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
@@ -150,9 +137,7 @@ public class MarksRenderer extends LeafRenderer
     final Camera camera = rc.getCurrentCamera();
     final Vector3D cameraPosition = camera.getCartesianPosition();
   
-    //TODO: AT_WORK
     updateGLState(rc);
-    //camera->addProjectionAndModelGLFeatures(_glState);
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -245,15 +230,9 @@ public class MarksRenderer extends LeafRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
-  //<<<<<<< HEAD
-  //        const Vector2I markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
-  //
-  //        const RectangleI markPixelBounds(markPixel._x - (textureWidth / 2),
-  //=======
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
           final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
-  //>>>>>>> webgl-port
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {

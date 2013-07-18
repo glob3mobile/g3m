@@ -112,40 +112,10 @@ public class SGNode
   
   }
 
-
-  //const GLState* SGNode::createState(const G3MRenderContext* rc,
-  //                                   const GLState& parentState) {
-  //  return  NULL;
-  //}
-  
-  
-  //void SGNode::render(const G3MRenderContext* rc,
-  //                    const GLState& parentState,
-  //                    bool renderNotReadyShapes) {
-  //  const GLState* myState = createState(rc, parentState);
-  //  const GLState* state;
-  //  if (myState == NULL) {
-  //    state = &parentState;
-  //  }
-  //  else {
-  //    state = myState;
-  //  }
-  //
-  //  prepareRender(rc);
-  //
-  //  rawRender(rc, *state);
-  //
-  //  const int childrenCount = _children.size();
-  //  for (int i = 0; i < childrenCount; i++) {
-  //    SGNode* child = _children[i];
-  //    child->render(rc, *stuuujuuate, renderNotReadyShapes);
-  //  }
-  //}
-  
   public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
   
-    ILogger.instance().logInfo("Rendering SG: " + description());
+  //  ILogger::instance()->logInfo("Rendering SG: " + description());
   
     final GLState glState = createState(rc, parentGLState);
     if (glState != null)
@@ -184,8 +154,6 @@ public class SGNode
   {
     return _children.get(i);
   }
-
-//  virtual const GLState* getGLState(const GLState* parentGLState){ return parentGLState;}
 
   public void rawRender(G3MRenderContext rc, GLState parentGLState)
   {

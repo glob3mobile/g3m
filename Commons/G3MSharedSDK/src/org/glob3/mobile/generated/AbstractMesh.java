@@ -106,43 +106,15 @@ public abstract class AbstractMesh extends Mesh
   protected final void createGLState()
   {
   
-  //  GLGlobalState* globalState = _glState.getGLGlobalState();
-  
-  //  globalState->setLineWidth(_lineWidth);
-  //  if (_depthTest){
-  //    globalState->enableDepthTest();
-  //  } else{
-  //    globalState->disableDepthTest();
-  //  }
-  
-  //  if (_flatColor != NULL && _flatColor->isTransparent()){
-  //    globalState->enableBlend();
-  //    globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  //  }
-  
-  //  GPUProgramState& progState = *_glState.getGPUProgramState();
-  
-  
-  
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_translationMatrix != null)
     {
-      //progState.setUniformMatrixValue(MODELVIEW, *_translationMatrix, true);
-  //    _glState.setModelView(_translationMatrix->asMatrix44D(), true);
-  
       _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
     }
   
     if (_flatColor != null && _colors == null) //FlatColorMesh Shader
     {
-  //    progState.setAttributeValue(POSITION,
-  //                                _vertices, 4, //The attribute is a float vector of 4 elements
-  //                                3,            //Our buffer contains elements of 3
-  //                                0,            //Index 0
-  //                                false,        //Not normalized
-  //                                0);           //Stride 0
-      //progState.setUniformValue(FLAT_COLOR, *_flatColor);
   
       _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   
@@ -152,52 +124,11 @@ public abstract class AbstractMesh extends Mesh
       return;
     }
   
-  
-  //  progState.setUniformValue(POINT_SIZE, _pointSize);
-  
-  //  progState.setAttributeValue(POSITION,
-  //                              _vertices, 4, //The attribute is a float vector of 4 elements
-  //                              3,            //Our buffer contains elements of 3
-  //                              0,            //Index 0
-  //                              false,        //Not normalized
-  //                              0);           //Stride 0
-  
     if (_colors != null)
     {
-      //    progState.setUniformValue(EnableColorPerVertex, true);
-      //    progState.setAttributeValue(COLOR,
-      //                                _colors, 4,   //The attribute is a float vector of 4 elements RGBA
-      //                                4,            //Our buffer contains elements of 4
-      //                                0,            //Index 0
-      //                                false,        //Not normalized
-      //                                0);           //Stride 0
-  
       _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
   
-      //    progState.setUniformValue(ColorPerVertexIntensity, _colorsIntensity);
     }
-    else
-    {
-      //    progState.setAttributeDisabled(COLOR);
-      //    progState.setUniformValue(EnableColorPerVertex, false);
-      //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-    }
-  
-    //  if (_flatColor != NULL){
-    //    progState.setUniformValue(EnableFlatColor, true);
-    //    progState.setUniformValue(FLAT_COLOR,
-    //                              (double)_flatColor->getRed(),
-    //                              (double)_flatColor->getGreen(),
-    //                              (double) _flatColor->getBlue(),
-    //                              (double) _flatColor->getAlpha());
-    //
-    //    progState.setUniformValue(FlatColorIntensity, _colorsIntensity);
-    //  } else{
-    //    progState.setUniformValue(EnableFlatColor, false);
-    //    progState.setUniformValue(ColorPerVertexIntensity, (float)0.0);
-    //    progState.setUniformValue(FLAT_COLOR, (float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    //    progState.setUniformValue(FlatColorIntensity, (float)0.0);
-    //  }
   }
 
 

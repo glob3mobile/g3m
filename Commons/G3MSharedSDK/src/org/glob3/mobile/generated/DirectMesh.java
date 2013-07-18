@@ -19,13 +19,6 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
-  //void rawRender(const G3MRenderContext* rc) const {
-  ////  GL* gl = rc->getGL();
-  //
-  ////  const int verticesCount = getVertexCount();
-  ////  gl->drawArrays(_primitive, 0, verticesCount, _GLGlobalState, *rc->getGPUProgramManager(), &_progState);
-  //}
-  
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();

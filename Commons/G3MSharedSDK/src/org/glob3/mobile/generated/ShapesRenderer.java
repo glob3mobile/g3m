@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "GPUProgramState.hpp"
 
 public class ShapesRenderer extends LeafRenderer
 {
@@ -28,7 +27,6 @@ public class ShapesRenderer extends LeafRenderer
 
   private GLState _glState = new GLState();
   private GLState _glStateTransparent = new GLState();
-//  void createGLState();
 
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
@@ -70,7 +68,6 @@ public class ShapesRenderer extends LeafRenderer
      _context = null;
      _projection = null;
      _model = null;
-//    createGLState();
   }
 
   public void dispose()
@@ -182,13 +179,6 @@ public class ShapesRenderer extends LeafRenderer
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
-  //  MutableMatrix44D m = rc->getCurrentCamera()->getModelViewMatrix();
-  //  _glState.setModelView(m.asMatrix44D(), false);
-  //  _glStateTransparent.setModelView(m.asMatrix44D(), false);
-  
-    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glStateTransparent);
-    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
-  
     updateGLState(rc);
   
   

@@ -272,18 +272,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       final boolean texturedInside = false;
       final boolean mercator = false;
   
-  //    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
-  //    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
-  
-  //    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-  //                                          rc->getPlanet()->getRadii(),
-  //                                          resolution,
-  //                                          borderWidth,
-  //                                          texturedInside,
-  //                                          mercator,
-  //                                          surfaceColor,
-  //                                          borderColor);
-  
       _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle.zero(), Angle.zero(), 0), _parameters._incompletePlanetTexureURL, rc.getPlanet().getRadii(), resolution, borderWidth, texturedInside, mercator);
   
     }
@@ -394,23 +382,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     {
       _elevationDataProvider.initialize(context);
     }
-  
-    //Initializing program State
-  //  _programState.setUniformValue("BillBoard", false);
-  //  _programState.setUniformValue(EnableTexture, false);
-  //  _programState.setUniformValue(POINT_SIZE, (float)1.0);
-  //  _programState.setUniformValue("TextureExtent", Vector2D(0.0,0.0));
-  //  _programState.setUniformValue("ViewPortExtent", Vector2D(0.0,0.0));
   }
 
   public final void render(G3MRenderContext rc)
   {
   
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-  //  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-  //  _glState.getGLGlobalState()->enableDepthTest();
-  
-    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
     updateGLState(rc);
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)

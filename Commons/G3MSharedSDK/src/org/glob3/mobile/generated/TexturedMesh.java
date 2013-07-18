@@ -31,12 +31,6 @@ public class TexturedMesh extends Mesh
 
   private void createGLState()
   {
-  //  GLGlobalState& globalState = *_glState.getGLGlobalState();
-  //  if (_transparent) {
-  //    globalState.enableBlend();
-  //    globalState.setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  //  }
-  
     _textureMapping.modifyGLState(_glState);
   }
 
@@ -49,7 +43,6 @@ public class TexturedMesh extends Mesh
      _textureMapping = textureMapping;
      _ownedTexMapping = ownedTexMapping;
      _transparent = transparent;
-    //addChild((Mesh*)mesh); //New and only child (not const)!!
     createGLState();
   }
 
@@ -67,9 +60,6 @@ public class TexturedMesh extends Mesh
     }
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
   public final void render(G3MRenderContext rc)
   {
     _mesh.render(rc);

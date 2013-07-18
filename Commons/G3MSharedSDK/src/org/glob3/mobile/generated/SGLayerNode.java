@@ -81,13 +81,6 @@ public class SGLayerNode extends SGNode
 
 
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
-//  _applyTo(applyTo),
-//  _blendMode(blendMode),
-//  _flipY(flipY),
-//  _magFilter(magFilter),
-//  _minFilter(minFilter),
-//  _wrapS(wrapS),
-//  _wrapT(wrapT),
   {
      super(id, sId);
      _uri = uri;
@@ -95,8 +88,6 @@ public class SGLayerNode extends SGNode
      _textureId = null;
      _initialized = false;
   }
-
-  //TODO: Implement
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
@@ -119,44 +110,31 @@ public class SGLayerNode extends SGNode
     _downloadedImage = image;
   }
 
-//  GLGlobalState* createState(const G3MRenderContext* rc,
-//                             const GLGlobalState& parentState);
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);
 
-  public final GLState createGLState(G3MRenderContext rc, GLState parentGLState)
-  {
-    if (!_initialized)
-    {
-      _initialized = true;
-      requestImage(rc);
-    }
-  
-    final IGLTextureId textureId = getTextureId(rc);
-    if (textureId == null)
-    {
-      return null;
-    }
-  
-    int SG_TODO;
-  
-    _glState.setParent(parentGLState);
-  //  _glState.getGLGlobalState()->enableBlend();
-  
-    int TODO_CHECK;
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
-  
-    _glState.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
-  
-  
-  //  GL* gl = rc->getGL();
-  //  gl->bindTexture(textureId);
-  //  _glState.getGLGlobalState()->bindTexture(textureId);
-  
-    return _glState;
-  }
+//  const GLState* createGLState(const G3MRenderContext* rc, const GLState* parentGLState);
 
+
+  //const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
+  //  if (!_initialized) {
+  //    _initialized = true;
+  //    requestImage(rc);
+  //  }
+  //
+  //  const IGLTextureId* textureId = getTextureId(rc);
+  //  if (textureId == NULL) {
+  //    return NULL;
+  //  }
+  //  _glState.setParent(parentGLState);
+  //  _glState.clearGLFeatureGroup(COLOR_GROUP);
+  //
+  //  _glState.addGLFeature(new TextureIDGLFeature(textureId,
+  //                                               false, 0,0), false);
+  //
+  //  return &_glState;
+  //}
+  
   public final boolean modifyGLState(G3MRenderContext rc, GLState state)
   {
   
@@ -171,8 +149,6 @@ public class SGLayerNode extends SGNode
     {
       return false;
     }
-  
-    int TODO_CHECK;
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
     state.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);

@@ -97,24 +97,6 @@ public class Mark
     _viewportHeight = viewportHeight;
     _viewportWidth = viewportWidth;
   
-    //  GLGlobalState *globalState = _glState.getGLGlobalState();
-  
-    //  globalState->disableDepthTest();
-    //  globalState->enableBlend();
-    //  globalState->setBlendFactors(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-    //  globalState->bindTexture(_textureId);
-  
-    //  GPUProgramState* progState = _glState.getGPUProgramState();
-  
-  
-  
-    //  progState->setAttributeValue(TEXTURE_COORDS,
-    //                               _billboardTexCoord, 2,
-    //                               2,
-    //                               0,
-    //                               false,
-    //                               0);
-  
     if (_vertices == null)
     {
       final Vector3D pos = new Vector3D(planet.toCartesian(_position));
@@ -127,21 +109,8 @@ public class Mark
       _vertices = vertex.create();
     }
   
-    //  progState->setAttributeValue(POSITION,
-    //                               _vertices, 4, //The attribute is a float vector of 4 elements
-    //                               3,            //Our buffer contains elements of 3
-    //                               0,            //Index 0
-    //                               false,        //Not normalized
-    //                               0);           //Stride 0
-  
-    //  progState->setUniformValue(TEXTURE_EXTENT, _textureWidth, _textureHeight);
-  
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
     _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
-  
-    //TODO: TEST
-    //  MutableMatrix44D id = MutableMatrix44D::identity();
-    //  _glState.addGLFeature(new ModelTransformGLFeature(id.asMatrix44D()));
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   }

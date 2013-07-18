@@ -17,9 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "GPUProgramState.hpp"
-
-
 //class Mesh;
 
 
@@ -28,17 +25,6 @@ public class MeshRenderer extends LeafRenderer
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
   private GLState _glState = new GLState();
-  private void createGLState()
-  {
-  
-  //  _glState.getGLGlobalState()->enableDepthTest();
-  
-  //  GPUProgramState& progState = *_glState.getGPUProgramState();
-  //  progState.setUniformValue(EnableTexture, false);
-  //  progState.setUniformValue(POINT_SIZE, (float)1.0);
-  //  progState.setUniformValue(SCALE_TEXTURE_COORDS, Vector2D(1.0,1.0));
-  //  progState.setUniformValue(TRANSLATION_TEXTURE_COORDS, Vector2D(0.0,0.0));
-  }
 
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
@@ -71,7 +57,6 @@ public class MeshRenderer extends LeafRenderer
   {
      _projection = null;
      _model = null;
-    createGLState();
   }
 
   public void dispose()
@@ -130,12 +115,6 @@ public class MeshRenderer extends LeafRenderer
   public final void render(G3MRenderContext rc)
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-  
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, rc->getCurrentCamera()->getModelViewMatrix(), false);
-  //  _glState.setModelView(rc->getCurrentCamera()->getModelViewMatrix().asMatrix44D(), false);
-  
-  
-    //rc->getCurrentCamera()->addProjectionAndModelGLFeatures(_glState);
     updateGLState(rc);
   
   
@@ -143,17 +122,10 @@ public class MeshRenderer extends LeafRenderer
     for (int i = 0; i < meshesCount; i++)
     {
       Mesh mesh = _meshes.get(i);
-  //<<<<<<< HEAD
-  //    const Extent* extent = mesh->getExtent();
-  //
-  //    if ( extent->touches(frustum) ) {
-  //      mesh->render(rc, &_glState);
-  //=======
       final BoundingVolume boundingVolume = mesh.getBoundingVolume();
       if (boundingVolume.touchesFrustum(frustum))
       {
         mesh.render(rc, _glState);
-  //>>>>>>> webgl-port
       }
     }
   }

@@ -63,8 +63,6 @@ public class LazyTextureMapping extends TextureMapping
     releaseGLTextureId();
   }
 
-  //void bind(const G3MRenderContext* rc, const GLGlobalState& parentState) const;
-
   public final boolean isValid()
   {
     return _glTextureId != null;
@@ -95,10 +93,6 @@ public class LazyTextureMapping extends TextureMapping
   
   public final void modifyGLState(GLState state)
   {
-  
-  //  GLGlobalState* glGlobalState = state.getGLGlobalState();
-  //  GPUProgramState* progState = state.getGPUProgramState();
-  
     if (!_initialized)
     {
       _initializer.initialize();
@@ -116,24 +110,6 @@ public class LazyTextureMapping extends TextureMapping
   
     if (_texCoords != null)
     {
-  //    glGlobalState->bindTexture(_glTextureId);
-  //
-  //    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
-  //      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
-  //      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
-  //    } else{
-  //      //ILogger::instance()->logInfo("No transformed TC");
-  //      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
-  //      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
-  //    }
-  //
-  //    progState->setAttributeValue(TEXTURE_COORDS,
-  //                                 _texCoords, 2,
-  //                                 2,
-  //                                 0,
-  //                                 false,
-  //                                 0);
-  //
       state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
       if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0))
