@@ -12,12 +12,12 @@ public final class FloatBuffer_WebGL
             IFloatBuffer {
 
    private final JavaScriptObject _buffer;
-   private int                    _timestamp   = 0;
-   private int 				      _bufferTimeStamp = -1;
+   private int                    _timestamp       = 0;
+   private int                    _bufferTimeStamp = -1;
 
 
-   private JavaScriptObject       _webGLBuffer = null;
-   private JavaScriptObject       _gl          = null;
+   private JavaScriptObject       _webGLBuffer     = null;
+   private JavaScriptObject       _gl              = null;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
@@ -27,20 +27,21 @@ public final class FloatBuffer_WebGL
       }
       return _webGLBuffer;
    }
-   
+
+
    public JavaScriptObject bindVBO(final JavaScriptObject gl) {
-	      if (_webGLBuffer == null) {
-	         _gl = gl;
-	         _webGLBuffer = jsCreateWebGLBuffer();
-	      }
-	      jsBindWebGLBuffer(gl);
-	      if (_bufferTimeStamp != _timestamp){
-	    	  _bufferTimeStamp = _timestamp;
-	    	  jsDataToVBO(gl);
-	      }
-	      
-	      return _webGLBuffer;
-	   }
+      if (_webGLBuffer == null) {
+         _gl = gl;
+         _webGLBuffer = jsCreateWebGLBuffer();
+      }
+      jsBindWebGLBuffer(gl);
+      if (_bufferTimeStamp != _timestamp) {
+         _bufferTimeStamp = _timestamp;
+         jsDataToVBO(gl);
+      }
+
+      return _webGLBuffer;
+   }
 
 
    @Override
@@ -55,14 +56,17 @@ public final class FloatBuffer_WebGL
 
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl.createBuffer();
+		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl
+				.createBuffer();
    }-*/;
-   
+
+
    private native void jsBindWebGLBuffer(final JavaScriptObject gl) /*-{
 		var buffer = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_webGLBuffer;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
    }-*/;
-   
+
+
    private native void jsDataToVBO(final JavaScriptObject gl) /*-{
 		var buffer = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_webGLBuffer;
 		var array = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
@@ -107,7 +111,7 @@ public final class FloatBuffer_WebGL
 
 
    public FloatBuffer_WebGL(final float[] array) {
-	  final int size = array.length;
+      final int size = array.length;
       _buffer = jsCreateBuffer(size);
       for (int i = 0; i < size; i++) {
          rawPut(i, array[i]);
