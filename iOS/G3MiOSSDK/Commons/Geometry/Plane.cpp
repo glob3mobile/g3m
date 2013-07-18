@@ -2,7 +2,7 @@
 //  Plane.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 14/07/12.
+//  Created by Agustin Trujillo Pino on 14/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
