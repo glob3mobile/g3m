@@ -30,10 +30,25 @@ public class Angle
   {
      _degrees = degrees;
      _radians = radians;
+     _sin = 2;
+     _cos = 2;
   }
+
+  private double _sin;
+  private double _cos;
 
   public final double _degrees;
   public final double _radians;
+
+
+  public Angle(Angle angle)
+  {
+     _degrees = angle._degrees;
+     _radians = angle._radians;
+     _sin = angle._sin;
+     _cos = angle._cos;
+
+  }
 
   public static Angle fromDegrees(double degrees)
   {
@@ -97,26 +112,45 @@ public class Angle
     return IMathUtils.instance().isNan(_degrees);
   }
 
-  public Angle(Angle angle)
-  {
-     _degrees = angle._degrees;
-     _radians = angle._radians;
-
-  }
-
   public final double sinus()
   {
-    return java.lang.Math.sin( _radians );
+    if (_sin > 1)
+    {
+      _sin = SIN(_radians);
+    }
+    return _sin;
+///#ifdef C_CODE
+//    return IMathUtils::instance()->sin( _radians );
+///#endif
+///#ifdef JAVA_CODE
+//    return java.lang.Math.sin( _radians );
+///#endif
   }
 
   public final double cosinus()
   {
-    return java.lang.Math.cos( _radians );
+    if (_cos > 1)
+    {
+      _cos = COS(_radians);
+    }
+    return _cos;
+///#ifdef C_CODE
+//    return IMathUtils::instance()->cos( _radians );
+///#endif
+///#ifdef JAVA_CODE
+//    return java.lang.Math.cos( _radians );
+///#endif
   }
 
   public final double tangent()
   {
-    return java.lang.Math.tan( _radians );
+    return TAN(_radians);
+///#ifdef C_CODE
+//    return IMathUtils::instance()->tan( _radians );
+///#endif
+///#ifdef JAVA_CODE
+//    return java.lang.Math.tan( _radians );
+///#endif
   }
 
   public final double degrees()

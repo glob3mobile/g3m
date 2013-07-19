@@ -17,6 +17,13 @@ package org.glob3.mobile.generated;
 
 
 
+
+#define SIN(x) java.lang.Math.sin(x)
+#define COS(x) java.lang.Math.cos(x)
+#define TAN(x) java.lang.Math.tan(x)
+
+
+
 public abstract class IMathUtils
 {
   private static IMathUtils _instance = null;
