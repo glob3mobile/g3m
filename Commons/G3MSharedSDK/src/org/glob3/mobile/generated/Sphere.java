@@ -20,9 +20,6 @@ package org.glob3.mobile.generated;
 
 public class Sphere extends BoundingVolume
 {
-  private final Vector3D _center ;
-  private final double _radius;
-  private final double _radiusSquared;
 
   private Mesh _mesh;
 
@@ -82,6 +79,11 @@ public class Sphere extends BoundingVolume
   
     _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
   }
+
+
+  public final Vector3D _center ;
+  public final double _radius;
+  public final double _radiusSquared;
 
 
   public Sphere(Vector3D center, double radius)

@@ -102,13 +102,13 @@ public class SubviewElevationData extends ElevationData
   //
   //  const double parentX = (
   //                          ( position._longitude._radians - parentLower._longitude._radians )
-  //                          / parentSector.getDeltaLongitude()._radians
+  //                          / parentSector._deltaLongitude._radians
   //                          * elevationData->getExtentWidth()
   //                          );
   //
   //  const double parentY = (
   //                          ( position._latitude._radians - parentLower._latitude._radians )
-  //                          / parentSector.getDeltaLatitude()._radians
+  //                          / parentSector._deltaLatitude._radians
   //                          * elevationData->getExtentHeight()
   //                          );
   //

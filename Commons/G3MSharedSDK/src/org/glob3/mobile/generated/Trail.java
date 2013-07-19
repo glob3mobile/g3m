@@ -1,34 +1,12 @@
 package org.glob3.mobile.generated; 
-//
-//  TrailsRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 10/23/12.
-//
-//
-
-//
-//  TrailsRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 10/23/12.
-//
-//
-
-
-
-//class Mesh;
-//class Planet;
-
 public class Trail
 {
   private boolean _visible;
-  private final int _maxSteps;
-  private boolean _positionsDirty;
 
   private Color _color ;
   private final float _ribbonWidth;
 
+<<<<<<< HEAD
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
   private Mesh createMesh(Planet planet)
@@ -119,20 +97,12 @@ public class Trail
   
     return surfaceMesh;
   }
+=======
+  private java.util.ArrayList<TrailSegment> _segments = new java.util.ArrayList<TrailSegment>();
+>>>>>>> webgl-port
 
-  private Mesh _mesh;
-  private Mesh getMesh(Planet planet)
-  {
-    if (_positionsDirty || (_mesh == null))
-    {
-      if (_mesh != null)
-         _mesh.dispose();
-      _mesh = createMesh(planet);
-      _positionsDirty = false;
-    }
-    return _mesh;
-  }
 
+<<<<<<< HEAD
   private GLState _glState = new GLState();
 
   private void updateGLState(G3MRenderContext rc)
@@ -163,11 +133,11 @@ public class Trail
   private ModelGLFeature _model;
 
   public Trail(int maxSteps, Color color, float ribbonWidth)
+=======
+  public Trail(Color color, float ribbonWidth)
+>>>>>>> webgl-port
   {
-     _maxSteps = maxSteps;
      _visible = true;
-     _positionsDirty = true;
-     _mesh = null;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
      _projection = null;
@@ -176,22 +146,38 @@ public class Trail
 
   public void dispose()
   {
-    if (_mesh != null)
-       _mesh.dispose();
-  
-    final int positionsSize = _positions.size();
-    for (int i = 0; i < positionsSize; i++)
+    //  delete _mesh;
+    //
+    //  const int positionsSize = _positions.size();
+    //  for (int i = 0; i < positionsSize; i++) {
+    //    const Geodetic3D* position = _positions[i];
+    //    delete position;
+    //  }
+    final int segmentsSize = _segments.size();
+    for (int i = 0; i < segmentsSize; i++)
     {
-      final Geodetic3D position = _positions.get(i);
-      if (position != null)
-         position.dispose();
+      TrailSegment segment = _segments.get(i);
+      if (segment != null)
+         segment.dispose();
     }
   }
 
+<<<<<<< HEAD
   public final void render(G3MRenderContext rc)
+=======
+  public final void render(G3MRenderContext rc, GLState parentState, Frustum frustum)
+>>>>>>> webgl-port
   {
+  //  if (_visible) {
+  //    Mesh* mesh = getMesh(rc->getPlanet());
+  //    if (mesh != NULL) {
+  //      mesh->render(rc, parentState);
+  //    }
+  //  }
+  
     if (_visible)
     {
+<<<<<<< HEAD
   
       Mesh mesh = getMesh(rc.getPlanet());
       if (mesh != null)
@@ -200,6 +186,13 @@ public class Trail
         updateGLState(rc);
   
         mesh.render(rc, _glState);
+=======
+      final int segmentsSize = _segments.size();
+      for (int i = 0; i < segmentsSize; i++)
+      {
+        TrailSegment segment = _segments.get(i);
+        segment.render(rc, parentState, frustum);
+>>>>>>> webgl-port
       }
     }
   }
@@ -216,21 +209,30 @@ public class Trail
 
   public final void addPosition(Geodetic3D position)
   {
-    _positionsDirty = true;
-
-    if (_maxSteps > 0)
+  
+    final int lastSegmentIndex = _segments.size() - 1;
+  
+    TrailSegment currentSegment;
+    if ((lastSegmentIndex < 0) || (_segments.get(lastSegmentIndex).getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT))
     {
-      while (_positions.size() >= _maxSteps)
+  
+      TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
+      if (lastSegmentIndex >= 0)
       {
-        final int index = 0;
-        if (_positions.get(index) != null)
-           _positions.get(index).dispose();
-
-        _positions.remove( index );
+        TrailSegment previousSegment = _segments.get(lastSegmentIndex);
+        previousSegment.setNextSegmentFirstPosition(position);
+        newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
+        newSegment.addPosition(previousSegment.getLastPosition());
       }
+      _segments.add(newSegment);
+      currentSegment = newSegment;
     }
-
-    _positions.add(new Geodetic3D(position));
+    else
+    {
+      currentSegment = _segments.get(lastSegmentIndex);
+    }
+  
+    currentSegment.addPosition(position);
   }
 
 }

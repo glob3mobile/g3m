@@ -2,7 +2,7 @@
 //  BusyQuadRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 

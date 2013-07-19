@@ -2,7 +2,7 @@
 //  EAGLView.m
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -59,7 +59,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
 {
-//<<<<<<< HEAD
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
   
@@ -81,25 +80,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   periodicalTasks,
                                   gpuProgramManager); //GPUProgramManager
     [self widget]->setUserData(userData);
-//=======
-//  _widgetVP = G3MWidget::create([_renderer getGL],
-//                                storage,
-//                                downloader,
-//                                threadUtils,
-//                                cameraActivityListener,
-//                                planet,
-//                                cameraConstraints,
-//                                cameraRenderer,
-//                                mainRenderer,
-//                                busyRenderer,
-//                                backgroundColor,
-//                                logFPS,
-//                                logDownloaderStatistics,
-//                                initializationTask,
-//                                autoDeleteInitializationTask,
-//                                periodicalTasks);
-//  [self widget]->setUserData(userData);
-//>>>>>>> webgl-port
 }
 
 - (GL*)getGL {

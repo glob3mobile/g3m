@@ -105,7 +105,12 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
 
   const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+#ifdef C_CODE
   const double angleInRadians = IMathUtils::instance()->acos(dot);
+#endif
+#ifdef JAVA_CODE
+  final double angleInRadians = java.lang.Math.acos(dot);
+#endif
 
   return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );
 }

@@ -54,8 +54,8 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
   }
 
   const Sector sector = tileSector.intersection(_sector);
-  if (sector.getDeltaLatitude().isZero() ||
-      sector.getDeltaLongitude().isZero() ) {
+  if (sector._deltaLatitude.isZero() ||
+      sector._deltaLongitude.isZero() ) {
     return petitions;
   }
 
@@ -80,9 +80,9 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
   isb->addInt(_parameters->_tileTextureResolution._y);
 
   isb->addString("&ctr=");
-  isb->addDouble(tileSector.getCenter()._latitude._degrees);
+  isb->addDouble(tileSector._center._latitude._degrees);
   isb->addString(",");
-  isb->addDouble(tileSector.getCenter()._longitude._degrees);
+  isb->addDouble(tileSector._center._longitude._degrees);
 
 //  isb->addString("&poi=");
 //  isb->addDouble(tileSector._lower._latitude._degrees);

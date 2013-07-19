@@ -17,16 +17,18 @@
 
 class Sphere : public BoundingVolume {
 private:
-  const Vector3D _center;
-  const double   _radius;
-  const double   _radiusSquared;
-  
+
   mutable Mesh *_mesh;
   void createWireframeMesh(Color* flatColor,
                            short resolution) const;
 
  
 public:
+  const Vector3D _center;
+  const double   _radius;
+  const double   _radiusSquared;
+
+
   Sphere(const Vector3D& center,
          double radius):
   _center(center),

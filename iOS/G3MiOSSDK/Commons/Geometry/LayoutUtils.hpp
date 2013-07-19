@@ -2,7 +2,7 @@
 //  LayoutUtils.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 

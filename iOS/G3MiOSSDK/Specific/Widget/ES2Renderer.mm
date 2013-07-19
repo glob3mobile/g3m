@@ -2,7 +2,7 @@
 //  ES2Renderer.m
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 

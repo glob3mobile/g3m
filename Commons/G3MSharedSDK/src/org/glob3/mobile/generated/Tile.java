@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  Tile.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  Tile.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -402,7 +402,7 @@ public class Tile
       final double minHeight = getMinHeight() * _verticalExaggeration;
       final double maxHeight = getMaxHeight() * _verticalExaggeration;
   
-      final Vector3D v0 = planet.toCartesian(_sector.getCenter(), maxHeight);
+      final Vector3D v0 = planet.toCartesian(_sector._center, maxHeight);
       final Vector3D v1 = planet.toCartesian(_sector.getNE(), minHeight);
       final Vector3D v2 = planet.toCartesian(_sector.getNW(), minHeight);
       final Vector3D v3 = planet.toCartesian(_sector.getSE(), minHeight);
@@ -582,8 +582,8 @@ public class Tile
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
-    //         _sector.getDeltaLatitude().description().c_str(),
-    //         _sector.getDeltaLongitude().description().c_str()
+    //         _sector._deltaLatitude.description().c_str(),
+    //         _sector._deltaLongitude.description().c_str()
     //         );
   }
 

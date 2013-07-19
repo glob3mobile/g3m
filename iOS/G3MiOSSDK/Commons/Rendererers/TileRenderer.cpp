@@ -2,7 +2,7 @@
 //  TileRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -303,8 +303,8 @@ void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
   const Angle fromLatitude  = parameters->_topSector._lower._latitude;
   const Angle fromLongitude = parameters->_topSector._lower._longitude;
 
-  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
+  const Angle deltaLan = parameters->_topSector._deltaLatitude;
+  const Angle deltaLon = parameters->_topSector._deltaLongitude;
 
   const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
   const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;

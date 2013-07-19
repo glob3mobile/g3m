@@ -130,7 +130,8 @@ public final class Factory_Android
    public void createImageFromBuffer(final IByteBuffer buffer,
                                      final IImageListener listener,
                                      final boolean autodelete) {
-      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      //      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer();
       final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
       final Image_Android result;
       if (bitmap == null) {

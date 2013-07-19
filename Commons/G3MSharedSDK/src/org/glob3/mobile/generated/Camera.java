@@ -503,8 +503,8 @@ public class Camera
   public final double getProjectedSphereArea(Sphere sphere)
   {
     // this implementation is not right exact, but it's faster.
-    final double z = sphere.getCenter().distanceTo(getCartesianPosition());
-    final double rWorld = sphere.getRadius() * _frustumData._znear / z;
+    final double z = sphere._center.distanceTo(getCartesianPosition());
+    final double rWorld = sphere._radius * _frustumData._znear / z;
     final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
     return IMathUtils.instance().pi() * rScreen * rScreen;
   }

@@ -2,7 +2,7 @@
 //  GL.cpp
 //  Glob3 Mobile
 //
-//  Created by Agustín Trujillo Pino on 02/05/11.
+//  Created by Agustin Trujillo Pino on 02/05/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 

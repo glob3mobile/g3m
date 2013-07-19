@@ -510,6 +510,7 @@ public final class G3MWidget_Android
       getG3MWidget().stopCameraAnimation();
    }
 
+
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }

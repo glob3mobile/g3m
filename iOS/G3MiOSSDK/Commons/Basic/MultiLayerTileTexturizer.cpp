@@ -358,8 +358,8 @@ public:
                                 const Sector& innerSector) const {
     //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
 
-    const double widthFactor  = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    const double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+    const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+    const double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
 
     const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
 

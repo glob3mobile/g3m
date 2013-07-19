@@ -74,14 +74,28 @@ public class TrailsRenderer extends LeafRenderer
   public final void render(G3MRenderContext rc)
   {
     final int trailsCount = _trails.size();
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
+<<<<<<< HEAD
       trail.render(rc);
+=======
+      if (trail != null)
+      {
+        trail.render(rc, parentState, frustum);
+      }
+>>>>>>> webgl-port
     }
   }
 
 }
+<<<<<<< HEAD
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer
 
+=======
+///#include "CompositeMesh.hpp"
+
+//#define MAX_POSITIONS_PER_SEGMENT 64
+>>>>>>> webgl-port
