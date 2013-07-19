@@ -68,7 +68,7 @@ public class BusyMeshRenderer extends LeafRenderer
     final float r2 = 18F;
     for (int step = 0; step<=numStrides; step++)
     {
-      final double angle = (double) step * 2 * IMathUtils.pi() / numStrides;
+      final double angle = (double) step * 2 * DefineConstants.PI / numStrides;
       final double c = IMathUtils.instance().cos(angle);
       final double s = IMathUtils.instance().sin(angle);
   

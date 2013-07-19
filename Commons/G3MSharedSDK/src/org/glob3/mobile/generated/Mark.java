@@ -542,7 +542,7 @@ public class Mark
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
+      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > DefineConstants.HALF_PI)
       {
   
         if (_textureId == null)

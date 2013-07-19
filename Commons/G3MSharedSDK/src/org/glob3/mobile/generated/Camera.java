@@ -506,7 +506,7 @@ public class Camera
     final double z = sphere._center.distanceTo(getCartesianPosition());
     final double rWorld = sphere._radius * _frustumData._znear / z;
     final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
-    return IMathUtils.instance().pi() * rScreen * rScreen;
+    return DefineConstants.PI * rScreen * rScreen;
   }
 
   private Angle getHeading(Vector3D normal)
