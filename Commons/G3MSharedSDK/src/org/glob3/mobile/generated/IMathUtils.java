@@ -18,9 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
-#define SIN(x) java.lang.Math.sin(x)
-#define COS(x) java.lang.Math.cos(x)
-#define TAN(x) java.lang.Math.tan(x)
+//#define SIN(x) java.lang.Math.sin(x)
+//#define COS(x) java.lang.Math.cos(x)
+//#define TAN(x) java.lang.Math.tan(x)
 
 
 

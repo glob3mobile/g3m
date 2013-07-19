@@ -116,7 +116,7 @@ public class Angle
   {
     if (_sin > 1)
     {
-      _sin = SIN(_radians);
+      _sin = java.lang.Math.sin(_radians);
     }
     return _sin;
 ///#ifdef C_CODE
@@ -131,7 +131,7 @@ public class Angle
   {
     if (_cos > 1)
     {
-      _cos = COS(_radians);
+      _cos = java.lang.Math.cos(_radians);
     }
     return _cos;
 ///#ifdef C_CODE
@@ -144,7 +144,7 @@ public class Angle
 
   public final double tangent()
   {
-    return TAN(_radians);
+    return java.lang.Math.tan(_radians);
 ///#ifdef C_CODE
 //    return IMathUtils::instance()->tan( _radians );
 ///#endif
