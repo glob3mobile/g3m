@@ -2147,6 +2147,8 @@ public:
                                  fromDistance, toDistance,
                                  fromAzimuth,  toAzimuth,
                                  fromAltitude, toAltitude);
+
+              delete buffer;
               /* */
             }
           }
