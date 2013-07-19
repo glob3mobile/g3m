@@ -120,9 +120,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      //      final MeshRenderer meshRenderer = new MeshRenderer();
-      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-      //      builder.addRenderer(meshRenderer);
+//      final MeshRenderer meshRenderer = new MeshRenderer();
+//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+//      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -181,11 +181,13 @@ public class G3MWebGLDemo
       }
 
 
+<<<<<<< HEAD
       builder.setInitializationTask(createMarkersInitializationTask());
-
+=======
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
+>>>>>>> webgl-port
 
 
       // test bson parser and 3D model
