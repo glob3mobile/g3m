@@ -54,6 +54,7 @@
 		CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */; };
 		CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF00E442166FD77E0098CABD /* IImageListener.cpp */; };
 		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
+		CF062DDF17998E3E0069843F /* SceneJSParserStatistics.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
@@ -552,6 +553,7 @@
 			files = (
 				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				D8B9E005174A3CFD00B865B7 /* GLState.hpp in CopyFiles */,
+				CF062DDF17998E3E0069843F /* SceneJSParserStatistics.hpp in CopyFiles */,
 				D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */,
 				D8B8CE91178D6DCF00EE1B97 /* GPUVariableValueSet.hpp in CopyFiles */,
 				D8B8CE90178D6C9600EE1B97 /* GLFeature.hpp in CopyFiles */,
