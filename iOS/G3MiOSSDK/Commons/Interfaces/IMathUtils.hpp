@@ -20,8 +20,7 @@
 #define COS(x) cos(x)
 #define TAN(x) tan(x)
 
-#endif
-#ifdef JAVA_CODE
+#else
 
 #define SIN(x) java.lang.Math.sin(x)
 #define COS(x) java.lang.Math.cos(x)
