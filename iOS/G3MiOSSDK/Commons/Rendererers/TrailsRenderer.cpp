@@ -183,7 +183,7 @@ Trail::~Trail() {
 }
 
 
-void TrailSegment::updateGLState(const G3MRenderContext* rc){
+void TrailsRenderer::updateGLState(const G3MRenderContext* rc){
 
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL){
@@ -202,13 +202,13 @@ void TrailSegment::updateGLState(const G3MRenderContext* rc){
 }
 
 void TrailSegment::render(const G3MRenderContext* rc,
-                          const Frustum* frustum) {
+                          const Frustum* frustum, const GLState* state) {
   Mesh* mesh = getMesh(rc->getPlanet());
   if (mesh != NULL) {
     BoundingVolume* bounding = mesh->getBoundingVolume();
     if (bounding != NULL) {
       if (bounding->touchesFrustum(frustum)) {
-        mesh->render(rc, &_glState);
+        mesh->render(rc, state);
       }
     }
   }
@@ -216,12 +216,12 @@ void TrailSegment::render(const G3MRenderContext* rc,
 
 
 void Trail::render(const G3MRenderContext* rc,
-                   const Frustum* frustum) {
+                   const Frustum* frustum, const GLState* state) {
   if (_visible) {
     const int segmentsSize = _segments.size();
     for (int i = 0; i < segmentsSize; i++) {
       TrailSegment* segment = _segments[i];
-      segment->render(rc, frustum);
+      segment->render(rc, frustum, state);
     }
   }
 }
@@ -246,10 +246,11 @@ void TrailsRenderer::addTrail(Trail* trail) {
 void TrailsRenderer::render(const G3MRenderContext* rc) {
   const int trailsCount = _trails.size();
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  updateGLState(rc);
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
     if (trail != NULL) {
-      trail->render(rc, frustum);
+      trail->render(rc, frustum, &_glState);
     }
   }
 }

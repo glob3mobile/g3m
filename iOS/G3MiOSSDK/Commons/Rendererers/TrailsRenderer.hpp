@@ -33,12 +33,7 @@ private:
 
   Mesh* _mesh;
   Mesh* getMesh(const Planet* planet);
-  
-  GLState _glState;
 
-  void updateGLState(const G3MRenderContext* rc);
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
 
 public:
   TrailSegment(Color color,
@@ -95,7 +90,7 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const Frustum* frustum);
+              const Frustum* frustum, const GLState* state);
 
 };
 
@@ -121,7 +116,7 @@ public:
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const Frustum* frustum);
+              const Frustum* frustum, const GLState* state);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -139,6 +134,13 @@ public:
 class TrailsRenderer : public LeafRenderer {
 private:
   std::vector<Trail*> _trails;
+
+
+  GLState _glState;
+
+  void updateGLState(const G3MRenderContext* rc);
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
 
 public:
   TrailsRenderer()
