@@ -98,12 +98,15 @@ public:
   }
 
   double sinus() const {
-#ifdef C_CODE
-    return IMathUtils::instance()->sin( _radians );
-#endif
-#ifdef JAVA_CODE
-    return java.lang.Math.sin( _radians );
-#endif
+    return SIN(_radians);
+
+
+//#ifdef C_CODE
+//    return IMathUtils::instance()->sin( _radians );
+//#endif
+//#ifdef JAVA_CODE
+//    return java.lang.Math.sin( _radians );
+//#endif
   }
 
   double cosinus() const {

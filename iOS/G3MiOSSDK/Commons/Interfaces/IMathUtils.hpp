@@ -13,6 +13,19 @@
 #include <cstdio>
 #include "ILogger.hpp"
 
+#ifdef C_CODE
+
+#include <math.h>
+#define SIN(x) sin(x)
+
+#endif
+#ifdef JAVA_CODE
+
+#define SIN(x) java.lang.Math.sin(x);
+
+#endif
+
+
 class IMathUtils {
 private:
   static IMathUtils* _instance;
