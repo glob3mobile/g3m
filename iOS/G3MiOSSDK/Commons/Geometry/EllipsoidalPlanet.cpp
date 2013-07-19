@@ -13,8 +13,7 @@
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
-_ellipsoid(ellipsoid),
-_lastValidDrag(false)
+_ellipsoid(ellipsoid)
 {
 
 }
@@ -281,6 +280,7 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * mu->pi() / 180 * R;
 }
 
+
 Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
                                                 const Vector3D& ray) const {
   std::vector<double> distances = intersectionsDistances(pos , ray);
@@ -289,6 +289,7 @@ Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
   }
   return pos.add(ray.times(distances[0]));
 }
+
 
 Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -340,15 +341,20 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 }
 
 
-MutableMatrix44D EllipsoidalPlanet::dragBetweenIntersections(const Vector3D& origin,
-                                            const Vector3D& initialRay,
-                                            const Vector3D& finalRay) const
+void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-  // compute initial point
-  const Vector3D initialPoint = closestIntersection(origin, initialRay);
-  if (initialPoint.isNan()) return MutableMatrix44D::invalid();
+  _origin = origin.asMutableVector3D();
+  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+}
+
+
+MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
+{
+  // test if initialPoint is valid
+  if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
   
   // compute final point
+  const Vector3D origin = _origin.asVector3D();
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
@@ -356,10 +362,10 @@ MutableMatrix44D EllipsoidalPlanet::dragBetweenIntersections(const Vector3D& ori
   }
   
   // compute the rotation axis
-  const Vector3D rotationAxis = initialPoint.cross(finalPoint.asVector3D());
+  const Vector3D rotationAxis = _initialPoint.cross(finalPoint).asVector3D();
   
   // compute the angle
-  double sinus = rotationAxis.length()/initialPoint.length()/finalPoint.length();
+  double sinus = rotationAxis.length()/_initialPoint.length()/finalPoint.length();
   const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
   
@@ -368,17 +374,22 @@ MutableMatrix44D EllipsoidalPlanet::dragBetweenIntersections(const Vector3D& ori
   double radians = rotationDelta.radians();
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
+  _singleDragging = true;
   
   // return rotation matrix
-  _lastValidDrag = true;
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
 
 
-Effect* EllipsoidalPlanet::createEffectFromLastDrag() const
+void EllipsoidalPlanet::endSingleDrag() const
 {
-  if (!_lastValidDrag || _lastDragAxis.isNan()) return NULL;
-  _lastValidDrag = false;
+  _singleDragging = false;
+}
+
+
+Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
+{
+  if (!_singleDragging || _lastDragAxis.isNan()) return NULL;
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 

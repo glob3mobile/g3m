@@ -11,8 +11,7 @@
 
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
-_sphere(sphere),
-_lastValidDrag(false)
+_sphere(sphere)
 {
 
 }
@@ -259,15 +258,20 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 }
 
 
-MutableMatrix44D SphericalPlanet::dragBetweenIntersections(const Vector3D& origin,
-                                                             const Vector3D& initialRay,
-                                                             const Vector3D& finalRay) const
+void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-  // compute initial point
-  const Vector3D initialPoint = closestIntersection(origin, initialRay);
-  if (initialPoint.isNan()) return MutableMatrix44D::invalid();
+  _origin = origin.asMutableVector3D();
+  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+}
+
+
+MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
+{
+  // test if initialPoint is valid
+  if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
   
   // compute final point
+  const Vector3D origin = _origin.asVector3D();
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
@@ -275,10 +279,10 @@ MutableMatrix44D SphericalPlanet::dragBetweenIntersections(const Vector3D& origi
   }
   
   // compute the rotation axis
-  const Vector3D rotationAxis = initialPoint.cross(finalPoint.asVector3D());
+  const Vector3D rotationAxis = _initialPoint.cross(finalPoint).asVector3D();
   
   // compute the angle
-  double sinus = rotationAxis.length()/initialPoint.length()/finalPoint.length();
+  double sinus = rotationAxis.length()/_initialPoint.length()/finalPoint.length();
   const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
   
@@ -287,18 +291,21 @@ MutableMatrix44D SphericalPlanet::dragBetweenIntersections(const Vector3D& origi
   double radians = rotationDelta.radians();
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
+  _singleDragging = true;
   
   // return rotation matrix
-  _lastValidDrag = true;
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
 
 
-Effect* SphericalPlanet::createEffectFromLastDrag() const
+void SphericalPlanet::endSingleDrag() const
 {
-  if (!_lastValidDrag || _lastDragAxis.isNan()) return NULL;
-  _lastValidDrag = false;
-  return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
+  _singleDragging = false;
 }
 
 
+Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
+{
+  if (!_singleDragging || _lastDragAxis.isNan()) return NULL;
+  return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
+}

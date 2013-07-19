@@ -48,8 +48,8 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
 
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  _origin = _camera0.getCartesianPosition().asMutableVector3D();
-  _initialRay = _camera0.pixel2Ray(pixel).asMutableVector3D();
+  eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
+                                             _camera0.pixel2Ray(pixel));
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
@@ -60,16 +60,11 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      CameraContext *cameraContext) {
   
   if (cameraContext->getCurrentGesture()!=Drag) return;
-  
-  // get final ray
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  Vector3D finalRay = _camera0.pixel2Ray(pixel);
-  
+    
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  MutableMatrix44D matrix = planet->dragBetweenIntersections(_origin.asVector3D(),
-                                                             _initialRay.asVector3D(),
-                                                             finalRay);
+  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  MutableMatrix44D matrix = planet->singleDrag(_camera0.pixel2Ray(pixel));
   if (!matrix.isValid()) return;
   
   // apply transformation
@@ -82,22 +77,27 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
 void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) {
-   if (_useInertia) {
-    // test if animation is needed
+  const Planet* planet = eventContext->getPlanet();
+  
+  // test if animation is needed
+  if (_useInertia) {
     const Touch *touch = touchEvent.getTouch(0);
     Vector2I currPixel = touch->getPos();
     Vector2I prevPixel = touch->getPrevPos();
     double desp        = currPixel.sub(prevPixel).length();
-
+    
     if (cameraContext->getCurrentGesture()==Drag && desp>2) {
-      Effect* effect = eventContext->getPlanet()->createEffectFromLastDrag();
+      Effect* effect = planet->createEffectFromLastSingleDrag();
       if (effect != NULL) {
         EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
         eventContext->getEffectsScheduler()->startEffect(effect, target);
       }
     }
   }
-  
+
+  // end drag
+  planet->endSingleDrag();
+
   // update gesture
   cameraContext->setCurrentGesture(None);
 }

@@ -24,10 +24,12 @@ private:
   private Sphere _sphere;
 #endif
 
+  mutable MutableVector3D _origin;
+  mutable MutableVector3D _initialPoint;
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
-  mutable bool            _lastValidDrag;
+  mutable bool            _singleDragging;
   
 
 public:
@@ -120,11 +122,13 @@ public:
 
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
-  MutableMatrix44D dragBetweenIntersections(const Vector3D& origin,
-                             const Vector3D& initialRay,
-                             const Vector3D& finalRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   
-  Effect* createEffectFromLastDrag() const;
+  MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
+  
+  void endSingleDrag() const;
+  
+  Effect* createEffectFromLastSingleDrag() const;
   
 };
 

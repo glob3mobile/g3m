@@ -77,11 +77,13 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
-  virtual MutableMatrix44D dragBetweenIntersections(const Vector3D& origin,
-                                     const Vector3D& initialRay,
-                                     const Vector3D& finalRay) const = 0;
+  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
   
-  virtual Effect* createEffectFromLastDrag() const = 0;
+  virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;
+  
+  virtual void endSingleDrag() const = 0;
+  
+  virtual Effect* createEffectFromLastSingleDrag() const = 0;
 };
 
 #endif

@@ -58,8 +58,8 @@ private:
   //double          _lastRadians;
   //double          _radiansStep;
   
-  MutableVector3D _origin;
-  MutableVector3D _initialRay;
+  //MutableVector3D _origin;
+  //MutableVector3D _initialRay;
 };
 
 

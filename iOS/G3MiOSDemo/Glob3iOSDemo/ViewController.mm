@@ -453,8 +453,8 @@ public:
   
   builder.setCameraRenderer([self createCameraRenderer]);
   
-  //builder.setPlanet(Planet::createEarth());
-  builder.setPlanet(Planet::createSphericalEarth());
+  builder.setPlanet(Planet::createEarth());
+  //builder.setPlanet(Planet::createSphericalEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
