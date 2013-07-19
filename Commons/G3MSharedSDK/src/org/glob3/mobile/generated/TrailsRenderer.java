@@ -78,24 +78,16 @@ public class TrailsRenderer extends LeafRenderer
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
-<<<<<<< HEAD
-      trail.render(rc);
-=======
       if (trail != null)
       {
-        trail.render(rc, parentState, frustum);
+        trail.render(rc, frustum);
       }
->>>>>>> webgl-port
     }
   }
 
 }
-<<<<<<< HEAD
+//#define MAX_POSITIONS_PER_SEGMENT 64
+
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer
 
-=======
-///#include "CompositeMesh.hpp"
-
-//#define MAX_POSITIONS_PER_SEGMENT 64
->>>>>>> webgl-port

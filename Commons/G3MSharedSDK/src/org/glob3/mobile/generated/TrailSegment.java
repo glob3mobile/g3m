@@ -120,28 +120,6 @@ public class TrailSegment
   //  return cm;
   
     return surfaceMesh;
-  
-    //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-    //                                          planet,
-    //                                          Geodetic3D::fromDegrees(0, 0, 0));
-    //
-    //  const int positionsSize = _positions.size();
-    //  for (int i = 0; i < positionsSize; i++) {
-    ///#ifdef C_CODE
-    //    vertices.add( *(_positions[i]) );
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //	  vertices.add( _positions.get(i) );
-    ///#endif
-    //  }
-    //
-    //  return new DirectMesh(GLPrimitive::lineStrip(),
-    //                        true,
-    //                        vertices.getCenter(),
-    //                        vertices.create(),
-    //                        _lineWidth,
-    //                        1,
-    //                        new Color(_color));
   }
 
   private Mesh _mesh;
@@ -156,6 +134,35 @@ public class TrailSegment
     }
     return _mesh;
   }
+
+  private GLState _glState = new GLState();
+
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _glState.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
 
   public TrailSegment(Color color, float ribbonWidth)
   {
@@ -224,7 +231,7 @@ public class TrailSegment
     return _positions.get(_positions.size() - 2);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, Frustum frustum)
+  public final void render(G3MRenderContext rc, Frustum frustum)
   {
     Mesh mesh = getMesh(rc.getPlanet());
     if (mesh != null)
@@ -234,7 +241,7 @@ public class TrailSegment
       {
         if (bounding.touchesFrustum(frustum))
         {
-          mesh.render(rc, parentState);
+          mesh.render(rc, _glState);
         }
       }
     }

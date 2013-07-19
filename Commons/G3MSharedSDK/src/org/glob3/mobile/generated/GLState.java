@@ -3,12 +3,7 @@ package org.glob3.mobile.generated;
 //  GLState.cpp
 //  G3MiOSSDK
 //
-<<<<<<< HEAD
 //  Created by Jose Miguel SN on 17/05/13.
-=======
-//  Created by Agustin Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
->>>>>>> webgl-port
 //
 //
 
@@ -18,6 +13,8 @@ package org.glob3.mobile.generated;
 //
 //  Created by Jose Miguel SN on 17/05/13.
 //
+//  Created by Agustin Trujillo Pino on 27/10/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
