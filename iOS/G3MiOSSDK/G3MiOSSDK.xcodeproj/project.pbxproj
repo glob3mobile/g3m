@@ -151,7 +151,6 @@
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
 		CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA081694914A002C760A /* BSONParser.cpp */; };
-		CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */; };
 		CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */; };
 		CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */; };
 		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
@@ -525,7 +524,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 				CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */,
-				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
 				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
 				CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */,
@@ -890,7 +888,6 @@
 		CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalPlanet.hpp; path = Commons/Geometry/EllipsoidalPlanet.hpp; sourceTree = "<group>"; };
 		CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SphericalPlanet.cpp; path = Commons/Geometry/SphericalPlanet.cpp; sourceTree = "<group>"; };
 		CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SphericalPlanet.hpp; path = Commons/Geometry/SphericalPlanet.hpp; sourceTree = "<group>"; };
-		CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		CF00E442166FD77E0098CABD /* IImageListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageListener.cpp; path = Commons/Interfaces/IImageListener.cpp; sourceTree = "<group>"; };
 		CF00E443166FD77E0098CABD /* IImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageListener.hpp; path = Commons/Interfaces/IImageListener.hpp; sourceTree = "<group>"; };
 		CF022384166836F500024B73 /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOJSONParser.cpp; path = Commons/GEO/GEOJSONParser.cpp; sourceTree = "<group>"; };
@@ -1306,7 +1303,6 @@
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		E87557C516E915D10031FBB3 /* TMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMSLayer.cpp; sourceTree = "<group>"; };
 		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
-		FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
 		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
@@ -1315,6 +1311,7 @@
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBC2309817972F4F009343FC /* CameraEffects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEffects.hpp; path = Commons/Cameras/CameraEffects.hpp; sourceTree = "<group>"; };
 		FBC23099179730FF009343FC /* CameraEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraEffects.cpp; path = Commons/Cameras/CameraEffects.cpp; sourceTree = "<group>"; };
+		FBC2309E1799380E009343FC /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1739,8 +1736,7 @@
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
-				CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */,
-				FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */,
+				FBC2309E1799380E009343FC /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
