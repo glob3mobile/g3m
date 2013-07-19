@@ -48,10 +48,7 @@ public class G3MShowMarkersActivity
 
       builder.addRenderer(_weatherMarkers);
       builder.setLogFPS(true);
-<<<<<<< HEAD
 
-=======
->>>>>>> webgl-port
       //Always after setting params
       _widgetAndroid = builder.createWidget();
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);

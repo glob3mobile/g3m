@@ -109,7 +109,7 @@ public class G3MWebGLDemo
          //initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-                  initCustomizedWithBuilder();
+         initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
@@ -120,9 +120,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-//      final MeshRenderer meshRenderer = new MeshRenderer();
-//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-//      builder.addRenderer(meshRenderer);
+      //      final MeshRenderer meshRenderer = new MeshRenderer();
+      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      //      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -181,13 +181,11 @@ public class G3MWebGLDemo
       }
 
 
-<<<<<<< HEAD
       builder.setInitializationTask(createMarkersInitializationTask());
-=======
+
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
->>>>>>> webgl-port
 
 
       // test bson parser and 3D model
@@ -466,9 +464,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-//      final MeshRenderer meshRenderer = new MeshRenderer();
-//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-//      builder.addRenderer(meshRenderer);
+      //      final MeshRenderer meshRenderer = new MeshRenderer();
+      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      //      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -640,7 +638,7 @@ public class G3MWebGLDemo
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
 =======
->>>>>>> webgl-port
+>>>>>>> (webgl-port)
       g3mWidgetHolder.setWidth("640px");
       g3mWidgetHolder.setHeight("480px");
 
@@ -1077,8 +1075,7 @@ public class G3MWebGLDemo
       };
       return initializationTask;
    }
-   
-   
+
 
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
@@ -1324,21 +1321,19 @@ public class G3MWebGLDemo
       layerSet.addLayer(pnoa);*/
 
       // testing visible sector listener
-      VisibleSectorListener myListener = new VisibleSectorListener() {
-          @Override
-          public void onVisibleSectorChange(final Sector visibleSector,
-                                            final Geodetic3D cameraPosition) {
-        	  Window.alert("Visible Sector from lat(" + visibleSector.lower().latitude().degrees() +
-        			  "), lon(" + visibleSector.lower().longitude().degrees() +
-        			  ") to lat(" + visibleSector.upper().latitude().degrees() +
-        			  "), lon(" + visibleSector.upper().longitude().degrees() + ")");
-          }
-       };
+      final VisibleSectorListener myListener = new VisibleSectorListener() {
+         @Override
+         public void onVisibleSectorChange(final Sector visibleSector,
+                                           final Geodetic3D cameraPosition) {
+            Window.alert("Visible Sector from lat(" + visibleSector.lower().latitude().degrees() + "), lon("
+                         + visibleSector.lower().longitude().degrees() + ") to lat(" + visibleSector.upper().latitude().degrees()
+                         + "), lon(" + visibleSector.upper().longitude().degrees() + ")");
+         }
+      };
 
-      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, 
-    		  TimeInterval.fromMilliseconds(2000));
-  
-      
+      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
+
+
       /*
       // testing getfeatureinfo
       final IBufferDownloadListener myListener = new IBufferDownloadListener() {
