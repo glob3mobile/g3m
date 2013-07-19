@@ -17,11 +17,15 @@
 
 #include <math.h>
 #define SIN(x) sin(x)
+#define COS(x) cos(x)
+#define TAN(x) tan(x)
 
 #endif
 #ifdef JAVA_CODE
 
-#define SIN(x) java.lang.Math.sin(x);
+#define SIN(x) java.lang.Math.sin(x)
+#define COS(x) java.lang.Math.cos(x)
+#define TAN(x) java.lang.Math.tan(x)
 
 #endif
 

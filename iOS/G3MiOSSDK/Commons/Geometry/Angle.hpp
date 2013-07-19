@@ -24,13 +24,28 @@ private:
   Angle(const double degrees,
         const double radians) :
   _degrees( degrees ),
-  _radians( radians )
+  _radians( radians ),
+  _sin(2),
+  _cos(2)
   {
   }
+
+  mutable double _sin;
+  mutable double _cos;
 
 public:
   const double _degrees;
   const double _radians;
+
+
+  Angle(const Angle& angle):
+  _degrees(angle._degrees),
+  _radians(angle._radians),
+  _sin(angle._sin),
+  _cos(angle._cos)
+  {
+
+  }
 
   static Angle fromDegrees(double degrees) {
     return Angle(degrees,
@@ -90,17 +105,11 @@ public:
     return IMathUtils::instance()->isNan(_degrees);
   }
 
-  Angle(const Angle& angle):
-  _degrees(angle._degrees),
-  _radians(angle._radians)
-  {
-
-  }
-
   double sinus() const {
-    return SIN(_radians);
-
-
+    if (_sin > 1){
+      _sin = SIN(_radians);
+    }
+    return _sin;
 //#ifdef C_CODE
 //    return IMathUtils::instance()->sin( _radians );
 //#endif
@@ -110,21 +119,26 @@ public:
   }
 
   double cosinus() const {
-#ifdef C_CODE
-    return IMathUtils::instance()->cos( _radians );
-#endif
-#ifdef JAVA_CODE
-    return java.lang.Math.cos( _radians );
-#endif
+    if (_cos > 1){
+      _cos = COS(_radians);
+    }
+    return _cos;
+//#ifdef C_CODE
+//    return IMathUtils::instance()->cos( _radians );
+//#endif
+//#ifdef JAVA_CODE
+//    return java.lang.Math.cos( _radians );
+//#endif
   }
   
   double tangent() const {
-#ifdef C_CODE
-    return IMathUtils::instance()->tan( _radians );
-#endif
-#ifdef JAVA_CODE
-    return java.lang.Math.tan( _radians );
-#endif
+    return TAN(_radians);
+//#ifdef C_CODE
+//    return IMathUtils::instance()->tan( _radians );
+//#endif
+//#ifdef JAVA_CODE
+//    return java.lang.Math.tan( _radians );
+//#endif
   }
 
   double degrees() const {
