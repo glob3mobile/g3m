@@ -21,7 +21,7 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
   // first is the center
   vertices.add(0.0, 0.0, 0.0);
 
-  const double twicePi = mu->pi() * 2;
+  const double twicePi = PI * 2;
 
   for (int i = 0; i <= _steps; i++) {
     const double angleInRadians = i * twicePi / _steps;

@@ -1442,7 +1442,7 @@ private:
     const IMathUtils* mu = IMathUtils::instance();
 
     const double area = population * 1200;
-    const float radius = (float) mu->sqrt( area / mu->pi() );
+    const float radius = (float) mu->sqrt( area / PI );
     Color* color = Color::newFromRGBA(1, 1, 0, 1);
 
     return new CircleShape(new Geodetic3D(geometry->getPosition(), 200),

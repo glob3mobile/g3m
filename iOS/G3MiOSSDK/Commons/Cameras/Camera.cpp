@@ -444,5 +444,5 @@ double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   const double z = sphere._center.distanceTo(getCartesianPosition());
   const double rWorld = sphere._radius * _frustumData._znear / z;
   const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
-  return IMathUtils::instance()->pi() * rScreen * rScreen;
+  return PI * rScreen * rScreen;
 }
