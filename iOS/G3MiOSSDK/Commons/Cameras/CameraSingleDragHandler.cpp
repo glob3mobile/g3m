@@ -95,9 +95,6 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
     }
   }
 
-  // end drag
-  planet->endSingleDrag();
-
   // update gesture
   cameraContext->setCurrentGesture(None);
 }

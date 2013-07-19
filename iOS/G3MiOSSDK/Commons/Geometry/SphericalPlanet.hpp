@@ -29,7 +29,7 @@ private:
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
-  mutable bool            _singleDragging;
+  mutable bool            _validSingleDrag;
   
 
 public:
@@ -125,8 +125,6 @@ public:
   void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
-  
-  void endSingleDrag() const;
   
   Effect* createEffectFromLastSingleDrag() const;
   

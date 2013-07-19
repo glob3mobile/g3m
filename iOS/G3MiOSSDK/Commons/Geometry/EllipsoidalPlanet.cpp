@@ -345,6 +345,7 @@ void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& 
 {
   _origin = origin.asMutableVector3D();
   _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _validSingleDrag = false;
 }
 
 
@@ -374,22 +375,16 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   double radians = rotationDelta.radians();
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
-  _singleDragging = true;
+  _validSingleDrag = true;
   
   // return rotation matrix
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
 
 
-void EllipsoidalPlanet::endSingleDrag() const
-{
-  _singleDragging = false;
-}
-
-
 Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
 {
-  if (!_singleDragging || _lastDragAxis.isNan()) return NULL;
+  if (!_validSingleDrag || _lastDragAxis.isNan()) return NULL;
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
