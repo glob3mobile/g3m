@@ -562,7 +562,7 @@ public:
 
   //  [self createInterpolationTest: meshRenderer];
 
-  //meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
