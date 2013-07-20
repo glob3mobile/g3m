@@ -11,7 +11,7 @@
 
 #include "FloatBufferBuilder.hpp"
 
-#include "Ellipsoid.hpp"
+#include "EllipsoidalPlanet.hpp"
 #include "Geodetic3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Vector3D.hpp"
@@ -30,12 +30,12 @@ private:
     _cz = (float) center._z;
   }
 
-  const Ellipsoid * _ellipsoid;
+  const Planet * _ellipsoid;
 
 public:
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Vector3D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
@@ -44,7 +44,7 @@ public:
   }
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Geodetic2D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
@@ -53,7 +53,7 @@ public:
   }
 
   FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Ellipsoid* ellipsoid,
+                                 const Planet* ellipsoid,
                                  const Geodetic3D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
@@ -66,21 +66,21 @@ public:
            const double height);
 
   void add(const Geodetic3D& position) {
-    add(position.latitude(),
-        position.longitude(),
-        position.height());
+    add(position._latitude,
+        position._longitude,
+        position._height);
   }
 
   void add(const Geodetic2D& position) {
-    add(position.latitude(),
-        position.longitude(),
+    add(position._latitude,
+        position._longitude,
         0.0);
   }
 
   void add(const Geodetic2D& position,
            const double height) {
-    add(position.latitude(),
-        position.longitude(),
+    add(position._latitude,
+        position._longitude,
         height);
   }
 

@@ -161,8 +161,8 @@ public class TileTextureBuilder extends RCObject
   {
     //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
 
-    final double widthFactor = innerSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-    final double heightFactor = innerSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+    final double widthFactor = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+    final double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
 
     final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
 

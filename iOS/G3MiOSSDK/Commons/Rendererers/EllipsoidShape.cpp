@@ -201,7 +201,9 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const Ellipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero(),
+                                              Vector3D(_radiusX, _radiusY, _radiusZ)
+                                              ));
   const Sector sector(Sector::fullSphere());
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
@@ -219,7 +221,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
       vertices.add(innerPoint);
       
-      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint.latitude()) : v;
+      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
     }

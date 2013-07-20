@@ -60,6 +60,14 @@ public class ShortBuffer_WebGL
    }
 
 
+   public ShortBuffer_WebGL(final short[] array) {
+      _buffer = jsCreateBuffer(array.length);
+      for (int i = 0; i < array.length; i++) {
+         rawPut(i, array[i]);
+      }
+   }
+
+
    @Override
    public int size() {
       return jsSize();

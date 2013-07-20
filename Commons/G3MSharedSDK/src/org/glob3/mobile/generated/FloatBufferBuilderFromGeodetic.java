@@ -30,24 +30,24 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     _cz = (float) center._z;
   }
 
-  private final Ellipsoid _ellipsoid;
+  private final Planet _ellipsoid;
 
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Vector3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic2D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Ellipsoid ellipsoid, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
@@ -68,31 +68,31 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   
     if (_centerStrategy == CenterStrategy.noCenter())
     {
-      _values.add((float) vector._x);
-      _values.add((float) vector._y);
-      _values.add((float) vector._z);
+      _values.push_back((float) vector._x);
+      _values.push_back((float) vector._y);
+      _values.push_back((float) vector._z);
     }
     else
     {
-      _values.add((float)(vector._x - _cx));
-      _values.add((float)(vector._y - _cy));
-      _values.add((float)(vector._z - _cz));
+      _values.push_back((float)(vector._x - _cx));
+      _values.push_back((float)(vector._y - _cy));
+      _values.push_back((float)(vector._z - _cz));
     }
   }
 
   public final void add(Geodetic3D position)
   {
-    add(position.latitude(), position.longitude(), position.height());
+    add(position._latitude, position._longitude, position._height);
   }
 
   public final void add(Geodetic2D position)
   {
-    add(position.latitude(), position.longitude(), 0.0);
+    add(position._latitude, position._longitude, 0.0);
   }
 
   public final void add(Geodetic2D position, double height)
   {
-    add(position.latitude(), position.longitude(), height);
+    add(position._latitude, position._longitude, height);
   }
 
   public final Vector3D getCenter()

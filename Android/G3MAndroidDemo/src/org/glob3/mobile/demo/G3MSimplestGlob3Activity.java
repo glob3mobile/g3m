@@ -79,7 +79,8 @@ public class G3MSimplestGlob3Activity
       final IThreadUtils threadUtils = new ThreadUtils_Android(_widgetAndroid);
       final ICameraActivityListener cameraActivityListener = null;
 
-      final Planet planet = Planet.createEarth();
+      //      final Planet planet = Planet.createEarth();
+      final Planet planet = Planet.createSphericalEarth();
 
       final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
       cameraConstraints.add(new SimpleCameraConstrainer());

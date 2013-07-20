@@ -13,6 +13,22 @@
 #include <cstdio>
 #include "ILogger.hpp"
 
+#ifdef C_CODE
+
+#include <math.h>
+#define SIN(x) sin(x)
+#define COS(x) cos(x)
+#define TAN(x) tan(x)
+
+#else
+
+#define SIN(x) java.lang.Math.sin(x)
+#define COS(x) java.lang.Math.cos(x)
+#define TAN(x) java.lang.Math.tan(x)
+
+#endif
+
+
 class IMathUtils {
 private:
   static IMathUtils* _instance;

@@ -2,7 +2,7 @@
 //  TileRenderer.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -130,9 +130,9 @@ public:
 
 class TilesStatistics {
 private:
-  long               _tilesProcessed;
-  long               _tilesVisible;
-  long               _tilesRendered;
+  long _tilesProcessed;
+  long _tilesVisible;
+  long _tilesRendered;
 
   static const int _maxLOD = 128;
 

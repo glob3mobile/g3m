@@ -2,7 +2,7 @@
 //  TileRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -261,17 +261,17 @@ void TileRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
   }
   else {
     const Sector sector = tile->getSector();
-    const Geodetic2D lower = sector.lower();
-    const Geodetic2D upper = sector.upper();
+    const Geodetic2D lower = sector._lower;
+    const Geodetic2D upper = sector._upper;
 
-    const Angle splitLongitude = Angle::midAngle(lower.longitude(),
-                                                 upper.longitude());
+    const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                                 upper._longitude);
 
     const Angle splitLatitude = mercator
-    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower.latitude(),
-                                                                                upper.latitude())
-    /*                               */ : Angle::midAngle(lower.latitude(),
-                                                          upper.latitude());
+    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                                upper._latitude)
+    /*                               */ : Angle::midAngle(lower._latitude,
+                                                          upper._latitude);
 
 
     std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
@@ -299,11 +299,11 @@ void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   std::vector<Tile*> topLevelTiles;
 
-  const Angle fromLatitude  = parameters->_topSector.lower().latitude();
-  const Angle fromLongitude = parameters->_topSector.lower().longitude();
+  const Angle fromLatitude  = parameters->_topSector._lower._latitude;
+  const Angle fromLongitude = parameters->_topSector._lower._longitude;
 
-  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
+  const Angle deltaLan = parameters->_topSector._deltaLatitude;
+  const Angle deltaLon = parameters->_topSector._deltaLongitude;
 
   const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
   const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
@@ -504,6 +504,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
+  const Planet* planet = rc->getPlanet();
+  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+
   if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
@@ -514,7 +519,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
       tile->render(rc,
                    &trc,
                    parentState,
-                   NULL);
+                   NULL,
+                   planet,
+                   cameraNormalizedPosition,
+                   cameraAngle2HorizonInRadians,
+                   cameraFrustumInModelCoordinates);
     }
   }
   else {
@@ -534,7 +543,11 @@ void TileRenderer::render(const G3MRenderContext* rc,
         tile->render(rc,
                      &trc,
                      parentState,
-                     &toVisitInNextIteration);
+                     &toVisitInNextIteration,
+                     planet,
+                     cameraNormalizedPosition,
+                     cameraAngle2HorizonInRadians,
+                     cameraFrustumInModelCoordinates);
       }
 
       toVisit = toVisitInNextIteration;

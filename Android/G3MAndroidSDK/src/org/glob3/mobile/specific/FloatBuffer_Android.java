@@ -17,6 +17,10 @@ public final class FloatBuffer_Android
    private int               _timestamp;
 
 
+   //   private boolean           _hasGLBuffer = false;
+   //   private int               _glBuffer;
+
+
    public FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    }
@@ -55,6 +59,13 @@ public final class FloatBuffer_Android
       _buffer.put(13, f13);
       _buffer.put(14, f14);
       _buffer.put(15, f15);
+   }
+
+
+   public FloatBuffer_Android(final float[] array) {
+      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer.put(array);
+      _buffer.rewind();
    }
 
 
@@ -102,5 +113,29 @@ public final class FloatBuffer_Android
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+   //   @Override
+   //   public void dispose() {
+   //      super.dispose();
+   //
+   //      if (_hasGLBuffer) {
+   //         final int[] buffers = new int[] { _glBuffer };
+   //         GLES20.glDeleteBuffers(1, buffers, 0);
+   //         _hasGLBuffer = false;
+   //      }
+   //   }
+   //
+   //
+   //   public int getGLBuffer() {
+   //      if (!_hasGLBuffer) {
+   //         final int[] buffers = new int[1];
+   //         GLES20.glGenBuffers(1, buffers, 0);
+   //         _glBuffer = buffers[0];
+   //         _hasGLBuffer = true;
+   //      }
+   //
+   //      return _glBuffer;
+   //   }
 
 }

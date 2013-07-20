@@ -36,9 +36,9 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     {
       final Sector tileSector = _tile.getSector();
 
-      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector.lower(), _mercator);
+      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower, _mercator);
 
-      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector.upper(), _mercator);
+      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper, _mercator);
 
       _scale = new MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x, lowerTextCoordUV._y - upperTextCoordUV._y);
 

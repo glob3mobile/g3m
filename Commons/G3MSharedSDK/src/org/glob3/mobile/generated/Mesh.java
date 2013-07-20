@@ -32,7 +32,7 @@ public abstract class Mesh
 
   public abstract void render(G3MRenderContext rc, GLState parentState);
 
-  public abstract Extent getExtent();
+  public abstract BoundingVolume getBoundingVolume();
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

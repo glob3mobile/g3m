@@ -58,8 +58,8 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState) const;
 
-  Extent* getExtent()  const {
-    return (_mesh == NULL) ? NULL : _mesh->getExtent();
+  BoundingVolume* getBoundingVolume()  const {
+    return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
   int getVertexCount() const {

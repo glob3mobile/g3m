@@ -187,12 +187,15 @@ public final class NativeGL_WebGL
                                           final IFloatBuffer buffer) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		// var webGLBuffer = gl.createBuffer();
-		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
-		gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
-
-		var array = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
+//		// var webGLBuffer = gl.createBuffer();
+//		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
+//		gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
+//
+//		var array = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
+//		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
+		
+		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::bindVBO(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
+		
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
    }-*/;

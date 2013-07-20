@@ -19,7 +19,7 @@ private:
   int                _cursor;
   int                _timestamp;
 
-  void checkTimestamp() const;
+//  void checkTimestamp() const;
 
   ByteBufferIterator(const ByteBufferIterator& that);
   

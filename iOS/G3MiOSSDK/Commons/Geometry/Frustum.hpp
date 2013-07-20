@@ -2,7 +2,7 @@
 //  Frustum.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 15/07/12.
+//  Created by Agustin Trujillo Pino on 15/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 #include "Vector3D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Plane.hpp"
-#include "Extent.hpp"
+#include "BoundingVolume.hpp"
 
 class Box;
 
@@ -65,17 +65,27 @@ public:
 
 class Frustum {
 private:
+#ifdef C_CODE
   const Plane _leftPlane;
   const Plane _rightPlane;
   const Plane _bottomPlane;
   const Plane _topPlane;
   const Plane _nearPlane;
   const Plane _farPlane;
-  
+#endif
+#ifdef JAVA_CODE
+  private final Plane _leftPlane;
+  private final Plane _rightPlane;
+  private final Plane _bottomPlane;
+  private final Plane _topPlane;
+  private final Plane _nearPlane;
+  private final Plane _farPlane;
+#endif
+
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
-  Extent*   _extent;
+  BoundingVolume*   _boundingVolume;
   
   Frustum(const Frustum *that,
           const MutableMatrix44D& matrix,
@@ -95,10 +105,10 @@ private:
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
-    _extent = computeExtent();
+    _boundingVolume = computeBoundingVolume();
   }
   
-  Extent* computeExtent();
+  BoundingVolume* computeBoundingVolume();
   
   
 public:
@@ -117,7 +127,7 @@ public:
   _rtf(that._rtf),
   _lbf(that._lbf),
   _rbf(that._rbf),
-  _extent(NULL)
+  _boundingVolume(NULL)
   {
 
   }
@@ -147,7 +157,7 @@ public:
                               Vector3D(left, top, -znear))),
   _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
   _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
-  _extent(NULL)
+  _boundingVolume(NULL)
   {
   }
   
@@ -162,11 +172,20 @@ public:
   }
   
   ~Frustum(){
-    delete _extent;
+    delete _boundingVolume;
   }
   
-  Extent *getExtent() const { return _extent; }
-
+  BoundingVolume* getBoundingVolume() const {
+    return _boundingVolume;
+  }
+  
+  Plane getTopPlane() const    { return _topPlane; }
+  Plane getBottomPlane() const { return _bottomPlane; }
+  Plane getLeftPlane() const   { return _leftPlane; }
+  Plane getRightPlane() const  { return _rightPlane; }
+  Plane getNearPlane() const   { return _nearPlane; }
+  Plane getFarPlane() const    { return _farPlane; }
+  
 };
 
 #endif

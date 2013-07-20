@@ -140,7 +140,8 @@ public final class SQLiteStorage_Android
                           final boolean saveInBackground) {
       final String table = "buffer2";
 
-      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
+      //      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer();
       final String name = url.getPath();
 
       if (saveInBackground) {

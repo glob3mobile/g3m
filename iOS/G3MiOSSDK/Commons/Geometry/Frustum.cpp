@@ -2,7 +2,7 @@
 //  Frustum.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 15/07/12.
+//  Created by Agustin Trujillo Pino on 15/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -33,7 +33,7 @@ _topPlane(Plane::fromPoints(Vector3D::zero(),
                             Vector3D(data._left, data._top, -data._znear))),
 _nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
 _farPlane(Plane(Vector3D(0, 0, -1), -data._zfar)),
-_extent(NULL)
+_boundingVolume(NULL)
 {
 }
 
@@ -48,17 +48,27 @@ bool Frustum::contains(const Vector3D& point) const {
   return true;
 }
 
+#define testAllCornersInside(plane, corners) \
+                        ( (plane.signedDistance(corners[0]) >= 0) && \
+                          (plane.signedDistance(corners[1]) >= 0) && \
+                          (plane.signedDistance(corners[2]) >= 0) && \
+                          (plane.signedDistance(corners[3]) >= 0) && \
+                          (plane.signedDistance(corners[4]) >= 0) && \
+                          (plane.signedDistance(corners[5]) >= 0) && \
+                          (plane.signedDistance(corners[6]) >= 0) && \
+                          (plane.signedDistance(corners[7]) >= 0) )
 
-bool Frustum::touchesWithBox(const Box *box) const {
+
+bool Frustum::touchesWithBox(const Box* that) const {
   // test first if frustum extent intersect with box
-  if (!getExtent()->touchesBox(box)) {
+  if (!getBoundingVolume()->touchesBox(that)) {
     return false;
   }
 
 #ifdef C_CODE
   // create an array with the 8 corners of the box
-  const Vector3D min = box->getLower();
-  const Vector3D max = box->getUpper();
+  const Vector3D min = that->getLower();
+  const Vector3D max = that->getUpper();
 
   Vector3F corners[8] = {
     Vector3F((float) min._x, (float) min._y, (float) min._z),
@@ -70,77 +80,46 @@ bool Frustum::touchesWithBox(const Box *box) const {
     Vector3F((float) max._x, (float) max._y, (float) min._z),
     Vector3F((float) max._x, (float) max._y, (float) max._z)
   };
-#else
-  const std::vector<Vector3F> corners = box->getCornersF();
+
+  return (!testAllCornersInside(_leftPlane,   corners) &&
+          !testAllCornersInside(_bottomPlane, corners) &&
+          !testAllCornersInside(_rightPlane,  corners) &&
+          !testAllCornersInside(_topPlane,    corners) &&
+          !testAllCornersInside(_nearPlane,   corners) &&
+          !testAllCornersInside(_farPlane,    corners));
 #endif
+#ifdef JAVA_CODE
+  final Vector3F[] corners = that.getCornersArray();
 
-  bool outside;
-
-  // test with left plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_leftPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  // test with bottom plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_bottomPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  // test with right plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_rightPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  // test with top plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_topPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  // test with near plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_nearPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  // test with far plane
-  outside = true;
-  for (int i = 0; i < 8; i++) {
-    if (_farPlane.signedDistance(corners[i]) < 0) {
-      outside = false;
-      break;
-    }
-  }
-  if (outside) return false;
-
-  return true;
+  return !((_leftPlane.signedDistance(corners[0]) >= 0) && (_leftPlane.signedDistance(corners[1]) >= 0)
+           && (_leftPlane.signedDistance(corners[2]) >= 0) && (_leftPlane.signedDistance(corners[3]) >= 0)
+           && (_leftPlane.signedDistance(corners[4]) >= 0) && (_leftPlane.signedDistance(corners[5]) >= 0)
+           && (_leftPlane.signedDistance(corners[6]) >= 0) && (_leftPlane.signedDistance(corners[7]) >= 0))
+           && !((_bottomPlane.signedDistance(corners[0]) >= 0) && (_bottomPlane.signedDistance(corners[1]) >= 0)
+                && (_bottomPlane.signedDistance(corners[2]) >= 0) && (_bottomPlane.signedDistance(corners[3]) >= 0)
+                && (_bottomPlane.signedDistance(corners[4]) >= 0) && (_bottomPlane.signedDistance(corners[5]) >= 0)
+                && (_bottomPlane.signedDistance(corners[6]) >= 0) && (_bottomPlane.signedDistance(corners[7]) >= 0))
+           && !((_rightPlane.signedDistance(corners[0]) >= 0) && (_rightPlane.signedDistance(corners[1]) >= 0)
+                && (_rightPlane.signedDistance(corners[2]) >= 0) && (_rightPlane.signedDistance(corners[3]) >= 0)
+                && (_rightPlane.signedDistance(corners[4]) >= 0) && (_rightPlane.signedDistance(corners[5]) >= 0)
+                && (_rightPlane.signedDistance(corners[6]) >= 0) && (_rightPlane.signedDistance(corners[7]) >= 0))
+           && !((_topPlane.signedDistance(corners[0]) >= 0) && (_topPlane.signedDistance(corners[1]) >= 0)
+                && (_topPlane.signedDistance(corners[2]) >= 0) && (_topPlane.signedDistance(corners[3]) >= 0)
+                && (_topPlane.signedDistance(corners[4]) >= 0) && (_topPlane.signedDistance(corners[5]) >= 0)
+                && (_topPlane.signedDistance(corners[6]) >= 0) && (_topPlane.signedDistance(corners[7]) >= 0))
+           && !((_nearPlane.signedDistance(corners[0]) >= 0) && (_nearPlane.signedDistance(corners[1]) >= 0)
+                && (_nearPlane.signedDistance(corners[2]) >= 0) && (_nearPlane.signedDistance(corners[3]) >= 0)
+                && (_nearPlane.signedDistance(corners[4]) >= 0) && (_nearPlane.signedDistance(corners[5]) >= 0)
+                && (_nearPlane.signedDistance(corners[6]) >= 0) && (_nearPlane.signedDistance(corners[7]) >= 0))
+           && !((_farPlane.signedDistance(corners[0]) >= 0) && (_farPlane.signedDistance(corners[1]) >= 0)
+                && (_farPlane.signedDistance(corners[2]) >= 0) && (_farPlane.signedDistance(corners[3]) >= 0)
+                && (_farPlane.signedDistance(corners[4]) >= 0) && (_farPlane.signedDistance(corners[5]) >= 0)
+                && (_farPlane.signedDistance(corners[6]) >= 0) && (_farPlane.signedDistance(corners[7]) >= 0));
+#endif
 }
 
 
-Extent* Frustum::computeExtent() {
+BoundingVolume* Frustum::computeBoundingVolume() {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
 
@@ -178,3 +157,4 @@ Extent* Frustum::computeExtent() {
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
+

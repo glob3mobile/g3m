@@ -9,7 +9,10 @@ public class TrailsRenderer extends LeafRenderer
 
   public final void addTrail(Trail trail)
   {
-    _trails.add(trail);
+    if (trail != null)
+    {
+      _trails.add(trail);
+    }
   }
 
   public void dispose()
@@ -72,11 +75,18 @@ public class TrailsRenderer extends LeafRenderer
   public final void render(G3MRenderContext rc, GLState parentState)
   {
     final int trailsCount = _trails.size();
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
-      trail.render(rc, parentState);
+      if (trail != null)
+      {
+        trail.render(rc, parentState, frustum);
+      }
     }
   }
 
 }
+///#include "CompositeMesh.hpp"
+
+//#define MAX_POSITIONS_PER_SEGMENT 64

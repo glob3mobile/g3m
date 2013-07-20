@@ -58,9 +58,9 @@ public class MeshHolder extends Mesh
     _mesh.render(rc, parentState);
   }
 
-  public final Extent getExtent()
+  public final BoundingVolume getBoundingVolume()
   {
-    return _mesh.getExtent();
+    return _mesh.getBoundingVolume();
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

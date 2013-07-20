@@ -23,10 +23,10 @@ package org.glob3.mobile.generated;
  */
 public class Geodetic3D
 {
-  private final Angle _latitude ;
-  private final Angle _longitude ;
-  private final double _height;
 
+  public final Angle _latitude ;
+  public final Angle _longitude ;
+  public final double _height;
 
   public void dispose()
   {
@@ -54,8 +54,8 @@ public class Geodetic3D
 
   public static Geodetic3D linearInterpolation(Geodetic3D from, Geodetic3D to, double alpha)
   {
-    return new Geodetic3D(Angle.linearInterpolation(from.latitude(), to.latitude(), alpha), Angle.linearInterpolation(from.longitude(), to.longitude(), alpha), IMathUtils.instance().linearInterpolation(from.height(), to.height(), alpha));
-                      //((1.0 - alpha) * from.height()) + (alpha * to.height())
+    return new Geodetic3D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha), IMathUtils.instance().linearInterpolation(from._height, to._height, alpha));
+                      //((1.0 - alpha) * from._height) + (alpha * to._height)
   }
 
   public Geodetic3D(Angle latitude, Angle longitude, double height)
@@ -67,8 +67,8 @@ public class Geodetic3D
 
   public Geodetic3D(Geodetic2D g2, double height)
   {
-     _latitude = new Angle(g2.latitude());
-     _longitude = new Angle(g2.longitude());
+     _latitude = new Angle(g2._latitude);
+     _longitude = new Angle(g2._longitude);
      _height = height;
   }
 

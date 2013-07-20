@@ -45,7 +45,7 @@ public abstract class TileTessellator
 
   public Vector2D getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
   {
-    return getTextCoord(tile, position.latitude(), position.longitude(), mercator);
+    return getTextCoord(tile, position._latitude, position._longitude, mercator);
   }
 
   public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);

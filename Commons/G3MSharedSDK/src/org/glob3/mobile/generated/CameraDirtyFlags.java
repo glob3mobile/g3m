@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
  *  Camera.cpp
  *  Prueba Opengl iPad
  *
- *  Created by AgustÃ­n Trujillo Pino on 24/01/11.
+ *  Created by Agustin Trujillo Pino on 24/01/11.
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
@@ -14,10 +14,11 @@ package org.glob3.mobile.generated;
  *  Camera.hpp
  *  Prueba Opengl iPad
  *
- *  Created by Agustín Trujillo Pino on 24/01/11.
+ *  Created by Agustin Trujillo Pino on 24/01/11.
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
+
 
 
 

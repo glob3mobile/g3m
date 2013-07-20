@@ -2,7 +2,7 @@
  *  Camera.cpp
  *  Prueba Opengl iPad
  *
- *  Created by Agustín Trujillo Pino on 24/01/11.
+ *  Created by Agustin Trujillo Pino on 24/01/11.
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
@@ -15,6 +15,7 @@
 #include "Plane.hpp"
 #include "GL.hpp"
 #include "Vector2F.hpp"
+#include "Sphere.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -33,6 +34,7 @@ void Camera::copyFrom(const Camera &that) {
   _position = MutableVector3D(that._position);
   _center   = MutableVector3D(that._center);
   _up       = MutableVector3D(that._up);
+  _normalizedPosition = MutableVector3D(that._normalizedPosition);
 
   _dirtyFlags.copyFrom(that._dirtyFlags);
 
@@ -61,6 +63,7 @@ void Camera::copyFrom(const Camera &that) {
   
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
+  _angle2Horizon = that._angle2Horizon;
 }
 
 Camera::Camera(int width, int height) :
@@ -82,7 +85,9 @@ _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
 _camEffectTarget(new CameraEffectTarget()),
-_geodeticPosition(NULL)
+_geodeticPosition(NULL),
+_angle2Horizon(-99),
+_normalizedPosition(0, 0, 0)
 {
   resizeViewport(width, height);
   _dirtyFlags.setAll(true);
@@ -151,7 +156,7 @@ void Camera::setHeading(const Angle& angle) {
   const Angle currentHeading = getHeading(normal);
   const Angle delta          = currentHeading.sub(angle);
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-  //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+  //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
 }
 
 const Angle Camera::getPitch() const {
@@ -164,7 +169,7 @@ void Camera::setPitch(const Angle& angle) {
   const Angle currentPitch  = getPitch();
   const Vector3D u          = getHorizontalVector();
   rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
 }
 
 void Camera::_setGeodeticPosition(const Vector3D& pos) {
@@ -214,30 +219,44 @@ const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-const Vector2I Camera::point2Pixel(const Vector3D& point) const {
+const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-//  const IMathUtils* mu = IMathUtils::instance();
-//
-//  return Vector2I(mu->round( (float) p._x ),
-//                  mu->round( (float) ((double) _height - p._y) ) );
-//
-  return Vector2I((int) p._x,
-                  (int) (_height - p._y) );
+  return Vector2F((float) p._x, (float) (_height - p._y) );
 }
 
-const Vector2I Camera::point2Pixel(const Vector3F& point) const {
+const Vector2F Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-//  const IMathUtils* mu = IMathUtils::instance();
-//
-//  return Vector2I(mu->round( p._x ),
-//                  mu->round( (float) _height - p._y ) );
-  return Vector2I((int) p._x ,
-                  (int) (_height - p._y ) );
+  return Vector2F(p._x, (_height - p._y) );
 }
+
+//const Vector2I Camera::point2Pixel(const Vector3D& point) const {
+//  const Vector2D p = getModelViewMatrix().project(point,
+//                                                  0, 0, _width, _height);
+//
+////  const IMathUtils* mu = IMathUtils::instance();
+////
+////  return Vector2I(mu->round( (float) p._x ),
+////                  mu->round( (float) ((double) _height - p._y) ) );
+////
+//  return Vector2I((int) p._x,
+//                  (int) (_height - p._y) );
+//}
+
+//const Vector2I Camera::point2Pixel(const Vector3F& point) const {
+//  const Vector2F p = getModelViewMatrix().project(point,
+//                                                  0, 0, _width, _height);
+//
+////  const IMathUtils* mu = IMathUtils::instance();
+////
+////  return Vector2I(mu->round( p._x ),
+////                  mu->round( (float) _height - p._y ) );
+//  return Vector2I((int) p._x ,
+//                  (int) (_height - p._y ) );
+//}
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
   setCartesianPosition( _position.transformedBy(M, 1.0) );
@@ -295,7 +314,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 Vector3D Camera::getHorizontalVector() {
   int todo_remove_get_in_matrix;
   const MutableMatrix44D M = getModelMatrix();
-  return Vector3D(M.get(0), M.get(4), M.get(8));
+  return Vector3D(M.get0(), M.get4(), M.get8());
 }
 
 Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
@@ -369,7 +388,7 @@ FrustumData Camera::calculateFrustumData() const {
   //                       bottom, top,
   //                       znear, zfar);
 
-  const double height = getGeodeticPosition().height();
+  const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
 
   /*
@@ -416,3 +435,11 @@ FrustumData Camera::calculateFrustumData() const {
                      zNear, zFar);
 }
 
+
+double Camera::getProjectedSphereArea(const Sphere& sphere) const {
+  // this implementation is not right exact, but it's faster.
+  const double z = sphere._center.distanceTo(getCartesianPosition());
+  const double rWorld = sphere._radius * _frustumData._znear / z;
+  const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
+  return IMathUtils::instance()->pi() * rScreen * rScreen;
+}

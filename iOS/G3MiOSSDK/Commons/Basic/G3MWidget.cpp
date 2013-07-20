@@ -447,13 +447,13 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  const TimeInterval elapsedTime = _timer->elapsedTime();
-  if (elapsedTime.milliseconds() > 100) {
-    //ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
-  }
+  const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
+//  if (elapsedTimeMS > 100) {
+//    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
+//  }
 
   if (_logFPS) {
-    _totalRenderTime += elapsedTime.milliseconds();
+    _totalRenderTime += elapsedTimeMS;
 
     if ((_renderStatisticsTimer == NULL) ||
         (_renderStatisticsTimer->elapsedTime().seconds() > 2)) {
@@ -583,8 +583,8 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                           const Angle& toPitch,
                                           const bool linearTiming,
                                           const bool linearHeight) {
-  double finalLatInDegrees = toPosition.latitude()._degrees;
-  double finalLonInDegrees = toPosition.longitude()._degrees;
+  double finalLatInDegrees = toPosition._latitude._degrees;
+  double finalLonInDegrees = toPosition._longitude._degrees;
 
   //Fixing final latitude
   while (finalLatInDegrees > 90) {
@@ -601,13 +601,13 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
   while (finalLonInDegrees < 0) {
     finalLonInDegrees += 360;
   }
-  if (fabs(finalLonInDegrees - fromPosition.longitude()._degrees) > 180) {
+  if (fabs(finalLonInDegrees - fromPosition._longitude._degrees) > 180) {
     finalLonInDegrees -= 360;
   }
 
   const Geodetic3D finalToPosition = Geodetic3D::fromDegrees(finalLatInDegrees,
                                                              finalLonInDegrees,
-                                                             toPosition.height());
+                                                             toPosition._height);
 
   stopCameraAnimation();
 

@@ -35,8 +35,8 @@ public abstract class AbstractMesh extends Mesh
   protected final float _pointSize;
   protected final boolean _depthTest;
 
-  protected Extent _extent;
-  protected final Extent computeExtent()
+  protected BoundingVolume _boundingVolume;
+  protected final BoundingVolume computeBoundingVolume()
   {
     final int vertexCount = getVertexCount();
   
@@ -88,7 +88,7 @@ public abstract class AbstractMesh extends Mesh
      _flatColor = flatColor;
      _colors = colors;
      _colorsIntensity = colorsIntensity;
-     _extent = null;
+     _boundingVolume = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
@@ -111,8 +111,8 @@ public abstract class AbstractMesh extends Mesh
          _flatColor.dispose();
     }
   
-    if (_extent != null)
-       _extent.dispose();
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
   }
@@ -162,13 +162,13 @@ public abstract class AbstractMesh extends Mesh
   
   }
 
-  public final Extent getExtent()
+  public final BoundingVolume getBoundingVolume()
   {
-    if (_extent == null)
+    if (_boundingVolume == null)
     {
-      _extent = computeExtent();
+      _boundingVolume = computeBoundingVolume();
     }
-    return _extent;
+    return _boundingVolume;
   }
 
   public final int getVertexCount()

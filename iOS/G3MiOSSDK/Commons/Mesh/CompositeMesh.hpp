@@ -15,9 +15,9 @@ class CompositeMesh : public Mesh {
 private:
   std::vector<Mesh*> _children;
 
-  Extent* calculateExtent() const;
+  BoundingVolume* calculateBoundingVolume() const;
 
-  mutable Extent* _extent;
+  mutable BoundingVolume* _boundingVolume;
   
 
 public:
@@ -30,7 +30,7 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState) const;
 
-  Extent* getExtent() const;
+  BoundingVolume* getBoundingVolume() const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
 

@@ -27,7 +27,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     return rawResolution;
   
   //  /* testing for dynamic latitude-resolution */
-  //  const double cos = sector.getCenter().latitude().cosinus();
+  //  const double cos = sector._center._latitude.cosinus();
   //
   //  int resolutionY = (int) (rawResolution._y * cos);
   //  if (resolutionY < 8) {
@@ -66,7 +66,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minElevation = 0;
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     final IMathUtils mu = IMathUtils.instance();
   
@@ -191,7 +191,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector3D nw = planet.toCartesian(sector.getNW());
     final double offset = nw.sub(sw).length() * 1e-3;
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
@@ -243,8 +243,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
     final Sector sector = tile.getSector();
   
-    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
-    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     for (int j = 0; j < tileResolution._y; j++)
@@ -270,23 +270,14 @@ public class EllipsoidalTileTessellator extends TileTessellator
       }
     }
   
-    int textCoordsSize = (tileResolution._x * tileResolution._y) * 2;
-    if (_skirted)
-    {
-      textCoordsSize += ((tileResolution._x-1) * (tileResolution._y-1) * 4) * 2;
-    }
-  
-    IFloatBuffer textCoords = IFactory.instance().createFloatBuffer(textCoordsSize);
-  
-    int textCoordsIndex = 0;
+    FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
     for (int j = 0; j < tileResolution._y; j++)
     {
       for (int i = 0; i < tileResolution._x; i++)
       {
         final int pos = j *tileResolution._x + i;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
+        textCoords.add(u[pos], v[pos]);
       }
     }
   
@@ -297,32 +288,28 @@ public class EllipsoidalTileTessellator extends TileTessellator
       for (int j = tileResolution._y-1; j > 0; j--)
       {
         final int pos = j *tileResolution._x + tileResolution._x-1;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
+        textCoords.add(u[pos], v[pos]);
       }
   
       // north side
       for (int i = tileResolution._x-1; i > 0; i--)
       {
         final int pos = i;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
+        textCoords.add(u[pos], v[pos]);
       }
   
       // west side
       for (int j = 0; j < tileResolution._y-1; j++)
       {
         final int pos = j *tileResolution._x;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
+        textCoords.add(u[pos], v[pos]);
       }
   
       // south side
       for (int i = 0; i < tileResolution._x-1; i++)
       {
         final int pos = (tileResolution._y-1) * tileResolution._x + i;
-        textCoords.rawPut(textCoordsIndex++, u[pos]);
-        textCoords.rawPut(textCoordsIndex++, v[pos]);
+        textCoords.add(u[pos], v[pos]);
       }
     }
   
@@ -331,7 +318,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
     v = null;
   
     //  return textCoords.create();
-    return textCoords;
+    return textCoords.create();
   }
 
   public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
@@ -344,8 +331,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
       return linearUV;
     }
   
-    final double lowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
-    final double upperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+    final double lowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double upperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
     final double deltaGlobalV = lowerGlobalV - upperGlobalV;
   
     final double globalV = MercatorUtils.getMercatorV(latitude);

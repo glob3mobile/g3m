@@ -130,7 +130,8 @@ public final class Factory_Android
    public void createImageFromBuffer(final IByteBuffer buffer,
                                      final IImageListener listener,
                                      final boolean autodelete) {
-      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      //      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer();
       final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
       final Image_Android result;
       if (bitmap == null) {
@@ -195,6 +196,18 @@ public final class Factory_Android
                                      final boolean autodeleteListener,
                                      final boolean autodeleteWebSocket) {
       return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket);
+   }
+
+
+   @Override
+   public IShortBuffer createShortBuffer(final short[] array) {
+      return new ShortBuffer_Android(array);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float[] array) {
+      return new FloatBuffer_Android(array);
    }
 
 }

@@ -52,7 +52,6 @@ public final class ES2Renderer
 
    @Override
    public void onDrawFrame(final GL10 glUnused) {
-
       if (Looper.myLooper() == null) {
          Looper.prepare();
       }
