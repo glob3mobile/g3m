@@ -14,6 +14,11 @@ public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
   {
     GEORasterSymbol symbol = (GEORasterSymbol) element;
 
+//    int __REMOVE_DEBUG_CODE;
+//    _canvas->setStrokeWidth(2);
+//    _canvas->setStrokeColor(Color::fromRGBA(1, 1, 0, 0.5f));
+//    sector.rasterize(_canvas, _projection);
+
     symbol.rasterize(_canvas, _projection);
 
     return false;

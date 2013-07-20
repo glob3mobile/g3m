@@ -25,6 +25,9 @@ public class GEORasterProjection
   private final int _imageWidth;
   private final int _imageHeight;
 
+  private double _mercatorUpperGlobalV;
+  private double _mercatorDeltaGlobalV;
+
 
   public GEORasterProjection(Sector sector, boolean mercator, int imageWidth, int imageHeight)
   {
@@ -32,6 +35,12 @@ public class GEORasterProjection
      _mercator = mercator;
      _imageWidth = imageWidth;
      _imageHeight = imageHeight;
+    if (_mercator)
+    {
+      final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
+      _mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+      _mercatorDeltaGlobalV = mercatorLowerGlobalV - _mercatorUpperGlobalV;
+    }
   }
 
   public void dispose()
@@ -40,12 +49,24 @@ public class GEORasterProjection
 
   public final Vector2F project(Geodetic2D position)
   {
-  
-    int _TODO_mercator;
-  
     final Vector2D uvCoordinates = _sector.getUVCoordinates(position);
   
-    return new Vector2F((float)(uvCoordinates._x * _imageWidth), (float)((1.0 - uvCoordinates._y) * _imageHeight));
+    double v;
+    if (_mercator)
+    {
+      final double linearV = uvCoordinates._y;
+      final Angle latitude = _sector.getInnerPointLatitude(linearV);
+      final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
+      final double mercatorLocalV = (mercatorGlobalV - _mercatorUpperGlobalV) / _mercatorDeltaGlobalV;
+      v = mercatorLocalV;
+    }
+    else
+    {
+      v = uvCoordinates._y;
+    }
+  
+    return new Vector2F((float)(uvCoordinates._x * _imageWidth), (float)(v * _imageHeight));
+  
   }
 
 }

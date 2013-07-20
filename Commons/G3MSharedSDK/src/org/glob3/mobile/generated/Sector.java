@@ -20,6 +20,10 @@ package org.glob3.mobile.generated;
 
 //class Sector_Geodetic2DCachedData;
 
+//class ICanvas;
+//class GEORasterProjection;
+
+
 public class Sector
 {
 
@@ -97,27 +101,17 @@ public class Sector
   {
      _lower = new Geodetic2D(lower);
      _upper = new Geodetic2D(upper);
-<<<<<<< HEAD
-     _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
-     _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
-     _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
-     _nwData = null;
-     _neData = null;
-     _swData = null;
-     _seData = null;
+     _deltaLatitude = new Angle(upper._latitude.sub(lower._latitude));
+     _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
+     _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
+     _deltaRadiusInRadians = -1.0;
+     _normalizedCartesianCenter = null;
 //    if (_deltaLatitude._degrees < 0) {
 //      printf("break point\n");
 //    }
 //    if (_deltaLongitude._degrees < 0) {
 //      printf("break point\n");
 //    }
-=======
-     _deltaLatitude = new Angle(upper._latitude.sub(lower._latitude));
-     _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
-     _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
-     _deltaRadiusInRadians = -1.0;
-     _normalizedCartesianCenter = null;
->>>>>>> webgl-port
   }
 
 
@@ -662,6 +656,28 @@ public class Sector
     return (_lower._latitude._degrees <= -89.9);
   }
 
+
+  //Vector2D Sector::getTranslationFactor(const Sector& that) const {
+  //  const Vector2D uv = that.getUVCoordinates(_lower);
+  //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+  //  return Vector2D(uv._x, uv._y - scaleY);
+  //}
+  
+  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  {
+  
+    final Vector2F l = projection.project(_lower);
+    final Vector2F u = projection.project(_upper);
+  
+    final float left = l._x;
+    final float top = l._y;
+    final float width = u._x - left;
+    final float height = u._y - top;
+  
+  //  canvas->strokeRectangle(left, canvas->getHeight() - top, width, -height);
+    canvas.strokeRectangle(left, top, width, height);
+  }
+
   public final boolean touchesPoles()
   {
     return ((_upper._latitude._degrees >= 89.9) || (_lower._latitude._degrees <= -89.9));
@@ -674,13 +690,6 @@ public class Sector
     return _deltaRadiusInRadians;
   }
 
-
-  //Vector2D Sector::getTranslationFactor(const Sector& that) const {
-  //  const Vector2D uv = that.getUVCoordinates(_lower);
-  //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
-  //  return Vector2D(uv._x, uv._y - scaleY);
-  //}
-  
   public final Vector3D getNormalizedCartesianCenter(Planet planet)
   {
     if (_normalizedCartesianCenter == null)

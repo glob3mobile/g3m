@@ -43,38 +43,52 @@ public abstract class GEORasterSymbol extends GEOSymbol
   
     final Geodetic2D coordinate0 = coordinates.get(0);
   
-    double minLatInDegrees = coordinate0.latitude().degrees();
-    double maxLatInDegrees = minLatInDegrees;
+    double minLatInRadians = coordinate0.latitude().radians();
+    double maxLatInRadians = minLatInRadians;
   
-    double minLonInDegrees = coordinate0.longitude().degrees();
-    double maxLonInDegrees = minLonInDegrees;
+    double minLonInRadians = coordinate0.longitude().radians();
+    double maxLonInRadians = minLonInRadians;
   
     for (int i = 1; i < size; i++)
     {
       final Geodetic2D coordinate = coordinates.get(i);
   
-      final double latInDegrees = coordinate.latitude().degrees();
-      if (latInDegrees < minLatInDegrees)
+      final double latInRadians = coordinate.latitude().radians();
+      if (latInRadians < minLatInRadians)
       {
-        minLatInDegrees = latInDegrees;
+        minLatInRadians = latInRadians;
       }
-      else if (latInDegrees > maxLatInDegrees)
+      if (latInRadians > maxLatInRadians)
       {
-        maxLatInDegrees = latInDegrees;
+        maxLatInRadians = latInRadians;
       }
   
-      final double lonInDegrees = coordinate.longitude().degrees();
-      if (lonInDegrees < minLonInDegrees)
+      final double lonInRadians = coordinate.longitude().radians();
+      if (lonInRadians < minLonInRadians)
       {
-        minLonInDegrees = lonInDegrees;
+        minLonInRadians = lonInRadians;
       }
-      else if (lonInDegrees > maxLonInDegrees)
+      if (lonInRadians > maxLonInRadians)
       {
-        maxLonInDegrees = lonInDegrees;
+        maxLonInRadians = lonInRadians;
       }
     }
   
-    return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
+  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+  
+  
+    Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+  
+  //  int __REMOVE_DEBUG_CODE;
+  //  for (int i = 0; i < size; i++) {
+  //    const Geodetic2D* coordinate = coordinates->at(i);
+  //    if (!result->contains(*coordinate)) {
+  //      printf("xxx\n");
+  //    }
+  //  }
+  
+    return result;
   }
   protected static Sector calculateSectorFromCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
@@ -84,11 +98,11 @@ public abstract class GEORasterSymbol extends GEOSymbol
     final double maxDouble = mu.maxDouble();
     final double minDouble = mu.minDouble();
   
-    double minLatInDegrees = maxDouble;
-    double maxLatInDegrees = minDouble;
+    double minLatInRadians = maxDouble;
+    double maxLatInRadians = minDouble;
   
-    double minLonInDegrees = maxDouble;
-    double maxLonInDegrees = minDouble;
+    double minLonInRadians = maxDouble;
+    double maxLonInRadians = minDouble;
   
     final int coordinatesArrayCount = coordinatesArray.size();
     for (int i = 0; i < coordinatesArrayCount; i++)
@@ -99,35 +113,52 @@ public abstract class GEORasterSymbol extends GEOSymbol
       {
         final Geodetic2D coordinate = coordinates.get(j);
   
-        final double latInDegrees = coordinate.latitude().degrees();
-        if (latInDegrees < minLatInDegrees)
+        final double latInRadians = coordinate.latitude().radians();
+        if (latInRadians < minLatInRadians)
         {
-          minLatInDegrees = latInDegrees;
+          minLatInRadians = latInRadians;
         }
-        else if (latInDegrees > maxLatInDegrees)
+        if (latInRadians > maxLatInRadians)
         {
-          maxLatInDegrees = latInDegrees;
+          maxLatInRadians = latInRadians;
         }
   
-        final double lonInDegrees = coordinate.longitude().degrees();
-        if (lonInDegrees < minLonInDegrees)
+        final double lonInRadians = coordinate.longitude().radians();
+        if (lonInRadians < minLonInRadians)
         {
-          minLonInDegrees = lonInDegrees;
+          minLonInRadians = lonInRadians;
         }
-        else if (lonInDegrees > maxLonInDegrees)
+        if (lonInRadians > maxLonInRadians)
         {
-          maxLonInDegrees = lonInDegrees;
+          maxLonInRadians = lonInRadians;
         }
       }
     }
   
-    if ((minLatInDegrees == maxDouble) || (maxLatInDegrees == minDouble) || (minLonInDegrees == maxDouble) || (maxLonInDegrees == minDouble))
+    if ((minLatInRadians == maxDouble) || (maxLatInRadians == minDouble) || (minLonInRadians == maxDouble) || (maxLonInRadians == minDouble))
     {
       return null;
     }
   
-    return new Sector(Geodetic2D.fromDegrees(minLatInDegrees, minLonInDegrees), Geodetic2D.fromDegrees(maxLatInDegrees, maxLonInDegrees));
+  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
   
+  
+    Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+  
+  //  int __REMOVE_DEBUG_CODE;
+  //  for (int i = 0; i < coordinatesArrayCount; i++) {
+  //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+  //    const int coordinatesCount = coordinates->size();
+  //    for (int j = 0; j < coordinatesCount; j++) {
+  //      const Geodetic2D* coordinate = coordinates->at(j);
+  //      if (!result->contains(*coordinate)) {
+  //        printf("xxx\n");
+  //      }
+  //    }
+  //  }
+  
+    return result;
   }
 
   protected GEORasterSymbol(Sector sector)

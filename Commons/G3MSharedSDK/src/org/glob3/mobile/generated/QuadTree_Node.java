@@ -29,6 +29,7 @@ public class QuadTree_Node
       if (_elements.get(i) != null)
          _elements.get(i).dispose();
     }
+  
     if (_children != null)
     {
       for (int i = 0; i < 4; i++)
@@ -43,8 +44,16 @@ public class QuadTree_Node
 
   public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)
   {
+    if (!_sector.fullContains(sector))
+    {
+      return false;
+    }
+    if (!_sector.touchesWith(sector))
+    {
+      return false;
+    }
   
-    if (_elements.size() < maxElementsPerNode || _depth >= maxDepth)
+    if ((_elements.size() < maxElementsPerNode) || (_depth >= maxDepth))
     {
       _elements.add(new QuadTree_Element(sector, element));
       return true;

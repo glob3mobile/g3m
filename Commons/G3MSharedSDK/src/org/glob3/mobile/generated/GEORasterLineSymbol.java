@@ -73,6 +73,8 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
   
+  //  int __REMOVE_DEBUG_CODE;
+  //  canvas->setStrokeColor(Color::magenta());
     canvas.setStrokeColor(_lineColor);
     canvas.setStrokeWidth(_lineWidth);
   

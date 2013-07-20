@@ -37,6 +37,11 @@ public class Geodetic2D
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
   }
 
+  public static Geodetic2D fromRadians(double lat, double lon)
+  {
+    return new Geodetic2D(Angle.fromRadians(lat), Angle.fromRadians(lon));
+  }
+
   public static Geodetic2D linearInterpolation(Geodetic2D from, Geodetic2D to, double alpha)
   {
     return new Geodetic2D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha));

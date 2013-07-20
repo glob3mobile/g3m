@@ -43,9 +43,9 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
   //  canvas->setFillColor(Color::yellow());
   
-    canvas.setStrokeColor(Color.white());
-    canvas.setStrokeWidth(1);
-    canvas.strokeRectangle(0, 0, width, height);
+  //  canvas->setStrokeColor(Color::white());
+  //  canvas->setStrokeWidth(1);
+  //  canvas->strokeRectangle(0, 0, width, height);
   
   
     _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection));
