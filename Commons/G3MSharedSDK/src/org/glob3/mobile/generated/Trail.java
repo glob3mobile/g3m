@@ -34,7 +34,7 @@ public class Trail
     }
   }
 
-  public final void render(G3MRenderContext rc, Frustum frustum)
+  public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
     if (_visible)
     {
@@ -42,7 +42,7 @@ public class Trail
       for (int i = 0; i < segmentsSize; i++)
       {
         TrailSegment segment = _segments.get(i);
-        segment.render(rc, frustum);
+        segment.render(rc, frustum, state);
       }
     }
   }

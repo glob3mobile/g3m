@@ -36,14 +36,38 @@ public class BusyMeshRenderer extends LeafRenderer
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
 
+
+  private ProjectionGLFeature _projectionFeature;
+  private ModelGLFeature _modelFeature;
+
   private GLState _glState = new GLState();
 
   private void createGLState()
   {
   
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+    if (_projectionFeature == null)
+    {
+      _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
+      _glState.addGLFeature(_projectionFeature, false);
+    }
+    else
+    {
+      _projectionFeature.setMatrix(_projectionMatrix.asMatrix44D());
+    }
+  
+    if (_modelFeature == null)
+    {
+      _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
+      _glState.addGLFeature(_modelFeature, false);
+    }
+    else
+    {
+      _modelFeature.setMatrix(_modelviewMatrix.asMatrix44D());
+    }
+  
+  //  _glState.clearGLFeatureGroup(CAMERA_GROUP);
+  //  _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+  //  _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   
   }
 
@@ -51,6 +75,8 @@ public class BusyMeshRenderer extends LeafRenderer
   {
      _degrees = 0;
      _backgroundColor = backgroundColor;
+     _projectionFeature = null;
+     _modelFeature = null;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D.invalid();
   }
@@ -108,8 +134,6 @@ public class BusyMeshRenderer extends LeafRenderer
   {
     GL gl = rc.getGL();
   
-    createGLState();
-  
     if (!_projectionMatrix.isValid())
     {
       // init modelview matrix
@@ -118,11 +142,9 @@ public class BusyMeshRenderer extends LeafRenderer
       final int halfWidth = currentViewport[2] / 2;
       final int halfHeight = currentViewport[3] / 2;
       _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-  
-      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-      _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-      _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
     }
+  
+    createGLState();
   
     gl.clearScreen(_backgroundColor);
   
@@ -143,9 +165,9 @@ public class BusyMeshRenderer extends LeafRenderer
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
 //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public void dispose()
@@ -163,9 +185,9 @@ public class BusyMeshRenderer extends LeafRenderer
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
 
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public final void start(G3MRenderContext rc)

@@ -176,14 +176,12 @@ public class GLState
       _valuesSet = new GPUVariableValueSet();
       for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
       {
-  
         GLFeatureGroup group = getAccumulatedGroup(i);
         if (group != null)
         {
           group.addToGPUVariableSet(_valuesSet);
         }
       }
-  
   
       int uniformsCode = _valuesSet.getUniformsCode();
       int attributesCode = _valuesSet.getAttributesCode();
@@ -197,7 +195,6 @@ public class GLState
       _globalState = new GLGlobalState();
       for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
       {
-  
         GLFeatureGroup group = getAccumulatedGroup(i);
         if (group != null)
         {

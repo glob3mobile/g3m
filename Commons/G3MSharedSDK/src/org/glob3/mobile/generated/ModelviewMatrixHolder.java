@@ -16,6 +16,10 @@ public class ModelviewMatrixHolder
     for (int i = 0; i < _nMatrix; i++)
     {
       _matrix[i] = matrixHolders[i].getMatrix();
+      if (_matrix[i] == null)
+      {
+        ILogger.instance().logError("Modelview multiplication failure");
+      }
     }
   }
 

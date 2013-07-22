@@ -4,7 +4,8 @@ public enum GLFeatureGroupName
   UNRECOGNIZED_GROUP(-1),
   NO_GROUP(0),
   CAMERA_GROUP(1),
-  COLOR_GROUP(2);
+  COLOR_GROUP(2),
+  LIGHTING_GROUP(3);
 
    private int intValue;
    private static java.util.HashMap<Integer, GLFeatureGroupName> mappings;

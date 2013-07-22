@@ -5,7 +5,11 @@ public class Matrix44DHolder
   public Matrix44DHolder(Matrix44D matrix)
   {
      _matrix = matrix;
-    matrix._retain();
+    if (matrix == null)
+    {
+      ILogger.instance().logError("Setting NULL in Matrix44D Holder");
+    }
+    _matrix._retain();
   }
 
   public void dispose()
@@ -22,7 +26,10 @@ public class Matrix44DHolder
 
     if (matrix != _matrix)
     {
-      _matrix._release();
+      if (_matrix != null)
+      {
+        _matrix._release();
+      }
       _matrix = matrix;
       _matrix._retain();
     }

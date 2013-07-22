@@ -4,7 +4,8 @@ public enum GPUAttributeKey
   UNRECOGNIZED_ATTRIBUTE(-1),
   POSITION(0),
   TEXTURE_COORDS(1),
-  COLOR(2);
+  COLOR(2),
+  NORMAL(3);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUAttributeKey> mappings;

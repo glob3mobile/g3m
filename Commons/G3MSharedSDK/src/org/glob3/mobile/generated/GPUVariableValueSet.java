@@ -161,7 +161,6 @@ public class GPUVariableValueSet
 
   public final void applyValuesToProgram(GPUProgram prog)
   {
-  
     for (int i = 0; i <= _highestUniformKey; i++)
     {
       GPUUniformValue u = _uniformValues[i];
