@@ -188,7 +188,6 @@ public abstract class ICanvas
   }
 
   void setLineDash(float[] lengths,
-                   int count,
                    int phase) {
     setLineDash(lengths, lengths.length, phase);
   }
