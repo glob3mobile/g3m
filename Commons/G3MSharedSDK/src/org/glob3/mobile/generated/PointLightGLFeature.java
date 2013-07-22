@@ -5,5 +5,7 @@ public class PointLightGLFeature extends GLFeature
   {
      super(GLFeatureGroupName.LIGHTING_GROUP);
   }
-  void applyOnGlobalGLState(GLGlobalState state){}
+  private void applyOnGlobalGLState(GLGlobalState state)
+  {
+  }
 }
