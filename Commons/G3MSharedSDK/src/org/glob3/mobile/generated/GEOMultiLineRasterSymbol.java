@@ -20,21 +20,7 @@ package org.glob3.mobile.generated;
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
-
-//  const Color _lineColor;
-//  const float _lineWidth;
-  private final GEOLine2DRasterStyle _style = new GEOLine2DRasterStyle();
-
-//  GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
-//                           const Sector* sector,
-//                           const Color&  lineColor,
-//                           const float   lineWidth) :
-//  GEORasterSymbol(sector),
-//  _coordinatesArray(coordinatesArray),
-//  _lineColor(lineColor),
-//  _lineWidth(lineWidth)
-//  {
-//  }
+  private final GEOLine2DRasterStyle                           _style;
 
   public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEOLine2DRasterStyle style)
   //_lineColor( style.getColor() ),
@@ -42,7 +28,7 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
   {
      super(calculateSectorFromCoordinatesArray(coordinatesArray));
      _coordinatesArray = copyCoordinatesArray(coordinatesArray);
-     _style = new GEOLine2DRasterStyle(style);
+     _style = style;
   }
 
   public void dispose()

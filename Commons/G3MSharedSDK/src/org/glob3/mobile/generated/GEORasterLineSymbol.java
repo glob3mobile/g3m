@@ -22,14 +22,14 @@ package org.glob3.mobile.generated;
 public class GEORasterLineSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
+  private final GEOLine2DRasterStyle      _style;
 
-  private final GEOLine2DRasterStyle _style = new GEOLine2DRasterStyle();
 
   public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DRasterStyle style)
   {
      super(calculateSectorFromCoordinates(coordinates));
      _coordinates = copyCoordinates(coordinates);
-     _style = new GEOLine2DRasterStyle(style);
+     _style = style;
   }
 
   public void dispose()

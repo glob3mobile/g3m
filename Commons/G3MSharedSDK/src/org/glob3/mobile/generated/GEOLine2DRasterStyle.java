@@ -25,7 +25,7 @@ public class GEOLine2DRasterStyle
   private final StrokeJoin _join;
   private final float _miterLimit;
 
-  const float[]    _dashLengths;
+  final float[]    _dashLengths;
   private final int _dashCount;
   private final int _dashPhase;
 
@@ -51,7 +51,7 @@ public class GEOLine2DRasterStyle
      _dashLengths = new float[that._dashCount];
      _dashCount = that._dashCount;
      _dashPhase = that._dashPhase;
-    std.copy(that._dashLengths, that._dashLengths + that._dashCount, _dashLengths);
+    _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
   }
 
   public void dispose()
