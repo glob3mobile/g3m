@@ -135,34 +135,6 @@ public class TrailSegment
     return _mesh;
   }
 
-  private GLState _glState = new GLState();
-
-  private void updateGLState(G3MRenderContext rc)
-  {
-  
-    final Camera cam = rc.getCurrentCamera();
-    if (_projection == null)
-    {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
-      _glState.addGLFeature(_projection, true);
-    }
-    else
-    {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
-    }
-  
-    if (_model == null)
-    {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
-      _glState.addGLFeature(_model, true);
-    }
-    else
-    {
-      _model.setMatrix(cam.getModelMatrix44D());
-    }
-  }
-  private ProjectionGLFeature _projection;
-  private ModelGLFeature _model;
 
   public TrailSegment(Color color, float ribbonWidth)
   {
@@ -231,7 +203,7 @@ public class TrailSegment
     return _positions.get(_positions.size() - 2);
   }
 
-  public final void render(G3MRenderContext rc, Frustum frustum)
+  public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
     Mesh mesh = getMesh(rc.getPlanet());
     if (mesh != null)
@@ -241,7 +213,7 @@ public class TrailSegment
       {
         if (bounding.touchesFrustum(frustum))
         {
-          mesh.render(rc, _glState);
+          mesh.render(rc, state);
         }
       }
     }
