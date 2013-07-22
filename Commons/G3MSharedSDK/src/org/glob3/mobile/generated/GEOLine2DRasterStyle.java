@@ -25,7 +25,7 @@ public class GEOLine2DRasterStyle
   private final StrokeJoin _join;
   private final float _miterLimit;
 
-  private float _dashLengths;
+  const float[]    _dashLengths;
   private final int _dashCount;
   private final int _dashPhase;
 
