@@ -30,6 +30,10 @@ private:
   
   MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelviewMatrix;
+
+
+  ProjectionGLFeature* _projectionFeature;
+  ModelGLFeature* _modelFeature;
   
   GLState _glState;
   
@@ -38,7 +42,9 @@ private:
 public:    
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
-  _backgroundColor(backgroundColor)
+  _backgroundColor(backgroundColor),
+  _projectionFeature(NULL),
+  _modelFeature(NULL)
   {
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D::invalid();
@@ -68,9 +74,9 @@ public:
     //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
 //    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
 
-    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
   
   virtual ~BusyMeshRenderer() {
@@ -83,9 +89,9 @@ public:
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
 
-    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   void start(const G3MRenderContext* rc);

@@ -127,7 +127,7 @@ public:
     if (matrix == NULL){
       ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
     }
-    matrix->_retain();
+    _matrix->_retain();
   }
 
   ~Matrix44DHolder(){
@@ -140,7 +140,9 @@ public:
     }
 
     if (matrix != _matrix){
-      _matrix->_release();
+      if (_matrix != NULL){
+        _matrix->_release();
+      }
       _matrix = matrix;
       _matrix->_retain();
     }

@@ -48,6 +48,8 @@
 		D8CE5D55173BB9AF00C7AAE6 /* Default.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */; };
 		D8D0CDBB1771C93700D25CB6 /* FlatColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */; };
 		D8D0CDBC1771C93700D25CB6 /* FlatColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */; };
+		D8E23D11179D4CA100E358DC /* TexturedMesh+PointLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8E23D0F179D4CA100E358DC /* TexturedMesh+PointLight.fsh */; };
+		D8E23D12179D4CA100E358DC /* TexturedMesh+PointLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8E23D10179D4CA100E358DC /* TexturedMesh+PointLight.vsh */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -127,8 +129,8 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
-		D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
-		D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
+		D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
+		D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625D91777292B00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625DA1777292B00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625E1177732B500FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
@@ -140,6 +142,8 @@
 		D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
 		D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
 		D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
+		D8E23D0F179D4CA100E358DC /* TexturedMesh+PointLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "TexturedMesh+PointLight.fsh"; sourceTree = "<group>"; };
+		D8E23D10179D4CA100E358DC /* TexturedMesh+PointLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "TexturedMesh+PointLight.vsh"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -321,6 +325,8 @@
 		E7A1A98F16F0E51A00D138D8 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8E23D0F179D4CA100E358DC /* TexturedMesh+PointLight.fsh */,
+				D8E23D10179D4CA100E358DC /* TexturedMesh+PointLight.vsh */,
 				D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
 				D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 				D84625E1177732B500FC4862 /* ColorMesh.fsh */,
@@ -464,6 +470,8 @@
 				D84625E4177732B500FC4862 /* ColorMesh.vsh in Resources */,
 				D8024491177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh in Resources */,
 				D8024492177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh in Resources */,
+				D8E23D11179D4CA100E358DC /* TexturedMesh+PointLight.fsh in Resources */,
+				D8E23D12179D4CA100E358DC /* TexturedMesh+PointLight.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

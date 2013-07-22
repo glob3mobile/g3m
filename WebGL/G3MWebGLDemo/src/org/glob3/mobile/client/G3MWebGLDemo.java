@@ -51,7 +51,6 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
-import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -180,20 +179,17 @@ public class G3MWebGLDemo
          builder.addRenderer(marksRenderer);
       }
 
+      //builder.setInitializationTask(createMarkersInitializationTask());
 
-<<<<<<< HEAD
-      builder.setInitializationTask(createMarkersInitializationTask());
-=======
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
->>>>>>> webgl-port
 
 
       // test bson parser and 3D model
       final ShapesRenderer shapeRenderer = new ShapesRenderer();
       builder.addRenderer(shapeRenderer);
-
+      
       builder.setInitializationTask(new GInitializationTask() {
 
          private boolean done = false;
@@ -211,6 +207,7 @@ public class G3MWebGLDemo
                         @Override
                         public void onError(final URL url) {
                            ILogger.instance().logError("error downloading A320.bson");
+                           done = true;
                         }
 
 
@@ -239,11 +236,13 @@ public class G3MWebGLDemo
                         public void onCanceledDownload(final URL url,
                                                        final IByteBuffer data,
                                                        final boolean expired) {
+                        	done = true;
                         }
 
 
                         @Override
                         public void onCancel(final URL url) {
+                        	done = true;
                         }
                      }, false);
          }
@@ -297,350 +296,6 @@ public class G3MWebGLDemo
 
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-<<<<<<< HEAD
-      final boolean useLatlon = false;
-      if (useLatlon) {
-         final WMSLayer latlon = new WMSLayer("latlon", new URL("http://wms.latlon.org/", false), WMSServerVersion.WMS_1_1_0,
-                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), "image/jpeg", "EPSG:4326", "", false, null, // layer condition
-                  TimeInterval.fromDays(30), // time interval to cache
-                  true); // read expired
-         layerSet.addLayer(latlon);
-      }
-
-      final boolean useBing = false;
-      if (useBing) {
-         final WMSLayer bing = new WMSLayer( //
-                  "ve", //
-                  new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), //
-                  WMSServerVersion.WMS_1_1_0, //
-                  Sector.fullSphere(), //
-                  "image/jpeg", //
-                  "EPSG:4326", //
-                  "", //
-                  false, //
-                  null, // layer condition
-                  TimeInterval.fromDays(30), // time interval to cache
-                  true);
-         layerSet.addLayer(bing);
-      }
-
-      /*final WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30), true);
-      layerSet.addLayer(political);*/
-
-      /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
-      layerSet.addLayer(mqlOSM);*/
-
-      /*
-      final WMSLayer bingLayer = LayerBuilder.createOSMLayer(true);
-      layerSet.addLayer(bingLayer);
-      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-        
-       @Override
-      	public boolean onTerrainTouch(G3MEventContext context,
-      			TerrainTouchEvent ev) {
-      	 Geodetic2D position = ev.getPosition().asGeodetic2D();
-      	 Window.alert("touching terrain at coords (" +
-      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
-      			NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
-      	 //URL url = bingLayer.getFeatureInfoURL(position, ev.getSector());
-      	 //Window.alert(url.toString());
-      	 
-      		return false;
-      	}
-
-      	@Override
-      	public void dispose() {}
-       });*/
-
-
-      final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
-      layerSet.addLayer(blueMarble);
-
-      final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
-      layerSet.addLayer(pnoa);
-
-      // testing getfeatureinfo
-      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
-         @Override
-         public void onDownload(final URL url,
-                                final IByteBuffer buffer,
-                                final boolean expired) {
-            final String response = buffer.getAsString();
-            Window.alert("GetFeatureInfo URL: " + response);
-         }
-
-
-         @Override
-         public void onError(final URL url) {
-         }
-
-
-         @Override
-         public void onCancel(final URL url) {
-         }
-
-
-         @Override
-         public void onCanceledDownload(final URL url,
-                                        final IByteBuffer data,
-                                        final boolean expired) {
-         }
-      };
-
-      pnoa.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-
-         @Override
-         public boolean onTerrainTouch(final G3MEventContext context,
-                                       final TerrainTouchEvent event) {
-            final URL url = event.getLayer().getFeatureInfoURL(event.getPosition().asGeodetic2D(), event.getSector());
-            Window.alert("Get Feature Info URL for this position: " + url.getPath());
-            /*final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
-            myDownloader.requestBuffer(url, (long)0,
-            TimeInterval.fromHours(1.0), false, myListener, false);*/
-            return false;
-         }
-
-
-         @Override
-         public void dispose() {
-         }
-      });
-
-      //>>>>>>> webgl-port
-      //      builder.setInitializationTask(initializationTask);
-      //      builder.getTileRendererBuilder().setLayerSet(layerSet);
-      //
-      //      _widget = builder.createWidget();
-      //<<<<<<< HEAD
-      //
-      //      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6);
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
-      //=======
-      //      
-      //      /*Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));*/
-      //      
-      //>>>>>>> webgl-port
-
-      builder.setInitializationTask(initializationTask);
-      builder.getTileRendererBuilder().setLayerSet(layerSet);
-
-      _widget = builder.createWidget();
-
-      /*// testing downloading from url
-      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
-
-          @Override
-          public void onDownload(final URL url, final IByteBuffer buffer, boolean expired) {
-        	  final String response = buffer.getAsString();
-        	  Window.alert("Downloaded text: " + response);
-          }
-
-
-          @Override
-          public void onError(final URL url) {
-          }
-
-
-          @Override
-          public void onCancel(final URL url) {
-             // TODO Auto-generated method stub
-          }
-
-
-          @Override
-          public void onCanceledDownload(final URL url,
-                                         final IByteBuffer data, boolean expired) {
-          }
-
-       };
-
-      final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
-      myDownloader.requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/sample.txt", false), (long)0,
-      TimeInterval.fromHours(1.0), false, myListener, false);
-      */
-
-   }
-
-
-   public void initCustomizedWithBuilder() {
-      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
-
-      //      final MeshRenderer meshRenderer = new MeshRenderer();
-      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-      //      builder.addRenderer(meshRenderer);
-
-
-      final boolean useMarkers = true;
-      if (useMarkers) {
-         // marks renderer
-         final boolean readyWhenMarksReady = false;
-         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
-
-         marksRenderer.setMarkTouchListener(new MarkTouchListener() {
-            @Override
-            public boolean touchedMark(final Mark mark) {
-               Window.alert("Touched on mark: " + mark.getLabel());
-               return true;
-            }
-         }, true);
-
-
-         final Mark m1 = new Mark( //
-                  "Label", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-         //m1->addTouchListener(listener);
-         marksRenderer.addMark(m1);
-
-         final Mark m2 = new Mark( //
-                  "Las Palmas", //
-                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
-                  0, //
-                  false);
-         //m2->addTouchListener(listener);
-         marksRenderer.addMark(m2);
-
-
-         final Mark m3 = new Mark( //
-                  "Washington, DC", //
-                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
-                           100), //
-                  0);
-         marksRenderer.addMark(m3);
-
-
-         final boolean randomMarkers = false;
-         if (randomMarkers) {
-            for (int i = 0; i < 500; i++) {
-               final Angle latitude = Angle.fromDegrees((Random.nextInt() % 180) - 90);
-               final Angle longitude = Angle.fromDegrees((Random.nextInt() % 360) - 180);
-               //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-
-               marksRenderer.addMark(new Mark( //
-                        "Random", //
-                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                        new Geodetic3D(latitude, longitude, 0)));
-            }
-         }
-         builder.addRenderer(marksRenderer);
-      }
-
-
-      final String proxy = "";
-      final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
-      builder.setDownloader(downloader);
-
-
-      // test bson parser and 3D model
-      final ShapesRenderer shapeRenderer = new ShapesRenderer();
-      builder.addRenderer(shapeRenderer);
-
-      builder.setInitializationTask(new GInitializationTask() {
-
-         private boolean done = false;
-
-
-         @Override
-         public void run(final G3MContext context) {
-            context.getDownloader().requestBuffer( //
-                     new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
-                     0, //
-                     TimeInterval.forever(), //
-                     true, //
-                     new IBufferDownloadListener() {
-
-                        @Override
-                        public void onError(final URL url) {
-                           ILogger.instance().logError("error downloading A320.bson");
-                        }
-
-
-                        @Override
-                        public void onDownload(final URL url,
-                                               final IByteBuffer buffer,
-                                               final boolean expired) {
-                           final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
-                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", false);
-
-                           if (aircraft != null) {
-                              // Washington, DC
-                              aircraft.setPosition(new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
-                                       Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
-                                       10000));
-                              final double scale = 200;
-                              aircraft.setScale(scale, scale, scale);
-                              aircraft.setPitch(Angle.fromDegrees(90));
-                              shapeRenderer.addShape(aircraft);
-                           }
-                           done = true;
-                        }
-
-
-                        @Override
-                        public void onCanceledDownload(final URL url,
-                                                       final IByteBuffer data,
-                                                       final boolean expired) {
-                        }
-
-
-                        @Override
-                        public void onCancel(final URL url) {
-                        }
-                     }, false);
-         }
-
-
-         @Override
-         public boolean isDone(final G3MContext context) {
-            return done;
-         }
-      });
-
-      _widget = builder.createWidget();
-   }
-
-
-   private Mesh createPointsMesh(final Planet planet) {
-      final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet,
-               Geodetic3D.zero());
-      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-
-      final Angle centerLat = Angle.fromDegreesMinutesSeconds(38, 53, 42);
-      final Angle centerLon = Angle.fromDegreesMinutesSeconds(-77, 02, 11);
-
-      final Angle deltaLat = Angle.fromDegrees(1).div(16);
-      final Angle deltaLon = Angle.fromDegrees(1).div(16);
-
-      final int steps = 128;
-      final int halfSteps = steps / 2;
-      for (int i = -halfSteps; i < halfSteps; i++) {
-         final Angle lat = centerLat.add(deltaLat.times(i));
-         for (int j = -halfSteps; j < halfSteps; j++) {
-            final Angle lon = centerLon.add(deltaLon.times(j));
-
-            vertices.add(new Geodetic3D(lat, lon, 100000));
-
-            final float red = (float) (i + halfSteps + 1) / steps;
-            final float green = (float) (j + halfSteps + 1) / steps;
-            colors.add(Color.fromRGBA(red, green, 0, 1));
-         }
-      }
-
-      final float lineWidth = 1;
-      final float pointSize = 2;
-      final Color flatColor = null;
-      return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor,
-               colors.create());
-   }
-
-
-   public void initWithoutBuilder() {
-
-      final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
-
-=======
->>>>>>> (webgl-port)
       g3mWidgetHolder.setWidth("640px");
       g3mWidgetHolder.setHeight("480px");
 

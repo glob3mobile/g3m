@@ -64,9 +64,10 @@ enum GLFeatureGroupName{
   NO_GROUP = 0,
   CAMERA_GROUP = 1,
   COLOR_GROUP = 2,
+  LIGHTING_GROUP = 3
 };
 
-#define N_GLFEATURES_GROUPS 3
+#define N_GLFEATURES_GROUPS 4
 class GLFeatureGroup: public GLFeatureSet{
 public:
 
@@ -93,6 +94,12 @@ public:
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
+public:
+  void applyOnGlobalGLState(GLGlobalState* state);
+  void addToGPUVariableSet(GPUVariableValueSet* vs);
+};
+
+class GLFeatureLightingGroup: public GLFeatureGroup{
 public:
   void applyOnGlobalGLState(GLGlobalState* state);
   void addToGPUVariableSet(GPUVariableValueSet* vs);

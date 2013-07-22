@@ -17,6 +17,8 @@ GLFeatureGroupName GLFeatureGroup::getGroupName(int i){
       return CAMERA_GROUP;
     case 2:
       return COLOR_GROUP;
+    case 3:
+      return LIGHTING_GROUP;
     default:
       return UNRECOGNIZED_GROUP;
   }
@@ -32,6 +34,8 @@ GLFeatureGroup* GLFeatureGroup::createGroup(GLFeatureGroupName name){
       return new GLFeatureCameraGroup();
     case COLOR_GROUP:
       return new GLFeatureColorGroup();
+    case LIGHTING_GROUP:
+      return new GLFeatureLightingGroup();
     default:
       return NULL;
   }
@@ -131,4 +135,12 @@ GLFeatureSet::~GLFeatureSet(){
   for (int i = 0; i < _nFeatures; i++) {
     _features[i]->_release();
   }
+}
+
+void GLFeatureLightingGroup::applyOnGlobalGLState(GLGlobalState* state){
+  
+}
+
+void GLFeatureLightingGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
+  
 }
