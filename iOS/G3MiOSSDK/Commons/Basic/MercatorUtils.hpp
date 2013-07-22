@@ -73,7 +73,7 @@ public:
     }
 
     const IMathUtils* mu = IMathUtils::instance();
-    const double pi4 = mu->pi() * 4;
+    const double pi4 = PI * 4;
 
     const double latSin = latitude.sinus();
     return 1.0 - ( ( mu->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
@@ -81,11 +81,10 @@ public:
 
   static const Angle toLatitude(double v) {
     const IMathUtils* mu = IMathUtils::instance();
-    const double pi = mu->pi() ;
 
-    const double exp = mu->exp(-2 * pi * (1.0 - v - 0.5));
+    const double exp = mu->exp(-2 * PI * (1.0 - v - 0.5));
     const double atan = mu->atan(exp);
-    return Angle::fromRadians((pi / 2) - 2 * atan);
+    return Angle::fromRadians((PI / 2) - 2 * atan);
   }
 
   static const Angle calculateSplitLatitude(const Angle& lowerLatitude,
@@ -126,9 +125,8 @@ public:
     }
 
     const IMathUtils* mu = IMathUtils::instance();
-    const double pi = mu->pi();
 
-    double my = mu->log( mu->tan( (90 + latitude._degrees) * pi / 360.0 ) ) / (pi / 180.0);
+    double my = mu->log( mu->tan( (90 + latitude._degrees) * PI / 360.0 ) ) / (PI / 180.0);
 		my = my * _originShift / 180.0;
 
 		return my;

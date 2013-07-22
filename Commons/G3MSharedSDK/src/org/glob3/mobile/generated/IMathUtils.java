@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //#define TAN(x) java.lang.Math.tan(x)
 
 
+//#define PI 3.14159265358979323846264338327950288
+//#define HALF_PI 1.57079632679489661923132169163975144
 
 public abstract class IMathUtils
 {
@@ -46,15 +48,6 @@ public abstract class IMathUtils
 
   public void dispose()
   {
-  }
-
-  public static double pi()
-  {
-     return 3.14159265358979323846264338327950288;
-  }
-  public static double halfPi()
-  {
-     return 1.57079632679489661923132169163975144;
   }
 
   public abstract boolean isNan(double v);

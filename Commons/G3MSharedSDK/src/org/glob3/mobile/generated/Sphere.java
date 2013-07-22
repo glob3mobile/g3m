@@ -31,17 +31,16 @@ public class Sphere extends BoundingVolume
   private void createWireframeMesh(Color color, short resolution)
   {
     IMathUtils mu = IMathUtils.instance();
-    final double pi = mu.pi();
-    final double delta = pi / (resolution-1);
+    final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
     FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
     for (int i = 0; i<2 *resolution-2; i++)
     {
-      final double longitude = -pi + i *delta;
+      final double longitude = -DefineConstants.PI + i *delta;
       for (int j = 0; j<resolution; j++)
       {
-        final double latitude = -pi/2 + j *delta;
+        final double latitude = -DefineConstants.PI/2 + j *delta;
         final double h = mu.cos(latitude);
         final double x = h * mu.cos(longitude);
         final double y = h * mu.sin(longitude);

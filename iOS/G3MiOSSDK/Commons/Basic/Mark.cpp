@@ -450,7 +450,7 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
-    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > HALF_PI) {
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {

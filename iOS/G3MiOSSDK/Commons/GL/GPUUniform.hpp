@@ -127,7 +127,7 @@ public:
   void unset();
 
   void set(const GPUUniformValue* v) {
-    if (v != _value){
+    if (v != _value) {
       if (_type == v->getType()) { //type checking
         if (_value == NULL || !_value->isEqualsTo(v)) {
           _dirty = true;

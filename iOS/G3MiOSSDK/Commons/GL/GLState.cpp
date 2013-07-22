@@ -55,13 +55,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   if (_valuesSet == NULL){
     _valuesSet = new GPUVariableValueSet();
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
-
       GLFeatureGroup* group = getAccumulatedGroup(i);
       if (group != NULL){
         group->addToGPUVariableSet(_valuesSet);
       }
     }
-
 
     int uniformsCode = _valuesSet->getUniformsCode();
     int attributesCode = _valuesSet->getAttributesCode();
@@ -73,7 +71,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
   if (_globalState == NULL){
     _globalState = new GLGlobalState();
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
-
       GLFeatureGroup* group = getAccumulatedGroup(i);
       if (group != NULL){
         group->applyOnGlobalGLState(_globalState);
@@ -91,7 +88,8 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     _lastGPUProgramUsed->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
-  } else{
+  }
+  else {
     ILogger::instance()->logError("No GPUProgram found.");
   }
 

@@ -171,7 +171,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
   
   // compute angle params
   double angle = atan2(difCurrentPixels._y, difCurrentPixels._x);
-  const double PI = IMathUtils::instance()->pi();
   while (fabs(_lastAngle-angle)>PI/2) {
     if (angle<_lastAngle) angle+=PI;  else  angle-=PI;
   }

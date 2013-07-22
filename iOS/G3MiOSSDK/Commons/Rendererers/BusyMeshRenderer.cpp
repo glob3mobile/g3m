@@ -37,7 +37,7 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
   const float r1=12;
   const float r2=18;
   for (int step=0; step<=numStrides; step++) {
-    const double angle = (double) step * 2 * IMathUtils::pi() / numStrides;
+    const double angle = (double) step * 2 * PI / numStrides;
     const double c = IMathUtils::instance()->cos(angle);
     const double s = IMathUtils::instance()->sin(angle);
     

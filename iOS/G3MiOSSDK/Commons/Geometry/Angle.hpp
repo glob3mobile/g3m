@@ -110,12 +110,6 @@ public:
       _sin = SIN(_radians);
     }
     return _sin;
-//#ifdef C_CODE
-//    return IMathUtils::instance()->sin( _radians );
-//#endif
-//#ifdef JAVA_CODE
-//    return java.lang.Math.sin( _radians );
-//#endif
   }
 
   double cosinus() const {
@@ -123,22 +117,10 @@ public:
       _cos = COS(_radians);
     }
     return _cos;
-//#ifdef C_CODE
-//    return IMathUtils::instance()->cos( _radians );
-//#endif
-//#ifdef JAVA_CODE
-//    return java.lang.Math.cos( _radians );
-//#endif
   }
   
   double tangent() const {
     return TAN(_radians);
-//#ifdef C_CODE
-//    return IMathUtils::instance()->tan( _radians );
-//#endif
-//#ifdef JAVA_CODE
-//    return java.lang.Math.tan( _radians );
-//#endif
   }
 
   double degrees() const {
