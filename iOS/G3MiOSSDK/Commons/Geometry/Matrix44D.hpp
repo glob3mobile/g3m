@@ -124,6 +124,9 @@ class Matrix44DHolder{
 #endif
 public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
+    if (matrix == NULL){
+      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+    }
     matrix->_retain();
   }
 

@@ -298,6 +298,9 @@ public:
 #endif
     for (int i = 0; i < _nMatrix; i++) {
       _matrix[i] = matrixHolders[i]->getMatrix();
+      if (_matrix[i] == NULL){
+        ILogger::instance()->logError("Modelview multiplication failure");
+      }
     }
   }
 

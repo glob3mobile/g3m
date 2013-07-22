@@ -143,7 +143,9 @@ private:
   ModelGLFeature*      _model;
 
 public:
-  TrailsRenderer()
+  TrailsRenderer():
+  _projection(NULL),
+  _model(NULL)
   {
   }
 
