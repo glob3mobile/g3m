@@ -31,6 +31,9 @@ protected:
   GEORasterSymbol(const Sector* sector) :
   _sector(sector)
   {
+//    if (_sector == NULL) {
+//      printf("break point on me\n");
+//    }
   }
 
   void rasterLine(const std::vector<Geodetic2D*>* coordinates,
@@ -40,18 +43,20 @@ protected:
 public:
   virtual ~GEORasterSymbol();
 
-  void symbolize(const G3MRenderContext* rc,
+  bool symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
+
+  bool deleteAfterSymbolize() const {
+    return false;
+  }
 
   const Sector* getSector() const {
     return _sector;
   }
 
-  virtual GEORasterSymbol* createSymbol() const = 0;
-
-
   virtual void rasterize(ICanvas*                   canvas,
                          const GEORasterProjection* projection) const = 0;
+  
 };
 
 #endif

@@ -17,7 +17,7 @@ GEOMarkSymbol::~GEOMarkSymbol() {
   delete _mark;
 }
 
-void GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
+bool GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
                               const GEOSymbolizationContext& sc) const {
   if (_mark != NULL) {
     MarksRenderer* marksRenderer = sc.getMarksRenderer();
@@ -30,4 +30,5 @@ void GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
     }
     _mark = NULL;
   }
+  return true;
 }

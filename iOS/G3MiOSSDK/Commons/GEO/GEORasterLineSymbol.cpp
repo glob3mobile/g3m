@@ -10,6 +10,17 @@
 
 #include "Tile.hpp"
 #include "ICanvas.hpp"
+#include "GEOLine2DStyle.hpp"
+
+GEORasterLineSymbol::GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
+                                         const GEOLine2DStyle& style):
+GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
+_coordinates( copyCoordinates(coordinates) ),
+_lineColor( style.getColor() ),
+_lineWidth( style.getWidth() )
+{
+}
+
 
 GEORasterLineSymbol::~GEORasterLineSymbol() {
   if (_coordinates != NULL) {
@@ -24,20 +35,8 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
   }
 }
 
-GEORasterLineSymbol* GEORasterLineSymbol::createSymbol() const {
-  GEORasterLineSymbol* result = new GEORasterLineSymbol(_coordinates,
-                                                        new Sector(*_sector),
-                                                        _lineColor,
-                                                        _lineWidth);
-  _coordinates = NULL;
-  return result;
-}
-
 void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
                                     const GEORasterProjection* projection) const {
-
-//  int __REMOVE_DEBUG_CODE;
-//  canvas->setStrokeColor(Color::magenta());
   canvas->setStrokeColor(_lineColor);
   canvas->setStrokeWidth(_lineWidth);
 

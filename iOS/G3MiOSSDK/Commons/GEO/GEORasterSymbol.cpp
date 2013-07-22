@@ -168,11 +168,16 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
 
 
-void GEORasterSymbol::symbolize(const G3MRenderContext* rc,
+bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizationContext& sc) const {
-  if (_sector != NULL) {
-    sc.getGEOTileRasterizer()->addSymbol( createSymbol() );
+
+  if (_sector == NULL) {
+    printf("break point on me\n");
+    return true;
   }
+
+  sc.getGEOTileRasterizer()->addSymbol( this );
+  return false;
 }
 
 GEORasterSymbol::~GEORasterSymbol() {

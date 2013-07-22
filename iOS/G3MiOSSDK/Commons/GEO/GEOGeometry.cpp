@@ -27,8 +27,10 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
     for (int i = 0; i < symbolsSize; i++) {
       const GEOSymbol* symbol = symbols->at(i);
       if (symbol != NULL) {
-        symbol->symbolize(rc, sc);
-        delete symbol;
+        const bool deleteSymbol = symbol->symbolize(rc, sc);
+        if (deleteSymbol) {
+          delete symbol;
+        }
       }
     }
 

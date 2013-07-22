@@ -16,7 +16,7 @@ GEOShapeSymbol::~GEOShapeSymbol() {
 }
 
 
-void GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
+bool GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
                                const GEOSymbolizationContext& sc) const {
   if (_shape != NULL) {
     ShapesRenderer* shapeRenderer = sc.getShapesRenderer();
@@ -29,4 +29,5 @@ void GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
     }
     _shape = NULL;
   }
+  return true;
 }

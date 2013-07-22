@@ -8,7 +8,17 @@
 
 #include "GEOMultiLineRasterSymbol.hpp"
 
+#include "GEOLine2DStyle.hpp"
 #include "ICanvas.hpp"
+
+GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+                                                   const GEOLine2DStyle& style) :
+GEORasterSymbol( calculateSectorFromCoordinatesArray(coordinatesArray) ),
+_coordinatesArray( copyCoordinatesArray(coordinatesArray) ),
+_lineColor( style.getColor() ),
+_lineWidth( style.getWidth() )
+{
+}
 
 GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
   if (_coordinatesArray != NULL) {
@@ -26,20 +36,8 @@ GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
   }
 }
 
-GEOMultiLineRasterSymbol* GEOMultiLineRasterSymbol::createSymbol() const {
-  GEOMultiLineRasterSymbol* result = new GEOMultiLineRasterSymbol(_coordinatesArray,
-                                                                  new Sector(*_sector),
-                                                                  _lineColor,
-                                                                  _lineWidth);
-  _coordinatesArray = NULL;
-  return result;
-}
-
-
 void GEOMultiLineRasterSymbol::rasterize(ICanvas*                   canvas,
                                          const GEORasterProjection* projection) const {
-//  int __REMOVE_DEBUG_CODE;
-//  canvas->setStrokeColor(Color::green());
   canvas->setStrokeColor(_lineColor);
   canvas->setStrokeWidth(_lineWidth);
 

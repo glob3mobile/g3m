@@ -12,7 +12,6 @@
 #include "GEORasterSymbol.hpp"
 
 #include "Color.hpp"
-#include "GEOLine2DStyle.hpp"
 class Geodetic2D;
 class GEOLine2DStyle;
 
@@ -42,19 +41,9 @@ private:
 
 public:
   GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                      const GEOLine2DStyle& style):
-  GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
-  _coordinates( copyCoordinates(coordinates) ),
-  _lineColor( style.getColor() ),
-  _lineWidth( style.getWidth() )
-
-  {
-  }
-
+                      const GEOLine2DStyle& style);
+  
   ~GEORasterLineSymbol();
-
-  GEORasterLineSymbol* createSymbol() const;
-
 
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection) const;

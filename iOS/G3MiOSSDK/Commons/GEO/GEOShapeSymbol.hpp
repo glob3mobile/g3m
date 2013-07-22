@@ -25,8 +25,12 @@ public:
 
   ~GEOShapeSymbol();
 
-  void symbolize(const G3MRenderContext* rc,
+  bool symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizationContext& sc) const;
+
+  bool deleteAfterSymbolize() const {
+    return true;
+  }
 
 };
 

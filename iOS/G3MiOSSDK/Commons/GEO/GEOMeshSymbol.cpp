@@ -91,7 +91,7 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                          false);
 }
 
-void GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
+bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
                               const GEOSymbolizationContext& sc) const {
   MeshRenderer* meshRenderer = sc.getMeshRenderer();
   if (meshRenderer == NULL) {
@@ -103,4 +103,5 @@ void GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
       meshRenderer->addMesh(mesh);
     }
   }
+  return true;
 }
