@@ -62,7 +62,7 @@ public:
     _dashLengths = new float[_dashCount];
     std::copy(that._dashLengths,
               that._dashLengths + _dashCount,
-              _dashLengths );
+              _dashLengths);
 #endif
 #ifdef JAVA_CODE
     _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
