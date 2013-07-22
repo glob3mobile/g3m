@@ -1,27 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  ICanvas.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/9/13.
-//
-//
-
-//
-//  ICanvas.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/9/13.
-//
-//
-
-
-//class Color;
-//class IImageListener;
-//class GFont;
-//class IImage;
-
-
 public abstract class ICanvas
 {
   protected int _canvasWidth;
@@ -54,10 +31,17 @@ public abstract class ICanvas
 
   protected abstract void _setFillColor(Color color);
 
-  protected abstract void _setStrokeColor(Color color);
+  protected abstract void _setLineColor(Color color);
 
-  protected abstract void _setStrokeWidth(float width);
+  protected abstract void _setLineWidth(float width);
 
+  protected abstract void _setLineCap(StrokeCap cap);
+
+  protected abstract void _setLineJoin(StrokeJoin join);
+
+  protected abstract void _setLineMiterLimit(float limit);
+
+  protected abstract void _setLineDash(float[] lengths, int count, int phase);
 
   protected abstract void _fillRectangle(float left, float top, float width, float height);
 
@@ -167,18 +151,47 @@ public abstract class ICanvas
     _setFillColor(color);
   }
 
-  public final void setStrokeColor(Color color)
+  public final void setLineColor(Color color)
   {
     checkInitialized();
-    _setStrokeColor(color);
+    _setLineColor(color);
   }
 
-  public final void setStrokeWidth(float width)
+  public final void setLineWidth(float width)
   {
     checkInitialized();
-    _setStrokeWidth(width);
+    _setLineWidth(width);
   }
 
+  public final void setLineCap(StrokeCap cap)
+  {
+    checkInitialized();
+    _setLineCap(cap);
+  }
+
+  public final void setLineJoin(StrokeJoin join)
+  {
+    checkInitialized();
+    _setLineJoin(join);
+  }
+
+  public final void setLineMiterLimit(float limit)
+  {
+    checkInitialized();
+    _setLineMiterLimit(limit);
+  }
+
+  public final void setLineDash(float[] lengths, int count, int phase)
+  {
+    checkInitialized();
+    _setLineDash(lengths, count, phase);
+  }
+
+  void setLineDash(float[] lengths,
+                   int count,
+                   int phase) {
+    setLineDash(lengths, lengths.length, phase);
+  }
 
   public final void setShadow(Color color, float blur, float offsetX, float offsetY)
   {

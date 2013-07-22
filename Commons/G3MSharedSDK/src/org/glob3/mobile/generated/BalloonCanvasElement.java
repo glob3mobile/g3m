@@ -79,8 +79,8 @@ public class BalloonCanvasElement extends CanvasElement
   
     canvas.setFillColor(_color);
   
-  //  canvas->setStrokeColor(Color::black());
-  //  canvas->setStrokeWidth(0.2f);
+  //  canvas->setLineColor(Color::black());
+  //  canvas->setLineWidth(0.2f);
   
     final float halfArrowPointSize = _arrowPointSize / 2;
   //  canvas->fillRoundedRectangle(left + (extent._x / 2) - halfArrowPointSize,

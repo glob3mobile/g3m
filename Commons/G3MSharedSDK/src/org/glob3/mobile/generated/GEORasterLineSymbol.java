@@ -18,30 +18,18 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic2D;
-//class GEOLine2DStyle;
-
 
 public class GEORasterLineSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
-  private final Color _lineColor ;
-  private final float _lineWidth;
+  private final GEOLine2DRasterStyle _style = new GEOLine2DRasterStyle();
 
-  private GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, Sector sector, Color lineColor, float lineWidth)
-  {
-     super(sector);
-     _coordinates = coordinates;
-     _lineColor = new Color(lineColor);
-     _lineWidth = lineWidth;
-  }
-
-  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style)
+  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DRasterStyle style)
   {
      super(calculateSectorFromCoordinates(coordinates));
      _coordinates = copyCoordinates(coordinates);
-     _lineColor = new Color(style.getColor());
-     _lineWidth = style.getWidth();
+     _style = new GEOLine2DRasterStyle(style);
   }
 
   public void dispose()
@@ -63,8 +51,7 @@ public class GEORasterLineSymbol extends GEORasterSymbol
 
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
-    canvas.setStrokeColor(_lineColor);
-    canvas.setStrokeWidth(_lineWidth);
+    _style.apply(canvas);
   
     rasterLine(_coordinates, canvas, projection);
   }

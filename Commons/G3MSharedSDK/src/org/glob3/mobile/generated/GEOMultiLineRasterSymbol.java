@@ -16,30 +16,33 @@ package org.glob3.mobile.generated;
 //
 
 
-//class GEOLine2DStyle;
-
 
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  private final Color _lineColor ;
-  private final float _lineWidth;
+//  const Color _lineColor;
+//  const float _lineWidth;
+  private final GEOLine2DRasterStyle _style = new GEOLine2DRasterStyle();
 
-  private GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Sector sector, Color lineColor, float lineWidth)
-  {
-     super(sector);
-     _coordinatesArray = coordinatesArray;
-     _lineColor = new Color(lineColor);
-     _lineWidth = lineWidth;
-  }
+//  GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+//                           const Sector* sector,
+//                           const Color&  lineColor,
+//                           const float   lineWidth) :
+//  GEORasterSymbol(sector),
+//  _coordinatesArray(coordinatesArray),
+//  _lineColor(lineColor),
+//  _lineWidth(lineWidth)
+//  {
+//  }
 
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEOLine2DStyle style)
+  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEOLine2DRasterStyle style)
+  //_lineColor( style.getColor() ),
+  //_lineWidth( style.getWidth() )
   {
      super(calculateSectorFromCoordinatesArray(coordinatesArray));
      _coordinatesArray = copyCoordinatesArray(coordinatesArray);
-     _lineColor = new Color(style.getColor());
-     _lineWidth = style.getWidth();
+     _style = new GEOLine2DRasterStyle(style);
   }
 
   public void dispose()
@@ -65,8 +68,9 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
-    canvas.setStrokeColor(_lineColor);
-    canvas.setStrokeWidth(_lineWidth);
+  //  canvas->setLineColor(_lineColor);
+  //  canvas->setLineWidth(_lineWidth);
+    _style.apply(canvas);
   
     final int coordinatesArrayCount = _coordinatesArray.size();
     for (int i = 0; i < coordinatesArrayCount; i++)

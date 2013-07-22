@@ -43,8 +43,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
   //  canvas->setFillColor(Color::yellow());
   
-  //  canvas->setStrokeColor(Color::white());
-  //  canvas->setStrokeWidth(1);
+  //  canvas->setLineColor(Color::white());
+  //  canvas->setLineWidth(1);
   //  canvas->strokeRectangle(0, 0, width, height);
   
   
