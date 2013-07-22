@@ -74,7 +74,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     MeshRenderer meshRenderer = sc.getMeshRenderer();
     if (meshRenderer == null)
@@ -89,6 +89,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
         meshRenderer.addMesh(mesh);
       }
     }
+    return true;
   }
 
 

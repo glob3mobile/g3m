@@ -35,7 +35,7 @@ public class GEOMarkSymbol extends GEOSymbol
        _mark.dispose();
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     if (_mark != null)
     {
@@ -52,6 +52,12 @@ public class GEOMarkSymbol extends GEOSymbol
       }
       _mark = null;
     }
+    return true;
+  }
+
+  public final boolean deleteAfterSymbolize()
+  {
+    return true;
   }
 
 }

@@ -27,6 +27,6 @@ public abstract class GEOSymbol
   {
   }
 
-  public abstract void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc);
+  public abstract boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc);
 
 }

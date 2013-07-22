@@ -37,7 +37,6 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   }
 
   public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style)
-
   {
      super(calculateSectorFromCoordinates(coordinates));
      _coordinates = copyCoordinates(coordinates);
@@ -62,19 +61,8 @@ public class GEORasterLineSymbol extends GEORasterSymbol
     }
   }
 
-  public final GEORasterLineSymbol createSymbol()
-  {
-    GEORasterLineSymbol result = new GEORasterLineSymbol(_coordinates, new Sector(_sector), _lineColor, _lineWidth);
-    _coordinates = null;
-    return result;
-  }
-
-
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
-  
-  //  int __REMOVE_DEBUG_CODE;
-  //  canvas->setStrokeColor(Color::magenta());
     canvas.setStrokeColor(_lineColor);
     canvas.setStrokeWidth(_lineWidth);
   

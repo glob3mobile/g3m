@@ -164,6 +164,9 @@ public abstract class GEORasterSymbol extends GEOSymbol
   protected GEORasterSymbol(Sector sector)
   {
      _sector = sector;
+//    if (_sector == NULL) {
+//      printf("break point on me\n");
+//    }
   }
 
   protected final void rasterLine(java.util.ArrayList<Geodetic2D> coordinates, ICanvas canvas, GEORasterProjection projection)
@@ -192,12 +195,22 @@ public abstract class GEORasterSymbol extends GEOSymbol
        _sector.dispose();
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-    if (_sector != null)
+  
+    if (_sector == null)
     {
-      sc.getGEOTileRasterizer().addSymbol(createSymbol());
+      System.out.print("break point on me\n");
+      return true;
     }
+  
+    sc.getGEOTileRasterizer().addSymbol(this);
+    return false;
+  }
+
+  public final boolean deleteAfterSymbolize()
+  {
+    return false;
   }
 
   public final Sector getSector()
@@ -205,8 +218,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
     return _sector;
   }
 
-  public abstract GEORasterSymbol createSymbol();
-
-
   public abstract void rasterize(ICanvas canvas, GEORasterProjection projection);
+
 }

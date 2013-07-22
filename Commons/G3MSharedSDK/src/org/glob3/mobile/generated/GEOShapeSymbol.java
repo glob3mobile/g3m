@@ -34,7 +34,7 @@ public class GEOShapeSymbol extends GEOSymbol
        _shape.dispose();
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     if (_shape != null)
     {
@@ -51,6 +51,12 @@ public class GEOShapeSymbol extends GEOSymbol
       }
       _shape = null;
     }
+    return true;
+  }
+
+  public final boolean deleteAfterSymbolize()
+  {
+    return true;
   }
 
 }

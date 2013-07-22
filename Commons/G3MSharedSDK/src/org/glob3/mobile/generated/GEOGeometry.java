@@ -64,9 +64,12 @@ public abstract class GEOGeometry extends GEOObject
         final GEOSymbol symbol = symbols.get(i);
         if (symbol != null)
         {
-          symbol.symbolize(rc, sc);
-          if (symbol != null)
-             symbol.dispose();
+          final boolean deleteSymbol = symbol.symbolize(rc, sc);
+          if (deleteSymbol)
+          {
+            if (symbol != null)
+               symbol.dispose();
+          }
         }
       }
   
