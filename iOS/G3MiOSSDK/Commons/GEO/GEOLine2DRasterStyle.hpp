@@ -55,13 +55,13 @@ public:
   _cap(that._cap),
   _join(that._join),
   _miterLimit(that._miterLimit),
-  _dashLengths( new float[that._dashCount] ),
   _dashCount(that._dashCount),
   _dashPhase(that._dashPhase)
   {
 #ifdef C_CODE
+    _dashLengths = new float[_dashCount];
     std::copy(that._dashLengths,
-              that._dashLengths + that._dashCount,
+              that._dashLengths + _dashCount,
               _dashLengths );
 #endif
 #ifdef JAVA_CODE
