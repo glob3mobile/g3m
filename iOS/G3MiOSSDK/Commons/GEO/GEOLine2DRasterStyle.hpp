@@ -24,7 +24,7 @@ private:
   float*           _dashLengths;
 #endif
 #ifdef JAVA_CODE
-  const float[]    _dashLengths;
+  final float[]    _dashLengths;
 #endif
   const int        _dashCount;
   const int        _dashPhase;
@@ -59,9 +59,14 @@ public:
   _dashCount(that._dashCount),
   _dashPhase(that._dashPhase)
   {
+#ifdef C_CODE
     std::copy(that._dashLengths,
               that._dashLengths + that._dashCount,
               _dashLengths );
+#endif
+#ifdef JAVA_CODE
+    _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
+#endif
   }
 
   virtual ~GEOLine2DRasterStyle() {

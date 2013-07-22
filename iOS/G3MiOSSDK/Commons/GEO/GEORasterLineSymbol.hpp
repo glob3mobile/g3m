@@ -19,12 +19,13 @@ class GEORasterLineSymbol : public GEORasterSymbol {
 private:
 #ifdef C_CODE
   mutable const std::vector<Geodetic2D*>* _coordinates;
+  const GEOLine2DRasterStyle              _style;
 #endif
 #ifdef JAVA_CODE
   private java.util.ArrayList<Geodetic2D> _coordinates;
+  private final GEOLine2DRasterStyle      _style;
 #endif
 
-  const GEOLine2DRasterStyle _style;
 
 public:
   GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
