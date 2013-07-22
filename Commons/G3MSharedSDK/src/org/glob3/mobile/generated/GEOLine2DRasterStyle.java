@@ -48,7 +48,6 @@ public class GEOLine2DRasterStyle
      _cap = that._cap;
      _join = that._join;
      _miterLimit = that._miterLimit;
-     _dashLengths = new float[that._dashCount];
      _dashCount = that._dashCount;
      _dashPhase = that._dashPhase;
     _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
