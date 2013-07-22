@@ -170,7 +170,6 @@ public:
 
 #ifdef JAVA_CODE
   void setLineDash(float[] lengths,
-                   int count,
                    int phase) {
     setLineDash(lengths, lengths.length, phase);
   }
