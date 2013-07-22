@@ -5,6 +5,5 @@ public class PointLightGLFeature extends GLFeature
   {
      super(GLFeatureGroupName.LIGHTING_GROUP);
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void applyOnGlobalGLState(GLGlobalState state);
+  void applyOnGlobalGLState(GLGlobalState state){}
 }

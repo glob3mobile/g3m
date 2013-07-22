@@ -236,7 +236,7 @@ public:
 
 class PointLightGLFeature: public GLFeature{
   PointLightGLFeature(const Vector3D& pos, const Vector3D& ):GLFeature(LIGHTING_GROUP){}
-  void applyOnGlobalGLState(GLGlobalState* state) const;
+  void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 
 
