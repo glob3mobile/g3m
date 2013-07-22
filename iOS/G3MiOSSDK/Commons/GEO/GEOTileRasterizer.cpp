@@ -45,8 +45,8 @@ public:
     GEORasterSymbol* symbol = (GEORasterSymbol*) element;
 
 //    int __REMOVE_DEBUG_CODE;
-//    _canvas->setStrokeWidth(2);
-//    _canvas->setStrokeColor(Color::fromRGBA(1, 1, 0, 0.5f));
+//    _canvas->setLineWidth(2);
+//    _canvas->setLineColor(Color::fromRGBA(1, 1, 0, 0.5f));
 //    sector.rasterize(_canvas, _projection);
 
     symbol->rasterize(_canvas, _projection);
@@ -77,8 +77,8 @@ void GEOTileRasterizer::rasterize(IImage* image,
 
 //  canvas->setFillColor(Color::yellow());
 
-//  canvas->setStrokeColor(Color::white());
-//  canvas->setStrokeWidth(1);
+//  canvas->setLineColor(Color::white());
+//  canvas->setLineWidth(1);
 //  canvas->strokeRectangle(0, 0, width, height);
 
 

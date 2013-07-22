@@ -10,14 +10,12 @@
 
 #include "Tile.hpp"
 #include "ICanvas.hpp"
-#include "GEOLine2DStyle.hpp"
 
 GEORasterLineSymbol::GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                                         const GEOLine2DStyle& style):
+                                         const GEOLine2DRasterStyle& style):
 GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
 _coordinates( copyCoordinates(coordinates) ),
-_lineColor( style.getColor() ),
-_lineWidth( style.getWidth() )
+_style(style)
 {
 }
 
@@ -37,8 +35,7 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
 
 void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
                                     const GEORasterProjection* projection) const {
-  canvas->setStrokeColor(_lineColor);
-  canvas->setStrokeWidth(_lineWidth);
+  _style.apply(canvas);
 
   rasterLine(_coordinates,
              canvas,

@@ -13,8 +13,7 @@
 
 #include "Color.hpp"
 class Geodetic2D;
-class GEOLine2DStyle;
-
+#include "GEOLine2DRasterStyle.hpp"
 
 class GEORasterLineSymbol : public GEORasterSymbol {
 private:
@@ -25,23 +24,11 @@ private:
   private java.util.ArrayList<Geodetic2D> _coordinates;
 #endif
 
-  const Color _lineColor;
-  const float _lineWidth;
-
-  GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                      const Sector* sector,
-                      const Color&  lineColor,
-                      const float   lineWidth) :
-  GEORasterSymbol(sector),
-  _coordinates(coordinates),
-  _lineColor(lineColor),
-  _lineWidth(lineWidth)
-  {
-  }
+  const GEOLine2DRasterStyle _style;
 
 public:
   GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                      const GEOLine2DStyle& style);
+                      const GEOLine2DRasterStyle& style);
   
   ~GEORasterLineSymbol();
 

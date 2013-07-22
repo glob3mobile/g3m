@@ -17,6 +17,18 @@ class IImage;
 
 #include "Vector2F.hpp"
 
+enum StrokeCap {
+  CAP_BUTT,
+  CAP_ROUND,
+  CAP_SQUARE
+};
+
+enum StrokeJoin {
+  JOIN_MITER,
+  JOIN_ROUND,
+  JOIN_BEVEL
+};
+
 class ICanvas {
 protected:
   int _canvasWidth;
@@ -36,11 +48,20 @@ protected:
   
   virtual void _setFillColor(const Color& color) = 0;
   
-  virtual void _setStrokeColor(const Color& color) = 0;
+  virtual void _setLineColor(const Color& color) = 0;
   
-  virtual void _setStrokeWidth(float width) = 0;
-  
-  
+  virtual void _setLineWidth(float width) = 0;
+
+  virtual void _setLineCap(StrokeCap cap) = 0;
+
+  virtual void _setLineJoin(StrokeJoin join) = 0;
+
+  virtual void _setLineMiterLimit(float limit) = 0;
+
+  virtual void _setLineDash(float lengths[],
+                            int count,
+                            int phase) = 0;
+
   virtual void _fillRectangle(float left, float top,
                               float width, float height) = 0;
   
@@ -133,10 +154,27 @@ public:
   
   void setFillColor(const Color& color);
   
-  void setStrokeColor(const Color& color);
+  void setLineColor(const Color& color);
   
-  void setStrokeWidth(float width);
-  
+  void setLineWidth(float width);
+
+  void setLineCap(StrokeCap cap);
+
+  void setLineJoin(StrokeJoin join);
+
+  void setLineMiterLimit(float limit);
+
+  void setLineDash(float lengths[],
+                   int count,
+                   int phase);
+
+#ifdef JAVA_CODE
+  void setLineDash(float[] lengths,
+                   int count,
+                   int phase) {
+    setLineDash(lengths, lengths.length, phase);
+  }
+#endif
   
   void setShadow(const Color& color,
                  float blur,

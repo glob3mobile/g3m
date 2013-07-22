@@ -35,11 +35,20 @@ protected:
   
   void _setFillColor(const Color& color);
   
-  void _setStrokeColor(const Color& color);
+  void _setLineColor(const Color& color);
   
-  void _setStrokeWidth(float width);
-  
-  
+  void _setLineWidth(float width);
+
+  void _setLineCap(StrokeCap cap);
+
+  void _setLineJoin(StrokeJoin join);
+
+  void _setLineMiterLimit(float limit);
+
+  void _setLineDash(float lengths[],
+                    int count,
+                    int phase);
+
   void _setShadow(const Color& color,
                   float blur,
                   float offsetX,

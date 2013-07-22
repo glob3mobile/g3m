@@ -109,6 +109,8 @@
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
+#import <G3MiOSSDK/GEOLine2DRasterStyle.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1368,18 +1370,53 @@ public:
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   
-  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+//  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    
+//    const std::string type = properties->getAsString("type", "");
+//    
+//    if (type.compare("Water Indicator") == 0) {
+//      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
+//    }
+//    
+//    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
+//  }
+
+  GEOLine2DRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
-    
+
     const std::string type = properties->getAsString("type", "");
-    
+
+    int _DGD_rasterizer;
+
+//    float dashLengths[] = {10, 10};
+//    int dashCount = 2;
+    float dashLengths[] = {1, 12};
+    int dashCount = 2;
+//    float dashLengths[] = {};
+//    int dashCount = 0;
+
     if (type.compare("Water Indicator") == 0) {
-      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
+      return GEOLine2DRasterStyle(Color::fromRGBA(1, 1, 1, 0.9),
+                                  8,
+                                  CAP_ROUND,
+                                  JOIN_ROUND,
+                                  1,
+                                  dashLengths,
+                                  dashCount,
+                                  0);
     }
-    
-    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
+
+    return GEOLine2DRasterStyle(Color::fromRGBA(1, 1, 0, 0.9),
+                                8,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
   }
-  
+
   CircleShape* createCircleShape(const GEO2DPointGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
     
@@ -1450,7 +1487,7 @@ public:
 //                                                30000) );
 
     symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
-                                                createLineStyle(geometry)) );
+                                                createLineRasterStyle(geometry)) );
 
     return symbols;
   }
@@ -1463,7 +1500,7 @@ public:
 //                                                     createLineStyle(geometry)) );
 
     symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray(),
-                                                     createLineStyle(geometry)) );
+                                                     createLineRasterStyle(geometry)) );
 
     return symbols;
   }
@@ -1832,16 +1869,16 @@ public:
       canvas->removeShadow();
       
       
-      canvas->setStrokeColor( Color::fromRGBA(1, 0, 1, 0.9) );
-      canvas->setStrokeWidth(2.5f);
+      canvas->setLineColor( Color::fromRGBA(1, 0, 1, 0.9) );
+      canvas->setLineWidth(2.5f);
       const float margin = 1.25f;
       canvas->strokeRoundedRectangle(0 + margin, 0 + margin,
                                      256 - (margin * 2), 256 - (margin * 2),
                                      32);
       
       canvas->setFillColor( Color::fromRGBA(1, 1, 0, 0.9) );
-      canvas->setStrokeWidth(1.1f);
-      canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
+      canvas->setLineWidth(1.1f);
+      canvas->setLineColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
 
       int _DGD_working_on_Canvas;

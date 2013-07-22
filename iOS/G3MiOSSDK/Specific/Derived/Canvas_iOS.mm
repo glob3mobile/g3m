@@ -70,7 +70,7 @@ void Canvas_iOS::_setFillColor(const Color& color) {
                            color.getAlpha());
 }
 
-void Canvas_iOS::_setStrokeColor(const Color& color) {
+void Canvas_iOS::_setLineColor(const Color& color) {
   CGContextSetRGBStrokeColor(_context,
                              color.getRed(),
                              color.getGreen(),
@@ -78,8 +78,48 @@ void Canvas_iOS::_setStrokeColor(const Color& color) {
                              color.getAlpha());
 }
 
-void Canvas_iOS::_setStrokeWidth(float width) {
+void Canvas_iOS::_setLineWidth(float width) {
   CGContextSetLineWidth(_context, width);
+}
+
+void Canvas_iOS::_setLineCap(StrokeCap cap) {
+  switch (cap) {
+    case CAP_BUTT:
+      CGContextSetLineCap(_context, kCGLineCapButt);
+      break;
+    case CAP_ROUND:
+      CGContextSetLineCap(_context, kCGLineCapRound);
+      break;
+    case CAP_SQUARE:
+      CGContextSetLineCap(_context, kCGLineCapSquare);
+      break;
+  }
+}
+
+void Canvas_iOS::_setLineJoin(StrokeJoin join) {
+  switch (join) {
+    case JOIN_MITER:
+      CGContextSetLineJoin(_context, kCGLineJoinMiter);
+      break;
+    case JOIN_ROUND:
+      CGContextSetLineJoin(_context, kCGLineJoinRound);
+      break;
+    case JOIN_BEVEL:
+      CGContextSetLineJoin(_context, kCGLineJoinBevel);
+      break;
+  }
+}
+
+void Canvas_iOS::_setLineMiterLimit(float limit) {
+  CGContextSetMiterLimit(_context, limit);
+}
+
+void Canvas_iOS::_setLineDash(float lengths[],
+                              int count,
+                              int phase) {
+  CGContextSetLineDash(_context,
+                       phase,
+                       lengths, count);
 }
 
 void Canvas_iOS::_setShadow(const Color& color,

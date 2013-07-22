@@ -230,6 +230,9 @@
 		CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */; };
 		CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42D916AA151100663F21 /* IShortBuffer.cpp */; };
 		CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */; };
+		CFBD67AD179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */; };
+		CFBD67AE179DBC210056A2BD /* GEOLine2DRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */; };
+		CFBD67AF179DBC210056A2BD /* SceneJSParserStatistics.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */; };
 		CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
 		CFC3F8FA17510DA800986630 /* G3MCBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3F8F817510DA700986630 /* G3MCBuilder.cpp */; };
@@ -536,6 +539,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
+				CFBD67AE179DBC210056A2BD /* GEOLine2DRasterStyle.hpp in CopyFiles */,
+				CFBD67AF179DBC210056A2BD /* SceneJSParserStatistics.hpp in CopyFiles */,
 				CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */,
 				CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */,
 				CF2DF7DA178DED1100FF5FF0 /* GEORasterLineSymbol.hpp in CopyFiles */,
@@ -547,9 +553,7 @@
 				CF5C1196178C773E000ED715 /* BoundingArea.hpp in CopyFiles */,
 				CF5363E4178B44DD00EE3D49 /* DebugTileRasterizer.hpp in CopyFiles */,
 				CF5363E0178B43F200EE3D49 /* TileRasterizer.hpp in CopyFiles */,
-				CFFF30831781C6FC005B7428 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */,
-				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
 				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
 				CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */,
@@ -1046,7 +1050,7 @@
 		CF6D723A17184D620043C74B /* CanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CanvasElement.hpp; path = Commons/Basic/CanvasElement.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF6D723E171854F50043C74B /* TextCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextCanvasElement.cpp; path = Commons/Basic/TextCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D723F171854F50043C74B /* TextCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextCanvasElement.hpp; path = Commons/Basic/TextCanvasElement.hpp; sourceTree = "<group>"; };
-		CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; };
+		CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BalloonCanvasElement.hpp; path = Commons/Basic/BalloonCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupCanvasElement.cpp; path = Commons/Basic/GroupCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
@@ -1137,8 +1141,8 @@
 		CFA189AD15F926CA0048BF46 /* IFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFactory.cpp; path = Commons/Interfaces/IFactory.cpp; sourceTree = "<group>"; };
 		CFA59EC9171467890095E2EF /* ICanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICanvas.cpp; path = Commons/Basic/ICanvas.cpp; sourceTree = "<group>"; };
 		CFA59ECA171467890095E2EF /* ICanvas.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvas.hpp; path = Commons/Basic/ICanvas.hpp; sourceTree = "<group>"; };
-		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; };
-		CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Canvas_iOS.hpp; path = Specific/Derived/Canvas_iOS.hpp; sourceTree = "<group>"; };
+		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Canvas_iOS.hpp; path = Specific/Derived/Canvas_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
 		CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiLayerTileTexturizer.cpp; path = Commons/Basic/MultiLayerTileTexturizer.cpp; sourceTree = "<group>"; };
 		CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
@@ -1162,6 +1166,8 @@
 		CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLine2DRasterStyle.cpp; path = Commons/GEO/GEOLine2DRasterStyle.cpp; sourceTree = "<group>"; };
+		CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLine2DRasterStyle.hpp; path = Commons/GEO/GEOLine2DRasterStyle.hpp; sourceTree = "<group>"; };
 		CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiLineStringGeometry.hpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
@@ -1660,7 +1666,7 @@
 				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				D80A28691746474E0058CEC3 /* Planet.cpp */,
-				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
+				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
 				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
@@ -1900,6 +1906,8 @@
 				CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */,
 				CF2A47C3178F211200901857 /* GEORasterProjection.cpp */,
 				CF2A47C4178F211200901857 /* GEORasterProjection.hpp */,
+				CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */,
+				CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2409,6 +2417,7 @@
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
+				CFBD67AD179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

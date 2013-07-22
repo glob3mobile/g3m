@@ -95,8 +95,8 @@ void DebugTileRasterizer::rasterize(IImage* image,
 
   canvas->drawImage(image, 0, 0);
 
-  canvas->setStrokeColor(_color);
-  canvas->setStrokeWidth(1);
+  canvas->setLineColor(_color);
+  canvas->setLineWidth(1);
   canvas->strokeRectangle(0, 0, width, height);
 
 

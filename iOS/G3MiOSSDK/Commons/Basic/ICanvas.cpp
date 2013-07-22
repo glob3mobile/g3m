@@ -50,14 +50,38 @@ void ICanvas::setFillColor(const Color& color) {
   _setFillColor(color);
 }
 
-void ICanvas::setStrokeColor(const Color& color) {
+void ICanvas::setLineColor(const Color& color) {
   checkInitialized();
-  _setStrokeColor(color);
+  _setLineColor(color);
 }
 
-void ICanvas::setStrokeWidth(float width) {
+void ICanvas::setLineWidth(float width) {
   checkInitialized();
-  _setStrokeWidth(width);
+  _setLineWidth(width);
+}
+
+void ICanvas::setLineCap(StrokeCap cap) {
+  checkInitialized();
+  _setLineCap(cap);
+}
+
+void ICanvas::setLineJoin(StrokeJoin join) {
+  checkInitialized();
+  _setLineJoin(join);
+}
+
+void ICanvas::setLineMiterLimit(float limit) {
+  checkInitialized();
+  _setLineMiterLimit(limit);
+}
+
+void ICanvas::setLineDash(float lengths[],
+                          int count,
+                          int phase) {
+  checkInitialized();
+  _setLineDash(lengths,
+               count,
+               phase);
 }
 
 void ICanvas::setShadow(const Color& color,
