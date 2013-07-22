@@ -20,7 +20,12 @@ private:
   const StrokeJoin _join;
   const float      _miterLimit;
 
+#ifdef C_CODE
   float*           _dashLengths;
+#endif
+#ifdef JAVA_CODE
+  const float[]    _dashLengths;
+#endif
   const int        _dashCount;
   const int        _dashPhase;
 

@@ -141,14 +141,14 @@ public class Canvas_WebGL
 
 
    @Override
-   protected native void _setStrokeColor(final Color color) /*-{
+   protected native void _setLineColor(final Color color) /*-{
 		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.strokeStyle = jsColor;
    }-*/;
 
 
    @Override
-   protected native void _setStrokeWidth(final float width) /*-{
+   protected native void _setLineWidth(final float width) /*-{
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.lineWidth = width;
    }-*/;
 

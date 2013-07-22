@@ -144,13 +144,13 @@ public class Canvas_Android
 
 
    @Override
-   protected void _setStrokeColor(final org.glob3.mobile.generated.Color color) {
+   protected void _setLineColor(final org.glob3.mobile.generated.Color color) {
       _strokePaint.setColor(toAndroidColor(color));
    }
 
 
    @Override
-   protected void _setStrokeWidth(final float width) {
+   protected void _setLineWidth(final float width) {
       _strokePaint.setStrokeWidth(width);
    }
 
