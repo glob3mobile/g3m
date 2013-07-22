@@ -154,11 +154,14 @@ public final class GL2Shaders {
 
 	public final static String _flatColorMeshFragmentShader = "uniform lowp vec4 uFlatColor;\n"
 			+ "\n" + "void main() {\n" + "  gl_FragColor = uFlatColor;\n" + "}";
-	public final static String _flatColorMeshVertexShader = "attribute vec4 aPosition;\n"
-			+ "uniform mat4 uModelview;\n"
-			+ "\n"
-			+ "void main() {\n"
-			+ "  gl_Position = uModelview * aPosition;\n" + "}";
+	public final static String _flatColorMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
 	
 	public final static String _transformedTexCoortexturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
 			"varying mediump vec4 VertexColor;\n" + 
