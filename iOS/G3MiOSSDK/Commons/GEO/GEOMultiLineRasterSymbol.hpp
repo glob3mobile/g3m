@@ -11,22 +11,22 @@
 
 #include "GEORasterSymbol.hpp"
 #include "Color.hpp"
-#include "GEOLine2DRasterStyle.hpp"
+#include "GEO2DLineRasterStyle.hpp"
 
 class GEOMultiLineRasterSymbol : public GEORasterSymbol {
 private:
 #ifdef C_CODE
   mutable const std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
-  const GEOLine2DRasterStyle                            _style;
+  const GEO2DLineRasterStyle                            _style;
 #endif
 #ifdef JAVA_CODE
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
-  private final GEOLine2DRasterStyle                           _style;
+  private final GEO2DLineRasterStyle                           _style;
 #endif
 
 public:
   GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
-                           const GEOLine2DRasterStyle& style);
+                           const GEO2DLineRasterStyle& style);
 
   ~GEOMultiLineRasterSymbol();
 

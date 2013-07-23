@@ -406,6 +406,14 @@ void Canvas_iOS::_stroke() {
   CGContextStrokePath(_context);
 }
 
+void Canvas_iOS::_fill() {
+  CGContextFillPath(_context);
+}
+
+void Canvas_iOS::_fillAndStroke() {
+  CGContextDrawPath(_context, kCGPathFillStroke);
+}
+
 void Canvas_iOS::_moveTo(float x, float y) {
   CGContextMoveToPoint(_context,
                        x,

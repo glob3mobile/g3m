@@ -171,7 +171,6 @@
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
 		CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA081694914A002C760A /* BSONParser.cpp */; };
-		CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */; };
 		CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */; };
 		CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */; };
 		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
@@ -230,9 +229,17 @@
 		CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */; };
 		CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42D916AA151100663F21 /* IShortBuffer.cpp */; };
 		CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */; };
-		CFBD67AD179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */; };
-		CFBD67AE179DBC210056A2BD /* GEOLine2DRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */; };
+		CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67AB179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp */; };
+		CFBD67AE179DBC210056A2BD /* GEO2DLineRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */; };
 		CFBD67AF179DBC210056A2BD /* SceneJSParserStatistics.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */; };
+		CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */; };
+		CFBD67B3179F04400056A2BD /* GEO2DPolygonGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */; };
+		CFBD67B5179F084F0056A2BD /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */; };
+		CFBD67B6179F084F0056A2BD /* CameraDoubleTapHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */; };
+		CFBD67B9179F09380056A2BD /* GEORasterPolygonSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */; };
+		CFBD67BA179F09850056A2BD /* GEORasterPolygonSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */; };
+		CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */; };
+		CFBD67BE179F0C5C0056A2BD /* GEO2DSurfaceRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */; };
 		CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
 		CFC3F8FA17510DA800986630 /* G3MCBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3F8F817510DA700986630 /* G3MCBuilder.cpp */; };
@@ -394,7 +401,6 @@
 		E780A53D16D3AE37000F0395 /* TouchEvent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3941577EE500012AC53 /* TouchEvent.hpp */; };
 		E780A53E16D3AE37000F0395 /* URL.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFEC12415C2EB96003FA986 /* URL.hpp */; };
 		E780A54016D3AED9000F0395 /* Camera.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
-		E780A54316D3AED9000F0395 /* CameraDoubleTapHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */; };
 		E780A54416D3AED9000F0395 /* CameraEventHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */; };
 		E780A54516D3AED9000F0395 /* CameraRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */; };
 		E780A54616D3AED9000F0395 /* CameraRotationHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */; };
@@ -539,8 +545,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				CF8201A31785B888006E61EC /* CameraDoubleDragHandler.hpp in CopyFiles */,
-				CFBD67AE179DBC210056A2BD /* GEOLine2DRasterStyle.hpp in CopyFiles */,
+				CFBD67BE179F0C5C0056A2BD /* GEO2DSurfaceRasterStyle.hpp in CopyFiles */,
+				CFBD67BA179F09850056A2BD /* GEORasterPolygonSymbol.hpp in CopyFiles */,
+				CFBD67B5179F084F0056A2BD /* CameraDoubleDragHandler.hpp in CopyFiles */,
+				CFBD67B6179F084F0056A2BD /* CameraDoubleTapHandler.hpp in CopyFiles */,
+				CFBD67B3179F04400056A2BD /* GEO2DPolygonGeometry.hpp in CopyFiles */,
+				CFBD67AE179DBC210056A2BD /* GEO2DLineRasterStyle.hpp in CopyFiles */,
 				CFBD67AF179DBC210056A2BD /* SceneJSParserStatistics.hpp in CopyFiles */,
 				CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */,
 				CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */,
@@ -622,7 +632,6 @@
 				CFD15C4516E7930A004DC360 /* OSMLayer.hpp in CopyFiles */,
 				E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */,
 				E780A54016D3AED9000F0395 /* Camera.hpp in CopyFiles */,
-				E780A54316D3AED9000F0395 /* CameraDoubleTapHandler.hpp in CopyFiles */,
 				E780A54416D3AED9000F0395 /* CameraEventHandler.hpp in CopyFiles */,
 				E780A54516D3AED9000F0395 /* CameraRenderer.hpp in CopyFiles */,
 				E780A54616D3AED9000F0395 /* CameraRotationHandler.hpp in CopyFiles */,
@@ -1166,8 +1175,14 @@
 		CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
-		CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLine2DRasterStyle.cpp; path = Commons/GEO/GEOLine2DRasterStyle.cpp; sourceTree = "<group>"; };
-		CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLine2DRasterStyle.hpp; path = Commons/GEO/GEOLine2DRasterStyle.hpp; sourceTree = "<group>"; };
+		CFBD67AB179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineRasterStyle.cpp; path = Commons/GEO/GEO2DLineRasterStyle.cpp; sourceTree = "<group>"; };
+		CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineRasterStyle.hpp; path = Commons/GEO/GEO2DLineRasterStyle.hpp; sourceTree = "<group>"; };
+		CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DPolygonGeometry.cpp; path = Commons/GEO/GEO2DPolygonGeometry.cpp; sourceTree = "<group>"; };
+		CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPolygonGeometry.hpp; path = Commons/GEO/GEO2DPolygonGeometry.hpp; sourceTree = "<group>"; };
+		CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterPolygonSymbol.cpp; path = Commons/GEO/GEORasterPolygonSymbol.cpp; sourceTree = "<group>"; };
+		CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterPolygonSymbol.hpp; path = Commons/GEO/GEORasterPolygonSymbol.hpp; sourceTree = "<group>"; };
+		CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DSurfaceRasterStyle.cpp; path = Commons/GEO/GEO2DSurfaceRasterStyle.cpp; sourceTree = "<group>"; };
+		CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DSurfaceRasterStyle.hpp; path = Commons/GEO/GEO2DSurfaceRasterStyle.hpp; sourceTree = "<group>"; };
 		CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiLineStringGeometry.hpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
@@ -1906,8 +1921,14 @@
 				CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */,
 				CF2A47C3178F211200901857 /* GEORasterProjection.cpp */,
 				CF2A47C4178F211200901857 /* GEORasterProjection.hpp */,
-				CFBD67AB179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp */,
-				CFBD67AC179DBB7F0056A2BD /* GEOLine2DRasterStyle.hpp */,
+				CFBD67AB179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp */,
+				CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */,
+				CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */,
+				CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */,
+				CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */,
+				CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */,
+				CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */,
+				CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2417,7 +2438,10 @@
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
-				CFBD67AD179DBB7F0056A2BD /* GEOLine2DRasterStyle.cpp in Sources */,
+				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
+				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
+				CFBD67B9179F09380056A2BD /* GEORasterPolygonSymbol.cpp in Sources */,
+				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

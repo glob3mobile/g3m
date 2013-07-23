@@ -107,10 +107,14 @@
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
+
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
-#import <G3MiOSSDK/GEOLine2DRasterStyle.hpp>
+#import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
 
+#import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
+#import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1382,7 +1386,25 @@ private:
 //    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
 //  }
 
-  GEOLine2DRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
+  GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) const {
+    float dashLengths[] = {};
+    int dashCount = 0;
+
+    return GEO2DLineRasterStyle(Color::fromRGBA(0.25, 0.25, 0.25, 0.8),
+                                2,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
+  }
+
+  GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
+    return GEO2DSurfaceRasterStyle(Color::fromRGBA(1, 1, 1, 0.5));
+  }
+
+  GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const std::string type = properties->getAsString("type", "");
@@ -1397,7 +1419,7 @@ private:
 //    int dashCount = 0;
 
     if (type.compare("Water Indicator") == 0) {
-      return GEOLine2DRasterStyle(Color::fromRGBA(1, 1, 1, 0.9),
+      return GEO2DLineRasterStyle(Color::fromRGBA(1, 1, 1, 0.9),
                                   8,
                                   CAP_ROUND,
                                   JOIN_ROUND,
@@ -1407,7 +1429,7 @@ private:
                                   0);
     }
 
-    return GEOLine2DRasterStyle(Color::fromRGBA(1, 1, 0, 0.9),
+    return GEO2DLineRasterStyle(Color::fromRGBA(1, 1, 0, 0.9),
                                 8,
                                 CAP_ROUND,
                                 JOIN_ROUND,
@@ -1474,11 +1496,21 @@ private:
     
     return NULL;
   }
-  
-  
-  
+
+
 public:
-  
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+    symbols->push_back( new GEORasterPolygonSymbol(geometry->getCoordinates(),
+                                                   geometry->getHolesCoordinatesArray(),
+                                                   createPolygonLineRasterStyle(geometry),
+                                                   createPolygonSurfaceRasterStyle(geometry)) );
+
+    return symbols;
+  }
+
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     
@@ -2166,22 +2198,15 @@ public:
       
       
       /**/
-      /**/
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/coastline"
-      //                                                                  ofType: @"geojson"];
 
-//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/test"
-//                                                                  ofType: @"geojson"];
+      NSString* geojsonName = @"geojson/countries";
+//      NSString* geojsonName = @"geojson/boundary_lines_land";
+//      NSString* geojsonName = @"geojson/cities";
+//      NSString* geojsonName = @"geojson/test";
 
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
                                                                   ofType: @"geojson"];
 
-//      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
-//                                                                  ofType: @"geojson"];
-
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
-      //                                                                  ofType: @"geojson"];
-      
       if (geoJSONFilePath) {
         NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
                                                         encoding: NSUTF8StringEncoding

@@ -12,7 +12,7 @@
 #include "ICanvas.hpp"
 
 GEORasterLineSymbol::GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                                         const GEOLine2DRasterStyle& style):
+                                         const GEO2DLineRasterStyle& style):
 GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
 _coordinates( copyCoordinates(coordinates) ),
 _style(style)
@@ -35,9 +35,9 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
 
 void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
                                     const GEORasterProjection* projection) const {
-  _style.apply(canvas);
-
-  rasterLine(_coordinates,
-             canvas,
-             projection);
+  if (_style.apply(canvas)) {
+    rasterLine(_coordinates,
+               canvas,
+               projection);
+  }
 }

@@ -116,6 +116,10 @@ protected:
 
   virtual void _stroke() = 0;
 
+  virtual void _fill() = 0;
+
+  virtual void _fillAndStroke() = 0;
+
   virtual void _moveTo(float x, float y) = 0;
 
   virtual void _lineTo(float x, float y) = 0;
@@ -232,6 +236,10 @@ public:
   void beginPath();
 
   void stroke();
+
+  void fill();
+
+  void fillAndStroke();
 
   void moveTo(const Vector2F& position) {
     moveTo(position._x, position._y);

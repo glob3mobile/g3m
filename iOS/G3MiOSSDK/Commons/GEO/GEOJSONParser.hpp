@@ -61,6 +61,7 @@ private:
   GEOGeometry* createLineStringGeometry(const JSONObject* jsonObject) const;
   GEOGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
   GEOGeometry* createPointGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createPolygonGeometry(const JSONObject* jsonObject) const;
 
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;

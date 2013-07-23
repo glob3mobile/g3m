@@ -128,6 +128,10 @@ public:
     return (_alpha < 1);
   }
 
+  bool isFullTransparent() const {
+    return (_alpha < 0.01);
+  }
+
   bool isEqualsTo(const Color& that) const;
 
 };

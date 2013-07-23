@@ -207,6 +207,16 @@ void ICanvas::stroke() {
   _stroke();
 }
 
+void ICanvas::fill() {
+  checkInitialized();
+  _fill();
+}
+
+void ICanvas::fillAndStroke() {
+  checkInitialized();
+  _fillAndStroke();
+}
+
 void ICanvas::moveTo(float x, float y) {
   checkInitialized();
   _moveTo(x, y);

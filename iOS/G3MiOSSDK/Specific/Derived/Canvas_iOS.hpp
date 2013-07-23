@@ -105,6 +105,10 @@ protected:
 
   void _stroke();
 
+  void _fill();
+  
+  void _fillAndStroke();
+
   void _moveTo(float x, float y);
 
   void _lineTo(float x, float y);

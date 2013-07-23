@@ -18,6 +18,9 @@ class GEORasterProjection;
 class ICanvas;
 
 class GEORasterSymbol : public GEOSymbol {
+private:
+  GEORasterSymbol(const GEORasterSymbol& that);
+  
 protected:
   const Sector* _sector;
 
@@ -27,7 +30,6 @@ protected:
   static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
   static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-protected:
   GEORasterSymbol(const Sector* sector) :
   _sector(sector)
   {
@@ -40,6 +42,12 @@ protected:
                   ICanvas*                        canvas,
                   const GEORasterProjection*      projection) const;
 
+  void rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
+                            const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+                            ICanvas*                                      canvas,
+                            const GEORasterProjection*                    projection) const;
+
+  
 public:
   virtual ~GEORasterSymbol();
 
