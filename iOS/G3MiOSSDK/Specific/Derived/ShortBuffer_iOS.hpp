@@ -9,6 +9,7 @@
 #ifndef __G3MiOSSDK__ShortBuffer_iOS__
 #define __G3MiOSSDK__ShortBuffer_iOS__
 
+#include <OpenGLES/ES2/gl.h>
 #include "IShortBuffer.hpp"
 #include "ILogger.hpp"
 
@@ -18,10 +19,15 @@ private:
   short*    _values;
   int       _timestamp;
 
+  mutable GLuint    _indexBuffer; //IBO
+  mutable int       _indexBufferTimeStamp;
+
 public:
   ShortBuffer_iOS(int size) :
   _size(size),
-  _timestamp(0)
+  _timestamp(0),
+  _indexBuffer(GL_INVALID_VALUE),
+  _indexBufferTimeStamp(-1)
   {
     _values = new short[size];
     if (_values == NULL){
@@ -74,6 +80,23 @@ public:
   }
 
   const std::string description() const;
+
+  void bindAsIBOToGPU(){
+    if (_indexBuffer == GL_INVALID_VALUE){
+      glGenBuffers(1, &_indexBuffer);
+    }
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+
+    if (_indexBufferTimeStamp != _timestamp){
+      _indexBufferTimeStamp = _timestamp;
+
+      short* index = getPointer();
+      int iboSize = sizeof(short) * size();
+
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
+    }
+  }
   
 };
 

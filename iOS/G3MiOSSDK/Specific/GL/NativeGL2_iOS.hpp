@@ -90,10 +90,13 @@ public:
                            int stride,
                            const IFloatBuffer* buffer) const {
     const FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
+
+    buffer_iOS->bindAsVBOToGPU();
+    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
     
-    const float* pointer = buffer_iOS->getPointer();
-    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
-    
+//    const float* pointer = buffer_iOS->getPointer();
+//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
+
 //    FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
 //
 //    GLuint glBuffer = buffer_iOS->getGLBuffer(size);

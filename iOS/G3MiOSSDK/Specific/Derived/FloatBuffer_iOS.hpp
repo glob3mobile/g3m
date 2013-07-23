@@ -11,12 +11,19 @@
 
 #include "IFloatBuffer.hpp"
 #include "ILogger.hpp"
+#include <OpenGLES/ES2/gl.h>
+
+#include "GL.hpp"
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
   const int _size;
   float*    _values;
   int       _timestamp;
+
+
+  mutable GLuint    _vertexBuffer; //VBO
+  mutable int       _vertexBufferTimeStamp;
 
 //  bool         _glBufferBound;
 //  unsigned int _glBuffer;
@@ -25,7 +32,9 @@ public:
   FloatBuffer_iOS(int size) :
   _size(size),
   _timestamp(0),
-  _values(new float[size])
+  _values(new float[size]),
+  _vertexBuffer(GL_INVALID_VALUE),
+  _vertexBufferTimeStamp(-1)
   {
     if (_values == NULL){
       ILogger::instance()->logError("Allocating error.");
@@ -49,7 +58,9 @@ public:
                   float f14,
                   float f15) :
   _size(16),
-  _timestamp(0)
+  _timestamp(0),
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-1)
 //  _glBufferBound(false),
 //  _glBuffer(0)
   {
@@ -122,7 +133,25 @@ public:
 //  unsigned int getGLBuffer(int size);
 
   const std::string description() const;
-  
+
+  void bindAsVBOToGPU() const {
+
+    if (_vertexBuffer == GL_INVALID_VALUE){
+      glGenBuffers(1, &_vertexBuffer);
+    }
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    
+    if (_vertexBufferTimeStamp != _timestamp){
+      _vertexBufferTimeStamp = _timestamp;
+
+      float* vertices = getPointer();
+      int vboSize = sizeof(vertices) * size();
+
+      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+    }
+  }
+
 };
 
 #endif
