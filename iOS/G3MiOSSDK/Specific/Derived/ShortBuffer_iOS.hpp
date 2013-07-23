@@ -36,6 +36,13 @@ public:
   }
 
   virtual ~ShortBuffer_iOS() {
+    if (_indexBuffer != GL_INVALID_VALUE){
+      glDeleteBuffers(1, &_indexBuffer);
+//      printf("DEL IBO %d\n", _indexBuffer);
+      if (GL_NO_ERROR != glGetError()){
+        ILogger::instance()->logError("Problem deleting IBO");
+      }
+    }
     delete [] _values;
   }
 
@@ -84,20 +91,48 @@ public:
   void bindAsIBOToGPU(){
     if (_indexBuffer == GL_INVALID_VALUE){
       glGenBuffers(1, &_indexBuffer);
+//      printf("GEN IBO %d\n", _indexBuffer);
     }
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
 
-    if (_indexBufferTimeStamp != _timestamp){
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    printf("BIND IBO %d\n", _indexBuffer);
+
+    int size;
+    glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    int iboSize = sizeof(short) * _size;
+
+    if (_indexBufferTimeStamp != _timestamp || size != iboSize){
       _indexBufferTimeStamp = _timestamp;
 
       short* index = getPointer();
-      int iboSize = sizeof(short) * size();
+//      int iboSize = sizeof(short) * size();
 
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STREAM_DRAW);
+//      printf("DATA IBO %d\n", _indexBuffer);
+    }
+
+
+//    if (!glIsBuffer(_indexBuffer)){
+//      printf("ERROR IBO %d\n", _indexBuffer);
+//    }
+
+    if (GL_NO_ERROR != glGetError()){
+      ILogger::instance()->logError("Problem using IBO");
     }
   }
-  
+
+//  void deleteIBO() const{
+//    if (_indexBuffer != GL_INVALID_VALUE){
+//      glDeleteBuffers(1, &_indexBuffer);
+//      if (GL_NO_ERROR != glGetError()){
+//        ILogger::instance()->logError("Problem deleting IBO");
+//      }
+//      _indexBuffer = GL_INVALID_VALUE;
+//      _indexBufferTimeStamp = 0;
+//    }
+//  }
+
 };
 
 

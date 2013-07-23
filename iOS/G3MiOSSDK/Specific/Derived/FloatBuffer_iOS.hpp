@@ -138,17 +138,34 @@ public:
 
     if (_vertexBuffer == GL_INVALID_VALUE){
       glGenBuffers(1, &_vertexBuffer);
+//      printf("GEN VBO %d\n", _vertexBuffer);
     }
-    
+
+
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    
-    if (_vertexBufferTimeStamp != _timestamp){
+//    printf("BIND VBO %d\n", _vertexBuffer);
+
+    int size;
+    glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    int vboSize = sizeof(float) * _size;
+
+    if (_vertexBufferTimeStamp != _timestamp || size != vboSize){
       _vertexBufferTimeStamp = _timestamp;
 
       float* vertices = getPointer();
-      int vboSize = sizeof(vertices) * size();
+//      int vboSize = sizeof(float) * size();
 
       glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+//      printf("DATA VBO %d\n", _vertexBuffer);
+    }
+
+
+//    if (!glIsBuffer(_vertexBuffer)){
+//      printf("ERROR VBO %d\n", _vertexBuffer);
+//    }
+
+    if (GL_NO_ERROR != glGetError()){
+      ILogger::instance()->logError("Problem using VBO");
     }
   }
 

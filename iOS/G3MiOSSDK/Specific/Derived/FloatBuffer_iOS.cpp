@@ -36,11 +36,15 @@ const std::string FloatBuffer_iOS::description() const {
 }
 
 FloatBuffer_iOS::~FloatBuffer_iOS() {
-  delete [] _values;
 
   if (_vertexBuffer != GL_INVALID_VALUE){
     glDeleteBuffers(1, &_vertexBuffer);
+    if (GL_NO_ERROR != glGetError()){
+      ILogger::instance()->logError("Problem deleting VBO");
+    }
   }
+
+  delete [] _values;
 //  if (_glBufferBound) {
 //    const unsigned int buffers[] = {
 //      _glBuffer

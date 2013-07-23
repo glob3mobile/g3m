@@ -93,7 +93,8 @@ public:
 
     buffer_iOS->bindAsVBOToGPU();
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
-    
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 //    const float* pointer = buffer_iOS->getPointer();
 //    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
 
@@ -130,8 +131,16 @@ public:
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
-    const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
-    glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
+//    printf("-----DRAW\n");
+    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer;
+    bufferIOS->bindAsIBOToGPU();
+    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+//    bufferIOS->deleteIBO();
+
+//    const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
+//    glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
   }
 
   void lineWidth(float width) const {
