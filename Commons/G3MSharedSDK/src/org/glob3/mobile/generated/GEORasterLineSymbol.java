@@ -22,10 +22,10 @@ package org.glob3.mobile.generated;
 public class GEORasterLineSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
-  private final GEOLine2DRasterStyle      _style;
+  private final GEO2DLineRasterStyle      _style;
 
 
-  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DRasterStyle style)
+  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style)
   {
      super(calculateSectorFromCoordinates(coordinates));
      _coordinates = copyCoordinates(coordinates);
@@ -51,9 +51,10 @@ public class GEORasterLineSymbol extends GEORasterSymbol
 
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
-    _style.apply(canvas);
-  
-    rasterLine(_coordinates, canvas, projection);
+    if (_style.apply(canvas))
+    {
+      rasterLine(_coordinates, canvas, projection);
+    }
   }
 
 

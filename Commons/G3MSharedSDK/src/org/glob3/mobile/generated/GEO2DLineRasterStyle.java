@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  GEOLine2DRasterStyle.cpp
+//  GEO2DLineRasterStyle.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/22/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GEOLine2DRasterStyle.hpp
+//  GEO2DLineRasterStyle.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/22/13.
@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEOLine2DRasterStyle
+public class GEO2DLineRasterStyle
 {
   private final Color _color ;
   private final float _width;
@@ -29,7 +29,7 @@ public class GEOLine2DRasterStyle
   private final int _dashCount;
   private final int _dashPhase;
 
-  public GEOLine2DRasterStyle(Color color, float width, StrokeCap cap, StrokeJoin join, float miterLimit, float[] dashLengths, int dashCount, int dashPhase)
+  public GEO2DLineRasterStyle(Color color, float width, StrokeCap cap, StrokeJoin join, float miterLimit, float[] dashLengths, int dashCount, int dashPhase)
   {
      _color = new Color(color);
      _width = width;
@@ -41,7 +41,7 @@ public class GEOLine2DRasterStyle
      _dashPhase = dashPhase;
   }
 
-  public GEOLine2DRasterStyle(GEOLine2DRasterStyle that)
+  public GEO2DLineRasterStyle(GEO2DLineRasterStyle that)
   {
      _color = new Color(that._color);
      _width = that._width;
@@ -58,17 +58,24 @@ public class GEOLine2DRasterStyle
 
   }
 
-  public final void apply(ICanvas canvas)
+  public final boolean apply(ICanvas canvas)
   {
-    canvas.setLineColor(_color);
-    canvas.setLineWidth(_width);
-    canvas.setLineCap(_cap);
-    canvas.setLineJoin(_join);
-    canvas.setLineMiterLimit(_miterLimit);
+    final boolean applied = (_width > 0) && (!_color.isFullTransparent());
   
-    int _DGD_rasterizer;
+    if (applied)
+    {
+      canvas.setLineColor(_color);
+      canvas.setLineWidth(_width);
+      canvas.setLineCap(_cap);
+      canvas.setLineJoin(_join);
+      canvas.setLineMiterLimit(_miterLimit);
   
-    canvas.setLineDash(_dashLengths, _dashCount, _dashPhase);
+      int _DGD_rasterizer;
+  
+      canvas.setLineDash(_dashLengths, _dashCount, _dashPhase);
+    }
+  
+    return applied;
   }
 
 }

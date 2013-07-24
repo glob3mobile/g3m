@@ -79,6 +79,10 @@ public abstract class ICanvas
 
   protected abstract void _stroke();
 
+  protected abstract void _fill();
+
+  protected abstract void _fillAndStroke();
+
   protected abstract void _moveTo(float x, float y);
 
   protected abstract void _lineTo(float x, float y);
@@ -299,6 +303,18 @@ public abstract class ICanvas
   {
     checkInitialized();
     _stroke();
+  }
+
+  public final void fill()
+  {
+    checkInitialized();
+    _fill();
+  }
+
+  public final void fillAndStroke()
+  {
+    checkInitialized();
+    _fillAndStroke();
   }
 
   public final void moveTo(Vector2F position)
