@@ -20,12 +20,7 @@ public class GPUUniformValueModelview extends GPUUniformValue
 
   public final boolean isEqualsTo(GPUUniformValue v)
   {
-    if (_holder.getModelview() == ((GPUUniformValueModelview)v)._holder.getModelview())
-    {
-      return true;
-    }
-
-    return false;
+    return (_holder.getModelview() == ((GPUUniformValueModelview)v)._holder.getModelview());
   }
 
   public final String description()

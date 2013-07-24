@@ -385,11 +385,7 @@ public:
   }
 
   bool isEqualsTo(const GPUUniformValue* v) const{
-    if (_holder.getModelview() == ((GPUUniformValueModelview *)v)->_holder.getModelview()){
-      return true;
-    }
-
-    return false;
+    return (_holder.getModelview() == ((GPUUniformValueModelview *)v)->_holder.getModelview());
   }
 
   std::string description() const{
