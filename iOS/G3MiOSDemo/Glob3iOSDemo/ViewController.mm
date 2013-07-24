@@ -1390,7 +1390,8 @@ private:
     float dashLengths[] = {};
     int dashCount = 0;
 
-    return GEO2DLineRasterStyle(Color::fromRGBA(0.25, 0.25, 0.25, 0.8),
+    return GEO2DLineRasterStyle(//Color::fromRGBA(0.25, 0.25, 0.25, 0.8),
+                                Color::fromRGBA(0.85, 0.85, 0.85, 0.8),
                                 2,
                                 CAP_ROUND,
                                 JOIN_ROUND,
@@ -1403,9 +1404,9 @@ private:
   GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
-    const int colorIndex = (int) properties->getAsNumber("mapcolor7", -1);
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
 
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex)
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
 
     return GEO2DSurfaceRasterStyle( color );
 

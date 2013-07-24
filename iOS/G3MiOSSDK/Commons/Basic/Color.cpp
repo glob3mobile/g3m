@@ -113,12 +113,14 @@ float Color::getBrightness() const {
 }
 
 double Color::getHueInRadians() const {
+  const IMathUtils* mu = IMathUtils::instance();
+
   const float r = getRed();
   const float g = getGreen();
   const float b = getBlue();
 
-  const float max = GMath.maxF(r, g, b);
-  const float min = GMath.minF(r, g, b);
+  const float max = mu->max(r, g, b);
+  const float min = mu->min(r, g, b);
 
   const float span = (max - min);
 
@@ -126,22 +128,68 @@ double Color::getHueInRadians() const {
     return 0;
   }
 
+  const double deg60 = 60.0 / 180.0 * mu->pi();
+
   double h;
   if (r == max) {
-    h = ((g - b) / span) * GMath.DEGREES_60;
+    h = ((g - b) / span) * deg60;
   }
   else if (g == max) {
-    h = (GMath.DEGREES_60 * 2) + (((b - r) / span) * GMath.DEGREES_60);
+    h = (deg60 * 2) + (((b - r) / span) * deg60);
   }
   else {
-    h = (GMath.DEGREES_60 * 4) + (((r - g) / span) * GMath.DEGREES_60);
+    h = (deg60 * 4) + (((r - g) / span) * deg60);
   }
 
   if (h < 0) {
-    return GMath.DEGREES_360 + h;
+    return (mu->pi() * 2) + h;
   }
 
   return h;
+
+}
+
+Color Color::fromHueSaturationBrightness(double hueInRadians,
+                                         float saturation,
+                                         float brightness,
+                                         float alpha) {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const float s = mu->clamp(saturation, 0, 1);
+  const float v = mu->clamp(brightness, 0, 1);
+
+  //  zero saturation yields gray with the given brightness
+  if (s == 0) {
+    return fromRGBA(v, v, v, alpha);
+  }
+
+  const double deg60 = 60.0 / 180.0 * mu->pi();
+
+  //final float hf = (float) ((hue % GMath.DEGREES_360) / GMath.DEGREES_60);
+  const float hf = (float) (mu->pseudoModule(hueInRadians, mu->pi() * 2) / deg60);
+
+  const int i = (int) hf; // integer part of hue
+  const float f = hf - i; // fractional part of hue
+
+  const float p = (1 - s) * v;
+  const float q = (1 - (s * f)) * v;
+  const float t = (1 - (s * (1 - f))) * v;
+
+  switch (i) {
+    case 0:
+      return fromRGBA(v, t, p, alpha);
+    case 1:
+      return fromRGBA(q, v, p, alpha);
+    case 2:
+      return fromRGBA(p, v, t, alpha);
+    case 3:
+      return fromRGBA(p, q, v, alpha);
+    case 4:
+      return fromRGBA(t, p, v, alpha);
+//    case 5:
+    default:
+      return fromRGBA(v, p, q, alpha);
+  }
 
 }
 
@@ -154,5 +202,5 @@ Color Color::wheelStep(int wheelSize,
   return Color::fromHueSaturationBrightness(hueInRadians,
                                             getSaturation(),
                                             getBrightness(),
-                                            getAlpha());
+                                            _alpha);
 }

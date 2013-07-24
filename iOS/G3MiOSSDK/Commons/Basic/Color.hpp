@@ -57,6 +57,11 @@ public:
     return new Color(red, green, blue, alpha);
   }
 
+  static Color fromHueSaturationBrightness(double hueInRadians,
+                                           float saturation,
+                                           float brightness,
+                                           float alpha);
+
   static Color transparent() {
     return Color::fromRGBA(0, 0, 0, 0);
   }
