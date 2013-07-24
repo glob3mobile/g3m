@@ -11,6 +11,8 @@
 
 #include <sstream>
 
+GLuint ShortBuffer_iOS::_boundIBO = GL_INVALID_VALUE;
+
 const std::string ShortBuffer_iOS::description() const {
   std::ostringstream oss;
 

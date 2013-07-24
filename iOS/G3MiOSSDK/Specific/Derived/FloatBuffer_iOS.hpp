@@ -21,12 +21,10 @@ private:
   float*    _values;
   int       _timestamp;
 
-
+  static GLuint     _boundVertexBuffer;
+  mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
   mutable int       _vertexBufferTimeStamp;
-
-//  bool         _glBufferBound;
-//  unsigned int _glBuffer;
 
 public:
   FloatBuffer_iOS(int size) :
@@ -34,7 +32,8 @@ public:
   _timestamp(0),
   _values(new float[size]),
   _vertexBuffer(GL_INVALID_VALUE),
-  _vertexBufferTimeStamp(-1)
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
     if (_values == NULL){
       ILogger::instance()->logError("Allocating error.");
@@ -59,10 +58,9 @@ public:
                   float f15) :
   _size(16),
   _timestamp(0),
-  _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1)
-//  _glBufferBound(false),
-//  _glBuffer(0)
+  _vertexBuffer(GL_INVALID_VALUE),
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
     _values = new float[16];
     _values[ 0] = f0;
@@ -130,43 +128,34 @@ public:
     return _values;
   }
 
-//  unsigned int getGLBuffer(int size);
-
   const std::string description() const;
 
   void bindAsVBOToGPU() const {
 
-    if (_vertexBuffer == GL_INVALID_VALUE){
-      glGenBuffers(1, &_vertexBuffer);
-//      printf("GEN VBO %d\n", _vertexBuffer);
+    if (!_vertexBufferCreated){
+      glGenBuffers(1, &_vertexBuffer); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+      _vertexBufferCreated = true;
     }
 
+    if (_vertexBuffer != _boundVertexBuffer){
+      glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+      _boundVertexBuffer = _vertexBuffer;
+    } else{
+      printf("REUSING");
+    }
 
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-//    printf("BIND VBO %d\n", _vertexBuffer);
-
-    int size;
-    glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-    int vboSize = sizeof(float) * _size;
-
-    if (_vertexBufferTimeStamp != _timestamp || size != vboSize){
+    if (_vertexBufferTimeStamp != _timestamp){
       _vertexBufferTimeStamp = _timestamp;
 
       float* vertices = getPointer();
-//      int vboSize = sizeof(float) * size();
+      int vboSize = sizeof(float) * size();
 
       glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
-//      printf("DATA VBO %d\n", _vertexBuffer);
     }
 
-
-//    if (!glIsBuffer(_vertexBuffer)){
-//      printf("ERROR VBO %d\n", _vertexBuffer);
+//    if (GL_NO_ERROR != glGetError()){
+//      ILogger::instance()->logError("Problem using VBO");
 //    }
-
-    if (GL_NO_ERROR != glGetError()){
-      ILogger::instance()->logError("Problem using VBO");
-    }
   }
 
 };
