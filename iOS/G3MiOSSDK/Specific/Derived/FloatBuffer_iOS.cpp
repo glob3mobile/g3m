@@ -11,7 +11,7 @@
 #include <sstream>
 #include <OpenGLES/ES2/gl.h>
 
-GLuint FloatBuffer_iOS::_boundVertexBuffer = GL_INVALID_VALUE;
+GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
 
 
 const std::string FloatBuffer_iOS::description() const {

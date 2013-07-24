@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import org.glob3.mobile.generated.IFloatBuffer;
 
@@ -19,9 +18,9 @@ public final class FloatBuffer_Android
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   static int     	_boundVertexBuffer = GLES20.GL_INVALID_VALUE;
+   static int     	_boundVertexBuffer = -1;
    boolean      	_vertexBufferCreated = false;
-   int    			_vertexBuffer = GLES20.GL_INVALID_VALUE;
+   int    			_vertexBuffer = -1;
    int       		_vertexBufferTimeStamp = -1;
 
    public FloatBuffer_Android(final int size) {
@@ -149,16 +148,16 @@ public final class FloatBuffer_Android
 	  }
 
 
-   //   @Override
-   //   public void dispose() {
-   //      super.dispose();
-   //
-   //      if (_hasGLBuffer) {
-   //         final int[] buffers = new int[] { _glBuffer };
-   //         GLES20.glDeleteBuffers(1, buffers, 0);
-   //         _hasGLBuffer = false;
-   //      }
-   //   }
+      @Override
+      public void dispose() {
+         super.dispose();
+   
+         if (_vertexBufferCreated) {
+            final int[] buffers = new int[] { _vertexBuffer };
+            GLES20.glDeleteBuffers(1, buffers, 0);
+            _vertexBufferCreated = false;
+         }
+      }
    //
    //
    //   public int getGLBuffer() {

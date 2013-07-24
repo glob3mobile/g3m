@@ -30,7 +30,7 @@ public:
   ShortBuffer_iOS(int size) :
   _size(size),
   _timestamp(0),
-  _indexBuffer(GL_INVALID_VALUE),
+  _indexBuffer(-1),
   _indexBufferTimeStamp(-1),
   _indexBufferCreated(false)
   {
@@ -94,7 +94,7 @@ public:
 
   void bindAsIBOToGPU(){
     if (!_indexBufferCreated){
-      glGenBuffers(1, &_indexBuffer); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+      glGenBuffers(1, &_indexBuffer);
       _indexBufferCreated = true;
     }
 

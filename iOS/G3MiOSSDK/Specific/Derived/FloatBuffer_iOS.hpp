@@ -31,7 +31,7 @@ public:
   _size(size),
   _timestamp(0),
   _values(new float[size]),
-  _vertexBuffer(GL_INVALID_VALUE),
+  _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
   _vertexBufferCreated(false)
   {
@@ -58,7 +58,7 @@ public:
                   float f15) :
   _size(16),
   _timestamp(0),
-  _vertexBuffer(GL_INVALID_VALUE),
+  _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
   _vertexBufferCreated(false)
   {
@@ -133,7 +133,7 @@ public:
   void bindAsVBOToGPU() const {
 
     if (!_vertexBufferCreated){
-      glGenBuffers(1, &_vertexBuffer); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+      glGenBuffers(1, &_vertexBuffer);
       _vertexBufferCreated = true;
     }
 

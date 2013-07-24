@@ -300,7 +300,6 @@ public final class NativeGL2_Android
 
       
       FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-
       buffer_Android.bindAsVBOToGPU();
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
       
