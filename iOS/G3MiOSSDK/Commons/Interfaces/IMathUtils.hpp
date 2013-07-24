@@ -138,6 +138,10 @@ public:
     return max(max(f1, f2), f3);
   }
 
+  virtual float min(float f1, float f2, float f3)  const {
+    return min(min(f1, f2), f3);
+  }
+
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
 

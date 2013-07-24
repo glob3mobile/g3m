@@ -1401,7 +1401,15 @@ private:
   }
 
   GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
-    return GEO2DSurfaceRasterStyle(Color::fromRGBA(1, 1, 1, 0.5));
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", -1);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex)
+
+    return GEO2DSurfaceRasterStyle( color );
+
+//    return GEO2DSurfaceRasterStyle(Color::fromRGBA(1, 1, 1, 0.5));
   }
 
   GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {

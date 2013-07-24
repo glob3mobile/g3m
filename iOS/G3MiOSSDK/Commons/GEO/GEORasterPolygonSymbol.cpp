@@ -23,32 +23,13 @@ _surfaceStyle(surfaceStyle)
 
 void GEORasterPolygonSymbol::rasterize(ICanvas*                   canvas,
                                        const GEORasterProjection* projection) const {
-  const bool rasterizeSurface  = _surfaceStyle.apply(canvas);
-  const bool rasterizeBoundary = _lineStyle.apply(canvas);
+  const bool rasterSurface  = _surfaceStyle.apply(canvas);
+  const bool rasterBoundary = _lineStyle.apply(canvas);
 
-  rasterPolygonSurface(_coordinates,
-                       _holesCoordinatesArray,
-                       canvas,
-                       projection);
-
-//  if (rasterizeSurface) {
-//    if (rasterizeBoundary) {
-//      rasterPolygonSurfaceAndBoundary(_coordinates,
-//                                      _holesCoordinatesArray,
-//                                      canvas,
-//                                      projection);
-//    }
-//    else {
-//      rasterPolygonSurface(_coordinates,
-//                           _holesCoordinatesArray,
-//                           canvas,
-//                           projection);
-//    }
-//  }
-//  else if (rasterizeBoundary) {
-//    rasterPolygonBoundary(_coordinates,
-//                          _holesCoordinatesArray,
-//                          canvas,
-//                          projection);
-//  }
+  rasterPolygon(_coordinates,
+                _holesCoordinatesArray,
+                rasterSurface,
+                rasterBoundary,
+                canvas,
+                projection);
 }

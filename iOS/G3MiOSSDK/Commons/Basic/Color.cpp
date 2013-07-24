@@ -85,9 +85,74 @@ Color* Color::parse(const std::string& str) {
 }
 
 bool Color::isEqualsTo(const Color& that) const {
-  return
-  (_red   == that._red  ) &&
-  (_green == that._green) &&
-  (_blue  == that._blue ) &&
-  (_alpha == that._alpha);
+  return ((_red   == that._red  ) &&
+          (_green == that._green) &&
+          (_blue  == that._blue ) &&
+          (_alpha == that._alpha));
+}
+
+float Color::getSaturation() const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+//  const float r = _red;
+//  const float g = _green;
+//  const float b = _blue;
+
+  const float max = mu->max(_red, _green, _blue);
+  const float min = mu->min(_red, _green, _blue);
+
+  if (max == 0) {
+    return 0;
+  }
+
+  return (max - min) / max;
+}
+
+float Color::getBrightness() const {
+  return IMathUtils::instance()->max(_red, _green, _blue);
+}
+
+double Color::getHueInRadians() const {
+  const float r = getRed();
+  const float g = getGreen();
+  const float b = getBlue();
+
+  const float max = GMath.maxF(r, g, b);
+  const float min = GMath.minF(r, g, b);
+
+  const float span = (max - min);
+
+  if (span == 0) {
+    return 0;
+  }
+
+  double h;
+  if (r == max) {
+    h = ((g - b) / span) * GMath.DEGREES_60;
+  }
+  else if (g == max) {
+    h = (GMath.DEGREES_60 * 2) + (((b - r) / span) * GMath.DEGREES_60);
+  }
+  else {
+    h = (GMath.DEGREES_60 * 4) + (((r - g) / span) * GMath.DEGREES_60);
+  }
+
+  if (h < 0) {
+    return GMath.DEGREES_360 + h;
+  }
+
+  return h;
+
+}
+
+Color Color::wheelStep(int wheelSize,
+                       int step) const {
+  const double stepInRadians = (IMathUtils::instance()->pi() * 2) / wheelSize;
+
+  const double hueInRadians = getHueInRadians() + (stepInRadians * step);
+
+  return Color::fromHueSaturationBrightness(hueInRadians,
+                                            getSaturation(),
+                                            getBrightness(),
+                                            getAlpha());
 }

@@ -10,6 +10,7 @@
 #define G3MiOSSDK_Color_hpp
 
 #include <string>
+#include "Angle.hpp"
 
 class Color {
 private:
@@ -133,6 +134,19 @@ public:
   }
 
   bool isEqualsTo(const Color& that) const;
+
+  Color wheelStep(int wheelSize,
+                  int step) const;
+
+  float getSaturation() const;
+
+  float getBrightness() const;
+
+  double getHueInRadians() const;
+
+  Angle getHue() const {
+    return Angle::fromRadians( getHueInRadians() );
+  }
 
 };
 

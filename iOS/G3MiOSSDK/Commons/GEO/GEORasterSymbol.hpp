@@ -42,12 +42,14 @@ protected:
                   ICanvas*                        canvas,
                   const GEORasterProjection*      projection) const;
 
-  void rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
-                            const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-                            ICanvas*                                      canvas,
-                            const GEORasterProjection*                    projection) const;
+  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
+                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+                     bool                                          rasterSurface,
+                     bool                                          rasterBoundary,
+                     ICanvas*                                      canvas,
+                     const GEORasterProjection*                    projection) const;
 
-  
+
 public:
   virtual ~GEORasterSymbol();
 
