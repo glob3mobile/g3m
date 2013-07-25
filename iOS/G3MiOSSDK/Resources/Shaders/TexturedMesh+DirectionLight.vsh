@@ -25,7 +25,5 @@ void main() {
   
   TextureCoordOut = aTextureCoord;
 
-  
-  
   gl_PointSize = uPointSize;
 }
