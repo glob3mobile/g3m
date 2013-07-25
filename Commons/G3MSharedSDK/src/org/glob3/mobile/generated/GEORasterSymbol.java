@@ -22,6 +22,9 @@ package org.glob3.mobile.generated;
 
 public abstract class GEORasterSymbol extends GEOSymbol
 {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GEORasterSymbol(GEORasterSymbol that);
+
   protected final Sector _sector;
 
   protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
@@ -74,19 +77,19 @@ public abstract class GEORasterSymbol extends GEOSymbol
       }
     }
   
-  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+    //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+    //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
   
   
     Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
   
-  //  int __REMOVE_DEBUG_CODE;
-  //  for (int i = 0; i < size; i++) {
-  //    const Geodetic2D* coordinate = coordinates->at(i);
-  //    if (!result->contains(*coordinate)) {
-  //      printf("xxx\n");
-  //    }
-  //  }
+    //  int __REMOVE_DEBUG_CODE;
+    //  for (int i = 0; i < size; i++) {
+    //    const Geodetic2D* coordinate = coordinates->at(i);
+    //    if (!result->contains(*coordinate)) {
+    //      printf("xxx\n");
+    //    }
+    //  }
   
     return result;
   }
@@ -140,23 +143,23 @@ public abstract class GEORasterSymbol extends GEOSymbol
       return null;
     }
   
-  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
+    //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
+    //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
   
   
     Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
   
-  //  int __REMOVE_DEBUG_CODE;
-  //  for (int i = 0; i < coordinatesArrayCount; i++) {
-  //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
-  //    const int coordinatesCount = coordinates->size();
-  //    for (int j = 0; j < coordinatesCount; j++) {
-  //      const Geodetic2D* coordinate = coordinates->at(j);
-  //      if (!result->contains(*coordinate)) {
-  //        printf("xxx\n");
-  //      }
-  //    }
-  //  }
+    //  int __REMOVE_DEBUG_CODE;
+    //  for (int i = 0; i < coordinatesArrayCount; i++) {
+    //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+    //    const int coordinatesCount = coordinates->size();
+    //    for (int j = 0; j < coordinatesCount; j++) {
+    //      const Geodetic2D* coordinate = coordinates->at(j);
+    //      if (!result->contains(*coordinate)) {
+    //        printf("xxx\n");
+    //      }
+    //    }
+    //  }
   
     return result;
   }
@@ -188,6 +191,45 @@ public abstract class GEORasterSymbol extends GEOSymbol
       canvas.stroke();
     }
   }
+
+  protected final void rasterPolygon(java.util.ArrayList<Geodetic2D> coordinates, java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray, boolean rasterSurface, boolean rasterBoundary, ICanvas canvas, GEORasterProjection projection)
+  {
+    if (rasterSurface || rasterBoundary)
+    {
+      final int coordinatesCount = coordinates.size();
+      if (coordinatesCount > 0)
+      {
+        canvas.beginPath();
+  
+        canvas.moveTo(projection.project(coordinates.get(0)));
+  
+        for (int i = 1; i < coordinatesCount; i++)
+        {
+          final Geodetic2D coordinate = coordinates.get(i);
+  
+          canvas.lineTo(projection.project(coordinate));
+        }
+  
+        if (rasterBoundary)
+        {
+          if (rasterSurface)
+          {
+            canvas.fillAndStroke();
+          }
+          else
+          {
+            canvas.stroke();
+          }
+        }
+        else
+        {
+          canvas.fill();
+        }
+  
+      }
+    }
+  }
+
 
   public void dispose()
   {
@@ -221,3 +263,24 @@ public abstract class GEORasterSymbol extends GEOSymbol
   public abstract void rasterize(ICanvas canvas, GEORasterProjection projection);
 
 }
+//void GEORasterSymbol::rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
+//                                           const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+//                                           ICanvas*                                      canvas,
+//                                           const GEORasterProjection*                    projection) const {
+//  const int coordinatesCount = coordinates->size();
+//  if (coordinatesCount > 0) {
+//    canvas->beginPath();
+//
+//    canvas->moveTo( projection->project(coordinates->at(0)) );
+//
+//    for (int i = 1; i < coordinatesCount; i++) {
+//      const Geodetic2D* coordinate = coordinates->at(i);
+//
+//      canvas->lineTo( projection->project(coordinate) );
+//    }
+//
+////    canvas->fill();
+////    canvas->stroke();
+//    canvas->fillAndStroke();
+//  }
+//}

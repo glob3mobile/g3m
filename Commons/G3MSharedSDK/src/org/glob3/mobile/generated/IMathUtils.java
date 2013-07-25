@@ -140,6 +140,11 @@ public abstract class IMathUtils
     return max(max(f1, f2), f3);
   }
 
+  public float min(float f1, float f2, float f3)
+  {
+    return min(min(f1, f2), f3);
+  }
+
   public abstract double floor(double d);
   public abstract float floor(float f);
 
@@ -218,4 +223,22 @@ public abstract class IMathUtils
   {
     return (value >= min) && (value <= max);
   }
+
+  public double pseudoModule(double numerator, double denominator)
+  {
+
+    final double result = numerator / denominator;
+    final long intPart = (long) result; // integer part
+    final double fracPart = result - intPart; // fractional part
+
+//    if (closeTo(fracPart, 1.0)) {
+    if (fracPart == 1.0)
+    {
+      return 0;
+    }
+
+    return fracPart * denominator;
+  }
+
+
 }

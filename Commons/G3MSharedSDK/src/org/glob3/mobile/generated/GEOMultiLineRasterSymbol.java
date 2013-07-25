@@ -20,9 +20,9 @@ package org.glob3.mobile.generated;
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
-  private final GEOLine2DRasterStyle                           _style;
+  private final GEO2DLineRasterStyle                           _style;
 
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEOLine2DRasterStyle style)
+  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style)
   //_lineColor( style.getColor() ),
   //_lineWidth( style.getWidth() )
   {
@@ -56,13 +56,14 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
   {
   //  canvas->setLineColor(_lineColor);
   //  canvas->setLineWidth(_lineWidth);
-    _style.apply(canvas);
-  
-    final int coordinatesArrayCount = _coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++)
+    if (_style.apply(canvas))
     {
-      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-      rasterLine(coordinates, canvas, projection);
+      final int coordinatesArrayCount = _coordinatesArray.size();
+      for (int i = 0; i < coordinatesArrayCount; i++)
+      {
+        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+        rasterLine(coordinates, canvas, projection);
+      }
     }
   }
 

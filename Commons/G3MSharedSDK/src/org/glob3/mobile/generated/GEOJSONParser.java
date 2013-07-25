@@ -153,9 +153,10 @@ public class GEOJSONParser
      "MultiLineString"
      "Point"
   
-     "MultiPoint"
      "Polygon"
      "MultiPolygon"
+  
+     "MultiPoint"
      "GeometryCollection"
      */
   
@@ -170,6 +171,10 @@ public class GEOJSONParser
     else if (type.compareTo("Point") == 0)
     {
       geo = createPointGeometry(jsonObject);
+    }
+    else if (type.compareTo("Polygon") == 0)
+    {
+      geo = createPolygonGeometry(jsonObject);
     }
     else
     {
@@ -313,6 +318,80 @@ public class GEOJSONParser
     else
     {
       ILogger.instance().logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
+    }
+  
+    return geo;
+  }
+  private GEOGeometry createPolygonGeometry(JSONObject jsonObject)
+  {
+    final JSONArray jsCoordinatesArray = jsonObject.getAsArray("coordinates");
+    if (jsCoordinatesArray == null)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is not present");
+      return null;
+    }
+  
+    final int coordinatesArrayCount = jsCoordinatesArray.size();
+    if (coordinatesArrayCount == 0)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is empty");
+      return null;
+    }
+  
+    final JSONArray jsFirstCoordinates = jsCoordinatesArray.getAsArray(0);
+    if (jsFirstCoordinates == null)
+    {
+      ILogger.instance().logError("Invalid format for first \"coordinates\" element");
+      return null;
+    }
+    final int firstCoordinatesCount = jsFirstCoordinates.size();
+    if (firstCoordinatesCount == 0)
+    {
+      ILogger.instance().logError("Invalid format for first \"coordinates\" element");
+      return null;
+    }
+  
+    GEOGeometry geo = null;
+  
+    final int dimensions = jsFirstCoordinates.getAsArray(0).size();
+    if (dimensions == 2)
+    {
+      java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = new java.util.ArrayList<java.util.ArrayList<Geodetic2D>>();
+  
+      final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(0);
+      java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
+  
+      for (int i = 1; i < coordinatesArrayCount; i++)
+      {
+        final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(i);
+        java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
+        if (coordinates != null)
+        {
+          holesCoordinatesArray.add(coordinates);
+          _lineStringsInMultiLineString2DCount++;
+        }
+      }
+  
+      if (holesCoordinatesArray.size() == 0)
+      {
+        holesCoordinatesArray = null;
+        geo = new GEO2DPolygonGeometry(coordinates);
+      }
+      else
+      {
+        geo = new GEO2DPolygonGeometry(coordinates, holesCoordinatesArray);
+      }
+      _multiLineStrings2DCount++;
+    }
+    /*
+     else if (dimensions >= 3) {
+     geo = new GEO3DLineStringGeometry(coordinates);
+     }
+     */
+    else
+    {
+      ILogger.instance().logError("Invalid coordinates dimensions=%d", dimensions);
+      return null;
     }
   
     return geo;
