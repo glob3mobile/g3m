@@ -5,6 +5,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MWebGLSDK"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MSharedSDK"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
