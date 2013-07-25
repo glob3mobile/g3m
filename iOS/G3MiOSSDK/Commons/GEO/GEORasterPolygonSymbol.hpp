@@ -14,6 +14,8 @@
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEO2DSurfaceRasterStyle.hpp"
 
+class GEO2DPolygonData;
+
 
 class GEORasterPolygonSymbol : public GEORasterSymbol {
 private:
@@ -33,11 +35,9 @@ public:
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection) const;
 
-
-  GEORasterPolygonSymbol(const std::vector<Geodetic2D*>*               coordinates,
-                         const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-                         const GEO2DLineRasterStyle&                   lineStyle,
-                         const GEO2DSurfaceRasterStyle&                surfaceStyle);
+  GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
+                         const GEO2DLineRasterStyle&    lineStyle,
+                         const GEO2DSurfaceRasterStyle& surfaceStyle);
 
 };
 

@@ -15,6 +15,7 @@ class GEO2DLineStringGeometry;
 class GEO2DPointGeometry;
 class GEOObject;
 class GEO2DPolygonGeometry;
+class GEO2DMultiPolygonGeometry;
 
 #include <vector>
 
@@ -28,6 +29,7 @@ public:
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const = 0;
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const = 0;
+  virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const = 0;
 
 };
 

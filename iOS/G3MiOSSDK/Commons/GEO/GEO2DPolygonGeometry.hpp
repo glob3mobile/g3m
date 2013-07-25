@@ -43,6 +43,10 @@ public:
 
   ~GEO2DPolygonGeometry();
 
+  const GEO2DPolygonData* getPolygonData() const {
+    return _polygonData;
+  }
+
   const std::vector<Geodetic2D*>* getCoordinates() const;
 
   const std::vector<std::vector<Geodetic2D*>*>* getHolesCoordinatesArray() const;

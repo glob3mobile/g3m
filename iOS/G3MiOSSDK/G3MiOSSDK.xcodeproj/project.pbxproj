@@ -215,6 +215,10 @@
 		CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA189AD15F926CA0048BF46 /* IFactory.cpp */; };
 		CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1FD9E17A1966C00DAEAB2 /* GEO2DPolygonData.cpp */; };
 		CFA1FDA117A196A300DAEAB2 /* GEO2DPolygonData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA1FD9F17A1966D00DAEAB2 /* GEO2DPolygonData.hpp */; };
+		CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */; };
+		CFA1FDA517A1AB4400DAEAB2 /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */; };
+		CFA1FDA817A1AF3B00DAEAB2 /* GEORasterMultiPolygonSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1FDA617A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.cpp */; };
+		CFA1FDA917A1AF5F00DAEAB2 /* GEORasterMultiPolygonSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA1FDA717A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.hpp */; };
 		CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA59EC9171467890095E2EF /* ICanvas.cpp */; };
 		CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ECC171482560095E2EF /* Canvas_iOS.mm */; };
 		CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECA171467890095E2EF /* ICanvas.hpp */; };
@@ -547,6 +551,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFA1FDA917A1AF5F00DAEAB2 /* GEORasterMultiPolygonSymbol.hpp in CopyFiles */,
+				CFA1FDA517A1AB4400DAEAB2 /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */,
 				CFA1FDA117A196A300DAEAB2 /* GEO2DPolygonData.hpp in CopyFiles */,
 				CFBD67BE179F0C5C0056A2BD /* GEO2DSurfaceRasterStyle.hpp in CopyFiles */,
 				CFBD67BA179F09850056A2BD /* GEORasterPolygonSymbol.hpp in CopyFiles */,
@@ -1153,6 +1159,10 @@
 		CFA189AD15F926CA0048BF46 /* IFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFactory.cpp; path = Commons/Interfaces/IFactory.cpp; sourceTree = "<group>"; };
 		CFA1FD9E17A1966C00DAEAB2 /* GEO2DPolygonData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DPolygonData.cpp; path = Commons/GEO/GEO2DPolygonData.cpp; sourceTree = "<group>"; };
 		CFA1FD9F17A1966D00DAEAB2 /* GEO2DPolygonData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPolygonData.hpp; path = Commons/GEO/GEO2DPolygonData.hpp; sourceTree = "<group>"; };
+		CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiPolygonGeometry.cpp; path = Commons/GEO/GEO2DMultiPolygonGeometry.cpp; sourceTree = "<group>"; };
+		CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiPolygonGeometry.hpp; path = Commons/GEO/GEO2DMultiPolygonGeometry.hpp; sourceTree = "<group>"; };
+		CFA1FDA617A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterMultiPolygonSymbol.cpp; path = Commons/GEO/GEORasterMultiPolygonSymbol.cpp; sourceTree = "<group>"; };
+		CFA1FDA717A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterMultiPolygonSymbol.hpp; path = Commons/GEO/GEORasterMultiPolygonSymbol.hpp; sourceTree = "<group>"; };
 		CFA59EC9171467890095E2EF /* ICanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICanvas.cpp; path = Commons/Basic/ICanvas.cpp; sourceTree = "<group>"; };
 		CFA59ECA171467890095E2EF /* ICanvas.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvas.hpp; path = Commons/Basic/ICanvas.hpp; sourceTree = "<group>"; };
 		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1936,6 +1946,10 @@
 				CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */,
 				CFA1FD9E17A1966C00DAEAB2 /* GEO2DPolygonData.cpp */,
 				CFA1FD9F17A1966D00DAEAB2 /* GEO2DPolygonData.hpp */,
+				CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */,
+				CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */,
+				CFA1FDA617A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.cpp */,
+				CFA1FDA717A1AF3A00DAEAB2 /* GEORasterMultiPolygonSymbol.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2450,6 +2464,8 @@
 				CFBD67B9179F09380056A2BD /* GEORasterPolygonSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
+				CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */,
+				CFA1FDA817A1AF3B00DAEAB2 /* GEORasterMultiPolygonSymbol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

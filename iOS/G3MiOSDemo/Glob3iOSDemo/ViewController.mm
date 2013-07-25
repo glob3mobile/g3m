@@ -116,6 +116,9 @@
 #import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 
+#import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
+#import <G3MiOSSDK/GEORasterMultiPolygonSymbol.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -1391,7 +1394,7 @@ private:
     int dashCount = 0;
 
     return GEO2DLineRasterStyle(//Color::fromRGBA(0.25, 0.25, 0.25, 0.8),
-                                Color::fromRGBA(0.85, 0.85, 0.85, 0.8),
+                                Color::fromRGBA(0.85, 0.85, 0.85, 0.6),
                                 2,
                                 CAP_ROUND,
                                 JOIN_ROUND,
@@ -1418,10 +1421,6 @@ private:
 
     const std::string type = properties->getAsString("type", "");
 
-    int _DGD_rasterizer;
-
-//    float dashLengths[] = {10, 10};
-//    int dashCount = 2;
     float dashLengths[] = {1, 12};
     int dashCount = 2;
 //    float dashLengths[] = {};
@@ -1509,11 +1508,37 @@ private:
 
 public:
 
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+    const GEO2DLineRasterStyle    lineStyle    = createPolygonLineRasterStyle(geometry);
+    const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+//    symbols->push_back( new GEORasterMultiPolygonSymbol(geometry->getPolygonsData(),
+//                                                        lineStyle,
+//                                                        surfaceStyle) );
+
+    const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
+    const int polygonsDataSize = polygonsData->size();
+
+    for (int i = 0; i < polygonsDataSize; i++) {
+      GEO2DPolygonData* polygonData = polygonsData->at(i);
+      symbols->push_back( new GEORasterPolygonSymbol(polygonData,
+                                                     lineStyle,
+                                                     surfaceStyle) );
+
+    }
+
+    int _DGD_AtWork;
+
+    return symbols;
+  }
+
+
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-    symbols->push_back( new GEORasterPolygonSymbol(geometry->getCoordinates(),
-                                                   geometry->getHolesCoordinatesArray(),
+    symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
                                                    createPolygonLineRasterStyle(geometry),
                                                    createPolygonSurfaceRasterStyle(geometry)) );
 
@@ -1560,7 +1585,9 @@ public:
     
     return symbols;
   }
-  
+
+
+
 };
 
 

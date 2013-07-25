@@ -8,18 +8,21 @@
 
 #include "GEORasterPolygonSymbol.hpp"
 
-GEORasterPolygonSymbol::GEORasterPolygonSymbol(const std::vector<Geodetic2D*>*               coordinates,
-                                               const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-                                               const GEO2DLineRasterStyle&                   lineStyle,
-                                               const GEO2DSurfaceRasterStyle&                surfaceStyle) :
-GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
-_coordinates( copyCoordinates(coordinates) ),
-_holesCoordinatesArray( copyCoordinatesArray(holesCoordinatesArray) ),
+#include "GEO2DPolygonData.hpp"
+
+
+GEORasterPolygonSymbol::GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
+                                               const GEO2DLineRasterStyle&    lineStyle,
+                                               const GEO2DSurfaceRasterStyle& surfaceStyle) :
+GEORasterSymbol( calculateSectorFromCoordinates(polygonData->getCoordinates()) ),
+_coordinates( copyCoordinates(polygonData->getCoordinates()) ),
+_holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
 _lineStyle(lineStyle),
 _surfaceStyle(surfaceStyle)
 {
 
 }
+
 
 void GEORasterPolygonSymbol::rasterize(ICanvas*                   canvas,
                                        const GEORasterProjection* projection) const {
