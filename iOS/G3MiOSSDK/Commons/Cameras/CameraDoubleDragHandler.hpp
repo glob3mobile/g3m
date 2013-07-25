@@ -55,6 +55,7 @@ public:
   MutableVector3D _initialPoint0, _initialPoint1;
   double _initialFingerSeparation;
   double _initialFingerInclination;
+  double _initialRaysAngle;
   
   Camera _camera0;         //Initial Camera saved on Down event
   

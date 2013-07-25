@@ -43,22 +43,27 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
-  
-/*
- // compute rays
-  const Vector3D origin = _camera0.getCartesianPosition();
-  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
-  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
-*/  
 
   // double dragging
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  _initialPoint1  = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
+
   
+  
+  _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
+  _initialPoint1  = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
+
+  
+  
+  
+  
+   // compute rays
+   const Vector3D origin = _camera0.getCartesianPosition();
+   const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
+   const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
+  _initialRaysAngle = ray0.angleBetween(ray1).degrees();
+  
+
   // both pixels must intersect globe
   if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
     cameraContext->setCurrentGesture(None);
@@ -93,11 +98,13 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();    
   Vector2I difPixel = pixel1.sub(pixel0);
-  double finalFingerSeparation = difPixel.length();
-  double factor = finalFingerSeparation/_initialFingerSeparation;
-  
   MutableVector3D ray0 = _camera0.pixel2Ray(pixel0).asMutableVector3D();
   MutableVector3D ray1 = _camera0.pixel2Ray(pixel1).asMutableVector3D();
+  //double finalFingerSeparation = difPixel.length();
+  //double factor = finalFingerSeparation/_initialFingerSeparation;
+  double finalRaysAngle = ray0.angleBetween(ray1).degrees();
+  double factor = finalRaysAngle / _initialRaysAngle;
+  
   
   const Planet* _planet = eventContext->getPlanet();
 
@@ -230,10 +237,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     matrix = matrix.multiply(rotation);
     tempCamera.applyTransform(rotation);
     
-    Camera kkCamera(_camera0);
-    kkCamera.applyTransform(matrix);
-
-
   }
   
   // move the camera
@@ -245,11 +248,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     matrix = translation.multiply(matrix);
     tempCamera.applyTransform(translation);
     
-    
-    Camera kkCamera(_camera0);
-    kkCamera.applyTransform(matrix);
-
-
   }
   
   // compute 3D point of view center
@@ -309,15 +307,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
     matrix = rotation.multiply(matrix);
     tempCamera.applyTransform(rotation);
-    
-    
-    
-    
-    Camera kkCamera(_camera0);
-    kkCamera.applyTransform(matrix);
-    
-    
-    
     
   }
   
