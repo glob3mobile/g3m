@@ -51,6 +51,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -120,7 +121,9 @@ public class G3MWebGLDemo
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
 //      final MeshRenderer meshRenderer = new MeshRenderer();
-//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+//      meshRenderer.addMesh(
+    		  createPointsMesh(builder.getPlanet());
+//    				  ));
 //      builder.addRenderer(meshRenderer);
 
 
