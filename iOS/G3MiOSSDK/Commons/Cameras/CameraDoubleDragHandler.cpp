@@ -44,6 +44,15 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
   
+/*
+ // compute rays
+  const Vector3D origin = _camera0.getCartesianPosition();
+  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
+  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
+*/  
+
   // double dragging
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
@@ -87,31 +96,78 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   double finalFingerSeparation = difPixel.length();
   double factor = finalFingerSeparation/_initialFingerSeparation;
   
+  const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
+  const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
+  
+  MutableVector3D positionCamera = _camera0.getCartesianPosition().asMutableVector3D();
+  MutableVector3D viewDirection = _camera0.getViewDirection().asMutableVector3D();
+  const Planet* _planet = eventContext->getPlanet();
+
+  
   // compute camera translation using numerical iterations until convergence
   double dAccum=0;
   {
-    Camera tempCamera(_camera0);
+    //Camera tempCamera(_camera0);
     Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
     double angle = originalAngle._degrees;
     
     // compute estimated camera translation
-    Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
-    double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
+    //Vector3D centerPoint = tempCamera.getXYZCenterOfView();
+    Vector3D centerPoint = _planet->closestIntersection(positionCamera.asVector3D(), viewDirection.asVector3D());
+    
+    double distance = positionCamera.asVector3D().sub(centerPoint).length();
     double d = distance*(factor-1)/factor;
-    tempCamera.moveForward(d);
+    //tempCamera.moveForward(d);
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(d));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
     dAccum += d;
-    //tempCamera.updateModelMatrix();
-    double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+    //double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+    double angle0;
+    {
+      const Vector3D point0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0);
+      if (point0.isNan()) {
+        printf ("error: point0 nan!\n");
+      }
+      const Vector3D point1 = _planet->closestIntersection(positionCamera.asVector3D(), ray1);
+      if (point1.isNan()) {
+        printf ("error: point1 nan!\n");
+      }
+      angle0 = point0.angleBetween(point1)._degrees;
+    }
+
+    
+    
+    
     if (mu->isNan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
  
     // step 1
     d = mu->abs((distance-d)*0.3);
     if (angle0 < angle) d*=-1;
-    tempCamera.moveForward(d);
+    //tempCamera.moveForward(d);
+    translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(d));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+
     dAccum += d;
     //tempCamera.updateModelMatrix();
-    double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+    //double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+    double angle1;
+    {
+      const Vector3D point0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0);
+      if (point0.isNan()) {
+        printf ("error: point0 nan!\n");
+      }
+      const Vector3D point1 = _planet->closestIntersection(positionCamera.asVector3D(), ray1);
+      if (point1.isNan()) {
+        printf ("error: point1 nan!\n");
+      }
+      angle1 = point0.angleBetween(point1)._degrees;
+    }
+   
+    
+    
+    
+    
     double angle_n1=angle0, angle_n=angle1;
     
     // iterations
@@ -120,11 +176,26 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     while (mu->abs(angle_n-angle) > precision) {
 //      iter++;
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
-      tempCamera.moveForward(d);
+      //tempCamera.moveForward(d);
+      translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(d));
+      positionCamera = positionCamera.transformedBy(translation, 1.0);
+
       dAccum += d;
       //tempCamera.updateModelMatrix();
       angle_n1 = angle_n;
-      angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+      //angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+      {
+        const Vector3D point0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0);
+        if (point0.isNan()) {
+          printf ("error: point0 nan!\n");
+        }
+        const Vector3D point1 = _planet->closestIntersection(positionCamera.asVector3D(), ray1);
+        if (point1.isNan()) {
+          printf ("error: point1 nan!\n");
+        }
+        angle_n = point0.angleBetween(point1)._degrees;
+      }
+
     }
     //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
   }

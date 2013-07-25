@@ -288,7 +288,7 @@ void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
 }
 
 void Camera::moveForward(double d) {
-  const Vector3D view = _center.sub(_position).normalized().asVector3D();
+  const Vector3D view = getViewDirection().normalized();
   applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(d)));
 }
 
@@ -307,8 +307,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
 //}
 
 Vector3D Camera::centerOfViewOnPlanet() const {
-  const Vector3D ray = _center.sub(_position).asVector3D();
-  return _planet->closestIntersection(_position.asVector3D(), ray);
+  return _planet->closestIntersection(_position.asVector3D(), getViewDirection());
 }
 
 Vector3D Camera::getHorizontalVector() {
