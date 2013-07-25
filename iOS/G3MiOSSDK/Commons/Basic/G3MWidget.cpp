@@ -396,7 +396,7 @@ void G3MWidget::render(int width, int height) {
 
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
-  int _TESTING_initializationTask;
+//  int _TESTING_initializationTask;
 //  if (_mainRendererReady) {
 //    if (_initializationTask != NULL) {
 //      if (!_initializationTaskWasRun) {
