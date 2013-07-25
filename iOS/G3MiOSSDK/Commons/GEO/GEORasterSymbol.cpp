@@ -178,12 +178,6 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
 bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizationContext& sc) const {
-
-  if (_sector == NULL) {
-    printf("break point on me\n");
-    return true;
-  }
-
   sc.getGEOTileRasterizer()->addSymbol( this );
   return false;
 }
@@ -210,6 +204,9 @@ void GEORasterSymbol::rasterLine(const std::vector<Geodetic2D*>* coordinates,
     canvas->stroke();
   }
 }
+
+int __REMOVE_INCLUDE;
+#include "Color.hpp"
 
 void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
                                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
@@ -242,6 +239,33 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
         canvas->fill();
       }
 
+
+      int __TODO_RasterHoles;
+      /*
+      if (holesCoordinatesArray != NULL) {
+        const int holesCoordinatesArraySize = holesCoordinatesArray->size();
+        for (int j = 0; j < holesCoordinatesArraySize; j++) {
+          const std::vector<Geodetic2D*>* holeCoordinates = holesCoordinatesArray->at(j);
+
+          const int holeCoordinatesCount = holeCoordinates->size();
+          if (holeCoordinatesCount > 0) {
+            canvas->beginPath();
+
+            canvas->moveTo( projection->project(holeCoordinates->at(0)) );
+
+            for (int i = 1; i < holeCoordinatesCount; i++) {
+              const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+
+              canvas->lineTo( projection->project(holeCoordinate) );
+            }
+
+            canvas->setFillColor(Color::red());
+            canvas->fill();
+          }
+          
+        }
+      }
+      */
     }
   }
 }

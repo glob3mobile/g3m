@@ -19,8 +19,6 @@ bool GEO2DLineRasterStyle::apply(ICanvas* canvas) const {
     canvas->setLineJoin(_join);
     canvas->setLineMiterLimit(_miterLimit);
 
-    int _DGD_rasterizer;
-
     canvas->setLineDash(_dashLengths,
                         _dashCount,
                         _dashPhase);

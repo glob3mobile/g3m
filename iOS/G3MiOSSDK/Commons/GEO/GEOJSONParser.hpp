@@ -21,6 +21,8 @@ class GEOFeatureCollection;
 class GEOFeature;
 class GEOGeometry;
 class Geodetic2D;
+class GEO2DPolygonData;
+
 #include <vector>
 
 class GEOJSONParser {
@@ -35,6 +37,8 @@ private:
   mutable int _lineStringsInMultiLineString2DCount;
   mutable int _featuresCount;
   mutable int _featuresCollectionCount;
+  mutable int _polygon2DCount;
+  mutable int _holesLineStringsInPolygon2DCount;
 
 
   GEOJSONParser(const std::string& json) :
@@ -45,7 +49,9 @@ private:
   _multiLineStrings2DCount(0),
   _lineStringsInMultiLineString2DCount(0),
   _featuresCount(0),
-  _featuresCollectionCount(0)
+  _featuresCollectionCount(0),
+  _polygon2DCount(0),
+  _holesLineStringsInPolygon2DCount(0)
   {
 
   }
@@ -64,9 +70,7 @@ private:
   GEOGeometry* createPolygonGeometry(const JSONObject* jsonObject) const;
   GEOGeometry* createMultiPolygonGeometry(const JSONObject* jsonObject) const;
 
-  bool parsePolygonCoordinates(const JSONArray* jsCoordinatesArray,
-                               std::vector<Geodetic2D*>* coordinates,
-                               std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray) const;
+  GEO2DPolygonData* parsePolygon2DData(const JSONObject* jsonObject) const;
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
 
