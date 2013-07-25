@@ -70,8 +70,6 @@ public class GEO2DLineRasterStyle
       canvas.setLineJoin(_join);
       canvas.setLineMiterLimit(_miterLimit);
   
-      int _DGD_rasterizer;
-  
       canvas.setLineDash(_dashLengths, _dashCount, _dashPhase);
     }
   

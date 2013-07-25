@@ -17,49 +17,78 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic2D;
+///#include <vector>
+//class Geodetic2D;
+
+//class GEO2DPolygonData;
 
 public class GEO2DPolygonGeometry extends GEOGeometry2D
 {
-  private java.util.ArrayList<Geodetic2D> _coordinates;
-  private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
+//  std::vector<Geodetic2D*>*               _coordinates;
+//  std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
+  private final GEO2DPolygonData _polygonData;
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     return sc.getSymbolizer().createSymbols(this);
   }
 
-  public GEO2DPolygonGeometry(java.util.ArrayList<Geodetic2D> coordinates)
+//  GEO2DPolygonGeometry(std::vector<Geodetic2D*>* coordinates,
+//                       std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray) :
+//  _coordinates(coordinates),
+//  _holesCoordinatesArray(holesCoordinatesArray)
+//  {
+//  }
+
+  public GEO2DPolygonGeometry(GEO2DPolygonData polygonData)
   {
-     _coordinates = coordinates;
-     _holesCoordinatesArray = null;
+     _polygonData = polygonData;
   }
 
-  public GEO2DPolygonGeometry(java.util.ArrayList<Geodetic2D> coordinates, java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray)
-  {
-     _coordinates = coordinates;
-     _holesCoordinatesArray = holesCoordinatesArray;
-  }
 
   public void dispose()
   {
-    final int coordinatesCount = _coordinates.size();
-    for (int i = 0; i < coordinatesCount; i++)
-    {
-      Geodetic2D coordinate = _coordinates.get(i);
-      if (coordinate != null)
-         coordinate.dispose();
-    }
-    _coordinates = null;
+    if (_polygonData != null)
+       _polygonData.dispose();
+  
+  //  const int coordinatesCount = _coordinates->size();
+  //  for (int i = 0; i < coordinatesCount; i++) {
+  //    Geodetic2D* coordinate = _coordinates->at(i);
+  //    delete coordinate;
+  //  }
+  //  delete _coordinates;
+  //
+  //
+  //  if (_holesCoordinatesArray != NULL) {
+  //    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
+  //    for (int j = 0; j < holesCoordinatesArraySize; j++) {
+  //      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+  //
+  //      const int holeCoordinatesCount = holeCoordinates->size();
+  //      for (int i =0; i < holeCoordinatesCount; i++) {
+  //        const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+  //
+  //        delete holeCoordinate;
+  //      }
+  //
+  //      delete holeCoordinates;
+  //    }
+  //    delete _holesCoordinatesArray;
+  //  }
+  
   }
 
+
+  ///#include "Geodetic2D.hpp"
+  
   public final java.util.ArrayList<Geodetic2D> getCoordinates()
   {
-    return _coordinates;
+    return _polygonData.getCoordinates();
   }
 
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getHolesCoordinatesArray()
   {
-    return _holesCoordinatesArray;
+    return _polygonData.getHolesCoordinatesArray();
   }
 
 }
