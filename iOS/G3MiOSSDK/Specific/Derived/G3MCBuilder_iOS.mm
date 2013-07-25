@@ -84,7 +84,7 @@ GPUProgramManager* G3MCBuilder_iOS::createGPUProgramManager(){
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh+PointLight"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh+DirectionLight"));
 
   return new GPUProgramManager(gpuProgramFactory);
 }

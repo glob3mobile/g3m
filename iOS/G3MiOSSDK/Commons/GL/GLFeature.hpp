@@ -234,9 +234,9 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class PointLightGLFeature: public GLFeature{
+class DirectionLightGLFeature: public GLFeature{
 public:
-  PointLightGLFeature(const Vector3D& pos, const Vector3D& ):GLFeature(LIGHTING_GROUP){}
+  DirectionLightGLFeature(const Vector3D& dir, float intensity, float ambientLight);
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 

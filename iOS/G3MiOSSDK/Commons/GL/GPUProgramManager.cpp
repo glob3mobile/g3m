@@ -19,6 +19,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   bool transformTC = GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
   GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS);
 
+  bool hasLight = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT);
+
   /*
    #ifdef C_CODE
    const GLState* thisGLState = glState;
@@ -88,6 +90,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     if (transformTC){
       return getProgram(gl, "TransformedTexCoorTexturedMesh");
     }
+
+    if (hasLight){
+      return getProgram(gl, "TexturedMesh+DirectionLight");
+    }
+
     return getProgram(gl, "TexturedMesh");
   }
 

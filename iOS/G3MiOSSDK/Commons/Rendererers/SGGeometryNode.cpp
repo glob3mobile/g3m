@@ -15,6 +15,7 @@
 #include "IShortBuffer.hpp"
 
 #include "GLState.hpp"
+#include "Vector3D.hpp"
 
 SGGeometryNode::~SGGeometryNode() {
   delete _vertices;
@@ -41,6 +42,8 @@ void SGGeometryNode::createGLState(){
   if (_normals != NULL){
     //TODO
     ILogger::instance()->logInfo("LUZ");
+
+    _glState.addGLFeature(new DirectionLightGLFeature(Vector3D(100000, 0,0), 100, 0.5), false);
 
 
   }

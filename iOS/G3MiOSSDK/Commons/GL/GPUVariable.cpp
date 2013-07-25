@@ -9,29 +9,6 @@
 #include "GPUVariable.hpp"
 #include "ILogger.hpp"
 
-//const int UNRECOGNIZED = -1;
-//const int FLAT_COLOR = 1;
-//const int MODELVIEW = 2;
-//const int TEXTURE_EXTENT = 3;
-//const int VIEWPORT_EXTENT = 4;
-//const int TRANSLATION_TEXTURE_COORDS = 5;
-//const int SCALE_TEXTURE_COORDS = 6;
-//const int POINT_SIZE = 7;
-//
-//const int POSITION = 8;
-//const int TEXTURE_COORDS = 9;
-//const int COLOR = 10;
-//
-////TODO: DELETE
-//const int EnableColorPerVertex = 11;
-//const int EnableTexture = 12;
-//const int EnableFlatColor = 13;
-//const int FlatColorIntensity = 14;
-//const int ColorPerVertexIntensity = 15;
-//
-//const int GROUP_NOGROUP = -1;
-//const int GROUP_COLOR = 1;
-
 bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
   if (u == UNRECOGNIZED_UNIFORM){
     return false;
@@ -129,6 +106,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
     return  POINT_SIZE;
   }
 
+  if (name.compare("uAmbientLight") == 0){
+    return AMBIENT_LIGHT;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 
@@ -148,67 +129,3 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name){
 
   return UNRECOGNIZED_ATTRIBUTE;
 }
-/*
-void createMetadata(){
-  _group = GROUP_NOGROUP;
-  _priority = -1;
-  _key = getKeyForName(_name, _variableType);
-
-  if (_key == UNRECOGNIZED){
-    ILogger::instance()->logError("Unrecognized GPU VARAIBLE %s\n", _name.c_str());
-  }
-
-  if (_variableType == UNIFORM){
-    if (_key == FLAT_COLOR){
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TEXTURE_EXTENT){
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TRANSLATION_TEXTURE_COORDS){
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TRANSLATION_TEXTURE_COORDS){
-      _group = GROUP_COLOR;
-    }
-//
-//    if (true){ //DELETE
-//      if (_key == EnableColorPerVertex){
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == EnableTexture){
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if ( _key == EnableFlatColor){
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == FlatColorIntensity){
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == ColorPerVertexIntensity){
-//        _group = GROUP_COLOR;
-//      }
-//    }
-  }
-
-  if (_variableType == ATTRIBUTE){
-
-    if (_key == COLOR){
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TEXTURE_COORDS){
-      _group = GROUP_COLOR;
-    }
-  }
-
-
-}
-*/

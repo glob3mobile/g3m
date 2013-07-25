@@ -138,9 +138,19 @@ GLFeatureSet::~GLFeatureSet(){
 }
 
 void GLFeatureLightingGroup::applyOnGlobalGLState(GLGlobalState* state){
-  
+  for(int i = 0; i < _nFeatures; i++){
+    const GLFeature* f = _features[i];
+    if (f != NULL){
+      f->applyOnGlobalGLState(state);
+    }
+  }
 }
 
 void GLFeatureLightingGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
-  
+  for(int i = 0; i < _nFeatures; i++){
+    const GLFeature* f = _features[i];
+    if (f != NULL){
+      vs->combineWith(f->getGPUVariableValueSet());
+    }
+  }
 }

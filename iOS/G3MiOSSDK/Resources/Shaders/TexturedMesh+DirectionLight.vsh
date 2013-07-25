@@ -4,13 +4,6 @@
 //  Created by José Miguel Santana Núñez
 //
 
-struct PointLight{
-  vec3 position;
-  vec4 color;
-};
-
-uniform PointLight uPointLight;
-
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
 
@@ -20,10 +13,19 @@ uniform float uPointSize;
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
+uniform float uAmbientLight;
+varying float AmbientLightIntensity;
+
 void main() {
+
+  float x = uAmbientLight;
+  AmbientLightIntensity = uAmbientLight;
+
   gl_Position = uModelview * aPosition;
   
   TextureCoordOut = aTextureCoord;
+
+  
   
   gl_PointSize = uPointSize;
 }

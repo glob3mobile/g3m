@@ -599,7 +599,7 @@ public:
   GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
   builder.addGPUProgramSources(sourcesTCTexturedMesh);
 
-  GPUProgramSources sourcesTexturedMeshPointLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+PointLight"];
+  GPUProgramSources sourcesTexturedMeshPointLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
   builder.addGPUProgramSources(sourcesTexturedMeshPointLight);
 
   //  WidgetUserData* userData = NULL;

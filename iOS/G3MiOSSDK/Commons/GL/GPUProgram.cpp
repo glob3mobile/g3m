@@ -25,10 +25,11 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
   if (!p->compileShader(gl, vertexShader, vertexSource)) {
-    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader\n");
+    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader :\n %s\n", vertexSource.c_str());
+    gl->printShaderInfoLog(vertexShader);
+
     p->deleteShader(gl, vertexShader);
     p->deleteProgram(gl, p->_programID);
-    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader");
     return NULL;
   }
 
@@ -37,10 +38,11 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
   if (!p->compileShader(gl, fragmentShader, fragmentSource)) {
-    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader\n");
+    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader :\n %s\n", fragmentSource.c_str());
+    gl->printShaderInfoLog(fragmentShader);
+
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p->_programID);
-    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader");
     return NULL;
   }
 
