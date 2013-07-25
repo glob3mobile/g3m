@@ -210,10 +210,7 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   
   // create temp camera to test gesture first
         Camera tempCamera(_camera0);
-        //positionCamera = origin.asMutableVector3D();
-
-  // computer center view point
-  //Vector3D centerPoint = tempCamera.getXYZCenterOfView();
+        positionCamera = origin.asMutableVector3D();
   
   // drag from initialPoint to centerPoint
   MutableMatrix44D matrix = MutableMatrix44D::identity();
@@ -222,39 +219,50 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     const Vector3D rotationAxis = initialPoint.cross(centerPoint);
     const Angle rotationDelta = Angle::fromRadians( - mu->acos(initialPoint.normalized().dot(centerPoint.normalized())) );
     if (rotationDelta.isNan()) return; 
-        tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
-    /*
+        //tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
+    
     MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
     positionCamera = positionCamera.transformedBy(rotation, 1.0);
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     upDirection = upDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-    matrix = matrix.multiply(rotation);*/
+    matrix = matrix.multiply(rotation);
+    tempCamera.applyTransform(rotation);
+    
+    Camera kkCamera(_camera0);
+    kkCamera.applyTransform(matrix);
+
 
   }
   
   // move the camera
   if (_processZoom) {
-        tempCamera.moveForward(dAccum);
-    /*
-     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
+        //tempCamera.moveForward(dAccum);
+    
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
-    matrix = matrix.multiply(translation);*/
+    matrix = translation.multiply(matrix);
+    tempCamera.applyTransform(translation);
+    
+    
+    Camera kkCamera(_camera0);
+    kkCamera.applyTransform(matrix);
+
 
   }
   
   // compute 3D point of view center
   //tempCamera.updateModelMatrix();
-        Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
-        //Vector3D centerPoint2 = _planet->closestIntersection(positionCamera.asVector3D(), viewDirection.asVector3D());
+        //Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
+        Vector3D centerPoint2 = _planet->closestIntersection(positionCamera.asVector3D(), viewDirection.asVector3D());
   
   
   // middle point in 3D
-        Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
-        //Vector3D P0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
-        Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-        //Vector3D P1 = _planet->closestIntersection(positionCamera.asVector3D(), ray1.asVector3D());
+        //Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
+        Vector3D P0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
+        //Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
+        Vector3D P1 = _planet->closestIntersection(positionCamera.asVector3D(), ray1.asVector3D());
   //const Planet *planet = eventContext->getPlanet();
   Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
   Vector3D finalPoint = _planet->toCartesian(g);
@@ -265,15 +273,16 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   if (rotationDelta.isNan()) {
     return;
   }
-        tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
-  /*
+        //tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
+  
   MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
   positionCamera = positionCamera.transformedBy(rotation, 1.0);
   viewDirection = viewDirection.transformedBy(rotation, 0.0);
   upDirection = upDirection.transformedBy(rotation, 0.0);
   ray0 = ray0.transformedBy(rotation, 0.0);
   ray1 = ray1.transformedBy(rotation, 0.0);
-  matrix = matrix.multiply(rotation);*/
+  matrix = rotation.multiply(matrix);
+  tempCamera.applyTransform(rotation);
 
   
   
@@ -286,31 +295,41 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   if (_processRotation) {
     Vector3D normal = _planet->geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-        Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
-    /*
+        //Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
+    
     Vector3D P0 = _planet->closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
-    Vector3D v1 = P0.sub(centerPoint2).projectionInPlane(normal);*/
+    Vector3D v1 = P0.sub(centerPoint2).projectionInPlane(normal);
 
     
     double angle    = v0.angleBetween(v1)._degrees;
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
-          tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle::fromDegrees(angle));
-    /*
+          //tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle::fromDegrees(angle));
+    
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
-    matrix = matrix.multiply(rotation);*/
+    matrix = rotation.multiply(matrix);
+    tempCamera.applyTransform(rotation);
+    
+    
+    
+    
+    Camera kkCamera(_camera0);
+    kkCamera.applyTransform(matrix);
+    
+    
+    
     
   }
   
   // copy final transformation to camera
   //tempCamera.updateModelMatrix();
-        cameraContext->getNextCamera()->copyFrom(tempCamera);
-/*
+        //cameraContext->getNextCamera()->copyFrom(tempCamera);
+
   // apply transformation
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->applyTransform(matrix);
-*/
+
 
   //printf ("moving 2 fingers\n");
 }
