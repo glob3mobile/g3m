@@ -153,47 +153,36 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
   if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
-    int __ASK_JM;
-    const TileTessellator* tessellator = trc->getTessellator();
-    const bool renderDebug = trc->getParameters()->_renderDebug;
-    const Planet* planet = rc->getPlanet();
-
-    const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
-
-    initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
+    initializeElevationData(elevationDataProvider,
+                            trc->getTessellator(),
+                            trc->getLayerTilesRenderParameters()->_tileMeshResolution,
+                            rc->getPlanet(),
+                            trc->getParameters()->_renderDebug);
   }
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
 
-    const TileTessellator* tessellator = trc->getTessellator();
-    const bool renderDebug = trc->getParameters()->_renderDebug;
-    const Planet* planet = rc->getPlanet();
-
     const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-    const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
-
-    const bool mercator = trc->getLayerTilesRenderParameters()->_mercator;
 
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
-      _tessellatorMesh = tessellator->createTileMesh(planet,
-                                                     tileMeshResolution,
-                                                     this,
-                                                     NULL,
-                                                     _verticalExaggeration,
-                                                     mercator,
-                                                     renderDebug);
+      _tessellatorMesh = trc->getTessellator()->createTileMesh(rc->getPlanet(),
+                                                               layerTilesRenderParameters->_tileMeshResolution,
+                                                               this,
+                                                               NULL,
+                                                               _verticalExaggeration,
+                                                               layerTilesRenderParameters->_mercator,
+                                                               trc->getParameters()->_renderDebug);
     }
     else {
-      Mesh* tessellatorMesh = tessellator->createTileMesh(planet,
-                                                          tileMeshResolution,
-                                                          this,
-                                                          _elevationData,
-                                                          _verticalExaggeration,
-                                                          mercator,
-                                                          renderDebug);
+      Mesh* tessellatorMesh = trc->getTessellator()->createTileMesh(rc->getPlanet(),
+                                                                    layerTilesRenderParameters->_tileMeshResolution,
+                                                                    this,
+                                                                    _elevationData,
+                                                                    _verticalExaggeration,
+                                                                    layerTilesRenderParameters->_mercator,
+                                                                    trc->getParameters()->_renderDebug);
 
       MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
       if (meshHolder == NULL) {
