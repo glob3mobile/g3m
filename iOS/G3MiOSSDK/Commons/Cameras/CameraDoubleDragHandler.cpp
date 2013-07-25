@@ -97,7 +97,7 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
     
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();    
-  Vector2I difPixel = pixel1.sub(pixel0);
+  //Vector2I difPixel = pixel1.sub(pixel0);
   MutableVector3D ray0 = _camera0.pixel2Ray(pixel0).asMutableVector3D();
   MutableVector3D ray1 = _camera0.pixel2Ray(pixel1).asMutableVector3D();
   //double finalFingerSeparation = difPixel.length();
