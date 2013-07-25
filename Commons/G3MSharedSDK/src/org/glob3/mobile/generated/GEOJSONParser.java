@@ -44,7 +44,7 @@ public class GEOJSONParser
   private int _featuresCollectionCount;
   private int _polygon2DCount;
   private int _holesLineStringsInPolygon2DCount;
-
+  private int _multiPolygon2DCount;
 
   private GEOJSONParser(String json)
   {
@@ -58,6 +58,7 @@ public class GEOJSONParser
      _featuresCollectionCount = 0;
      _polygon2DCount = 0;
      _holesLineStringsInPolygon2DCount = 0;
+     _multiPolygon2DCount = 0;
 
   }
 
@@ -159,6 +160,7 @@ public class GEOJSONParser
      "MultiLineString"
      "Point"
      "Polygon"
+  
      "MultiPolygon"
   
      "MultiPoint"
@@ -323,42 +325,37 @@ public class GEOJSONParser
   }
   private GEOGeometry createPolygonGeometry(JSONObject jsonObject)
   {
-    GEOGeometry polygon = null;
-  
     GEO2DPolygonData polygonData = parsePolygon2DData(jsonObject);
-    if (polygonData != null)
-    {
-  //    polygon = new GEO2DPolygonGeometry(polygonData->_coordinates,
-  //                                       polygonData->_holesCoordinatesArray);
-  //    delete polygonData;
-      polygon = new GEO2DPolygonGeometry(polygonData);
-    }
   
-    return polygon;
+    return (polygonData == null) ? null : new GEO2DPolygonGeometry(polygonData);
   }
   private GEOGeometry createMultiPolygonGeometry(JSONObject jsonObject)
   {
-  /*
-    const JSONArray* jsPolygonsCoordinatesArray = jsonObject->getAsArray("coordinates");
-    if (jsPolygonsCoordinatesArray == NULL) {
-      ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
-      return NULL;
+    final JSONArray jsPolygonsCoordinatesArray = jsonObject.getAsArray("coordinates");
+    if (jsPolygonsCoordinatesArray == null)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is not present");
+      return null;
     }
   
-    const int polygonsCoordinatesArrayCount = jsPolygonsCoordinatesArray->size();
-    if (polygonsCoordinatesArrayCount == 0) {
-      ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
-      return NULL;
+    final int polygonsCoordinatesArrayCount = jsPolygonsCoordinatesArray.size();
+    if (polygonsCoordinatesArrayCount == 0)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is empty");
+      return null;
     }
   
+    java.util.ArrayList<GEO2DPolygonData> polygonsData = new java.util.ArrayList<GEO2DPolygonData>();
+    for (int i = 0; i < polygonsCoordinatesArrayCount; i++)
+    {
+      final JSONArray jsCoordinatesArray = jsPolygonsCoordinatesArray.getAsArray(i);
   
-    for (int i = 0; i < polygonsCoordinatesArrayCount; i++) {
-      const JSONArray* jsCoordinatesArray = jsPolygonsCoordinatesArray->getAsArray(i);
+      polygonsData.add(parsePolygon2DData(jsCoordinatesArray));
     }
   
-    int _XXXX;
-  */
-    return null;
+    _multiPolygon2DCount++;
+  
+    return new GEO2DMultiPolygonGeometry(polygonsData);
   }
 
   private GEO2DPolygonData parsePolygon2DData(JSONObject jsonObject)
@@ -370,6 +367,10 @@ public class GEOJSONParser
       return null;
     }
   
+    return parsePolygon2DData(jsCoordinatesArray);
+  }
+  private GEO2DPolygonData parsePolygon2DData(JSONArray jsCoordinatesArray)
+  {
     final int coordinatesArrayCount = jsCoordinatesArray.size();
     if (coordinatesArrayCount == 0)
     {
@@ -459,7 +460,7 @@ public class GEOJSONParser
   //  mutable int _polygon2DCount;
   //  mutable int _holesLineStringsInPolygon2DCount;
   
-    ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _polygon2DCount, _holesLineStringsInPolygon2DCount, _featuresCount, _featuresCollectionCount);
+    ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _polygon2DCount, _holesLineStringsInPolygon2DCount, _multiPolygon2DCount, _featuresCount, _featuresCollectionCount);
   }
 
 

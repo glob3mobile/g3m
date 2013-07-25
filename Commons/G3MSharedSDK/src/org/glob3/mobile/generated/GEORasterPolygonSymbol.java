@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class GEO2DPolygonData;
+
 
 public class GEORasterPolygonSymbol extends GEORasterSymbol
 {
@@ -35,12 +37,11 @@ public class GEORasterPolygonSymbol extends GEORasterSymbol
     rasterPolygon(_coordinates, _holesCoordinatesArray, rasterSurface, rasterBoundary, canvas, projection);
   }
 
-
-  public GEORasterPolygonSymbol(java.util.ArrayList<Geodetic2D> coordinates, java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray, GEO2DLineRasterStyle lineStyle, GEO2DSurfaceRasterStyle surfaceStyle)
+  public GEORasterPolygonSymbol(GEO2DPolygonData polygonData, GEO2DLineRasterStyle lineStyle, GEO2DSurfaceRasterStyle surfaceStyle)
   {
-     super(calculateSectorFromCoordinates(coordinates));
-     _coordinates = copyCoordinates(coordinates);
-     _holesCoordinatesArray = copyCoordinatesArray(holesCoordinatesArray);
+     super(calculateSectorFromCoordinates(polygonData.getCoordinates()));
+     _coordinates = copyCoordinates(polygonData.getCoordinates());
+     _holesCoordinatesArray = copyCoordinatesArray(polygonData.getHolesCoordinatesArray());
      _lineStyle = lineStyle;
      _surfaceStyle = new GEO2DSurfaceRasterStyle(surfaceStyle);
   

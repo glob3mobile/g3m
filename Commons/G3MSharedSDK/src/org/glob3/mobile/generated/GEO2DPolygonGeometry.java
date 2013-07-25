@@ -78,6 +78,11 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
   
   }
 
+  public final GEO2DPolygonData getPolygonData()
+  {
+    return _polygonData;
+  }
+
 
   ///#include "Geodetic2D.hpp"
   
