@@ -12,6 +12,7 @@
 
 
 GEO2DPolygonData::~GEO2DPolygonData() {
+#ifdef C_CODE
   const int coordinatesCount = _coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
     Geodetic2D* coordinate = _coordinates->at(i);
@@ -36,4 +37,5 @@ GEO2DPolygonData::~GEO2DPolygonData() {
     }
     delete _holesCoordinatesArray;
   }
+#endif
 }

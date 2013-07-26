@@ -117,7 +117,6 @@
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
-#import <G3MiOSSDK/GEORasterMultiPolygonSymbol.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {

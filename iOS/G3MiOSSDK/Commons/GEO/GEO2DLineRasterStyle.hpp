@@ -43,7 +43,6 @@ public:
   _cap(cap),
   _join(join),
   _miterLimit(miterLimit),
-//  _dashLengths(dashLengths),
   _dashCount(dashCount),
   _dashPhase(dashPhase)
   {
@@ -79,7 +78,9 @@ public:
   }
 
   virtual ~GEO2DLineRasterStyle() {
+#ifdef C_CODE
     delete [] _dashLengths;
+#endif
   }
 
   bool apply(ICanvas* canvas) const;
