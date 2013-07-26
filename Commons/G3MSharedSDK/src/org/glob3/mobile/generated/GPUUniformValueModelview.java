@@ -3,6 +3,7 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueModelview extends GPUUniformValue
 {
+  protected Matrix44D _lastMatrix;
   protected ModelviewMatrixHolder _holder = null;
   public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
   {
@@ -15,12 +16,13 @@ public class GPUUniformValueModelview extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniformMatrix4fv(id, false, _holder.getModelview());
+    _lastMatrix = _holder.getModelview();
+    gl.uniformMatrix4fv(id, false, _lastMatrix);
   }
 
   public final boolean isEqualsTo(GPUUniformValue v)
   {
-    return (_holder.getModelview() == ((GPUUniformValueModelview)v)._holder.getModelview());
+    return (_lastMatrix == ((GPUUniformValueModelview)v)._holder.getModelview());
   }
 
   public final String description()
