@@ -30,7 +30,6 @@ public class GEO2DLineRasterStyle
   private final int _dashPhase;
 
   public GEO2DLineRasterStyle(Color color, float width, StrokeCap cap, StrokeJoin join, float miterLimit, float[] dashLengths, int dashCount, int dashPhase)
-//  _dashLengths(dashLengths),
   {
      _color = new Color(color);
      _width = width;
@@ -56,7 +55,6 @@ public class GEO2DLineRasterStyle
 
   public void dispose()
   {
-    _dashLengths = null;
   }
 
   public final boolean apply(ICanvas canvas)

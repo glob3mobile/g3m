@@ -25,9 +25,9 @@ public class GEORasterPolygonSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _lineStyle;
+  private final GEO2DSurfaceRasterStyle   _surfaceStyle;
 
   private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
-  private final GEO2DSurfaceRasterStyle _surfaceStyle = new GEO2DSurfaceRasterStyle();
 
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
@@ -43,7 +43,7 @@ public class GEORasterPolygonSymbol extends GEORasterSymbol
      _coordinates = copyCoordinates(polygonData.getCoordinates());
      _holesCoordinatesArray = copyCoordinatesArray(polygonData.getHolesCoordinatesArray());
      _lineStyle = lineStyle;
-     _surfaceStyle = new GEO2DSurfaceRasterStyle(surfaceStyle);
+     _surfaceStyle = surfaceStyle;
   
   }
 
