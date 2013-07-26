@@ -39,6 +39,9 @@ public:
                          const GEO2DLineRasterStyle&    lineStyle,
                          const GEO2DSurfaceRasterStyle& surfaceStyle);
 
+
+  ~GEORasterPolygonSymbol();
+
 };
 
 #endif

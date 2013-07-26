@@ -10,10 +10,17 @@
 
 #include "GEOSymbolizationContext.hpp"
 #include "GEOSymbolizer.hpp"
-
+#include "GEO2DPolygonData.hpp"
 
 GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
-  delete _polygonsData;
+  if (_polygonsData != NULL) {
+    const int polygonsDataSize = _polygonsData->size();
+    for (int i = 0; i < polygonsDataSize; i++) {
+      GEO2DPolygonData* polygonData = _polygonsData->at(i);
+      delete polygonData;
+    }
+    delete _polygonsData;
+  }
 }
 
 

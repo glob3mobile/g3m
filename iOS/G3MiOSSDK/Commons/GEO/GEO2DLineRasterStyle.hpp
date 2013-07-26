@@ -43,10 +43,19 @@ public:
   _cap(cap),
   _join(join),
   _miterLimit(miterLimit),
-  _dashLengths(dashLengths),
+//  _dashLengths(dashLengths),
   _dashCount(dashCount),
   _dashPhase(dashPhase)
   {
+#ifdef C_CODE
+    _dashLengths = new float[_dashCount];
+    std::copy(dashLengths,
+              dashLengths + _dashCount,
+              _dashLengths);
+#endif
+#ifdef JAVA_CODE
+    _dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
+#endif
   }
 
   GEO2DLineRasterStyle(const GEO2DLineRasterStyle& that) :
@@ -70,7 +79,7 @@ public:
   }
 
   virtual ~GEO2DLineRasterStyle() {
-
+    delete [] _dashLengths;
   }
 
   bool apply(ICanvas* canvas) const;
