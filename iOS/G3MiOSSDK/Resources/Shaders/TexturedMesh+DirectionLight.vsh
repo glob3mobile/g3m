@@ -10,7 +10,7 @@ attribute vec4 aNormal;
 
 uniform mat4 uModelview;
 uniform float uPointSize;
-uniform vec4 uLightDirection;
+uniform vec4 uLightDirection; //MUST BE NORMALIZED
 
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
@@ -20,8 +20,7 @@ varying float diffuseLightIntensity;
 void main() {
 
   vec4 normal = normalize( aNormal);
-  vec4 lightDir = normalize(uLightDirection);
-  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
+  diffuseLightIntensity = max(dot(normal, uLightDirection), 0.0);
 
   gl_Position = uModelview * aPosition;
   
