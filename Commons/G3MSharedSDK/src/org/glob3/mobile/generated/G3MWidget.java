@@ -92,7 +92,8 @@ public class G3MWidget
       return;
     }
   
-    if ((_width != width || _height != height) && _mainRendererReady)
+    if ((_width != width || _height != height) //&& _mainRendererReady
+    		)
     {
       _width = width;
       _height = height;
@@ -310,8 +311,8 @@ public class G3MWidget
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    if (_mainRendererReady)
-    {
+  //  if (_mainRendererReady)
+    //{
       G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
       _nextCamera.resizeViewport(width, height);
@@ -325,7 +326,7 @@ public class G3MWidget
       {
         _mainRenderer.onResizeViewportEvent(ec, width, height);
       }
-    }
+    //}
   }
 
   public final void onPause()
