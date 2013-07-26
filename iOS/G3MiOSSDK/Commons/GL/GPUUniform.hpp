@@ -127,7 +127,7 @@ public:
   void unset();
 
   void set(const GPUUniformValue* v) {
-    if (v != _value) {
+//    if (v != _value) {
       if (_type == v->getType()) { //type checking
         if (_value == NULL || !_value->isEqualsTo(v)) {
           _dirty = true;
@@ -143,7 +143,7 @@ public:
       else {
         ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
       }
-    }
+//    }
   }
 
   void applyChanges(GL* gl);
@@ -356,6 +356,7 @@ public:
 
 class GPUUniformValueModelview:public GPUUniformValue{
 protected:
+  mutable Matrix44D* _lastMatrix;
 #ifdef C_CODE
   const ModelviewMatrixHolder _holder;
 #endif
@@ -366,7 +367,8 @@ public:
 #ifdef C_CODE
   GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
-  _holder(matrixHolders, nMatrix)
+  _holder(matrixHolders, nMatrix),
+  _lastMatrix(NULL)
   {
   }
 #endif
@@ -381,11 +383,12 @@ public:
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    gl->uniformMatrix4fv(id, false, _holder.getModelview());
+    _lastMatrix = _holder.getModelview();
+    gl->uniformMatrix4fv(id, false, _lastMatrix);
   }
 
   bool isEqualsTo(const GPUUniformValue* v) const{
-    return (_holder.getModelview() == ((GPUUniformValueModelview *)v)->_holder.getModelview());
+    return (_lastMatrix == ((GPUUniformValueModelview *)v)->_holder.getModelview());
   }
 
   std::string description() const{
