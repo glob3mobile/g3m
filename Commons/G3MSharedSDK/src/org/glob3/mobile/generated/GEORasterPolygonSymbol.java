@@ -50,39 +50,6 @@ public class GEORasterPolygonSymbol extends GEORasterSymbol
 
   public void dispose()
   {
-    if (_coordinates != null)
-    {
-      final int coordinatesSize = _coordinates.size();
-      for (int i = 0; i < coordinatesSize; i++)
-      {
-        Geodetic2D coordinate = _coordinates.get(i);
-        if (coordinate != null)
-           coordinate.dispose();
-      }
-      _coordinates = null;
-    }
-  
-    if (_holesCoordinatesArray != null)
-    {
-      final int holesCoordinatesArraySize = _holesCoordinatesArray.size();
-      for (int j = 0; j < holesCoordinatesArraySize; j++)
-      {
-        final java.util.ArrayList<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(j);
-  
-        final int holeCoordinatesCount = holeCoordinates.size();
-        for (int i = 0; i < holeCoordinatesCount; i++)
-        {
-          final Geodetic2D holeCoordinate = holeCoordinates.get(i);
-  
-          if (holeCoordinate != null)
-             holeCoordinate.dispose();
-        }
-  
-        holeCoordinates = null;
-      }
-      _holesCoordinatesArray = null;
-    }
-  
   }
 
 }
