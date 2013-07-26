@@ -51,7 +51,6 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
-import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -106,10 +105,10 @@ public class G3MWebGLDemo
          //initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         initDefaultWithBuilder();
+         //         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-         //         initCustomizedWithBuilder();
+         initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
@@ -120,9 +119,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-//      final MeshRenderer meshRenderer = new MeshRenderer();
-//      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-//      builder.addRenderer(meshRenderer);
+      //      final MeshRenderer meshRenderer = new MeshRenderer();
+      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      //      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -729,8 +728,7 @@ public class G3MWebGLDemo
       };
       return initializationTask;
    }
-   
-   
+
 
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
@@ -976,21 +974,19 @@ public class G3MWebGLDemo
       layerSet.addLayer(pnoa);*/
 
       // testing visible sector listener
-      VisibleSectorListener myListener = new VisibleSectorListener() {
-          @Override
-          public void onVisibleSectorChange(final Sector visibleSector,
-                                            final Geodetic3D cameraPosition) {
-        	  Window.alert("Visible Sector from lat(" + visibleSector.lower().latitude().degrees() +
-        			  "), lon(" + visibleSector.lower().longitude().degrees() +
-        			  ") to lat(" + visibleSector.upper().latitude().degrees() +
-        			  "), lon(" + visibleSector.upper().longitude().degrees() + ")");
-          }
-       };
+      final VisibleSectorListener myListener = new VisibleSectorListener() {
+         @Override
+         public void onVisibleSectorChange(final Sector visibleSector,
+                                           final Geodetic3D cameraPosition) {
+            Window.alert("Visible Sector from lat(" + visibleSector.lower().latitude().degrees() + "), lon("
+                         + visibleSector.lower().longitude().degrees() + ") to lat(" + visibleSector.upper().latitude().degrees()
+                         + "), lon(" + visibleSector.upper().longitude().degrees() + ")");
+         }
+      };
 
-      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, 
-    		  TimeInterval.fromMilliseconds(2000));
-  
-      
+      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
+
+
       /*
       // testing getfeatureinfo
       final IBufferDownloadListener myListener = new IBufferDownloadListener() {
