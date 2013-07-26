@@ -239,10 +239,10 @@ GEO2DPolygonData* GEOJSONParser::parsePolygon2DData(const JSONArray* jsCoordinat
 
     std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
     for (int i = 1; i < coordinatesArrayCount; i++) {
-      const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(i);
-      std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
-      if (coordinates != NULL) {
-        holesCoordinatesArray->push_back( coordinates );
+      const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
+      std::vector<Geodetic2D*>* holeCoordinates = create2DCoordinates(jsHoleCoordinates);
+      if (holeCoordinates != NULL) {
+        holesCoordinatesArray->push_back( holeCoordinates );
         _holesLineStringsInPolygon2DCount++;
       }
     }
