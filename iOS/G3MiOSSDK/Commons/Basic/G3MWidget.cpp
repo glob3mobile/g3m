@@ -223,67 +223,69 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  bool handled = false;
-  if (_mainRenderer->isEnable()) {
-    handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
-  }
+  if (_mainRendererReady){
+    bool handled = false;
+    if (_mainRenderer->isEnable()) {
+      handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+    }
 
-  if (!handled) {
-    handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
-    if (handled) {
-      if (_cameraActivityListener != NULL) {
-        _cameraActivityListener->touchEventHandled();
+    if (!handled) {
+      handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
+      if (handled) {
+        if (_cameraActivityListener != NULL) {
+          _cameraActivityListener->touchEventHandled();
+        }
       }
     }
+  } else{
+    _busyRenderer->onTouchEvent(&ec, touchEvent);
   }
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
-  if (_mainRendererReady) {
-    G3MEventContext ec(IFactory::instance(),
-                       IStringUtils::instance(),
-                       _threadUtils,
-                       ILogger::instance(),
-                       IMathUtils::instance(),
-                       IJSONParser::instance(),
-                       _planet,
-                       _downloader,
-                       _effectsScheduler,
-                       _storage);
+
+  G3MEventContext ec(IFactory::instance(),
+                     IStringUtils::instance(),
+                     _threadUtils,
+                     ILogger::instance(),
+                     IMathUtils::instance(),
+                     IJSONParser::instance(),
+                     _planet,
+                     _downloader,
+                     _effectsScheduler,
+                     _storage);
 
 
-    // notify the original event
-    notifyTouchEvent(ec, touchEvent);
+  // notify the original event
+  notifyTouchEvent(ec, touchEvent);
 
 
-    // creates DownUp event when a Down is immediately followed by an Up
-    if (touchEvent->getTouchCount() == 1) {
-      const TouchEventType eventType = touchEvent->getType();
-      if (eventType == Down) {
-        _clickOnProcess = true;
-      }
-      else {
-        if (eventType == Up) {
-          if (_clickOnProcess) {
-
-            const Touch* touch = touchEvent->getTouch(0);
-            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
-                                                               new Touch(*touch));
-
-            notifyTouchEvent(ec, downUpEvent);
-
-            delete downUpEvent;
-          }
-        }
-        _clickOnProcess = false;
-      }
+  // creates DownUp event when a Down is immediately followed by an Up
+  if (touchEvent->getTouchCount() == 1) {
+    const TouchEventType eventType = touchEvent->getType();
+    if (eventType == Down) {
+      _clickOnProcess = true;
     }
     else {
+      if (eventType == Up) {
+        if (_clickOnProcess) {
+
+          const Touch* touch = touchEvent->getTouch(0);
+          const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
+                                                             new Touch(*touch));
+
+          notifyTouchEvent(ec, downUpEvent);
+
+          delete downUpEvent;
+        }
+      }
       _clickOnProcess = false;
     }
-
-
   }
+  else {
+    _clickOnProcess = false;
+  }
+
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
