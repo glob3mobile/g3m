@@ -37,7 +37,17 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
 
   public void dispose()
   {
-    _polygonsData = null;
+    if (_polygonsData != null)
+    {
+      final int polygonsDataSize = _polygonsData.size();
+      for (int i = 0; i < polygonsDataSize; i++)
+      {
+        GEO2DPolygonData polygonData = _polygonsData.get(i);
+        if (polygonData != null)
+           polygonData.dispose();
+      }
+      _polygonsData = null;
+    }
   }
 
   public final java.util.ArrayList<GEO2DPolygonData> getPolygonsData()

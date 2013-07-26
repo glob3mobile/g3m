@@ -30,15 +30,16 @@ public class GEO2DLineRasterStyle
   private final int _dashPhase;
 
   public GEO2DLineRasterStyle(Color color, float width, StrokeCap cap, StrokeJoin join, float miterLimit, float[] dashLengths, int dashCount, int dashPhase)
+//  _dashLengths(dashLengths),
   {
      _color = new Color(color);
      _width = width;
      _cap = cap;
      _join = join;
      _miterLimit = miterLimit;
-     _dashLengths = dashLengths;
      _dashCount = dashCount;
      _dashPhase = dashPhase;
+    _dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
   }
 
   public GEO2DLineRasterStyle(GEO2DLineRasterStyle that)
@@ -55,7 +56,7 @@ public class GEO2DLineRasterStyle
 
   public void dispose()
   {
-
+    _dashLengths = null;
   }
 
   public final boolean apply(ICanvas canvas)

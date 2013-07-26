@@ -400,11 +400,11 @@ public class GEOJSONParser
       java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = new java.util.ArrayList<java.util.ArrayList<Geodetic2D>>();
       for (int i = 1; i < coordinatesArrayCount; i++)
       {
-        final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(i);
-        java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
-        if (coordinates != null)
+        final JSONArray jsHoleCoordinates = jsCoordinatesArray.getAsArray(i);
+        java.util.ArrayList<Geodetic2D> holeCoordinates = create2DCoordinates(jsHoleCoordinates);
+        if (holeCoordinates != null)
         {
-          holesCoordinatesArray.add(coordinates);
+          holesCoordinatesArray.add(holeCoordinates);
           _holesLineStringsInPolygon2DCount++;
         }
       }
