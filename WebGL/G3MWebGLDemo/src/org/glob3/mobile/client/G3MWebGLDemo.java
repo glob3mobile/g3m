@@ -120,11 +120,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-//      final MeshRenderer meshRenderer = new MeshRenderer();
-//      meshRenderer.addMesh(
-    		  createPointsMesh(builder.getPlanet());
-//    				  ));
-//      builder.addRenderer(meshRenderer);
+      final MeshRenderer meshRenderer = new MeshRenderer();
+      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -192,7 +190,7 @@ public class G3MWebGLDemo
       // test bson parser and 3D model
       final ShapesRenderer shapeRenderer = new ShapesRenderer();
       builder.addRenderer(shapeRenderer);
-      
+
       builder.setInitializationTask(new GInitializationTask() {
 
          private boolean done = false;
@@ -200,6 +198,8 @@ public class G3MWebGLDemo
 
          @Override
          public void run(final G3MContext context) {
+            //            meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
+
             context.getDownloader().requestBuffer( //
                      new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
                      0, //
@@ -239,13 +239,13 @@ public class G3MWebGLDemo
                         public void onCanceledDownload(final URL url,
                                                        final IByteBuffer data,
                                                        final boolean expired) {
-                        	done = true;
+                           done = true;
                         }
 
 
                         @Override
                         public void onCancel(final URL url) {
-                        	done = true;
+                           done = true;
                         }
                      }, false);
          }
@@ -272,7 +272,7 @@ public class G3MWebGLDemo
       final Angle deltaLat = Angle.fromDegrees(1).div(16);
       final Angle deltaLon = Angle.fromDegrees(1).div(16);
 
-      final int steps = 128;
+      final int steps = 40;
       final int halfSteps = steps / 2;
       for (int i = -halfSteps; i < halfSteps; i++) {
          final Angle lat = centerLat.add(deltaLat.times(i));
