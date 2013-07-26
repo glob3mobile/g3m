@@ -352,4 +352,49 @@ public class Color
     return Angle.fromRadians(getHueInRadians());
   }
 
+  public final Color adjustBrightness(float brightness)
+  {
+    final float newBrightness = getBrightness() + brightness;
+    return Color.fromHueSaturationBrightness(getHueInRadians(), getSaturation(), newBrightness, _alpha);
+  }
+
+  public final Color adjustSaturationBrightness(float saturation, float brightness)
+  {
+    final float newSaturation = getSaturation() + saturation;
+    final float newBrightness = getBrightness() + brightness;
+    return Color.fromHueSaturationBrightness(getHueInRadians(), newSaturation, newBrightness, _alpha);
+  }
+
+  public final Color darker()
+  {
+    return adjustBrightness(-0.08f);
+  }
+
+  public final Color twiceDarker()
+  {
+    return adjustBrightness(-0.16f);
+  }
+
+  public final Color muchDarker()
+  {
+//    return adjustBrightness(-0.32f);
+    return adjustBrightness(-0.64f);
+  }
+
+  public final Color lighter()
+  {
+    return adjustSaturationBrightness(-0.03f, 0.08f);
+  }
+
+  public final Color twiceLighter()
+  {
+    return adjustSaturationBrightness(-0.06f, 0.16f);
+  }
+
+  public final Color muchLighter()
+  {
+//    return adjustSaturationBrightness(-0.12f, 0.32f);
+    return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
+
 }

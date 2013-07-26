@@ -77,10 +77,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
       }
     }
   
-    //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-    //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-  
-  
     Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
   
     //  int __REMOVE_DEBUG_CODE;
@@ -143,10 +139,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
       return null;
     }
   
-    //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-    //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-  
-  
     Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
   
     //  int __REMOVE_DEBUG_CODE;
@@ -197,7 +189,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
     if (rasterSurface || rasterBoundary)
     {
       final int coordinatesCount = coordinates.size();
-      if (coordinatesCount > 0)
+      if (coordinatesCount > 1)
       {
         canvas.beginPath();
   
@@ -209,6 +201,33 @@ public abstract class GEORasterSymbol extends GEOSymbol
   
           canvas.lineTo(projection.project(coordinate));
         }
+  
+        canvas.closePath();
+  
+        if (holesCoordinatesArray != null)
+        {
+          final int holesCoordinatesArraySize = holesCoordinatesArray.size();
+          for (int j = 0; j < holesCoordinatesArraySize; j++)
+          {
+            final java.util.ArrayList<Geodetic2D> holeCoordinates = holesCoordinatesArray.get(j);
+  
+            final int holeCoordinatesCount = holeCoordinates.size();
+            if (holeCoordinatesCount > 1)
+            {
+              canvas.moveTo(projection.project(holeCoordinates.get(0)));
+  
+              for (int i = 1; i < holeCoordinatesCount; i++)
+              {
+                final Geodetic2D holeCoordinate = holeCoordinates.get(i);
+  
+                canvas.lineTo(projection.project(holeCoordinate));
+              }
+  
+              canvas.closePath();
+            }
+          }
+        }
+  
   
         if (rasterBoundary)
         {

@@ -77,6 +77,8 @@ public abstract class ICanvas
 
   protected abstract void _beginPath();
 
+  protected abstract void _closePath();
+
   protected abstract void _stroke();
 
   protected abstract void _fill();
@@ -297,6 +299,12 @@ public abstract class ICanvas
   {
     checkInitialized();
     _beginPath();
+  }
+
+  public final void closePath()
+  {
+    checkInitialized();
+    _closePath();
   }
 
   public final void stroke()
