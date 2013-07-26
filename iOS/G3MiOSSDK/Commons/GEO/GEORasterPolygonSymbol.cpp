@@ -24,6 +24,7 @@ _surfaceStyle(surfaceStyle)
 }
 
 GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
+#ifdef C_CODE
   if (_coordinates != NULL) {
     const int coordinatesSize = _coordinates->size();
     for (int i = 0; i < coordinatesSize; i++) {
@@ -49,7 +50,7 @@ GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
     }
     delete _holesCoordinatesArray;
   }
-  
+#endif
 }
 
 
