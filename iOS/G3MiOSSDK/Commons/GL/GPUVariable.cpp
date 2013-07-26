@@ -110,6 +110,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
     return AMBIENT_LIGHT;
   }
 
+  if (name.compare("uLightDirection") == 0){
+    return LIGHT_DIRECTION;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 
@@ -125,6 +129,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name){
 
   if (name.compare("aTextureCoord") == 0){
     return  TEXTURE_COORDS;
+  }
+
+  if (name.compare("aNormal") == 0){
+    return  NORMAL;
   }
 
   return UNRECOGNIZED_ATTRIBUTE;

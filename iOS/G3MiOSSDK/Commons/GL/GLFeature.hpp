@@ -240,5 +240,11 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 
+class VertexNormalGLFeature: public GLFeature{
+public:
+  VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride);
+  void applyOnGlobalGLState(GLGlobalState* state) const{}
+};
+
 
 #endif
