@@ -1395,14 +1395,16 @@ private:
 //    const Color color = Color::fromRGBA(0.85, 0.85, 0.85, 0.6);
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
 
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter();
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
 
 
     float dashLengths[] = {};
     int dashCount = 0;
+//    float dashLengths[] = {3, 6};
+//    int dashCount = 2;
 
     return GEO2DLineRasterStyle(color,
-                                3,
+                                2,
                                 CAP_ROUND,
                                 JOIN_ROUND,
                                 1,
