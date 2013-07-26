@@ -100,10 +100,6 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
     return NULL;
   }
 
-  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-
-
   Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
                               Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
 
@@ -155,10 +151,6 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
       maxLonInRadians = lonInRadians;
     }
   }
-
-  //  return new Sector(Geodetic2D::fromDegrees(minLatInDegrees, minLonInDegrees),
-  //                    Geodetic2D::fromDegrees(maxLatInDegrees, maxLonInDegrees));
-
 
   Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
                               Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
