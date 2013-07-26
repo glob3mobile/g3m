@@ -17,6 +17,9 @@ class Canvas_iOS : public ICanvas {
 private:
   CGContextRef _context;
   UIFont*      _currentUIFont;
+
+  CGMutablePathRef _path;
+  CGAffineTransform _transform;
   
   CGColorRef createCGColor(const Color& color);
   
@@ -102,6 +105,8 @@ protected:
   
 
   void _beginPath();
+  
+  void _closePath();
 
   void _stroke();
 
@@ -117,7 +122,9 @@ protected:
 public:
   Canvas_iOS() :
   _context(NULL),
-  _currentUIFont(nil)
+  _currentUIFont(nil),
+  _path(NULL),
+  _transform()
   {
   }
   

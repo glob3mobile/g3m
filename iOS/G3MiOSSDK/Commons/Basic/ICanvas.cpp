@@ -201,6 +201,10 @@ void ICanvas::beginPath() {
   _beginPath();
 }
 
+void ICanvas::closePath() {
+  checkInitialized();
+  _closePath();
+}
 
 void ICanvas::stroke() {
   checkInitialized();

@@ -208,7 +208,7 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
                                     const GEORasterProjection*                    projection) const {
   if (rasterSurface || rasterBoundary) {
     const int coordinatesCount = coordinates->size();
-    if (coordinatesCount > 0) {
+    if (coordinatesCount > 1) {
       canvas->beginPath();
 
       canvas->moveTo( projection->project(coordinates->at(0)) );
@@ -218,6 +218,29 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
 
         canvas->lineTo( projection->project(coordinate) );
       }
+
+      canvas->closePath();
+
+      if (holesCoordinatesArray != NULL) {
+        const int holesCoordinatesArraySize = holesCoordinatesArray->size();
+        for (int j = 0; j < holesCoordinatesArraySize; j++) {
+          const std::vector<Geodetic2D*>* holeCoordinates = holesCoordinatesArray->at(j);
+
+          const int holeCoordinatesCount = holeCoordinates->size();
+          if (holeCoordinatesCount > 1) {
+            canvas->moveTo( projection->project(holeCoordinates->at(0)) );
+
+            for (int i = 1; i < holeCoordinatesCount; i++) {
+              const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+
+              canvas->lineTo( projection->project(holeCoordinate) );
+            }
+
+            canvas->closePath();
+          }
+        }
+      }
+
 
       if (rasterBoundary) {
         if (rasterSurface) {

@@ -153,6 +153,50 @@ public:
     return Angle::fromRadians( getHueInRadians() );
   }
 
+  Color adjustBrightness(float brightness) {
+    const float newBrightness = getBrightness() + brightness;
+    return Color::fromHueSaturationBrightness(getHueInRadians(),
+                                              getSaturation(),
+                                              newBrightness,
+                                              _alpha);
+  }
+
+  Color adjustSaturationBrightness(float saturation,
+                                   float brightness) {
+    const float newSaturation = getSaturation() + saturation;
+    const float newBrightness = getBrightness() + brightness;
+    return Color::fromHueSaturationBrightness(getHueInRadians(),
+                                              newSaturation,
+                                              newBrightness,
+                                              _alpha);
+  }
+
+  Color darker() {
+    return adjustBrightness(-0.08f);
+  }
+
+  Color twiceDarker() {
+    return adjustBrightness(-0.16f);
+  }
+
+  Color muchDarker() {
+//    return adjustBrightness(-0.32f);
+    return adjustBrightness(-0.64f);
+  }
+
+  Color lighter() {
+    return adjustSaturationBrightness(-0.03f, 0.08f);
+  }
+
+  Color twiceLighter() {
+    return adjustSaturationBrightness(-0.06f, 0.16f);
+  }
+  
+  Color muchLighter() {
+//    return adjustSaturationBrightness(-0.12f, 0.32f);
+    return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
+
 };
 
 #endif

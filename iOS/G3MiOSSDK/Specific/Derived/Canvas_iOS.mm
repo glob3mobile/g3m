@@ -18,7 +18,12 @@
 
 
 Canvas_iOS::~Canvas_iOS() {
-  if (_context) {
+  if (_path != NULL) {
+    CGPathRelease(_path);
+    _path = NULL;
+  }
+
+  if (_context != NULL) {
     CGContextRelease( _context );
     _context = NULL;
   }
@@ -399,29 +404,48 @@ void Canvas_iOS::_drawImage(const IImage* image,
 }
 
 void Canvas_iOS::_beginPath() {
-  CGContextBeginPath(_context);
+  if (_path != NULL) {
+    CGPathRelease(_path);
+  }
+
+  _path = CGPathCreateMutable();
+  
+  //_transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _canvasHeight), 1, -1);
+  _transform = CGAffineTransformMake(1, 0, -0, -1, 0, _canvasHeight);
+}
+
+void Canvas_iOS::_closePath() {
+  CGPathCloseSubpath(_path);
 }
 
 void Canvas_iOS::_stroke() {
-  CGContextStrokePath(_context);
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathStroke);
+
+  CGPathRelease(_path);
+  _path = NULL;
 }
 
 void Canvas_iOS::_fill() {
-  CGContextFillPath(_context);
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathEOFill);
+
+  CGPathRelease(_path);
+  _path = NULL;
 }
 
 void Canvas_iOS::_fillAndStroke() {
-  CGContextDrawPath(_context, kCGPathFillStroke);
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathEOFillStroke);
+
+  CGPathRelease(_path);
+  _path = NULL;
 }
 
 void Canvas_iOS::_moveTo(float x, float y) {
-  CGContextMoveToPoint(_context,
-                       x,
-                       _canvasHeight - y);
+  CGPathMoveToPoint(_path, &_transform, x, y);
 }
 
 void Canvas_iOS::_lineTo(float x, float y) {
-  CGContextAddLineToPoint(_context,
-                          x,
-                          _canvasHeight - y);
+  CGPathAddLineToPoint(_path, &_transform, x, y);
 }

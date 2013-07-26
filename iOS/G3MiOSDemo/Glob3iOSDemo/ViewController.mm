@@ -1389,12 +1389,20 @@ private:
 //  }
 
   GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+
+//    const Color color = Color::fromRGBA(0.85, 0.85, 0.85, 0.6);
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter();
+
+
     float dashLengths[] = {};
     int dashCount = 0;
 
-    return GEO2DLineRasterStyle(//Color::fromRGBA(0.25, 0.25, 0.25, 0.8),
-                                Color::fromRGBA(0.85, 0.85, 0.85, 0.6),
-                                2,
+    return GEO2DLineRasterStyle(color,
+                                3,
                                 CAP_ROUND,
                                 JOIN_ROUND,
                                 1,
@@ -1412,7 +1420,7 @@ private:
 
     return GEO2DSurfaceRasterStyle( color );
 
-//    return GEO2DSurfaceRasterStyle(Color::fromRGBA(1, 1, 1, 0.5));
+//    return GEO2DSurfaceRasterStyle(Color::transparent());
   }
 
   GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
@@ -1512,10 +1520,6 @@ public:
 
     const GEO2DLineRasterStyle    lineStyle    = createPolygonLineRasterStyle(geometry);
     const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
-
-//    symbols->push_back( new GEORasterMultiPolygonSymbol(geometry->getPolygonsData(),
-//                                                        lineStyle,
-//                                                        surfaceStyle) );
 
     const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
     const int polygonsDataSize = polygonsData->size();

@@ -113,6 +113,8 @@ protected:
 
   
   virtual void _beginPath() = 0;
+  
+  virtual void _closePath() = 0;
 
   virtual void _stroke() = 0;
 
@@ -234,6 +236,8 @@ public:
 
 
   void beginPath();
+  
+  void closePath();
 
   void stroke();
 

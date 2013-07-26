@@ -204,3 +204,4 @@ Color Color::wheelStep(int wheelSize,
                                             getBrightness(),
                                             _alpha);
 }
+
