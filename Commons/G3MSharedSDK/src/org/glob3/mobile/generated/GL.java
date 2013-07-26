@@ -335,11 +335,10 @@ public class GL
     }
   }
 
-  public final void getViewport(int[] v)
-  {
-//    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-    _nativeGL.getIntegerv(GLVariable.viewport(), v);
-  }
+//  void getViewport(int v[]) {
+////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
+//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+//  }
 
   public void dispose()
   {

@@ -134,15 +134,16 @@ public class BusyMeshRenderer extends LeafRenderer
   {
     GL gl = rc.getGL();
   
-    if (!_projectionMatrix.isValid())
-    {
-      // init modelview matrix
-      int[] currentViewport = new int[4];
-      gl.getViewport(currentViewport);
-      final int halfWidth = currentViewport[2] / 2;
-      final int halfHeight = currentViewport[3] / 2;
-      _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    }
+  //  if (!_projectionMatrix.isValid()){
+  //    // init modelview matrix
+  //    int currentViewport[4];
+  //    gl->getViewport(currentViewport);
+  //    const int halfWidth = currentViewport[2] / 2;
+  //    const int halfHeight = currentViewport[3] / 2;
+  //    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+  //                                                                             -halfHeight, halfHeight,
+  //                                                                             -halfWidth, halfWidth);
+  //  }
   
     createGLState();
   
