@@ -182,7 +182,7 @@ GLCameraGroupFeature(cam->getProjectionMatrix44D()){}
 ModelGLFeature::ModelGLFeature(const Camera* cam):
 GLCameraGroupFeature(cam->getModelMatrix44D()){}
 
-DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, float intensity, float ambientLight):
+DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
 GLFeature(LIGHTING_GROUP){
   _values.addUniformValue(AMBIENT_LIGHT,
                           new GPUUniformValueFloat(ambientLight), false);
@@ -192,6 +192,10 @@ GLFeature(LIGHTING_GROUP){
   _values.addUniformValue(LIGHT_DIRECTION,
                           new GPUUniformValueVec4Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z(), 1.0),
                           false);
+  _values.addUniformValue(LIGHT_COLOR,
+                          new GPUUniformValueVec4Float(lightColor),
+                          false);
+          
 }
 
 VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride):

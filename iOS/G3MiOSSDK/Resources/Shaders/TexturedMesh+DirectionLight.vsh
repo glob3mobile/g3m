@@ -10,6 +10,7 @@ attribute vec4 aNormal;
 
 uniform mat4 uModelview;
 uniform float uPointSize;
+
 uniform vec4 uLightDirection; //MUST BE NORMALIZED
 
 varying vec4 VertexColor;

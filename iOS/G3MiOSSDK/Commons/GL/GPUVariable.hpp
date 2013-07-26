@@ -26,7 +26,8 @@ enum GPUUniformKey{
   SCALE_TEXTURE_COORDS = 5,
   POINT_SIZE= 6,
   AMBIENT_LIGHT = 7,
-  LIGHT_DIRECTION = 8
+  LIGHT_DIRECTION = 8,
+  LIGHT_COLOR = 9
 };
 
 enum GPUAttributeKey{

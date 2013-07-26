@@ -236,7 +236,7 @@ public:
 
 class DirectionLightGLFeature: public GLFeature{
 public:
-  DirectionLightGLFeature(const Vector3D& dir, float intensity, float ambientLight);
+  DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight);
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 

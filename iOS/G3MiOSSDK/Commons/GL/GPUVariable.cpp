@@ -114,6 +114,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
     return LIGHT_DIRECTION;
   }
 
+  if (name.compare("uLightColor") == 0){
+    return LIGHT_COLOR;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 
