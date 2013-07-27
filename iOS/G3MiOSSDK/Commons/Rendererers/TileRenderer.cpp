@@ -24,6 +24,7 @@
 
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
+#include "TileRasterizer.hpp"
 
 #include <algorithm>
 
@@ -130,9 +131,13 @@ _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
-_incompleteShape(NULL)
+_incompleteShape(NULL),
+_recreateTilesPending(false)
 {
   _layerSet->setChangeListener(this);
+  if (_tileRasterizer != NULL) {
+    _tileRasterizer->setChangeListener(this);
+  }
 }
 
 void TileRenderer::recreateTiles() {
@@ -141,6 +146,8 @@ void TileRenderer::recreateTiles() {
   _firstRender = true;
   _allFirstLevelTilesAreTextureSolved = false;
   createFirstLevelTiles(_context);
+
+  _recreateTilesPending = false;
 }
 
 class RecreateTilesTask : public GTask {
@@ -157,11 +164,13 @@ public:
   }
 };
 
-void TileRenderer::changed(const LayerSet* layerSet) {
-  // recreateTiles();
-
-  // recreateTiles() delete tiles, then meshes, and delete textures from the GPU so it has to be executed in the OpenGL thread
-  _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+void TileRenderer::changed() {
+  if (!_recreateTilesPending) {
+    _recreateTilesPending = true;
+    // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
+    //   so it has to be executed in the OpenGL thread
+    _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+  }
 }
 
 TileRenderer::~TileRenderer() {
@@ -439,7 +448,8 @@ bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  return isReadyToRenderTiles(rc) || _parameters->_renderIncompletePlanet;
+  return (isReadyToRenderTiles(rc)  ||
+          _parameters->_renderIncompletePlanet);
 }
 
 void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
@@ -478,6 +488,11 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
 
 void TileRenderer::render(const G3MRenderContext* rc,
                           const GLState& parentState) {
+
+//  if (_recreateTilesPending) {
+//    recreateTiles();
+//    _recreateTilesPending = false;
+//  }
 
   if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
     renderIncompletePlanet(rc, parentState);

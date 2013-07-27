@@ -22,7 +22,10 @@
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const bool added = _quadTree.add(*symbol->getSector(),
                                    symbol);
-  if (!added) {
+  if (added) {
+    notifyChanges();
+  }
+  else {
     delete symbol;
   }
 }

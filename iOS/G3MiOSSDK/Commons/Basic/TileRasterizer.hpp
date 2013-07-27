@@ -14,8 +14,12 @@
 class IImage;
 class Tile;
 class IImageListener;
+class ChangedListener;
 
 class TileRasterizer {
+private:
+  ChangedListener* _listener;
+  
 public:
 
   virtual ~TileRasterizer() {
@@ -29,6 +33,10 @@ public:
                          bool mercator,
                          IImageListener* listener,
                          bool autodelete) const = 0;
+
+  void setChangeListener(ChangedListener* listener);
+
+  void notifyChanges() const;
 
 };
 

@@ -53,10 +53,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 }
 
 void Layer::notifyChanges() const {
-  if (_layerSet == NULL) {
-//    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
-  }
-  else {
+  if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
   }
 }

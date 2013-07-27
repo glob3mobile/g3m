@@ -25,6 +25,7 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "ChangedListener.hpp"
 
 class EllipsoidShape;
 
@@ -290,7 +291,7 @@ public:
 };
 
 
-class TileRenderer: public LeafRenderer, LayerSetChangedListener {
+class TileRenderer: public LeafRenderer, ChangedListener {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -341,7 +342,8 @@ private:
                               const GLState& parentState);
 
   EllipsoidShape* _incompleteShape;
-
+  
+  bool _recreateTilesPending;
 
 public:
   TileRenderer(const TileTessellator* tessellator,
@@ -405,7 +407,7 @@ public:
     }
   }
 
-  void changed(const LayerSet* layerSet);
+  void changed();
 
   void recreateTiles();
 

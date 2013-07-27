@@ -7,3 +7,20 @@
 //
 
 #include "TileRasterizer.hpp"
+
+#include "ILogger.hpp"
+#include "ChangedListener.hpp"
+
+
+void TileRasterizer::setChangeListener(ChangedListener* listener) {
+  if (_listener != NULL) {
+    ILogger::instance()->logError("Listener already set");
+  }
+  _listener = listener;
+}
+
+void TileRasterizer::notifyChanges() const {
+  if (_listener != NULL) {
+    _listener->changed();
+  }
+}

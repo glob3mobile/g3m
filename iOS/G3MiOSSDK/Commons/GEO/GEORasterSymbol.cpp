@@ -170,7 +170,14 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
 bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizationContext& sc) const {
-  sc.getGEOTileRasterizer()->addSymbol( this );
+  GEOTileRasterizer* rasterizer = sc.getGEOTileRasterizer();
+  if (rasterizer == NULL) {
+    ILogger::instance()->logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+  }
+  else {
+    rasterizer->addSymbol( this );
+  }
+
   return false;
 }
 

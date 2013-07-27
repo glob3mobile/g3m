@@ -16,24 +16,13 @@ class Petition;
 class Vector2I;
 class LayerTilesRenderParameters;
 
-class LayerSetChangedListener {
-public:
-#ifdef C_CODE
-  virtual ~LayerSetChangedListener() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
-#endif
-  
-  virtual void changed(const LayerSet* layerSet) = 0;
-};
-
+class ChangedListener;
 
 class LayerSet {
 private:
   std::vector<Layer*> _layers;
   
-  LayerSetChangedListener* _listener;
+  ChangedListener* _listener;
   
   mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   
@@ -80,7 +69,7 @@ public:
   
   void layerChanged(const Layer* layer) const;
   
-  void setChangeListener(LayerSetChangedListener* listener) {
+  void setChangeListener(ChangedListener* listener) {
     if (_listener != NULL) {
       ILogger::instance()->logError("Listener already set");
     }
