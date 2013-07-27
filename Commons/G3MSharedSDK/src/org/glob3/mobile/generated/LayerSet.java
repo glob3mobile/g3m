@@ -1,9 +1,33 @@
 package org.glob3.mobile.generated; 
+//
+//  LayerSet.cpp
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 23/07/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+//
+//  LayerSet.hpp
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 23/07/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+
+//class Petition;
+//class Vector2I;
+//class LayerTilesRenderParameters;
+
+//class ChangedListener;
+
 public class LayerSet
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
-  private LayerSetChangedListener _listener;
+  private ChangedListener _listener;
 
   private LayerTilesRenderParameters _layerTilesRenderParameters;
 
@@ -126,7 +150,7 @@ public class LayerSet
   
     if (_listener != null)
     {
-      _listener.changed(this);
+      _listener.changed();
     }
   }
 
@@ -287,7 +311,7 @@ public class LayerSet
     layersChanged();
   }
 
-  public final void setChangeListener(LayerSetChangedListener listener)
+  public final void setChangeListener(ChangedListener listener)
   {
     if (_listener != null)
     {

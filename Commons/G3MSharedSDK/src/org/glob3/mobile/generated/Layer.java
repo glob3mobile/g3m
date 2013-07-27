@@ -43,11 +43,7 @@ public abstract class Layer
 
   protected final void notifyChanges()
   {
-    if (_layerSet == null)
-    {
-  //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
-    }
-    else
+    if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
     }

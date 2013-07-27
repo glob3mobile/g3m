@@ -62,7 +62,11 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   public final void addSymbol(GEORasterSymbol symbol)
   {
     final boolean added = _quadTree.add(symbol.getSector(), symbol);
-    if (!added)
+    if (added)
+    {
+      notifyChanges();
+    }
+    else
     {
       if (symbol != null)
          symbol.dispose();

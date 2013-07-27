@@ -285,7 +285,16 @@ public abstract class GEORasterSymbol extends GEOSymbol
 
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
-    sc.getGEOTileRasterizer().addSymbol(this);
+    GEOTileRasterizer rasterizer = sc.getGEOTileRasterizer();
+    if (rasterizer == null)
+    {
+      ILogger.instance().logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+    }
+    else
+    {
+      rasterizer.addSymbol(this);
+    }
+  
     return false;
   }
 
