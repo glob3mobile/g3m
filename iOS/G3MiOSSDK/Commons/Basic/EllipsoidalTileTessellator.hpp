@@ -11,6 +11,7 @@
 
 #include "TileTessellator.hpp"
 class Sector;
+class IShortBuffer;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
@@ -18,6 +19,8 @@ private:
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Sector& sector) const;
+
+  IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
 
 public:
 

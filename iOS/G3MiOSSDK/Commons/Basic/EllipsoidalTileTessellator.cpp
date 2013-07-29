@@ -57,7 +57,9 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
 //  return Vector2I(resolutionX, resolutionY);
 }
 
-IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution){
+IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet,
+                                                            const Sector& sector,
+                                                            const Vector2I& tileResolution) const{
 
   ShortBufferBuilder indices;
   for (short j = 0; j < (tileResolution._y-1); j++) {
@@ -78,43 +80,30 @@ IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, cons
     // compute skirt height
     const Vector3D sw = planet->toCartesian(sector.getSW());
     const Vector3D nw = planet->toCartesian(sector.getNW());
-    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     int posS = tileResolution._x * tileResolution._y;
     indices.add((short) (posS-1));
 
     // east side
     for (int j = tileResolution._y-1; j > 0; j--) {
-      vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)),
-                   skirtHeight);
-
       indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
       indices.add((short) posS++);
     }
 
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
-      vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0),
-                   skirtHeight);
-
       indices.add((short) i);
       indices.add((short) posS++);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
-      vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
-                   skirtHeight);
-
       indices.add((short) (j*tileResolution._x));
       indices.add((short) posS++);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
-      vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
-                   skirtHeight);
-
       indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
       indices.add((short) posS++);
     }
@@ -124,6 +113,7 @@ IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, cons
     indices.add((short) (tileResolution._x*tileResolution._y));
   }
 
+  return indices.create();
 }
 
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
