@@ -137,6 +137,16 @@ public abstract class G3MCBuilder
     return _downloader;
   }
 
+  private GPUProgramManager _gpuProgramManager;
+  private GPUProgramManager getGPUProgramManager()
+  {
+    if (_gpuProgramManager == null)
+    {
+      _gpuProgramManager = createGPUProgramManager();
+    }
+    return _gpuProgramManager;
+  }
+
   private void resetScene(String sceneId)
   {
     _sceneId = sceneId;
@@ -333,6 +343,7 @@ public abstract class G3MCBuilder
      _layerSet = new LayerSet();
      _downloader = null;
      _sceneListener = sceneListener;
+     _gpuProgramManager = null;
      _isSceneTubeOpen = false;
      _sceneTubeWebSocket = null;
   
@@ -389,8 +400,7 @@ public abstract class G3MCBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), _sceneBackgroundColor, false, false, initializationTask, true, periodicalTasks); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
-  
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), _sceneBackgroundColor, false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -416,6 +426,8 @@ public abstract class G3MCBuilder
   protected abstract IDownloader createDownloader();
 
   protected abstract IThreadUtils createThreadUtils();
+
+  protected abstract GPUProgramManager createGPUProgramManager();
 
   /** Private to G3M, don't call it */
   public final int getSceneTimestamp()

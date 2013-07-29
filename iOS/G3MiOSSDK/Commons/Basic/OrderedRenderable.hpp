@@ -10,14 +10,15 @@
 #define __G3MiOSSDK__OrderedRenderable__
 
 #include "Context.hpp"
+class GLGlobalState;
+class GPUProgramState;
 class GLState;
 
 class OrderedRenderable {
 public:
   virtual double squaredDistanceFromEye() const = 0;
 
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) = 0;
+  virtual void render(const G3MRenderContext* rc) = 0;
 
   virtual ~OrderedRenderable() {
 

@@ -7,9 +7,9 @@
 //
 
 #include "GEOGeometry.hpp"
-
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
+
 
 void GEOGeometry::setFeature(GEOFeature* feature) {
   if (_feature != feature) {

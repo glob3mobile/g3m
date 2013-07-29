@@ -261,7 +261,7 @@ public class SphericalPlanet extends Planet
     }
   
     double dist = mu.sqrt(diflat * diflat + diflon * diflon);
-    return dist * mu.pi() / 180 * R;
+    return dist * DefineConstants.PI / 180 * R;
   }
 
   public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)

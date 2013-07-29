@@ -182,6 +182,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
 
   private float _verticalExaggeration;
 
+
   private boolean isReadyToRenderTiles(G3MRenderContext rc)
   {
     if (!_layerSet.isReady())
@@ -262,7 +263,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   
     return true;
   }
-  private void renderIncompletePlanet(G3MRenderContext rc, GLState parentState)
+  private void renderIncompletePlanet(G3MRenderContext rc)
   {
   
     if (_incompleteShape == null)
@@ -272,30 +273,51 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
       final boolean texturedInside = false;
       final boolean mercator = false;
   
-  //    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
-  //    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
-  
-  //    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-  //                                          rc->getPlanet()->getRadii(),
-  //                                          resolution,
-  //                                          borderWidth,
-  //                                          texturedInside,
-  //                                          mercator,
-  //                                          surfaceColor,
-  //                                          borderColor);
-  
       _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle.zero(), Angle.zero(), 0), _parameters._incompletePlanetTexureURL, rc.getPlanet().getRadii(), resolution, borderWidth, texturedInside, mercator);
   
     }
   
-    _incompleteShape.rawRender(rc, parentState, true);
+    _incompleteShape.rawRender(rc, _glState, true);
   }
 
   private EllipsoidShape _incompleteShape;
 
   private boolean _recreateTilesPending;
 
+<<<<<<< HEAD
   public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+=======
+  private GLState _glState = new GLState();
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _glState.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+
+
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+>>>>>>> webgl-port
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -314,7 +336,12 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _incompleteShape = null;
+<<<<<<< HEAD
      _recreateTilesPending = false;
+=======
+     _projection = null;
+     _model = null;
+>>>>>>> webgl-port
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -372,20 +399,23 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
   
+<<<<<<< HEAD
   //  if (_recreateTilesPending) {
   //    recreateTiles();
   //    _recreateTilesPending = false;
   //  }
+=======
+    updateGLState(rc);
+>>>>>>> webgl-port
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {
-      renderIncompletePlanet(rc, parentState);
+      renderIncompletePlanet(rc);
       return;
     }
-  
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -410,7 +440,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, parentState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+        tile.render(rc, trc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
       }
     }
     else
@@ -429,7 +459,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, parentState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+          tile.render(rc, trc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
         }
   
         toVisit = toVisitInNextIteration;
@@ -631,5 +661,4 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   {
     return true;
   }
-
 }

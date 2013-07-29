@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_IMathUtils_hpp
 #define G3MiOSSDK_IMathUtils_hpp
 
-#include <string.h>
+#include <string>
 #include <cstdio>
 #include "ILogger.hpp"
 
@@ -28,6 +28,8 @@
 
 #endif
 
+#define PI       3.14159265358979323846264338327950288
+#define HALF_PI  1.57079632679489661923132169163975144
 
 class IMathUtils {
 private:
@@ -47,9 +49,6 @@ public:
   }
 
   virtual ~IMathUtils() { }
-
-  virtual double pi() const = 0;
-  virtual double halfPi() const = 0;
 
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v)  const = 0;

@@ -78,9 +78,8 @@ public:
     _processTouchEvents = processTouchEvents;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
-
+  void render(const G3MRenderContext* rc);
+  
   void initialize(const G3MContext* context);
 
   bool onTouchEvent(const G3MEventContext* ec,
@@ -112,7 +111,6 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
-  
 };
 
 

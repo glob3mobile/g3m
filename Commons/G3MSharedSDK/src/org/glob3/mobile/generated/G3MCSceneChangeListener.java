@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class G3MCSceneDescription;
 //class Color;
+//class GPUProgramManager;
 //class JSONBaseObject;
 //class JSONObject;
 //class TimeInterval;

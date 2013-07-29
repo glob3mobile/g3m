@@ -25,6 +25,7 @@ class IMathUtils;
 class IJSONParser;
 class IStorage;
 class OrderedRenderable;
+class GPUProgramManager;
 
 #include <vector>
 
@@ -157,6 +158,7 @@ private:
   Camera*             _nextCamera;
   TexturesHandler*    _texturesHandler;
   ITimer*             _frameStartTimer;
+  GPUProgramManager*  _gpuProgramManager;
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
@@ -176,7 +178,8 @@ public:
                    IDownloader*        downloader,
                    EffectsScheduler*   scheduler,
                    ITimer*             frameStartTimer,
-                   IStorage*           storage) :
+                   IStorage*           storage,
+                   GPUProgramManager*  gpuProgramManager) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -193,7 +196,8 @@ public:
   _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
   _frameStartTimer(frameStartTimer),
-  _orderedRenderables(NULL)
+  _orderedRenderables(NULL),
+  _gpuProgramManager(gpuProgramManager)
   {
 
   }
@@ -220,6 +224,10 @@ public:
 
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
+  }
+  
+  GPUProgramManager* getGPUProgramManager() const{
+    return _gpuProgramManager;
   }
 
   virtual ~G3MRenderContext();

@@ -15,24 +15,26 @@
 bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
                                                  int executedCounter) {
   const int tasksCount = _preRenderTasks.size();
+  if (tasksCount <= _minimumExecutionsPerFrame) {
+    //if (_stressed) {
+    //  rc->getLogger()->logWarning("Abandon STRESSED mode");
+    //}
+    _stressed = false;
+  }
+
   if (tasksCount == 0) {
-    if (_stressed) {
-      //      rc->getLogger()->logWarning("Abandon STRESSED mode");
-      _stressed = false;
-    }
     return false;
   }
-  
+
   if (executedCounter < _minimumExecutionsPerFrame) {
     return true;
   }
   
   if (tasksCount > _maximumQueuedTasks) {
-    //    if (!_stressed) {
-    //      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-    //                                  _preRenderTasks.size());
-    //    }
-    
+    if (!_stressed) {
+      //rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
+      //                            _preRenderTasks.size());
+    }
     _stressed = true;
   }
   
@@ -44,22 +46,6 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
     return false;
   }
   return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrame);
-  
-  
-  //  if (tasksCount > _maximumQueuedTasks) {
-  //    rc->getLogger()->logWarning("Too many queued tasks (%d).",
-  //                                _preRenderTasks.size());
-  //
-  ////    return true;
-  //
-  //    return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrameStressed);
-  //  }
-  //
-  //  if (executedCounter > _maximumExecutionsPerFrame) {
-  //    return false;
-  //  }
-  //
-  //  return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrame);
 }
 
 void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext *rc) {

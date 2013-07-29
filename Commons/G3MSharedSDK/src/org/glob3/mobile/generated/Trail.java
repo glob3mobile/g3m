@@ -34,22 +34,15 @@ public class Trail
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, Frustum frustum)
+  public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
-  //  if (_visible) {
-  //    Mesh* mesh = getMesh(rc->getPlanet());
-  //    if (mesh != NULL) {
-  //      mesh->render(rc, parentState);
-  //    }
-  //  }
-  
     if (_visible)
     {
       final int segmentsSize = _segments.size();
       for (int i = 0; i < segmentsSize; i++)
       {
         TrailSegment segment = _segments.get(i);
-        segment.render(rc, parentState, frustum);
+        segment.render(rc, frustum, state);
       }
     }
   }

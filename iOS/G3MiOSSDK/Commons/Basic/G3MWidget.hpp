@@ -39,6 +39,8 @@ class IStorage;
 class ITextUtils;
 class G3MEventContext;
 
+class GPUProgram;
+class GPUProgramManager;
 class ICameraActivityListener;
 
 #include <vector>
@@ -48,7 +50,7 @@ class ICameraActivityListener;
 #include "Angle.hpp"
 
 class G3MContext;
-class GLState;
+class GLGlobalState;
 
 class WidgetUserData {
 private:
@@ -101,7 +103,8 @@ public:
                            const bool                       logDownloaderStatistics,
                            GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
-                           std::vector<PeriodicalTask*>     periodicalTasks);
+                           std::vector<PeriodicalTask*>     periodicalTasks,
+                           GPUProgramManager*               gpuProgramManager);
   
   ~G3MWidget();
   
@@ -238,13 +241,12 @@ private:
   const G3MContext* _context;
   
   bool _paused;
-  
-  const GLState* _rootState;
-  
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
   
   bool _clickOnProcess;
+  
+  GPUProgramManager* _gpuProgramManager;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -261,8 +263,9 @@ private:
             const bool                       logDownloaderStatistics,
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
-            std::vector<PeriodicalTask*>     periodicalTasks);
-  
+            std::vector<PeriodicalTask*>     periodicalTasks,
+            GPUProgramManager*               gpuProgramManager);
+
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
   

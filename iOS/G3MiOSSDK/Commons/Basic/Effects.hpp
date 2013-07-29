@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Effects_hpp
 #define G3MiOSSDK_Effects_hpp
 
-#include "Renderer.hpp"
+
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
@@ -18,13 +18,15 @@
 
 #include <vector>
 
-class EffectTarget {
+class G3MRenderContext;
+class G3MContext;
+
+class EffectTarget{
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
+#else
+  void dispose();
 #endif
 };
 

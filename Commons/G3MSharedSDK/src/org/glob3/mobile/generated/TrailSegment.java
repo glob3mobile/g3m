@@ -120,28 +120,6 @@ public class TrailSegment
   //  return cm;
   
     return surfaceMesh;
-  
-    //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-    //                                          planet,
-    //                                          Geodetic3D::fromDegrees(0, 0, 0));
-    //
-    //  const int positionsSize = _positions.size();
-    //  for (int i = 0; i < positionsSize; i++) {
-    ///#ifdef C_CODE
-    //    vertices.add( *(_positions[i]) );
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //	  vertices.add( _positions.get(i) );
-    ///#endif
-    //  }
-    //
-    //  return new DirectMesh(GLPrimitive::lineStrip(),
-    //                        true,
-    //                        vertices.getCenter(),
-    //                        vertices.create(),
-    //                        _lineWidth,
-    //                        1,
-    //                        new Color(_color));
   }
 
   private Mesh _mesh;
@@ -156,6 +134,7 @@ public class TrailSegment
     }
     return _mesh;
   }
+
 
   public TrailSegment(Color color, float ribbonWidth)
   {
@@ -224,7 +203,7 @@ public class TrailSegment
     return _positions.get(_positions.size() - 2);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, Frustum frustum)
+  public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
     Mesh mesh = getMesh(rc.getPlanet());
     if (mesh != null)
@@ -234,7 +213,7 @@ public class TrailSegment
       {
         if (bounding.touchesFrustum(frustum))
         {
-          mesh.render(rc, parentState);
+          mesh.render(rc, state);
         }
       }
     }

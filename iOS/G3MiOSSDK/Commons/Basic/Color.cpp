@@ -128,7 +128,7 @@ double Color::getHueInRadians() const {
     return 0;
   }
 
-  const double deg60 = 60.0 / 180.0 * mu->pi();
+  const double deg60 = TO_RADIANS(60.0);
 
   double h;
   if (r == max) {
@@ -142,7 +142,7 @@ double Color::getHueInRadians() const {
   }
 
   if (h < 0) {
-    return (mu->pi() * 2) + h;
+    return (PI * 2) + h;
   }
 
   return h;
@@ -163,10 +163,10 @@ Color Color::fromHueSaturationBrightness(double hueInRadians,
     return fromRGBA(v, v, v, alpha);
   }
 
-  const double deg60 = 60.0 / 180.0 * mu->pi();
+  const double deg60 = TO_RADIANS(60);
 
   //final float hf = (float) ((hue % GMath.DEGREES_360) / GMath.DEGREES_60);
-  const float hf = (float) (mu->pseudoModule(hueInRadians, mu->pi() * 2) / deg60);
+  const float hf = (float) (mu->pseudoModule(hueInRadians, PI * 2) / deg60);
 
   const int i = (int) hf; // integer part of hue
   const float f = hf - i; // fractional part of hue
@@ -195,7 +195,7 @@ Color Color::fromHueSaturationBrightness(double hueInRadians,
 
 Color Color::wheelStep(int wheelSize,
                        int step) const {
-  const double stepInRadians = (IMathUtils::instance()->pi() * 2) / wheelSize;
+  const double stepInRadians = (PI * 2) / wheelSize;
 
   const double hueInRadians = getHueInRadians() + (stepInRadians * step);
 
@@ -204,4 +204,3 @@ Color Color::wheelStep(int wheelSize,
                                             getBrightness(),
                                             _alpha);
 }
-

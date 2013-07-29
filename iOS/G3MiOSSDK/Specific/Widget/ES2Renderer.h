@@ -14,8 +14,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-//#include "GLProgramId_iOS.hpp"
-#include "ShaderProgram.hpp"
+#include "GPUProgram.hpp"
 
 class GL;
 
@@ -30,10 +29,6 @@ class GL;
   
   // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
   GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
-  
-  //IGLProgramId* program;
-  ShaderProgram* _shaderProgram;
-//  ShaderProgram* _shaderProgram2;
 
   BOOL _firstRender;
   

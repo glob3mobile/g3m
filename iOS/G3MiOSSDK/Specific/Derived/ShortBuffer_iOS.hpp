@@ -9,6 +9,7 @@
 #ifndef __G3MiOSSDK__ShortBuffer_iOS__
 #define __G3MiOSSDK__ShortBuffer_iOS__
 
+#include <OpenGLES/ES2/gl.h>
 #include "IShortBuffer.hpp"
 #include "ILogger.hpp"
 
@@ -18,10 +19,20 @@ private:
   short*    _values;
   int       _timestamp;
 
+  mutable bool      _indexBufferCreated;
+  mutable GLuint    _indexBuffer; //IBO
+  mutable int       _indexBufferTimeStamp;
+
+
+  static GLuint _boundIBO;
+
 public:
   ShortBuffer_iOS(int size) :
   _size(size),
-  _timestamp(0)
+  _timestamp(0),
+  _indexBuffer(-1),
+  _indexBufferTimeStamp(-1),
+  _indexBufferCreated(false)
   {
     _values = new short[size];
     if (_values == NULL){
@@ -30,6 +41,12 @@ public:
   }
 
   virtual ~ShortBuffer_iOS() {
+    if (_indexBufferCreated){
+      glDeleteBuffers(1, &_indexBuffer);
+      if (GL_NO_ERROR != glGetError()){
+        ILogger::instance()->logError("Problem deleting IBO");
+      }
+    }
     delete [] _values;
   }
 
@@ -74,7 +91,33 @@ public:
   }
 
   const std::string description() const;
-  
+
+  void bindAsIBOToGPU(){
+    if (!_indexBufferCreated){
+      glGenBuffers(1, &_indexBuffer);
+      _indexBufferCreated = true;
+    }
+
+    if (_boundIBO != _indexBuffer){
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+      _boundIBO = _indexBuffer;
+    } else{
+      printf("REUSING");
+    }
+
+    if (_indexBufferTimeStamp != _timestamp){
+      _indexBufferTimeStamp = _timestamp;
+      short* index = getPointer();
+      int iboSize = sizeof(short) * size();
+
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
+    }
+
+//    if (GL_NO_ERROR != glGetError()){
+//      ILogger::instance()->logError("Problem using IBO");
+//    }
+  }
+
 };
 
 

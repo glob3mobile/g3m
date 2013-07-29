@@ -37,13 +37,12 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     // compute angle params
     double angle = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
-    final double PI = IMathUtils.instance().pi();
-    while (Math.abs(_lastAngle-angle)>PI/2)
+    while (Math.abs(_lastAngle-angle)>DefineConstants.PI/2)
     {
       if (angle<_lastAngle)
-         angle+=PI;
+         angle+=DefineConstants.PI;
          else
-            angle-=PI;
+            angle-=DefineConstants.PI;
     }
     _lastAngle = angle;
     angle -= _angle0;

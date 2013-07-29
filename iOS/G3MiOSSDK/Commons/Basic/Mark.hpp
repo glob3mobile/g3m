@@ -17,17 +17,19 @@
 #include "URL.hpp"
 #include "Vector2I.hpp"
 #include "Color.hpp"
+#include "GLState.hpp"
 
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
 class MarkTouchListener;
-class GLState;
+class GLGlobalState;
+class GPUProgramState;
 
 class MarkUserData {
 public:
   virtual ~MarkUserData() {
-
+    
   }
 };
 
@@ -102,27 +104,37 @@ private:
    * Default value: FALSE
    */
   const bool        _autoDeleteListener;
-
+  
 #ifdef C_CODE
   const IGLTextureId* _textureId;
 #endif
 #ifdef JAVA_CODE
   private IGLTextureId _textureId;
 #endif
-
+  
   Vector3D* _cartesianPosition;
-
+  
   IFloatBuffer* _vertices;
-  IFloatBuffer* getVertices(const Planet* planet);
+//  IFloatBuffer* getVertices(const Planet* planet);
 
   bool    _textureSolved;
   IImage* _textureImage;
   int     _textureWidth;
   int     _textureHeight;
   const std::string _imageID;
-
+  
   bool    _renderedMark;
+  
+  static IFloatBuffer* _billboardTexCoord;
+  int _viewportWidth;
+  int _viewportHeight;
+  
+  GLState _glState;
+  
+  void createGLState(const Planet* planet, int viewportWidth, int viewportHeight);
 
+  IFloatBuffer* getBillboardTexCoords();
+  
 public:
   /**
    * Creates a marker with icon and label
@@ -140,7 +152,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker just with label, without icon
    */
@@ -154,7 +166,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker just with icon, without label
    */
@@ -165,7 +177,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
@@ -177,62 +189,65 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   ~Mark();
-
+  
   const std::string getLabel() const {
     return _label;
   }
-
+  
   const Geodetic3D getPosition() const {
     return _position;
   }
-
+  
   void initialize(const G3MContext* context,
                   long long downloadPriority);
-
+  
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition);
-
+  
   bool isReady() const;
-
+  
   bool isRendered() const {
     return _renderedMark;
   }
-
+  
   void onTextureDownloadError();
-
+  
   void onTextureDownload(IImage* image);
-
+  
   int getTextureWidth() const {
     return _textureWidth;
   }
-
+  
   int getTextureHeight() const {
     return _textureHeight;
   }
-
+  
   Vector2I getTextureExtent() const {
     return Vector2I(_textureWidth, _textureHeight);
   }
-
+  
   const MarkUserData* getUserData() const {
     return _userData;
   }
-
+  
   void setUserData(MarkUserData* userData) {
     if (_autoDeleteUserData) {
       delete _userData;
     }
     _userData = userData;
   }
-
+  
   bool touched();
-
+  
   Vector3D* getCartesianPosition(const Planet* planet);
   
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
+
+  void render(const G3MRenderContext* rc,
+              const Vector3D& cameraPosition, const GLState* parentGLState);
   
 };
 

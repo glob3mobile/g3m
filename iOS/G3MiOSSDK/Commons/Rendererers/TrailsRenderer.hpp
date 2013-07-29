@@ -13,6 +13,7 @@
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
+#include "GLState.hpp"
 
 class Mesh;
 class Planet;
@@ -32,7 +33,8 @@ private:
 
   Mesh* _mesh;
   Mesh* getMesh(const Planet* planet);
-  
+
+
 public:
   TrailSegment(Color color,
                float ribbonWidth) :
@@ -47,7 +49,7 @@ public:
   }
 
   ~TrailSegment();
-
+  
   int getSize() const {
     return _positions.size();
   }
@@ -88,8 +90,7 @@ public:
   }
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const Frustum* frustum);
+              const Frustum* frustum, const GLState* state);
 
 };
 
@@ -115,8 +116,7 @@ public:
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState,
-              const Frustum* frustum);
+              const Frustum* frustum, const GLState* state);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -135,8 +135,18 @@ class TrailsRenderer : public LeafRenderer {
 private:
   std::vector<Trail*> _trails;
 
+
+  GLState _glState;
+
+  void updateGLState(const G3MRenderContext* rc);
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+
 public:
-  TrailsRenderer() {
+  TrailsRenderer():
+  _projection(NULL),
+  _model(NULL)
+  {
   }
 
   void addTrail(Trail* trail);
@@ -155,9 +165,7 @@ public:
 
   }
 
-  void initialize(const G3MContext* context) {
-
-  }
+  void initialize(const G3MContext* context);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
@@ -181,8 +189,7 @@ public:
 
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
   
 };
 
