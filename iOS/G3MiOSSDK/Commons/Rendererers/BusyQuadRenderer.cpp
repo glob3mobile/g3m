@@ -65,7 +65,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   const double halfWidth = _size._x / 2;
   const double hadfHeight = _size._y / 2;
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
   vertices.add(-halfWidth, +hadfHeight, 0);
   vertices.add(-halfWidth, -hadfHeight, 0);
   vertices.add(+halfWidth, +hadfHeight, 0);

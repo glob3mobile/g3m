@@ -12,6 +12,8 @@
 
 #include "IStringBuilder.hpp"
 
+Vector3D Vector3D::zero = Vector3D(0,0,0);
+
 
 Vector3D Vector3D::normalized() const {
   const double d = length();

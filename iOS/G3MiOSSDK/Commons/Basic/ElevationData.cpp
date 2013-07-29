@@ -60,7 +60,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   
 //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
 //                                          ellipsoid,
-//                                          Vector3D::zero());
+//                                          Vector3D::zero);
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
                                           sector._center);
@@ -158,7 +158,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           planet,
-                                          Vector3D::zero());
+                                          Vector3D::zero);
   FloatBufferBuilderFromColor colors;
 
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();

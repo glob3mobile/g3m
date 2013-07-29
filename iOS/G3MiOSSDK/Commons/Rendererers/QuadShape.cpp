@@ -106,13 +106,13 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   const float bottom = -halfHeight;
   const float top    = +halfHeight;
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
   vertices.add(left,  bottom, 0);
   vertices.add(right, bottom, 0);
   vertices.add(left,  top,    0);
   vertices.add(right, top,    0);
 
-//  const Vector3D center = Vector3D::zero();
+//  const Vector3D center = Vector3D::zero;
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
 

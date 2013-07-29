@@ -28,7 +28,7 @@ DummyRenderer::~DummyRenderer() {
 void DummyRenderer::initialize(const G3MContext* context) {
   int res = 12;
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
   ShortBufferBuilder index;
 
   // create vertices

@@ -571,8 +571,8 @@ public:
   if (true){
 
     Vector3D lightDir = Vector3D(100000, 0,0);
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(Vector3D::zero());
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    vertex.add(Vector3D::zero);
     vertex.add(lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
     meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
@@ -647,7 +647,7 @@ public:
 
 
   //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-  //                                             Vector3D::zero());
+  //                                             Vector3D::zero);
   //  FloatBufferBuilderFromColor colors;
 
   const Sector sector = Sector::fromDegrees(-34, -58,
@@ -1832,7 +1832,7 @@ public:
 
       FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
                                               context->getPlanet(),
-                                              Vector3D::zero());
+                                              Vector3D::zero);
 
       for (double alpha = 0; alpha <= 1; alpha += 0.025) {
         const double height = mu->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, alpha);

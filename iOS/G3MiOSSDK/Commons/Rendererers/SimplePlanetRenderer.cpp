@@ -40,7 +40,7 @@ void SimplePlanetRenderer::initialize(const G3MContext* context) {
 
 IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet* planet) const {
   //Vertices with Center in zero
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, Vector3D::zero());
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, Vector3D::zero);
   const double lonRes1 = (double) (_lonRes-1);
   const double latRes1 = (double) (_latRes-1);
   for(double i = 0.0; i < _lonRes; i++) {
@@ -118,7 +118,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
 
   IndexedMesh *indexedMesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                                              true,
-                                             Vector3D::zero(),
+                                             Vector3D::zero,
                                              vertices,
                                              indices,
                                              1,

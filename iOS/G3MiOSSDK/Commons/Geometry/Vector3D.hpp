@@ -21,6 +21,9 @@ private:
   Vector3D& operator=(const Vector3D& that);
   
 public:
+
+  static Vector3D zero;
+
   const double _x;
   const double _y;
   const double _z;
@@ -46,9 +49,9 @@ public:
                     mu->NanD());
   }
   
-  static Vector3D zero() {
-    return Vector3D(0, 0, 0);
-  }
+//  static Vector3D zero() {
+//    return Vector3D(0, 0, 0);
+//  }
 
   static Vector3D upX() {
     return Vector3D(1,0,0);

@@ -237,7 +237,7 @@ void Box::createMesh(Color* color) const {
   };
   
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-                                             Vector3D::zero());
+                                             Vector3D::zero);
   ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;
