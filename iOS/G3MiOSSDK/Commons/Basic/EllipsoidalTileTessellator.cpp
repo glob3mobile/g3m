@@ -30,6 +30,16 @@
 
 #include "IndexedGeometryMesh.hpp"
 
+#include "IShortBuffer.hpp"
+
+EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
+  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
+       it != _indicesMap.end();
+       it++){
+    delete it->second;
+  }
+}
+
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
                                                            const Tile* tile,
@@ -116,6 +126,22 @@ IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet
   return indices.create();
 }
 
+IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
+                                                         const Sector& sector,
+                                                         const Vector2I& tileResolution) const{
+  std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
+  if (it != _indicesMap.end()){
+//    printf("REUSING");
+    return it->second;
+  }
+
+  IShortBuffer* indices = createTileIndices(planet, sector, tileResolution);
+  _indicesMap[tileResolution] = indices;
+
+  return indices;
+  
+}
+
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile,
@@ -161,21 +187,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     }
   }
 
-
-  ShortBufferBuilder indices;
-  for (short j = 0; j < (tileResolution._y-1); j++) {
-    const short jTimesResolution = (short) (j*tileResolution._x);
-    if (j > 0) {
-      indices.add(jTimesResolution);
-    }
-    for (short i = 0; i < tileResolution._x; i++) {
-      indices.add((short) (jTimesResolution + i));
-      indices.add((short) (jTimesResolution + i + tileResolution._x));
-    }
-    indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
-  }
-
-
   // create skirts
   if (_skirted) {
     // compute skirt height
@@ -183,48 +194,29 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D nw = planet->toCartesian(sector.getNW());
     const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
-    int posS = tileResolution._x * tileResolution._y;
-    indices.add((short) (posS-1));
-
     // east side
     for (int j = tileResolution._y-1; j > 0; j--) {
       vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-
-      indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
-      indices.add((short) posS++);
     }
 
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0),
                    skirtHeight);
-
-      indices.add((short) i);
-      indices.add((short) posS++);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-
-      indices.add((short) (j*tileResolution._x));
-      indices.add((short) posS++);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
                    skirtHeight);
-
-      indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
-      indices.add((short) posS++);
     }
-
-    // last triangle
-    indices.add((short) ((tileResolution._x*tileResolution._y)-1));
-    indices.add((short) (tileResolution._x*tileResolution._y));
   }
 
 //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
@@ -243,7 +235,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                          vertices.getCenter(),
                          vertices.create(), true,
-                         indices.create(), true,
+                         getTileIndices(planet, sector, tileResolution), false,
                          1,
                          1);
 }

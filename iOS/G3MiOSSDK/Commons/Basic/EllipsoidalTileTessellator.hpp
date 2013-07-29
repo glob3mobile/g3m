@@ -10,6 +10,7 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
+#include <map.h>
 class Sector;
 class IShortBuffer;
 
@@ -17,10 +18,22 @@ class EllipsoidalTileTessellator : public TileTessellator {
 private:
   const bool         _skirted;
 
+  class OrderableVector2I: public Vector2I{
+  public:
+    OrderableVector2I(const Vector2I v): Vector2I(v){}
+    bool operator<(const Vector2I& that) const{
+      return _x < that._x;
+    }
+  };
+
+  mutable std::map<OrderableVector2I, IShortBuffer*> _indicesMap; //Resolution vs Indices
+
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Sector& sector) const;
 
   IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
+
+  IShortBuffer* getTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
 
 public:
 
@@ -30,7 +43,7 @@ public:
 
   }
 
-  virtual ~EllipsoidalTileTessellator() { }
+  virtual ~EllipsoidalTileTessellator();
 
   Vector2I getTileMeshResolution(const Planet* planet,
                                  const Vector2I& resolution,
