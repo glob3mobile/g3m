@@ -131,11 +131,10 @@ public:
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
-//    printf("-----DRAW\n");
+//  IBO CODE
 //    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer;
 //    bufferIOS->bindAsIBOToGPU();
 //    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
-
 
     const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
     glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
