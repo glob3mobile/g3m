@@ -21,7 +21,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   INativeGL* nativeGL = gl->getNative();
   
   // Depth Test
-  if (_depthTestChanged){
+//  if (_depthTestChanged){
     if (_depthTest != currentState._depthTest) {
       if (_depthTest) {
         nativeGL->enable(GLStage::depthTest());
@@ -31,10 +31,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
       }
       currentState._depthTest = _depthTest;
     }
-  }
-  
+//  }
+
   // Blending
-  if (_blendChanged){
+//  if (_blendChanged){
     if (_blend != currentState._blend) {
       if (_blend) {
         nativeGL->enable(GLStage::blend());
@@ -44,10 +44,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
       }
       currentState._blend = _blend;
     }
-  }
-  
+//  }
+
   // Cull Face
-  if (_cullFaceChanged){
+//  if (_cullFaceChanged){
     if (_cullFace != currentState._cullFace) {
       currentState._cullFace = _cullFace;
       if (_cullFace) {
@@ -61,17 +61,17 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         nativeGL->disable(GLStage::cullFace());
       }
     }
-  }
-  
-  if (_lineWidthChanged){
+//  }
+
+//  if (_lineWidthChanged){
     if (_lineWidth != currentState._lineWidth) {
       nativeGL->lineWidth(_lineWidth);
       currentState._lineWidth = _lineWidth;
     }
-  }
-  
+//  }
+
   //Polygon Offset
-  if (_polygonOffsetChanged){
+//  if (_polygonOffsetChanged){
     if (_polygonOffsetFill != currentState._polygonOffsetFill){
       currentState._polygonOffsetFill = _polygonOffsetFill;
       if (_polygonOffsetFill){
@@ -89,19 +89,19 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         nativeGL->disable(GLStage::polygonOffsetFill());
       }
     }
-  }
-  
+//  }
+
   //Blending Factors
-  if (_blendFactorsChanged){
+//  if (_blendFactorsChanged){
     if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
       nativeGL->blendFunc(_blendSFactor, _blendDFactor);
       currentState._blendDFactor = _blendDFactor;
       currentState._blendSFactor = _blendSFactor;
     }
-  }
-  
+//  }
+
   //Texture (After blending factors)
-  if (_boundTextureChanged){
+//  if (_boundTextureChanged){
     if (_boundTextureId != NULL){
       if (currentState._boundTextureId == NULL ||
           !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
@@ -112,16 +112,16 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         //ILogger::instance()->logInfo("Texture already bound.\n");
       }
     }
-  }
-  
-  if (_pixelStoreIChanged){
+//  }
+
+//  if (_pixelStoreIChanged){
     if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
       nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
       currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
     }
-  }
-  
-  if (_clearColorChanged){
+//  }
+
+//  if (_clearColorChanged){
     if (_clearColorR != currentState._clearColorR ||
         _clearColorG != currentState._clearColorG ||
         _clearColorB != currentState._clearColorB ||
@@ -132,7 +132,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
       currentState._clearColorB = _clearColorB;
       currentState._clearColorA = _clearColorA;
     }
-  }
- 
+//  }
+
 }
 

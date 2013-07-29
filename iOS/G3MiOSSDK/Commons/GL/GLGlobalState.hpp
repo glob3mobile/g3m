@@ -60,16 +60,16 @@ private:
   float _clearColorB;
   float _clearColorA;
   
-  //Marks of state changed
-  bool _depthTestChanged;
-  bool _blendChanged;
-  bool _cullFaceChanged;
-  bool _lineWidthChanged;
-  bool _polygonOffsetChanged;
-  bool _blendFactorsChanged;
-  bool _boundTextureChanged;
-  bool _pixelStoreIChanged;
-  bool _clearColorChanged;
+//  //Marks of state changed
+//  bool _depthTestChanged;
+//  bool _blendChanged;
+//  bool _cullFaceChanged;
+//  bool _lineWidthChanged;
+//  bool _polygonOffsetChanged;
+//  bool _blendFactorsChanged;
+//  bool _boundTextureChanged;
+//  bool _pixelStoreIChanged;
+//  bool _clearColorChanged;
 
   GLGlobalState(const GLGlobalState& parentState) :
   _depthTest(parentState._depthTest),
@@ -87,16 +87,16 @@ private:
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
-  _clearColorA(parentState._clearColorA),
-  _depthTestChanged(parentState._depthTestChanged),
-  _blendChanged(parentState._blendChanged),
-  _cullFaceChanged(parentState._cullFaceChanged),
-  _lineWidthChanged(parentState._lineWidthChanged),
-  _polygonOffsetChanged(parentState._polygonOffsetChanged),
-  _blendFactorsChanged(parentState._blendFactorsChanged),
-  _boundTextureChanged(parentState._boundTextureChanged),
-  _pixelStoreIChanged(parentState._pixelStoreIChanged),
-  _clearColorChanged(parentState._clearColorChanged)
+  _clearColorA(parentState._clearColorA)//,
+//  _depthTestChanged(parentState._depthTestChanged),
+//  _blendChanged(parentState._blendChanged),
+//  _cullFaceChanged(parentState._cullFaceChanged),
+//  _lineWidthChanged(parentState._lineWidthChanged),
+//  _polygonOffsetChanged(parentState._polygonOffsetChanged),
+//  _blendFactorsChanged(parentState._blendFactorsChanged),
+//  _boundTextureChanged(parentState._boundTextureChanged),
+//  _pixelStoreIChanged(parentState._pixelStoreIChanged),
+//  _clearColorChanged(parentState._clearColorChanged)
   {
   }
   
@@ -118,16 +118,16 @@ public:
   _clearColorR(0.0),
   _clearColorG(0.0),
   _clearColorB(0.0),
-  _clearColorA(0.0),
-  _depthTestChanged(false),
-  _blendChanged(false),
-  _cullFaceChanged(false),
-  _lineWidthChanged(false),
-  _polygonOffsetChanged(false),
-  _blendFactorsChanged(false),
-  _boundTextureChanged(false),
-  _pixelStoreIChanged(false),
-  _clearColorChanged(false)
+  _clearColorA(0.0)//,
+//  _depthTestChanged(false),
+//  _blendChanged(false),
+//  _cullFaceChanged(false),
+//  _lineWidthChanged(false),
+//  _polygonOffsetChanged(false),
+//  _blendFactorsChanged(false),
+//  _boundTextureChanged(false),
+//  _pixelStoreIChanged(false),
+//  _clearColorChanged(false)
   {
   }
 
@@ -167,39 +167,39 @@ public:
   
   void enableDepthTest() {
       _depthTest = true;
-    _depthTestChanged = true;
+//    _depthTestChanged = true;
   }
   void disableDepthTest() {
       _depthTest = false;
-    _depthTestChanged = true;
+//    _depthTestChanged = true;
   }
   bool isEnabledDepthTest() const { return _depthTest; }
   
   void enableBlend() {
       _blend = true;
-    _blendChanged = true;
+//    _blendChanged = true;
   }
   void disableBlend() {
       _blend = false;
-    _blendChanged = true;
+//    _blendChanged = true;
   }
   bool isEnabledBlend() const { return _blend; }
   
   void enableCullFace(int face) {
     _cullFace   = true;
     _culledFace = face;
-    _cullFaceChanged = true;
+//    _cullFaceChanged = true;
   }
   void disableCullFace() {
     _cullFace = false;
-    _cullFaceChanged = true;
+//    _cullFaceChanged = true;
   }
   bool isEnabledCullFace() const { return _cullFace; }
   int getCulledFace() const { return _culledFace; }
   
   void setLineWidth(float lineWidth) {
     _lineWidth = lineWidth;
-    _lineWidthChanged = true;
+//    _lineWidthChanged = true;
   }
   float lineWidth() const { return _lineWidth; }
   
@@ -208,12 +208,12 @@ public:
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
     
-    _polygonOffsetChanged = true;
+//    _polygonOffsetChanged = true;
   }
   void disPolygonOffsetFill(){
     _polygonOffsetFill = false;
     
-    _polygonOffsetChanged = true;
+//    _polygonOffsetChanged = true;
   }
   
   bool getPolygonOffsetFill() const { return _polygonOffsetFill;}
@@ -224,13 +224,13 @@ public:
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
     
-    _blendFactorsChanged = true;
+//    _blendFactorsChanged = true;
   }
   
   void bindTexture(const IGLTextureId* textureId){
     _boundTextureId = textureId;
     
-    _boundTextureChanged = true;
+//    _boundTextureChanged = true;
   }
   
   const IGLTextureId* getBoundTexture() const{
@@ -240,7 +240,7 @@ public:
   void setPixelStoreIAlignmentUnpack(int p){
     _pixelStoreIAlignmentUnpack = p;
     
-    _pixelStoreIChanged = true;
+//    _pixelStoreIChanged = true;
   }
   
   void setClearColor(const Color& color){
@@ -249,7 +249,7 @@ public:
     _clearColorB = color.getBlue();
     _clearColorA = color.getAlpha();
     
-    _clearColorChanged = true;
+//    _clearColorChanged = true;
   }
   
   void applyChanges(GL* gl, GLGlobalState& currentState) const;
