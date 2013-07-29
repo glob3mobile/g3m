@@ -27,7 +27,7 @@ public class CircleShape extends AbstractMeshShape
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
   
     // first is the center
     vertices.add(0.0, 0.0, 0.0);
@@ -44,7 +44,7 @@ public class CircleShape extends AbstractMeshShape
   
     Color color = (_color == null) ? null : new Color(_color);
   
-    return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), 1, 1, color);
+    return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color);
   }
 
   public CircleShape(Geodetic3D position, float radius, Color color)

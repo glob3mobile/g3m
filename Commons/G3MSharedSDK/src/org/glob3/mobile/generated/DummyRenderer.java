@@ -73,7 +73,7 @@ public abstract class DummyRenderer extends LeafRenderer
   {
     int res = 12;
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
     ShortBufferBuilder index = new ShortBufferBuilder();
   
     // create vertices

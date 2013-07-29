@@ -104,7 +104,7 @@ public abstract class ElevationData
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Vector3D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Vector3D.zero);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
@@ -157,7 +157,7 @@ public abstract class ElevationData
   
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
   //                                          ellipsoid,
-  //                                          Vector3D::zero());
+  //                                          Vector3D::zero);
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();

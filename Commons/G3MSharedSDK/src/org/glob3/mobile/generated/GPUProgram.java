@@ -134,10 +134,11 @@ public class GPUProgram
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
     if (!p.compileShader(gl, vertexShader, vertexSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader\n");
+      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader :\n %s\n", vertexSource);
+      gl.printShaderInfoLog(vertexShader);
+  
       p.deleteShader(gl, vertexShader);
       p.deleteProgram(gl, p._programID);
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader");
       return null;
     }
   
@@ -147,10 +148,11 @@ public class GPUProgram
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
     if (!p.compileShader(gl, fragmentShader, fragmentSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader\n");
+      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader :\n %s\n", fragmentSource);
+      gl.printShaderInfoLog(fragmentShader);
+  
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p._programID);
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader");
       return null;
     }
   

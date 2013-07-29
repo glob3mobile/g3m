@@ -84,8 +84,7 @@ public class GPUUniform extends GPUVariable
 
   public final void set(GPUUniformValue v)
   {
-    if (v != _value)
-    {
+//    if (v != _value) {
       if (_type == v.getType()) //type checking
       {
         if (_value == null || !_value.isEqualsTo(v))
@@ -106,7 +105,7 @@ public class GPUUniform extends GPUVariable
         ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
       }
     }
-  }
+//  }
 
   public final void applyChanges(GL gl)
   {

@@ -22,11 +22,11 @@ public abstract class Planet
 
   public static Planet createEarth()
   {
-    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero(), new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
+    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
   }
   public static Planet createSphericalEarth()
   {
-    return new SphericalPlanet(new Sphere(Vector3D.zero(), 6378137.0));
+    return new SphericalPlanet(new Sphere(Vector3D.zero, 6378137.0));
   }
 
   public void dispose()

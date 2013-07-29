@@ -17,10 +17,26 @@ package org.glob3.mobile.generated;
 
 
 //class Sector;
+//class IShortBuffer;
 
 public class EllipsoidalTileTessellator extends TileTessellator
 {
   private final boolean _skirted;
+
+  private static class OrderableVector2I extends Vector2I
+  {
+    public OrderableVector2I(Vector2I v)
+    {
+       super(v);
+    }
+//C++ TO JAVA CONVERTER TODO TASK: Operators cannot be overloaded in Java:
+    boolean operator <(Vector2I that)
+    {
+      return _x < that._x;
+    }
+  }
+
+  private java.util.HashMap<OrderableVector2I, IShortBuffer> _indicesMap = new java.util.HashMap<OrderableVector2I, IShortBuffer>(); //Resolution vs Indices
 
   private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
   {
@@ -42,6 +58,88 @@ public class EllipsoidalTileTessellator extends TileTessellator
   //  return Vector2I(resolutionX, resolutionY);
   }
 
+  private IShortBuffer createTileIndices(Planet planet, Sector sector, Vector2I tileResolution)
+  {
+  
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+    for (short j = 0; j < (tileResolution._y-1); j++)
+    {
+      final short jTimesResolution = (short)(j *tileResolution._x);
+      if (j > 0)
+      {
+        indices.add(jTimesResolution);
+      }
+      for (short i = 0; i < tileResolution._x; i++)
+      {
+        indices.add((short)(jTimesResolution + i));
+        indices.add((short)(jTimesResolution + i + tileResolution._x));
+      }
+      indices.add((short)(jTimesResolution + 2 *tileResolution._x - 1));
+    }
+  
+  
+    // create skirts
+    if (_skirted)
+    {
+      // compute skirt height
+      final Vector3D sw = planet.toCartesian(sector.getSW());
+      final Vector3D nw = planet.toCartesian(sector.getNW());
+  
+      int posS = tileResolution._x * tileResolution._y;
+      indices.add((short)(posS-1));
+  
+      // east side
+      for (int j = tileResolution._y-1; j > 0; j--)
+      {
+        indices.add((short)(j *tileResolution._x + (tileResolution._x-1)));
+        indices.add((short) posS++);
+      }
+  
+      // north side
+      for (int i = tileResolution._x-1; i > 0; i--)
+      {
+        indices.add((short) i);
+        indices.add((short) posS++);
+      }
+  
+      // west side
+      for (int j = 0; j < tileResolution._y-1; j++)
+      {
+        indices.add((short)(j *tileResolution._x));
+        indices.add((short) posS++);
+      }
+  
+      // south side
+      for (int i = 0; i < tileResolution._x-1; i++)
+      {
+        indices.add((short)((tileResolution._y-1)*tileResolution._x + i));
+        indices.add((short) posS++);
+      }
+  
+      // last triangle
+      indices.add((short)((tileResolution._x *tileResolution._y)-1));
+      indices.add((short)(tileResolution._x *tileResolution._y));
+    }
+  
+    return indices.create();
+  }
+
+  private IShortBuffer getTileIndices(Planet planet, Sector sector, Vector2I tileResolution)
+  {
+    java.util.Iterator<OrderableVector2I, IShortBuffer> it = _indicesMap.indexOf(new OrderableVector2I(tileResolution));
+    if (it.hasNext())
+    {
+  //    printf("REUSING");
+      return it.next().getValue();
+    }
+  
+    IShortBuffer indices = createTileIndices(planet, sector, tileResolution);
+    _indicesMap.put(tileResolution, indices);
+  
+    return indices;
+  
+  }
+
 
   public EllipsoidalTileTessellator(boolean skirted)
   {
@@ -51,6 +149,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public void dispose()
   {
+    for (java.util.Iterator<OrderableVector2I, IShortBuffer> it = _indicesMap.iterator(); it.hasNext();)
+    {
+      it.next().getValue() = null;
+    }
   }
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
@@ -102,24 +204,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
       }
     }
   
-  
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    for (short j = 0; j < (tileResolution._y-1); j++)
-    {
-      final short jTimesResolution = (short)(j *tileResolution._x);
-      if (j > 0)
-      {
-        indices.add(jTimesResolution);
-      }
-      for (short i = 0; i < tileResolution._x; i++)
-      {
-        indices.add((short)(jTimesResolution + i));
-        indices.add((short)(jTimesResolution + i + tileResolution._x));
-      }
-      indices.add((short)(jTimesResolution + 2 *tileResolution._x - 1));
-    }
-  
-  
     // create skirts
     if (_skirted)
     {
@@ -128,48 +212,29 @@ public class EllipsoidalTileTessellator extends TileTessellator
       final Vector3D nw = planet.toCartesian(sector.getNW());
       final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
   
-      int posS = tileResolution._x * tileResolution._y;
-      indices.add((short)(posS-1));
-  
       // east side
       for (int j = tileResolution._y-1; j > 0; j--)
       {
         vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)), skirtHeight);
-  
-        indices.add((short)(j *tileResolution._x + (tileResolution._x-1)));
-        indices.add((short) posS++);
       }
   
       // north side
       for (int i = tileResolution._x-1; i > 0; i--)
       {
         vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0), skirtHeight);
-  
-        indices.add((short) i);
-        indices.add((short) posS++);
       }
   
       // west side
       for (int j = 0; j < tileResolution._y-1; j++)
       {
         vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)), skirtHeight);
-  
-        indices.add((short)(j *tileResolution._x));
-        indices.add((short) posS++);
       }
   
       // south side
       for (int i = 0; i < tileResolution._x-1; i++)
       {
         vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1), skirtHeight);
-  
-        indices.add((short)((tileResolution._y-1)*tileResolution._x + i));
-        indices.add((short) posS++);
       }
-  
-      // last triangle
-      indices.add((short)((tileResolution._x *tileResolution._y)-1));
-      indices.add((short)(tileResolution._x *tileResolution._y));
     }
   
   //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
@@ -185,7 +250,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   //                         1,
   //                         color);
   
-    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1);
+    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, getTileIndices(planet, sector, tileResolution), false, 1, 1);
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)

@@ -70,13 +70,13 @@ public class QuadShape extends AbstractMeshShape
     final float bottom = -halfHeight;
     final float top = +halfHeight;
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
     vertices.add(left, bottom, 0);
     vertices.add(right, bottom, 0);
     vertices.add(left, top, 0);
     vertices.add(right, top, 0);
   
-  //  const Vector3D center = Vector3D::zero();
+  //  const Vector3D center = Vector3D::zero;
   
     Color color = (_color == null) ? null : new Color(_color);
   

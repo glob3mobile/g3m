@@ -55,18 +55,27 @@ public class GLGlobalState
   private float _clearColorB;
   private float _clearColorA;
 
-  //Marks of state changed
-  private boolean _depthTestChanged;
-  private boolean _blendChanged;
-  private boolean _cullFaceChanged;
-  private boolean _lineWidthChanged;
-  private boolean _polygonOffsetChanged;
-  private boolean _blendFactorsChanged;
-  private boolean _boundTextureChanged;
-  private boolean _pixelStoreIChanged;
-  private boolean _clearColorChanged;
+//  //Marks of state changed
+//  bool _depthTestChanged;
+//  bool _blendChanged;
+//  bool _cullFaceChanged;
+//  bool _lineWidthChanged;
+//  bool _polygonOffsetChanged;
+//  bool _blendFactorsChanged;
+//  bool _boundTextureChanged;
+//  bool _pixelStoreIChanged;
+//  bool _clearColorChanged;
 
-  private GLGlobalState(GLGlobalState parentState)
+  private GLGlobalState(GLGlobalState parentState) //,
+//  _depthTestChanged(parentState._depthTestChanged),
+//  _blendChanged(parentState._blendChanged),
+//  _cullFaceChanged(parentState._cullFaceChanged),
+//  _lineWidthChanged(parentState._lineWidthChanged),
+//  _polygonOffsetChanged(parentState._polygonOffsetChanged),
+//  _blendFactorsChanged(parentState._blendFactorsChanged),
+//  _boundTextureChanged(parentState._boundTextureChanged),
+//  _pixelStoreIChanged(parentState._pixelStoreIChanged),
+//  _clearColorChanged(parentState._clearColorChanged)
   {
      _depthTest = parentState._depthTest;
      _blend = parentState._blend;
@@ -84,19 +93,19 @@ public class GLGlobalState
      _clearColorG = parentState._clearColorG;
      _clearColorB = parentState._clearColorB;
      _clearColorA = parentState._clearColorA;
-     _depthTestChanged = parentState._depthTestChanged;
-     _blendChanged = parentState._blendChanged;
-     _cullFaceChanged = parentState._cullFaceChanged;
-     _lineWidthChanged = parentState._lineWidthChanged;
-     _polygonOffsetChanged = parentState._polygonOffsetChanged;
-     _blendFactorsChanged = parentState._blendFactorsChanged;
-     _boundTextureChanged = parentState._boundTextureChanged;
-     _pixelStoreIChanged = parentState._pixelStoreIChanged;
-     _clearColorChanged = parentState._clearColorChanged;
   }
 
 
-  public GLGlobalState()
+  public GLGlobalState() //,
+//  _depthTestChanged(false),
+//  _blendChanged(false),
+//  _cullFaceChanged(false),
+//  _lineWidthChanged(false),
+//  _polygonOffsetChanged(false),
+//  _blendFactorsChanged(false),
+//  _boundTextureChanged(false),
+//  _pixelStoreIChanged(false),
+//  _clearColorChanged(false)
   {
      _depthTest = false;
      _blend = false;
@@ -114,15 +123,6 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
-     _depthTestChanged = false;
-     _blendChanged = false;
-     _cullFaceChanged = false;
-     _lineWidthChanged = false;
-     _polygonOffsetChanged = false;
-     _blendFactorsChanged = false;
-     _boundTextureChanged = false;
-     _pixelStoreIChanged = false;
-     _clearColorChanged = false;
   }
 
   //GLGlobalState* createCombinationWithMorePriorityGLGlobalState(const GLGlobalState* that);
@@ -166,12 +166,12 @@ public class GLGlobalState
   public final void enableDepthTest()
   {
       _depthTest = true;
-    _depthTestChanged = true;
+//    _depthTestChanged = true;
   }
   public final void disableDepthTest()
   {
       _depthTest = false;
-    _depthTestChanged = true;
+//    _depthTestChanged = true;
   }
   public final boolean isEnabledDepthTest()
   {
@@ -181,12 +181,12 @@ public class GLGlobalState
   public final void enableBlend()
   {
       _blend = true;
-    _blendChanged = true;
+//    _blendChanged = true;
   }
   public final void disableBlend()
   {
       _blend = false;
-    _blendChanged = true;
+//    _blendChanged = true;
   }
   public final boolean isEnabledBlend()
   {
@@ -197,12 +197,12 @@ public class GLGlobalState
   {
     _cullFace = true;
     _culledFace = face;
-    _cullFaceChanged = true;
+//    _cullFaceChanged = true;
   }
   public final void disableCullFace()
   {
     _cullFace = false;
-    _cullFaceChanged = true;
+//    _cullFaceChanged = true;
   }
   public final boolean isEnabledCullFace()
   {
@@ -216,7 +216,7 @@ public class GLGlobalState
   public final void setLineWidth(float lineWidth)
   {
     _lineWidth = lineWidth;
-    _lineWidthChanged = true;
+//    _lineWidthChanged = true;
   }
   public final float lineWidth()
   {
@@ -229,13 +229,13 @@ public class GLGlobalState
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
 
-    _polygonOffsetChanged = true;
+//    _polygonOffsetChanged = true;
   }
   public final void disPolygonOffsetFill()
   {
     _polygonOffsetFill = false;
 
-    _polygonOffsetChanged = true;
+//    _polygonOffsetChanged = true;
   }
 
   public final boolean getPolygonOffsetFill()
@@ -256,14 +256,14 @@ public class GLGlobalState
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
 
-    _blendFactorsChanged = true;
+//    _blendFactorsChanged = true;
   }
 
   public final void bindTexture(IGLTextureId textureId)
   {
     _boundTextureId = textureId;
 
-    _boundTextureChanged = true;
+//    _boundTextureChanged = true;
   }
 
   public final IGLTextureId getBoundTexture()
@@ -275,7 +275,7 @@ public class GLGlobalState
   {
     _pixelStoreIAlignmentUnpack = p;
 
-    _pixelStoreIChanged = true;
+//    _pixelStoreIChanged = true;
   }
 
   public final void setClearColor(Color color)
@@ -285,7 +285,7 @@ public class GLGlobalState
     _clearColorB = color.getBlue();
     _clearColorA = color.getAlpha();
 
-    _clearColorChanged = true;
+//    _clearColorChanged = true;
   }
 
   public final void applyChanges(GL gl, GLGlobalState currentState)
@@ -294,8 +294,7 @@ public class GLGlobalState
     INativeGL nativeGL = gl.getNative();
   
     // Depth Test
-    if (_depthTestChanged)
-    {
+  //  if (_depthTestChanged){
       if (_depthTest != currentState._depthTest)
       {
         if (_depthTest)
@@ -308,11 +307,10 @@ public class GLGlobalState
         }
         currentState._depthTest = _depthTest;
       }
-    }
+  //  }
   
     // Blending
-    if (_blendChanged)
-    {
+  //  if (_blendChanged){
       if (_blend != currentState._blend)
       {
         if (_blend)
@@ -325,11 +323,10 @@ public class GLGlobalState
         }
         currentState._blend = _blend;
       }
-    }
+  //  }
   
     // Cull Face
-    if (_cullFaceChanged)
-    {
+  //  if (_cullFaceChanged){
       if (_cullFace != currentState._cullFace)
       {
         currentState._cullFace = _cullFace;
@@ -347,20 +344,18 @@ public class GLGlobalState
           nativeGL.disable(GLStage.cullFace());
         }
       }
-    }
+  //  }
   
-    if (_lineWidthChanged)
-    {
+  //  if (_lineWidthChanged){
       if (_lineWidth != currentState._lineWidth)
       {
         nativeGL.lineWidth(_lineWidth);
         currentState._lineWidth = _lineWidth;
       }
-    }
+  //  }
   
     //Polygon Offset
-    if (_polygonOffsetChanged)
-    {
+  //  if (_polygonOffsetChanged){
       if (_polygonOffsetFill != currentState._polygonOffsetFill)
       {
         currentState._polygonOffsetFill = _polygonOffsetFill;
@@ -382,22 +377,20 @@ public class GLGlobalState
           nativeGL.disable(GLStage.polygonOffsetFill());
         }
       }
-    }
+  //  }
   
     //Blending Factors
-    if (_blendFactorsChanged)
-    {
+  //  if (_blendFactorsChanged){
       if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor)
       {
         nativeGL.blendFunc(_blendSFactor, _blendDFactor);
         currentState._blendDFactor = _blendDFactor;
         currentState._blendSFactor = _blendSFactor;
       }
-    }
+  //  }
   
     //Texture (After blending factors)
-    if (_boundTextureChanged)
-    {
+  //  if (_boundTextureChanged){
       if (_boundTextureId != null)
       {
         if (currentState._boundTextureId == null || !_boundTextureId.isEqualsTo(currentState._boundTextureId))
@@ -411,19 +404,17 @@ public class GLGlobalState
           //ILogger::instance()->logInfo("Texture already bound.\n");
         }
       }
-    }
+  //  }
   
-    if (_pixelStoreIChanged)
-    {
+  //  if (_pixelStoreIChanged){
       if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
       {
         nativeGL.pixelStorei(GLAlignment.unpack(), _pixelStoreIAlignmentUnpack);
         currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
       }
-    }
+  //  }
   
-    if (_clearColorChanged)
-    {
+  //  if (_clearColorChanged){
       if (_clearColorR != currentState._clearColorR || _clearColorG != currentState._clearColorG || _clearColorB != currentState._clearColorB || _clearColorA != currentState._clearColorA)
       {
         nativeGL.clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
@@ -432,7 +423,7 @@ public class GLGlobalState
         currentState._clearColorB = _clearColorB;
         currentState._clearColorA = _clearColorA;
       }
-    }
+  //  }
   
   }
 }

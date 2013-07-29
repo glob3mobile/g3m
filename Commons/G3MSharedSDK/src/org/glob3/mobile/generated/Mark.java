@@ -100,7 +100,7 @@ public class Mark
     if (_vertices == null)
     {
       final Vector3D pos = new Vector3D(planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
       vertex.add(pos);
       vertex.add(pos);
       vertex.add(pos);

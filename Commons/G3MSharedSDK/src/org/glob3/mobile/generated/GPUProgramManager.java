@@ -68,36 +68,6 @@ public class GPUProgramManager
     return prog;
   }
 
-//  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
-///#ifdef C_CODE
-//    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
-//        it != _programs.end(); it++){
-//      if (state.isLinkableToProgram(*it->second)){
-//        return it->second;
-//      }
-//    }
-///#endif
-///#ifdef JAVA_CODE
-//    for (final GPUProgram p : _programs.values()){
-//    	if (state.isLinkableToProgram(p)) {
-//        return p;
-//      }
-//    }
-///#endif
-//    
-//    int WORKING_JM;
-//    
-//    std::vector<std::string>* us = state.getUniformsNames();
-//    int size = us->size();
-//    for (int i = 0; i < size; i++) {
-//      if (us->at(i).compare("ViewPortExtent") == 0){
-//        return getProgram(gl, "Billboard");
-//      }
-//    }
-//    
-//    return getProgram(gl, "Default");
-//  }
-
   public final GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
@@ -106,6 +76,8 @@ public class GPUProgramManager
     boolean billboard = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);
     boolean color = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.COLOR);
     boolean transformTC = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS);
+  
+    boolean hasLight = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT);
   
     /*
      #ifdef C_CODE
@@ -180,6 +152,12 @@ public class GPUProgramManager
       {
         return getProgram(gl, "TransformedTexCoorTexturedMesh");
       }
+  
+      if (hasLight)
+      {
+        return getProgram(gl, "TexturedMesh+DirectionLight");
+      }
+  
       return getProgram(gl, "TexturedMesh");
     }
   

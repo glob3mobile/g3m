@@ -39,7 +39,7 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
   private IFloatBuffer createVertices(Planet planet)
   {
     //Vertices with Center in zero
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, Vector3D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, Vector3D.zero);
     final double lonRes1 = (double)(_lonRes-1);
     final double latRes1 = (double)(_latRes-1);
     for(double i = 0.0; i < _lonRes; i++)
@@ -125,7 +125,7 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
     //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
     //  }
   
-    IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices, indices, 1, 1, flatColor, vertexColors);
+    IndexedMesh indexedMesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero, vertices, indices, 1, 1, flatColor, vertexColors);
   
     //TEXTURED
     final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SimplePlanetRenderer-Texture", false);
