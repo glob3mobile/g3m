@@ -21,7 +21,8 @@ varying float diffuseLightIntensity;
 void main() {
 
   vec4 normal = normalize( aNormal);
-  diffuseLightIntensity = max(dot(normal, uLightDirection), 0.0);
+  vec4 lightDir = normalize( uLightDirection);
+  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
 
   gl_Position = uModelview * aPosition;
   

@@ -105,6 +105,8 @@
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 
 #include <G3MiOSSDK/GPUProgramFactory.hpp>
+#import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
+#import <G3MiOSSDK/Color.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -498,7 +500,8 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  builder.setPlanet(Planet::createEarth());
+  const Planet* planet = Planet::createEarth();
+  builder.setPlanet(planet);
   //  builder.setPlanet(Planet::createSphericalEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -563,6 +566,27 @@ public:
   //  [self createInterpolationTest: meshRenderer];
 
   meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+
+  //Draw light direction
+  if (true){
+
+    Vector3D lightDir = Vector3D(100000, 0,0);
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
+    vertex.add(Vector3D::zero());
+    vertex.add(lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+
+    meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                          true,
+                                          vertex.getCenter(),
+                                          vertex.create(),
+                                          3.0,
+                                          1.0,
+                                          Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+
+    
+  }
+
+
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
@@ -1646,19 +1670,19 @@ public:
                                                       meshResolution) );
 
 
-//    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
-//                                                                     meshSector,
-//                                                                     meshResolution,
-//                                                                     false);
-//
-//    _meshRenderer->addMesh( subElevationData->createMesh(planet,
-//                                                         verticalExaggeration,
-//                                                         Geodetic3D::fromDegrees(meshSector._deltaLatitude._degrees + 0.1,
-//                                                                                 0,
-//                                                                                 0),
-//                                                         pointSize) );
-//
-//    delete subElevationData;
+    //    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+    //                                                                     meshSector,
+    //                                                                     meshResolution,
+    //                                                                     false);
+    //
+    //    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+    //                                                         verticalExaggeration,
+    //                                                         Geodetic3D::fromDegrees(meshSector._deltaLatitude._degrees + 0.1,
+    //                                                                                 0,
+    //                                                                                 0),
+    //                                                         pointSize) );
+    //
+    //    delete subElevationData;
 
 
 
@@ -2204,21 +2228,21 @@ public:
           plane->setScale(scale, scale, scale);
           plane->setPitch(Angle::fromDegrees(90));
           _shapesRenderer->addShape(plane);
-          
 
-//          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
-//
-//          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-//          printf("%s\n", bson->description().c_str());
-//
-//          JSONBaseObject* bsonObject = BSONParser::parse(bson);
-//          printf("%s\n", bsonObject->description().c_str());
-//
-//          delete bson;
-//
-//          delete jsonObject;
-//
-//          delete bsonObject;
+
+          //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+          //
+          //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+          //          printf("%s\n", bson->description().c_str());
+          //
+          //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+          //          printf("%s\n", bsonObject->description().c_str());
+          //
+          //          delete bson;
+          //
+          //          delete jsonObject;
+          //
+          //          delete bsonObject;
         }
       }
 
@@ -2290,20 +2314,20 @@ public:
     _lastHeight(lastPosition._height)
     {
     }
-
+    
     void run(const G3MContext* context) {
       const double latStep = 2.0 / ((arc4random() % 100) + 50);
       const double lonStep = 2.0 / ((arc4random() % 100) + 50);
-
+      
       _lastLatitudeDegrees  -= latStep;
       _lastLongitudeDegrees += lonStep;
-
+      
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
                                      Angle::fromDegrees(_lastLongitudeDegrees),
                                      _lastHeight));
     }
   };
-
+  
   PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(0.25),
                                                       new TestTrailTask(trail, position));
   return periodicalTask;
@@ -2329,13 +2353,13 @@ public:
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-	[super viewWillDisappear:animated];
+  [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
   [G3MWidget stopAnimation];
-	[super viewDidDisappear:animated];
+  [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
