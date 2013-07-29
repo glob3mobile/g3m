@@ -389,4 +389,17 @@ Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
 }
 
 
+void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
+                                      const Vector3D& initialRay0,
+                                      const Vector3D& initialRay1) const
+{
+}
+
+
+MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
+                                             const Vector3D& finalRay1) const
+{
+  
+}
+
 

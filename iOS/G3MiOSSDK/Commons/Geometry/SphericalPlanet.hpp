@@ -128,6 +128,14 @@ public:
   
   Effect* createEffectFromLastSingleDrag() const;
   
+  void beginDoubleDrag(const Vector3D& origin,
+                               const Vector3D& initialRay0,
+                               const Vector3D& initialRay1) const;
+  
+  MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                                      const Vector3D& finalRay1) const;
+
+  
 };
 
 #endif

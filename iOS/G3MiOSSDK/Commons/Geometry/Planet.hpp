@@ -82,6 +82,13 @@ public:
   virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;
     
   virtual Effect* createEffectFromLastSingleDrag() const = 0;
+
+  virtual void beginDoubleDrag(const Vector3D& origin,
+                               const Vector3D& initialRay0,
+                               const Vector3D& initialRay1) const = 0;
+  
+  virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                                      const Vector3D& finalRay1) const = 0;
 };
 
 #endif

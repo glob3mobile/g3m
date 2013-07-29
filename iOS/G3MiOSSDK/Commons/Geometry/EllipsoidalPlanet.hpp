@@ -31,6 +31,8 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _initialPoint0;
+  mutable MutableVector3D _initialPoint1;
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
@@ -132,6 +134,14 @@ public:
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
     
   Effect* createEffectFromLastSingleDrag() const;
+  
+  void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& initialRay0,
+                       const Vector3D& initialRay1) const;
+  
+  MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                              const Vector3D& finalRay1) const;
+
 };
 
 
