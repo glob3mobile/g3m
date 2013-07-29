@@ -31,6 +31,8 @@ package org.glob3.mobile.generated;
 //class Planet;
 //class Renderer;
 //class WidgetUserData;
+//class GPUProgramSources;
+//class GPUProgramManager;
 
 public abstract class IG3MBuilder
 {
@@ -52,6 +54,8 @@ public abstract class IG3MBuilder
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
+
+  private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
 
 
   /**
@@ -250,8 +254,17 @@ public abstract class IG3MBuilder
   {
     return _userData;
   }
-
-
+  private GPUProgramManager getGPUProgramManager()
+  {
+    //GPU Program Manager
+    GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+    for(int i = 0; i < _sources.size(); i++)
+    {
+      gpuProgramFactory.add(_sources.get(i));
+    }
+    GPUProgramManager gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+    return gpuProgramManager;
+  }
   private java.util.ArrayList<ICameraConstrainer> createDefaultCameraConstraints()
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
@@ -371,7 +384,10 @@ public abstract class IG3MBuilder
       mainRenderer = getTileRendererBuilder().create();
     }
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks());
+  
+  
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager());
   
     g3mWidget.setUserData(getUserData());
   
@@ -868,5 +884,10 @@ public abstract class IG3MBuilder
     }
   
     return _tileRendererBuilder;
+  }
+
+  public final void addGPUProgramSources(GPUProgramSources s)
+  {
+    _sources.add(s);
   }
 }

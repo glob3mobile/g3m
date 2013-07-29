@@ -47,12 +47,14 @@ package org.glob3.mobile.generated;
 //class ITextUtils;
 //class G3MEventContext;
 
+//class GPUProgram;
+//class GPUProgramManager;
 //class ICameraActivityListener;
 
 
 
 //class G3MContext;
-//class GLState;
+//class GLGlobalState;
 
 public class WidgetUserData
 {

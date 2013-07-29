@@ -139,7 +139,7 @@ public class CameraRotationHandler extends CameraEventHandler
     // compute angle between normal and view direction
     Vector3D view = camera.getViewDirection();
     double dot = normal.normalized().dot(view.normalized().times(-1));
-    double initialAngle = mu.acos(dot) / mu.pi() * 180;
+    double initialAngle = mu.acos(dot) / DefineConstants.PI * 180;
   
     // rotate more than 85 degrees or less than 0 degrees is not allowed
     double delta = (cm._y - _pivotPixel.y()) * 0.25;

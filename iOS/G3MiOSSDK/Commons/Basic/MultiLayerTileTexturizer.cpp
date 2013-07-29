@@ -192,6 +192,15 @@ public:
 
 class TileTextureBuilder : public RCObject {
 private:
+
+  ~TileTextureBuilder() {
+    if (!_finalized && !_canceled) {
+      cancel();
+    }
+
+    deletePetitions();
+  }
+
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
   
@@ -233,6 +242,7 @@ private:
   
   
   const std::vector<Petition*> cleanUpPetitions(const std::vector<Petition*>& petitions) const {
+
     const int petitionsSize = petitions.size();
     if (petitionsSize <= 1) {
       return petitions;
@@ -341,13 +351,7 @@ public:
     }
   }
   
-  ~TileTextureBuilder() {
-    if (!_finalized && !_canceled) {
-      cancel();
-    }
-    
-    deletePetitions();
-  }
+
   
   RectangleF* getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
                                 const Sector& wholeSector,

@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__AbstractMeshShape__
 
 #include "Shape.hpp"
+
 class Mesh;
 
 class AbstractMeshShape : public Shape {
@@ -41,13 +42,12 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState,
+                 GLState* parentState,
                  bool renderNotReadyShapes);
 
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
-  
 };
 
 #endif

@@ -21,6 +21,9 @@ package org.glob3.mobile.generated;
 //class GEOGeometry;
 //class JSONBaseObject;
 //class JSONObject;
+//class GPUProgramState;
+//class GLGlobalState;
+//class GEOSymbolizer;
 
 public class GEOFeature extends GEOObject
 {
@@ -49,6 +52,10 @@ public class GEOFeature extends GEOObject
     if (_properties != null)
        _properties.dispose();
   }
+
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
+//              const GEOSymbolizer* symbolizer);
 
   public final JSONObject getProperties()
   {

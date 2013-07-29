@@ -28,6 +28,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
 
+#include "IndexedGeometryMesh.hpp"
+
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
                                                            const Tile* tile,
@@ -166,18 +168,26 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     indices.add((short) (tileResolution._x*tileResolution._y));
   }
 
-  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+//  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+  
+//  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+//                         GLPrimitive::triangleStrip(),
+//                         //GLPrimitive::lineStrip(),
+//                         true,
+//                         vertices.getCenter(),
+//                         vertices.create(),
+//                         indices.create(),
+//                         1,
+//                         1,
+//                         color);
 
-  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
-                         GLPrimitive::triangleStrip(),
-                         //GLPrimitive::lineStrip(),
+  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
                          1,
-                         1,
-                         color);
+                         1);
 }
 
 const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,

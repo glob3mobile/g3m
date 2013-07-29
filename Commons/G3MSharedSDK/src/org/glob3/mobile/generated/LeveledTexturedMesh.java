@@ -21,6 +21,9 @@ public class LeveledTexturedMesh extends Mesh
   
     if (!_currentLevelIsValid)
     {
+  
+      int newCurrentLevel = 0;
+  
       for (int i = 0; i < _levelsCount; i++)
       {
         LazyTextureMapping mapping = _mappings.get(i);
@@ -29,30 +32,50 @@ public class LeveledTexturedMesh extends Mesh
           if (mapping.isValid())
           {
             //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
-            _currentLevel = i;
+            newCurrentLevel = i;
             _currentLevelIsValid = true;
             break;
           }
         }
       }
   
-      if (_currentLevelIsValid)
+      if (newCurrentLevel != _currentLevel)
       {
-        for (int i = _currentLevel+1; i < _levelsCount; i++)
+        _currentLevel = newCurrentLevel;
+        //MESH SHOULD BE NOTIFIED TO CHANGE STATE FROM TILE
+  
+        if (_currentLevelIsValid)
         {
-          LazyTextureMapping mapping = _mappings.get(i);
-          if (mapping != null)
+          for (int i = _currentLevel+1; i < _levelsCount; i++)
           {
-            _mappings.get(i).dispose();
+            LazyTextureMapping mapping = _mappings.get(i);
             if (mapping != null)
-               mapping.dispose();
+            {
+              _mappings.get(i).dispose();
+              if (mapping != null)
+                 mapping.dispose();
+            }
           }
         }
       }
+  
+  
     }
   
     return _currentLevelIsValid ? _mappings.get(_currentLevel) : null;
   }
+
+  private GLState _glState = new GLState();
+  private void updateGLState()
+  {
+    LazyTextureMapping mapping = getCurrentTextureMapping();
+    if (mapping != null && mapping != _mappingOnGLState)
+    {
+      _mappingOnGLState = mapping;
+      mapping.modifyGLState(_glState);
+    }
+  }
+  private LazyTextureMapping _mappingOnGLState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
@@ -62,6 +85,7 @@ public class LeveledTexturedMesh extends Mesh
      _levelsCount = mappings.size();
      _currentLevel = mappings.size() + 1;
      _currentLevelIsValid = false;
+     _mappingOnGLState = null;
     if (_mappings.size() <= 0)
     {
       ILogger.instance().logError("LOGIC ERROR\n");
@@ -104,24 +128,19 @@ public class LeveledTexturedMesh extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-      _mesh.render(rc, parentState);
+      _mesh.render(rc);
     }
     else
     {
-      GLState state = new GLState(parentState);
-      state.enableTextures();
-      state.enableTexture2D();
-  
-      mapping.bind(rc);
-  
-      _mesh.render(rc, state);
+      _mesh.render(rc);
     }
   }
+
 
   public final BoundingVolume getBoundingVolume()
   {
@@ -147,9 +166,6 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-//  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const const GLTextureId*glTextureId);
-
   public final IGLTextureId getTopLevelGLTextureId()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
@@ -164,13 +180,6 @@ public class LeveledTexturedMesh extends Mesh
     return null;
   }
 
-
-  //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-  //                                                         const const GLTextureId*glTextureId) {
-  //  const int level = _mappings->size() - inversedLevel - 1;
-  //  setGLTextureIdForLevel(level, glTextureId);
-  //}
-  
   public final boolean isTransparent(G3MRenderContext rc)
   {
     if (_mesh.isTransparent(rc))
@@ -185,7 +194,16 @@ public class LeveledTexturedMesh extends Mesh
       return false;
     }
   
-    return mapping.isTransparent(rc);
+    return mapping.isTransparent();
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+  
+    updateGLState();
+  
+    _glState.setParent(parentGLState);
+    ((Mesh)_mesh).render(rc, _glState);
   }
 
 }

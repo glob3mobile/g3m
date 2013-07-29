@@ -27,5 +27,4 @@ public abstract class GEOObject
   }
 
   public abstract void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc);
-
 }

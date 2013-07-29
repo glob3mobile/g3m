@@ -7,6 +7,7 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
+
 //
 //  Effects.hpp
 //  G3MiOSSDK
@@ -19,7 +20,12 @@ package org.glob3.mobile.generated;
 
 
 
+
+//class G3MRenderContext;
+//class G3MContext;
+
 public interface EffectTarget
 {
-  public void dispose();
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
 }

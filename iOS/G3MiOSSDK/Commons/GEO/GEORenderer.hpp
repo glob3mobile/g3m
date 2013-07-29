@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
+//#include "GPUProgramState.hpp"
 
 #include <vector>
 class GEOObject;
@@ -50,7 +51,6 @@ public:
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer)
   {
-
   }
 
   virtual ~GEORenderer();
@@ -83,8 +83,7 @@ public:
     return true;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -103,7 +102,6 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
-  
 };
 
 #endif

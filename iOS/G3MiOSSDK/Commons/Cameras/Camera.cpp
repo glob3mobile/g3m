@@ -9,13 +9,15 @@
 
 
 #include "IMathUtils.hpp"
-#include <string.h>
+#include <string>
 
 #include "Camera.hpp"
 #include "Plane.hpp"
 #include "GL.hpp"
 #include "Vector2F.hpp"
 #include "Sphere.hpp"
+
+//#include "GPUProgramState.hpp"
 
 void Camera::initialize(const G3MContext* context)
 {
@@ -26,6 +28,7 @@ void Camera::initialize(const G3MContext* context)
 
 
 void Camera::copyFrom(const Camera &that) {
+  //TODO: IMPROVE PERFORMANCE
   _width  = that._width;
   _height = that._height;
 
@@ -40,9 +43,13 @@ void Camera::copyFrom(const Camera &that) {
 
   _frustumData = FrustumData(that._frustumData);
 
-  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
-  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
-  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+//  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+//  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+//  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+  _projectionMatrix.copyValue(that._projectionMatrix);
+  _modelMatrix.copyValue(that._modelMatrix);
+  _modelViewMatrix.copyValue(that._modelViewMatrix);
 
   _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
 
@@ -194,12 +201,9 @@ void Camera::_setGeodeticPosition(const Vector3D& pos) {
 }
 
 void Camera::render(const G3MRenderContext* rc,
-                    const GLState& parentState) const {
-  GL* gl = rc->getGL();
-  gl->setProjection(getProjectionMatrix());
-  gl->loadMatrixf(getModelMatrix());
+                    const GLGlobalState& parentState) const {
+  //TODO: NO LONGER NEEDED!!!
 }
-
 
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;
@@ -435,11 +439,10 @@ FrustumData Camera::calculateFrustumData() const {
                      zNear, zFar);
 }
 
-
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.
   const double z = sphere._center.distanceTo(getCartesianPosition());
   const double rWorld = sphere._radius * _frustumData._znear / z;
   const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
-  return IMathUtils::instance()->pi() * rScreen * rScreen;
+  return PI * rScreen * rScreen;
 }

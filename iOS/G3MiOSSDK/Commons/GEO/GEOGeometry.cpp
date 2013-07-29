@@ -7,12 +7,12 @@
 //
 
 #include "GEOGeometry.hpp"
-
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
 
-GEOGeometry::~GEOGeometry() {
+//#include "GPUProgramState.hpp"
 
+GEOGeometry::~GEOGeometry() {
 }
 
 void GEOGeometry::setFeature(GEOFeature* feature) {
@@ -32,9 +32,7 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
   const int symbolsSize = symbols->size();
   for (int i = 0; i < symbolsSize; i++) {
     const GEOSymbol* symbol = symbols->at(i);
-
     symbol->symbolize(rc, sc);
-
     delete symbol;
   }
 

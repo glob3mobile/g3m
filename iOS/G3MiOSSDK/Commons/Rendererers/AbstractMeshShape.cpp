@@ -8,7 +8,6 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Mesh.hpp"
-//#include "GL.hpp"
 
 AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;
@@ -33,9 +32,9 @@ bool AbstractMeshShape::isReadyToRender(const G3MRenderContext* rc) {
 }
 
 void AbstractMeshShape::rawRender(const G3MRenderContext* rc,
-                                  const GLState& parentState,
-                                  bool renderNotReadyShapes) {
-  const Mesh* mesh = getMesh(rc);
+               GLState* parentState,
+               bool renderNotReadyShapes){
+  Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
     mesh->render(rc, parentState);
   }

@@ -12,9 +12,12 @@
 #include "Context.hpp"
 #include "BoundingVolume.hpp"
 
-class Vector3D;
+#include "GLState.hpp"
 
-class Mesh {
+class Vector3D;
+class GPUProgramState;
+
+class Mesh{
 public:
   
   virtual ~Mesh() { }
@@ -23,12 +26,13 @@ public:
   
   virtual const Vector3D getVertex(int i) const = 0;
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) const = 0;
+  virtual void render(const G3MRenderContext* rc) const = 0;
   
   virtual BoundingVolume* getBoundingVolume() const = 0;
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
+  
+  virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) = 0;
 
 };
 

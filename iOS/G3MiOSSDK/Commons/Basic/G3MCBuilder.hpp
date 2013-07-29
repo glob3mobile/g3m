@@ -27,6 +27,7 @@ class Layer;
 class LayerSet;
 class G3MCSceneDescription;
 class Color;
+class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
 class TimeInterval;
@@ -133,6 +134,9 @@ private:
 
   IDownloader* _downloader;
   IDownloader* getDownloader();
+  
+  GPUProgramManager* _gpuProgramManager;
+  GPUProgramManager* getGPUProgramManager();
 
   void resetScene(const std::string& sceneId);
 
@@ -186,6 +190,8 @@ protected:
   virtual IDownloader* createDownloader() = 0;
 
   virtual IThreadUtils* createThreadUtils() = 0;
+  
+  virtual GPUProgramManager* createGPUProgramManager() = 0;
   
 public:
   /** Private to G3M, don't call it */

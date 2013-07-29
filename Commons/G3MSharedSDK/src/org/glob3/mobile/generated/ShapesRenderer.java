@@ -25,6 +25,38 @@ public class ShapesRenderer extends LeafRenderer
 
   private G3MContext _context;
 
+  private GLState _glState = new GLState();
+  private GLState _glStateTransparent = new GLState();
+
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _glState.addGLFeature(_projection, true);
+      _glStateTransparent.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+      _glStateTransparent.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+
 
   public ShapesRenderer()
   {
@@ -34,7 +66,8 @@ public class ShapesRenderer extends LeafRenderer
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
-
+     _projection = null;
+     _model = null;
   }
 
   public void dispose()
@@ -141,15 +174,18 @@ public class ShapesRenderer extends LeafRenderer
   {
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+  
+    //Setting camera matrixes
+    updateGLState(rc);
+  
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)
     {
       Shape shape = _shapes.get(i);
-  
       if (shape.isEnable())
       {
         if (shape.isTransparent(rc))
@@ -158,11 +194,11 @@ public class ShapesRenderer extends LeafRenderer
           final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
           final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
   
-          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _renderNotReadyShapes));
+          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glStateTransparent, _renderNotReadyShapes));
         }
         else
         {
-          shape.render(rc, parentState, _renderNotReadyShapes);
+          shape.render(rc, _glState, _renderNotReadyShapes);
         }
       }
     }

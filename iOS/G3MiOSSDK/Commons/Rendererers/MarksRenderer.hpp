@@ -12,9 +12,14 @@
 #include <vector>
 #include "LeafRenderer.hpp"
 
+//#include "GPUProgramState.hpp"
+
+#include "GLState.hpp"
+
 class Mark;
 class Camera;
 class MarkTouchListener;
+class IFloatBuffer;
 
 class MarksRenderer : public LeafRenderer {
 private:
@@ -34,7 +39,16 @@ private:
   bool               _autoDeleteMarkTouchListener;
 
   long long _downloadPriority;
+  
+  IFloatBuffer* _billboardTexCoord;
+  
+  GLState _glState;
+  
+  void updateGLState(const G3MRenderContext* rc);
 
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);
@@ -46,8 +60,7 @@ public:
 
   virtual void initialize(const G3MContext* context);
 
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
+  virtual void render(const G3MRenderContext* rc);
 
   void addMark(Mark* mark);
 
@@ -93,6 +106,15 @@ public:
     return _downloadPriority;
   }
   
+  bool isVisible(const G3MRenderContext* rc){
+    return true;
+  }
+  
+  void modifiyGLState(GLState* state){
+    
+  }
+  
+  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

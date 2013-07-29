@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "GPUProgramState.hpp"
 
 //class GEOObject;
 //class GEOSymbolizer;
@@ -51,7 +52,6 @@ public class GEORenderer extends LeafRenderer
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
-
   }
 
   public void dispose()
@@ -116,7 +116,7 @@ public class GEORenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     final int childrenCount = _children.size();
     if (childrenCount > 0)
@@ -160,5 +160,4 @@ public class GEORenderer extends LeafRenderer
   {
 
   }
-
 }

@@ -22,6 +22,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 
+//#include "GPUProgramState.hpp"
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
 
@@ -128,7 +129,9 @@ _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
-_incompleteShape(NULL)
+_incompleteShape(NULL),
+_projection(NULL),
+_model(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -439,26 +442,13 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   return isReadyToRenderTiles(rc) || _parameters->_renderIncompletePlanet;
 }
 
-void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
-                                          const GLState& parentState) {
+void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
 
   if (_incompleteShape == NULL) {
     const short resolution = 16;
     const float borderWidth = 0;
     const bool texturedInside = false;
     const bool mercator = false;
-
-//    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
-//    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
-
-//    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-//                                          rc->getPlanet()->getRadii(),
-//                                          resolution,
-//                                          borderWidth,
-//                                          texturedInside,
-//                                          mercator,
-//                                          surfaceColor,
-//                                          borderColor);
 
     _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
                                           _parameters->_incompletePlanetTexureURL,
@@ -470,21 +460,39 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
 
   }
 
-  _incompleteShape->rawRender(rc, parentState, true);
+  _incompleteShape->rawRender(rc, &_glState, true);
 }
 
-void TileRenderer::render(const G3MRenderContext* rc,
-                          const GLState& parentState) {
+void TileRenderer::updateGLState(const G3MRenderContext* rc){
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL){
+    _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+    _glState.addGLFeature(_projection, true);
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix44D());
+  }
+
+  if (_model == NULL){
+    _model = new ModelGLFeature(cam->getModelMatrix44D());
+    _glState.addGLFeature(_model, true);
+  } else{
+    _model->setMatrix(cam->getModelMatrix44D());
+  }
+}
+
+void TileRenderer::render(const G3MRenderContext* rc) {
+
+  updateGLState(rc);
 
   if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
-    renderIncompletePlanet(rc, parentState);
+    renderIncompletePlanet(rc);
     return;
   }
 
-
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
-
+  
   TilesStatistics statistics;
 
   TileRenderContext trc(_tessellator,
@@ -514,7 +522,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   parentState,
+                   _glState,
                    NULL,
                    planet,
                    cameraNormalizedPosition,
@@ -538,7 +546,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
         tile->render(rc,
                      &trc,
-                     parentState,
+                     _glState,
                      &toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,

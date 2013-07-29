@@ -32,9 +32,11 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public void dispose()
   {
-  
   }
 
   public final void setFeature(GEOFeature feature)
@@ -64,9 +66,7 @@ public abstract class GEOGeometry extends GEOObject
     for (int i = 0; i < symbolsSize; i++)
     {
       final GEOSymbol symbol = symbols.get(i);
-  
       symbol.symbolize(rc, sc);
-  
       if (symbol != null)
          symbol.dispose();
     }

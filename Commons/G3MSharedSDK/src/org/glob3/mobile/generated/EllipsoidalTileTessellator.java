@@ -172,10 +172,20 @@ public class EllipsoidalTileTessellator extends TileTessellator
       indices.add((short)(tileResolution._x *tileResolution._y));
     }
   
-    Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+  //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
-                           //GLPrimitive::lineStrip(),
+  //  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+  //                         GLPrimitive::triangleStrip(),
+  //                         //GLPrimitive::lineStrip(),
+  //                         true,
+  //                         vertices.getCenter(),
+  //                         vertices.create(),
+  //                         indices.create(),
+  //                         1,
+  //                         1,
+  //                         color);
+  
+    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1);
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)

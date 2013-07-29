@@ -16,13 +16,15 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GLGlobalState;
+//class GPUProgramState;
 //class GLState;
 
 public abstract class OrderedRenderable
 {
   public abstract double squaredDistanceFromEye();
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc);
 
   public void dispose()
   {

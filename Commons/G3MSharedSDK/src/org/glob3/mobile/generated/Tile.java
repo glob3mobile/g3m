@@ -33,9 +33,11 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class MeshHolder;
 //class Vector2I;
+//class GPUProgramState;
 //class TileElevationDataRequest;
 //class Frustum;
 //class Box;
+
 
 
 public class Tile
@@ -52,6 +54,8 @@ public class Tile
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
+
+  private Mesh _flatColorMesh;
 
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
@@ -79,38 +83,23 @@ public class Tile
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
-      int __ASK_JM;
-      final TileTessellator tessellator = trc.getTessellator();
-      final boolean renderDebug = trc.getParameters()._renderDebug;
-      final Planet planet = rc.getPlanet();
-  
-      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
-      initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
+      initializeElevationData(elevationDataProvider, trc.getTessellator(), trc.getLayerTilesRenderParameters()._tileMeshResolution, rc.getPlanet(), trc.getParameters()._renderDebug);
     }
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
-      final TileTessellator tessellator = trc.getTessellator();
-      final boolean renderDebug = trc.getParameters()._renderDebug;
-      final Planet planet = rc.getPlanet();
-  
       final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
-      final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
   
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, mercator, renderDebug);
+        _tessellatorMesh = trc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, layerTilesRenderParameters._mercator, trc.getParameters()._renderDebug);
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, mercator, renderDebug);
+        Mesh tessellatorMesh = trc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, layerTilesRenderParameters._mercator, trc.getParameters()._renderDebug);
   
         MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
         if (meshHolder == null)
@@ -249,9 +238,8 @@ public class Tile
     return _lastLodTest;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState glState)
   {
-  
     Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
     if (tessellatorMesh == null)
     {
@@ -261,7 +249,7 @@ public class Tile
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
-      tessellatorMesh.render(rc, parentState);
+      tessellatorMesh.render(rc);
     }
     else
     {
@@ -274,11 +262,18 @@ public class Tile
   
       if (_texturizedMesh != null)
       {
-        _texturizedMesh.render(rc, parentState);
+        _texturizedMesh.render(rc, glState);
       }
       else
       {
-        tessellatorMesh.render(rc, parentState);
+        //Adding flat color if no texture set on the mesh
+        if (_flatColorMesh == null)
+        {
+          _flatColorMesh = new FlatColorMesh(tessellatorMesh, false, Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+        }
+        _flatColorMesh.render(rc, glState);
+  
+        //tessellatorMesh->render(rc, glState);
       }
     }
   
@@ -287,12 +282,13 @@ public class Tile
   //  boundingVolume->render(rc, parentState);
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState glState)
   {
     Mesh debugMesh = getDebugMesh(rc, trc);
     if (debugMesh != null)
     {
-      debugMesh.render(rc, parentState);
+      //debugMesh->render(rc);
+      debugMesh.render(rc, glState);
     }
   }
 
@@ -537,6 +533,7 @@ public class Tile
 
   ///#include "Sphere.hpp"
   
+  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -547,6 +544,7 @@ public class Tile
      _column = column;
      _tessellatorMesh = null;
      _debugMesh = null;
+     _flatColorMesh = null;
      _texturizedMesh = null;
      _textureSolved = false;
      _texturizerDirty = true;
@@ -583,6 +581,10 @@ public class Tile
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
+  
+    if (_flatColorMesh != null)
+       _flatColorMesh.dispose();
+    _flatColorMesh = null;
   
     if (_tessellatorMesh != null)
        _tessellatorMesh.dispose();

@@ -47,7 +47,7 @@ public:
   }
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const {
+              const GLState* parentState) const {
     _mesh->render(rc, parentState);
   }
   

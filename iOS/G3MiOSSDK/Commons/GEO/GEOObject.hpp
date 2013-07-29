@@ -20,7 +20,6 @@ public:
 
   virtual void symbolize(const G3MRenderContext* rc,
                          const GEOSymbolizationContext& sc) const = 0 ;
-
 };
 
 #endif

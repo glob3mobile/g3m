@@ -33,6 +33,7 @@ public class LazyTextureMapping extends TextureMapping
 
   private final boolean _transparent;
 
+
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
   {
      _initializer = initializer;
@@ -54,15 +55,43 @@ public class LazyTextureMapping extends TextureMapping
 
     if (_ownedTexCoords)
     {
-        if (_texCoords != null)
-           _texCoords.dispose();
+      if (_texCoords != null)
+         _texCoords.dispose();
     }
     _texCoords = null;
 
     releaseGLTextureId();
   }
 
-  public final void bind(G3MRenderContext rc)
+  public final boolean isValid()
+  {
+    return _glTextureId != null;
+  }
+
+  public final void setGLTextureId(IGLTextureId glTextureId)
+  {
+    releaseGLTextureId();
+    _glTextureId = glTextureId;
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState);
+
+
+  public final IGLTextureId getGLTextureId()
+  {
+    return _glTextureId;
+  }
+
+  public final boolean isTransparent()
+  {
+    return _transparent;
+  }
+
+
+  ///#include "GPUProgramState.hpp"
+  
+  public final void modifyGLState(GLState state)
   {
     if (!_initialized)
     {
@@ -81,38 +110,24 @@ public class LazyTextureMapping extends TextureMapping
   
     if (_texCoords != null)
     {
-      GL gl = rc.getGL();
+      state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-      gl.transformTexCoords(_scale, _translation);
-      gl.bindTexture(_glTextureId);
-      gl.setTextureCoordinates(2, 0, _texCoords);
+      if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0))
+      {
+  
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+      }
+      else
+      {
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+      }
+  
     }
     else
     {
       ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
     }
-  }
-
-  public final boolean isValid()
-  {
-    return _glTextureId != null;
-  }
-
-  public final void setGLTextureId(IGLTextureId glTextureId)
-  {
-    releaseGLTextureId();
-    _glTextureId = glTextureId;
-  }
-
-
-  public final IGLTextureId getGLTextureId()
-  {
-    return _glTextureId;
-  }
-
-  public final boolean isTransparent(G3MRenderContext rc)
-  {
-    return _transparent;
+  
   }
 
 }

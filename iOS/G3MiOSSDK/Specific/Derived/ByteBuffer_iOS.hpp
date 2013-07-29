@@ -22,7 +22,7 @@ public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
-  _timestamp(0) {
+  _timestamp(-1) {
     if (_values == NULL){
       ILogger::instance()->logError("Allocating error.");
     }
@@ -31,7 +31,7 @@ public:
   ByteBuffer_iOS(unsigned char* values, int size) :
   _values(values),
   _size(size),
-  _timestamp(0) {
+  _timestamp(-1) {
 
   }
 

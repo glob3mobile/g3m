@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class LayerTilesRenderParameters;
 
+///#include "GPUProgramState.hpp"
 
 //class EllipsoidShape;
 
@@ -46,7 +47,6 @@ public class TileRenderContext
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   private long _texturePriority;
-
   public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
   {
      _tessellator = tessellator;

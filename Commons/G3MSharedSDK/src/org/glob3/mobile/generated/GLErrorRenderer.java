@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLErrorRenderer extends LeafRenderer
+public abstract class GLErrorRenderer extends LeafRenderer
 {
 
   public final void initialize(G3MContext context)
@@ -25,7 +25,7 @@ public class GLErrorRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
     GL gl = rc.getGL();
     final ILogger logger = rc.getLogger();

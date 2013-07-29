@@ -25,6 +25,7 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+//#include "GPUProgramState.hpp"
 
 class EllipsoidShape;
 
@@ -46,7 +47,6 @@ private:
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   
   long long _texturePriority;
-
 public:
   TileRenderContext(const TileTessellator*       tessellator,
                     ElevationDataProvider*       elevationDataProvider,
@@ -326,11 +326,17 @@ private:
 
   float _verticalExaggeration;
 
+
   bool isReadyToRenderTiles(const G3MRenderContext* rc);
-  void renderIncompletePlanet(const G3MRenderContext* rc,
-                              const GLState& parentState);
+  void renderIncompletePlanet(const G3MRenderContext* rc);
 
   EllipsoidShape* _incompleteShape;
+
+
+  GLState _glState;
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 
 
 public:
@@ -347,8 +353,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
@@ -446,7 +451,6 @@ public:
   bool isTileRenderer() {
     return true;
   }
-
 };
 
 

@@ -51,6 +51,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
@@ -105,7 +106,7 @@ public class G3MWebGLDemo
          //initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         //         initDefaultWithBuilder();
+         //initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          initCustomizedWithBuilder();
@@ -119,9 +120,9 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      //      final MeshRenderer meshRenderer = new MeshRenderer();
-      //      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-      //      builder.addRenderer(meshRenderer);
+      final MeshRenderer meshRenderer = new MeshRenderer();
+      meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
+      builder.addRenderer(meshRenderer);
 
 
       final boolean useMarkers = true;
@@ -179,6 +180,7 @@ public class G3MWebGLDemo
          builder.addRenderer(marksRenderer);
       }
 
+      //builder.setInitializationTask(createMarkersInitializationTask());
 
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
@@ -196,6 +198,8 @@ public class G3MWebGLDemo
 
          @Override
          public void run(final G3MContext context) {
+            //            meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
+
             context.getDownloader().requestBuffer( //
                      new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
                      0, //
@@ -206,6 +210,7 @@ public class G3MWebGLDemo
                         @Override
                         public void onError(final URL url) {
                            ILogger.instance().logError("error downloading A320.bson");
+                           done = true;
                         }
 
 
@@ -234,11 +239,13 @@ public class G3MWebGLDemo
                         public void onCanceledDownload(final URL url,
                                                        final IByteBuffer data,
                                                        final boolean expired) {
+                           done = true;
                         }
 
 
                         @Override
                         public void onCancel(final URL url) {
+                           done = true;
                         }
                      }, false);
          }
@@ -265,7 +272,7 @@ public class G3MWebGLDemo
       final Angle deltaLat = Angle.fromDegrees(1).div(16);
       final Angle deltaLon = Angle.fromDegrees(1).div(16);
 
-      final int steps = 128;
+      final int steps = 40;
       final int halfSteps = steps / 2;
       for (int i = -halfSteps; i < halfSteps; i++) {
          final Angle lat = centerLat.add(deltaLat.times(i));

@@ -19,6 +19,8 @@
 #include "StringBuilder_iOS.hpp"
 #include "TextUtils_iOS.hpp"
 
+#include "GPUProgramManager.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -57,23 +59,27 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
 {
-  _widgetVP = G3MWidget::create([_renderer getGL],
-                                storage,
-                                downloader,
-                                threadUtils,
-                                cameraActivityListener,
-                                planet,
-                                cameraConstraints,
-                                cameraRenderer,
-                                mainRenderer,
-                                busyRenderer,
-                                backgroundColor,
-                                logFPS,
-                                logDownloaderStatistics,
-                                initializationTask,
-                                autoDeleteInitializationTask,
-                                periodicalTasks);
-  [self widget]->setUserData(userData);
+  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
+  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+  
+    _widgetVP = G3MWidget::create([_renderer getGL],
+                                  storage,
+                                  downloader,
+                                  threadUtils,
+                                  cameraActivityListener,
+                                  planet,
+                                  cameraConstraints,
+                                  cameraRenderer,
+                                  mainRenderer,
+                                  busyRenderer,
+                                  backgroundColor,
+                                  logFPS,
+                                  logDownloaderStatistics,
+                                  initializationTask,
+                                  autoDeleteInitializationTask,
+                                  periodicalTasks,
+                                  gpuProgramManager); //GPUProgramManager
+    [self widget]->setUserData(userData);
 }
 
 - (GL*)getGL {

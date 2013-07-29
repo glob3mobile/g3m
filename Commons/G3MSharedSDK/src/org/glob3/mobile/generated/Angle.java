@@ -119,12 +119,6 @@ public class Angle
       _sin = java.lang.Math.sin(_radians);
     }
     return _sin;
-///#ifdef C_CODE
-//    return IMathUtils::instance()->sin( _radians );
-///#endif
-///#ifdef JAVA_CODE
-//    return java.lang.Math.sin( _radians );
-///#endif
   }
 
   public final double cosinus()
@@ -134,23 +128,11 @@ public class Angle
       _cos = java.lang.Math.cos(_radians);
     }
     return _cos;
-///#ifdef C_CODE
-//    return IMathUtils::instance()->cos( _radians );
-///#endif
-///#ifdef JAVA_CODE
-//    return java.lang.Math.cos( _radians );
-///#endif
   }
 
   public final double tangent()
   {
     return java.lang.Math.tan(_radians);
-///#ifdef C_CODE
-//    return IMathUtils::instance()->tan( _radians );
-///#endif
-///#ifdef JAVA_CODE
-//    return java.lang.Math.tan( _radians );
-///#endif
   }
 
   public final double degrees()
