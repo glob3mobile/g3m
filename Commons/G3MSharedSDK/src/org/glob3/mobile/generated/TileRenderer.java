@@ -284,9 +284,6 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
 
   private boolean _recreateTilesPending;
 
-<<<<<<< HEAD
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
-=======
   private GLState _glState = new GLState();
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
@@ -316,8 +313,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   }
 
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
->>>>>>> webgl-port
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -336,12 +332,9 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _incompleteShape = null;
-<<<<<<< HEAD
      _recreateTilesPending = false;
-=======
      _projection = null;
      _model = null;
->>>>>>> webgl-port
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -402,14 +395,12 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   public final void render(G3MRenderContext rc)
   {
   
-<<<<<<< HEAD
+    updateGLState(rc);
+  
   //  if (_recreateTilesPending) {
   //    recreateTiles();
   //    _recreateTilesPending = false;
   //  }
-=======
-    updateGLState(rc);
->>>>>>> webgl-port
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {

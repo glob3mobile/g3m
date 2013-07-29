@@ -142,10 +142,10 @@ public class Color
       return fromRGBA(v, v, v, alpha);
     }
   
-    final double deg60 = 60.0 / 180.0 * mu.pi();
+    final double deg60 = ((60) / 180.0 * 3.14159265358979323846264338327950288);
   
     //final float hf = (float) ((hue % GMath.DEGREES_360) / GMath.DEGREES_60);
-    final float hf = (float)(mu.pseudoModule(hueInRadians, mu.pi() * 2) / deg60);
+    final float hf = (float)(mu.pseudoModule(hueInRadians, DefineConstants.PI * 2) / deg60);
   
     final int i = (int) hf; // integer part of hue
     final float f = hf - i; // fractional part of hue
@@ -273,7 +273,7 @@ public class Color
 
   public final Color wheelStep(int wheelSize, int step)
   {
-    final double stepInRadians = (IMathUtils.instance().pi() * 2) / wheelSize;
+    final double stepInRadians = (DefineConstants.PI * 2) / wheelSize;
   
     final double hueInRadians = getHueInRadians() + (stepInRadians * step);
   
@@ -322,7 +322,7 @@ public class Color
       return 0;
     }
   
-    final double deg60 = 60.0 / 180.0 * mu.pi();
+    final double deg60 = ((60.0) / 180.0 * 3.14159265358979323846264338327950288);
   
     double h;
     if (r == max)
@@ -340,7 +340,7 @@ public class Color
   
     if (h < 0)
     {
-      return (mu.pi() * 2) + h;
+      return (DefineConstants.PI * 2) + h;
     }
   
     return h;

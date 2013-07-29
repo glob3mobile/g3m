@@ -32,15 +32,9 @@ public abstract class GEOGeometry extends GEOObject
 
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
   public void dispose()
   {
-<<<<<<< HEAD
 
-=======
->>>>>>> webgl-port
   }
 
   public final void setFeature(GEOFeature feature)
@@ -63,7 +57,6 @@ public abstract class GEOGeometry extends GEOObject
     java.util.ArrayList<GEOSymbol> symbols = createSymbols(rc, sc);
     if (symbols != null)
     {
-<<<<<<< HEAD
   
       final int symbolsSize = symbols.size();
       for (int i = 0; i < symbolsSize; i++)
@@ -81,12 +74,6 @@ public abstract class GEOGeometry extends GEOObject
       }
   
       symbols = null;
-=======
-      final GEOSymbol symbol = symbols.get(i);
-      symbol.symbolize(rc, sc);
-      if (symbol != null)
-         symbol.dispose();
->>>>>>> webgl-port
     }
   }
 

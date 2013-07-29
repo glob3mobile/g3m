@@ -159,8 +159,6 @@ public class TileTextureBuilder extends RCObject
     }
   }
 
-
-
   public final RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
   {
     //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());

@@ -54,11 +54,7 @@ public class GEORenderer extends LeafRenderer
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
-<<<<<<< HEAD
      _geoTileRasterizer = geoTileRasterizer;
-
-=======
->>>>>>> webgl-port
   }
 
   public void dispose()
