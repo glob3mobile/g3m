@@ -190,7 +190,7 @@ GLFeature(LIGHTING_GROUP){
   Vector3D dirN = dir.normalized();
 
   _values.addUniformValue(LIGHT_DIRECTION,
-                          new GPUUniformValueVec4Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z(), 1.0),
+                          new GPUUniformValueVec4Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z(), (float)1.0),
                           false);
 //  _values.addUniformValue(LIGHT_COLOR,
 //                          new GPUUniformValueVec4Float(lightColor),

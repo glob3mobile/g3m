@@ -33,11 +33,22 @@
 #include "IShortBuffer.hpp"
 
 EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
+#ifdef C_CODE
   for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
        it != _indicesMap.end();
        it++){
     delete it->second;
   }
+#endif
+#ifdef JAVA_CODE
+  java.util.Iterator it = _indicesMap.entrySet().iterator();
+  while (it.hasNext()) {
+    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+    IShortBuffer b =  pairs.getValue();
+    b.dispose();
+  }
+#endif
+
 }
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
@@ -87,9 +98,6 @@ IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet
 
   // create skirts
   if (_skirted) {
-    // compute skirt height
-    const Vector3D sw = planet->toCartesian(sector.getSW());
-    const Vector3D nw = planet->toCartesian(sector.getNW());
 
     int posS = tileResolution._x * tileResolution._y;
     indices.add((short) (posS-1));
@@ -129,9 +137,9 @@ IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet
 IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
                                                          const Sector& sector,
                                                          const Vector2I& tileResolution) const{
+#ifdef C_CODE
   std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
   if (it != _indicesMap.end()){
-//    printf("REUSING");
     return it->second;
   }
 
@@ -139,6 +147,15 @@ IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
   _indicesMap[tileResolution] = indices;
 
   return indices;
+#endif
+#ifdef JAVA_CODE
+  IShortBuffer indices = _indicesMap.get(tileResolution);
+  if (indices == null){
+    indices = createTileIndices(planet, sector, tileResolution);
+    _indicesMap.put(tileResolution, indices);
+  }
+  return indices;
+#endif
   
 }
 
