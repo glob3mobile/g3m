@@ -119,7 +119,7 @@ public:
 
 class LeveledTexturedMesh : public Mesh {
 private:
-  const Mesh* _mesh;
+  const Mesh * _mesh;
   const bool  _ownedMesh;
   
   mutable std::vector<LazyTextureMapping*>* _mappings;
@@ -133,7 +133,7 @@ private:
   LazyTextureMapping* getCurrentTextureMapping() const;
   
   GLState _glState;
-  void updateGLState();
+//  void updateGLState();
   LazyTextureMapping* _mappingOnGLState;
   
 public:
@@ -159,7 +159,7 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const G3MRenderContext* rc) const;
+  void render(const G3MRenderContext* rc) const{}
   
 
   BoundingVolume* getBoundingVolume() const;

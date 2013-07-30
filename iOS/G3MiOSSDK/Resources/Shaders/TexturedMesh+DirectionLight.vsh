@@ -24,12 +24,13 @@ varying float diffuseLightIntensity;
 
 void main() {
 
-  vec4 normal = normalize( aNormal);
-  vec4 lightDir = normalize( uLightDirection);
+  vec4 normal = normalize( uModel * aNormal);
+  vec4 lightDir = normalize( uModel * uLightDirection);
   diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
 
 //  gl_Position = uModelview * aPosition;
-    gl_Position = uProjection * uCameraModel * uModel * aPosition;
+  mat4 modelview = uProjection * uCameraModel * uModel;
+  gl_Position = modelview * aPosition;
   
   TextureCoordOut = aTextureCoord;
 

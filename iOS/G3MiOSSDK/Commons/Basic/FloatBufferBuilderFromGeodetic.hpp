@@ -76,7 +76,7 @@ public:
   static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center){
     return FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
   }
-
+ 
   static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center){
     return FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
   }

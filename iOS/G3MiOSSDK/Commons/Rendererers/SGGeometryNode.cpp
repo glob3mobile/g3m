@@ -42,7 +42,7 @@ void SGGeometryNode::createGLState(){
   if (_normals != NULL){
 
     _glState.addGLFeature(new DirectionLightGLFeature(Vector3D(100000, 0,0),  Color::red(),
-                                                      (float)0.1), false);
+                                                      (float)0.0), false);
 
     _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0),
                           false);
