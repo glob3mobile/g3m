@@ -38,7 +38,8 @@ public class GEO2DLineRasterStyle
      _miterLimit = miterLimit;
      _dashCount = dashCount;
      _dashPhase = dashPhase;
-    _dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
+    //_dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
+    _dashLengths = (float[]) dashLengths.clone();
   }
 
   public GEO2DLineRasterStyle(GEO2DLineRasterStyle that)
@@ -50,7 +51,8 @@ public class GEO2DLineRasterStyle
      _miterLimit = that._miterLimit;
      _dashCount = that._dashCount;
      _dashPhase = that._dashPhase;
-    _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
+    //_dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
+    _dashLengths = (float[]) that._dashLengths.clone();
   }
 
   public void dispose()
