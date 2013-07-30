@@ -26,14 +26,15 @@ private:
     _cz = (float) z;
   }
 
-public:
-
   FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy,
                                     const Vector3D& center):
   _centerStrategy(centerStrategy)
   {
     setCenter(center._x, center._y, center._z);
   }
+
+public:
+
 
   static FloatBufferBuilderFromCartesian3D builderWithoutCenter(){
     return FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);

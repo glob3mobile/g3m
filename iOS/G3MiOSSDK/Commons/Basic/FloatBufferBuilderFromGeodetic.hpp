@@ -32,8 +32,6 @@ private:
 
   const Planet * _ellipsoid;
 
-public:
-
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* ellipsoid,
                                  const Vector3D& center):
@@ -60,6 +58,8 @@ public:
   {
     setCenter( _ellipsoid->toCartesian(center) );
   }
+
+public:
 
   static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet){
     return FloatBufferBuilderFromGeodetic(NO_CENTER, planet, Vector3D::zero);
