@@ -390,7 +390,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
 
   if (_vertices == NULL){
     const Vector3D pos( planet->toCartesian(_position) );
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+//    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     vertex.add(pos);
     vertex.add(pos);
     vertex.add(pos);

@@ -99,8 +99,10 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-                                             Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+  //                                             Vector3D::zero);
+
 
   const Vector3D rotationAxis = Vector3D::downZ();
   for (int i = 0; i < positionsSize; i++) {

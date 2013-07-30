@@ -61,9 +61,11 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
 //                                          ellipsoid,
 //                                          Vector3D::zero);
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+
 
   FloatBufferBuilderFromColor colors;
 
@@ -156,9 +158,10 @@ Mesh* ElevationData::createMesh(const Planet* planet,
                                averageElevation, minElevation, maxElevation, deltaElevation);
 
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Vector3D::zero);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Vector3D::zero);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
 
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();

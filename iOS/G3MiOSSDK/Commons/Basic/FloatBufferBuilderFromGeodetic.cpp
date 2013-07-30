@@ -10,13 +10,13 @@ void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
                                          const double height) {
   const Vector3D vector = _ellipsoid->toCartesian(latitude, longitude, height);
 
-  if (_centerStrategy == CenterStrategy::firstVertex()) {
+  if (_centerStrategy == FIRST_VERTEX) {
     if (_values.size() == 0) {
       setCenter(vector);
     }
   }
 
-  if (_centerStrategy == CenterStrategy::noCenter()) {
+  if (_centerStrategy == NO_CENTER) {
     _values.push_back( (float) vector._x );
     _values.push_back( (float) vector._y );
     _values.push_back( (float) vector._z );

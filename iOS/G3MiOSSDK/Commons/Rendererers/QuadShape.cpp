@@ -106,7 +106,8 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   const float bottom = -halfHeight;
   const float top    = +halfHeight;
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices.add(left,  bottom, 0);
   vertices.add(right, bottom, 0);
   vertices.add(left,  top,    0);
