@@ -428,7 +428,6 @@ public class Canvas_WebGL
    @Override
    protected native void _closePath() /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-		context.setLineDash(lengths);
 		context.closePath();
    }-*/;
 

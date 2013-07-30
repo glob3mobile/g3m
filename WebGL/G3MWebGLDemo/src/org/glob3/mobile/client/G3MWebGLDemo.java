@@ -423,7 +423,8 @@ public class G3MWebGLDemo
                }
             };
 
-            final URL geoJSONURL = new URL("file:///countries-50m.geojson", false);
+            //            final URL geoJSONURL = new URL("http://127.0.0.1:8888/countries-50m.geojson", false);
+            final URL geoJSONURL = new URL("/countries-50m.geojson", false);
             // final URL geoJSONURL = new URL("file:///boundary_lines_land.geojson", false);
             context.getDownloader().requestBuffer( //
                      geoJSONURL, //
