@@ -2290,8 +2290,8 @@ public:
       /**/
 
 //      NSString* geojsonName = @"geojson/countries";
-//      NSString* geojsonName = @"geojson/countries-50m";
-      NSString* geojsonName = @"geojson/boundary_lines_land";
+      NSString* geojsonName = @"geojson/countries-50m";
+//      NSString* geojsonName = @"geojson/boundary_lines_land";
 //      NSString* geojsonName = @"geojson/cities";
 //      NSString* geojsonName = @"geojson/test";
 

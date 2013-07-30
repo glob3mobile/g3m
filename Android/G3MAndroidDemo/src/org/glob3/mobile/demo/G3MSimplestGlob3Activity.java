@@ -56,7 +56,6 @@ import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -186,86 +185,13 @@ public class G3MSimplestGlob3Activity
 
       layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      final TileRendererBuilder tlBuilder = new TileRendererBuilder();
 
-
-      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider( //
-               new URL("file:///full-earth-2048x1024.bil", false), //
-               Sector.fullSphere(), //
-               new Vector2I(2048, 1024) //
-      );
-      tlBuilder.setElevationDataProvider(elevationDataProvider);
-
-      tlBuilder.setVerticalExaggeration(20);
-
-
-      tlBuilder.setLayerSet(layerSet);
-      tlBuilder.setRenderDebug(false);
-      final TileRenderer tileRenderer = tlBuilder.create();
-      mainRenderer.addRenderer(tileRenderer);
+      final MeshRenderer meshRenderer = null;
+      final MarksRenderer marksRenderer = null;
+      final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
-      mainRenderer.addRenderer(shapesRenderer);
-
-      //      final boolean testingImagesCombine = true;
-      //      if (testingImagesCombine) {
-      //         final Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.play);
-      //         final Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
-      //         final Image_Android image1 = new Image_Android(b1, null);
-      //         final Image_Android image2 = new Image_Android(b2, null);
-      //
-      //         final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
-      //         images.add(image2);
-      //         images.add(image1);
-      //
-      //         final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
-      //         srcRs.add(new RectangleF(0, 0, 640, 960));
-      //         srcRs.add(new RectangleF(0, 0, 48, 48));
-      //
-      //         final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
-      //         destRs.add(new RectangleF(0, 0, 256, 256));
-      //         destRs.add(new RectangleF(0, 128, 130, 130));
-      //
-      //         class QuadListener
-      //                  extends
-      //                     IImageListener {
-      //            ShapesRenderer _sr;
-      //
-      //
-      //            public QuadListener(final ShapesRenderer sr) {
-      //               _sr = sr;
-      //
-      //            }
-      //
-      //
-      //            @Override
-      //            public void imageCreated(final IImage image) {
-      //               final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728), Angle.fromDegrees(-16.339417),
-      //                        8000), image, 49000, 38000);
-      //
-      //               _sr.addShape(quadImages);
-      //            }
-      //         }
-      //
-      //
-      //         IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
-      //      }
-
-
-      //      final MarksRenderer marksRenderer = new MarksRenderer(false);
-      //      final Mark m1 = new Mark("Fuerteventura", //
-      //               new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-      //               new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
-      //               false);
-      //      marksRenderer.addMark(m1);
-      //
-      //      final Mark m3 = new Mark(
-      //               "Washington, DC", //
-      //               new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
-      //               0);
-      //      marksRenderer.addMark(m3);
-      //      mainRenderer.addRenderer(marksRenderer);
 
 
       final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
@@ -387,14 +313,8 @@ public class G3MSimplestGlob3Activity
 
             return symbols;
          }
-
-
       };
 
-
-      final MeshRenderer meshRenderer = null;
-      final MarksRenderer marksRenderer = null;
-      final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 
       final GEORenderer geoRenderer = new GEORenderer( //
                defaultSymbolizer, //
@@ -403,9 +323,88 @@ public class G3MSimplestGlob3Activity
                marksRenderer, //
                geoTileRasterizer);
 
-      mainRenderer.addRenderer(geoRenderer);
 
-      tlBuilder.setTileRasterizer(geoTileRasterizer);
+      final TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
+
+
+      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider( //
+               new URL("file:///full-earth-2048x1024.bil", false), //
+               Sector.fullSphere(), //
+               new Vector2I(2048, 1024) //
+      );
+      tileRendererBuilder.setElevationDataProvider(elevationDataProvider);
+
+      tileRendererBuilder.setVerticalExaggeration(20);
+
+
+      tileRendererBuilder.setLayerSet(layerSet);
+      tileRendererBuilder.setRenderDebug(false);
+      tileRendererBuilder.setTileRasterizer(geoTileRasterizer);
+
+
+      mainRenderer.addRenderer(tileRendererBuilder.create());
+
+      mainRenderer.addRenderer(geoRenderer);
+      mainRenderer.addRenderer(shapesRenderer);
+
+      //      final boolean testingImagesCombine = true;
+      //      if (testingImagesCombine) {
+      //         final Bitmap b1 = BitmapFactory.decodeResource(getResources(), R.drawable.play);
+      //         final Bitmap b2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+      //         final Image_Android image1 = new Image_Android(b1, null);
+      //         final Image_Android image2 = new Image_Android(b2, null);
+      //
+      //         final java.util.ArrayList<IImage> images = new ArrayList<IImage>();
+      //         images.add(image2);
+      //         images.add(image1);
+      //
+      //         final java.util.ArrayList<RectangleF> srcRs = new ArrayList<RectangleF>();
+      //         srcRs.add(new RectangleF(0, 0, 640, 960));
+      //         srcRs.add(new RectangleF(0, 0, 48, 48));
+      //
+      //         final java.util.ArrayList<RectangleF> destRs = new ArrayList<RectangleF>();
+      //         destRs.add(new RectangleF(0, 0, 256, 256));
+      //         destRs.add(new RectangleF(0, 128, 130, 130));
+      //
+      //         class QuadListener
+      //                  extends
+      //                     IImageListener {
+      //            ShapesRenderer _sr;
+      //
+      //
+      //            public QuadListener(final ShapesRenderer sr) {
+      //               _sr = sr;
+      //
+      //            }
+      //
+      //
+      //            @Override
+      //            public void imageCreated(final IImage image) {
+      //               final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728), Angle.fromDegrees(-16.339417),
+      //                        8000), image, 49000, 38000);
+      //
+      //               _sr.addShape(quadImages);
+      //            }
+      //         }
+      //
+      //
+      //         IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+      //      }
+
+
+      //      final MarksRenderer marksRenderer = new MarksRenderer(false);
+      //      final Mark m1 = new Mark("Fuerteventura", //
+      //               new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+      //               new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), //
+      //               false);
+      //      marksRenderer.addMark(m1);
+      //
+      //      final Mark m3 = new Mark(
+      //               "Washington, DC", //
+      //               new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 100), //
+      //               0);
+      //      marksRenderer.addMark(m3);
+      //      mainRenderer.addRenderer(marksRenderer);
 
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
@@ -455,8 +454,8 @@ public class G3MSimplestGlob3Activity
                }
             };
 
-            // final URL geoJSONURL = new URL("file:///countries-50m.geojson", false);
-            final URL geoJSONURL = new URL("file:///boundary_lines_land.geojson", false);
+            final URL geoJSONURL = new URL("file:///countries-50m.geojson", false);
+            // final URL geoJSONURL = new URL("file:///boundary_lines_land.geojson", false);
             context.getDownloader().requestBuffer( //
                      geoJSONURL, //
                      DownloadPriority.HIGHER, //
