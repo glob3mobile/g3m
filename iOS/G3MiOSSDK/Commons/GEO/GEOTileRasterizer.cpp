@@ -20,13 +20,21 @@
 #include "GEORasterProjection.hpp"
 
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
-  const bool added = _quadTree.add(*symbol->getSector(),
-                                   symbol);
-  if (added) {
-    notifyChanges();
+  const Sector* sector = symbol->getSector();
+
+  if (sector == NULL) {
+//    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+//                                  symbol->description().c_str());
+    delete symbol;
   }
   else {
-    delete symbol;
+    const bool added = _quadTree.add(*sector, symbol);
+    if (added) {
+      notifyChanges();
+    }
+    else {
+      delete symbol;
+    }
   }
 }
 

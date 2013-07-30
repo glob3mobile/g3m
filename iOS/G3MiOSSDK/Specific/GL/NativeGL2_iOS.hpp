@@ -513,7 +513,7 @@ public:
     
     const int id = glGetAttribLocation(program->getProgramID(), name);
     
-    NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
+    //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
     switch (type) {
       case GL_FLOAT_VEC4:
         return new GPUAttributeVec4Float(name, id);
@@ -546,7 +546,7 @@ public:
     
     const int id = glGetUniformLocation(program->getProgramID(), name);
     
-    NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
+    //NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
     switch (type) {
       case GL_FLOAT_MAT4:
         return new GPUUniformMatrix4Float(name, new GLUniformID_iOS(id));
