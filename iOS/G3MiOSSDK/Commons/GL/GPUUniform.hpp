@@ -279,7 +279,7 @@ public:
   GPUUniformVec4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec4Float()){}
 };
 
-
+/*
 /////////////////////
 
 class ModelviewMatrixHolder{
@@ -408,6 +408,60 @@ public:
   }
 
 //  const Matrix44D* getMatrix() const { return _m;}
+};
+*/
+
+class GPUUniformValueModelview:public GPUUniformValue{
+protected:
+  mutable const Matrix44D* _lastModelSet;
+#ifdef C_CODE
+  const Matrix44DMultiplicationHolder _holder;
+#endif
+#ifdef JAVA_CODE
+  protected Matrix44DMultiplicationHolder _holder = null;
+#endif
+public:
+#ifdef C_CODE
+  GPUUniformValueModelview(const Matrix44DProvider* providers[], int nMatrix):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _holder(providers, nMatrix),
+  _lastModelSet(NULL)
+  {
+  }
+#endif
+#ifdef JAVA_CODE
+  public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
+  {
+    super(GLType.glMatrix4Float());
+    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
+  }
+#endif
+  ~GPUUniformValueModelview(){
+  }
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    _lastModelSet = _holder.getMatrix();
+
+    gl->uniformMatrix4fv(id, false, _holder.getMatrix());
+  }
+
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    if (_lastModelSet == ((GPUUniformValueModelview *)v)->_holder.getMatrix()){
+      return true;
+    }
+
+    return false;
+  }
+
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Matrix44D.");
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+
+  //  const Matrix44D* getMatrix() const { return _m;}
 };
 
 class GPUUniformValueMatrix4Float:public GPUUniformValue{

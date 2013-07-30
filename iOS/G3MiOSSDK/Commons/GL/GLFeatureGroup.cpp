@@ -79,10 +79,10 @@ void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 
 void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 #ifdef C_CODE
-  const Matrix44DHolder** matrixHolders = new const Matrix44DHolder*[_nFeatures];
+  const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures];
 #endif
 #ifdef JAVA_CODE
-  final Matrix44DHolder[] matrixHolders = new Matrix44DHolder[_nFeatures];
+  final Matrix44DProvider[] matrixHolders = new Matrix44DProvider[_nFeatures];
 #endif
   for (int i = 0; i < _nFeatures; i++){
     GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
