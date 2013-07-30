@@ -78,7 +78,7 @@ void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 }
 
 void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
-/*
+
 #ifdef C_CODE
   const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures-2];
 #endif
@@ -103,9 +103,15 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
     }
   }
 
-  vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(matrixHolders, _nFeatures-2), false);
-*/
-
+  if (_nFeatures> 2){
+    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(matrixHolders, _nFeatures-2), false);
+  } else{
+    const Matrix44D* id = Matrix44D::createIdentity();
+    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(id), false);
+    id->_release();
+    delete[] matrixHolders;
+  }
+/*
 #ifdef C_CODE
   const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures];
 #endif
@@ -121,7 +127,7 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
   }
 
   vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(matrixHolders, _nFeatures), false);
- 
+ */
 }
 
 void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs){

@@ -414,6 +414,7 @@ public:
 class GPUUniformValueMatrix4:public GPUUniformValue{
 protected:
   mutable const Matrix44D* _lastModelSet;
+  const bool _ownsProvider;
 #ifdef C_CODE
   const Matrix44DProvider* _provider;
 #endif
@@ -425,35 +426,40 @@ public:
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
-  _lastModelSet(NULL)
+  _lastModelSet(NULL),
+  _ownsProvider(true)
   {
   }
 #endif
 #ifdef JAVA_CODE
-  public GPUUniformValueMatrix4(Matrix44DHolder[] matrixHolders, int nMatrix)
-  {
-    super(GLType.glMatrix4Float());
-    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
-  }
+  
 #endif
 
 #ifdef C_CODE
   GPUUniformValueMatrix4(const Matrix44DProvider* provider):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
-  _lastModelSet(NULL)
+  _lastModelSet(NULL),
+  _ownsProvider(false)
   {
   }
 #endif
 #ifdef JAVA_CODE
-  public GPUUniformValueMatrix4(Matrix44DProvider[] matrixHolders)
-  {
-    super(GLType.glMatrix4Float());
-    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
-  }
+
 #endif
+
+  GPUUniformValueMatrix4(const Matrix44D* m):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _provider(new Matrix44DHolder(m)),
+  _lastModelSet(NULL),
+  _ownsProvider(true)
+  {
+  }
+
   ~GPUUniformValueMatrix4(){
-    delete _provider;
+    if (_ownsProvider){
+      delete _provider;
+    }
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
