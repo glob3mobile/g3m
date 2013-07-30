@@ -61,15 +61,27 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
 
   public final void addSymbol(GEORasterSymbol symbol)
   {
-    final boolean added = _quadTree.add(symbol.getSector(), symbol);
-    if (added)
+    final Sector sector = symbol.getSector();
+  
+    if (sector == null)
     {
-      notifyChanges();
+  //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+  //                                  symbol->description().c_str());
+      if (symbol != null)
+         symbol.dispose();
     }
     else
     {
-      if (symbol != null)
-         symbol.dispose();
+      final boolean added = _quadTree.add(sector, symbol);
+      if (added)
+      {
+        notifyChanges();
+      }
+      else
+      {
+        if (symbol != null)
+           symbol.dispose();
+      }
     }
   }
 
