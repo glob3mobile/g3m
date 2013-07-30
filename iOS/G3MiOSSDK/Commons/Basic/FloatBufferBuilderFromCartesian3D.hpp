@@ -15,7 +15,7 @@
 
 class FloatBufferBuilderFromCartesian3D: public FloatBufferBuilder {
 private:
-  const int _centerStrategy;
+  const CenterStrategy _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
@@ -28,11 +28,23 @@ private:
 
 public:
 
-  FloatBufferBuilderFromCartesian3D(int centerStrategy,
+  FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy,
                                     const Vector3D& center):
   _centerStrategy(centerStrategy)
   {
     setCenter(center._x, center._y, center._z);
+  }
+
+  static FloatBufferBuilderFromCartesian3D builderWithoutCenter(){
+    return FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
+  }
+
+  static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter(){
+    return FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
+  }
+
+  static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(const Vector3D& center){
+    return FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
   }
 
   void add(const Vector3D& vector) {
@@ -42,13 +54,13 @@ public:
   }
 
   void add(double x, double y, double z) {
-    if (_centerStrategy == CenterStrategy::firstVertex()) {
+    if (_centerStrategy == FIRST_VERTEX) {
       if (_values.size() == 0) {
         setCenter(x, y, z);
       }
     }
 
-    if (_centerStrategy == CenterStrategy::noCenter()) {
+    if (_centerStrategy == NO_CENTER) {
       _values.push_back( (float) x );
       _values.push_back( (float) y );
       _values.push_back( (float) z );
@@ -61,13 +73,13 @@ public:
   }
 
   void add(float x, float y, float z) {
-    if (_centerStrategy == CenterStrategy::firstVertex()) {
+    if (_centerStrategy == FIRST_VERTEX) {
       if (_values.size() == 0) {
         setCenter(x, y, z);
       }
     }
 
-    if (_centerStrategy == CenterStrategy::noCenter()) {
+    if (_centerStrategy == NO_CENTER) {
       _values.push_back( x );
       _values.push_back( y );
       _values.push_back( z );

@@ -126,9 +126,11 @@ Mesh* createSectorMesh(const Planet* planet,
                        const Color& color,
                        const int lineWidth) {
   // create vectors
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+
 
   // create indices
   ShortBufferBuilder indices;
@@ -571,7 +573,8 @@ public:
   if (true){
 
     Vector3D lightDir = Vector3D(100000, 0,0);
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+//    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     vertex.add(Vector3D::zero);
     vertex.add(lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
@@ -640,9 +643,11 @@ public:
 
   Interpolator* interpolator = new BilinearInterpolator();
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+
   FloatBufferBuilderFromColor colors;
 
 
@@ -724,9 +729,10 @@ public:
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
 {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
 
   const Angle centerLat = Angle::fromDegreesMinutesSeconds(38, 53, 42);
@@ -1830,9 +1836,10 @@ public:
       }
       // const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
 
-      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
-                                              context->getPlanet(),
-                                              Vector3D::zero);
+//      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
+//                                              context->getPlanet(),
+//                                              Vector3D::zero);
+      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithoutCenter(context->getPlanet());
 
       for (double alpha = 0; alpha <= 1; alpha += 0.025) {
         const double height = mu->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, alpha);

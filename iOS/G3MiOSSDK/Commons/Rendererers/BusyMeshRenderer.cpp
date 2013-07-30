@@ -28,8 +28,10 @@
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
   unsigned int numStrides = 60;
+
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
   FloatBufferBuilderFromColor colors;
   ShortBufferBuilder indices;
   

@@ -171,9 +171,10 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
 
   double minElevation = 0;
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -371,9 +372,11 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+
 
   ShortBufferBuilder indices;
 
