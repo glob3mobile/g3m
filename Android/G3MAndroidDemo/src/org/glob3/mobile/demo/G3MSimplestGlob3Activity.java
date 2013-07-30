@@ -208,8 +208,6 @@ public class G3MSimplestGlob3Activity
 
             final float dashLengths[] = { 1, 12 };
             final int dashCount = 2;
-            //            float dashLengths[] = {};
-            //            int dashCount = 0;
 
             final Color color = type.equalsIgnoreCase("Water Indicator") //
                                                                         ? Color.fromRGBA(1, 1, 1, 0.9f) //
@@ -228,32 +226,17 @@ public class G3MSimplestGlob3Activity
 
          @Override
          public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
-            //            return new ArrayList<GEOSymbol>(0);
             final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-
-            //          symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
-            //                                                      createLineStyle(geometry),
-            //                                                      30000) );
-
             symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(), createLineRasterStyle(geometry)));
-
             return symbols;
          }
 
 
          @Override
          public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
-            //            return new ArrayList<GEOSymbol>(0);
-
             final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-
-            //          symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
-            //                                                           createLineStyle(geometry)) );
-
             symbols.add(new GEOMultiLineRasterSymbol(geometry.getCoordinatesArray(), createLineRasterStyle(geometry)));
-
             return symbols;
-
          }
 
 
@@ -266,8 +249,6 @@ public class G3MSimplestGlob3Activity
 
             final float dashLengths[] = {};
             final int dashCount = 0;
-            //          float dashLengths[] = {3, 6};
-            //          int dashCount = 2;
 
             return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
          }

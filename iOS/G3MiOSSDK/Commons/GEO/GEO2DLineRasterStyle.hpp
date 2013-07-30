@@ -53,7 +53,8 @@ public:
               _dashLengths);
 #endif
 #ifdef JAVA_CODE
-    _dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
+    //_dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
+    _dashLengths = (float[]) dashLengths.clone();
 #endif
   }
 
@@ -73,7 +74,8 @@ public:
               _dashLengths);
 #endif
 #ifdef JAVA_CODE
-    _dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
+    //_dashLengths = java.util.Arrays.copyOf(that._dashLengths, _dashCount);
+    _dashLengths = (float[]) that._dashLengths.clone();
 #endif
   }
 

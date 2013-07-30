@@ -7,9 +7,12 @@ import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.Vector2F;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayNumber;
 
 
 public class Canvas_WebGL
@@ -349,5 +352,99 @@ public class Canvas_WebGL
 		context.lineTo(x, y);
    }-*/;
 
+
+   @Override
+   protected void _setLineCap(final StrokeCap cap) {
+      switch (cap) {
+         case CAP_BUTT:
+            jsLineCap("butt");
+            break;
+         case CAP_ROUND:
+            jsLineCap("round");
+            break;
+         case CAP_SQUARE:
+            jsLineCap("square");
+            break;
+      }
+   }
+
+
+   private native void jsLineCap(String cap) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.lineCap = cap;
+   }-*/;
+
+
+   @Override
+   protected void _setLineJoin(final StrokeJoin join) {
+      switch (join) {
+         case JOIN_MITER:
+            jsLineJoin("miter");
+            break;
+         case JOIN_ROUND:
+            jsLineJoin("round");
+            break;
+         case JOIN_BEVEL:
+            jsLineJoin("bevel");
+            break;
+      }
+   }
+
+
+   private native void jsLineJoin(final String join) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.lineJoin = join;
+   }-*/;
+
+
+   @Override
+   protected native void _setLineMiterLimit(final float limit) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.miterLimit = limit;
+   }-*/;
+
+
+   @Override
+   protected void _setLineDash(final float[] lengths,
+                               final int count,
+                               final int phase) {
+      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
+
+      for (int i = 0; i < count; i++) {
+         jsArray.push(lengths[i]);
+      }
+      jsSetLineDash(jsArray, phase);
+   }
+
+
+   private native void jsSetLineDash(final JsArrayNumber lengths,
+                                     final int phase) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.setLineDash(lengths);
+		context.lineDashOffset = phase;
+   }-*/;
+
+
+   @Override
+   protected native void _closePath() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.setLineDash(lengths);
+		context.closePath();
+   }-*/;
+
+
+   @Override
+   protected native void _fill() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.fill();
+   }-*/;
+
+
+   @Override
+   protected native void _fillAndStroke() /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.fill();
+		context.stroke();
+   }-*/;
 
 }
