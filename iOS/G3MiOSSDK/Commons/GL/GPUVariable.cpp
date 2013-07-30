@@ -118,6 +118,18 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
     return LIGHT_COLOR;
   }
 
+  if (name.compare("uProjection") == 0){
+    return PROJECTION;
+  }
+
+  if (name.compare("uCameraModel") == 0){
+    return CAMERA_MODEL;
+  }
+  
+  if (name.compare("uModel") == 0){
+    return MODEL;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 

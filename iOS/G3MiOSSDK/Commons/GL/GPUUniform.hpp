@@ -411,42 +411,59 @@ public:
 };
 */
 
-class GPUUniformValueModelview:public GPUUniformValue{
+class GPUUniformValueMatrix4:public GPUUniformValue{
 protected:
   mutable const Matrix44D* _lastModelSet;
 #ifdef C_CODE
-  const Matrix44DMultiplicationHolder _holder;
+  const Matrix44DProvider* _provider;
 #endif
 #ifdef JAVA_CODE
-  protected Matrix44DMultiplicationHolder _holder = null;
+  protected Matrix44DProvider _holder = null;
 #endif
 public:
 #ifdef C_CODE
-  GPUUniformValueModelview(const Matrix44DProvider* providers[], int nMatrix):
+  GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
-  _holder(providers, nMatrix),
+  _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
   _lastModelSet(NULL)
   {
   }
 #endif
 #ifdef JAVA_CODE
-  public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
+  public GPUUniformValueMatrix4(Matrix44DHolder[] matrixHolders, int nMatrix)
   {
     super(GLType.glMatrix4Float());
     _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
   }
 #endif
-  ~GPUUniformValueModelview(){
+
+#ifdef C_CODE
+  GPUUniformValueMatrix4(const Matrix44DProvider* provider):
+  GPUUniformValue(GLType::glMatrix4Float()),
+  _provider(provider),
+  _lastModelSet(NULL)
+  {
+  }
+#endif
+#ifdef JAVA_CODE
+  public GPUUniformValueMatrix4(Matrix44DProvider[] matrixHolders)
+  {
+    super(GLType.glMatrix4Float());
+    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
+  }
+#endif
+  ~GPUUniformValueMatrix4(){
+    delete _provider;
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-    _lastModelSet = _holder.getMatrix();
+    _lastModelSet = _provider->getMatrix();
 
-    gl->uniformMatrix4fv(id, false, _holder.getMatrix());
+    gl->uniformMatrix4fv(id, false, _provider->getMatrix());
   }
 
   bool isEqualsTo(const GPUUniformValue* v) const{
-    if (_lastModelSet == ((GPUUniformValueModelview *)v)->_holder.getMatrix()){
+    if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()){
       return true;
     }
 

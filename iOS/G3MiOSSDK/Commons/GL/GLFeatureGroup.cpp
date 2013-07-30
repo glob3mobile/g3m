@@ -78,6 +78,34 @@ void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 }
 
 void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
+/*
+#ifdef C_CODE
+  const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures-2];
+#endif
+#ifdef JAVA_CODE
+  final Matrix44DProvider[] matrixHolders = new Matrix44DProvider[_nFeatures-2];
+#endif
+
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    GLCameraGroupFeatureType t = f->getType();
+    switch (t) {
+      case F_PROJECTION:
+        vs->addUniformValue(PROJECTION, new GPUUniformValueMatrix4(f->getMatrixHolder()), false);
+        break;
+      case F_CAMERA_MODEL:
+        vs->addUniformValue(CAMERA_MODEL, new GPUUniformValueMatrix4(f->getMatrixHolder()), false);
+        break;
+      case F_MODEL_TRANSFORM:
+        matrixHolders[i-2] = f->getMatrixHolder();
+      default:
+        break;
+    }
+  }
+
+  vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(matrixHolders, _nFeatures-2), false);
+*/
+
 #ifdef C_CODE
   const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures];
 #endif
@@ -92,7 +120,8 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
     }
   }
 
-  vs->addUniformValue(MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
+  vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(matrixHolders, _nFeatures), false);
+ 
 }
 
 void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs){

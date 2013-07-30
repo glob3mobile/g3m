@@ -177,10 +177,10 @@ void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getProjectionMatrix44D()){}
+GLCameraGroupFeature(cam->getProjectionMatrix44D(), F_PROJECTION){}
 
 ModelGLFeature::ModelGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getModelMatrix44D()){}
+GLCameraGroupFeature(cam->getModelMatrix44D(), F_CAMERA_MODEL){}
 
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
 GLFeature(LIGHTING_GROUP){

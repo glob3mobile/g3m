@@ -95,7 +95,13 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+enum GLCameraGroupFeatureType{
+  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
+};
 class GLCameraGroupFeature: public GLFeature{
+protected:
+  const enum GLCameraGroupFeatureType _type;
+private:
 #ifdef C_CODE
   Matrix44DHolder _matrixHolder;
 #endif
@@ -104,7 +110,8 @@ class GLCameraGroupFeature: public GLFeature{
 #endif
 public:
 #ifdef C_CODE
-  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix){}
+  GLCameraGroupFeature(Matrix44D* matrix, GLCameraGroupFeatureType type):
+  GLFeature(CAMERA_GROUP), _matrixHolder(matrix), _type(type){}
 #endif
 #ifdef JAVA_CODE
   public GLCameraGroupFeature(Matrix44D matrix)
@@ -118,23 +125,25 @@ public:
   const void setMatrix(const Matrix44D* matrix){_matrixHolder.setMatrix(matrix);}
   const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
   void applyOnGlobalGLState(GLGlobalState* state) const {}
+
+  GLCameraGroupFeatureType getType() const{ return _type;}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model){}
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, F_CAMERA_MODEL){}
   ModelGLFeature(const Camera* cam);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection){}
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, F_PROJECTION){}
   ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform){}
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, F_MODEL_TRANSFORM){}
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -158,15 +167,6 @@ public:
   _sFactor(sFactor),
   _dFactor(dFactor)
   {
-//    _globalState = new GLGlobalState();
-//
-//    if (blend){
-//      _globalState->enableBlend();
-//      _globalState->setBlendFactors(sFactor, dFactor);
-//    } else{
-//      _globalState->disableBlend();
-//    }
-
   }
 
   void blendingOnGlobalGLState(GLGlobalState* state) const {
