@@ -140,14 +140,7 @@ public class GLState
     {
   
       _parentGLState = parent;
-      if (_parentGLState == null)
-      {
-        _parentsTimeStamp = 0;
-      }
-      else
-      {
-        _parentsTimeStamp = _parentGLState.getTimeStamp();
-      }
+      _parentsTimeStamp = (_parentGLState == null) ? 0 : _parentGLState.getTimeStamp();
   
       hasChangedStructure();
     }
@@ -159,7 +152,7 @@ public class GLState
 
   public final void applyGlobalStateOnGPU(GL gl)
   {
-  
+    int __ASK_JM;
     if (_parentGLState != null)
     {
       _parentGLState.applyGlobalStateOnGPU(gl);
@@ -181,12 +174,11 @@ public class GLState
         }
       }
   
-      int uniformsCode = _valuesSet.getUniformsCode();
-      int attributesCode = _valuesSet.getAttributesCode();
+      final int uniformsCode = _valuesSet.getUniformsCode();
+      final int attributesCode = _valuesSet.getAttributesCode();
   
       _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
     }
-  
   
     if (_globalState == null)
     {
