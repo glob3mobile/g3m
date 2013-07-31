@@ -414,7 +414,7 @@ void Tile::rawRender(const G3MRenderContext *rc,
 
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer == NULL) {
-    tessellatorMesh->render(rc);
+    tessellatorMesh->render(rc, glState);
   }
   else {
     const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();

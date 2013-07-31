@@ -86,16 +86,6 @@ public class CompositeMesh extends Mesh
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc)
-  {
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      Mesh child = _children.get(i);
-      child.render(rc);
-    }
-  }
-
   public final BoundingVolume getBoundingVolume()
   {
     if (_boundingVolume == null)

@@ -118,11 +118,6 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
   return _flatColor->isTransparent();
 }
 
-
-void AbstractMesh::render(const G3MRenderContext *rc) const {
-  rawRender(rc);
-}
-
 void AbstractMesh::createGLState(){
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
@@ -165,7 +160,7 @@ void AbstractMesh::createGLState(){
   }
 }
 
-void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) {
+void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
 
   _glState.setParent(parentGLState);
   rawRender(rc);

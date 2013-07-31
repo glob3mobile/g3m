@@ -54,8 +54,6 @@ public:
       delete _textureMapping;
     }
   }
-  
-  void render(const G3MRenderContext* rc) const;
 
   BoundingVolume* getBoundingVolume()  const {
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
@@ -77,7 +75,7 @@ public:
     return _transparent;
   }
   
-  void render(const G3MRenderContext* rc, const GLState* parentState);
+  void render(const G3MRenderContext* rc, const GLState* parentState) const;
 };
 
 #endif
