@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class LeveledMesh extends Mesh
+public class LeveledMesh extends Mesh
 {
   private Mesh _mesh;
 

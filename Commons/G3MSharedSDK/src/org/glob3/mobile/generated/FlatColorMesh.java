@@ -59,11 +59,6 @@ public class FlatColorMesh extends Mesh
     }
   }
 
-  public final void render(G3MRenderContext rc)
-  {
-    _mesh.render(rc);
-  }
-
   public final BoundingVolume getBoundingVolume()
   {
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
