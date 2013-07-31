@@ -133,7 +133,6 @@ private:
   LazyTextureMapping* getCurrentTextureMapping() const;
   
   GLState _glState;
-  void updateGLState();
   LazyTextureMapping* _mappingOnGLState;
   
 public:

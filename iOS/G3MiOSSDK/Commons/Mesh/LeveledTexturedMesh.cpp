@@ -37,19 +37,19 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
     if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
 
       state.addGLFeature(new TextureGLFeature(_glTextureId,
-                                                        _texCoords, 2, 0, false, 0,
-                                                        isTransparent(),
-                                                        GLBlendFactor::srcAlpha(),
-                                                        GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        true, _translation.asVector2D(), _scale.asVector2D()),
+                                              _texCoords, 2, 0, false, 0,
+                                              isTransparent(),
+                                              GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                              true, _translation.asVector2D(), _scale.asVector2D()),
                          false); //TRANSFORM
     } else{
       state.addGLFeature(new TextureGLFeature(_glTextureId,
-                                                        _texCoords, 2, 0, false, 0,
-                                                        isTransparent(),
-                                                        GLBlendFactor::srcAlpha(),
-                                                        GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        false, Vector2D::zero(), Vector2D::zero() ),
+                                              _texCoords, 2, 0, false, 0,
+                                              isTransparent(),
+                                              GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                              false, Vector2D::zero(), Vector2D::zero() ),
                          false); //TRANSFORM
     }
 
@@ -199,18 +199,20 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return mapping->isTransparent();
 }
 
-void LeveledTexturedMesh::updateGLState(){
-  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  if (mapping != NULL && mapping != _mappingOnGLState){
-    _mappingOnGLState = mapping;
-    mapping->modifyGLState(_glState);
-  }
-}
-
 void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState){
 
-  updateGLState();
+  LazyTextureMapping* mapping = getCurrentTextureMapping();
+  if (mapping != NULL){
+    if (mapping != _mappingOnGLState){
+      _mappingOnGLState = mapping;
+      mapping->modifyGLState(_glState);
+    }
 
-  _glState.setParent(parentGLState);
-  ((Mesh*)_mesh)->render(rc, &_glState);
+    _glState.setParent(parentGLState);
+    ((Mesh*)_mesh)->render(rc, &_glState);
+  } else{
+    ILogger::instance()->logError("No Texture Mapping");
+  }
+
+
 }
