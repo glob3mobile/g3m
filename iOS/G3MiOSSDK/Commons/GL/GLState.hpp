@@ -53,7 +53,7 @@ class GLState{
     _globalState = NULL;
     _lastGPUProgramUsed = NULL;
 
-    for (int i = 0; i < N_GLFEATURES_GROUPS; i++){
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
       delete _accumulatedGroups[i];
       _accumulatedGroups[i] = NULL;
     }
@@ -80,16 +80,16 @@ public:
   int getTimeStamp() const { return _timeStamp;}
 
   GLFeatureGroup* getAccumulatedGroup(int i) const{
-    if (_accumulatedGroups[i] == NULL){
+    if (_accumulatedGroups[i] == NULL) {
 
       _accumulatedGroups[i] = GLFeatureGroup::createGroup(GLFeatureGroup::getGroupName(i));
-      if (_parentGLState != NULL){
+      if (_parentGLState != NULL) {
         GLFeatureGroup* pg = _parentGLState->getAccumulatedGroup(i);
-        if (pg != NULL){
+        if (pg != NULL) {
           _accumulatedGroups[i]->add(pg);
         }
       }
-      if (_featuresGroups[i] != NULL){
+      if (_featuresGroups[i] != NULL) {
         _accumulatedGroups[i]->add(_featuresGroups[i]);
       }
     }
@@ -108,7 +108,7 @@ public:
 
   void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
-  void addGLFeature(const GLFeature* f, bool mustRetain){
+  void addGLFeature(const GLFeature* f, bool mustRetain) {
     GLFeatureGroupName g = f->getGroup();
 #ifdef C_CODE
     const int index = g;
@@ -117,12 +117,12 @@ public:
     final int index = g.getValue();
 #endif
 
-    if (_featuresGroups[index] == NULL){
+    if (_featuresGroups[index] == NULL) {
       _featuresGroups[index] = GLFeatureGroup::createGroup(g);
     }
 
     _featuresGroups[index]->add(f);
-    if (!mustRetain){
+    if (!mustRetain) {
       f->_release();
     }
 
@@ -139,7 +139,7 @@ public:
     final int index = g.getValue();
 #endif
 
-    if (_featuresGroups[index] == NULL){
+    if (_featuresGroups[index] == NULL) {
       return 0;
     }
     return _featuresGroups[index]->size();
