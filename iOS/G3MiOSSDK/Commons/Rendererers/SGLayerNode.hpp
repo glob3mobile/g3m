@@ -44,7 +44,7 @@ private:
 
   URL getURL() const;
   
-  GLState _glState;
+//  GLState _glState;
 
 
 public:

@@ -20,20 +20,23 @@ GLState::~GLState(){
 
 void GLState::setParent(const GLState* parent) const{
 
-  if (parent != _parentGLState || parent == NULL || _parentsTimeStamp != parent->getTimeStamp()){
+  if ((parent != _parentGLState) ||
+      (parent == NULL)           ||
+      (_parentsTimeStamp != parent->getTimeStamp())) {
 
     _parentGLState = parent;
-    if (_parentGLState != NULL){
-      _parentsTimeStamp = parent->getTimeStamp();
-    } else{
+    if (_parentGLState == NULL){
       _parentsTimeStamp = 0;
+    }
+    else {
+      _parentsTimeStamp = _parentGLState->getTimeStamp();
     }
 
     hasChangedStructure();
-
-  } else{
-    //ILogger::instance()->logInfo("Reusing GLState Parent");
   }
+//  else {
+//    ILogger::instance()->logInfo("Reusing GLState Parent");
+//  }
 
 }
 
