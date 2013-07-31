@@ -16,6 +16,7 @@
 #include "GPUProgramManager.hpp"
 //#include "GPUProgramState.hpp"
 #include "Camera.hpp"
+#include "GLState.hpp"
 
 void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (!_initialized) {
@@ -136,6 +137,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
           if (mapping != NULL) {
             _mappings->at(i) = NULL;
             delete mapping;
+            _glState.clearGLFeatureGroup(CAMERA_GROUP);
           }
         }
       }
@@ -156,17 +158,6 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
   }
 
   return NULL;
-}
-
-
-void LeveledTexturedMesh::render(const G3MRenderContext* rc) const {
-  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  if (mapping == NULL) {
-    _mesh->render(rc);
-  }
-  else {
-    _mesh->render(rc);
-  }
 }
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
@@ -199,7 +190,7 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return mapping->isTransparent();
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState){
+void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
 
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL){
@@ -209,7 +200,7 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* pare
     }
 
     _glState.setParent(parentGLState);
-    ((Mesh*)_mesh)->render(rc, &_glState);
+    _mesh->render(rc, &_glState);
   } else{
     ILogger::instance()->logError("No Texture Mapping");
   }

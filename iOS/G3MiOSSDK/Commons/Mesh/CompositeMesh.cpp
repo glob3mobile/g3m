@@ -41,14 +41,6 @@ bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
   return false;
 }
 
-void CompositeMesh::render(const G3MRenderContext* rc) const {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    Mesh* child = _children[i];
-    child->render(rc);
-  }
-}
-
 const Vector3D CompositeMesh::getVertex(int index) const {
   int acumIndex = 0;
   const int childrenCount = _children.size();
@@ -93,7 +85,7 @@ void CompositeMesh::addMesh(Mesh* mesh) {
   _children.push_back(mesh);
 }
 
-void CompositeMesh::render(const G3MRenderContext* rc, const GLState* parentGLState){
+void CompositeMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

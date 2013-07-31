@@ -55,9 +55,7 @@ protected:
 
 public:
   ~AbstractMesh();
-
-  void render(const G3MRenderContext* rc) const;
-
+  
   BoundingVolume* getBoundingVolume() const;
 
   int getVertexCount() const;
@@ -66,7 +64,7 @@ public:
 
   bool isTransparent(const G3MRenderContext* rc) const;
   
-  void render(const G3MRenderContext* rc, const GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

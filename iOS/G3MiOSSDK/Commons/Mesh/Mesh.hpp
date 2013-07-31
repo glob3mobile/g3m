@@ -25,14 +25,12 @@ public:
   virtual int getVertexCount() const = 0;
   
   virtual const Vector3D getVertex(int i) const = 0;
-  
-  virtual void render(const G3MRenderContext* rc) const = 0;
-  
+    
   virtual BoundingVolume* getBoundingVolume() const = 0;
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
   
-  virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) = 0;
+  virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
 };
 

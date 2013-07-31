@@ -50,8 +50,6 @@ protected:
 public:
   ~AbstractGeometryMesh();
   
-  void render(const G3MRenderContext* rc) const{}
-  
   BoundingVolume* getBoundingVolume() const;
   
   int getVertexCount() const;
@@ -62,7 +60,7 @@ public:
     return false; //TODO: CHECK
   }
   
-  void render(const G3MRenderContext* rc, const GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

@@ -44,10 +44,6 @@ public:
     return _mesh->getVertex(i);
   }
 
-  void render(const G3MRenderContext* rc) const {
-    _mesh->render(rc);
-  }
-
   BoundingVolume* getBoundingVolume() const {
     return _mesh->getBoundingVolume();
   }
@@ -56,7 +52,7 @@ public:
     return _mesh->isTransparent(rc);
   }
 
-  void render(const G3MRenderContext* rc, const GLState* parentGLState){
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const{
     _mesh->render(rc, parentGLState);
   }
   
