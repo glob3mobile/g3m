@@ -458,7 +458,7 @@ public:
 
   ~GPUUniformValueMatrix4(){
     if (_ownsProvider){
-      delete _provider;
+      _provider->_release();
     }
   }
 

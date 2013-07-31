@@ -103,7 +103,7 @@ protected:
   const enum GLCameraGroupFeatureType _type;
 private:
 #ifdef C_CODE
-  Matrix44DHolder _matrixHolder;
+  Matrix44DHolder *_matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
@@ -111,7 +111,7 @@ private:
 public:
 #ifdef C_CODE
   GLCameraGroupFeature(Matrix44D* matrix, GLCameraGroupFeatureType type):
-  GLFeature(CAMERA_GROUP), _matrixHolder(matrix), _type(type){}
+  GLFeature(CAMERA_GROUP), _matrixHolder(new Matrix44DHolder(matrix)), _type(type){}
 #endif
 #ifdef JAVA_CODE
   public GLCameraGroupFeature(Matrix44D matrix)
@@ -120,10 +120,12 @@ public:
     _matrixHolder = new Matrix44DHolder(matrix);
   }
 #endif
-  ~GLCameraGroupFeature(){}
-  const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
-  const void setMatrix(const Matrix44D* matrix){_matrixHolder.setMatrix(matrix);}
-  const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
+  ~GLCameraGroupFeature(){
+    _matrixHolder->_release();
+  }
+  const Matrix44D* getMatrix() const{ return _matrixHolder->getMatrix();}
+  const void setMatrix(const Matrix44D* matrix){_matrixHolder->setMatrix(matrix);}
+  const Matrix44DHolder* getMatrixHolder() const{ return _matrixHolder;}
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 
   GLCameraGroupFeatureType getType() const{ return _type;}

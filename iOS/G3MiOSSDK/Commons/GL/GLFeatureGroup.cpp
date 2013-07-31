@@ -79,6 +79,84 @@ void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 
 void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
 
+  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures];
+
+  int modelTransformCount = 0;
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    GLCameraGroupFeatureType t = f->getType();
+    switch (t) {
+      case F_PROJECTION:
+        modelTransformHolders[0] = f->getMatrixHolder();
+        break;
+      case F_CAMERA_MODEL:
+        modelTransformHolders[1] = f->getMatrixHolder();
+        break;
+      case F_MODEL_TRANSFORM:
+        modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
+        break;
+      default:
+        ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
+        break;
+    }
+  }
+
+  if (modelTransformCount > 0){
+    vs->addUniformValue(MODEL,
+                        new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount)),
+                        false);
+  } else{
+    const Matrix44D* id = Matrix44D::createIdentity();
+    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(id), false);
+    id->_release();
+  }
+
+  vs->addUniformValue(MODELVIEW,
+                      new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2)),
+                      false);
+/*
+  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures-2];
+  const Matrix44DProvider** cameraHolders = new const Matrix44DProvider*[2];
+
+  int modelTransformCount = 0;
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    GLCameraGroupFeatureType t = f->getType();
+    switch (t) {
+      case F_PROJECTION:
+        cameraHolders[0] = f->getMatrixHolder();
+        break;
+      case F_CAMERA_MODEL:
+        cameraHolders[1] = f->getMatrixHolder();
+        break;
+      case F_MODEL_TRANSFORM:
+        modelTransformHolders[modelTransformCount++] = f->getMatrixHolder();
+        break;
+      default:
+        ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
+        break;
+    }
+  }
+
+  if (modelTransformCount > 0){
+
+    const Matrix44DProvider** modelviewHolders = new const Matrix44DProvider*[2];
+
+    modelviewHolders[0] = new Matrix44DMultiplicationHolder(cameraHolders, 2);
+    modelviewHolders[1] = new Matrix44DMultiplicationHolder(modelTransformHolders, modelTransformCount);
+
+    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(modelviewHolders[1]), false);
+    vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(modelviewHolders,2)), false);
+    
+  } else{
+    const Matrix44D* id = Matrix44D::createIdentity();
+    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(id), false);
+    id->_release();
+
+    vs->addUniformValue(MODELVIEW, new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(cameraHolders,2)), false);
+  }
+*/
+/*
 #ifdef C_CODE
   const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures-2];
 #endif
@@ -111,6 +189,7 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
     id->_release();
     delete[] matrixHolders;
   }
+ */
 /*
 #ifdef C_CODE
   const Matrix44DProvider** matrixHolders = new const Matrix44DProvider*[_nFeatures];

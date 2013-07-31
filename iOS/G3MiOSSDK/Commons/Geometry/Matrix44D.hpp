@@ -98,7 +98,7 @@ public:
 };
 
 
-class Matrix44DProvider{
+class Matrix44DProvider: public RCObject{
 public:
   virtual ~Matrix44DProvider(){}
   virtual const Matrix44D* getMatrix() const = 0;
@@ -163,6 +163,7 @@ public:
 #endif
     for (int i = 0; i < _nMatrix; i++) {
       _lastMatrixes[i] = _providers[i]->getMatrix();
+      _providers[i]->_retain();
       if (_lastMatrixes[i] == NULL){
         ILogger::instance()->logError("Modelview multiplication failure");
       }
@@ -176,6 +177,9 @@ public:
 #endif
     if (_modelview != NULL){
       _modelview->_release();
+    }
+    for (int i = 0; i < _nMatrix; i++) {
+      _providers[i]->_release();
     }
   }
 
