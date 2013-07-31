@@ -54,6 +54,7 @@ public class LeveledTexturedMesh extends Mesh
               _mappings.get(i).dispose();
               if (mapping != null)
                  mapping.dispose();
+              _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
             }
           }
         }
@@ -66,15 +67,6 @@ public class LeveledTexturedMesh extends Mesh
   }
 
   private GLState _glState = new GLState();
-  private void updateGLState()
-  {
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping != null && mapping != _mappingOnGLState)
-    {
-      _mappingOnGLState = mapping;
-      mapping.modifyGLState(_glState);
-    }
-  }
   private LazyTextureMapping _mappingOnGLState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
@@ -127,20 +119,6 @@ public class LeveledTexturedMesh extends Mesh
   {
     return _mesh.getVertex(i);
   }
-
-  public final void render(G3MRenderContext rc)
-  {
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping == null)
-    {
-      _mesh.render(rc);
-    }
-    else
-    {
-      _mesh.render(rc);
-    }
-  }
-
 
   public final BoundingVolume getBoundingVolume()
   {
@@ -200,10 +178,24 @@ public class LeveledTexturedMesh extends Mesh
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
   
-    updateGLState();
+    LazyTextureMapping mapping = getCurrentTextureMapping();
+    if (mapping != null)
+    {
+      if (mapping != _mappingOnGLState)
+      {
+        _mappingOnGLState = mapping;
+        mapping.modifyGLState(_glState);
+      }
   
-    _glState.setParent(parentGLState);
-    ((Mesh)_mesh).render(rc, _glState);
+      _glState.setParent(parentGLState);
+      _mesh.render(rc, _glState);
+    }
+    else
+    {
+      ILogger.instance().logError("No Texture Mapping");
+    }
+  
+  
   }
 
 }

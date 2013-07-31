@@ -32,8 +32,6 @@ public abstract class Mesh
 
   public abstract Vector3D getVertex(int i);
 
-  public abstract void render(G3MRenderContext rc);
-
   public abstract BoundingVolume getBoundingVolume();
 
   public abstract boolean isTransparent(G3MRenderContext rc);

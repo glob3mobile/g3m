@@ -153,11 +153,6 @@ public abstract class AbstractMesh extends Mesh
        _translationMatrix.dispose();
   }
 
-  public final void render(G3MRenderContext rc)
-  {
-    rawRender(rc);
-  }
-
   public final BoundingVolume getBoundingVolume()
   {
     if (_boundingVolume == null)
