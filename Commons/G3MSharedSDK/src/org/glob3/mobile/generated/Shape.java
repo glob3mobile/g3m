@@ -35,7 +35,7 @@ public abstract class Shape implements EffectTarget
   private double _scaleY;
   private double _scaleZ;
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+//  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
@@ -74,6 +74,7 @@ public abstract class Shape implements EffectTarget
   }
 
   public Shape(Geodetic3D position)
+//  _planet(NULL),
   {
      _position = position;
      _heading = new Angle(Angle.zero());
@@ -82,7 +83,6 @@ public abstract class Shape implements EffectTarget
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
-     _planet = null;
      _enable = true;
 
   }

@@ -96,15 +96,14 @@ public class GL
   }
 
   //Get Locations warning of errors
-  private boolean _errorGettingLocationOcurred;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  int checkedGetAttribLocation(GPUProgram program, String name);
+//  bool _errorGettingLocationOcurred;
+//  int checkedGetAttribLocation(GPUProgram* program,
+//                               const std::string& name);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
 
-  private IFloatBuffer _billboardTexCoord;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  IFloatBuffer getBillboardTexCoord();
+//  IFloatBuffer* _billboardTexCoord;
+//  IFloatBuffer* getBillboardTexCoord();
 
 //  const bool _verbose;
 

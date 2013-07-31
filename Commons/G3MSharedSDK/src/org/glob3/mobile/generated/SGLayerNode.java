@@ -76,7 +76,7 @@ public class SGLayerNode extends SGNode
     return new URL(path, false);
   }
 
-  private GLState _glState = new GLState();
+//  GLState _glState;
 
 
 

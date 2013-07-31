@@ -136,26 +136,24 @@ public class GLState
   public final void setParent(GLState parent)
   {
   
-    if (parent != _parentGLState || parent == null || _parentsTimeStamp != parent.getTimeStamp())
+    if ((parent != _parentGLState) || (parent == null) || (_parentsTimeStamp != parent.getTimeStamp()))
     {
   
       _parentGLState = parent;
-      if (_parentGLState != null)
-      {
-        _parentsTimeStamp = parent.getTimeStamp();
-      }
-      else
+      if (_parentGLState == null)
       {
         _parentsTimeStamp = 0;
       }
+      else
+      {
+        _parentsTimeStamp = _parentGLState.getTimeStamp();
+      }
   
       hasChangedStructure();
-  
     }
-    else
-    {
-      //ILogger::instance()->logInfo("Reusing GLState Parent");
-    }
+  //  else {
+  //    ILogger::instance()->logInfo("Reusing GLState Parent");
+  //  }
   
   }
 
