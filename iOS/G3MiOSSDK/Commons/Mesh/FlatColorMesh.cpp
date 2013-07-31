@@ -8,17 +8,13 @@
 
 #include "FlatColorMesh.hpp"
 
-void FlatColorMesh::render(const G3MRenderContext* rc) const {
-  _mesh->render(rc);
-}
-
 void FlatColorMesh::createGLState(){
   _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                _flatColor->isTransparent(),
                                                GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 }
 
-void FlatColorMesh::render(const G3MRenderContext* rc, const GLState* parentState){
+void FlatColorMesh::render(const G3MRenderContext* rc, const GLState* parentState) const{
   _glState.setParent(parentState);
   _mesh->render(rc, &_glState);
 }

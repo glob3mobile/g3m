@@ -104,8 +104,13 @@ public class GPUUniform extends GPUVariable
       {
         ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
       }
+<<<<<<< HEAD
     }
 //  }
+=======
+//    }
+  }
+>>>>>>> glfeature
 
   public final void applyChanges(GL gl)
   {

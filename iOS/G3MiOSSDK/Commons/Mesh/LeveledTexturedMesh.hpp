@@ -131,10 +131,9 @@ private:
   mutable bool _currentLevelIsValid;
   
   LazyTextureMapping* getCurrentTextureMapping() const;
-  
-  GLState _glState;
-//  void updateGLState();
-  LazyTextureMapping* _mappingOnGLState;
+
+  mutable GLState _glState;
+  mutable LazyTextureMapping* _mappingOnGLState;
   
 public:
   LeveledTexturedMesh(const Mesh* mesh,
@@ -159,9 +158,6 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const G3MRenderContext* rc) const{}
-  
-
   BoundingVolume* getBoundingVolume() const;
 
   bool setGLTextureIdForLevel(int level,
@@ -171,7 +167,7 @@ public:
   
   bool isTransparent(const G3MRenderContext* rc) const;
 
-  void render(const G3MRenderContext* rc, const GLState* parentGLState);
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

@@ -83,38 +83,23 @@ public class Tile
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
-      int __ASK_JM;
-      final TileTessellator tessellator = trc.getTessellator();
-      final boolean renderDebug = trc.getParameters()._renderDebug;
-      final Planet planet = rc.getPlanet();
-  
-      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
-      initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
+      initializeElevationData(elevationDataProvider, trc.getTessellator(), trc.getLayerTilesRenderParameters()._tileMeshResolution, rc.getPlanet(), trc.getParameters()._renderDebug);
     }
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
-      final TileTessellator tessellator = trc.getTessellator();
-      final boolean renderDebug = trc.getParameters()._renderDebug;
-      final Planet planet = rc.getPlanet();
-  
       final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
-      final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
   
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, mercator, renderDebug);
+        _tessellatorMesh = trc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, layerTilesRenderParameters._mercator, trc.getParameters()._renderDebug);
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, mercator, renderDebug);
+        Mesh tessellatorMesh = trc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, layerTilesRenderParameters._mercator, trc.getParameters()._renderDebug);
   
         MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
         if (meshHolder == null)

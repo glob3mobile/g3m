@@ -30,10 +30,10 @@ public:
   {}
 
   virtual ~GPUUniformValue(){
-//    ILogger::instance()->logInfo("Deleting Uniform Value");
+    //    ILogger::instance()->logInfo("Deleting Uniform Value");
   }
 
-  
+
   int getType() const { return _type;}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
@@ -127,24 +127,22 @@ public:
   void unset();
 
   void set(const GPUUniformValue* v) {
-//    if (v != _value) {
-      if (_type == v->getType()) { //type checking
-        if (_value == NULL || !_value->isEqualsTo(v)) {
-          _dirty = true;
-          //        _value = v->copyOrCreate(_value);
+    if (_type == v->getType()) { //type checking
+      if (_value == NULL || !_value->isEqualsTo(v)) {
+        _dirty = true;
+        //        _value = v->copyOrCreate(_value);
 
-          v->_retain();
-          if (_value != NULL){
-            _value->_release();
-          }
-          _value = v;
+        v->_retain();
+        if (_value != NULL){
+          _value->_release();
         }
-      }
-      else {
-        ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+        _value = v;
       }
     }
-//  }
+    else {
+      ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+    }
+  }
 
   void applyChanges(GL* gl);
 
@@ -280,136 +278,153 @@ public:
 };
 
 /*
-/////////////////////
+ /////////////////////
 
-class ModelviewMatrixHolder{
-  const Matrix44D** _matrix;
-  const Matrix44DHolder** _matrixHolders;
-  int _nMatrix;
-  mutable Matrix44D* _modelview;
-public:
-  ModelviewMatrixHolder(const Matrix44DHolder* matrixHolders[], int nMatrix):
-  _matrixHolders(matrixHolders),
-  _nMatrix(nMatrix),
-  _modelview(NULL)
-  {
-#ifdef C_CODE
-    _matrix = new const Matrix44D*[nMatrix];
-#endif
-#ifdef JAVA_CODE
-    _matrix = new Matrix44D[nMatrix];
-#endif
-    for (int i = 0; i < _nMatrix; i++) {
-      _matrix[i] = matrixHolders[i]->getMatrix();
-      if (_matrix[i] == NULL){
-        ILogger::instance()->logError("Modelview multiplication failure");
-      }
-    }
-  }
+ class ModelviewMatrixHolder{
+ const Matrix44D** _matrix;
+ const Matrix44DHolder** _matrixHolders;
+ int _nMatrix;
+ mutable Matrix44D* _modelview;
+ public:
+ ModelviewMatrixHolder(const Matrix44DHolder* matrixHolders[], int nMatrix):
+ _matrixHolders(matrixHolders),
+ _nMatrix(nMatrix),
+ _modelview(NULL)
+ {
+ #ifdef C_CODE
+ _matrix = new const Matrix44D*[nMatrix];
+ #endif
+ #ifdef JAVA_CODE
+ _matrix = new Matrix44D[nMatrix];
+ #endif
+ for (int i = 0; i < _nMatrix; i++) {
+ _matrix[i] = matrixHolders[i]->getMatrix();
+ if (_matrix[i] == NULL){
+ ILogger::instance()->logError("Modelview multiplication failure");
+ }
+ }
+ }
 
-  ~ModelviewMatrixHolder(){
-#ifdef C_CODE
-    delete[] _matrix;
-    delete[] _matrixHolders;
-#endif
-    if (_modelview != NULL){
-      _modelview->_release();
-    }
-  }
+ ~ModelviewMatrixHolder(){
+ #ifdef C_CODE
+ delete[] _matrix;
+ delete[] _matrixHolders;
+ #endif
+ if (_modelview != NULL){
+ _modelview->_release();
+ }
+ }
 
-  Matrix44D* getModelview() const {
+ Matrix44D* getModelview() const {
 
-    if (_modelview != NULL){
-      for (int i = 0; i < _nMatrix; i++) {
-        const Matrix44D* m = _matrixHolders[i]->getMatrix();
-        if (m == NULL){
-          ILogger::instance()->logError("Modelview multiplication failure");
-        }
+ if (_modelview != NULL){
+ for (int i = 0; i < _nMatrix; i++) {
+ const Matrix44D* m = _matrixHolders[i]->getMatrix();
+ if (m == NULL){
+ ILogger::instance()->logError("Modelview multiplication failure");
+ }
 
-        if (_matrix[i] != m){
+ if (_matrix[i] != m){
 
-          //If one matrix differs we have to raplace all matrixes on Holders and recalculate modelview
-          _modelview->_release();//NEW MODELVIEW NEEDED
-          _modelview = NULL;
+ //If one matrix differs we have to raplace all matrixes on Holders and recalculate modelview
+ _modelview->_release();//NEW MODELVIEW NEEDED
+ _modelview = NULL;
 
-          for (int j = 0; j < _nMatrix; j++) {
-            _matrix[j] = _matrixHolders[j]->getMatrix();
-          }
-          break;
-        }
-      }
-    }
+ for (int j = 0; j < _nMatrix; j++) {
+ _matrix[j] = _matrixHolders[j]->getMatrix();
+ }
+ break;
+ }
+ }
+ }
 
 
-    if (_modelview == NULL){
-      _modelview = new Matrix44D(*_matrix[0]);
-      for (int i = 1; i < _nMatrix; i++){
-        const Matrix44D* m2 = _matrix[i];
-        Matrix44D* m3 = _modelview->createMultiplication(*m2);
-        _modelview->_release();
-        _modelview = m3;
-      }
-    }
-    return _modelview;
-  }
-  
-};
+ if (_modelview == NULL){
+ _modelview = new Matrix44D(*_matrix[0]);
+ for (int i = 1; i < _nMatrix; i++){
+ const Matrix44D* m2 = _matrix[i];
+ Matrix44D* m3 = _modelview->createMultiplication(*m2);
+ _modelview->_release();
+ _modelview = m3;
+ }
+ }
+ return _modelview;
+ }
 
-/////////////////////
+ };
 
-class GPUUniformValueModelview:public GPUUniformValue{
-protected:
-  mutable Matrix44D* _lastModelSet;
-#ifdef C_CODE
-  const ModelviewMatrixHolder _holder;
-#endif
-#ifdef JAVA_CODE
-  protected ModelviewMatrixHolder _holder = null;
-#endif
-public:
-#ifdef C_CODE
-  GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):
-  GPUUniformValue(GLType::glMatrix4Float()),
-  _holder(matrixHolders, nMatrix),
-  _lastModelSet(NULL)
-  {
-  }
-#endif
-#ifdef JAVA_CODE
-  public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
-  {
-    super(GLType.glMatrix4Float());
-    _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
-  }
-#endif
-  ~GPUUniformValueModelview(){
-  }
+ /////////////////////
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
-    _lastModelSet = _holder.getModelview();
+ class GPUUniformValueModelview:public GPUUniformValue{
+ protected:
+ <<<<<<< HEAD
+ mutable Matrix44D* _lastModelSet;
+ =======
+ mutable Matrix44D* _lastMatrix;
+ >>>>>>> glfeature
+ #ifdef C_CODE
+ const ModelviewMatrixHolder _holder;
+ #endif
+ #ifdef JAVA_CODE
+ protected ModelviewMatrixHolder _holder = null;
+ #endif
+ public:
+ #ifdef C_CODE
+ GPUUniformValueModelview(const Matrix44DHolder* matrixHolders[], int nMatrix):
+ GPUUniformValue(GLType::glMatrix4Float()),
+ _holder(matrixHolders, nMatrix),
+ <<<<<<< HEAD
+ _lastModelSet(NULL)
+ =======
+ _lastMatrix(NULL)
+ >>>>>>> glfeature
+ {
+ }
+ #endif
+ #ifdef JAVA_CODE
+ public GPUUniformValueModelview(Matrix44DHolder[] matrixHolders, int nMatrix)
+ {
+ super(GLType.glMatrix4Float());
+ _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
+ }
+ #endif
+ ~GPUUniformValueModelview(){
+ }
 
-    gl->uniformMatrix4fv(id, false, _holder.getModelview());
-  }
+ void setUniform(GL* gl, const IGLUniformID* id) const{
+ <<<<<<< HEAD
+ _lastModelSet = _holder.getModelview();
 
-  bool isEqualsTo(const GPUUniformValue* v) const{
-    if (_lastModelSet == ((GPUUniformValueModelview *)v)->_holder.getModelview()){
-      return true;
-    }
+ gl->uniformMatrix4fv(id, false, _holder.getModelview());
+ }
 
-    return false;
-  }
+ bool isEqualsTo(const GPUUniformValue* v) const{
+ if (_lastModelSet == ((GPUUniformValueModelview *)v)->_holder.getModelview()){
+ return true;
+ }
 
-  std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->addString("Uniform Value Matrix44D.");
-    std::string s = isb->getString();
-    delete isb;
-    return s;
-  }
+ return false;
+ =======
+ _lastMatrix = _holder.getModelview();
+ gl->uniformMatrix4fv(id, false, _lastMatrix);
+ }
 
-//  const Matrix44D* getMatrix() const { return _m;}
-};
-*/
+ bool isEqualsTo(const GPUUniformValue* v) const{
+ return (_lastMatrix == ((GPUUniformValueModelview *)v)->_holder.getModelview());
+ >>>>>>> glfeature
+ }
+
+ std::string description() const{
+ IStringBuilder *isb = IStringBuilder::newStringBuilder();
+ isb->addString("Uniform Value Matrix44D.");
+ std::string s = isb->getString();
+ delete isb;
+ return s;
+ }
+
+ //  const Matrix44D* getMatrix() const { return _m;}
+ };
+ */
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
 protected:
@@ -432,7 +447,7 @@ public:
   }
 #endif
 #ifdef JAVA_CODE
-  
+
 #endif
 
 #ifdef C_CODE

@@ -123,11 +123,11 @@ public:
   
   void deleteTexture(const IGLTextureId* textureId);
 
-  void getViewport(int v[]) {
-//    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-    _nativeGL->getIntegerv(GLVariable::viewport(), v);
-  }
-  
+//  void getViewport(int v[]) {
+////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
+//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+//  }
+
   ~GL() {
 #ifdef C_CODE
     delete _nativeGL;
