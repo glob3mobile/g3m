@@ -39,7 +39,9 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
   private IFloatBuffer createVertices(Planet planet)
   {
     //Vertices with Center in zero
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, Vector3D.zero);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), planet, Vector3D::zero);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, Vector3D.zero);
+  
     final double lonRes1 = (double)(_lonRes-1);
     final double latRes1 = (double)(_latRes-1);
     for(double i = 0.0; i < _lonRes; i++)

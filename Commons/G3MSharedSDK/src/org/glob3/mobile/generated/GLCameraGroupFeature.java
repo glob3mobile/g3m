@@ -1,8 +1,7 @@
 package org.glob3.mobile.generated; 
-///////////////////////////////////////////////////////////////////////////////////////////
-
 public class GLCameraGroupFeature extends GLFeature
 {
+  protected final GLCameraGroupFeatureType _type;
   private Matrix44DHolder _matrixHolder = null;
   public GLCameraGroupFeature(Matrix44D matrix)
   {
@@ -11,6 +10,7 @@ public class GLCameraGroupFeature extends GLFeature
   }
   public void dispose()
   {
+    _matrixHolder._release();
   }
   public final Matrix44D getMatrix()
   {
@@ -26,5 +26,10 @@ public class GLCameraGroupFeature extends GLFeature
   }
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
+  }
+
+  public final GLCameraGroupFeatureType getType()
+  {
+     return _type;
   }
 }

@@ -9,7 +9,7 @@ public class TextureGLFeature extends GLColorGroupFeature
      _texID = texID;
   //  _globalState->bindTexture(texID);
   
-    GPUAttributeValueVec4Float value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
+    GPUAttributeValueVec2Float value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS, value, false);
   
     if (coordsTransformed)

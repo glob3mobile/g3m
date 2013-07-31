@@ -57,7 +57,8 @@ public abstract class BusyQuadRenderer extends LeafRenderer
   
     final double halfWidth = _size._x / 2;
     final double hadfHeight = _size._y / 2;
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(-halfWidth, +hadfHeight, 0);
     vertices.add(-halfWidth, -hadfHeight, 0);
     vertices.add(+halfWidth, +hadfHeight, 0);

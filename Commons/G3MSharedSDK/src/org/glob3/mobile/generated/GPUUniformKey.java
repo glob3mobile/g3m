@@ -11,7 +11,10 @@ public enum GPUUniformKey
   POINT_SIZE(6),
   AMBIENT_LIGHT(7),
   LIGHT_DIRECTION(8),
-  LIGHT_COLOR(9);
+  LIGHT_COLOR(9),
+  PROJECTION(10),
+  CAMERA_MODEL(11),
+  MODEL(12);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

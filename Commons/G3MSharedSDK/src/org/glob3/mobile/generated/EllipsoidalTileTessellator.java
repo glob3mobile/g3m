@@ -23,20 +23,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 {
   private final boolean _skirted;
 
-  private static class OrderableVector2I extends Vector2I
-  {
-    public OrderableVector2I(Vector2I v)
-    {
-       super(v);
-    }
-//C++ TO JAVA CONVERTER TODO TASK: Operators cannot be overloaded in Java:
-    boolean operator <(Vector2I that)
-    {
-      return _x < that._x;
-    }
-  }
-
-  private java.util.HashMap<OrderableVector2I, IShortBuffer> _indicesMap = new java.util.HashMap<OrderableVector2I, IShortBuffer>(); //Resolution vs Indices
+  private java.util.HashMap<Vector2I, IShortBuffer> _indicesMap = new java.util.HashMap<Vector2I, IShortBuffer>();
 
   private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
   {
@@ -81,9 +68,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
     // create skirts
     if (_skirted)
     {
-      // compute skirt height
-      final Vector3D sw = planet.toCartesian(sector.getSW());
-      final Vector3D nw = planet.toCartesian(sector.getNW());
   
       int posS = tileResolution._x * tileResolution._y;
       indices.add((short)(posS-1));
@@ -126,16 +110,11 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   private IShortBuffer getTileIndices(Planet planet, Sector sector, Vector2I tileResolution)
   {
-    java.util.Iterator<OrderableVector2I, IShortBuffer> it = _indicesMap.indexOf(new OrderableVector2I(tileResolution));
-    if (it.hasNext())
-    {
-  //    printf("REUSING");
-      return it.next().getValue();
+    IShortBuffer indices = _indicesMap.get(tileResolution);
+    if (indices == null){
+      indices = createTileIndices(planet, sector, tileResolution);
+      _indicesMap.put(tileResolution, indices);
     }
-  
-    IShortBuffer indices = createTileIndices(planet, sector, tileResolution);
-    _indicesMap.put(tileResolution, indices);
-  
     return indices;
   
   }
@@ -149,10 +128,13 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public void dispose()
   {
-    for (java.util.Iterator<OrderableVector2I, IShortBuffer> it = _indicesMap.iterator(); it.hasNext();)
-    {
-      it.next().getValue() = null;
+    java.util.Iterator it = _indicesMap.entrySet().iterator();
+    while (it.hasNext()) {
+      java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+      IShortBuffer b =  pairs.getValue();
+      b.dispose();
     }
+  
   }
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
@@ -168,7 +150,10 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector2I tileResolution = calculateResolution(rawResolution, sector);
   
     double minElevation = 0;
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+  //                                          planet,
+  //                                          sector._center);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
   
     final IMathUtils mu = IMathUtils.instance();
   
@@ -266,7 +251,11 @@ public class EllipsoidalTileTessellator extends TileTessellator
     final Vector3D nw = planet.toCartesian(sector.getNW());
     final double offset = nw.sub(sw).length() * 1e-3;
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+  //                                          planet,
+  //                                          sector._center);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
+  
   
     ShortBufferBuilder indices = new ShortBufferBuilder();
   

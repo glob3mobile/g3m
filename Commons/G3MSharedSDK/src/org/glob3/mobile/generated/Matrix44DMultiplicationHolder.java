@@ -1,22 +1,21 @@
 package org.glob3.mobile.generated; 
-/////////////////////
-
-public class ModelviewMatrixHolder
+public class Matrix44DMultiplicationHolder extends Matrix44DProvider
 {
-  private final Matrix44D[] _matrix;
-  private final Matrix44DHolder[] _matrixHolders;
+  private final Matrix44D[] _lastMatrixes;
+  private final Matrix44DProvider[] _providers;
   private int _nMatrix;
   private Matrix44D _modelview;
-  public ModelviewMatrixHolder(Matrix44DHolder[] matrixHolders, int nMatrix)
+  public Matrix44DMultiplicationHolder(Matrix44DProvider[] providers, int nMatrix)
   {
-     _matrixHolders = matrixHolders;
+     _providers = providers;
      _nMatrix = nMatrix;
      _modelview = null;
-    _matrix = new Matrix44D[nMatrix];
+    _lastMatrixes = new Matrix44D[nMatrix];
     for (int i = 0; i < _nMatrix; i++)
     {
-      _matrix[i] = matrixHolders[i].getMatrix();
-      if (_matrix[i] == null)
+      _lastMatrixes[i] = _providers[i].getMatrix();
+      _providers[i]._retain();
+      if (_lastMatrixes[i] == null)
       {
         ILogger.instance().logError("Modelview multiplication failure");
       }
@@ -29,22 +28,26 @@ public class ModelviewMatrixHolder
     {
       _modelview._release();
     }
+    for (int i = 0; i < _nMatrix; i++)
+    {
+      _providers[i]._release();
+    }
   }
 
-  public final Matrix44D getModelview()
+  public final Matrix44D getMatrix()
   {
 
     if (_modelview != null)
     {
       for (int i = 0; i < _nMatrix; i++)
       {
-        final Matrix44D m = _matrixHolders[i].getMatrix();
+        final Matrix44D m = _providers[i].getMatrix();
         if (m == null)
         {
           ILogger.instance().logError("Modelview multiplication failure");
         }
 
-        if (_matrix[i] != m)
+        if (_lastMatrixes[i] != m)
         {
 
           //If one matrix differs we have to raplace all matrixes on Holders and recalculate modelview
@@ -53,7 +56,7 @@ public class ModelviewMatrixHolder
 
           for (int j = 0; j < _nMatrix; j++)
           {
-            _matrix[j] = _matrixHolders[j].getMatrix();
+            _lastMatrixes[j] = _providers[j].getMatrix();
           }
           break;
         }
@@ -63,10 +66,10 @@ public class ModelviewMatrixHolder
 
     if (_modelview == null)
     {
-      _modelview = new Matrix44D(_matrix[0]);
+      _modelview = new Matrix44D(_lastMatrixes[0]);
       for (int i = 1; i < _nMatrix; i++)
       {
-        final Matrix44D m2 = _matrix[i];
+        final Matrix44D m2 = _lastMatrixes[i];
         Matrix44D m3 = _modelview.createMultiplication(m2);
         _modelview._release();
         _modelview = m3;

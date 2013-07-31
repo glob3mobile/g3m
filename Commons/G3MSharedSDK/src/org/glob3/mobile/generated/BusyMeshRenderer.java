@@ -85,7 +85,9 @@ public class BusyMeshRenderer extends LeafRenderer
   {
     int numStrides = 60;
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   

@@ -27,7 +27,8 @@ public class CircleShape extends AbstractMeshShape
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero);
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
     // first is the center
     vertices.add(0.0, 0.0, 0.0);

@@ -3,6 +3,6 @@ public class ModelTransformGLFeature extends GLCameraGroupFeature
 {
   public ModelTransformGLFeature(Matrix44D transform)
   {
-     super(transform);
+     super(transform, GLCameraGroupFeatureType.F_MODEL_TRANSFORM);
   }
 }

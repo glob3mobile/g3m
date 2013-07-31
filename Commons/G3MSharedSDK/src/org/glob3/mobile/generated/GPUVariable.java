@@ -60,6 +60,21 @@ public class GPUVariable
       return GPUUniformKey.LIGHT_COLOR;
     }
   
+    if (name.compareTo("uProjection") == 0)
+    {
+      return GPUUniformKey.PROJECTION;
+    }
+  
+    if (name.compareTo("uCameraModel") == 0)
+    {
+      return GPUUniformKey.CAMERA_MODEL;
+    }
+  
+    if (name.compareTo("uModel") == 0)
+    {
+      return GPUUniformKey.MODEL;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
