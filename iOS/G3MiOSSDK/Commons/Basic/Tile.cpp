@@ -841,13 +841,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   if ((_lastElevationDataProvider != NULL) &&
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
-//    ElevationData* subView = _lastElevationDataProvider->createSubviewOfElevationData(ed,
-//                                                                                      getSector(),
-//                                                                                      Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
-//    return subView;
-
     return new DecimatedSubviewElevationData(ed,
-                                             //bool ownsElevationData,
                                              getSector(),
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
