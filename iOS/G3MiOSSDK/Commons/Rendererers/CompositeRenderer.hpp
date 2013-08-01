@@ -67,7 +67,7 @@ public:
 
   void onDestroy(const G3MContext* context);
 
-  const PlanetRenderer* asPlanetRenderer() const;
+  PlanetRenderer* asPlanetRenderer();
 
 };
 

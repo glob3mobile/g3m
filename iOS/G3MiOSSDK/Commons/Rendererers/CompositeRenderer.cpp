@@ -119,12 +119,12 @@ void CompositeRenderer::setEnable(bool enable) {
   _enable = enable;
 }
 
-const PlanetRenderer* CompositeRenderer::asPlanetRenderer() const {
-  const PlanetRenderer* result = NULL;
+PlanetRenderer* CompositeRenderer::asPlanetRenderer() {
+  PlanetRenderer* result = NULL;
 
   for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
-    const PlanetRenderer* childAsPlanetRenderer = renderer->asPlanetRenderer();
+    PlanetRenderer* childAsPlanetRenderer = renderer->asPlanetRenderer();
     if (result == NULL) {
       result = childAsPlanetRenderer;
     }

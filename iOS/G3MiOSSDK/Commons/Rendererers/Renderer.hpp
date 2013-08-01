@@ -64,7 +64,7 @@ public:
     return false;
   }
 
-  virtual const PlanetRenderer* asPlanetRenderer() const = 0;
+  virtual PlanetRenderer* asPlanetRenderer() = 0;
 
 };
 

@@ -464,7 +464,7 @@ public:
     return true;
   }
 
-  const PlanetRenderer* asPlanetRenderer() const {
+  PlanetRenderer* asPlanetRenderer() {
     return this;
   }
 
