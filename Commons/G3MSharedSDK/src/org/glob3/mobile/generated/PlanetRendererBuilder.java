@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TileRendererBuilder.cpp
+//  PlanetRendererBuilder.cpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 22/11/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TileRendererBuilder.hpp
+//  PlanetRendererBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 22/11/12.
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class TileRendererBuilder
+public class PlanetRendererBuilder
 {
 
   private TileTessellator _tileTessellator;
@@ -99,7 +99,7 @@ public class TileRendererBuilder
   {
     if (_parameters == null)
     {
-      _parameters = createTileRendererParameters();
+      _parameters = createPlanetRendererParameters();
     }
   
     return _parameters;
@@ -168,10 +168,10 @@ public class TileRendererBuilder
   }
 
   /**
-    * Returns the array of stabilization milliseconds related to visible-sector listeners.
-    *
-    * @return _stabilizationMilliSeconds: std::vector<long long>
-    */
+   * Returns the array of stabilization milliseconds related to visible-sector listeners.
+   *
+   * @return _stabilizationMilliSeconds: std::vector<long long>
+   */
   private java.util.ArrayList<Long> getStabilizationMilliSeconds()
   {
     if (_stabilizationMilliSeconds == null)
@@ -195,7 +195,7 @@ public class TileRendererBuilder
   {
     return LayerBuilder.createDefaultSatelliteImagery();
   }
-  private TilesRenderParameters createTileRendererParameters()
+  private TilesRenderParameters createPlanetRendererParameters()
   {
     int __TODO_MakeConfigurable_renderIncompletePlanet;
     final boolean renderIncompletePlanet = false;
@@ -220,7 +220,7 @@ public class TileRendererBuilder
     return _verticalExaggeration;
   }
 
-  public TileRendererBuilder()
+  public PlanetRendererBuilder()
   {
     _showStatistics = false;
     _renderDebug = false;
@@ -255,13 +255,13 @@ public class TileRendererBuilder
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
   }
-  public final TileRenderer create()
+  public final PlanetRenderer create()
   {
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
-      tileRenderer.addVisibleSectorListener(getVisibleSectorListeners().get(i), TimeInterval.fromMilliseconds(getStabilizationMilliSeconds().get(i)));
+      planetRenderer.addVisibleSectorListener(getVisibleSectorListeners().get(i), TimeInterval.fromMilliseconds(getStabilizationMilliSeconds().get(i)));
     }
   
     _parameters = null;
@@ -276,7 +276,7 @@ public class TileRendererBuilder
   
     _elevationDataProvider = null;
   
-    return tileRenderer;
+    return planetRenderer;
   }
   public final void setTileTessellator(TileTessellator tileTessellator)
   {
@@ -314,7 +314,7 @@ public class TileRendererBuilder
     }
     _layerSet = layerSet;
   }
-  public final void setTileRendererParameters(TilesRenderParameters parameters)
+  public final void setPlanetRendererParameters(TilesRenderParameters parameters)
   {
     if (_parameters != null)
     {

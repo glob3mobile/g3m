@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TileRenderer.cpp
+//  PlanetRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TileRenderer.h
+//  PlanetRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
@@ -30,7 +30,7 @@ package org.glob3.mobile.generated;
 
 //class TileRasterizer;
 
-public class TileRenderContext
+public class PlanetRendererContext
 {
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -49,7 +49,7 @@ public class TileRenderContext
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   private long _texturePriority;
-  public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
+  public PlanetRendererContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;

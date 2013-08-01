@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class GL;
 //class G3MWidget;
-//class TileRenderer;
+//class PlanetRenderer;
 //class IStorage;
 //class IDownloader;
 //class IThreadUtils;

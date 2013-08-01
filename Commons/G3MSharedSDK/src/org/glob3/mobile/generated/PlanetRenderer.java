@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TileRenderer extends LeafRenderer implements ChangedListener
+public class PlanetRenderer extends LeafRenderer implements ChangedListener
 {
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -208,12 +208,12 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
+        PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
           Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, trc);
+          tile.prepareForFullRendering(rc, prc);
         }
       }
   
@@ -313,7 +313,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   }
 
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -397,10 +397,10 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   
     updateGLState(rc);
   
-  //  if (_recreateTilesPending) {
-  //    recreateTiles();
-  //    _recreateTilesPending = false;
-  //  }
+    //  if (_recreateTilesPending) {
+    //    recreateTiles();
+    //    _recreateTilesPending = false;
+    //  }
   
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {
@@ -413,7 +413,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
+    PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -431,7 +431,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, trc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+        tile.render(rc, prc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
       }
     }
     else
@@ -450,7 +450,7 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
         {
           Tile tile = iter.next();
   
-          tile.render(rc, trc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
+          tile.render(rc, prc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates);
         }
   
         toVisit = toVisitInNextIteration;
@@ -646,9 +646,9 @@ public class TileRenderer extends LeafRenderer implements ChangedListener
   }
 
   /**
-   * @see Renderer#isTileRenderer()
+   * @see Renderer#isPlanetRenderer()
    */
-  public final boolean isTileRenderer()
+  public final boolean isPlanetRenderer()
   {
     return true;
   }

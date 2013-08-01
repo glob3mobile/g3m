@@ -27,7 +27,7 @@ public abstract class G3MCBuilder
   private boolean _isSceneTubeOpen;
 
   private LayerSet _layerSet;
-  private TileRenderer createTileRenderer()
+  private PlanetRenderer createPlanetRenderer()
   {
     final TileTessellator tessellator = new EllipsoidalTileTessellator(true);
   
@@ -48,7 +48,7 @@ public abstract class G3MCBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority);
+    return new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority);
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
@@ -389,8 +389,8 @@ public abstract class G3MCBuilder
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
   
-    TileRenderer tileRenderer = createTileRenderer();
-    mainRenderer.addRenderer(tileRenderer);
+    PlanetRenderer planetRenderer = createPlanetRenderer();
+    mainRenderer.addRenderer(planetRenderer);
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
