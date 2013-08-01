@@ -180,12 +180,12 @@ public class CompositeRenderer extends Renderer
 
   public final PlanetRenderer asPlanetRenderer()
   {
-    final PlanetRenderer result = null;
+    PlanetRenderer result = null;
   
     for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i);
-      final PlanetRenderer childAsPlanetRenderer = renderer.asPlanetRenderer();
+      PlanetRenderer childAsPlanetRenderer = renderer.asPlanetRenderer();
       if (result == null)
       {
         result = childAsPlanetRenderer;
