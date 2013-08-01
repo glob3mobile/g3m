@@ -10,19 +10,12 @@ public class LeveledTexturedMesh extends Mesh
   private final int _levelsCount;
 
   private int _currentLevel;
-  private boolean _currentLevelIsValid;
 
   private LazyTextureMapping getCurrentTextureMapping()
   {
-    if (_mappings == null)
+    if (_currentLevel < 0)
     {
-      return null;
-    }
-  
-    if (!_currentLevelIsValid)
-    {
-  
-      int newCurrentLevel = 0;
+      int newCurrentLevel = -1;
   
       for (int i = 0; i < _levelsCount; i++)
       {
@@ -33,41 +26,34 @@ public class LeveledTexturedMesh extends Mesh
           {
             //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
             newCurrentLevel = i;
-            _currentLevelIsValid = true;
             break;
           }
         }
       }
   
-      if (newCurrentLevel != _currentLevel)
+      if (newCurrentLevel >= 0)
       {
         _currentLevel = newCurrentLevel;
-        //MESH SHOULD BE NOTIFIED TO CHANGE STATE FROM TILE
   
-        if (_currentLevelIsValid)
+        _mappings.get(_currentLevel).modifyGLState(_glState);
+  
+        for (int i = _currentLevel+1; i < _levelsCount; i++)
         {
-          for (int i = _currentLevel+1; i < _levelsCount; i++)
+          LazyTextureMapping mapping = _mappings.get(i);
+          if (mapping != null)
           {
-            LazyTextureMapping mapping = _mappings.get(i);
+            _mappings.get(i).dispose();
             if (mapping != null)
-            {
-              _mappings.get(i).dispose();
-              if (mapping != null)
-                 mapping.dispose();
-              _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-            }
+               mapping.dispose();
           }
         }
       }
-  
-  
     }
   
-    return _currentLevelIsValid ? _mappings.get(_currentLevel) : null;
+    return (_currentLevel >= 0) ? _mappings.get(_currentLevel) : null;
   }
 
   private GLState _glState = new GLState();
-  private LazyTextureMapping _mappingOnGLState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
@@ -75,9 +61,7 @@ public class LeveledTexturedMesh extends Mesh
      _ownedMesh = ownedMesh;
      _mappings = mappings;
      _levelsCount = mappings.size();
-     _currentLevel = mappings.size() + 1;
-     _currentLevelIsValid = false;
-     _mappingOnGLState = null;
+     _currentLevel = -1;
     if (_mappings.size() <= 0)
     {
       ILogger.instance().logError("LOGIC ERROR\n");
@@ -127,17 +111,16 @@ public class LeveledTexturedMesh extends Mesh
 
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
-    if (_mappings.size() <= 0)
+    if (_mappings.size() > 0)
     {
-      return false;
-    }
-    if (glTextureId != null)
-    {
-      if (!_currentLevelIsValid || (level < _currentLevel))
+      if (glTextureId != null)
       {
-        _mappings.get(level).setGLTextureId(glTextureId);
-        _currentLevelIsValid = false;
-        return true;
+        if ((_currentLevel < 0) || (level < _currentLevel))
+        {
+          _mappings.get(level).setGLTextureId(glTextureId);
+          _currentLevel = -1;
+          return true;
+        }
       }
     }
   
@@ -167,35 +150,22 @@ public class LeveledTexturedMesh extends Mesh
   
     LazyTextureMapping mapping = getCurrentTextureMapping();
   
-    if (mapping == null)
-    {
-      return false;
-    }
-  
-    return mapping.isTransparent();
+    return (mapping == null) ? false : mapping.isTransparent();
   }
 
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
-  
     LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping != null)
+    if (mapping == null)
     {
-      if (mapping != _mappingOnGLState)
-      {
-        _mappingOnGLState = mapping;
-        mapping.modifyGLState(_glState);
-      }
-  
-      _glState.setParent(parentGLState);
-      _mesh.render(rc, _glState);
+      ILogger.instance().logError("No Texture Mapping");
+      _mesh.render(rc, parentGLState);
     }
     else
     {
-      ILogger.instance().logError("No Texture Mapping");
+      _glState.setParent(parentGLState);
+      _mesh.render(rc, _glState);
     }
-  
-  
   }
 
 }
