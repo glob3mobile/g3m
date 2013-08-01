@@ -49,7 +49,7 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                          const URL& tubesURL,
                          bool useWebSockets,
                          const std::string& sceneId,
-                         G3MCSceneChangeListener* sceneListener) :
+                         MapBooSceneChangeListener* sceneListener) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),

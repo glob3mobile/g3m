@@ -254,7 +254,7 @@ public:
 
 - (void) initWithMapBooBuilder
 {
-  G3MCSceneChangeListener* sceneListener = NULL;
+  MapBooSceneChangeListener* sceneListener = NULL;
   const bool useWebSockets = true;
 
   _g3mcBuilder =  new MapBooBuilder_iOS([self G3MWidget],

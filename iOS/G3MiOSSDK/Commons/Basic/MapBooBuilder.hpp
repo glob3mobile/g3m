@@ -45,9 +45,9 @@ class IWebSocket;
 #include <string>
 
 
-class G3MCSceneChangeListener {
+class MapBooSceneChangeListener {
 public:
-  virtual ~G3MCSceneChangeListener() {
+  virtual ~MapBooSceneChangeListener() {
 
   }
 
@@ -95,7 +95,7 @@ private:
 
   const bool _useWebSockets;
 
-  G3MCSceneChangeListener* _sceneListener;
+  MapBooSceneChangeListener* _sceneListener;
 
   std::string _sceneId;
   int         _sceneTimestamp;
@@ -170,7 +170,7 @@ protected:
               const URL& tubesURL,
               bool useWebSockets,
               const std::string& sceneId,
-              G3MCSceneChangeListener* sceneListener);
+              MapBooSceneChangeListener* sceneListener);
   
   virtual ~MapBooBuilder() {
   }

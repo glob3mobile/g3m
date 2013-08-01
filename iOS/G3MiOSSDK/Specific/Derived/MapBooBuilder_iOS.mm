@@ -18,7 +18,7 @@ MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                  const URL& tubesURL,
                                  bool useWebSockets,
                                  const std::string& sceneId,
-                                 G3MCSceneChangeListener* sceneListener) :
+                                 MapBooSceneChangeListener* sceneListener) :
 MapBooBuilder(serverURL, tubesURL, useWebSockets, sceneId, sceneListener),
 _nativeWidget(nativeWidget)
 {

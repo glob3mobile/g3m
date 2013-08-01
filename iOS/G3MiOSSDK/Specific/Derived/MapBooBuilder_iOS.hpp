@@ -36,7 +36,7 @@ public:
                   const URL& tubesURL,
                   bool useWebSockets,
                   const std::string& sceneId,
-                  G3MCSceneChangeListener* sceneListener);
+                  MapBooSceneChangeListener* sceneListener);
 
   void initializeWidget();
   
