@@ -1,13 +1,13 @@
 //
-//  TileRenderer.h
+//  PlanetRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TileRenderer_h
-#define G3MiOSSDK_TileRenderer_h
+#ifndef G3MiOSSDK_PlanetRenderer_h
+#define G3MiOSSDK_PlanetRenderer_h
 
 class Tile;
 class TileTessellator;
@@ -31,7 +31,7 @@ class EllipsoidShape;
 
 class TileRasterizer;
 
-class TileRenderContext {
+class PlanetRendererContext {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -51,7 +51,7 @@ private:
   
   long long _texturePriority;
 public:
-  TileRenderContext(const TileTessellator*       tessellator,
+  PlanetRendererContext(const TileTessellator*       tessellator,
                     ElevationDataProvider*       elevationDataProvider,
                     TileTexturizer*              texturizer,
                     TileRasterizer*              tileRasterizer,
@@ -223,7 +223,7 @@ public:
     }
   }
 
-  void computeTileRendered(Tile* tile) {
+  void computePlanetRenderered(Tile* tile) {
     _tilesRendered++;
 
     const int level = tile->getLevel();
@@ -290,7 +290,7 @@ public:
 };
 
 
-class TileRenderer: public LeafRenderer, ChangedListener {
+class PlanetRenderer: public LeafRenderer, ChangedListener {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -351,7 +351,7 @@ private:
 
 
 public:
-  TileRenderer(const TileTessellator* tessellator,
+  PlanetRenderer(const TileTessellator* tessellator,
                ElevationDataProvider* elevationDataProvider,
                float verticalExaggeration,
                TileTexturizer*  texturizer,
@@ -361,7 +361,7 @@ public:
                bool showStatistics,
                long long texturePriority);
 
-  ~TileRenderer();
+  ~PlanetRenderer();
 
   void initialize(const G3MContext* context);
 
@@ -458,9 +458,9 @@ public:
   }
   
   /**
-   * @see Renderer#isTileRenderer()
+   * @see Renderer#isPlanetRenderer()
    */
-  bool isTileRenderer() {
+  bool isPlanetRenderer() {
     return true;
   }
 };

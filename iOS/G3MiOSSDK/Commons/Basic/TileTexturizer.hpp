@@ -15,7 +15,7 @@ class Tile;
 class TileTessellator;
 class G3MContext;
 class TilesRenderParameters;
-class TileRenderContext;
+class PlanetRendererContext;
 class Geodetic3D;
 class LayerSet;
 
@@ -33,7 +33,7 @@ public:
                           const TilesRenderParameters* parameters) = 0;
 
   virtual Mesh* texturize(const G3MRenderContext* rc,
-                          const TileRenderContext* trc,
+                          const PlanetRendererContext* prc,
                           Tile* tile,
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;

@@ -21,7 +21,7 @@ class Color;
 class GInitializationTask;
 class PeriodicalTask;
 class G3MWidget;
-class TileRendererBuilder;
+class PlanetRendererBuilder;
 class Planet;
 class Renderer;
 class WidgetUserData;
@@ -39,7 +39,7 @@ private:
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer* _cameraRenderer;
   Color* _backgroundColor;
-  TileRendererBuilder* _tileRendererBuilder;
+  PlanetRendererBuilder* _planetRendererBuilder;
   Renderer* _busyRenderer;
   std::vector<Renderer*>* _renderers;
   GInitializationTask* _initializationTask;
@@ -75,7 +75,7 @@ private:
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
   
-  bool containsTileRenderer(std::vector<Renderer*> renderers);
+  bool containsPlanetRenderer(std::vector<Renderer*> renderers);
   
 protected:
   IStorage* _storage;
@@ -125,7 +125,7 @@ public:
 #endif
   
   const Planet* getPlanet();
-  TileRendererBuilder* getTileRendererBuilder();
+  PlanetRendererBuilder* getPlanetRendererBuilder();
   
   void addGPUProgramSources(GPUProgramSources& s);
 };

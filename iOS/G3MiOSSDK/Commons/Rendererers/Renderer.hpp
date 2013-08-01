@@ -55,11 +55,11 @@ public:
   virtual void onDestroy(const G3MContext* context) = 0;
   
   /**
-   * Allows us to know if the renderer is a TileRenderer.
-   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of TileRenderer.
+   * Allows us to know if the renderer is a PlanetRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  virtual bool isTileRenderer() {
+  virtual bool isPlanetRenderer() {
     return false;
   }
 

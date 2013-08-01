@@ -13,7 +13,7 @@
 
 class GL;
 class G3MWidget;
-class TileRenderer;
+class PlanetRenderer;
 class IStorage;
 class IDownloader;
 class IThreadUtils;
@@ -115,7 +115,7 @@ private:
   bool        _isSceneTubeOpen;
 
   LayerSet* _layerSet;
-  TileRenderer* createTileRenderer();
+  PlanetRenderer* createPlanetRenderer();
 
   std::vector<ICameraConstrainer*>* createCameraConstraints();
   

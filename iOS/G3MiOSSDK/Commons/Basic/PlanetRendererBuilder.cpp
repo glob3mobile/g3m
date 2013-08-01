@@ -1,12 +1,12 @@
 //
-//  TileRendererBuilder.cpp
+//  PlanetRendererBuilder.cpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //
 //
 
-#include "TileRendererBuilder.hpp"
+#include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
@@ -16,7 +16,7 @@
 #include "TileRasterizer.hpp"
 
 
-TileRendererBuilder::TileRendererBuilder() {  
+PlanetRendererBuilder::PlanetRendererBuilder() {
   _showStatistics = false;
   _renderDebug = false;
   _useTilesSplitBudget = true;
@@ -36,7 +36,7 @@ TileRendererBuilder::TileRendererBuilder() {
   _verticalExaggeration = 0.0f;
 }
 
-TileRendererBuilder::~TileRendererBuilder() {
+PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _parameters;
   delete _layerSet;
   delete _texturizer;
@@ -50,15 +50,15 @@ TileRendererBuilder::~TileRendererBuilder() {
  *
  * @return _tileTessellator: TileTessellator*
  */
-TileTessellator* TileRendererBuilder::getTileTessellator() {
+TileTessellator* PlanetRendererBuilder::getTileTessellator() {
   if (!_tileTessellator) {
     _tileTessellator = createTileTessellator();
   }
-  
+
   return _tileTessellator;
 }
 
-TileRasterizer* TileRendererBuilder::getTileRasterizer() {
+TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
   return _tileRasterizer;
 }
 
@@ -67,11 +67,11 @@ TileRasterizer* TileRendererBuilder::getTileRasterizer() {
  *
  * @return _texturizer: TileTexturizer*
  */
-TileTexturizer* TileRendererBuilder::getTexturizer() {
+TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
     _texturizer = new MultiLayerTileTexturizer();
   }
-  
+
   return _texturizer;
 }
 
@@ -80,11 +80,11 @@ TileTexturizer* TileRendererBuilder::getTexturizer() {
  *
  * @return _layerSet: LayerSet*
  */
-LayerSet* TileRendererBuilder::getLayerSet() {
+LayerSet* PlanetRendererBuilder::getLayerSet() {
   if (!_layerSet) {
     _layerSet = createLayerSet();
   }
-  
+
   return _layerSet;
 }
 
@@ -93,11 +93,11 @@ LayerSet* TileRendererBuilder::getLayerSet() {
  *
  * @return _parameters: TilesRenderParameters*
  */
-TilesRenderParameters* TileRendererBuilder::getParameters() {
+TilesRenderParameters* PlanetRendererBuilder::getParameters() {
   if (!_parameters) {
-    _parameters = createTileRendererParameters();
+    _parameters = createPlanetRendererParameters();
   }
-  
+
   return _parameters;
 }
 
@@ -106,7 +106,7 @@ TilesRenderParameters* TileRendererBuilder::getParameters() {
  *
  * @return _showStatistics: bool
  */
-bool TileRendererBuilder::getShowStatistics() {
+bool PlanetRendererBuilder::getShowStatistics() {
   return _showStatistics;
 }
 
@@ -115,7 +115,7 @@ bool TileRendererBuilder::getShowStatistics() {
  *
  * @return _renderDebug: bool
  */
-bool TileRendererBuilder::getRenderDebug() {
+bool PlanetRendererBuilder::getRenderDebug() {
   return _renderDebug;
 }
 
@@ -124,7 +124,7 @@ bool TileRendererBuilder::getRenderDebug() {
  *
  * @return _useTilesSplitBudget: bool
  */
-bool TileRendererBuilder::getUseTilesSplitBudget() {
+bool PlanetRendererBuilder::getUseTilesSplitBudget() {
   return _useTilesSplitBudget;
 }
 
@@ -133,7 +133,7 @@ bool TileRendererBuilder::getUseTilesSplitBudget() {
  *
  * @return _forceFirstLevelTilesRenderOnStart: bool
  */
-bool TileRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
+bool PlanetRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
   return _forceFirstLevelTilesRenderOnStart;
 }
 
@@ -142,14 +142,14 @@ bool TileRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
  *
  * @return _incrementalTileQuality: bool
  */
-bool TileRendererBuilder::getIncrementalTileQuality() {
+bool PlanetRendererBuilder::getIncrementalTileQuality() {
   return _incrementalTileQuality;
 }
 
 /**
  * Returns the array of visibleSectorListeners.
  */
-std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListeners() {
+std::vector<VisibleSectorListener*>* PlanetRendererBuilder::getVisibleSectorListeners() {
   if (!_visibleSectorListeners) {
     _visibleSectorListeners = new std::vector<VisibleSectorListener*>;
   }
@@ -157,11 +157,11 @@ std::vector<VisibleSectorListener*>* TileRendererBuilder::getVisibleSectorListen
 }
 
 /**
-  * Returns the array of stabilization milliseconds related to visible-sector listeners.
-  *
-  * @return _stabilizationMilliSeconds: std::vector<long long>
-  */
-std::vector<long long>* TileRendererBuilder::getStabilizationMilliSeconds() {
+ * Returns the array of stabilization milliseconds related to visible-sector listeners.
+ *
+ * @return _stabilizationMilliSeconds: std::vector<long long>
+ */
+std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() {
   if (!_stabilizationMilliSeconds) {
     _stabilizationMilliSeconds = new std::vector<long long>;
   }
@@ -173,11 +173,11 @@ std::vector<long long>* TileRendererBuilder::getStabilizationMilliSeconds() {
  *
  * @return _texturePriority: long long
  */
-long long TileRendererBuilder::getTexturePriority() {
+long long PlanetRendererBuilder::getTexturePriority() {
   return _texturePriority;
 }
 
-void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
+void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   if (_tileTessellator) {
     ILogger::instance()->logError("LOGIC ERROR: _tileTessellator already initialized");
     return;
@@ -185,7 +185,7 @@ void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   _tileTessellator = tileTessellator;
 }
 
-void TileRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
+void PlanetRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
   if (_tileRasterizer) {
     ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer already initialized");
     return;
@@ -193,7 +193,7 @@ void TileRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
   _tileRasterizer = tileRasterizer;
 }
 
-void TileRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
+void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   if (_texturizer) {
     ILogger::instance()->logError("LOGIC ERROR: _texturizer already initialized");
     return;
@@ -201,7 +201,7 @@ void TileRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   _texturizer = tileTexturizer;
 }
 
-void TileRendererBuilder::setLayerSet(LayerSet *layerSet) {
+void PlanetRendererBuilder::setLayerSet(LayerSet *layerSet) {
   if (_layerSet) {
     ILogger::instance()->logError("LOGIC ERROR: _layerSet already initialized");
     return;
@@ -209,7 +209,7 @@ void TileRendererBuilder::setLayerSet(LayerSet *layerSet) {
   _layerSet = layerSet;
 }
 
-void TileRendererBuilder::setTileRendererParameters(TilesRenderParameters *parameters) {
+void PlanetRendererBuilder::setPlanetRendererParameters(TilesRenderParameters *parameters) {
   if (_parameters) {
     ILogger::instance()->logError("LOGIC ERROR: _parameters already initialized");
     return;
@@ -217,37 +217,37 @@ void TileRendererBuilder::setTileRendererParameters(TilesRenderParameters *param
   _parameters = parameters;
 }
 
-void TileRendererBuilder::setShowStatistics(const bool showStatistics) {
+void PlanetRendererBuilder::setShowStatistics(const bool showStatistics) {
   _showStatistics = showStatistics;
 }
 
-void TileRendererBuilder::setRenderDebug(const bool renderDebug) {
+void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
 }
 
-void TileRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
+void PlanetRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
-void TileRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
+void PlanetRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
   _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
 }
 
-void TileRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
+void PlanetRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
   _incrementalTileQuality = incrementalTileQuality;
 }
 
-void TileRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
-                                                   const TimeInterval& stabilizationInterval) {
+void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
+                                                     const TimeInterval& stabilizationInterval) {
   getVisibleSectorListeners()->push_back(listener);
   getStabilizationMilliSeconds()->push_back(stabilizationInterval.milliseconds());
 }
 
-void TileRendererBuilder::setTexturePriority(long long texturePriority) {
+void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
   _texturePriority = texturePriority;
 }
 
-void TileRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
+void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
   if (_elevationDataProvider != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _elevationDataProvider already initialized");
     return;
@@ -255,7 +255,7 @@ void TileRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevat
   _elevationDataProvider = elevationDataProvider;
 }
 
-void TileRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
+void PlanetRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
   if (_verticalExaggeration > 0.0f) {
     ILogger::instance()->logError("LOGIC ERROR: _verticalExaggeration already initialized");
     return;
@@ -263,11 +263,11 @@ void TileRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
   _verticalExaggeration = verticalExaggeration;
 }
 
-ElevationDataProvider* TileRendererBuilder::getElevationDataProvider() {
+ElevationDataProvider* PlanetRendererBuilder::getElevationDataProvider() {
   return _elevationDataProvider;
 }
 
-float TileRendererBuilder::getVerticalExaggeration() {
+float PlanetRendererBuilder::getVerticalExaggeration() {
   if (_verticalExaggeration <= 0.0f) {
     _verticalExaggeration = 1.0f;
   }
@@ -275,22 +275,22 @@ float TileRendererBuilder::getVerticalExaggeration() {
 }
 
 
-TileRenderer* TileRendererBuilder::create() {
-  TileRenderer* tileRenderer = new TileRenderer(getTileTessellator(),
-                                                getElevationDataProvider(),
-                                                getVerticalExaggeration(),
-                                                getTexturizer(),
-                                                getTileRasterizer(),
-                                                getLayerSet(),
-                                                getParameters(),
-                                                getShowStatistics(),
-                                                getTexturePriority());
-  
+PlanetRenderer* PlanetRendererBuilder::create() {
+  PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
+                                                      getElevationDataProvider(),
+                                                      getVerticalExaggeration(),
+                                                      getTexturizer(),
+                                                      getTileRasterizer(),
+                                                      getLayerSet(),
+                                                      getParameters(),
+                                                      getShowStatistics(),
+                                                      getTexturePriority());
+
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
-    tileRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
-                                           TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()->at(i)));
+    planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
+                                             TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()->at(i)));
   }
-  
+
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
@@ -302,11 +302,11 @@ TileRenderer* TileRendererBuilder::create() {
   _stabilizationMilliSeconds = NULL;
 
   _elevationDataProvider = NULL;
-  
-  return tileRenderer;
+
+  return planetRenderer;
 }
 
-TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
+TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   int __TODO_MakeConfigurable_renderIncompletePlanet;
   const bool renderIncompletePlanet = false;
   const URL incompletePlanetTexureURL("", false);
@@ -318,10 +318,10 @@ TilesRenderParameters* TileRendererBuilder::createTileRendererParameters() {
                                    incompletePlanetTexureURL);
 }
 
-TileTessellator* TileRendererBuilder::createTileTessellator() {
+TileTessellator* PlanetRendererBuilder::createTileTessellator() {
   return new EllipsoidalTileTessellator(true);
 }
 
-LayerSet* TileRendererBuilder::createLayerSet() {
+LayerSet* PlanetRendererBuilder::createLayerSet() {
   return LayerBuilder::createDefaultSatelliteImagery();
 }

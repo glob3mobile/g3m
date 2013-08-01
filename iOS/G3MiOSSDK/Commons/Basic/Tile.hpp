@@ -19,7 +19,7 @@ class TileTexturizer;
 class TilesRenderParameters;
 class ITimer;
 class TilesStatistics;
-class TileRenderContext;
+class PlanetRendererContext;
 class TileKey;
 class Vector3D;
 class GLState;
@@ -67,13 +67,13 @@ private:
   BoundingVolume* _boundingVolume;
 
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
+                                  const PlanetRendererContext* prc);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
-                     const TileRenderContext* trc);
+                     const PlanetRendererContext* prc);
 
   inline bool isVisible(const G3MRenderContext* rc,
-                        const TileRenderContext* trc,
+                        const PlanetRendererContext* prc,
                         const Planet* planet,
                         const Vector3D& cameraNormalizedPosition,
                         double cameraAngle2HorizonInRadians,
@@ -82,14 +82,14 @@ private:
   ITimer* _lodTimer;
   bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
+                                  const PlanetRendererContext* prc);
 
   inline void rawRender(const G3MRenderContext* rc,
-                        const TileRenderContext* trc,
+                        const PlanetRendererContext* prc,
                         const GLState* glState);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc, const GLState* glState);
+                   const PlanetRendererContext* prc, const GLState* glState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -125,7 +125,7 @@ private:
   int _lastTileMeshResolutionY;
 
   const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
-                                          const TileRenderContext* trc);
+                                          const PlanetRendererContext* prc);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -163,10 +163,10 @@ public:
   }
 
   void prepareForFullRendering(const G3MRenderContext* rc,
-                               const TileRenderContext* trc);
+                               const PlanetRendererContext* prc);
 
   void render(const G3MRenderContext* rc,
-              const TileRenderContext* trc,
+              const PlanetRendererContext* prc,
               const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration,
               const Planet* planet,

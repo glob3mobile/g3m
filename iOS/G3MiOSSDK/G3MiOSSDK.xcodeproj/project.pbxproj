@@ -48,7 +48,7 @@
 		CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
 		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
-		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
+		CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */; };
 		CCF45F531743AD320037CA28 /* SphericalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */; };
 		CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */; };
 		CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */; };
@@ -367,7 +367,7 @@
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
-		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
+		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
@@ -428,7 +428,7 @@
 		E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */; };
 		E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 38D786E41587B3DD003BBC75 /* Tile.hpp */; };
 		E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; };
-		E780A53916D3AE37000F0395 /* TileRendererBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */; };
+		E780A53916D3AE37000F0395 /* PlanetRendererBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */; };
 		E780A53A16D3AE37000F0395 /* TileTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */; };
 		E780A53B16D3AE37000F0395 /* TileTexturizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; };
 		E780A53C16D3AE37000F0395 /* TimeInterval.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */; };
@@ -522,7 +522,7 @@
 		E780A59E16D3AEDA000F0395 /* ShapeOrbitCameraEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */; };
 		E780A59F16D3AEDA000F0395 /* ShapePositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */; };
 		E780A5A016D3AEDA000F0395 /* SimplePlanetRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; };
-		E780A5A116D3AEDA000F0395 /* TileRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; };
+		E780A5A116D3AEDA000F0395 /* PlanetRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */; };
 		E780A5A216D3AEDA000F0395 /* TilesRenderParameters.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */; };
 		E780A5A316D3AEDA000F0395 /* TrailsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */; };
 		E780A5A416D3AEDA000F0395 /* VisibleSectorListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF024DC616A84F330051255C /* VisibleSectorListener.hpp */; };
@@ -771,7 +771,7 @@
 				E780A59E16D3AEDA000F0395 /* ShapeOrbitCameraEffect.hpp in CopyFiles */,
 				E780A59F16D3AEDA000F0395 /* ShapePositionEffect.hpp in CopyFiles */,
 				E780A5A016D3AEDA000F0395 /* SimplePlanetRenderer.hpp in CopyFiles */,
-				E780A5A116D3AEDA000F0395 /* TileRenderer.hpp in CopyFiles */,
+				E780A5A116D3AEDA000F0395 /* PlanetRenderer.hpp in CopyFiles */,
 				E780A5A216D3AEDA000F0395 /* TilesRenderParameters.hpp in CopyFiles */,
 				E780A5A316D3AEDA000F0395 /* TrailsRenderer.hpp in CopyFiles */,
 				E780A5A416D3AEDA000F0395 /* VisibleSectorListener.hpp in CopyFiles */,
@@ -848,7 +848,7 @@
 				E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */,
 				E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */,
 				E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */,
-				E780A53916D3AE37000F0395 /* TileRendererBuilder.hpp in CopyFiles */,
+				E780A53916D3AE37000F0395 /* PlanetRendererBuilder.hpp in CopyFiles */,
 				E780A53A16D3AE37000F0395 /* TileTessellator.hpp in CopyFiles */,
 				E780A53B16D3AE37000F0395 /* TileTexturizer.hpp in CopyFiles */,
 				E780A53C16D3AE37000F0395 /* TimeInterval.hpp in CopyFiles */,
@@ -964,8 +964,8 @@
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
 		CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Rendererers/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
-		CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileRenderer.cpp; path = Commons/Rendererers/TileRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
+		CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PlanetRenderer.cpp; path = Commons/Rendererers/PlanetRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRenderer.hpp; path = Commons/Rendererers/PlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalPlanet.hpp; path = Commons/Geometry/EllipsoidalPlanet.hpp; sourceTree = "<group>"; };
 		CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SphericalPlanet.cpp; path = Commons/Geometry/SphericalPlanet.cpp; sourceTree = "<group>"; };
 		CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SphericalPlanet.hpp; path = Commons/Geometry/SphericalPlanet.hpp; sourceTree = "<group>"; };
@@ -1438,8 +1438,8 @@
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
-		E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRendererBuilder.cpp; path = Commons/Basic/TileRendererBuilder.cpp; sourceTree = "<group>"; };
-		E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRendererBuilder.hpp; path = Commons/Basic/TileRendererBuilder.hpp; sourceTree = "<group>"; };
+		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
+		E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRendererBuilder.hpp; path = Commons/Basic/PlanetRendererBuilder.hpp; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
 		E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MBuilder_iOS.mm; path = Specific/Derived/G3MBuilder_iOS.mm; sourceTree = "<group>"; };
 		E70B56E116D3CCCD00C5FFFB /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
@@ -1700,8 +1700,8 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
-				E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */,
-				E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */,
+				E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */,
+				E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */,
 				D80D525815EE698E00ACEA16 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
@@ -1944,8 +1944,8 @@
 				CFEEE4BA1648676800F45F59 /* Shapes */,
 				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
 				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
-				CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */,
-				CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */,
+				CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */,
+				CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */,
 				CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */,
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
@@ -2387,7 +2387,7 @@
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
 				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
-				CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */,
+				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
@@ -2458,7 +2458,7 @@
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
 				E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */,
-				E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */,
+				E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */,
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,

@@ -1,20 +1,20 @@
 //
-//  TileRendererBuilder.hpp
+//  PlanetRendererBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //
 //
 
-#ifndef __G3MiOSSDK__TileRendererBuilder__
-#define __G3MiOSSDK__TileRendererBuilder__
+#ifndef __G3MiOSSDK__PlanetRendererBuilder__
+#define __G3MiOSSDK__PlanetRendererBuilder__
 
 #include "LayerSet.hpp"
 #include "TilesRenderParameters.hpp"
-#include "TileRenderer.hpp"
+#include "PlanetRenderer.hpp"
 
 
-class TileRendererBuilder {
+class PlanetRendererBuilder {
 
 private:
   TileTessellator* _tileTessellator;
@@ -51,21 +51,21 @@ private:
   long long getTexturePriority();
 
   LayerSet* createLayerSet();
-  TilesRenderParameters* createTileRendererParameters();
+  TilesRenderParameters* createPlanetRendererParameters();
   TileTessellator* createTileTessellator();
 
   ElevationDataProvider* getElevationDataProvider();
   float getVerticalExaggeration();
 
 public:
-  TileRendererBuilder();
-  ~TileRendererBuilder();
-  TileRenderer* create();
+  PlanetRendererBuilder();
+  ~PlanetRendererBuilder();
+  PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
   void setTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
-  void setTileRendererParameters(TilesRenderParameters* parameters);
+  void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
   void setUseTilesSplitBuget(const bool useTilesSplitBudget);

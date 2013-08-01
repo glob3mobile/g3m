@@ -10,7 +10,7 @@
 
 #include "ILogger.hpp"
 #include "CompositeRenderer.hpp"
-#include "TileRenderer.hpp"
+#include "PlanetRenderer.hpp"
 
 #include "EllipsoidalTileTessellator.hpp"
 #include "MultiLayerTileTexturizer.hpp"
@@ -116,7 +116,7 @@ GL* G3MCBuilder::getGL() {
   return _gl;
 }
 
-TileRenderer* G3MCBuilder::createTileRenderer() {
+PlanetRenderer* G3MCBuilder::createPlanetRenderer() {
   const TileTessellator* tessellator = new EllipsoidalTileTessellator(true);
   
   ElevationDataProvider* elevationDataProvider = NULL;
@@ -141,7 +141,7 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
   
-  return new TileRenderer(tessellator,
+  return new PlanetRenderer(tessellator,
                           elevationDataProvider,
                           verticalExaggeration,
                           texturizer,
@@ -656,8 +656,8 @@ G3MWidget* G3MCBuilder::create() {
   
   CompositeRenderer* mainRenderer = new CompositeRenderer();
 
-  TileRenderer* tileRenderer = createTileRenderer();
-  mainRenderer->addRenderer(tileRenderer);
+  PlanetRenderer* planetRenderer = createPlanetRenderer();
+  mainRenderer->addRenderer(planetRenderer);
   
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
   

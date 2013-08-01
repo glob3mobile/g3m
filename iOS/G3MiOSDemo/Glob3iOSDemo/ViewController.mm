@@ -28,7 +28,7 @@
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
-#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
 #import <G3MiOSSDK/TrailsRenderer.hpp>
 #import <G3MiOSSDK/Mark.hpp>
@@ -285,9 +285,9 @@ public:
 //
 //  CompositeRenderer* mainRenderer = new CompositeRenderer();
 //
-//  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
+//  PlanetRenderer* planetRenderer = [self createPlanetRenderer: [self createPlanetRendererParameters]
 //                                               layerSet: [self createLayerSet]];
-//  mainRenderer->addRenderer(tileRenderer);
+//  mainRenderer->addRenderer(planetRenderer);
 //
 //  MarksRenderer* marksRenderer = [self createMarksRenderer];
 //  mainRenderer->addRenderer(marksRenderer);
@@ -334,13 +334,11 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  int _DGD_working_on_terrain;
-
   float verticalExaggeration = 6.0f;
-  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   //ElevationDataProvider* elevationDataProvider = NULL;
-  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
   //  ElevationDataProvider* elevationDataProviderACorunia;
@@ -349,23 +347,23 @@ public:
   //                                                                                          43.8317114006282011, -7.6284544428640784),
   //                                                                      Vector2I(968, 747));
   //
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
   //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
   //                                                           Sector::fullSphere());
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://igosoftware.dyndns.org:8080/geoserver/wms", false),
   //                                                           "igo:corunia",
   //                                                           Sector::fromDegrees(42.4785417976085213, -9.3819593635107914,
   //                                                                               43.8317114006282011, -7.6284544428641370));
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   /*
    //  ElevationDataProvider* elevationDataProvider;
@@ -450,7 +448,7 @@ public:
 
    compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
 
-   //  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+   //  builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
    */
 }
 
@@ -508,8 +506,8 @@ public:
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
-  //builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
-  builder.getTileRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+  //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
 
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
@@ -538,9 +536,9 @@ public:
 
   [self initializeElevationDataProvider: builder];
 
-  builder.getTileRendererBuilder()->setLayerSet(layerSet);
-  builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
-  builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
+  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                              TimeInterval::fromSeconds(3));
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -1155,7 +1153,7 @@ public:
   return layerSet;
 }
 
-- (TilesRenderParameters*) createTileRenderParameters
+- (TilesRenderParameters*) createPlanetRendererParameters
 {
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
@@ -1173,17 +1171,17 @@ public:
                                    incompletePlanetTexureURL);
 }
 
-- (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
+- (PlanetRenderer*) createPlanetRenderer: (TilesRenderParameters*) parameters
                             layerSet: (LayerSet*) layerSet
 {
-  TileRendererBuilder* trBuilder = new TileRendererBuilder();
+  PlanetRendererBuilder* trBuilder = new PlanetRendererBuilder();
   trBuilder->setShowStatistics(false);
-  trBuilder->setTileRendererParameters(parameters);
+  trBuilder->setPlanetRendererParameters(parameters);
   trBuilder->setLayerSet(layerSet);
 
-  TileRenderer* tileRenderer = trBuilder->create();
+  PlanetRenderer* planetRenderer = trBuilder->create();
 
-  return tileRenderer;
+  return planetRenderer;
 }
 
 - (MarksRenderer*) createMarksRenderer
@@ -1602,8 +1600,6 @@ public:
 
     }
 
-    int _DGD_AtWork;
-
     return symbols;
   }
 
@@ -1749,8 +1745,6 @@ public:
     //    //    const Vector2I subResolution(512, 512);
     //    //    const Vector2I subResolution(251*2, 254*2);
     //    const Vector2I subResolution(251*2, 254*2);
-
-    int _DGD_working_on_terrain;
 
     _meshRenderer->addMesh( createSectorMesh(planet,
                                              32,
@@ -2017,8 +2011,6 @@ public:
       canvas->setLineWidth(1.1f);
       canvas->setLineColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
-
-      int _DGD_working_on_Canvas;
 
       canvas->setFillColor( Color::white() );
       canvas->setShadow(Color::black(), 5, 1, -1);
