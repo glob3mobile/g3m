@@ -390,6 +390,7 @@ Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
 
 
 void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
+                                        const Vector3D& centerRay,
                                       const Vector3D& initialRay0,
                                       const Vector3D& initialRay1) const
 {

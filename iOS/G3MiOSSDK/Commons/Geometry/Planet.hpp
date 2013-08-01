@@ -84,6 +84,7 @@ public:
   virtual Effect* createEffectFromLastSingleDrag() const = 0;
 
   virtual void beginDoubleDrag(const Vector3D& origin,
+                               const Vector3D& centerRay,
                                const Vector3D& initialRay0,
                                const Vector3D& initialRay1) const = 0;
   

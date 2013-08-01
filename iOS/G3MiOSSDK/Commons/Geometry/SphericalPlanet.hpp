@@ -26,10 +26,16 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _centerPoint;
+  mutable MutableVector3D _centerRay;
+  mutable MutableVector3D _initialPoint0;
+  mutable MutableVector3D _initialPoint1;
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
+  mutable double          _initialRaysAngle;
   mutable bool            _validSingleDrag;
+  mutable bool            _validDoubleDrag;
   
 
 public:
@@ -129,6 +135,7 @@ public:
   Effect* createEffectFromLastSingleDrag() const;
   
   void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
                                const Vector3D& initialRay0,
                                const Vector3D& initialRay1) const;
   
