@@ -93,7 +93,13 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
         modelTransformHolders[1] = f->getMatrixHolder();
         break;
       case F_MODEL_TRANSFORM:
-        modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
+      {
+        const Matrix44D* m = f->getMatrixHolder()->getMatrix();
+
+        if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
+          modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
+        } 
+      }
         break;
       default:
         ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");

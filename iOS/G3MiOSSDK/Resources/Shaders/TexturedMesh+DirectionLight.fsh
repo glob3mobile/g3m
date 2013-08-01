@@ -27,6 +27,10 @@ void main() {
 //  gl_FragColor += lightColor;
 
   float diffuseLightIntensity = max(dot(vertex_normal, uLightDirection ), 0.0);
+  
+  if (diffuseLightIntensity > 0.87){
+  diffuseLightIntensity = 0.0;
+  }
 
   gl_FragColor *= (uAmbientLight + diffuseLightIntensity);
 }

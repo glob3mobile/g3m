@@ -95,6 +95,11 @@ public:
                          0, 0, 0, 1);
   }
 
+
+  bool isScaleMatrix() const;
+
+  bool isTranslationMatrix() const;
+
 };
 
 
@@ -218,6 +223,7 @@ public:
     }
     return _modelview;
   }
+
   
 };
 
