@@ -16,6 +16,7 @@ class CompositeRenderer: public Renderer
 {
 private:
   std::vector<Renderer*> _renderers;
+  int                    _renderersSize;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -29,9 +30,10 @@ private:
 public:
   CompositeRenderer():
   _context(NULL),
-  _enable(true)
+  _enable(true),
+  _renderersSize(0)
   {
-    _renderers = std::vector<Renderer*>();
+//    _renderers = std::vector<Renderer*>();
   }
   
   virtual ~CompositeRenderer() {
@@ -64,6 +66,9 @@ public:
   void onPause(const G3MContext* context);
 
   void onDestroy(const G3MContext* context);
+
+  const PlanetRenderer* asPlanetRenderer() const;
+
 };
 
 #endif

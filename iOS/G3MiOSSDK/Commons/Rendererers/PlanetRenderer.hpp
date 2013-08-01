@@ -463,6 +463,11 @@ public:
   bool isPlanetRenderer() {
     return true;
   }
+
+  const PlanetRenderer* asPlanetRenderer() const {
+    return this;
+  }
+
 };
 
 

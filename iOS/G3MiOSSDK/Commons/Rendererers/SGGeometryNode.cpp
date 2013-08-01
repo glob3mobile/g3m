@@ -38,13 +38,6 @@ void SGGeometryNode::createGLState(){
                                               true, (float)1.0),
                         false);
 
-  if (_normals != NULL){
-    //TODO
-    ILogger::instance()->logInfo("LUZ");
-
-
-  }
-
   if (_uv != NULL){
     _glState.addGLFeature(new TextureCoordsGLFeature(_uv,
                                                      2,

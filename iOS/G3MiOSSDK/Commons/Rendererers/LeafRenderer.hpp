@@ -71,6 +71,10 @@ public:
   
   virtual void stop(const G3MRenderContext* rc) = 0;
 
+  const PlanetRenderer* asPlanetRenderer() const {
+    return NULL;
+  }
+
 };
 
 #endif
