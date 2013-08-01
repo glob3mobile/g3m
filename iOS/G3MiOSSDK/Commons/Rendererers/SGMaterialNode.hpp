@@ -58,7 +58,7 @@ public:
   }
 
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState){
+                             const GLState* parentState) {
     _glState.setParent(parentState);
     return &_glState;
   }
@@ -75,7 +75,7 @@ public:
     delete _specularColor;
   }
 
-  std::string description(){
+  std::string description() {
     return "SGMaterialNode";
   }
 

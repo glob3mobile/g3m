@@ -77,7 +77,7 @@ public:
 
   bool modifyGLState(const G3MRenderContext* rc, GLState* state);
 
-  std::string description(){
+  std::string description() {
     return "SGLayerNode";
   }
 };

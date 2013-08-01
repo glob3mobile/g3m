@@ -69,7 +69,7 @@ public:
   
   void doPreRenderCycle(const G3MRenderContext* rc);
   
-  ~FrameTasksExecutor(){}
+  ~FrameTasksExecutor() {}
   
 };
 

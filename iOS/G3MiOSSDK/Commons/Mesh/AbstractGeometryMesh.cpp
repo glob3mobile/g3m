@@ -101,7 +101,7 @@ int AbstractGeometryMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
-void AbstractGeometryMesh::createGLState(){
+void AbstractGeometryMesh::createGLState() {
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
@@ -114,7 +114,7 @@ void AbstractGeometryMesh::createGLState(){
                                               _lineWidth,
                                               true, _pointSize), false);
 
-  if (_translationMatrix != NULL){
+  if (_translationMatrix != NULL) {
     _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 }

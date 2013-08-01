@@ -1,5 +1,5 @@
 //
-//  TileElevationDataListener.h
+//  TileElevationDataListener.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/04/13.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__TileElevationDataRequest__
 #define __G3MiOSSDK__TileElevationDataRequest__
-
-#include <iostream>
 
 #include "ElevationDataProvider.hpp"
 #include "Tile.hpp"
@@ -75,4 +73,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__TileElevationDataRequest__) */
+#endif

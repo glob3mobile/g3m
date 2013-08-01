@@ -30,7 +30,7 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
 
   const double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
 
-  if (den == 0){
+  if (den == 0) {
     return Vector3D::nan();
   }
 

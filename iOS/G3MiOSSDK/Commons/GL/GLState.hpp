@@ -1,5 +1,5 @@
 //
-//  GLState.h
+//  GLState.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 17/05/13.
@@ -10,8 +10,6 @@
 
 #ifndef __G3MiOSSDK__GLState__
 #define __G3MiOSSDK__GLState__
-
-#include <iostream>
 
 #include "GLGlobalState.hpp"
 #include "GPUProgram.hpp"
@@ -146,4 +144,4 @@ public:
   }
 };
 
-#endif /* defined(__G3MiOSSDK__GLState__) */
+#endif

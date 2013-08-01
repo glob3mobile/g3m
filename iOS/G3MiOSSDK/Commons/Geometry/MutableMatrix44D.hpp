@@ -150,7 +150,7 @@ public:
     _m33 = m._m33;
 
     _matrix44D = m._matrix44D;
-    if (_matrix44D != NULL){
+    if (_matrix44D != NULL) {
       _matrix44D->_retain();
     }
 
@@ -184,7 +184,7 @@ public:
   }
 
   Matrix44D* asMatrix44D() const{
-    if (_matrix44D == NULL){
+    if (_matrix44D == NULL) {
       _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
                                  _m01, _m11, _m21, _m31,
                                  _m02, _m12, _m22, _m32,

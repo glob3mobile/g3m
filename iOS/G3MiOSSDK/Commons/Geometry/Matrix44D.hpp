@@ -1,5 +1,5 @@
 //
-//  Matrix44D.h
+//  Matrix44D.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 01/07/13.
@@ -98,14 +98,14 @@ public:
 
   bool isEqualsTo(const Matrix44D& m) const;
 
-  //    void addListener(Matrix44DListener* l){
+  //    void addListener(Matrix44DListener* l) {
   //      _listeners.push_back(l);
   //    }
   //
-  //    void removeListener(Matrix44DListener* l){
+  //    void removeListener(Matrix44DListener* l) {
   //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
   //           it != _listeners.end(); it++) {
-  //        if (*it == l){
+  //        if (*it == l) {
   //          _listeners.erase(it);
   //          return;
   //        }
@@ -123,24 +123,24 @@ class Matrix44DHolder{
   private Matrix44D _matrix;
 #endif
 public:
-  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix){
-    if (matrix == NULL){
+  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
+    if (matrix == NULL) {
       ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
     }
     _matrix->_retain();
   }
 
-  ~Matrix44DHolder(){
+  ~Matrix44DHolder() {
     _matrix->_release();
   }
 
-  void setMatrix(const Matrix44D* matrix){
-    if (matrix == NULL){
+  void setMatrix(const Matrix44D* matrix) {
+    if (matrix == NULL) {
       ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
     }
 
-    if (matrix != _matrix){
-      if (_matrix != NULL){
+    if (matrix != _matrix) {
+      if (_matrix != NULL) {
         _matrix->_release();
       }
       _matrix = matrix;
@@ -154,4 +154,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__Matrix44D__) */
+#endif

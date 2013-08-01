@@ -382,12 +382,12 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight){
+void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight) {
 
   _viewportHeight = viewportHeight;
   _viewportWidth = viewportWidth;
 
-  if (_vertices == NULL){
+  if (_vertices == NULL) {
     const Vector3D pos( planet->toCartesian(_position) );
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(pos);
@@ -415,8 +415,8 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                         false);
 }
 
-IFloatBuffer* Mark::getBillboardTexCoords(){
-  if (_billboardTexCoord == NULL){
+IFloatBuffer* Mark::getBillboardTexCoords() {
+  if (_billboardTexCoord == NULL) {
     FloatBufferBuilderFromCartesian2D texCoor;
     texCoor.add(1,1);
     texCoor.add(1,0);
@@ -473,7 +473,7 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
         if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
-            rc->getCurrentCamera()->getHeight() != _viewportHeight){
+            rc->getCurrentCamera()->getHeight() != _viewportHeight) {
           createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
         }
 

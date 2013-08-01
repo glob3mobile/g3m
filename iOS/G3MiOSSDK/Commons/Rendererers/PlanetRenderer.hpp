@@ -48,20 +48,20 @@ private:
 
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-  
+
   long long _texturePriority;
 public:
   PlanetRendererContext(const TileTessellator*       tessellator,
-                    ElevationDataProvider*       elevationDataProvider,
-                    TileTexturizer*              texturizer,
-                    TileRasterizer*              tileRasterizer,
-                    const LayerSet*              layerSet,
-                    const TilesRenderParameters* parameters,
-                    TilesStatistics*             statistics,
-                    ITimer*                      lastSplitTimer,
-                    bool                         isForcedFullRender,
-                    long long                    texturePriority,
-                    const float                  verticalExaggeration) :
+                        ElevationDataProvider*       elevationDataProvider,
+                        TileTexturizer*              texturizer,
+                        TileRasterizer*              tileRasterizer,
+                        const LayerSet*              layerSet,
+                        const TilesRenderParameters* parameters,
+                        TilesStatistics*             statistics,
+                        ITimer*                      lastSplitTimer,
+                        bool                         isForcedFullRender,
+                        long long                    texturePriority,
+                        const float                  verticalExaggeration) :
   _tessellator(tessellator),
   _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
@@ -116,7 +116,7 @@ public:
   bool isForcedFullRender() const {
     return _isForcedFullRender;
   }
-  
+
   long long getTexturePriority() const {
     return _texturePriority;
   }
@@ -261,7 +261,7 @@ public:
     for(int i = 0; i < nMax; i++) {
       const int level   = i;
       const int counter = m[i];
-      if (counter != 0){
+      if (counter != 0) {
         if (first) {
           first = false;
         }
@@ -331,7 +331,7 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-  
+
   long long _texturePriority;
 
   float _verticalExaggeration;
@@ -341,7 +341,7 @@ private:
   void renderIncompletePlanet(const G3MRenderContext* rc);
 
   EllipsoidShape* _incompleteShape;
-  
+
   bool _recreateTilesPending;
 
   GLState _glState;
@@ -352,14 +352,14 @@ private:
 
 public:
   PlanetRenderer(const TileTessellator* tessellator,
-               ElevationDataProvider* elevationDataProvider,
-               float verticalExaggeration,
-               TileTexturizer*  texturizer,
-               TileRasterizer*  tileRasterizer,
-               LayerSet* layerSet,
-               const TilesRenderParameters* parameters,
-               bool showStatistics,
-               long long texturePriority);
+                 ElevationDataProvider* elevationDataProvider,
+                 float verticalExaggeration,
+                 TileTexturizer*  texturizer,
+                 TileRasterizer*  tileRasterizer,
+                 LayerSet* layerSet,
+                 const TilesRenderParameters* parameters,
+                 bool showStatistics,
+                 long long texturePriority);
 
   ~PlanetRenderer();
 
@@ -438,7 +438,7 @@ public:
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
-  
+
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
@@ -447,7 +447,7 @@ public:
   void setTexturePriority(long long texturePriority) {
     _texturePriority = texturePriority;
   }
-  
+
   /**
    * Return the current value for the download priority of textures
    *
@@ -456,7 +456,7 @@ public:
   long long getTexturePriority() const {
     return _texturePriority;
   }
-  
+
   /**
    * @see Renderer#isPlanetRenderer()
    */

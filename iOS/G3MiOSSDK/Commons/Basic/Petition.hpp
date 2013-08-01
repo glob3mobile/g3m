@@ -62,7 +62,7 @@ public:
 
   }
   
-  ~Petition(){
+  ~Petition() {
     delete _sector;
     releaseImage();
   }

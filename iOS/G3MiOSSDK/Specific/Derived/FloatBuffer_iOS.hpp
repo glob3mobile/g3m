@@ -35,7 +35,7 @@ public:
   _vertexBufferTimeStamp(-1),
   _vertexBufferCreated(false)
   {
-    if (_values == NULL){
+    if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
@@ -93,7 +93,7 @@ public:
   
   float get(int i) const {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
     
@@ -103,7 +103,7 @@ public:
   void put(int i,
            float value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -117,7 +117,7 @@ public:
               float value) {
     
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -132,19 +132,20 @@ public:
 
   void bindAsVBOToGPU() const {
 
-    if (!_vertexBufferCreated){
+    if (!_vertexBufferCreated) {
       glGenBuffers(1, &_vertexBuffer);
       _vertexBufferCreated = true;
     }
 
-    if (_vertexBuffer != _boundVertexBuffer){
+    if (_vertexBuffer != _boundVertexBuffer) {
       glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
       _boundVertexBuffer = _vertexBuffer;
-    } else{
-      printf("REUSING");
     }
+//    else {
+//      printf("REUSING");
+//    }
 
-    if (_vertexBufferTimeStamp != _timestamp){
+    if (_vertexBufferTimeStamp != _timestamp) {
       _vertexBufferTimeStamp = _timestamp;
 
       float* vertices = getPointer();
@@ -153,7 +154,7 @@ public:
       glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
     }
 
-//    if (GL_NO_ERROR != glGetError()){
+//    if (GL_NO_ERROR != glGetError()) {
 //      ILogger::instance()->logError("Problem using VBO");
 //    }
   }

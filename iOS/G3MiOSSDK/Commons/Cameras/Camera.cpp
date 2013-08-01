@@ -200,10 +200,10 @@ void Camera::_setGeodeticPosition(const Vector3D& pos) {
   setPitch(pitch);
 }
 
-void Camera::render(const G3MRenderContext* rc,
-                    const GLGlobalState& parentState) const {
-  //TODO: NO LONGER NEEDED!!!
-}
+//void Camera::render(const G3MRenderContext* rc,
+//                    const GLGlobalState& parentState) const {
+//  //TODO: NO LONGER NEEDED!!!
+//}
 
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;

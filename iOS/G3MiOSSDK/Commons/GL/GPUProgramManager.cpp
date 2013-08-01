@@ -32,25 +32,25 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
    for (int j = 0; j < sizeI; j++) {
    int key = ui->at(j);
 
-   if (key == VIEWPORT_EXTENT){
+   if (key == VIEWPORT_EXTENT) {
    billboard = true;
 
-   if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)){
+   if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)) {
    int a = 0;
    a++;
    }
 
    }
 
-   if (key == FLAT_COLOR){
+   if (key == FLAT_COLOR) {
    flatColor = true;
    }
 
-   //      if (key == TRANSLATION_TEXTURE_COORDS){
+   //      if (key == TRANSLATION_TEXTURE_COORDS) {
    //        texture = true;
    //      }
 
-   if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS){
+   if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS) {
    transformTC = true;
    }
    }
@@ -60,14 +60,14 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
    for (int j = 0; j < sizeI; j++) {
    int key = ai->at(j);
 
-   //      if (key == TEXTURE_COORDS){
+   //      if (key == TEXTURE_COORDS) {
    //        texture = true;
    //      }
 
-   if (key == COLOR){
+   if (key == COLOR) {
    color = true;
 
-   if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)){
+   if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)) {
    int a = 0;
    a++;
    }
@@ -77,32 +77,32 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
    thisGLState = thisGLState->getParent();
    }
    */
-  if (billboard){
+  if (billboard) {
     return getProgram(gl, "Billboard");
   }
-  if (flatColor && !texture && !color){
+  if (flatColor && !texture && !color) {
     return getProgram(gl, "FlatColorMesh");
   }
 
-  if (!flatColor && texture && !color){
-    if (transformTC){
+  if (!flatColor && texture && !color) {
+    if (transformTC) {
       return getProgram(gl, "TransformedTexCoorTexturedMesh");
     }
     return getProgram(gl, "TexturedMesh");
   }
 
-  if (!flatColor && !texture && color){
+  if (!flatColor && !texture && color) {
     return getProgram(gl, "ColorMesh");
   }
 
   return NULL;
 }
 
-GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode){
+GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
 #ifdef C_CODE
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it){
+  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     GPUProgram* p = it->second;
-    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode){
+    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
       return p;
     }
   }

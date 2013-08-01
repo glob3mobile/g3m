@@ -40,7 +40,7 @@ public:
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState);
 
-  std::string description(){
+  std::string description() {
     return "SGTextureNode";
   }
 

@@ -405,7 +405,7 @@ public:
           const Sector intersectionSector = tileSector.intersection(imageSector);
 
           RectangleF* sourceRect = NULL;
-          if (!intersectionSector.isEqualsTo(imageSector)){
+          if (!intersectionSector.isEqualsTo(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
                                            imageSector,
                                            intersectionSector);

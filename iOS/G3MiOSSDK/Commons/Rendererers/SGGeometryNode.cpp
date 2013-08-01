@@ -24,7 +24,7 @@ SGGeometryNode::~SGGeometryNode() {
   delete _indices;
 }
 
-void SGGeometryNode::createGLState(){
+void SGGeometryNode::createGLState() {
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
@@ -38,7 +38,7 @@ void SGGeometryNode::createGLState(){
                                               true, (float)1.0),
                         false);
 
-  if (_uv != NULL){
+  if (_uv != NULL) {
     _glState.addGLFeature(new TextureCoordsGLFeature(_uv,
                                                      2,
                                                      0,
@@ -49,7 +49,7 @@ void SGGeometryNode::createGLState(){
   }
 }
 
-void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glState){
+void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glState) {
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, glState, *rc->getGPUProgramManager());
 }

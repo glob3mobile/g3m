@@ -24,12 +24,12 @@ public:
   //, _globalState(NULL)
   {}
 
-//  virtual ~GLFeature(){
+//  virtual ~GLFeature() {
 //    delete _globalState;
 //  }
 
 //  void applyGLGlobalState(GL* gl) const{
-//    if (_globalState != NULL){
+//    if (_globalState != NULL) {
 //      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 //    }
 //  }
@@ -104,7 +104,7 @@ class GLCameraGroupFeature: public GLFeature{
 #endif
 public:
 #ifdef C_CODE
-  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix){}
+  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix) {}
 #endif
 #ifdef JAVA_CODE
   public GLCameraGroupFeature(Matrix44D matrix)
@@ -113,35 +113,35 @@ public:
     _matrixHolder = new Matrix44DHolder(matrix);
   }
 #endif
-  ~GLCameraGroupFeature(){}
+  ~GLCameraGroupFeature() {}
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
-  const void setMatrix(const Matrix44D* matrix){_matrixHolder.setMatrix(matrix);}
+  const void setMatrix(const Matrix44D* matrix) {_matrixHolder.setMatrix(matrix);}
   const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model){}
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model) {}
   ModelGLFeature(const Camera* cam);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection){}
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection) {}
   ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform){}
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform) {}
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 class PriorityGLFeature: public GLFeature{
   const int _priority;
 public:
-  PriorityGLFeature(GLFeatureGroupName g, int p): GLFeature(g), _priority(p){}
+  PriorityGLFeature(GLFeatureGroupName g, int p): GLFeature(g), _priority(p) {}
 
   int getPriority() const { return _priority;}
 };
@@ -160,7 +160,7 @@ public:
   {
 //    _globalState = new GLGlobalState();
 //
-//    if (blend){
+//    if (blend) {
 //      _globalState->enableBlend();
 //      _globalState->setBlendFactors(sFactor, dFactor);
 //    } else{
@@ -170,7 +170,7 @@ public:
   }
 
   void blendingOnGlobalGLState(GLGlobalState* state) const {
-    if (_blend){
+    if (_blend) {
       state->enableBlend();
       state->setBlendFactors(_sFactor, _dFactor);
     } else{
@@ -236,7 +236,7 @@ public:
 
 class PointLightGLFeature: public GLFeature{
 public:
-  PointLightGLFeature(const Vector3D& pos, const Vector3D& ):GLFeature(LIGHTING_GROUP){}
+  PointLightGLFeature(const Vector3D& pos, const Vector3D& ):GLFeature(LIGHTING_GROUP) {}
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 

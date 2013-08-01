@@ -20,15 +20,15 @@ void GPUAttributeValue::setValueToLinkedAttribute() const {
 }
 
 bool GPUAttributeValue::linkToGPUProgram(const GPUProgram* prog, int key) const{
-  if (_enabled){
-    if (_type==GLType::glFloat()){
+  if (_enabled) {
+    if (_type==GLType::glFloat()) {
       _attribute = prog->getGPUAttributeVecXFloat(key,_attributeSize);
     }
   } else{
     _attribute = prog->getGPUAttribute(key);
   }
   
-  if (_attribute == NULL){
+  if (_attribute == NULL) {
     ILogger::instance()->logError("ATTRIBUTE WITH KEY %d NOT FOUND ", key);
     return false;
   } else{

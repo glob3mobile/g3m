@@ -1,5 +1,5 @@
 //
-//  GLFeatureGroup.h
+//  GLFeatureGroup.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
@@ -8,9 +8,6 @@
 
 #ifndef __G3MiOSSDK__GLFeatureGroup__
 #define __G3MiOSSDK__GLFeatureGroup__
-
-#include <iostream>
-
 
 #include "GPUVariableValueSet.hpp"
 
@@ -29,7 +26,7 @@ protected:
 
 public:
 
-  GLFeatureSet():_nFeatures(0){
+  GLFeatureSet():_nFeatures(0) {
     for (int i = 0; i < MAX_CONCURRENT_FEATURES_PER_GROUP; i++) {
       _features[i] = NULL;
     }
@@ -43,7 +40,7 @@ public:
   GLFeature* get(int i) const
 #endif
   {
-    if (_nFeatures < i){
+    if (_nFeatures < i) {
       return NULL;
     }
     return _features[i];
@@ -71,7 +68,7 @@ enum GLFeatureGroupName{
 class GLFeatureGroup: public GLFeatureSet{
 public:
 
-  virtual ~GLFeatureGroup(){}
+  virtual ~GLFeatureGroup() {}
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroupName getGroupName(int i);
@@ -88,7 +85,7 @@ public:
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state){}
+  void applyOnGlobalGLState(GLGlobalState* state) {}
   void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
@@ -105,4 +102,4 @@ public:
   void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
-#endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */
+#endif

@@ -46,11 +46,11 @@ public:
     createGLState();
   }
   
-  ~TexturedMesh(){
+  ~TexturedMesh() {
     if (_ownedMesh) {
       delete _mesh;
     } 
-    if (_ownedTexMapping){
+    if (_ownedTexMapping) {
       delete _textureMapping;
     }
   }

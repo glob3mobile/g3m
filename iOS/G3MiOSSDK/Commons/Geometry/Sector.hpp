@@ -106,7 +106,7 @@ public:
       
   }
 
-  static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon){
+  static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon) {
     const Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
     const Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
 

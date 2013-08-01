@@ -22,7 +22,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IStringBuilder.hpp"
 #include "MercatorUtils.hpp"
-#include "SubviewElevationData.hpp"
+#include "DecimatedSubviewElevationData.hpp"
 #include "TileElevationDataRequest.hpp"
 //#include "Sphere.hpp"
 #include "Vector2F.hpp"
@@ -432,7 +432,7 @@ void Tile::rawRender(const G3MRenderContext *rc,
     }
     else {
       //Adding flat color if no texture set on the mesh
-      if (_flatColorMesh == NULL){
+      if (_flatColorMesh == NULL) {
         _flatColorMesh = new FlatColorMesh(tessellatorMesh, false,
                                            Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
       }
@@ -473,7 +473,7 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
 
   if (elevationDataProvider != NULL) {
     //cancelElevationDataRequest(elevationDataProvider);
-    if (_elevationDataRequest != NULL){
+    if (_elevationDataRequest != NULL) {
       _elevationDataRequest->cancelRequest();
     }
   }
@@ -730,10 +730,10 @@ double Tile::getMaxHeight() const {
 
 #pragma mark ElevationData methods
 
-void Tile::setElevationData(ElevationData* ed, int level){
-  if (_elevationDataLevel < level){
+void Tile::setElevationData(ElevationData* ed, int level) {
+  if (_elevationDataLevel < level) {
 
-    if (_elevationData != NULL){
+    if (_elevationData != NULL) {
       delete _elevationData;
     }
 
@@ -742,7 +742,7 @@ void Tile::setElevationData(ElevationData* ed, int level){
     _mustActualizeMeshDueToNewElevationData = true;
 
     //If the elevation belongs to tile's level, we notify the sub-tree
-    if (isElevationDataSolved()){
+    if (isElevationDataSolved()) {
       if (_subtiles != NULL) {
         const int subtilesSize = _subtiles->size();
         for (int i = 0; i < subtilesSize; i++) {
@@ -777,12 +777,12 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                    const TileTessellator* tessellator,
                                    const Vector2I& tileMeshResolution,
                                    const Planet* planet,
-                                   bool renderDebug){
+                                   bool renderDebug) {
   //Storing for subviewing
   _lastElevationDataProvider = elevationDataProvider;
   _lastTileMeshResolutionX = tileMeshResolution._x;
   _lastTileMeshResolutionY = tileMeshResolution._y;
-  if (_elevationDataRequest == NULL){
+  if (_elevationDataRequest == NULL) {
 //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
 //                                                     -6.3829977122432933,
 //                                                     39.4829891936013553,
@@ -801,17 +801,17 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
   }
 
   //If after petition we still have no data we request from ancestor
-  if (_elevationData == NULL){
+  if (_elevationData == NULL) {
     getElevationDataFromAncestor(tileMeshResolution);
   }
 
 }
 
-void Tile::ancestorChangedElevationData(Tile* ancestor){
+void Tile::ancestorChangedElevationData(Tile* ancestor) {
 
-  if (ancestor->getLevel() > _elevationDataLevel){
+  if (ancestor->getLevel() > _elevationDataLevel) {
     ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
-    if (subView != NULL){
+    if (subView != NULL) {
       setElevationData(subView, ancestor->getLevel());
     }
   }
@@ -828,12 +828,12 @@ void Tile::ancestorChangedElevationData(Tile* ancestor){
 ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) const{
   ElevationData* ed = ancestor->getElevationData();
 
-  if (ed == NULL){
+  if (ed == NULL) {
     ILogger::instance()->logError("Ancestor can't have undefined Elevation Data.");
     return NULL;
   }
 
-  if (ed->getExtentWidth() < 1 || ed->getExtentHeight() < 1){
+  if (ed->getExtentWidth() < 1 || ed->getExtentHeight() < 1) {
     ILogger::instance()->logWarning("Tile too small for ancestor elevation data.");
     return NULL;
   }
@@ -846,10 +846,10 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
 //                                                                                      Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
 //    return subView;
 
-    return new SubviewElevationData(ed,
-                                    //bool ownsElevationData,
-                                    getSector(),
-                                    Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+    return new DecimatedSubviewElevationData(ed,
+                                             //bool ownsElevationData,
+                                             getSector(),
+                                             Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
 
   ILogger::instance()->logError("Can't create subview of elevation data from ancestor");

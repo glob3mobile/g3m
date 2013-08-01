@@ -340,7 +340,7 @@ void Canvas_iOS::_fillText(const std::string& text,
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop){
+                            float destLeft, float destTop) {
 UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
 CGImage* cgImage = [uiImage CGImage];
 
@@ -353,7 +353,7 @@ CGContextDrawImage(_context,
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop, float destWidth, float destHeight){
+                            float destLeft, float destTop, float destWidth, float destHeight) {
   
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
@@ -368,7 +368,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
 void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                            float destLeft, float destTop, float destWidth, float destHeight){
+                            float destLeft, float destTop, float destWidth, float destHeight) {
   
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];

@@ -8,7 +8,7 @@
 
 #include "TexturedMesh.hpp"
 
-void TexturedMesh::createGLState(){
+void TexturedMesh::createGLState() {
   _textureMapping->modifyGLState(_glState);
 }
 

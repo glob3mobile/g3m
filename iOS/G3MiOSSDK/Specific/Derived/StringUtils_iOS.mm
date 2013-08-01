@@ -9,7 +9,6 @@
 #include "StringUtils_iOS.hpp"
 #include <algorithm>
 #include <sstream>
-#include <iostream>
 
 std::string StringUtils_iOS::createString(unsigned char* data,
                                           int            length) const {

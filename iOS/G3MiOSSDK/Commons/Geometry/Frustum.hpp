@@ -171,7 +171,7 @@ public:
     return new Frustum(this, matrix, matrix.inversed());
   }
   
-  ~Frustum(){
+  ~Frustum() {
     delete _boundingVolume;
   }
   

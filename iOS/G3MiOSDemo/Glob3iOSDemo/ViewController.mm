@@ -1405,11 +1405,11 @@ public:
     ShapesRenderer* _sr;
   public:
 
-    QuadListener(ShapesRenderer* sr):_sr(sr){
+    QuadListener(ShapesRenderer* sr):_sr(sr) {
 
     }
 
-    void imageCreated(IImage* image){
+    void imageCreated(IImage* image) {
 
 
       Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),

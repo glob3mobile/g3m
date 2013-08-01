@@ -728,14 +728,14 @@ bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
   return false;
 }
 
-void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s){
+void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s) {
   _sources.push_back(s);
 }
 
 GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
   //GPU Program Manager
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-  for(int i = 0; i < _sources.size(); i++){
+  for(int i = 0; i < _sources.size(); i++) {
     gpuProgramFactory->add(_sources[i]);
   }
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);

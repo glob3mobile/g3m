@@ -50,7 +50,7 @@ void DummyRenderer::initialize(const G3MContext* context) {
   }
 
   for (int j = 0; j < res - 1; j++) {
-    if (j > 0){
+    if (j > 0) {
       index.add((short) (j * res));
     }
     for (int i = 0; i < res; i++) {
@@ -66,7 +66,7 @@ void DummyRenderer::initialize(const G3MContext* context) {
 
 
 bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
-                                 const TouchEvent* touchEvent){
+                                 const TouchEvent* touchEvent) {
   return false;
 }
 

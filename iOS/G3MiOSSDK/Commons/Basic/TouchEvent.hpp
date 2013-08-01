@@ -45,7 +45,7 @@ public:
   const Vector2I getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
 
-  ~Touch(){}
+  ~Touch() {}
 };
 
 

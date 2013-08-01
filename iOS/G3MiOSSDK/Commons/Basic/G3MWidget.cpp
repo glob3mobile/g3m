@@ -135,7 +135,7 @@ _gpuProgramManager(gpuProgramManager)
     _storage->initialize(_context);
   }
 
-  if (_downloader != NULL){
+  if (_downloader != NULL) {
     _downloader->initialize(_context, _frameTasksExecutor);
     _downloader->start();
   }
@@ -211,7 +211,7 @@ G3MWidget::~G3MWidget() {
   }
   delete _frameTasksExecutor;
 
-  for (int i = 0; i < _periodicalTasks.size(); i++){
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
     PeriodicalTask* periodicalTask =  _periodicalTasks[i];
     delete periodicalTask;
   }
@@ -221,7 +221,7 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  if (_mainRendererReady){
+  if (_mainRendererReady) {
     bool handled = false;
     if (_mainRenderer->isEnable()) {
       handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
@@ -474,7 +474,7 @@ void G3MWidget::render(int width, int height) {
   if (_logDownloaderStatistics) {
     std::string cacheStatistics = "";
 
-    if (_downloader != NULL){
+    if (_downloader != NULL) {
       cacheStatistics = _downloader->statistics();
     }
 

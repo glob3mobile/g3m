@@ -1,5 +1,5 @@
 //
-//  GPUVariable.h
+//  GPUVariable.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 20/06/13.
@@ -95,9 +95,9 @@ public:
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;
 
-  virtual ~GPUVariable(){}
+  virtual ~GPUVariable() {}
   
-  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type){
+  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {
 //    createMetadata();
   }
   
@@ -108,4 +108,4 @@ public:
 
 };
 
-#endif /* defined(__G3MiOSSDK__GPUVariable__) */
+#endif

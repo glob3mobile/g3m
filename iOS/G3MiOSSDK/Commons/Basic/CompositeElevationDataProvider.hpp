@@ -91,7 +91,7 @@ private:
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
-    ~CompositeElevationDataProvider_Request(){}
+    ~CompositeElevationDataProvider_Request() {}
     
     bool launchNewStep();
     
@@ -117,7 +117,7 @@ private:
   void requestFinished(CompositeElevationDataProvider_Request* req);
 
 public:
-  CompositeElevationDataProvider():_context(NULL), _currentID(0){}
+  CompositeElevationDataProvider():_context(NULL), _currentID(0) {}
 
   ~CompositeElevationDataProvider() {
     int size =  _providers.size();

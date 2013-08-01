@@ -1,5 +1,5 @@
 //
-//  GPUProgram.h
+//  GPUProgram.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.
@@ -9,7 +9,6 @@
 #ifndef __G3MiOSSDK__GPUProgram__
 #define __G3MiOSSDK__GPUProgram__
 
-#include <iostream>
 #include <string>
 #include <map>
 
@@ -68,7 +67,7 @@ class GPUProgram{
   _nUniforms(0),
   _nAttributes(0),
   _uniformsCode(0),
-  _attributesCode(0){}
+  _attributesCode(0) {}
 
   GPUProgram(const GPUProgram& that);
   
@@ -120,4 +119,4 @@ public:
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
 };
 
-#endif /* defined(__G3MiOSSDK__GPUProgram__) */
+#endif
