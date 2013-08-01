@@ -48,7 +48,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class G3MCSceneChangeListener
+public abstract class MapBooSceneChangeListener
 {
   public void dispose()
   {

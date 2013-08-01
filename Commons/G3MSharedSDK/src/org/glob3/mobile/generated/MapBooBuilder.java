@@ -7,7 +7,7 @@ public abstract class MapBooBuilder
 
   private final boolean _useWebSockets;
 
-  private G3MCSceneChangeListener _sceneListener;
+  private MapBooSceneChangeListener _sceneListener;
 
   private String _sceneId;
   private int _sceneTimestamp;
@@ -323,7 +323,7 @@ public abstract class MapBooBuilder
     return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, G3MCSceneChangeListener sceneListener)
+  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, MapBooSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
