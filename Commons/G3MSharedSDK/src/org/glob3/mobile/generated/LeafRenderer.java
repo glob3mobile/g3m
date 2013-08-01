@@ -69,7 +69,7 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract void stop(G3MRenderContext rc);
 
-  public final PlanetRenderer asPlanetRenderer()
+  public PlanetRenderer asPlanetRenderer()
   {
     return null;
   }
