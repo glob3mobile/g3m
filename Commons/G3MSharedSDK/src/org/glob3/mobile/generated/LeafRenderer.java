@@ -45,7 +45,8 @@ public abstract class LeafRenderer extends Renderer
     return _enable;
   }
 
-  public void setEnable(final boolean enable) {
+  public void setEnable(boolean enable)
+  {
     _enable = enable;
   }
 
