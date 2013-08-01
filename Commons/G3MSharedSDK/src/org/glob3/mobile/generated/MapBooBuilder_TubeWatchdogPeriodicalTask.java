@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_TubeWatchdogPeriodicalTask extends GTask
+public class MapBooBuilder_TubeWatchdogPeriodicalTask extends GTask
 {
-  private G3MCBuilder _builder;
+  private MapBooBuilder _builder;
 
-  public G3MCBuilder_TubeWatchdogPeriodicalTask(G3MCBuilder builder)
+  public MapBooBuilder_TubeWatchdogPeriodicalTask(MapBooBuilder builder)
   {
      _builder = builder;
   }

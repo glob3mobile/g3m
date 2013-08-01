@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_PollingScenePeriodicalTask extends GTask
+public class MapBooBuilder_PollingScenePeriodicalTask extends GTask
 {
-  private G3MCBuilder _builder;
+  private MapBooBuilder _builder;
 
   private long _requestId;
 
@@ -32,7 +32,7 @@ public class G3MCBuilder_PollingScenePeriodicalTask extends GTask
   }
 
 
-  public G3MCBuilder_PollingScenePeriodicalTask(G3MCBuilder builder)
+  public MapBooBuilder_PollingScenePeriodicalTask(MapBooBuilder builder)
   {
      _builder = builder;
      _requestId = -1;
@@ -47,6 +47,6 @@ public class G3MCBuilder_PollingScenePeriodicalTask extends GTask
       downloader.cancelRequest(_requestId);
     }
 
-    _requestId = downloader.requestBuffer(getURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_SceneDescriptionBufferListener(_builder), true);
+    _requestId = downloader.requestBuffer(getURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new MapBooBuilder_SceneDescriptionBufferListener(_builder), true);
   }
 }

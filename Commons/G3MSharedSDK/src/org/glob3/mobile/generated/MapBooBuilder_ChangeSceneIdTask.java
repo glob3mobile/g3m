@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_ChangeSceneIdTask extends GTask
+public class MapBooBuilder_ChangeSceneIdTask extends GTask
 {
-  private G3MCBuilder _builder;
+  private MapBooBuilder _builder;
   private final String _sceneId;
 
-  public G3MCBuilder_ChangeSceneIdTask(G3MCBuilder builder, String sceneId)
+  public MapBooBuilder_ChangeSceneIdTask(MapBooBuilder builder, String sceneId)
   {
      _builder = builder;
      _sceneId = sceneId;

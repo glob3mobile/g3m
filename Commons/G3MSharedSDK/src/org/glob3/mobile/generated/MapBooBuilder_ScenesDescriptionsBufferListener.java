@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_ScenesDescriptionsBufferListener extends IBufferDownloadListener
+public class MapBooBuilder_ScenesDescriptionsBufferListener extends IBufferDownloadListener
 {
-  private G3MCBuilderScenesDescriptionsListener _listener;
+  private MapBooBuilderScenesDescriptionsListener _listener;
   private final boolean _autoDelete;
 
-  public G3MCBuilder_ScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
+  public MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener listener, boolean autoDelete)
   {
      _listener = listener;
      _autoDelete = autoDelete;
@@ -32,7 +32,7 @@ public class G3MCBuilder_ScenesDescriptionsBufferListener extends IBufferDownloa
       }
       else
       {
-        java.util.ArrayList<G3MCSceneDescription> scenesDescriptions = new java.util.ArrayList<G3MCSceneDescription>();
+        java.util.ArrayList<MapBooSceneDescription> scenesDescriptions = new java.util.ArrayList<MapBooSceneDescription>();
 
         final int size = jsonScenesDescriptions.size();
 
@@ -70,7 +70,7 @@ public class G3MCBuilder_ScenesDescriptionsBufferListener extends IBufferDownloa
               }
             }
 
-            scenesDescriptions.add(new G3MCSceneDescription(id, user, name, description, iconURL, tags));
+            scenesDescriptions.add(new MapBooSceneDescription(id, user, name, description, iconURL, tags));
 
           }
         }

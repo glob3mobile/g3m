@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  G3MCBuilder.cpp
+//  MapBooBuilder.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  G3MCBuilder.hpp
+//  MapBooBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
@@ -31,7 +31,7 @@ package org.glob3.mobile.generated;
 //class PeriodicalTask;
 //class Layer;
 //class LayerSet;
-//class G3MCSceneDescription;
+//class MapBooSceneDescription;
 //class Color;
 //class GPUProgramManager;
 //class JSONBaseObject;

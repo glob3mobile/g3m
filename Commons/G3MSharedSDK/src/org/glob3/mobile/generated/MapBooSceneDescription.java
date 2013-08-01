@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  G3MCSceneDescription.cpp
+//  MapBooSceneDescription.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/26/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  G3MCSceneDescription.hpp
+//  MapBooSceneDescription.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/26/13.
@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class G3MCSceneDescription
+public class MapBooSceneDescription
 {
   private final String _id;
   private final String _user;
@@ -27,7 +27,7 @@ public class G3MCSceneDescription
   private java.util.ArrayList<String> _tags = new java.util.ArrayList<String>();
 
 
-  public G3MCSceneDescription(String id, String user, String name, String description, String iconURL, java.util.ArrayList<String> tags)
+  public MapBooSceneDescription(String id, String user, String name, String description, String iconURL, java.util.ArrayList<String> tags)
   {
      _id = id;
      _user = user;

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class G3MCBuilder
+public abstract class MapBooBuilder
 {
 
   private final URL _serverURL;
@@ -85,11 +85,11 @@ public abstract class G3MCBuilder
   
     if (_useWebSockets)
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_TubeWatchdogPeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
     }
     else
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new G3MCBuilder_PollingScenePeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_PollingScenePeriodicalTask(this)));
     }
   
     return periodicalTasks;
@@ -187,7 +187,7 @@ public abstract class G3MCBuilder
 
   private GInitializationTask createInitializationTask()
   {
-    return _useWebSockets ? new G3MCBuilder_SceneTubeConnector(this) : null;
+    return _useWebSockets ? new MapBooBuilder_SceneTubeConnector(this) : null;
   }
 
 
@@ -323,7 +323,7 @@ public abstract class G3MCBuilder
     return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
-  protected G3MCBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, G3MCSceneChangeListener sceneListener)
+  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String sceneId, G3MCSceneChangeListener sceneListener)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -584,13 +584,13 @@ public abstract class G3MCBuilder
   }
 
   /** Private to G3M, don't call it */
-  public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener)
+  public final void requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener listener)
   {
      requestScenesDescriptions(listener, true);
   }
-  public final void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener listener, boolean autoDelete)
+  public final void requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener listener, boolean autoDelete)
   {
-    getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new G3MCBuilder_ScenesDescriptionsBufferListener(listener, autoDelete), true);
+    getDownloader().requestBuffer(createScenesDescriptionsURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), true, new MapBooBuilder_ScenesDescriptionsBufferListener(listener, autoDelete), true);
   }
 
   /** Private to G3M, don't call it */
@@ -689,7 +689,7 @@ public abstract class G3MCBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-    _sceneTubeWebSocket = context.getFactory().createWebSocket(createSceneTubeURL(), new G3MCBuilder_SceneTubeListener(this), autodeleteListener, autodeleteWebSocket);
+    _sceneTubeWebSocket = context.getFactory().createWebSocket(createSceneTubeURL(), new MapBooBuilder_SceneTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
   public final void setSceneTubeOpened(boolean open)
@@ -713,7 +713,7 @@ public abstract class G3MCBuilder
   {
     if (sceneId.compareTo(_sceneId) != 0)
     {
-      getThreadUtils().invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId), true);
+      getThreadUtils().invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, sceneId), true);
     }
   }
 }

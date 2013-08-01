@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_SceneTubeListener implements IWebSocketListener
+public class MapBooBuilder_SceneTubeListener implements IWebSocketListener
 {
-  private G3MCBuilder _builder;
+  private MapBooBuilder _builder;
 
-  public G3MCBuilder_SceneTubeListener(G3MCBuilder builder)
+  public MapBooBuilder_SceneTubeListener(MapBooBuilder builder)
   {
      _builder = builder;
   }

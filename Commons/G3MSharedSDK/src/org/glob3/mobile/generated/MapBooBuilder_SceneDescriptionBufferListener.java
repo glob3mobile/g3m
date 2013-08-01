@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class G3MCBuilder_SceneDescriptionBufferListener extends IBufferDownloadListener
+public class MapBooBuilder_SceneDescriptionBufferListener extends IBufferDownloadListener
 {
-  private G3MCBuilder _builder;
+  private MapBooBuilder _builder;
 
-  public G3MCBuilder_SceneDescriptionBufferListener(G3MCBuilder builder)
+  public MapBooBuilder_SceneDescriptionBufferListener(MapBooBuilder builder)
   {
      _builder = builder;
   }
