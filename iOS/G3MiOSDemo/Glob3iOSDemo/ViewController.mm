@@ -575,8 +575,14 @@ public:
     Vector3D lightDir = Vector3D(100000, 0,0);
 //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-    vertex.add(Vector3D::zero);
-    vertex.add(lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+
+    Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                                Angle::fromDegrees(-15.431389),
+                                                10000));
+
+    vertex.add(v);
+    vertex.add(v.add(lightDir));
+               //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
     meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
                                           true,
@@ -2178,10 +2184,11 @@ public:
               const Angle fromAltitude = Angle::fromDegrees(90);
               const Angle toAltitude   = Angle::fromDegrees(15);
 
-              plane->orbitCamera(TimeInterval::fromSeconds(20),
-                                 fromDistance, toDistance,
-                                 fromAzimuth,  toAzimuth,
-                                 fromAltitude, toAltitude);
+//              plane->orbitCamera(TimeInterval::fromSeconds(20),
+//                                 fromDistance, toDistance,
+//                                 fromAzimuth,  toAzimuth,
+//                                 fromAltitude, toAltitude);
+              
 
               delete buffer;
               /* */
@@ -2228,13 +2235,16 @@ public:
           Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
 
           // Washington, DC
-          plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                            Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+          plane->setPosition(new Geodetic3D(Angle::fromDegrees(28.127222),
+                                            Angle::fromDegrees(-15.431389),
                                             10000) );
-          const double scale = 200;
+          const double scale = 1000;
           plane->setScale(scale, scale, scale);
           plane->setPitch(Angle::fromDegrees(90));
+          plane->setHeading(Angle::fromDegrees(270));
           _shapesRenderer->addShape(plane);
+
+          
 
 
           //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
