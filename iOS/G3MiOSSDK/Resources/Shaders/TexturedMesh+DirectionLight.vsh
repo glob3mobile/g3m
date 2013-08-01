@@ -15,23 +15,19 @@ uniform mat4 uModel;
 
 uniform float uPointSize;
 
-uniform vec4 uLightDirection; //MUST BE NORMALIZED
-
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
-varying float diffuseLightIntensity;
+varying vec4 vertex_normal;
 
 void main() {
-  mat4 m = uModel;
+mat4 m=uModel;
+  vertex_normal = normalize(
+  uModel *
+  aNormal);
   
-  vec4 modelNormal = uModel * normalize(aNormal);
+//  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
 
-  vec4 normal = normalize( modelNormal );
-  vec4 lightDir = normalize(uLightDirection);
-  
-  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
-  
 //  if (length(normal) > 1.01 || length(normal) < 0.99 || dot(normal, lightDir) > 1.01){
 //    diffuseLightIntensity = 0.0;
 //  }
