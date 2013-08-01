@@ -31,11 +31,15 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _centerPoint;
+  mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
   mutable MutableVector3D _initialPoint1;
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
+  mutable double          _angleBetweenInitialRays;
+  mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
 
 
