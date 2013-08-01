@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUProgramManager.h
+//  GPUProgramManager.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 02/04/13.
@@ -17,9 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
-
-///#include "GPUProgramState.hpp"
 
 public class GPUProgramManager
 {
@@ -71,14 +68,14 @@ public class GPUProgramManager
 //  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
 ///#ifdef C_CODE
 //    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
-//        it != _programs.end(); it++){
-//      if (state.isLinkableToProgram(*it->second)){
+//        it != _programs.end(); it++) {
+//      if (state.isLinkableToProgram(*it->second)) {
 //        return it->second;
 //      }
 //    }
 ///#endif
 ///#ifdef JAVA_CODE
-//    for (final GPUProgram p : _programs.values()){
+//    for (final GPUProgram p : _programs.values()) {
 //    	if (state.isLinkableToProgram(p)) {
 //        return p;
 //      }
@@ -90,7 +87,7 @@ public class GPUProgramManager
 //    std::vector<std::string>* us = state.getUniformsNames();
 //    int size = us->size();
 //    for (int i = 0; i < size; i++) {
-//      if (us->at(i).compare("ViewPortExtent") == 0){
+//      if (us->at(i).compare("ViewPortExtent") == 0) {
 //        return getProgram(gl, "Billboard");
 //      }
 //    }
@@ -120,25 +117,25 @@ public class GPUProgramManager
      for (int j = 0; j < sizeI; j++) {
      int key = ui->at(j);
   
-     if (key == VIEWPORT_EXTENT){
+     if (key == VIEWPORT_EXTENT) {
      billboard = true;
   
-     if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)){
+     if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)) {
      int a = 0;
      a++;
      }
   
      }
   
-     if (key == FLAT_COLOR){
+     if (key == FLAT_COLOR) {
      flatColor = true;
      }
   
-     //      if (key == TRANSLATION_TEXTURE_COORDS){
+     //      if (key == TRANSLATION_TEXTURE_COORDS) {
      //        texture = true;
      //      }
   
-     if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS){
+     if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS) {
      transformTC = true;
      }
      }
@@ -148,14 +145,14 @@ public class GPUProgramManager
      for (int j = 0; j < sizeI; j++) {
      int key = ai->at(j);
   
-     //      if (key == TEXTURE_COORDS){
+     //      if (key == TEXTURE_COORDS) {
      //        texture = true;
      //      }
   
-     if (key == COLOR){
+     if (key == COLOR) {
      color = true;
   
-     if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)){
+     if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)) {
      int a = 0;
      a++;
      }

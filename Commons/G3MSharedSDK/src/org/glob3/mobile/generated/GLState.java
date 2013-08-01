@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GLState.h
+//  GLState.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 17/05/13.
@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //  Created by Agustin Trujillo Pino on 27/10/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
-
 
 
 

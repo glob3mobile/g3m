@@ -134,7 +134,7 @@ public class BusyMeshRenderer extends LeafRenderer
   {
     GL gl = rc.getGL();
   
-  //  if (!_projectionMatrix.isValid()){
+  //  if (!_projectionMatrix.isValid()) {
   //    // init modelview matrix
   //    int currentViewport[4];
   //    gl->getViewport(currentViewport);

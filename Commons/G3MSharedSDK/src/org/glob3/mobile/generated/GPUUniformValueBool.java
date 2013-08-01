@@ -26,7 +26,7 @@ public class GPUUniformValueBool extends GPUUniformValue
   }
 
   //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
+  //    if (value != NULL) {
   //      delete value;
   //    }
   //    return new GPUUniformValueBool(_value);

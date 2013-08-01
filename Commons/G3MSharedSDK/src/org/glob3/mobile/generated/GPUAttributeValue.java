@@ -63,7 +63,7 @@ public abstract class GPUAttributeValue extends RCObject
      _arrayElementSize = arrayElementSize;
   }
 
-//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized){
+//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized) {
 //    _enabled = enabled;
 //    _type = type;
 //    _attributeSize = attributeSize;
@@ -112,7 +112,7 @@ public abstract class GPUAttributeValue extends RCObject
   //    _attribute = a;
   //  }
   //
-  //  void unLinkToGPUAttribute(){
+  //  void unLinkToGPUAttribute() {
   //    _attribute = NULL;
   //  }
 

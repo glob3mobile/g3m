@@ -26,7 +26,7 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
   }
 
   //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
+  //    if (value != NULL) {
   //      delete value;
   //    }
   //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);

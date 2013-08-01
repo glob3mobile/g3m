@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraZoomAndRotateHandler.h
+//  CameraZoomAndRotateHandler.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo on 26/06/13.

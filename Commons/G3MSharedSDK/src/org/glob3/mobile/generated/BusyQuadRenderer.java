@@ -129,7 +129,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     }
   
     // init modelview matrix
-  //  if (!_projectionMatrix.isValid()){
+  //  if (!_projectionMatrix.isValid()) {
   //    // init modelview matrix
   //    int currentViewport[4];
   //    gl->getViewport(currentViewport);

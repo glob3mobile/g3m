@@ -8,14 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GLFeatureGroup.h
+//  GLFeatureGroup.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
 //
 //
-
-
 
 
 
