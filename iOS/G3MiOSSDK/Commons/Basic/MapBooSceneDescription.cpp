@@ -1,35 +1,35 @@
 //
-//  G3MCSceneDescription.cpp
+//  MapBooSceneDescription.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/26/13.
 //
 //
 
-#include "G3MCSceneDescription.hpp"
+#include "MapBooSceneDescription.hpp"
 #include "IStringBuilder.hpp"
 
-const std::string G3MCSceneDescription::getId() const {
+const std::string MapBooSceneDescription::getId() const {
   return _id;
 }
 
-const std::string G3MCSceneDescription::getUser() const {
+const std::string MapBooSceneDescription::getUser() const {
   return _user;
 }
 
-const std::string G3MCSceneDescription::getName() const {
+const std::string MapBooSceneDescription::getName() const {
   return _name;
 }
 
-const std::string G3MCSceneDescription::getDescription() const {
+const std::string MapBooSceneDescription::getDescription() const {
   return _description;
 }
 
-const std::string G3MCSceneDescription::getIconURL() const {
+const std::string MapBooSceneDescription::getIconURL() const {
   return _iconURL;
 }
 
-std::vector<std::string> G3MCSceneDescription::getTags() const {
+std::vector<std::string> MapBooSceneDescription::getTags() const {
   std::vector<std::string> result;
   const int size = _tags.size();
   for (int i = 0; i < size; i++) {
@@ -38,7 +38,7 @@ std::vector<std::string> G3MCSceneDescription::getTags() const {
   return result;
 }
 
-const std::string G3MCSceneDescription::description() const {
+const std::string MapBooSceneDescription::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->addString("[Scene id=");
   isb->addString(_id);

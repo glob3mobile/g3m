@@ -1,20 +1,20 @@
 //
-//  G3MCBuilder_iOS.hpp
+//  MapBooBuilder_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#ifndef __G3MiOSSDK__G3MCBuilder_iOS__
-#define __G3MiOSSDK__G3MCBuilder_iOS__
+#ifndef __G3MiOSSDK__MapBooBuilder_iOS__
+#define __G3MiOSSDK__MapBooBuilder_iOS__
 
-#include "G3MCBuilder.hpp"
+#include "MapBooBuilder.hpp"
 #include "G3MWidget_iOS.h"
 
 class GPUProgramSources;
 
-class G3MCBuilder_iOS : public G3MCBuilder {
+class MapBooBuilder_iOS : public MapBooBuilder {
 private:
   G3MWidget_iOS* _nativeWidget;
   
@@ -31,7 +31,7 @@ protected:
   GPUProgramManager* createGPUProgramManager();
 
 public:
-  G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,
+  MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                   const URL& serverURL,
                   const URL& tubesURL,
                   bool useWebSockets,

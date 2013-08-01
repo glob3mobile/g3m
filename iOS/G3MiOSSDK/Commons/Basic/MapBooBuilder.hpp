@@ -1,13 +1,13 @@
 //
-//  G3MCBuilder.hpp
+//  MapBooBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#ifndef __G3MiOSSDK__G3MCBuilder__
-#define __G3MiOSSDK__G3MCBuilder__
+#ifndef __G3MiOSSDK__MapBooBuilder__
+#define __G3MiOSSDK__MapBooBuilder__
 
 #include <stddef.h>
 
@@ -25,7 +25,7 @@ class GInitializationTask;
 class PeriodicalTask;
 class Layer;
 class LayerSet;
-class G3MCSceneDescription;
+class MapBooSceneDescription;
 class Color;
 class GPUProgramManager;
 class JSONBaseObject;
@@ -68,20 +68,20 @@ public:
 };
 
 
-class G3MCBuilderScenesDescriptionsListener {
+class MapBooBuilderScenesDescriptionsListener {
 public:
-  virtual ~G3MCBuilderScenesDescriptionsListener() {
+  virtual ~MapBooBuilderScenesDescriptionsListener() {
 
   }
 
-  virtual void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) = 0;
+  virtual void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) = 0;
 
   virtual void onError() = 0;
   
 };
 
 
-class G3MCBuilder {
+class MapBooBuilder {
 private:
 
 #ifdef C_CODE
@@ -166,13 +166,13 @@ private:
   WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const;
 
 protected:
-  G3MCBuilder(const URL& serverURL,
+  MapBooBuilder(const URL& serverURL,
               const URL& tubesURL,
               bool useWebSockets,
               const std::string& sceneId,
               G3MCSceneChangeListener* sceneListener);
   
-  virtual ~G3MCBuilder() {
+  virtual ~MapBooBuilder() {
   }
 
   void setGL(GL *gl);
@@ -228,7 +228,7 @@ public:
   void rawChangeScene(const std::string& sceneId);
 
   /** Private to G3M, don't call it */
-  void requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
+  void requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener* listener,
                                  bool autoDelete = true);
 
   /** Private to G3M, don't call it */

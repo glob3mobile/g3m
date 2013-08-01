@@ -1,12 +1,12 @@
 //
-//  G3MCBuilder.cpp
+//  MapBooBuilder.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#include "G3MCBuilder.hpp"
+#include "MapBooBuilder.hpp"
 
 #include "ILogger.hpp"
 #include "CompositeRenderer.hpp"
@@ -32,7 +32,7 @@
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
-#include "G3MCSceneDescription.hpp"
+#include "MapBooSceneDescription.hpp"
 #include "IThreadUtils.hpp"
 #include "Color.hpp"
 #include "OSMLayer.hpp"
@@ -45,7 +45,7 @@
 #include "IWebSocketListener.hpp"
 #include "IWebSocket.hpp"
 
-G3MCBuilder::G3MCBuilder(const URL& serverURL,
+MapBooBuilder::MapBooBuilder(const URL& serverURL,
                          const URL& tubesURL,
                          bool useWebSockets,
                          const std::string& sceneId,
@@ -75,28 +75,28 @@ _sceneTubeWebSocket(NULL)
   
 }
 
-GPUProgramManager* G3MCBuilder::getGPUProgramManager() {
+GPUProgramManager* MapBooBuilder::getGPUProgramManager() {
   if (_gpuProgramManager == NULL) {
     _gpuProgramManager = createGPUProgramManager();
   }
   return _gpuProgramManager;
 }
 
-IDownloader* G3MCBuilder::getDownloader() {
+IDownloader* MapBooBuilder::getDownloader() {
   if (_downloader == NULL) {
     _downloader = createDownloader();
   }
   return _downloader;
 }
 
-IThreadUtils* G3MCBuilder::getThreadUtils() {
+IThreadUtils* MapBooBuilder::getThreadUtils() {
   if (_threadUtils == NULL) {
     _threadUtils = createThreadUtils();
   }
   return _threadUtils;
 }
 
-void G3MCBuilder::setGL(GL *gl) {
+void MapBooBuilder::setGL(GL *gl) {
   if (_gl) {
     ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
     return;
@@ -108,7 +108,7 @@ void G3MCBuilder::setGL(GL *gl) {
   _gl = gl;
 }
 
-GL* G3MCBuilder::getGL() {
+GL* MapBooBuilder::getGL() {
   if (!_gl) {
     ILogger::instance()->logError("Logic Error: _gl not initialized");
   }
@@ -116,7 +116,7 @@ GL* G3MCBuilder::getGL() {
   return _gl;
 }
 
-PlanetRenderer* G3MCBuilder::createPlanetRenderer() {
+PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const TileTessellator* tessellator = new EllipsoidalTileTessellator(true);
   
   ElevationDataProvider* elevationDataProvider = NULL;
@@ -152,11 +152,11 @@ PlanetRenderer* G3MCBuilder::createPlanetRenderer() {
                           texturePriority);
 }
 
-const Planet* G3MCBuilder::createPlanet() {
+const Planet* MapBooBuilder::createPlanet() {
   return Planet::createEarth();
 }
 
-std::vector<ICameraConstrainer*>* G3MCBuilder::createCameraConstraints() {
+std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints->push_back(scc);
@@ -164,7 +164,7 @@ std::vector<ICameraConstrainer*>* G3MCBuilder::createCameraConstraints() {
   return cameraConstraints;
 }
 
-CameraRenderer* G3MCBuilder::createCameraRenderer() {
+CameraRenderer* MapBooBuilder::createCameraRenderer() {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
@@ -178,11 +178,11 @@ CameraRenderer* G3MCBuilder::createCameraRenderer() {
   return cameraRenderer;
 }
 
-Renderer* G3MCBuilder::createBusyRenderer() {
+Renderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
-MapQuestLayer* G3MCBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
                                                const TimeInterval& timeToCache) const {
   const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
   if (imagery.compare("OpenAerial") == 0) {
@@ -193,7 +193,7 @@ MapQuestLayer* G3MCBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
   return MapQuestLayer::newOSM(timeToCache);
 }
 
-BingMapsLayer* G3MCBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
                                                const TimeInterval& timeToCache) const {
   const std::string key = jsonBaseLayer->getAsString("key", "");
   const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
@@ -201,7 +201,7 @@ BingMapsLayer* G3MCBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
   return new BingMapsLayer(imagerySet, key, timeToCache);
 }
 
-CartoDBLayer* G3MCBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
                                              const TimeInterval& timeToCache) const {
   const std::string userName = jsonBaseLayer->getAsString("userName", "");
   const std::string table    = jsonBaseLayer->getAsString("table",    "");
@@ -209,14 +209,14 @@ CartoDBLayer* G3MCBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
   return new CartoDBLayer(userName, table, timeToCache);
 }
 
-MapBoxLayer* G3MCBuilder::parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonBaseLayer,
                                            const TimeInterval& timeToCache) const {
   const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
 
   return new MapBoxLayer(mapKey, timeToCache);
 }
 
-WMSLayer* G3MCBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
+WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
 
   const std::string mapLayer = jsonBaseLayer->getAsString("layerName", "");
   const URL mapServerURL = URL(jsonBaseLayer->getAsString("server", ""), false);
@@ -271,7 +271,7 @@ WMSLayer* G3MCBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
 }
 
 
-Layer* G3MCBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
+Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
 
   if (jsonBaseObjectLayer->asNull() != NULL) {
     return NULL;
@@ -311,7 +311,7 @@ Layer* G3MCBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const 
 }
 
 
-void G3MCBuilder::parseSceneDescription(const std::string& json,
+void MapBooBuilder::parseSceneDescription(const std::string& json,
                                         const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
 
@@ -387,12 +387,12 @@ void G3MCBuilder::parseSceneDescription(const std::string& json,
 }
 
 
-class G3MCBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
+class MapBooBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
 private:
-  G3MCBuilder* _builder;
+  MapBooBuilder* _builder;
 
 public:
-  G3MCBuilder_SceneDescriptionBufferListener(G3MCBuilder* builder) :
+  MapBooBuilder_SceneDescriptionBufferListener(MapBooBuilder* builder) :
   _builder(builder)
   {
   }
@@ -424,9 +424,9 @@ public:
 };
 
 
-class G3MCBuilder_PollingScenePeriodicalTask : public GTask {
+class MapBooBuilder_PollingScenePeriodicalTask : public GTask {
 private:
-  G3MCBuilder* _builder;
+  MapBooBuilder* _builder;
   
   long long _requestId;
   
@@ -455,7 +455,7 @@ private:
   
   
 public:
-  G3MCBuilder_PollingScenePeriodicalTask(G3MCBuilder* builder) :
+  MapBooBuilder_PollingScenePeriodicalTask(MapBooBuilder* builder) :
   _builder(builder),
   _requestId(-1)
   {
@@ -472,13 +472,13 @@ public:
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::zero(),
                                            true,
-                                           new G3MCBuilder_SceneDescriptionBufferListener(_builder),
+                                           new MapBooBuilder_SceneDescriptionBufferListener(_builder),
                                            true);
   }
 };
 
 
-void G3MCBuilder::recreateLayerSet() {
+void MapBooBuilder::recreateLayerSet() {
   _layerSet->removeAllLayers(false);
 
   if (_sceneBaseLayer != NULL) {
@@ -490,7 +490,7 @@ void G3MCBuilder::recreateLayerSet() {
   }
 }
 
-void G3MCBuilder::setSceneBaseLayer(Layer* baseLayer) {
+void MapBooBuilder::setSceneBaseLayer(Layer* baseLayer) {
   if (baseLayer == NULL) {
     ILogger::instance()->logError("Base Layer can't be NULL");
     return;
@@ -508,7 +508,7 @@ void G3MCBuilder::setSceneBaseLayer(Layer* baseLayer) {
   }
 }
 
-void G3MCBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
+void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
   if (_sceneOverlayLayer != overlayLayer) {
     delete _sceneOverlayLayer;
     _sceneOverlayLayer = overlayLayer;
@@ -521,25 +521,25 @@ void G3MCBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
   }
 }
 
-const URL G3MCBuilder::createSceneTubeURL() const {
+const URL MapBooBuilder::createSceneTubeURL() const {
   const std::string tubesPath = _tubesURL.getPath();
 
   return URL(tubesPath + "/scene/" + _sceneId, false);
 }
 
-const URL G3MCBuilder::createPollingSceneDescriptionURL() const {
+const URL MapBooBuilder::createPollingSceneDescriptionURL() const {
   const std::string serverPath = _serverURL.getPath();
   
   return URL(serverPath + "/scenes/" + _sceneId, false);
 }
 
 
-class G3MCBuilder_TubeWatchdogPeriodicalTask : public GTask {
+class MapBooBuilder_TubeWatchdogPeriodicalTask : public GTask {
 private:
-  G3MCBuilder* _builder;
+  MapBooBuilder* _builder;
 
 public:
-  G3MCBuilder_TubeWatchdogPeriodicalTask(G3MCBuilder* builder) :
+  MapBooBuilder_TubeWatchdogPeriodicalTask(MapBooBuilder* builder) :
   _builder(builder)
   {
   }
@@ -553,39 +553,39 @@ public:
 };
 
 
-std::vector<PeriodicalTask*>* G3MCBuilder::createPeriodicalTasks() {
+std::vector<PeriodicalTask*>* MapBooBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   if (_useWebSockets) {
     periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
-                                                  new G3MCBuilder_TubeWatchdogPeriodicalTask(this)));
+                                                  new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
   }
   else {
     periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
-                                                  new G3MCBuilder_PollingScenePeriodicalTask(this)));
+                                                  new MapBooBuilder_PollingScenePeriodicalTask(this)));
   }
 
   return periodicalTasks;
 }
 
-IStorage* G3MCBuilder::getStorage() {
+IStorage* MapBooBuilder::getStorage() {
   if (_storage == NULL) {
     _storage = createStorage();
   }
   return _storage;
 }
 
-class G3MCBuilder_SceneTubeListener : public IWebSocketListener {
+class MapBooBuilder_SceneTubeListener : public IWebSocketListener {
 private:
-  G3MCBuilder* _builder;
+  MapBooBuilder* _builder;
 
 public:
-  G3MCBuilder_SceneTubeListener(G3MCBuilder* builder) :
+  MapBooBuilder_SceneTubeListener(MapBooBuilder* builder) :
   _builder(builder)
   {
   }
 
-  ~G3MCBuilder_SceneTubeListener() {
+  ~MapBooBuilder_SceneTubeListener() {
   }
 
   void onOpen(IWebSocket* ws) {
@@ -613,12 +613,12 @@ public:
   }
 };
 
-class G3MCBuilder_SceneTubeConnector : public GInitializationTask {
+class MapBooBuilder_SceneTubeConnector : public GInitializationTask {
 private:
-  G3MCBuilder* _builder;
+  MapBooBuilder* _builder;
 
 public:
-  G3MCBuilder_SceneTubeConnector(G3MCBuilder* builder) :
+  MapBooBuilder_SceneTubeConnector(MapBooBuilder* builder) :
   _builder(builder)
   {
   }
@@ -632,22 +632,22 @@ public:
   }
 };
 
-void G3MCBuilder::openSceneTube(const G3MContext* context) {
+void MapBooBuilder::openSceneTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
   _sceneTubeWebSocket = context->getFactory()->createWebSocket(createSceneTubeURL(),
-                                                               new G3MCBuilder_SceneTubeListener(this),
+                                                               new MapBooBuilder_SceneTubeListener(this),
                                                                autodeleteListener,
                                                                autodeleteWebSocket);
 }
 
 
-GInitializationTask* G3MCBuilder::createInitializationTask() {
-  return _useWebSockets ? new G3MCBuilder_SceneTubeConnector(this) : NULL;
+GInitializationTask* MapBooBuilder::createInitializationTask() {
+  return _useWebSockets ? new MapBooBuilder_SceneTubeConnector(this) : NULL;
 }
 
-G3MWidget* G3MCBuilder::create() {
+G3MWidget* MapBooBuilder::create() {
   if (_g3mWidget != NULL) {
     ILogger::instance()->logError("The G3MWidget was already created, can't be created more than once");
     return NULL;
@@ -690,13 +690,13 @@ G3MWidget* G3MCBuilder::create() {
   return _g3mWidget;
 }
 
-class G3MCBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
+class MapBooBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
 private:
-  G3MCBuilderScenesDescriptionsListener* _listener;
+  MapBooBuilderScenesDescriptionsListener* _listener;
   const bool _autoDelete;
   
 public:
-  G3MCBuilder_ScenesDescriptionsBufferListener(G3MCBuilderScenesDescriptionsListener* listener,
+  MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener* listener,
                                                bool autoDelete) :
   _listener(listener),
   _autoDelete(autoDelete)
@@ -723,7 +723,7 @@ public:
         onError(url);
       }
       else {
-        std::vector<G3MCSceneDescription*>* scenesDescriptions = new std::vector<G3MCSceneDescription*>();
+        std::vector<MapBooSceneDescription*>* scenesDescriptions = new std::vector<MapBooSceneDescription*>();
         
         const int size = jsonScenesDescriptions->size();
         
@@ -754,7 +754,7 @@ public:
               }
             }
             
-            scenesDescriptions->push_back( new G3MCSceneDescription(id,
+            scenesDescriptions->push_back( new MapBooSceneDescription(id,
                                                                     user,
                                                                     name,
                                                                     description,
@@ -795,32 +795,32 @@ public:
   
 };
 
-const URL G3MCBuilder::createScenesDescriptionsURL() const {
+const URL MapBooBuilder::createScenesDescriptionsURL() const {
   const std::string serverPath = _serverURL.getPath();
   
   return URL(serverPath + "/scenes/", false);
 }
 
 
-void G3MCBuilder::requestScenesDescriptions(G3MCBuilderScenesDescriptionsListener* listener,
+void MapBooBuilder::requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener* listener,
                                             bool autoDelete) {
   getDownloader()->requestBuffer(createScenesDescriptionsURL(),
                                  DownloadPriority::HIGHEST,
                                  TimeInterval::zero(),
                                  true,
-                                 new G3MCBuilder_ScenesDescriptionsBufferListener(listener, autoDelete),
+                                 new MapBooBuilder_ScenesDescriptionsBufferListener(listener, autoDelete),
                                  true);
 }
 
-int G3MCBuilder::getSceneTimestamp() const {
+int MapBooBuilder::getSceneTimestamp() const {
   return _sceneTimestamp;
 }
 
-void G3MCBuilder::setSceneTimestamp(const int timestamp) {
+void MapBooBuilder::setSceneTimestamp(const int timestamp) {
   _sceneTimestamp = timestamp;
 }
 
-void G3MCBuilder::setSceneUser(const std::string& user) {
+void MapBooBuilder::setSceneUser(const std::string& user) {
   if (_sceneUser.compare(user) != 0) {
     _sceneUser = user;
     
@@ -830,7 +830,7 @@ void G3MCBuilder::setSceneUser(const std::string& user) {
   }
 }
 
-void G3MCBuilder::setSceneName(const std::string& name) {
+void MapBooBuilder::setSceneName(const std::string& name) {
   if (_sceneName.compare(name) != 0) {
     _sceneName = name;
     
@@ -840,7 +840,7 @@ void G3MCBuilder::setSceneName(const std::string& name) {
   }
 }
 
-void G3MCBuilder::setSceneDescription(const std::string& description) {
+void MapBooBuilder::setSceneDescription(const std::string& description) {
   if (_sceneDescription.compare(description) != 0) {
     _sceneDescription = description;
 
@@ -850,7 +850,7 @@ void G3MCBuilder::setSceneDescription(const std::string& description) {
   }
 }
 
-void G3MCBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
+void MapBooBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
   if (!_sceneBackgroundColor->isEqualsTo(backgroundColor)) {
     delete _sceneBackgroundColor;
     _sceneBackgroundColor = new Color(backgroundColor);
@@ -865,13 +865,13 @@ void G3MCBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
   }
 }
 
-class G3MCBuilder_ChangeSceneIdTask : public GTask {
+class MapBooBuilder_ChangeSceneIdTask : public GTask {
 private:
-  G3MCBuilder*      _builder;
+  MapBooBuilder*      _builder;
   const std::string _sceneId;
   
 public:
-  G3MCBuilder_ChangeSceneIdTask(G3MCBuilder* builder,
+  MapBooBuilder_ChangeSceneIdTask(MapBooBuilder* builder,
                                 const std::string& sceneId) :
   _builder(builder),
   _sceneId(sceneId)
@@ -883,14 +883,14 @@ public:
   }
 };
 
-void G3MCBuilder::changeScene(const std::string& sceneId) {
+void MapBooBuilder::changeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
-    getThreadUtils()->invokeInRendererThread(new G3MCBuilder_ChangeSceneIdTask(this, sceneId),
+    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, sceneId),
                                              true);
   }
 }
 
-void G3MCBuilder::resetScene(const std::string& sceneId) {
+void MapBooBuilder::resetScene(const std::string& sceneId) {
   _sceneId = sceneId;
 
   _sceneTimestamp = -1;
@@ -911,7 +911,7 @@ void G3MCBuilder::resetScene(const std::string& sceneId) {
   _sceneBackgroundColor = Color::newFromRGBA(0, 0, 0, 1);
 }
 
-void G3MCBuilder::resetG3MWidget() {
+void MapBooBuilder::resetG3MWidget() {
   _layerSet->removeAllLayers(false);
 
   if (_g3mWidget != NULL) {
@@ -922,7 +922,7 @@ void G3MCBuilder::resetG3MWidget() {
   }
 }
 
-void G3MCBuilder::setSceneTubeOpened(bool open) {
+void MapBooBuilder::setSceneTubeOpened(bool open) {
   if (_isSceneTubeOpen != open) {
     _isSceneTubeOpen = open;
     if (!_isSceneTubeOpen) {
@@ -931,7 +931,7 @@ void G3MCBuilder::setSceneTubeOpened(bool open) {
   }
 }
 
-void G3MCBuilder::rawChangeScene(const std::string& sceneId) {
+void MapBooBuilder::rawChangeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
     resetScene(sceneId);
 

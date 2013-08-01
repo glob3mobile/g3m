@@ -1,18 +1,18 @@
 //
-//  G3MCSceneDescription.hpp
+//  MapBooSceneDescription.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/26/13.
 //
 //
 
-#ifndef __G3MiOSSDK__G3MCSceneDescription__
-#define __G3MiOSSDK__G3MCSceneDescription__
+#ifndef __G3MiOSSDK__MapBooSceneDescription__
+#define __G3MiOSSDK__MapBooSceneDescription__
 
 #include <string>
 #include <vector>
 
-class G3MCSceneDescription {
+class MapBooSceneDescription {
 private:
   const std::string        _id;
   const std::string        _user;
@@ -23,7 +23,7 @@ private:
 
 public:
 
-  G3MCSceneDescription(const std::string&        id,
+  MapBooSceneDescription(const std::string&        id,
                        const std::string&        user,
                        const std::string&        name,
                        const std::string&        description,
@@ -51,7 +51,7 @@ public:
 
   std::vector<std::string> getTags() const;
 
-  virtual ~G3MCSceneDescription() {
+  virtual ~MapBooSceneDescription() {
 
   }
 

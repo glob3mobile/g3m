@@ -100,8 +100,8 @@
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
-#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
-#import <G3MiOSSDK/G3MCSceneDescription.hpp>
+#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
+#import <G3MiOSSDK/MapBooSceneDescription.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 
 #import <G3MiOSSDK/TileRasterizer.hpp>
@@ -229,12 +229,12 @@ Mesh* createSectorMesh(const Planet* planet,
 }
 
 
-class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+class TestMapBooBuilderScenesDescriptionsListener  : public MapBooBuilderScenesDescriptionsListener {
 public:
-  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+  void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) {
     const int scenesCount = scenesDescriptions->size();
     for (int i = 0; i < scenesCount; i++) {
-      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      MapBooSceneDescription* sceneDescription = scenesDescriptions->at(i);
       ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
     }
 
@@ -252,19 +252,19 @@ public:
 };
 
 
-- (void) initWithG3MCBuilder
+- (void) initWithMapBooBuilder
 {
   G3MCSceneChangeListener* sceneListener = NULL;
   const bool useWebSockets = true;
 
-  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
+  _g3mcBuilder =  new MapBooBuilder_iOS([self G3MWidget],
                                       URL("http://192.168.0.103:8080/g3mc-server", false),
                                       URL("ws://192.168.0.103:8888/tube", false),
                                       useWebSockets,
                                       "2g59wh610g6c1kmkt0l",
                                       sceneListener);
 
-  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+  //_g3mcBuilder->requestScenesDescriptions(new TestMapBooBuilderScenesDescriptionsListener(), true);
 
   _g3mcBuilder->initializeWidget();
 }
