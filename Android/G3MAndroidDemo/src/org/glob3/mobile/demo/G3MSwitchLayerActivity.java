@@ -41,7 +41,7 @@ public class G3MSwitchLayerActivity
       final LayerSet layers = new LayerSet();
       layers.addLayer(_BingLayer);
       layers.addLayer(_OSMLayer);
-      g3mBuilder.getTileRendererBuilder().setLayerSet(layers);
+      g3mBuilder.getPlanetRendererBuilder().setLayerSet(layers);
 
       _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);

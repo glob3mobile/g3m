@@ -45,7 +45,7 @@ public class G3MDoubleGlob3Activity
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(LayerBuilder.createOSMLayer(true));
 
-      g3mBuilderDown.getTileRendererBuilder().setLayerSet(layerSet);
+      g3mBuilderDown.getPlanetRendererBuilder().setLayerSet(layerSet);
       _widgetAndroidDown = g3mBuilderDown.createWidget();
 
       final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);
