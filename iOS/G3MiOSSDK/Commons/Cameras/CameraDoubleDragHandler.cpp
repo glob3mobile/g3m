@@ -45,7 +45,7 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);  
 
   // double dragging
-  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
 
   
@@ -92,41 +92,21 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
 void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
-
-
+  
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
-  if (_initialPoint.isNan()) return;
-    
-  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();    
-  //Vector2I difPixel = pixel1.sub(pixel0);
-  const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
-  const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
-  //double finalFingerSeparation = difPixel.length();
-  //double factor = finalFingerSeparation/_initialFingerSeparation;
-  
-  
-  const Planet* _planet = eventContext->getPlanet();
 
-  const Vector3D origin = _camera0.getCartesianPosition();
-  MutableVector3D positionCamera = origin.asMutableVector3D();
-  MutableVector3D viewDirection = _camera0.getViewDirection().asMutableVector3D();
-  MutableVector3D upDirection = _camera0.getUp().asMutableVector3D();
-
-
-  MutableMatrix44D matrix = _planet->doubleDrag(ray0, ray1);
-  
-  // copy final transformation to camera
-  //tempCamera.updateModelMatrix();
-        //cameraContext->getNextCamera()->copyFrom(tempCamera);
+  // compute transformation matrix
+  const Planet* planet = eventContext->getPlanet();
+  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  MutableMatrix44D matrix = planet->doubleDrag(_camera0.pixel2Ray(pixel0),
+                                               _camera0.pixel2Ray(pixel1));
+  if (!matrix.isValid()) return;
 
   // apply transformation
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->applyTransform(matrix);
-
-
-  //printf ("moving 2 fingers\n");
 }
 
 

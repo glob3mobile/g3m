@@ -330,6 +330,11 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
                             const Vector3D& finalRay1) const
 {
+  // test if initialPoints are valid
+  if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    return MutableMatrix44D::invalid();
+
+  // init params
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
 
