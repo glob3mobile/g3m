@@ -50,8 +50,6 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
                                              _camera0.pixel2Ray(pixel));
-  
-  //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
 

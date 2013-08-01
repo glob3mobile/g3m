@@ -315,9 +315,9 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _centerRay = centerRay.asMutableVector3D();
   _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
   _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+  _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1).degrees();
   _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
-  _initialRaysAngle = initialRay0.angleBetween(initialRay1).degrees();
-  _validDoubleDrag = false;
+  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
   
   // middle point in 3D
   Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
@@ -341,16 +341,10 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   // compute camera translation using numerical iterations until convergence
   double dAccum=0;
   {
-    //Camera tempCamera(_camera0);
-    Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
-    double angle = originalAngle._degrees;
-    
     double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
-    double factor = finalRaysAngle / _initialRaysAngle;
+    double factor = finalRaysAngle / _angleBetweenInitialRays;
     
     // compute estimated camera translation
-    //Vector3D centerPoint = tempCamera.getXYZCenterOfView();
-    
     double distance = _origin.sub(_centerPoint).length();
     double d = distance*(factor-1)/factor;
     //tempCamera.moveForward(d);
@@ -379,7 +373,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     
     // step 1
     d = mu->abs((distance-d)*0.3);
-    if (angle0 < angle) d*=-1;
+    if (angle0 < _angleBetweenInitialPoints) d*=-1;
     //tempCamera.moveForward(d);
     translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
@@ -409,9 +403,9 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     // iterations
     //    int iter=0;
     double precision = mu->pow(10, mu->log10(distance)-8.5);
-    while (mu->abs(angle_n-angle) > precision) {
+    while (mu->abs(angle_n-_angleBetweenInitialPoints) > precision) {
       //      iter++;
-      if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
+      if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0) d*=-0.5;
       //tempCamera.moveForward(d);
       translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
       positionCamera = positionCamera.transformedBy(translation, 1.0);

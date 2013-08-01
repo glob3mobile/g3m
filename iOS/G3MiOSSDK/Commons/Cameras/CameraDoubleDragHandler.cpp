@@ -46,46 +46,11 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
 
   // double dragging
   const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-
-  
-  
-  _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
-  _initialPoint1  = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
-
-  
-  
-  
-  
-   // compute rays
-   const Vector3D origin = _camera0.getCartesianPosition();
-   const Vector3D ray0 = _camera0.pixel2Ray(pixel0);
-   const Vector3D ray1 = _camera0.pixel2Ray(pixel1);
-  _initialRaysAngle = ray0.angleBetween(ray1).degrees();
-  
-
-  // both pixels must intersect globe
-  if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
-    cameraContext->setCurrentGesture(None);
-    return;
-  }
-  
-  // middle point in 3D
-  const Planet *planet = eventContext->getPlanet();
-  Geodetic2D g0 = planet->toGeodetic2D(_initialPoint0.asVector3D());
-  Geodetic2D g1 = planet->toGeodetic2D(_initialPoint1.asVector3D());
-  Geodetic2D g  = planet->getMidPoint(g0, g1);
-  _initialPoint = planet->toCartesian(g).asMutableVector3D();
-  
-  // fingers difference
-  Vector2I difPixel = pixel1.sub(pixel0);
-  _initialFingerSeparation = difPixel.length();
-  _initialFingerInclination = difPixel.orientation()._radians;
-  
-  
-  planet->beginDoubleDrag(origin, _camera0.getViewDirection(), ray0, ray1);
-  
-  //printf ("down 2 finger\n");
+  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  eventContext->getPlanet()->beginDoubleDrag(_camera0.getCartesianPosition(),
+                                             _camera0.getViewDirection(),
+                                             _camera0.pixel2Ray(pixel0),
+                                             _camera0.pixel2Ray(pixel1));
 }
 
 
@@ -115,9 +80,6 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-  _initialPixel = Vector3D::nan().asMutableVector3D();
-  
-  //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
 }
 
 

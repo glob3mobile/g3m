@@ -33,9 +33,9 @@ private:
   mutable MutableVector3D _lastDragAxis;
   mutable double          _lastDragRadians;
   mutable double          _lastDragRadiansStep;
-  mutable double          _initialRaysAngle;
+  mutable double          _angleBetweenInitialRays;
+  mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
-  mutable bool            _validDoubleDrag;
   
 
 public:
