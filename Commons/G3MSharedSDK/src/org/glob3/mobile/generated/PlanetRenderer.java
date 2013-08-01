@@ -652,4 +652,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener
   {
     return true;
   }
+
+  public final PlanetRenderer asPlanetRenderer()
+  {
+    return this;
+  }
+
 }
