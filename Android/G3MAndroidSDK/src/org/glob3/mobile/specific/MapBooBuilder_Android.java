@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
-import org.glob3.mobile.generated.G3MCSceneChangeListener;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.GPUProgramSources;
@@ -11,6 +10,7 @@ import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.MapBooBuilder;
+import org.glob3.mobile.generated.MapBooSceneChangeListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -47,7 +47,7 @@ public class MapBooBuilder_Android
                                 final URL tubesURL,
                                 final boolean useWebSockets,
                                 final String sceneId,
-                                final G3MCSceneChangeListener sceneListener) {
+                                final MapBooSceneChangeListener sceneListener) {
       super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
 
       _nativeWidget = new G3MWidget_Android(context);
