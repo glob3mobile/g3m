@@ -652,3 +652,20 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
   _visibleSectorListeners.push_back( new VisibleSectorListenerEntry(listener,
                                                                     stabilizationInterval) );
 }
+
+
+
+void PlanetRenderer::addListener(const Angle& latitude,
+                                 const Angle& longitude,
+                                 SurfaceElevationListener* observer) {
+  int __DGD_AtWork;
+}
+
+void PlanetRenderer::addListener(const Geodetic2D& position,
+                                 SurfaceElevationListener* observer) {
+  int __DGD_AtWork;
+}
+
+void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
+  int __DGD_AtWork;
+}

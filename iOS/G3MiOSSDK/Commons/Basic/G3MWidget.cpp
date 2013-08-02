@@ -104,6 +104,7 @@ _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
+_surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
 _context(new G3MContext(IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
@@ -113,7 +114,9 @@ _context(new G3MContext(IFactory::instance(),
                         _planet,
                         downloader,
                         _effectsScheduler,
-                        storage)),
+                        storage,
+                        mainRenderer->getSurfaceElevationProvider()
+                        )),
 _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
@@ -251,7 +254,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _planet,
                      _downloader,
                      _effectsScheduler,
-                     _storage);
+                     _storage,
+                     _surfaceElevationProvider);
 
 
   // notify the original event
@@ -296,7 +300,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _planet,
                      _downloader,
                      _effectsScheduler,
-                     _storage);
+                     _storage,
+                     _surfaceElevationProvider);
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);
@@ -385,7 +390,8 @@ void G3MWidget::render(int width, int height) {
                       _effectsScheduler,
                       IFactory::instance()->createTimer(),
                       _storage,
-                      _gpuProgramManager);
+                      _gpuProgramManager,
+                      _surfaceElevationProvider);
 
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 

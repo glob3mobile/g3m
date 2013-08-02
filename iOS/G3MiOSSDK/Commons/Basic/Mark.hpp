@@ -26,6 +26,9 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 
+#include "SurfaceElevationProvider.hpp"
+
+
 class MarkUserData {
 public:
   virtual ~MarkUserData() {
@@ -34,7 +37,7 @@ public:
 };
 
 
-class Mark {
+class Mark : public SurfaceElevationListener {
 private:
   /**
    * The text the mark displays.
@@ -131,10 +134,14 @@ private:
   
   GLState _glState;
   
-  void createGLState(const Planet* planet, int viewportWidth, int viewportHeight);
+  void createGLState(const Planet* planet,
+                     int viewportWidth,
+                     int viewportHeight);
 
   IFloatBuffer* getBillboardTexCoords();
-  
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
+
 public:
   /**
    * Creates a marker with icon and label
@@ -240,11 +247,11 @@ public:
   }
   
   bool touched();
-  
-  Vector3D* getCartesianPosition(const Planet* planet);
-  
+    
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
+
+  Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition,

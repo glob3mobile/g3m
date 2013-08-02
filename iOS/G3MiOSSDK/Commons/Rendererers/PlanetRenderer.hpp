@@ -26,6 +26,7 @@ class LayerTilesRenderParameters;
 #include "Camera.hpp"
 #include "LayerSet.hpp"
 #include "ChangedListener.hpp"
+#include "SurfaceElevationProvider.hpp"
 
 class EllipsoidShape;
 
@@ -290,7 +291,7 @@ public:
 };
 
 
-class PlanetRenderer: public LeafRenderer, ChangedListener {
+class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -348,7 +349,6 @@ private:
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
-
 
 public:
   PlanetRenderer(const TileTessellator* tessellator,
@@ -464,9 +464,18 @@ public:
     return true;
   }
 
-  PlanetRenderer* asPlanetRenderer() {
-    return this;
+  SurfaceElevationProvider* getSurfaceElevationProvider() {
+    return (_elevationDataProvider == NULL) ? NULL : this;
   }
+
+  void addListener(const Angle& latitude,
+                   const Angle& longitude,
+                   SurfaceElevationListener* observer);
+
+  void addListener(const Geodetic2D& position,
+                   SurfaceElevationListener* observer);
+
+  void removeListener(SurfaceElevationListener* observer);
 
 };
 

@@ -64,7 +64,7 @@ public:
   
   virtual void stop(const G3MRenderContext* rc) = 0;
 
-  virtual PlanetRenderer* asPlanetRenderer() {
+  virtual SurfaceElevationProvider* getSurfaceElevationProvider() {
     return NULL;
   }
 

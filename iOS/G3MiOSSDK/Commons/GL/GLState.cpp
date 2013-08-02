@@ -86,7 +86,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 }
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
-
+  int __ASK_JM; // replace clear with replaceFeature
 #ifdef C_CODE
   const int index = g;
 #endif

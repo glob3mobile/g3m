@@ -46,19 +46,19 @@ std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
 }
 
 std::string DebugTileRasterizer::getSectorLabel1(const Sector& sector) const {
-  return "Lower lat: " + sector.lower().latitude().description();
+  return "Lower lat: " + sector._lower._latitude.description();
 }
 
 std::string DebugTileRasterizer::getSectorLabel2(const Sector& sector) const {
-  return "Lower lon: " + sector.lower().longitude().description();
+  return "Lower lon: " + sector._lower._longitude.description();
 }
 
 std::string DebugTileRasterizer::getSectorLabel3(const Sector& sector) const {
-  return "Upper lat: " + sector.upper().latitude().description();
+  return "Upper lat: " + sector._upper._latitude.description();
 }
 
 std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
-  return "Upper lon: " + sector.upper().longitude().description();
+  return "Upper lon: " + sector._upper._longitude.description();
 }
 
 //ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {

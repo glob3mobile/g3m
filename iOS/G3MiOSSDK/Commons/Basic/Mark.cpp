@@ -17,10 +17,7 @@
 #include "MarkTouchListener.hpp"
 #include "ITextUtils.hpp"
 #include "IImageListener.hpp"
-
-//#include "GPUProgramState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
 
@@ -106,11 +103,6 @@ public:
                                          _labelShadowColor,
                                          new MarkLabelImageListener(image, _mark),
                                          true);
-      //      ITextUtils::instance()->labelImage(image,
-      //                                         _label,
-      //                                         labelPosition,
-      //                                         new MarkLabelImageListener(image, _mark),
-      //                                         true);
     }
     else {
       _mark->onTextureDownload(image);
@@ -172,7 +164,8 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" + label )
+_imageID( iconURL.getPath() + "_" + label ),
+_surfaceElevationProvider(NULL)
 {
 
 }
@@ -208,7 +201,8 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( "_" + label )
+_imageID( "_" + label ),
+_surfaceElevationProvider(NULL)
 {
 
 }
@@ -241,7 +235,8 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" )
+_imageID( iconURL.getPath() + "_" ),
+_surfaceElevationProvider(NULL)
 {
 
 }
@@ -275,13 +270,22 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( imageID )
+_imageID( imageID ),
+_surfaceElevationProvider(NULL)
 {
 
 }
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
+
+  _surfaceElevationProvider = context->getSurfaceElevationProvider();
+  if (_surfaceElevationProvider != NULL) {
+    _surfaceElevationProvider->addListener(_position._latitude,
+                                           _position._longitude,
+                                           this);
+  }
+
   if (!_textureSolved) {
     const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
@@ -334,11 +338,10 @@ void Mark::onTextureDownload(IImage* image) {
 
   delete _labelFontColor;
   delete _labelShadowColor;
-  //  _textureImage = image->shallowCopy();
+
   _textureImage = image;
   _textureWidth = _textureImage->getWidth();
   _textureHeight = _textureImage->getHeight();
-  //  IFactory::instance()->deleteImage(image);
 }
 
 bool Mark::isReady() const {
@@ -346,6 +349,10 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
+  if (_surfaceElevationProvider != NULL) {
+    _surfaceElevationProvider->removeListener(this);
+  }
+
   delete _cartesianPosition;
   delete _vertices;
   if (_autoDeleteListener) {
@@ -368,10 +375,6 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
 
 bool Mark::touched() {
   return (_listener == NULL) ? false : _listener->touchedMark(this);
-  //  if (_listener == NULL) {
-  //    return false;
-  //  }
-  //  return _listener->touchedMark(this);
 }
 
 void Mark::setMinDistanceToCamera(double minDistanceToCamera) {
@@ -382,7 +385,9 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight) {
+void Mark::createGLState(const Planet* planet,
+                         int viewportWidth,
+                         int viewportHeight) {
 
   _viewportHeight = viewportHeight;
   _viewportWidth = viewportWidth;
@@ -402,16 +407,16 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
   _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
                                                viewportWidth, viewportHeight), false);
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
-                                              3,            //Our buffer contains elements of 3
-                                              0,            //Index 0
-                                              false,        //Not normalized
+  _glState.addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
+                                              3,            // Our buffer contains elements of 3
+                                              0,            // Index 0
+                                              false,        // Not normalized
                                               0,
-                                              false,        //NO DEPTH TEST
-                                              false, 0,     //NO CULLING
-                                              false, 0, 0,  //NO POLYGON OFFSET
-                                              (float)1.0,          //LINE WIDTH
-                                              false, (float)1.0),   //POINT SIZE
+                                              false,        // NO DEPTH TEST
+                                              false, 0,     // NO CULLING
+                                              false, 0, 0,  // NO POLYGON OFFSET
+                                              1.0f,         // LINE WIDTH
+                                              false, 1.0f), // POINT SIZE
                         false);
 }
 

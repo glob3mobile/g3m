@@ -119,17 +119,19 @@ void CompositeRenderer::setEnable(bool enable) {
   _enable = enable;
 }
 
-PlanetRenderer* CompositeRenderer::asPlanetRenderer() {
-  PlanetRenderer* result = NULL;
+SurfaceElevationProvider* CompositeRenderer::getSurfaceElevationProvider() {
+  SurfaceElevationProvider* result = NULL;
 
   for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
-    PlanetRenderer* childAsPlanetRenderer = renderer->asPlanetRenderer();
-    if (result == NULL) {
-      result = childAsPlanetRenderer;
-    }
-    else {
-      ILogger::instance()->logError("Inconsistency in Renderers: more than one PlanetRenderer");
+    SurfaceElevationProvider* childSurfaceElevationProvider = renderer->getSurfaceElevationProvider();
+    if (childSurfaceElevationProvider != NULL) {
+      if (result == NULL) {
+        result = childSurfaceElevationProvider;
+      }
+      else {
+        ILogger::instance()->logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+      }
     }
   }
 
