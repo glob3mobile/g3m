@@ -139,7 +139,7 @@ public:
   _currentLevel(-1)
   {
     if (_mappings->size() <= 0) {
-      ILogger::instance()->logError("LOGIC ERROR\n");
+      ILogger::instance()->logError("LeveledTexturedMesh: empty mappings");
     }
   }
 
