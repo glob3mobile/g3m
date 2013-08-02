@@ -428,7 +428,8 @@ IFloatBuffer* Mark::getBillboardTexCoords() {
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition, const GLState* parentGLState) {
+                  const Vector3D& cameraPosition,
+                  const GLState* parentGLState) {
   const Planet* planet = rc->getPlanet();
 
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -446,6 +447,7 @@ void Mark::render(const G3MRenderContext* rc,
   }
 
   _renderedMark = false;
+
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
@@ -461,33 +463,40 @@ void Mark::render(const G3MRenderContext* rc,
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
 
-          _glState.addGLFeature(new TextureGLFeature(_textureId,
-                                                     getBillboardTexCoords(),
-                                                     2,
-                                                     0,
-                                                     false,
-                                                     0,
-                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                                     false, Vector2D::zero(), Vector2D::zero()),
-                                false);
+          if (_textureId != NULL) {
+            _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                                       getBillboardTexCoords(),
+                                                       2,
+                                                       0,
+                                                       false,
+                                                       0,
+                                                       true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                                       false, Vector2D::zero(), Vector2D::zero()),
+                                  false);
+          }
         }
-      } else{
-        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
-            rc->getCurrentCamera()->getHeight() != _viewportHeight) {
-          createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
+      }
+
+      if (_textureId != NULL) {
+        const Camera* camera = rc->getCurrentCamera();
+        const int viewportWidth  = camera->getWidth();
+        const int viewportHeight = camera->getHeight();
+
+        if ((viewportWidth  != _viewportWidth) ||
+            (viewportHeight != _viewportHeight)) {
+          int ASK_JM; // move to MarkRenderer
+          createGLState(planet,
+                        viewportWidth,
+                        viewportHeight);
         }
-
-        GL* gl = rc->getGL();
-
-        GPUProgramManager& progManager = *rc->getGPUProgramManager();
 
         _glState.setParent(parentGLState); //Linking with parent
 
-        gl->drawArrays(GLPrimitive::triangleStrip(),
-                       0,
-                       4,
-                       &_glState,
-                       progManager);
+        rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
+                                0,
+                                4,
+                                &_glState,
+                                *rc->getGPUProgramManager());
         
         _renderedMark = true;
       }
