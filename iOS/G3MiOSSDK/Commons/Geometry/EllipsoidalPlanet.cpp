@@ -411,7 +411,8 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                             const Vector3D& finalRay1) const
+                                               const Vector3D& finalRay1,
+                                               double zoomFactor) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -451,11 +452,11 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   }
   
   // compute estimated camera translation: steps 2..n until convergence
-  //int iter=0;
+  int iter=0;
   double precision = mu->pow(10, mu->log10(distance)-7.0);
   double angle_n1=angle0, angle_n=angle1;
   while (mu->abs(angle_n-_angleBetweenInitialPoints) > precision) {
-    // iter++;
+    iter++;
     if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0) d*=-0.5;
     translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
@@ -468,7 +469,10 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
       if (mu->isNan(angle_n)) return MutableMatrix44D::invalid();
     }
   }
-  //if (iter>2) printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+  
+//  if (iter>5)
+//    printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n",
+//           iter, precision, angle_n, dAccum);
   
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();

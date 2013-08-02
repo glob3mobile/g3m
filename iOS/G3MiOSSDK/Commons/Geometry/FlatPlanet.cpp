@@ -171,7 +171,7 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
   _centerRay = centerRay.asMutableVector3D();
   _initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
   _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
-  _squaredDistanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).squaredLength();
+  _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
   _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
   _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
   
@@ -181,7 +181,8 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
-                            const Vector3D& finalRay1) const
+                                        const Vector3D& finalRay1,
+                                        double zoomFactor) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -191,7 +192,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
   const double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
-  const double factor = finalRaysAngle / _angleBetweenInitialRays;
+  const double factor = zoomFactor; //finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, distance0, distance1;
   double distance = _origin.sub(_centerPoint).length();
   
@@ -203,30 +204,30 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
     const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-    distance0 = point0.sub(point1).squaredLength();
+    distance0 = point0.sub(point1).length();
     if (mu->isNan(distance0)) return MutableMatrix44D::invalid();
   }
   
   // compute estimated camera translation: step 1
   d = mu->abs((distance-d)*0.3);
-  if (distance0 < _squaredDistanceBetweenInitialPoints) d*=-1;
+  if (distance0 < _distanceBetweenInitialPoints) d*=-1;
   translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
   positionCamera = positionCamera.transformedBy(translation, 1.0);
   dAccum += d;
   {
     const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
     const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-    distance1 = point0.sub(point1).squaredLength();
+    distance1 = point0.sub(point1).length();
     if (mu->isNan(distance1)) return MutableMatrix44D::invalid();
   }
-  
+
   // compute estimated camera translation: steps 2..n until convergence
-  //int iter=0;
-  double precision = mu->pow(10, mu->log10(distance)-7.0);
+  int iter=0;
+  double precision = mu->pow(10, mu->log10(distance)- 3.0);
   double distance_n1=distance0, distance_n=distance1;
-  while (mu->abs(distance_n-_squaredDistanceBetweenInitialPoints) > precision) {
-    // iter++;
-    if ((distance_n1-distance_n)/(distance_n-_squaredDistanceBetweenInitialPoints) < 0) d*=-0.5;
+  while (mu->abs(distance_n-_distanceBetweenInitialPoints) > precision) {
+    iter++;
+    if ((distance_n1-distance_n)/(distance_n-_distanceBetweenInitialPoints) < 0) d*=-0.5;
     translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     dAccum += d;
@@ -234,12 +235,15 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     {
       const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
       const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-      distance_n = point0.sub(point1).squaredLength();
+      distance_n = point0.sub(point1).length();
       if (mu->isNan(distance_n)) return MutableMatrix44D::invalid();
-
     }
   }
-  //if (iter>2) printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+  
+//  if (iter>5)
+//    printf("-----------  iteraciones=%d  precision=%f distance_n=%.4f  distancia final=%.1f\n",
+//           iter, precision, distance_n, dAccum);
+
   
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
