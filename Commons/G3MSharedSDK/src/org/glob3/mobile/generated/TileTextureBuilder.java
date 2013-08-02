@@ -383,50 +383,27 @@ public class TileTextureBuilder extends RCObject
 
     Tile ancestor = _tile;
     boolean fallbackSolved = false;
-    while (ancestor != null)
+    while (ancestor != null && !fallbackSolved)
     {
-      LazyTextureMapping mapping;
-      if (fallbackSolved)
-      {
-        mapping = null;
-      }
-      else
-      {
-        final boolean ownedTexCoords = true;
-        final boolean transparent = false;
-        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
-      }
+      final boolean ownedTexCoords = true;
+      final boolean transparent = false;
+      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
 
       if (ancestor != _tile)
       {
-        if (!fallbackSolved)
+        final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
+        if (glTextureId != null)
         {
-          final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId != null)
-          {
-            _texturesHandler.retainGLTextureId(glTextureId);
-            mapping.setGLTextureId(glTextureId);
-            fallbackSolved = true;
-          }
+          _texturesHandler.retainGLTextureId(glTextureId);
+          mapping.setGLTextureId(glTextureId);
+          fallbackSolved = true;
         }
       }
-//      else {
-//        if (mapping != NULL) {
-//          if ( mapping->getGLTextureId() != NULL ) {
-//            ILogger::instance()->logInfo("break (point) on me 3\n");
-//          }
-//        }
-//      }
 
       mappings.add(mapping);
+
       ancestor = ancestor.getParent();
     }
-
-//    if ((mappings != NULL) && (_tile != NULL)) {
-//      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
-//        ILogger::instance()->logInfo("break (point) me\n");
-//      }
-//    }
 
     return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
   }
