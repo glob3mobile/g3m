@@ -126,9 +126,9 @@ Mesh* createSectorMesh(const Planet* planet,
                        const Color& color,
                        const int lineWidth) {
   // create vectors
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-//                                          planet,
-//                                          sector._center);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+  //                                          planet,
+  //                                          sector._center);
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
 
 
@@ -573,7 +573,7 @@ public:
   if (true){
 
     Vector3D lightDir = Vector3D(100000, 0,0);
-//    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
     Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
@@ -582,7 +582,7 @@ public:
 
     vertex.add(v);
     vertex.add(v.add(lightDir));
-               //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+    //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
     meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
                                           true,
@@ -592,7 +592,7 @@ public:
                                           1.0,
                                           Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
 
-    
+
   }
 
 
@@ -649,9 +649,9 @@ public:
 
   Interpolator* interpolator = new BilinearInterpolator();
 
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          planet,
-//                                          Geodetic2D::zero());
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+  //                                          planet,
+  //                                          Geodetic2D::zero());
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
   FloatBufferBuilderFromColor colors;
@@ -735,9 +735,9 @@ public:
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
 {
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          planet,
-//                                          Geodetic2D::zero());
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+  //                                          planet,
+  //                                          Geodetic2D::zero());
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
 
@@ -1842,9 +1842,9 @@ public:
       }
       // const double middleHeight = ((averageHeight * distanceInDegrees) > maxHeight) ? maxHeight : (averageHeight * distanceInDegrees);
 
-//      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
-//                                              context->getPlanet(),
-//                                              Vector3D::zero);
+      //      FloatBufferBuilderFromGeodetic vertices(CenterStrategy::noCenter(),
+      //                                              context->getPlanet(),
+      //                                              Vector3D::zero);
       FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithoutCenter(context->getPlanet());
 
       for (double alpha = 0; alpha <= 1; alpha += 0.025) {
@@ -2184,11 +2184,11 @@ public:
               const Angle fromAltitude = Angle::fromDegrees(90);
               const Angle toAltitude   = Angle::fromDegrees(15);
 
-//              plane->orbitCamera(TimeInterval::fromSeconds(20),
-//                                 fromDistance, toDistance,
-//                                 fromAzimuth,  toAzimuth,
-//                                 fromAltitude, toAltitude);
-              
+              //              plane->orbitCamera(TimeInterval::fromSeconds(20),
+              //                                 fromDistance, toDistance,
+              //                                 fromAzimuth,  toAzimuth,
+              //                                 fromAltitude, toAltitude);
+
 
               delete buffer;
               /* */
@@ -2241,10 +2241,16 @@ public:
           const double scale = 1000;
           plane->setScale(scale, scale, scale);
           plane->setPitch(Angle::fromDegrees(90));
-          plane->setHeading(Angle::fromDegrees(270));
+          plane->setHeading(Angle::fromDegrees(0));
           _shapesRenderer->addShape(plane);
 
-          
+
+          plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
+                                     Geodetic3D(Angle::fromDegrees(28.127222),
+                                                Angle::fromDegrees(-15.431389),
+                                                10000),
+                                     Angle::fromDegrees(90), Angle::fromDegrees(720));
+
 
 
           //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);

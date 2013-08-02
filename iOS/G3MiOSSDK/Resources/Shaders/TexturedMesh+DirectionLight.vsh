@@ -18,17 +18,16 @@ uniform float uPointSize;
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
-varying vec3 vertex_normal;
+uniform vec3 uLightDirection; //MUST BE NORMALIZED
+varying float diffuseLightIntensity;
+
 
 void main() {
 
-  vertex_normal = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
+  vec3 normal = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
+  vec3 lightDir = normalize( uLightDirection );
   
-//  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
-
-//  if (length(normal) > 1.01 || length(normal) < 0.99 || dot(normal, lightDir) > 1.01){
-//    diffuseLightIntensity = 0.0;
-//  }
+  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
 
   gl_Position = uModelview * aPosition;
   

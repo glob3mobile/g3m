@@ -192,9 +192,9 @@ GLFeature(LIGHTING_GROUP){
   _values.addUniformValue(LIGHT_DIRECTION,
                           new GPUUniformValueVec3Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z()),
                           false);
-//  _values.addUniformValue(LIGHT_COLOR,
-//                          new GPUUniformValueVec4Float(lightColor),
-//                          false);
+  _values.addUniformValue(LIGHT_COLOR,
+                          new GPUUniformValueVec4Float(lightColor),
+                          false);
 
 }
 
