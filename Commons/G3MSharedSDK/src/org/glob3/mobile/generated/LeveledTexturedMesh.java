@@ -30,7 +30,7 @@ public class LeveledTexturedMesh extends Mesh
   
       if (newCurrentLevel >= 0)
       {
-        // ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d",
+        // ILogger::instance()->logInfo("LeveledTexturedMesh: changed from level %d to %d",
         //                              _currentLevel,
         //                              newCurrentLevel);
         _currentLevel = newCurrentLevel;
@@ -43,14 +43,10 @@ public class LeveledTexturedMesh extends Mesh
           {
             final LazyTextureMapping mapping = _mappings.get(i);
             if (mapping != null)
-            {
-              //_mappings->at(i) = NULL;
-              if (mapping != null)
-                 mapping.dispose();
-            }
+               mapping.dispose();
+            _mappings.remove(i);
           }
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-          _mappings.erase(_mappings.iterator() + _currentLevel + 1, _mappings.end());
+          _mappings.trimToSize();
         }
       }
     }
@@ -68,7 +64,7 @@ public class LeveledTexturedMesh extends Mesh
      _currentLevel = -1;
     if (_mappings.size() <= 0)
     {
-      ILogger.instance().logError("LOGIC ERROR\n");
+      ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
     }
   }
 
@@ -162,7 +158,7 @@ public class LeveledTexturedMesh extends Mesh
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-      ILogger.instance().logError("No Texture Mapping");
+      ILogger.instance().logError("LeveledTexturedMesh: No Texture Mapping");
       _mesh.render(rc, parentGLState);
     }
     else
