@@ -238,7 +238,7 @@ private:
 
   const TileTessellator* _tessellator;
 
-  const int    _firstLevel;
+//  const int    _firstLevel;
 
   std::vector<TileTextureBuilder_PetitionStatus> _status;
   std::vector<long long>                         _requestsIds;
@@ -246,7 +246,7 @@ private:
 
   bool _finalized;
   bool _canceled;
-  bool _anyCanceled;
+//  bool _anyCanceled;
   bool _alreadyStarted;
 
   long long _texturePriority;
@@ -307,12 +307,12 @@ public:
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
   _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
-  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
+//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
-  _anyCanceled(false),
+//  _anyCanceled(false),
   _mesh(NULL),
   _tessellator(tessellator),
   _finalized(false),
@@ -577,7 +577,7 @@ public:
     }
     //checkIsPending(position);
 
-    _anyCanceled = true;
+//    _anyCanceled = true;
     _status[position] = STATUS_CANCELED;
 
     stepDone();

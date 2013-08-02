@@ -489,7 +489,7 @@ void Mark::render(const G3MRenderContext* rc,
 
         if ((viewportWidth  != _viewportWidth) ||
             (viewportHeight != _viewportHeight)) {
-          int ASK_JM; // move to MarkRenderer
+          int __ASK_JM; // move to MarkRenderer
           createGLState(planet,
                         viewportWidth,
                         viewportHeight);
