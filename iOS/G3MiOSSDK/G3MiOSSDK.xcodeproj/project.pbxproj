@@ -230,6 +230,7 @@
 		CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */; };
 		CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */; };
 		CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
+		CFAB754F17AC517500852FA7 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */; };
 		CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */; };
 		CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -583,6 +584,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFAB754F17AC517500852FA7 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */,
 				CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */,
 				CFAA530617AAFE9E002A9204 /* DecimatedSubviewElevationData.hpp in CopyFiles */,
@@ -975,7 +977,6 @@
 		CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalPlanet.hpp; path = Commons/Geometry/EllipsoidalPlanet.hpp; sourceTree = "<group>"; };
 		CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SphericalPlanet.cpp; path = Commons/Geometry/SphericalPlanet.cpp; sourceTree = "<group>"; };
 		CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SphericalPlanet.hpp; path = Commons/Geometry/SphericalPlanet.hpp; sourceTree = "<group>"; };
-		CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		CF00E442166FD77E0098CABD /* IImageListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageListener.cpp; path = Commons/Interfaces/IImageListener.cpp; sourceTree = "<group>"; };
 		CF00E443166FD77E0098CABD /* IImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageListener.hpp; path = Commons/Interfaces/IImageListener.hpp; sourceTree = "<group>"; };
 		CF022384166836F500024B73 /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GEOJSONParser.cpp; path = Commons/GEO/GEOJSONParser.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1917,7 +1918,6 @@
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
-				CCF45F561743BFF90037CA28 /* CameraDoubleDragHandler.hpp */,
 				FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
