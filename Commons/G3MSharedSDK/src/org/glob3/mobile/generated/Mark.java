@@ -538,6 +538,7 @@ public class Mark
     }
   
     _renderedMark = false;
+  
     if (renderableByDistance)
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
@@ -554,23 +555,28 @@ public class Mark
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
   
-            _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+            if (_textureId != null)
+            {
+              _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+            }
           }
         }
-        else
+  
+        if (_textureId != null)
         {
-          if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
+          final Camera camera = rc.getCurrentCamera();
+          final int viewportWidth = camera.getWidth();
+          final int viewportHeight = camera.getHeight();
+  
+          if ((viewportWidth != _viewportWidth) || (viewportHeight != _viewportHeight))
           {
-            createGLState(rc.getPlanet(), rc.getCurrentCamera().getWidth(), rc.getCurrentCamera().getHeight());
+            int ASK_JM; // move to MarkRenderer
+            createGLState(planet, viewportWidth, viewportHeight);
           }
-  
-          GL gl = rc.getGL();
-  
-          GPUProgramManager progManager = rc.getGPUProgramManager();
   
           _glState.setParent(parentGLState); //Linking with parent
   
-          gl.drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, progManager);
+          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   
           _renderedMark = true;
         }
