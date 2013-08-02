@@ -32,7 +32,7 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
-  private final int _firstLevel;
+//  const int    _firstLevel;
 
   private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
@@ -40,7 +40,7 @@ public class TileTextureBuilder extends RCObject
 
   private boolean _finalized;
   private boolean _canceled;
-  private boolean _anyCanceled;
+//  bool _anyCanceled;
   private boolean _alreadyStarted;
 
   private long _texturePriority;
@@ -95,6 +95,8 @@ public class TileTextureBuilder extends RCObject
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
+//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
+//  _anyCanceled(false),
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -102,12 +104,10 @@ public class TileTextureBuilder extends RCObject
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
-     _firstLevel = layerSet.getLayerTilesRenderParameters()._firstLevel;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
      _stepsDone = 0;
-     _anyCanceled = false;
      _mesh = null;
      _tessellator = tessellator;
      _finalized = false;
@@ -371,7 +371,7 @@ public class TileTextureBuilder extends RCObject
     }
     //checkIsPending(position);
 
-    _anyCanceled = true;
+//    _anyCanceled = true;
     _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
     stepDone();
