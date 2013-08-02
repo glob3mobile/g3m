@@ -17,9 +17,9 @@ public class G3MRenderContext extends G3MContext
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager)
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider)
   {
-     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
+     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider);
      _frameTasksExecutor = frameTasksExecutor;
      _gl = gl;
      _currentCamera = currentCamera;

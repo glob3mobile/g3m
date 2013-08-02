@@ -178,21 +178,24 @@ public class CompositeRenderer extends Renderer
     }
   }
 
-  public final PlanetRenderer asPlanetRenderer()
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
-    PlanetRenderer result = null;
+    SurfaceElevationProvider result = null;
   
     for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i);
-      PlanetRenderer childAsPlanetRenderer = renderer.asPlanetRenderer();
-      if (result == null)
+      SurfaceElevationProvider childSurfaceElevationProvider = renderer.getSurfaceElevationProvider();
+      if (childSurfaceElevationProvider != null)
       {
-        result = childAsPlanetRenderer;
-      }
-      else
-      {
-        ILogger.instance().logError("Inconsistency in Renderers: more than one PlanetRenderer");
+        if (result == null)
+        {
+          result = childSurfaceElevationProvider;
+        }
+        else
+        {
+          ILogger.instance().logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+        }
       }
     }
   

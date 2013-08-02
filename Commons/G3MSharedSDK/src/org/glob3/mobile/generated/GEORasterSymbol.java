@@ -46,17 +46,17 @@ public abstract class GEORasterSymbol extends GEOSymbol
   
     final Geodetic2D coordinate0 = coordinates.get(0);
   
-    double minLatInRadians = coordinate0.latitude().radians();
+    double minLatInRadians = coordinate0._latitude.radians();
     double maxLatInRadians = minLatInRadians;
   
-    double minLonInRadians = coordinate0.longitude().radians();
+    double minLonInRadians = coordinate0._longitude.radians();
     double maxLonInRadians = minLonInRadians;
   
     for (int i = 1; i < size; i++)
     {
       final Geodetic2D coordinate = coordinates.get(i);
   
-      final double latInRadians = coordinate.latitude().radians();
+      final double latInRadians = coordinate._latitude.radians();
       if (latInRadians < minLatInRadians)
       {
         minLatInRadians = latInRadians;
@@ -66,7 +66,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
         maxLatInRadians = latInRadians;
       }
   
-      final double lonInRadians = coordinate.longitude().radians();
+      final double lonInRadians = coordinate._longitude.radians();
       if (lonInRadians < minLonInRadians)
       {
         minLonInRadians = lonInRadians;
@@ -112,7 +112,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
       {
         final Geodetic2D coordinate = coordinates.get(j);
   
-        final double latInRadians = coordinate.latitude().radians();
+        final double latInRadians = coordinate._latitude.radians();
         if (latInRadians < minLatInRadians)
         {
           minLatInRadians = latInRadians;
@@ -122,7 +122,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
           maxLatInRadians = latInRadians;
         }
   
-        final double lonInRadians = coordinate.longitude().radians();
+        final double lonInRadians = coordinate._longitude.radians();
         if (lonInRadians < minLonInRadians)
         {
           minLonInRadians = lonInRadians;

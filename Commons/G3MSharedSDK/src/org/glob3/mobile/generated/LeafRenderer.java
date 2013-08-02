@@ -70,7 +70,7 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract void stop(G3MRenderContext rc);
 
-  public PlanetRenderer asPlanetRenderer()
+  public SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return null;
   }

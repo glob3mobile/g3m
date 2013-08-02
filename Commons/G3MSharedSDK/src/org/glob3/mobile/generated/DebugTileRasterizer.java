@@ -47,19 +47,19 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
 
   private String getSectorLabel1(Sector sector)
   {
-    return "Lower lat: " + sector.lower().latitude().description();
+    return "Lower lat: " + sector._lower._latitude.description();
   }
   private String getSectorLabel2(Sector sector)
   {
-    return "Lower lon: " + sector.lower().longitude().description();
+    return "Lower lon: " + sector._lower._longitude.description();
   }
   private String getSectorLabel3(Sector sector)
   {
-    return "Upper lat: " + sector.upper().latitude().description();
+    return "Upper lat: " + sector._upper._latitude.description();
   }
   private String getSectorLabel4(Sector sector)
   {
-    return "Upper lon: " + sector.upper().longitude().description();
+    return "Upper lon: " + sector._upper._longitude.description();
   }
 
   public DebugTileRasterizer()

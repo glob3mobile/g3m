@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class OrderedRenderable;
 //class GPUProgramManager;
+//class SurfaceElevationProvider;
 
 
 public class G3MContext
@@ -48,7 +49,9 @@ public class G3MContext
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
 
-  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
+  protected SurfaceElevationProvider _surfaceElevationProvider;
+
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
   {
      _factory = factory;
      _stringUtils = stringUtils;
@@ -60,6 +63,7 @@ public class G3MContext
      _downloader = downloader;
      _effectsScheduler = effectsScheduler;
      _storage = storage;
+     _surfaceElevationProvider = surfaceElevationProvider;
   }
 
   public void dispose()
@@ -116,4 +120,10 @@ public class G3MContext
   {
     return _threadUtils;
   }
+
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    return _surfaceElevationProvider;
+  }
+
 }

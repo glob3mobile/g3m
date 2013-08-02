@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Mark
+public class Mark extends SurfaceElevationListener
 {
   /**
    * The text the mark displays.
@@ -112,7 +112,7 @@ public class Mark
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
     _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -128,6 +128,8 @@ public class Mark
     }
     return _billboardTexCoord;
   }
+
+  private SurfaceElevationProvider _surfaceElevationProvider;
 
   /**
    * Creates a marker with icon and label
@@ -196,6 +198,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
+     _surfaceElevationProvider = null;
   
   }
 
@@ -258,6 +261,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
+     _surfaceElevationProvider = null;
   
   }
 
@@ -308,6 +312,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
+     _surfaceElevationProvider = null;
   
   }
 
@@ -358,11 +363,17 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
+     _surfaceElevationProvider = null;
   
   }
 
   public void dispose()
   {
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.removeListener(this);
+    }
+  
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
     if (_vertices != null)
@@ -395,6 +406,13 @@ public class Mark
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
+  
+    _surfaceElevationProvider = context.getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+    }
+  
     if (!_textureSolved)
     {
       final boolean hasLabel = (_label.length() != 0);
@@ -453,11 +471,10 @@ public class Mark
        _labelFontColor.dispose();
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
-    //  _textureImage = image->shallowCopy();
+  
     _textureImage = image;
     _textureWidth = _textureImage.getWidth();
     _textureHeight = _textureImage.getHeight();
-    //  IFactory::instance()->deleteImage(image);
   }
 
   public final int getTextureWidth()
@@ -493,19 +510,6 @@ public class Mark
   public final boolean touched()
   {
     return (_listener == null) ? false : _listener.touchedMark(this);
-    //  if (_listener == NULL) {
-    //    return false;
-    //  }
-    //  return _listener->touchedMark(this);
-  }
-
-  public final Vector3D getCartesianPosition(Planet planet)
-  {
-    if (_cartesianPosition == null)
-    {
-      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
-    }
-    return _cartesianPosition;
   }
 
   public final void setMinDistanceToCamera(double minDistanceToCamera)
@@ -515,6 +519,15 @@ public class Mark
   public final double getMinDistanceToCamera()
   {
     return _minDistanceToCamera;
+  }
+
+  public final Vector3D getCartesianPosition(Planet planet)
+  {
+    if (_cartesianPosition == null)
+    {
+      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+    }
+    return _cartesianPosition;
   }
 
   public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)

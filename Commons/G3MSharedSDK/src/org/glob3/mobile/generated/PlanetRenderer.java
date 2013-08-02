@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends LeafRenderer implements ChangedListener
+public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
 {
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -311,7 +311,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener
       _model.setMatrix(cam.getModelMatrix44D());
     }
   }
-
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
@@ -653,9 +652,24 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener
     return true;
   }
 
-  public final PlanetRenderer asPlanetRenderer()
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
-    return this;
+    return (_elevationDataProvider == null) ? null : this;
+  }
+
+  public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener observer)
+  {
+    int __DGD_AtWork;
+  }
+
+  public final void addListener(Geodetic2D position, SurfaceElevationListener observer)
+  {
+    int __DGD_AtWork;
+  }
+
+  public final void removeListener(SurfaceElevationListener observer)
+  {
+    int __DGD_AtWork;
   }
 
 }

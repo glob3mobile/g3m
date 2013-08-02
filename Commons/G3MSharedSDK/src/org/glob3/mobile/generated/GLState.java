@@ -223,7 +223,7 @@ public class GLState
 
   public final void clearGLFeatureGroup(GLFeatureGroupName g)
   {
-  
+    int __ASK_JM; // replace clear with replaceFeature
     final int index = g.getValue();
   
     GLFeatureGroup group = _featuresGroups[index];

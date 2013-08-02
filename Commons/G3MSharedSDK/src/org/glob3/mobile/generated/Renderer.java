@@ -13,7 +13,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class G3MEventContext;
 //class GLGlobalState;
-//class PlanetRenderer;
+//class SurfaceElevationProvider;
 
 
 public abstract class Renderer implements EffectTarget
@@ -63,6 +63,6 @@ public abstract class Renderer implements EffectTarget
     return false;
   }
 
-  public abstract PlanetRenderer asPlanetRenderer();
+  public abstract SurfaceElevationProvider getSurfaceElevationProvider();
 
 }
