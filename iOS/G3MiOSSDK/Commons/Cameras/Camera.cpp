@@ -289,6 +289,12 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 }
 
 
+void Camera::translateCamera(const Vector3D &desp)
+{
+  applyTransform(MutableMatrix44D::createTranslationMatrix(desp));
+}
+
+
 void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }

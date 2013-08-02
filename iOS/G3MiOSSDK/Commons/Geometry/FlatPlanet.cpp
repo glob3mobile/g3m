@@ -8,6 +8,8 @@
 
 #include "FlatPlanet.hpp"
 #include "Plane.hpp"
+#include "CameraEffects.hpp"
+
 
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
@@ -128,6 +130,7 @@ void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initial
 {
   _origin = origin.asMutableVector3D();
   _initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+  _lastFinalPoint = _initialPoint;
   _validSingleDrag = false;
 }
 
@@ -142,14 +145,11 @@ MutableMatrix44D FlatPlanet::singleDrag(const Vector3D& finalRay) const
   MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) return MutableMatrix44D::invalid();
   
-  /*
   // save params for possible inertial animations
-  _lastDragAxis = rotationAxis.asMutableVector3D();
-  double radians = rotationDelta.radians();
-  _lastDragRadiansStep = radians - _lastDragRadians;
-  _lastDragRadians = radians;
-  _validSingleDrag = true;*/
-  
+  _validSingleDrag = true;
+  _lastDirection = _lastFinalPoint.sub(finalPoint);
+  _lastFinalPoint = finalPoint;
+
   // return rotation matrix
   return MutableMatrix44D::createTranslationMatrix(_initialPoint.sub(finalPoint).asVector3D());
 }
@@ -157,7 +157,8 @@ MutableMatrix44D FlatPlanet::singleDrag(const Vector3D& finalRay) const
 
 Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 {
-  return NULL;
+  if (!_validSingleDrag) return NULL;
+  return new SingleTranslationEffect(_lastDirection.asVector3D());
 }
 
 

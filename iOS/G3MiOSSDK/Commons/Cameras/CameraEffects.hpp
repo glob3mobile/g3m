@@ -24,20 +24,39 @@ public:
   
   virtual ~RotateWithAxisEffect() {};
   
-  virtual void start(const G3MRenderContext *rc, const TimeInterval& when) {
-  }
+  virtual void start(const G3MRenderContext *rc, const TimeInterval& when) {}
   
   virtual void doStep(const G3MRenderContext *rc, const TimeInterval& when);
   
   virtual void stop(const G3MRenderContext *rc, const TimeInterval& when);
   
-  virtual void cancel(const TimeInterval& when) {
-    // do nothing, just leave the effect in the intermediate state
-  }
+  virtual void cancel(const TimeInterval& when) {}
   
 private:
   Vector3D _axis;
 };
+
+
+class SingleTranslationEffect : public EffectWithForce {
+public:
+  
+  SingleTranslationEffect(const Vector3D& desp);
+  
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when) {}
+  
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when);
+  
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when);
+  
+  virtual void cancel(const TimeInterval& when) {}
+  
+private:
+  Vector3D _direction;
+};
+
 
 
 

@@ -31,3 +31,23 @@ void RotateWithAxisEffect::stop(const G3MRenderContext *rc,
   rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
 }
 
+
+SingleTranslationEffect::SingleTranslationEffect(const Vector3D& desp):
+EffectWithForce(1, 0.92),
+_direction(desp)
+{
+}
+
+
+void SingleTranslationEffect::doStep(const G3MRenderContext *rc,
+                    const TimeInterval& when) {
+  EffectWithForce::doStep(rc, when);
+  rc->getNextCamera()->translateCamera(_direction.times(getForce()));
+}
+
+
+void SingleTranslationEffect::stop(const G3MRenderContext *rc,
+                  const TimeInterval& when) {
+  rc->getNextCamera()->translateCamera(_direction.times(getForce()));
+}
+
