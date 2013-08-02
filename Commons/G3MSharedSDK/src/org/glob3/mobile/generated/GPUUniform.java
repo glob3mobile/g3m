@@ -84,33 +84,26 @@ public class GPUUniform extends GPUVariable
 
   public final void set(GPUUniformValue v)
   {
-//    if (v != _value) {
-      if (_type == v.getType()) //type checking
+    if (_type == v.getType()) //type checking
+    {
+      if (_value == null || !_value.isEqualsTo(v))
       {
-        if (_value == null || !_value.isEqualsTo(v))
-        {
-          _dirty = true;
-          //        _value = v->copyOrCreate(_value);
+        _dirty = true;
+        //        _value = v->copyOrCreate(_value);
 
-          v._retain();
-          if (_value != null)
-          {
-            _value._release();
-          }
-          _value = v;
+        v._retain();
+        if (_value != null)
+        {
+          _value._release();
         }
+        _value = v;
       }
-      else
-      {
-        ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
-      }
-<<<<<<< HEAD
     }
-//  }
-=======
-//    }
+    else
+    {
+      ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+    }
   }
->>>>>>> glfeature
 
   public final void applyChanges(GL gl)
   {

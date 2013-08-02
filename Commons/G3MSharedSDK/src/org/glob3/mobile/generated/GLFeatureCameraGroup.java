@@ -23,7 +23,14 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
           modelTransformHolders[1] = f.getMatrixHolder();
           break;
         case F_MODEL_TRANSFORM:
-          modelTransformHolders[2 + modelTransformCount++] = f.getMatrixHolder();
+        {
+          final Matrix44D m = f.getMatrixHolder().getMatrix();
+  
+          if (!m.isScaleMatrix() && !m.isTranslationMatrix())
+          {
+            modelTransformHolders[2 + modelTransformCount++] = f.getMatrixHolder();
+          }
+        }
           break;
         default:
           ILogger.instance().logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
@@ -31,9 +38,24 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
       }
     }
   
+    Matrix44DProvider modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
+  
     if (modelTransformCount > 0)
     {
-      vs.addUniformValue(GPUUniformKey.MODEL, new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(modelTransformHolders[2], modelTransformCount)), false);
+      Matrix44DProvider modelProvider = new Matrix44DMultiplicationHolder(modelTransformHolders[2], modelTransformCount);
+      vs.addUniformValue(GPUUniformKey.MODEL, new GPUUniformValueMatrix4(modelProvider), false);
+  
+  //    const Matrix44D* mv1 = modelViewProvider->getMatrix();
+  //
+  //    const Matrix44D* proj = modelTransformHolders[0]->getMatrix();
+  //    const Matrix44D* camMod = modelTransformHolders[1]->getMatrix();
+  //
+  //    const Matrix44D* mv2 = proj->createMultiplication(*camMod)->createMultiplication(*modelProvider->getMatrix());
+  //
+  //    if (!mv1->isEqualsTo(*mv2)){
+  //      ILogger::instance()->logError("...");
+  //    }
+  
     }
     else
     {
@@ -42,7 +64,7 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
       id._release();
     }
   
-    vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2)), false);
+    vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(modelViewProvider), false);
   /*
     const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures-2];
     const Matrix44DProvider** cameraHolders = new const Matrix44DProvider*[2];

@@ -34,7 +34,7 @@ public abstract class GPUUniformValue extends RCObject
 
   public void dispose()
   {
-//    ILogger::instance()->logInfo("Deleting Uniform Value");
+    //    ILogger::instance()->logInfo("Deleting Uniform Value");
   }
 
 

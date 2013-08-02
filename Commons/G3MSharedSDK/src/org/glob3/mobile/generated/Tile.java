@@ -249,7 +249,7 @@ public class Tile
     TileTexturizer texturizer = trc.getTexturizer();
     if (texturizer == null)
     {
-      tessellatorMesh.render(rc);
+      tessellatorMesh.render(rc, glState);
     }
     else
     {

@@ -40,7 +40,7 @@ public class SGGeometryNode extends SGNode
     if (_normals != null)
     {
   
-      _glState.addGLFeature(new DirectionLightGLFeature(new Vector3D(100000, 0,0), Color.red(), (float)0.0), false);
+      _glState.addGLFeature(new DirectionLightGLFeature(new Vector3D(1, 0,0), Color.yellow(), (float)0.0), false);
   
       _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0), false);
   

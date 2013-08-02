@@ -179,7 +179,7 @@ public abstract class SimplePlanetRenderer extends LeafRenderer
     }
     if (_mesh != null)
     {
-      _mesh.render(rc);
+      _mesh.render(rc, null);
     }
   }
 

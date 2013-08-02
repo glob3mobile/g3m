@@ -419,6 +419,11 @@ public class GL
      _nativeGL.uniform4f(location, v0, v1, v2, v3);
   }
 
+  public final void uniform3f(IGLUniformID location, float v0, float v1, float v2)
+  {
+     _nativeGL.uniform3f(location, v0, v1, v2);
+  }
+
   public final void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer)
   {
     _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);

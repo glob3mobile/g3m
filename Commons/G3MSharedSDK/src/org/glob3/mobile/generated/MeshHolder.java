@@ -55,11 +55,6 @@ public class MeshHolder extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc)
-  {
-    _mesh.render(rc);
-  }
-
   public final BoundingVolume getBoundingVolume()
   {
     return _mesh.getBoundingVolume();

@@ -1,39 +1,27 @@
 package org.glob3.mobile.generated; 
 ////////////////////////////////////////////////////////////
-
-public class GPUUniformValueVec4Float extends GPUUniformValue
+public class GPUUniformValueVec3Float extends GPUUniformValue
 {
   public final float _x;
   public final float _y;
   public final float _z;
-  public final float _w;
 
-  public GPUUniformValueVec4Float(Color color)
+  public GPUUniformValueVec3Float(float x, float y, float z)
   {
-     super(GLType.glVec4Float());
-     _x = color.getRed();
-     _y = color.getGreen();
-     _z = color.getBlue();
-     _w = color.getAlpha();
-  }
-
-  public GPUUniformValueVec4Float(float x, float y, float z, float w)
-  {
-     super(GLType.glVec4Float());
+     super(GLType.glVec3Float());
      _x = x;
      _y = y;
      _z = z;
-     _w = w;
   }
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniform4f(id, _x, _y, _z, _w);
+    gl.uniform3f(id, _x, _y, _z);
   }
   public final boolean isEqualsTo(GPUUniformValue v)
   {
-    GPUUniformValueVec4Float v2 = (GPUUniformValueVec4Float)v;
-    return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
+    GPUUniformValueVec3Float v2 = (GPUUniformValueVec3Float)v;
+    return (_x == v2._x) && (_y == v2._y) && (_z == v2._z);
   }
 
   //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
@@ -52,8 +40,6 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     isb.addDouble(_y);
     isb.addString("z:");
     isb.addDouble(_z);
-    isb.addString("w:");
-    isb.addDouble(_w);
     String s = isb.getString();
     if (isb != null)
        isb.dispose();

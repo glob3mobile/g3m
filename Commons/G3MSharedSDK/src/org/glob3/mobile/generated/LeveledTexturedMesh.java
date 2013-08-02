@@ -54,6 +54,7 @@ public class LeveledTexturedMesh extends Mesh
               _mappings.get(i).dispose();
               if (mapping != null)
                  mapping.dispose();
+              _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
             }
           }
         }
@@ -66,7 +67,6 @@ public class LeveledTexturedMesh extends Mesh
   }
 
   private GLState _glState = new GLState();
-//  void updateGLState();
   private LazyTextureMapping _mappingOnGLState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
@@ -120,27 +120,11 @@ public class LeveledTexturedMesh extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc)
-  {
-  }
-
-
   public final BoundingVolume getBoundingVolume()
   {
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-
-  //void LeveledTexturedMesh::render(const G3MRenderContext* rc) const {
-  ////  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  ////  if (mapping == NULL) {
-  ////    _mesh->render(rc);
-  ////  }
-  ////  else {
-  ////    _mesh->render(rc);
-  ////  }
-  //}
-  
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
     if (glTextureId != null)
@@ -187,33 +171,25 @@ public class LeveledTexturedMesh extends Mesh
     return mapping.isTransparent();
   }
 
-
-  //void LeveledTexturedMesh::updateGLState(){
-  //  LazyTextureMapping* mapping = getCurrentTextureMapping();
-  //  if (mapping != NULL && mapping != _mappingOnGLState){
-  //    _mappingOnGLState = mapping;
-  //    mapping->modifyGLState(_glState);
-  //  }
-  //}
-  
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
   
     LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping != null && mapping != _mappingOnGLState)
+    if (mapping != null)
     {
-      _mappingOnGLState = mapping;
-      mapping.modifyGLState(_glState);
-    }
+      if (mapping != _mappingOnGLState)
+      {
+        _mappingOnGLState = mapping;
+        mapping.modifyGLState(_glState);
+      }
   
-    if (mapping == null)
+      _glState.setParent(parentGLState);
+      _mesh.render(rc, _glState);
+    }
+    else
     {
-      ILogger.instance().logError("NO MAPPING");
+      ILogger.instance().logError("No Texture Mapping");
     }
-  
-    _glState.setParent(parentGLState);
-//C++ TO JAVA CONVERTER TODO TASK: There is no equivalent to 'const_cast' in Java:
-    const_cast<Mesh>(_mesh).render(rc, _glState);
   }
 
 }

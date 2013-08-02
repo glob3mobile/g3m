@@ -362,7 +362,10 @@ public class GPUProgram
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      _createdAttributes[i].unset(gl);
+      if (_createdAttributes[i] != null)
+      {
+        _createdAttributes[i].unset(gl);
+      }
     }
   
     //  for (int i = 0; i < 32; i++) {
@@ -393,7 +396,10 @@ public class GPUProgram
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      _createdAttributes[i].applyChanges(gl);
+      if (_createdAttributes[i] != null)
+      {
+        _createdAttributes[i].applyChanges(gl);
+      }
     }
   
   

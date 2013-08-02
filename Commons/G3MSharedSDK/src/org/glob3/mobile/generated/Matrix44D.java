@@ -91,9 +91,9 @@ public class Matrix44D extends RCObject
   public void dispose()
   {
     //ILogger::instance()->logError("N LISTENERS %d", _listeners.size());
-  //  for (int i = 0; i < _listeners.size(); i++) {
-  //    _listeners[i]->onMatrixBeingDeleted(this);
-  //  }
+    //  for (int i = 0; i < _listeners.size(); i++) {
+    //    _listeners[i]->onMatrixBeingDeleted(this);
+    //  }
   
     _columnMajorFloatArray = null;
     if (_columnMajorFloatBuffer != null)
@@ -194,6 +194,35 @@ public class Matrix44D extends RCObject
   public static Matrix44D createIdentity()
   {
     return new Matrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
+
+  public final boolean isScaleMatrix()
+  {
+  
+    return (_m01 == 0 && _m02 == 0 && _m03 == 0 && _m10 == 0 && _m12 == 0 && _m13 == 0 && _m20 == 0 && _m21 == 0 && _m23 == 0 && _m30 == 0 && _m31 == 0 && _m32 == 0 && _m33 == 1.0);
+  
+  
+    //
+    //  return MutableMatrix44D(scale._x, 0, 0, 0,
+    //                          0, scale._y, 0, 0,
+    //                          0, 0, scale._z, 0,
+    //                          0, 0, 0, 1);
+  
+  }
+
+  public final boolean isTranslationMatrix()
+  {
+  
+    return (_m00 == 1 && _m01 == 0 && _m02 == 0 && _m03 == 0 && _m10 == 0 && _m11 == 1 && _m12 == 0 && _m13 == 0 && _m20 == 0 && _m21 == 0 && _m22 == 1 && _m23 == 0 && _m33 == 1);
+  
+  
+  
+  //  return MutableMatrix44D(1, 0, 0, 0,
+  //                          0, 1, 0, 0,
+  //                          0, 0, 1, 0,
+  //                          x, y, z, 1);
+  
   }
 
 }
