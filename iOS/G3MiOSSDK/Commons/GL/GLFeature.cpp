@@ -190,7 +190,7 @@ GLFeature(LIGHTING_GROUP){
   Vector3D dirN = dir.normalized();
 
   _values.addUniformValue(LIGHT_DIRECTION,
-                          new GPUUniformValueVec4Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z(), (float)1.0),
+                          new GPUUniformValueVec3Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z()),
                           false);
 //  _values.addUniformValue(LIGHT_COLOR,
 //                          new GPUUniformValueVec4Float(lightColor),
@@ -202,7 +202,7 @@ VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElem
 GLFeature(LIGHTING_GROUP)
 {
   _values.addAttributeValue(NORMAL,
-                            new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized),
+                            new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
                             false);
 
 }

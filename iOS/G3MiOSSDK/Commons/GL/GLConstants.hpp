@@ -79,6 +79,7 @@ class GLType {
   static int _unsignedInt;
   static int _int;
   static int _vec2Float;
+  static int _vec3Float;
   static int _vec4Float;
   static int _bool;
   static int _matrix4Float;
@@ -89,6 +90,7 @@ public:
   static int glUnsignedInt(){ return _unsignedInt;}
   static int glInt(){ return _int;}
   static int glVec2Float(){ return _vec2Float;}
+  static int glVec3Float(){ return _vec3Float;}
   static int glVec4Float(){ return _vec4Float;}
   static int glBool(){ return _bool;}
   static int glMatrix4Float(){ return _matrix4Float;}
@@ -99,10 +101,10 @@ public:
     _unsignedInt = ngl->Type_UnsignedInt();
     _int = ngl->Type_Int();
     _vec2Float = ngl->Type_Vec2Float();
+    _vec3Float = ngl->Type_Vec3Float();
     _vec4Float = ngl->Type_Vec4Float();
     _bool = ngl->Type_Bool();
     _matrix4Float = ngl->Type_Matrix4Float();
-    
   }
 };
 

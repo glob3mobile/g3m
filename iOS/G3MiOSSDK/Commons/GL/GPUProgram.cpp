@@ -295,7 +295,9 @@ void GPUProgram::onUnused(GL* gl){
   }
 
   for (int i = 0; i < _nAttributes; i++) {
-    _createdAttributes[i]->unset(gl);
+    if (_createdAttributes[i] != NULL){
+      _createdAttributes[i]->unset(gl);
+    }
   }
 
   //  for (int i = 0; i < 32; i++) {
@@ -322,7 +324,9 @@ void GPUProgram::applyChanges(GL* gl){
   }
 
   for (int i = 0; i < _nAttributes; i++) {
-    _createdAttributes[i]->applyChanges(gl);
+    if (_createdAttributes[i] != NULL){
+      _createdAttributes[i]->applyChanges(gl);
+    }
   }
 
 

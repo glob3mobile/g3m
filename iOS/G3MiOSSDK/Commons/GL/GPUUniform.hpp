@@ -228,7 +228,49 @@ class GPUUniformVec2Float: public GPUUniform{
 public:
   GPUUniformVec2Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec2Float()){}
 };
+////////////////////////////////////////////////////////////
+class GPUUniformValueVec3Float:public GPUUniformValue{
+public:
+  const float _x, _y, _z;
 
+  GPUUniformValueVec3Float(float x, float y, float z):
+  GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z){}
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniform3f(id, _x, _y, _z);
+  }
+  bool isEqualsTo(const GPUUniformValue* v) const{
+    GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
+    return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
+  }
+
+  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
+  //    if (value != NULL){
+  //      delete value;
+  //    }
+  //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
+  //  }
+
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Vec4Float: x:");
+    isb->addDouble(_x);
+    isb->addString("y:");
+    isb->addDouble(_y);
+    isb->addString("z:");
+    isb->addDouble(_z);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+};
+
+
+class GPUUniformVec3Float: public GPUUniform{
+public:
+  GPUUniformVec3Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec3Float()){}
+};
+////////////////////////////////////////////////////////////
 
 class GPUUniformValueVec4Float:public GPUUniformValue{
 public:

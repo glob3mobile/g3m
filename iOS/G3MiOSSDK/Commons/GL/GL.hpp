@@ -197,7 +197,12 @@ public:
                  float v1,
                  float v2,
                  float v3) const{ _nativeGL->uniform4f(location, v0, v1, v2, v3);}
-  
+
+  void uniform3f(const IGLUniformID* location,
+                 float v0,
+                 float v1,
+                 float v2) const{ _nativeGL->uniform3f(location, v0, v1, v2);}
+
   void vertexAttribPointer(int index,
                            int size,
                            bool normalized,
