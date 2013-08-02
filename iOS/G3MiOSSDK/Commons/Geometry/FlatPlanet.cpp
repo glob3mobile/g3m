@@ -167,13 +167,129 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
                      const Vector3D& initialRay0,
                      const Vector3D& initialRay1) const
 {
+  _origin = origin.asMutableVector3D();
+  _centerRay = centerRay.asMutableVector3D();
+  _initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
+  _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  _squaredDistanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).squaredLength();
+  _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
   
+  // middle point in 3D
+  _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
 }
 
 
 MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
                             const Vector3D& finalRay1) const
 {
+  // test if initialPoints are valid
+  if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    return MutableMatrix44D::invalid();
   
+  // init params
+  const IMathUtils* mu = IMathUtils::instance();
+  MutableVector3D positionCamera = _origin;
+  const double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
+  const double factor = finalRaysAngle / _angleBetweenInitialRays;
+  double dAccum=0, distance0, distance1;
+  double distance = _origin.sub(_centerPoint).length();
+  
+  // compute estimated camera translation: step 0
+  double d = distance*(factor-1)/factor;
+  MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+  positionCamera = positionCamera.transformedBy(translation, 1.0);
+  dAccum += d;
+  {
+    const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
+    const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
+    distance0 = point0.sub(point1).squaredLength();
+    if (mu->isNan(distance0)) return MutableMatrix44D::invalid();
+  }
+  
+  // compute estimated camera translation: step 1
+  d = mu->abs((distance-d)*0.3);
+  if (distance0 < _squaredDistanceBetweenInitialPoints) d*=-1;
+  translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+  positionCamera = positionCamera.transformedBy(translation, 1.0);
+  dAccum += d;
+  {
+    const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
+    const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
+    distance1 = point0.sub(point1).squaredLength();
+    if (mu->isNan(distance1)) return MutableMatrix44D::invalid();
+  }
+  
+  // compute estimated camera translation: steps 2..n until convergence
+  //int iter=0;
+  double precision = mu->pow(10, mu->log10(distance)-7.0);
+  double distance_n1=distance0, distance_n=distance1;
+  while (mu->abs(distance_n-_squaredDistanceBetweenInitialPoints) > precision) {
+    // iter++;
+    if ((distance_n1-distance_n)/(distance_n-_squaredDistanceBetweenInitialPoints) < 0) d*=-0.5;
+    translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    dAccum += d;
+    distance_n1 = distance_n;
+    {
+      const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
+      const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
+      distance_n = point0.sub(point1).squaredLength();
+      if (mu->isNan(distance_n)) return MutableMatrix44D::invalid();
+
+    }
+  }
+  //if (iter>2) printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+  
+  // start to compound matrix
+  MutableMatrix44D matrix = MutableMatrix44D::identity();
+  positionCamera = _origin;
+  MutableVector3D viewDirection = _centerRay;
+  MutableVector3D ray0 = finalRay0.asMutableVector3D();
+  MutableVector3D ray1 = finalRay1.asMutableVector3D();
+  
+  // drag from initialPoint to centerPoint
+  {
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_initialPoint.sub(_centerPoint).asVector3D());
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+  }
+  
+  // move the camera forward
+  {
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+  }
+  
+  // compute 3D point of view center
+  Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D());
+  
+  // compute middle point in 3D
+  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D());
+  Vector3D finalPoint = P0.add(P1).times(0.5);
+  
+  // drag globe from centerPoint to finalPoint
+  {
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(centerPoint2.sub(finalPoint));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+  }
+  
+  // camera rotation
+  {
+    Vector3D normal = geodeticSurfaceNormal(centerPoint2);
+    Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
+    Vector3D P0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+    Vector3D v1     = P0.sub(centerPoint2).projectionInPlane(normal);
+    double angle    = v0.angleBetween(v1)._degrees;
+    double sign     = v1.cross(v0).dot(normal);
+    if (sign<0) angle = -angle;
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
+    matrix = rotation.multiply(matrix);
+  }
+  
+  return matrix;  
 }
 

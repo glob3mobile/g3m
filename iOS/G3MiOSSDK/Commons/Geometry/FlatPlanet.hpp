@@ -18,18 +18,20 @@
 class FlatPlanet: public Planet {
 private:
   const Vector2D _size;
-  
-  mutable MutableVector3D _lastDirection;
-  mutable MutableVector3D _lastFinalPoint;
+
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
-  mutable MutableVector3D _centerPoint;
+  mutable MutableVector3D _lastFinalPoint;
+  mutable bool            _validSingleDrag;
+  mutable MutableVector3D _lastDirection;
+  
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
   mutable MutableVector3D _initialPoint1;
+  mutable double          _squaredDistanceBetweenInitialPoints;
+  mutable MutableVector3D _centerPoint;
   mutable double          _angleBetweenInitialRays;
-  mutable double          _angleBetweenInitialPoints;
-  mutable bool            _validSingleDrag;
+  
 
   
 public:
