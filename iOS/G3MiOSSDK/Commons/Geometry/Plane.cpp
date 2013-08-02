@@ -40,3 +40,15 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
   const Vector3D intersection = origin.add(direction.times(t));
   return intersection;
 }
+
+
+Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
+                                           const Vector3D& direction)
+{
+  if (direction.z()==0) return Vector3D::nan();
+  const double t = -origin.z() / direction.z();
+  if (t<0) return Vector3D::nan();
+  Vector3D point = origin.add(direction.times(t));
+  return point;
+}
+

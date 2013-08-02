@@ -7,6 +7,8 @@
 //
 
 #include "FlatPlanet.hpp"
+#include "Plane.hpp"
+
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
 _size(size)
@@ -124,19 +126,38 @@ MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Geodetic3D& pos
 
 void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-  
+  _origin = origin.asMutableVector3D();
+  _initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+  _validSingleDrag = false;
 }
 
 
 MutableMatrix44D FlatPlanet::singleDrag(const Vector3D& finalRay) const
 {
+  // test if initialPoint is valid
+  if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
   
+  // compute final point
+  const Vector3D origin = _origin.asVector3D();
+  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
+  if (finalPoint.isNan()) return MutableMatrix44D::invalid();
+  
+  /*
+  // save params for possible inertial animations
+  _lastDragAxis = rotationAxis.asMutableVector3D();
+  double radians = rotationDelta.radians();
+  _lastDragRadiansStep = radians - _lastDragRadians;
+  _lastDragRadians = radians;
+  _validSingleDrag = true;*/
+  
+  // return rotation matrix
+  return MutableMatrix44D::createTranslationMatrix(_initialPoint.sub(finalPoint).asVector3D());
 }
 
 
 Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 {
-  
+  return NULL;
 }
 
 
