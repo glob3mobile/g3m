@@ -149,15 +149,6 @@ public class GLState
   
   }
 
-  public final void applyGlobalStateOnGPU(GL gl)
-  {
-    int __ASK_JM;
-    if (_parentGLState != null)
-    {
-      _parentGLState.applyGlobalStateOnGPU(gl);
-    }
-  }
-
   public final void applyOnGPU(GL gl, GPUProgramManager progManager)
   {
   

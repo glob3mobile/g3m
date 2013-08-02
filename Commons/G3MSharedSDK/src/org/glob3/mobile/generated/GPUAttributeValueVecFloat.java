@@ -55,7 +55,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-    return (_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized());
+    return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized()));
   }
 
 //  GPUAttributeValue* shallowCopy() const{
