@@ -15,11 +15,7 @@
 
 
 class CameraDoubleDragHandler: public CameraEventHandler {
-  
-private:
-  double _initialFingerSeparation;
-
-  
+    
 public:
   CameraDoubleDragHandler():
   _camera0(Camera(0, 0))

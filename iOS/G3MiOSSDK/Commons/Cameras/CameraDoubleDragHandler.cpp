@@ -47,14 +47,6 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   // double dragging
   const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  
-  //Vector2I pixel0 = Vector2I(509,494);
-  //Vector2I pixel1 = Vector2I(506,262);
-  
-  _initialFingerSeparation = pixel1.sub(pixel0).length();
-
-
-  
   eventContext->getPlanet()->beginDoubleDrag(_camera0.getCartesianPosition(),
                                              _camera0.getViewDirection(),
                                              _camera0.pixel2Ray(pixel0),
@@ -74,15 +66,8 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Planet* planet = eventContext->getPlanet();
   const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  
-  //Vector2I pixel0 = Vector2I(523,495);
-  //Vector2I pixel1 = Vector2I(511,259);
-  
-  double finalFingerSeparation = pixel1.sub(pixel0).length();
-  double zoomFactor = finalFingerSeparation/_initialFingerSeparation;
   MutableMatrix44D matrix = planet->doubleDrag(_camera0.pixel2Ray(pixel0),
-                                               _camera0.pixel2Ray(pixel1),
-                                               zoomFactor);
+                                               _camera0.pixel2Ray(pixel1));
   if (!matrix.isValid()) return;
 
   // apply transformation

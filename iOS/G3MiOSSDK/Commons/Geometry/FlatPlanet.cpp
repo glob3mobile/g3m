@@ -181,8 +181,7 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
-                                        const Vector3D& finalRay1,
-                                        double zoomFactor) const
+                                        const Vector3D& finalRay1) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -191,59 +190,17 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   // init params
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
-  const double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
-  const double factor = zoomFactor; //finalRaysAngle / _angleBetweenInitialRays;
-  double dAccum=0, distance0, distance1;
-  double distance = _origin.sub(_centerPoint).length();
-  
-  // compute estimated camera translation: step 0
-  double d = distance*(factor-1)/factor;
-  MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
-  positionCamera = positionCamera.transformedBy(translation, 1.0);
-  dAccum += d;
-  {
-    const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
-    const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-    distance0 = point0.sub(point1).length();
-    if (mu->isNan(distance0)) return MutableMatrix44D::invalid();
-  }
-  
-  // compute estimated camera translation: step 1
-  d = mu->abs((distance-d)*0.3);
-  if (distance0 < _distanceBetweenInitialPoints) d*=-1;
-  translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
-  positionCamera = positionCamera.transformedBy(translation, 1.0);
-  dAccum += d;
-  {
-    const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
-    const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-    distance1 = point0.sub(point1).length();
-    if (mu->isNan(distance1)) return MutableMatrix44D::invalid();
-  }
-
-  // compute estimated camera translation: steps 2..n until convergence
-  int iter=0;
-  double precision = mu->pow(10, mu->log10(distance)- 3.0);
-  double distance_n1=distance0, distance_n=distance1;
-  while (mu->abs(distance_n-_distanceBetweenInitialPoints) > precision) {
-    iter++;
-    if ((distance_n1-distance_n)/(distance_n-_distanceBetweenInitialPoints) < 0) d*=-0.5;
-    translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
-    positionCamera = positionCamera.transformedBy(translation, 1.0);
-    dAccum += d;
-    distance_n1 = distance_n;
-    {
-      const Vector3D point0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0);
-      const Vector3D point1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1);
-      distance_n = point0.sub(point1).length();
-      if (mu->isNan(distance_n)) return MutableMatrix44D::invalid();
-    }
-  }
-  
-//  if (iter>5)
-//    printf("-----------  iteraciones=%d  precision=%f distance_n=%.4f  distancia final=%.1f\n",
-//           iter, precision, distance_n, dAccum);
-
+    
+  // compute distance to translate camera
+  double d0 = _distanceBetweenInitialPoints;
+  const Vector3D r1 = finalRay0;
+  const Vector3D r2 = finalRay1;
+  double k = (r1.x()/r1.z() - r2.x()/r2.z()) * (r1.x()/r1.z() - r2.x()/r2.z()) +
+              (r1.y()/r1.z() - r2.y()/r2.z()) * (r1.y()/r1.z() - r2.y()/r2.z());
+  double zc = _origin.z();
+  double uz = _centerRay.z();
+  double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+  double dAccum = t2*_centerRay.length();
   
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();

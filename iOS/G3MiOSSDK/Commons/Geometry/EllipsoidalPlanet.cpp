@@ -411,8 +411,7 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                               const Vector3D& finalRay1,
-                                               double zoomFactor) const
+                                               const Vector3D& finalRay1) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())

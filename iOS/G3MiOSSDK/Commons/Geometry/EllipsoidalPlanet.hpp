@@ -147,8 +147,7 @@ public:
                        const Vector3D& initialRay1) const;
   
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
-                              const Vector3D& finalRay1,
-                              double zoomFactor) const;
+                              const Vector3D& finalRay1) const;
 
 };
 
