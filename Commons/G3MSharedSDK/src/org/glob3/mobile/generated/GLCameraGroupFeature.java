@@ -3,10 +3,11 @@ public class GLCameraGroupFeature extends GLFeature
 {
   protected final GLCameraGroupFeatureType _type;
   private Matrix44DHolder _matrixHolder = null;
-  public GLCameraGroupFeature(Matrix44D matrix)
+  public GLCameraGroupFeature(Matrix44D matrix, GLCameraGroupFeatureType type)
   {
     super(GLFeatureGroupName.CAMERA_GROUP);
     _matrixHolder = new Matrix44DHolder(matrix);
+    _type = type;
   }
   public void dispose()
   {

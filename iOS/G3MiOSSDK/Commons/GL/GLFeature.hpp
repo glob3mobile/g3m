@@ -114,10 +114,11 @@ public:
   GLFeature(CAMERA_GROUP), _matrixHolder(new Matrix44DHolder(matrix)), _type(type){}
 #endif
 #ifdef JAVA_CODE
-  public GLCameraGroupFeature(Matrix44D matrix)
+  public GLCameraGroupFeature(Matrix44D matrix, GLCameraGroupFeatureType type)
   {
     super(GLFeatureGroupName.CAMERA_GROUP);
     _matrixHolder = new Matrix44DHolder(matrix);
+    _type = type;
   }
 #endif
   ~GLCameraGroupFeature(){
