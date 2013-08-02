@@ -1,70 +1,46 @@
 //
-//  EllipsoidalPlanet.hpp
+//  FlatPlanet.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 15/05/13.
+//  Created by Agustín Trujillo on 10/07/13.
 //
 //
 
-#ifndef G3MiOSSDK_EllipsoidalPlanet_hpp
-#define G3MiOSSDK_EllipsoidalPlanet_hpp
-
-#include <vector>
-#include <list>
-
-#include "Vector3D.hpp"
-#include "Planet.hpp"
+#ifndef G3MiOSSDK_FlatPlanet_hpp
+#define G3MiOSSDK_FlatPlanet_hpp
 
 #include "MutableVector3D.hpp"
+#include "Geodetic3D.hpp"
+#include "Planet.hpp"
+#include "Vector2D.hpp"
 
-#include "Ellipsoid.hpp"
 
-class EllipsoidalPlanet: public Planet{
+class FlatPlanet: public Planet {
 private:
+  const Vector2D _size;
   
-#ifdef C_CODE
-  const Ellipsoid _ellipsoid;
-#endif
-#ifdef JAVA_CODE
-  private final Ellipsoid _ellipsoid;
-#endif
-
-  mutable MutableVector3D _origin;
-  mutable MutableVector3D _initialPoint;
-  mutable MutableVector3D _centerPoint;
-  mutable MutableVector3D _centerRay;
-  mutable MutableVector3D _initialPoint0;
-  mutable MutableVector3D _initialPoint1;
-  mutable MutableVector3D _lastDragAxis;
-  mutable double          _lastDragRadians;
-  mutable double          _lastDragRadiansStep;
-  mutable double          _angleBetweenInitialRays;
-  mutable double          _angleBetweenInitialPoints;
-  mutable bool            _validSingleDrag;
-
-
 public:
   
-  EllipsoidalPlanet(const Ellipsoid& ellipsoid);
+  FlatPlanet(const Vector2D& size);
   
-  ~EllipsoidalPlanet() {
+  ~FlatPlanet() {
     
   }
   
   Vector3D getRadii() const{
-    return _ellipsoid.getRadii();
+    return Vector3D(_size._x, _size._y, 0);
   }
   
-  Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.normalized();
+  Vector3D centricSurfaceNormal(const Vector3D& position) const {
+    return Vector3D(0, 0, 1);
   }
   
-  Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized();
+  Vector3D geodeticSurfaceNormal(const Vector3D& position) const {
+    return Vector3D(0, 0, 1);
   }
   
-  Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized().asVector3D();
+  Vector3D geodeticSurfaceNormal(const MutableVector3D& position) const {
+    return Vector3D(0, 0, 1);
   }
   
   
@@ -72,11 +48,11 @@ public:
                                  const Angle& longitude) const;
   
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+    return Vector3D(0, 0, 1);
   }
   
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+    return Vector3D(0, 0, 1);
   }
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
@@ -87,25 +63,26 @@ public:
                        const double height) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       geodetic._height);
+    const double x = geodetic.longitude().degrees() * _size._x / 360.0;
+    const double y = geodetic.latitude().degrees() * _size._y / 180.0;
+    return Vector3D(x, y, geodetic.height());
   }
   
+    
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
+    return toCartesian(geodetic.latitude(),
+                       geodetic.longitude(),
                        0.0);
   }
   
   Vector3D toCartesian(const Geodetic2D& geodetic,
                        const double height) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
+    return toCartesian(geodetic.latitude(),
+                       geodetic.longitude(),
                        height);
   }
   
-  Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoidalPlanet) const;
+  Geodetic2D toGeodetic2D(const Vector3D& position) const;
   
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
   
@@ -133,12 +110,12 @@ public:
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
-  bool isFlat() const { return false; }
-
+  bool isFlat() const { return true; }
+  
   void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
-    
+  
   Effect* createEffectFromLastSingleDrag() const;
   
   void beginDoubleDrag(const Vector3D& origin,

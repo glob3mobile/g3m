@@ -128,6 +128,8 @@ public:
 
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
+  bool isFlat() const { return false; }
+
   void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;

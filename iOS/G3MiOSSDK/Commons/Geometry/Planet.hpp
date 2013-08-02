@@ -23,6 +23,8 @@ public:
   
   static const Planet* createEarth();
   static const Planet* createSphericalEarth();
+  static const Planet* createFlatEarth();
+
   
   virtual ~Planet() {}
   
@@ -77,6 +79,8 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
+  virtual bool isFlat() const = 0;
+
   virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
   
   virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;

@@ -20,7 +20,13 @@
 void Camera::initialize(const G3MContext* context)
 {
   _planet = context->getPlanet();
-  setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
+  if (_planet->isFlat()) {
+    setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
+    setUp(MutableVector3D(0, 1, 0));
+  } else {
+    setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
+    setUp(MutableVector3D(0, 0, 1));
+  }
   _dirtyFlags.setAll(true);
 }
 
@@ -402,7 +408,7 @@ FrustumData Camera::calculateFrustumData() const {
   double zFar = 10000 * zNear;
   const double distance2ToPlanetCenter = _position.squaredLength();
   if ((zFar * zFar) > distance2ToPlanetCenter) {
-    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
+    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter) * 1.001;
   }
 
   const double goalRatio = 1000;

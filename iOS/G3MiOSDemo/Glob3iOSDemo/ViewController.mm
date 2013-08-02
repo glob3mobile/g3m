@@ -453,8 +453,9 @@ public:
   
   builder.setCameraRenderer([self createCameraRenderer]);
   
-  builder.setPlanet(Planet::createEarth());
+  //builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
+  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -677,10 +678,8 @@ public:
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool processRotation = true;
-  const bool processZoom = true;
   
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
   
   cameraRenderer->addHandler(new CameraRotationHandler());
@@ -1990,13 +1989,13 @@ public:
       //                                                     );
 
       // go to Grand Canyon
-      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
-                                                                Angle::fromDegreesMinutes(-112, 6),
-                                                                25000),
-                                                     Angle::zero(),
-                                                     Angle::fromDegrees(75)
-                                                     );
+//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+//                                                                Angle::fromDegreesMinutes(-112, 6),
+//                                                                25000),
+//                                                     Angle::zero(),
+//                                                     Angle::fromDegrees(75)
+//                                                     );
 
 
       /*

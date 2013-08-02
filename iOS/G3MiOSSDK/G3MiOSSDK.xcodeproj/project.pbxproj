@@ -513,6 +513,8 @@
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
+		FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */; };
+		FBBDBCDE17AB98CF00077004 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC23099179730FF009343FC /* CameraEffects.cpp */; };
 /* End PBXBuildFile section */
 
@@ -523,6 +525,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FBBDBCDE17AB98CF00077004 /* CameraDoubleDragHandler.hpp in CopyFiles */,
 				CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */,
 				CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */,
 				D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */,
@@ -1309,9 +1312,11 @@
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
+		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; };
+		FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FlatPlanet.hpp; path = Commons/Geometry/FlatPlanet.hpp; sourceTree = "<group>"; };
+		FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		FBC2309817972F4F009343FC /* CameraEffects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEffects.hpp; path = Commons/Cameras/CameraEffects.hpp; sourceTree = "<group>"; };
 		FBC23099179730FF009343FC /* CameraEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraEffects.cpp; path = Commons/Cameras/CameraEffects.cpp; sourceTree = "<group>"; };
-		FBC2309E1799380E009343FC /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1597,6 +1602,8 @@
 				D8B749AA175E040800046B96 /* Ellipsoid.hpp */,
 				D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */,
 				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
+				FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */,
+				FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */,
 				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
@@ -1736,7 +1743,7 @@
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
-				FBC2309E1799380E009343FC /* CameraDoubleDragHandler.hpp */,
+				FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
@@ -2356,6 +2363,7 @@
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,
+				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2439,7 +2447,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -2464,7 +2472,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
