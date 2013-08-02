@@ -102,8 +102,6 @@ public:
 
   void setParent(const GLState* p) const;
 
-  void applyGlobalStateOnGPU(GL* gl) const;
-
   void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
   void addGLFeature(const GLFeature* f, bool mustRetain) {

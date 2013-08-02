@@ -35,13 +35,6 @@ void GLState::setParent(const GLState* parent) const{
 
 }
 
-void GLState::applyGlobalStateOnGPU(GL* gl) const {
-  int __ASK_JM;
-  if (_parentGLState != NULL) {
-    _parentGLState->applyGlobalStateOnGPU(gl);
-  }
-}
-
 void GLState::applyStates(GL* gl, GPUProgram* prog) const{
   if (_parentGLState != NULL) {
     _parentGLState->applyStates(gl, prog);
