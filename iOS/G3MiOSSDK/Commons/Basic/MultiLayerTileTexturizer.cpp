@@ -588,51 +588,31 @@ public:
 
     Tile* ancestor = _tile;
     bool fallbackSolved = false;
-    while (ancestor != NULL) {
-      LazyTextureMapping* mapping;
-      if (fallbackSolved) {
-        mapping = NULL;
-      }
-      else {
-        const bool ownedTexCoords = true;
-        const bool transparent    = false;
-        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
-                                                            _tile,
-                                                            ancestor,
-                                                            _tessellator,
-                                                            _mercator),
-                                         _texturesHandler,
-                                         ownedTexCoords,
-                                         transparent);
-      }
+    while (ancestor != NULL && !fallbackSolved) {
+      const bool ownedTexCoords = true;
+      const bool transparent    = false;
+      LazyTextureMapping* mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
+                                                                              _tile,
+                                                                              ancestor,
+                                                                              _tessellator,
+                                                                              _mercator),
+                                                           _texturesHandler,
+                                                           ownedTexCoords,
+                                                           transparent);
 
       if (ancestor != _tile) {
-        if (!fallbackSolved) {
-          const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId != NULL) {
-            _texturesHandler->retainGLTextureId(glTextureId);
-            mapping->setGLTextureId(glTextureId);
-            fallbackSolved = true;
-          }
+        const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
+        if (glTextureId != NULL) {
+          _texturesHandler->retainGLTextureId(glTextureId);
+          mapping->setGLTextureId(glTextureId);
+          fallbackSolved = true;
         }
       }
-//      else {
-//        if (mapping != NULL) {
-//          if ( mapping->getGLTextureId() != NULL ) {
-//            ILogger::instance()->logInfo("break (point) on me 3\n");
-//          }
-//        }
-//      }
 
       mappings->push_back(mapping);
+
       ancestor = ancestor->getParent();
     }
-
-//    if ((mappings != NULL) && (_tile != NULL)) {
-//      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
-//        ILogger::instance()->logInfo("break (point) me\n");
-//      }
-//    }
 
     return new LeveledTexturedMesh(_tessellatorMesh,
                                    false,

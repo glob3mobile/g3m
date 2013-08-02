@@ -111,11 +111,12 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   if (_currentLevel < 0) {
     int newCurrentLevel = -1;
 
-    for (int i = 0; i < _levelsCount; i++) {
-      LazyTextureMapping* mapping = _mappings->at(i);
+    const int levelsCount = _mappings->size();
+
+    for (int i = 0; i < levelsCount; i++) {
+      const LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
         if (mapping->isValid()) {
-          //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
           newCurrentLevel = i;
           break;
         }
@@ -123,16 +124,23 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
     }
 
     if (newCurrentLevel >= 0) {
+      // ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d",
+      //                              _currentLevel,
+      //                              newCurrentLevel);
       _currentLevel = newCurrentLevel;
 
       _mappings->at(_currentLevel)->modifyGLState(_glState);
 
-      for (int i = _currentLevel+1; i < _levelsCount; i++) {
-        LazyTextureMapping* mapping = _mappings->at(i);
-        if (mapping != NULL) {
-          _mappings->at(i) = NULL;
-          delete mapping;
+      if (_currentLevel < levelsCount-1) {
+        for (int i = levelsCount-1; i > _currentLevel; i--) {
+          const LazyTextureMapping* mapping = _mappings->at(i);
+          if (mapping != NULL) {
+            //_mappings->at(i) = NULL;
+            delete mapping;
+          }
         }
+        _mappings->erase(_mappings->begin() + _currentLevel + 1,
+                         _mappings->end());
       }
     }
   }
@@ -176,7 +184,8 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return (mapping == NULL) ? false : mapping->isTransparent();
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void LeveledTexturedMesh::render(const G3MRenderContext* rc,
+                                 const GLState* parentGLState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("No Texture Mapping");
