@@ -339,9 +339,6 @@ private:
 
 
   bool isReadyToRenderTiles(const G3MRenderContext* rc);
-  void renderIncompletePlanet(const G3MRenderContext* rc);
-
-  EllipsoidShape* _incompleteShape;
 
   bool _recreateTilesPending;
 

@@ -132,7 +132,6 @@ _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
-_incompleteShape(NULL),
 _recreateTilesPending(false),
 _projection(NULL),
 _model(NULL)
@@ -178,8 +177,6 @@ void PlanetRenderer::changed() {
 
 PlanetRenderer::~PlanetRenderer() {
   clearFirstLevelTiles();
-
-  delete _incompleteShape;
 
   delete _tessellator;
   delete _elevationDataProvider;
@@ -451,29 +448,7 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
 }
 
 bool PlanetRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  return (isReadyToRenderTiles(rc)  ||
-          _parameters->_renderIncompletePlanet);
-}
-
-void PlanetRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
-
-  if (_incompleteShape == NULL) {
-    const short resolution = 16;
-    const float borderWidth = 0;
-    const bool texturedInside = false;
-    const bool mercator = false;
-
-    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-                                          _parameters->_incompletePlanetTexureURL,
-                                          rc->getPlanet()->getRadii(),
-                                          resolution,
-                                          borderWidth,
-                                          texturedInside,
-                                          mercator);
-
-  }
-
-  _incompleteShape->rawRender(rc, &_glState, true);
+  return isReadyToRenderTiles(rc);
 }
 
 void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
@@ -502,11 +477,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc) {
   //    recreateTiles();
   //    _recreateTilesPending = false;
   //  }
-
-  if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
-    renderIncompletePlanet(rc);
-    return;
-  }
 
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();

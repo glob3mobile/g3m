@@ -118,7 +118,7 @@ GL* MapBooBuilder::getGL() {
 
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const TileTessellator* tessellator = new EllipsoidalTileTessellator(true);
-  
+
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   TileTexturizer* texturizer = new MultiLayerTileTexturizer();
@@ -128,28 +128,24 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const bool renderIncompletePlanet = false;
-  const URL incompletePlanetTexureURL("", false);
-  
+
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
-                                                                      incrementalTileQuality,
-                                                                      renderIncompletePlanet,
-                                                                      incompletePlanetTexureURL);
-  
+                                                                      incrementalTileQuality);
+
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
-  
+
   return new PlanetRenderer(tessellator,
-                          elevationDataProvider,
-                          verticalExaggeration,
-                          texturizer,
-                          tileRasterizer,
-                          _layerSet,
-                          parameters,
-                          showStatistics,
-                          texturePriority);
+                            elevationDataProvider,
+                            verticalExaggeration,
+                            texturizer,
+                            tileRasterizer,
+                            _layerSet,
+                            parameters,
+                            showStatistics,
+                            texturePriority);
 }
 
 const Planet* MapBooBuilder::createPlanet() {

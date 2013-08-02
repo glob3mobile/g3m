@@ -1160,15 +1160,10 @@ public:
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
-  const bool renderIncompletePlanet = false;
-  const URL incompletePlanetTexureURL("", false);
-
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality,
-                                   renderIncompletePlanet,
-                                   incompletePlanetTexureURL);
+                                   incrementalTileQuality);
 }
 
 - (PlanetRenderer*) createPlanetRenderer: (TilesRenderParameters*) parameters

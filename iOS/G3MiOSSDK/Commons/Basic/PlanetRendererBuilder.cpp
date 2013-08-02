@@ -307,15 +307,10 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 }
 
 TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
-  int __TODO_MakeConfigurable_renderIncompletePlanet;
-  const bool renderIncompletePlanet = false;
-  const URL incompletePlanetTexureURL("", false);
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
-                                   getIncrementalTileQuality(),
-                                   renderIncompletePlanet,
-                                   incompletePlanetTexureURL);
+                                   getIncrementalTileQuality());
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
