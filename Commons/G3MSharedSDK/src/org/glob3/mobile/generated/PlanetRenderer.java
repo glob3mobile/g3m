@@ -263,24 +263,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     return true;
   }
-  private void renderIncompletePlanet(G3MRenderContext rc)
-  {
-  
-    if (_incompleteShape == null)
-    {
-      final short resolution = 16;
-      final float borderWidth = 0F;
-      final boolean texturedInside = false;
-      final boolean mercator = false;
-  
-      _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle.zero(), Angle.zero(), 0), _parameters._incompletePlanetTexureURL, rc.getPlanet().getRadii(), resolution, borderWidth, texturedInside, mercator);
-  
-    }
-  
-    _incompleteShape.rawRender(rc, _glState, true);
-  }
-
-  private EllipsoidShape _incompleteShape;
 
   private boolean _recreateTilesPending;
 
@@ -330,7 +312,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
-     _incompleteShape = null;
      _recreateTilesPending = false;
      _projection = null;
      _model = null;
@@ -344,9 +325,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public void dispose()
   {
     clearFirstLevelTiles();
-  
-    if (_incompleteShape != null)
-       _incompleteShape.dispose();
   
     if (_tessellator != null)
        _tessellator.dispose();
@@ -400,12 +378,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     //    recreateTiles();
     //    _recreateTilesPending = false;
     //  }
-  
-    if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
-    {
-      renderIncompletePlanet(rc);
-      return;
-    }
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -535,7 +507,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    return (isReadyToRenderTiles(rc) || _parameters._renderIncompletePlanet);
+    return isReadyToRenderTiles(rc);
   }
 
 

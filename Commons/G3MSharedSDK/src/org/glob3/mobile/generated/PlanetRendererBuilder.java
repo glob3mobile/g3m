@@ -197,10 +197,7 @@ public class PlanetRendererBuilder
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    int __TODO_MakeConfigurable_renderIncompletePlanet;
-    final boolean renderIncompletePlanet = false;
-    final URL incompletePlanetTexureURL = new URL("", false);
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), renderIncompletePlanet, incompletePlanetTexureURL);
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
   }
   private TileTessellator createTileTessellator()
   {

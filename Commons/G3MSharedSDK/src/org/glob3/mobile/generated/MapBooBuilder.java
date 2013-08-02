@@ -40,10 +40,8 @@ public abstract class MapBooBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-    final boolean renderIncompletePlanet = false;
-    final URL incompletePlanetTexureURL = new URL("", false);
   
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, renderIncompletePlanet, incompletePlanetTexureURL);
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality);
   
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
