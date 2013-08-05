@@ -14,6 +14,8 @@ GLState::~GLState() {
 
   delete _valuesSet;
   delete _globalState;
+
+//  printf("TIMESTAMP: %d\n", _timeStamp);
 }
 
 void GLState::hasChangedStructure() const {
@@ -71,19 +73,22 @@ void GLState::addGLFeature(const GLFeature* f, bool mustRetain) {
 
 void GLState::setParent(const GLState* parent) const{
 
-  if ((parent != _parentGLState) ||
-      (parent == NULL)           ||
-      (_parentsTimeStamp != parent->getTimeStamp())) {
-
-    _parentGLState    = parent;
-    _parentsTimeStamp = (_parentGLState == NULL) ? 0 : _parentGLState->getTimeStamp();
-
-    hasChangedStructure();
+  if (parent == NULL) {
+    if (parent != _parentGLState) {
+      _parentGLState    = NULL;
+      _parentsTimeStamp = -1;
+      hasChangedStructure();
+    }
   }
-//  else {
-//    ILogger::instance()->logInfo("Reusing GLState Parent");
-//  }
-
+  else {
+    const int parentsTimeStamp = parent->getTimeStamp();
+    if ((parent != _parentGLState) ||
+        (_parentsTimeStamp != parentsTimeStamp)) {
+      _parentGLState    = parent;
+      _parentsTimeStamp = parentsTimeStamp;
+      hasChangedStructure();
+    }
+  }
 }
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
