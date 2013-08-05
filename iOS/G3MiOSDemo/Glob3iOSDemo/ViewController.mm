@@ -516,9 +516,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  //  builder.setPlanet(Planet::createEarth());
+  builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-  builder.setPlanet(Planet::createFlatEarth());
+  //builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -2291,30 +2291,32 @@ public:
       /**/
 
       /**/
-
-      //      NSString* geojsonName = @"geojson/countries";
-      NSString* geojsonName = @"geojson/countries-50m";
-      //      NSString* geojsonName = @"geojson/boundary_lines_land";
-      //      NSString* geojsonName = @"geojson/cities";
-      //      NSString* geojsonName = @"geojson/test";
-
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
-                                                                  ofType: @"geojson"];
-
-      if (geoJSONFilePath) {
-        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-                                                        encoding: NSUTF8StringEncoding
-                                                           error: nil];
-
-        if (nsGEOJSON) {
-          std::string geoJSON = [nsGEOJSON UTF8String];
-
-          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
-
-          _geoRenderer->addGEOObject(geoObject);
+      
+      if (false) {
+        //      NSString* geojsonName = @"geojson/countries";
+        NSString* geojsonName = @"geojson/countries-50m";
+        //      NSString* geojsonName = @"geojson/boundary_lines_land";
+        //      NSString* geojsonName = @"geojson/cities";
+        //      NSString* geojsonName = @"geojson/test";
+        
+        NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
+                                                                    ofType: @"geojson"];
+        
+        if (geoJSONFilePath) {
+          NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+          
+          if (nsGEOJSON) {
+            std::string geoJSON = [nsGEOJSON UTF8String];
+            
+            GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+            
+            _geoRenderer->addGEOObject(geoObject);
+          }
         }
       }
-      /**/
+
 
       if (false){
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
