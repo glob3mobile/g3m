@@ -135,6 +135,8 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
   vs->addUniformValue(MODELVIEW,
                       new GPUUniformValueMatrix4(modelViewProvider),
                       false);
+
+  delete [] modelTransformHolders;
 /*
   const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures-2];
   const Matrix44DProvider** cameraHolders = new const Matrix44DProvider*[2];

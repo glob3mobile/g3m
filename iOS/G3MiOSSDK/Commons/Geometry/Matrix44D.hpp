@@ -156,7 +156,7 @@ class Matrix44DMultiplicationHolder: public Matrix44DProvider{
   mutable Matrix44D* _modelview;
 public:
   Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix):
-  _providers(providers),
+  _providers(new const Matrix44DProvider*[nMatrix]),
   _nMatrix(nMatrix),
   _modelview(NULL)
   {
@@ -167,6 +167,7 @@ public:
     _lastMatrixes = new Matrix44D[nMatrix];
 #endif
     for (int i = 0; i < _nMatrix; i++) {
+      _providers[i] = providers[i];
       _lastMatrixes[i] = _providers[i]->getMatrix();
       _providers[i]->_retain();
       if (_lastMatrixes[i] == NULL){
