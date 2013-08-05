@@ -29,8 +29,11 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     return "GEOTileRasterizer";
   }
 
-  public final void rasterize(IImage image, Tile tile, boolean mercator, IImageListener listener, boolean autodelete)
+  public final void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
+    IImage image = trc._image;
+    final Tile tile = trc._tile;
+    final boolean mercator = trc._mercator;
   
     final int width = image.getWidth();
     final int height = image.getHeight();
@@ -40,13 +43,6 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     ICanvas canvas = getCanvas(width, height);
   
     canvas.drawImage(image, 0, 0);
-  
-  //  canvas->setFillColor(Color::yellow());
-  
-  //  canvas->setLineColor(Color::white());
-  //  canvas->setLineWidth(1);
-  //  canvas->strokeRectangle(0, 0, width, height);
-  
   
     _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection));
   

@@ -98,8 +98,11 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   //  return _canvas;
   //}
   
-  public final void rasterize(IImage image, Tile tile, boolean mercator, IImageListener listener, boolean autodelete)
+  public final void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
+  
+    IImage image = trc._image;
+    final Tile tile = trc._tile;
   
     final int width = image.getWidth();
     final int height = image.getHeight();
