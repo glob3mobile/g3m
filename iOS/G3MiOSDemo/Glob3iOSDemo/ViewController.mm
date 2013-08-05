@@ -2399,17 +2399,17 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-  
+
   //  renderers.push_back(new GLErrorRenderer());
-  
+
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-    
+
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
-    
+
   public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
