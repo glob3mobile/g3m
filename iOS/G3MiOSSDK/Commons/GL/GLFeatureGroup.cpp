@@ -138,8 +138,9 @@ void GLFeatureSet::clearFeatures(GLFeatureGroupName g){
           _features[j] = _features[j+1];
         }
       }
+      i--;
+      _nFeatures--;
     }
-    _nFeatures--;
   }
   
 }
