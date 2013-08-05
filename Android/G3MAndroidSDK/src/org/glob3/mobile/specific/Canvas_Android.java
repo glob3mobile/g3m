@@ -6,11 +6,15 @@ import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.Vector2F;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -26,6 +30,8 @@ public class Canvas_Android
    private final Paint _strokePaint;
    private Typeface    _currentTypeface = null;
 
+   private Path        _path            = null;
+
    private final RectF _rectF           = new RectF(); // RectF instance for reuse (and avoid garbage)
    private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
 
@@ -38,7 +44,6 @@ public class Canvas_Android
       _strokePaint = new Paint();
       _strokePaint.setAntiAlias(true);
       _strokePaint.setStyle(Paint.Style.STROKE);
-      // _strokePaint.setARGB(0, 0, 0, 0);
    }
 
 
@@ -114,7 +119,6 @@ public class Canvas_Android
 
    @Override
    protected Vector2F _textExtent(final String text) {
-      //final Rect textBounds = new Rect();
       final Rect textBounds = _rect;
       _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
       final int width = textBounds.width();
@@ -144,13 +148,13 @@ public class Canvas_Android
 
 
    @Override
-   protected void _setStrokeColor(final org.glob3.mobile.generated.Color color) {
+   protected void _setLineColor(final org.glob3.mobile.generated.Color color) {
       _strokePaint.setColor(toAndroidColor(color));
    }
 
 
    @Override
-   protected void _setStrokeWidth(final float width) {
+   protected void _setLineWidth(final float width) {
       _strokePaint.setStrokeWidth(width);
    }
 
@@ -259,12 +263,6 @@ public class Canvas_Android
                              final float height) {
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
 
-      //      final RectF dst = new RectF( //
-      //               left, //
-      //               top, //
-      //               left + width, // Right
-      //               top + height); // Bottom
-
       final RectF dst = _rectF;
       dst.set(left, //
                top, //
@@ -285,26 +283,13 @@ public class Canvas_Android
                              final float destTop,
                              final float destWidth,
                              final float destHeight) {
-      //ILogger.instance().logError("RECT: %f, %f, %f, %f - %f, %f, %f, %f ", srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
-
-      //      final RectF dst = new RectF( //
-      //               destLeft, //
-      //               destTop, //
-      //               destLeft + destWidth, // Right
-      //               destTop + destHeight); // Bottom
 
       final RectF dst = _rectF;
       dst.set(destLeft, //
                destTop, //
                destLeft + destWidth, // Right
                destTop + destHeight); // Bottom
-
-      //      final Rect src = new Rect( //
-      //               Math.round(srcLeft), //
-      //               Math.round(srcTop), //
-      //               Math.round(srcLeft + srcWidth), // Right
-      //               Math.round(srcTop + srcHeight)); // Bottom
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
@@ -315,5 +300,106 @@ public class Canvas_Android
       _canvas.drawBitmap(bitmap, src, dst, null);
    }
 
+
+   @Override
+   protected void _setLineCap(final StrokeCap cap) {
+      switch (cap) {
+         case CAP_BUTT:
+            _strokePaint.setStrokeCap(Paint.Cap.BUTT);
+            break;
+         case CAP_ROUND:
+            _strokePaint.setStrokeCap(Paint.Cap.ROUND);
+            break;
+         case CAP_SQUARE:
+            _strokePaint.setStrokeCap(Paint.Cap.SQUARE);
+            break;
+      }
+   }
+
+
+   @Override
+   protected void _setLineJoin(final StrokeJoin join) {
+      switch (join) {
+         case JOIN_MITER:
+            _strokePaint.setStrokeJoin(Paint.Join.MITER);
+            break;
+         case JOIN_ROUND:
+            _strokePaint.setStrokeJoin(Paint.Join.ROUND);
+            break;
+         case JOIN_BEVEL:
+            _strokePaint.setStrokeJoin(Paint.Join.BEVEL);
+            break;
+      }
+   }
+
+
+   @Override
+   protected void _setLineMiterLimit(final float limit) {
+      _strokePaint.setStrokeMiter(limit);
+   }
+
+
+   @Override
+   protected void _setLineDash(final float[] lengths,
+                               final int count,
+                               final int phase) {
+      if ((count == 0) || (lengths.length == 0)) {
+         _strokePaint.setPathEffect(null);
+      }
+      else {
+         _strokePaint.setPathEffect(new DashPathEffect(lengths, phase));
+      }
+   }
+
+
+   @Override
+   protected void _beginPath() {
+      if (_path == null) {
+         _path = new Path();
+         _path.setFillType(Path.FillType.EVEN_ODD);
+      }
+      else {
+         _path.reset();
+      }
+   }
+
+
+   @Override
+   protected void _closePath() {
+      _path.close();
+   }
+
+
+   @Override
+   protected void _stroke() {
+      _canvas.drawPath(_path, _strokePaint);
+   }
+
+
+   @Override
+   protected void _fill() {
+      _canvas.drawPath(_path, _fillPaint);
+   }
+
+
+   @Override
+   protected void _fillAndStroke() {
+      _canvas.drawPath(_path, _fillPaint);
+      _canvas.drawPath(_path, _strokePaint);
+   }
+
+
+   @Override
+   protected void _moveTo(final float x,
+                          final float y) {
+      _path.moveTo(x, y);
+   }
+
+
+   @Override
+   protected void _lineTo(final float x,
+                          final float y) {
+      _path.lineTo(x, y);
+   }
 
 }

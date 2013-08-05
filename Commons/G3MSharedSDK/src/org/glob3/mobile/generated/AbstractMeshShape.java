@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class Mesh;
 
 public abstract class AbstractMeshShape extends Shape
@@ -63,16 +64,13 @@ public abstract class AbstractMeshShape extends Shape
 
   public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    final Mesh mesh = getMesh(rc);
+    Mesh mesh = getMesh(rc);
     if (mesh != null)
     {
       mesh.render(rc, parentState);
     }
   }
 
-
-  ///#include "GL.hpp"
-  
   public void dispose()
   {
     if (_mesh != null)
@@ -88,5 +86,4 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
-
 }

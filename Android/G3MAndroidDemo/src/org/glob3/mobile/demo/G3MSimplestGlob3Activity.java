@@ -13,24 +13,49 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GEO2DLineRasterStyle;
+import org.glob3.mobile.generated.GEO2DLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DPointGeometry;
+import org.glob3.mobile.generated.GEO2DPolygonData;
+import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOJSONParser;
+import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
+import org.glob3.mobile.generated.GEOObject;
+import org.glob3.mobile.generated.GEORasterLineSymbol;
+import org.glob3.mobile.generated.GEORasterPolygonSymbol;
+import org.glob3.mobile.generated.GEORenderer;
+import org.glob3.mobile.generated.GEOSymbol;
+import org.glob3.mobile.generated.GEOSymbolizer;
+import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
-import org.glob3.mobile.generated.TileRenderer;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -111,9 +136,9 @@ public class G3MSimplestGlob3Activity
       //               true);
       //      layerSet.addLayer(osm);
 
-      final LayerTilesRenderParameters params = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 1, 19,
-               LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(),
-               false);
+      //      final LayerTilesRenderParameters params = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 1, 19,
+      //               LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(),
+      //               false);
       //final Sector bbox = new Sector(new Geodetic2D(Angle.fromDegrees(-6.858), Angle.fromDegrees(39.182)), new Geodetic2D(
       //         Angle.fromDegrees(-6.089), Angle.fromDegrees(39.657)));
 
@@ -160,25 +185,147 @@ public class G3MSimplestGlob3Activity
 
       layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      final TileRendererBuilder tlBuilder = new TileRendererBuilder();
+
+      final MeshRenderer meshRenderer = null;
+      final MarksRenderer marksRenderer = null;
+      final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+
+
+      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+
+
+      final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
+         @Override
+         public ArrayList<GEOSymbol> createSymbols(final GEO2DPointGeometry geometry) {
+            return new ArrayList<GEOSymbol>(0);
+         }
+
+
+         private GEO2DLineRasterStyle createLineRasterStyle(final GEOGeometry geometry) {
+            final JSONObject properties = geometry.getFeature().getProperties();
+
+            final String type = properties.getAsString("type", "");
+
+            final float dashLengths[] = { 1, 12 };
+            final int dashCount = 2;
+
+            final Color color = type.equalsIgnoreCase("Water Indicator") //
+                                                                        ? Color.fromRGBA(1, 1, 1, 0.9f) //
+                                                                        : Color.fromRGBA(1, 1, 0, 0.9f);
+
+            return new GEO2DLineRasterStyle( //
+                     color, //
+                     8, //
+                     StrokeCap.CAP_ROUND, //
+                     StrokeJoin.JOIN_ROUND, //
+                     1, dashLengths, //
+                     dashCount, //
+                     0);
+         }
+
+
+         @Override
+         public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
+            final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
+            symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(), createLineRasterStyle(geometry)));
+            return symbols;
+         }
+
+
+         @Override
+         public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
+            final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
+            symbols.add(new GEOMultiLineRasterSymbol(geometry.getCoordinatesArray(), createLineRasterStyle(geometry)));
+            return symbols;
+         }
+
+
+         private GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
+            final JSONObject properties = geometry.getFeature().getProperties();
+
+            final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+
+            final Color color = Color.fromRGBA(0.7f, 0, 0, 0.5f).wheelStep(7, colorIndex).muchLighter().muchLighter();
+
+            final float dashLengths[] = {};
+            final int dashCount = 0;
+
+            return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
+         }
+
+
+         private GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+            final JSONObject properties = geometry.getFeature().getProperties();
+
+            final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+
+            final Color color = Color.fromRGBA(0.7f, 0, 0, 0.5f).wheelStep(7, colorIndex);
+
+            return new GEO2DSurfaceRasterStyle(color);
+         }
+
+
+         @Override
+         public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
+            final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>(0);
+
+            symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(), createPolygonLineRasterStyle(geometry),
+                     createPolygonSurfaceRasterStyle(geometry)));
+
+            return symbols;
+         }
+
+
+         @Override
+         public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
+            final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>(0);
+
+            final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
+            final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+            final ArrayList<GEO2DPolygonData> polygonsData = geometry.getPolygonsData();
+            final int polygonsDataSize = polygonsData.size();
+
+            for (int i = 0; i < polygonsDataSize; i++) {
+               final GEO2DPolygonData polygonData = polygonsData.get(i);
+               symbols.add(new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle));
+
+            }
+
+            return symbols;
+         }
+      };
+
+
+      final GEORenderer geoRenderer = new GEORenderer( //
+               defaultSymbolizer, //
+               meshRenderer, //
+               shapesRenderer, //
+               marksRenderer, //
+               geoTileRasterizer);
+
+
+      final TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
+
 
       final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider( //
                new URL("file:///full-earth-2048x1024.bil", false), //
                Sector.fullSphere(), //
                new Vector2I(2048, 1024) //
       );
-      tlBuilder.setElevationDataProvider(elevationDataProvider);
+      tileRendererBuilder.setElevationDataProvider(elevationDataProvider);
 
-      tlBuilder.setVerticalExaggeration(20);
-
-
-      tlBuilder.setLayerSet(layerSet);
-      tlBuilder.setRenderDebug(false);
-      final TileRenderer tileRenderer = tlBuilder.create();
-      mainRenderer.addRenderer(tileRenderer);
+      tileRendererBuilder.setVerticalExaggeration(20);
 
 
-      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      tileRendererBuilder.setLayerSet(layerSet);
+      tileRendererBuilder.setRenderDebug(false);
+      tileRendererBuilder.setTileRasterizer(geoTileRasterizer);
+
+
+      mainRenderer.addRenderer(tileRendererBuilder.create());
+
+      mainRenderer.addRenderer(geoRenderer);
       mainRenderer.addRenderer(shapesRenderer);
 
       //      final boolean testingImagesCombine = true;
@@ -251,39 +398,52 @@ public class G3MSimplestGlob3Activity
 
       // final GInitializationTask initializationTask = null;
 
+
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
-            /*
-            final URL url = new URL("ws://192.168.0.103:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
-            final IWebSocketListener listener = new IWebSocketListener() {
+            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
                @Override
-               public void onOpen(final IWebSocket ws) {
-                  ILogger.instance().logError(ws + " opened!");
+               public void onDownload(final URL url,
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
+                  final GEOObject geoObject = GEOJSONParser.parse(buffer);
+                  if (geoObject != null) {
+                     geoRenderer.addGEOObject(geoObject);
+                  }
                }
 
 
                @Override
-               public void onMesssage(final IWebSocket ws,
-                                      final String message) {
-                  ILogger.instance().logError(ws + " message \"" + message + "\"");
+               public void onError(final URL url) {
+                  ILogger.instance().logError("Error downloading: " + url.description());
                }
 
 
                @Override
-               public void onError(final IWebSocket ws,
-                                   final String error) {
-                  ILogger.instance().logError(ws + " error \"" + error + "\"");
+               public void onCancel(final URL url) {
+                  ILogger.instance().logError("Canceled download: " + url.description());
                }
 
 
                @Override
-               public void onClose(final IWebSocket ws) {
-                  ILogger.instance().logError(ws + " closed!");
+               public void onCanceledDownload(final URL url,
+                                              final IByteBuffer buffer,
+                                              final boolean expired) {
+                  // do nothing
                }
             };
-            context.getFactory().createWebSocket(url, listener, true, true);
-            */
+
+            final URL geoJSONURL = new URL("file:///countries-50m.geojson", false);
+            // final URL geoJSONURL = new URL("file:///boundary_lines_land.geojson", false);
+            context.getDownloader().requestBuffer( //
+                     geoJSONURL, //
+                     DownloadPriority.HIGHER, //
+                     TimeInterval.fromDays(30), //
+                     true, //
+                     listener, //
+                     true);
          }
 
 

@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  LayoutUtils.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  LayoutUtils.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 
@@ -38,7 +38,7 @@ public class LayoutUtils
     java.util.ArrayList<Geodetic3D> result = new java.util.ArrayList<Geodetic3D>();
   
     final double startAngleInRadians = startAngle._radians;
-    final double deltaInRadians = (IMathUtils.instance().pi() * 2.0) / splits;
+    final double deltaInRadians = (DefineConstants.PI * 2.0) / splits;
     final Vector3D cartesianCenter = EllipsoidalPlanet.toCartesian(center);
     final Vector3D normal = EllipsoidalPlanet.geodeticSurfaceNormal(center);
     final Vector3D northInPlane = Vector3D.upZ().projectionInPlane(normal).normalized().times(radiusInMeters);

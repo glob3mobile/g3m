@@ -20,36 +20,56 @@ package org.glob3.mobile.generated;
 
 
 
+//#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+//#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
+
 
 public class Angle
 {
-  private Angle(double degrees)
+  private Angle(double degrees, double radians)
   {
      _degrees = degrees;
-     _radians = degrees / 180.0 * 3.14159265358979323846264338327950288;
+     _radians = radians;
+     _sin = 2;
+     _cos = 2;
   }
+
+  private double _sin;
+  private double _cos;
 
   public final double _degrees;
   public final double _radians;
 
+
+  public Angle(Angle angle)
+  {
+     _degrees = angle._degrees;
+     _radians = angle._radians;
+     _sin = angle._sin;
+     _cos = angle._cos;
+
+  }
+
   public static Angle fromDegrees(double degrees)
   {
-    return new Angle(degrees);
+    return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutes(double degrees, double minutes)
   {
-    return new Angle(degrees + (minutes / 60.0));
+    final double d = degrees + (minutes / 60.0);
+    return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
   {
-    return new Angle(degrees + (minutes / 60.0) + (seconds / 3600.0));
+    final double d = degrees + (minutes / 60.0) + (seconds / 3600.0);
+    return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromRadians(double radians)
   {
-    return Angle.fromDegrees(radians / IMathUtils.instance().pi() * 180.0);
+    return new Angle(((radians) * (180.0 / 3.14159265358979323846264338327950288)), radians);
   }
 
   public static Angle min(Angle a1, Angle a2)
@@ -79,13 +99,11 @@ public class Angle
 
   public static Angle midAngle(Angle angle1, Angle angle2)
   {
-    //return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
     return Angle.fromRadians((angle1._radians + angle2._radians) / 2);
   }
 
   public static Angle linearInterpolation(Angle from, Angle to, double alpha)
   {
-    //return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
     return Angle.fromRadians((1.0-alpha) * from._radians + alpha * to._radians);
   }
 
@@ -94,26 +112,27 @@ public class Angle
     return IMathUtils.instance().isNan(_degrees);
   }
 
-  public Angle(Angle angle)
-  {
-     _degrees = angle._degrees;
-     _radians = angle._radians;
-
-  }
-
   public final double sinus()
   {
-    return IMathUtils.instance().sin(_radians);
+    if (_sin > 1)
+    {
+      _sin = java.lang.Math.sin(_radians);
+    }
+    return _sin;
   }
 
   public final double cosinus()
   {
-    return IMathUtils.instance().cos(_radians);
+    if (_cos > 1)
+    {
+      _cos = java.lang.Math.cos(_radians);
+    }
+    return _cos;
   }
 
   public final double tangent()
   {
-    return IMathUtils.instance().tan(_radians);
+    return java.lang.Math.tan(_radians);
   }
 
   public final double degrees()
@@ -133,37 +152,41 @@ public class Angle
 
   public final Angle add(Angle a)
   {
-    return new Angle(_degrees + a._degrees);
+    final double r = _radians + a._radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
   public final Angle sub(Angle a)
   {
-    return new Angle(_degrees - a._degrees);
+    final double r = _radians - a._radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
   public final Angle times(double k)
   {
-    return new Angle(k * _degrees);
+    final double r = k * _radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
   public final Angle div(double k)
   {
-    return new Angle(_degrees / k);
+    final double r = _radians / k;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
   public final double div(Angle k)
   {
-    return _degrees / k._degrees;
+    return _radians / k._radians;
   }
 
   public final boolean greaterThan(Angle a)
   {
-    return (_degrees > a._degrees);
+    return (_radians > a._radians);
   }
 
   public final boolean lowerThan(Angle a)
   {
-    return (_degrees < a._degrees);
+    return (_radians < a._radians);
   }
 
   public final Angle clampedTo(Angle min, Angle max)
@@ -219,7 +242,7 @@ public class Angle
     {
       degrees -= 360;
     }
-    return new Angle(degrees);
+    return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public final boolean isZero()

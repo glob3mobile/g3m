@@ -14,8 +14,9 @@ class IShortBuffer;
 
 class ShortBufferElevationData : public BufferElevationData {
 private:
-  IShortBuffer*  _buffer;
-  bool           _hasNoData;
+//  IShortBuffer*  _buffer;
+  short*  _buffer;
+  bool    _hasNoData;
 
 protected:
   double getValueInBufferAt(int index) const;
@@ -28,7 +29,8 @@ public:
                            const Vector2I& extent,
                            const Sector& realSector,
                            const Vector2I& realExtent,
-                           IShortBuffer* buffer);
+                           short* buffer,
+                           int bufferSize);
 
   virtual ~ShortBufferElevationData();
 

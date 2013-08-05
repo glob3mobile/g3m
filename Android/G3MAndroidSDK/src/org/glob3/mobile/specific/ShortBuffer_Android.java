@@ -19,9 +19,12 @@ public class ShortBuffer_Android
 
 
    public ShortBuffer_Android(final int size) {
-      // _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
-      //_buffer = ByteBuffer.allocate(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
       _buffer = ShortBuffer.wrap(new short[size]);
+   }
+
+
+   public ShortBuffer_Android(final short[] array) {
+      _buffer = ShortBuffer.wrap(array);
    }
 
 

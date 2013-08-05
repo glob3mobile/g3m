@@ -42,8 +42,8 @@ class MathUtils_iOS: public IMathUtils {
 
 public:
 
-  double pi() const { return M_PI; }
-  double halfPi() const { return M_PI_2; }
+//  double pi() const { return M_PI; }
+//  double halfPi() const { return M_PI_2; }
 
   bool isNan(double v) const { return isnan(v);}
   bool isNan(float v) const { return isnan(v);}
@@ -98,18 +98,19 @@ public:
   float  log(float v)  const { return log(v); }
 
   short maxInt16() const { return std::numeric_limits<short>::max(); }
-  short minInt16() const { return std::numeric_limits<short>::min(); }
+  short minInt16() const { return -(std::numeric_limits<short>::max()); }
 
   int maxInt32() const { return std::numeric_limits<int>::max(); }
-  int minInt32() const { return std::numeric_limits<int>::min(); }
+  int minInt32() const { return -(std::numeric_limits<int>::max()); }
 
   long long maxInt64() const { return std::numeric_limits<long long>::max(); }
-  long long minInt64() const { return std::numeric_limits<long long>::min(); }
+  long long minInt64() const { return -(std::numeric_limits<long long>::max()); }
 
   double maxDouble() const { return std::numeric_limits<double>::max(); }
-  double minDouble() const { return std::numeric_limits<double>::min(); }
+  double minDouble() const { return -(std::numeric_limits<double>::max()); }
+
   float maxFloat() const { return std::numeric_limits<float>::max(); }
-  float minFloat() const { return std::numeric_limits<float>::min(); }
+  float minFloat() const { return -(std::numeric_limits<float>::max()); }
 
   int toInt(double value) const { return (int) value; }
   int toInt(float value) const { return (int) value; }

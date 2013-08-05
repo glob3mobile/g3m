@@ -2,7 +2,7 @@
  *  Camera.hpp
  *  Prueba Opengl iPad
  *
- *  Created by Agustín Trujillo Pino on 24/01/11.
+ *  Created by Agustin Trujillo Pino on 24/01/11.
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
@@ -23,7 +23,11 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 
+////#include "GPUProgramState.hpp"
+
+#include "GLState.hpp"
 class ILogger;
+class GPUProgramState;
 
 
 class CameraDirtyFlags {
@@ -153,10 +157,15 @@ public:
 
   void copyFrom(const Camera &c);
 
+  void copyFromForcingMatrixCreation(const Camera &c){
+    c.forceMatrixCreation();
+    copyFrom(c);
+  }
+
   void resizeViewport(int width, int height);
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+              const GLGlobalState& parentState) const;
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
@@ -288,20 +297,37 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation(){
+  void forceMatrixCreation() const{
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix();
-    getModelMatrix();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
+    getModelViewMatrix().asMatrix44D();
   }
   
+
+
+//  void addProjectionAndModelGLFeatures(GLState& glState) const{
+//    glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+//    glState.addGLFeature(p, false);
+//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
+//    glState.addGLFeature(m, false);
+//  }
+
+  Matrix44D* getModelMatrix44D() const{
+    return getModelMatrix().asMatrix44D();
+  }
+
+  Matrix44D* getProjectionMatrix44D() const{
+    return getProjectionMatrix().asMatrix44D();
+  }
+
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
   double getProjectedSphereArea(const Sphere& sphere) const;
   
   void applyTransform(const MutableMatrix44D& mat);
-
-  
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -372,33 +398,6 @@ private:
     return _frustumData;
   }
 
-  // opengl projection matrix
-  MutableMatrix44D getProjectionMatrix() const{
-    if (_dirtyFlags._projectionMatrixDirty) {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-
-  // Model matrix, computed in CPU in double precision
-  MutableMatrix44D getModelMatrix() const {
-    if (_dirtyFlags._modelMatrixDirty) {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
-  }
-
-  // multiplication of model * projection
-  MutableMatrix44D getModelViewMatrix() const {
-    if (_dirtyFlags._modelViewMatrixDirty) {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
-  }
-
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
@@ -453,7 +452,34 @@ private:
   FrustumData calculateFrustumData() const;
   
   void _setGeodeticPosition(const Vector3D& pos);
-  
+
+  // opengl projection matrix
+  const MutableMatrix44D& getProjectionMatrix() const{
+    if (_dirtyFlags._projectionMatrixDirty) {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+
+  // Model matrix, computed in CPU in double precision
+  const MutableMatrix44D& getModelMatrix() const {
+    if (_dirtyFlags._modelMatrixDirty) {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
+
+  // multiplication of model * projection
+  const MutableMatrix44D& getModelViewMatrix() const {
+    if (_dirtyFlags._modelViewMatrixDirty) {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
+  }
+
 };
 
 

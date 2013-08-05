@@ -28,11 +28,11 @@ package org.glob3.mobile.generated;
 //class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
-//class TextureBuilder;
 //class IMathUtils;
 //class IJSONParser;
 //class IStorage;
 //class OrderedRenderable;
+//class GPUProgramManager;
 
 
 public class G3MContext

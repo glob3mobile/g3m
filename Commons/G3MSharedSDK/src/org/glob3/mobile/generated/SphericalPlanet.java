@@ -37,7 +37,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D getRadii()
   {
-    return new Vector3D(_sphere.getRadius(), _sphere.getRadius(), _sphere.getRadius());
+    return new Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D position)
@@ -82,7 +82,7 @@ public class SphericalPlanet extends Planet
   
     final double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
   
-    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere.getRadiusSquared();
+    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -121,7 +121,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
-    return geodeticSurfaceNormal(latitude, longitude).times(_sphere.getRadius() + height);
+    return geodeticSurfaceNormal(latitude, longitude).times(_sphere._radius + height);
   }
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
@@ -159,7 +159,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
-    return geodeticSurfaceNormal(position).times(_sphere.getRadius());
+    return geodeticSurfaceNormal(position).times(_sphere._radius);
   }
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
@@ -214,7 +214,7 @@ public class SphericalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final double R = _sphere.getRadius();
+    final double R = _sphere._radius;
   
     // spheric distance from P to Q
     // this is the right form, but it's the most complex
@@ -241,7 +241,7 @@ public class SphericalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final double R = _sphere.getRadius();
+    final double R = _sphere._radius;
   
     final double medLat = g1._latitude._degrees;
     final double medLon = g1._longitude._degrees;
@@ -261,7 +261,7 @@ public class SphericalPlanet extends Planet
     }
   
     double dist = mu.sqrt(diflat * diflat + diflon * diflon);
-    return dist * mu.pi() / 180 * R;
+    return dist * DefineConstants.PI / 180 * R;
   }
 
   public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
@@ -271,7 +271,7 @@ public class SphericalPlanet extends Planet
     double t = 0;
   
     // compute radius for the rotation
-    final double R0 = _sphere.getRadius();
+    final double R0 = _sphere._radius;
   
     // compute the point in this ray that are to a distance R from the origin.
     final double U2 = ray.squaredLength();

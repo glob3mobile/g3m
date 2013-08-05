@@ -68,10 +68,18 @@ _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
 _sceneListener(sceneListener),
+_gpuProgramManager(NULL),
 _isSceneTubeOpen(false),
 _sceneTubeWebSocket(NULL)
 {
   
+}
+
+GPUProgramManager* G3MCBuilder::getGPUProgramManager() {
+  if (_gpuProgramManager == NULL) {
+    _gpuProgramManager = createGPUProgramManager();
+  }
+  return _gpuProgramManager;
 }
 
 IDownloader* G3MCBuilder::getDownloader() {
@@ -114,7 +122,8 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-  
+  TileRasterizer* tileRasterizer = NULL;
+
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
@@ -136,6 +145,7 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
                           elevationDataProvider,
                           verticalExaggeration,
                           texturizer,
+                          tileRasterizer,
                           _layerSet,
                           parameters,
                           showStatistics,
@@ -669,8 +679,8 @@ G3MWidget* G3MCBuilder::create() {
                                  false,      // logDownloaderStatistics
                                  initializationTask,
                                  true,       // autoDeleteInitializationTask
-                                 *periodicalTasks);
-    
+                                 *periodicalTasks,
+                                 getGPUProgramManager());
   delete cameraConstraints;
   delete periodicalTasks;
   

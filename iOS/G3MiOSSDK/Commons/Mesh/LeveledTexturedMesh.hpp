@@ -19,6 +19,8 @@
 
 #include "IGLTextureId.hpp"
 
+#include "GLState.hpp"
+
 class LazyTextureMappingInitializer {
 public:
   virtual ~LazyTextureMappingInitializer() {
@@ -45,21 +47,22 @@ private:
 #endif
   
   mutable bool _initialized;
-
+  
   mutable bool             _ownedTexCoords;
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-    
+  
   TexturesHandler* _texturesHandler;
   
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
   
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
-
+  
   const bool _transparent;
-
+  
+  
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      TexturesHandler* texturesHandler,
@@ -82,15 +85,13 @@ public:
     _initializer = NULL;
     
     if (_ownedTexCoords) {
-        delete _texCoords;
+      delete _texCoords;
     }
     _texCoords = NULL;
     
     releaseGLTextureId();
   }
   
-  void bind(const G3MRenderContext* rc) const;
-
   bool isValid() const {
     return _glTextureId != NULL;
   }
@@ -100,15 +101,19 @@ public:
     _glTextureId = glTextureId;
   }
   
-
+  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
+  
+  
   const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
   }
-
-  bool isTransparent(const G3MRenderContext* rc) const {
+  
+  bool isTransparent() const {
     return _transparent;
   }
-
+  
+  void modifyGLState(GLState& state) const;
+  
 };
 
 
@@ -116,16 +121,17 @@ class LeveledTexturedMesh : public Mesh {
 private:
   const Mesh* _mesh;
   const bool  _ownedMesh;
-
+  
   mutable std::vector<LazyTextureMapping*>* _mappings;
   
   
   const   int _levelsCount;
   
   mutable int  _currentLevel;
-  mutable bool _currentLevelIsValid;
-    
+
   LazyTextureMapping* getCurrentTextureMapping() const;
+  
+  mutable GLState _glState;
 
 public:
   LeveledTexturedMesh(const Mesh* mesh,
@@ -135,8 +141,7 @@ public:
   _ownedMesh(ownedMesh),
   _mappings(mappings),
   _levelsCount(mappings->size()),
-  _currentLevel(mappings->size() + 1),
-  _currentLevelIsValid(false)
+  _currentLevel(-1)
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LOGIC ERROR\n");
@@ -149,20 +154,16 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
-  
   BoundingVolume* getBoundingVolume() const;
 
   bool setGLTextureIdForLevel(int level,
                               const IGLTextureId* glTextureId);
   
-//  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const const GLTextureId*glTextureId);
-  
   const IGLTextureId* getTopLevelGLTextureId() const;
   
   bool isTransparent(const G3MRenderContext* rc) const;
+
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

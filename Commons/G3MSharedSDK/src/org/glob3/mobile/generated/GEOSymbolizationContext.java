@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class MarksRenderer;
 //class ShapesRenderer;
+//class GEOTileRasterizer;
 
 public class GEOSymbolizationContext
 {
@@ -28,13 +29,15 @@ public class GEOSymbolizationContext
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
+  private GEOTileRasterizer _geoTileRasterizer;
 
-  public GEOSymbolizationContext(GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
+  public GEOSymbolizationContext(GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
      _symbolizer = symbolizer;
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
+     _geoTileRasterizer = geoTileRasterizer;
 
   }
 
@@ -56,6 +59,11 @@ public class GEOSymbolizationContext
   public final MarksRenderer getMarksRenderer()
   {
     return _marksRenderer;
+  }
+
+  public final GEOTileRasterizer getGEOTileRasterizer()
+  {
+    return _geoTileRasterizer;
   }
 
 }

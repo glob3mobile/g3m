@@ -12,6 +12,9 @@
 
 #include "IStringBuilder.hpp"
 
+#include "GEORasterProjection.hpp"
+#include "ICanvas.hpp"
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
   return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
@@ -107,7 +110,12 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   if (planet->isFlat()) return false;
 
   const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+#ifdef C_CODE
   const double angleInRadians = IMathUtils::instance()->acos(dot);
+#endif
+#ifdef JAVA_CODE
+  final double angleInRadians = java.lang.Math.acos(dot);
+#endif
 
   return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );
 }
@@ -286,25 +294,25 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
     return position;
   }
 
-  double latitudeInDegrees = position._latitude.degrees();
-  double longitudeInDegrees = position._longitude.degrees();
+  double latitudeInDegrees = position._latitude._degrees;
+  double longitudeInDegrees = position._longitude._degrees;
 
-  const double upperLatitudeInDegrees  = _upper._latitude.degrees();
+  const double upperLatitudeInDegrees  = _upper._latitude._degrees;
   if (latitudeInDegrees > upperLatitudeInDegrees) {
     latitudeInDegrees = upperLatitudeInDegrees;
   }
 
-  const double upperLongitudeInDegrees = _upper._longitude.degrees();
+  const double upperLongitudeInDegrees = _upper._longitude._degrees;
   if (longitudeInDegrees > upperLongitudeInDegrees) {
     longitudeInDegrees = upperLongitudeInDegrees;
   }
 
-  const double lowerLatitudeInDegrees  = _lower._latitude.degrees();
+  const double lowerLatitudeInDegrees  = _lower._latitude._degrees;
   if (latitudeInDegrees < lowerLatitudeInDegrees) {
     latitudeInDegrees = lowerLatitudeInDegrees;
   }
 
-  const double lowerLongitudeInDegrees  = _lower._longitude.degrees();
+  const double lowerLongitudeInDegrees  = _lower._longitude._degrees;
   if (longitudeInDegrees < lowerLongitudeInDegrees) {
     longitudeInDegrees = lowerLongitudeInDegrees;
   }
@@ -406,6 +414,21 @@ const Vector2D Sector::div(const Sector& that) const {
 //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
 //  return Vector2D(uv._x, uv._y - scaleY);
 //}
+
+void Sector::rasterize(ICanvas*                   canvas,
+                       const GEORasterProjection* projection) const {
+
+  const Vector2F l = projection->project(&_lower);
+  const Vector2F u = projection->project(&_upper);
+  
+  const float left   = l._x;
+  const float top    = l._y;
+  const float width  = u._x - left;
+  const float height = u._y - top;
+
+//  canvas->strokeRectangle(left, canvas->getHeight() - top, width, -height);
+  canvas->strokeRectangle(left, top, width, height);
+}
 
 const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
   if (_normalizedCartesianCenter == NULL) {

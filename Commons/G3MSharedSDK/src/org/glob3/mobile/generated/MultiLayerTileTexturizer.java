@@ -69,7 +69,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, trc.getTileRasterizer(), rc, trc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
       tile.setTexturizerData(builderHolder);
     }
   
@@ -99,13 +99,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cleanTile();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 4\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 4\n");
+  //    }
+  //  }
   }
 
   public final boolean tileMeetsRenderCriteria(Tile tile)
@@ -181,13 +179,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cancel();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 5\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 5\n");
+  //    }
+  //  }
   }
 
 }

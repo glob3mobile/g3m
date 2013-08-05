@@ -25,14 +25,22 @@ private:
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
+  
+  GLState _glState;
+  GLState _glStateTransparent;
+
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 
 public:
 
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
-  _context(NULL)
+  _context(NULL),
+  _projection(NULL),
+  _model(NULL)
   {
-
   }
 
   ~ShapesRenderer() {
@@ -91,8 +99,7 @@ public:
   void stop(const G3MRenderContext* rc) {
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
 };
 

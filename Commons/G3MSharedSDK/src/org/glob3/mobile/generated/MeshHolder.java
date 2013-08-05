@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "GPUProgramState.hpp"
+
 public class MeshHolder extends Mesh
 {
   private Mesh _mesh;
@@ -53,11 +55,6 @@ public class MeshHolder extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-    _mesh.render(rc, parentState);
-  }
-
   public final BoundingVolume getBoundingVolume()
   {
     return _mesh.getBoundingVolume();
@@ -66,6 +63,11 @@ public class MeshHolder extends Mesh
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _mesh.isTransparent(rc);
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+    _mesh.render(rc, parentGLState);
   }
 
 }

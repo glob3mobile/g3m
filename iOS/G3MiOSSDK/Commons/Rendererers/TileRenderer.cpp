@@ -2,7 +2,7 @@
 //  TileRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -22,8 +22,10 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 
+//#include "GPUProgramState.hpp"
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
+#include "TileRasterizer.hpp"
 
 #include <algorithm>
 
@@ -109,6 +111,7 @@ TileRenderer::TileRenderer(const TileTessellator* tessellator,
                            ElevationDataProvider* elevationDataProvider,
                            float verticalExaggeration,
                            TileTexturizer*  texturizer,
+                           TileRasterizer*  tileRasterizer,
                            LayerSet* layerSet,
                            const TilesRenderParameters* parameters,
                            bool showStatistics,
@@ -117,6 +120,7 @@ _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
+_tileRasterizer(tileRasterizer),
 _layerSet(layerSet),
 _parameters(parameters),
 _showStatistics(showStatistics),
@@ -128,9 +132,15 @@ _context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
-_incompleteShape(NULL)
+_incompleteShape(NULL),
+_recreateTilesPending(false),
+_projection(NULL),
+_model(NULL)
 {
   _layerSet->setChangeListener(this);
+  if (_tileRasterizer != NULL) {
+    _tileRasterizer->setChangeListener(this);
+  }
 }
 
 void TileRenderer::recreateTiles() {
@@ -139,6 +149,8 @@ void TileRenderer::recreateTiles() {
   _firstRender = true;
   _allFirstLevelTilesAreTextureSolved = false;
   createFirstLevelTiles(_context);
+
+  _recreateTilesPending = false;
 }
 
 class RecreateTilesTask : public GTask {
@@ -155,11 +167,13 @@ public:
   }
 };
 
-void TileRenderer::changed(const LayerSet* layerSet) {
-  // recreateTiles();
-
-  // recreateTiles() delete tiles, then meshes, and delete textures from the GPU so it has to be executed in the OpenGL thread
-  _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+void TileRenderer::changed() {
+  if (!_recreateTilesPending) {
+    _recreateTilesPending = true;
+    // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
+    //   so it has to be executed in the OpenGL thread
+    _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+  }
 }
 
 TileRenderer::~TileRenderer() {
@@ -300,8 +314,8 @@ void TileRenderer::createFirstLevelTiles(const G3MContext* context) {
   const Angle fromLatitude  = parameters->_topSector._lower._latitude;
   const Angle fromLongitude = parameters->_topSector._lower._longitude;
 
-  const Angle deltaLan = parameters->_topSector.getDeltaLatitude();
-  const Angle deltaLon = parameters->_topSector.getDeltaLongitude();
+  const Angle deltaLan = parameters->_topSector._deltaLatitude;
+  const Angle deltaLon = parameters->_topSector._deltaLongitude;
 
   const int topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
   const int topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
@@ -384,6 +398,7 @@ bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
       TileRenderContext trc(_tessellator,
                             _elevationDataProvider,
                             _texturizer,
+                            _tileRasterizer,
                             _layerSet,
                             _parameters,
                             &statistics,
@@ -436,29 +451,17 @@ bool TileRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
 }
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  return isReadyToRenderTiles(rc) || _parameters->_renderIncompletePlanet;
+  return (isReadyToRenderTiles(rc)  ||
+          _parameters->_renderIncompletePlanet);
 }
 
-void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
-                                          const GLState& parentState) {
+void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc) {
 
   if (_incompleteShape == NULL) {
     const short resolution = 16;
     const float borderWidth = 0;
     const bool texturedInside = false;
     const bool mercator = false;
-
-//    Color* surfaceColor = Color::newFromRGBA(0.5f, 0.5f, 0.5f, 0.5f);
-//    Color* borderColor  = Color::newFromRGBA(1, 1, 1, 1);
-
-//    _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
-//                                          rc->getPlanet()->getRadii(),
-//                                          resolution,
-//                                          borderWidth,
-//                                          texturedInside,
-//                                          mercator,
-//                                          surfaceColor,
-//                                          borderColor);
 
     _incompleteShape = new EllipsoidShape(new Geodetic3D(Angle::zero(), Angle::zero(), 0),
                                           _parameters->_incompletePlanetTexureURL,
@@ -470,26 +473,50 @@ void TileRenderer::renderIncompletePlanet(const G3MRenderContext* rc,
 
   }
 
-  _incompleteShape->rawRender(rc, parentState, true);
+  _incompleteShape->rawRender(rc, &_glState, true);
 }
 
-void TileRenderer::render(const G3MRenderContext* rc,
-                          const GLState& parentState) {
+void TileRenderer::updateGLState(const G3MRenderContext* rc){
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL){
+    _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+    _glState.addGLFeature(_projection, true);
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix44D());
+  }
+
+  if (_model == NULL){
+    _model = new ModelGLFeature(cam->getModelMatrix44D());
+    _glState.addGLFeature(_model, true);
+  } else{
+    _model->setMatrix(cam->getModelMatrix44D());
+  }
+}
+
+void TileRenderer::render(const G3MRenderContext* rc) {
+
+  updateGLState(rc);
+
+//  if (_recreateTilesPending) {
+//    recreateTiles();
+//    _recreateTilesPending = false;
+//  }
 
   if (!isReadyToRenderTiles(rc) && _parameters->_renderIncompletePlanet) {
-    renderIncompletePlanet(rc, parentState);
+    renderIncompletePlanet(rc);
     return;
   }
 
-
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
-
+  
   TilesStatistics statistics;
 
   TileRenderContext trc(_tessellator,
                         _elevationDataProvider,
                         _texturizer,
+                        _tileRasterizer,
                         _layerSet,
                         _parameters,
                         &statistics,
@@ -514,7 +541,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   parentState,
+                   _glState,
                    NULL,
                    planet,
                    cameraNormalizedPosition,
@@ -538,7 +565,7 @@ void TileRenderer::render(const G3MRenderContext* rc,
 
         tile->render(rc,
                      &trc,
-                     parentState,
+                     _glState,
                      &toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,

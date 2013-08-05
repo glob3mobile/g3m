@@ -12,7 +12,6 @@
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
 #include "IFactory.hpp"
-#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "ShortBufferBuilder.hpp"
@@ -103,7 +102,7 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
 
     const int numVertices = _lonRes * _lonRes * 4;
     for (int i = 0; i < numVertices; i++) {
-      const float val = (float) (0.5 + mu->sin( (float) (2.0 * mu->pi() * ((float) i) / numVertices) ) / 2.0);
+      const float val = (float) (0.5 + mu->sin( (float) (2.0 * PI * ((float) i) / numVertices) ) / 2.0);
 
       colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
     }
@@ -152,12 +151,11 @@ Mesh* SimplePlanetRenderer::createMesh(const G3MRenderContext* rc) {
   return new TexturedMesh(indexedMesh, true, textureMapping, true, false);
 }
 
-void SimplePlanetRenderer::render(const G3MRenderContext* rc,
-                                  const GLState& parentState) {
+void SimplePlanetRenderer::render(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
   }
   if (_mesh != NULL) {
-    _mesh->render(rc, parentState);
+    _mesh->render(rc, NULL);
   }
 }

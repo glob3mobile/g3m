@@ -2,7 +2,7 @@
 //  CameraZoomAndRotateHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -108,6 +108,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
     default:
       break;
   }
+  
 }
 
 
@@ -172,7 +173,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
   
   // compute angle params
   double angle = atan2(difCurrentPixels._y, difCurrentPixels._x);
-  const double PI = IMathUtils::instance()->pi();
   while (fabs(_lastAngle-angle)>PI/2) {
     if (angle<_lastAngle) angle+=PI;  else  angle-=PI;
   }

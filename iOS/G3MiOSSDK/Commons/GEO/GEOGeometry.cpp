@@ -7,13 +7,9 @@
 //
 
 #include "GEOGeometry.hpp"
-
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
 
-GEOGeometry::~GEOGeometry() {
-
-}
 
 void GEOGeometry::setFeature(GEOFeature* feature) {
   if (_feature != feature) {
@@ -25,18 +21,19 @@ void GEOGeometry::setFeature(GEOFeature* feature) {
 void GEOGeometry::symbolize(const G3MRenderContext* rc,
                             const GEOSymbolizationContext& sc) const {
   std::vector<GEOSymbol*>* symbols = createSymbols(rc, sc);
-  if (symbols == NULL) {
-    return;
+  if (symbols != NULL) {
+
+    const int symbolsSize = symbols->size();
+    for (int i = 0; i < symbolsSize; i++) {
+      const GEOSymbol* symbol = symbols->at(i);
+      if (symbol != NULL) {
+        const bool deleteSymbol = symbol->symbolize(rc, sc);
+        if (deleteSymbol) {
+          delete symbol;
+        }
+      }
+    }
+
+    delete symbols;
   }
-
-  const int symbolsSize = symbols->size();
-  for (int i = 0; i < symbolsSize; i++) {
-    const GEOSymbol* symbol = symbols->at(i);
-
-    symbol->symbolize(rc, sc);
-
-    delete symbol;
-  }
-
-  delete symbols;
 }

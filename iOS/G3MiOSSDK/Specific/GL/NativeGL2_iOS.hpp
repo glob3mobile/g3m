@@ -18,50 +18,39 @@
 #include "FloatBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
-#include "MutableMatrix44D.hpp"
+#include "GPUProgram.hpp"
+#include "GPUAttribute.hpp"
+#include "GPUUniform.hpp"
+
 
 class NativeGL2_iOS: public INativeGL {
 public:
 
-  void useProgram(ShaderProgram* program) const {
-//    glUseProgram(((GLProgramId_iOS*)program)->getID());
-    glUseProgram(program->getProgram());
+  void useProgram(GPUProgram* program) const {
+    glUseProgram(program->getProgramID());
   }
 
-  int getAttribLocation(ShaderProgram* program,
-                        const std::string& name) const {
-//    return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
-    return glGetAttribLocation(program->getProgram(), name.c_str());
-  }
-
-  IGLUniformID* getUniformLocation(ShaderProgram* program,
-                                   const std::string& name) const {
-//    const int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
-    const int id = glGetUniformLocation(program->getProgram(), name.c_str());
-    return (IGLUniformID*) new GLUniformID_iOS(id);
-  }
-
-  void uniform2f(IGLUniformID* loc,
+  void uniform2f(const IGLUniformID* loc,
                  float x, float y) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform2f(location, x, y);
   }
 
-  void uniform1f(IGLUniformID* loc,
+  void uniform1f(const IGLUniformID* loc,
                  float x) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform1f(location, x);
   }
 
-  void uniform1i(IGLUniformID* loc,
+  void uniform1i(const IGLUniformID* loc,
                  int v) const {
     const int location = ((GLUniformID_iOS*)loc)->getID();
     glUniform1i(location, v);
   }
 
-  void uniformMatrix4fv(IGLUniformID* location,
+  void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
-                        const MutableMatrix44D* matrix) const {
+                        const Matrix44D* matrix) const {
     const int loc = ((GLUniformID_iOS*)location)->getID();
 
     GLfloat* pointer = matrix->getColumnMajorFloatArray();
@@ -77,7 +66,7 @@ public:
     glClear(buffers);
   }
 
-  void uniform4f(IGLUniformID* location,
+  void uniform4f(const IGLUniformID* location,
                  float v0, float v1, float v2, float v3) const {
     const int loc = ((GLUniformID_iOS*)location)->getID();
     glUniform4f(loc, v0, v1, v2, v3);
@@ -99,11 +88,15 @@ public:
                            int size,
                            bool normalized,
                            int stride,
-                           IFloatBuffer* buffer) const {
+                           const IFloatBuffer* buffer) const {
     const FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
-    
-    const float* pointer = buffer_iOS->getPointer();
-    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
+
+    buffer_iOS->bindAsVBOToGPU();
+    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+//    const float* pointer = buffer_iOS->getPointer();
+//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
 
 //    FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
 //
@@ -138,6 +131,12 @@ public:
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
+//    printf("-----DRAW\n");
+//    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
+//    bufferIOS->bindAsIBOToGPU();
+//    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
+
+
     const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
     glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
   }
@@ -297,6 +296,19 @@ public:
   int Type_Int() const {
     return GL_INT;
   }
+  
+  int Type_Vec2Float() const{
+    return GL_FLOAT_VEC2;
+  }
+  virtual int Type_Vec4Float() const{
+    return GL_FLOAT_VEC4;
+  }
+  virtual int Type_Bool() const{
+    return GL_BOOL;
+  }
+  virtual int Type_Matrix4Float() const{
+    return GL_FLOAT_MAT4;
+  }
 
   int Primitive_Triangles() const {
     return GL_TRIANGLES;
@@ -324,6 +336,14 @@ public:
 
   int Primitive_Points() const {
     return GL_POINTS;
+  }
+  
+  int BlendFactor_One() const {
+    return GL_ONE;
+  }
+  
+  int BlendFactor_Zero() const {
+    return GL_ZERO;
   }
 
   int BlendFactor_SrcAlpha() const {
@@ -377,6 +397,14 @@ public:
   int Variable_Viewport() const {
     return GL_VIEWPORT;
   }
+  
+  int Variable_ActiveAttributes() const{
+    return GL_ACTIVE_ATTRIBUTES;
+  }
+  
+  virtual int Variable_ActiveUniforms() const{
+    return GL_ACTIVE_UNIFORMS;
+  }
 
   int Error_NoError() const {
     return GL_NO_ERROR;
@@ -386,8 +414,13 @@ public:
     return glCreateProgram();
   }
   
-  void deleteProgram(int program) const {
+  bool deleteProgram(int program) const {
     glDeleteProgram(program);
+    return true;
+    int NOT_WORKING_APPARENTLY;
+//    int ps;
+//    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
+//    return (ps == GL_TRUE);
   }
   
   void attachShader(int program, int shader) const {
@@ -412,8 +445,11 @@ public:
     return status;
   }
 
-  void deleteShader(int shader) const {
+  bool deleteShader(int shader) const {
     glDeleteShader(shader);
+    int ds;
+    glGetShaderiv(shader, GL_DELETE_STATUS, &ds);
+    return (ds == GL_TRUE);
   }
   
   void printShaderInfoLog(int shader) const {
@@ -442,6 +478,92 @@ public:
       glGetProgramInfoLog(program, logLength, &logLength, log);
       NSLog(@"Program link log:\n%s", log);
       free(log);
+    }
+  }
+  
+  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+    glBindAttribLocation(program->getProgramID(), loc, name.c_str());
+  }
+  
+  int getProgramiv(const GPUProgram* program, int pname) const{
+    int i = 0;
+    glGetProgramiv(program->getProgramID(), pname, &i);
+    return i;
+  }
+  
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
+    GLint maxLength;
+    glGetProgramiv(program->getProgramID(), GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
+  
+    GLsizei bufsize = maxLength;
+    
+    GLchar name[maxLength];
+    GLsizei length;
+    GLint size;
+    GLenum type;
+    
+    glGetActiveAttrib(program->getProgramID(),
+                      i,
+                      bufsize,
+                      &length,
+                      &size,
+                      &type,
+                      name);
+    
+    
+    const int id = glGetAttribLocation(program->getProgramID(), name);
+    
+    //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
+    switch (type) {
+      case GL_FLOAT_VEC4:
+        return new GPUAttributeVec4Float(name, id);
+      case GL_FLOAT_VEC2:
+        return new GPUAttributeVec2Float(name, id);
+      default:
+        return NULL;
+        break;
+    }
+  }
+  
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
+    GLint maxLength;
+    glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
+    
+    GLsizei bufsize = maxLength;
+    
+    GLchar name[maxLength];
+    GLsizei length;
+    GLint size;
+    GLenum type;
+    
+    glGetActiveUniform(program->getProgramID(),
+                       i,
+                       bufsize,
+                       &length,
+                       &size,
+                       &type,
+                       name);
+    
+    const int id = glGetUniformLocation(program->getProgramID(), name);
+    
+    //NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
+    switch (type) {
+      case GL_FLOAT_MAT4:
+        return new GPUUniformMatrix4Float(name, new GLUniformID_iOS(id));
+      case GL_FLOAT_VEC4:
+        return new GPUUniformVec4Float(name, new GLUniformID_iOS(id));
+      case GL_FLOAT:
+        return new GPUUniformFloat(name, new GLUniformID_iOS(id));
+      case GL_FLOAT_VEC2:
+        return new GPUUniformVec2Float(name, new GLUniformID_iOS(id));
+      case GL_BOOL:
+        return new GPUUniformBool(name, new GLUniformID_iOS(id));
+      case GL_SAMPLER_2D:
+        int NOT_IMPLEMENTED_YET;
+        return NULL;
+      default:
+        return NULL;
+        break;
     }
   }
   

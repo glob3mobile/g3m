@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraZoomAndRotateHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  CameraZoomAndRotateHandler.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -37,13 +37,12 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     // compute angle params
     double angle = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
-    final double PI = IMathUtils.instance().pi();
-    while (Math.abs(_lastAngle-angle)>PI/2)
+    while (Math.abs(_lastAngle-angle)>DefineConstants.PI/2)
     {
       if (angle<_lastAngle)
-         angle+=PI;
+         angle+=DefineConstants.PI;
          else
-            angle-=PI;
+            angle-=DefineConstants.PI;
     }
     _lastAngle = angle;
     angle -= _angle0;
@@ -212,18 +211,22 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   
     // call specific transformation
-    switch (cameraContext.getCurrentGesture())
+    final Gesture gesture = cameraContext.getCurrentGesture();
+    if (gesture == Gesture.Zoom)
     {
-      case Zoom:
-        if (_processZoom)
-           zoom(cameraContext.getNextCamera(), difCurrentPixels);
-        break;
-  
-      case Rotate:
-        if (_processRotation)
-           rotate();
-        break;
+      if (_processZoom)
+      {
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
+      }
     }
+    else if (gesture == Gesture.Rotate)
+    {
+      if (_processRotation)
+      {
+        rotate();
+      }
+    }
+  
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

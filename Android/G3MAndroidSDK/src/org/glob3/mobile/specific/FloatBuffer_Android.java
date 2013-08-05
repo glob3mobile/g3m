@@ -8,6 +8,8 @@ import java.nio.FloatBuffer;
 
 import org.glob3.mobile.generated.IFloatBuffer;
 
+import android.opengl.GLES20;
+
 
 public final class FloatBuffer_Android
          extends
@@ -16,10 +18,10 @@ public final class FloatBuffer_Android
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-
-   //   private boolean           _hasGLBuffer = false;
-   //   private int               _glBuffer;
-
+   static int     	_boundVertexBuffer = -1;
+   boolean      	_vertexBufferCreated = false;
+   int    			_vertexBuffer = -1;
+   int       		_vertexBufferTimeStamp = -1;
 
    public FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -59,6 +61,13 @@ public final class FloatBuffer_Android
       _buffer.put(13, f13);
       _buffer.put(14, f14);
       _buffer.put(15, f15);
+   }
+
+
+   public FloatBuffer_Android(final float[] array) {
+      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer.put(array);
+      _buffer.rewind();
    }
 
 
@@ -106,18 +115,49 @@ public final class FloatBuffer_Android
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+   
+   void bindAsVBOToGPU() {
+
+	    if (!_vertexBufferCreated){
+	    	java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+	    	GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+	    	_vertexBuffer = ib.get(0);
+	    	_vertexBufferCreated = true;
+	    }
+
+	    if (_vertexBuffer != _boundVertexBuffer){
+	    	GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
+	    	_boundVertexBuffer = _vertexBuffer;
+	    } else{
+	      //....
+	    }
+
+	    if (_vertexBufferTimeStamp != _timestamp){
+	      _vertexBufferTimeStamp = _timestamp;
+
+	      FloatBuffer buffer = getBuffer();
+	      int vboSize = 4 * size();
+
+//	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+	      GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+	    }
+
+//	    if (GL_NO_ERROR != glGetError()){
+//	      ILogger::instance()->logError("Problem using VBO");
+//	    }
+	  }
 
 
-   //   @Override
-   //   public void dispose() {
-   //      super.dispose();
-   //
-   //      if (_hasGLBuffer) {
-   //         final int[] buffers = new int[] { _glBuffer };
-   //         GLES20.glDeleteBuffers(1, buffers, 0);
-   //         _hasGLBuffer = false;
-   //      }
-   //   }
+      @Override
+      public void dispose() {
+         super.dispose();
+   
+         if (_vertexBufferCreated) {
+            final int[] buffers = new int[] { _vertexBuffer };
+            GLES20.glDeleteBuffers(1, buffers, 0);
+            _vertexBufferCreated = false;
+         }
+      }
    //
    //
    //   public int getGLBuffer() {

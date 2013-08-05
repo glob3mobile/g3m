@@ -46,7 +46,7 @@ public abstract class ElevationData
      _sector = new Sector(sector);
      _width = extent._x;
      _height = extent._y;
-     _resolution = new Geodetic2D(sector.getDeltaLatitude().div(extent._y), sector.getDeltaLongitude().div(extent._x));
+     _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
      _interpolator = null;
   }
 
@@ -158,7 +158,7 @@ public abstract class ElevationData
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
   //                                          ellipsoid,
   //                                          Vector3D::zero());
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   

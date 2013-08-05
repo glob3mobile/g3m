@@ -16,10 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEOLineStringGeometry
+
+public class GEO2DLineStringGeometry extends GEOGeometry2D
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 

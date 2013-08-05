@@ -18,7 +18,12 @@
 
 
 Canvas_iOS::~Canvas_iOS() {
-  if (_context) {
+  if (_path != NULL) {
+    CGPathRelease(_path);
+    _path = NULL;
+  }
+
+  if (_context != NULL) {
     CGContextRelease( _context );
     _context = NULL;
   }
@@ -70,7 +75,7 @@ void Canvas_iOS::_setFillColor(const Color& color) {
                            color.getAlpha());
 }
 
-void Canvas_iOS::_setStrokeColor(const Color& color) {
+void Canvas_iOS::_setLineColor(const Color& color) {
   CGContextSetRGBStrokeColor(_context,
                              color.getRed(),
                              color.getGreen(),
@@ -78,8 +83,48 @@ void Canvas_iOS::_setStrokeColor(const Color& color) {
                              color.getAlpha());
 }
 
-void Canvas_iOS::_setStrokeWidth(float width) {
+void Canvas_iOS::_setLineWidth(float width) {
   CGContextSetLineWidth(_context, width);
+}
+
+void Canvas_iOS::_setLineCap(StrokeCap cap) {
+  switch (cap) {
+    case CAP_BUTT:
+      CGContextSetLineCap(_context, kCGLineCapButt);
+      break;
+    case CAP_ROUND:
+      CGContextSetLineCap(_context, kCGLineCapRound);
+      break;
+    case CAP_SQUARE:
+      CGContextSetLineCap(_context, kCGLineCapSquare);
+      break;
+  }
+}
+
+void Canvas_iOS::_setLineJoin(StrokeJoin join) {
+  switch (join) {
+    case JOIN_MITER:
+      CGContextSetLineJoin(_context, kCGLineJoinMiter);
+      break;
+    case JOIN_ROUND:
+      CGContextSetLineJoin(_context, kCGLineJoinRound);
+      break;
+    case JOIN_BEVEL:
+      CGContextSetLineJoin(_context, kCGLineJoinBevel);
+      break;
+  }
+}
+
+void Canvas_iOS::_setLineMiterLimit(float limit) {
+  CGContextSetMiterLimit(_context, limit);
+}
+
+void Canvas_iOS::_setLineDash(float lengths[],
+                              int count,
+                              int phase) {
+  CGContextSetLineDash(_context,
+                       phase,
+                       lengths, count);
 }
 
 void Canvas_iOS::_setShadow(const Color& color,
@@ -356,4 +401,51 @@ void Canvas_iOS::_drawImage(const IImage* image,
     
     CGImageRelease(cgCropImage);
   }
+}
+
+void Canvas_iOS::_beginPath() {
+  if (_path != NULL) {
+    CGPathRelease(_path);
+  }
+
+  _path = CGPathCreateMutable();
+  
+  //_transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _canvasHeight), 1, -1);
+  _transform = CGAffineTransformMake(1, 0, -0, -1, 0, _canvasHeight);
+}
+
+void Canvas_iOS::_closePath() {
+  CGPathCloseSubpath(_path);
+}
+
+void Canvas_iOS::_stroke() {
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathStroke);
+
+  CGPathRelease(_path);
+  _path = NULL;
+}
+
+void Canvas_iOS::_fill() {
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathEOFill);
+
+  CGPathRelease(_path);
+  _path = NULL;
+}
+
+void Canvas_iOS::_fillAndStroke() {
+  CGContextAddPath(_context, _path);
+  CGContextDrawPath(_context, kCGPathEOFillStroke);
+
+  CGPathRelease(_path);
+  _path = NULL;
+}
+
+void Canvas_iOS::_moveTo(float x, float y) {
+  CGPathMoveToPoint(_path, &_transform, x, y);
+}
+
+void Canvas_iOS::_lineTo(float x, float y) {
+  CGPathAddLineToPoint(_path, &_transform, x, y);
 }

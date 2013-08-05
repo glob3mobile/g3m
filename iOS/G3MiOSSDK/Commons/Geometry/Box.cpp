@@ -2,7 +2,7 @@
 //  Box.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 17/07/12.
+//  Created by Agustin Trujillo Pino on 17/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -260,12 +260,11 @@ void Box::createMesh(Color* color) const {
                           color);
 }
 
-void Box::render(const G3MRenderContext* rc,
-                 const GLState& parentState) const {
+void Box::render(const G3MRenderContext* rc, const GLState& parentState) const{
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }
-  _mesh->render(rc, parentState);
+  _mesh->render(rc, &parentState);
 }
 
 bool Box::touchesBox(const Box* that) const {

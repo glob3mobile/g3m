@@ -277,7 +277,7 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   }
 
   double dist = mu->sqrt(diflat * diflat + diflon * diflon);
-  return dist * mu->pi() / 180 * R;
+  return dist * PI / 180 * R;
 }
 
 

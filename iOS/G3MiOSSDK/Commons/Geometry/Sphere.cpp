@@ -27,15 +27,14 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
 void Sphere::createWireframeMesh(Color* color,
                                  short resolution) const {
   IMathUtils* mu = IMathUtils::instance();
-  const double pi = mu->pi();
-  const double delta = pi / (resolution-1);
+  const double delta = PI / (resolution-1);
 
   // create vertices
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero());
   for (int i=0; i<2*resolution-2; i++) {
-    const double longitude = -pi + i*delta;
+    const double longitude = -PI + i*delta;
     for (int j=0; j<resolution; j++) {
-      const double latitude = -pi/2 + j*delta;
+      const double latitude = -PI/2 + j*delta;
       const double h = mu->cos(latitude);
       const double x = h * mu->cos(longitude);
       const double y = h * mu->sin(longitude);
@@ -82,7 +81,7 @@ void Sphere::render(const G3MRenderContext* rc,
   if (_mesh == NULL) {
     createWireframeMesh(Color::newFromRGBA(1.0f, 1.0f, 0.0f, 1.0f), (short) 16);
   }
-  _mesh->render(rc, parentState);
+  _mesh->render(rc, &parentState);
 }
 
 

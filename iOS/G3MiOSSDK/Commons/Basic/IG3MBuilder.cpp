@@ -23,6 +23,8 @@
 #include "BusyMeshRenderer.hpp"
 #include "CompositeRenderer.hpp"
 #include "SimpleCameraConstrainer.hpp"
+#include "GPUProgramManager.hpp"
+#include "GPUProgramFactory.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -634,6 +636,9 @@ G3MWidget* IG3MBuilder::create() {
     mainRenderer = getTileRendererBuilder()->create();
   }
   
+
+  
+  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
                                             getStorage(), //
                                             getDownloader(), //
@@ -649,7 +654,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getLogDownloaderStatistics(), //
                                             getInitializationTask(), //
                                             getAutoDeleteInitializationTask(), //
-                                            *getPeriodicalTasks());
+                                            *getPeriodicalTasks(),
+                                            getGPUProgramManager());
   
   g3mWidget->setUserData(getUserData());
 
@@ -717,4 +723,18 @@ bool IG3MBuilder::containsTileRenderer(std::vector<Renderer*> renderers) {
     }
   }
   return false;
+}
+
+void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s){
+  _sources.push_back(s);
+}
+
+GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
+  //GPU Program Manager
+  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
+  for(int i = 0; i < _sources.size(); i++){
+    gpuProgramFactory->add(_sources[i]);
+  }
+  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+  return gpuProgramManager;
 }

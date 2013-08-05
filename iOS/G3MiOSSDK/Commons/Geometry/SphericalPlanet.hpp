@@ -47,7 +47,7 @@ public:
   }
 
   Vector3D getRadii() const{
-    return Vector3D(_sphere.getRadius(), _sphere.getRadius(), _sphere.getRadius());
+    return Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
   }
 
   Vector3D centricSurfaceNormal(const Vector3D& position) const {

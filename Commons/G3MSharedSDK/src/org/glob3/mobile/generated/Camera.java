@@ -76,6 +76,7 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
+    //TODO: IMPROVE PERFORMANCE
     _width = that._width;
     _height = that._height;
   
@@ -90,9 +91,13 @@ public class Camera
   
     _frustumData = new FrustumData(that._frustumData);
   
-    _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
-    _modelMatrix = new MutableMatrix44D(that._modelMatrix);
-    _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
+  //  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+  //  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+  //  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+    _projectionMatrix.copyValue(that._projectionMatrix);
+    _modelMatrix.copyValue(that._modelMatrix);
+    _modelViewMatrix.copyValue(that._modelViewMatrix);
   
     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
   
@@ -120,6 +125,12 @@ public class Camera
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
     _angle2Horizon = that._angle2Horizon;
+  }
+
+  public final void copyFromForcingMatrixCreation(Camera c)
+  {
+    c.forceMatrixCreation();
+    copyFrom(c);
   }
 
 
@@ -164,11 +175,9 @@ public class Camera
     //cleanCachedValues();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLGlobalState parentState)
   {
-    GL gl = rc.getGL();
-    gl.setProjection(getProjectionMatrix());
-    gl.loadMatrixf(getModelMatrix());
+    //TODO: NO LONGER NEEDED!!!
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -348,6 +357,9 @@ public class Camera
     return point0.angleBetween(point1);
   }
 
+
+  ///#include "GPUProgramState.hpp"
+  
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
@@ -389,7 +401,7 @@ public class Camera
     final Angle currentHeading = getHeading(normal);
     final Angle delta = currentHeading.sub(angle);
     rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-    //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+    //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
   }
   public final Angle getPitch()
   {
@@ -402,7 +414,7 @@ public class Camera
     final Angle currentPitch = getPitch();
     final Vector3D u = getHorizontalVector();
     rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
   }
 
   public final Geodetic3D getGeodeticPosition()
@@ -458,8 +470,29 @@ public class Camera
   {
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix();
-    getModelMatrix();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
+    getModelViewMatrix().asMatrix44D();
+  }
+
+
+
+//  void addProjectionAndModelGLFeatures(GLState& glState) const{
+//    glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+//    glState.addGLFeature(p, false);
+//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
+//    glState.addGLFeature(m, false);
+//  }
+
+  public final Matrix44D getModelMatrix44D()
+  {
+    return getModelMatrix().asMatrix44D();
+  }
+
+  public final Matrix44D getProjectionMatrix44D()
+  {
+    return getProjectionMatrix().asMatrix44D();
   }
 
   public final double getAngle2HorizonInRadians()
@@ -470,12 +503,11 @@ public class Camera
   public final double getProjectedSphereArea(Sphere sphere)
   {
     // this implementation is not right exact, but it's faster.
-    final double z = sphere.getCenter().distanceTo(getCartesianPosition());
-    final double rWorld = sphere.getRadius() * _frustumData._znear / z;
+    final double z = sphere._center.distanceTo(getCartesianPosition());
+    final double rWorld = sphere._radius * _frustumData._znear / z;
     final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
-    return IMathUtils.instance().pi() * rScreen * rScreen;
+    return DefineConstants.PI * rScreen * rScreen;
   }
-
 
   private Angle getHeading(Vector3D normal)
   {
@@ -600,39 +632,6 @@ public class Camera
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // opengl projection matrix
-  private MutableMatrix44D getProjectionMatrix()
-  {
-    if (_dirtyFlags._projectionMatrixDirty)
-    {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-
-  // Model matrix, computed in CPU in double precision
-  private MutableMatrix44D getModelMatrix()
-  {
-    if (_dirtyFlags._modelMatrixDirty)
-    {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
-  }
-
-  // multiplication of model * projection
-  private MutableMatrix44D getModelViewMatrix()
-  {
-    if (_dirtyFlags._modelViewMatrixDirty)
-    {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
   }
 
   // intersection of view direction with globe in(x,y,z)
@@ -804,6 +803,39 @@ public class Camera
   
     setHeading(heading);
     setPitch(pitch);
+  }
+
+  // opengl projection matrix
+  private MutableMatrix44D getProjectionMatrix()
+  {
+    if (_dirtyFlags._projectionMatrixDirty)
+    {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+
+  // Model matrix, computed in CPU in double precision
+  private MutableMatrix44D getModelMatrix()
+  {
+    if (_dirtyFlags._modelMatrixDirty)
+    {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
+
+  // multiplication of model * projection
+  private MutableMatrix44D getModelViewMatrix()
+  {
+    if (_dirtyFlags._modelViewMatrixDirty)
+    {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
   }
 
 }

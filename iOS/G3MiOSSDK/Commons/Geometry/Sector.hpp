@@ -2,7 +2,7 @@
 //  Sector.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -20,13 +20,13 @@
 
 //class Sector_Geodetic2DCachedData;
 
+class ICanvas;
+class GEORasterProjection;
+
+
 class Sector {
 
 private:
-  const Geodetic2D _center;
-
-  const Angle _deltaLatitude;
-  const Angle _deltaLongitude;
   
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
@@ -48,6 +48,11 @@ private:
 public:
   const Geodetic2D _lower;
   const Geodetic2D _upper;
+  
+  const Geodetic2D _center;
+
+  const Angle _deltaLatitude;
+  const Angle _deltaLongitude;
 
 
   ~Sector();
@@ -69,6 +74,12 @@ public:
    */
   _normalizedCartesianCenter(NULL)
   {
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 
@@ -201,8 +212,10 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-    return Vector2D(getUCoordinate(longitude),
-                    getVCoordinate(latitude));
+//    return Vector2D(getUCoordinate(longitude),
+//                    getVCoordinate(latitude));
+    return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
+                    (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
   }
 
   double getUCoordinate(const Angle& longitude) const {
@@ -255,6 +268,9 @@ public:
   bool touchesSouthPole() const {
     return (_lower._latitude._degrees <= -89.9);
   }
+  
+  void rasterize(ICanvas*                   canvas,
+                 const GEORasterProjection* projection) const;
 
   bool touchesPoles() const {
     return ((_upper._latitude._degrees >=  89.9) ||
@@ -263,8 +279,8 @@ public:
 
   double getDeltaRadiusInRadians() const {
     if (_deltaRadiusInRadians < 0)
-      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude.radians()  * _deltaLatitude.radians() +
-                                   _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude._radians  * _deltaLatitude._radians +
+                                   _deltaLongitude._radians * _deltaLongitude._radians) * 0.5;
     return _deltaRadiusInRadians;
   }
   

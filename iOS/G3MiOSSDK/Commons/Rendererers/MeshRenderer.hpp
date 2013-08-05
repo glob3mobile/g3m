@@ -11,6 +11,7 @@
 
 #include "LeafRenderer.hpp"
 #include <vector>
+#include "GLState.hpp"
 
 class Mesh;
 
@@ -18,8 +19,20 @@ class Mesh;
 class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
+  
+  GLState _glState;
 
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 public:
+  
+  MeshRenderer():
+  _projection(NULL),
+  _model(NULL)
+  {
+  }
+  
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh) {
@@ -41,15 +54,14 @@ public:
   }
 
   void initialize(const G3MContext* context) {
-
+    
   }
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

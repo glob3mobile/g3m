@@ -43,8 +43,12 @@ public class G3MShowMarkersActivity
 
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
+
       builder.setInitializationTask(getWeatherMarkerLayersTask());
+
       builder.addRenderer(_weatherMarkers);
+      builder.setLogFPS(true);
+
       //Always after setting params
       _widgetAndroid = builder.createWidget();
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);

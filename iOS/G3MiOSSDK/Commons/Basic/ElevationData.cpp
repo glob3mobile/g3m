@@ -22,8 +22,8 @@ ElevationData::ElevationData(const Sector& sector,
 _sector(sector),
 _width(extent._x),
 _height(extent._y),
-_resolution(sector.getDeltaLatitude().div(extent._y),
-            sector.getDeltaLongitude().div(extent._x)),
+_resolution(sector._deltaLatitude.div(extent._y),
+            sector._deltaLongitude.div(extent._x)),
 _interpolator(NULL)
 {
 }
@@ -63,7 +63,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 //                                          Vector3D::zero());
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
                                           planet,
-                                          sector.getCenter());
+                                          sector._center);
 
   FloatBufferBuilderFromColor colors;
 

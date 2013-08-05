@@ -2,7 +2,7 @@
 //  Tile.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -28,11 +28,14 @@ class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class GPUProgramState;
 class TileElevationDataRequest;
 class Frustum;
 class Box;
 
 #include "ITexturizerData.hpp"
+
+#include "GLState.hpp"
 
 class Tile {
 private:
@@ -48,6 +51,8 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
+  
+  Mesh* _flatColorMesh;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
@@ -81,11 +86,10 @@ private:
 
   inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc,
-                        const GLState& parentState);
+                        const GLState* glState);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc,
-                   const GLState& parentState);
+                   const TileRenderContext* trc, const GLState* glState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,

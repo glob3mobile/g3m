@@ -68,15 +68,15 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   
     if (_centerStrategy == CenterStrategy.noCenter())
     {
-      _values.add((float) vector._x);
-      _values.add((float) vector._y);
-      _values.add((float) vector._z);
+      _values.push_back((float) vector._x);
+      _values.push_back((float) vector._y);
+      _values.push_back((float) vector._z);
     }
     else
     {
-      _values.add((float)(vector._x - _cx));
-      _values.add((float)(vector._y - _cy));
-      _values.add((float)(vector._z - _cz));
+      _values.push_back((float)(vector._x - _cx));
+      _values.push_back((float)(vector._y - _cy));
+      _values.push_back((float)(vector._z - _cz));
     }
   }
 

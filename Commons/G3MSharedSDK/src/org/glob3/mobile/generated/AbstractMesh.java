@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableMatrix44D;
 //class IFloatBuffer;
 //class Color;
@@ -94,11 +95,46 @@ public abstract class AbstractMesh extends Mesh
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
-  
+    createGLState();
   }
 
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  protected abstract void rawRender(G3MRenderContext rc);
+//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
+  protected GLState _glState = new GLState();
+
+  protected final void createGLState()
+  {
+  
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_translationMatrix != null)
+    {
+      _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+    }
+  
+    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
+    {
+  
+      _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+  
+  
+  
+  
+      return;
+    }
+  
+    if (_colors != null)
+    {
+      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  
+    }
+  }
+
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     if (_owner)
@@ -115,51 +151,6 @@ public abstract class AbstractMesh extends Mesh
        _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
-  }
-
-  public final void render(G3MRenderContext rc, GLState parentState)
-  {
-    GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.enableVerticesPosition();
-    state.setLineWidth(_lineWidth);
-    state.setPointSize(_pointSize);
-    if (_colors != null)
-    {
-      state.enableVertexColor(_colors, _colorsIntensity);
-    }
-    if (_flatColor != null)
-    {
-      state.enableFlatColor(_flatColor, _colorsIntensity);
-      if (_flatColor.isTransparent())
-      {
-        state.enableBlend();
-        gl.setBlendFuncSrcAlpha();
-      }
-    }
-  
-    if (!_depthTest)
-    {
-      state.disableDepthTest();
-    }
-  
-    gl.vertexPointer(3, 0, _vertices);
-  
-    if (_translationMatrix != null)
-    {
-      gl.pushMatrix();
-      gl.multMatrixf(_translationMatrix);
-    }
-  
-    gl.setState(state);
-    rawRender(rc, state);
-  
-    if (_translationMatrix != null)
-    {
-      gl.popMatrix();
-    }
-  
   }
 
   public final BoundingVolume getBoundingVolume()
@@ -189,6 +180,13 @@ public abstract class AbstractMesh extends Mesh
       return false;
     }
     return _flatColor.isTransparent();
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+  
+    _glState.setParent(parentGLState);
+    rawRender(rc);
   }
 
 }

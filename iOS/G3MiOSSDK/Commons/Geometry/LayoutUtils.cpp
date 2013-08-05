@@ -2,7 +2,7 @@
 //  LayoutUtils.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 18/03/13.
+//  Created by Agustin Trujillo on 18/03/13.
 //
 //
 
@@ -20,7 +20,7 @@ std::vector<Geodetic3D*> LayoutUtils::splitOverCircle(const EllipsoidalPlanet* E
   std::vector<Geodetic3D*> result;
   
   const double startAngleInRadians = startAngle._radians;
-  const double deltaInRadians      = (IMathUtils::instance()->pi() * 2.0) / splits;
+  const double deltaInRadians      = (PI * 2.0) / splits;
   const Vector3D cartesianCenter   = EllipsoidalPlanet->toCartesian(center);
   const Vector3D normal            = EllipsoidalPlanet->geodeticSurfaceNormal(center);
   const Vector3D northInPlane      = Vector3D::upZ().projectionInPlane(normal).normalized().times(radiusInMeters);

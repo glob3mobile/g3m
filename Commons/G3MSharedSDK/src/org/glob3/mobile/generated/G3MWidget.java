@@ -20,10 +20,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager);
   }
 
   public void dispose()
@@ -83,20 +83,16 @@ public class G3MWidget
   
     if (_context != null)
        _context.dispose();
-  
-    if (_rootState != null)
-       _rootState.dispose();
   }
 
   public final void render(int width, int height)
   {
-  
     if (_paused)
     {
       return;
     }
   
-    if ((_width != width || _height != height) && _mainRendererReady)
+    if (_width != width || _height != height)
     {
       _width = width;
       _height = height;
@@ -106,6 +102,8 @@ public class G3MWidget
   
     _timer.start();
     _renderCounter++;
+  
+  
   
     if (_initializationTask != null)
     {
@@ -144,37 +142,38 @@ public class G3MWidget
     }
   
   
-    _nextCamera.forceMatrixCreation();
+    //  _nextCamera->forceMatrixCreation();
+    //
+    //  _currentCamera->copyFrom(*_nextCamera);
+    _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-    _currentCamera.copyFrom(_nextCamera);
-  
-    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
+    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
   
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
-    int _TESTING_initializationTask;
-  //  if (_mainRendererReady) {
-  //    if (_initializationTask != NULL) {
-  //      if (!_initializationTaskWasRun) {
-  //        _initializationTask->run(_context);
-  //        _initializationTaskWasRun = true;
-  //      }
-  //
-  //      if (_initializationTask->isDone(_context)) {
-  //        if (_autoDeleteInitializationTask) {
-  //          delete _initializationTask;
-  //        }
-  //        _initializationTask = NULL;
-  //      }
-  //      else {
-  //        _mainRendererReady = false;
-  //      }
-  //    }
-  //  }
-  //
-  //  if (_mainRendererReady) {
-  //    _effectsScheduler->doOneCyle(&rc);
-  //  }
+    //  int _TESTING_initializationTask;
+    //  if (_mainRendererReady) {
+    //    if (_initializationTask != NULL) {
+    //      if (!_initializationTaskWasRun) {
+    //        _initializationTask->run(_context);
+    //        _initializationTaskWasRun = true;
+    //      }
+    //
+    //      if (_initializationTask->isDone(_context)) {
+    //        if (_autoDeleteInitializationTask) {
+    //          delete _initializationTask;
+    //        }
+    //        _initializationTask = NULL;
+    //      }
+    //      else {
+    //        _mainRendererReady = false;
+    //      }
+    //    }
+    //  }
+    //
+    //  if (_mainRendererReady) {
+    //    _effectsScheduler->doOneCyle(&rc);
+    //  }
     _effectsScheduler.doOneCyle(rc);
   
     _frameTasksExecutor.doPreRenderCycle(rc);
@@ -194,12 +193,12 @@ public class G3MWidget
   
     if (_mainRendererReady)
     {
-      _cameraRenderer.render(rc, _rootState);
+      _cameraRenderer.render(rc);
     }
   
     if (_selectedRenderer.isEnable())
     {
-      _selectedRenderer.render(rc, _rootState);
+      _selectedRenderer.render(rc);
     }
   
     java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
@@ -209,16 +208,16 @@ public class G3MWidget
       for (int i = 0; i < orderedRenderablesCount; i++)
       {
         OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-        orderedRenderable.render(rc, _rootState);
+        orderedRenderable.render(rc);
         if (orderedRenderable != null)
            orderedRenderable.dispose();
       }
     }
   
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
-  //  if (elapsedTimeMS > 100) {
-  //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
-  //  }
+    //  if (elapsedTimeMS > 100) {
+    //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
+    //  }
   
     if (_logFPS)
     {
@@ -264,69 +263,58 @@ public class G3MWidget
 
   public final void onTouchEvent(TouchEvent touchEvent)
   {
-    if (_mainRendererReady)
+  
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+  
+  
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
+  
+  
+    // creates DownUp event when a Down is immediately followed by an Up
+    if (touchEvent.getTouchCount() == 1)
     {
-      G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
-  
-  
-      // notify the original event
-      notifyTouchEvent(ec, touchEvent);
-  
-  
-      // creates DownUp event when a Down is immediately followed by an Up
-      if (touchEvent.getTouchCount() == 1)
+      final TouchEventType eventType = touchEvent.getType();
+      if (eventType == TouchEventType.Down)
       {
-        final TouchEventType eventType = touchEvent.getType();
-        if (eventType == TouchEventType.Down)
-        {
-          _clickOnProcess = true;
-        }
-        else
-        {
-          if (eventType == TouchEventType.Up)
-          {
-            if (_clickOnProcess)
-            {
-  
-              final Touch touch = touchEvent.getTouch(0);
-              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
-  
-              notifyTouchEvent(ec, downUpEvent);
-  
-              if (downUpEvent != null)
-                 downUpEvent.dispose();
-            }
-          }
-          _clickOnProcess = false;
-        }
+        _clickOnProcess = true;
       }
       else
       {
+        if (eventType == TouchEventType.Up)
+        {
+          if (_clickOnProcess)
+          {
+  
+            final Touch touch = touchEvent.getTouch(0);
+            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+  
+            notifyTouchEvent(ec, downUpEvent);
+  
+            if (downUpEvent != null)
+               downUpEvent.dispose();
+          }
+        }
         _clickOnProcess = false;
       }
-  
-  
     }
+    else
+    {
+      _clickOnProcess = false;
+    }
+  
   }
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    if (_mainRendererReady)
-    {
-      G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
-      _nextCamera.resizeViewport(width, height);
+    _nextCamera.resizeViewport(width, height);
+    _currentCamera.resizeViewport(width, height);
+    _cameraRenderer.onResizeViewportEvent(ec, width, height);
+    _mainRenderer.onResizeViewportEvent(ec, width, height);
+    _busyRenderer.onResizeViewportEvent(ec, width, height);
   
-      // _nextCamera->resizeViewport(width, height);
-  
-      _currentCamera.resizeViewport(width, height);
-      _cameraRenderer.onResizeViewportEvent(ec, width, height);
-  
-      if (_mainRenderer.isEnable())
-      {
-        _mainRenderer.onResizeViewportEvent(ec, width, height);
-      }
-    }
   }
 
   public final void onPause()
@@ -574,7 +562,6 @@ public class G3MWidget
   private Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
-  private TextureBuilder _textureBuilder;
 
   private Color _backgroundColor;
 
@@ -600,22 +587,15 @@ public class G3MWidget
   private final G3MContext _context;
 
   private boolean _paused;
-
-  private final GLState _rootState;
-
   private boolean _initializationTaskWasRun;
   private boolean _initializationTaskReady;
 
   private boolean _clickOnProcess;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
-  /*
-   =======
-  _gl( new GL(nativeGL, false) ),
-  >>>>>>> origin/webgl-port
-   */
+  private GPUProgramManager _gpuProgramManager;
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
-     _rootState = GLState.newDefault();
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
      _gl = gl;
@@ -624,7 +604,6 @@ public class G3MWidget
      _threadUtils = threadUtils;
      _cameraActivityListener = cameraActivityListener;
      _texturesHandler = new TexturesHandler(_gl, false);
-     _textureBuilder = new CPUTextureBuilder();
      _planet = planet;
      _cameraConstrainers = cameraConstrainers;
      _cameraRenderer = cameraRenderer;
@@ -651,6 +630,7 @@ public class G3MWidget
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
      _clickOnProcess = false;
+     _gpuProgramManager = gpuProgramManager;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -682,22 +662,29 @@ public class G3MWidget
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    boolean handled = false;
-    if (_mainRenderer.isEnable())
+    if (_mainRendererReady)
     {
-      handled = _mainRenderer.onTouchEvent(ec, touchEvent);
-    }
-  
-    if (!handled)
-    {
-      handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
-      if (handled)
+      boolean handled = false;
+      if (_mainRenderer.isEnable())
       {
-        if (_cameraActivityListener != null)
+        handled = _mainRenderer.onTouchEvent(ec, touchEvent);
+      }
+  
+      if (!handled)
+      {
+        handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
+        if (handled)
         {
-          _cameraActivityListener.touchEventHandled();
+          if (_cameraActivityListener != null)
+          {
+            _cameraActivityListener.touchEventHandled();
+          }
         }
       }
+    }
+    else
+    {
+      _busyRenderer.onTouchEvent(ec, touchEvent);
     }
   }
 

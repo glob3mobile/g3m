@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  EllipsoidalPlanet.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 15/05/13.
+//  Created by Agustin Trujillo Pino on 15/05/13.
 //
 //
 
@@ -324,7 +324,7 @@ public class EllipsoidalPlanet extends Planet
     }
   
     double dist = mu.sqrt(diflat * diflat + diflon * diflon);
-    return dist * mu.pi() / 180 * R;
+    return dist * DefineConstants.PI / 180 * R;
   }
 
   public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)

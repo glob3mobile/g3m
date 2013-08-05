@@ -2,7 +2,7 @@
 //  Box.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 16/07/12.
+//  Created by Agustin Trujillo Pino on 16/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -13,6 +13,8 @@
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
 #include "Frustum.hpp"
+
+#include "GLState.hpp"
 
 class Vector2D;
 class Mesh;
@@ -60,8 +62,7 @@ public:
   Vector3D intersectionWithRay(const Vector3D& origin,
                                const Vector3D& direction) const;
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+  void render(const G3MRenderContext* rc, const GLState& parentState) const;
 
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

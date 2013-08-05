@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 

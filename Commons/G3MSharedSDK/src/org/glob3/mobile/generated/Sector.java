@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  Sector.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -20,13 +20,13 @@ package org.glob3.mobile.generated;
 
 //class Sector_Geodetic2DCachedData;
 
+//class ICanvas;
+//class GEORasterProjection;
+
+
 public class Sector
 {
 
-  private final Geodetic2D _center ;
-
-  private final Angle _deltaLatitude ;
-  private final Angle _deltaLongitude ;
 
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
@@ -47,6 +47,11 @@ public class Sector
 
   public final Geodetic2D _lower ;
   public final Geodetic2D _upper ;
+
+  public final Geodetic2D _center ;
+
+  public final Angle _deltaLatitude ;
+  public final Angle _deltaLongitude ;
 
 
 
@@ -101,6 +106,12 @@ public class Sector
      _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
      _deltaRadiusInRadians = -1.0;
      _normalizedCartesianCenter = null;
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 
@@ -455,7 +466,9 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-    return new Vector2D(getUCoordinate(longitude), getVCoordinate(latitude));
+//    return Vector2D(getUCoordinate(longitude),
+//                    getVCoordinate(latitude));
+    return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
   }
 
   public final double getUCoordinate(Angle longitude)
@@ -480,7 +493,7 @@ public class Sector
   //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
   
     final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
-    final double angleInRadians = IMathUtils.instance().acos(dot);
+    final double angleInRadians = java.lang.Math.acos(dot);
   
     return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
   }
@@ -492,28 +505,28 @@ public class Sector
       return position;
     }
   
-    double latitudeInDegrees = position._latitude.degrees();
-    double longitudeInDegrees = position._longitude.degrees();
+    double latitudeInDegrees = position._latitude._degrees;
+    double longitudeInDegrees = position._longitude._degrees;
   
-    final double upperLatitudeInDegrees = _upper._latitude.degrees();
+    final double upperLatitudeInDegrees = _upper._latitude._degrees;
     if (latitudeInDegrees > upperLatitudeInDegrees)
     {
       latitudeInDegrees = upperLatitudeInDegrees;
     }
   
-    final double upperLongitudeInDegrees = _upper._longitude.degrees();
+    final double upperLongitudeInDegrees = _upper._longitude._degrees;
     if (longitudeInDegrees > upperLongitudeInDegrees)
     {
       longitudeInDegrees = upperLongitudeInDegrees;
     }
   
-    final double lowerLatitudeInDegrees = _lower._latitude.degrees();
+    final double lowerLatitudeInDegrees = _lower._latitude._degrees;
     if (latitudeInDegrees < lowerLatitudeInDegrees)
     {
       latitudeInDegrees = lowerLatitudeInDegrees;
     }
   
-    final double lowerLongitudeInDegrees = _lower._longitude.degrees();
+    final double lowerLongitudeInDegrees = _lower._longitude._degrees;
     if (longitudeInDegrees < lowerLongitudeInDegrees)
     {
       longitudeInDegrees = lowerLongitudeInDegrees;
@@ -643,6 +656,28 @@ public class Sector
     return (_lower._latitude._degrees <= -89.9);
   }
 
+
+  //Vector2D Sector::getTranslationFactor(const Sector& that) const {
+  //  const Vector2D uv = that.getUVCoordinates(_lower);
+  //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
+  //  return Vector2D(uv._x, uv._y - scaleY);
+  //}
+  
+  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  {
+  
+    final Vector2F l = projection.project(_lower);
+    final Vector2F u = projection.project(_upper);
+  
+    final float left = l._x;
+    final float top = l._y;
+    final float width = u._x - left;
+    final float height = u._y - top;
+  
+  //  canvas->strokeRectangle(left, canvas->getHeight() - top, width, -height);
+    canvas.strokeRectangle(left, top, width, height);
+  }
+
   public final boolean touchesPoles()
   {
     return ((_upper._latitude._degrees >= 89.9) || (_lower._latitude._degrees <= -89.9));
@@ -651,17 +686,10 @@ public class Sector
   public final double getDeltaRadiusInRadians()
   {
     if (_deltaRadiusInRadians < 0)
-      _deltaRadiusInRadians = IMathUtils.instance().sqrt(_deltaLatitude.radians() * _deltaLatitude.radians() + _deltaLongitude.radians() * _deltaLongitude.radians()) * 0.5;
+      _deltaRadiusInRadians = IMathUtils.instance().sqrt(_deltaLatitude._radians * _deltaLatitude._radians + _deltaLongitude._radians * _deltaLongitude._radians) * 0.5;
     return _deltaRadiusInRadians;
   }
 
-
-  //Vector2D Sector::getTranslationFactor(const Sector& that) const {
-  //  const Vector2D uv = that.getUVCoordinates(_lower);
-  //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
-  //  return Vector2D(uv._x, uv._y - scaleY);
-  //}
-  
   public final Vector3D getNormalizedCartesianCenter(Planet planet)
   {
     if (_normalizedCartesianCenter == null)
