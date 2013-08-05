@@ -24,6 +24,7 @@
 
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
+#include "Camera.hpp"
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
@@ -94,8 +95,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 }
 
 //TODO: REMOVE???
-void BusyQuadRenderer::render(const G3MRenderContext* rc,
-                              const GLGlobalState& parentState) {
+void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
 
   if (_quadMesh == NULL){
@@ -104,8 +104,9 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
     }
   }
 
-  // init modelview matrix
+//  // init modelview matrix
 //  if (!_projectionMatrix.isValid()){
+//    
 //    // init modelview matrix
 //    int currentViewport[4];
 //    gl->getViewport(currentViewport);
