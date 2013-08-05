@@ -453,3 +453,26 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   return matrix;
 }
 
+
+Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
+                                                 const Vector3D& centerRay,
+                                                 const Vector3D& tapRay) const
+{
+  const Vector3D initialPoint = closestIntersection(origin, tapRay);
+  if (initialPoint.isNan()) return NULL;
+  
+  // compute central point of view
+  const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  
+  // compute drag parameters
+  const IMathUtils* mu = IMathUtils::instance();
+  const Vector3D axis = initialPoint.cross(centerPoint);
+  const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  
+  // compute zoom factor
+  const double height   = toGeodetic3D(origin).height();
+  const double distance = height * 0.6;
+  
+  // create effect
+  return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
+}

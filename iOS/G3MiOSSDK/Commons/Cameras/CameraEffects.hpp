@@ -36,6 +36,7 @@ private:
   Vector3D _axis;
 };
 
+//***************************************************************
 
 class SingleTranslationEffect : public EffectWithForce {
 public:
@@ -55,6 +56,36 @@ public:
   
 private:
   Vector3D _direction;
+};
+
+
+//***************************************************************
+
+class DoubleTapRotationEffect : public EffectWithDuration {
+public:
+  
+  DoubleTapRotationEffect(const TimeInterval& duration,
+                          const Vector3D& axis,
+                          const Angle& angle,
+                          double distance,
+                          const bool linearTiming=false);
+  
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when);
+  
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when);
+  
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when);
+  
+  virtual void cancel(const TimeInterval& when) {}
+  
+private:
+  Vector3D _axis;
+  Angle    _angle;
+  double   _distance;
+  double   _lastAlpha;
 };
 
 

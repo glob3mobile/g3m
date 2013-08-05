@@ -94,6 +94,11 @@ public:
   
   virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                                       const Vector3D& finalRay1) const = 0;
+  
+  virtual Effect* createDoubleTapEffect(const Vector3D& origin,
+                                        const Vector3D& centerRay,
+                                        const Vector3D& tapRay) const = 0;
+
 };
 
 #endif

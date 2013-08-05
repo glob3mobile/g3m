@@ -51,3 +51,43 @@ void SingleTranslationEffect::stop(const G3MRenderContext *rc,
   rc->getNextCamera()->translateCamera(_direction.times(getForce()));
 }
 
+
+DoubleTapRotationEffect::DoubleTapRotationEffect(const TimeInterval& duration,
+                                                 const Vector3D& axis,
+                                                 const Angle& angle,
+                                                 double distance,
+                                                 const bool linearTiming):
+EffectWithDuration(duration, linearTiming),
+_axis(axis),
+_angle(angle),
+_distance(distance)
+{}
+
+
+void DoubleTapRotationEffect::start(const G3MRenderContext *rc,
+                                    const TimeInterval& when) {
+  EffectWithDuration::start(rc, when);
+  _lastAlpha = 0;
+}
+
+
+void DoubleTapRotationEffect::doStep(const G3MRenderContext *rc,
+                                     const TimeInterval& when) {
+  const double alpha = getAlpha(when);
+  Camera *camera = rc->getNextCamera();
+  const double step = alpha - _lastAlpha;
+  camera->rotateWithAxis(_axis, _angle.times(step));
+  camera->moveForward(_distance * step);
+  _lastAlpha = alpha;
+}
+
+
+void DoubleTapRotationEffect::stop(const G3MRenderContext *rc,
+                                  const TimeInterval& when) {
+  Camera *camera = rc->getNextCamera();
+  const double step = 1.0 - _lastAlpha;
+  camera->rotateWithAxis(_axis, _angle.times(step));
+  camera->moveForward(_distance * step);
+}
+
+

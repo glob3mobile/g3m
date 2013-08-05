@@ -248,3 +248,11 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   return matrix;  
 }
 
+
+Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
+                                                 const Vector3D& centerRay,
+                                                 const Vector3D& tapRay) const
+{
+  
+}
+

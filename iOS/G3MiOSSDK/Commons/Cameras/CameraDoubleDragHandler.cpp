@@ -54,8 +54,6 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
 }
 
 
-double PUTOFACTOR;
-
 void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
