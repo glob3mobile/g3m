@@ -88,6 +88,33 @@ private:
   double   _lastAlpha;
 };
 
+//***************************************************************
+
+class DoubleTapTranslationEffect : public EffectWithDuration {
+public:
+  
+  DoubleTapTranslationEffect(const TimeInterval& duration,
+                             const Vector3D& translation,
+                             double distance,
+                             const bool linearTiming=false);
+  
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when);
+  
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when);
+  
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when);
+  
+  virtual void cancel(const TimeInterval& when) {}
+  
+private:
+  Vector3D _translation;
+  double   _distance;
+  double   _lastAlpha;
+};
+
 
 
 

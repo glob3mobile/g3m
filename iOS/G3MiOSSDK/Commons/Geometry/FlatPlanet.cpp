@@ -253,6 +253,13 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                  const Vector3D& centerRay,
                                                  const Vector3D& tapRay) const
 {
-  
+  const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+  if (initialPoint.isNan()) return NULL;
+  const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+    
+  // create effect
+  return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
+                                        initialPoint.sub(centerPoint),
+                                        toGeodetic3D(origin).height()*0.6);
 }
 
