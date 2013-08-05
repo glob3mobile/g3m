@@ -1477,6 +1477,16 @@ private:
   GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
+//    std::string name = properties->getAsString("name", "");
+//    if (name.compare("Russia") == 0) {
+//      int _XXX;
+//      printf("break point on me\n");
+//    }
+//    if (name.compare("Antarctica") == 0) {
+//      int _XXX;
+//      printf("break point on me\n");
+//    }
+
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
 
     const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
