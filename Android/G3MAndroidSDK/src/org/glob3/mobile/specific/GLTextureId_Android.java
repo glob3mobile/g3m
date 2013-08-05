@@ -12,9 +12,9 @@ public final class GLTextureId_Android
    private final int _glTextureId;
 
 
-   public GLTextureId_Android() {
-      _glTextureId = -1;
-   }
+   //   public GLTextureId_Android() {
+   //      _glTextureId = -1;
+   //   }
 
 
    public GLTextureId_Android(final int textureId) {
@@ -22,9 +22,9 @@ public final class GLTextureId_Android
    }
 
 
-   public GLTextureId_Android(final GLTextureId_Android that) {
-      _glTextureId = that.getGLTextureId();
-   }
+   //   public GLTextureId_Android(final GLTextureId_Android that) {
+   //      _glTextureId = that.getGLTextureId();
+   //   }
 
 
    @Override
@@ -41,6 +41,12 @@ public final class GLTextureId_Android
 
    public int getGLTextureId() {
       return _glTextureId;
+   }
+
+
+   @Override
+   public void dispose() {
+
    }
 
 }

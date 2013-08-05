@@ -26,9 +26,10 @@ public class Proxy
    /**
     * 
     */
-   private static final long serialVersionUID         = -6020365142488111237L;
+   private static final long serialVersionUID = -6020365142488111237L;
 
-   private static final int  CACHE_DURATION_IN_SECOND = 31536000;
+
+   //   private static final int  CACHE_DURATION_IN_SECOND = 31536000;
 
 
    @Override

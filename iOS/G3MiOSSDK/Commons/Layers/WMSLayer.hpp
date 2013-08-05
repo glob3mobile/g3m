@@ -20,25 +20,23 @@ enum WMSServerVersion {
 
 class WMSLayer: public Layer {
 private:
-  
+
 #ifdef C_CODE
-  const URL              _mapServerURL;
-  const URL              _queryServerURL;
+  const URL _mapServerURL;
+  const URL _queryServerURL;
 #endif
-  
-  
 #ifdef JAVA_CODE
   private final URL _mapServerURL;
   private final URL _queryServerURL;
 #endif
-  
+
   const std::string      _mapLayer;
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;
   const WMSServerVersion _queryServerVersion;
-  
+
   Sector              _sector;
-  
+
   const std::string   _format;
   const std::string   _srs;
   const std::string   _style;
@@ -46,9 +44,11 @@ private:
 
   std::string         _extraParameter;
 
+  inline double toBBOXLongitude(const Angle& longitude) const;
+  inline double toBBOXLatitude (const Angle& latitude)  const;
+
 public:
-  
-  
+
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
@@ -57,70 +57,40 @@ public:
            const WMSServerVersion queryServerVersion,
            const Sector& sector,
            const std::string& format,
-           const std::string srs,
+           const std::string& srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(condition),
-  _mapLayer(mapLayer),
-  _mapServerURL(mapServerURL),
-  _mapServerVersion(mapServerVersion),
-  _queryLayer(queryLayer),
-  _queryServerURL(queryServerURL),
-  _queryServerVersion(queryServerVersion),
-  _sector(sector),
-  _format(format),
-  _srs(srs),
-  _style(style),
-  _isTransparent(isTransparent)
-  {
-    
-  }
-  
+           LayerCondition* condition,
+           const TimeInterval& timeToCache,
+           bool readExpired,
+           const LayerTilesRenderParameters* parameters = NULL);
+
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
            const Sector& sector,
            const std::string& format,
-           const std::string srs,
+           const std::string& srs,
            const std::string& style,
            const bool isTransparent,
-           LayerCondition* condition):
-  Layer(condition),
-  _mapLayer(mapLayer),
-  _mapServerURL(mapServerURL),
-  _mapServerVersion(mapServerVersion),
-  _queryLayer(mapLayer),
-  _queryServerURL(mapServerURL),
-  _queryServerVersion(mapServerVersion),
-  _sector(sector),
-  _format(format),
-  _srs(srs),
-  _style(style),
-  _isTransparent(isTransparent)
-  {
-    
-  }
-  
-  std::vector<Petition*> getMapPetitions(const RenderContext* rc,
-                                         const Tile* tile,
-                                         int width, int height) const;
-  
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
-  
+           LayerCondition* condition,
+           const TimeInterval& timeToCache,
+           bool readExpired,
+           const LayerTilesRenderParameters* parameters = NULL);
+
+
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const Tile* tile) const;
+
   URL getFeatureInfoURL(const Geodetic2D& g,
-                        const IFactory* factory,
-                        const Sector& sector,
-                        int width, int height) const;
-  
+                        const Sector& sector) const;
+
 
   void setExtraParameter(const std::string& extraParameter) {
     _extraParameter = extraParameter;
     notifyChanges();
   }
-
+  
 };
 
 #endif

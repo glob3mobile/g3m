@@ -19,65 +19,55 @@ package org.glob3.mobile.generated;
 
 public class SGMaterialNode extends SGNode
 {
-  private Color _specularColor;
+  private Color _baseColor;
+  private final Color _specularColor;
 
-  private double _shine;
-  private double _specular;
+//  const double _specular;
+//  const double _shine;
+//  const double _alpha;
+//  const double _emit;
 
-  protected final void prepareRender(RenderContext rc)
+
+  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
+//  _specular(specular),
+//  _shine(shine),
+//  _alpha(alpha),
+//  _emit(emit)
   {
-	GL gl = rc.getGL();
-  
-	if (_specularColor == null)
-	{
-	  gl.disableVertexFlatColor();
-	}
-	else
-	{
-	  final float colorsIntensity = 1F;
-	  gl.enableVertexFlatColor(_specularColor, colorsIntensity);
-	}
-  
-	super.prepareRender(rc);
+     super(id, sId);
+     _baseColor = baseColor;
+     _specularColor = specularColor;
+
   }
 
-  protected final void cleanUpRender(RenderContext rc)
+  public final void setBaseColor(Color baseColor)
   {
-	GL gl = rc.getGL();
-  
-	gl.disableVertexFlatColor();
-  
-	super.cleanUpRender(rc);
-  }
-
-
-  public SGMaterialNode()
-  {
-	  _specularColor = null;
-	  _shine = 0;
-	  _specular = 0;
-
+    if (baseColor != _baseColor)
+    {
+      _baseColor = null;
+      _baseColor = baseColor;
+    }
   }
 
   public void dispose()
   {
-	_specularColor = null;
+    _baseColor = null;
+    if (_specularColor != null)
+       _specularColor.dispose();
   }
 
-  public final void setSpecularColor(Color color)
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	_specularColor = null;
-	_specularColor = color;
-  }
-
-  public final void setShine(double shine)
-  {
-	_shine = shine;
-  }
-
-  public final void setSpecular(double specular)
-  {
-	_specular = specular;
+    if (_baseColor == null)
+    {
+      return null;
+    }
+  
+    GLState state = new GLState(parentState);
+    final float colorsIntensity = 1F;
+    state.enableFlatColor(_baseColor, colorsIntensity);
+  
+    return state;
   }
 
 }

@@ -2,7 +2,7 @@
 //  EAGLView.h
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -10,20 +10,29 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "TouchEvent.hpp"
+#import "GL.hpp"
 
 //class G3MWidget;
 
 @class ES2Renderer;
 
+class IStorage;
+class IDownloader;
+class IThreadUtils;
+class ICameraActivityListener;
+class Planet;
+class Color;
 class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
-class UserData;
+class WidgetUserData;
+class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
-class GTask;
+class GInitializationTask;
+class TimeInterval;
 
 // opengl versions value
 enum GL_version {
@@ -40,7 +49,7 @@ enum GL_version {
   
   enum GL_version glver;
   
-  TouchEvent *lastTouchEvent;
+  TouchEvent* _lastTouchEvent;
   
   void* _widgetVP;
 }
@@ -58,25 +67,48 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                               layerSet: (LayerSet*) layerSet
-                 incrementalTileQuality: (bool) incrementalTileQuality
-                              renderers: (std::vector<Renderer*>) renderers
-                               userData: (UserData*) userData
-                     initializationTask: (GTask*) initializationTask
-                        periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+- (void)          initWidget: (IStorage*) storage
+                  downloader: (IDownloader*) downloader
+                 threadUtils: (IThreadUtils*) threadUtils
+      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
+                      planet: (const Planet*) planet
+           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
+              cameraRenderer: (CameraRenderer*) cameraRenderer
+                mainRenderer: (Renderer*) mainRenderer
+                busyRenderer: (Renderer*) busyRenderer
+             backgroundColor: (Color) backgroundColor
+                      logFPS: (bool) logFPS
+     logDownloaderStatistics: (bool) logDownloaderStatistics
+          initializationTask: (GInitializationTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+                    userData: (WidgetUserData*) userData;
 
-- (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                            layerSet: (LayerSet*) layerSet
-               tilesRenderParameters: (TilesRenderParameters*) parameters
-                           renderers: (std::vector<Renderer*>) renderers
-                            userData: (UserData*) userData
-                  initializationTask: (GTask*) initializationTask
-                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+- (GL*)getGL;
+
+- (void)setWidget: (G3MWidget*) widget;
 
 - (G3MWidget*) widget;
 
 - (void)initSingletons;
+
+- (CameraRenderer*)getCameraRenderer;
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position
+                     timeInterval: (const TimeInterval&)interval;
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position;
+
+- (void)setCameraPosition: (const Geodetic3D&) position;
+
+- (void)setCameraHeading: (const Angle&) angle;
+
+- (void)setCameraPitch: (const Angle&) angle;
+
+- (void)stopCameraAnimation;
+
+//- (void)resetCameraPosition;
+
+- (WidgetUserData*) userData;
 
 @end

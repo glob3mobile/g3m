@@ -23,13 +23,13 @@ public abstract class LeafRenderer extends Renderer
 
   public LeafRenderer()
   {
-	  _enable = true;
+     _enable = true;
 
   }
 
   public LeafRenderer(boolean enable)
   {
-	  _enable = enable;
+     _enable = enable;
 
   }
 
@@ -38,33 +38,33 @@ public abstract class LeafRenderer extends Renderer
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnable() const
   public final boolean isEnable()
   {
-	return _enable;
+    return _enable;
   }
 
   public void setEnable(final boolean enable) {
-	_enable = enable;
+    _enable = enable;
   }
 
-  public abstract void onResume(InitializationContext ic);
+  public abstract void onResume(G3MContext context);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void onPause(G3MContext context);
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract void onDestroy(G3MContext context);
 
-  public abstract boolean isReadyToRender(RenderContext rc);
+  public abstract void initialize(G3MContext context);
 
-  public abstract void render(RenderContext rc);
+  public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
-  public abstract void onResizeViewportEvent(EventContext ec, int width, int height);
+  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
-  public abstract void start();
+  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void stop();
+  public abstract void start(G3MRenderContext rc);
+
+  public abstract void stop(G3MRenderContext rc);
 
 }

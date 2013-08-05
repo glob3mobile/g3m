@@ -14,42 +14,54 @@
 
 class SGMaterialNode : public SGNode {
 private:
-  Color* _specularColor;
+#ifdef C_CODE
+  const Color* _baseColor;
+#endif
+#ifdef JAVA_CODE
+  private Color _baseColor;
+#endif
+  const Color* _specularColor;
 
-  double _shine;
-  double _specular;
-
-protected:
-  void prepareRender(const RenderContext* rc);
-
-  void cleanUpRender(const RenderContext* rc);
-
+//  const double _specular;
+//  const double _shine;
+//  const double _alpha;
+//  const double _emit;
 
 public:
-  SGMaterialNode() :
-  _specularColor(NULL),
-  _shine(0),
-  _specular(0)
+
+  SGMaterialNode(const std::string& id,
+                 const std::string& sId,
+                 Color* baseColor,
+                 Color* specularColor,
+                 double specular,
+                 double shine,
+                 double alpha,
+                 double emit) :
+  SGNode(id, sId),
+  _baseColor(baseColor),
+  _specularColor(specularColor)
+//  _specular(specular),
+//  _shine(shine),
+//  _alpha(alpha),
+//  _emit(emit)
   {
 
   }
 
+  void setBaseColor(Color* baseColor) {
+    if (baseColor != _baseColor) {
+      delete _baseColor;
+      _baseColor = baseColor;
+    }
+  }
+
   ~SGMaterialNode() {
+    delete _baseColor;
     delete _specularColor;
   }
 
-  void setSpecularColor(Color* color) {
-    delete _specularColor;
-    _specularColor = color;
-  }
-
-  void setShine(double shine) {
-    _shine = shine;
-  }
-
-  void setSpecular(double specular) {
-    _specular = specular;
-  }
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState);
 
 };
 

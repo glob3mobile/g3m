@@ -4,25 +4,26 @@ public class TileTextureBuilder extends RCObject
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
-  //  const TileKey             _tileKey;
-
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
   private int _petitionsCount;
   private int _stepsDone;
 
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
-  private GL _gl;
 
-  private final TilesRenderParameters _parameters;
+  private final Vector2I _tileTextureResolution;
+  private final Vector2I _tileMeshResolution;
+  private final boolean _mercator;
+
   private IDownloader _downloader;
 
   private final Mesh _tessellatorMesh;
 
-  private IFloatBuffer _texCoords;
+  private final TileTessellator _tessellator;
 
-  private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
+  private final int _firstLevel;
+
+  private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
 
@@ -31,323 +32,429 @@ public class TileTextureBuilder extends RCObject
   private boolean _anyCanceled;
   private boolean _alreadyStarted;
 
+  private long _texturePriority;
+
+
+  private java.util.ArrayList<Petition> cleanUpPetitions(java.util.ArrayList<Petition> petitions)
+  {
+    final int petitionsSize = petitions.size();
+    if (petitionsSize <= 1)
+    {
+      return petitions;
+    }
+
+    java.util.ArrayList<Petition> result = new java.util.ArrayList<Petition>();
+    for (int i = 0; i < petitionsSize; i++)
+    {
+      Petition currentPetition = petitions.get(i);
+      final Sector currentSector = currentPetition.getSector();
+
+      boolean coveredByFollowingPetition = false;
+      for (int j = i+1; j < petitionsSize; j++)
+      {
+        Petition followingPetition = petitions.get(j);
+
+        // only opaque petitions can cover
+        if (!followingPetition.isTransparent())
+        {
+          if (followingPetition.getSector().fullContains(currentSector))
+          {
+            coveredByFollowingPetition = true;
+            break;
+          }
+        }
+      }
+
+      if (coveredByFollowingPetition)
+      {
+        if (currentPetition != null)
+           currentPetition.dispose();
+      }
+      else
+      {
+        result.add(currentPetition);
+      }
+    }
+
+    return result;
+  }
+
+
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
-  //_tileKey(tile->getKey()),
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
   {
-	  _texturizer = texturizer;
-	  _factory = rc.getFactory();
-	  _texturesHandler = rc.getTexturesHandler();
-	  _textureBuilder = rc.getTextureBuilder();
-	  _gl = rc.getGL();
-	  _parameters = parameters;
-	  _downloader = downloader;
-	  _tile = tile;
-	  _tessellatorMesh = tessellatorMesh;
-	  _stepsDone = 0;
-	  _anyCanceled = false;
-	  _mesh = null;
-	  _texCoords = texCoords;
-	  _finalized = false;
-	  _canceled = false;
-	  _alreadyStarted = false;
-	_petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
+     _texturizer = texturizer;
+     _texturesHandler = rc.getTexturesHandler();
+     _textureBuilder = rc.getTextureBuilder();
+     _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
+     _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
+     _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
+     _firstLevel = layerSet.getLayerTilesRenderParameters()._firstLevel;
+     _downloader = downloader;
+     _tile = tile;
+     _tessellatorMesh = tessellatorMesh;
+     _stepsDone = 0;
+     _anyCanceled = false;
+     _mesh = null;
+     _tessellator = tessellator;
+     _finalized = false;
+     _canceled = false;
+     _alreadyStarted = false;
+     _texturePriority = texturePriority;
+    _petitions = cleanUpPetitions(layerSet.createTileMapPetitions(rc, tile));
 
-	_petitionsCount = _petitions.size();
+    _petitionsCount = _petitions.size();
 
-	for (int i = 0; i < _petitionsCount; i++)
-	{
-	  _status.add(PetitionStatus.STATUS_PENDING);
-	}
+    for (int i = 0; i < _petitionsCount; i++)
+    {
+      _status.add(TileTextureBuilder_PetitionStatus.STATUS_PENDING);
+    }
 
-	_mesh = createMesh();
+    _mesh = createMesh();
   }
 
   public final void start()
   {
-	if (_canceled)
-	{
-	  return;
-	}
-	if (_alreadyStarted)
-	{
-	  return;
-	}
-	_alreadyStarted = true;
+    if (_canceled)
+    {
+      return;
+    }
+    if (_alreadyStarted)
+    {
+      return;
+    }
+    _alreadyStarted = true;
 
-	if (_tile == null)
-	{
-	  return;
-	}
+    if (_tile == null)
+    {
+      return;
+    }
 
-	for (int i = 0; i < _petitionsCount; i++)
-	{
-	  final Petition petition = _petitions.get(i);
+    for (int i = 0; i < _petitionsCount; i++)
+    {
+      final Petition petition = _petitions.get(i);
 
-	  final long priority = (_parameters._incrementalTileQuality ? 1000 - _tile.getLevel() : _tile.getLevel());
+      final long priority = _texturePriority + _tile.getLevel();
 
-	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
+      //      printf("%s\n", petition->getURL().getPath().c_str());
 
-	  _requestsIds.add(requestId);
-	}
+      final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true);
+      if (requestId >= 0)
+      {
+        _requestsIds.add(requestId);
+      }
+    }
   }
 
   public void dispose()
   {
-	if (!_finalized && !_canceled)
-	{
-	  cancel();
-	}
+    if (!_finalized && !_canceled)
+    {
+      cancel();
+    }
 
-	deletePetitions();
+    deletePetitions();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: RectangleD* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
-  public final RectangleD getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+  public final RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
   {
-	final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
+    //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
 
-	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+    final double widthFactor = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+    final double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
 
-	return new RectangleD(lowerFactor._x * textureWidth, (1.0 - lowerFactor._y) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
+    final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+
+    return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void composeAndUploadTexture() const
   public final void composeAndUploadTexture()
   {
-	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	final java.util.ArrayList<RectangleD> rectangles = new java.util.ArrayList<RectangleD>();
-	String textureId = _tile.getKey().tinyDescription();
+    synchronized (this) {
 
-	final int textureWidth = _parameters._tileTextureWidth;
-	final int textureHeight = _parameters._tileTextureHeight;
+      if (_mesh == null)
+      {
+        return;
+      }
 
-	final Sector tileSector = _tile.getSector();
+      final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+      java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
+      java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
+      String textureId = _tile.getKey().tinyDescription();
 
-	for (int i = 0; i < _petitionsCount; i++)
-	{
-	  final Petition petition = _petitions.get(i);
-	  IImage image = petition.getImage();
+      final Sector tileSector = _tile.getSector();
 
-	  if (image != null)
-	  {
-		images.add(image);
+      for (int i = 0; i < _petitionsCount; i++)
+      {
+        final Petition petition = _petitions.get(i);
+        IImage image = petition.getImage();
 
-		rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
+        if (image != null)
+        {
+          final Sector imageSector = petition.getSector();
+          //Finding intersection image sector - tile sector = srcReq
+          final Sector intersectionSector = tileSector.intersection(imageSector);
 
-		textureId += petition.getURL().getPath();
-		textureId += "_";
-	  }
-	}
+          RectangleF sourceRect = null;
+          if (!intersectionSector.isEqualsTo(imageSector))
+          {
+            sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
+          }
+          else
+          {
+            sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
+          }
 
-	if (images.size() > 0)
-	{
-	  //        int __TESTING_mipmapping;
-	  final boolean isMipmap = false;
+          //Part of the image we are going to draw
+          sourceRects.add(sourceRect);
 
-	  IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+          images.add(image);
 
-	  final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
+          //Where we are going to draw the image
+          destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
+          textureId += petition.getURL().getPath();
+          textureId += "_";
+        }
+      }
 
-	  if (glTextureId != null)
-	  {
-		if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
-		{
-		  _texturesHandler.releaseGLTextureId(glTextureId);
-		}
-	  }
+      if (images.size() > 0)
+      {
+        _textureBuilder.createTextureFromImages(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, sourceRects, destRects, textureId), true);
+      }
 
-	  if (image != null)
-		  image.dispose();
-	}
-
-
+    }
   }
 
-  public final void finalize()
+  public final void imageCreated(IImage image, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
-	if (!_finalized)
-	{
-	  _finalized = true;
+    synchronized (this) {
 
-	  if (!_canceled && (_tile != null) && (_mesh != null))
-	  {
-		composeAndUploadTexture();
-	  }
+      if (_mesh == null)
+      {
+        IFactory.instance().deleteImage(image);
+        return;
+      }
 
-	  _tile.setTextureSolved(true);
-	}
+      final boolean isMipmap = false;
+
+      final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
+
+      if (glTextureId != null)
+      {
+        if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
+        {
+          _texturesHandler.releaseGLTextureId(glTextureId);
+        }
+      }
+
+      IFactory.instance().deleteImage(image);
+
+      for (int i = 0; i < srcRects.size(); i++)
+      {
+        if (srcRects.get(i) != null)
+           srcRects.get(i).dispose();
+      }
+
+      for (int i = 0; i < dstRects.size(); i++)
+      {
+        if (dstRects.get(i) != null)
+           dstRects.get(i).dispose();
+      }
+
+    }
+  }
+
+  public final void done()
+  {
+    if (!_finalized)
+    {
+      _finalized = true;
+
+      if (!_canceled && (_tile != null) && (_mesh != null))
+      {
+        composeAndUploadTexture();
+      }
+
+      if (_tile != null)
+      {
+        _tile.setTextureSolved(true);
+      }
+    }
   }
 
   public final void deletePetitions()
   {
-	for (int i = 0; i < _petitionsCount; i++)
-	{
-	  Petition petition = _petitions.get(i);
-	  if (petition != null)
-		  petition.dispose();
-	}
-	_petitions.clear();
-	_petitionsCount = 0;
+    for (int i = 0; i < _petitionsCount; i++)
+    {
+      Petition petition = _petitions.get(i);
+      if (petition != null)
+         petition.dispose();
+    }
+    _petitions.clear();
+    _petitionsCount = 0;
   }
 
   public final void stepDone()
   {
-	_stepsDone++;
+    _stepsDone++;
 
-	if (_stepsDone == _petitionsCount)
-	{
-	  if (_anyCanceled)
-	  {
-		ILogger.instance().logInfo("Completed with cancelation\n");
-	  }
+    if (_stepsDone == _petitionsCount)
+    {
+      if (_anyCanceled)
+      {
+        ILogger.instance().logInfo("Completed with cancelation\n");
+      }
 
-	  finalize();
-	}
+      done();
+    }
   }
 
   public final void cancel()
   {
-	if (_canceled)
-	{
-	  return;
-	}
+    if (_canceled)
+    {
+      return;
+    }
 
-	_canceled = true;
+    _canceled = true;
 
-	if (!_finalized)
-	{
-	  for (int i = 0; i < _requestsIds.size(); i++)
-	  {
-		final long requestId = _requestsIds.get(i);
-		_downloader.cancelRequest(requestId);
-	  }
-	}
-	_requestsIds.clear();
+    if (!_finalized)
+    {
+      for (int i = 0; i < _requestsIds.size(); i++)
+      {
+        final long requestId = _requestsIds.get(i);
+        _downloader.cancelRequest(requestId);
+      }
+    }
+    _requestsIds.clear();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isCanceled() const
   public final boolean isCanceled()
   {
-	return _canceled;
+    return _canceled;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void checkIsPending(int position) const
-  public final void checkIsPending(int position)
-  {
-	if (_status.get(position) != PetitionStatus.STATUS_PENDING)
-	{
-	  ILogger.instance().logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
-	}
-  }
+  //  void checkIsPending(int position) const {
+  //    if (_status[position] != STATUS_PENDING) {
+  //      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+  //                                    position,
+  //                                    _status[position]);
+  //    }
+  //  }
 
   public final void stepDownloaded(int position, IImage image)
   {
-	if (_canceled)
-	{
-	  return;
-	}
-	checkIsPending(position);
+    if (_canceled)
+    {
+      IFactory.instance().deleteImage(image);
+      return;
+    }
+    //checkIsPending(position);
 
-	_status.set(position, PetitionStatus.STATUS_DOWNLOADED);
-	_petitions.get(position).setImage(image.shallowCopy());
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_DOWNLOADED);
+    _petitions.get(position).setImage(image);
 
-	stepDone();
+    stepDone();
   }
 
   public final void stepCanceled(int position)
   {
-	if (_canceled)
-	{
-	  return;
-	}
-	checkIsPending(position);
+    if (_canceled)
+    {
+      return;
+    }
+    //checkIsPending(position);
 
-	_anyCanceled = true;
+    _anyCanceled = true;
 
-	_status.set(position, PetitionStatus.STATUS_CANCELED);
+    _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
-	stepDone();
+    stepDone();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: LeveledTexturedMesh* createMesh() const
   public final LeveledTexturedMesh createMesh()
   {
-	java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
+    java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
-	Tile ancestor = _tile;
-	boolean fallbackSolved = false;
-	while (ancestor != null)
-	{
-	  LazyTextureMapping mapping;
-	  if (fallbackSolved)
-	  {
-		mapping = null;
-	  }
-	  else
-	  {
-		mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false);
-	  }
+    Tile ancestor = _tile;
+    boolean fallbackSolved = false;
+    while (ancestor != null)
+    {
+      LazyTextureMapping mapping;
+      if (fallbackSolved)
+      {
+        mapping = null;
+      }
+      else
+      {
+        final boolean ownedTexCoords = true;
+        final boolean transparent = false;
+        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
+      }
 
-	  if (ancestor != _tile)
-	  {
-		if (!fallbackSolved)
-		{
-		  final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
-		  if (glTextureId != null)
-		  {
-			_texturesHandler.retainGLTextureId(glTextureId);
-			mapping.setGLTextureId(glTextureId);
-			fallbackSolved = true;
-		  }
-		}
-	  }
-	  else
-	  {
-		if (mapping.getGLTextureId() != null)
-		{
-		  ILogger.instance().logInfo("break (point) on me 3\n");
-		}
-	  }
+      if (ancestor != _tile)
+      {
+        if (!fallbackSolved)
+        {
+          final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
+          if (glTextureId != null)
+          {
+            _texturesHandler.retainGLTextureId(glTextureId);
+            mapping.setGLTextureId(glTextureId);
+            fallbackSolved = true;
+          }
+        }
+      }
+      else
+      {
+        if (mapping != null)
+        {
+          if (mapping.getGLTextureId() != null)
+          {
+            ILogger.instance().logInfo("break (point) on me 3\n");
+          }
+        }
+      }
 
-	  mappings.add(mapping);
-	  ancestor = ancestor.getParent();
-	}
+      mappings.add(mapping);
+      ancestor = ancestor.getParent();
+    }
 
-	if (mappings.size() != _tile.getLevel() + 1)
-	{
-	  ILogger.instance().logInfo("pleae break (point) me\n");
-	}
+    if ((mappings != null) && (_tile != null))
+    {
+      if (mappings.size() != (_tile.getLevel() - _firstLevel + 1))
+      {
+        ILogger.instance().logInfo("pleae break (point) me\n");
+      }
+    }
 
-	return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
+    return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
   }
 
   public final LeveledTexturedMesh getMesh()
   {
-	return _mesh;
+    return _mesh;
   }
 
   public final void cleanMesh()
   {
-	if (_mesh != null)
-	{
-	  _mesh = null;
-	}
+    synchronized (this) {
+
+      if (_mesh != null)
+      {
+        _mesh = null;
+      }
+
+    }
   }
 
   public final void cleanTile()
   {
-	if (_tile != null)
-	{
-	  _tile = null;
-	}
+    if (_tile != null)
+    {
+      _tile = null;
+    }
   }
 
 }

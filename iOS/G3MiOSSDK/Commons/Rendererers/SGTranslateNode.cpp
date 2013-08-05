@@ -11,7 +11,7 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-void SGTranslateNode::prepareRender(const RenderContext* rc) {
+void SGTranslateNode::prepareRender(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
 
   gl->pushMatrix();
@@ -20,7 +20,7 @@ void SGTranslateNode::prepareRender(const RenderContext* rc) {
   SGNode::prepareRender(rc);
 }
 
-void SGTranslateNode::cleanUpRender(const RenderContext* rc) {
+void SGTranslateNode::cleanUpRender(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
   gl->popMatrix();
 

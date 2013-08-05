@@ -6,25 +6,23 @@ public abstract class EffectWithForce extends Effect
 
   protected EffectWithForce(double force, double friction)
   {
-	  _force = force;
-	  _friction = friction;
+     _force = force;
+     _friction = friction;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getForce() const
   protected final double getForce()
   {
-	return _force;
+    return _force;
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	_force *= _friction;
+    _force *= _friction;
   }
 
-  public boolean isDone(RenderContext rc, TimeInterval now)
+  public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-	return (IMathUtils.instance().abs(_force) < 1e-6);
+    return (IMathUtils.instance().abs(_force) < 1e-6);
   }
 
 }

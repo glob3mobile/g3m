@@ -60,12 +60,6 @@ public final class IntBuffer_WebGL
    }
 
 
-   //   IntBuffer_WebGL(final byte[] data) {
-   //      //      TODO needed??
-   //      throw new RuntimeException("IntBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
-   //   }
-
-
    @Override
    public int size() {
       return jsSize();
@@ -128,7 +122,6 @@ public final class IntBuffer_WebGL
    }
 
 
-   //TODO _CHANGED_TO_UINT16;
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
 		return new Uint16Array(data);
    }-*/;
@@ -147,6 +140,12 @@ public final class IntBuffer_WebGL
    private native int jsGet(int i) /*-{
 		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i];
    }-*/;
+
+
+   @Override
+   public String description() {
+      return "IntBuffer_WebGL(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
+   }
 
 
 }

@@ -11,14 +11,14 @@
 #include "Tile.hpp"
 
 
-bool LevelTileCondition::isAvailable(const RenderContext* rc,
+bool LevelTileCondition::isAvailable(const G3MRenderContext* rc,
                                      const Tile* tile) const {
   const int level = tile->getLevel();
   return ((level >= _minLevel) &&
           (level <= _maxLevel));
 }
 
-bool LevelTileCondition::isAvailable(const EventContext* ec,
+bool LevelTileCondition::isAvailable(const G3MEventContext* ec,
                                      const Tile* tile) const {
   const int level = tile->getLevel();
   return ((level >= _minLevel) &&

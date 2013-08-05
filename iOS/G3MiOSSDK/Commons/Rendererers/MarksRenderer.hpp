@@ -11,98 +11,86 @@
 
 #include <vector>
 #include "LeafRenderer.hpp"
-#include "Mark.hpp"
 
-class MarkTouchListener {
-public:
-  virtual ~MarkTouchListener() {
-    
-  }
-  
-  virtual bool touchedMark(Mark* mark) = 0;
-};
-
+class Mark;
+class Camera;
+class MarkTouchListener;
 
 class MarksRenderer : public LeafRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
-  
+
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
-  const Camera*                _lastCamera;
+  const G3MContext* _context;
+  const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private G3MContext _context;
+  private Camera     _lastCamera;
 #endif
-  
+
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
-  
+
+  long long _downloadPriority;
+
 public:
-  
-  MarksRenderer(bool readyWhenMarksReady) :
-  _readyWhenMarksReady(readyWhenMarksReady),
-  _initializationContext(NULL),
-  _lastCamera(NULL),
-  _markTouchListener(NULL),
-  _autoDeleteMarkTouchListener(false)
-  {
-  }
-  
+
+  MarksRenderer(bool readyWhenMarksReady);
+
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
-                            bool autoDelete) {
-    if ( _autoDeleteMarkTouchListener ) {
-      delete _markTouchListener;
-    }
-    
-    _markTouchListener = markTouchListener;
-    _autoDeleteMarkTouchListener = autoDelete;
-  }
-  
-  virtual ~MarksRenderer() {
-    int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
-      delete _marks[i];
-    }
-    
-    if ( _autoDeleteMarkTouchListener ) {
-      delete _markTouchListener;
-    }
-    _markTouchListener = NULL;
-  };
-  
-  virtual void initialize(const InitializationContext* ic);
-  
-  virtual void render(const RenderContext* rc);
-  
+                            bool autoDelete);
+
+  virtual ~MarksRenderer();
+
+  virtual void initialize(const G3MContext* context);
+
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState);
+
   void addMark(Mark* mark);
-  
-  bool onTouchEvent(const EventContext* ec,
+
+  void removeMark(Mark* mark);
+
+  void removeAllMarks();
+
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-    
   }
-  
-  bool isReadyToRender(const RenderContext* rc);
-  
-  void start() {
-    
+
+  bool isReadyToRender(const G3MRenderContext* rc);
+
+  void start(const G3MRenderContext* rc) {
   }
-  
-  void stop() {
-    
+
+  void stop(const G3MRenderContext* rc) {
   }
-  
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+
+  void onResume(const G3MContext* context) {
+    _context = context;
   }
-  
-  void onPause(const InitializationContext* ic) {
-    
+
+  void onPause(const G3MContext* context) {
+  }
+
+  void onDestroy(const G3MContext* context) {
+  }
+
+  /**
+   Change the download-priority used by Marks (for downloading textures).
+
+   Default value is 1000000
+   */
+  void setDownloadPriority(long long downloadPriority) {
+    _downloadPriority = downloadPriority;
+  }
+
+  long long getDownloadPriority() const {
+    return _downloadPriority;
   }
   
 };

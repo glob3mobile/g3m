@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.glob3.mobile.generated.IStringUtils;
 
@@ -25,8 +26,8 @@ public final class StringUtils_Android
 
 
    @Override
-   public ArrayList<String> splitLines(final String String) {
-      final String lines[] = String.split("\\r?\\n");
+   public ArrayList<String> splitLines(final String string) {
+      final String lines[] = string.split("\\r?\\n");
       final ArrayList<String> l = new ArrayList<String>();
       for (final java.lang.String line : lines) {
          l.add(line);
@@ -37,44 +38,65 @@ public final class StringUtils_Android
 
 
    @Override
-   public boolean beginsWith(final String String,
+   public boolean beginsWith(final String string,
                              final String prefix) {
-      return String.startsWith(prefix);
+      return string.startsWith(prefix);
    }
 
 
    @Override
-   public int indexOf(final String String,
+   public int indexOf(final String string,
                       final String search) {
-      return String.indexOf(search);
+      return string.indexOf(search);
    }
 
 
    @Override
-   public String substring(final String String,
+   public String substring(final String string,
                            final int beginIndex,
                            final int endIndex) {
-      return String.substring(beginIndex, endIndex);
+      return string.substring(beginIndex, endIndex);
    }
 
 
    @Override
-   public String rtrim(final String String) {
-      int index = String.length() - 1;
-      while ((index > 0) && (String.charAt(index) == ' ')) {
+   public String rtrim(final String string) {
+      int index = string.length() - 1;
+      while ((index > 0) && (string.charAt(index) == ' ')) {
          index--;
       }
-      return String.substring(0, index + 1);
+      return string.substring(0, index + 1);
    }
 
 
    @Override
-   public String ltrim(final String String) {
+   public String ltrim(final String string) {
       int index = 0;
-      while ((index < String.length()) && (String.charAt(index) == ' ')) {
+      final int stringLength = string.length();
+      while ((index < stringLength) && (string.charAt(index) == ' ')) {
          index++;
       }
-      return String.substring(index, String.length());
+      return string.substring(index, stringLength);
    }
+
+
+   @Override
+   public boolean endsWith(final String string,
+                           final String suffix) {
+      return string.endsWith(suffix);
+   }
+
+
+   @Override
+   public String toUpperCase(final String string) {
+      return string.toUpperCase(Locale.ENGLISH);
+   }
+
+
+   @Override
+   public long parseHexInt(final String str) {
+      return Long.parseLong(str, 16);
+   }
+
 
 }

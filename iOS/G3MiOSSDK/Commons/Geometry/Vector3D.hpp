@@ -39,7 +39,11 @@ public:
   }
   
   static Vector3D nan() {
-    return Vector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return Vector3D(mu->NanD(),
+                    mu->NanD(),
+                    mu->NanD());
   }
   
   static Vector3D zero() {
@@ -71,7 +75,11 @@ public:
   }
 
   bool isNan() const {
-    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return (mu->isNan(_x) ||
+            mu->isNan(_y) ||
+            mu->isNan(_z));
   }
   
   bool isZero() const {
@@ -81,7 +89,7 @@ public:
   Vector3D normalized() const;
   
   double length() const {
-    return GMath.sqrt(squaredLength());
+    return IMathUtils::instance()->sqrt(squaredLength());
   }
   
   double squaredLength() const {
@@ -97,13 +105,25 @@ public:
                     _y + v._y,
                     _z + v._z);
   }
-  
+
+  Vector3D add(double d) const {
+    return Vector3D(_x + d,
+                    _y + d,
+                    _z + d);
+  }
+
   Vector3D sub(const Vector3D& v) const {
     return Vector3D(_x - v._x,
                     _y - v._y,
                     _z - v._z);
   }
-  
+
+  Vector3D sub(double d) const {
+    return Vector3D(_x - d,
+                    _y - d,
+                    _z - d);
+  }
+
   Vector3D times(const Vector3D& v) const {
     return Vector3D(_x * v._x,
                     _y * v._y,
@@ -139,29 +159,38 @@ public:
   
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
-  
-  //  double x() const {
-  //    return _x;
-  //  }
-  //
-  //  double y() const {
-  //    return _y;
-  //  }
-  //
-  //  double z() const {
-  //    return _z;
-  //  }
-  
+
+  double x() const {
+    return _x;
+  }
+
+  double y() const {
+    return _y;
+  }
+
+  double z() const {
+    return _z;
+  }
+
   Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   
   MutableVector3D asMutableVector3D() const;
   
   double maxAxis() const;
   
+  double axisAverage() const;
+  
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;
-  
+
+  const Vector3D clamp(const Vector3D& min,
+                       const Vector3D& max) const;
+
+  const double squaredDistanceTo(const Vector3D& that) const;
+
+  const double distanceTo(const Vector3D& that) const;
+
 };
 
 

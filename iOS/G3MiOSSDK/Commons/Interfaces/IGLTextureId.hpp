@@ -11,7 +11,7 @@
 
 #include <string>
 
-class IGLTextureId{
+class IGLTextureId {
 public:
 
   virtual bool isEqualsTo(const IGLTextureId* that) const = 0;
@@ -19,7 +19,10 @@ public:
   virtual const std::string description() const = 0;
   
 #ifdef C_CODE
-  virtual ~IGLTextureId(){ }
+  virtual ~IGLTextureId() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
 #endif
 };
 

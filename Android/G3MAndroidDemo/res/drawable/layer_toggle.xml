@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="false"
+        android:drawable="@drawable/map_on_96x48" />
+    <item android:state_checked="true"
+        android:drawable="@drawable/satellite_on_96x48" />
+</selector>

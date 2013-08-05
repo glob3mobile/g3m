@@ -1,75 +1,108 @@
 package org.glob3.mobile.generated; 
-public class ImageSaverDownloadListener implements IImageDownloadListener
+public class ImageSaverDownloadListener extends IImageDownloadListener
 {
   private CachedDownloader _downloader;
+
+  private IImage _expiredImage;
+
   private IImageDownloadListener _listener;
   private final boolean _deleteListener;
 
-  public ImageSaverDownloadListener(CachedDownloader downloader, IImageDownloadListener listener, boolean deleteListener)
+  private IStorage _storage;
+
+  private final TimeInterval _timeToCache;
+
+  public ImageSaverDownloadListener(CachedDownloader downloader, IImage expiredImage, IImageDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
-	  _downloader = downloader;
-	  _listener = listener;
-	  _deleteListener = deleteListener;
+     _downloader = downloader;
+     _expiredImage = expiredImage;
+     _listener = listener;
+     _deleteListener = deleteListener;
+     _storage = storage;
+     _timeToCache = timeToCache;
 
   }
 
   public final void deleteListener()
   {
-	if (_deleteListener)
-	{
-	  _listener = null;
-	}
+    if (_deleteListener)
+    {
+      if (_listener != null)
+         _listener.dispose();
+      _listener = null;
+    }
+  }
+
+  public void dispose()
+  {
+    if (_expiredImage != null)
+       _expiredImage.dispose();
   }
 
   public final void saveImage(URL url, IImage image)
   {
-	if (image != null)
-	{
-	  if (IStorage.instance().isAvailable())
-	  {
-		//if (!_cacheStorage->containsImage(url)) {
-		_downloader.countSave();
+    if (!url.isFileProtocol())
+    {
+      if (image != null)
+      {
+        if (_storage.isAvailable())
+        {
+          _downloader.countSave();
 
-		IStorage.instance().saveImage(url, image, _downloader.saveInBackground());
-		//}
-	  }
-	  else
-	  {
-		ILogger.instance().logWarning("The cacheStorage is not available, skipping image save.");
-	  }
-	}
+          _storage.saveImage(url, image, _timeToCache, _downloader.saveInBackground());
+        }
+        else
+        {
+          ILogger.instance().logWarning("The cacheStorage is not available, skipping image save.");
+        }
+      }
+    }
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
-	saveImage(url, image);
+    if (!expired)
+    {
+      saveImage(url, image);
+    }
 
-	_listener.onDownload(url, image);
+    _listener.onDownload(url, image, expired);
 
-	deleteListener();
+    deleteListener();
   }
 
   public final void onError(URL url)
   {
-	_listener.onError(url);
+    if (_expiredImage == null)
+    {
+      _listener.onError(url);
+    }
+    else
+    {
+      _listener.onDownload(url, _expiredImage, true);
+      _expiredImage = null;
+    }
 
-	deleteListener();
+    deleteListener();
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
-	saveImage(url, image);
+    if (!expired)
+    {
+      saveImage(url, image);
+    }
 
-	_listener.onCanceledDownload(url, image);
+    _listener.onCanceledDownload(url, image, expired);
 
-	// no deleteListener() call, onCanceledDownload() is always called before onCancel().
+    // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
 
   public final void onCancel(URL url)
   {
-	_listener.onCancel(url);
+    _listener.onCancel(url);
 
-	deleteListener();
+    deleteListener();
   }
 
 }

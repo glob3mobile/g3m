@@ -12,6 +12,8 @@
 class FrustumData;
 class Vector3D;
 class Vector2D;
+class Vector3F;
+class Vector2F;
 class MutableVector3D;
 class IFloatBuffer;
 
@@ -179,6 +181,24 @@ public:
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
+  double get0() const { return _m00; }
+  double get1() const { return _m10; }
+  double get2() const { return _m20; }
+  double get3() const { return _m30; }
+  double get4() const { return _m01; }
+  double get5() const { return _m11; }
+  double get6() const { return _m21; }
+  double get7() const { return _m31; }
+  double get8() const { return _m02; }
+  double get9() const { return _m12; }
+  double get10() const { return _m22; }
+  double get11() const { return _m32; }
+  double get12() const { return _m03; }
+  double get13() const { return _m13; }
+  double get14() const { return _m23; }
+  double get15() const { return _m33; }
+  
+  /*
   //Returns values from 0..15 in column mayor order
   double get(int i) const {
     switch (i) {
@@ -218,17 +238,16 @@ public:
         ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
         return 0;
     }
-  }
+  }*/
 
   const IFloatBuffer* getColumnMajorFloatBuffer() const;
-
 
 #ifdef C_CODE
   float* getColumnMajorFloatArray() const {
 #else
-    float[] getColumnMajorFloatArray() const {
+  float[] getColumnMajorFloatArray() const {
 #endif
-      if (_columnMajorFloatArray == NULL){
+      if (_columnMajorFloatArray == NULL) {
         _columnMajorFloatArray = new float[16];
 
         _columnMajorFloatArray[ 0] = (float) _m00;
@@ -252,8 +271,8 @@ public:
         _columnMajorFloatArray[15] = (float) _m33;
       }
       return _columnMajorFloatArray;
-    }
-
+  }
+    
 
     void print(const std::string& name, const ILogger* log) const;
 
@@ -264,6 +283,12 @@ public:
                        const int vpHeight) const;
 
     Vector2D project(const Vector3D& point,
+                     const int vpLeft,
+                     const int vpTop,
+                     const int vpWidth,
+                     const int vpHeight) const;
+    
+    Vector2F project(const Vector3F& point,
                      const int vpLeft,
                      const int vpTop,
                      const int vpWidth,
@@ -313,11 +338,11 @@ public:
                                                          const Angle& longitude);
 
     static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
     static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
-      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+      return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
     }
 
   };

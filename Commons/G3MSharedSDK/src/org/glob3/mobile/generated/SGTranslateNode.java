@@ -19,50 +19,41 @@ package org.glob3.mobile.generated;
 
 public class SGTranslateNode extends SGNode
 {
-  private double _x;
-  private double _y;
-  private double _z;
+  private final double _x;
+  private final double _y;
+  private final double _z;
 
-  protected final void prepareRender(RenderContext rc)
+
+  public SGTranslateNode(String id, String sId, double x, double y, double z)
   {
-	GL gl = rc.getGL();
+     super(id, sId);
+     _x = x;
+     _y = y;
+     _z = z;
+
+  }
+
+  public final void prepareRender(G3MRenderContext rc)
+  {
+    GL gl = rc.getGL();
   
-	gl.pushMatrix();
-	gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
+    gl.pushMatrix();
+    gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
   
-	super.prepareRender(rc);
+    super.prepareRender(rc);
   }
 
-  protected final void cleanUpRender(RenderContext rc)
+  public final void cleanUpRender(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
-	gl.popMatrix();
+    GL gl = rc.getGL();
+    gl.popMatrix();
   
-	super.cleanUpRender(rc);
+    super.cleanUpRender(rc);
   }
 
-
-  public SGTranslateNode()
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	  _x = 0;
-	  _y = 0;
-	  _z = 0;
-
-  }
-
-  public final void setX(double x)
-  {
-	_x = x;
-  }
-
-  public final void setY(double y)
-  {
-	_y = y;
-  }
-
-  public final void setZ(double z)
-  {
-	_z = z;
+    return null;
   }
 
 }

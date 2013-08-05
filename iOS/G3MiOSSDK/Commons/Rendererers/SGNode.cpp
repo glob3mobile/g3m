@@ -8,6 +8,8 @@
 
 #include "SGNode.hpp"
 
+#include "GLState.hpp"
+
 SGNode::~SGNode() {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
@@ -17,29 +19,31 @@ SGNode::~SGNode() {
 }
 
 
-void SGNode::initialize(const InitializationContext* ic) {
-  _initializationContext = ic;
+void SGNode::initialize(const G3MContext* context,
+                        SGShape *shape) {
+  _context = context;
+  _shape = shape;
 
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->initialize(ic);
+    child->initialize(context, shape);
   }
 }
 
 void SGNode::addNode(SGNode* child) {
-  child->setParent(this);
+//  child->setParent(this);
   _children.push_back(child);
-  if (_initializationContext != NULL) {
-    child->initialize(_initializationContext);
+  if (_context != NULL) {
+    child->initialize(_context, _shape);
   }
 }
 
-void SGNode::setParent(SGNode* parent) {
-  _parent = parent;
-}
+//void SGNode::setParent(SGNode* parent) {
+//  _parent = parent;
+//}
 
-bool SGNode::isReadyToRender(const RenderContext* rc) {
+bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
@@ -51,28 +55,48 @@ bool SGNode::isReadyToRender(const RenderContext* rc) {
   return true;
 }
 
-void SGNode::prepareRender(const RenderContext* rc) {
+void SGNode::prepareRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::cleanUpRender(const RenderContext* rc) {
+void SGNode::cleanUpRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::rawRender(const RenderContext* rc) {
+void SGNode::rawRender(const G3MRenderContext* rc,
+                       const GLState& parentState) {
 
 }
 
-void SGNode::render(const RenderContext* rc) {
+const GLState* SGNode::createState(const G3MRenderContext* rc,
+                                   const GLState& parentState) {
+  return  NULL;
+}
+
+
+void SGNode::render(const G3MRenderContext* rc,
+                    const GLState& parentState,
+                    bool renderNotReadyShapes) {
+  const GLState* myState = createState(rc, parentState);
+  const GLState* state;
+  if (myState == NULL) {
+    state = &parentState;
+  }
+  else {
+    state = myState;
+  }
+
   prepareRender(rc);
 
-  rawRender(rc);
+  rawRender(rc, *state);
 
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->render(rc);
+    child->render(rc, *state, renderNotReadyShapes);
   }
 
   cleanUpRender(rc);
+  
+  delete myState;
 }

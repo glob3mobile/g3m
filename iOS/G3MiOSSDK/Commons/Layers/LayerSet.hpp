@@ -13,16 +13,18 @@
 #include "Layer.hpp"
 
 class Petition;
-
+class Vector2I;
+class LayerTilesRenderParameters;
 
 class LayerSetChangedListener {
 public:
 #ifdef C_CODE
-  virtual ~LayerSetChangedListener() {
-
-  }
+  virtual ~LayerSetChangedListener() { }
 #endif
-
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
+  
   virtual void changed(const LayerSet* layerSet) = 0;
 };
 
@@ -30,49 +32,69 @@ public:
 class LayerSet {
 private:
   std::vector<Layer*> _layers;
-
+  
   LayerSetChangedListener* _listener;
   
+  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+  
+  
+  LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
+  void layersChanged() const;
+
+#ifdef C_CODE
+  mutable const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
 public:
   LayerSet() :
-  _listener(NULL)
+  _listener(NULL),
+  _layerTilesRenderParameters(NULL),
+  _context(NULL)
   {
-
+    
   }
-
-  ~LayerSet() {
-    for (unsigned int i = 0; i < _layers.size(); i++) {
-      delete _layers[i];
-    }
-  }
+  
+  ~LayerSet();
+  
+  void removeAllLayers(const bool deleteLayers);
   
   void addLayer(Layer* layer);
   
-  std::vector<Petition*> createTileMapPetitions(const RenderContext* rc,
-                                                const Tile* tile,
-                                                int width, int height) const;
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const Tile* tile) const;
   
-  void onTerrainTouchEvent(const EventContext* ec,
+  bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
   bool isReady() const;
   
-  void initialize(const InitializationContext* ic)const;
+  void initialize(const G3MContext* context)const;
   
   int size() const {
     return _layers.size();
   }
-
+  
   void layerChanged(const Layer* layer) const;
-
+  
   void setChangeListener(LayerSetChangedListener* listener) {
     if (_listener != NULL) {
       ILogger::instance()->logError("Listener already set");
     }
     _listener = listener;
   }
-
+  
+  Layer* get(int index);
+  
+  Layer* getLayer(const std::string& name);
+  
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
+  
+  //  const Angle calculateSplitLatitude(const Tile* tile) const;
+  
 };
 
 #endif

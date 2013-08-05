@@ -10,8 +10,7 @@ package org.glob3.mobile.generated;
 
 public interface IGLUniformID
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isValid() const = 0;
   boolean isValid();
 
+  public void dispose();
 }

@@ -9,7 +9,10 @@
 #include "JSONArray.hpp"
 #include "JSONBaseObject.hpp"
 #include "IStringBuilder.hpp"
-
+#include "JSONBoolean.hpp"
+#include "JSONNumber.hpp"
+#include "JSONString.hpp"
+#include "JSONVisitor.hpp"
 
 JSONArray::~JSONArray() {
   for (int i = 0; i < _entries.size(); i++) {
@@ -18,7 +21,7 @@ JSONArray::~JSONArray() {
   _entries.clear();
 }
 
-JSONBaseObject* JSONArray::get(const int index) const {
+const JSONBaseObject* JSONArray::get(const int index) const {
   return _entries[index];
 }
 
@@ -30,28 +33,28 @@ int JSONArray::size() const {
   return _entries.size();
 }
 
-JSONObject* JSONArray::getAsObject(const int index) const {
-  JSONBaseObject* object = get(index);
+const JSONObject* JSONArray::getAsObject(const int index) const {
+  const JSONBaseObject* object = get(index);
   return (object == NULL) ? NULL : object->asObject();
 }
 
-JSONArray* JSONArray::getAsArray(const int index) const {
-  JSONBaseObject* object = get(index);
+const JSONArray* JSONArray::getAsArray(const int index) const {
+  const JSONBaseObject* object = get(index);
   return (object == NULL) ? NULL : object->asArray();
 }
 
-JSONBoolean* JSONArray::getAsBoolean(const int index) const {
-  JSONBaseObject* object = get(index);
+const JSONBoolean* JSONArray::getAsBoolean(const int index) const {
+  const JSONBaseObject* object = get(index);
   return (object == NULL) ? NULL : object->asBoolean();
 }
 
-JSONNumber* JSONArray::getAsNumber(const int index) const {
-  JSONBaseObject* object = get(index);
+const JSONNumber* JSONArray::getAsNumber(const int index) const {
+  const JSONBaseObject* object = get(index);
   return (object == NULL) ? NULL : object->asNumber();
 }
 
-JSONString* JSONArray::getAsString(const int index) const {
-  JSONBaseObject* object = get(index);
+const JSONString* JSONArray::getAsString(const int index) const {
+  const JSONBaseObject* object = get(index);
   return (object == NULL) ? NULL : object->asString();
 }
 
@@ -61,8 +64,8 @@ const std::string JSONArray::description() const {
   int size = this->size();
 
   isb->addString("[");
-//  isb->addString("[size=");
-//  isb->addInt(size);
+  //  isb->addString("[size=");
+  //  isb->addInt(size);
 
   if (size > 0) {
     //isb->addString(" ");
@@ -92,4 +95,48 @@ const std::string JSONArray::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+JSONArray* JSONArray::deepCopy() const {
+  JSONArray* result = new JSONArray();
+
+  const int size = this->size();
+  for (int i = 0; i < size; i++) {
+    result->add( JSONBaseObject::deepCopy( get(i) ) );
+  }
+
+  return result;
+}
+
+bool JSONArray::getAsBoolean(const int index,
+                             bool defaultValue) const {
+  const JSONBoolean* jsBool = getAsBoolean(index);
+  return (jsBool == NULL) ? defaultValue : jsBool->value();
+}
+
+double JSONArray::getAsNumber(const int index,
+                              double defaultValue) const {
+  const JSONNumber* jsNumber = getAsNumber(index);
+  return (jsNumber == NULL) ? defaultValue : jsNumber->value();
+}
+
+const std::string JSONArray::getAsString(const int index,
+                                         const std::string& defaultValue) const {
+  const JSONString* jsString = getAsString(index);
+  return (jsString == NULL) ? defaultValue : jsString->value();
+}
+
+void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
+  visitor->visitArrayBeforeChildren(this);
+
+  const int size = this->size();
+  for (int i = 0; i < size; i++) {
+    if (i != 0) {
+      visitor->visitArrayInBetweenChildren(this);
+    }
+    visitor->visitArrayBeforeChild(this, i);
+    get(i)->acceptVisitor(visitor);
+  }
+
+  visitor->visitArrayAfterChildren(this);
 }

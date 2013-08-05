@@ -17,42 +17,50 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
-//#define JSONParser IJSONParser.instance()
-
 public abstract class IJSONParser
 {
-
   private static IJSONParser _instance = null;
 
 
   public static void setInstance(IJSONParser parser)
   {
-	if (_instance != null)
-	{
-	  ILogger.instance().logWarning("Warning, IJSONParser instance set two times\n");
-	}
-	_instance = parser;
+    if (_instance != null)
+    {
+      ILogger.instance().logWarning("IJSONParser instance already set!");
+      if (_instance != null)
+         _instance.dispose();
+    }
+    _instance = parser;
   }
 
   public static IJSONParser instance()
   {
-	return _instance;
+    return _instance;
   }
-
 
   public void dispose()
   {
   }
 
-  public abstract JSONBaseObject parse(String json);
+  public JSONBaseObject parse(String json)
+  {
+    return parse(json, false);
+  }
 
-  public abstract JSONBaseObject parse(IByteBuffer buffer);
+  public abstract JSONBaseObject parse(String json, boolean nullAsObject);
+
+
+  public JSONBaseObject parse(IByteBuffer buffer)
+  {
+    return parse(buffer, false);
+  }
+
+  public abstract JSONBaseObject parse(IByteBuffer buffer, boolean nullAsObject);
 
   public void deleteJSONData(JSONBaseObject object)
   {
-	if (object != null)
-		object.dispose();
+    if (object != null)
+       object.dispose();
   }
 
 }

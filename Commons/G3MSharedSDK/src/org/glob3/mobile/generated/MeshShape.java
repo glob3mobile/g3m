@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  MeshShape.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 11/5/12.
+//  Created by Diego Gomez Deck on 1/30/13.
 //
 //
 
@@ -11,69 +11,23 @@ package org.glob3.mobile.generated;
 //  MeshShape.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 11/5/12.
+//  Created by Diego Gomez Deck on 1/30/13.
 //
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Mesh;
 
-public abstract class MeshShape extends Shape
+public class MeshShape extends AbstractMeshShape
 {
-  private Mesh _mesh;
-
-  protected abstract Mesh createMesh(RenderContext rc);
-
-  protected final Mesh getMesh(RenderContext rc)
+  protected final Mesh createMesh(G3MRenderContext rc)
   {
-	if (_mesh == null)
-	{
-	  _mesh = createMesh(rc);
-	}
-	return _mesh;
+    return null;
   }
 
-  protected final void cleanMesh()
+  public MeshShape(Geodetic3D position, Mesh mesh)
   {
-	if (_mesh != null)
-		_mesh.dispose();
-	_mesh = null;
-  }
+     super(position, mesh);
 
-  public MeshShape(Geodetic3D position)
-  {
-	  super(position);
-	  _mesh = null;
-
-  }
-
-//  MeshShape(Geodetic3D* position,
-//            Mesh* mesh) :
-//  Shape(position),
-//  _mesh(mesh) {
-//
-//  }
-
-  public final boolean isReadyToRender(RenderContext rc)
-  {
-	final Mesh mesh = getMesh(rc);
-	return (mesh != null);
-  }
-
-  public final void rawRender(RenderContext rc)
-  {
-	final Mesh mesh = getMesh(rc);
-	if (mesh != null)
-	{
-	  mesh.render(rc);
-	}
-  }
-
-  public void dispose()
-  {
-	if (_mesh != null)
-		_mesh.dispose();
   }
 
 }

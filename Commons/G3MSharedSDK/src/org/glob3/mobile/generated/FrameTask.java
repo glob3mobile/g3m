@@ -18,8 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
+//class G3MRenderContext;
 
 
 public abstract class FrameTask
@@ -29,8 +28,8 @@ public abstract class FrameTask
 
   }
 
-  public abstract boolean isCanceled(RenderContext rc);
+  public abstract boolean isCanceled(G3MRenderContext rc);
 
-  public abstract void execute(RenderContext rc);
+  public abstract void execute(G3MRenderContext rc);
 
 }

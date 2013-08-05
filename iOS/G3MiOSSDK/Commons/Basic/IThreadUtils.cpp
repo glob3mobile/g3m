@@ -8,7 +8,6 @@
 
 #include "IThreadUtils.hpp"
 
-#include <cstring>
-
-IThreadUtils* IThreadUtils::_instance = NULL;
-
+void IThreadUtils::initialize(const G3MContext* context) {
+  _context = context;
+}

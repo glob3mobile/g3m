@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleTapHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleTapHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -26,42 +26,48 @@ public class DoubleTapEffect extends EffectWithDuration
 
   public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance)
   {
-	  super(duration);
-	  _axis = new Vector3D(axis);
-	  _angle = new Angle(angle);
-	  _distance = distance;
+     this(duration, axis, angle, distance, false);
+  }
+  public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance, boolean linearTiming)
+  {
+     super(duration, linearTiming);
+     _axis = new Vector3D(axis);
+     _angle = new Angle(angle);
+     _distance = distance;
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval when)
   {
-	super.start(rc, now);
-	_lastPercent = 0;
+    super.start(rc, when);
+    _lastAlpha = 0;
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	//const double percent = gently(percentDone(now), 0.2, 0.9);
-	//const double percent = pace( percentDone(now) );
-	final double percent = percentDone(now);
-	Camera camera = rc.getNextCamera();
-	final double step = percent - _lastPercent;
-	camera.rotateWithAxis(_axis, _angle.times(step));
-	camera.moveForward(_distance *step);
-	_lastPercent = percent;
+    final double alpha = getAlpha(when);
+    Camera camera = rc.getNextCamera();
+    final double step = alpha - _lastAlpha;
+    camera.rotateWithAxis(_axis, _angle.times(step));
+    camera.moveForward(_distance * step);
+    _lastAlpha = alpha;
   }
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval when)
   {
-	super.stop(rc, now);
+    Camera camera = rc.getNextCamera();
+
+    final double step = 1.0 - _lastAlpha;
+    camera.rotateWithAxis(_axis, _angle.times(step));
+    camera.moveForward(_distance * step);
   }
 
-  public void cancel(TimeInterval now)
+  public void cancel(TimeInterval when)
   {
-	// do nothing, just leave the effect in the intermediate state
+    // do nothing, just leave the effect in the intermediate state
   }
 
   private Vector3D _axis ;
   private Angle _angle ;
   private double _distance;
-  private double _lastPercent;
+  private double _lastAlpha;
 }

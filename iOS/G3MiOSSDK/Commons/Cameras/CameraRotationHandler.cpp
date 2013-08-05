@@ -2,7 +2,7 @@
 //  CameraRotationHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 
 
 
-bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent, 
                                          CameraContext *cameraContext) 
 {
@@ -37,7 +37,7 @@ bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onDown(const EventContext *eventContext,
+void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {  
@@ -50,12 +50,12 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2I pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  _initialPixel = MutableVector2I(averagePixel._x, averagePixel._y);
-  lastYValid = _initialPixel.y();
+  _pivotPixel = MutableVector2I(averagePixel._x, averagePixel._y);
+  //_lastYValid = _initialPixel.y();
   
   // compute center of view
-  _initialPoint = camera->getXYZCenterOfView().asMutableVector3D();
-  if (_initialPoint.isNan()) {
+  _pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
+  if (_pivotPoint.isNan()) {
     ILogger::instance()->logError("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);
   }
@@ -64,10 +64,11 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onMove(const EventContext *eventContext,
+void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
-                                   CameraContext *cameraContext) 
-{
+                                   CameraContext *cameraContext) {
+  const IMathUtils* mu = IMathUtils::instance();
+
   //_currentGesture = getGesture(touchEvent);
   if (cameraContext->getCurrentGesture() != Rotate) return;
   
@@ -78,21 +79,21 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   const Vector2I cm = c0.add(c1).add(c2).div(3);
   
   // compute normal to Initial point
-  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint );
+  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_pivotPoint );
   
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm._x)*0.25);
-  camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
+  Angle angle_v             = Angle::fromDegrees((_pivotPixel.x()-cm._x)*0.25);
+  camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
   Vector3D view = camera->getViewDirection();
   double dot = normal.normalized().dot(view.normalized().times(-1));
-  double initialAngle = GMath.acos(dot) / GMath.pi() * 180;
+  double initialAngle = mu->acos(dot) / mu->pi() * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
-  double delta = (cm._y - _initialPixel.y()) * 0.25;
+  double delta = (cm._y - _pivotPixel.y()) * 0.25;
   double finalAngle = initialAngle + delta;
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
@@ -102,7 +103,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   
   // horizontal rotation over the original camera horizontal axix
   Vector3D u = camera->getHorizontalVector();
-  tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle::fromDegrees(delta));
+  tempCamera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle::fromDegrees(delta));
   
   // update camera only if new view intersects globe
   //tempCamera.updateModelMatrix();
@@ -112,22 +113,22 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onUp(const EventContext *eventContext,
+void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  const TouchEvent& touchEvent, 
                                  CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-  _initialPixel = MutableVector2I::zero();
+  _pivotPixel = MutableVector2I::zero();
 }
 
 
-void CameraRotationHandler::render(const RenderContext* rc,
+void CameraRotationHandler::render(const G3MRenderContext* rc,
                                    CameraContext *cameraContext)
 {
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {
 //    if (cameraContext->getCurrentGesture() == Rotate) {
-//      GL *gl = rc->getGL();
+//      GL* gl = rc->getGL();
 //      float vertices[] = { 0,0,0};
 //      int indices[] = {0};
 //      gl->enableVerticesPosition();
@@ -142,7 +143,7 @@ void CameraRotationHandler::render(const RenderContext* rc,
 //      gl->drawPoints(1, indices);
 //      gl->popMatrix();
 //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+//      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
 //    }
 //  }
 }

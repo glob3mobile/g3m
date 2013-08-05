@@ -12,28 +12,28 @@
 #include "SGNode.hpp"
 
 class IFloatBuffer;
-class IIntBuffer;
+class IShortBuffer;
 
 class SGGeometryNode : public SGNode {
 private:
-  int           _primitive;
+  const int     _primitive;
   IFloatBuffer* _vertices;
   IFloatBuffer* _colors;
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
-  IIntBuffer*   _indices;
-
-protected:
-  void rawRender(const RenderContext* rc);
+  IShortBuffer* _indices;
 
 public:
 
-  SGGeometryNode(int           primitive,
-                 IFloatBuffer* vertices,
-                 IFloatBuffer* colors,
-                 IFloatBuffer* uv,
-                 IFloatBuffer* normals,
-                 IIntBuffer*   indices) :
+  SGGeometryNode(const std::string& id,
+                 const std::string& sId,
+                 int                primitive,
+                 IFloatBuffer*      vertices,
+                 IFloatBuffer*      colors,
+                 IFloatBuffer*      uv,
+                 IFloatBuffer*      normals,
+                 IShortBuffer*      indices) :
+  SGNode(id, sId),
   _primitive(primitive),
   _vertices(vertices),
   _colors(colors),
@@ -44,6 +44,17 @@ public:
 
   }
 
+  ~SGGeometryNode();
+
+
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState& parentState);
+
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState) {
+    return NULL;
+  }
+  
 };
 
 #endif

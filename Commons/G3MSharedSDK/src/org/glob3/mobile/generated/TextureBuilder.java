@@ -9,21 +9,19 @@ package org.glob3.mobile.generated;
 
 
 
+//class IImage;
+//class IFactory;
+//class RectangleI;
+//class IImageListener;
+//class RectangleF;
+//class Vector2I;
+
 public abstract class TextureBuilder
 {
+  public abstract void createTextureFromImages(Vector2I textureExtent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> srcRectangles, java.util.ArrayList<RectangleF> destRectangles, IImageListener listener, boolean autodelete);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const IImage* createTextureFromImage(GL * gl, const IFactory* factory, const IImage* image, int width, int height) const = 0;
-  public abstract IImage createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const IImage* createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, int width, int height) const = 0;
-  public abstract IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, int width, int height);
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const IImage* createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const RectangleD*> rectangles, int width, int height) const = 0;
-  public abstract IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleD> rectangles, int width, int height);
   public void dispose()
   {
   }
+
 }

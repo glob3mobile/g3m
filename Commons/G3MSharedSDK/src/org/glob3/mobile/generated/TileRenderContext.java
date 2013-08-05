@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  TileRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,144 +11,110 @@ package org.glob3.mobile.generated;
 //  TileRenderer.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTexturizer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
+//class VisibleSectorListenerEntry;
+//class VisibleSectorListener;
+//class ElevationDataProvider;
+//class LayerTilesRenderParameters;
 
 
-
-
-//class TileCacheEntry {
-//public:
-//  Tile* _tile;
-//  long  _timestamp;
-//
-//  TileCacheEntry(Tile* tile,
-//                 long  timestamp) :
-//  _tile(tile),
-//  _timestamp(timestamp)
-//  {
-//
-//  }
-//
-//  ~TileCacheEntry() {
-//    if (_tile != NULL) {
-//      delete _tile;
-//    }
-//  }
-//};
-//
-//class TileRenderer;
-//
-//class TilesCache {
-//private:
-//  TileRenderer*                _tileRenderer;
-//  const int                    _maxElements;
-//  std::vector<TileCacheEntry*> _entries;
-//
-//  long _tsCounter;
-//
-//public:
-//  TilesCache(TileRenderer* tileRenderer, int maxElements) :
-//  _tileRenderer(tileRenderer),
-//  _maxElements(maxElements),
-//  _tsCounter(0)
-//  {
-//
-//  }
-//
-//  Tile* getTile(const int level,
-//                const int row, const int column);
-//
-//  void putTile(Tile* tile);
-//
-//};
-
+//class EllipsoidShape;
 
 public class TileRenderContext
 {
   private final TileTessellator _tessellator;
+  private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
+
   private final TilesRenderParameters _parameters;
   private TilesStatistics _statistics;
-
   private final LayerSet _layerSet;
 
   private final boolean _isForcedFullRender;
 
+  private final float _verticalExaggeration;
+
+
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
+  private long _texturePriority;
+
+  public TileRenderContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
   {
-	  _tessellator = tessellator;
-	  _texturizer = texturizer;
-	  _layerSet = layerSet;
-	  _parameters = parameters;
-	  _statistics = statistics;
-	  _lastSplitTimer = lastSplitTimer;
-	  _isForcedFullRender = isForcedFullRender;
+     _tessellator = tessellator;
+     _elevationDataProvider = elevationDataProvider;
+     _texturizer = texturizer;
+     _layerSet = layerSet;
+     _parameters = parameters;
+     _statistics = statistics;
+     _lastSplitTimer = lastSplitTimer;
+     _isForcedFullRender = isForcedFullRender;
+     _texturePriority = texturePriority;
+     _verticalExaggeration = verticalExaggeration;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const LayerSet* getLayerSet() const
+  public final float getVerticalExaggeration()
+  {
+    return _verticalExaggeration;
+  }
+
   public final LayerSet getLayerSet()
   {
-	return _layerSet;
+    return _layerSet;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const TileTessellator* getTessellator() const
   public final TileTessellator getTessellator()
   {
-	return _tessellator;
+    return _tessellator;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TileTexturizer* getTexturizer() const
+  public final ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
+  }
+
   public final TileTexturizer getTexturizer()
   {
-	return _texturizer;
+    return _texturizer;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const TilesRenderParameters* getParameters() const
   public final TilesRenderParameters getParameters()
   {
-	return _parameters;
+    return _parameters;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TilesStatistics* getStatistics() const
   public final TilesStatistics getStatistics()
   {
-	return _statistics;
+    return _statistics;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: ITimer* getLastSplitTimer() const
   public final ITimer getLastSplitTimer()
   {
-	return _lastSplitTimer;
+    return _lastSplitTimer;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isForcedFullRender() const
   public final boolean isForcedFullRender()
   {
-	return _isForcedFullRender;
+    return _isForcedFullRender;
+  }
+
+  public final long getTexturePriority()
+  {
+    return _texturePriority;
+  }
+
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    return _layerSet.getLayerTilesRenderParameters();
   }
 
 }

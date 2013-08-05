@@ -61,4 +61,10 @@ public final class IntBuffer_Android
       return _buffer;
    }
 
+
+   @Override
+   public String description() {
+      return "IntBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
+   }
+
 }

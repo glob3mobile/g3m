@@ -35,9 +35,11 @@ public:
 
   void addShape(Shape* shape);
 
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
-  void rawRender(const RenderContext* rc);
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState& parentState,
+                 bool renderNotReadyShapes);
 
 };
 

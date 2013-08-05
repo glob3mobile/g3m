@@ -2,10 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IByteBufferResult;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageResult;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.InitializationContext;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -24,37 +27,31 @@ public final class IndexedDBStorage_WebGL
 
 
    @Override
-   public boolean containsBuffer(final URL url) {
-      return false;
-   }
-
-
-   @Override
-   public IByteBuffer readBuffer(final URL url) {
-      // TODO Auto-generated method stub
+   public IByteBufferResult readBuffer(final URL url,
+                                       final boolean readExpired) {
       return null;
    }
 
 
    @Override
-   public boolean containsImage(final URL url) {
-      return false;
-   }
-
-
-   @Override
-   public IImage readImage(final URL url) {
+   public IImageResult readImage(final URL url,
+                                 final boolean readExpired) {
       return null;
    }
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
+   public void onResume(final G3MContext context) {
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public void onPause(final G3MContext context) {
+   }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
    }
 
 
@@ -116,6 +113,7 @@ public final class IndexedDBStorage_WebGL
    @Override
    public void saveBuffer(final URL url,
                           final IByteBuffer buffer,
+                          final TimeInterval timeToExpires,
                           final boolean saveInBackground) {
    }
 
@@ -123,7 +121,9 @@ public final class IndexedDBStorage_WebGL
    @Override
    public void saveImage(final URL url,
                          final IImage image,
+                         final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
    }
+
 
 }

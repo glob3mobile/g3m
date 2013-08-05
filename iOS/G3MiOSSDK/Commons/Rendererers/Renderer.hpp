@@ -10,9 +10,10 @@
 #define G3MiOSSDK_IRenderer_h
 
 class TouchEvent;
-class InitializationContext;
-class RenderContext;
-class EventContext;
+class G3MContext;
+class G3MRenderContext;
+class G3MEventContext;
+class GLState;
 
 class Renderer {
 public:
@@ -20,32 +21,47 @@ public:
   
   virtual void setEnable(bool enable) = 0;
   
-  virtual void onResume(const InitializationContext* ic) = 0;
   
-  virtual void onPause(const InitializationContext* ic) = 0;
+  virtual void initialize(const G3MContext* context) = 0;
   
-  virtual void initialize(const InitializationContext* ic) = 0;
+  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual bool isReadyToRender(const RenderContext* rc) = 0;
-  
-  virtual void render(const RenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState) = 0;
 
   /*
    Gives to Renderer the opportunity to process touch, events.
    
    The Renderer answer true if the event was processed.
    */
-  virtual bool onTouchEvent(const EventContext* ec,
+  virtual bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent) = 0;
   
-  virtual void onResizeViewportEvent(const EventContext* ec,
+  virtual void onResizeViewportEvent(const G3MEventContext* ec,
                                      int width, int height) = 0;
   
-  virtual void start() = 0;
+  virtual void start(const G3MRenderContext* rc) = 0;
   
-  virtual void stop() = 0;
+  virtual void stop(const G3MRenderContext* rc) = 0;
   
   virtual ~Renderer() { };
+
+  // Android activity lifecyle
+  virtual void onResume(const G3MContext* context) = 0;
+
+  virtual void onPause(const G3MContext* context) = 0;
+
+  virtual void onDestroy(const G3MContext* context) = 0;
+  
+  /**
+   * Allows us to know if the renderer is a TileRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of TileRenderer.
+   * Default value: FALSE
+   */
+  virtual bool isTileRenderer() {
+    return false;
+  }
+
 };
 
 

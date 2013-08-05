@@ -10,39 +10,56 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
-
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
+class Sector;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  
-  const unsigned int _resolution;
   const bool         _skirted;
-  
+
+  Vector2I calculateResolution(const Vector2I& resolution,
+                               const Sector& sector) const;
+
 public:
-  Mesh* createDebugMesh(const RenderContext* rc,
-                        const Tile* tile) const;
-  
-  EllipsoidalTileTessellator(const unsigned int resolution,
-                             const bool skirted) :
-  _resolution(resolution),
+
+  EllipsoidalTileTessellator(const bool skirted) :
   _skirted(skirted)
   {
-//    int __TODO_width_and_height_resolutions;
+
   }
-  
+
   virtual ~EllipsoidalTileTessellator() { }
-  
-  Mesh* createMesh(const RenderContext* rc,
-                   const Tile* tile) const;
-  
-  bool isReady(const RenderContext *rc) const {
+
+  Vector2I getTileMeshResolution(const Planet* planet,
+                                 const Vector2I& resolution,
+                                 const Tile* tile,
+                                 bool debug) const;
+
+
+  Mesh* createTileMesh(const Planet* planet,
+                       const Vector2I& resolution,
+                       const Tile* tile,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
+                       bool mercator,
+                       bool debug) const;
+
+  Mesh* createTileDebugMesh(const Planet* planet,
+                            const Vector2I& resolution,
+                            const Tile* tile) const;
+
+  bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
-  
-  IFloatBuffer* createUnitTextCoords() const;
-  
+
+  IFloatBuffer* createTextCoords(const Vector2I& resolution,
+                                 const Tile* tile,
+                                 bool mercator) const;
+
+  const Vector2D getTextCoord(const Tile* tile,
+                              const Angle& latitude,
+                              const Angle& longitude,
+                              bool mercator) const;
+
 };
 
 #endif

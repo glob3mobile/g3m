@@ -2,7 +2,7 @@
 //  NullStorage.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 29/06/12.
+//  Created by Agustin Trujillo Pino on 29/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,31 +13,46 @@
 
 class NullStorage: public IStorage {
 public:
-  bool containsBuffer(const URL& url) {
-    return false;
+  IByteBufferResult readBuffer(const URL& url,
+                               bool readExpired) {
+    return IByteBufferResult(NULL, false);
   }
-  
+
+  IImageResult readImage(const URL& url,
+                         bool readExpired) {
+    return IImageResult(NULL, false);
+  }
+
+
   void saveBuffer(const URL& url,
-                  const IByteBuffer& buffer) {
-    
+                  const IByteBuffer* buffer,
+                  const TimeInterval& timeToExpires,
+                  bool saveInBackground) {
+
   }
-  
-  const IByteBuffer* readBuffer(const URL& url) {
-    return NULL;
+
+  void saveImage(const URL& url,
+                 const IImage* image,
+                 const TimeInterval& timeToExpires,
+                 bool saveInBackground) {
+
   }
-  
-  bool containsImage(const URL& url) {
+
+
+  void onResume(const G3MContext* context) {
+  }
+
+  void onPause(const G3MContext* context) {
+  }
+
+  void onDestroy(const G3MContext* context) {
+  }
+
+
+  bool isAvailable() {
     return false;
   }
   
-  void saveImage(const URL& url,
-                 const IImage& buffer) {
-    
-  }
-  
-  const IImage* readImage(const URL& url) {
-    return NULL;
-  }
   
 };
 

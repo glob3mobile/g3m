@@ -10,10 +10,10 @@
 #define G3MiOSSDK_TileTexturizer_hpp
 
 class Mesh;
-class RenderContext;
+class G3MRenderContext;
 class Tile;
 class TileTessellator;
-class InitializationContext;
+class G3MContext;
 class TilesRenderParameters;
 class TileRenderContext;
 class Geodetic3D;
@@ -26,13 +26,13 @@ public:
   virtual ~TileTexturizer() {
   }
   
-  virtual bool isReady(const RenderContext *rc,
+  virtual bool isReady(const G3MRenderContext *rc,
                        LayerSet* layerSet) = 0;
   
-  virtual void initialize(const InitializationContext* ic,
+  virtual void initialize(const G3MContext* context,
                           const TilesRenderParameters* parameters) = 0;
   
-  virtual Mesh* texturize(const RenderContext* rc,
+  virtual Mesh* texturize(const G3MRenderContext* rc,
                           const TileRenderContext* trc,
                           Tile* tile,
                           Mesh* tessellatorMesh,
@@ -46,7 +46,7 @@ public:
   
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
-  virtual void justCreatedTopTile(const RenderContext* rc,
+  virtual void justCreatedTopTile(const G3MRenderContext* rc,
                                   Tile* tile,
                                   LayerSet* layerSet) = 0;
   
@@ -54,7 +54,7 @@ public:
                                              Tile* ancestorTile,
                                              bool textureSolved) = 0;
   
-  virtual void onTerrainTouchEvent(const EventContext* ec,
+  virtual bool onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile,
                                    LayerSet* layerSet) = 0;

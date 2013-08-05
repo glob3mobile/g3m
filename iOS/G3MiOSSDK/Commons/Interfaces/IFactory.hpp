@@ -2,7 +2,7 @@
 //  IFactory.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,50 +11,58 @@
 
 #include "ILogger.hpp"
 
-#ifdef C_CODE
-#define GFactory (*IFactory::instance())
-#else
-#define GFactory IFactory.instance() //FOR JAVA CONVERTER
-#endif
-
 class ITimer;
 class IImage;
 class IFloatBuffer;
 class IIntBuffer;
+class IShortBuffer;
 class IByteBuffer;
 class ILogger;
+class IImageListener;
+class ICanvas;
+class IWebSocket;
+class IWebSocketListener;
+class URL;
 
 class IFactory {
+private:
   static IFactory* _instance;
-  
+
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("IFactory instance already set!");
+      delete _instance;
     }
     _instance = factory;
   }
-  
+
   static IFactory* instance() {
     return _instance;
   }
 
   virtual ~IFactory() {
-    
+
   }
-  
-  virtual ITimer* createTimer() const = 0;
-  
-  virtual void deleteTimer(const ITimer* timer) const = 0;
-  
-  virtual IImage* createImageFromFileName(const std::string filename) const = 0;
-  
-  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
-  
-  virtual IImage* createImageFromSize(int width, int height) const = 0;
+
+  virtual void createImageFromFileName(const std::string& filename,
+                                       IImageListener* listener,
+                                       bool autodelete) const = 0;
+
+  virtual void createImageFromBuffer(const IByteBuffer* buffer,
+                                     IImageListener* listener,
+                                     bool autodelete) const = 0;
+
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
-  
+
+  virtual ITimer* createTimer() const = 0;
+
+  virtual void deleteTimer(const ITimer* timer) const = 0;
+
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
 
   /* special factory method for creating floatbuffers from matrix */
@@ -74,12 +82,27 @@ public:
                                           float f13,
                                           float f14,
                                           float f15) const = 0;
-  
+
   virtual IIntBuffer* createIntBuffer(int size) const = 0;
-  
+
+  virtual IShortBuffer* createShortBuffer(int size) const = 0;
+
   virtual IByteBuffer* createByteBuffer(int length) const = 0;
-  
+
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
+
+  virtual ICanvas* createCanvas() const = 0;
+
+  virtual IWebSocket* createWebSocket(const URL& url,
+                                      IWebSocketListener* listener,
+                                      bool autodeleteListener,
+                                      bool autodeleteWebSocket) const = 0;
+#ifdef JAVA_CODE
+
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+#endif
   
 };
 

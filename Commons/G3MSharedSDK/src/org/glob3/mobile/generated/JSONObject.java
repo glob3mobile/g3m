@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStringBuilder;
 
 public class JSONObject extends JSONBaseObject
@@ -25,120 +24,152 @@ public class JSONObject extends JSONBaseObject
   private java.util.HashMap<String, JSONBaseObject> _entries = new java.util.HashMap<String, JSONBaseObject>();
 
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void putKeyAndValueDescription(const String& key, IStringBuilder *isb) const
   private void putKeyAndValueDescription(String key, IStringBuilder isb)
   {
-	isb.addString("\"");
-	isb.addString(key);
-	isb.addString("\"=");
-	isb.addString(get(key).description());
+    isb.addString("\"");
+    isb.addString(key);
+    isb.addString("\":");
+    isb.addString(get(key).description());
   }
 
   public void dispose()
   {
-	_entries.clear();
-  
+    _entries.clear();
   }
 
   public final JSONObject asObject()
   {
-	return this;
+    return this;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBaseObject* get(const String& key) const
   public final JSONBaseObject get(String key)
   {
   
-	return _entries.get(key);
+    return _entries.get(key);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONObject* getAsObject(const String& key) const
   public final JSONObject getAsObject(String key)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? null : object.asObject();
+    final JSONBaseObject object = get(key);
+    return (object == null) ? null : object.asObject();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONArray* getAsArray(const String& key) const
   public final JSONArray getAsArray(String key)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? null : object.asArray();
+    final JSONBaseObject object = get(key);
+    return (object == null) ? null : object.asArray();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBoolean* getAsBoolean(const String& key) const
   public final JSONBoolean getAsBoolean(String key)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? null : object.asBoolean();
+    final JSONBaseObject object = get(key);
+    return (object == null) ? null : object.asBoolean();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONNumber* getAsNumber(const String& key) const
   public final JSONNumber getAsNumber(String key)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? null : object.asNumber();
+    final JSONBaseObject object = get(key);
+    return (object == null) ? null : object.asNumber();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONString* getAsString(const String& key) const
   public final JSONString getAsString(String key)
   {
-	JSONBaseObject object = get(key);
-	return (object == null) ? null : object.asString();
+    final JSONBaseObject object = get(key);
+    return (object == null) ? null : object.asString();
+  }
+
+  public final boolean getAsBoolean(String key, boolean defaultValue)
+  {
+    final JSONBoolean jsBool = getAsBoolean(key);
+    return (jsBool == null) ? defaultValue : jsBool.value();
+  }
+
+  public final double getAsNumber(String key, double defaultValue)
+  {
+    final JSONNumber jsNumber = getAsNumber(key);
+    return (jsNumber == null) ? defaultValue : jsNumber.value();
+  }
+
+  public final String getAsString(String key, String defaultValue)
+  {
+    final JSONString jsString = getAsString(key);
+    return (jsString == null) ? defaultValue : jsString.value();
   }
 
   public final void put(String key, JSONBaseObject object)
   {
-	_entries.put(key, object);
+    _entries.put(key, object);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int size() const
   public final int size()
   {
-	return _entries.size();
+    return _entries.size();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<String> keys() const
   public final java.util.ArrayList<String> keys()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	return new java.util.ArrayList<String>(_entries.keySet());
-//#endif
+    return new java.util.ArrayList<String>(_entries.keySet());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-	isb.addString("{");
+    isb.addString("{");
   
-	java.util.ArrayList<String> keys = this.keys();
+    java.util.ArrayList<String> keys = this.keys();
   
-	int keysCount = keys.size();
-	if (keysCount > 0)
-	{
-	  putKeyAndValueDescription(keys.get(0), isb);
-	  for (int i = 1; i < keysCount; i++)
-	  {
-		isb.addString(", ");
-		putKeyAndValueDescription(keys.get(i), isb);
-	  }
-	}
+    int keysCount = keys.size();
+    if (keysCount > 0)
+    {
+      putKeyAndValueDescription(keys.get(0), isb);
+      for (int i = 1; i < keysCount; i++)
+      {
+        isb.addString(", ");
+        putKeyAndValueDescription(keys.get(i), isb);
+      }
+    }
   
-	isb.addString("}");
+    isb.addString("}");
   
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final JSONObject deepCopy()
+  {
+    JSONObject result = new JSONObject();
+  
+    java.util.ArrayList<String> keys = this.keys();
+  
+    int keysCount = keys.size();
+    for (int i = 0; i < keysCount; i++)
+    {
+      String key = keys.get(i);
+      result.put(key, JSONBaseObject.deepCopy(get(key)));
+    }
+  
+    return result;
+  }
+
+  public final void acceptVisitor(JSONVisitor visitor)
+  {
+    visitor.visitObjectBeforeChildren(this);
+  
+    java.util.ArrayList<String> keys = this.keys();
+  
+    int keysCount = keys.size();
+    for (int i = 0; i < keysCount; i++)
+    {
+      if (i != 0)
+      {
+        visitor.visitObjectInBetweenChildren(this);
+      }
+      String key = keys.get(i);
+      visitor.visitObjectBeforeChild(this, key);
+      final JSONBaseObject child = get(key);
+      child.acceptVisitor(visitor);
+    }
+  
+    visitor.visitObjectAfterChildren(this);
   }
 
 }

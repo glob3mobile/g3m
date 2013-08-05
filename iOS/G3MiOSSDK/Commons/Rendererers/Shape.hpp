@@ -1,5 +1,5 @@
 //
-//  Shape.h
+//  Shape.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/28/12.
@@ -12,30 +12,36 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
-//#include <string>
 
 class MutableMatrix44D;
 
-class Shape {
+#include "Effects.hpp"
+#include <vector>
+
+class ShapePendingEffect;
+
+class Shape : public EffectTarget {
 private:
   Geodetic3D* _position;
-
+  
   Angle*      _heading;
   Angle*      _pitch;
-
+  
   double      _scaleX;
   double      _scaleY;
   double      _scaleZ;
-
+  
   MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
+  
+  std::vector<ShapePendingEffect*> _pendingEffects;
 
-//  std::string _id;
-
+  bool _enable;
+  
 protected:
   virtual void cleanTransformMatrix();
-
+  
 public:
   Shape(Geodetic3D* position) :
   _position( position ),
@@ -44,46 +50,67 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL) {
-
+  _transformMatrix(NULL),
+  _enable(true)
+  {
+    
   }
-
-//  void setId(const std::string& id) {
-//    _id = id;
-//  }
-
+  
   virtual ~Shape();
   
   const Geodetic3D getPosition() const {
     return *_position;
   }
-
+  
   const Angle getHeading() const {
     return *_heading;
   }
-
+  
   const Angle getPitch() const {
     return *_pitch;
   }
-
+  
   void setPosition(Geodetic3D* position) {
     delete _position;
     _position = position;
     cleanTransformMatrix();
   }
-
+  
+  void addShapeEffect(Effect* effect);
+  
+  void setAnimatedPosition(const TimeInterval& duration,
+                           const Geodetic3D& position,
+                           bool linearInterpolation=false);
+  
+  void setAnimatedPosition(const TimeInterval& duration,
+                           const Geodetic3D& position,
+                           const Angle& pitch,
+                           const Angle& heading,
+                           bool linearInterpolation=false);
+  
+  void setAnimatedPosition(const Geodetic3D& position,
+                           bool linearInterpolation=false) {
+    setAnimatedPosition(TimeInterval::fromSeconds(3),
+                        position,
+                        linearInterpolation);
+  }
+  
   void setHeading(const Angle& heading) {
     delete _heading;
     _heading = new Angle(heading);
     cleanTransformMatrix();
   }
-
+  
   void setPitch(const Angle& pitch) {
     delete _pitch;
     _pitch = new Angle(pitch);
     cleanTransformMatrix();
   }
-
+  
+  void setScale(double scale) {
+    setScale(scale, scale, scale);
+  }
+  
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
@@ -92,22 +119,73 @@ public:
     _scaleZ = scaleZ;
     cleanTransformMatrix();
   }
-
+  
   void setScale(const Vector3D& scale) {
     setScale(scale._x,
              scale._y,
              scale._z);
   }
+  
+  Vector3D getScale() const {
+    return Vector3D(_scaleX,
+                    _scaleY,
+                    _scaleZ);
+  }
+  
+  void setAnimatedScale(const TimeInterval& duration,
+                        double scaleX,
+                        double scaleY,
+                        double scaleZ);
+  
+  void setAnimatedScale(double scaleX,
+                        double scaleY,
+                        double scaleZ) {
+    setAnimatedScale(TimeInterval::fromSeconds(1),
+                     scaleX, scaleY, scaleZ);
+  }
+  
+  void setAnimatedScale(const Vector3D& scale) {
+    setAnimatedScale(scale._x,
+                     scale._y,
+                     scale._z);
+  }
+  
+  void setAnimatedScale(const TimeInterval& duration,
+                        const Vector3D& scale) {
+    setAnimatedScale(duration,
+                     scale._x,
+                     scale._y,
+                     scale._z);
+  }
+  
+  void orbitCamera(const TimeInterval& duration,
+                   double fromDistance,       double toDistance,
+                   const Angle& fromAzimuth,  const Angle& toAzimuth,
+                   const Angle& fromAltitude, const Angle& toAltitude);
 
-  void render(const RenderContext* rc);
+  bool isEnable() const {
+    return _enable;
+  }
 
-  virtual void initialize(const InitializationContext* ic) {
+  void setEnable(bool enable) {
+    _enable = enable;
+  }
+  
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState,
+              bool renderNotReadyShapes);
+
+  virtual void initialize(const G3MContext* context) {
 
   }
 
-  virtual bool isReadyToRender(const RenderContext* rc) = 0;
-  
-  virtual void rawRender(const RenderContext* rc) = 0;
+  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
+
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState& parentState,
+                         bool renderNotReadyShapes) = 0;
+
+  virtual bool isTransparent(const G3MRenderContext* rc) = 0;
 
 };
 

@@ -10,57 +10,75 @@
 #define __G3MiOSSDK__SGLayerNode__
 
 #include "SGNode.hpp"
+#include "URL.hpp"
+
+class IGLTextureId;
+class IImage;
 
 class SGLayerNode : public SGNode {
 private:
-  std::string _uri;
-  std::string _applyTo;
-  std::string _blendMode;
-  bool        _flipY;
+  const std::string _uri;
 
-  std::string _magFilter;
-  std::string _minFilter;
-  std::string _wrapS;
-  std::string _wrapT;
+//  const std::string _applyTo;
+//  const std::string _blendMode;
+//  const bool        _flipY;
+//
+//  const std::string _magFilter;
+//  const std::string _minFilter;
+//  const std::string _wrapS;
+//  const std::string _wrapT;
 
-protected:
-  virtual void prepareRender(const RenderContext* rc);
+  bool _initialized;
 
-  virtual void cleanUpRender(const RenderContext* rc);
+  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+
+  IImage* _downloadedImage;
+  void requestImage(const G3MRenderContext* rc);
+
+#ifdef C_CODE
+  const IGLTextureId* _textureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _textureId;
+#endif
+
+  URL getURL() const;
+
 
 public:
 
-  void setUri(const std::string& uri) {
-    _uri = uri;
-  }
-  
-  void setApplyTo(const std::string& applyTo) {
-    _applyTo = applyTo;
+  SGLayerNode(const std::string& id,
+              const std::string& sId,
+              const std::string& uri,
+              const std::string& applyTo,
+              const std::string& blendMode,
+              bool flipY,
+              const std::string& magFilter,
+              const std::string& minFilter,
+              const std::string& wrapS,
+              const std::string& wrapT) :
+  SGNode(id, sId),
+  _uri(uri),
+//  _applyTo(applyTo),
+//  _blendMode(blendMode),
+//  _flipY(flipY),
+//  _magFilter(magFilter),
+//  _minFilter(minFilter),
+//  _wrapS(wrapS),
+//  _wrapT(wrapT),
+  _downloadedImage(NULL),
+  _textureId(NULL),
+  _initialized(false)
+  {
+
   }
 
-  void setBlendMode(const std::string& blendMode) {
-    _blendMode = blendMode;
-  }
+  bool isReadyToRender(const G3MRenderContext* rc);
 
-  void setFlipY(bool flipY) {
-    _flipY = flipY;
-  }
+  void onImageDownload(IImage* image);
 
-  void setMagFilter(const std::string& magFilter) {
-    _magFilter = magFilter;
-  }
-
-  void setMinFilter(const std::string& minFilter) {
-    _minFilter = minFilter;
-  }
-
-  void setWrapS(const std::string& wrapS) {
-    _wrapS = wrapS;
-  }
-
-  void setWrapT(const std::string& wrapT) {
-    _wrapT = wrapT;
-  }
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState);
 
 };
 

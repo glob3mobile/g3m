@@ -8,20 +8,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.glob3.mobile.generated.FrameTasksExecutor;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.InitializationContext;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+
+import android.content.Context;
+import android.util.Log;
 
 
 public final class Downloader_Android
          extends
             IDownloader {
 
-   final static String                                      TAG = "Downloader_Android";
+   final static String                                      TAG             = "Downloader_Android";
 
-   private boolean                                          _started;
    private final int                                        _maxConcurrentOperationCount;
    private int                                              _requestIdCounter;
    private long                                             _requestsCounter;
@@ -29,15 +33,23 @@ public final class Downloader_Android
    private final ArrayList<Downloader_Android_WorkerThread> _workers;
    private final Map<String, Downloader_Android_Handler>    _downloadingHandlers;
    private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
-   private final int                                        _connectTimeout;
-   private final int                                        _readTimeout;
+   private final TimeInterval                               _connectTimeout;
+   private final TimeInterval                               _readTimeout;
+   private final Context                                    _appContext;
+
+   private boolean                                          _started;
+   private final Object                                     _startStopMutex = new Object();
+
+   private G3MContext                                       _context;
 
 
    public Downloader_Android(final int maxConcurrentOperationCount,
-                             final int connectTimeoutMillis,
-                             final int readTimeoutMillis) {
+                             final TimeInterval connectTimeout,
+                             final TimeInterval readTimeout,
+                             final Context appContext) {
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
+      _appContext = appContext;
       _requestIdCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
@@ -46,65 +58,114 @@ public final class Downloader_Android
       _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
 
-      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-         final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-         _workers.add(da);
-      }
-      _connectTimeout = connectTimeoutMillis;
-      _readTimeout = readTimeoutMillis;
+      _connectTimeout = connectTimeout;
+      _readTimeout = readTimeout;
    }
 
 
    @Override
    public void start() {
-      if (!_started) {
-         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-         while (iter.hasNext()) {
-            final Downloader_Android_WorkerThread worker = iter.next();
-            worker.start();
+      synchronized (_startStopMutex) {
+         if (!_started) {
+            for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+               final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this, i);
+               _workers.add(da);
+            }
+
+
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.initialize(_context);
+            }
+
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.start();
+            }
+
+            _started = true;
+            Log.i(TAG, "Downloader started");
          }
-         _started = true;
       }
    }
 
 
    @Override
    public void stop() {
-      if (_started) {
-         for (final Downloader_Android_WorkerThread worker : _workers) {
-            worker.stopWorkerThread();
-         }
-         _started = false;
-
-         boolean allWorkersStopped;
-         do {
-            allWorkersStopped = true;
+      synchronized (_startStopMutex) {
+         if (_started) {
             for (final Downloader_Android_WorkerThread worker : _workers) {
-               if (!worker.isStopped()) {
-                  allWorkersStopped = false;
-                  break;
-               }
+               worker.stopWorkerThread();
             }
-         }
-         while (!allWorkersStopped);
+            _started = false;
 
-         //         boolean allStopped = true;
-         //         while (_started) {
-         //            for (final Downloader_Android_WorkerThread worker : _workers) {
-         //               allStopped = allStopped && worker.isStopping();
-         //            }
-         //         _started = allStopped;
-         //         }
+
+            //            boolean allWorkersStopped;
+            //            do {
+            //               allWorkersStopped = true;
+            //               for (final Downloader_Android_WorkerThread worker : _workers) {
+            //                  if (!worker.isStopped()) {
+            //                     allWorkersStopped = false;
+            //                     try {
+            //                        Thread.sleep(2);
+            //                     }
+            //                     catch (final InterruptedException e) {
+            //                     }
+            //                     break;
+            //                  }
+            //               }
+            //            }
+            //            while (!allWorkersStopped);
+
+
+            _workers.clear();
+            Log.i(TAG, "Downloader stopped");
+         }
       }
    }
 
 
+   //   @Override
+   //   public long requestBuffer(final URL url,
+   //                             final long priority,
+   //                             final TimeInterval timeToCache,
+   //                             final IBufferDownloadListener listener,
+   //                             final boolean deleteListener) {
+   //
+   //      Downloader_Android_Handler handler = null;
+   //      long requestId;
+   //
+   //      synchronized (this) {
+   //         _requestsCounter++;
+   //         requestId = _requestIdCounter++;
+   //         handler = _downloadingHandlers.get(url.getPath());
+   //
+   //         if (handler == null) {
+   //            handler = _queuedHandlers.get(url.getPath());
+   //            if (handler == null) {
+   //               // new handler, queue it
+   //               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+   //               _queuedHandlers.put(url.getPath(), handler);
+   //            }
+   //            else {
+   //               // the URL is queued for future download, just add the new listener
+   //               handler.addListener(listener, priority, requestId);
+   //            }
+   //         }
+   //         else {
+   //            // the URL is being downloaded, just add the new listener
+   //            handler.addListener(listener, priority, requestId);
+   //         }
+   //      }
+   //
+   //      return requestId;
+   //   }
+
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
+                             final TimeInterval timeToCache,
+                             final boolean readExpired,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 
@@ -138,23 +199,24 @@ public final class Downloader_Android
    @Override
    public long requestImage(final URL url,
                             final long priority,
+                            final TimeInterval timeToCache,
+                            final boolean readExpired,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 
       synchronized (this) {
          _requestsCounter++;
          requestId = _requestIdCounter++;
-         handler = _downloadingHandlers.get(url.getPath());
-
+         final String path = url.getPath();
+         handler = _downloadingHandlers.get(path);
          if (handler == null) {
-            handler = _queuedHandlers.get(url.getPath());
+            handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
                handler = new Downloader_Android_Handler(url, listener, priority, requestId);
-               _queuedHandlers.put(url.getPath(), handler);
+               _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
@@ -218,16 +280,32 @@ public final class Downloader_Android
    }
 
 
-   public Downloader_Android_Handler getHandlerToRun() {
-      long selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+   @Override
+   public synchronized void initialize(final G3MContext context,
+                                       final FrameTasksExecutor frameTasksExecutor) {
+      _context = context;
+      for (final Downloader_Android_WorkerThread worker : _workers) {
+         worker.initialize(_context);
+      }
+   }
+
+
+   Downloader_Android_Handler getHandlerToRun() {
+      long selectedPriority = Long.MIN_VALUE;
       Downloader_Android_Handler selectedHandler = null;
       String selectedURL = null;
 
       synchronized (this) {
-         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
 
-         while (it.hasNext()) {
-            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
+         if (_context == null) {
+            return null;
+         }
+
+         //         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
+         //
+         //         while (it.hasNext()) {
+         for (final Map.Entry<String, Downloader_Android_Handler> e : _queuedHandlers.entrySet()) {
+            //            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
             final String url = e.getKey();
             final Downloader_Android_Handler handler = e.getValue();
             final long priority = handler.getPriority();
@@ -267,23 +345,37 @@ public final class Downloader_Android
    }
 
 
-   public int getConnectTimeout() {
+   public TimeInterval getConnectTimeout() {
       return _connectTimeout;
    }
 
 
-   public int getReadTimeout() {
+   public TimeInterval getReadTimeout() {
       return _readTimeout;
    }
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
+   public void onResume(final G3MContext context) {
+      start();
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public void onPause(final G3MContext context) {
+      stop();
    }
+
+
+   public Context getAppContext() {
+      return _appContext;
+   }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
+      stop();
+   }
+
 
 }

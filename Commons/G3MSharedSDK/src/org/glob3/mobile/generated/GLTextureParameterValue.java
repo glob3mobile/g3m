@@ -6,16 +6,16 @@ public class GLTextureParameterValue
 
   public static int linear()
   {
-	  return _linear;
+     return _linear;
   }
   public static int clampToEdge()
   {
-	  return _clampToEdge;
+     return _clampToEdge;
   }
 
   public static void init(INativeGL ngl)
   {
-	_linear = ngl.TextureParameterValue_Linear();
-	_clampToEdge = ngl.TextureParameterValue_ClampToEdge();
+    _linear = ngl.TextureParameterValue_Linear();
+    _clampToEdge = ngl.TextureParameterValue_ClampToEdge();
   }
 }

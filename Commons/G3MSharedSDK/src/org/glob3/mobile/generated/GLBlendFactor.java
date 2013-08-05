@@ -7,16 +7,16 @@ public class GLBlendFactor
 
   public static int srcAlpha()
   {
-	  return _srcAlpha;
+     return _srcAlpha;
   }
   public static int oneMinusSrcAlpha()
   {
-	  return _oneMinusSrcAlpha;
+     return _oneMinusSrcAlpha;
   }
 
   public static void init(INativeGL ngl)
   {
-	_srcAlpha = ngl.BlendFactor_SrcAlpha();
-	_oneMinusSrcAlpha = ngl.BlendFactor_OneMinusSrcAlpha();
+    _srcAlpha = ngl.BlendFactor_SrcAlpha();
+    _oneMinusSrcAlpha = ngl.BlendFactor_OneMinusSrcAlpha();
   }
 }

@@ -9,9 +9,8 @@
 #include "MutableVector3D.hpp"
 
 
-MutableVector3D MutableVector3D::normalized() const
-{
-  double d = length();
+MutableVector3D MutableVector3D::normalized() const {
+  const double d = length();
   return MutableVector3D(_x / d, _y /d, _z / d);
 }
 
@@ -24,7 +23,7 @@ Angle MutableVector3D::angleBetween(const MutableVector3D& other) const {
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  return Angle::fromRadians(GMath.acos(c));
+  return Angle::fromRadians(IMathUtils::instance()->acos(c));
 }
 
 MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
@@ -37,7 +36,7 @@ MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
   const double sinTheta = theta.sinus();
   
   const double ms = axis.squaredLength();
-  const double m = GMath.sqrt(ms);
+  const double m = IMathUtils::instance()->sqrt(ms);
   
   return MutableVector3D(
                          ((u * (u * _x + v * _y + w * _z)) +

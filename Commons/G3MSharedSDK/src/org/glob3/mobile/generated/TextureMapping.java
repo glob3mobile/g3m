@@ -18,12 +18,9 @@ package org.glob3.mobile.generated;
 
 ///#include <vector>
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class G3MRenderContext;
 //class IFloatBuffer;
 
 public abstract class TextureMapping
@@ -33,8 +30,8 @@ public abstract class TextureMapping
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void bind(const RenderContext* rc) const = 0;
-  public abstract void bind(RenderContext rc);
+  public abstract void bind(G3MRenderContext rc);
+
+  public abstract boolean isTransparent(G3MRenderContext rc);
 
 }

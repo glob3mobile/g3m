@@ -3,6 +3,8 @@
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.ILogger;
@@ -13,7 +15,10 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -21,48 +26,72 @@ import com.google.gwt.user.client.Event;
 
 public final class MotionEventProcessor {
 
-   final static String     TAG        = "MotionEventProcessor";
+   private final static String   TAG                    = "MotionEventProcessor";
 
-   private final G3MWidget _widget;
-   private boolean         _mouseDown = false;
-   private boolean         _keyDown   = false;
-   private Vector2I        _prevPos   = null;
+   private static final Vector2I DELTA                  = new Vector2I(10, 0);
 
 
-   public MotionEventProcessor(final G3MWidget widget) {
+   private final G3MWidget       _widget;
+   private final CanvasElement   _canvasElement;
+   private boolean               _mouseDown             = false;
+   private Vector2I              _previousMousePosition = null;
+
+
+   public MotionEventProcessor(final G3MWidget widget,
+                               final CanvasElement canvasElement) {
       _widget = widget;
+      _canvasElement = canvasElement;
 
       jsAddMouseWheelListener();
    }
 
 
+   private static Vector2I createPosition(final Event event) {
+      return new Vector2I(event.getClientX(), event.getClientY());
+   }
+
+
    public void processEvent(final Event event) {
 
-      final Vector2I pos = new Vector2I(event.getClientX(), event.getClientY());
       TouchEvent touchEvent = null;
 
       switch (DOM.eventGetType(event)) {
+         case Event.ONTOUCHSTART:
+            event.preventDefault();
+            touchEvent = processTouchStart(event);
+            break;
+         case Event.ONTOUCHEND:
+            event.preventDefault();
+            touchEvent = processTouchEnd(event);
+            break;
+         case Event.ONTOUCHMOVE:
+            event.preventDefault();
+            touchEvent = processTouchMove(event);
+            break;
+         case Event.ONTOUCHCANCEL:
+            event.preventDefault();
+            touchEvent = processTouchCancel(event);
+            break;
+
          case Event.ONMOUSEMOVE:
-            touchEvent = mouseMoveHandler(pos);
+            touchEvent = processMouseMove(event);
             break;
          case Event.ONMOUSEDOWN:
-            touchEvent = mouseDownHandler(pos);
+            touchEvent = processMouseDown(event);
             break;
          case Event.ONMOUSEUP:
-            touchEvent = mouseUpHandler(pos);
+            touchEvent = processMouseUp(event);
             break;
+
          case Event.ONDBLCLICK:
-            touchEvent = doubleClickHanler(pos);
+            touchEvent = processDoubleClick(event);
             break;
-         case Event.ONKEYDOWN:
-            keyDownHandler(event);
-            break;
-         case Event.ONKEYUP:
-            keyUpHandler(event);
-            break;
+
          case Event.ONCONTEXTMENU:
             event.preventDefault();
+            touchEvent = processContextMenu(event);
             break;
+
          case Event.ONMOUSEWHEEL:
             event.preventDefault();
             break;
@@ -72,169 +101,226 @@ public final class MotionEventProcessor {
       }
 
       if (touchEvent != null) {
-         final ArrayList<TouchEvent> tes = new ArrayList<TouchEvent>();
-
-         tes.add(touchEvent);
-         eventHandler(tes);
+         dispatchEvents(touchEvent);
       }
    }
 
 
-   public void eventHandler(final ArrayList<TouchEvent> touchEvents) {
-      if (touchEvents.size() > 0) {
+   private Map<Integer, Vector2I> _previousTouchesPositions = new HashMap<Integer, Vector2I>();
 
-         for (final TouchEvent te : touchEvents) {
-            Scheduler.get().scheduleDeferred(new Command() {
 
+   private ArrayList<Touch> createTouches(final Event event) {
+      final Map<Integer, Vector2I> currentTouchesPositions = new HashMap<Integer, Vector2I>();
+
+      final JsArray<com.google.gwt.dom.client.Touch> jsTouches = event.getTouches();
+      final int jsTouchesSize = jsTouches.length();
+      final ArrayList<Touch> touches = new ArrayList<Touch>(jsTouchesSize);
+      for (int i = 0; i < jsTouchesSize; i++) {
+         final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
+
+         final Vector2I currentTouchPosition = new Vector2I( //
+                  jsTouch.getRelativeX(_canvasElement), //
+                  jsTouch.getRelativeY(_canvasElement) //
+         );
+
+         final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
+
+         currentTouchesPositions.put(touchId, currentTouchPosition);
+
+
+         Vector2I previousTouchPosition = _previousTouchesPositions.get(touchId);
+         if (previousTouchPosition == null) {
+            //previousTouchPosition = Vector2I.zero();
+            previousTouchPosition = currentTouchPosition;
+         }
+
+         touches.add(new Touch(currentTouchPosition, previousTouchPosition));
+      }
+
+      _previousTouchesPositions = currentTouchesPositions;
+
+      return touches;
+   }
+
+
+   private TouchEvent processTouchStart(final Event event) {
+      return TouchEvent.create(TouchEventType.Down, createTouches(event));
+   }
+
+
+   private TouchEvent processTouchMove(final Event event) {
+      return TouchEvent.create(TouchEventType.Move, createTouches(event));
+   }
+
+
+   private TouchEvent processTouchEnd(final Event event) {
+      return TouchEvent.create(TouchEventType.Up, createTouches(event));
+   }
+
+
+   private TouchEvent processTouchCancel(@SuppressWarnings("unused")
+   final Event event) {
+      _previousTouchesPositions = new HashMap<Integer, Vector2I>();
+      return null;
+   }
+
+
+   //   private void dispatchEvents(final ArrayList<TouchEvent> events) {
+   private void dispatchEvents(final TouchEvent... events) {
+      if (events.length > 0) {
+         final Scheduler scheduler = Scheduler.get();
+         for (final TouchEvent event : events) {
+            scheduler.scheduleDeferred( //
+            new Command() {
                @Override
                public void execute() {
-                  _widget.onTouchEvent(te);
+                  _widget.onTouchEvent(event);
                }
-
             });
-
          }
       }
    }
 
 
-   private TouchEvent mouseMoveHandler(final Vector2I pos) {
+   private TouchEvent processMouseMove(final Event event) {
       //            log(LogLevel.InfoLevel, " onMouseMove");
 
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
-      TouchEvent touchEvent = null;
-
-      if (_mouseDown) {
-         if (_keyDown) {
-            touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
-            touches.add(new Touch(pos, _prevPos));
-            touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
-         }
-         else {
-            touches.add(new Touch(pos, _prevPos));
-         }
-         touchEvent = TouchEvent.create(TouchEventType.Move, touches);
-         _prevPos = pos;
+      if (!_mouseDown) {
+         return null;
       }
 
-      return touchEvent;
+      final Vector2I currentMousePosition = createPosition(event);
+      final ArrayList<Touch> touches = new ArrayList<Touch>();
+
+      if (event.getShiftKey()) {
+         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
+      }
+      else {
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+      }
+
+      _previousMousePosition = currentMousePosition;
+
+      return TouchEvent.create(TouchEventType.Move, touches);
    }
 
 
-   private TouchEvent mouseDownHandler(final Vector2I pos) {
+   private TouchEvent processMouseDown(final Event event) {
       //            log(LogLevel.InfoLevel, " onMouseDown");
 
+      final Vector2I currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<Touch>();
 
       _mouseDown = true;
-      _prevPos = pos;
-      if (_keyDown) {
-         touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
-         touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
+      if (event.getShiftKey()) {
+         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
       }
       else {
-         touches.add(new Touch(pos, _prevPos));
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
       }
+
+      _previousMousePosition = currentMousePosition;
 
       return TouchEvent.create(TouchEventType.Down, touches);
    }
 
 
-   private TouchEvent mouseUpHandler(final Vector2I pos) {
-      //    log(LogLevel.InfoLevel, " onMouseUp");
+   private TouchEvent processMouseUp(final Event event) {
+      //      log(LogLevel.InfoLevel, " onMouseUp");
 
+      final Vector2I currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<Touch>();
 
+      final TouchEventType touchType;
+
       _mouseDown = false;
-      if (_keyDown) {
-         touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
-         touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
+      if (event.getShiftKey()) {
+         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
+
+         touchType = TouchEventType.Up;
       }
       else {
-         touches.add(new Touch(pos, _prevPos));
+         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touchType = (event.getCtrlKey() && (event.getButton() == NativeEvent.BUTTON_LEFT)) ? TouchEventType.LongPress
+                                                                                           : TouchEventType.Up;
       }
-      _prevPos = pos;
+      _previousMousePosition = currentMousePosition;
 
-      return TouchEvent.create(TouchEventType.Up, touches);
+      return TouchEvent.create(touchType, touches);
    }
 
 
-   private TouchEvent doubleClickHanler(final Vector2I pos) {
+   private TouchEvent processDoubleClick(final Event event) {
       //          log(LogLevel.InfoLevel, " onDoubleClick");
 
-      final Touch touch = new Touch(pos, pos, (byte) 2);
+      final Vector2I currentMousePosition = createPosition(event);
+
+      final Touch touch = new Touch(currentMousePosition, currentMousePosition, (byte) 2);
 
       return TouchEvent.create(TouchEventType.Down, touch);
    }
 
 
-   private void keyDownHandler(final Event event) {
-      //               log(LogLevel.InfoLevel, " onKeyDown");
+   private TouchEvent processContextMenu(final Event event) {
+      //      log(LogLevel.InfoLevel, " onContextMenu");
 
-      // event.getShiftKey() does not work on Chrome
-      if (event.getShiftKey() || (event.getKeyCode() == 16)) {
-         _keyDown = true;
-      }
+      _mouseDown = false;
+
+      final Vector2I currentMousePosition = createPosition(event);
+      final Touch touch = new Touch(currentMousePosition, _previousMousePosition);
+      _previousMousePosition = currentMousePosition;
+
+      return TouchEvent.create(TouchEventType.LongPress, touch);
    }
 
 
-   private void keyUpHandler(final Event event) {
-      //               log(LogLevel.InfoLevel, " onKeyUp");
-
-      // event.getShiftKey() does not work on Chrome
-      if (event.getShiftKey() || (event.getKeyCode() == 16)) {
-         _keyDown = false;
-      }
-   }
-
-
-   private void mouseWheelHandler(final int delta,
+   private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
       //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
 
-      final ArrayList<Touch> beginTouches = new ArrayList<Touch>();
-      final ArrayList<Touch> endTouches = new ArrayList<Touch>();
+      final Vector2I beginFirstPosition = new Vector2I(x - 10, y - 10);
+      final Vector2I beginSecondPosition = new Vector2I(x + 10, y + 10);
 
-      Vector2I firstPointerPos = new Vector2I(x, y);
-      Vector2I secondPointerPos = new Vector2I(x + 20, y + 20);
+      final ArrayList<Touch> beginTouches = new ArrayList<Touch>(2);
+      beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
+      beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
 
-      beginTouches.add(new Touch(new Vector2I(firstPointerPos._x, firstPointerPos._y), new Vector2I(x, y)));
-      beginTouches.add(new Touch(new Vector2I(secondPointerPos._x, secondPointerPos._y), new Vector2I(x, y)));
 
-      _prevPos = firstPointerPos;
-      final Vector2I prevSecondPos = secondPointerPos;
+      final Vector2I endFirstPosition = new Vector2I(beginFirstPosition._x - delta, beginFirstPosition._y - delta);
+      final Vector2I endSecondPosition = new Vector2I(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
 
-      firstPointerPos = new Vector2I(firstPointerPos._x - delta, firstPointerPos._y - delta);
-      secondPointerPos = new Vector2I(secondPointerPos._x + delta, secondPointerPos._y + delta);
+      final ArrayList<Touch> endTouches = new ArrayList<Touch>(2);
+      endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
+      endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
 
-      endTouches.add(new Touch(firstPointerPos, _prevPos));
-      endTouches.add(new Touch(secondPointerPos, prevSecondPos));
+      dispatchEvents( //
+               TouchEvent.create(TouchEventType.Down, beginTouches), //
+               TouchEvent.create(TouchEventType.Move, endTouches), //
+               TouchEvent.create(TouchEventType.Up, endTouches) //
+      );
 
-      final ArrayList<TouchEvent> tes = new ArrayList<TouchEvent>();
-
-      tes.add(TouchEvent.create(TouchEventType.Down, beginTouches));
-      tes.add(TouchEvent.create(TouchEventType.Move, endTouches));
-      tes.add(TouchEvent.create(TouchEventType.Up, endTouches));
-
-      eventHandler(tes);
+      _previousMousePosition = new Vector2I(x, y);
    }
 
 
-   public native void jsAddMouseWheelListener() /*-{
+   private native void jsAddMouseWheelListener() /*-{
 		//      debugger;
 		var thisInstance = this;
 
-		var canvas = $doc
-				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::CANVAS_ID);
+		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
 
 		$wnd.g3mMouseWheelHandler = function(e) {
 			// cross-browser wheel delta
 			var e = $wnd.event || e; // old IE support
 			var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
-			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::mouseWheelHandler(III)(delta, e.clientX, e.clientY);
+			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
 		};
 
 		if (canvas) {
@@ -256,18 +342,19 @@ public final class MotionEventProcessor {
    }-*/;
 
 
-   public void log(final LogLevel level,
-                   final String msg) {
-      if (ILogger.instance() != null) {
+   private void log(final LogLevel level,
+                    final String msg) {
+      final ILogger logger = ILogger.instance();
+      if (logger != null) {
          switch (level) {
             case InfoLevel:
-               ILogger.instance().logInfo(TAG + msg);
+               logger.logInfo(TAG + msg);
                break;
             case WarningLevel:
-               ILogger.instance().logWarning(TAG + msg);
+               logger.logWarning(TAG + msg);
                break;
             case ErrorLevel:
-               ILogger.instance().logError(TAG + msg);
+               logger.logError(TAG + msg);
                break;
             default:
                break;

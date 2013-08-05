@@ -28,15 +28,9 @@ public abstract class LazyTextureMappingInitializer
 
   public abstract void initialize();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const MutableVector2D getScale() const = 0;
   public abstract MutableVector2D getScale();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const MutableVector2D getTranslation() const = 0;
   public abstract MutableVector2D getTranslation();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IFloatBuffer* getTexCoords() const = 0;
-  public abstract IFloatBuffer getTexCoords();
+  public abstract IFloatBuffer createTextCoords();
 }

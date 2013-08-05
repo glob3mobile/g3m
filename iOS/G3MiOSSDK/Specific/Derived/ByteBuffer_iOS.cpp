@@ -13,9 +13,19 @@
 
 const std::string ByteBuffer_iOS::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->addString("ByteBuffer_iOS (size=");
+  isb->addString("(ByteBuffer_iOS: size=");
   isb->addInt(_size);
-  isb->addString("_");
+
+//  isb->addString(" [");
+//  for (int i = 0; i < _size; i++) {
+//    if (i != 0) {
+//      isb->addString(",");
+//    }
+//    isb->addInt(_values[i]);
+//  }
+//  isb->addString("]");
+
+  isb->addString(")");
   const std::string s = isb->getString();
   delete isb;
   return s;

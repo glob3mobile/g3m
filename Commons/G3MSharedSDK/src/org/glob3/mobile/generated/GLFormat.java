@@ -5,11 +5,11 @@ public class GLFormat
 
   public static int rgba()
   {
-	  return _rgba;
+     return _rgba;
   }
 
   public static void init(INativeGL ngl)
   {
-	_rgba = ngl.Format_RGBA();
+    _rgba = ngl.Format_RGBA();
   }
 }

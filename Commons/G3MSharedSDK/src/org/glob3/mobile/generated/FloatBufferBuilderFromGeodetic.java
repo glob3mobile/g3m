@@ -1,5 +1,10 @@
 package org.glob3.mobile.generated; 
 //
+//  FloatBufferBuilderFromGeodetic.cpp
+//  G3MiOSSDK
+
+
+//
 //  FloatBufferBuilderFromGeodetic.hpp
 //  G3MiOSSDK
 //
@@ -20,87 +25,78 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   private void setCenter(Vector3D center)
   {
-	_cx = (float)center._x;
-	_cy = (float)center._y;
-	_cz = (float)center._z;
+    _cx = (float) center._x;
+    _cy = (float) center._y;
+    _cz = (float) center._z;
   }
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private final Planet _ellipsoid;
 
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Vector3D center)
   {
-	  _planet = planet;
-	  _centerStrategy = cs;
-	setCenter(center);
+     _ellipsoid = ellipsoid;
+     _centerStrategy = centerStrategy;
+    setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic2D center)
   {
-	  _planet = planet;
-	  _centerStrategy = cs;
-	setCenter(_planet.toCartesian(center));
+     _ellipsoid = ellipsoid;
+     _centerStrategy = centerStrategy;
+    setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic3D center)
   {
-	  _planet = planet;
-	  _centerStrategy = cs;
-	setCenter(_planet.toCartesian(center));
+     _ellipsoid = ellipsoid;
+     _centerStrategy = centerStrategy;
+    setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public final void add(Geodetic3D g)
+  public final void add(Angle latitude, Angle longitude, double height)
   {
-	final Vector3D vector = _planet.toCartesian(g);
-
-	float x = (float) vector._x;
-	float y = (float) vector._y;
-	float z = (float) vector._z;
-
-	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
-	{
-	  setCenter(vector);
-	}
-
-	if (_centerStrategy != CenterStrategy.noCenter())
-	{
-	  x -= _cx;
-	  y -= _cy;
-	  z -= _cz;
-	}
-
-	_values.add(x);
-	_values.add(y);
-	_values.add(z);
+    final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
+  
+    if (_centerStrategy == CenterStrategy.firstVertex())
+    {
+      if (_values.size() == 0)
+      {
+        setCenter(vector);
+      }
+    }
+  
+    if (_centerStrategy == CenterStrategy.noCenter())
+    {
+      _values.push_back((float) vector._x);
+      _values.push_back((float) vector._y);
+      _values.push_back((float) vector._z);
+    }
+    else
+    {
+      _values.push_back((float)(vector._x - _cx));
+      _values.push_back((float)(vector._y - _cy));
+      _values.push_back((float)(vector._z - _cz));
+    }
   }
 
-  public final void add(Geodetic2D g)
+  public final void add(Geodetic3D position)
   {
-	final Vector3D vector = _planet.toCartesian(g);
+    add(position._latitude, position._longitude, position._height);
+  }
 
-	float x = (float) vector._x;
-	float y = (float) vector._y;
-	float z = (float) vector._z;
+  public final void add(Geodetic2D position)
+  {
+    add(position._latitude, position._longitude, 0.0);
+  }
 
-	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
-	{
-	  setCenter(vector);
-	}
-
-	if (_centerStrategy != CenterStrategy.noCenter())
-	{
-	  x -= _cx;
-	  y -= _cy;
-	  z -= _cz;
-	}
-
-	_values.add(x);
-	_values.add(y);
-	_values.add(z);
+  public final void add(Geodetic2D position, double height)
+  {
+    add(position._latitude, position._longitude, height);
   }
 
   public final Vector3D getCenter()
   {
-	return new Vector3D((double)_cx,(double)_cy,(double)_cz);
+    return new Vector3D(_cx, _cy, _cz);
   }
 }

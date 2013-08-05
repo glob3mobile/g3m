@@ -49,10 +49,21 @@ class GLFeature {
   static int _cullFace;
   
 public:
-  static int polygonOffsetFill(){ return _polygonOffsetFill;}
-  static int depthTest(){ return _depthTest;}
-  static int blend(){ return _blend;}
-  static int cullFace(){ return _cullFace;}
+  static int polygonOffsetFill() {
+    return _polygonOffsetFill;
+  }
+
+  static int depthTest() {
+    return _depthTest;
+  }
+
+  static int blend() {
+    return _blend;
+  }
+
+  static int cullFace() {
+    return _cullFace;
+  }
 
   static void init(const INativeGL* ngl){
     _polygonOffsetFill = ngl->Feature_PolygonOffsetFill();

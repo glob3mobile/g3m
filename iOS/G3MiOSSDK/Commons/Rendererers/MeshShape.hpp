@@ -2,47 +2,30 @@
 //  MeshShape.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 11/5/12.
+//  Created by Diego Gomez Deck on 1/30/13.
 //
 //
 
 #ifndef __G3MiOSSDK__MeshShape__
 #define __G3MiOSSDK__MeshShape__
 
-#include "Shape.hpp"
-class Mesh;
+#include "AbstractMeshShape.hpp"
 
-class MeshShape : public Shape {
-private:
-  Mesh* _mesh;
-
+class MeshShape : public AbstractMeshShape {
 protected:
-  virtual Mesh* createMesh(const RenderContext* rc) = 0;
-  
-  Mesh* getMesh(const RenderContext* rc);
-
-  void cleanMesh();
+  Mesh* createMesh(const G3MRenderContext* rc) {
+    return NULL;
+  }
 
 public:
-  MeshShape(Geodetic3D* position) :
-  Shape(position),
-  _mesh(NULL) {
+  MeshShape(Geodetic3D* position,
+            Mesh* mesh) :
+  AbstractMeshShape(position, mesh)
+  {
 
   }
-  
-//  MeshShape(Geodetic3D* position,
-//            Mesh* mesh) :
-//  Shape(position),
-//  _mesh(mesh) {
-//
-//  }
-
-  bool isReadyToRender(const RenderContext* rc);
-
-  void rawRender(const RenderContext* rc);
-
-  virtual ~MeshShape();
 
 };
 
 #endif
+

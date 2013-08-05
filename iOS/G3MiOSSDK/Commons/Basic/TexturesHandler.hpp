@@ -16,7 +16,7 @@
 
 class TextureBuilder;
 class IImage;
-class RenderContext;
+class G3MRenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
@@ -26,13 +26,13 @@ class IGLTextureId;
 class TextureSpec {
 private:
   const std::string _id;
-  
+
   const int         _width;
   const int         _height;
   const bool        _isMipmap;
-  
+
   TextureSpec& operator=(const TextureSpec& that);
-  
+
 public:
   TextureSpec(const std::string& id,
               const int          width,
@@ -43,38 +43,38 @@ public:
   _height(height),
   _isMipmap(isMipmap)
   {
-    
+
   }
-  
+
   TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false){}
-  
+
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
   _height(that._height),
   _isMipmap(that._isMipmap)
   {
-    
+
   }
-  
+
   bool isMipmap() const {
     return _isMipmap;
   }
-  
+
   int getWidth() const {
     return _width;
   }
-  
+
   int getHeight() const {
     return _height;
   }
-  
+
   bool equalsTo(const TextureSpec& that) const {
     return ((_id.compare(that._id) == 0) &&
-            (_width == that._width) &&
+            (_width  == that._width) &&
             (_height == that._height));
   }
-  
+
   bool lowerThan(const TextureSpec& that) const {
     if (_id < that._id) {
       return true;
@@ -82,25 +82,25 @@ public:
     else if (_id > that._id) {
       return false;
     }
-    
+
     if (_width < that._width) {
       return true;
     }
     else if (_width > that._width) {
       return false;
     }
-    
+
     return (_height < that._height);
   }
-  
+
   const std::string description() const;
-  
+
 #ifdef C_CODE
   bool operator<(const TextureSpec& that) const {
     return lowerThan(that);
   }
 #endif
-  
+
 #ifdef JAVA_CODE
   @Override
 	public int hashCode() {
@@ -111,7 +111,7 @@ public:
 		result = prime * result + _width;
 		return result;
 	}
-  
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -138,35 +138,35 @@ public:
 class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
-  
+
   GL* const _gl;
-  
+
   const bool _verbose;
-  
-  void showHolders(const std::string message) const;
-  
+
+  //void showHolders(const std::string& message) const;
+
 public:
-  
+
   TexturesHandler(GL* const  gl,
                   bool verbose):
   _gl(gl),
   _verbose(verbose)
   {
   }
-  
+
   ~TexturesHandler();
-  
+
   const IGLTextureId* getGLTextureId(const IImage* image,
                                      int format,
                                      const std::string& name,
                                      bool hasMipMap);
-  
+
   const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
-  
+
   void releaseGLTextureId(const IGLTextureId* glTextureId);
-  
+
   void retainGLTextureId(const IGLTextureId* glTextureId);
-  
+
 };
 
 #endif

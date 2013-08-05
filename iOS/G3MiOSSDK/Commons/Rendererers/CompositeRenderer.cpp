@@ -8,35 +8,36 @@
 
 #include "CompositeRenderer.hpp"
 
-void CompositeRenderer::initialize(const InitializationContext* ic) {
-  _ic = ic;
+void CompositeRenderer::initialize(const G3MContext* context) {
+  _context = context;
   
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->initialize(ic);
+    _renderers[i]->initialize(context);
   }
 }
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
-  if (_ic != NULL) {
-    renderer->initialize(_ic);
+  if (_context != NULL) {
+    renderer->initialize(_context);
   }
 }
 
-void CompositeRenderer::render(const RenderContext* rc) {
+void CompositeRenderer::render(const G3MRenderContext* rc,
+                               const GLState& parentState) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {
-      renderer->render(rc);
+      renderer->render(rc, parentState);
     }
   }
 }
 
-bool CompositeRenderer::onTouchEvent(const EventContext* ec,
+bool CompositeRenderer::onTouchEvent(const G3MEventContext* ec,
                                      const TouchEvent* touchEvent) {
   // the events are processed bottom to top
   const int rendersSize = _renderers.size();
@@ -51,7 +52,7 @@ bool CompositeRenderer::onTouchEvent(const EventContext* ec,
   return false;
 }
 
-void CompositeRenderer::onResizeViewportEvent(const EventContext* ec,
+void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                               int width, int height)
 {
   // the events are processed bottom to top
@@ -61,7 +62,7 @@ void CompositeRenderer::onResizeViewportEvent(const EventContext* ec,
   }
 }
 
-bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
+bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
     Renderer* renderer = _renderers[i];
@@ -75,31 +76,38 @@ bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
   return true;
 }
 
-void CompositeRenderer::start() {
+void CompositeRenderer::start(const G3MRenderContext* rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->start();
+    _renderers[i]->start(rc);
   }
 }
 
-void CompositeRenderer::stop() {
+void CompositeRenderer::stop(const G3MRenderContext* rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->stop();
+    _renderers[i]->stop(rc);
   }
 }
 
-void CompositeRenderer::onResume(const InitializationContext* ic) {
+void CompositeRenderer::onResume(const G3MContext* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->onResume(ic);
+    _renderers[i]->onResume(context);
   }
 }
 
-void CompositeRenderer::onPause(const InitializationContext* ic) {
+void CompositeRenderer::onPause(const G3MContext* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->onPause(ic);
+    _renderers[i]->onPause(context);
+  }
+}
+
+void CompositeRenderer::onDestroy(const G3MContext* context) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    _renderers[i]->onDestroy(context);
   }
 }
 

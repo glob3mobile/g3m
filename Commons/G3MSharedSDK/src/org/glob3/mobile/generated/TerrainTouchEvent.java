@@ -8,7 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Layer;
 
 public class TerrainTouchEvent
@@ -19,31 +18,25 @@ public class TerrainTouchEvent
 
   public TerrainTouchEvent(Geodetic3D position, Sector sector, Layer layer)
   {
-	  _position = new Geodetic3D(position);
-	  _sector = new Sector(sector);
-	  _layer = layer;
+     _position = new Geodetic3D(position);
+     _sector = new Sector(sector);
+     _layer = layer;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Geodetic3D getPosition() const
   public final Geodetic3D getPosition()
   {
-	return _position;
+    return _position;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Sector getSector() const
   public final Sector getSector()
   {
-	return _sector;
+    return _sector;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Layer* getLayer() const
   public final Layer getLayer()
   {
-	return _layer;
+    return _layer;
   }
 
 }

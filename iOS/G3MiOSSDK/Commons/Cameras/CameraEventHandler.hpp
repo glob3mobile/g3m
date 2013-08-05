@@ -2,7 +2,7 @@
 //  CameraEventHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -12,30 +12,30 @@
 #include "CameraRenderer.hpp"
 
 class TouchEvent;
-class RenderContext;
+class G3MRenderContext;
 class CameraContext;
 
 class CameraEventHandler {
   
 public:
-  virtual bool onTouchEvent(const EventContext *eventContext,
+  virtual bool onTouchEvent(const G3MEventContext *eventContext,
                             const TouchEvent* touchEvent,
                             CameraContext *cameraContext) = 0;
   
-  virtual void render(const RenderContext* rc,
+  virtual void render(const G3MRenderContext* rc,
                       CameraContext *cameraContext) = 0;
   
   virtual ~CameraEventHandler() {}
   
-  virtual void onDown(const EventContext *eventContext,
+  virtual void onDown(const G3MEventContext *eventContext,
                       const TouchEvent& touchEvent,
                       CameraContext *cameraContext) = 0;
   
-  virtual void onMove(const EventContext *eventContext,
+  virtual void onMove(const G3MEventContext *eventContext,
                       const TouchEvent& touchEvent,
                       CameraContext *cameraContext) = 0;
   
-  virtual void onUp(const EventContext *eventContext,
+  virtual void onUp(const G3MEventContext *eventContext,
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext) = 0;
   

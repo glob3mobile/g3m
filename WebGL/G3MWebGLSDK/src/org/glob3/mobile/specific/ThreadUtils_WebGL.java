@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IThreadUtils;
 
@@ -25,7 +26,7 @@ public final class ThreadUtils_WebGL
       final Timer timer = new Timer() {
          @Override
          public void run() {
-            task.run();
+            task.run(_context);
             if (autoDelete) {
                task.dispose();
             }
@@ -46,6 +47,21 @@ public final class ThreadUtils_WebGL
    public void invokeInBackground(final GTask task,
                                   final boolean autoDelete) {
       invokeTask(task, autoDelete);
+   }
+
+
+   @Override
+   public void onResume(final G3MContext context) {
+   }
+
+
+   @Override
+   public void onPause(final G3MContext context) {
+   }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
    }
 
 }

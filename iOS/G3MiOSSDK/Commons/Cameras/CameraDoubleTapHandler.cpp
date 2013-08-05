@@ -2,7 +2,7 @@
 //  CameraDoubleTapHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 
-bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,
                                           CameraContext *cameraContext) {
   // only one finger needed
@@ -24,7 +24,7 @@ bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
   return true;
 }
 
-void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
+void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
                                     const TouchEvent& touchEvent,
                                     CameraContext *cameraContext) {
   // compute globe point where user tapped
@@ -38,10 +38,10 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   
   // compute drag parameters
   const Vector3D axis = initialPoint.cross(centerPoint);
-  const Angle angle   = Angle::fromRadians(- GMath.asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  const Angle angle   = Angle::fromRadians(- IMathUtils::instance()->asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getCartesianPosition()).height();
+  const double height   = camera->getGeodeticPosition()._height;
   const double distance = height * 0.6;
   
   // create effect

@@ -2,7 +2,7 @@
 //  ILogger.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -31,7 +31,8 @@ protected:
 public:
   static void setInstance(ILogger* logger) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("ILooger instance already set!");
+      delete _instance;
     }
     _instance = logger;
   }
@@ -41,9 +42,9 @@ public:
   }
   
   
-  virtual void logInfo(const std::string x, ...) const = 0;
-  virtual void logWarning(const std::string x, ...) const = 0;
-  virtual void logError(const std::string x, ...) const = 0;
+  virtual void logInfo   (const std::string& x, ...) const = 0;
+  virtual void logWarning(const std::string& x, ...) const = 0;
+  virtual void logError  (const std::string& x, ...) const = 0;
   
   // a virtual destructor is needed for conversion to Java
   virtual ~ILogger() {}

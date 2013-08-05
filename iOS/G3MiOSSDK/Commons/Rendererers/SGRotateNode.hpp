@@ -13,40 +13,34 @@
 
 class SGRotateNode : public SGNode {
 private:
-  double _x;
-  double _y;
-  double _z;
-  double _angle;
-
-protected:
-  void prepareRender(const RenderContext* rc);
-
-  void cleanUpRender(const RenderContext* rc);
+  const double _x;
+  const double _y;
+  const double _z;
+  const double _angle;
 
 public:
-  SGRotateNode() :
-  _x(0),
-  _y(0),
-  _z(0),
-  _angle(0)
+  SGRotateNode(const std::string& id,
+               const std::string& sId,
+               double x,
+               double y,
+               double z,
+               double angle) :
+  SGNode(id, sId),
+  _x(x),
+  _y(y),
+  _z(z),
+  _angle(angle)
   {
 
   }
 
-  void setX(double x) {
-    _x = x;
-  }
+  void prepareRender(const G3MRenderContext* rc);
 
-  void setY(double y) {
-    _y = y;
-  }
+  void cleanUpRender(const G3MRenderContext* rc);
 
-  void setZ(double z) {
-    _z = z;
-  }
-
-  void setAngle(double angle) {
-    _angle = angle;
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState& parentState) {
+    return NULL;
   }
 
 };

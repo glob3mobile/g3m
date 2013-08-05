@@ -10,15 +10,16 @@
 
 #include "SGNode.hpp"
 
-
-void SGShape::initialize(const InitializationContext* ic) {
-  _node->initialize(ic);
+void SGShape::initialize(const G3MContext* context) {
+  _node->initialize(context, this);
 }
 
-bool SGShape::isReadyToRender(const RenderContext* rc) {
+bool SGShape::isReadyToRender(const G3MRenderContext* rc) {
   return _node->isReadyToRender(rc);
 }
 
-void SGShape::rawRender(const RenderContext* rc) {
-  _node->render(rc);
+void SGShape::rawRender(const G3MRenderContext* rc,
+                        const GLState& parentState,
+                        bool renderNotReadyShapes) {
+  _node->render(rc, parentState, renderNotReadyShapes);
 }

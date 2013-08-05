@@ -21,6 +21,12 @@ const std::string URL::description() const {
   return s; 
 }
 
+const std::string URL::FILE_PROTOCOL = "file:///";
+
+bool URL::isFileProtocol() const {
+  return (IStringUtils::instance()->beginsWith(_path, FILE_PROTOCOL));
+}
+
 
 const std::string URL::escape(const std::string& path) {
 //    std::string escapedURL = IStringUtils::instance()->replaceSubstring(path, "%", "%25");

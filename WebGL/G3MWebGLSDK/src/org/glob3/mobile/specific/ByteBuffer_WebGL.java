@@ -47,9 +47,9 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public int size() {
-      return jsSize();
-   }
+   public native int size() /*-{
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
+   }-*/;
 
 
    @Override
@@ -59,16 +59,27 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public byte get(final int i) {
-      return jsGet(i);
-   }
+   public native byte get(final int i) /*-{
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i];
+   }-*/;
 
 
    @Override
-   public void put(final int i,
-                   final byte value) {
-      jsPut(i, value);
-   }
+   public native void put(final int i,
+                          final byte value) /*-{
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		if (buffer[i] != value) {
+			buffer[i] = value;
+			this.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
+		}
+   }-*/;
+
+
+   @Override
+   public native void rawPut(final int i,
+                             final byte value) /*-{
+		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i] = value;
+   }-*/;
 
 
    @Override
@@ -78,9 +89,14 @@ public final class ByteBuffer_WebGL
 
 
    @Override
-   public String getAsString() {
-      return jsGetAsString();
-   }
+   public native String getAsString() /*-{
+		var result = "";
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		for ( var i = 0; i < buffer.byteLength; i++) {
+			result += String.fromCharCode(buffer[i]);
+		}
+		return result;
+   }-*/;
 
 
    public JavaScriptObject getBuffer() {
@@ -102,34 +118,4 @@ public final class ByteBuffer_WebGL
 		return new Uint8Array(size);
    }-*/;
 
-
-   private native int jsSize() /*-{
-		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
-   }-*/;
-
-
-   private native byte jsGet(int i) /*-{
-		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.get(i);
-   }-*/;
-
-
-   private native void jsPut(int i,
-                             byte value) /*-{
-		var thisInstance = this;
-		if (thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
-				.get(i) != value) {
-			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
-					.set(i, value);
-			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
-		}
-   }-*/;
-
-
-   private native String jsGetAsString() /*-{
-		var thisInstance = this;
-		return String.fromCharCode
-				.apply(
-						null,
-						thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer);
-   }-*/;
 }

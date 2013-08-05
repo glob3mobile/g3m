@@ -23,7 +23,7 @@ private:
   
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
-  
+
 public:
   
   virtual ~Image_iOS() {
@@ -39,8 +39,8 @@ public:
     
   }
   
-  Image_iOS(int width, int height);
-  
+//  Image_iOS(int width, int height);
+
   UIImage* getUIImage() const {
     return _image;
   }
@@ -61,27 +61,17 @@ public:
     return (_image == NULL) ? 0 : (int) _image.size.height;
   }
   
-  Vector2I getExtent() const {
+  const Vector2I getExtent() const {
     return Vector2I(getWidth(), getHeight());
   }
-  
-  IImage* combineWith(const IImage& other,
-                      int width, int height) const;
-  
-  IImage* combineWith(const IImage& other,
-                      const RectangleD& rect,
-                      int width, int height) const;
-  
-  IImage* subImage(const RectangleD& rect) const;
+
   
   unsigned char* createByteArrayRGBA8888() const;
-  
-  IImage* scale(int width, int height) const;
 
   const std::string description() const;
   
   IImage* shallowCopy() const;
-  
+
 };
 
 #endif

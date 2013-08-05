@@ -12,11 +12,11 @@
 #include "GL.hpp"
 
 
-void GLErrorRenderer::initialize(const InitializationContext* ic) {
+void GLErrorRenderer::initialize(const G3MContext* context) {
   
 }
 
-bool GLErrorRenderer::onTouchEvent(const EventContext* ec,
+bool GLErrorRenderer::onTouchEvent(const G3MEventContext* ec,
                                    const TouchEvent* touchEvent) {
   return false;
 }
@@ -24,11 +24,12 @@ bool GLErrorRenderer::onTouchEvent(const EventContext* ec,
 GLErrorRenderer::~GLErrorRenderer() {
 }
 
-void GLErrorRenderer::onResizeViewportEvent(const EventContext* ec,
+void GLErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                             int width, int height) {
 }
 
-void GLErrorRenderer::render(const RenderContext *rc) {
+void GLErrorRenderer::render(const G3MRenderContext *rc,
+                             const GLState& parentState) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   

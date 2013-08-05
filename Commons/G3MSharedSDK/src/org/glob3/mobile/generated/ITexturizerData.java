@@ -1,46 +1,22 @@
 package org.glob3.mobile.generated; 
 //
-//  Tile.cpp
+//  ITexturizerData.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 2/7/13.
+//
 //
 
 //
-//  Tile.h
+//  ITexturizerData.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 2/7/13.
+//
 //
 
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileTexturizer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TilesRenderParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class ITimer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TilesStatistics;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileKey;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Vector3D;
 
 public interface ITexturizerData
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isTexturizerData() const = 0;
-  boolean isTexturizerData(); //Java needs to know that this is an interface
+  public void dispose();
 }

@@ -1,20 +1,27 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraConstraints.hpp
+//  ICameraConstrainer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 09/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Diego Gomez Deck on 1/30/13.
+//
+//
+
+//
+//  ICameraConstrainer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/30/13.
+//
 //
 
 
-
+//class Planet;
+//class Camera;
 
 public interface ICameraConstrainer
 {
-  //NO DESTRUCTOR FOR INTERFACE
+  public void dispose();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void onCameraChange(const Planet *planet, const Camera* previousCamera, Camera* nextCamera) const = 0;
   void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);
 }

@@ -16,18 +16,21 @@
 
 #include "IJSONParser.hpp"
 
-class JSONParser_iOS : public IJSONParser{
+class JSONParser_iOS : public IJSONParser {
 private:
-  NSData* _jsonData;
-  
+  JSONBaseObject* convert(NSObject *object,
+                          bool nullAsObject);
+
+  JSONBaseObject* parse(NSData* jsonData,
+                        bool nullAsObject);
+
 public:
-  JSONBaseObject* parse(const std::string& string);
-  JSONBaseObject* parse(IByteBuffer* buffer);
-  
-  JSONBaseObject* makeJSONElement(NSObject *object);
-  
+  JSONBaseObject* parse(const std::string& string,
+                        bool nullAsObject);
+
+  JSONBaseObject* parse(IByteBuffer* buffer,
+                        bool nullAsObject);
+
 };
-
-
 
 #endif

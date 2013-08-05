@@ -9,6 +9,9 @@
 #ifndef __G3MiOSSDK__MutableVector2I__
 #define __G3MiOSSDK__MutableVector2I__
 
+class Vector2I;
+
+
 class MutableVector2I {
 private:
   int _x;
@@ -54,6 +57,7 @@ public:
     return _y;
   }
   
+  Vector2I asVector2I() const;
 };
 
 #endif

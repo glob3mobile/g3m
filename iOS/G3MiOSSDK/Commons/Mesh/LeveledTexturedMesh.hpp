@@ -30,7 +30,7 @@ public:
   
   virtual const MutableVector2D getTranslation() const = 0;
   
-  virtual IFloatBuffer* getTexCoords() const = 0;
+  virtual IFloatBuffer* createTextCoords() const = 0;
 };
 
 class LazyTextureMapping : public TextureMapping {
@@ -50,7 +50,7 @@ private:
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-  
+    
   TexturesHandler* _texturesHandler;
   
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
@@ -58,10 +58,13 @@ private:
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
 
+  const bool _transparent;
+
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      TexturesHandler* texturesHandler,
-                     bool ownedTexCoords) :
+                     bool ownedTexCoords,
+                     bool transparent) :
   _initializer(initializer),
   _glTextureId(NULL),
   _initialized(false),
@@ -69,9 +72,9 @@ public:
   _translation(0,0),
   _scale(1,1),
   _texturesHandler(texturesHandler),
-  _ownedTexCoords(ownedTexCoords)
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent)
   {
-    
   }
   
   virtual ~LazyTextureMapping() {
@@ -86,7 +89,7 @@ public:
     releaseGLTextureId();
   }
   
-  void bind(const RenderContext* rc) const;
+  void bind(const G3MRenderContext* rc) const;
 
   bool isValid() const {
     return _glTextureId != NULL;
@@ -98,8 +101,12 @@ public:
   }
   
 
-  const const IGLTextureId* getGLTextureId() const {
+  const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
+  }
+
+  bool isTransparent(const G3MRenderContext* rc) const {
+    return _transparent;
   }
 
 };
@@ -117,7 +124,7 @@ private:
   
   mutable int  _currentLevel;
   mutable bool _currentLevelIsValid;
-  
+    
   LazyTextureMapping* getCurrentTextureMapping() const;
 
 public:
@@ -142,9 +149,10 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const RenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
   
-  Extent* getExtent() const;
+  BoundingVolume* getBoundingVolume() const;
 
   bool setGLTextureIdForLevel(int level,
                               const IGLTextureId* glTextureId);
@@ -153,7 +161,9 @@ public:
 //                                      const const GLTextureId*glTextureId);
   
   const IGLTextureId* getTopLevelGLTextureId() const;
-
+  
+  bool isTransparent(const G3MRenderContext* rc) const;
+  
 };
 
 #endif

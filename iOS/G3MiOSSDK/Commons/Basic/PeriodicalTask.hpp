@@ -19,16 +19,16 @@ private:
   long long _intervalMS;
   long long _lastExecutionMS;
   GTask*    _task;
-  
+
   ITimer*   _timer;
-  
+
   ITimer* getTimer() {
     if (_timer == NULL) {
       _timer = IFactory::instance()->createTimer();
     }
     return _timer;
   }
-  
+
 public:
   PeriodicalTask(const TimeInterval& interval,
                  GTask* task):
@@ -38,24 +38,28 @@ public:
   _timer(NULL)
   {
   }
-  
+
   ~PeriodicalTask() {
-      delete _task;
-    
-      IFactory::instance()->deleteTimer(_timer);
+    delete _task;
+
+    IFactory::instance()->deleteTimer(_timer);
   }
-  
-  void executeIfNecessary() {
+
+  void resetTimeout() {
+    _lastExecutionMS = 0;
+  }
+
+  void executeIfNecessary(const G3MContext* context) {
     long long now = getTimer()->now().milliseconds();
-    
+
     long long interval = now - _lastExecutionMS;
-    
+
     if (interval >= _intervalMS) {
-      _task->run();
+      _task->run(context);
       _lastExecutionMS = now;
     }
   }
-  
+
 };
 
 #endif

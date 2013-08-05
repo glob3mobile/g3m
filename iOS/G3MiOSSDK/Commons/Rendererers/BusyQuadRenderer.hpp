@@ -2,7 +2,7 @@
 //  BusyQuadRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,8 +11,10 @@
 
 
 #include "LeafRenderer.hpp"
-#include "IndexedMesh.hpp"
 #include "Effects.hpp"
+#include "Vector2D.hpp"
+#include "Color.hpp"
+#include "DirectMesh.hpp"
 
 
 //***************************************************************
@@ -20,60 +22,76 @@
 
 class BusyQuadRenderer : public LeafRenderer, EffectTarget {
 private:
-  double  _degrees;
-  const std::string _textureFilename;
-  Mesh *  _quadMesh;
+  double      _degrees;
+  //  const std::string _textureFilename;
+  IImage*     _image;
+  Mesh*       _quadMesh;
   
-  bool initMesh(const RenderContext* rc);
+  const bool      _animated;
+  const Vector2D  _size;
+  Color*          _backgroundColor;
   
+  bool initMesh(const G3MRenderContext* rc);
   
   
 public:
-  BusyQuadRenderer(const std::string textureFilename):
+  BusyQuadRenderer(IImage* image,
+                   Color* backgroundColor,
+                   const Vector2D& size,
+                   const bool animated):
   _degrees(0),
   _quadMesh(NULL),
-  _textureFilename(textureFilename)
-  {}
+  _image(image),
+  _backgroundColor(backgroundColor),
+  _animated(animated),
+  _size(size)
+  {
+  }
   
-  void initialize(const InitializationContext* ic) {}
+  void initialize(const G3MContext* context) {
+  }
   
-  bool isReadyToRender(const RenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
   
-  virtual ~BusyQuadRenderer() {}
+  virtual ~BusyQuadRenderer() {
+    delete _quadMesh;
+    delete _backgroundColor;
+  }
   
   void incDegrees(double value) {
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
   }
   
-  void start();
+  void start(const G3MRenderContext* rc);
   
-  void stop();
+  void stop(const G3MRenderContext* rc);
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
   }
 
-  void unusedMethod() const {
-    
+  void onDestroy(const G3MContext* context) {
+
   }
 
 };
@@ -91,16 +109,19 @@ public:
   _renderer(renderer)
   { }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when) {}
   
-  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
-    EffectWithForce::doStep(rc, now);
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when) {
+    EffectWithForce::doStep(rc, when);
     _renderer->incDegrees(3);
   }
   
-  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when) { }
   
-  virtual void cancel(const TimeInterval& now) {
+  virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
   

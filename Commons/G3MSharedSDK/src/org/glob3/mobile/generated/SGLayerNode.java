@@ -17,69 +17,129 @@ package org.glob3.mobile.generated;
 
 
 
+//class IGLTextureId;
+//class IImage;
+
 public class SGLayerNode extends SGNode
 {
-  private String _uri;
-  private String _applyTo;
-  private String _blendMode;
-  private boolean _flipY;
+  private final String _uri;
 
-  private String _magFilter;
-  private String _minFilter;
-  private String _wrapS;
-  private String _wrapT;
+//  const std::string _applyTo;
+//  const std::string _blendMode;
+//  const bool        _flipY;
+//
+//  const std::string _magFilter;
+//  const std::string _minFilter;
+//  const std::string _wrapS;
+//  const std::string _wrapT;
 
-  protected void prepareRender(RenderContext rc)
+  private boolean _initialized;
+
+  private IGLTextureId getTextureId(G3MRenderContext rc)
   {
+    if (_textureId == null)
+    {
+      if (_downloadedImage != null)
+      {
+        final boolean hasMipMap = false;
+        _textureId = rc.getTexturesHandler().getGLTextureId(_downloadedImage, GLFormat.rgba(), getURL().getPath(), hasMipMap);
   
-	super.prepareRender(rc);
+        IFactory.instance().deleteImage(_downloadedImage);
+        _downloadedImage = null;
+      }
+    }
+    return _textureId;
   }
 
-  protected void cleanUpRender(RenderContext rc)
+  private IImage _downloadedImage;
+  private void requestImage(G3MRenderContext rc)
   {
+    if (_uri.compareTo("") == 0)
+    {
+      return;
+    }
   
-	super.cleanUpRender(rc);
+    rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), true, new SGLayerNode_ImageDownloadListener(this), true);
+  }
+
+  private IGLTextureId _textureId;
+
+  private URL getURL()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_shape.getURIPrefix());
+    isb.addString(_uri);
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
   }
 
 
-  public final void setUri(String uri)
+
+  public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
+//  _applyTo(applyTo),
+//  _blendMode(blendMode),
+//  _flipY(flipY),
+//  _magFilter(magFilter),
+//  _minFilter(minFilter),
+//  _wrapS(wrapS),
+//  _wrapT(wrapT),
   {
-	_uri = uri;
+     super(id, sId);
+     _uri = uri;
+     _downloadedImage = null;
+     _textureId = null;
+     _initialized = false;
+
   }
 
-  public final void setApplyTo(String applyTo)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	_applyTo = applyTo;
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    return (textureId != null);
   }
 
-  public final void setBlendMode(String blendMode)
+  public final void onImageDownload(IImage image)
   {
-	_blendMode = blendMode;
+    if (_downloadedImage != null)
+    {
+      IFactory.instance().deleteImage(_downloadedImage);
+    }
+    _downloadedImage = image;
   }
 
-  public final void setFlipY(boolean flipY)
+  public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-	_flipY = flipY;
-  }
-
-  public final void setMagFilter(String magFilter)
-  {
-	_magFilter = magFilter;
-  }
-
-  public final void setMinFilter(String minFilter)
-  {
-	_minFilter = minFilter;
-  }
-
-  public final void setWrapS(String wrapS)
-  {
-	_wrapS = wrapS;
-  }
-
-  public final void setWrapT(String wrapT)
-  {
-	_wrapT = wrapT;
+    if (!_initialized)
+    {
+      _initialized = true;
+      requestImage(rc);
+    }
+  
+    final IGLTextureId textureId = getTextureId(rc);
+    if (textureId == null)
+    {
+      return null;
+    }
+  
+    GLState state = new GLState(parentState);
+    state.enableTextures();
+    state.enableTexture2D();
+    state.enableBlend();
+    //int __WORKING;
+  
+    GL gl = rc.getGL();
+    gl.bindTexture(textureId);
+  
+    return state;
   }
 
 }

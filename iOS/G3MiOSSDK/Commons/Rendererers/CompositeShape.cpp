@@ -20,7 +20,7 @@ void CompositeShape::addShape(Shape* shape) {
   _children.push_back(shape);
 }
 
-bool CompositeShape::isReadyToRender(const RenderContext *rc) {
+bool CompositeShape::isReadyToRender(const G3MRenderContext *rc) {
   int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
@@ -32,10 +32,12 @@ bool CompositeShape::isReadyToRender(const RenderContext *rc) {
   return false;
 }
 
-void CompositeShape::rawRender(const RenderContext *rc) {
+void CompositeShape::rawRender(const G3MRenderContext* rc,
+                               const GLState& parentState,
+                               bool renderNotReadyShapes) {
   int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
-    child->render(rc);
+    child->render(rc, parentState, renderNotReadyShapes);
   }
 }

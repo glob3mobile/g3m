@@ -17,13 +17,12 @@
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
 class Geodetic3D {
-private:
+
+public:
   const Angle _latitude;
   const Angle _longitude;
   const double _height;
-  
-public:
-  
+
   ~Geodetic3D(){}
   
   static Geodetic3D nan() {
@@ -42,22 +41,38 @@ public:
     return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
   }
   
-  static Geodetic3D interpolation(const Geodetic3D& ini, const Geodetic3D& end, double v){
-    return Geodetic3D(Angle::interpolation(ini.latitude(),  end.latitude(),  v),
-                      Angle::interpolation(ini.longitude(), end.longitude(), v),
-                      (1-v) * ini.height() + v * end.height() );
+  static Geodetic3D linearInterpolation(const Geodetic3D& from,
+                                        const Geodetic3D& to,
+                                        double alpha){
+    return Geodetic3D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
+                      Angle::linearInterpolation(from._longitude, to._longitude, alpha),
+                      IMathUtils::instance()->linearInterpolation(from._height, to._height, alpha)
+                      //((1.0 - alpha) * from._height) + (alpha * to._height)
+                      );
   }
   
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
-             const double height): _latitude(latitude), _longitude(longitude), _height(height) {
+             const double height) :
+  _latitude(latitude),
+  _longitude(longitude),
+  _height(height)
+  {
   }
   
   Geodetic3D(const Geodetic2D& g2,
-             const double height): _latitude(g2.latitude()), _longitude(g2.longitude()), _height(height) {
+             const double height):
+  _latitude(g2._latitude),
+  _longitude(g2._longitude),
+  _height(height)
+  {
   }
   
-  Geodetic3D(const Geodetic3D& g): _latitude(g._latitude), _longitude(g._longitude), _height(g._height) {
+  Geodetic3D(const Geodetic3D& g) :
+  _latitude(g._latitude),
+  _longitude(g._longitude),
+  _height(g._height)
+  {
   }
   
   const Angle latitude() const {
@@ -71,7 +86,7 @@ public:
   double height() const {
     return _height;
   }
-  
+
   Geodetic2D asGeodetic2D() const {
     return Geodetic2D(_latitude, _longitude);
   }
@@ -102,7 +117,6 @@ public:
                       _longitude.div(magnitude),
                       _height / magnitude);
   }
-  
 };
 
 

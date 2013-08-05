@@ -27,31 +27,40 @@ public:
   _sector(sector),
   _layer(layer)
   {
-    
+
   }
-  
+
   const Geodetic3D getPosition() const {
     return _position;
   }
-  
+
   const Sector getSector() const {
     return _sector;
   }
-  
+
   const Layer* getLayer() const {
     return _layer;
   }
 
 };
 
-class TerrainTouchEventListener{
+
+class TerrainTouchEventListener {
 public:
-  
-  virtual void onTerrainTouchEvent(const EventContext* ec,
-                                   const TerrainTouchEvent& ev) = 0;
-  
-  virtual ~TerrainTouchEventListener(){}
-  
+
+  /**
+   Process terrain touch event, return true if the event was processed.
+   */
+  virtual bool onTerrainTouch(const G3MEventContext* context,
+                              const TerrainTouchEvent& ev) = 0;
+
+#ifdef C_CODE
+  virtual ~TerrainTouchEventListener() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
+
 };
 
 #endif

@@ -2,7 +2,7 @@
 //  CameraSingleDragHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 #include "GL.hpp"
 
 
-bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
@@ -39,7 +39,7 @@ bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraSingleDragHandler::onDown(const EventContext *eventContext,
+void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {  
   Camera *camera = cameraContext->getNextCamera();
@@ -50,13 +50,22 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  _initialPixel = pixel.asMutableVector2I();
+  //_initialPixel = pixel.asMutableVector2I();
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
+  
+/*
+  // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
+  if (pixel._x<50) {
+    Geodetic3D center(Angle::fromDegrees(39.78), Angle::fromDegrees(-122), 0);
+    camera->setPointOfView(center, 1e6, Angle::fromDegrees(180), Angle::fromDegrees(90));
+  }*/
+  
+
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
-void CameraSingleDragHandler::onMove(const EventContext *eventContext,
+void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   
@@ -90,13 +99,13 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   // save drag parameters
   _axis = _initialPoint.cross(finalPoint);
   
-  const double radians = - GMath.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  const double radians = - IMathUtils::instance()->asin(_axis.length()/_initialPoint.length()/finalPoint.length());
   _radiansStep = radians - _lastRadians;
   _lastRadians = radians;
 }
 
 
-void CameraSingleDragHandler::onUp(const EventContext *eventContext,
+void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) {
   if (_useInertia) {
@@ -117,15 +126,15 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   
   // update gesture
   cameraContext->setCurrentGesture(None);
-  _initialPixel = MutableVector2I::zero();
+  //_initialPixel = MutableVector2I::zero();
 }
 
-void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
+void CameraSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)
 {
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {
 //    if (cameraContext->getCurrentGesture() == Drag) {
-//      GL *gl = rc->getGL();
+//      GL* gl = rc->getGL();
 //      float vertices[] = { 0,0,0};
 //      int indices[] = {0};
 //      gl->enableVerticesPosition();
@@ -141,7 +150,7 @@ void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cam
 //      gl->popMatrix();
 //            
 //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+//      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
 //    }
 //  }
 }

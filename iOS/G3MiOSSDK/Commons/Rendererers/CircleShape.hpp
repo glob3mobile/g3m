@@ -9,24 +9,24 @@
 #ifndef __G3MiOSSDK__CircleShape__
 #define __G3MiOSSDK__CircleShape__
 
-#include "MeshShape.hpp"
+#include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
-class CircleShape : public MeshShape {
+class CircleShape : public AbstractMeshShape {
 private:
   float  _radius;
   int    _steps;
   Color* _color;
 
 protected:
-  Mesh* createMesh(const RenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
   CircleShape(Geodetic3D* position,
               float radius,
               Color* color = NULL,
               int steps = 64) :
-  MeshShape(position),
+  AbstractMeshShape(position),
   _radius(radius),
   _color(color),
   _steps(steps)
@@ -46,9 +46,11 @@ public:
   }
 
   void setColor(Color* color) {
-    delete _color;
-    _color = color;
-    cleanMesh();
+    if (_color != color) {
+      delete _color;
+      _color = color;
+      cleanMesh();
+    }
   }
   
 

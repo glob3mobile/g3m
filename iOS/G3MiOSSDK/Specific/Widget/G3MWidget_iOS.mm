@@ -2,7 +2,7 @@
 //  EAGLView.m
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,38 +11,13 @@
 #import "ES2Renderer.h"
 
 #include "G3MWidget.hpp"
-#include "CompositeRenderer.hpp"
-#include "Planet.hpp"
-#include "CameraRenderer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "CameraConstraints.hpp"
-#include "TileRenderer.hpp"
-#include "EllipsoidalTileTessellator.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "BusyMeshRenderer.hpp"
-#include "CPUTextureBuilder.hpp"
-#include "LayerSet.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-#include "INativeGL.hpp"
-#include "GL.hpp"
-#include "MultiLayerTileTexturizer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "Box.hpp"
-#include "TexturesHandler.hpp"
-#include "WMSLayer.hpp"
 #include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
+#include "TextUtils_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -64,97 +39,49 @@
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                                layerSet: (LayerSet*) layerSet
-                  incrementalTileQuality: (bool) incrementalTileQuality
-                               renderers: (std::vector<Renderer*>) renderers
-                                userData: (UserData*) userData
-                      initializationTask: (GTask *) initializationTask
-                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-{
-  // creates default camera-renderer and camera-handlers
-  CameraRenderer *cameraRenderer = new CameraRenderer();
-  
-  const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  
-  const bool processRotation = true;
-  const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  
-  const bool renderDebug = false;
-  const bool useTilesSplitBudget = true;
-  const bool forceTopLevelTilesRenderOnStart = true;
-  
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-  
-  [self initWidgetWithCameraRenderer: cameraRenderer
-                   cameraConstraints: cameraConstraints
-                            layerSet: layerSet
-               tilesRenderParameters: parameters
-                           renderers: renderers
-                            userData: userData
-                  initializationTask: initializationTask
-                     periodicalTasks: periodicalTasks];
-}
 
-- (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                             layerSet: (LayerSet*) layerSet
-                tilesRenderParameters: (TilesRenderParameters*) parameters
-                            renderers: (std::vector<Renderer*>) renderers
-                             userData: (UserData*) userData
-                   initializationTask: (GTask*) initializationTask
-                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+- (void)          initWidget: (IStorage*) storage
+                  downloader: (IDownloader*) downloader
+                 threadUtils: (IThreadUtils*) threadUtils
+      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
+                      planet: (const Planet*) planet
+           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+              cameraRenderer: (CameraRenderer*) cameraRenderer
+                mainRenderer: (Renderer*) mainRenderer
+                busyRenderer: (Renderer*) busyRenderer
+             backgroundColor: (Color) backgroundColor
+                      logFPS: (bool) logFPS
+     logDownloaderStatistics: (bool) logDownloaderStatistics
+          initializationTask: (GInitializationTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+                    userData: (WidgetUserData*) userData
 {
-  
-  const int width  = (int) [self frame].size.width;
-  const int height = (int) [self frame].size.height;
-  
-  NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
-  
-  CompositeRenderer* mainRenderer = new CompositeRenderer();
-  
-  if (layerSet != NULL) {
-    TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-    
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        layerSet,
-                                        parameters,
-                                        showStatistics);
-    mainRenderer->addRenderer(tr);
-  }
-  
-  for (int i = 0; i < renderers.size(); i++) {
-    mainRenderer->addRenderer(renderers[i]);
-  }
-  
-  const Planet* planet = Planet::createEarth();
-  
-  Renderer* busyRenderer = new BusyMeshRenderer();
-  
-  _widgetVP = G3MWidget::create(nativeGL,
+  _widgetVP = G3MWidget::create([_renderer getGL],
+                                storage,
+                                downloader,
+                                threadUtils,
+                                cameraActivityListener,
                                 planet,
                                 cameraConstraints,
                                 cameraRenderer,
                                 mainRenderer,
                                 busyRenderer,
-                                width, height,
-                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                                true,
-                                false,
+                                backgroundColor,
+                                logFPS,
+                                logDownloaderStatistics,
                                 initializationTask,
-                                true,
+                                autoDeleteInitializationTask,
                                 periodicalTasks);
   [self widget]->setUserData(userData);
+}
+
+- (GL*)getGL {
+  return [_renderer getGL];
+}
+
+- (void)setWidget:(G3MWidget*) widget {
+  _widgetVP = widget;
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
@@ -191,7 +118,7 @@
     NSLog(@"----------------------------------------------------------------------------");
     
     
-    lastTouchEvent = NULL;
+    _lastTouchEvent = NULL;
     
     // rest of initialization
     _animating = FALSE;
@@ -217,26 +144,24 @@
   return self;
 }
 
-//** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-  
   //  printf ("Longpress. state=%d\n", sender.state);
   //
   //  if (sender.state == UIGestureRecognizerStateEnded) {
   //    NSLog(@"LONG PRESS");
   //  }
   
-  if (sender.state == 1){
-    
-    CGPoint tapPoint = [sender locationInView:sender.view.superview];
+  if (sender.state == 1) {
+    CGPoint tapPoint = [sender locationInView:sender.view];
     
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I( GMath.toInt(tapPoint.x), GMath.toInt(tapPoint.y)),
+    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
+                                      (int) tapPoint.y),
                              Vector2I(0, 0),
                              1);
     pointers.push_back(touch);
-    lastTouchEvent = TouchEvent::create(LongPress, pointers);
-    [self widget]->onTouchEvent(lastTouchEvent);
+    _lastTouchEvent = TouchEvent::create(LongPress, pointers);
+    [self widget]->onTouchEvent(_lastTouchEvent);
   }
   
 }
@@ -251,10 +176,16 @@
   int w = (int) [self frame].size.width;
   int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  [self widget]->onResizeViewportEvent(w,h);
   
-  [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
-  [self drawView:nil];
+  if ([self widget]) {
+    [self widget]->onResizeViewportEvent(w,h);
+    
+    [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
+    [self drawView:nil];
+  }
+  else {
+    NSLog(@"Widget is not set");
+  }
 }
 
 //- (NSInteger)animationFrameInterval {
@@ -329,17 +260,19 @@
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
     
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ),
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y),
                              tapCount);
     
     pointers.push_back(touch);
   }
   
-  delete lastTouchEvent;
-      
-  lastTouchEvent = TouchEvent::create(Down, pointers);
-  [self widget]->onTouchEvent(lastTouchEvent);
+  delete _lastTouchEvent;
+  
+  _lastTouchEvent = TouchEvent::create(Down, pointers);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 
@@ -356,19 +289,21 @@
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
     
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ));
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y));
     
     pointers.push_back(touch);
   }
   
   // test if finger orders are the same that in the previous gesture
-  if (lastTouchEvent!=NULL) {
-    if (pointers.size()==2 && lastTouchEvent->getTouchCount()==2) {
+  if (_lastTouchEvent!=NULL) {
+    if (pointers.size()==2 && _lastTouchEvent->getTouchCount()==2) {
       Vector2I current0 = pointers[0]->getPrevPos();
-      Vector2I last0 = lastTouchEvent->getTouch(0)->getPos();
-      Vector2I last1 = lastTouchEvent->getTouch(1)->getPos();
-      delete lastTouchEvent;
+      Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
+      Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      delete _lastTouchEvent;
       double dist0 = current0.sub(last0).squaredLength();
       double dist1 = current0.sub(last1).squaredLength();
       
@@ -377,19 +312,19 @@
         std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
         swappedPointers.push_back(pointers[1]);
         swappedPointers.push_back(pointers[0]);
-        lastTouchEvent = TouchEvent::create(Move, swappedPointers);
+        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
       } else {
-        lastTouchEvent = TouchEvent::create(Move, pointers);
+        _lastTouchEvent = TouchEvent::create(Move, pointers);
       }
     } else {
-      delete lastTouchEvent;
-      lastTouchEvent = TouchEvent::create(Move, pointers);
+      delete _lastTouchEvent;
+      _lastTouchEvent = TouchEvent::create(Move, pointers);
     }
   } else {
-    lastTouchEvent = TouchEvent::create(Move, pointers);
+    _lastTouchEvent = TouchEvent::create(Move, pointers);
   }
   
-  [self widget]->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 
@@ -409,20 +344,24 @@
     
     [touch timestamp];
     
-    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
-                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ) );
+    Touch *touch = new Touch(Vector2I((int) current.x,
+                                      (int) current.y),
+                             Vector2I((int) previous.x,
+                                      (int) previous.y));
     
     pointers.push_back(touch);
   }
   
-  delete lastTouchEvent;
+  delete _lastTouchEvent;
   
-  lastTouchEvent = TouchEvent::create(Up, pointers);
-  [self widget]->onTouchEvent(lastTouchEvent);
+  _lastTouchEvent = TouchEvent::create(Up, pointers);
+  [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 - (void)dealloc {
-  delete lastTouchEvent;
+  delete _lastTouchEvent;
+  [self setRenderer: nil];
+  delete (G3MWidget*) _widgetVP;
 }
 
 - (G3MWidget*) widget {
@@ -430,21 +369,59 @@
 }
 
 - (void)initSingletons {
+  ILogger*            logger          = new Logger_iOS(InfoLevel);
+  IFactory*           factory         = new Factory_iOS();
+  const IStringUtils* stringUtils     = new StringUtils_iOS();
+  IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
+  IMathUtils*         mathUtils       = new MathUtils_iOS();
+  IJSONParser*        jsonParser      = new JSONParser_iOS();
+  ITextUtils*         textUtils       = new TextUtils_iOS();
+  
+  G3MWidget::initSingletons(logger,
+                            factory,
+                            stringUtils,
+                            stringBuilder,
+                            mathUtils,
+                            jsonParser,
+                            textUtils);
+}
 
-    ILogger*            logger          = new Logger_iOS(WarningLevel);
-    IFactory*           factory         = new Factory_iOS();
-    const IStringUtils* stringUtils     = new StringUtils_iOS();
-    IThreadUtils*       threadUtils     = new ThreadUtils_iOS();
-    IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
-    IMathUtils*         mathUtils       = new MathUtils_iOS();
-    IJSONParser*        jsonParser      = new JSONParser_iOS();
-    
-    IStorage*           storage         = new SQLiteStorage_iOS("g3m.cache");
-    const bool          saveInBackground= true;
-    IDownloader*        downloader      = new CachedDownloader(new Downloader_iOS(8),
-                                                   saveInBackground);
-    
-    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage, downloader);
+- (CameraRenderer*)getCameraRenderer {
+  return [self widget]->getCameraRenderer();
+}
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position
+                     timeInterval: (const TimeInterval&)interval {
+  [self widget]->setAnimatedCameraPosition(interval, position);
+}
+
+- (void)setAnimatedCameraPosition: (const Geodetic3D&) position {
+  [self widget]->setAnimatedCameraPosition(position);
+}
+
+- (void)setCameraPosition: (const Geodetic3D&) position {
+  [self widget]->setCameraPosition(position);
+}
+
+- (void)setCameraHeading: (const Angle&) angle {
+  [self widget]->setCameraHeading(angle);
+}
+
+- (void)setCameraPitch: (const Angle&) angle {
+  [self widget]->setCameraPitch(angle);
+}
+
+- (void)stopCameraAnimation {
+  [self widget]->stopCameraAnimation();
+}
+
+//- (void)resetCameraPosition {
+//  [self widget]->resetCameraPosition();
+//}
+
+- (WidgetUserData*) userData
+{
+  return [self widget]->getUserData();
 }
 
 @end

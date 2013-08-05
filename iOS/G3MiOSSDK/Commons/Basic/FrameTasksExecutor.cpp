@@ -12,7 +12,7 @@
 #include "ITimer.hpp"
 #include "ILogger.hpp"
 
-bool FrameTasksExecutor::canExecutePreRenderStep(const RenderContext* rc,
+bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
                                                  int executedCounter) {
   const int tasksCount = _preRenderTasks.size();
   if (tasksCount == 0) {
@@ -62,7 +62,7 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const RenderContext* rc,
   //  return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrame);
 }
 
-void FrameTasksExecutor::doPreRenderCycle(const RenderContext *rc) {
+void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext *rc) {
   
 //  int canceledCounter = 0;
   std::list<FrameTask*>::iterator i = _preRenderTasks.begin();

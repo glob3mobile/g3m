@@ -4,5 +4,5 @@ public class GlobalMembersIStringUtils
 
 
 
-	public static final IStringUtils _instance = null;
+   public static final IStringUtils _instance = null;
 }

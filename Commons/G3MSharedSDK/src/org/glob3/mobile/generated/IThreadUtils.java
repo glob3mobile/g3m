@@ -17,22 +17,28 @@ package org.glob3.mobile.generated;
 
 
 
+//class G3MContext;
+
 public abstract class IThreadUtils
 {
-  private static IThreadUtils _instance = null;
+  protected G3MContext _context;
 
 
-  public static void setInstance(IThreadUtils logger)
+  public IThreadUtils()
   {
-	//    if (_instance != NULL) {
-	//      printf("Warning, IThreadUtils instance set two times\n");
-	//    }
-	_instance = logger;
+     _context = null;
+
   }
 
-  public static IThreadUtils instance()
+  public abstract void onResume(G3MContext context);
+
+  public abstract void onPause(G3MContext context);
+
+  public abstract void onDestroy(G3MContext context);
+
+  public void initialize(G3MContext context)
   {
-	return _instance;
+    _context = context;
   }
 
   public void dispose()

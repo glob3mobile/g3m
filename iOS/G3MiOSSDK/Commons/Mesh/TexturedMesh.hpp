@@ -13,6 +13,7 @@
 #include "TextureMapping.hpp"
 #include "Vector3D.hpp"
 
+
 class TexturedMesh: public Mesh
 {
 private:
@@ -21,6 +22,7 @@ private:
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
   const bool            _transparent;
+
   
 public:
   
@@ -34,25 +36,30 @@ public:
   _textureMapping(textureMapping),
   _ownedTexMapping(ownedTexMapping),
   _transparent(transparent)
+
   {
-    
+//    GLState* state = _mesh->getGLState();
+//    state->enableTextures();
+//    state->enableTexture2D();
+//    if (_transparent) {
+//      state->enableBlend();
+//    }
   }
   
   ~TexturedMesh(){
-#ifdef C_CODE
     if (_ownedMesh) {
       delete _mesh;
     } 
     if (_ownedTexMapping){
       delete _textureMapping;
     }
-#endif
   }
   
-  void render(const RenderContext* rc) const;
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const;
 
-  Extent* getExtent()  const {
-    return (_mesh == NULL) ? NULL : _mesh->getExtent();
+  BoundingVolume* getBoundingVolume()  const {
+    return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
   int getVertexCount() const {
@@ -67,6 +74,9 @@ public:
     return _textureMapping;
   }
 
+  bool isTransparent(const G3MRenderContext* rc) const {
+    return _transparent;
+  }
 };
 
 #endif

@@ -2,8 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IGLProgramId;
-
 import com.google.gwt.core.client.JavaScriptObject;
 
 
@@ -78,22 +76,22 @@ public final class Shaders_WebGL {
    }
 
 
-   public IGLProgramId createProgram() {
-
-      final JavaScriptObject vertexS = jsCompileShader(_gl, _vertexShader, "x-shader/x-vertex");
-      final JavaScriptObject fragmentS = jsCompileShader(_gl, _fragmentShader, "x-shader/x-fragment");
-
-      if ((vertexS == null) || (fragmentS == null)) {
-         throw new RuntimeException("FAILURE CREATING SHADERS");
-      }
-
-      final JavaScriptObject program = jsCreateNewProgram(_gl, vertexS, fragmentS);
-      if (program == null) {
-         throw new RuntimeException("FAILURE CREATING PROGRAM");
-      }
-
-      return new GLProgramId_WebGL(program);
-   }
+   //   public IGLProgramId createProgram() {
+   //
+   //      final JavaScriptObject vertexS = jsCompileShader(_gl, _vertexShader, "x-shader/x-vertex");
+   //      final JavaScriptObject fragmentS = jsCompileShader(_gl, _fragmentShader, "x-shader/x-fragment");
+   //
+   //      if ((vertexS == null) || (fragmentS == null)) {
+   //         throw new RuntimeException("FAILURE CREATING SHADERS");
+   //      }
+   //
+   //      final JavaScriptObject program = jsCreateNewProgram(_gl, vertexS, fragmentS);
+   //      if (program == null) {
+   //         throw new RuntimeException("FAILURE CREATING PROGRAM");
+   //      }
+   //
+   //      return new GLProgramId_WebGL(program);
+   //   }
 
 
    // Shader compiler function

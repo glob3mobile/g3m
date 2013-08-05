@@ -2,7 +2,7 @@
 //  CameraRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 30/07/12.
+//  Created by Agustin Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -28,7 +28,7 @@ class TouchEvent;
 
 
 enum Gesture {
-  None,                  
+  None,
   Drag,
   Zoom,
   Rotate,
@@ -38,16 +38,16 @@ enum Gesture {
 class CameraContext {
 private:
   Gesture _currentGesture;
-  Camera* _nextCamera;         
+  Camera* _nextCamera;
 
 public:
-  CameraContext(Gesture gesture, Camera* nextCamera): 
+  CameraContext(Gesture gesture, Camera* nextCamera):
   _currentGesture(gesture),
   _nextCamera(nextCamera)
   {}
-  
+
   ~CameraContext(){}
-  
+
   const Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
   Camera* getNextCamera() { return _nextCamera; }
@@ -58,9 +58,9 @@ public:
 class CameraRenderer: public LeafRenderer {
 private:
   bool _processTouchEvents;
-  std::vector<CameraEventHandler *> _handlers;
-  CameraContext *_cameraContext;    
-  
+  std::vector<CameraEventHandler*> _handlers;
+  CameraContext *_cameraContext;
+
 public:
   CameraRenderer() :
   _cameraContext(NULL),
@@ -68,49 +68,51 @@ public:
   {
   }
 
-  ~CameraRenderer() {
-      delete _cameraContext;
-  }
-    
-  void addHandler(CameraEventHandler *handler) {
+  ~CameraRenderer();
+
+  void addHandler(CameraEventHandler* handler) {
     _handlers.push_back(handler);
   }
 
   void setProcessTouchEvents(bool processTouchEvents) {
     _processTouchEvents = processTouchEvents;
   }
-  
-  void render(const RenderContext* rc);
 
-  void initialize(const InitializationContext* ic);
-  
-  bool onTouchEvent(const EventContext* ec,
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState);
+
+  void initialize(const G3MContext* context);
+
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
-  
-  bool isReadyToRender(const RenderContext* rc) {
+
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
-  
-  void start() {
-    
-  }
-  
-  void stop() {
-    
-  }
-  
-  void onResume(const InitializationContext* ic) {
-    
-  }
-  
-  void onPause(const InitializationContext* ic) {
-    
+
+  void start(const G3MRenderContext* rc) {
+
   }
 
+  void stop(const G3MRenderContext* rc) {
 
+  }
+
+  void onResume(const G3MContext* context) {
+
+  }
+
+  void onPause(const G3MContext* context) {
+
+  }
+
+  void onDestroy(const G3MContext* context) {
+    
+  }
+  
 };
 
 

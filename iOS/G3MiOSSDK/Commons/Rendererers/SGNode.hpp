@@ -12,60 +12,85 @@
 #include <string>
 #include <vector>
 
-class InitializationContext;
-class RenderContext;
+class G3MContext;
+class G3MRenderContext;
+class SGShape;
+class GLState;
 
 class SGNode {
-private:
-  std::string _id;
-  std::string _sId;
+protected:
+  const std::string _id;
+  const std::string _sId;
 
-  SGNode*              _parent;
+//  SGNode*              _parent;
   std::vector<SGNode*> _children;
 
 
-  void setParent(SGNode* parent);
+//  void setParent(SGNode* parent);
 
 protected:
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected InitializationContext _initializationContext;
+  protected G3MContext _context;
 #endif
 
-  virtual void prepareRender(const RenderContext* rc);
-
-  virtual void cleanUpRender(const RenderContext* rc);
-
-  virtual void rawRender(const RenderContext* rc);
+  SGShape *_shape;
 
 public:
 
-  SGNode() :
-  _initializationContext(NULL),
-  _parent(NULL)
+  SGNode(const std::string& id,
+         const std::string& sId) :
+  _id(id),
+  _sId(sId),
+  _context(NULL),
+  _shape(NULL)
+//  _parent(NULL)
   {
 
   }
 
   virtual ~SGNode();
 
-  void initialize(const InitializationContext* ic);
+  virtual void initialize(const G3MContext* context,
+                          SGShape *shape);
 
   void addNode(SGNode* child);
 
-  void setId(const std::string& id) {
-    _id = id;
+  virtual bool isReadyToRender(const G3MRenderContext* rc);
+
+  virtual void prepareRender(const G3MRenderContext* rc);
+
+  virtual void cleanUpRender(const G3MRenderContext* rc);
+
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState& parentState);
+
+  virtual void render(const G3MRenderContext* rc,
+                      const GLState& parentState,
+                      bool renderNotReadyShapes);
+
+//  SGShape* getShape() const {
+//    if (_shape != NULL) {
+//      return _shape;
+//    }
+//    if (_parent != NULL) {
+//      return _parent->getShape();
+//    }
+//    return NULL;
+//  }
+
+  virtual const GLState* createState(const G3MRenderContext* rc,
+                                     const GLState& parentState);
+
+  int getChildrenCount() const {
+    return _children.size();
   }
 
-  void setSId(const std::string& sId) {
-    _sId = sId;
+  SGNode* getChild(int i) const {
+    return _children[i];
   }
-
-  virtual bool isReadyToRender(const RenderContext* rc);
-
-  void render(const RenderContext* rc);
 
 };
 

@@ -21,13 +21,8 @@ public final class GLTextureId_WebGL
 
    @Override
    public boolean isEqualsTo(final IGLTextureId that) {
-      return jsIsEqualsTo(((GLTextureId_WebGL) that).getWebGLTexture());
+      return (_webGLTexture.equals(((GLTextureId_WebGL) that).getWebGLTexture()));
    }
-
-
-   private native boolean jsIsEqualsTo(final JavaScriptObject that) /*-{
-		return (this.@org.glob3.mobile.specific.GLTextureId_WebGL::_webGLTexture.id == that.id);
-   }-*/;
 
 
    public JavaScriptObject getWebGLTexture() {
@@ -37,12 +32,13 @@ public final class GLTextureId_WebGL
 
    @Override
    public String description() {
-      return "GLTextureId_WebGL " + jsGetWebGLTextureId();
+      return "GLTextureId_WebGL " + _webGLTexture.hashCode();
    }
 
 
-   private native int jsGetWebGLTextureId() /*-{
-		return this.@org.glob3.mobile.specific.GLTextureId_WebGL::_webGLTexture.id;
-   }-*/;
+   @Override
+   public void dispose() {
+
+   }
 
 }

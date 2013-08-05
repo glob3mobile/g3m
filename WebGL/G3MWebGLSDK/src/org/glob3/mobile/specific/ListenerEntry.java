@@ -4,7 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
@@ -87,19 +87,18 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onDownload(url, byteBuffer);
+         _bufferListener.onDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
-         final Image_WebGL imageGL = new Image_WebGL(data);
+         final Image_WebGL image = new Image_WebGL(data);
 
-         if (imageGL.getImage() == null) {
+         if (image.getImage() == null) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
             _imageListener.onError(url);
          }
          else {
-            final IImage image = imageGL;
-
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
+            //IFactory.instance().deleteImage(image);
          }
       }
    }
@@ -110,18 +109,17 @@ public final class ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
-         _bufferListener.onCanceledDownload(url, byteBuffer);
+         _bufferListener.onCanceledDownload(url, byteBuffer, false);
       }
       if (_imageListener != null) {
-         final Image_WebGL imageGL = new Image_WebGL(data);
+         final Image_WebGL image = new Image_WebGL(data);
 
-         if (imageGL.getImage() == null) {
+         if (image.getImage() == null) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
          }
          else {
-            final IImage image = imageGL;
-
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
+            IFactory.instance().deleteImage(image);
          }
       }
    }

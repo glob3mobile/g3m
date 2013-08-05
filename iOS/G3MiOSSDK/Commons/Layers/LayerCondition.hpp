@@ -10,18 +10,18 @@
 #define __G3MiOSSDK__LayerCondition__
 
 class Tile;
-class RenderContext;
-class EventContext;
+class G3MRenderContext;
+class G3MEventContext;
 
 class LayerCondition {
 public:
   virtual ~LayerCondition() {
   }
 
-  virtual bool isAvailable(const RenderContext* rc,
+  virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const = 0;
   
-  virtual bool isAvailable(const EventContext* ec,
+  virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const = 0;
 
 };

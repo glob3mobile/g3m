@@ -13,18 +13,18 @@ public class FloatBufferBuilderFromColor extends FloatBufferBuilder
 {
   public final void add(float r, float g, float b, float a) //RGBA
   {
-	_values.add(r);
-	_values.add(g);
-	_values.add(b);
-	_values.add(a);
+    _values.push_back(r);
+    _values.push_back(g);
+    _values.push_back(b);
+    _values.push_back(a);
   }
 
   public final void add(Color c) //RGBA
   {
-	_values.add(c.getRed());
-	_values.add(c.getGreen());
-	_values.add(c.getBlue());
-	_values.add(c.getAlpha());
+    _values.push_back(c.getRed());
+    _values.push_back(c.getGreen());
+    _values.push_back(c.getBlue());
+    _values.push_back(c.getAlpha());
   }
 
 }

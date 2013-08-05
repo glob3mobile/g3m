@@ -7,143 +7,141 @@ public class TexturesHandler
 
   private final boolean _verbose;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void showHolders(const String message) const
-  private void showHolders(String message)
-  {
-	if (false)
-	{
-	  String holdersString = ">>>> " + message + ", Holders=(";
-	  for (int i = 0; i < _textureHolders.size(); i++)
-	  {
-		TextureHolder holder = _textureHolders.get(i);
-  
-		if (i > 0)
-		{
-		  holdersString += ", ";
-		}
-		holdersString += holder.description();
-	  }
-	  holdersString += ")";
-  
-	  ILogger.instance().logInfo("%s\n", holdersString);
-	}
-  }
+  //void showHolders(const std::string& message) const;
 
 
   public TexturesHandler(GL gl, boolean verbose)
   {
-	  _gl = gl;
-	  _verbose = verbose;
+     _gl = gl;
+     _verbose = verbose;
   }
 
   public void dispose()
   {
-	if (_textureHolders.size() > 0)
-	{
-	  ILogger.instance().logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
-	}
+    if (_textureHolders.size() > 0)
+    {
+      ILogger.instance().logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
+    }
   }
 
   public final IGLTextureId getGLTextureId(IImage image, int format, String name, boolean hasMipMap)
   {
   
-	TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), hasMipMap);
+    TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), hasMipMap);
   
-	final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
-	if (previousId != null)
-	{
-	  return previousId;
-	}
+    final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
+    if (previousId != null)
+    {
+      return previousId;
+    }
   
-	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId= _gl.uploadTexture(image, format, textureSpec.isMipmap());
+    TextureHolder holder = new TextureHolder(textureSpec);
+    holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.isMipmap());
   
   
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("Uploaded texture \"%s\" to GPU with texId=%s", textureSpec.description(), holder._glTextureId.description());
-	}
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("Uploaded texture \"%s\" to GPU with texId=%s", textureSpec.description(), holder._glTextureId.description());
+    }
   
-	_textureHolders.add(holder);
+    _textureHolders.add(holder);
   
-	showHolders("getGLTextureId(): created holder " + holder.description());
+    //showHolders("getGLTextureId(): created holder " + holder->description());
   
-	return holder._glTextureId;
+    return holder._glTextureId;
   }
 
+
+  //void TexturesHandler::showHolders(const std::string& message) const {
+  //  if (false) {
+  //    std::string holdersString = ">>>> " + message + ", Holders=(";
+  //    for (int i = 0; i < _textureHolders.size(); i++) {
+  //      TextureHolder* holder = _textureHolders[i];
+  //
+  //      if (i > 0) {
+  //        holdersString += ", ";
+  //      }
+  //      holdersString += holder->description();
+  //    }
+  //    holdersString += ")";
+  //
+  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+  //  }
+  //}
+  
   public final IGLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
   {
-	for (int i = 0; i < _textureHolders.size(); i++)
-	{
-	  TextureHolder holder = _textureHolders.get(i);
-	  if (holder.hasSpec(textureSpec))
-	  {
-		holder.retain();
+    final int _textureHoldersSize = _textureHolders.size();
+    for (int i = 0; i < _textureHoldersSize; i++)
+    {
+      TextureHolder holder = _textureHolders.get(i);
+      if (holder.hasSpec(textureSpec))
+      {
+        holder.retain();
   
-		showHolders("getGLTextureIdIfAvailable(): retained " + holder.description());
+        //showHolders("getGLTextureIdIfAvailable(): retained " + holder->description());
   
-		return holder._glTextureId;
-	  }
-	}
+        return holder._glTextureId;
+      }
+    }
   
-	return null;
+    return null;
   }
 
   public final void releaseGLTextureId(IGLTextureId glTextureId)
   {
-	if (glTextureId == null)
-	{
-	  return;
-	}
+    if (glTextureId == null)
+    {
+      return;
+    }
   
-	for (int i = 0; i < _textureHolders.size(); i++)
-	{
-	  TextureHolder holder = _textureHolders.get(i);
+    for (int i = 0; i < _textureHolders.size(); i++)
+    {
+      TextureHolder holder = _textureHolders.get(i);
   
-	  if (holder._glTextureId.isEqualsTo(glTextureId))
-	  {
-		holder.release();
+      if (holder._glTextureId.isEqualsTo(glTextureId))
+      {
+        holder.release();
   
-		showHolders("releaseGLTextureId(  ): released holder " + holder.description());
+        //showHolders("releaseGLTextureId(  ): released holder " + holder->description());
   
-		if (!holder.isRetained())
-		{
-		  _gl.deleteTexture(holder._glTextureId);
+        if (!holder.isRetained())
+        {
+          _gl.deleteTexture(holder._glTextureId);
   
-  		_textureHolders.remove(i);
+          _textureHolders.remove(i);
   
-		  if (holder != null)
-			  holder.dispose();
-		}
+          if (holder != null)
+             holder.dispose();
+        }
   
-		return;
-	  }
-	}
+        return;
+      }
+    }
   }
 
   public final void retainGLTextureId(IGLTextureId glTextureId)
   {
-	if (glTextureId == null)
-	{
-	  return;
-	}
+    if (glTextureId == null)
+    {
+      return;
+    }
   
-	for (int i = 0; i < _textureHolders.size(); i++)
-	{
-	  TextureHolder holder = _textureHolders.get(i);
+    for (int i = 0; i < _textureHolders.size(); i++)
+    {
+      TextureHolder holder = _textureHolders.get(i);
   
-	  if (holder._glTextureId.isEqualsTo(glTextureId))
-	  {
-		holder.retain();
+      if (holder._glTextureId.isEqualsTo(glTextureId))
+      {
+        holder.retain();
   
-		showHolders("retainGLTextureId(): retained holder " + holder.description());
+        //showHolders("retainGLTextureId(): retained holder " + holder->description());
   
-		return;
-	  }
-	}
+        return;
+      }
+    }
   
-	ILogger.instance().logInfo("break (point) on me 6\n");
+    ILogger.instance().logInfo("break (point) on me 6\n");
   }
 
 }

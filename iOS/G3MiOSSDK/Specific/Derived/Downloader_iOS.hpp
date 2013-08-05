@@ -48,11 +48,15 @@ public:
   
   long long requestBuffer(const URL& url,
                           long long priority,
+                          const TimeInterval& timeToCache,
+                          bool readExpired,
                           IBufferDownloadListener* listener,
                           bool deleteListener);
   
   long long requestImage(const URL& url,
                          long long priority,
+                         const TimeInterval& timeToCache,
+                         bool readExpired,
                          IImageDownloadListener* listener,
                          bool deleteListener);
   
@@ -68,15 +72,23 @@ public:
   
   const std::string statistics();
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
+  }
+  
+  void onDestroy(const G3MContext* context) {
+
+  }
+
+  void initialize(const G3MContext* context,
+                  FrameTasksExecutor* frameTasksExecutor) {
+
   }
 
 };
-
 
 #endif

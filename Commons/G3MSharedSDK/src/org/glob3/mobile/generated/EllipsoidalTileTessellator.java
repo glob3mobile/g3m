@@ -16,266 +16,329 @@ package org.glob3.mobile.generated;
 //
 
 
-
-///#include "MutableVector3D.hpp"
-///#include "Planet.hpp"
+//class Sector;
 
 public class EllipsoidalTileTessellator extends TileTessellator
 {
-
-  private final int _resolution;
   private final boolean _skirted;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const
-  public final Mesh createDebugMesh(RenderContext rc, Tile tile)
+  private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
   {
-	final Sector sector = tile.getSector();
-	final Planet planet = rc.getPlanet();
+    return rawResolution;
   
-	final int resolutionMinus1 = _resolution - 1;
-	int posS = 0;
-  
-	// compute offset for vertices
-	final Vector3D sw = planet.toCartesian(sector.getSW());
-	final Vector3D nw = planet.toCartesian(sector.getNW());
-	final double offset = nw.sub(sw).length() * 1e-3;
-  
-	// create vectors
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-	// create indices
-	IntBufferBuilder indices = new IntBufferBuilder();
-  
-	// west side
-	for (int j = 0; j < resolutionMinus1; j++)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
-  
-	  vertices.add(g);
-	  indices.add(posS++);
-	}
-  
-	// south side
-	for (int i = 0; i < resolutionMinus1; i++)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
-  
-	  vertices.add(g);
-	  indices.add(posS++);
-	}
-  
-	// east side
-	for (int j = resolutionMinus1; j > 0; j--)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
-  
-	  vertices.add(g);
-	  indices.add(posS++);
-	}
-  
-	// north side
-	for (int i = resolutionMinus1; i > 0; i--)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
-  
-	  vertices.add(g);
-	  indices.add(posS++);
-	}
-  
-	Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
-	final Vector3D center = planet.toCartesian(sector.getCenter());
-  
-	return new IndexedMesh(GLPrimitive.lineLoop(), true, center, vertices.create(), indices.create(), 1, color);
+  //  /* testing for dynamic latitude-resolution */
+  //  const double cos = sector._center._latitude.cosinus();
+  //
+  //  int resolutionY = (int) (rawResolution._y * cos);
+  //  if (resolutionY < 8) {
+  //    resolutionY = 8;
+  //  }
+  //
+  //  int resolutionX = (int) (rawResolution._x * cos);
+  //  if (resolutionX < 8) {
+  //    resolutionX = 8;
+  //  }
+  //
+  //  return Vector2I(resolutionX, resolutionY);
   }
 
-  public EllipsoidalTileTessellator(int resolution, boolean skirted)
+
+  public EllipsoidalTileTessellator(boolean skirted)
   {
-	  _resolution = resolution;
-	  _skirted = skirted;
-//    int __TODO_width_and_height_resolutions;
+     _skirted = skirted;
+
   }
 
   public void dispose()
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* createMesh(const RenderContext* rc, const Tile* tile) const
-  public final Mesh createMesh(RenderContext rc, Tile tile)
+  public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
   {
-  
-	final Sector sector = tile.getSector();
-	final Planet planet = rc.getPlanet();
-  
-	final int resolution = _resolution;
-	final int resolutionMinus1 = resolution - 1;
-  
-	// create vertices coordinates
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
-	for (int j = 0; j < resolution; j++)
-	{
-	  for (int i = 0; i < resolution; i++)
-	  {
-		Geodetic2D innerPoint = sector.getInnerPoint((double) i / resolutionMinus1, (double) j / resolutionMinus1);
-  
-		vertices.add(innerPoint);
-	  }
-	}
-  
-	// create indices
-	IntBufferBuilder indices = new IntBufferBuilder();
-	for (int j = 0; j < resolutionMinus1; j++)
-	{
-	  if (j > 0)
-	  {
-		indices.add(j *resolution);
-	  }
-	  for (int i = 0; i < resolution; i++)
-	  {
-		indices.add(j *resolution + i);
-		indices.add(j *resolution + i + resolution);
-	  }
-	  indices.add(j *resolution + 2 *resolution - 1);
-	}
-  
-	// create skirts
-	if (_skirted)
-	{
-  
-	  // compute skirt height
-	  final Vector3D sw = planet.toCartesian(sector.getSW());
-	  final Vector3D nw = planet.toCartesian(sector.getNW());
-	  final double skirtHeight = nw.sub(sw).length() * 0.05;
-  
-	  indices.add(0);
-	  int posS = resolution * resolution;
-  
-	  // west side
-	  for (int j = 0; j < resolutionMinus1; j++)
-	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
-		vertices.add(g);
-  
-		indices.add(j *resolution);
-		indices.add(posS++);
-	  }
-  
-	  // south side
-	  for (int i = 0; i < resolutionMinus1; i++)
-	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
-		vertices.add(g);
-  
-		indices.add(resolutionMinus1 *resolution + i);
-		indices.add(posS++);
-	  }
-  
-	  // east side
-	  for (int j = resolutionMinus1; j > 0; j--)
-	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
-		vertices.add(g);
-  
-		indices.add(j *resolution + resolutionMinus1);
-		indices.add(posS++);
-	  }
-  
-	  // north side
-	  for (int i = resolutionMinus1; i > 0; i--)
-	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
-		vertices.add(g);
-  
-		indices.add(i);
-		indices.add(posS++);
-	  }
-  
-	  // last triangle
-	  indices.add(0);
-	  indices.add(resolution *resolution);
-	}
-  
-	Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-  
-	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, color);
+    return calculateResolution(rawResolution, tile.getSector());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isReady(const RenderContext *rc) const
-  public final boolean isReady(RenderContext rc)
+
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
   {
-	return true;
+  
+    final Sector sector = tile.getSector();
+    final Vector2I tileResolution = calculateResolution(rawResolution, sector);
+  
+    double minElevation = 0;
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    for (int j = 0; j < tileResolution._y; j++)
+    {
+      final double v = (double) j / (tileResolution._y - 1);
+  
+      for (int i = 0; i < tileResolution._x; i++)
+      {
+        final double u = (double) i / (tileResolution._x - 1);
+  
+        final Geodetic2D position = sector.getInnerPoint(u, v);
+  
+        double elevation = 0;
+  
+        //TODO: MERCATOR!!!
+  
+        if (elevationData != null)
+        {
+          final double rawElevation = elevationData.getElevationAt(position);
+          if (!mu.isNan(rawElevation))
+          {
+            elevation = rawElevation * verticalExaggeration;
+  
+            if (elevation < minElevation)
+            {
+              minElevation = elevation;
+            }
+          }
+        }
+  
+        vertices.add(position, elevation);
+      }
+    }
+  
+  
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+    for (short j = 0; j < (tileResolution._y-1); j++)
+    {
+      final short jTimesResolution = (short)(j *tileResolution._x);
+      if (j > 0)
+      {
+        indices.add(jTimesResolution);
+      }
+      for (short i = 0; i < tileResolution._x; i++)
+      {
+        indices.add((short)(jTimesResolution + i));
+        indices.add((short)(jTimesResolution + i + tileResolution._x));
+      }
+      indices.add((short)(jTimesResolution + 2 *tileResolution._x - 1));
+    }
+  
+  
+    // create skirts
+    if (_skirted)
+    {
+      // compute skirt height
+      final Vector3D sw = planet.toCartesian(sector.getSW());
+      final Vector3D nw = planet.toCartesian(sector.getNW());
+      final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
+  
+      int posS = tileResolution._x * tileResolution._y;
+      indices.add((short)(posS-1));
+  
+      // east side
+      for (int j = tileResolution._y-1; j > 0; j--)
+      {
+        vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)), skirtHeight);
+  
+        indices.add((short)(j *tileResolution._x + (tileResolution._x-1)));
+        indices.add((short) posS++);
+      }
+  
+      // north side
+      for (int i = tileResolution._x-1; i > 0; i--)
+      {
+        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0), skirtHeight);
+  
+        indices.add((short) i);
+        indices.add((short) posS++);
+      }
+  
+      // west side
+      for (int j = 0; j < tileResolution._y-1; j++)
+      {
+        vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)), skirtHeight);
+  
+        indices.add((short)(j *tileResolution._x));
+        indices.add((short) posS++);
+      }
+  
+      // south side
+      for (int i = 0; i < tileResolution._x-1; i++)
+      {
+        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1), skirtHeight);
+  
+        indices.add((short)((tileResolution._y-1)*tileResolution._x + i));
+        indices.add((short) posS++);
+      }
+  
+      // last triangle
+      indices.add((short)((tileResolution._x *tileResolution._y)-1));
+      indices.add((short)(tileResolution._x *tileResolution._y));
+    }
+  
+    Color color = Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+  
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color); //renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
+                           //GLPrimitive::lineStrip(),
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IFloatBuffer* createUnitTextCoords() const
-  public final IFloatBuffer createUnitTextCoords()
+  public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
+  {
+    final Sector sector = tile.getSector();
+  
+    final int resolutionXMinus1 = rawResolution._x - 1;
+    final int resolutionYMinus1 = rawResolution._y - 1;
+    short posS = 0;
+  
+    // compute offset for vertices
+    final Vector3D sw = planet.toCartesian(sector.getSW());
+    final Vector3D nw = planet.toCartesian(sector.getNW());
+    final double offset = nw.sub(sw).length() * 1e-3;
+  
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
+  
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+  
+    // west side
+    for (int j = 0; j < resolutionYMinus1; j++)
+    {
+      vertices.add(sector.getInnerPoint(0, (double)j/resolutionYMinus1), offset);
+      indices.add(posS++);
+    }
+  
+    // south side
+    for (int i = 0; i < resolutionXMinus1; i++)
+    {
+      vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 1), offset);
+      indices.add(posS++);
+    }
+  
+    // east side
+    for (int j = resolutionYMinus1; j > 0; j--)
+    {
+      vertices.add(sector.getInnerPoint(1, (double)j/resolutionYMinus1), offset);
+      indices.add(posS++);
+    }
+  
+    // north side
+    for (int i = resolutionXMinus1; i > 0; i--)
+    {
+      vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 0), offset);
+      indices.add(posS++);
+    }
+  
+    Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
+  
+    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
+  }
+
+  public final boolean isReady(G3MRenderContext rc)
+  {
+    return true;
+  }
+
+  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile, boolean mercator)
   {
   
-	FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
+    final Vector2I tileResolution = calculateResolution(rawResolution, tile.getSector());
   
-	final int resolution = _resolution;
-	final int resolutionMinus1 = resolution - 1;
+    float[] u = new float[tileResolution._x * tileResolution._y];
+    float[] v = new float[tileResolution._x * tileResolution._y];
   
-	float[] u = new float[resolution * resolution];
-	float[] v = new float[resolution * resolution];
+    final Sector sector = tile.getSector();
   
-	for (int j = 0; j < resolution; j++)
-	{
-	  for (int i = 0; i < resolution; i++)
-	  {
-		final int pos = j *resolution + i;
-		u[pos] = (float) i / resolutionMinus1;
-		v[pos] = (float) j / resolutionMinus1;
-	  }
-	}
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
+    final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
-	for (int j = 0; j < resolution; j++)
-	{
-	  for (int i = 0; i < resolution; i++)
-	  {
-		final int pos = j *resolution + i;
-		textCoords.add(u[pos], v[pos]);
-	  }
-	}
+    for (int j = 0; j < tileResolution._y; j++)
+    {
+      for (int i = 0; i < tileResolution._x; i++)
+      {
+        final int pos = j *tileResolution._x + i;
   
-	// create skirts
-	if (_skirted)
-	{
-	  // west side
-	  for (int j = 0; j < resolutionMinus1; j++)
-	  {
-		final int pos = j *resolution;
-		textCoords.add(u[pos], v[pos]);
-	  }
+        u[pos] = (float) i / (tileResolution._x-1);
   
-	  // south side
-	  for (int i = 0; i < resolutionMinus1; i++)
-	  {
-		final int pos = resolutionMinus1 * resolution + i;
-		textCoords.add(u[pos], v[pos]);
-	  }
+        final double linearV = (double) j / (tileResolution._y-1);
+        if (mercator)
+        {
+          final Angle latitude = sector.getInnerPointLatitude(linearV);
+          final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
+          final double mercatorLocalV = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          v[pos] = (float) mercatorLocalV;
+        }
+        else
+        {
+          v[pos] = (float) linearV;
+        }
+      }
+    }
   
-	  // east side
-	  for (int j = resolutionMinus1; j > 0; j--)
-	  {
-		final int pos = j *resolution + resolutionMinus1;
-		textCoords.add(u[pos], v[pos]);
-	  }
+    FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-	  // north side
-	  for (int i = resolutionMinus1; i > 0; i--)
-	  {
-		final int pos = i;
-		textCoords.add(u[pos], v[pos]);
-	  }
-	}
+    for (int j = 0; j < tileResolution._y; j++)
+    {
+      for (int i = 0; i < tileResolution._x; i++)
+      {
+        final int pos = j *tileResolution._x + i;
+        textCoords.add(u[pos], v[pos]);
+      }
+    }
   
-	// free temp memory
-	u = null;
-	v = null;
+    // create skirts
+    if (_skirted)
+    {
+      // east side
+      for (int j = tileResolution._y-1; j > 0; j--)
+      {
+        final int pos = j *tileResolution._x + tileResolution._x-1;
+        textCoords.add(u[pos], v[pos]);
+      }
   
-	return textCoords.create();
+      // north side
+      for (int i = tileResolution._x-1; i > 0; i--)
+      {
+        final int pos = i;
+        textCoords.add(u[pos], v[pos]);
+      }
+  
+      // west side
+      for (int j = 0; j < tileResolution._y-1; j++)
+      {
+        final int pos = j *tileResolution._x;
+        textCoords.add(u[pos], v[pos]);
+      }
+  
+      // south side
+      for (int i = 0; i < tileResolution._x-1; i++)
+      {
+        final int pos = (tileResolution._y-1) * tileResolution._x + i;
+        textCoords.add(u[pos], v[pos]);
+      }
+    }
+  
+    // free temp memory
+    u = null;
+    v = null;
+  
+    //  return textCoords.create();
+    return textCoords.create();
+  }
+
+  public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  {
+    final Sector sector = tile.getSector();
+  
+    final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+    if (!mercator)
+    {
+      return linearUV;
+    }
+  
+    final double lowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+    final double upperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
+    final double deltaGlobalV = lowerGlobalV - upperGlobalV;
+  
+    final double globalV = MercatorUtils.getMercatorV(latitude);
+    final double localV = (globalV - upperGlobalV) / deltaGlobalV;
+  
+    return new Vector2D(linearUV._x, localV);
   }
 
 }

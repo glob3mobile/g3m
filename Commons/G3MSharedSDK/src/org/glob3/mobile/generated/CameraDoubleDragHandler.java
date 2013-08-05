@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -26,11 +26,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public CameraDoubleDragHandler(boolean processRotation, boolean processZoom)
   {
-	  _camera0 = new Camera(new Camera(0, 0));
-	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector3D(0,0,0);
-	  _processRotation = processRotation;
-	  _processZoom = processZoom;
+     _camera0 = new Camera(new Camera(0, 0));
+     _initialPoint = new MutableVector3D(0,0,0);
+     _initialPixel = new MutableVector3D(0,0,0);
+     _processRotation = processRotation;
+     _processZoom = processZoom;
   }
 
   public void dispose()
@@ -38,35 +38,35 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   }
 
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	// only one finger needed
-	if (touchEvent.getTouchCount()!=2)
-		return false;
+    // only one finger needed
+    if (touchEvent.getTouchCount()!=2)
+       return false;
   
-	switch (touchEvent.getType())
-	{
-	  case Down:
-		onDown(eventContext, touchEvent, cameraContext);
-		break;
-	  case Move:
-		onMove(eventContext, touchEvent, cameraContext);
-		break;
-	  case Up:
-		onUp(eventContext, touchEvent, cameraContext);
-	  default:
-		break;
-	}
+    switch (touchEvent.getType())
+    {
+      case Down:
+        onDown(eventContext, touchEvent, cameraContext);
+        break;
+      case Move:
+        onMove(eventContext, touchEvent, cameraContext);
+        break;
+      case Up:
+        onUp(eventContext, touchEvent, cameraContext);
+      default:
+        break;
+    }
   
-	return true;
+    return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
   //    if (cameraContext->getCurrentGesture() == DoubleDrag) {
-  //      GL *gl = rc->getGL();
+  //      GL* gl = rc->getGL();
   //      float vertices[] = { 0,0,0};
   //      int indices[] = {0};
   //      gl->enableVerticesPosition();
@@ -96,206 +96,178 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   //
   //
   //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-  //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+  //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
   //    }
   //  }
   
   }
 
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	Camera camera = cameraContext.getNextCamera();
-	_camera0.copyFrom(camera);
-	cameraContext.setCurrentGesture(Gesture.DoubleDrag);
+    Camera camera = cameraContext.getNextCamera();
+    _camera0.copyFrom(camera);
+    cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
-	// double dragging
-	Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-	_initialPoint0 = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
-	Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-	_initialPoint1 = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
+    // double dragging
+    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
+    _initialPoint0 = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
+    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+    _initialPoint1 = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
   
-	// both pixels must intersect globe
-	if (_initialPoint0.isNan() || _initialPoint1.isNan())
-	{
-	  cameraContext.setCurrentGesture(Gesture.None);
-	  return;
-	}
+    // both pixels must intersect globe
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    {
+      cameraContext.setCurrentGesture(Gesture.None);
+      return;
+    }
   
-	// middle point in 3D
-	final Planet planet = eventContext.getPlanet();
-	Geodetic2D g0 = planet.toGeodetic2D(_initialPoint0.asVector3D());
-	Geodetic2D g1 = planet.toGeodetic2D(_initialPoint1.asVector3D());
-	Geodetic2D g = planet.getMidPoint(g0, g1);
-	_initialPoint = planet.toCartesian(g).asMutableVector3D();
+    // middle point in 3D
+    final Planet planet = eventContext.getPlanet();
+    Geodetic2D g0 = planet.toGeodetic2D(_initialPoint0.asVector3D());
+    Geodetic2D g1 = planet.toGeodetic2D(_initialPoint1.asVector3D());
+    Geodetic2D g = planet.getMidPoint(g0, g1);
+    _initialPoint = planet.toCartesian(g).asMutableVector3D();
   
-	// fingers difference
-	Vector2I difPixel = pixel1.sub(pixel0);
-	_initialFingerSeparation = difPixel.length();
-	_initialFingerInclination = difPixel.orientation()._radians;
+    // fingers difference
+    Vector2I difPixel = pixel1.sub(pixel0);
+    _initialFingerSeparation = difPixel.length();
+    _initialFingerInclination = difPixel.orientation()._radians;
   
-	//printf ("down 2 finger\n");
+    //printf ("down 2 finger\n");
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
-		return;
-	if (_initialPoint.isNan())
-		return;
   
-	Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-	Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-	Vector2I difPixel = pixel1.sub(pixel0);
-	double finalFingerSeparation = difPixel.length();
-	double factor = finalFingerSeparation/_initialFingerSeparation;
+    final IMathUtils mu = IMathUtils.instance();
   
-	// compute camera translation using numerical iterations until convergence
-	double dAccum = 0;
-	{
-	  Camera tempCamera = new Camera(_camera0);
-	  Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
-	  double angle = originalAngle._degrees;
+    if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
+       return;
+    if (_initialPoint.isNan())
+       return;
   
-	  // compute estimated camera translation
-	  Vector3D centerPoint = tempCamera.getXYZCenterOfView();
-	  double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
-	  double d = distance*(factor-1)/factor;
-	  tempCamera.moveForward(d);
-	  dAccum += d;
-	  //tempCamera.updateModelMatrix();
-	  double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-	  if (IMathUtils.instance().isNan(angle0))
-		  return;
-	  //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
+    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+    Vector2I difPixel = pixel1.sub(pixel0);
+    double finalFingerSeparation = difPixel.length();
+    double factor = finalFingerSeparation/_initialFingerSeparation;
   
-	  // step 1
-	  d = IMathUtils.instance().abs((distance-d)*0.3);
-	  if (angle0 < angle)
-		  d*=-1;
-	  tempCamera.moveForward(d);
-	  dAccum += d;
-	  //tempCamera.updateModelMatrix();
-	  double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-	  double angle_n1 = angle0;
-	  double angle_n = angle1;
+    // compute camera translation using numerical iterations until convergence
+    double dAccum = 0;
+    {
+      Camera tempCamera = new Camera(_camera0);
+      Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
+      double angle = originalAngle._degrees;
   
-	  // iterations
-	  int iter = 0;
-	  double precision = IMathUtils.instance().pow(10, IMathUtils.instance().log10(distance)-8.5);
-	  while (IMathUtils.instance().abs(angle_n-angle) > precision)
-	  {
-		iter++;
-		if ((angle_n1-angle_n)/(angle_n-angle) < 0)
-			d*=-0.5;
-		tempCamera.moveForward(d);
-		dAccum += d;
-		//tempCamera.updateModelMatrix();
-		angle_n1 = angle_n;
-		angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
-	  }
-	  //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
-	}
+      // compute estimated camera translation
+      Vector3D centerPoint = tempCamera.getXYZCenterOfView();
+      double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
+      double d = distance*(factor-1)/factor;
+      tempCamera.moveForward(d);
+      dAccum += d;
+      //tempCamera.updateModelMatrix();
+      double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+      if (mu.isNan(angle0))
+         return;
+      //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
   
-	// create temp camera to test gesture first
-	Camera tempCamera = new Camera(_camera0);
+      // step 1
+      d = mu.abs((distance-d)*0.3);
+      if (angle0 < angle)
+         d*=-1;
+      tempCamera.moveForward(d);
+      dAccum += d;
+      //tempCamera.updateModelMatrix();
+      double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+      double angle_n1 = angle0;
+      double angle_n = angle1;
   
-	// computer center view point
-	Vector3D centerPoint = tempCamera.getXYZCenterOfView();
+      // iterations
+  //    int iter=0;
+      double precision = mu.pow(10, mu.log10(distance)-8.5);
+      while (mu.abs(angle_n-angle) > precision)
+      {
+  //      iter++;
+        if ((angle_n1-angle_n)/(angle_n-angle) < 0)
+           d*=-0.5;
+        tempCamera.moveForward(d);
+        dAccum += d;
+        //tempCamera.updateModelMatrix();
+        angle_n1 = angle_n;
+        angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
+      }
+      //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+    }
   
-	// drag from initialPoint to centerPoint
-	{
-	  Vector3D initialPoint = _initialPoint.asVector3D();
-	  final Vector3D rotationAxis = initialPoint.cross(centerPoint);
-	  final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(initialPoint.normalized().dot(centerPoint.normalized())));
-	  if (rotationDelta.isNan())
-		  return;
-	  tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
-	}
+    // create temp camera to test gesture first
+    Camera tempCamera = new Camera(_camera0);
   
-	// move the camera
-	if (_processZoom)
-	{
-	  tempCamera.moveForward(dAccum);
-	}
+    // computer center view point
+    Vector3D centerPoint = tempCamera.getXYZCenterOfView();
   
-	// compute 3D point of view center
-	//tempCamera.updateModelMatrix();
-	Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
+    // drag from initialPoint to centerPoint
+    {
+      Vector3D initialPoint = _initialPoint.asVector3D();
+      final Vector3D rotationAxis = initialPoint.cross(centerPoint);
+      final Angle rotationDelta = Angle.fromRadians(- mu.acos(initialPoint.normalized().dot(centerPoint.normalized())));
+      if (rotationDelta.isNan())
+         return;
+      tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
+    }
   
-  //<<<<<<< HEAD
-  //  // rotate the camera
-  //  {
-  //    tempCamera.updateModelMatrix();
-  //    Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-  //    tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
-  //  }
-  //
-  //  // detect new final point
-  //  {
-  //    // compute 3D point of view center
-  //    tempCamera.updateModelMatrix();
-  //    Vector3D newCenterPoint = tempCamera.centerOfViewOnPlanet(_planet);
-  //
-  //    // middle point in 3D
-  //    Vector3D ray0 = tempCamera.pixel2Ray(pixel0);
-  //    Vector3D P0 = _planet->closestIntersection(tempCamera.getPosition(), ray0);
-  //    Vector3D ray1 = tempCamera.pixel2Ray(pixel1);
-  //    Vector3D P1 = _planet->closestIntersection(tempCamera.getPosition(), ray1);
-  //    Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-  //    Vector3D finalPoint = _planet->toVector3D(g);
-  //
-  //    // rotate globe from newCenterPoint to finalPoint
-  //    const Vector3D rotationAxis = newCenterPoint.cross(finalPoint);
-  //    const Angle rotationDelta = Angle::fromRadians( - acos(newCenterPoint.normalized().dot(finalPoint.normalized())) );
-  //    if (rotationDelta.isNan()) {
-  //      return;
-  //    }
-  //    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
-  //=======
-	// middle point in 3D
-	Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
-	Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-	final Planet planet = eventContext.getPlanet();
-	Geodetic2D g = planet.getMidPoint(planet.toGeodetic2D(P0), planet.toGeodetic2D(P1));
-	Vector3D finalPoint = planet.toCartesian(g);
+    // move the camera
+    if (_processZoom)
+    {
+      tempCamera.moveForward(dAccum);
+    }
   
-	// drag globe from centerPoint to finalPoint
-	final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-	final Angle rotationDelta = Angle.fromRadians(- IMathUtils.instance().acos(centerPoint2.normalized().dot(finalPoint.normalized())));
-	if (rotationDelta.isNan())
-	{
-	  return;
-  //>>>>>>> master
-	}
-	tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
+    // compute 3D point of view center
+    //tempCamera.updateModelMatrix();
+    Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
   
-	// the gesture was valid. Copy data to final camera
-	//tempCamera.updateModelMatrix();
+    // middle point in 3D
+    Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
+    Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
+    final Planet planet = eventContext.getPlanet();
+    Geodetic2D g = planet.getMidPoint(planet.toGeodetic2D(P0), planet.toGeodetic2D(P1));
+    Vector3D finalPoint = planet.toCartesian(g);
   
-	// camera rotation
-	if (_processRotation)
-	{
-	  Vector3D normal = planet.geodeticSurfaceNormal(centerPoint2);
-	  Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-	  Vector3D v1 = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
-	  double angle = v0.angleBetween(v1)._degrees;
-	  double sign = v1.cross(v0).dot(normal);
-	  if (sign<0)
-		  angle = -angle;
-	  tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle.fromDegrees(angle));
-	}
+    // drag globe from centerPoint to finalPoint
+    final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
+    final Angle rotationDelta = Angle.fromRadians(- mu.acos(centerPoint2.normalized().dot(finalPoint.normalized())));
+    if (rotationDelta.isNan())
+    {
+      return;
+    }
+    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
   
-	// copy final transformation to camera
-	//tempCamera.updateModelMatrix();
-	cameraContext.getNextCamera().copyFrom(tempCamera);
+    // the gesture was valid. Copy data to final camera
+    //tempCamera.updateModelMatrix();
   
-	//printf ("moving 2 fingers\n");
+    // camera rotation
+    if (_processRotation)
+    {
+      Vector3D normal = planet.geodeticSurfaceNormal(centerPoint2);
+      Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
+      Vector3D v1 = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
+      double angle = v0.angleBetween(v1)._degrees;
+      double sign = v1.cross(v0).dot(normal);
+      if (sign<0)
+         angle = -angle;
+      tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle.fromDegrees(angle));
+    }
+  
+    // copy final transformation to camera
+    //tempCamera.updateModelMatrix();
+    cameraContext.getNextCamera().copyFrom(tempCamera);
+  
+    //printf ("moving 2 fingers\n");
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = Vector3D.nan().asMutableVector3D();
+    cameraContext.setCurrentGesture(Gesture.None);
+    _initialPixel = Vector3D.nan().asMutableVector3D();
   
-	//printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
+    //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
   public MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging

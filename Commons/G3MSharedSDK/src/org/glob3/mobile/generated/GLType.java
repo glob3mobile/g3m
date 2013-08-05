@@ -8,26 +8,26 @@ public class GLType
 
   public static int glFloat()
   {
-	  return _float;
+     return _float;
   }
   public static int glUnsignedByte()
   {
-	  return _unsignedByte;
+     return _unsignedByte;
   }
   public static int glUnsignedInt()
   {
-	  return _unsignedInt;
+     return _unsignedInt;
   }
   public static int glInt()
   {
-	  return _int;
+     return _int;
   }
 
   public static void init(INativeGL ngl)
   {
-	_float = ngl.Type_Float();
-	_unsignedByte = ngl.Type_UnsignedByte();
-	_unsignedInt = ngl.Type_UnsignedInt();
-	_int = ngl.Type_Int();
+    _float = ngl.Type_Float();
+    _unsignedByte = ngl.Type_UnsignedByte();
+    _unsignedInt = ngl.Type_UnsignedInt();
+    _int = ngl.Type_Int();
   }
 }

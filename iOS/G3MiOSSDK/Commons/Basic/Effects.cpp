@@ -10,12 +10,12 @@
 
 #include "Context.hpp"
 
-void EffectsScheduler::initialize(const InitializationContext* ic) {
-  _factory = ic->getFactory();
+void EffectsScheduler::initialize(const G3MContext* context) {
+  _factory = context->getFactory();
   _timer = _factory->createTimer();
 }
 
-void EffectsScheduler::cancellAllEffectsFor(EffectTarget* target) {
+void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   std::vector<int> indicesToRemove;
   const TimeInterval now = _timer->now();
 
@@ -46,15 +46,15 @@ void EffectsScheduler::cancellAllEffectsFor(EffectTarget* target) {
 
 }
 
-void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
-                                              const TimeInterval& now) {
+void EffectsScheduler::processFinishedEffects(const G3MRenderContext *rc,
+                                              const TimeInterval& when) {
   std::vector<int> indicesToRemove;
   for (int i = 0; i < _effectsRuns.size(); i++) {
     EffectRun* effectRun = _effectsRuns[i];
     
     if (effectRun->_started == true) {
-      if (effectRun->_effect->isDone(rc, now)) {
-        effectRun->_effect->stop(rc, now);
+      if (effectRun->_effect->isDone(rc, when)) {
+        effectRun->_effect->stop(rc, when);
         
         indicesToRemove.push_back(i);
       }
@@ -75,7 +75,7 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
   }
 }
 
-void EffectsScheduler::doOneCyle(const RenderContext *rc) {
+void EffectsScheduler::doOneCyle(const G3MRenderContext *rc) {
   const TimeInterval now = _timer->now();
   
   

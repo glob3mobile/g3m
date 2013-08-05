@@ -21,11 +21,5 @@ package org.glob3.mobile.generated;
 
 public interface EffectTarget
 {
-
-  // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void unusedMethod() const = 0;
-  void unusedMethod();
-
-
+  public void dispose();
 }

@@ -11,29 +11,17 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-//SimpleTextureMapping::SimpleTextureMapping(const GLTextureId& glTextureId,
-//                                           std::vector<MutableVector2D> texCoords) :
-//_glTextureId(glTextureId),
-//_translation(0, 0),
-//_scale(1, 1),
-//_ownedTexCoords(true)
-//{
-//  const int texCoordsSize = texCoords.size();
-//  float* texCoordsA = new float[2 * texCoordsSize];
-//  int p = 0;
-//  for (int i = 0; i < texCoordsSize; i++) {
-//    texCoordsA[p++] = (float) texCoords[i].x();
-//    texCoordsA[p++] = (float) texCoords[i].y();
-//  }
-//  _texCoords = texCoordsA;
-//}
+void SimpleTextureMapping::bind(const G3MRenderContext* rc) const {
+  if (_texCoords != NULL) {
+    GL* gl = rc->getGL();
 
-void SimpleTextureMapping::bind(const RenderContext* rc) const {
-  GL* gl = rc->getGL();
-  
-  gl->transformTexCoords(_scale, _translation);
-  gl->bindTexture(_glTextureId);
-  gl->setTextureCoordinates(2, 0, _texCoords);
+    gl->transformTexCoords(_scale, _translation);
+    gl->bindTexture(_glTextureId);
+    gl->setTextureCoordinates(2, 0, _texCoords);
+  }
+  else {
+    ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+  }
 }
 
 SimpleTextureMapping::~SimpleTextureMapping() {

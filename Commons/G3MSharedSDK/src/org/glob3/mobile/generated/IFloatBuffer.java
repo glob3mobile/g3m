@@ -25,8 +25,6 @@ public abstract class IFloatBuffer implements IBuffer
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual float get(int i) const = 0;
   public abstract float get(int i);
 
   public abstract void put(int i, float value);

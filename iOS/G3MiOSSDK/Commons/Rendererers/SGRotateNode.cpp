@@ -12,7 +12,7 @@
 #include "GL.hpp"
 #include "Vector3D.hpp"
 
-void SGRotateNode::prepareRender(const RenderContext* rc) {
+void SGRotateNode::prepareRender(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
 
   gl->pushMatrix();
@@ -22,7 +22,7 @@ void SGRotateNode::prepareRender(const RenderContext* rc) {
   SGNode::prepareRender(rc);
 }
 
-void SGRotateNode::cleanUpRender(const RenderContext* rc) {
+void SGRotateNode::cleanUpRender(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
   gl->popMatrix();
 

@@ -25,21 +25,21 @@ public class GLCullFace
 
   public static int front()
   {
-	  return _front;
+     return _front;
   }
   public static int back()
   {
-	  return _back;
+     return _back;
   }
   public static int frontAndBack()
   {
-	  return _frontAndBack;
+     return _frontAndBack;
   }
 
   public static void init(INativeGL ngl)
   {
-	_front = ngl.CullFace_Front();
-	_back = ngl.CullFace_Back();
-	_frontAndBack = ngl.CullFace_FrontAndBack();
+    _front = ngl.CullFace_Front();
+    _back = ngl.CullFace_Back();
+    _frontAndBack = ngl.CullFace_FrontAndBack();
   }
 }

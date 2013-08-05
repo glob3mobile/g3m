@@ -30,4 +30,9 @@ public final class GLUniformID_WebGL
    }
 
 
+   @Override
+   public void dispose() {
+
+   }
+
 }

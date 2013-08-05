@@ -19,88 +19,153 @@ package org.glob3.mobile.generated;
 
 public class ShapesRenderer extends LeafRenderer
 {
+  private final boolean _renderNotReadyShapes;
+
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
-  private InitializationContext _initializationContext;
+  private G3MContext _context;
 
 
   public ShapesRenderer()
   {
-	  _initializationContext = null;
+     this(true);
+  }
+  public ShapesRenderer(boolean renderNotReadyShapes)
+  {
+     _renderNotReadyShapes = renderNotReadyShapes;
+     _context = null;
 
   }
 
   public void dispose()
   {
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  if (shape != null)
-		  shape.dispose();
-	}
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      if (shape != null)
+         shape.dispose();
+    }
   }
 
   public final void addShape(Shape shape)
   {
-	_shapes.add(shape);
-	if (_initializationContext != null)
-	{
-	  shape.initialize(_initializationContext);
-	}
+    _shapes.add(shape);
+    if (_context != null)
+    {
+      shape.initialize(_context);
+    }
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void removeAllShapes()
   {
-	_initializationContext = ic;
+     removeAllShapes(true);
+  }
+  public final void removeAllShapes(boolean deleteShapes)
+  {
+    if (deleteShapes)
+    {
+      final int shapesCount = _shapes.size();
+      for (int i = 0; i < shapesCount; i++)
+      {
+        Shape shape = _shapes.get(i);
+        if (shape != null)
+           shape.dispose();
+      }
+    }
+  
+    _shapes.clear();
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onResume(G3MContext context)
+  {
+    _context = context;
+  }
+
+  public final void onPause(G3MContext context)
+  {
+
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+
+  }
+
+  public final void initialize(G3MContext context)
+  {
+    _context = context;
+
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.initialize(context);
+    }
+  }
+
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    if (_renderNotReadyShapes)
+    {
+      return true;
+    }
+  
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      final boolean shapeReady = shape.isReadyToRender(rc);
+      if (!shapeReady)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
+    return false;
+  }
+
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
   }
 
-  public final void initialize(InitializationContext ic)
-  {
-	_initializationContext = ic;
-
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  shape.initialize(ic);
-	}
-  }
-
-  public final boolean isReadyToRender(RenderContext rc)
-  {
-	return true;
-  }
-
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
-  {
-	return false;
-  }
-
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void start(G3MRenderContext rc)
   {
   }
 
-  public final void start()
+  public final void stop(G3MRenderContext rc)
   {
   }
 
-  public final void stop()
+  public final void render(G3MRenderContext rc, GLState parentState)
   {
-  }
-
-  public final void render(RenderContext rc)
-  {
-	final int shapesCount = _shapes.size();
-	for (int i = 0; i < shapesCount; i++)
-	{
-	  Shape shape = _shapes.get(i);
-	  shape.render(rc);
-	}
+    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+  
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+  
+      if (shape.isEnable())
+      {
+        if (shape.isTransparent(rc))
+        {
+          final Planet planet = rc.getPlanet();
+          final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
+          final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+  
+          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _renderNotReadyShapes));
+        }
+        else
+        {
+          shape.render(rc, parentState, _renderNotReadyShapes);
+        }
+      }
+    }
   }
 
 }

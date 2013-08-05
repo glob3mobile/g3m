@@ -23,20 +23,6 @@ class IFloatBuffer;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
-//  LayerSet* _layerSet;
-  
-#ifdef C_CODE
-  const TilesRenderParameters* _parameters;
-#else
-  TilesRenderParameters* _parameters;
-#endif
-
-  mutable IFloatBuffer* _texCoordsCache;
-  
-  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
-  
-  long _pendingTopTileRequests;
-  
   TexturesHandler* _texturesHandler;
   
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
@@ -44,19 +30,15 @@ private:
 public:
   MultiLayerTileTexturizer() ;
   
-  void countTopTileRequest() {
-    _pendingTopTileRequests--;
-  }
-  
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const RenderContext *rc,
+  bool isReady(const G3MRenderContext *rc,
                LayerSet* layerSet);
   
-  void initialize(const InitializationContext* ic,
+  void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);
   
-  Mesh* texturize(const RenderContext* rc,
+  Mesh* texturize(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   Tile* tile,
                   Mesh* tessellatorMesh,
@@ -67,7 +49,7 @@ public:
   
   bool tileMeetsRenderCriteria(Tile* tile);
   
-  void justCreatedTopTile(const RenderContext* rc,
+  void justCreatedTopTile(const G3MRenderContext* rc,
                           Tile* tile,
                           LayerSet* layerSet);
   
@@ -77,7 +59,7 @@ public:
   
   const IGLTextureId* getTopLevelGLTextureIdForTile(Tile* tile);
   
-  void onTerrainTouchEvent(const EventContext* ec,
+  bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile,
                            LayerSet* layerSet);

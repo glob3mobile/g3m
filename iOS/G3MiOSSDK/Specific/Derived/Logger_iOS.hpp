@@ -2,7 +2,7 @@
 //  Logger_iOS.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,12 +13,15 @@
 
 
 class Logger_iOS: public ILogger {
-public:  
-  Logger_iOS(const LogLevel level): ILogger(level) { }
+public:
+  Logger_iOS(const LogLevel level) :
+  ILogger(level)
+  {
+  }
   
-  void logInfo(const std::string x, ...) const ;
-  void logWarning(const std::string x, ...) const ;
-  void logError(const std::string x, ...) const ;
+  void logInfo   (const std::string& x, ...) const;
+  void logWarning(const std::string& x, ...) const;
+  void logError  (const std::string& x, ...) const;
 };
 
 #endif

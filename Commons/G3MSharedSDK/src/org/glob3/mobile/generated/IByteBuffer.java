@@ -17,26 +17,18 @@ public abstract class IByteBuffer
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int size() const = 0;
   public abstract int size();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int timestamp() const = 0;
   public abstract int timestamp();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual byte get(int i) const = 0;
   public abstract byte get(int i);
 
   public abstract void put(int i, byte value);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const String description() const = 0;
+  public abstract void rawPut(int i, byte value);
+
   public abstract String description();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const String getAsString() const = 0;
   public abstract String getAsString();
 
 }

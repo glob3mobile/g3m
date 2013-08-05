@@ -16,20 +16,20 @@ import android.view.MotionEvent.PointerCoords;
 public final class MotionEventProcessor {
 
    //Stores pointer positions, id and event type
-   class EventProcessed {
+   private static class EventProcessed {
       // LAST EVENT PROCESSED
-      public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
-      public java.util.ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
-      public TouchEventType               _type       = TouchEventType.Down;
+      private ArrayList<Integer> _pointersID = new ArrayList<Integer>();
+      private ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      private TouchEventType     _type       = TouchEventType.Down;
 
 
       @SuppressWarnings("unchecked")
       @Override
       protected EventProcessed clone() {
          final EventProcessed e = new EventProcessed();
-         e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
-         e._touchs = (ArrayList<Touch>) this._touchs.clone();
-         e._type = this._type;
+         e._pointersID = (ArrayList<Integer>) _pointersID.clone();
+         e._touchs = (ArrayList<Touch>) _touchs.clone();
+         e._type = _type;
          return e;
       }
 
@@ -117,14 +117,20 @@ public final class MotionEventProcessor {
          case MotionEvent.ACTION_MOVE:
             _lastEvent._type = TouchEventType.Move;
             break;
-
-         case MotionEvent.ACTION_POINTER_1_UP:
-         case MotionEvent.ACTION_POINTER_2_UP:
+         /**
+          * MotionEvent.ACTION_POINTER_1_UP and MotionEvent.ACTION_POINTER_2_UP are deprecated. MotionEvent.ACTION_POINTER_UP
+          * added as fallback
+          */
+         //         case MotionEvent.ACTION_POINTER_1_UP:
+         //         case MotionEvent.ACTION_POINTER_2_UP:
+         case MotionEvent.ACTION_POINTER_UP:
          case MotionEvent.ACTION_UP:
             _lastEvent._type = TouchEventType.Up;
             break;
-
-         case MotionEvent.ACTION_POINTER_2_DOWN:
+         /**
+          * MotionEvent.ACTION_POINTER_2_DOWN is deprecated.
+          */
+         //         case MotionEvent.ACTION_POINTER_2_DOWN:
          case MotionEvent.ACTION_POINTER_DOWN:
          case MotionEvent.ACTION_DOWN:
             _lastEvent._type = TouchEventType.Down;

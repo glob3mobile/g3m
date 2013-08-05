@@ -1,28 +1,21 @@
 package org.glob3.mobile.generated; 
 //
-//  MarksRenderer.cpp
+//  MarkTouchListener.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  MarksRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//  Created by Eduardo de la Montaña on 05/12/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
+//class Mark;
 
 public abstract class MarkTouchListener
 {
-  public void dispose()
-  {
+    public void dispose()
+    {
 
-  }
+    }
 
-  public abstract boolean touchedMark(Mark mark);
+    public abstract boolean touchedMark(Mark mark);
 }

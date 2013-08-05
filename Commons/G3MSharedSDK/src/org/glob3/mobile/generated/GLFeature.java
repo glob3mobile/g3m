@@ -8,26 +8,29 @@ public class GLFeature
 
   public static int polygonOffsetFill()
   {
-	  return _polygonOffsetFill;
+    return _polygonOffsetFill;
   }
+
   public static int depthTest()
   {
-	  return _depthTest;
+    return _depthTest;
   }
+
   public static int blend()
   {
-	  return _blend;
+    return _blend;
   }
+
   public static int cullFace()
   {
-	  return _cullFace;
+    return _cullFace;
   }
 
   public static void init(INativeGL ngl)
   {
-	_polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
-	_depthTest = ngl.Feature_DepthTest();
-	_blend = ngl.Feature_Blend();
-	_cullFace = ngl.Feature_CullFace();
+    _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
+    _depthTest = ngl.Feature_DepthTest();
+    _blend = ngl.Feature_Blend();
+    _cullFace = ngl.Feature_CullFace();
   }
 }

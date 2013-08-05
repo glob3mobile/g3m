@@ -9,26 +9,22 @@
 #include "SGMaterialNode.hpp"
 
 #include "Context.hpp"
-#include "GL.hpp"
+#include "GLState.hpp"
 
-void SGMaterialNode::prepareRender(const RenderContext* rc) {
-  GL *gl = rc->getGL();
-
-  if (_specularColor == NULL) {
-    gl->disableVertexFlatColor();
-  }
-  else {
-    const float colorsIntensity = 1;
-    gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
+const GLState* SGMaterialNode::createState(const G3MRenderContext* rc,
+                                           const GLState& parentState) {
+  if (_baseColor == NULL) {
+    return NULL;
   }
 
-  SGNode::prepareRender(rc);
-}
+  GLState* state = new GLState(parentState);
+  const float colorsIntensity = 1;
+#ifdef C_CODE
+  state->enableFlatColor(*_baseColor, colorsIntensity);
+#endif
+#ifdef JAVA_CODE
+  state.enableFlatColor(_baseColor, colorsIntensity);
+#endif
 
-void SGMaterialNode::cleanUpRender(const RenderContext* rc) {
-  GL *gl = rc->getGL();
-
-  gl->disableVertexFlatColor();
-
-  SGNode::cleanUpRender(rc);
+  return state;
 }

@@ -17,34 +17,54 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+
 //class SGNode;
 
 public class SGShape extends Shape
 {
   private SGNode _node;
+  private final String _uriPrefix;
+
+  private final boolean _isTransparent;
 
 
-  public SGShape(SGNode node)
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
   {
-	  super(null);
-	  _node = node;
+     super(null);
+     _node = node;
+     _uriPrefix = uriPrefix;
+     _isTransparent = isTransparent;
 
   }
 
-  public final void initialize(InitializationContext ic)
+  public final SGNode getNode()
   {
-	_node.initialize(ic);
+    return _node;
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final String getURIPrefix()
   {
-	return _node.isReadyToRender(rc);
+    return _uriPrefix;
   }
 
-  public final void rawRender(RenderContext rc)
+  public final void initialize(G3MContext context)
   {
-	_node.render(rc);
+    _node.initialize(context, this);
+  }
+
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    return _node.isReadyToRender(rc);
+  }
+
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  {
+    _node.render(rc, parentState, renderNotReadyShapes);
+  }
+
+  public final boolean isTransparent(G3MRenderContext rc)
+  {
+    return _isTransparent;
   }
 
 }

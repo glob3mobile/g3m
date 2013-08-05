@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector3D;
 
 public abstract class Mesh
@@ -27,20 +26,14 @@ public abstract class Mesh
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getVertexCount() const = 0;
   public abstract int getVertexCount();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const Vector3D getVertex(int i) const = 0;
   public abstract Vector3D getVertex(int i);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void render(const RenderContext* rc) const = 0;
-  public abstract void render(RenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState parentState);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Extent* getExtent() const = 0;
-  public abstract Extent getExtent();
+  public abstract BoundingVolume getBoundingVolume();
+
+  public abstract boolean isTransparent(G3MRenderContext rc);
 
 }
