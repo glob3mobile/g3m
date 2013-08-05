@@ -653,9 +653,8 @@ void TextureUploader::imageCreated(IImage* image) {
                            _textureId);
   }
   else {
-    _tileRasterizer->rasterize(image,
-                               _tile,
-                               _mercator,
+    const TileRasterizerContext trc(image, _tile, _mercator);
+    _tileRasterizer->rasterize(trc,
                                new TextureUploader(_builder,
                                                    _tile,
                                                    _mercator,

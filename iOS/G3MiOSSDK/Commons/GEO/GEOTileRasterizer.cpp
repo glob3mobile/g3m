@@ -65,11 +65,12 @@ public:
 
 };
 
-void GEOTileRasterizer::rasterize(IImage* image,
-                                  const Tile* tile,
-                                  bool mercator,
+void GEOTileRasterizer::rasterize(const TileRasterizerContext& trc,
                                   IImageListener* listener,
                                   bool autodelete) const {
+  const IImage* image    = trc._image;
+  const Tile*   tile     = trc._tile;
+  const bool    mercator = trc._mercator;
 
   const int width  = image->getWidth();
   const int height = image->getHeight();
@@ -80,13 +81,6 @@ void GEOTileRasterizer::rasterize(IImage* image,
   ICanvas* canvas = getCanvas(width, height);
 
   canvas->drawImage(image, 0, 0);
-
-//  canvas->setFillColor(Color::yellow());
-
-//  canvas->setLineColor(Color::white());
-//  canvas->setLineWidth(1);
-//  canvas->strokeRectangle(0, 0, width, height);
-
 
   _quadTree.acceptVisitor(tile->getSector(),
                           GEOTileRasterizer_QuadTreeVisitor(canvas, projection));

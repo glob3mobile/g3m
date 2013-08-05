@@ -80,11 +80,12 @@ std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
 //  return _canvas;
 //}
 
-void DebugTileRasterizer::rasterize(IImage* image,
-                                    const Tile* tile,
-                                    bool mercator,
+void DebugTileRasterizer::rasterize(const TileRasterizerContext& trc,
                                     IImageListener* listener,
                                     bool autodelete) const {
+
+  const IImage* image = trc._image;
+  const Tile*   tile  = trc._tile;
 
   const int width  = image->getWidth();
   const int height = image->getHeight();

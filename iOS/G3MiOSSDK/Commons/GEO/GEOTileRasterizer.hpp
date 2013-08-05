@@ -24,9 +24,7 @@ public:
     return "GEOTileRasterizer";
   }
 
-  void rasterize(IImage* image,
-                 const Tile* tile,
-                 bool mercator,
+  void rasterize(const TileRasterizerContext& trc,
                  IImageListener* listener,
                  bool autodelete) const;
 
