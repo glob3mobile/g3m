@@ -34,8 +34,8 @@ private:
   double      _scaleY;
   double      _scaleZ;
   
-  const Planet* _planet;
-  
+//  const Planet* _planet;
+
   mutable MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
@@ -58,7 +58,7 @@ public:
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
-  _planet(NULL),
+//  _planet(NULL),
   _enable(true)
   {
     

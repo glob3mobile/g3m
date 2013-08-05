@@ -23,6 +23,8 @@ public class TileRendererBuilder
 
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
+  private TileRasterizer _tileRasterizer;
+
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
   private boolean _showStatistics;
@@ -67,6 +69,11 @@ public class TileRendererBuilder
   
     return _texturizer;
   }
+  private TileRasterizer getTileRasterizer()
+  {
+    return _tileRasterizer;
+  }
+
 
   /**
    * Returns the _layerSet.
@@ -224,6 +231,7 @@ public class TileRendererBuilder
     _parameters = null;
     _layerSet = null;
     _texturizer = null;
+    _tileRasterizer = null;
     _tileTessellator = null;
     _visibleSectorListeners = null;
     _stabilizationMilliSeconds = null;
@@ -240,6 +248,8 @@ public class TileRendererBuilder
        _layerSet.dispose();
     if (_texturizer != null)
        _texturizer.dispose();
+    if (_tileRasterizer != null)
+       _tileRasterizer.dispose();
     if (_tileTessellator != null)
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
@@ -247,7 +257,7 @@ public class TileRendererBuilder
   }
   public final TileRenderer create()
   {
-    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    TileRenderer tileRenderer = new TileRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -257,6 +267,7 @@ public class TileRendererBuilder
     _parameters = null;
     _layerSet = null;
     _texturizer = null;
+    _tileRasterizer = null;
     _tileTessellator = null;
     _visibleSectorListeners = null;
     _visibleSectorListeners = null;
@@ -284,6 +295,15 @@ public class TileRendererBuilder
       return;
     }
     _texturizer = tileTexturizer;
+  }
+  public final void setTileRasterizer(TileRasterizer tileRasterizer)
+  {
+    if (_tileRasterizer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _tileRasterizer already initialized");
+      return;
+    }
+    _tileRasterizer = tileRasterizer;
   }
   public final void setLayerSet(LayerSet layerSet)
   {

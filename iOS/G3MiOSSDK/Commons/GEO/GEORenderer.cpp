@@ -59,7 +59,6 @@ void GEORenderer::addGEOObject(GEOObject* geoObject,
 void GEORenderer::render(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();
   if (childrenCount > 0) {
-
     for (int i = 0; i < childrenCount; i++) {
       const GEORenderer_ObjectSymbolizerPair* pair = _children[i];
 
@@ -69,7 +68,8 @@ void GEORenderer::render(const G3MRenderContext* rc) {
         const GEOSymbolizationContext sc(symbolizer,
                                          _meshRenderer,
                                          _shapesRenderer,
-                                         _marksRenderer);
+                                         _marksRenderer,
+                                         _geoTileRasterizer);
         pair->_geoObject->symbolize(rc, sc);
       }
 

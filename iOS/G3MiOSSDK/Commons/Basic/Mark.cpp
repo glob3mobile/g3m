@@ -10,7 +10,6 @@
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
-#include "TextureBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IGLTextureId.hpp"
 #include "IDownloader.hpp"

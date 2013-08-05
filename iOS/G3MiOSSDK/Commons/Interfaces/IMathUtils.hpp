@@ -137,6 +137,10 @@ public:
     return max(max(f1, f2), f3);
   }
 
+  virtual float min(float f1, float f2, float f3)  const {
+    return min(min(f1, f2), f3);
+  }
+
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
 
@@ -216,6 +220,23 @@ public:
                          float max) const {
     return (value >= min) && (value <= max);
   }
+
+  virtual double pseudoModule(double numerator,
+                              double denominator) const {
+
+    const double result = numerator / denominator;
+    const long long intPart = (long long) result; // integer part
+    const double fracPart = result - intPart;     // fractional part
+
+//    if (closeTo(fracPart, 1.0)) {
+    if (fracPart == 1.0) {
+      return 0;
+    }
+
+    return fracPart * denominator;
+  }
+
+
 };
 
 #endif

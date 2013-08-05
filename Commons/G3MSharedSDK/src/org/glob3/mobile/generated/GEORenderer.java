@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class MarksRenderer;
 //class ShapesRenderer;
+//class GEOTileRasterizer;
 //class GEORenderer_ObjectSymbolizerPair;
 
 public class GEORenderer extends LeafRenderer
@@ -34,6 +35,7 @@ public class GEORenderer extends LeafRenderer
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
+  private GEOTileRasterizer _geoTileRasterizer;
 
 
   /**
@@ -46,12 +48,13 @@ public class GEORenderer extends LeafRenderer
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
 
    */
-  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer)
+  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
      _defaultSymbolizer = defaultSymbolizer;
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
+     _geoTileRasterizer = geoTileRasterizer;
   }
 
   public void dispose()
@@ -121,7 +124,6 @@ public class GEORenderer extends LeafRenderer
     final int childrenCount = _children.size();
     if (childrenCount > 0)
     {
-  
       for (int i = 0; i < childrenCount; i++)
       {
         final GEORenderer_ObjectSymbolizerPair pair = _children.get(i);
@@ -130,7 +132,7 @@ public class GEORenderer extends LeafRenderer
         {
           final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
   
-          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer);
+          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
           pair._geoObject.symbolize(rc, sc);
         }
   

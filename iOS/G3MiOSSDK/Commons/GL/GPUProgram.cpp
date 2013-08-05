@@ -33,7 +33,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     return NULL;
   }
 
-  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
+//  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
 
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
@@ -46,7 +46,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     return NULL;
   }
 
-  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
+//  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
 
   //gl->bindAttribLocation(p, 0, POSITION);
 
@@ -161,7 +161,7 @@ void GPUProgram::getVariables(GL* gl){
     _createdAttributes[counter++] = a;
   }
 
-  ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
+  //ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
 }
 
 GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{

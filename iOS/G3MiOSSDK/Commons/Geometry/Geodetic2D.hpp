@@ -32,7 +32,13 @@ public:
     return Geodetic2D(Angle::fromDegrees(lat),
                       Angle::fromDegrees(lon));
   }
-  
+
+  static Geodetic2D fromRadians(double lat,
+                                double lon) {
+    return Geodetic2D(Angle::fromRadians(lat),
+                      Angle::fromRadians(lon));
+  }
+
   static Geodetic2D linearInterpolation(const Geodetic2D& from,
                                         const Geodetic2D& to,
                                         double alpha){

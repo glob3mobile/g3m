@@ -17,7 +17,6 @@
 #include "TexturesHandler.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"

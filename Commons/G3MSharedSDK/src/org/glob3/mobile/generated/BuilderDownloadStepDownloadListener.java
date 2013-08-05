@@ -3,6 +3,7 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
 {
   private TileTextureBuilder _builder;
   private final int _position;
+
   public BuilderDownloadStepDownloadListener(TileTextureBuilder builder, int position)
   //_onDownload(0),
   //_onError(0),

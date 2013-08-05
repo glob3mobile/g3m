@@ -12,6 +12,9 @@
 
 #include "IStringBuilder.hpp"
 
+#include "GEORasterProjection.hpp"
+#include "ICanvas.hpp"
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
   return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
@@ -409,6 +412,21 @@ const Vector2D Sector::div(const Sector& that) const {
 //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
 //  return Vector2D(uv._x, uv._y - scaleY);
 //}
+
+void Sector::rasterize(ICanvas*                   canvas,
+                       const GEORasterProjection* projection) const {
+
+  const Vector2F l = projection->project(&_lower);
+  const Vector2F u = projection->project(&_upper);
+  
+  const float left   = l._x;
+  const float top    = l._y;
+  const float width  = u._x - left;
+  const float height = u._y - top;
+
+//  canvas->strokeRectangle(left, canvas->getHeight() - top, width, -height);
+  canvas->strokeRectangle(left, top, width, height);
+}
 
 const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
   if (_normalizedCartesianCenter == NULL) {

@@ -34,6 +34,7 @@ public abstract class G3MCBuilder
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
     TileTexturizer texturizer = new MultiLayerTileTexturizer();
+    TileRasterizer tileRasterizer = null;
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -47,7 +48,7 @@ public abstract class G3MCBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, texturePriority);
+    return new TileRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority);
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()

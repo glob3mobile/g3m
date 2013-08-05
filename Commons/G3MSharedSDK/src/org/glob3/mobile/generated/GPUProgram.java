@@ -103,7 +103,7 @@ public class GPUProgram
       _createdAttributes[counter++] = a;
     }
   
-    ILogger.instance().logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
+    //ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
   }
 
   private GPUProgram()
@@ -142,7 +142,7 @@ public class GPUProgram
       return null;
     }
   
-    ILogger.instance().logInfo("VERTEX SOURCE: \n %s", vertexSource);
+  //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
   
     // compile fragment shader
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
@@ -156,7 +156,7 @@ public class GPUProgram
       return null;
     }
   
-    ILogger.instance().logInfo("FRAGMENT SOURCE: \n %s", fragmentSource);
+  //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
     //gl->bindAttribLocation(p, 0, POSITION);
   

@@ -20,6 +20,10 @@
 
 //class Sector_Geodetic2DCachedData;
 
+class ICanvas;
+class GEORasterProjection;
+
+
 class Sector {
 
 private:
@@ -70,6 +74,12 @@ public:
    */
   _normalizedCartesianCenter(NULL)
   {
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 
@@ -258,6 +268,9 @@ public:
   bool touchesSouthPole() const {
     return (_lower._latitude._degrees <= -89.9);
   }
+  
+  void rasterize(ICanvas*                   canvas,
+                 const GEORasterProjection* projection) const;
 
   bool touchesPoles() const {
     return ((_upper._latitude._degrees >=  89.9) ||

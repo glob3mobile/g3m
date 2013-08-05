@@ -29,7 +29,6 @@ class ITimer;
 class PeriodicalTask;
 class ICameraConstrainer;
 class FrameTasksExecutor;
-class TextureBuilder;
 class G3MWidget;
 class IStringBuilder;
 class IMathUtils;
@@ -217,7 +216,6 @@ private:
   Camera*          _currentCamera;
   Camera*          _nextCamera;
   TexturesHandler* _texturesHandler;
-  TextureBuilder*  _textureBuilder;
 
   Color*           _backgroundColor;
 

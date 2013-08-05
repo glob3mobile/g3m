@@ -25,7 +25,6 @@
 #include "PeriodicalTask.hpp"
 #include "CameraGoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
-#include "CPUTextureBuilder.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
 #include <math.h>
@@ -84,7 +83,6 @@ _storage(storage),
 _threadUtils(threadUtils),
 _cameraActivityListener(cameraActivityListener),
 _texturesHandler( new TexturesHandler(_gl, false) ),
-_textureBuilder( new CPUTextureBuilder() ),
 _planet(planet),
 _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
@@ -383,7 +381,6 @@ void G3MWidget::render(int width, int height) {
                       _currentCamera,
                       _nextCamera,
                       _texturesHandler,
-                      _textureBuilder,
                       _downloader,
                       _effectsScheduler,
                       IFactory::instance()->createTimer(),

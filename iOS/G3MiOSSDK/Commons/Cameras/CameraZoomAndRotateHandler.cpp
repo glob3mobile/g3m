@@ -107,6 +107,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       rotate();
     }
   }
+  
 }
 
 

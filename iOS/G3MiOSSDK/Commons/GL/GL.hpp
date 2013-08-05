@@ -54,14 +54,14 @@ private:
   const IGLTextureId* getGLTextureId();
 
   //Get Locations warning of errors
-  bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(GPUProgram* program,
-                               const std::string& name);
+//  bool _errorGettingLocationOcurred;
+//  int checkedGetAttribLocation(GPUProgram* program,
+//                               const std::string& name);
   IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
                                           const std::string& name);
 
-  IFloatBuffer* _billboardTexCoord;
-  IFloatBuffer* getBillboardTexCoord();
+//  IFloatBuffer* _billboardTexCoord;
+//  IFloatBuffer* getBillboardTexCoord();
 
 //  const bool _verbose;
 

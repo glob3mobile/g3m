@@ -108,6 +108,21 @@
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #import <G3MiOSSDK/Color.hpp>
 
+#import <G3MiOSSDK/TileRasterizer.hpp>
+#import <G3MiOSSDK/DebugTileRasterizer.hpp>
+#import <G3MiOSSDK/GEOTileRasterizer.hpp>
+
+#import <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
+#import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
+
+#import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
+#import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
+
+#import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
+#import <G3MiOSSDK/GPUProgramFactory.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -497,6 +512,11 @@ public:
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+
+  //builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
+  builder.getTileRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
 
@@ -561,7 +581,8 @@ public:
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
-                                                   marksRenderer: marksRenderer];
+                                                   marksRenderer: marksRenderer
+                                               geoTileRasterizer: geoTileRasterizer];
   builder.addRenderer(geoRenderer);
 
 
@@ -1460,17 +1481,85 @@ public:
 
 class SampleSymbolizer : public GEOSymbolizer {
 private:
+  
+//  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    
+//    const std::string type = properties->getAsString("type", "");
+//    
+//    if (type.compare("Water Indicator") == 0) {
+//      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
+//    }
+//    
+//    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
+//  }
 
-  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+  GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+
+//    const Color color = Color::fromRGBA(0.85, 0.85, 0.85, 0.6);
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
+
+
+    float dashLengths[] = {};
+    int dashCount = 0;
+//    float dashLengths[] = {3, 6};
+//    int dashCount = 2;
+
+    return GEO2DLineRasterStyle(color,
+                                2,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
+  }
+
+  GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
+
+    return GEO2DSurfaceRasterStyle( color );
+
+//    return GEO2DSurfaceRasterStyle(Color::transparent());
+  }
+
+  GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const std::string type = properties->getAsString("type", "");
 
+    float dashLengths[] = {1, 12};
+    int dashCount = 2;
+//    float dashLengths[] = {};
+//    int dashCount = 0;
+
     if (type.compare("Water Indicator") == 0) {
-      return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 4);
+      return GEO2DLineRasterStyle(Color::fromRGBA(1, 1, 1, 0.9),
+                                  8,
+                                  CAP_ROUND,
+                                  JOIN_ROUND,
+                                  1,
+                                  dashLengths,
+                                  dashCount,
+                                  0);
     }
 
-    return GEOLine2DStyle(Color::fromRGBA(1, 0, 1, 1), 2);
+    return GEO2DLineRasterStyle(Color::fromRGBA(1, 1, 0, 0.9),
+                                8,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
   }
 
   CircleShape* createCircleShape(const GEO2DPointGeometry* geometry) const {
@@ -1532,15 +1621,50 @@ private:
   }
 
 
-
 public:
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+    const GEO2DLineRasterStyle    lineStyle    = createPolygonLineRasterStyle(geometry);
+    const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+    const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
+    const int polygonsDataSize = polygonsData->size();
+
+    for (int i = 0; i < polygonsDataSize; i++) {
+      GEO2DPolygonData* polygonData = polygonsData->at(i);
+      symbols->push_back( new GEORasterPolygonSymbol(polygonData,
+                                                     lineStyle,
+                                                     surfaceStyle) );
+
+    }
+
+    int _DGD_AtWork;
+
+    return symbols;
+  }
+
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
+    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+
+    symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
+                                                   createPolygonLineRasterStyle(geometry),
+                                                   createPolygonSurfaceRasterStyle(geometry)) );
+
+    return symbols;
+  }
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+    
+//    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
+//                                                createLineStyle(geometry),
+//                                                30000) );
 
-    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
-                                                createLineStyle(geometry),
-                                                30000) );
+    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
+                                                createLineRasterStyle(geometry)) );
 
     return symbols;
   }
@@ -1549,8 +1673,11 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
-                                                     createLineStyle(geometry)) );
+//    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
+//                                                     createLineStyle(geometry)) );
+
+    symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray(),
+                                                     createLineRasterStyle(geometry)) );
 
     return symbols;
   }
@@ -1576,6 +1703,7 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
+                             geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer();
 
@@ -1583,7 +1711,8 @@ public:
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
-                                             marksRenderer);
+                                             marksRenderer,
+                                             geoTileRasterizer);
 
   return geoRenderer;
 }
@@ -1915,17 +2044,17 @@ public:
       canvas->fillRectangle(32, 64, 64, 128);
       canvas->removeShadow();
 
+      canvas->setLineColor( Color::fromRGBA(1, 0, 1, 0.9) );
+      canvas->setLineWidth(2.5f);
 
-      canvas->setStrokeColor( Color::fromRGBA(1, 0, 1, 0.9) );
-      canvas->setStrokeWidth(2.5f);
       const float margin = 1.25f;
       canvas->strokeRoundedRectangle(0 + margin, 0 + margin,
                                      256 - (margin * 2), 256 - (margin * 2),
                                      32);
 
       canvas->setFillColor( Color::fromRGBA(1, 1, 0, 0.9) );
-      canvas->setStrokeWidth(1.1f);
-      canvas->setStrokeColor( Color::fromRGBA(0, 0, 0, 0.9) );
+      canvas->setLineWidth(1.1f);
+      canvas->setLineColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
 
       int _DGD_working_on_Canvas;
@@ -2198,14 +2327,16 @@ public:
       }
       /**/
 
+      /**/
 
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
-      //                                                                  ofType: @"geojson"];
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/cities"
+//      NSString* geojsonName = @"geojson/countries";
+      NSString* geojsonName = @"geojson/countries-50m";
+//      NSString* geojsonName = @"geojson/boundary_lines_land";
+//      NSString* geojsonName = @"geojson/cities";
+//      NSString* geojsonName = @"geojson/test";
+
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
                                                                   ofType: @"geojson"];
-
-      //      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/extremadura-roads"
-      //                                                                  ofType: @"geojson"];
 
       if (geoJSONFilePath) {
         NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath

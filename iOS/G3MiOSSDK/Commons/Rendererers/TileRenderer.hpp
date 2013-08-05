@@ -25,15 +25,18 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
-//#include "GPUProgramState.hpp"
+#include "ChangedListener.hpp"
 
 class EllipsoidShape;
+
+class TileRasterizer;
 
 class TileRenderContext {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
+  TileRasterizer*              _tileRasterizer;
 
   const TilesRenderParameters* _parameters;
   TilesStatistics*             _statistics;
@@ -51,6 +54,7 @@ public:
   TileRenderContext(const TileTessellator*       tessellator,
                     ElevationDataProvider*       elevationDataProvider,
                     TileTexturizer*              texturizer,
+                    TileRasterizer*              tileRasterizer,
                     const LayerSet*              layerSet,
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
@@ -61,6 +65,7 @@ public:
   _tessellator(tessellator),
   _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
+  _tileRasterizer(tileRasterizer),
   _layerSet(layerSet),
   _parameters(parameters),
   _statistics(statistics),
@@ -70,6 +75,10 @@ public:
   _verticalExaggeration(verticalExaggeration)
   {
 
+  }
+
+  TileRasterizer* getTileRasterizer() const {
+    return _tileRasterizer;
   }
 
   const float getVerticalExaggeration() const {
@@ -281,11 +290,12 @@ public:
 };
 
 
-class TileRenderer: public LeafRenderer, LayerSetChangedListener {
+class TileRenderer: public LeafRenderer, ChangedListener {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
+  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
@@ -331,7 +341,8 @@ private:
   void renderIncompletePlanet(const G3MRenderContext* rc);
 
   EllipsoidShape* _incompleteShape;
-
+  
+  bool _recreateTilesPending;
 
   GLState _glState;
   ProjectionGLFeature* _projection;
@@ -344,6 +355,7 @@ public:
                ElevationDataProvider* elevationDataProvider,
                float verticalExaggeration,
                TileTexturizer*  texturizer,
+               TileRasterizer*  tileRasterizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
                bool showStatistics,
@@ -399,7 +411,7 @@ public:
     }
   }
 
-  void changed(const LayerSet* layerSet);
+  void changed();
 
   void recreateTiles();
 

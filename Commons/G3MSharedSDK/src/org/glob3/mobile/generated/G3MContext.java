@@ -28,7 +28,6 @@ package org.glob3.mobile.generated;
 //class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
-//class TextureBuilder;
 //class IMathUtils;
 //class IJSONParser;
 //class IStorage;

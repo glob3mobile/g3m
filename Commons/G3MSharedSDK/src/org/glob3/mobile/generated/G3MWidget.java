@@ -147,7 +147,7 @@ public class G3MWidget
     //  _currentCamera->copyFrom(*_nextCamera);
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
+    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
   
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
@@ -562,7 +562,6 @@ public class G3MWidget
   private Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
-  private TextureBuilder _textureBuilder;
 
   private Color _backgroundColor;
 
@@ -605,7 +604,6 @@ public class G3MWidget
      _threadUtils = threadUtils;
      _cameraActivityListener = cameraActivityListener;
      _texturesHandler = new TexturesHandler(_gl, false);
-     _textureBuilder = new CPUTextureBuilder();
      _planet = planet;
      _cameraConstrainers = cameraConstrainers;
      _cameraRenderer = cameraRenderer;

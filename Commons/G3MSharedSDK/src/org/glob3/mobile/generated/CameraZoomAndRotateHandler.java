@@ -226,6 +226,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         rotate();
       }
     }
+  
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

@@ -122,7 +122,8 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-  
+  TileRasterizer* tileRasterizer = NULL;
+
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
@@ -144,6 +145,7 @@ TileRenderer* G3MCBuilder::createTileRenderer() {
                           elevationDataProvider,
                           verticalExaggeration,
                           texturizer,
+                          tileRasterizer,
                           _layerSet,
                           parameters,
                           showStatistics,

@@ -129,6 +129,50 @@ public class Color
     return new Color(red, green, blue, alpha);
   }
 
+  public static Color fromHueSaturationBrightness(double hueInRadians, float saturation, float brightness, float alpha)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final float s = mu.clamp(saturation, 0, 1);
+    final float v = mu.clamp(brightness, 0, 1);
+  
+    //  zero saturation yields gray with the given brightness
+    if (s == 0)
+    {
+      return fromRGBA(v, v, v, alpha);
+    }
+  
+    final double deg60 = ((60) / 180.0 * 3.14159265358979323846264338327950288);
+  
+    //final float hf = (float) ((hue % GMath.DEGREES_360) / GMath.DEGREES_60);
+    final float hf = (float)(mu.pseudoModule(hueInRadians, DefineConstants.PI * 2) / deg60);
+  
+    final int i = (int) hf; // integer part of hue
+    final float f = hf - i; // fractional part of hue
+  
+    final float p = (1 - s) * v;
+    final float q = (1 - (s * f)) * v;
+    final float t = (1 - (s * (1 - f))) * v;
+  
+    switch (i)
+    {
+      case 0:
+        return fromRGBA(v, t, p, alpha);
+      case 1:
+        return fromRGBA(q, v, p, alpha);
+      case 2:
+        return fromRGBA(p, v, t, alpha);
+      case 3:
+        return fromRGBA(p, q, v, alpha);
+      case 4:
+        return fromRGBA(t, p, v, alpha);
+  //    case 5:
+      default:
+        return fromRGBA(v, p, q, alpha);
+    }
+  
+  }
+
   public static Color transparent()
   {
     return Color.fromRGBA(0, 0, 0, 0);
@@ -217,9 +261,140 @@ public class Color
     return (_alpha < 1);
   }
 
+  public final boolean isFullTransparent()
+  {
+    return (_alpha < 0.01);
+  }
+
   public final boolean isEqualsTo(Color that)
   {
-    return (_red == that._red) && (_green == that._green) && (_blue == that._blue) && (_alpha == that._alpha);
+    return ((_red == that._red) && (_green == that._green) && (_blue == that._blue) && (_alpha == that._alpha));
+  }
+
+  public final Color wheelStep(int wheelSize, int step)
+  {
+    final double stepInRadians = (DefineConstants.PI * 2) / wheelSize;
+  
+    final double hueInRadians = getHueInRadians() + (stepInRadians * step);
+  
+    return Color.fromHueSaturationBrightness(hueInRadians, getSaturation(), getBrightness(), _alpha);
+  }
+
+  public final float getSaturation()
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+  //  const float r = _red;
+  //  const float g = _green;
+  //  const float b = _blue;
+  
+    final float max = mu.max(_red, _green, _blue);
+    final float min = mu.min(_red, _green, _blue);
+  
+    if (max == 0)
+    {
+      return 0;
+    }
+  
+    return (max - min) / max;
+  }
+
+  public final float getBrightness()
+  {
+    return IMathUtils.instance().max(_red, _green, _blue);
+  }
+
+  public final double getHueInRadians()
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final float r = getRed();
+    final float g = getGreen();
+    final float b = getBlue();
+  
+    final float max = mu.max(r, g, b);
+    final float min = mu.min(r, g, b);
+  
+    final float span = (max - min);
+  
+    if (span == 0)
+    {
+      return 0;
+    }
+  
+    final double deg60 = ((60.0) / 180.0 * 3.14159265358979323846264338327950288);
+  
+    double h;
+    if (r == max)
+    {
+      h = ((g - b) / span) * deg60;
+    }
+    else if (g == max)
+    {
+      h = (deg60 * 2) + (((b - r) / span) * deg60);
+    }
+    else
+    {
+      h = (deg60 * 4) + (((r - g) / span) * deg60);
+    }
+  
+    if (h < 0)
+    {
+      return (DefineConstants.PI * 2) + h;
+    }
+  
+    return h;
+  
+  }
+
+  public final Angle getHue()
+  {
+    return Angle.fromRadians(getHueInRadians());
+  }
+
+  public final Color adjustBrightness(float brightness)
+  {
+    final float newBrightness = getBrightness() + brightness;
+    return Color.fromHueSaturationBrightness(getHueInRadians(), getSaturation(), newBrightness, _alpha);
+  }
+
+  public final Color adjustSaturationBrightness(float saturation, float brightness)
+  {
+    final float newSaturation = getSaturation() + saturation;
+    final float newBrightness = getBrightness() + brightness;
+    return Color.fromHueSaturationBrightness(getHueInRadians(), newSaturation, newBrightness, _alpha);
+  }
+
+  public final Color darker()
+  {
+    return adjustBrightness(-0.08f);
+  }
+
+  public final Color twiceDarker()
+  {
+    return adjustBrightness(-0.16f);
+  }
+
+  public final Color muchDarker()
+  {
+//    return adjustBrightness(-0.32f);
+    return adjustBrightness(-0.64f);
+  }
+
+  public final Color lighter()
+  {
+    return adjustSaturationBrightness(-0.03f, 0.08f);
+  }
+
+  public final Color twiceLighter()
+  {
+    return adjustSaturationBrightness(-0.06f, 0.16f);
+  }
+
+  public final Color muchLighter()
+  {
+//    return adjustSaturationBrightness(-0.12f, 0.32f);
+    return adjustSaturationBrightness(-0.24f, 0.64f);
   }
 
 }

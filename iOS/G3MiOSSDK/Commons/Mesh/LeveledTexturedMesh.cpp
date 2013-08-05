@@ -35,7 +35,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (_texCoords != NULL) {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
 
       state.addGLFeature(new TextureGLFeature(_glTextureId,
                                               _texCoords, 2, 0, false, 0,
@@ -44,7 +44,8 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
                                               true, _translation.asVector2D(), _scale.asVector2D()),
                          false); //TRANSFORM
-    } else{
+    }
+    else {
       state.addGLFeature(new TextureGLFeature(_glTextureId,
                                               _texCoords, 2, 0, false, 0,
                                               isTransparent(),
@@ -107,13 +108,8 @@ BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
-  if (_mappings == NULL) {
-    return NULL;
-  }
-
-  if (!_currentLevelIsValid) {
-
-    int newCurrentLevel = 0;
+  if (_currentLevel < 0) {
+    int newCurrentLevel = -1;
 
     for (int i = 0; i < _levelsCount; i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
@@ -121,32 +117,27 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
         if (mapping->isValid()) {
           //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
           newCurrentLevel = i;
-          _currentLevelIsValid = true;
           break;
         }
       }
     }
 
-    if (newCurrentLevel != _currentLevel){
+    if (newCurrentLevel >= 0) {
       _currentLevel = newCurrentLevel;
-      //MESH SHOULD BE NOTIFIED TO CHANGE STATE FROM TILE
 
-      if (_currentLevelIsValid) {
-        for (int i = _currentLevel+1; i < _levelsCount; i++) {
-          LazyTextureMapping* mapping = _mappings->at(i);
-          if (mapping != NULL) {
-            _mappings->at(i) = NULL;
-            delete mapping;
-            _glState.clearGLFeatureGroup(CAMERA_GROUP);
-          }
+      _mappings->at(_currentLevel)->modifyGLState(_glState);
+
+      for (int i = _currentLevel+1; i < _levelsCount; i++) {
+        LazyTextureMapping* mapping = _mappings->at(i);
+        if (mapping != NULL) {
+          _mappings->at(i) = NULL;
+          delete mapping;
         }
       }
     }
-
-
   }
 
-  return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
+  return (_currentLevel >= 0) ? _mappings->at(_currentLevel) : NULL;
 }
 
 const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
@@ -162,11 +153,14 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
                                                  const IGLTextureId* glTextureId) {
-  if (glTextureId != NULL) {
-    if (!_currentLevelIsValid || (level < _currentLevel)) {
-      _mappings->at(level)->setGLTextureId(glTextureId);
-      _currentLevelIsValid = false;
-      return true;
+
+  if (_mappings->size() > 0) {
+    if (glTextureId != NULL) {
+      if ((_currentLevel < 0) || (level < _currentLevel)) {
+        _mappings->at(level)->setGLTextureId(glTextureId);
+        _currentLevel = -1;
+        return true;
+      }
     }
   }
 
@@ -180,25 +174,17 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 
   LazyTextureMapping* mapping = getCurrentTextureMapping();
 
-  if (mapping == NULL) {
-    return false;
-  }
-
-  return mapping->isTransparent();
+  return (mapping == NULL) ? false : mapping->isTransparent();
 }
 
 void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
-
   LazyTextureMapping* mapping = getCurrentTextureMapping();
-  if (mapping != NULL){
-    if (mapping != _mappingOnGLState){
-      _mappingOnGLState = mapping;
-      mapping->modifyGLState(_glState);
-    }
-
+  if (mapping == NULL) {
+    ILogger::instance()->logError("No Texture Mapping");
+    _mesh->render(rc, parentGLState);
+  }
+  else {
     _glState.setParent(parentGLState);
     _mesh->render(rc, &_glState);
-  } else{
-    ILogger::instance()->logError("No Texture Mapping");
   }
 }

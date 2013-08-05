@@ -36,7 +36,6 @@ package org.glob3.mobile.generated;
 //class PeriodicalTask;
 //class ICameraConstrainer;
 //class FrameTasksExecutor;
-//class TextureBuilder;
 //class G3MWidget;
 //class IStringBuilder;
 //class IMathUtils;

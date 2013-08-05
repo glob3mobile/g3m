@@ -1,9 +1,10 @@
 package org.glob3.mobile.generated; 
-public class TileRenderer extends LeafRenderer implements LayerSetChangedListener
+public class TileRenderer extends LeafRenderer implements ChangedListener
 {
   private final TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
+  private TileRasterizer _tileRasterizer;
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
@@ -207,7 +208,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
+        TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
@@ -281,6 +282,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private EllipsoidShape _incompleteShape;
 
+  private boolean _recreateTilesPending;
 
   private GLState _glState = new GLState();
   private ProjectionGLFeature _projection;
@@ -311,12 +313,13 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   }
 
 
-  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+  public TileRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
+     _tileRasterizer = tileRasterizer;
      _layerSet = layerSet;
      _parameters = parameters;
      _showStatistics = showStatistics;
@@ -329,9 +332,14 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _incompleteShape = null;
+     _recreateTilesPending = false;
      _projection = null;
      _model = null;
     _layerSet.setChangeListener(this);
+    if (_tileRasterizer != null)
+    {
+      _tileRasterizer.setChangeListener(this);
+    }
   }
 
   public void dispose()
@@ -389,6 +397,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     updateGLState(rc);
   
+  //  if (_recreateTilesPending) {
+  //    recreateTiles();
+  //    _recreateTilesPending = false;
+  //  }
+  
     if (!isReadyToRenderTiles(rc) && _parameters._renderIncompletePlanet)
     {
       renderIncompletePlanet(rc);
@@ -400,7 +413,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
     TilesStatistics statistics = new TilesStatistics();
   
-    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
+    TileRenderContext trc = new TileRenderContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -523,7 +536,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    return isReadyToRenderTiles(rc) || _parameters._renderIncompletePlanet;
+    return (isReadyToRenderTiles(rc) || _parameters._renderIncompletePlanet);
   }
 
 
@@ -562,12 +575,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     }
   }
 
-  public final void changed(LayerSet layerSet)
+  public final void changed()
   {
-    // recreateTiles();
-  
-    // recreateTiles() delete tiles, then meshes, and delete textures from the GPU so it has to be executed in the OpenGL thread
-    _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+    if (!_recreateTilesPending)
+    {
+      _recreateTilesPending = true;
+      // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
+      //   so it has to be executed in the OpenGL thread
+      _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+    }
   }
 
   public final void recreateTiles()
@@ -577,6 +593,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
     _firstRender = true;
     _allFirstLevelTilesAreTextureSolved = false;
     createFirstLevelTiles(_context);
+  
+    _recreateTilesPending = false;
   }
 
   /**
