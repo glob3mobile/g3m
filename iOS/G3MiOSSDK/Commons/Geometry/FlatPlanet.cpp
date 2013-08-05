@@ -200,7 +200,6 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double zc = _origin.z();
   double uz = _centerRay.z();
   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
-  double dAccum = t2*_centerRay.length();
   
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
@@ -208,17 +207,12 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   MutableVector3D viewDirection = _centerRay;
   MutableVector3D ray0 = finalRay0.asMutableVector3D();
   MutableVector3D ray1 = finalRay1.asMutableVector3D();
-  
-  // drag from initialPoint to centerPoint
+    
+  // drag from initialPoint to centerPoint and move the camera forward
   {
-    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_initialPoint.sub(_centerPoint).asVector3D());
-    positionCamera = positionCamera.transformedBy(translation, 1.0);
-    matrix = translation.multiply(matrix);
-  }
-  
-  // move the camera forward
-  {
-    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
+    MutableVector3D delta = _initialPoint.sub((_centerPoint));
+    delta = delta.add(viewDirection.times(t2));
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
