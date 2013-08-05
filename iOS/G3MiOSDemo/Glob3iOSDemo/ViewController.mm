@@ -515,10 +515,10 @@ public:
   builder.addCameraConstraint(scc);
 
   builder.setCameraRenderer([self createCameraRenderer]);
-  
-  builder.setPlanet(Planet::createEarth());
+
+  //  builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-  //builder.setPlanet(Planet::createFlatEarth());
+  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -536,11 +536,11 @@ public:
   //                                  true, //
   //                                  NULL)
   //                     );
-  
+
   bool useElevations = false;
   if (useElevations)
     [self initializeElevationDataProvider: builder];
-  
+
   builder.getTileRendererBuilder()->setLayerSet(layerSet);
   builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
   builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
@@ -765,7 +765,7 @@ public:
 {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));  
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
 
@@ -1443,24 +1443,24 @@ public:
 
 class SampleSymbolizer : public GEOSymbolizer {
 private:
-  
-//  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
-//    const JSONObject* properties = geometry->getFeature()->getProperties();
-//    
-//    const std::string type = properties->getAsString("type", "");
-//    
-//    if (type.compare("Water Indicator") == 0) {
-//      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
-//    }
-//    
-//    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
-//  }
+
+  //  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
+  //    const JSONObject* properties = geometry->getFeature()->getProperties();
+  //
+  //    const std::string type = properties->getAsString("type", "");
+  //
+  //    if (type.compare("Water Indicator") == 0) {
+  //      return GEOLine2DStyle(Color::fromRGBA(1, 1, 1, 1), 2);
+  //    }
+  //
+  //    return GEOLine2DStyle(Color::fromRGBA(1, 1, 0, 1), 2);
+  //  }
 
   GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
 
-//    const Color color = Color::fromRGBA(0.85, 0.85, 0.85, 0.6);
+    //    const Color color = Color::fromRGBA(0.85, 0.85, 0.85, 0.6);
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
 
     const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
@@ -1468,8 +1468,8 @@ private:
 
     float dashLengths[] = {};
     int dashCount = 0;
-//    float dashLengths[] = {3, 6};
-//    int dashCount = 2;
+    //    float dashLengths[] = {3, 6};
+    //    int dashCount = 2;
 
     return GEO2DLineRasterStyle(color,
                                 2,
@@ -1490,7 +1490,7 @@ private:
 
     return GEO2DSurfaceRasterStyle( color );
 
-//    return GEO2DSurfaceRasterStyle(Color::transparent());
+    //    return GEO2DSurfaceRasterStyle(Color::transparent());
   }
 
   GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) const {
@@ -1500,8 +1500,8 @@ private:
 
     float dashLengths[] = {1, 12};
     int dashCount = 2;
-//    float dashLengths[] = {};
-//    int dashCount = 0;
+    //    float dashLengths[] = {};
+    //    int dashCount = 0;
 
     if (type.compare("Water Indicator") == 0) {
       return GEO2DLineRasterStyle(Color::fromRGBA(1, 1, 1, 0.9),
@@ -1620,10 +1620,10 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    
-//    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
-//                                                createLineStyle(geometry),
-//                                                30000) );
+
+    //    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
+    //                                                createLineStyle(geometry),
+    //                                                30000) );
 
     symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
                                                 createLineRasterStyle(geometry)) );
@@ -1635,8 +1635,8 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-//    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
-//                                                     createLineStyle(geometry)) );
+    //    symbols->push_back( new GEOMultiLine2DMeshSymbol(geometry->getCoordinatesArray(),
+    //                                                     createLineStyle(geometry)) );
 
     symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray(),
                                                      createLineRasterStyle(geometry)) );
@@ -1773,19 +1773,19 @@ public:
                                                       meshResolution) );
 
 
-//    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
-//                                                                     meshSector,
-//                                                                     meshResolution,
-//                                                                     false);
-//
-//    _meshRenderer->addMesh( subElevationData->createMesh(planet,
-//                                                         verticalExaggeration,
-//                                                         Geodetic3D::fromDegrees(meshSector._deltaLatitude._degrees + 0.1,
-//                                                                                 0,
-//                                                                                 0),
-//                                                         pointSize) );
-//
-//    delete subElevationData;
+    //    const ElevationData* subElevationData = new SubviewElevationData(elevationData,
+    //                                                                     meshSector,
+    //                                                                     meshResolution,
+    //                                                                     false);
+    //
+    //    _meshRenderer->addMesh( subElevationData->createMesh(planet,
+    //                                                         verticalExaggeration,
+    //                                                         Geodetic3D::fromDegrees(meshSector._deltaLatitude._degrees + 0.1,
+    //                                                                                 0,
+    //                                                                                 0),
+    //                                                         pointSize) );
+    //
+    //    delete subElevationData;
 
 
 
@@ -2173,12 +2173,12 @@ public:
       // go to Grand Canyon
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
-//                                                                Angle::fromDegreesMinutes(-112, 6),
-//                                                                25000),
-//                                                     Angle::zero(),
-//                                                     Angle::fromDegrees(75)
-//                                                     );
+      //                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+      //                                                                Angle::fromDegreesMinutes(-112, 6),
+      //                                                                25000),
+      //                                                     Angle::zero(),
+      //                                                     Angle::fromDegrees(75)
+      //                                                     );
 
 
       /*
@@ -2230,7 +2230,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
         if (planeFilePath) {
@@ -2292,11 +2292,11 @@ public:
 
       /**/
 
-//      NSString* geojsonName = @"geojson/countries";
+      //      NSString* geojsonName = @"geojson/countries";
       NSString* geojsonName = @"geojson/countries-50m";
-//      NSString* geojsonName = @"geojson/boundary_lines_land";
-//      NSString* geojsonName = @"geojson/cities";
-//      NSString* geojsonName = @"geojson/test";
+      //      NSString* geojsonName = @"geojson/boundary_lines_land";
+      //      NSString* geojsonName = @"geojson/cities";
+      //      NSString* geojsonName = @"geojson/test";
 
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
                                                                   ofType: @"geojson"];
@@ -2316,41 +2316,42 @@ public:
       }
       /**/
 
+      if (false){
+        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                  ofType: @"json"];
+        if (planeFilePath) {
+          NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsPlaneJSON) {
+            std::string planeJSON = [nsPlaneJSON UTF8String];
 
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                                ofType: @"json"];
-      if (planeFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
+            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
 
-          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
+            // Washington, DC
+            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                              10000) );
+            const double scale = 200;
+            plane->setScale(scale, scale, scale);
+            plane->setPitch(Angle::fromDegrees(90));
+            _shapesRenderer->addShape(plane);
 
-          // Washington, DC
-          plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                            Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                            10000) );
-          const double scale = 200;
-          plane->setScale(scale, scale, scale);
-          plane->setPitch(Angle::fromDegrees(90));
-          _shapesRenderer->addShape(plane);
-          
 
-//          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
-//
-//          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-//          printf("%s\n", bson->description().c_str());
-//
-//          JSONBaseObject* bsonObject = BSONParser::parse(bson);
-//          printf("%s\n", bsonObject->description().c_str());
-//
-//          delete bson;
-//
-//          delete jsonObject;
-//
-//          delete bsonObject;
+            //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+            //
+            //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+            //          printf("%s\n", bson->description().c_str());
+            //
+            //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+            //          printf("%s\n", bsonObject->description().c_str());
+            //
+            //          delete bson;
+            //
+            //          delete jsonObject;
+            //
+            //          delete bsonObject;
+          }
         }
       }
 
@@ -2402,17 +2403,17 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
+  
   //  renderers.push_back(new GLErrorRenderer());
-
+  
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-
+    
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
-
+    
   public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
@@ -2422,20 +2423,20 @@ public:
     _lastHeight(lastPosition._height)
     {
     }
-
+    
     void run(const G3MContext* context) {
       const double latStep = 2.0 / ((arc4random() % 100) + 50);
       const double lonStep = 2.0 / ((arc4random() % 100) + 50);
-
+      
       _lastLatitudeDegrees  -= latStep;
       _lastLongitudeDegrees += lonStep;
-
+      
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
                                      Angle::fromDegrees(_lastLongitudeDegrees),
                                      _lastHeight));
     }
   };
-
+  
   PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(0.25),
                                                       new TestTrailTask(trail, position));
   return periodicalTask;
