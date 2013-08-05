@@ -65,8 +65,6 @@
 		CF1871B81703536B00092888 /* GEO2DPointGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */; };
 		CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */; };
 		CF1871C017036EC600092888 /* GEOMeshSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */; };
-		CF1871C3170389AB00092888 /* GEOSymbolizationContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871C1170389AA00092888 /* GEOSymbolizationContext.cpp */; };
-		CF1871C4170394AA00092888 /* GEOSymbolizationContext.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C2170389AA00092888 /* GEOSymbolizationContext.hpp */; };
 		CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */; };
 		CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */; };
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
@@ -659,7 +657,6 @@
 				CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */,
 				CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */,
 				CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */,
-				CF1871C4170394AA00092888 /* GEOSymbolizationContext.hpp in CopyFiles */,
 				CF1871C017036EC600092888 /* GEOMeshSymbol.hpp in CopyFiles */,
 				CF1871B81703536B00092888 /* GEO2DPointGeometry.hpp in CopyFiles */,
 				CF8AE00C170204C600FE9F56 /* GEOLine2DStyle.hpp in CopyFiles */,
@@ -998,8 +995,6 @@
 		CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPointGeometry.hpp; path = Commons/GEO/GEO2DPointGeometry.hpp; sourceTree = "<group>"; };
 		CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMeshSymbol.cpp; path = Commons/GEO/GEOMeshSymbol.cpp; sourceTree = "<group>"; };
 		CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMeshSymbol.hpp; path = Commons/GEO/GEOMeshSymbol.hpp; sourceTree = "<group>"; };
-		CF1871C1170389AA00092888 /* GEOSymbolizationContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOSymbolizationContext.cpp; path = Commons/GEO/GEOSymbolizationContext.cpp; sourceTree = "<group>"; };
-		CF1871C2170389AA00092888 /* GEOSymbolizationContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOSymbolizationContext.hpp; path = Commons/GEO/GEOSymbolizationContext.hpp; sourceTree = "<group>"; };
 		CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOShapeSymbol.cpp; path = Commons/GEO/GEOShapeSymbol.cpp; sourceTree = "<group>"; };
 		CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOShapeSymbol.hpp; path = Commons/GEO/GEOShapeSymbol.hpp; sourceTree = "<group>"; };
 		CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferElevationData.cpp; path = Commons/Basic/BufferElevationData.cpp; sourceTree = "<group>"; };
@@ -2023,8 +2018,6 @@
 				CF8AE0011702049F00FE9F56 /* GEOStyle.hpp */,
 				CF8AE0021702049F00FE9F56 /* GEOSymbol.cpp */,
 				CF8AE0031702049F00FE9F56 /* GEOSymbol.hpp */,
-				CF1871C1170389AA00092888 /* GEOSymbolizationContext.cpp */,
-				CF1871C2170389AA00092888 /* GEOSymbolizationContext.hpp */,
 				CF8AE0041702049F00FE9F56 /* GEOSymbolizer.cpp */,
 				CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */,
 				CF5C1197178C7E33000ED715 /* GEOGeometry2D.cpp */,
@@ -2554,7 +2547,6 @@
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
-				CF1871C3170389AB00092888 /* GEOSymbolizationContext.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,

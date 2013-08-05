@@ -10,19 +10,6 @@
 
 #include "GEOFeature.hpp"
 
-//void GEOFeatureCollection::addFeature(GEOFeature* feature) {
-//  _features.push_back(feature);
-//}
-
-//void GEOFeatureCollection::render(const G3MRenderContext* rc,
-//                                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
-//                                  const GEOSymbolizer* symbolizer) {
-//  const int featuresCount = _features.size();
-//  for (int i = 0; i < featuresCount; i++) {
-//    GEOFeature* feature = _features[i];
-//    feature->render(rc, parentState, parentProgramState, symbolizer);
-//  }
-//}
 
 GEOFeatureCollection::~GEOFeatureCollection() {
   const int featuresCount = _features.size();
@@ -33,10 +20,19 @@ GEOFeatureCollection::~GEOFeatureCollection() {
 }
 
 void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
-                                     const GEOSymbolizationContext& sc) const {
+                                     const GEOSymbolizer*    symbolizer,
+                                     MeshRenderer*           meshRenderer,
+                                     ShapesRenderer*         shapesRenderer,
+                                     MarksRenderer*          marksRenderer,
+                                     GEOTileRasterizer*      geoTileRasterizer) const {
   const int featuresCount = _features.size();
   for (int i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
-    feature->symbolize(rc, sc);
+    feature->symbolize(rc,
+                       symbolizer,
+                       meshRenderer,
+                       shapesRenderer,
+                       marksRenderer,
+                       geoTileRasterizer);
   }
 }

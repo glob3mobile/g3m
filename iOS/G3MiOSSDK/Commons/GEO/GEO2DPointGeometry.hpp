@@ -18,8 +18,7 @@ private:
   const Geodetic2D _position;
 
 protected:
-  std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
-                                         const GEOSymbolizationContext& sc) const;
+  std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
 public:
 

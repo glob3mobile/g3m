@@ -8,7 +8,6 @@
 
 #include "GEOShapeSymbol.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "ShapesRenderer.hpp"
 
 GEOShapeSymbol::~GEOShapeSymbol() {
@@ -17,15 +16,18 @@ GEOShapeSymbol::~GEOShapeSymbol() {
 
 
 bool GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
-                               const GEOSymbolizationContext& sc) const {
+                               const GEOSymbolizer*    symbolizer,
+                               MeshRenderer*           meshRenderer,
+                               ShapesRenderer*         shapesRenderer,
+                               MarksRenderer*          marksRenderer,
+                               GEOTileRasterizer*      geoTileRasterizer) const {
   if (_shape != NULL) {
-    ShapesRenderer* shapeRenderer = sc.getShapesRenderer();
-    if (shapeRenderer == NULL) {
+    if (shapesRenderer == NULL) {
       ILogger::instance()->logError("Can't simbolize with Shape, ShapesRenderer was not set");
       delete _shape;
     }
     else {
-      shapeRenderer->addShape(_shape);
+      shapesRenderer->addShape(_shape);
     }
     _shape = NULL;
   }
