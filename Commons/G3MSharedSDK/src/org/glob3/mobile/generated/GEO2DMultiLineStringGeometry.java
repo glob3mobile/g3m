@@ -23,9 +23,9 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
-    return sc.getSymbolizer().createSymbols(this);
+    return symbolizer.createSymbols(this);
   }
 
 

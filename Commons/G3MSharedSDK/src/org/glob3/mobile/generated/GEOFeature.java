@@ -53,20 +53,16 @@ public class GEOFeature extends GEOObject
        _properties.dispose();
   }
 
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
-//              const GEOSymbolizer* symbolizer);
-
   public final JSONObject getProperties()
   {
     return _properties;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     if (_geometry != null)
     {
-      _geometry.symbolize(rc, sc);
+      _geometry.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
     }
   }
 
