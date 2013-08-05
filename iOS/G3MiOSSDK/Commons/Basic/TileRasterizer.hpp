@@ -23,9 +23,16 @@ private:
   TileRasterizerContext(const TileRasterizerContext& that);
 
 public:
+#ifdef C_CODE
   const IImage* const _image;
   const Tile*   const _tile;
   const bool          _mercator;
+#endif
+#ifdef JAVA_CODE
+  public final IImage  _image;
+  public final Tile    _tile;
+  public final boolean _mercator;
+#endif
 
   TileRasterizerContext(IImage* image,
                         const Tile* tile,
