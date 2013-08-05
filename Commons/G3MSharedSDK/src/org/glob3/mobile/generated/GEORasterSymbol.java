@@ -255,16 +255,15 @@ public abstract class GEORasterSymbol extends GEOSymbol
        _sector.dispose();
   }
 
-  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
-    GEOTileRasterizer rasterizer = sc.getGEOTileRasterizer();
-    if (rasterizer == null)
+    if (geoTileRasterizer == null)
     {
       ILogger.instance().logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
     }
     else
     {
-      rasterizer.addSymbol(this);
+      geoTileRasterizer.addSymbol(this);
     }
   
     return false;

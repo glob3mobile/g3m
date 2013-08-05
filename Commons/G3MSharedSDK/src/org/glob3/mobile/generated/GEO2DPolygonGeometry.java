@@ -28,9 +28,9 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
 //  std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
   private final GEO2DPolygonData _polygonData;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
-    return sc.getSymbolizer().createSymbols(this);
+    return symbolizer.createSymbols(this);
   }
 
 //  GEO2DPolygonGeometry(std::vector<Geodetic2D*>* coordinates,
@@ -83,9 +83,6 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return _polygonData;
   }
 
-
-  ///#include "Geodetic2D.hpp"
-  
   public final java.util.ArrayList<Geodetic2D> getCoordinates()
   {
     return _polygonData.getCoordinates();

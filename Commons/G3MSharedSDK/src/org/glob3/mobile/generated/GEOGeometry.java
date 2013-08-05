@@ -24,7 +24,7 @@ public abstract class GEOGeometry extends GEOObject
 {
   private GEOFeature _feature;
 
-  protected abstract java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc);
+  protected abstract java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer);
 
   public GEOGeometry()
   {
@@ -52,9 +52,9 @@ public abstract class GEOGeometry extends GEOObject
     return _feature;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
-    java.util.ArrayList<GEOSymbol> symbols = createSymbols(rc, sc);
+    java.util.ArrayList<GEOSymbol> symbols = createSymbols(symbolizer);
     if (symbols != null)
     {
   
@@ -64,7 +64,7 @@ public abstract class GEOGeometry extends GEOObject
         final GEOSymbol symbol = symbols.get(i);
         if (symbol != null)
         {
-          final boolean deleteSymbol = symbol.symbolize(rc, sc);
+          final boolean deleteSymbol = symbol.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
           if (deleteSymbol)
           {
             if (symbol != null)

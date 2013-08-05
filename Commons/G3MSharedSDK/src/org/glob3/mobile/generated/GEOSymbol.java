@@ -18,7 +18,11 @@ package org.glob3.mobile.generated;
 
 
 //class G3MRenderContext;
-//class GEOSymbolizationContext;
+//class GEOSymbolizer;
+//class MeshRenderer;
+//class ShapesRenderer;
+//class MarksRenderer;
+//class GEOTileRasterizer;
 
 public abstract class GEOSymbol
 {
@@ -27,6 +31,6 @@ public abstract class GEOSymbol
   {
   }
 
-  public abstract boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc);
+  public abstract boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer);
 
 }
