@@ -50,7 +50,7 @@ public:
   GLState():
   _parentGLState(NULL),
   _lastGPUProgramUsed(NULL),
-  _parentsTimeStamp(0),
+  _parentsTimeStamp(-1),
   _timeStamp(0),
   _valuesSet(NULL),
   _globalState(NULL)//,

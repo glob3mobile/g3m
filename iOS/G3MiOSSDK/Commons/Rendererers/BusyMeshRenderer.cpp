@@ -84,7 +84,7 @@ void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
 }
 
-void BusyMeshRenderer::render(const G3MRenderContext* rc)
+void BusyMeshRenderer::render(const G3MRenderContext* rc, GLState* glState)
 {
   GL* gl = rc->getGL();
   

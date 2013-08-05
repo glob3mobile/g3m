@@ -76,7 +76,7 @@ void GLState::setParent(const GLState* parent) const{
       (_parentsTimeStamp != parent->getTimeStamp())) {
 
     _parentGLState    = parent;
-    _parentsTimeStamp = (_parentGLState == NULL) ? 0 : _parentGLState->getTimeStamp();
+    _parentsTimeStamp = (_parentGLState == NULL) ? -1 : _parentGLState->getTimeStamp();
 
     hasChangedStructure();
   }
