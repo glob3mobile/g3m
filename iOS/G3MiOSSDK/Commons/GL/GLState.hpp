@@ -23,8 +23,11 @@
 
 class GLState{
 
-  GLFeatureGroup* _featuresGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
-  mutable GLFeatureGroup* _accumulatedGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
+  GLFeatureSet _features;
+  mutable GLFeatureSet* _accumulatedFeatures;
+
+//  GLFeatureGroup* _featuresGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
+//  mutable GLFeatureGroup* _accumulatedGroups[N_GLFEATURES_GROUPS]; //1 set for group of features
 
   mutable int _timeStamp;
   mutable int _parentsTimeStamp;
@@ -41,7 +44,7 @@ class GLState{
   private GLState _parentGLState;
 #endif
 
-  void applyStates(GL* gl, GPUProgram* prog) const;
+//  void applyStates(GL* gl, GPUProgram* prog) const;
 
   GLState(const GLState& state);
 
@@ -53,10 +56,13 @@ class GLState{
     _globalState = NULL;
     _lastGPUProgramUsed = NULL;
 
-    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      delete _accumulatedGroups[i];
-      _accumulatedGroups[i] = NULL;
-    }
+//    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+//      delete _accumulatedGroups[i];
+//      _accumulatedGroups[i] = NULL;
+//    }
+
+    delete _accumulatedFeatures;
+    _accumulatedFeatures = NULL;
   }
 
 public:
@@ -67,61 +73,81 @@ public:
   _parentsTimeStamp(0),
   _timeStamp(0),
   _valuesSet(NULL),
-  _globalState(NULL)
+  _globalState(NULL),
+  _accumulatedFeatures(NULL)
   {
 
-    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      _featuresGroups[i] = NULL;
-      _accumulatedGroups[i] = NULL;
-    }
+//    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+//      _featuresGroups[i] = NULL;
+//      _accumulatedGroups[i] = NULL;
+//    }
 
   }
 
   int getTimeStamp() const { return _timeStamp;}
 
-  GLFeatureGroup* getAccumulatedGroup(int i) const{
-    if (_accumulatedGroups[i] == NULL) {
+//  GLFeatureGroup* getAccumulatedGroup(int i) const{
+//    if (_accumulatedGroups[i] == NULL) {
+//
+//      _accumulatedGroups[i] = GLFeatureGroup::createGroup(GLFeatureGroup::getGroupName(i));
+//      if (_parentGLState != NULL) {
+//        GLFeatureGroup* pg = _parentGLState->getAccumulatedGroup(i);
+//        if (pg != NULL) {
+//          _accumulatedGroups[i]->add(pg);
+//        }
+//      }
+//      if (_featuresGroups[i] != NULL) {
+//        _accumulatedGroups[i]->add(_featuresGroups[i]);
+//      }
+//    }
+//    return _accumulatedGroups[i];
+//  }
 
-      _accumulatedGroups[i] = GLFeatureGroup::createGroup(GLFeatureGroup::getGroupName(i));
-      if (_parentGLState != NULL) {
-        GLFeatureGroup* pg = _parentGLState->getAccumulatedGroup(i);
-        if (pg != NULL) {
-          _accumulatedGroups[i]->add(pg);
+  GLFeatureSet* getAccumulatedFeatures() const{
+    if (_accumulatedFeatures == NULL) {
+
+      _accumulatedFeatures = new GLFeatureSet();
+
+      if (_parentGLState != NULL){
+        GLFeatureSet* parents = _parentGLState->getAccumulatedFeatures();
+        if (parents != NULL){
+          _accumulatedFeatures->add(parents);
         }
       }
-      if (_featuresGroups[i] != NULL) {
-        _accumulatedGroups[i]->add(_featuresGroups[i]);
-      }
+      _accumulatedFeatures->add(&_features);
+
     }
-    return _accumulatedGroups[i];
+    return _accumulatedFeatures;
   }
 
   ~GLState();
 
-  const GLState* getParent() const{
-    return _parentGLState;
-  }
+//  const GLState* getParent() const{
+//    return _parentGLState;
+//  }
 
   void setParent(const GLState* p) const;
 
-  void applyGlobalStateOnGPU(GL* gl) const;
+//  void applyGlobalStateOnGPU(GL* gl) const;
 
   void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
   void addGLFeature(const GLFeature* f, bool mustRetain) {
-    GLFeatureGroupName g = f->getGroup();
-#ifdef C_CODE
-    const int index = g;
-#endif
-#ifdef JAVA_CODE
-    final int index = g.getValue();
-#endif
+//    GLFeatureGroupName g = f->getGroup();
+//#ifdef C_CODE
+//    const int index = g;
+//#endif
+//#ifdef JAVA_CODE
+//    final int index = g.getValue();
+//#endif
 
-    if (_featuresGroups[index] == NULL) {
-      _featuresGroups[index] = GLFeatureGroup::createGroup(g);
-    }
+    _features.add(f);
 
-    _featuresGroups[index]->add(f);
+//    if (_featuresGroups[index] == NULL) {
+//      _featuresGroups[index] = GLFeatureGroup::createGroup(g);
+//    }
+//
+//    _featuresGroups[index]->add(f);
     if (!mustRetain) {
       f->_release();
     }
@@ -131,19 +157,19 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
-  int getGLFeatureSize(GLFeatureGroupName g) const{
-#ifdef C_CODE
-    const int index = g;
-#endif
-#ifdef JAVA_CODE
-    final int index = g.getValue();
-#endif
-
-    if (_featuresGroups[index] == NULL) {
-      return 0;
-    }
-    return _featuresGroups[index]->size();
-  }
+//  int getGLFeatureSize(GLFeatureGroupName g) const{
+//#ifdef C_CODE
+//    const int index = g;
+//#endif
+//#ifdef JAVA_CODE
+//    final int index = g.getValue();
+//#endif
+//
+//    if (_featuresGroups[index] == NULL) {
+//      return 0;
+//    }
+//    return _featuresGroups[index]->size();
+//  }
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */

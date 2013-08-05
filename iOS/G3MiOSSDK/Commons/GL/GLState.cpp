@@ -9,10 +9,12 @@
 #include "GLState.hpp"
 
 GLState::~GLState() {
-  for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-    delete _featuresGroups[i];
-    delete _accumulatedGroups[i];
-  }
+//  for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+//    delete _featuresGroups[i];
+//    delete _accumulatedGroups[i];
+//  }
+
+  delete _accumulatedFeatures;
 
   delete _valuesSet;
   delete _globalState;
@@ -35,21 +37,47 @@ void GLState::setParent(const GLState* parent) const{
 
 }
 
-void GLState::applyGlobalStateOnGPU(GL* gl) const {
-  int __ASK_JM;
-  if (_parentGLState != NULL) {
-    _parentGLState->applyGlobalStateOnGPU(gl);
-  }
-}
+//void GLState::applyGlobalStateOnGPU(GL* gl) const {
+//  int __ASK_JM;
+//  if (_parentGLState != NULL) {
+//    _parentGLState->applyGlobalStateOnGPU(gl);
+//  }
+//}
 
-void GLState::applyStates(GL* gl, GPUProgram* prog) const{
-  if (_parentGLState != NULL) {
-    _parentGLState->applyStates(gl, prog);
-  }
-}
+//void GLState::applyStates(GL* gl, GPUProgram* prog) const{
+//  if (_parentGLState != NULL) {
+//    _parentGLState->applyStates(gl, prog);
+//  }
+//}
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
+
+  if (_valuesSet == NULL && _globalState == NULL){
+    
+    _valuesSet = new GPUVariableValueSet();
+
+    GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
+
+    
+
+
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+      GLFeatureGroup* group = getAccumulatedGroup(i);
+      if (group != NULL) {
+        group->addToGPUVariableSet(_valuesSet);
+      }
+    }
+
+    const int uniformsCode = _valuesSet->getUniformsCode();
+    const int attributesCode = _valuesSet->getAttributesCode();
+
+    _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+
+    
+  }
+
+  /*
   if (_valuesSet == NULL) {
     _valuesSet = new GPUVariableValueSet();
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
@@ -74,10 +102,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
       }
     }
   }
+   */
 
   if (_lastGPUProgramUsed != NULL) {
     gl->useProgram(_lastGPUProgramUsed);
-    applyStates(gl, _lastGPUProgramUsed);
+//    applyStates(gl, _lastGPUProgramUsed);
 
     _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
     _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
