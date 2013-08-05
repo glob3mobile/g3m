@@ -104,6 +104,8 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 //
 //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
 
+  if (planet->isFlat()) return false;
+
   const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
   const double angleInRadians = IMathUtils::instance()->acos(dot);
 
