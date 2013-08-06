@@ -14,8 +14,6 @@ GLState::~GLState() {
 
   delete _valuesSet;
   delete _globalState;
-
-//  printf("TIMESTAMP: %d\n", _timeStamp);
 }
 
 void GLState::hasChangedStructure() const {
@@ -46,20 +44,6 @@ GLFeatureSet* GLState::getAccumulatedFeatures() const{
   }
   return _accumulatedFeatures;
 }
-
-//GLFeatureSet* GLState::createAccumulatedFeatures() const{
-//  GLFeatureSet* accumulatedFeatures = new GLFeatureSet();
-//
-//  if (_parentGLState != NULL){
-//    GLFeatureSet* parents = _parentGLState->createAccumulatedFeatures();
-//    if (parents != NULL){
-//      accumulatedFeatures->add(parents);
-//    }
-//    delete parents;
-//  }
-//  accumulatedFeatures->add(&_features);
-//  return accumulatedFeatures;
-//}
 
 void GLState::addGLFeature(const GLFeature* f, bool mustRetain) {
   _features.add(f);
@@ -100,7 +84,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     _globalState = new GLGlobalState();
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
-//    GLFeatureSet* accumulatedFeatures = createAccumulatedFeatures();
 
     for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
       GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
@@ -117,8 +100,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
       delete group;
     }
-
-//    delete accumulatedFeatures;
 
     const int uniformsCode = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
