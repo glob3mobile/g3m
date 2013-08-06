@@ -247,8 +247,11 @@ public:
   double getMinDistanceToCamera();
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition, const GLState* parentGLState);
-  
+              const Vector3D& cameraPosition,
+              const GLState* parentGLState,
+              const Planet* planet,
+              GL* gl);
+
 };
 
 #endif
