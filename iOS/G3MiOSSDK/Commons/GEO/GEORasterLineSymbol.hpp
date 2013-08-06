@@ -29,12 +29,14 @@ private:
 
 public:
   GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                      const GEO2DLineRasterStyle& style);
-  
+                      const GEO2DLineRasterStyle& style,
+                      const int minTileLevel = -1,
+                      const int maxTileLevel = -1);
+
   ~GEORasterLineSymbol();
 
-  void rasterize(ICanvas*                   canvas,
-                 const GEORasterProjection* projection) const;
+  void rawRasterize(ICanvas*                   canvas,
+                    const GEORasterProjection* projection) const;
 
 
 };

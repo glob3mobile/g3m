@@ -42,12 +42,15 @@ class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
 private:
   ICanvas*                   _canvas;
   const GEORasterProjection* _projection;
+  const int                  _tileLevel;
   
 public:
   GEOTileRasterizer_QuadTreeVisitor(ICanvas* canvas,
-                                    const GEORasterProjection* projection) :
+                                    const GEORasterProjection* projection,
+                                    int tileLevel) :
   _canvas(canvas),
-  _projection(projection)
+  _projection(projection),
+  _tileLevel(tileLevel)
   {
   }
 
@@ -55,7 +58,7 @@ public:
                     const void*   element) const {
     GEORasterSymbol* symbol = (GEORasterSymbol*) element;
 
-    symbol->rasterize(_canvas, _projection);
+    symbol->rasterize(_canvas, _projection, _tileLevel);
 
     return false;
   }
@@ -83,7 +86,7 @@ void GEOTileRasterizer::rasterize(const TileRasterizerContext& trc,
   canvas->drawImage(image, 0, 0);
 
   _quadTree.acceptVisitor(tile->getSector(),
-                          GEOTileRasterizer_QuadTreeVisitor(canvas, projection));
+                          GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile->getLevel()));
 
   canvas->createImage(listener, autodelete);
 

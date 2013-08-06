@@ -266,25 +266,11 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
   }
 }
 
-
-//void GEORasterSymbol::rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
-//                                           const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-//                                           ICanvas*                                      canvas,
-//                                           const GEORasterProjection*                    projection) const {
-//  const int coordinatesCount = coordinates->size();
-//  if (coordinatesCount > 0) {
-//    canvas->beginPath();
-//
-//    canvas->moveTo( projection->project(coordinates->at(0)) );
-//
-//    for (int i = 1; i < coordinatesCount; i++) {
-//      const Geodetic2D* coordinate = coordinates->at(i);
-//
-//      canvas->lineTo( projection->project(coordinate) );
-//    }
-//
-////    canvas->fill();
-////    canvas->stroke();
-//    canvas->fillAndStroke();
-//  }
-//}
+void GEORasterSymbol::rasterize(ICanvas*                   canvas,
+                                const GEORasterProjection* projection,
+                                int tileLevel) const {
+  if (((_minTileLevel < 0) || (tileLevel >= _minTileLevel)) &&
+      ((_maxTileLevel < 0) || (tileLevel <= _maxTileLevel))) {
+    rawRasterize(canvas, projection);
+  }
+}

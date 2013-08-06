@@ -1615,7 +1615,7 @@ public:
     symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
                                                    createPolygonLineRasterStyle(geometry),
                                                    createPolygonSurfaceRasterStyle(geometry)) );
-
+    
     return symbols;
   }
 

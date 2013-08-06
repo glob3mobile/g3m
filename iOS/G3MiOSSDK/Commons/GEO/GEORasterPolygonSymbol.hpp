@@ -33,15 +33,17 @@ private:
   const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
 public:
-  void rasterize(ICanvas*                   canvas,
-                 const GEORasterProjection* projection) const;
 
   GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
                          const GEO2DLineRasterStyle&    lineStyle,
-                         const GEO2DSurfaceRasterStyle& surfaceStyle);
-
+                         const GEO2DSurfaceRasterStyle& surfaceStyle,
+                         const int minTileLevel = -1,
+                         const int maxTileLevel = -1);
 
   ~GEORasterPolygonSymbol();
+
+  void rawRasterize(ICanvas*                   canvas,
+                    const GEORasterProjection* projection) const;
 
 };
 
