@@ -44,10 +44,8 @@
 		CCB2566415B5F58500079B96 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2566315B5F58500079B96 /* Box.cpp */; };
 		CCC2A02E15CA6C7D00923850 /* BusyMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */; };
 		CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */; };
-		CCC2A03215CA6C7D00923850 /* DummyRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01F15CA6C7D00923850 /* DummyRenderer.cpp */; };
 		CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
-		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
 		CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */; };
 		CCF45F531743AD320037CA28 /* SphericalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */; };
 		CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */; };
@@ -500,7 +498,6 @@
 		E780A58316D3AED9000F0395 /* BusyMeshRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */; };
 		E780A58416D3AED9000F0395 /* BusyQuadRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */; };
 		E780A58516D3AED9000F0395 /* CompositeRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A01E15CA6C7D00923850 /* CompositeRenderer.hpp */; };
-		E780A58616D3AED9000F0395 /* DummyRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */; };
 		E780A58716D3AED9000F0395 /* GLErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */; };
 		E780A58816D3AED9000F0395 /* LeafRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */; };
 		E780A58916D3AED9000F0395 /* MarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */; };
@@ -525,7 +522,6 @@
 		E780A59C16D3AEDA000F0395 /* ShapesRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */; };
 		E780A59E16D3AEDA000F0395 /* ShapeOrbitCameraEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */; };
 		E780A59F16D3AEDA000F0395 /* ShapePositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */; };
-		E780A5A016D3AEDA000F0395 /* SimplePlanetRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; };
 		E780A5A116D3AEDA000F0395 /* PlanetRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */; };
 		E780A5A216D3AEDA000F0395 /* TilesRenderParameters.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */; };
 		E780A5A316D3AEDA000F0395 /* TrailsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */; };
@@ -751,7 +747,6 @@
 				E780A58316D3AED9000F0395 /* BusyMeshRenderer.hpp in CopyFiles */,
 				E780A58416D3AED9000F0395 /* BusyQuadRenderer.hpp in CopyFiles */,
 				E780A58516D3AED9000F0395 /* CompositeRenderer.hpp in CopyFiles */,
-				E780A58616D3AED9000F0395 /* DummyRenderer.hpp in CopyFiles */,
 				E780A58716D3AED9000F0395 /* GLErrorRenderer.hpp in CopyFiles */,
 				E780A58816D3AED9000F0395 /* LeafRenderer.hpp in CopyFiles */,
 				E780A58916D3AED9000F0395 /* MarksRenderer.hpp in CopyFiles */,
@@ -776,7 +771,6 @@
 				E780A59C16D3AEDA000F0395 /* ShapesRenderer.hpp in CopyFiles */,
 				E780A59E16D3AEDA000F0395 /* ShapeOrbitCameraEffect.hpp in CopyFiles */,
 				E780A59F16D3AEDA000F0395 /* ShapePositionEffect.hpp in CopyFiles */,
-				E780A5A016D3AEDA000F0395 /* SimplePlanetRenderer.hpp in CopyFiles */,
 				E780A5A116D3AEDA000F0395 /* PlanetRenderer.hpp in CopyFiles */,
 				E780A5A216D3AEDA000F0395 /* TilesRenderParameters.hpp in CopyFiles */,
 				E780A5A316D3AEDA000F0395 /* TrailsRenderer.hpp in CopyFiles */,
@@ -960,15 +954,11 @@
 		CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BusyMeshRenderer.hpp; path = Commons/Rendererers/BusyMeshRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeRenderer.cpp; path = Commons/Rendererers/CompositeRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A01E15CA6C7D00923850 /* CompositeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeRenderer.hpp; path = Commons/Rendererers/CompositeRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CCC2A01F15CA6C7D00923850 /* DummyRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DummyRenderer.cpp; path = Commons/Rendererers/DummyRenderer.cpp; sourceTree = "<group>"; };
-		CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DummyRenderer.hpp; path = Commons/Rendererers/DummyRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLErrorRenderer.cpp; path = Commons/Rendererers/GLErrorRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = Commons/Rendererers/GLErrorRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Rendererers/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarksRenderer.hpp; path = Commons/Rendererers/MarksRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
-		CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Rendererers/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
-		CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PlanetRenderer.cpp; path = Commons/Rendererers/PlanetRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRenderer.hpp; path = Commons/Rendererers/PlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalPlanet.hpp; path = Commons/Geometry/EllipsoidalPlanet.hpp; sourceTree = "<group>"; };
@@ -1943,8 +1933,6 @@
 				CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */,
 				CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */,
 				CCC2A01E15CA6C7D00923850 /* CompositeRenderer.hpp */,
-				CCC2A01F15CA6C7D00923850 /* DummyRenderer.cpp */,
-				CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */,
 				CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */,
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
 				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
@@ -1955,8 +1943,6 @@
 				CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
 				CFEEE4BA1648676800F45F59 /* Shapes */,
-				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
-				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */,
 				CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */,
 				CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */,
@@ -2393,10 +2379,8 @@
 				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,
 				CCC2A02E15CA6C7D00923850 /* BusyMeshRenderer.cpp in Sources */,
 				CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */,
-				CCC2A03215CA6C7D00923850 /* DummyRenderer.cpp in Sources */,
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
-				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,

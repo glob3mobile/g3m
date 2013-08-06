@@ -50,20 +50,32 @@ protected:
 
 };
 
-class BillboardGLFeature: public GLFeature{
+//class BillboardGLFeature: public GLFeature{
+//
+//  GPUUniformValueVec2Float* _texExtent;
+//  GPUUniformValueVec2Float* _viewportExtent;
+//  
+//
+//public:
+//
+//  BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight);
+//
+//  ~BillboardGLFeature();
+//
+//  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+//
+//};
 
-  GPUUniformValueVec2Float* _texExtent;
-  GPUUniformValueVec2Float* _viewportExtent;
-  
-
+class TextureExtentGLFeature: public GLFeature{
 public:
-
-  BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight);
-
-  ~BillboardGLFeature();
-
+  TextureExtentGLFeature(int textureWidth, int textureHeight);
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
 
+class ViewportExtentGLFeature: public GLFeature{
+public:
+  ViewportExtentGLFeature(int viewportWidth, int viewportHeight);
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
 

@@ -9,19 +9,14 @@
 #include "GLFeature.hpp"
 #include "Camera.hpp"
 
-BillboardGLFeature::BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight):
+ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth, int viewportHeight):
 GLFeature(NO_GROUP) {
-
-  _texExtent = new GPUUniformValueVec2Float(textureWidth, textureHeight);
-  _values.addUniformValue(TEXTURE_EXTENT, _texExtent, false);
-
-  _viewportExtent = new GPUUniformValueVec2Float(viewportWidth, viewportHeight);
-  _values.addUniformValue(VIEWPORT_EXTENT, _viewportExtent, false);
+  _values.addUniformValue(VIEWPORT_EXTENT, new GPUUniformValueVec2Float(viewportWidth, viewportHeight), false);
 }
 
-BillboardGLFeature::~BillboardGLFeature() {
-//  _texExtent->_release();
-//  _viewportExtent->_release();
+TextureExtentGLFeature::TextureExtentGLFeature(int textureWidth, int textureHeight):
+GLFeature(NO_GROUP) {
+  _values.addUniformValue(TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,

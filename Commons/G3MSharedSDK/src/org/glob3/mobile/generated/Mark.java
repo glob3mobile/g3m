@@ -110,7 +110,10 @@ public class Mark extends SurfaceElevationListener
     }
   
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
+  //  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+  //                                               viewportWidth, viewportHeight), false);
+  
+    _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   }
@@ -521,6 +524,7 @@ public class Mark extends SurfaceElevationListener
     return _minDistanceToCamera;
   }
 
+<<<<<<< HEAD
   public final Vector3D getCartesianPosition(Planet planet)
   {
     if (_cartesianPosition == null)
@@ -531,8 +535,11 @@ public class Mark extends SurfaceElevationListener
   }
 
   public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)
+=======
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
+>>>>>>> webgl-port
   {
-    final Planet planet = rc.getPlanet();
+  //  const Planet* planet = rc->getPlanet();
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
@@ -587,6 +594,13 @@ public class Mark extends SurfaceElevationListener
             createGLState(planet, viewportWidth, viewportHeight);
           }
   
+<<<<<<< HEAD
+=======
+  //        GL* gl = rc->getGL();
+  
+          GPUProgramManager progManager = rc.getGPUProgramManager();
+  
+>>>>>>> webgl-port
           _glState.setParent(parentGLState); //Linking with parent
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());

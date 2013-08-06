@@ -13,6 +13,12 @@ public class GeometryGLFeature extends GLFeature
   private final float _lineWidth;
 
 
+
+  //BillboardGLFeature::~BillboardGLFeature(){
+  ////  _texExtent->_release();
+  ////  _viewportExtent->_release();
+  //}
+  
   public GeometryGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, boolean depthTestEnabled, boolean cullFace, int culledFace, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, float lineWidth, boolean needsPointSize, float pointSize)
   {
      super(GLFeatureGroupName.NO_GROUP);

@@ -66,8 +66,7 @@ public:
     return true;
   }
   
-  void render(const G3MRenderContext* rc,
-              const GLGlobalState& parentState);
+  void render(const G3MRenderContext* rc);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -76,9 +75,13 @@ public:
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-    
+    const int halfWidth = width / 2;
+    const int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                             -halfHeight, halfHeight,
+                                                                             -halfWidth, halfWidth);
   }
-  
+
   virtual ~BusyQuadRenderer() {
     delete _quadMesh;
     delete _backgroundColor;
@@ -88,10 +91,6 @@ public:
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-    
-    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
   
   void start(const G3MRenderContext* rc);

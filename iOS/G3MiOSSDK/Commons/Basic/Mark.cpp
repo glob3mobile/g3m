@@ -404,8 +404,10 @@ void Mark::createGLState(const Planet* planet,
   }
 
   _glState.clearGLFeatureGroup(NO_GROUP);
-  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
-                                               viewportWidth, viewportHeight), false);
+//  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+//                                               viewportWidth, viewportHeight), false);
+
+  _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
 
   _glState.addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
                                               3,            // Our buffer contains elements of 3
@@ -434,8 +436,9 @@ IFloatBuffer* Mark::getBillboardTexCoords() {
 
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
-                  const GLState* parentGLState) {
-  const Planet* planet = rc->getPlanet();
+                  const GLState* parentGLState,
+                  const Planet* planet,
+                  GL* gl) {
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
@@ -482,18 +485,24 @@ void Mark::render(const G3MRenderContext* rc,
         }
       }
 
+//<<<<<<< HEAD
       if (_textureId != NULL) {
-        const Camera* camera = rc->getCurrentCamera();
-        const int viewportWidth  = camera->getWidth();
-        const int viewportHeight = camera->getHeight();
-
-        if ((viewportWidth  != _viewportWidth) ||
-            (viewportHeight != _viewportHeight)) {
-          int __ASK_JM; // move to MarkRenderer
-          createGLState(planet,
-                        viewportWidth,
-                        viewportHeight);
-        }
+//        const Camera* camera = rc->getCurrentCamera();
+//        const int viewportWidth  = camera->getWidth();
+//        const int viewportHeight = camera->getHeight();
+//
+//        if ((viewportWidth  != _viewportWidth) ||
+//            (viewportHeight != _viewportHeight)) {
+//          int __ASK_JM; // move to MarkRenderer
+//          createGLState(planet,
+//                        viewportWidth,
+//                        viewportHeight);
+//        }
+//=======
+//        GL* gl = rc->getGL();
+//
+//        GPUProgramManager& progManager = *rc->getGPUProgramManager();
+//>>>>>>> webgl-port
 
         _glState.setParent(parentGLState); //Linking with parent
 

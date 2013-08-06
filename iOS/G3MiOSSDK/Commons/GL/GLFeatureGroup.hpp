@@ -13,6 +13,14 @@
 
 class GLFeature;
 
+enum GLFeatureGroupName{
+  UNRECOGNIZED_GROUP = -1,
+  NO_GROUP = 0,
+  CAMERA_GROUP = 1,
+  COLOR_GROUP = 2,
+  LIGHTING_GROUP = 3
+};
+
 class GLFeatureSet{
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
@@ -54,15 +62,11 @@ public:
     return _nFeatures;
   }
 
+  void clearFeatures(GLFeatureGroupName g);
+
 };
 
-enum GLFeatureGroupName{
-  UNRECOGNIZED_GROUP = -1,
-  NO_GROUP = 0,
-  CAMERA_GROUP = 1,
-  COLOR_GROUP = 2,
-  LIGHTING_GROUP = 3
-};
+
 
 #define N_GLFEATURES_GROUPS 4
 class GLFeatureGroup: public GLFeatureSet{
