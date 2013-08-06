@@ -25,9 +25,7 @@ public abstract class ICanvas
     }
   }
 
-
   protected abstract void _initialize(int width, int height);
-
 
   protected abstract void _setFillColor(Color color);
 
@@ -128,7 +126,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-   
+
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -140,7 +138,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-   
+
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)
@@ -294,7 +292,6 @@ public abstract class ICanvas
     return _canvasHeight;
   }
 
-
   public final void beginPath()
   {
     checkInitialized();
@@ -325,25 +322,26 @@ public abstract class ICanvas
     _fillAndStroke();
   }
 
-  public final void moveTo(Vector2F position)
-  {
-    moveTo(position._x, position._y);
-  }
   public final void moveTo(float x, float y)
   {
     checkInitialized();
     _moveTo(x, y);
   }
 
-  public final void lineTo(Vector2F position)
+  public final void moveTo(Vector2F position)
   {
-    lineTo(position._x, position._y);
+    moveTo(position._x, position._y);
   }
+
   public final void lineTo(float x, float y)
   {
     checkInitialized();
     _lineTo(x, y);
   }
 
+  public final void lineTo(Vector2F position)
+  {
+    lineTo(position._x, position._y);
+  }
 
 }

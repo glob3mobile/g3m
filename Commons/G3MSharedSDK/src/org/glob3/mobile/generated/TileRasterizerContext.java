@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 
 public class TileRasterizerContext
 {
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileRasterizerContext(TileRasterizerContext that);
 
