@@ -19,7 +19,6 @@ class ChangedListener;
 
 class TileRasterizerContext {
 private:
-
   TileRasterizerContext(const TileRasterizerContext& that);
 
 public:
