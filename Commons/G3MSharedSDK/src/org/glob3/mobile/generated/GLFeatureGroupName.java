@@ -1,4 +1,26 @@
 package org.glob3.mobile.generated; 
+//
+//  GLFeatureGroup.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 10/07/13.
+//
+//
+
+//
+//  GLFeatureGroup.h
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 10/07/13.
+//
+//
+
+
+
+
+
+//class GLFeature;
+
 public enum GLFeatureGroupName
 {
   UNRECOGNIZED_GROUP(-1),
