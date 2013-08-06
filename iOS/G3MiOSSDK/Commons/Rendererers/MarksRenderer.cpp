@@ -190,11 +190,18 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
 
   updateGLState(rc);
 
+  const Planet* planet = rc->getPlanet();
+  GL* gl = rc->getGL();
+
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition, &_glState);
+      mark->render(rc,
+                   cameraPosition,
+                   &_glState,
+                   planet,
+                   gl);
     }
   }
 }
@@ -276,4 +283,7 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc){
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
+
+  _glState.clearGLFeatureGroup(NO_GROUP);
+  _glState.addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
 }

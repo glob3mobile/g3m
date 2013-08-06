@@ -110,7 +110,10 @@ public class Mark
     }
   
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
+  //  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+  //                                               viewportWidth, viewportHeight), false);
+  
+    _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   }
@@ -517,9 +520,9 @@ public class Mark
     return _minDistanceToCamera;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
   {
-    final Planet planet = rc.getPlanet();
+  //  const Planet* planet = rc->getPlanet();
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
@@ -564,7 +567,7 @@ public class Mark
             createGLState(rc.getPlanet(), rc.getCurrentCamera().getWidth(), rc.getCurrentCamera().getHeight());
           }
   
-          GL gl = rc.getGL();
+  //        GL* gl = rc->getGL();
   
           GPUProgramManager progManager = rc.getGPUProgramManager();
   

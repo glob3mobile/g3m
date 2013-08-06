@@ -64,6 +64,9 @@ public class MarksRenderer extends LeafRenderer
     {
       _model.setMatrix(cam.getModelMatrix44D());
     }
+  
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
+    _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
   }
 
   private ProjectionGLFeature _projection;
@@ -139,13 +142,16 @@ public class MarksRenderer extends LeafRenderer
   
     updateGLState(rc);
   
+    final Planet planet = rc.getPlanet();
+    GL gl = rc.getGL();
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition, _glState);
+        mark.render(rc, cameraPosition, _glState, planet, gl);
       }
     }
   }
