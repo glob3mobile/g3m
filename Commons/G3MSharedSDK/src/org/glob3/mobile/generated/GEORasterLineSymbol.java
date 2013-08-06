@@ -25,9 +25,17 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   private final GEO2DLineRasterStyle      _style;
 
 
+  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel)
+  {
+     this(coordinates, style, minTileLevel, -1);
+  }
   public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style)
   {
-     super(calculateSectorFromCoordinates(coordinates));
+     this(coordinates, style, -1, -1);
+  }
+  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
+  {
+     super(calculateSectorFromCoordinates(coordinates), minTileLevel, maxTileLevel);
      _coordinates = copyCoordinates(coordinates);
      _style = style;
   }
@@ -49,7 +57,7 @@ public class GEORasterLineSymbol extends GEORasterSymbol
     }
   }
 
-  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {
     if (_style.apply(canvas))
     {
