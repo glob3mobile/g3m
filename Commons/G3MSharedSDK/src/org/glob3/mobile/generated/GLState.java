@@ -104,8 +104,6 @@ public class GLState
        _valuesSet.dispose();
     if (_globalState != null)
        _globalState.dispose();
-  
-  //  printf("TIMESTAMP: %d\n", _timeStamp);
   }
 
   public final void setParent(GLState parent)
@@ -143,7 +141,6 @@ public class GLState
       _globalState = new GLGlobalState();
   
       GLFeatureSet accumulatedFeatures = getAccumulatedFeatures();
-  //    GLFeatureSet* accumulatedFeatures = createAccumulatedFeatures();
   
       for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
       {
@@ -164,8 +161,6 @@ public class GLState
         if (group != null)
            group.dispose();
       }
-  
-  //    delete accumulatedFeatures;
   
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
@@ -197,21 +192,6 @@ public class GLState
   
   }
 
-
-  //GLFeatureSet* GLState::createAccumulatedFeatures() const{
-  //  GLFeatureSet* accumulatedFeatures = new GLFeatureSet();
-  //
-  //  if (_parentGLState != NULL){
-  //    GLFeatureSet* parents = _parentGLState->createAccumulatedFeatures();
-  //    if (parents != NULL){
-  //      accumulatedFeatures->add(parents);
-  //    }
-  //    delete parents;
-  //  }
-  //  accumulatedFeatures->add(&_features);
-  //  return accumulatedFeatures;
-  //}
-  
   public final void addGLFeature(GLFeature f, boolean mustRetain)
   {
     _features.add(f);
