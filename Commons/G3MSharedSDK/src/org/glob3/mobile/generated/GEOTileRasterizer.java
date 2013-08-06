@@ -44,7 +44,7 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
     canvas.drawImage(image, 0, 0);
   
-    _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection));
+    _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile.getLevel()));
   
     canvas.createImage(listener, autodelete);
   

@@ -25,6 +25,9 @@ public abstract class GEORasterSymbol extends GEOSymbol
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GEORasterSymbol(GEORasterSymbol that);
 
+  private final int _minTileLevel;
+  private final int _maxTileLevel;
+
   protected final Sector _sector;
 
   protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
@@ -156,9 +159,11 @@ public abstract class GEORasterSymbol extends GEOSymbol
     return result;
   }
 
-  protected GEORasterSymbol(Sector sector)
+  protected GEORasterSymbol(Sector sector, int minTileLevel, int maxTileLevel)
   {
      _sector = sector;
+     _minTileLevel = minTileLevel;
+     _maxTileLevel = maxTileLevel;
 //    if (_sector == NULL) {
 //      printf("break point on me\n");
 //    }
@@ -279,27 +284,14 @@ public abstract class GEORasterSymbol extends GEOSymbol
     return _sector;
   }
 
-  public abstract void rasterize(ICanvas canvas, GEORasterProjection projection);
+  public final void rasterize(ICanvas canvas, GEORasterProjection projection, int tileLevel)
+  {
+    if (((_minTileLevel < 0) || (tileLevel >= _minTileLevel)) && ((_maxTileLevel < 0) || (tileLevel <= _maxTileLevel)))
+    {
+      rawRasterize(canvas, projection);
+    }
+  }
+
+  public abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
 
 }
-//void GEORasterSymbol::rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
-//                                           const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-//                                           ICanvas*                                      canvas,
-//                                           const GEORasterProjection*                    projection) const {
-//  const int coordinatesCount = coordinates->size();
-//  if (coordinatesCount > 0) {
-//    canvas->beginPath();
-//
-//    canvas->moveTo( projection->project(coordinates->at(0)) );
-//
-//    for (int i = 1; i < coordinatesCount; i++) {
-//      const Geodetic2D* coordinate = coordinates->at(i);
-//
-//      canvas->lineTo( projection->project(coordinate) );
-//    }
-//
-////    canvas->fill();
-////    canvas->stroke();
-//    canvas->fillAndStroke();
-//  }
-//}
