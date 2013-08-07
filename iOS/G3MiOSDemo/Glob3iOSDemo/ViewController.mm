@@ -225,6 +225,9 @@ Mesh* createSectorMesh(const Planet* planet,
 
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
+
+//  [self initWithMapBooBuilder];
+
   [[self G3MWidget] startAnimation];
 }
 
@@ -257,12 +260,12 @@ public:
   MapBooSceneChangeListener* sceneListener = NULL;
   const bool useWebSockets = true;
 
-  _g3mcBuilder =  new MapBooBuilder_iOS([self G3MWidget],
-                                      URL("http://192.168.0.103:8080/g3mc-server", false),
-                                      URL("ws://192.168.0.103:8888/tube", false),
-                                      useWebSockets,
-                                      "2g59wh610g6c1kmkt0l",
-                                      sceneListener);
+  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
+                                       URL("http://127.0.0.1:8080/g3mc-server", false),
+                                       URL("ws://127.0.0.1:8888/tube", false),
+                                       useWebSockets,
+                                       "2gl2syurzilwq2noujq",
+                                       sceneListener);
 
   //_g3mcBuilder->requestScenesDescriptions(new TestMapBooBuilderScenesDescriptionsListener(), true);
 
@@ -2033,37 +2036,6 @@ public:
                           true);
 
       delete canvas;
-    }
-
-    void testWebSocket(const G3MContext* context) {
-
-      class WSListener : public IWebSocketListener {
-        void onOpen(IWebSocket* ws) {
-
-        }
-
-        void onError(IWebSocket* ws,
-                     const std::string& error) {
-
-        }
-
-        void onMesssage(IWebSocket* ws,
-                        const std::string& message) {
-
-        }
-
-        void onClose(IWebSocket* ws) {
-
-        }
-
-      };
-
-      const URL wsURL("ws://127.0.0.1:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
-      context->getFactory()->createWebSocket(wsURL,
-                                             new WSListener(),
-                                             true,
-                                             true);
-
     }
 
     void run(const G3MContext* context) {

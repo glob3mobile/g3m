@@ -46,10 +46,10 @@
 #include "IWebSocket.hpp"
 
 MapBooBuilder::MapBooBuilder(const URL& serverURL,
-                         const URL& tubesURL,
-                         bool useWebSockets,
-                         const std::string& sceneId,
-                         MapBooSceneChangeListener* sceneListener) :
+                             const URL& tubesURL,
+                             bool useWebSockets,
+                             const std::string& sceneId,
+                             MapBooSceneChangeListener* sceneListener) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),
@@ -72,7 +72,7 @@ _gpuProgramManager(NULL),
 _isSceneTubeOpen(false),
 _sceneTubeWebSocket(NULL)
 {
-  
+
 }
 
 GPUProgramManager* MapBooBuilder::getGPUProgramManager() {
@@ -112,7 +112,7 @@ GL* MapBooBuilder::getGL() {
   if (!_gl) {
     ILogger::instance()->logError("Logic Error: _gl not initialized");
   }
-  
+
   return _gl;
 }
 
@@ -156,7 +156,7 @@ std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints->push_back(scc);
-  
+
   return cameraConstraints;
 }
 
@@ -170,7 +170,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
                                                          processZoom));
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  
+
   return cameraRenderer;
 }
 
@@ -179,7 +179,7 @@ Renderer* MapBooBuilder::createBusyRenderer() {
 }
 
 MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
-                                               const TimeInterval& timeToCache) const {
+                                                 const TimeInterval& timeToCache) const {
   const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
   if (imagery.compare("OpenAerial") == 0) {
     return MapQuestLayer::newOpenAerial(timeToCache);
@@ -190,7 +190,7 @@ MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer
 }
 
 BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
-                                               const TimeInterval& timeToCache) const {
+                                                 const TimeInterval& timeToCache) const {
   const std::string key = jsonBaseLayer->getAsString("key", "");
   const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
 
@@ -198,7 +198,7 @@ BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer
 }
 
 CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
-                                             const TimeInterval& timeToCache) const {
+                                               const TimeInterval& timeToCache) const {
   const std::string userName = jsonBaseLayer->getAsString("userName", "");
   const std::string table    = jsonBaseLayer->getAsString("table",    "");
 
@@ -206,7 +206,7 @@ CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
 }
 
 MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonBaseLayer,
-                                           const TimeInterval& timeToCache) const {
+                                             const TimeInterval& timeToCache) const {
   const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
 
   return new MapBoxLayer(mapKey, timeToCache);
@@ -308,7 +308,7 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
 
 
 void MapBooBuilder::parseSceneDescription(const std::string& json,
-                                        const URL& url) {
+                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
 
   if (jsonBaseObject == NULL) {
@@ -392,8 +392,8 @@ public:
   _builder(builder)
   {
   }
-  
-  
+
+
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
@@ -401,69 +401,69 @@ public:
     _builder->parseSceneDescription(buffer->getAsString(), url);
     delete buffer;
   }
-  
+
   void onError(const URL& url) {
     ILogger::instance()->logError("Can't download SceneJSON from %s",
                                   url.getPath().c_str());
   }
-  
+
   void onCancel(const URL& url) {
     // do nothing
   }
-  
+
   void onCanceledDownload(const URL& url,
                           IByteBuffer* buffer,
                           bool expired) {
     // do nothing
   }
-  
+
 };
 
 
 class MapBooBuilder_PollingScenePeriodicalTask : public GTask {
 private:
   MapBooBuilder* _builder;
-  
+
   long long _requestId;
-  
-  
+
+
   URL getURL() const {
     const int sceneTimestamp = _builder->getSceneTimestamp();
-    
+
     const URL _sceneDescriptionURL = _builder->createPollingSceneDescriptionURL();
-    
+
     if (sceneTimestamp < 0) {
       return _sceneDescriptionURL;
     }
-    
+
     IStringBuilder* ib = IStringBuilder::newStringBuilder();
-    
+
     ib->addString(_sceneDescriptionURL.getPath());
     ib->addString("?lastTs=");
     ib->addInt(sceneTimestamp);
-    
+
     const std::string path = ib->getString();
-    
+
     delete ib;
-    
+
     return URL(path, false);
   }
-  
-  
+
+
 public:
   MapBooBuilder_PollingScenePeriodicalTask(MapBooBuilder* builder) :
   _builder(builder),
   _requestId(-1)
   {
-    
+
   }
-  
-  void run(const G3MContext* context) {    
+
+  void run(const G3MContext* context) {
     IDownloader* downloader = context->getDownloader();
     if (_requestId >= 0) {
       downloader->cancelRequest(_requestId);
     }
-    
+
     _requestId = downloader->requestBuffer(getURL(),
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::zero(),
@@ -495,9 +495,9 @@ void MapBooBuilder::setSceneBaseLayer(Layer* baseLayer) {
   if (_sceneBaseLayer != baseLayer) {
     delete _sceneBaseLayer;
     _sceneBaseLayer = baseLayer;
-    
+
     recreateLayerSet();
-    
+
     if (_sceneListener != NULL) {
       _sceneListener->onBaseLayerChanged(_sceneBaseLayer);
     }
@@ -508,9 +508,9 @@ void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
   if (_sceneOverlayLayer != overlayLayer) {
     delete _sceneOverlayLayer;
     _sceneOverlayLayer = overlayLayer;
-    
+
     recreateLayerSet();
-    
+
     if (_sceneListener != NULL) {
       _sceneListener->onOverlayLayerChanged(_sceneOverlayLayer);
     }
@@ -520,32 +520,39 @@ void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
 const URL MapBooBuilder::createSceneTubeURL() const {
   const std::string tubesPath = _tubesURL.getPath();
 
-  return URL(tubesPath + "/scene/" + _sceneId, false);
+  return URL(tubesPath + "/application/" + _sceneId, false);
 }
 
 const URL MapBooBuilder::createPollingSceneDescriptionURL() const {
   const std::string serverPath = _serverURL.getPath();
-  
-  return URL(serverPath + "/scenes/" + _sceneId, false);
+
+  return URL(serverPath + "/application/" + _sceneId, false);
 }
 
 
 class MapBooBuilder_TubeWatchdogPeriodicalTask : public GTask {
 private:
   MapBooBuilder* _builder;
+  bool _firstRun;
 
 public:
   MapBooBuilder_TubeWatchdogPeriodicalTask(MapBooBuilder* builder) :
-  _builder(builder)
+  _builder(builder),
+  _firstRun(true)
   {
   }
 
   void run(const G3MContext* context) {
-    if (!_builder->isSceneTubeOpen()) {
-      _builder->openSceneTube(context);
+    if (_firstRun) {
+      _firstRun = false;
+    }
+    else {
+      if (!_builder->isSceneTubeOpen()) {
+        _builder->openSceneTube(context);
+      }
     }
   }
-
+  
 };
 
 
@@ -648,17 +655,17 @@ G3MWidget* MapBooBuilder::create() {
     ILogger::instance()->logError("The G3MWidget was already created, can't be created more than once");
     return NULL;
   }
-  
-  
+
+
   CompositeRenderer* mainRenderer = new CompositeRenderer();
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
   mainRenderer->addRenderer(planetRenderer);
-  
+
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
-  
+
   GInitializationTask* initializationTask = createInitializationTask();
-  
+
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
 
   ICameraActivityListener* cameraActivityListener = NULL;
@@ -682,7 +689,7 @@ G3MWidget* MapBooBuilder::create() {
                                  getGPUProgramManager());
   delete cameraConstraints;
   delete periodicalTasks;
-  
+
   return _g3mWidget;
 }
 
@@ -690,23 +697,23 @@ class MapBooBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadLis
 private:
   MapBooBuilderScenesDescriptionsListener* _listener;
   const bool _autoDelete;
-  
+
 public:
   MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener* listener,
-                                               bool autoDelete) :
+                                                 bool autoDelete) :
   _listener(listener),
   _autoDelete(autoDelete)
   {
-    
+
   }
-  
-  
+
+
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    
+
     const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
-    
+
     if (jsonBaseObject == NULL) {
       ILogger::instance()->logError("Can't parse ScenesDescriptionJSON from %s",
                                     url.getPath().c_str());
@@ -720,9 +727,9 @@ public:
       }
       else {
         std::vector<MapBooSceneDescription*>* scenesDescriptions = new std::vector<MapBooSceneDescription*>();
-        
+
         const int size = jsonScenesDescriptions->size();
-        
+
         for (int i = 0; i < size; i++) {
           const JSONObject* jsonSceneDescription = jsonScenesDescriptions->getAsObject(i);
           if (jsonSceneDescription == NULL) {
@@ -734,7 +741,7 @@ public:
             const std::string name        = jsonSceneDescription->getAsString("name",        "<invalid name>");
             const std::string description = jsonSceneDescription->getAsString("description", "");
             const std::string iconURL     = jsonSceneDescription->getAsString("iconURL",     "<invalid iconURL>");
-            
+
             std::vector<std::string> tags;
             const JSONArray* jsonTags = jsonSceneDescription->getAsArray("tags");
             if (jsonTags == NULL) {
@@ -749,57 +756,57 @@ public:
                 }
               }
             }
-            
+
             scenesDescriptions->push_back( new MapBooSceneDescription(id,
-                                                                    user,
-                                                                    name,
-                                                                    description,
-                                                                    iconURL,
-                                                                    tags) );
-            
+                                                                      user,
+                                                                      name,
+                                                                      description,
+                                                                      iconURL,
+                                                                      tags) );
+
           }
         }
-        
+
         _listener->onDownload(scenesDescriptions);
         if (_autoDelete) {
           delete _listener;
         }
       }
-      
+
       delete jsonBaseObject;
     }
-    
+
     delete buffer;
   }
-  
+
   void onError(const URL& url) {
     _listener->onError();
     if (_autoDelete) {
       delete _listener;
     }
   }
-  
+
   void onCancel(const URL& url) {
     // do nothing
   }
-  
+
   void onCanceledDownload(const URL& url,
                           IByteBuffer* buffer,
                           bool expired) {
     // do nothing
   }
-  
+
 };
 
 const URL MapBooBuilder::createScenesDescriptionsURL() const {
   const std::string serverPath = _serverURL.getPath();
-  
+
   return URL(serverPath + "/scenes/", false);
 }
 
 
 void MapBooBuilder::requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener* listener,
-                                            bool autoDelete) {
+                                              bool autoDelete) {
   getDownloader()->requestBuffer(createScenesDescriptionsURL(),
                                  DownloadPriority::HIGHEST,
                                  TimeInterval::zero(),
@@ -819,7 +826,7 @@ void MapBooBuilder::setSceneTimestamp(const int timestamp) {
 void MapBooBuilder::setSceneUser(const std::string& user) {
   if (_sceneUser.compare(user) != 0) {
     _sceneUser = user;
-    
+
     if (_sceneListener != NULL) {
       _sceneListener->onUserChanged(_sceneUser);
     }
@@ -829,7 +836,7 @@ void MapBooBuilder::setSceneUser(const std::string& user) {
 void MapBooBuilder::setSceneName(const std::string& name) {
   if (_sceneName.compare(name) != 0) {
     _sceneName = name;
-    
+
     if (_sceneListener != NULL) {
       _sceneListener->onNameChanged(_sceneName);
     }
@@ -865,15 +872,15 @@ class MapBooBuilder_ChangeSceneIdTask : public GTask {
 private:
   MapBooBuilder*      _builder;
   const std::string _sceneId;
-  
+
 public:
   MapBooBuilder_ChangeSceneIdTask(MapBooBuilder* builder,
-                                const std::string& sceneId) :
+                                  const std::string& sceneId) :
   _builder(builder),
   _sceneId(sceneId)
   {
   }
-  
+
   void run(const G3MContext* context) {
     _builder->rawChangeScene(_sceneId);
   }
@@ -930,13 +937,13 @@ void MapBooBuilder::setSceneTubeOpened(bool open) {
 void MapBooBuilder::rawChangeScene(const std::string& sceneId) {
   if (sceneId.compare(_sceneId) != 0) {
     resetScene(sceneId);
-
+    
     resetG3MWidget();
-
+    
     if (_sceneListener != NULL) {
       _sceneListener->onSceneChanged(sceneId);
     }
-
+    
     if (_sceneTubeWebSocket != NULL) {
       _sceneTubeWebSocket->close();
     }
