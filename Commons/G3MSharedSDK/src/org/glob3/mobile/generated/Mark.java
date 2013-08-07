@@ -90,7 +90,6 @@ public class Mark extends SurfaceElevationListener
 
   private void createGLState(Planet planet)
   {
-  
     if (_vertices == null)
     {
       final Vector3D pos = new Vector3D(planet.toCartesian(_position));
@@ -105,13 +104,9 @@ public class Mark extends SurfaceElevationListener
   
     _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
   
-<<<<<<< HEAD
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
-=======
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
->>>>>>> webgl-port
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -520,7 +515,6 @@ public class Mark extends SurfaceElevationListener
     return _minDistanceToCamera;
   }
 
-<<<<<<< HEAD
   public final Vector3D getCartesianPosition(Planet planet)
   {
     if (_cartesianPosition == null)
@@ -530,10 +524,7 @@ public class Mark extends SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)
-=======
   public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
->>>>>>> webgl-port
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -569,40 +560,11 @@ public class Mark extends SurfaceElevationListener
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
-<<<<<<< HEAD
-  
-            if (_textureId != null)
-            {
-              _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
-            }
-=======
             createGLState(rc.getPlanet());
->>>>>>> webgl-port
           }
         }
-  
-        if (_textureId != null)
+        else
         {
-<<<<<<< HEAD
-          final Camera camera = rc.getCurrentCamera();
-          final int viewportWidth = camera.getWidth();
-          final int viewportHeight = camera.getHeight();
-  
-          if ((viewportWidth != _viewportWidth) || (viewportHeight != _viewportHeight))
-          {
-            int __ASK_JM; // move to MarkRenderer
-            createGLState(planet, viewportWidth, viewportHeight);
-          }
-  
-<<<<<<< HEAD
-=======
-  //        GL* gl = rc->getGL();
-  
-=======
->>>>>>> webgl-port
-          GPUProgramManager progManager = rc.getGPUProgramManager();
-  
->>>>>>> webgl-port
           _glState.setParent(parentGLState); //Linking with parent
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
@@ -613,5 +575,4 @@ public class Mark extends SurfaceElevationListener
     }
   
   }
-
 }
