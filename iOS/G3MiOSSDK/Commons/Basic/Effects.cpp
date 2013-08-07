@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
+
+#include "Renderer.hpp"
+
 #include "Effects.hpp"
 
 #include "Context.hpp"

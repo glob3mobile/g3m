@@ -166,4 +166,16 @@ public final class Factory_WebGL
       return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket);
    }
 
+
+   @Override
+   public IShortBuffer createShortBuffer(final short[] array) {
+      return new ShortBuffer_WebGL(array);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float[] array) {
+      return new FloatBuffer_WebGL(array);
+   }
+
 }

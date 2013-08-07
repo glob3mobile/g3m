@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
+//#include "GPUProgramState.hpp"
 
 #include <vector>
 class GEOObject;
@@ -17,6 +18,7 @@ class GEOSymbolizer;
 class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
+class GEOTileRasterizer;
 class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public LeafRenderer {
@@ -25,10 +27,11 @@ private:
 
   const GEOSymbolizer* _defaultSymbolizer;
 
-  MeshRenderer*   _meshRenderer;
-  ShapesRenderer* _shapesRenderer;
-  MarksRenderer*  _marksRenderer;
-
+  MeshRenderer*      _meshRenderer;
+  ShapesRenderer*    _shapesRenderer;
+  MarksRenderer*     _marksRenderer;
+  GEOTileRasterizer* _geoTileRasterizer;
+  
 public:
 
   /**
@@ -42,15 +45,16 @@ public:
 
    */
   GEORenderer(const GEOSymbolizer* defaultSymbolizer,
-              MeshRenderer*   meshRenderer,
-              ShapesRenderer* shapesRenderer,
-              MarksRenderer*  marksRenderer) :
+              MeshRenderer*        meshRenderer,
+              ShapesRenderer*      shapesRenderer,
+              MarksRenderer*       marksRenderer,
+              GEOTileRasterizer*   geoTileRasterizer) :
   _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
-  _marksRenderer(marksRenderer)
+  _marksRenderer(marksRenderer),
+  _geoTileRasterizer(geoTileRasterizer)
   {
-
   }
 
   virtual ~GEORenderer();
@@ -83,8 +87,7 @@ public:
     return true;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -103,7 +106,6 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
-  
   MeshRenderer* getMeshRenderer(){
     return _meshRenderer;
   }
@@ -115,6 +117,11 @@ public:
   ShapesRenderer* getShapesRenderer(){
     return _shapesRenderer;
   }
+  
+  GEOTileRasterizer* getGeoTileRasterizer(){
+    return _geoTileRasterizer;
+  }
+
   
 };
 

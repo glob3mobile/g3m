@@ -20,12 +20,13 @@ package org.glob3.mobile.generated;
 
 public class ShortBufferElevationData extends BufferElevationData
 {
-  private IShortBuffer _buffer;
+//  IShortBuffer*  _buffer;
+  private short[] _buffer;
   private boolean _hasNoData;
 
   protected final double getValueInBufferAt(int index)
   {
-    final short value = _buffer.get(index);
+    final short value = _buffer[index];
     if (value == NO_DATA_VALUE)
     {
       return IMathUtils.instance().NanD();
@@ -40,20 +41,20 @@ public class ShortBufferElevationData extends BufferElevationData
   //const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
   
   
-  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IShortBuffer buffer)
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize)
   {
-     super(sector, extent, realSector, realExtent, buffer.size());
+     super(sector, extent, realSector, realExtent, bufferSize);
      _buffer = buffer;
-    if (_buffer.size() != (_width * _height))
+    if (_bufferSize != (_width * _height))
     {
       ILogger.instance().logError("Invalid buffer size");
     }
   
-    final int size = buffer.size();
+    final int size = _bufferSize;
     _hasNoData = false;
     for (int i = 0; i < size; i++)
     {
-      if (buffer.get(i) == NO_DATA_VALUE)
+      if (buffer[i] == NO_DATA_VALUE)
       {
         _hasNoData = true;
         break;
@@ -63,8 +64,7 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public void dispose()
   {
-    if (_buffer != null)
-       _buffer.dispose();
+    _buffer = null;
   }
 
   public final String description(boolean detailed)
@@ -104,10 +104,10 @@ public class ShortBufferElevationData extends BufferElevationData
     short maxHeight = mu.minInt16();
     double sumHeight = 0.0;
   
-    final int bufferSize = _buffer.size();
+    final int bufferSize = _bufferSize;
     for (int i = 0; i < bufferSize; i++)
     {
-      final short height = _buffer.get(i);
+      final short height = _buffer[i];
       if (height != NO_DATA_VALUE)
       {
         if (height < minHeight)

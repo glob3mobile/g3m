@@ -17,6 +17,9 @@ class Canvas_iOS : public ICanvas {
 private:
   CGContextRef _context;
   UIFont*      _currentUIFont;
+
+  CGMutablePathRef _path;
+  CGAffineTransform _transform;
   
   CGColorRef createCGColor(const Color& color);
   
@@ -35,11 +38,20 @@ protected:
   
   void _setFillColor(const Color& color);
   
-  void _setStrokeColor(const Color& color);
+  void _setLineColor(const Color& color);
   
-  void _setStrokeWidth(float width);
-  
-  
+  void _setLineWidth(float width);
+
+  void _setLineCap(StrokeCap cap);
+
+  void _setLineJoin(StrokeJoin join);
+
+  void _setLineMiterLimit(float limit);
+
+  void _setLineDash(float lengths[],
+                    int count,
+                    int phase);
+
   void _setShadow(const Color& color,
                   float blur,
                   float offsetX,
@@ -91,11 +103,28 @@ protected:
                   float srcLeft, float srcTop, float srcWidth, float srcHeight,
                   float destLeft, float destTop, float destWidth, float destHeight);
   
+
+  void _beginPath();
   
+  void _closePath();
+
+  void _stroke();
+
+  void _fill();
+  
+  void _fillAndStroke();
+
+  void _moveTo(float x, float y);
+
+  void _lineTo(float x, float y);
+
+
 public:
   Canvas_iOS() :
   _context(NULL),
-  _currentUIFont(nil)
+  _currentUIFont(nil),
+  _path(NULL),
+  _transform()
   {
   }
   

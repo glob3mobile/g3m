@@ -1,236 +1,260 @@
 package org.glob3.mobile.generated; 
 //
-//  GLState.hpp
+//  GLState.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 27/10/12.
+//  Created by Jose Miguel SN on 17/05/13.
+//
+//
+
+//
+//  GLState.h
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 17/05/13.
+//
+//  Created by Agustin Trujillo Pino on 27/10/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
-//class IFloatBuffer;
+
 
 
 public class GLState
 {
-  private boolean _depthTest;
-  private boolean _blend;
-  private boolean _textures;
-  private boolean _texture2D;
-  private boolean _vertexColor;
-  private boolean _verticesPosition;
-  private boolean _flatColor;
-  private boolean _cullFace;
-  private int _culledFace;
 
-  private IFloatBuffer _colors;
-  private float _intensity;
-  private float _flatColorR;
-  private float _flatColorG;
-  private float _flatColorB;
-  private float _flatColorA;
+  private GLFeatureGroup[] _featuresGroups = new GLFeatureGroup[DefineConstants.N_GLFEATURES_GROUPS]; //1 set for group of features
+  private GLFeatureGroup[] _accumulatedGroups = new GLFeatureGroup[DefineConstants.N_GLFEATURES_GROUPS]; //1 set for group of features
 
-  private float _lineWidth;
-  private float _pointSize;
+  private int _timeStamp;
+  private int _parentsTimeStamp;
 
+  private GPUVariableValueSet _valuesSet;
+  private GLGlobalState _globalState;
 
-  private GLState()
+  private GPUProgram _lastGPUProgramUsed;
+
+  private GLState _parentGLState;
+
+  private void applyStates(GL gl, GPUProgram prog)
   {
-     _depthTest = true;
-     _blend = false;
-     _textures = false;
-     _texture2D = false;
-     _vertexColor = false;
-     _verticesPosition = false;
-     _flatColor = false;
-     _cullFace = true;
-     _culledFace = GLCullFace.back();
-     _colors = null;
-     _intensity = 0F;
-     _flatColorR = 0F;
-     _flatColorG = 0F;
-     _flatColorB = 0F;
-     _flatColorA = 0F;
-     _lineWidth = 1F;
-     _pointSize = 1F;
+    if (_parentGLState != null)
+    {
+      _parentGLState.applyStates(gl, prog);
+    }
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLState(GLState state);
+
+  private void hasChangedStructure()
+  {
+    _timeStamp++;
+    if (_valuesSet != null)
+       _valuesSet.dispose();
+    _valuesSet = null;
+    if (_globalState != null)
+       _globalState.dispose();
+    _globalState = null;
+    _lastGPUProgramUsed = null;
+
+    for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+    {
+      if (_accumulatedGroups[i] != null)
+         _accumulatedGroups[i].dispose();
+      _accumulatedGroups[i] = null;
+    }
   }
 
 
-
-  public static GLState newDefault()
+  public GLState()
   {
-    return new GLState();
+     _parentGLState = null;
+     _lastGPUProgramUsed = null;
+     _parentsTimeStamp = 0;
+     _timeStamp = 0;
+     _valuesSet = null;
+     _globalState = null;
+
+    for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+    {
+      _featuresGroups[i] = null;
+      _accumulatedGroups[i] = null;
+    }
+
   }
 
-  public GLState(GLState parentState)
+  public final int getTimeStamp()
   {
-     _depthTest = parentState._depthTest;
-     _blend = parentState._blend;
-     _textures = parentState._textures;
-     _texture2D = parentState._texture2D;
-     _vertexColor = parentState._vertexColor;
-     _verticesPosition = parentState._verticesPosition;
-     _flatColor = parentState._flatColor;
-     _cullFace = parentState._cullFace;
-     _culledFace = parentState._culledFace;
-     _colors = parentState._colors;
-     _intensity = parentState._intensity;
-     _flatColorR = parentState._flatColorR;
-     _flatColorG = parentState._flatColorG;
-     _flatColorB = parentState._flatColorB;
-     _flatColorA = parentState._flatColorA;
-     _lineWidth = parentState._lineWidth;
-     _pointSize = parentState._pointSize;
+     return _timeStamp;
+  }
+
+  public final GLFeatureGroup getAccumulatedGroup(int i)
+  {
+    if (_accumulatedGroups[i] == null)
+    {
+
+      _accumulatedGroups[i] = GLFeatureGroup.createGroup(GLFeatureGroup.getGroupName(i));
+      if (_parentGLState != null)
+      {
+        GLFeatureGroup pg = _parentGLState.getAccumulatedGroup(i);
+        if (pg != null)
+        {
+          _accumulatedGroups[i].add(pg);
+        }
+      }
+      if (_featuresGroups[i] != null)
+      {
+        _accumulatedGroups[i].add(_featuresGroups[i]);
+      }
+    }
+    return _accumulatedGroups[i];
   }
 
   public void dispose()
   {
+    for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+    {
+      if (_featuresGroups[i] != null)
+         _featuresGroups[i].dispose();
+      if (_accumulatedGroups[i] != null)
+         _accumulatedGroups[i].dispose();
+    }
+  
+    if (_valuesSet != null)
+       _valuesSet.dispose();
+    if (_globalState != null)
+       _globalState.dispose();
   }
 
-  public final void enableDepthTest()
+  public final GLState getParent()
   {
-     _depthTest = true;
-  }
-  public final void disableDepthTest()
-  {
-     _depthTest = false;
-  }
-  public final boolean isEnabledDepthTest()
-  {
-     return _depthTest;
+    return _parentGLState;
   }
 
-  public final void enableBlend()
+  public final void setParent(GLState parent)
   {
-     _blend = true;
-  }
-  public final void disableBlend()
-  {
-     _blend = false;
-  }
-  public final boolean isEnabledBlend()
-  {
-     return _blend;
-  }
-
-  public final void enableTextures()
-  {
-     _textures = true;
-  }
-  public final void disableTextures()
-  {
-     _textures = false;
-  }
-  public final boolean isEnabledTextures()
-  {
-     return _textures;
+  
+    if ((parent != _parentGLState) || (parent == null) || (_parentsTimeStamp != parent.getTimeStamp()))
+    {
+  
+      _parentGLState = parent;
+      _parentsTimeStamp = (_parentGLState == null) ? 0 : _parentGLState.getTimeStamp();
+  
+      hasChangedStructure();
+    }
+  //  else {
+  //    ILogger::instance()->logInfo("Reusing GLState Parent");
+  //  }
+  
   }
 
-  public final void enableTexture2D()
+  public final void applyGlobalStateOnGPU(GL gl)
   {
-     _texture2D = true;
-  }
-  public final void disableTexture2D()
-  {
-     _texture2D = false;
-  }
-  public final boolean isEnabledTexture2D()
-  {
-     return _texture2D;
+    int __ASK_JM;
+    if (_parentGLState != null)
+    {
+      _parentGLState.applyGlobalStateOnGPU(gl);
+    }
   }
 
-  public final void enableVertexColor(IFloatBuffer colors, float intensity)
+  public final void applyOnGPU(GL gl, GPUProgramManager progManager)
   {
-    _vertexColor = true;
-    _colors = colors;
-    _intensity = intensity;
-  }
-  public final void disableVertexColor()
-  {
-     _vertexColor = false;
-  }
-  public final boolean isEnabledVertexColor()
-  {
-     return _vertexColor;
-  }
-  public final IFloatBuffer getColors()
-  {
-     return _colors;
-  }
-  public final float getIntensity()
-  {
-     return _intensity;
-  }
-
-  public final void enableVerticesPosition()
-  {
-     _verticesPosition = true;
-  }
-  public final void disableVerticesPosition()
-  {
-     _verticesPosition = false;
-  }
-  public final boolean isEnabledVerticesPosition()
-  {
-     return _verticesPosition;
-  }
-
-  public final void enableFlatColor(Color color, float intensity)
-  {
-    _flatColor = true;
-    _flatColorR = color.getRed();
-    _flatColorG = color.getGreen();
-    _flatColorB = color.getBlue();
-    _flatColorA = color.getAlpha();
-    _intensity = intensity;
-  }
-  public final void disableFlatColor()
-  {
-     _flatColor = false;
-  }
-  public final boolean isEnabledFlatColor()
-  {
-     return _flatColor;
-  }
-  public final Color getFlatColor()
-  {
-    return Color.fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
+  
+    if (_valuesSet == null)
+    {
+      _valuesSet = new GPUVariableValueSet();
+      for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+      {
+        GLFeatureGroup group = getAccumulatedGroup(i);
+        if (group != null)
+        {
+          group.addToGPUVariableSet(_valuesSet);
+        }
+      }
+  
+      final int uniformsCode = _valuesSet.getUniformsCode();
+      final int attributesCode = _valuesSet.getAttributesCode();
+  
+      _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+    }
+  
+    if (_globalState == null)
+    {
+      _globalState = new GLGlobalState();
+      for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+      {
+        GLFeatureGroup group = getAccumulatedGroup(i);
+        if (group != null)
+        {
+          group.applyOnGlobalGLState(_globalState);
+        }
+      }
+    }
+  
+    if (_lastGPUProgramUsed != null)
+    {
+      gl.useProgram(_lastGPUProgramUsed);
+      applyStates(gl, _lastGPUProgramUsed);
+  
+      _valuesSet.applyValuesToProgram(_lastGPUProgramUsed);
+      _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
+  
+      _lastGPUProgramUsed.applyChanges(gl);
+  
+      //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
+    }
+    else
+    {
+      ILogger.instance().logError("No GPUProgram found.");
+    }
+  
   }
 
-  public final void enableCullFace(int face)
+  public final void addGLFeature(GLFeature f, boolean mustRetain)
   {
-    _cullFace = true;
-    _culledFace = face;
-  }
-  public final void disableCullFace()
-  {
-     _cullFace = false;
-  }
-  public final boolean isEnabledCullFace()
-  {
-     return _cullFace;
-  }
-  public final int getCulledFace()
-  {
-     return _culledFace;
+    GLFeatureGroupName g = f.getGroup();
+    final int index = g.getValue();
+
+    if (_featuresGroups[index] == null)
+    {
+      _featuresGroups[index] = GLFeatureGroup.createGroup(g);
+    }
+
+    _featuresGroups[index].add(f);
+    if (!mustRetain)
+    {
+      f._release();
+    }
+
+    hasChangedStructure();
   }
 
-  public final void setLineWidth(float lineWidth)
+  public final void clearGLFeatureGroup(GLFeatureGroupName g)
   {
-     _lineWidth = lineWidth;
-  }
-  public final float lineWidth()
-  {
-     return _lineWidth;
-  }
-
-  public final void setPointSize(float pointSize)
-  {
-     _pointSize = pointSize;
-  }
-  public final float pointSize()
-  {
-     return _pointSize;
+  
+    final int index = g.getValue();
+  
+    GLFeatureGroup group = _featuresGroups[index];
+    if (group != null)
+    {
+      if (group != null)
+         group.dispose();
+      _featuresGroups[index] = null;
+    }
+  
+    hasChangedStructure();
   }
 
+  public final int getGLFeatureSize(GLFeatureGroupName g)
+  {
+    final int index = g.getValue();
+
+    if (_featuresGroups[index] == null)
+    {
+      return 0;
+    }
+    return _featuresGroups[index].size();
+  }
 }

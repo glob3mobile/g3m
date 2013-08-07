@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraZoomAndRotateHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  CameraZoomAndRotateHandler.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -37,13 +37,12 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     // compute angle params
     double angle = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
-    final double PI = IMathUtils.instance().pi();
-    while (Math.abs(_lastAngle-angle)>PI/2)
+    while (Math.abs(_lastAngle-angle)>DefineConstants.PI/2)
     {
       if (angle<_lastAngle)
-         angle+=PI;
+         angle+=DefineConstants.PI;
          else
-            angle-=PI;
+            angle-=DefineConstants.PI;
     }
     _lastAngle = angle;
     angle -= _angle0;
@@ -152,7 +151,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     //
     //
     //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-    //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+    //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
     //    }
     //  }
   
@@ -181,6 +180,11 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     {
       Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
       Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
+      {
+        System.out.print("zoom..\n");
+        cameraContext.setCurrentGesture(Gesture.Zoom);
+      }
   
       // test if starting a zoom action
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
@@ -207,18 +211,22 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     }
   
     // call specific transformation
-    switch (cameraContext.getCurrentGesture())
+    final Gesture gesture = cameraContext.getCurrentGesture();
+    if (gesture == Gesture.Zoom)
     {
-      case Zoom:
-        if (_processZoom)
-           zoom(cameraContext.getNextCamera(), difCurrentPixels);
-        break;
-  
-      case Rotate:
-        if (_processRotation)
-           rotate();
-        break;
+      if (_processZoom)
+      {
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
+      }
     }
+    else if (gesture == Gesture.Rotate)
+    {
+      if (_processRotation)
+      {
+        rotate();
+      }
+    }
+  
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

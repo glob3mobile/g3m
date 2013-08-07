@@ -91,7 +91,7 @@ public class MercatorUtils
     }
 
     final IMathUtils mu = IMathUtils.instance();
-    final double pi4 = mu.pi() * 4;
+    final double pi4 = DefineConstants.PI * 4;
 
     final double latSin = latitude.sinus();
     return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
@@ -100,11 +100,10 @@ public class MercatorUtils
   public static Angle toLatitude(double v)
   {
     final IMathUtils mu = IMathUtils.instance();
-    final double pi = mu.pi();
 
-    final double exp = mu.exp(-2 * pi * (1.0 - v - 0.5));
+    final double exp = mu.exp(-2 * DefineConstants.PI * (1.0 - v - 0.5));
     final double atan = mu.atan(exp);
-    return Angle.fromRadians((pi / 2) - 2 * atan);
+    return Angle.fromRadians((DefineConstants.PI / 2) - 2 * atan);
   }
 
   public static Angle calculateSplitLatitude(Angle lowerLatitude, Angle upperLatitude)
@@ -148,9 +147,8 @@ public class MercatorUtils
     }
 
     final IMathUtils mu = IMathUtils.instance();
-    final double pi = mu.pi();
 
-    double my = mu.log(mu.tan((90 + latitude._degrees) * pi / 360.0)) / (pi / 180.0);
+    double my = mu.log(mu.tan((90 + latitude._degrees) * DefineConstants.PI / 360.0)) / (DefineConstants.PI / 180.0);
       my = my * _originShift / 180.0;
 
       return my;

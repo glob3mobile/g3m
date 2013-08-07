@@ -16,6 +16,7 @@
 #include "ShapeFullPositionEffect.hpp"
 
 #include "Camera.hpp"
+//#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:
@@ -56,7 +57,7 @@ void Shape::cleanTransformMatrix() {
   _transformMatrix = NULL;
 }
 
-MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
   
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
@@ -67,18 +68,19 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
 
-MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
+    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+    _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
   }
   return _transformMatrix;
 }
 
 void Shape::render(const G3MRenderContext* rc,
-                   const GLState& parentState,
+                   GLState* parentGLState,
                    bool renderNotReadyShapes) {
   if (renderNotReadyShapes || isReadyToRender(rc)) {
-
     const int pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
@@ -94,17 +96,10 @@ void Shape::render(const G3MRenderContext* rc,
       }
       _pendingEffects.clear();
     }
-
-
-    GL* gl = rc->getGL();
-
-    gl->pushMatrix();
-
-    gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
-
-    rawRender(rc, parentState, renderNotReadyShapes);
-
-    gl->popMatrix();
+    
+    getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
+    _glState.setParent(parentGLState);
+    rawRender(rc, &_glState, renderNotReadyShapes);
   }
 }
 

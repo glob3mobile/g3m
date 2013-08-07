@@ -2,7 +2,7 @@
 //  CameraRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 30/07/12.
+//  Created by Agustin Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -33,15 +33,15 @@ void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   //  }
 }
 
-void CameraRenderer::render(const G3MRenderContext* rc,
-                            const GLState& parentState) {
+void CameraRenderer::render(const G3MRenderContext* rc) {
+
   // create the CameraContext
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
 
   // render camera object
-  rc->getCurrentCamera()->render(rc, parentState);
+//  rc->getCurrentCamera()->render(rc, parentState);
 
   const int handlersSize = _handlers.size();
   for (unsigned int i = 0; i < handlersSize; i++) {

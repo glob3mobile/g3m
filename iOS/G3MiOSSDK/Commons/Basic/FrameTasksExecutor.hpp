@@ -56,7 +56,7 @@ public:
   _minimumExecutionsPerFrame(1),
   _maximumExecutionsPerFrame(8),
   _maximumQueuedTasks(64),
-  _maxTimePerFrame(TimeInterval::fromMilliseconds(7)),
+  _maxTimePerFrame(TimeInterval::fromMilliseconds(5)),
   _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
   _stressed(false)
   {

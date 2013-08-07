@@ -16,6 +16,7 @@
 #include "ILogger.hpp"
 #include "IMathUtils.hpp"
 #include <string>
+#include "Angle.hpp"
 
 class Color {
 private:
@@ -104,6 +105,11 @@ public:
       return hexToRGB(hex);
   }
 
+  static Color fromHueSaturationBrightness(double hueInRadians,
+                                           float saturation,
+                                           float brightness,
+                                           float alpha);
+
   static Color transparent() {
     return Color::fromRGBA(0, 0, 0, 0);
   }
@@ -176,7 +182,68 @@ public:
     return (_alpha < 1);
   }
 
+  bool isFullTransparent() const {
+    return (_alpha < 0.01);
+  }
+
   bool isEqualsTo(const Color& that) const;
+
+  Color wheelStep(int wheelSize,
+                  int step) const;
+
+  float getSaturation() const;
+
+  float getBrightness() const;
+
+  double getHueInRadians() const;
+
+  Angle getHue() const {
+    return Angle::fromRadians( getHueInRadians() );
+  }
+
+  Color adjustBrightness(float brightness) {
+    const float newBrightness = getBrightness() + brightness;
+    return Color::fromHueSaturationBrightness(getHueInRadians(),
+                                              getSaturation(),
+                                              newBrightness,
+                                              _alpha);
+  }
+
+  Color adjustSaturationBrightness(float saturation,
+                                   float brightness) {
+    const float newSaturation = getSaturation() + saturation;
+    const float newBrightness = getBrightness() + brightness;
+    return Color::fromHueSaturationBrightness(getHueInRadians(),
+                                              newSaturation,
+                                              newBrightness,
+                                              _alpha);
+  }
+
+  Color darker() {
+    return adjustBrightness(-0.08f);
+  }
+
+  Color twiceDarker() {
+    return adjustBrightness(-0.16f);
+  }
+
+  Color muchDarker() {
+//    return adjustBrightness(-0.32f);
+    return adjustBrightness(-0.64f);
+  }
+
+  Color lighter() {
+    return adjustSaturationBrightness(-0.03f, 0.08f);
+  }
+
+  Color twiceLighter() {
+    return adjustSaturationBrightness(-0.06f, 0.16f);
+  }
+  
+  Color muchLighter() {
+//    return adjustSaturationBrightness(-0.12f, 0.32f);
+    return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
 
 };
 

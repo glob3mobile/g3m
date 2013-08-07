@@ -61,7 +61,7 @@ public class MercatorTiledLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }

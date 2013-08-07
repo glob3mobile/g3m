@@ -2,7 +2,7 @@
 //  ES2Renderer.m
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -41,12 +41,11 @@ enum {
   self = [super init];
     
   if (self) {
-      _shaderProgram = NULL;
       NativeGL2_iOS* nGL = new NativeGL2_iOS();
       _gl = new GL(nGL,false);
     _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    
+
     if (!context || ![EAGLContext setCurrentContext:context] || ![self loadShaders]) {
       return nil;
     }
@@ -88,7 +87,6 @@ enum {
   }
 
   // Use shader program
-  widget->getGL()->useProgram(_shaderProgram);
   widget->render(_width, _height);
 
   if (_firstRender) {
@@ -96,6 +94,7 @@ enum {
     // This call is redundant, but needed if dealing with multiple renderbuffers.
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     _firstRender = false;
+    
   }
   [context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -140,13 +139,20 @@ enum {
   const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
                                                                encoding: NSUTF8StringEncoding
                                                                   error: nil] UTF8String]);
-
-  // Create shader program
-  _shaderProgram = new ShaderProgram(_gl);
-  if (_shaderProgram->loadShaders(vertexSource, fragmentSource)==false) {
-    NSLog(@"Failed to load shaders");
-    return FALSE;
-  }
+//  
+//  try {
+//    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
+//    if (_gpuProgram != NULL){
+//      NSLog(@"GPU Program Loaded");
+//      try {
+//        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
+//      } catch (G3MError* e) {
+//        NSLog(@"%s", e->getMessage().c_str());
+//      }
+//    }
+//  } catch (G3MError* e) {
+//    NSLog(@"%s", e->getMessage().c_str());
+//  }
 
   return TRUE;
 }
@@ -187,11 +193,6 @@ enum {
   if (depthRenderbuffer) {
     glDeleteRenderbuffers(1, &depthRenderbuffer);
     depthRenderbuffer = 0;
-  }
-    
-  if (_shaderProgram!=NULL) {
-    delete _shaderProgram;
-    _shaderProgram = NULL;
   }
   
   // Tear down context

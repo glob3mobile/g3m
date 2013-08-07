@@ -17,11 +17,10 @@
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
 class Geodetic2D {
-private:
+public:
   const Angle _latitude;
   const Angle _longitude;
-  
-public:
+
   
   static Geodetic2D zero() {
     return Geodetic2D(Angle::zero(),
@@ -33,12 +32,18 @@ public:
     return Geodetic2D(Angle::fromDegrees(lat),
                       Angle::fromDegrees(lon));
   }
-  
+
+  static Geodetic2D fromRadians(double lat,
+                                double lon) {
+    return Geodetic2D(Angle::fromRadians(lat),
+                      Angle::fromRadians(lon));
+  }
+
   static Geodetic2D linearInterpolation(const Geodetic2D& from,
                                         const Geodetic2D& to,
                                         double alpha){
-    return Geodetic2D(Angle::linearInterpolation(from.latitude(),  to.latitude(),  alpha),
-                      Angle::linearInterpolation(from.longitude(), to.longitude(), alpha));
+    return Geodetic2D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
+                      Angle::linearInterpolation(from._longitude, to._longitude, alpha));
   }
   
   
@@ -50,15 +55,29 @@ public:
                        const Angle& fromLongitude,
                        const Angle& toLatitude,
                        const Angle& toLongitude) {
+    return Angle::fromRadians( bearingInRadians(fromLatitude,
+                                                fromLongitude,
+                                                toLatitude,
+                                                toLongitude) );
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http://williams.best.vwh.net/avform.htm#Crs
+   */
+  static double bearingInRadians(const Angle& fromLatitude,
+                                 const Angle& fromLongitude,
+                                 const Angle& toLatitude,
+                                 const Angle& toLongitude) {
     const Angle dLon = toLongitude.sub(fromLongitude);
-    
+
     const double toLatCos = toLatitude.cosinus();
-    
+
     const double y = dLon.sinus() * toLatCos;
     const double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos*dLon.cosinus();
     const double radians = IMathUtils::instance()->atan2(y, x);
-    
-    return Angle::fromRadians(radians);
+
+    return radians;
   }
   
   /**
@@ -67,10 +86,10 @@ public:
    */
   static Angle bearing(const Geodetic2D& from,
                        const Geodetic2D& to) {
-    return bearing(from.latitude(),
-                   from.longitude(),
-                   to.latitude(),
-                   to.longitude());
+    return bearing(from._latitude,
+                   from._longitude,
+                   to._latitude,
+                   to._longitude);
   }
 
 

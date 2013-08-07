@@ -47,15 +47,15 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
     if (_centerStrategy == CenterStrategy.noCenter())
     {
-      _values.add((float) x);
-      _values.add((float) y);
-      _values.add((float) z);
+      _values.push_back((float) x);
+      _values.push_back((float) y);
+      _values.push_back((float) z);
     }
     else
     {
-      _values.add((float)(x - _cx));
-      _values.add((float)(y - _cy));
-      _values.add((float)(z - _cz));
+      _values.push_back((float)(x - _cx));
+      _values.push_back((float)(y - _cy));
+      _values.push_back((float)(z - _cz));
     }
   }
 
@@ -71,15 +71,15 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
     if (_centerStrategy == CenterStrategy.noCenter())
     {
-      _values.add(x);
-      _values.add(y);
-      _values.add(z);
+      _values.push_back(x);
+      _values.push_back(y);
+      _values.push_back(z);
     }
     else
     {
-      _values.add(x - _cx);
-      _values.add(y - _cy);
-      _values.add(z - _cz);
+      _values.push_back(x - _cx);
+      _values.push_back(y - _cy);
+      _values.push_back(z - _cz);
     }
   }
 

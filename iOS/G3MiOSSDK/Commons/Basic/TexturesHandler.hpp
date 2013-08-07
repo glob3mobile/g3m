@@ -14,7 +14,6 @@
 
 #include "INativeGL.hpp"
 
-class TextureBuilder;
 class IImage;
 class G3MRenderContext;
 class TextureHolder;

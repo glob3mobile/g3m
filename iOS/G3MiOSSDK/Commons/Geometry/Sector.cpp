@@ -12,15 +12,19 @@
 
 #include "IStringBuilder.hpp"
 
+#include "GEORasterProjection.hpp"
+#include "ICanvas.hpp"
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
-  return
-  latitude.isBetween(_lower.latitude(), _upper.latitude()) &&
-  longitude.isBetween(_lower.longitude(), _upper.longitude());
+  return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
+          longitude.isBetween(_lower._longitude, _upper._longitude));
 }
 
-bool Sector::fullContains(const Sector &s) const {
-  return contains(s.upper()) && contains(s.lower());
+bool Sector::fullContains(const Sector& that) const {
+  //return contains(that._upper) && contains(that._lower);
+  return (contains(that._upper._latitude, that._upper._longitude) &&
+          contains(that._lower._latitude, that._lower._longitude));
 }
 
 bool Sector::touchesWith(const Sector &that) const {
@@ -28,12 +32,12 @@ bool Sector::touchesWith(const Sector &that) const {
   //   page 79
 
   // Exit with no intersection if separated along an axis
-  if (_upper.latitude().lowerThan(that._lower.latitude()) ||
-      _lower.latitude().greaterThan(that._upper.latitude())) {
+  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+      _lower._latitude.greaterThan(that._upper._latitude)) {
     return false;
   }
-  if (_upper.longitude().lowerThan(that._lower.longitude()) ||
-      _lower.longitude().greaterThan(that._upper.longitude())) {
+  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+      _lower._longitude.greaterThan(that._upper._longitude)) {
     return false;
   }
 
@@ -44,18 +48,19 @@ bool Sector::touchesWith(const Sector &that) const {
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 const Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  return Geodetic2D(Angle::linearInterpolation( _lower.latitude(),  _upper.latitude(),  1.0 - v ),
-                    Angle::linearInterpolation( _lower.longitude(), _upper.longitude(),       u ) );
+  return Geodetic2D(Angle::linearInterpolation( _lower._latitude,  _upper._latitude,  1.0 - v ),
+                    Angle::linearInterpolation( _lower._longitude, _upper._longitude,       u ) );
 }
 
 const Angle Sector::getInnerPointLongitude(double u) const {
-  return Angle::linearInterpolation( _lower.longitude(), _upper.longitude(), u );
+  return Angle::linearInterpolation( _lower._longitude, _upper._longitude, u );
 }
 
 const Angle Sector::getInnerPointLatitude(double v) const {
-  return Angle::linearInterpolation( _lower.latitude(), _upper.latitude(), 1.0 - v );
+  return Angle::linearInterpolation( _lower._latitude, _upper._latitude,  1.0 - v);
 }
 
+/*
 class Sector_Geodetic2DCachedData {
 private:
   const Vector3D _cartesian;
@@ -76,16 +81,45 @@ public:
   bool test(const Vector3D& eye) const {
     return _geodeticSurfaceNormal.dot( eye.sub(_cartesian) ) > 0;
   }
-};
+};*/
 
 Sector::~Sector() {
-  delete _nwData;
+  /*
+   delete _nwData;
   delete _neData;
   delete _swData;
   delete _seData;
+   */
+  if (_normalizedCartesianCenter) delete _normalizedCartesianCenter;
 }
 
+
 bool Sector::isBackOriented(const G3MRenderContext *rc,
+                            double minHeight,
+                            const Planet* planet,
+                            const Vector3D& cameraNormalizedPosition,
+                            double cameraAngle2HorizonInRadians) const {
+//  const Camera* camera = rc->getCurrentCamera();
+//  const Planet* planet = rc->getPlanet();
+//
+//  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+//  const double angleInRadians = IMathUtils::instance()->acos(dot);
+//
+//  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+
+  const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+#ifdef C_CODE
+  const double angleInRadians = IMathUtils::instance()->acos(dot);
+#endif
+#ifdef JAVA_CODE
+  final double angleInRadians = java.lang.Math.acos(dot);
+#endif
+
+  return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );
+}
+
+/*
+bool Sector::isBackOriented_v4(const G3MRenderContext *rc,
                             double minHeight) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
@@ -105,20 +139,19 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
   if (_seData == NULL)    { _seData = new Sector_Geodetic2DCachedData(planet, getSE()); }
   if (_seData->test(eye)) { return false; }
 
-  /*
-  const Vector3D cartesianNW = planet->toCartesian(getNW());
-  if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
-
-  const Vector3D cartesianNE = planet->toCartesian(getNE());
-  if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
-
-  const Vector3D cartesianSW = planet->toCartesian(getSW());
-  if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
-
-  const Vector3D cartesianSE = planet->toCartesian(getSE());
-  if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
-  */
   
+  //const Vector3D cartesianNW = planet->toCartesian(getNW());
+  //if (planet->geodeticSurfaceNormal(cartesianNW).dot(eye.sub(cartesianNW)) > 0) { return false; }
+
+  //const Vector3D cartesianNE = planet->toCartesian(getNE());
+  //if (planet->geodeticSurfaceNormal(cartesianNE).dot(eye.sub(cartesianNE)) > 0) { return false; }
+
+  //const Vector3D cartesianSW = planet->toCartesian(getSW());
+  //if (planet->geodeticSurfaceNormal(cartesianSW).dot(eye.sub(cartesianSW)) > 0) { return false; }
+
+  //const Vector3D cartesianSE = planet->toCartesian(getSE());
+  //if (planet->geodeticSurfaceNormal(cartesianSE).dot(eye.sub(cartesianSE)) > 0) { return false; }
+
   // compute angle with normal in the closest point to the camera
   const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
 
@@ -126,7 +159,8 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 
   // if all the angles are higher than 90, sector is back oriented
   return (planet->geodeticSurfaceNormal(cartesianCenter).dot(eye.sub(cartesianCenter)) <= 0);
-}
+}*/
+
 
 /*
 bool Sector::isBackOriented_v3(const G3MRenderContext *rc, double height) const {
@@ -230,24 +264,24 @@ bool Sector::isBackOriented(const G3MRenderContext *rc, double height) const {
 */
 
 Sector Sector::intersection(const Sector& that) const {
-  const Angle lowLat = Angle::max(lower().latitude(),  that.lower().latitude());
-  const Angle lowLon = Angle::max(lower().longitude(), that.lower().longitude());
+  const Angle lowLat = Angle::max(_lower._latitude,  that._lower._latitude);
+  const Angle lowLon = Angle::max(_lower._longitude, that._lower._longitude);
   const Geodetic2D low(lowLat, lowLon);
 
-  const Angle upLat = Angle::min(upper().latitude(),  that.upper().latitude());
-  const Angle upLon = Angle::min(upper().longitude(), that.upper().longitude());
+  const Angle upLat = Angle::min(_upper._latitude,  that._upper._latitude);
+  const Angle upLon = Angle::min(_upper._longitude, that._upper._longitude);
   const Geodetic2D up(upLat, upLon);
 
   return Sector(low, up);
 }
 
 Sector Sector::mergedWith(const Sector& that) const {
-  const Angle lowLat = Angle::min(lower().latitude(),  that.lower().latitude());
-  const Angle lowLon = Angle::min(lower().longitude(), that.lower().longitude());
+  const Angle lowLat = Angle::min(_lower._latitude,  that._lower._latitude);
+  const Angle lowLon = Angle::min(_lower._longitude, that._lower._longitude);
   const Geodetic2D low(lowLat, lowLon);
 
-  const Angle upLat = Angle::max(upper().latitude(),  that.upper().latitude());
-  const Angle upLon = Angle::max(upper().longitude(), that.upper().longitude());
+  const Angle upLat = Angle::max(_upper._latitude,  that._upper._latitude);
+  const Angle upLon = Angle::max(_upper._longitude, that._upper._longitude);
   const Geodetic2D up(upLat, upLon);
 
   return Sector(low, up);
@@ -258,25 +292,25 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
     return position;
   }
 
-  double latitudeInDegrees = position.latitude().degrees();
-  double longitudeInDegrees = position.longitude().degrees();
+  double latitudeInDegrees = position._latitude._degrees;
+  double longitudeInDegrees = position._longitude._degrees;
 
-  const double upperLatitudeInDegrees  = _upper.latitude().degrees();
+  const double upperLatitudeInDegrees  = _upper._latitude._degrees;
   if (latitudeInDegrees > upperLatitudeInDegrees) {
     latitudeInDegrees = upperLatitudeInDegrees;
   }
 
-  const double upperLongitudeInDegrees = _upper.longitude().degrees();
+  const double upperLongitudeInDegrees = _upper._longitude._degrees;
   if (longitudeInDegrees > upperLongitudeInDegrees) {
     longitudeInDegrees = upperLongitudeInDegrees;
   }
 
-  const double lowerLatitudeInDegrees  = _lower.latitude().degrees();
+  const double lowerLatitudeInDegrees  = _lower._latitude._degrees;
   if (latitudeInDegrees < lowerLatitudeInDegrees) {
     latitudeInDegrees = lowerLatitudeInDegrees;
   }
 
-  const double lowerLongitudeInDegrees  = _lower.longitude().degrees();
+  const double lowerLongitudeInDegrees  = _lower._longitude._degrees;
   if (longitudeInDegrees < lowerLongitudeInDegrees) {
     longitudeInDegrees = lowerLongitudeInDegrees;
   }
@@ -284,6 +318,7 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
   return Geodetic2D::fromDegrees(latitudeInDegrees, longitudeInDegrees);
 }
 
+/*
 const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   // if pos is included, return pos
   if (contains(pos)) {
@@ -292,16 +327,16 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
 
   // test longitude
   Geodetic2D center = getCenter();
-  double lon        = pos.longitude()._degrees;
-  double centerLon  = center.longitude()._degrees;
+  double lon        = pos._longitude._degrees;
+  double centerLon  = center._longitude._degrees;
   double oppLon1    = centerLon - 180;
   double oppLon2    = centerLon + 180;
   if (lon<oppLon1)
     lon+=360;
   if (lon>oppLon2)
     lon-=360;
-  double minLon     = _lower.longitude()._degrees;
-  double maxLon     = _upper.longitude()._degrees;
+  double minLon     = _lower._longitude._degrees;
+  double maxLon     = _upper._longitude._degrees;
   //bool insideLon    = true;
   if (lon < minLon) {
     lon = minLon;
@@ -313,9 +348,9 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   }
 
   // test latitude
-  double lat        = pos.latitude()._degrees;
-  double minLat     = _lower.latitude()._degrees;
-  double maxLat     = _upper.latitude()._degrees;
+  double lat        = pos._latitude._degrees;
+  double minLat     = _lower._latitude._degrees;
+  double maxLat     = _upper._latitude._degrees;
   //bool insideLat    = true;
   if (lat < minLat) {
     lat = minLat;
@@ -327,6 +362,7 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   }
 
   return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+ */
   
   /*// here we have to handle the case where sector is close to the pole,
   // and the latitude of the other point must be seen from the other side
@@ -348,10 +384,10 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
   return point;*/
 
   /*
-   const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-   const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+   const Angle lat = pos._latitude.nearestAngleInInterval(_lower._latitude, _upper._latitude);
+   const Angle lon = pos._longitude.nearestAngleInInterval(_lower._longitude, _upper._longitude);
    return Geodetic2D(lat, lon);*/
-}
+//}
 
 const std::string Sector::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -376,3 +412,25 @@ const Vector2D Sector::div(const Sector& that) const {
 //  const double scaleY = _deltaLatitude.div(that._deltaLatitude);
 //  return Vector2D(uv._x, uv._y - scaleY);
 //}
+
+void Sector::rasterize(ICanvas*                   canvas,
+                       const GEORasterProjection* projection) const {
+
+  const Vector2F l = projection->project(&_lower);
+  const Vector2F u = projection->project(&_upper);
+  
+  const float left   = l._x;
+  const float top    = l._y;
+  const float width  = u._x - left;
+  const float height = u._y - top;
+
+//  canvas->strokeRectangle(left, canvas->getHeight() - top, width, -height);
+  canvas->strokeRectangle(left, top, width, height);
+}
+
+const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
+  if (_normalizedCartesianCenter == NULL) {
+    _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
+  }
+  return *_normalizedCartesianCenter;
+}

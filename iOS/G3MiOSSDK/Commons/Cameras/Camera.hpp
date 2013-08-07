@@ -2,13 +2,15 @@
  *  Camera.hpp
  *  Prueba Opengl iPad
  *
- *  Created by Agustín Trujillo Pino on 24/01/11.
+ *  Created by Agustin Trujillo Pino on 24/01/11.
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 
 #ifndef CAMERA
 #define CAMERA
+
+#include <math.h>
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
@@ -21,7 +23,11 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 
+////#include "GPUProgramState.hpp"
+
+#include "GLState.hpp"
 class ILogger;
+class GPUProgramState;
 
 
 class CameraDirtyFlags {
@@ -131,7 +137,9 @@ public:
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
-  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition))
+  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
+  _angle2Horizon(that._angle2Horizon),
+  _normalizedPosition(that._normalizedPosition)
   {
   }
 
@@ -149,17 +157,24 @@ public:
 
   void copyFrom(const Camera &c);
 
+  void copyFromForcingMatrixCreation(const Camera &c){
+    c.forceMatrixCreation();
+    copyFrom(c);
+  }
+
   void resizeViewport(int width, int height);
 
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
+              const GLGlobalState& parentState) const;
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-  const Vector2I point2Pixel(const Vector3D& point) const;
-  const Vector2I point2Pixel(const Vector3F& point) const;
+//  const Vector2I point2Pixel(const Vector3D& point) const;
+//  const Vector2I point2Pixel(const Vector3F& point) const;
+  const Vector2F point2Pixel(const Vector3D& point) const;
+  const Vector2F point2Pixel(const Vector3F& point) const;
 
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
@@ -173,6 +188,7 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
@@ -228,6 +244,10 @@ public:
       delete _geodeticPosition;
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
+      const double distanceToPlanetCenter = _position.length();
+      const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+      _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition = _position.normalized();
     }
   }
 
@@ -259,7 +279,7 @@ public:
 
   void setGeodeticPosition(const Geodetic2D &g2d,
                            const double height) {
-    _setGeodeticPosition( _planet->toCartesian(g2d.latitude(), g2d.longitude(), height) );
+    _setGeodeticPosition( _planet->toCartesian(g2d._latitude, g2d._longitude, height) );
   }
 
   /**
@@ -275,14 +295,36 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation(){
+  void forceMatrixCreation() const{
     //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
     //getFrustumData();
-    getProjectionMatrix();
-    getModelMatrix();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
+    getModelViewMatrix().asMatrix44D();
   }
-    
+  
 
+
+//  void addProjectionAndModelGLFeatures(GLState& glState) const{
+//    glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
+//    glState.addGLFeature(p, false);
+//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
+//    glState.addGLFeature(m, false);
+//  }
+
+  Matrix44D* getModelMatrix44D() const{
+    return getModelMatrix().asMatrix44D();
+  }
+
+  Matrix44D* getProjectionMatrix44D() const{
+    return getProjectionMatrix().asMatrix44D();
+  }
+
+  double getAngle2HorizonInRadians() const { return _angle2Horizon; }
+  
+  double getProjectedSphereArea(const Sphere& sphere) const;
+  
 private:
   const Angle getHeading(const Vector3D& normal) const;
 
@@ -297,6 +339,13 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+
+  // this value is only used in the method Sector::isBackOriented
+  // it's stored in double instead of Angle class to optimize performance in android
+  // Must be updated when changing position
+  mutable double          _angle2Horizon;
+  MutableVector3D         _normalizedPosition;
+  
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;
@@ -345,33 +394,6 @@ private:
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
-  }
-
-  // opengl projection matrix
-  MutableMatrix44D getProjectionMatrix() const{
-    if (_dirtyFlags._projectionMatrixDirty) {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
-    }
-    return _projectionMatrix;
-  }
-
-  // Model matrix, computed in CPU in double precision
-  MutableMatrix44D getModelMatrix() const {
-    if (_dirtyFlags._modelMatrixDirty) {
-      _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-    }
-    return _modelMatrix;
-  }
-
-  // multiplication of model * projection
-  MutableMatrix44D getModelViewMatrix() const {
-    if (_dirtyFlags._modelViewMatrixDirty) {
-      _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
-    }
-    return _modelViewMatrix;
   }
 
   // intersection of view direction with globe in(x,y,z)
@@ -428,7 +450,34 @@ private:
   FrustumData calculateFrustumData() const;
   
   void _setGeodeticPosition(const Vector3D& pos);
-  
+
+  // opengl projection matrix
+  const MutableMatrix44D& getProjectionMatrix() const{
+    if (_dirtyFlags._projectionMatrixDirty) {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+    }
+    return _projectionMatrix;
+  }
+
+  // Model matrix, computed in CPU in double precision
+  const MutableMatrix44D& getModelMatrix() const {
+    if (_dirtyFlags._modelMatrixDirty) {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+    }
+    return _modelMatrix;
+  }
+
+  // multiplication of model * projection
+  const MutableMatrix44D& getModelViewMatrix() const {
+    if (_dirtyFlags._modelViewMatrixDirty) {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+    }
+    return _modelViewMatrix;
+  }
+
 };
 
 #endif

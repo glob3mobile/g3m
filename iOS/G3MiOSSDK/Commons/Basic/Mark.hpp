@@ -17,12 +17,14 @@
 #include "URL.hpp"
 #include "Vector2I.hpp"
 #include "Color.hpp"
+#include "GLState.hpp"
 
 class IImage;
 class IFloatBuffer;
 class IGLTextureId;
 class MarkTouchListener;
-class GLState;
+class GLGlobalState;
+class GPUProgramState;
 
 class MarkUserData {
 public:
@@ -102,7 +104,7 @@ private:
    * Default value: FALSE
    */
   const bool        _autoDeleteListener;
-
+  
 #ifdef C_CODE
   const IGLTextureId* _textureId;
 #endif
@@ -113,15 +115,26 @@ private:
   Vector3D* _cartesianPosition;
   
   IFloatBuffer* _vertices;
-  IFloatBuffer* getVertices(const Planet* planet);
-  
+//  IFloatBuffer* getVertices(const Planet* planet);
+
+
   bool    _textureSolved;
   IImage* _textureImage;
   int     _textureWidth;
   int     _textureHeight;
   const std::string _imageID;
-
+  
   bool    _renderedMark;
+  
+  static IFloatBuffer* _billboardTexCoord;
+  int _viewportWidth;
+  int _viewportHeight;
+  
+  GLState _glState;
+  
+  void createGLState(const Planet* planet, int viewportWidth, int viewportHeight);
+
+  IFloatBuffer* getBillboardTexCoords();
   
 public:
   /**
@@ -140,7 +153,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker just with label, without icon
    */
@@ -154,7 +167,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker just with icon, without label
    */
@@ -165,7 +178,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
@@ -177,7 +190,7 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-
+  
   ~Mark();
   
   const std::string getLabel() const {
@@ -187,13 +200,13 @@ public:
   const Geodetic3D getPosition() const {
     return _position;
   }
-
+  
   void initialize(const G3MContext* context,
                   long long downloadPriority);
-
+  
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition);
-
+  
   bool isReady() const;
   
   bool isRendered() const {
@@ -201,9 +214,9 @@ public:
   }
   
   void onTextureDownloadError();
-
+  
   void onTextureDownload(IImage* image);
-
+  
   int getTextureWidth() const {
     return _textureWidth;
   }
@@ -215,7 +228,7 @@ public:
   Vector2I getTextureExtent() const {
     return Vector2I(_textureWidth, _textureHeight);
   }
-
+  
   const MarkUserData* getUserData() const {
     return _userData;
   }
@@ -233,6 +246,9 @@ public:
   
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
+
+  void render(const G3MRenderContext* rc,
+              const Vector3D& cameraPosition, const GLState* parentGLState);
   
 };
 

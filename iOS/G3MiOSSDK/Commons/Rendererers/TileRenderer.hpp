@@ -2,7 +2,7 @@
 //  TileRenderer.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -25,14 +25,18 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "ChangedListener.hpp"
 
 class EllipsoidShape;
+
+class TileRasterizer;
 
 class TileRenderContext {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
+  TileRasterizer*              _tileRasterizer;
 
   const TilesRenderParameters* _parameters;
   TilesStatistics*             _statistics;
@@ -46,11 +50,11 @@ private:
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   
   long long _texturePriority;
-
 public:
   TileRenderContext(const TileTessellator*       tessellator,
                     ElevationDataProvider*       elevationDataProvider,
                     TileTexturizer*              texturizer,
+                    TileRasterizer*              tileRasterizer,
                     const LayerSet*              layerSet,
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
@@ -61,6 +65,7 @@ public:
   _tessellator(tessellator),
   _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
+  _tileRasterizer(tileRasterizer),
   _layerSet(layerSet),
   _parameters(parameters),
   _statistics(statistics),
@@ -70,6 +75,10 @@ public:
   _verticalExaggeration(verticalExaggeration)
   {
 
+  }
+
+  TileRasterizer* getTileRasterizer() const {
+    return _tileRasterizer;
   }
 
   const float getVerticalExaggeration() const {
@@ -121,9 +130,9 @@ public:
 
 class TilesStatistics {
 private:
-  long               _tilesProcessed;
-  long               _tilesVisible;
-  long               _tilesRendered;
+  long _tilesProcessed;
+  long _tilesVisible;
+  long _tilesRendered;
 
   static const int _maxLOD = 128;
 
@@ -281,11 +290,12 @@ public:
 };
 
 
-class TileRenderer: public LeafRenderer, LayerSetChangedListener {
+class TileRenderer: public LeafRenderer, ChangedListener {
 private:
   const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
+  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
@@ -326,11 +336,18 @@ private:
 
   float _verticalExaggeration;
 
+
   bool isReadyToRenderTiles(const G3MRenderContext* rc);
-  void renderIncompletePlanet(const G3MRenderContext* rc,
-                              const GLState& parentState);
+  void renderIncompletePlanet(const G3MRenderContext* rc);
 
   EllipsoidShape* _incompleteShape;
+  
+  bool _recreateTilesPending;
+
+  GLState _glState;
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 
 
 public:
@@ -338,6 +355,7 @@ public:
                ElevationDataProvider* elevationDataProvider,
                float verticalExaggeration,
                TileTexturizer*  texturizer,
+               TileRasterizer*  tileRasterizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
                bool showStatistics,
@@ -347,8 +365,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
@@ -394,7 +411,7 @@ public:
     }
   }
 
-  void changed(const LayerSet* layerSet);
+  void changed();
 
   void recreateTiles();
 
@@ -446,7 +463,6 @@ public:
   bool isTileRenderer() {
     return true;
   }
-
 };
 
 

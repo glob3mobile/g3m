@@ -61,7 +61,7 @@ public class GoogleMapsLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }
@@ -83,9 +83,9 @@ public class GoogleMapsLayer extends Layer
     isb.addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
   
     isb.addString("&center=");
-    isb.addDouble(tileSector.getCenter().latitude().degrees());
+    isb.addDouble(tileSector._center._latitude._degrees);
     isb.addString(",");
-    isb.addDouble(tileSector.getCenter().longitude().degrees());
+    isb.addDouble(tileSector._center._longitude._degrees);
   
     final int level = tile.getLevel();
     isb.addString("&zoom=");

@@ -23,8 +23,8 @@ package org.glob3.mobile.generated;
  */
 public class Geodetic2D
 {
-  private final Angle _latitude ;
-  private final Angle _longitude ;
+  public final Angle _latitude ;
+  public final Angle _longitude ;
 
 
   public static Geodetic2D zero()
@@ -37,9 +37,14 @@ public class Geodetic2D
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
   }
 
+  public static Geodetic2D fromRadians(double lat, double lon)
+  {
+    return new Geodetic2D(Angle.fromRadians(lat), Angle.fromRadians(lon));
+  }
+
   public static Geodetic2D linearInterpolation(Geodetic2D from, Geodetic2D to, double alpha)
   {
-    return new Geodetic2D(Angle.linearInterpolation(from.latitude(), to.latitude(), alpha), Angle.linearInterpolation(from.longitude(), to.longitude(), alpha));
+    return new Geodetic2D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha));
   }
 
 
@@ -49,6 +54,15 @@ public class Geodetic2D
    */
   public static Angle bearing(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
   {
+    return Angle.fromRadians(bearingInRadians(fromLatitude, fromLongitude, toLatitude, toLongitude));
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+  public static double bearingInRadians(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
     final Angle dLon = toLongitude.sub(fromLongitude);
 
     final double toLatCos = toLatitude.cosinus();
@@ -57,7 +71,7 @@ public class Geodetic2D
     final double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos *dLon.cosinus();
     final double radians = IMathUtils.instance().atan2(y, x);
 
-    return Angle.fromRadians(radians);
+    return radians;
   }
 
   /**
@@ -66,7 +80,7 @@ public class Geodetic2D
    */
   public static Angle bearing(Geodetic2D from, Geodetic2D to)
   {
-    return bearing(from.latitude(), from.longitude(), to.latitude(), to.longitude());
+    return bearing(from._latitude, from._longitude, to._latitude, to._longitude);
   }
 
 
@@ -129,7 +143,7 @@ public class Geodetic2D
 
   public final boolean isBetween(Geodetic2D min, Geodetic2D max)
   {
-    return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
+    return _latitude.isBetween(min._latitude, max._latitude) && _longitude.isBetween(min._longitude, max._longitude);
   }
 
   public final Angle angleTo(Geodetic2D other)

@@ -12,11 +12,13 @@
 #include "G3MCBuilder.hpp"
 #include "G3MWidget_iOS.h"
 
-
+class GPUProgramSources;
 
 class G3MCBuilder_iOS : public G3MCBuilder {
 private:
   G3MWidget_iOS* _nativeWidget;
+  
+  GPUProgramSources loadDefaultGPUProgramSources(const std::string& name);
 
 protected:
 
@@ -25,6 +27,8 @@ protected:
   IDownloader* createDownloader();
 
   IThreadUtils* createThreadUtils();
+  
+  GPUProgramManager* createGPUProgramManager();
 
 public:
   G3MCBuilder_iOS(G3MWidget_iOS* nativeWidget,

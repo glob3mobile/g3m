@@ -14,6 +14,10 @@
 #include <vector>
 
 class GEOFeature;
+class GPUProgramState;
+class GLGlobalState;
+class GPUProgramState;
+class GEOSymbolizer;
 
 class GEOFeatureCollection : public GEOObject {
 private:
@@ -25,11 +29,16 @@ public:
   {
 
   }
+  
+//  void addFeature(GEOFeature* feature);
 
   virtual ~GEOFeatureCollection();
 
-  void symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
+//              const GEOSymbolizer* symbolizer);
+  
+  void symbolize(const G3MRenderContext* rc, const GEOSymbolizationContext& sc) const;
 
 };
 

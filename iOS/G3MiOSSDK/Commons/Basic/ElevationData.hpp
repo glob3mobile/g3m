@@ -52,7 +52,7 @@ public:
     return _resolution;
   }
 
-//  virtual const Geodetic2D getRealResolution() const = 0;
+  //  virtual const Geodetic2D getRealResolution() const = 0;
 
   virtual double getElevationAt(int x,
                                 int y) const = 0;
@@ -63,12 +63,12 @@ public:
 
   virtual Vector3D getMinMaxAverageElevations() const = 0;
 
-  virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
+  virtual Mesh* createMesh(const Planet* planet,
                            float verticalExaggeration,
                            const Geodetic3D& positionOffset,
                            float pointSize) const;
 
-  virtual Mesh* createMesh(const Ellipsoid* ellipsoid,
+  virtual Mesh* createMesh(const Planet* planet,
                            float verticalExaggeration,
                            const Geodetic3D& positionOffset,
                            float pointSize,
@@ -86,34 +86,34 @@ public:
                         const Angle& longitude) const;
 
   double getElevationAt(const Geodetic2D& position) const {
-    return getElevationAt(position.latitude(),
-                          position.longitude());
+    return getElevationAt(position._latitude,
+                          position._longitude);
   }
-  
-//  bool isEquivalentTo(const ElevationData* ed){
-//    bool equivalent = true;
-//    const int width  = 3;
-//    const int height = 3;
-//    for (int x = 0; x < width; x++) {
-//      const double u = (double) x / (width  - 1);
-//      
-//      for (int y = 0; y < height; y++) {
-//        const double v = 1.0 - ( (double) y / (height - 1) );
-//        
-//        const Geodetic2D position = _sector.getInnerPoint(u, v);
-//        
-//        const double elevation = getElevationAt(position);
-//        const double elevation2 = ed->getElevationAt(position);
-//        
-//        if (elevation != elevation2){
-//          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
-//          equivalent = false;
-//        }
-//      }
-//    }
-//    return equivalent;
-//  }
 
+  //  bool isEquivalentTo(const ElevationData* ed){
+  //    bool equivalent = true;
+  //    const int width  = 3;
+  //    const int height = 3;
+  //    for (int x = 0; x < width; x++) {
+  //      const double u = (double) x / (width  - 1);
+  //
+  //      for (int y = 0; y < height; y++) {
+  //        const double v = 1.0 - ( (double) y / (height - 1) );
+  //
+  //        const Geodetic2D position = _sector.getInnerPoint(u, v);
+  //
+  //        const double elevation = getElevationAt(position);
+  //        const double elevation2 = ed->getElevationAt(position);
+  //
+  //        if (elevation != elevation2){
+  //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
+  //          equivalent = false;
+  //        }
+  //      }
+  //    }
+  //    return equivalent;
+  //  }
+  
 };
 
 #endif

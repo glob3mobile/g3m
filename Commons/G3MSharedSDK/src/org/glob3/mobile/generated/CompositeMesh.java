@@ -21,7 +21,7 @@ public class CompositeMesh extends Mesh
 {
   private java.util.ArrayList<Mesh> _children = new java.util.ArrayList<Mesh>();
 
-  private Extent calculateExtent()
+  private BoundingVolume calculateBoundingVolume()
   {
     final int childrenCount = _children.size();
     if (childrenCount == 0)
@@ -29,17 +29,17 @@ public class CompositeMesh extends Mesh
       return null;
     }
   
-    Extent result = _children.get(0).getExtent();
+    BoundingVolume result = _children.get(0).getBoundingVolume();
     for (int i = 1; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-      result = result.mergedWith(child.getExtent());
+      result = result.mergedWith(child.getBoundingVolume());
     }
   
     return result;
   }
 
-  private Extent _extent;
+  private BoundingVolume _boundingVolume;
 
 
   public void dispose()
@@ -52,8 +52,8 @@ public class CompositeMesh extends Mesh
          child.dispose();
     }
   
-    if (_extent != null)
-       _extent.dispose();
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
   }
 
   public final int getVertexCount()
@@ -86,23 +86,13 @@ public class CompositeMesh extends Mesh
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
+    if (_boundingVolume == null)
     {
-      Mesh child = _children.get(i);
-      child.render(rc, parentState);
+      _boundingVolume = calculateBoundingVolume();
     }
-  }
-
-  public final Extent getExtent()
-  {
-    if (_extent == null)
-    {
-      _extent = calculateExtent();
-    }
-    return _extent;
+    return _boundingVolume;
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
@@ -121,11 +111,21 @@ public class CompositeMesh extends Mesh
 
   public final void addMesh(Mesh mesh)
   {
-    if (_extent != null)
-       _extent.dispose();
-    _extent = null;
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
+    _boundingVolume = null;
   
     _children.add(mesh);
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      child.render(rc, parentGLState);
+    }
   }
 
 }

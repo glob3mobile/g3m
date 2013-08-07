@@ -22,16 +22,16 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                       const Color& lineColor,
                                       float lineWidth,
                                       double deltaHeight,
-                                      const Ellipsoid* ellipsoid) const {
+                                      const Planet* planet) const {
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          ellipsoid,
+                                          planet,
                                           Geodetic2D::zero());
 
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(coordinate->latitude(),
-                 coordinate->longitude(),
+    vertices.add(coordinate->_latitude,
+                 coordinate->_longitude,
                  deltaHeight);
   }
 
@@ -51,10 +51,10 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                                        const Color& lineColor,
                                        float lineWidth,
                                        double deltaHeight,
-                                       const Ellipsoid* ellipsoid) const {
+                                       const Planet* planet) const {
 
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          ellipsoid,
+                                          planet,
                                           Geodetic2D::zero());
   ShortBufferBuilder indices;
 
@@ -66,8 +66,8 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      vertices.add(coordinate->latitude(),
-                   coordinate->longitude(),
+      vertices.add(coordinate->_latitude,
+                   coordinate->_longitude,
                    deltaHeight);
 
       indices.add(index);
@@ -91,7 +91,7 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                          false);
 }
 
-void GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
+bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
                               const GEOSymbolizationContext& sc) const {
   MeshRenderer* meshRenderer = sc.getMeshRenderer();
   if (meshRenderer == NULL) {
@@ -103,4 +103,5 @@ void GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
       meshRenderer->addMesh(mesh);
     }
   }
+  return true;
 }

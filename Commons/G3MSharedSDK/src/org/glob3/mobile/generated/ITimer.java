@@ -17,6 +17,8 @@ public abstract class ITimer
 
   public abstract TimeInterval elapsedTime();
 
+  public abstract long elapsedTimeInMilliseconds();
+
   public void dispose()
   {
   }

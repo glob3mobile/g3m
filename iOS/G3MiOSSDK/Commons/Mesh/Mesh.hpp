@@ -10,11 +10,14 @@
 #define G3MiOSSDK_Mesh_hpp
 
 #include "Context.hpp"
-#include "Extent.hpp"
+#include "BoundingVolume.hpp"
+
+#include "GLState.hpp"
 
 class Vector3D;
+class GPUProgramState;
 
-class Mesh {
+class Mesh{
 public:
   
   virtual ~Mesh() { }
@@ -22,13 +25,12 @@ public:
   virtual int getVertexCount() const = 0;
   
   virtual const Vector3D getVertex(int i) const = 0;
-  
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) const = 0;
-  
-  virtual Extent* getExtent() const = 0;
+    
+  virtual BoundingVolume* getBoundingVolume() const = 0;
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
+  
+  virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
 };
 

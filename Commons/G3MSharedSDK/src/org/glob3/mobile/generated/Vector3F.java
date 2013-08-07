@@ -49,12 +49,12 @@ public class Vector3F
 
   public final float dot(Vector3D v)
   {
-    return _x * (float) v._x + _y * (float) v._y + _z * (float) v._z;
+    return ((_x * (float) v._x) + (_y * (float) v._y) + (_z * (float) v._z));
   }
 
   public final float dot(Vector3F v)
   {
-    return _x * v._x + _y * v._y + _z * v._z;
+    return ((_x * v._x) + (_y * v._y) + (_z * v._z));
   }
 
   public final Vector3F normalized()

@@ -12,6 +12,8 @@
 #include "Mesh.hpp"
 #include "Vector3D.hpp"
 
+//#include "GPUProgramState.hpp"
+
 class MeshHolder : public Mesh {
 private:
   Mesh* _mesh;
@@ -42,17 +44,16 @@ public:
     return _mesh->getVertex(i);
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) const {
-    _mesh->render(rc, parentState);
-  }
-
-  Extent* getExtent() const {
-    return _mesh->getExtent();
+  BoundingVolume* getBoundingVolume() const {
+    return _mesh->getBoundingVolume();
   }
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _mesh->isTransparent(rc);
+  }
+
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+    _mesh->render(rc, parentGLState);
   }
   
 };

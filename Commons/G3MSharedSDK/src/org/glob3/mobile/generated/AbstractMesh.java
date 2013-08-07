@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableMatrix44D;
 //class IFloatBuffer;
 //class Color;
@@ -35,8 +36,8 @@ public abstract class AbstractMesh extends Mesh
   protected final float _pointSize;
   protected final boolean _depthTest;
 
-  protected Extent _extent;
-  protected final Extent computeExtent()
+  protected BoundingVolume _boundingVolume;
+  protected final BoundingVolume computeBoundingVolume()
   {
     final int vertexCount = getVertexCount();
   
@@ -88,17 +89,52 @@ public abstract class AbstractMesh extends Mesh
      _flatColor = flatColor;
      _colors = colors;
      _colorsIntensity = colorsIntensity;
-     _extent = null;
+     _boundingVolume = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
-  
+    createGLState();
   }
 
-  protected abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  protected abstract void rawRender(G3MRenderContext rc);
+//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
+  protected GLState _glState = new GLState();
+
+  protected final void createGLState()
+  {
+  
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_translationMatrix != null)
+    {
+      _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+    }
+  
+    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
+    {
+  
+      _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+  
+  
+  
+  
+      return;
+    }
+  
+    if (_colors != null)
+    {
+      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+  
+    }
+  }
+
+
+  ///#include "GPUProgramState.hpp"
+  
+  
   public void dispose()
   {
     if (_owner)
@@ -111,64 +147,19 @@ public abstract class AbstractMesh extends Mesh
          _flatColor.dispose();
     }
   
-    if (_extent != null)
-       _extent.dispose();
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-    GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.enableVerticesPosition();
-    state.setLineWidth(_lineWidth);
-    state.setPointSize(_pointSize);
-    if (_colors != null)
+    if (_boundingVolume == null)
     {
-      state.enableVertexColor(_colors, _colorsIntensity);
+      _boundingVolume = computeBoundingVolume();
     }
-    if (_flatColor != null)
-    {
-      state.enableFlatColor(_flatColor, _colorsIntensity);
-      if (_flatColor.isTransparent())
-      {
-        state.enableBlend();
-        gl.setBlendFuncSrcAlpha();
-      }
-    }
-  
-    if (!_depthTest)
-    {
-      state.disableDepthTest();
-    }
-  
-    gl.vertexPointer(3, 0, _vertices);
-  
-    if (_translationMatrix != null)
-    {
-      gl.pushMatrix();
-      gl.multMatrixf(_translationMatrix);
-    }
-  
-    gl.setState(state);
-    rawRender(rc, state);
-  
-    if (_translationMatrix != null)
-    {
-      gl.popMatrix();
-    }
-  
-  }
-
-  public final Extent getExtent()
-  {
-    if (_extent == null)
-    {
-      _extent = computeExtent();
-    }
-    return _extent;
+    return _boundingVolume;
   }
 
   public final int getVertexCount()
@@ -189,6 +180,13 @@ public abstract class AbstractMesh extends Mesh
       return false;
     }
     return _flatColor.isTransparent();
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+  
+    _glState.setParent(parentGLState);
+    rawRender(rc);
   }
 
 }

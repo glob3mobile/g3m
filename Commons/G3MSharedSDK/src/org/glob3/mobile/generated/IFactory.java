@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  IFactory.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -85,5 +85,9 @@ public abstract class IFactory
   public abstract ICanvas createCanvas();
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
+
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
 
 }

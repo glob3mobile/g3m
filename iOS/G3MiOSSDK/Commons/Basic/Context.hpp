@@ -21,11 +21,11 @@ class EffectsScheduler;
 class ITimer;
 class IStringUtils;
 class IThreadUtils;
-class TextureBuilder;
 class IMathUtils;
 class IJSONParser;
 class IStorage;
 class OrderedRenderable;
+class GPUProgramManager;
 
 #include <vector>
 
@@ -157,8 +157,8 @@ private:
   const Camera*       _currentCamera;
   Camera*             _nextCamera;
   TexturesHandler*    _texturesHandler;
-  TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
+  GPUProgramManager*  _gpuProgramManager;
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
@@ -175,11 +175,11 @@ public:
                    const Camera*       currentCamera,
                    Camera*             nextCamera,
                    TexturesHandler*    texturesHandler,
-                   TextureBuilder*     textureBuilder,
                    IDownloader*        downloader,
                    EffectsScheduler*   scheduler,
                    ITimer*             frameStartTimer,
-                   IStorage*           storage) :
+                   IStorage*           storage,
+                   GPUProgramManager*  gpuProgramManager) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -195,9 +195,9 @@ public:
   _currentCamera(currentCamera),
   _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
-  _textureBuilder(textureBuilder),
   _frameStartTimer(frameStartTimer),
-  _orderedRenderables(NULL)
+  _orderedRenderables(NULL),
+  _gpuProgramManager(gpuProgramManager)
   {
 
   }
@@ -218,16 +218,16 @@ public:
     return _texturesHandler;
   }
 
-  TextureBuilder* getTextureBuilder() const {
-    return _textureBuilder;
-  }
-
   const ITimer* getFrameStartTimer() const {
     return _frameStartTimer;
   }
 
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
+  }
+  
+  GPUProgramManager* getGPUProgramManager() const{
+    return _gpuProgramManager;
   }
 
   virtual ~G3MRenderContext();

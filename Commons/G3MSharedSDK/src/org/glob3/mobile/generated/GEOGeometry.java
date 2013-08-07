@@ -34,7 +34,7 @@ public abstract class GEOGeometry extends GEOObject
 
   public void dispose()
   {
-  
+
   }
 
   public final void setFeature(GEOFeature feature)
@@ -55,23 +55,26 @@ public abstract class GEOGeometry extends GEOObject
   public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
   {
     java.util.ArrayList<GEOSymbol> symbols = createSymbols(rc, sc);
-    if (symbols == null)
+    if (symbols != null)
     {
-      return;
+  
+      final int symbolsSize = symbols.size();
+      for (int i = 0; i < symbolsSize; i++)
+      {
+        final GEOSymbol symbol = symbols.get(i);
+        if (symbol != null)
+        {
+          final boolean deleteSymbol = symbol.symbolize(rc, sc);
+          if (deleteSymbol)
+          {
+            if (symbol != null)
+               symbol.dispose();
+          }
+        }
+      }
+  
+      symbols = null;
     }
-  
-    final int symbolsSize = symbols.size();
-    for (int i = 0; i < symbolsSize; i++)
-    {
-      final GEOSymbol symbol = symbols.get(i);
-  
-      symbol.symbolize(rc, sc);
-  
-      if (symbol != null)
-         symbol.dispose();
-    }
-  
-    symbols = null;
   }
 
 }

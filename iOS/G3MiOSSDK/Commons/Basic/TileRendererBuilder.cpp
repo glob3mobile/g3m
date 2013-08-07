@@ -13,6 +13,8 @@
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
+#include "TileRasterizer.hpp"
+
 
 TileRendererBuilder::TileRendererBuilder() {  
   _showStatistics = false;
@@ -24,6 +26,7 @@ TileRendererBuilder::TileRendererBuilder() {
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
+  _tileRasterizer = NULL;
   _tileTessellator = NULL;
   _visibleSectorListeners = NULL;
   _stabilizationMilliSeconds = NULL;
@@ -37,6 +40,7 @@ TileRendererBuilder::~TileRendererBuilder() {
   delete _parameters;
   delete _layerSet;
   delete _texturizer;
+  delete _tileRasterizer;
   delete _tileTessellator;
   delete _elevationDataProvider;
 }
@@ -52,6 +56,10 @@ TileTessellator* TileRendererBuilder::getTileTessellator() {
   }
   
   return _tileTessellator;
+}
+
+TileRasterizer* TileRendererBuilder::getTileRasterizer() {
+  return _tileRasterizer;
 }
 
 /**
@@ -177,6 +185,14 @@ void TileRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   _tileTessellator = tileTessellator;
 }
 
+void TileRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
+  if (_tileRasterizer) {
+    ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer already initialized");
+    return;
+  }
+  _tileRasterizer = tileRasterizer;
+}
+
 void TileRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   if (_texturizer) {
     ILogger::instance()->logError("LOGIC ERROR: _texturizer already initialized");
@@ -264,6 +280,7 @@ TileRenderer* TileRendererBuilder::create() {
                                                 getElevationDataProvider(),
                                                 getVerticalExaggeration(),
                                                 getTexturizer(),
+                                                getTileRasterizer(),
                                                 getLayerSet(),
                                                 getParameters(),
                                                 getShowStatistics(),
@@ -277,6 +294,7 @@ TileRenderer* TileRendererBuilder::create() {
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
+  _tileRasterizer = NULL;
   _tileTessellator = NULL;
   delete _visibleSectorListeners;
   _visibleSectorListeners = NULL;

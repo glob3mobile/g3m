@@ -46,7 +46,7 @@ public abstract class ElevationData
      _sector = new Sector(sector);
      _width = extent._x;
      _height = extent._y;
-     _resolution = new Geodetic2D(sector.getDeltaLatitude().div(extent._y), sector.getDeltaLongitude().div(extent._x));
+     _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
      _interpolator = null;
   }
 
@@ -79,7 +79,7 @@ public abstract class ElevationData
     return _resolution;
   }
 
-//  virtual const Geodetic2D getRealResolution() const = 0;
+  //  virtual const Geodetic2D getRealResolution() const = 0;
 
   public abstract double getElevationAt(int x, int y);
 
@@ -92,7 +92,7 @@ public abstract class ElevationData
 
   public abstract Vector3D getMinMaxAverageElevations();
 
-  public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
+  public Mesh createMesh(Planet planet, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
   {
   
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
@@ -104,7 +104,7 @@ public abstract class ElevationData
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Vector3D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Vector3D.zero());
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
@@ -132,7 +132,7 @@ public abstract class ElevationData
   
         final Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
   
-        vertices.add(position, positionOffset.height() + (elevation * verticalExaggeration));
+        vertices.add(position, positionOffset._height + (elevation * verticalExaggeration));
   
       }
     }
@@ -144,7 +144,7 @@ public abstract class ElevationData
                           //GLPrimitive::lineStrip(),
   }
 
-  public Mesh createMesh(Ellipsoid ellipsoid, float verticalExaggeration, Geodetic3D positionOffset, float pointSize, Sector sector, Vector2I resolution)
+  public Mesh createMesh(Planet planet, float verticalExaggeration, Geodetic3D positionOffset, float pointSize, Sector sector, Vector2I resolution)
   {
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
     final double minElevation = minMaxAverageElevations._x;
@@ -158,7 +158,7 @@ public abstract class ElevationData
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
   //                                          ellipsoid,
   //                                          Vector3D::zero());
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, sector.getCenter());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
@@ -190,7 +190,7 @@ public abstract class ElevationData
         final float b = alpha;
         colors.add(r, g, b, 1);
   
-        vertices.add(position.add(positionOffset2D), positionOffset.height() + (elevation * verticalExaggeration));
+        vertices.add(position.add(positionOffset2D), positionOffset._height + (elevation * verticalExaggeration));
       }
     }
   
@@ -210,7 +210,7 @@ public abstract class ElevationData
   //      }
   //
   //      vertices.add(position.add(positionOffset2D),
-  //                   positionOffset.height() + (elevation * verticalExaggeration));
+  //                   positionOffset._height + (elevation * verticalExaggeration));
   //
   //
   //      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
@@ -347,31 +347,31 @@ public abstract class ElevationData
 
   public final double getElevationAt(Geodetic2D position)
   {
-    return getElevationAt(position.latitude(), position.longitude());
+    return getElevationAt(position._latitude, position._longitude);
   }
 
-//  bool isEquivalentTo(const ElevationData* ed){
-//    bool equivalent = true;
-//    const int width  = 3;
-//    const int height = 3;
-//    for (int x = 0; x < width; x++) {
-//      const double u = (double) x / (width  - 1);
-//      
-//      for (int y = 0; y < height; y++) {
-//        const double v = 1.0 - ( (double) y / (height - 1) );
-//        
-//        const Geodetic2D position = _sector.getInnerPoint(u, v);
-//        
-//        const double elevation = getElevationAt(position);
-//        const double elevation2 = ed->getElevationAt(position);
-//        
-//        if (elevation != elevation2){
-//          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
-//          equivalent = false;
-//        }
-//      }
-//    }
-//    return equivalent;
-//  }
+  //  bool isEquivalentTo(const ElevationData* ed){
+  //    bool equivalent = true;
+  //    const int width  = 3;
+  //    const int height = 3;
+  //    for (int x = 0; x < width; x++) {
+  //      const double u = (double) x / (width  - 1);
+  //
+  //      for (int y = 0; y < height; y++) {
+  //        const double v = 1.0 - ( (double) y / (height - 1) );
+  //
+  //        const Geodetic2D position = _sector.getInnerPoint(u, v);
+  //
+  //        const double elevation = getElevationAt(position);
+  //        const double elevation2 = ed->getElevationAt(position);
+  //
+  //        if (elevation != elevation2){
+  //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
+  //          equivalent = false;
+  //        }
+  //      }
+  //    }
+  //    return equivalent;
+  //  }
 
 }

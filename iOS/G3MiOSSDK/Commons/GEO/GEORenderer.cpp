@@ -11,8 +11,9 @@
 #include "GEOObject.hpp"
 #include "GEOSymbolizer.hpp"
 #include "GEOSymbolizationContext.hpp"
-
 #include "ILogger.hpp"
+#include "Context.hpp"
+#include "Camera.hpp"
 
 class GEORenderer_ObjectSymbolizerPair {
 public:
@@ -55,11 +56,9 @@ void GEORenderer::addGEOObject(GEOObject* geoObject,
   }
 }
 
-void GEORenderer::render(const G3MRenderContext* rc,
-                         const GLState& parentState) {
+void GEORenderer::render(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();
   if (childrenCount > 0) {
-
     for (int i = 0; i < childrenCount; i++) {
       const GEORenderer_ObjectSymbolizerPair* pair = _children[i];
 
@@ -70,7 +69,8 @@ void GEORenderer::render(const G3MRenderContext* rc,
         const GEOSymbolizationContext sc(symbolizer,
                                          _meshRenderer,
                                          _shapesRenderer,
-                                         _marksRenderer);
+                                         _marksRenderer,
+                                         _geoTileRasterizer);
         pair->_geoObject->symbolize(rc, sc);
       }
 
@@ -79,3 +79,5 @@ void GEORenderer::render(const G3MRenderContext* rc,
     _children.clear();
   }
 }
+
+

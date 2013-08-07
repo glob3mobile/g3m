@@ -10,6 +10,7 @@
 #include "Tile.hpp"
 #include "TileKey.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "ChangedListener.hpp"
 
 LayerSet::~LayerSet() {
   delete _layerTilesRenderParameters;
@@ -156,7 +157,7 @@ void LayerSet::layersChanged() const {
   _layerTilesRenderParameters = NULL;
   
   if (_listener != NULL) {
-    _listener->changed(this);
+    _listener->changed();
   }
 }
 

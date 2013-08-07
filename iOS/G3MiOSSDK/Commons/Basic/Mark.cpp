@@ -10,7 +10,6 @@
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
-#include "TextureBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IGLTextureId.hpp"
 #include "IDownloader.hpp"
@@ -19,6 +18,11 @@
 #include "ITextUtils.hpp"
 #include "IImageListener.hpp"
 
+//#include "GPUProgramState.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+
+#include "GLFeature.hpp"
+#include "Vector2D.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -102,11 +106,11 @@ public:
                                          _labelShadowColor,
                                          new MarkLabelImageListener(image, _mark),
                                          true);
-//      ITextUtils::instance()->labelImage(image,
-//                                         _label,
-//                                         labelPosition,
-//                                         new MarkLabelImageListener(image, _mark),
-//                                         true);
+      //      ITextUtils::instance()->labelImage(image,
+      //                                         _label,
+      //                                         labelPosition,
+      //                                         new MarkLabelImageListener(image, _mark),
+      //                                         true);
     }
     else {
       _mark->onTextureDownload(image);
@@ -131,7 +135,7 @@ public:
 };
 
 
-
+IFloatBuffer* Mark::_billboardTexCoord = NULL;
 
 
 Mark::Mark(const std::string& label,
@@ -273,7 +277,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID )
 {
-  
+
 }
 
 void Mark::initialize(const G3MContext* context,
@@ -319,7 +323,7 @@ void Mark::onTextureDownloadError() {
 
   delete _labelFontColor;
   delete _labelShadowColor;
-  
+
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
                                 _iconURL.getPath().c_str(),
                                 _label.c_str());
@@ -327,14 +331,14 @@ void Mark::onTextureDownloadError() {
 
 void Mark::onTextureDownload(IImage* image) {
   _textureSolved = true;
-  
+
   delete _labelFontColor;
   delete _labelShadowColor;
-//  _textureImage = image->shallowCopy();
+  //  _textureImage = image->shallowCopy();
   _textureImage = image;
   _textureWidth = _textureImage->getWidth();
   _textureHeight = _textureImage->getHeight();
-//  IFactory::instance()->deleteImage(image);
+  //  IFactory::instance()->deleteImage(image);
 }
 
 bool Mark::isReady() const {
@@ -362,23 +366,69 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   return _cartesianPosition;
 }
 
-IFloatBuffer* Mark::getVertices(const Planet* planet) {
-  if (_vertices == NULL) {
-    const Vector3D* pos = getCartesianPosition(planet);
-    
+bool Mark::touched() {
+  return (_listener == NULL) ? false : _listener->touchedMark(this);
+  //  if (_listener == NULL) {
+  //    return false;
+  //  }
+  //  return _listener->touchedMark(this);
+}
+
+void Mark::setMinDistanceToCamera(double minDistanceToCamera) {
+  _minDistanceToCamera = minDistanceToCamera;
+}
+
+double Mark::getMinDistanceToCamera() {
+  return _minDistanceToCamera;
+}
+
+void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight){
+
+  _viewportHeight = viewportHeight;
+  _viewportWidth = viewportWidth;
+
+  if (_vertices == NULL){
+    const Vector3D pos( planet->toCartesian(_position) );
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
-    vertex.add(*pos);
-    
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+    vertex.add(pos);
+
     _vertices = vertex.create();
   }
-  return _vertices;
+
+  _glState.clearGLFeatureGroup(NO_GROUP);
+  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
+                                               viewportWidth, viewportHeight), false);
+
+  _glState.addGLFeature(new GeometryGLFeature(_vertices, //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,
+                                              false,        //NO DEPTH TEST
+                                              false, 0,     //NO CULLING
+                                              false, 0, 0,  //NO POLYGON OFFSET
+                                              (float)1.0,          //LINE WIDTH
+                                              false, (float)1.0),   //POINT SIZE
+                        false);
+}
+
+IFloatBuffer* Mark::getBillboardTexCoords(){
+  if (_billboardTexCoord == NULL){
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
+  }
+  return _billboardTexCoord;
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition) {
+                  const Vector3D& cameraPosition, const GLState* parentGLState) {
   const Planet* planet = rc->getPlanet();
 
   const Vector3D* markPosition = getCartesianPosition(planet);
@@ -399,7 +449,7 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
 
-    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils::instance()->halfPi()) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > HALF_PI) {
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
@@ -410,35 +460,38 @@ void Mark::render(const G3MRenderContext* rc,
           
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
-        }
-      }
-      
-      if (_textureId != NULL) {
-        GL* gl = rc->getGL();
-        
-        gl->drawBillBoard(_textureId,
-                          getVertices(planet),
-                          _textureWidth,
-                          _textureHeight);
 
+          _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                                     getBillboardTexCoords(),
+                                                     2,
+                                                     0,
+                                                     false,
+                                                     0,
+                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                                     false, Vector2D::zero(), Vector2D::zero()),
+                                false);
+        }
+      } else{
+        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
+            rc->getCurrentCamera()->getHeight() != _viewportHeight){
+          createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
+        }
+
+        GL* gl = rc->getGL();
+
+        GPUProgramManager& progManager = *rc->getGPUProgramManager();
+
+        _glState.setParent(parentGLState); //Linking with parent
+        
+        gl->drawArrays(GLPrimitive::triangleStrip(),
+                       0,
+                       4,
+                       &_glState,
+                       progManager);
+        
         _renderedMark = true;
       }
     }
   }
-}
-
-bool Mark::touched() {
-  return (_listener == NULL) ? false : _listener->touchedMark(this);
-//  if (_listener == NULL) {
-//    return false;
-//  }
-//  return _listener->touchedMark(this);
-}
-
-void Mark::setMinDistanceToCamera(double minDistanceToCamera) {
-  _minDistanceToCamera = minDistanceToCamera;
-}
-
-double Mark::getMinDistanceToCamera() {
-  return _minDistanceToCamera;
+  
 }

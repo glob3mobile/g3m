@@ -44,19 +44,28 @@ public class ShortBuffer_WebGL
    }-*/;
 
 
-   private native JavaScriptObject jsDeleteWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_gl
+   private native void jsDeleteWebGLBuffer() /*-{
+		this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_gl
 				.deleteBuffer(this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_webGLBuffer);
    }-*/;
 
 
    public ShortBuffer_WebGL(final JavaScriptObject data) {
-      _buffer = jsCreateBuffer(data);
+      _buffer = jsCreateBufferWithData(data);
    }
 
 
    public ShortBuffer_WebGL(final int size) {
-      _buffer = jsCreateBuffer(size);
+      _buffer = jsCreateBufferWithSize(size);
+   }
+
+
+   public ShortBuffer_WebGL(final short[] array) {
+      final int size = array.length;
+      _buffer = jsCreateBufferWithSize(size);
+      for (int i = 0; i < size; i++) {
+         rawPut(i, array[i]);
+      }
    }
 
 
@@ -122,12 +131,12 @@ public class ShortBuffer_WebGL
    }
 
 
-   private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
+   private native JavaScriptObject jsCreateBufferWithData(final JavaScriptObject data) /*-{
 		return new Uint16Array(data);
    }-*/;
 
 
-   private native JavaScriptObject jsCreateBuffer(final int size) /*-{
+   private native JavaScriptObject jsCreateBufferWithSize(final int size) /*-{
 		return new Uint16Array(size);
    }-*/;
 

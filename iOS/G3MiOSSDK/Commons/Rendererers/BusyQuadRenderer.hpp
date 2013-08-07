@@ -2,7 +2,7 @@
 //  BusyQuadRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -16,11 +16,15 @@
 #include "Color.hpp"
 #include "DirectMesh.hpp"
 
+//#include "GPUProgramState.hpp"
+
+#include "MutableMatrix44D.hpp"
+
 
 //***************************************************************
 
 
-class BusyQuadRenderer : public LeafRenderer, EffectTarget {
+class BusyQuadRenderer : public LeafRenderer{
 private:
   double      _degrees;
   //  const std::string _textureFilename;
@@ -33,6 +37,12 @@ private:
   
   bool initMesh(const G3MRenderContext* rc);
   
+  mutable MutableMatrix44D _modelviewMatrix;
+  MutableMatrix44D _projectionMatrix;
+  
+  GLState _glState;
+  void createGLState();
+  
   
 public:
   BusyQuadRenderer(IImage* image,
@@ -44,19 +54,19 @@ public:
   _image(image),
   _backgroundColor(backgroundColor),
   _animated(animated),
-  _size(size)
+  _size(size),
+  _projectionMatrix(MutableMatrix44D::invalid())
   {
+    createGLState();
   }
   
-  void initialize(const G3MContext* context) {
-  }
+  void initialize(const G3MContext* context) {}
   
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
   
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -76,6 +86,11 @@ public:
   void incDegrees(double value) {
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
+    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+    
+    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
   
   void start(const G3MRenderContext* rc);
@@ -89,11 +104,11 @@ public:
   void onPause(const G3MContext* context) {
     
   }
-
+  
   void onDestroy(const G3MContext* context) {
-
+    
   }
-
+  
 };
 
 //***************************************************************

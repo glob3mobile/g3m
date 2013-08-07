@@ -11,6 +11,8 @@
 
 #include <sstream>
 
+GLuint ShortBuffer_iOS::_boundIBO = -1;
+
 const std::string ShortBuffer_iOS::description() const {
   std::ostringstream oss;
 
