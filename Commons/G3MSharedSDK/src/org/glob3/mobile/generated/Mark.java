@@ -77,6 +77,7 @@ public class Mark
   private IFloatBuffer _vertices;
 //  IFloatBuffer* getVertices(const Planet* planet);
 
+
   private boolean _textureSolved;
   private IImage _textureImage;
   private int _textureWidth;

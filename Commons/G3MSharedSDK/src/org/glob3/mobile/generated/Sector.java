@@ -154,8 +154,6 @@ public class Sector
     return new Vector2D(scaleX, scaleY);
   }
 
-//  Vector2D getTranslationFactor(const Sector& that) const;
-
   public final boolean fullContains(Sector that)
   {
     //return contains(that._upper) && contains(that._lower);

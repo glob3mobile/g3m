@@ -217,6 +217,7 @@ public class Color
       default:
         return fromRGBA(v, p, q, alpha);
     }
+  
   }
 
   public static Color transparent()

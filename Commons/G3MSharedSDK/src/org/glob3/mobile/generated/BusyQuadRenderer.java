@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public abstract class BusyQuadRenderer extends LeafRenderer
+public class BusyQuadRenderer extends LeafRenderer
 {
   private double _degrees;
   //  const std::string _textureFilename;
@@ -116,7 +116,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
 
 
   //TODO: REMOVE???
-  public final void render(G3MRenderContext rc, GLGlobalState parentState)
+  public final void render(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
   

@@ -133,23 +133,6 @@ public class MarksRenderer extends LeafRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.disableDepthTest();
-    state.enableBlend();
-    state.enableTextures();
-    state.enableTexture2D();
-    state.enableVerticesPosition();
-    gl.setState(state);
-  
-    Vector2D textureTranslation = new Vector2D(0.0, 0.0);
-    Vector2D textureScale = new Vector2D(1.0, 1.0);
-  
-    gl.transformTexCoords(textureScale, textureTranslation);
-  
-    gl.setBlendFuncSrcAlpha();
-  
     final Camera camera = rc.getCurrentCamera();
   
     final Vector3D cameraPosition = camera.getCartesianPosition();
@@ -247,6 +230,7 @@ public class MarksRenderer extends LeafRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
+  
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
           final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
