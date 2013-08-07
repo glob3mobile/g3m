@@ -118,7 +118,6 @@ private:
   Vector3D* _cartesianPosition;
   
   IFloatBuffer* _vertices;
-//  IFloatBuffer* getVertices(const Planet* planet);
 
   bool    _textureSolved;
   IImage* _textureImage;
@@ -129,14 +128,10 @@ private:
   bool    _renderedMark;
   
   static IFloatBuffer* _billboardTexCoord;
-  int _viewportWidth;
-  int _viewportHeight;
   
   GLState _glState;
-  
-  void createGLState(const Planet* planet,
-                     int viewportWidth,
-                     int viewportHeight);
+
+  void createGLState(const Planet* planet);
 
   IFloatBuffer* getBillboardTexCoords();
 

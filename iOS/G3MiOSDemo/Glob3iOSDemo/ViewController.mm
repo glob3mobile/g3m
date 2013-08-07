@@ -119,6 +119,8 @@
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 
+#import <G3MiOSSDK/GenericQuadTree.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:

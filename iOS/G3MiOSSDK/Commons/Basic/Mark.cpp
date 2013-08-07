@@ -385,12 +385,7 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet,
-                         int viewportWidth,
-                         int viewportHeight) {
-
-  _viewportHeight = viewportHeight;
-  _viewportWidth = viewportWidth;
+void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL) {
     const Vector3D pos( planet->toCartesian(_position) );
@@ -402,10 +397,6 @@ void Mark::createGLState(const Planet* planet,
 
     _vertices = vertex.create();
   }
-
-  _glState.clearGLFeatureGroup(NO_GROUP);
-//  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
-//                                               viewportWidth, viewportHeight), false);
 
   _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
 
@@ -419,6 +410,16 @@ void Mark::createGLState(const Planet* planet,
                                               false, 0, 0,  // NO POLYGON OFFSET
                                               1.0f,         // LINE WIDTH
                                               false, 1.0f), // POINT SIZE
+                        false);
+
+  _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                             getBillboardTexCoords(),
+                                             2,
+                                             0,
+                                             false,
+                                             0,
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                             false, Vector2D::zero(), Vector2D::zero()),
                         false);
 }
 
@@ -470,40 +471,9 @@ void Mark::render(const G3MRenderContext* rc,
 
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
-
-          if (_textureId != NULL) {
-            _glState.addGLFeature(new TextureGLFeature(_textureId,
-                                                       getBillboardTexCoords(),
-                                                       2,
-                                                       0,
-                                                       false,
-                                                       0,
-                                                       true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                                       false, Vector2D::zero(), Vector2D::zero()),
-                                  false);
-          }
+          createGLState(rc->getPlanet());
         }
-      }
-
-//<<<<<<< HEAD
-      if (_textureId != NULL) {
-//        const Camera* camera = rc->getCurrentCamera();
-//        const int viewportWidth  = camera->getWidth();
-//        const int viewportHeight = camera->getHeight();
-//
-//        if ((viewportWidth  != _viewportWidth) ||
-//            (viewportHeight != _viewportHeight)) {
-//          int __ASK_JM; // move to MarkRenderer
-//          createGLState(planet,
-//                        viewportWidth,
-//                        viewportHeight);
-//        }
-//=======
-//        GL* gl = rc->getGL();
-//
-//        GPUProgramManager& progManager = *rc->getGPUProgramManager();
-//>>>>>>> webgl-port
-
+      } else{
         _glState.setParent(parentGLState); //Linking with parent
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
