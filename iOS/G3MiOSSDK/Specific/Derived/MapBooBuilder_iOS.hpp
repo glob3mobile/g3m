@@ -17,7 +17,7 @@ class GPUProgramSources;
 class MapBooBuilder_iOS : public MapBooBuilder {
 private:
   G3MWidget_iOS* _nativeWidget;
-  
+
   GPUProgramSources loadDefaultGPUProgramSources(const std::string& name);
 
 protected:
@@ -27,16 +27,16 @@ protected:
   IDownloader* createDownloader();
 
   IThreadUtils* createThreadUtils();
-  
+
   GPUProgramManager* createGPUProgramManager();
 
 public:
   MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
-                  const URL& serverURL,
-                  const URL& tubesURL,
-                  bool useWebSockets,
-                  const std::string& sceneId,
-                  MapBooSceneChangeListener* sceneListener);
+                    const URL& serverURL,
+                    const URL& tubesURL,
+                    bool useWebSockets,
+                    const std::string& applicationId,
+                    MapBooApplicationChangeListener* applicationListener);
 
   void initializeWidget();
   

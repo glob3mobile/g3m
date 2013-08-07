@@ -25,7 +25,7 @@ class GInitializationTask;
 class PeriodicalTask;
 class Layer;
 class LayerSet;
-class MapBooSceneDescription;
+class MapBooApplicationDescription;
 class Color;
 class GPUProgramManager;
 class JSONBaseObject;
@@ -45,36 +45,34 @@ class IWebSocket;
 #include <string>
 
 
-class MapBooSceneChangeListener {
+class MapBooApplicationChangeListener {
 public:
-  virtual ~MapBooSceneChangeListener() {
+  virtual ~MapBooApplicationChangeListener() {
 
   }
-
-  virtual void onSceneChanged(const std::string& sceneId) = 0;
-
-  virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
-
-  virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
-
-  virtual void onUserChanged(const std::string& user) = 0;
 
   virtual void onNameChanged(const std::string& name) = 0;
 
   virtual void onDescriptionChanged(const std::string& description) = 0;
 
-  virtual void onBackgroundColorChanged(const Color& backgroundColor) = 0;
+  virtual void onIconChanged(const std::string& icon) = 0;
+
+//  virtual void onIdChanged(const std::string& applicationId) = 0;
+//  virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
+//  virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
+//  virtual void onUserChanged(const std::string& user) = 0;
+//  virtual void onBackgroundColorChanged(const Color& backgroundColor) = 0;
 
 };
 
 
-class MapBooBuilderScenesDescriptionsListener {
+class MapBooBuilderApplicationsDescriptionsListener {
 public:
-  virtual ~MapBooBuilderScenesDescriptionsListener() {
+  virtual ~MapBooBuilderApplicationsDescriptionsListener() {
 
   }
 
-  virtual void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) = 0;
+  virtual void onDownload(std::vector<MapBooApplicationDescription*>* ApplicationsDescriptions) = 0;
 
   virtual void onError() = 0;
 
@@ -95,24 +93,24 @@ private:
 
   const bool _useWebSockets;
 
-  MapBooSceneChangeListener* _sceneListener;
+  MapBooApplicationChangeListener* _applicationListener;
 
-  std::string _sceneId;
-  int         _sceneTimestamp;
-  Layer*      _sceneBaseLayer;
-  Layer*      _sceneOverlayLayer;
-  std::string _sceneUser;
-  std::string _sceneName;
-  std::string _sceneDescription;
-  Color*      _sceneBackgroundColor;
+  std::string _applicationId;
+  int         _applicationTimestamp;
+//  Layer*      _applicationBaseLayer;
+//  Layer*      _applicationOverlayLayer;
+  std::string _applicationUser;
+  std::string _applicationName;
+  std::string _applicationDescription;
+//  Color*      _applicationBackgroundColor;
 
 
   GL* _gl;
   G3MWidget* _g3mWidget;
   IStorage* _storage;
 
-  IWebSocket* _sceneTubeWebSocket;
-  bool        _isSceneTubeOpen;
+  IWebSocket* _applicationTubeWebSocket;
+  bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
@@ -125,7 +123,7 @@ private:
 
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
-  const URL createScenesDescriptionsURL() const;
+  const URL createApplicationsDescriptionsURL() const;
 
   void recreateLayerSet();
 
@@ -138,7 +136,7 @@ private:
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
 
-  void resetScene(const std::string& sceneId);
+  void resetApplication(const std::string& applicationId);
 
   void resetG3MWidget();
 
@@ -169,8 +167,8 @@ protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
                 bool useWebSockets,
-                const std::string& sceneId,
-                MapBooSceneChangeListener* sceneListener);
+                const std::string& applicationId,
+                MapBooApplicationChangeListener* ApplicationListener);
 
   virtual ~MapBooBuilder() {
   }
@@ -195,56 +193,56 @@ protected:
 
 public:
   /** Private to G3M, don't call it */
-  int getSceneTimestamp() const;
+  int getApplicationTimestamp() const;
 
   /** Private to G3M, don't call it */
-  void setSceneTimestamp(const int timestamp);
+  void setApplicationTimestamp(const int timestamp);
 
   /** Private to G3M, don't call it */
-  void setSceneBaseLayer(Layer* baseLayer);
+  void setApplicationBaseLayer(Layer* baseLayer);
 
   /** Private to G3M, don't call it */
-  void setSceneOverlayLayer(Layer* overlayLayer);
+  void setApplicationOverlayLayer(Layer* overlayLayer);
 
   /** Private to G3M, don't call it */
-  void setSceneUser(const std::string& user);
+  void setApplicationUser(const std::string& user);
 
   /** Private to G3M, don't call it */
-  void setSceneName(const std::string& name);
+  void setApplicationName(const std::string& name);
 
   /** Private to G3M, don't call it */
-  void setSceneDescription(const std::string& description);
+  void setApplicationDescription(const std::string& description);
 
   /** Private to G3M, don't call it */
-  void setSceneBackgroundColor(const Color& backgroundColor);
+  void setApplicationBackgroundColor(const Color& backgroundColor);
 
   /** Private to G3M, don't call it */
-  const URL createPollingSceneDescriptionURL() const;
+  const URL createPollingApplicationDescriptionURL() const;
 
   /** Private to G3M, don't call it */
-  const URL createSceneTubeURL() const;
+  const URL createApplicationTubeURL() const;
 
   /** Private to G3M, don't call it */
-  void rawChangeScene(const std::string& sceneId);
+  void rawChangeApplication(const std::string& applicationId);
 
   /** Private to G3M, don't call it */
-  void requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener* listener,
+  void requestApplicationsDescriptions(MapBooBuilderApplicationsDescriptionsListener* listener,
                                  bool autoDelete = true);
 
   /** Private to G3M, don't call it */
-  void parseSceneDescription(const std::string& json,
+  void parseApplicationDescription(const std::string& json,
                              const URL& url);
 
   /** Private to G3M, don't call it */
-  void openSceneTube(const G3MContext* context);
+  void openApplicationTube(const G3MContext* context);
 
-  void setSceneTubeOpened(bool open);
+  void setApplicationTubeOpened(bool open);
   
-  bool isSceneTubeOpen() const {
-    return _isSceneTubeOpen;
+  bool isApplicationTubeOpen() const {
+    return _isApplicationTubeOpen;
   }
   
-  void changeScene(const std::string& sceneId);
+  void changeApplication(const std::string& applicationId);
 };
 
 #endif

@@ -48,12 +48,12 @@
 MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const URL& tubesURL,
                              bool useWebSockets,
-                             const std::string& sceneId,
-                             MapBooSceneChangeListener* sceneListener) :
+                             const std::string& applicationId,
+                             MapBooApplicationChangeListener* applicationListener) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),
-_sceneId(sceneId),
+_applicationId(applicationId),
 _sceneTimestamp(-1),
 _sceneBaseLayer(NULL),
 _sceneOverlayLayer(NULL),
@@ -67,7 +67,7 @@ _storage(NULL),
 _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
-_sceneListener(sceneListener),
+_applicationListener(applicationListener),
 _gpuProgramManager(NULL),
 _isSceneTubeOpen(false),
 _sceneTubeWebSocket(NULL)
@@ -498,8 +498,8 @@ void MapBooBuilder::setSceneBaseLayer(Layer* baseLayer) {
 
     recreateLayerSet();
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onBaseLayerChanged(_sceneBaseLayer);
+    if (_applicationListener != NULL) {
+      _applicationListener->onBaseLayerChanged(_sceneBaseLayer);
     }
   }
 }
@@ -511,8 +511,8 @@ void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
 
     recreateLayerSet();
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onOverlayLayerChanged(_sceneOverlayLayer);
+    if (_applicationListener != NULL) {
+      _applicationListener->onOverlayLayerChanged(_sceneOverlayLayer);
     }
   }
 }
@@ -520,13 +520,13 @@ void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
 const URL MapBooBuilder::createSceneTubeURL() const {
   const std::string tubesPath = _tubesURL.getPath();
 
-  return URL(tubesPath + "/application/" + _sceneId, false);
+  return URL(tubesPath + "/application/" + _applicationId, false);
 }
 
 const URL MapBooBuilder::createPollingSceneDescriptionURL() const {
   const std::string serverPath = _serverURL.getPath();
 
-  return URL(serverPath + "/application/" + _sceneId, false);
+  return URL(serverPath + "/application/" + _applicationId, false);
 }
 
 
@@ -552,7 +552,7 @@ public:
       }
     }
   }
-  
+
 };
 
 
@@ -693,110 +693,110 @@ G3MWidget* MapBooBuilder::create() {
   return _g3mWidget;
 }
 
-class MapBooBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
-private:
-  MapBooBuilderScenesDescriptionsListener* _listener;
-  const bool _autoDelete;
-
-public:
-  MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener* listener,
-                                                 bool autoDelete) :
-  _listener(listener),
-  _autoDelete(autoDelete)
-  {
-
-  }
-
-
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
-
-    if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse ScenesDescriptionJSON from %s",
-                                    url.getPath().c_str());
-      onError(url);
-    }
-    else {
-      const JSONArray* jsonScenesDescriptions = jsonBaseObject->asArray();
-      if (jsonScenesDescriptions == NULL) {
-        ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (1)");
-        onError(url);
-      }
-      else {
-        std::vector<MapBooSceneDescription*>* scenesDescriptions = new std::vector<MapBooSceneDescription*>();
-
-        const int size = jsonScenesDescriptions->size();
-
-        for (int i = 0; i < size; i++) {
-          const JSONObject* jsonSceneDescription = jsonScenesDescriptions->getAsObject(i);
-          if (jsonSceneDescription == NULL) {
-            ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (2) at index #%d", i);
-          }
-          else {
-            const std::string id          = jsonSceneDescription->getAsString("id",          "<invalid id>");
-            const std::string user        = jsonSceneDescription->getAsString("user",        "<invalid user>");
-            const std::string name        = jsonSceneDescription->getAsString("name",        "<invalid name>");
-            const std::string description = jsonSceneDescription->getAsString("description", "");
-            const std::string iconURL     = jsonSceneDescription->getAsString("iconURL",     "<invalid iconURL>");
-
-            std::vector<std::string> tags;
-            const JSONArray* jsonTags = jsonSceneDescription->getAsArray("tags");
-            if (jsonTags == NULL) {
-              ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (3) at index #%d", i);
-            }
-            else {
-              const int tagsCount = jsonTags->size();
-              for (int j = 0; j < tagsCount; j++) {
-                const std::string tag = jsonTags->getAsString(j, "");
-                if (tag.size() > 0) {
-                  tags.push_back(tag);
-                }
-              }
-            }
-
-            scenesDescriptions->push_back( new MapBooSceneDescription(id,
-                                                                      user,
-                                                                      name,
-                                                                      description,
-                                                                      iconURL,
-                                                                      tags) );
-
-          }
-        }
-
-        _listener->onDownload(scenesDescriptions);
-        if (_autoDelete) {
-          delete _listener;
-        }
-      }
-
-      delete jsonBaseObject;
-    }
-
-    delete buffer;
-  }
-
-  void onError(const URL& url) {
-    _listener->onError();
-    if (_autoDelete) {
-      delete _listener;
-    }
-  }
-
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-    // do nothing
-  }
-
-};
+//class MapBooBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
+//private:
+//  MapBooBuilderScenesDescriptionsListener* _listener;
+//  const bool _autoDelete;
+//
+//public:
+//  MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener* listener,
+//                                                 bool autoDelete) :
+//  _listener(listener),
+//  _autoDelete(autoDelete)
+//  {
+//
+//  }
+//
+//
+//  void onDownload(const URL& url,
+//                  IByteBuffer* buffer,
+//                  bool expired) {
+//
+//    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
+//
+//    if (jsonBaseObject == NULL) {
+//      ILogger::instance()->logError("Can't parse ScenesDescriptionJSON from %s",
+//                                    url.getPath().c_str());
+//      onError(url);
+//    }
+//    else {
+//      const JSONArray* jsonScenesDescriptions = jsonBaseObject->asArray();
+//      if (jsonScenesDescriptions == NULL) {
+//        ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (1)");
+//        onError(url);
+//      }
+//      else {
+//        std::vector<MapBooSceneDescription*>* scenesDescriptions = new std::vector<MapBooSceneDescription*>();
+//
+//        const int size = jsonScenesDescriptions->size();
+//
+//        for (int i = 0; i < size; i++) {
+//          const JSONObject* jsonSceneDescription = jsonScenesDescriptions->getAsObject(i);
+//          if (jsonSceneDescription == NULL) {
+//            ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (2) at index #%d", i);
+//          }
+//          else {
+//            const std::string id          = jsonSceneDescription->getAsString("id",          "<invalid id>");
+//            const std::string user        = jsonSceneDescription->getAsString("user",        "<invalid user>");
+//            const std::string name        = jsonSceneDescription->getAsString("name",        "<invalid name>");
+//            const std::string description = jsonSceneDescription->getAsString("description", "");
+//            const std::string iconURL     = jsonSceneDescription->getAsString("iconURL",     "<invalid iconURL>");
+//
+//            std::vector<std::string> tags;
+//            const JSONArray* jsonTags = jsonSceneDescription->getAsArray("tags");
+//            if (jsonTags == NULL) {
+//              ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (3) at index #%d", i);
+//            }
+//            else {
+//              const int tagsCount = jsonTags->size();
+//              for (int j = 0; j < tagsCount; j++) {
+//                const std::string tag = jsonTags->getAsString(j, "");
+//                if (tag.size() > 0) {
+//                  tags.push_back(tag);
+//                }
+//              }
+//            }
+//
+//            scenesDescriptions->push_back( new MapBooSceneDescription(id,
+//                                                                      user,
+//                                                                      name,
+//                                                                      description,
+//                                                                      iconURL,
+//                                                                      tags) );
+//
+//          }
+//        }
+//
+//        _listener->onDownload(scenesDescriptions);
+//        if (_autoDelete) {
+//          delete _listener;
+//        }
+//      }
+//
+//      delete jsonBaseObject;
+//    }
+//
+//    delete buffer;
+//  }
+//
+//  void onError(const URL& url) {
+//    _listener->onError();
+//    if (_autoDelete) {
+//      delete _listener;
+//    }
+//  }
+//
+//  void onCancel(const URL& url) {
+//    // do nothing
+//  }
+//
+//  void onCanceledDownload(const URL& url,
+//                          IByteBuffer* buffer,
+//                          bool expired) {
+//    // do nothing
+//  }
+//
+//};
 
 const URL MapBooBuilder::createScenesDescriptionsURL() const {
   const std::string serverPath = _serverURL.getPath();
@@ -827,8 +827,8 @@ void MapBooBuilder::setSceneUser(const std::string& user) {
   if (_sceneUser.compare(user) != 0) {
     _sceneUser = user;
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onUserChanged(_sceneUser);
+    if (_applicationListener != NULL) {
+      _applicationListener->onUserChanged(_sceneUser);
     }
   }
 }
@@ -837,8 +837,8 @@ void MapBooBuilder::setSceneName(const std::string& name) {
   if (_sceneName.compare(name) != 0) {
     _sceneName = name;
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onNameChanged(_sceneName);
+    if (_applicationListener != NULL) {
+      _applicationListener->onNameChanged(_sceneName);
     }
   }
 }
@@ -847,8 +847,8 @@ void MapBooBuilder::setSceneDescription(const std::string& description) {
   if (_sceneDescription.compare(description) != 0) {
     _sceneDescription = description;
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onDescriptionChanged(_sceneDescription);
+    if (_applicationListener != NULL) {
+      _applicationListener->onDescriptionChanged(_sceneDescription);
     }
   }
 }
@@ -862,39 +862,39 @@ void MapBooBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
       _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
     }
 
-    if (_sceneListener != NULL) {
-      _sceneListener->onBackgroundColorChanged(*_sceneBackgroundColor);
+    if (_applicationListener != NULL) {
+      _applicationListener->onBackgroundColorChanged(*_sceneBackgroundColor);
     }
   }
 }
 
 class MapBooBuilder_ChangeSceneIdTask : public GTask {
 private:
-  MapBooBuilder*      _builder;
-  const std::string _sceneId;
+  MapBooBuilder*    _builder;
+  const std::string _applicationId;
 
 public:
   MapBooBuilder_ChangeSceneIdTask(MapBooBuilder* builder,
-                                  const std::string& sceneId) :
+                                  const std::string& applicationId) :
   _builder(builder),
-  _sceneId(sceneId)
+  _applicationId(applicationId)
   {
   }
 
   void run(const G3MContext* context) {
-    _builder->rawChangeScene(_sceneId);
+    _builder->rawChangeScene(_applicationId);
   }
 };
 
-void MapBooBuilder::changeScene(const std::string& sceneId) {
-  if (sceneId.compare(_sceneId) != 0) {
-    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, sceneId),
+void MapBooBuilder::changeScene(const std::string& applicationId) {
+  if (applicationId.compare(_applicationId) != 0) {
+    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
                                              true);
   }
 }
 
-void MapBooBuilder::resetScene(const std::string& sceneId) {
-  _sceneId = sceneId;
+void MapBooBuilder::resetScene(const std::string& applicationId) {
+  _applicationId = applicationId;
 
   _sceneTimestamp = -1;
 
@@ -934,14 +934,14 @@ void MapBooBuilder::setSceneTubeOpened(bool open) {
   }
 }
 
-void MapBooBuilder::rawChangeScene(const std::string& sceneId) {
-  if (sceneId.compare(_sceneId) != 0) {
-    resetScene(sceneId);
+void MapBooBuilder::rawChangeScene(const std::string& applicationId) {
+  if (applicationId.compare(_applicationId) != 0) {
+    resetScene(applicationId);
     
     resetG3MWidget();
     
-    if (_sceneListener != NULL) {
-      _sceneListener->onSceneChanged(sceneId);
+    if (_applicationListener != NULL) {
+      _applicationListener->onSceneChanged(applicationId);
     }
     
     if (_sceneTubeWebSocket != NULL) {

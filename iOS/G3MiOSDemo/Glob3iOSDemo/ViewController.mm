@@ -232,32 +232,32 @@ Mesh* createSectorMesh(const Planet* planet,
 }
 
 
-class TestMapBooBuilderScenesDescriptionsListener  : public MapBooBuilderScenesDescriptionsListener {
-public:
-  void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) {
-    const int scenesCount = scenesDescriptions->size();
-    for (int i = 0; i < scenesCount; i++) {
-      MapBooSceneDescription* sceneDescription = scenesDescriptions->at(i);
-      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
-    }
-
-    for (int i = 0; i < scenesCount; i++) {
-      delete scenesDescriptions->at(i);
-    }
-
-    delete scenesDescriptions;
-  }
-
-  void onError() {
-    ILogger::instance()->logError("Error downloading ScenesDescriptions");
-  }
-
-};
+//class TestMapBooBuilderScenesDescriptionsListener  : public MapBooBuilderScenesDescriptionsListener {
+//public:
+//  void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) {
+//    const int scenesCount = scenesDescriptions->size();
+//    for (int i = 0; i < scenesCount; i++) {
+//      MapBooSceneDescription* sceneDescription = scenesDescriptions->at(i);
+//      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
+//    }
+//
+//    for (int i = 0; i < scenesCount; i++) {
+//      delete scenesDescriptions->at(i);
+//    }
+//
+//    delete scenesDescriptions;
+//  }
+//
+//  void onError() {
+//    ILogger::instance()->logError("Error downloading ScenesDescriptions");
+//  }
+//
+//};
 
 
 - (void) initWithMapBooBuilder
 {
-  MapBooSceneChangeListener* sceneListener = NULL;
+  MapBooApplicationChangeListener* applicationListener = NULL;
   const bool useWebSockets = true;
 
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
@@ -265,7 +265,7 @@ public:
                                        URL("ws://127.0.0.1:8888/tube", false),
                                        useWebSockets,
                                        "2gl2syurzilwq2noujq",
-                                       sceneListener);
+                                       applicationListener);
 
   //_g3mcBuilder->requestScenesDescriptions(new TestMapBooBuilderScenesDescriptionsListener(), true);
 
