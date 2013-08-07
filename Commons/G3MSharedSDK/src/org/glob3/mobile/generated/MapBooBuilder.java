@@ -549,7 +549,7 @@ public abstract class MapBooBuilder
   {
     final String serverPath = _serverURL.getPath();
   
-    return new URL(serverPath + "/scenes/" + _sceneId, false);
+    return new URL(serverPath + "/application/" + _sceneId, false);
   }
 
   /** Private to G3M, don't call it */
@@ -557,7 +557,7 @@ public abstract class MapBooBuilder
   {
     final String tubesPath = _tubesURL.getPath();
   
-    return new URL(tubesPath + "/scene/" + _sceneId, false);
+    return new URL(tubesPath + "/application/" + _sceneId, false);
   }
 
   /** Private to G3M, don't call it */
