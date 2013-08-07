@@ -382,10 +382,7 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHeight){
-
-  _viewportHeight = viewportHeight;
-  _viewportWidth = viewportWidth;
+void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL){
     const Vector3D pos( planet->toCartesian(_position) );
@@ -397,10 +394,6 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
 
     _vertices = vertex.create();
   }
-
-  _glState.clearGLFeatureGroup(NO_GROUP);
-//  _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight,
-//                                               viewportWidth, viewportHeight), false);
 
   _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
 
@@ -414,6 +407,16 @@ void Mark::createGLState(const Planet* planet, int viewportWidth, int viewportHe
                                               false, 0, 0,  //NO POLYGON OFFSET
                                               (float)1.0,          //LINE WIDTH
                                               false, (float)1.0),   //POINT SIZE
+                        false);
+
+  _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                             getBillboardTexCoords(),
+                                             2,
+                                             0,
+                                             false,
+                                             0,
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                             false, Vector2D::zero(), Vector2D::zero()),
                         false);
 }
 
@@ -434,7 +437,6 @@ void Mark::render(const G3MRenderContext* rc,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl) {
-//  const Planet* planet = rc->getPlanet();
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
@@ -465,25 +467,9 @@ void Mark::render(const G3MRenderContext* rc,
 
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
-
-          _glState.addGLFeature(new TextureGLFeature(_textureId,
-                                                     getBillboardTexCoords(),
-                                                     2,
-                                                     0,
-                                                     false,
-                                                     0,
-                                                     true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                                     false, Vector2D::zero(), Vector2D::zero()),
-                                false);
+          createGLState(rc->getPlanet());
         }
       } else{
-        if (rc->getCurrentCamera()->getWidth() != _viewportWidth ||
-            rc->getCurrentCamera()->getHeight() != _viewportHeight){
-          createGLState(rc->getPlanet(), rc->getCurrentCamera()->getWidth(), rc->getCurrentCamera()->getHeight());
-        }
-
-//        GL* gl = rc->getGL();
-
         GPUProgramManager& progManager = *rc->getGPUProgramManager();
 
         _glState.setParent(parentGLState); //Linking with parent
