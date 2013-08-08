@@ -31,7 +31,6 @@ package org.glob3.mobile.generated;
 //class PeriodicalTask;
 //class Layer;
 //class LayerSet;
-//class MapBooApplicationDescription;
 //class GPUProgramManager;
 //class JSONBaseObject;
 //class JSONObject;

@@ -1,16 +1,4 @@
 package org.glob3.mobile.generated; 
-//class MapBooBuilderApplicationsDescriptionsListener {
-//public:
-//  virtual ~MapBooBuilderApplicationsDescriptionsListener() {
-//
-//  }
-//
-//  virtual void onDownload(std::vector<MapBooApplicationDescription*>* ApplicationsDescriptions) = 0;
-//
-//  virtual void onError() = 0;
-//
-//};
-
 public class MapBoo_Scene
 {
   private final String _name;
@@ -28,7 +16,21 @@ public class MapBoo_Scene
      _backgroundColor = new Color(backgroundColor);
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
+  }
 
+  public final String getName()
+  {
+    return _name;
+  }
+
+  public final String getDescription()
+  {
+    return _description;
+  }
+
+  public final String getIcon()
+  {
+    return _icon;
   }
 
   public final Color getBackgroundColor()

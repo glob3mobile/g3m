@@ -17,12 +17,6 @@ public abstract class MapBooBuilder
   private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
   private int _currentScene;
 
-  //  Layer*      _applicationBaseLayer;
-  //  Layer*      _applicationOverlayLayer;
-  //  std::string _applicationUser;
-  //  Color*      _applicationBackgroundColor;
-
-
   private GL _gl;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
@@ -96,8 +90,6 @@ public abstract class MapBooBuilder
   
     return periodicalTasks;
   }
-
-  //  const URL createApplicationsDescriptionsURL() const;
 
   private void recreateLayerSet()
   {
@@ -297,7 +289,7 @@ public abstract class MapBooBuilder
     return _applicationScenes.get(_currentScene);
   }
 
-  private Color getBackgroundColor()
+  private Color getCurrentBackgroundColor()
   {
     final MapBoo_Scene scene = getCurrentScene();
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
@@ -340,10 +332,6 @@ public abstract class MapBooBuilder
   }
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
-  //_sceneBaseLayer(NULL),
-  //_sceneOverlayLayer(NULL),
-  //_sceneUser(""),
-  //_sceneBackgroundColor( Color::newFromRGBA(0, 0, 0, 1) ),
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -417,8 +405,7 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), getBackgroundColor(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
-  //                                 *_sceneBackgroundColor,
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), getCurrentBackgroundColor(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -448,129 +435,6 @@ public abstract class MapBooBuilder
   protected abstract GPUProgramManager createGPUProgramManager();
 
   /** Private to G3M, don't call it */
-
-  //class MapBooBuilder_ScenesDescriptionsBufferListener : public IBufferDownloadListener {
-  //private:
-  //  MapBooBuilderScenesDescriptionsListener* _listener;
-  //  const bool _autoDelete;
-  //
-  //public:
-  //  MapBooBuilder_ScenesDescriptionsBufferListener(MapBooBuilderScenesDescriptionsListener* listener,
-  //                                                 bool autoDelete) :
-  //  _listener(listener),
-  //  _autoDelete(autoDelete)
-  //  {
-  //
-  //  }
-  //
-  //
-  //  void onDownload(const URL& url,
-  //                  IByteBuffer* buffer,
-  //                  bool expired) {
-  //
-  //    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
-  //
-  //    if (jsonBaseObject == NULL) {
-  //      ILogger::instance()->logError("Can't parse ScenesDescriptionJSON from %s",
-  //                                    url.getPath().c_str());
-  //      onError(url);
-  //    }
-  //    else {
-  //      const JSONArray* jsonScenesDescriptions = jsonBaseObject->asArray();
-  //      if (jsonScenesDescriptions == NULL) {
-  //        ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (1)");
-  //        onError(url);
-  //      }
-  //      else {
-  //        std::vector<MapBooSceneDescription*>* scenesDescriptions = new std::vector<MapBooSceneDescription*>();
-  //
-  //        const int size = jsonScenesDescriptions->size();
-  //
-  //        for (int i = 0; i < size; i++) {
-  //          const JSONObject* jsonSceneDescription = jsonScenesDescriptions->getAsObject(i);
-  //          if (jsonSceneDescription == NULL) {
-  //            ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (2) at index #%d", i);
-  //          }
-  //          else {
-  //            const std::string id          = jsonSceneDescription->getAsString("id",          "<invalid id>");
-  //            const std::string user        = jsonSceneDescription->getAsString("user",        "<invalid user>");
-  //            const std::string name        = jsonSceneDescription->getAsString("name",        "<invalid name>");
-  //            const std::string description = jsonSceneDescription->getAsString("description", "");
-  //            const std::string iconURL     = jsonSceneDescription->getAsString("iconURL",     "<invalid iconURL>");
-  //
-  //            std::vector<std::string> tags;
-  //            const JSONArray* jsonTags = jsonSceneDescription->getAsArray("tags");
-  //            if (jsonTags == NULL) {
-  //              ILogger::instance()->logError("ScenesDescriptionJSON: invalid format (3) at index #%d", i);
-  //            }
-  //            else {
-  //              const int tagsCount = jsonTags->size();
-  //              for (int j = 0; j < tagsCount; j++) {
-  //                const std::string tag = jsonTags->getAsString(j, "");
-  //                if (tag.size() > 0) {
-  //                  tags.push_back(tag);
-  //                }
-  //              }
-  //            }
-  //
-  //            scenesDescriptions->push_back( new MapBooSceneDescription(id,
-  //                                                                      user,
-  //                                                                      name,
-  //                                                                      description,
-  //                                                                      iconURL,
-  //                                                                      tags) );
-  //
-  //          }
-  //        }
-  //
-  //        _listener->onDownload(scenesDescriptions);
-  //        if (_autoDelete) {
-  //          delete _listener;
-  //        }
-  //      }
-  //
-  //      delete jsonBaseObject;
-  //    }
-  //
-  //    delete buffer;
-  //  }
-  //
-  //  void onError(const URL& url) {
-  //    _listener->onError();
-  //    if (_autoDelete) {
-  //      delete _listener;
-  //    }
-  //  }
-  //
-  //  void onCancel(const URL& url) {
-  //    // do nothing
-  //  }
-  //
-  //  void onCanceledDownload(const URL& url,
-  //                          IByteBuffer* buffer,
-  //                          bool expired) {
-  //    // do nothing
-  //  }
-  //
-  //};
-  
-  //const URL MapBooBuilder::createApplicationsDescriptionsURL() const {
-  //  const std::string serverPath = _serverURL.getPath();
-  //
-  //  return URL(serverPath + "/scenes/", false);
-  //}
-  
-  
-  //void MapBooBuilder::requestScenesDescriptions(MapBooBuilderScenesDescriptionsListener* listener,
-  //                                              bool autoDelete) {
-  //  getDownloader()->requestBuffer(createScenesDescriptionsURL(),
-  //                                 DownloadPriority::HIGHEST,
-  //                                 TimeInterval::zero(),
-  //                                 true,
-  //                                 new MapBooBuilder_ScenesDescriptionsBufferListener(listener, autoDelete),
-  //                                 true);
-  //}
-  
   public final int getApplicationTimestamp()
   {
     return _applicationTimestamp;
@@ -582,27 +446,7 @@ public abstract class MapBooBuilder
     _applicationTimestamp = timestamp;
   }
 
-//  /** Private to G3M, don't call it */
-//  void setApplicationBaseLayer(Layer* baseLayer);
-//
-//  /** Private to G3M, don't call it */
-//  void setApplicationOverlayLayer(Layer* overlayLayer);
-//
-//  /** Private to G3M, don't call it */
-//  void setApplicationUser(const std::string& user);
-
   /** Private to G3M, don't call it */
-  //
-  //void MapBooBuilder::setApplicationUser(const std::string& user) {
-  //  if (_applicationUser.compare(user) != 0) {
-  //    _applicationUser = user;
-  //
-  //    if (_applicationListener != NULL) {
-  //      _applicationListener->onUserChanged(_sceneUser);
-  //    }
-  //  }
-  //}
-  
   public final void setApplicationName(String name)
   {
     if (_applicationName.compareTo(name) != 0)
@@ -653,50 +497,15 @@ public abstract class MapBooBuilder
     }
   }
 
-//  /** Private to G3M, don't call it */
-//  void setApplicationBackgroundColor(const Color& backgroundColor);
-
   /** Private to G3M, don't call it */
   public final URL createPollingApplicationDescriptionURL()
   {
-    final String tubesPath = _tubesURL.getPath();
+    final String tubesPath = _serverURL.getPath();
   
     return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
   }
 
   /** Private to G3M, don't call it */
-
-  //void MapBooBuilder::setSceneBaseLayer(Layer* baseLayer) {
-  //  if (baseLayer == NULL) {
-  //    ILogger::instance()->logError("Base Layer can't be NULL");
-  //    return;
-  //  }
-  //
-  //  if (_sceneBaseLayer != baseLayer) {
-  //    delete _sceneBaseLayer;
-  //    _sceneBaseLayer = baseLayer;
-  //
-  //    recreateLayerSet();
-  //
-  //    if (_applicationListener != NULL) {
-  //      _applicationListener->onBaseLayerChanged(_sceneBaseLayer);
-  //    }
-  //  }
-  //}
-  //
-  //void MapBooBuilder::setSceneOverlayLayer(Layer* overlayLayer) {
-  //  if (_sceneOverlayLayer != overlayLayer) {
-  //    delete _sceneOverlayLayer;
-  //    _sceneOverlayLayer = overlayLayer;
-  //
-  //    recreateLayerSet();
-  //
-  //    if (_applicationListener != NULL) {
-  //      _applicationListener->onOverlayLayerChanged(_sceneOverlayLayer);
-  //    }
-  //  }
-  //}
-  
   public final URL createApplicationTubeURL()
   {
     final String tubesPath = _tubesURL.getPath();
@@ -706,10 +515,6 @@ public abstract class MapBooBuilder
 
 //  /** Private to G3M, don't call it */
 //  void rawChangeApplication(const std::string& applicationId);
-
-//  /** Private to G3M, don't call it */
-//  void requestApplicationsDescriptions(MapBooBuilderApplicationsDescriptionsListener* listener,
-//                                       bool autoDelete = true);
 
   /** Private to G3M, don't call it */
   public final void parseApplicationDescription(String json, URL url)
@@ -766,7 +571,6 @@ public abstract class MapBooBuilder
               setApplicationScenes(scenes);
             }
   
-  //          scenes
   //          warnings
   
             setApplicationTimestamp(timestamp);
@@ -794,21 +598,6 @@ public abstract class MapBooBuilder
   }
 
 
-  //void MapBooBuilder::setSceneBackgroundColor(const Color& backgroundColor) {
-  //  if (!_sceneBackgroundColor->isEqualsTo(backgroundColor)) {
-  //    delete _sceneBackgroundColor;
-  //    _sceneBackgroundColor = new Color(backgroundColor);
-  //
-  //    if (_g3mWidget != NULL) {
-  //      _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
-  //    }
-  //
-  //    if (_applicationListener != NULL) {
-  //      _applicationListener->onBackgroundColorChanged(*_sceneBackgroundColor);
-  //    }
-  //  }
-  //}
-  
   //class MapBooBuilder_ChangeSceneIdTask : public GTask {
   //private:
   //  MapBooBuilder*    _builder;
