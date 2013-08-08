@@ -81,6 +81,18 @@ double Vector3D::maxAxis() const {
   }
 }
 
+double Vector3D::minAxis() const {
+  if (_x <= _y && _x <= _z) {
+    return _x;
+  }
+  else if (_y <= _z) {
+    return _y;
+  }
+  else {
+    return _z;
+  }
+}
+
 double Vector3D::axisAverage() const {
   return ((_x + _y + _z) / 3);
 }

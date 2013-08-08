@@ -564,3 +564,10 @@ Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
 }
 
 
+double EllipsoidalPlanet::distanceToHorizon(const Vector3D& position) const
+{
+  double R = getRadii().minAxis();
+  double D = position.length();
+  return sqrt(D*D - R*R);
+}
+

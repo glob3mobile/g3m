@@ -98,6 +98,8 @@ public:
   virtual Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
                                         const Vector3D& tapRay) const = 0;
+  
+  virtual double distanceToHorizon(const Vector3D& position) const = 0;
 
 };
 

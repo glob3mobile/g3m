@@ -476,3 +476,12 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
   // create effect
   return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
 }
+
+
+double SphericalPlanet::distanceToHorizon(const Vector3D& position) const
+{
+  double R = _sphere._radius;
+  double D = position.length();
+  return sqrt(D*D - R*R);
+}
+

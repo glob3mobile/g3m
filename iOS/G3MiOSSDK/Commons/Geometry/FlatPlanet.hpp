@@ -145,6 +145,8 @@ public:
                                 const Vector3D& centerRay,
                                 const Vector3D& tapRay) const;
 
+  double distanceToHorizon(const Vector3D& position) const;
+
 
 };
 
