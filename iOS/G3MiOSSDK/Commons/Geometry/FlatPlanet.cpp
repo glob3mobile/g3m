@@ -263,3 +263,15 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
                                         toGeodetic3D(origin).height()*0.6);
 }
 
+
+double FlatPlanet::distanceToHorizon(const Vector3D& position) const
+{
+  double xCorner = 0.5 * _size.x();
+  if (position.x()>0) xCorner *= -1;
+  double yCorner = 0.5 * _size.y();
+  if (position.y()>0) yCorner *= -1;
+  const Vector3D fartherCorner(xCorner, yCorner, 0.0);
+  return position.sub(fartherCorner).length();
+}
+
+
