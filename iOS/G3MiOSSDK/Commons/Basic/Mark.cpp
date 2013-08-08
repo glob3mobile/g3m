@@ -385,7 +385,8 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet) {
+void Mark::createGLState(const Planet* planet){
+
   if (_vertices == NULL) {
     const Vector3D pos( planet->toCartesian(_position) );
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
@@ -472,8 +473,7 @@ void Mark::render(const G3MRenderContext* rc,
           _textureImage = NULL;
           createGLState(rc->getPlanet());
         }
-      }
-      else {
+      } else{
         _glState.setParent(parentGLState); //Linking with parent
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),

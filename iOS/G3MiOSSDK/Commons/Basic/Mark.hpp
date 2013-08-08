@@ -130,7 +130,6 @@ private:
   static IFloatBuffer* _billboardTexCoord;
   
   GLState _glState;
-  
   void createGLState(const Planet* planet);
 
   IFloatBuffer* getBillboardTexCoords();

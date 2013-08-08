@@ -119,6 +119,8 @@
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 
+#import <G3MiOSSDK/GenericQuadTree.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -215,6 +217,8 @@ Mesh* createSectorMesh(const Planet* planet,
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+
+  GenericQuadTree_TESTER::run(1000);
 
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
