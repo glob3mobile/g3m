@@ -38,11 +38,17 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   
     if (cameraHeight > maxHeight)
     {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      maxHeight);*/
     }
     else if (cameraHeight < minHeight)
     {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      minHeight);*/
     }
   
   }

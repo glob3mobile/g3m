@@ -251,6 +251,21 @@ public class Vector3D
       return _z;
     }
   }
+  public final double minAxis()
+  {
+    if (_x <= _y && _x <= _z)
+    {
+      return _x;
+    }
+    else if (_y <= _z)
+    {
+      return _y;
+    }
+    else
+    {
+      return _z;
+    }
+  }
 
   public final double axisAverage()
   {

@@ -1,12 +1,34 @@
 package org.glob3.mobile.generated; 
+//
+//  CameraSingleDragHandler.cpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 28/07/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//
+
+
+//
+//  CameraSingleDragHandler.hpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 28/07/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//
+
+
+
+
+
+
 public class CameraSingleDragHandler extends CameraEventHandler
 {
 
   public CameraSingleDragHandler(boolean useInertia)
+//  _initialPoint(0,0,0),
 //  _initialPixel(0,0),
   {
      _camera0 = new Camera(new Camera(0, 0));
-     _initialPoint = new MutableVector3D(0,0,0);
      _useInertia = useInertia;
   }
 
@@ -72,97 +94,55 @@ public class CameraSingleDragHandler extends CameraEventHandler
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
     cameraContext.setCurrentGesture(Gesture.Drag);
-    _axis = MutableVector3D.nan();
-    _lastRadians = _radiansStep = 0.0;
   
     // dragging
     final Vector2I pixel = touchEvent.getTouch(0).getPos();
-    //_initialPixel = pixel.asMutableVector2I();
-    _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-  
-  /*
-    // TEMP AGUSTIN TO TEST OBJECT ELLIPSOIDSHAPE
-    if (pixel._x<50) {
-      Geodetic3D center(Angle::fromDegrees(39.78), Angle::fromDegrees(-122), 0);
-      camera->setPointOfView(center, 1e6, Angle::fromDegrees(180), Angle::fromDegrees(90));
-    }*/
-  
-  
-  
-    //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+    eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), _camera0.pixel2Ray(pixel));
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
     if (cameraContext.getCurrentGesture()!=Gesture.Drag)
-    {
-      return;
-    }
+       return;
   
-    if (_initialPoint.isNan())
-    {
-      return;
-    }
-  
+    // compute transformation matrix
+    final Planet planet = eventContext.getPlanet();
     final Vector2I pixel = touchEvent.getTouch(0).getPos();
+    MutableMatrix44D matrix = planet.singleDrag(_camera0.pixel2Ray(pixel));
+    if (!matrix.isValid())
+       return;
   
-  //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
-  
-    MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-    if (finalPoint.isNan())
-    {
-      //INVALID FINAL POINT
-      //printf ("--invalid final point in drag!!\n");
-      Vector3D ray = _camera0.pixel2Ray(pixel);
-      Vector3D pos = _camera0.getCartesianPosition();
-      finalPoint = eventContext.getPlanet().closestPointToSphere(pos, ray).asMutableVector3D();
-    }
-  
-    // make drag
+    // apply transformation
     Camera camera = cameraContext.getNextCamera();
     camera.copyFrom(_camera0);
-    camera.dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
-  
-  
-    // save drag parameters
-    _axis = _initialPoint.cross(finalPoint);
-  
-    final double radians = - IMathUtils.instance().asin(_axis.length()/_initialPoint.length()/finalPoint.length());
-    _radiansStep = radians - _lastRadians;
-    _lastRadians = radians;
+    camera.applyTransform(matrix);
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+    final Planet planet = eventContext.getPlanet();
+  
+    // test if animation is needed
     if (_useInertia)
     {
-      // test if animation is needed
       final Touch touch = touchEvent.getTouch(0);
       Vector2I currPixel = touch.getPos();
       Vector2I prevPixel = touch.getPrevPos();
       double desp = currPixel.sub(prevPixel).length();
   
-      if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2)
+      if (cameraContext.getCurrentGesture() == Gesture.Drag && desp>2)
       {
-        // start inertial effect
-        Effect effect = new SingleDragEffect(_axis.asVector3D(), Angle.fromRadians(_radiansStep));
-  
-        EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
-        eventContext.getEffectsScheduler().startEffect(effect, target);
+        Effect effect = planet.createEffectFromLastSingleDrag();
+        if (effect != null)
+        {
+          EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
+          eventContext.getEffectsScheduler().startEffect(effect, target);
+        }
       }
     }
   
     // update gesture
     cameraContext.setCurrentGesture(Gesture.None);
-    //_initialPixel = MutableVector2I::zero();
   }
 
   private Camera _camera0 ; //Initial Camera saved on Down event
-
-  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  //MutableVector2I _initialPixel;  //Initial pixel at start of gesture
-
-  private MutableVector3D _axis = new MutableVector3D();
-  private double _lastRadians;
-  private double _radiansStep;
-
 }
