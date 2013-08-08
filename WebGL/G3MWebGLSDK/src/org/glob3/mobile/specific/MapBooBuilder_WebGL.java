@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.MapBooApplicationChangeListener;
 import org.glob3.mobile.generated.MapBooBuilder;
-import org.glob3.mobile.generated.MapBooSceneChangeListener;
 import org.glob3.mobile.generated.URL;
 
 
@@ -25,8 +25,8 @@ public class MapBooBuilder_WebGL
                               final URL tubesURL,
                               final boolean useWebSockets,
                               final String sceneId,
-                              final MapBooSceneChangeListener sceneListener) {
-      super(serverURL, tubesURL, useWebSockets, sceneId, sceneListener);
+                              final MapBooApplicationChangeListener applicationListener) {
+      super(serverURL, tubesURL, useWebSockets, sceneId, applicationListener);
       _nativeWidget = new G3MWidget_WebGL();
    }
 
