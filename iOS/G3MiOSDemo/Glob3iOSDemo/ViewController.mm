@@ -228,9 +228,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initDefaultWithBuilder];
 
   // initialize a customized widget by using a buider
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
-//  [self initWithMapBooBuilder];
+  [self initWithMapBooBuilder];
 
   [[self G3MWidget] startAnimation];
 }
