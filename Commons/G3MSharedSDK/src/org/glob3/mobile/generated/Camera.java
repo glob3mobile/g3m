@@ -291,9 +291,14 @@ public class Camera
   }
   public final void moveForward(double d)
   {
-    final Vector3D view = _center.sub(_position).normalized().asVector3D();
+    final Vector3D view = getViewDirection().normalized();
     applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
   }
+  public final void translateCamera(Vector3D desp)
+  {
+    applyTransform(MutableMatrix44D.createTranslationMatrix(desp));
+  }
+
 
   //Pivot
   public final void pivotOnCenter(Angle a)
@@ -367,7 +372,16 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-    setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
+    if (_planet.isFlat())
+    {
+      setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
+      setUp(new MutableVector3D(0, 1, 0));
+    }
+    else
+    {
+      setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
+      setUp(new MutableVector3D(0, 0, 1));
+    }
     _dirtyFlags.setAll(true);
   }
 
@@ -513,6 +527,42 @@ public class Camera
     return DefineConstants.PI * rScreen * rScreen;
   }
 
+
+  //const Vector2I Camera::point2Pixel(const Vector3D& point) const {
+  //  const Vector2D p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( (float) p._x ),
+  ////                  mu->round( (float) ((double) _height - p._y) ) );
+  ////
+  //  return Vector2I((int) p._x,
+  //                  (int) (_height - p._y) );
+  //}
+  
+  //const Vector2I Camera::point2Pixel(const Vector3F& point) const {
+  //  const Vector2F p = getModelViewMatrix().project(point,
+  //                                                  0, 0, _width, _height);
+  //
+  ////  const IMathUtils* mu = IMathUtils::instance();
+  ////
+  ////  return Vector2I(mu->round( p._x ),
+  ////                  mu->round( (float) _height - p._y ) );
+  //  return Vector2I((int) p._x ,
+  //                  (int) (_height - p._y ) );
+  //}
+  
+  public final void applyTransform(MutableMatrix44D M)
+  {
+    setCartesianPosition(_position.transformedBy(M, 1.0));
+    setCenter(_center.transformedBy(M, 1.0));
+  
+    setUp(_up.transformedBy(M, 0.0));
+  
+    //_dirtyFlags.setAll(true);
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
@@ -563,50 +613,13 @@ public class Camera
   private CameraEffectTarget _camEffectTarget;
 
 
-  //const Vector2I Camera::point2Pixel(const Vector3D& point) const {
-  //  const Vector2D p = getModelViewMatrix().project(point,
-  //                                                  0, 0, _width, _height);
-  //
-  ////  const IMathUtils* mu = IMathUtils::instance();
-  ////
-  ////  return Vector2I(mu->round( (float) p._x ),
-  ////                  mu->round( (float) ((double) _height - p._y) ) );
-  ////
-  //  return Vector2I((int) p._x,
-  //                  (int) (_height - p._y) );
-  //}
-  
-  //const Vector2I Camera::point2Pixel(const Vector3F& point) const {
-  //  const Vector2F p = getModelViewMatrix().project(point,
-  //                                                  0, 0, _width, _height);
-  //
-  ////  const IMathUtils* mu = IMathUtils::instance();
-  ////
-  ////  return Vector2I(mu->round( p._x ),
-  ////                  mu->round( (float) _height - p._y ) );
-  //  return Vector2I((int) p._x ,
-  //                  (int) (_height - p._y ) );
-  //}
-  
-  private void applyTransform(MutableMatrix44D M)
-  {
-    setCartesianPosition(_position.transformedBy(M, 1.0));
-    setCenter(_center.transformedBy(M, 1.0));
-  
-    setUp(_up.transformedBy(M, 0.0));
-  
-    //_dirtyFlags.setAll(true);
-  }
-
-
   //void Camera::setPosition(const Geodetic3D& g3d) {
   //  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
   //}
   
   private Vector3D centerOfViewOnPlanet()
   {
-    final Vector3D ray = _center.sub(_position).asVector3D();
-    return _planet.closestIntersection(_position.asVector3D(), ray);
+    return _planet.closestIntersection(_position.asVector3D(), getViewDirection());
   }
 
   private void setCenter(MutableVector3D v)
@@ -751,12 +764,14 @@ public class Camera
     printf ("ratio z = %f\n", zfar/znear);
      */
   
-    double zFar = 10000 * zNear;
-    final double distance2ToPlanetCenter = _position.squaredLength();
-    if ((zFar * zFar) > distance2ToPlanetCenter)
-    {
-      zFar = IMathUtils.instance().sqrt(distance2ToPlanetCenter);
-    }
+    /*
+     double zFar = 10000 * zNear;
+    const double distance2ToPlanetCenter = _position.squaredLength();
+    if ((zFar * zFar) > distance2ToPlanetCenter) {
+      zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter) * 1.001;
+    }*/
+  
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
   
     final double goalRatio = 1000;
     final double ratio = zFar / zNear;

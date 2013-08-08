@@ -141,6 +141,8 @@ public class G3MWidget
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
   
+    int agustin_todo_planet_onCameraChange = ;
+  
   
     //  _nextCamera->forceMatrixCreation();
     //
