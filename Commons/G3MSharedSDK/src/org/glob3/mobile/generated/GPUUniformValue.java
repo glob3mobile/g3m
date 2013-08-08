@@ -53,7 +53,7 @@ public abstract class GPUUniformValue extends RCObject
   //    _uniform = u;
   //  }
   //
-  //  void unLinkToGPUUniform(){
+  //  void unLinkToGPUUniform() {
   //    _uniform = NULL;
   //  }
 
@@ -67,7 +67,7 @@ public abstract class GPUUniformValue extends RCObject
 
   //  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
   //    GPUUniform* u = prog->getGPUUniform(key);
-  //    if (u == NULL){
+  //    if (u == NULL) {
   //      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
   //      return false;
   //    } else{

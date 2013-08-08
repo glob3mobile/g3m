@@ -1,5 +1,5 @@
 //
-//  GPUVariableValueSet.h
+//  GPUVariableValueSet.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__GPUVariableSet__
 #define __G3MiOSSDK__GPUVariableSet__
-
-#include <iostream>
 
 #include "GPUUniform.hpp"
 #include "GPUAttribute.hpp"
@@ -30,7 +28,7 @@ public:
   _highestAttributeKey(0),
   _highestUniformKey(0),
   _uniformsCode(0),
-  _attributeCode(0){
+  _attributeCode(0) {
     for (int i = 0; i < 32; i++) {
       _uniformValues[i] = NULL;
       _attributeValues[i] = NULL;
@@ -38,7 +36,7 @@ public:
   }
   ~GPUVariableValueSet();
 
-  void addUniformValue(GPUUniformKey key, GPUUniformValue* v, bool mustRetain){
+  void addUniformValue(GPUUniformKey key, GPUUniformValue* v, bool mustRetain) {
 #ifdef C_CODE
     const int index = key;
 #endif
@@ -47,15 +45,15 @@ public:
 #endif
 
     _uniformValues[index] = v;
-    if (mustRetain){
+    if (mustRetain) {
     v->_retain();
     }
-    if (index > _highestUniformKey){
+    if (index > _highestUniformKey) {
       _highestUniformKey = index;
     }
   }
 
-  void addAttributeValue(GPUAttributeKey key, GPUAttributeValue* v, bool mustRetain){
+  void addAttributeValue(GPUAttributeKey key, GPUAttributeValue* v, bool mustRetain) {
 #ifdef C_CODE
     const int index = key;
 #endif
@@ -63,15 +61,15 @@ public:
     final int index = key.getValue();
 #endif
     _attributeValues[index] = v;
-    if (mustRetain){
+    if (mustRetain) {
       v->_retain();
     }
-    if (index > _highestAttributeKey){
+    if (index > _highestAttributeKey) {
       _highestAttributeKey = index;
     }
   }
 
-//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
+//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v) {
 //#ifdef C_CODE
 //    const int index = key;
 //#endif
@@ -79,12 +77,12 @@ public:
 //    final int index = key.getValue();
 //#endif
 //    _attributeValues[key] = v;
-//    if (key > _highestAttributeKey){
+//    if (key > _highestAttributeKey) {
 //      _highestAttributeKey = key;
 //    }
 //  }
 //
-//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v){
+//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v) {
 //#ifdef C_CODE
 //    const int index = key;
 //#endif
@@ -92,7 +90,7 @@ public:
 //    final int index = key.getValue();
 //#endif
 //    _uniformValues[key] = v;
-//    if (key > _highestUniformKey){
+//    if (key > _highestUniformKey) {
 //      _highestUniformKey = key;
 //    }
 //  }
@@ -115,4 +113,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__GPUVariableSet__) */
+#endif

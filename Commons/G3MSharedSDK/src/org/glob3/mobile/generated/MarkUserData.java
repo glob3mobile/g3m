@@ -25,6 +25,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 
+
+
 public class MarkUserData
 {
   public void dispose()

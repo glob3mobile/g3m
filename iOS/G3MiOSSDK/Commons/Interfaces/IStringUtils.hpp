@@ -84,7 +84,7 @@ public:
     const std::string right = substring(originalString, endIndex);
     const std::string result = left + replaceWith + right;
     startIndex = indexOf(result, toReplace);
-    if (startIndex != -1){
+    if (startIndex != -1) {
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }

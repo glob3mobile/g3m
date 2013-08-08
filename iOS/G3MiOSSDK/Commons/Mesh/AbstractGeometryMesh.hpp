@@ -64,4 +64,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__AbstractGeometryMesh__) */
+#endif

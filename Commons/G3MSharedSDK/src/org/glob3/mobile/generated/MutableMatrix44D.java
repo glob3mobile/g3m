@@ -325,7 +325,7 @@ public class MutableMatrix44D
 
 
   //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
-  //  if (_columnMajorFloatBuffer == NULL){
+  //  if (_columnMajorFloatBuffer == NULL) {
   //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
   //                                                                      (float) _m00,
   //                                                                      (float) _m10,

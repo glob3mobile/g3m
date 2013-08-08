@@ -28,7 +28,7 @@
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
-#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
 #import <G3MiOSSDK/TrailsRenderer.hpp>
 #import <G3MiOSSDK/Mark.hpp>
@@ -100,8 +100,8 @@
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
-#import <G3MiOSSDK/G3MCBuilder_iOS.hpp>
-#import <G3MiOSSDK/G3MCSceneDescription.hpp>
+#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
+#import <G3MiOSSDK/MapBooSceneDescription.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 
 #import <G3MiOSSDK/TileRasterizer.hpp>
@@ -225,16 +225,19 @@ Mesh* createSectorMesh(const Planet* planet,
 
   // initialize a customized widget by using a buider
   [self initCustomizedWithBuilder];
+
+//  [self initWithMapBooBuilder];
+
   [[self G3MWidget] startAnimation];
 }
 
 
-class TestG3MCBuilderScenesDescriptionsListener  : public G3MCBuilderScenesDescriptionsListener {
+class TestMapBooBuilderScenesDescriptionsListener  : public MapBooBuilderScenesDescriptionsListener {
 public:
-  void onDownload(std::vector<G3MCSceneDescription*>* scenesDescriptions) {
+  void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) {
     const int scenesCount = scenesDescriptions->size();
     for (int i = 0; i < scenesCount; i++) {
-      G3MCSceneDescription* sceneDescription = scenesDescriptions->at(i);
+      MapBooSceneDescription* sceneDescription = scenesDescriptions->at(i);
       ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
     }
 
@@ -252,19 +255,19 @@ public:
 };
 
 
-- (void) initWithG3MCBuilder
+- (void) initWithMapBooBuilder
 {
-  G3MCSceneChangeListener* sceneListener = NULL;
+  MapBooSceneChangeListener* sceneListener = NULL;
   const bool useWebSockets = true;
 
-  _g3mcBuilder =  new G3MCBuilder_iOS([self G3MWidget],
-                                      URL("http://192.168.0.103:8080/g3mc-server", false),
-                                      URL("ws://192.168.0.103:8888/tube", false),
-                                      useWebSockets,
-                                      "2g59wh610g6c1kmkt0l",
-                                      sceneListener);
+  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
+                                       URL("http://127.0.0.1:8080/g3mc-server", false),
+                                       URL("ws://127.0.0.1:8888/tube", false),
+                                       useWebSockets,
+                                       "2gl2syurzilwq2noujq",
+                                       sceneListener);
 
-  //_g3mcBuilder->requestScenesDescriptions(new TestG3MCBuilderScenesDescriptionsListener(), true);
+  //_g3mcBuilder->requestScenesDescriptions(new TestMapBooBuilderScenesDescriptionsListener(), true);
 
   _g3mcBuilder->initializeWidget();
 }
@@ -285,9 +288,9 @@ public:
 //
 //  CompositeRenderer* mainRenderer = new CompositeRenderer();
 //
-//  TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
+//  PlanetRenderer* planetRenderer = [self createPlanetRenderer: [self createPlanetRendererParameters]
 //                                               layerSet: [self createLayerSet]];
-//  mainRenderer->addRenderer(tileRenderer);
+//  mainRenderer->addRenderer(planetRenderer);
 //
 //  MarksRenderer* marksRenderer = [self createMarksRenderer];
 //  mainRenderer->addRenderer(marksRenderer);
@@ -334,13 +337,11 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  int _DGD_working_on_terrain;
-
   float verticalExaggeration = 6.0f;
-  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   //ElevationDataProvider* elevationDataProvider = NULL;
-  //builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
   //  ElevationDataProvider* elevationDataProviderACorunia;
@@ -349,23 +350,23 @@ public:
   //                                                                                          43.8317114006282011, -7.6284544428640784),
   //                                                                      Vector2I(968, 747));
   //
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
   //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
   //                                                           Sector::fullSphere());
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://igosoftware.dyndns.org:8080/geoserver/wms", false),
   //                                                           "igo:corunia",
   //                                                           Sector::fromDegrees(42.4785417976085213, -9.3819593635107914,
   //                                                                               43.8317114006282011, -7.6284544428641370));
-  //  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
   /*
    //  ElevationDataProvider* elevationDataProvider;
@@ -450,7 +451,7 @@ public:
 
    compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
 
-   //  builder.getTileRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+   //  builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
    */
 }
 
@@ -508,8 +509,8 @@ public:
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
-  //builder.getTileRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
-  builder.getTileRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+  //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
 
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
@@ -541,22 +542,22 @@ public:
   if (useElevations)
     [self initializeElevationDataProvider: builder];
 
-  builder.getTileRendererBuilder()->setLayerSet(layerSet);
-  builder.getTileRendererBuilder()->setTileRendererParameters([self createTileRenderParameters]);
-  builder.getTileRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
+  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                              TimeInterval::fromSeconds(3));
 
-  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  //  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
 
   //  // Busy quad renderer
-  //  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
-  //                                    encoding: [NSString defaultCStringEncoding]];
-  //  UIImage* image = [UIImage imageNamed:fn];
-  //  IImage* busyImg =  new Image_iOS(image, NULL);
-  //  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
-  //                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
-  //                                                Vector2D(250,194),
-  //                                                false);
+  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
+                                    encoding: [NSString defaultCStringEncoding]];
+  UIImage* image = [UIImage imageNamed:fn];
+  IImage* busyImg =  new Image_iOS(image, NULL);
+  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
+                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
+                                                Vector2D(250,194),
+                                                true);
 
   builder.setBusyRenderer(busyRenderer);
 
@@ -1155,35 +1156,30 @@ public:
   return layerSet;
 }
 
-- (TilesRenderParameters*) createTileRenderParameters
+- (TilesRenderParameters*) createPlanetRendererParameters
 {
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
 
-  const bool renderIncompletePlanet = false;
-  const URL incompletePlanetTexureURL("", false);
-
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality,
-                                   renderIncompletePlanet,
-                                   incompletePlanetTexureURL);
+                                   incrementalTileQuality);
 }
 
-- (TileRenderer*) createTileRenderer: (TilesRenderParameters*) parameters
+- (PlanetRenderer*) createPlanetRenderer: (TilesRenderParameters*) parameters
                             layerSet: (LayerSet*) layerSet
 {
-  TileRendererBuilder* trBuilder = new TileRendererBuilder();
+  PlanetRendererBuilder* trBuilder = new PlanetRendererBuilder();
   trBuilder->setShowStatistics(false);
-  trBuilder->setTileRendererParameters(parameters);
+  trBuilder->setPlanetRendererParameters(parameters);
   trBuilder->setLayerSet(layerSet);
 
-  TileRenderer* tileRenderer = trBuilder->create();
+  PlanetRenderer* planetRenderer = trBuilder->create();
 
-  return tileRenderer;
+  return planetRenderer;
 }
 
 - (MarksRenderer*) createMarksRenderer
@@ -1407,11 +1403,11 @@ public:
     ShapesRenderer* _sr;
   public:
 
-    QuadListener(ShapesRenderer* sr):_sr(sr){
+    QuadListener(ShapesRenderer* sr):_sr(sr) {
 
     }
 
-    void imageCreated(IImage* image){
+    void imageCreated(IImage* image) {
 
 
       Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
@@ -1483,6 +1479,16 @@ private:
 
   GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
+
+//    std::string name = properties->getAsString("name", "");
+//    if (name.compare("Russia") == 0) {
+//      int _XXX;
+//      printf("break point on me\n");
+//    }
+//    if (name.compare("Antarctica") == 0) {
+//      int _XXX;
+//      printf("break point on me\n");
+//    }
 
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
 
@@ -1602,8 +1608,6 @@ public:
 
     }
 
-    int _DGD_AtWork;
-
     return symbols;
   }
 
@@ -1614,7 +1618,7 @@ public:
     symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
                                                    createPolygonLineRasterStyle(geometry),
                                                    createPolygonSurfaceRasterStyle(geometry)) );
-
+    
     return symbols;
   }
 
@@ -1749,8 +1753,6 @@ public:
     //    //    const Vector2I subResolution(512, 512);
     //    //    const Vector2I subResolution(251*2, 254*2);
     //    const Vector2I subResolution(251*2, 254*2);
-
-    int _DGD_working_on_terrain;
 
     _meshRenderer->addMesh( createSectorMesh(planet,
                                              32,
@@ -2018,8 +2020,6 @@ public:
       canvas->setLineColor( Color::fromRGBA(0, 0, 0, 0.9) );
       canvas->fillAndStrokeRoundedRectangle(128, 16, 64, 64, 8);
 
-      int _DGD_working_on_Canvas;
-
       canvas->setFillColor( Color::white() );
       canvas->setShadow(Color::black(), 5, 1, -1);
       canvas->fillText(text,
@@ -2036,37 +2036,6 @@ public:
                           true);
 
       delete canvas;
-    }
-
-    void testWebSocket(const G3MContext* context) {
-
-      class WSListener : public IWebSocketListener {
-        void onOpen(IWebSocket* ws) {
-
-        }
-
-        void onError(IWebSocket* ws,
-                     const std::string& error) {
-
-        }
-
-        void onMesssage(IWebSocket* ws,
-                        const std::string& message) {
-
-        }
-
-        void onClose(IWebSocket* ws) {
-
-        }
-
-      };
-
-      const URL wsURL("ws://127.0.0.1:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
-      context->getFactory()->createWebSocket(wsURL,
-                                             new WSListener(),
-                                             true,
-                                             true);
-
     }
 
     void run(const G3MContext* context) {

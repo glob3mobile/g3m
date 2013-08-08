@@ -61,7 +61,7 @@ public:
   //  _attribute(NULL)
   {}
 
-//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized){
+//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized) {
 //    _enabled = enabled;
 //    _type = type;
 //    _attributeSize = attributeSize;
@@ -79,7 +79,7 @@ public:
   bool getNormalized() const { return _normalized;}
   bool getEnabled() const { return _enabled;}
   //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
-  virtual ~GPUAttributeValue(){}
+  virtual ~GPUAttributeValue() {}
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
 //  virtual GPUAttributeValue* shallowCopy() const = 0;
@@ -90,7 +90,7 @@ public:
   //    _attribute = a;
   //  }
   //
-  //  void unLinkToGPUAttribute(){
+  //  void unLinkToGPUAttribute() {
   //    _attribute = NULL;
   //  }
 
@@ -124,7 +124,7 @@ private:
 
 public:
 
-  virtual ~GPUAttribute(){
+  virtual ~GPUAttribute() {
     delete _value;
   }
 
@@ -137,7 +137,7 @@ public:
   _size(size),
   _enabled(false),
 //  _dirtyEnabled(false),
-  _key(getAttributeKey(name)){}
+  _key(getAttributeKey(name)) {}
 
   const std::string getName() const{ return _name;}
   const int getID() const{ return _id;}
@@ -157,8 +157,8 @@ public:
 #endif
   }
 
-  void unset(GL* gl){
-    if (_value != NULL){
+  void unset(GL* gl) {
+    if (_value != NULL) {
 //      delete _value;
       _value->_release();
       _value = NULL;
@@ -171,22 +171,22 @@ public:
   }
 
   void set(const GPUAttributeValue* v) {
-    if (v != _value){
+    if (v != _value) {
 
-    if (v->getEnabled() && _type != v->getType()){ //type checking
+    if (v->getEnabled() && _type != v->getType()) { //type checking
       //delete v;
       ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
       return;
     }
-    if (_value == NULL || !_value->isEqualsTo(v)){
+    if (_value == NULL || !_value->isEqualsTo(v)) {
       _dirty = true;
-      //      if (_value != NULL){
+      //      if (_value != NULL) {
       //        delete _value;
       //      }
       //      _value = v->shallowCopy();
 //      _value = v->copyOrCreate(_value);
 
-      if (_value != NULL){
+      if (_value != NULL) {
         _value->_release();
       }
       _value = v;
@@ -197,23 +197,23 @@ public:
   }
 
 
-  virtual void applyChanges(GL* gl){
+  virtual void applyChanges(GL* gl) {
 
-    if (_value == NULL){
-      if (_enabled){
+    if (_value == NULL) {
+      if (_enabled) {
         ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
       }
     } else{
-      if (_dirty){
+      if (_dirty) {
 
-        if (_value->getEnabled()){
-          if (!_enabled){
+        if (_value->getEnabled()) {
+          if (!_enabled) {
             gl->enableVertexAttribArray(_id);
             _enabled = true;
           }
           _value->setAttribute(gl, _id);
         } else{
-          if (_enabled){
+          if (_enabled) {
             gl->disableVertexAttribArray(_id);
             _enabled = false;
           }
@@ -230,7 +230,7 @@ public:
 class GPUAttributeValueDisabled: public GPUAttributeValue{
 public:
   GPUAttributeValueDisabled():
-  GPUAttributeValue(false){}
+  GPUAttributeValue(false) {}
 
   void setAttribute(GL* gl, const int id) const{
   }
@@ -249,10 +249,10 @@ public:
 
   GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
 
-    if (oldAtt == NULL){
+    if (oldAtt == NULL) {
       return new GPUAttributeValueDisabled();
     }
-    if (oldAtt->getEnabled()){
+    if (oldAtt->getEnabled()) {
       delete oldAtt;
       return new GPUAttributeValueDisabled();
     }
@@ -269,11 +269,11 @@ public:
   GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()){}
+  _timeStamp(buffer->timestamp()) {}
 
 //  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
 //
-//    if (oldAtt == NULL){
+//    if (oldAtt == NULL) {
 //      GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
 //                                                                   _arrayElementSize,
 //                                                                   _index,
@@ -298,7 +298,7 @@ public:
 //  }
 
   void setAttribute(GL* gl, const int id) const{
-    if (_index != 0){
+    if (_index != 0) {
       //TODO: Change vertexAttribPointer
       ILogger::instance()->logError("INDEX NO 0");
     }
@@ -308,16 +308,16 @@ public:
 
   bool isEqualsTo(const GPUAttributeValue* v) const{
 
-    if (!v->getEnabled()){
+    if (!v->getEnabled()) {
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    return (_buffer == vecV->_buffer) &&
-    (_timeStamp == vecV->_timeStamp) &&
-    (_type == v->getType()) &&
-    (_attributeSize == v->getAttributeSize()) &&
-    (_stride == v->getStride()) &&
-    (_normalized == v->getNormalized() ) ;
+    return ((_buffer        == vecV->_buffer)         &&
+            (_timeStamp     == vecV->_timeStamp)      &&
+            (_type          == v->getType())          &&
+            (_attributeSize == v->getAttributeSize()) &&
+            (_stride        == v->getStride())        &&
+            (_normalized    == v->getNormalized()) );
   }
 
 //  GPUAttributeValue* shallowCopy() const{
@@ -355,23 +355,23 @@ public:
 class GPUAttributeValueVec1Float: public GPUAttributeValueVecFloat{
 public:
   GPUAttributeValueVec1Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValueVecFloat(buffer, 1, arrayElementSize, index, stride, normalized){}
+  GPUAttributeValueVecFloat(buffer, 1, arrayElementSize, index, stride, normalized) {}
 };
 class GPUAttributeVec1Float: public GPUAttribute{
 public:
-  GPUAttributeVec1Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 1){}
+  GPUAttributeVec1Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 1) {}
 };
 ////////
 ///////////
 class GPUAttributeValueVec2Float: public GPUAttributeValueVecFloat{
 public:
   GPUAttributeValueVec2Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValueVecFloat(buffer, 2, arrayElementSize, index, stride, normalized){}
+  GPUAttributeValueVecFloat(buffer, 2, arrayElementSize, index, stride, normalized) {}
 };
 
 class GPUAttributeVec2Float: public GPUAttribute{
 public:
-  GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2){}
+  GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2) {}
 };
 ////////
 
@@ -379,11 +379,11 @@ public:
 class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat{
 public:
   GPUAttributeValueVec3Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized){}
+  GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
 class GPUAttributeVec3Float: public GPUAttribute{
 public:
-  GPUAttributeVec3Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 3){}
+  GPUAttributeVec3Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 3) {}
 };
 ////////
 
@@ -391,11 +391,11 @@ public:
 class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat{
 public:
   GPUAttributeValueVec4Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized){}
+  GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized) {}
 };
 class GPUAttributeVec4Float: public GPUAttribute{
 public:
-  GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4){}
+  GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4) {}
 };
 ////////
 

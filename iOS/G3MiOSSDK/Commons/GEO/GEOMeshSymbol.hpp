@@ -38,7 +38,11 @@ protected:
 public:
 
   bool symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
+                 const GEOSymbolizer*    symbolizer,
+                 MeshRenderer*           meshRenderer,
+                 ShapesRenderer*         shapesRenderer,
+                 MarksRenderer*          marksRenderer,
+                 GEOTileRasterizer*      geoTileRasterizer) const;
 
 
 };

@@ -28,19 +28,19 @@ public class GeometryGLFeature extends GLFeature
     _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
   
   //  _globalState = new GLGlobalState();
-  //  if (depthTestEnabled){
+  //  if (depthTestEnabled) {
   //    _globalState->enableDepthTest();
   //  } else{
   //    _globalState->disableDepthTest();
   //  }
   //
-  //  if (cullFace){
+  //  if (cullFace) {
   //    _globalState->enableCullFace(culledFace);
   //  } else{
   //    _globalState->disableCullFace();
   //  }
   //
-  //  if (polygonOffsetFill){
+  //  if (polygonOffsetFill) {
   //    _globalState->enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
   //  } else{
   //    _globalState->disPolygonOffsetFill();

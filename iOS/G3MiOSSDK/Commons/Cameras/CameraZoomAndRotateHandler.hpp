@@ -1,5 +1,5 @@
 //
-//  CameraZoomAndRotateHandler.h
+//  CameraZoomAndRotateHandler.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo on 26/06/13.
@@ -71,4 +71,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__CameraZoomAndRotateHandler__) */
+#endif

@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUVariableValueSet.h
+//  GPUVariableValueSet.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
 //
 //
-
 
 
 
@@ -92,7 +91,7 @@ public class GPUVariableValueSet
     }
   }
 
-//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
+//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v) {
 ///#ifdef C_CODE
 //    const int index = key;
 ///#endif
@@ -100,12 +99,12 @@ public class GPUVariableValueSet
 //    final int index = key.getValue();
 ///#endif
 //    _attributeValues[key] = v;
-//    if (key > _highestAttributeKey){
+//    if (key > _highestAttributeKey) {
 //      _highestAttributeKey = key;
 //    }
 //  }
 //
-//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v){
+//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v) {
 ///#ifdef C_CODE
 //    const int index = key;
 ///#endif
@@ -113,7 +112,7 @@ public class GPUVariableValueSet
 //    final int index = key.getValue();
 ///#endif
 //    _uniformValues[key] = v;
-//    if (key > _highestUniformKey){
+//    if (key > _highestUniformKey) {
 //      _highestUniformKey = key;
 //    }
 //  }

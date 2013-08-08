@@ -60,8 +60,6 @@ public:
     return _hasNoData;
   }
 
-//  const Geodetic2D getRealResolution() const;
-
 };
 
 #endif

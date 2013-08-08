@@ -80,7 +80,7 @@ public class SimpleTextureMapping extends TextureMapping
   //                                false,
   //                                0);
   //
-  //    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+  //    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
   //      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
   //      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
   //    } else{

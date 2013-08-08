@@ -234,7 +234,7 @@ public:
     _nativeGL->disableVertexAttribArray(location);
   }
 
-  GLGlobalState* getCurrentGLGlobalState(){
+  GLGlobalState* getCurrentGLGlobalState() {
     return &_currentGLGlobalState;
   }
   

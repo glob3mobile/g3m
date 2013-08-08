@@ -82,7 +82,7 @@ void IImageUtils::combine(int width,
                           const std::vector<RectangleF*>& sourceRects,
                           const std::vector<RectangleF*>& destRects,
                           IImageListener* listener,
-                          bool autodelete){
+                          bool autodelete) {
 
   const int imagesSize = images.size();
 

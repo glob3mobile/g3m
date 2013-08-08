@@ -41,7 +41,7 @@ public:
 
   static Geodetic2D linearInterpolation(const Geodetic2D& from,
                                         const Geodetic2D& to,
-                                        double alpha){
+                                        double alpha) {
     return Geodetic2D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
                       Angle::linearInterpolation(from._longitude, to._longitude, alpha));
   }

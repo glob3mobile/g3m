@@ -8,7 +8,7 @@
 
 #include "FlatColorMesh.hpp"
 
-void FlatColorMesh::createGLState(){
+void FlatColorMesh::createGLState() {
   _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                _flatColor->isTransparent(),
                                                GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);

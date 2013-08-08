@@ -9,19 +9,14 @@
 #include "GLFeature.hpp"
 #include "Camera.hpp"
 
-BillboardGLFeature::BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight):
-GLFeature(NO_GROUP){
-
-  _texExtent = new GPUUniformValueVec2Float(textureWidth, textureHeight);
-  _values.addUniformValue(TEXTURE_EXTENT, _texExtent, false);
-
-  _viewportExtent = new GPUUniformValueVec2Float(viewportWidth, viewportHeight);
-  _values.addUniformValue(VIEWPORT_EXTENT, _viewportExtent, false);
+ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth, int viewportHeight):
+GLFeature(NO_GROUP) {
+  _values.addUniformValue(VIEWPORT_EXTENT, new GPUUniformValueVec2Float(viewportWidth, viewportHeight), false);
 }
 
-BillboardGLFeature::~BillboardGLFeature(){
-//  _texExtent->_release();
-//  _viewportExtent->_release();
+TextureExtentGLFeature::TextureExtentGLFeature(int textureWidth, int textureHeight):
+GLFeature(NO_GROUP) {
+  _values.addUniformValue(TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
@@ -44,19 +39,19 @@ _lineWidth(lineWidth)
   _values.addAttributeValue(POSITION, _position, false);
 
 //  _globalState = new GLGlobalState();
-//  if (depthTestEnabled){
+//  if (depthTestEnabled) {
 //    _globalState->enableDepthTest();
 //  } else{
 //    _globalState->disableDepthTest();
 //  }
 //
-//  if (cullFace){
+//  if (cullFace) {
 //    _globalState->enableCullFace(culledFace);
 //  } else{
 //    _globalState->disableCullFace();
 //  }
 //
-//  if (polygonOffsetFill){
+//  if (polygonOffsetFill) {
 //    _globalState->enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
 //  } else{
 //    _globalState->disPolygonOffsetFill();
@@ -64,25 +59,25 @@ _lineWidth(lineWidth)
 //
 //  _globalState->setLineWidth(lineWidth);
 
-  if (needsPointSize){
+  if (needsPointSize) {
     _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
 }
 
 void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
-  if (_depthTestEnabled){
+  if (_depthTestEnabled) {
     state->enableDepthTest();
   } else{
     state->disableDepthTest();
   }
 
-  if (_cullFace){
+  if (_cullFace) {
     state->enableCullFace(_culledFace);
   } else{
     state->disableCullFace();
   }
 
-  if (_polygonOffsetFill){
+  if (_polygonOffsetFill) {
     state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
   } else{
     state->disPolygonOffsetFill();
@@ -92,7 +87,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 
-GeometryGLFeature::~GeometryGLFeature(){
+GeometryGLFeature::~GeometryGLFeature() {
 //  _position->_release();
 }
 
@@ -108,7 +103,7 @@ _texID(texID)
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);
 
-  if (coordsTransformed){
+  if (coordsTransformed) {
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
                             new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
@@ -146,7 +141,7 @@ GLColorGroupFeature(2, blend, sFactor, dFactor)
 TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID,
                                        bool blend, int sFactor, int dFactor):
 GLColorGroupFeature(4, blend, sFactor, dFactor),
-_texID(texID){
+_texID(texID) {
 
   
 }
@@ -164,7 +159,7 @@ PriorityGLFeature(COLOR_GROUP, 4)
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);
 
-  if (coordsTransformed){
+  if (coordsTransformed) {
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
                             new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
@@ -177,8 +172,8 @@ void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getProjectionMatrix44D()){}
+GLCameraGroupFeature(cam->getProjectionMatrix44D()) {}
 
 ModelGLFeature::ModelGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getModelMatrix44D()){}
+GLCameraGroupFeature(cam->getModelMatrix44D()) {}
 

@@ -53,7 +53,7 @@ MarksRenderer::~MarksRenderer() {
   }
   _markTouchListener = NULL;
   
-  if (_billboardTexCoord != NULL){
+  if (_billboardTexCoord != NULL) {
     delete _billboardTexCoord;
   }
 };
@@ -76,7 +76,7 @@ void MarksRenderer::addMark(Mark* mark) {
   }
 }
 
-void MarksRenderer::removeMark(Mark* mark){
+void MarksRenderer::removeMark(Mark* mark) {
   int pos = -1;
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -190,11 +190,18 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
 
   updateGLState(rc);
 
+  const Planet* planet = rc->getPlanet();
+  GL* gl = rc->getGL();
+
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition, &_glState);
+      mark->render(rc,
+                   cameraPosition,
+                   &_glState,
+                   planet,
+                   gl);
     }
   }
 }
@@ -218,7 +225,7 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
           continue;
         }
         
-        if (!mark->isRendered()){
+        if (!mark->isRendered()) {
           continue;
         }
         
@@ -261,19 +268,22 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
   }
 }
 
-void MarksRenderer::updateGLState(const G3MRenderContext* rc){
+void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL){
+  if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam);
     _glState.addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
-  if (_model == NULL){
+  if (_model == NULL) {
     _model = new ModelGLFeature(cam);
     _glState.addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
+
+  _glState.clearGLFeatureGroup(NO_GROUP);
+  _glState.addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
 }

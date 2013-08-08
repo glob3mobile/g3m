@@ -16,7 +16,7 @@ double CompositeElevationData::getElevationAt(int x,
   const int size = _data.size();
   for (int i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
-    if (!mu->isNan(h)){
+    if (!mu->isNan(h)) {
       return h;
     }
   }
@@ -25,7 +25,7 @@ double CompositeElevationData::getElevationAt(int x,
 }
 
 
-void CompositeElevationData::addElevationData(ElevationData* data){
+void CompositeElevationData::addElevationData(ElevationData* data) {
 //  ElevationData* d0 = _data[0];
 
   if ((data->getExtentWidth()  != _width) ||
@@ -36,7 +36,7 @@ void CompositeElevationData::addElevationData(ElevationData* data){
 //  Sector s = data->getSector();
 //  Sector s2 = d0->getSector();
 
-  if (!data->getSector().isEqualsTo(getSector())){
+  if (!data->getSector().isEqualsTo(getSector())) {
     ILogger::instance()->logError("Sectors don't match.");
   }
 
@@ -48,7 +48,7 @@ void CompositeElevationData::addElevationData(ElevationData* data){
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       double height = getElevationAt(i, j);
-      if (mu->isNan(height)){
+      if (mu->isNan(height)) {
         _hasNoData = true;
         return;
       }
@@ -90,7 +90,7 @@ Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       const double height = getElevationAt(i, j);
-      if (!mu->isNan(height)){
+      if (!mu->isNan(height)) {
         if (height < minHeight) {
           minHeight = height;
         }
@@ -113,8 +113,3 @@ Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
                   maxHeight,
                   sumHeight / (_width * _height));
 }
-
-//const Geodetic2D CompositeElevationData::getRealResolution() const {
-//  int _TODO_complete;
-//  aa;
-//}

@@ -366,10 +366,10 @@ public class GPUProgram
     //  for (int i = 0; i < 32; i++) {
     //    GPUUniform* u = _uniforms[i];
     //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL){
+    //    if (u != NULL) {
     //      u->unset();
     //    }
-    //    if (a != NULL){
+    //    if (a != NULL) {
     //      a->unset(gl);
     //    }
     //  }
@@ -398,10 +398,10 @@ public class GPUProgram
     //  for (int i = 0; i < 32; i++) {
     //    GPUUniform* u = _uniforms[i];
     //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL){
+    //    if (u != NULL) {
     //      u->applyChanges(gl);
     //    }
-    //    if (a != NULL){
+    //    if (a != NULL) {
     //      a->applyChanges(gl);
     //    }
     //  }

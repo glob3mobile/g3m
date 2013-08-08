@@ -179,10 +179,4 @@ public class CompositeElevationData extends ElevationData
     return _hasNoData;
   }
 
-//  const Geodetic2D getRealResolution() const;
-
 }
-//const Geodetic2D CompositeElevationData::getRealResolution() const {
-//  int _TODO_complete;
-//  aa;
-//}

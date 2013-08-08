@@ -73,6 +73,8 @@ import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRenderer;
+import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
 import org.glob3.mobile.generated.SceneJSShapesParser;
@@ -84,8 +86,6 @@ import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TerrainTouchEvent;
 import org.glob3.mobile.generated.TerrainTouchEventListener;
-import org.glob3.mobile.generated.TileRenderer;
-import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -328,7 +328,7 @@ public class G3MWebGLDemo
 
       builder.addRenderer(geoRenderer);
 
-      builder.getTileRendererBuilder().setTileRasterizer(geoTileRasterizer);
+      builder.getPlanetRendererBuilder().setTileRasterizer(geoTileRasterizer);
 
 
       builder.setInitializationTask(new GInitializationTask() {
@@ -641,11 +641,11 @@ public class G3MWebGLDemo
          }
 
 
-         final TileRendererBuilder tlBuilder = new TileRendererBuilder();
+         final PlanetRendererBuilder tlBuilder = new PlanetRendererBuilder();
          tlBuilder.setLayerSet(layerSet);
          tlBuilder.setRenderDebug(true);
-         final TileRenderer tileRenderer = tlBuilder.create();
-         mainRenderer.addRenderer(tileRenderer);
+         final PlanetRenderer planetRenderer = tlBuilder.create();
+         mainRenderer.addRenderer(planetRenderer);
 
 
          final boolean useQuadShapes = true;
@@ -1177,7 +1177,7 @@ public class G3MWebGLDemo
          }
       };
 
-      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
+      builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
 
 
       /*
@@ -1228,24 +1228,8 @@ public class G3MWebGLDemo
          }
       });*/
 
-      //>>>>>>> webgl-port
-      //      builder.setInitializationTask(initializationTask);
-      //      builder.getTileRendererBuilder().setLayerSet(layerSet);
-      //
-      //      _widget = builder.createWidget();
-      //<<<<<<< HEAD
-      //
-      //      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6);
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
-      //=======
-      //      
-      //      /*Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));*/
-      //      
-      //>>>>>>> webgl-port
-
       builder.setInitializationTask(initializationTask);
-      builder.getTileRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
 

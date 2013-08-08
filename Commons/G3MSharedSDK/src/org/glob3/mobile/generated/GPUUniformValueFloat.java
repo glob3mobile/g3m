@@ -20,7 +20,7 @@ public class GPUUniformValueFloat extends GPUUniformValue
   }
 
   //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
+  //    if (value != NULL) {
   //      delete value;
   //    }
   //    return new GPUUniformValueFloat(_value);

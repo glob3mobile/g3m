@@ -35,7 +35,7 @@ public:
   static inline double log_  (double v)           { return log(v);     }
   static inline double floor_(double d)           { return floor(d);   }
   static inline double ceil_ (double d)           { return ceil(d);    }
-  static inline double fmod_ (double d1, double d2){ return fmod(d1, d2);}
+  static inline double fmod_ (double d1, double d2) { return fmod(d1, d2);}
 };
 
 class MathUtils_iOS: public IMathUtils {

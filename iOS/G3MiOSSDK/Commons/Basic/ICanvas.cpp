@@ -187,7 +187,7 @@ void ICanvas::drawImage(const IImage* image,
   checkInitialized();
 
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
-                                srcLeft, srcTop, srcWidth, srcHeight)){
+                                srcLeft, srcTop, srcWidth, srcHeight)) {
     ILogger::instance()->logError("Invalid source rectangle in drawImage");
   }
 

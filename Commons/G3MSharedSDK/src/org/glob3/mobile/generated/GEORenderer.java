@@ -132,8 +132,7 @@ public class GEORenderer extends LeafRenderer
         {
           final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
   
-          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
-          pair._geoObject.symbolize(rc, sc);
+          pair._geoObject.symbolize(rc, symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
         }
   
         if (pair != null)

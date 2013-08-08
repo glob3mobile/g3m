@@ -326,7 +326,7 @@ public class GL
   
   //    GLState::textureHasBeenDeleted(textureId);
   
-  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
+  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
   //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
   //    }
   
@@ -479,7 +479,7 @@ public class GL
 
 
 }
-//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
+//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {
 //  state.applyChanges(this, *_currentState);
 //  setProgramState(progManager, progState);
 //}

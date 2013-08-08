@@ -32,7 +32,7 @@ _m23(m23),
 _m30(m30),
 _m31(m31),
 _m32(m32),
-_m33(m33){
+_m33(m33) {
   _columnMajorFloatArray = NULL;
   _columnMajorFloatBuffer = NULL;
 }
@@ -67,7 +67,7 @@ _m23(m._m23),
 _m30(m._m30),
 _m31(m._m31),
 _m32(m._m32),
-_m33(m._m33){
+_m33(m._m33) {
   _columnMajorFloatArray = NULL;
   _columnMajorFloatBuffer = NULL;
 }
@@ -131,7 +131,7 @@ bool Matrix44D::isEqualsTo(const Matrix44D& m) const{
 }
 
 const IFloatBuffer* Matrix44D::getColumnMajorFloatBuffer() const {
-  if (_columnMajorFloatBuffer == NULL){
+  if (_columnMajorFloatBuffer == NULL) {
     _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
                                                                       (float) _m00,
                                                                       (float) _m10,

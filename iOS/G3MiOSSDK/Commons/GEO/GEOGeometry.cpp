@@ -19,15 +19,24 @@ void GEOGeometry::setFeature(GEOFeature* feature) {
 }
 
 void GEOGeometry::symbolize(const G3MRenderContext* rc,
-                            const GEOSymbolizationContext& sc) const {
-  std::vector<GEOSymbol*>* symbols = createSymbols(rc, sc);
+                            const GEOSymbolizer*    symbolizer,
+                            MeshRenderer*           meshRenderer,
+                            ShapesRenderer*         shapesRenderer,
+                            MarksRenderer*          marksRenderer,
+                            GEOTileRasterizer*      geoTileRasterizer) const {
+  std::vector<GEOSymbol*>* symbols = createSymbols(symbolizer);
   if (symbols != NULL) {
 
     const int symbolsSize = symbols->size();
     for (int i = 0; i < symbolsSize; i++) {
       const GEOSymbol* symbol = symbols->at(i);
       if (symbol != NULL) {
-        const bool deleteSymbol = symbol->symbolize(rc, sc);
+        const bool deleteSymbol = symbol->symbolize(rc,
+                                                    symbolizer,
+                                                    meshRenderer,
+                                                    shapesRenderer,
+                                                    marksRenderer,
+                                                    geoTileRasterizer);
         if (deleteSymbol) {
           delete symbol;
         }

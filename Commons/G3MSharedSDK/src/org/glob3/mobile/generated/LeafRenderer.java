@@ -45,7 +45,8 @@ public abstract class LeafRenderer extends Renderer
     return _enable;
   }
 
-  public void setEnable(final boolean enable) {
+  public void setEnable(boolean enable)
+  {
     _enable = enable;
   }
 
@@ -68,5 +69,10 @@ public abstract class LeafRenderer extends Renderer
   public abstract void start(G3MRenderContext rc);
 
   public abstract void stop(G3MRenderContext rc);
+
+  public SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    return null;
+  }
 
 }

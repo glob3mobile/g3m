@@ -54,13 +54,13 @@ SGTextureNode::~SGTextureNode() {
 }
 
 const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLState* parentState) {
-  if (_glState == NULL){
+  if (_glState == NULL) {
     _glState = new GLState();
 
     const int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++) {
       SGLayerNode* layer = _layers[i];
-      if (!layer->modifyGLState(rc, _glState)){
+      if (!layer->modifyGLState(rc, _glState)) {
         delete _glState;
         _glState = NULL;
         return parentState;
@@ -68,7 +68,7 @@ const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLSt
     }
 
   }
-  if (_glState != NULL){
+  if (_glState != NULL) {
     _glState->setParent(parentState);
   }
   return _glState;

@@ -18,8 +18,6 @@
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
 
-//class Sector_Geodetic2DCachedData;
-
 class ICanvas;
 class GEORasterProjection;
 
@@ -32,16 +30,6 @@ private:
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
   mutable double _deltaRadiusInRadians;
-
-  //const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
-
-  /*
-  // cached values for speed up in isBackOriented()
-  mutable Sector_Geodetic2DCachedData* _nwData;
-  mutable Sector_Geodetic2DCachedData* _neData;
-  mutable Sector_Geodetic2DCachedData* _swData;
-  mutable Sector_Geodetic2DCachedData* _seData;
-   */
   
   mutable Vector3D* _normalizedCartesianCenter;
 
@@ -66,12 +54,6 @@ public:
   _center(Angle::midAngle(lower._latitude, upper._latitude),
           Angle::midAngle(lower._longitude, upper._longitude)),
   _deltaRadiusInRadians(-1.0),
-  /*
-   _nwData(NULL),
-  _neData(NULL),
-  _swData(NULL),
-  _seData(NULL),
-   */
   _normalizedCartesianCenter(NULL)
   {
 //    if (_deltaLatitude._degrees < 0) {
@@ -90,23 +72,18 @@ public:
   _deltaLongitude(sector._deltaLongitude),
   _center(sector._center),
   _deltaRadiusInRadians(sector._deltaRadiusInRadians)
-  /*
-   _nwData(NULL),
-  _neData(NULL),
-  _swData(NULL),
-  _seData(NULL),
-   */
   {
-    if (sector._normalizedCartesianCenter==NULL)
+    if (sector._normalizedCartesianCenter == NULL) {
       _normalizedCartesianCenter = NULL;
+    }
     else {
       const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
       _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
     }
-      
   }
 
-  static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon){
+  static Sector fromDegrees(double minLat, double minLon,
+                            double maxLat, double maxLon) {
     const Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
     const Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
 
@@ -114,8 +91,6 @@ public:
   }
 
   const Vector2D div(const Sector& that) const;
-
-//  Vector2D getTranslationFactor(const Sector& that) const;
 
   bool fullContains(const Sector& that) const;
 
@@ -152,7 +127,6 @@ public:
     return _upper._longitude;
   }
 
-  
   bool contains(const Angle& latitude,
                 const Angle& longitude) const;
   
@@ -278,9 +252,10 @@ public:
   }
 
   double getDeltaRadiusInRadians() const {
-    if (_deltaRadiusInRadians < 0)
-      _deltaRadiusInRadians = IMathUtils::instance()->sqrt(_deltaLatitude._radians  * _deltaLatitude._radians +
-                                   _deltaLongitude._radians * _deltaLongitude._radians) * 0.5;
+    if (_deltaRadiusInRadians < 0) {
+      _deltaRadiusInRadians = IMathUtils::instance()->sqrt((_deltaLatitude._radians  * _deltaLatitude._radians) +
+                                                           (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
+    }
     return _deltaRadiusInRadians;
   }
   
@@ -331,6 +306,5 @@ public:
 #endif
 
 };
-
 
 #endif

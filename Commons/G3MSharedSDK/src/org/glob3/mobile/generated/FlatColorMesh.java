@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  FlatColorMesh.h
+//  FlatColorMesh.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/06/13.

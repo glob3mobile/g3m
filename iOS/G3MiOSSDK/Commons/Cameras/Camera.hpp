@@ -52,7 +52,7 @@ public:
     setAll(true);
   }
 
-  void copyFrom(const CameraDirtyFlags& other){
+  void copyFrom(const CameraDirtyFlags& other) {
     _frustumDataDirty           = other._frustumDataDirty;
     _projectionMatrixDirty      = other._projectionMatrixDirty;
     _modelMatrixDirty           = other._modelMatrixDirty;
@@ -81,7 +81,7 @@ public:
     _halfFrustumMCDirty         = other._halfFrustumMCDirty;
   }
 
-  std::string description(){
+  std::string description() {
     std::string d = "";
     if (_frustumDataDirty) d+= "FD ";
     if (_projectionMatrixDirty) d += "PM ";
@@ -157,15 +157,15 @@ public:
 
   void copyFrom(const Camera &c);
 
-  void copyFromForcingMatrixCreation(const Camera &c){
+  void copyFromForcingMatrixCreation(const Camera &c) {
     c.forceMatrixCreation();
     copyFrom(c);
   }
 
   void resizeViewport(int width, int height);
 
-  void render(const G3MRenderContext* rc,
-              const GLGlobalState& parentState) const;
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState) const;
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
@@ -183,7 +183,7 @@ public:
     return (float) _width / _height;
   }
 
-  EffectTarget* getEffectTarget(){
+  EffectTarget* getEffectTarget() {
     return _camEffectTarget;
   }
 
@@ -240,8 +240,8 @@ public:
 
   //  void resetPosition();
 
-  void setCartesianPosition(const MutableVector3D& v){
-    if (!v.equalTo(_position)){
+  void setCartesianPosition(const MutableVector3D& v) {
+    if (!v.equalTo(_position)) {
       _position = MutableVector3D(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
@@ -253,7 +253,7 @@ public:
     }
   }
 
-  void setCartesianPosition(const Vector3D& v){
+  void setCartesianPosition(const Vector3D& v) {
     setCartesianPosition(v.asMutableVector3D());
   }
 
@@ -375,15 +375,15 @@ private:
 
   Vector3D centerOfViewOnPlanet() const;
 
-  void setCenter(const MutableVector3D& v){
-    if (!v.equalTo(_center)){
+  void setCenter(const MutableVector3D& v) {
+    if (!v.equalTo(_center)) {
       _center = MutableVector3D(v);
       _dirtyFlags.setAll(true);
     }
   }
 
-  void setUp(const MutableVector3D& v){
-    if (!v.equalTo(_up)){
+  void setUp(const MutableVector3D& v) {
+    if (!v.equalTo(_up)) {
       _up = MutableVector3D(v);
       _dirtyFlags.setAll(true);
     }

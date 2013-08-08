@@ -52,8 +52,6 @@ public:
     return _resolution;
   }
 
-  //  virtual const Geodetic2D getRealResolution() const = 0;
-
   virtual double getElevationAt(int x,
                                 int y) const = 0;
 
@@ -90,7 +88,7 @@ public:
                           position._longitude);
   }
 
-  //  bool isEquivalentTo(const ElevationData* ed){
+  //  bool isEquivalentTo(const ElevationData* ed) {
   //    bool equivalent = true;
   //    const int width  = 3;
   //    const int height = 3;
@@ -105,7 +103,7 @@ public:
   //        const double elevation = getElevationAt(position);
   //        const double elevation2 = ed->getElevationAt(position);
   //
-  //        if (elevation != elevation2){
+  //        if (elevation != elevation2) {
   //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
   //          equivalent = false;
   //        }

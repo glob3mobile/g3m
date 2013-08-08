@@ -86,7 +86,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   
-//  if (!_projectionMatrix.isValid()){
+//  if (!_projectionMatrix.isValid()) {
 //    // init modelview matrix
 //    int currentViewport[4];
 //    gl->getViewport(currentViewport);
@@ -104,16 +104,16 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc)
   _mesh->render(rc, &_glState);
 }
 
-void BusyMeshRenderer::createGLState(){
+void BusyMeshRenderer::createGLState() {
 
-  if (_projectionFeature == NULL){
+  if (_projectionFeature == NULL) {
     _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
     _glState.addGLFeature(_projectionFeature, false);
   } else{
     _projectionFeature->setMatrix(_projectionMatrix.asMatrix44D());
   }
 
-  if (_modelFeature == NULL){
+  if (_modelFeature == NULL) {
     _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
     _glState.addGLFeature(_modelFeature, false);
   } else{

@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public abstract class BusyQuadRenderer extends LeafRenderer
+public class BusyQuadRenderer extends LeafRenderer
 {
   private double _degrees;
   //  const std::string _textureFilename;
@@ -116,7 +116,7 @@ public abstract class BusyQuadRenderer extends LeafRenderer
 
 
   //TODO: REMOVE???
-  public final void render(G3MRenderContext rc, GLGlobalState parentState)
+  public final void render(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
   
@@ -127,18 +127,6 @@ public abstract class BusyQuadRenderer extends LeafRenderer
         return;
       }
     }
-  
-    // init modelview matrix
-  //  if (!_projectionMatrix.isValid()){
-  //    // init modelview matrix
-  //    int currentViewport[4];
-  //    gl->getViewport(currentViewport);
-  //    const int halfWidth = currentViewport[2] / 2;
-  //    const int halfHeight = currentViewport[3] / 2;
-  //    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-  //                                                                             -halfHeight, halfHeight,
-  //                                                                             -halfWidth, halfWidth);
-  //  }
   
     createGLState();
   
@@ -156,7 +144,9 @@ public abstract class BusyQuadRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
+    final int halfWidth = width / 2;
+    final int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   }
 
   public void dispose()
@@ -173,10 +163,6 @@ public abstract class BusyQuadRenderer extends LeafRenderer
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public final void start(G3MRenderContext rc)

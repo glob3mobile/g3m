@@ -19,8 +19,7 @@ private:
   std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
 
 protected:
-  std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
-                                         const GEOSymbolizationContext& sc) const;
+  std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
 public:
 

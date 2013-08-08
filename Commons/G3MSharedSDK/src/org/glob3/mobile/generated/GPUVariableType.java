@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUVariable.h
+//  GPUVariable.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 20/06/13.

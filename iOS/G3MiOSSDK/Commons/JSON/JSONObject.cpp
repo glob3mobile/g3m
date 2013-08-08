@@ -17,7 +17,7 @@
 
 JSONObject::~JSONObject() {
 #ifdef C_CODE
-  for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++){
+  for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++) {
     delete it->second;
   }
 #endif
@@ -27,7 +27,7 @@ JSONObject::~JSONObject() {
 const JSONBaseObject* JSONObject::get(const std::string& key) const {
 #ifdef C_CODE
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.find(key);
-  if (it != _entries.end()){
+  if (it != _entries.end()) {
     return _entries.at(key);
   }
   //ILogger::instance()->logError("The JSONObject does not contain the key \"" + key + "\"");

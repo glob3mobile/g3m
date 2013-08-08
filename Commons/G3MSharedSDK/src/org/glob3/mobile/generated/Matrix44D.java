@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Matrix44D.h
+//  Matrix44D.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 01/07/13.
@@ -201,14 +201,14 @@ public class Matrix44D extends RCObject
     return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
   }
 
-  //    void addListener(Matrix44DListener* l){
+  //    void addListener(Matrix44DListener* l) {
   //      _listeners.push_back(l);
   //    }
   //
-  //    void removeListener(Matrix44DListener* l){
+  //    void removeListener(Matrix44DListener* l) {
   //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
   //           it != _listeners.end(); it++) {
-  //        if (*it == l){
+  //        if (*it == l) {
   //          _listeners.erase(it);
   //          return;
   //        }

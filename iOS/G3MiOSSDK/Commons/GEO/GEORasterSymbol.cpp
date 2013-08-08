@@ -8,7 +8,6 @@
 
 #include "GEORasterSymbol.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "GEOTileRasterizer.hpp"
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
@@ -75,7 +74,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      const double latInRadians = coordinate->latitude().radians();
+      const double latInRadians = coordinate->_latitude.radians();
       if (latInRadians < minLatInRadians) {
         minLatInRadians = latInRadians;
       }
@@ -83,7 +82,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
         maxLatInRadians = latInRadians;
       }
 
-      const double lonInRadians = coordinate->longitude().radians();
+      const double lonInRadians = coordinate->_longitude.radians();
       if (lonInRadians < minLonInRadians) {
         minLonInRadians = lonInRadians;
       }
@@ -126,16 +125,16 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
   const Geodetic2D* coordinate0 = coordinates->at(0);
 
-  double minLatInRadians = coordinate0->latitude().radians();
+  double minLatInRadians = coordinate0->_latitude.radians();
   double maxLatInRadians = minLatInRadians;
 
-  double minLonInRadians = coordinate0->longitude().radians();
+  double minLonInRadians = coordinate0->_longitude.radians();
   double maxLonInRadians = minLonInRadians;
 
   for (int i = 1; i < size; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
 
-    const double latInRadians = coordinate->latitude().radians();
+    const double latInRadians = coordinate->_latitude.radians();
     if (latInRadians < minLatInRadians) {
       minLatInRadians = latInRadians;
     }
@@ -143,7 +142,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
       maxLatInRadians = latInRadians;
     }
 
-    const double lonInRadians = coordinate->longitude().radians();
+    const double lonInRadians = coordinate->_longitude.radians();
     if (lonInRadians < minLonInRadians) {
       minLonInRadians = lonInRadians;
     }
@@ -169,13 +168,16 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
 
 bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
-                                const GEOSymbolizationContext& sc) const {
-  GEOTileRasterizer* rasterizer = sc.getGEOTileRasterizer();
-  if (rasterizer == NULL) {
+                                const GEOSymbolizer*    symbolizer,
+                                MeshRenderer*           meshRenderer,
+                                ShapesRenderer*         shapesRenderer,
+                                MarksRenderer*          marksRenderer,
+                                GEOTileRasterizer*      geoTileRasterizer) const {
+  if (geoTileRasterizer == NULL) {
     ILogger::instance()->logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
   }
   else {
-    rasterizer->addSymbol( this );
+    geoTileRasterizer->addSymbol( this );
   }
 
   return false;
@@ -264,25 +266,11 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
   }
 }
 
-
-//void GEORasterSymbol::rasterPolygonSurface(const std::vector<Geodetic2D*>*               coordinates,
-//                                           const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-//                                           ICanvas*                                      canvas,
-//                                           const GEORasterProjection*                    projection) const {
-//  const int coordinatesCount = coordinates->size();
-//  if (coordinatesCount > 0) {
-//    canvas->beginPath();
-//
-//    canvas->moveTo( projection->project(coordinates->at(0)) );
-//
-//    for (int i = 1; i < coordinatesCount; i++) {
-//      const Geodetic2D* coordinate = coordinates->at(i);
-//
-//      canvas->lineTo( projection->project(coordinate) );
-//    }
-//
-////    canvas->fill();
-////    canvas->stroke();
-//    canvas->fillAndStroke();
-//  }
-//}
+void GEORasterSymbol::rasterize(ICanvas*                   canvas,
+                                const GEORasterProjection* projection,
+                                int tileLevel) const {
+  if (((_minTileLevel < 0) || (tileLevel >= _minTileLevel)) &&
+      ((_maxTileLevel < 0) || (tileLevel <= _maxTileLevel))) {
+    rawRasterize(canvas, projection);
+  }
+}

@@ -45,6 +45,7 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class ITextUtils;
 //class G3MEventContext;
+//class SurfaceElevationProvider;
 
 //class GPUProgram;
 //class GPUProgramManager;

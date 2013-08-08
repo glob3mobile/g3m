@@ -46,7 +46,7 @@ public:
   _nextCamera(nextCamera)
   {}
 
-  ~CameraContext(){}
+  ~CameraContext() {}
 
   const Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }

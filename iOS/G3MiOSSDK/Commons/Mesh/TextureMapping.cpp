@@ -38,7 +38,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
 //                                false,
 //                                0);
 //    
-//    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+//    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
 //      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
 //      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
 //    } else{
@@ -49,7 +49,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
 
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)){
+    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
 
       state.addGLFeature(new TextureGLFeature(_glTextureId,
                                                         _texCoords, 2, 0, false, 0,

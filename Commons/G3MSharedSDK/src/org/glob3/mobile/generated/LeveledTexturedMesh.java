@@ -5,10 +5,6 @@ public class LeveledTexturedMesh extends Mesh
   private final boolean _ownedMesh;
 
   private java.util.ArrayList<LazyTextureMapping> _mappings;
-
-
-  private final int _levelsCount;
-
   private int _currentLevel;
 
   private LazyTextureMapping getCurrentTextureMapping()
@@ -17,14 +13,15 @@ public class LeveledTexturedMesh extends Mesh
     {
       int newCurrentLevel = -1;
   
-      for (int i = 0; i < _levelsCount; i++)
+      final int levelsCount = _mappings.size();
+  
+      for (int i = 0; i < levelsCount; i++)
       {
-        LazyTextureMapping mapping = _mappings.get(i);
+        final LazyTextureMapping mapping = _mappings.get(i);
         if (mapping != null)
         {
           if (mapping.isValid())
           {
-            //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
             newCurrentLevel = i;
             break;
           }
@@ -33,19 +30,23 @@ public class LeveledTexturedMesh extends Mesh
   
       if (newCurrentLevel >= 0)
       {
+        // ILogger::instance()->logInfo("LeveledTexturedMesh: changed from level %d to %d",
+        //                              _currentLevel,
+        //                              newCurrentLevel);
         _currentLevel = newCurrentLevel;
   
         _mappings.get(_currentLevel).modifyGLState(_glState);
   
-        for (int i = _currentLevel+1; i < _levelsCount; i++)
+        if (_currentLevel < levelsCount-1)
         {
-          LazyTextureMapping mapping = _mappings.get(i);
-          if (mapping != null)
+          for (int i = levelsCount-1; i > _currentLevel; i--)
           {
-            _mappings.get(i).dispose();
+            final LazyTextureMapping mapping = _mappings.get(i);
             if (mapping != null)
                mapping.dispose();
+            _mappings.remove(i);
           }
+          _mappings.trimToSize();
         }
       }
     }
@@ -60,11 +61,10 @@ public class LeveledTexturedMesh extends Mesh
      _mesh = mesh;
      _ownedMesh = ownedMesh;
      _mappings = mappings;
-     _levelsCount = mappings.size();
      _currentLevel = -1;
     if (_mappings.size() <= 0)
     {
-      ILogger.instance().logError("LOGIC ERROR\n");
+      ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
     }
   }
 
@@ -158,7 +158,7 @@ public class LeveledTexturedMesh extends Mesh
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-      ILogger.instance().logError("No Texture Mapping");
+      ILogger.instance().logError("LeveledTexturedMesh: No Texture Mapping");
       _mesh.render(rc, parentGLState);
     }
     else

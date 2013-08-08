@@ -126,7 +126,7 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
-void Shape::addShapeEffect(Effect* effect){
+void Shape::addShapeEffect(Effect* effect) {
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
 }
 

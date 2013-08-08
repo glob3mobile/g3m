@@ -10,15 +10,16 @@
 
 void CompositeRenderer::initialize(const G3MContext* context) {
   _context = context;
-  
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->initialize(context);
   }
 }
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
+  _renderersSize = _renderers.size();
+
   if (_context != NULL) {
     renderer->initialize(_context);
   }
@@ -26,9 +27,8 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
 
 void CompositeRenderer::render(const G3MRenderContext* rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
-  
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+
+  for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {
       renderer->render(rc);
@@ -39,8 +39,7 @@ void CompositeRenderer::render(const G3MRenderContext* rc) {
 bool CompositeRenderer::onTouchEvent(const G3MEventContext* ec,
                                      const TouchEvent* touchEvent) {
   // the events are processed bottom to top
-  const int rendersSize = _renderers.size();
-  for (int i = rendersSize - 1; i >= 0; i--) {
+  for (int i = _renderersSize - 1; i >= 0; i--) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {
       if (renderer->onTouchEvent(ec, touchEvent)) {
@@ -55,15 +54,13 @@ void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                               int width, int height)
 {
   // the events are processed bottom to top
-  const int rendersSize = _renderers.size();
-  for (int i = rendersSize - 1; i >= 0; i--) {
+  for (int i = _renderersSize - 1; i >= 0; i--) {
     _renderers[i]->onResizeViewportEvent(ec, width, height);
   }
 }
 
 bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {
       if (!renderer->isReadyToRender(rc)) {
@@ -71,41 +68,36 @@ bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
       }
     }
   }
-  
+
   return true;
 }
 
 void CompositeRenderer::start(const G3MRenderContext* rc) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->start(rc);
   }
 }
 
 void CompositeRenderer::stop(const G3MRenderContext* rc) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->stop(rc);
   }
 }
 
 void CompositeRenderer::onResume(const G3MContext* context) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->onResume(context);
   }
 }
 
 void CompositeRenderer::onPause(const G3MContext* context) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->onPause(context);
   }
 }
 
 void CompositeRenderer::onDestroy(const G3MContext* context) {
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+  for (int i = 0; i < _renderersSize; i++) {
     _renderers[i]->onDestroy(context);
   }
 }
@@ -114,9 +106,8 @@ bool CompositeRenderer::isEnable() const {
   if (!_enable) {
     return false;
   }
-  
-  const int rendersSize = _renderers.size();
-  for (int i = 0; i < rendersSize; i++) {
+
+  for (int i = 0; i < _renderersSize; i++) {
     if (_renderers[i]->isEnable()) {
       return true;
     }
@@ -126,4 +117,23 @@ bool CompositeRenderer::isEnable() const {
 
 void CompositeRenderer::setEnable(bool enable) {
   _enable = enable;
+}
+
+SurfaceElevationProvider* CompositeRenderer::getSurfaceElevationProvider() {
+  SurfaceElevationProvider* result = NULL;
+
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* renderer = _renderers[i];
+    SurfaceElevationProvider* childSurfaceElevationProvider = renderer->getSurfaceElevationProvider();
+    if (childSurfaceElevationProvider != NULL) {
+      if (result == NULL) {
+        result = childSurfaceElevationProvider;
+      }
+      else {
+        ILogger::instance()->logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+      }
+    }
+  }
+
+  return result;
 }

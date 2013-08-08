@@ -137,7 +137,7 @@ public:
     return new GLGlobalState();
   }
   
-  GLGlobalState* createCopy(){
+  GLGlobalState* createCopy() {
     return new GLGlobalState(*this);
   }
   
@@ -203,14 +203,14 @@ public:
   }
   float lineWidth() const { return _lineWidth; }
   
-  void enablePolygonOffsetFill(float factor, float units){
+  void enablePolygonOffsetFill(float factor, float units) {
     _polygonOffsetFill = true;
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
     
     _polygonOffsetChanged = true;
   }
-  void disPolygonOffsetFill(){
+  void disPolygonOffsetFill() {
     _polygonOffsetFill = false;
     
     _polygonOffsetChanged = true;
@@ -227,7 +227,7 @@ public:
     _blendFactorsChanged = true;
   }
   
-  void bindTexture(const IGLTextureId* textureId){
+  void bindTexture(const IGLTextureId* textureId) {
     _boundTextureId = textureId;
     
     _boundTextureChanged = true;
@@ -237,13 +237,13 @@ public:
     return _boundTextureId;
   }
   
-  void setPixelStoreIAlignmentUnpack(int p){
+  void setPixelStoreIAlignmentUnpack(int p) {
     _pixelStoreIAlignmentUnpack = p;
     
     _pixelStoreIChanged = true;
   }
   
-  void setClearColor(const Color& color){
+  void setClearColor(const Color& color) {
     _clearColorR = color.getRed();
     _clearColorG = color.getGreen();
     _clearColorB = color.getBlue();

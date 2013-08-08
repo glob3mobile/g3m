@@ -106,14 +106,14 @@ public:
   }
 
   double sinus() const {
-    if (_sin > 1){
+    if (_sin > 1) {
       _sin = SIN(_radians);
     }
     return _sin;
   }
 
   double cosinus() const {
-    if (_cos > 1){
+    if (_cos > 1) {
       _cos = COS(_radians);
     }
     return _cos;

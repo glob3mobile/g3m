@@ -21,7 +21,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   INativeGL* nativeGL = gl->getNative();
   
   // Depth Test
-  if (_depthTestChanged){
+  if (_depthTestChanged) {
     if (_depthTest != currentState._depthTest) {
       if (_depthTest) {
         nativeGL->enable(GLStage::depthTest());
@@ -34,7 +34,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
   
   // Blending
-  if (_blendChanged){
+  if (_blendChanged) {
     if (_blend != currentState._blend) {
       if (_blend) {
         nativeGL->enable(GLStage::blend());
@@ -47,7 +47,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
   
   // Cull Face
-  if (_cullFaceChanged){
+  if (_cullFaceChanged) {
     if (_cullFace != currentState._cullFace) {
       currentState._cullFace = _cullFace;
       if (_cullFace) {
@@ -63,7 +63,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     }
   }
   
-  if (_lineWidthChanged){
+  if (_lineWidthChanged) {
     if (_lineWidth != currentState._lineWidth) {
       nativeGL->lineWidth(_lineWidth);
       currentState._lineWidth = _lineWidth;
@@ -71,14 +71,14 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
   
   //Polygon Offset
-  if (_polygonOffsetChanged){
-    if (_polygonOffsetFill != currentState._polygonOffsetFill){
+  if (_polygonOffsetChanged) {
+    if (_polygonOffsetFill != currentState._polygonOffsetFill) {
       currentState._polygonOffsetFill = _polygonOffsetFill;
-      if (_polygonOffsetFill){
+      if (_polygonOffsetFill) {
         nativeGL->enable(GLStage::polygonOffsetFill());
         
         if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
-            _polygonOffsetUnits != currentState._polygonOffsetUnits){
+            _polygonOffsetUnits != currentState._polygonOffsetUnits) {
           nativeGL->polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
           
           currentState._polygonOffsetUnits = _polygonOffsetUnits;
@@ -92,8 +92,8 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
   
   //Blending Factors
-  if (_blendFactorsChanged){
-    if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor){
+  if (_blendFactorsChanged) {
+    if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor) {
       nativeGL->blendFunc(_blendSFactor, _blendDFactor);
       currentState._blendDFactor = _blendDFactor;
       currentState._blendSFactor = _blendSFactor;
@@ -101,10 +101,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
   
   //Texture (After blending factors)
-  if (_boundTextureChanged){
-    if (_boundTextureId != NULL){
+  if (_boundTextureChanged) {
+    if (_boundTextureId != NULL) {
       if (currentState._boundTextureId == NULL ||
-          !_boundTextureId->isEqualsTo(currentState._boundTextureId)){
+          !_boundTextureId->isEqualsTo(currentState._boundTextureId)) {
         nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
         
         currentState._boundTextureId = _boundTextureId;
@@ -114,18 +114,18 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     }
   }
   
-  if (_pixelStoreIChanged){
-    if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+  if (_pixelStoreIChanged) {
+    if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack) {
       nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
       currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
     }
   }
   
-  if (_clearColorChanged){
+  if (_clearColorChanged) {
     if (_clearColorR != currentState._clearColorR ||
         _clearColorG != currentState._clearColorG ||
         _clearColorB != currentState._clearColorB ||
-        _clearColorA != currentState._clearColorA){
+        _clearColorA != currentState._clearColorA) {
       nativeGL->clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
       currentState._clearColorR = _clearColorR;
       currentState._clearColorG = _clearColorG;

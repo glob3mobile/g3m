@@ -175,11 +175,15 @@ public class Camera
     //cleanCachedValues();
   }
 
-  public final void render(G3MRenderContext rc, GLGlobalState parentState)
-  {
-    //TODO: NO LONGER NEEDED!!!
-  }
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState) const;
 
+
+  //void Camera::render(const G3MRenderContext* rc,
+  //                    const GLGlobalState& parentState) const {
+  //  //TODO: NO LONGER NEEDED!!!
+  //}
+  
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
     final int px = pixel._x;

@@ -23,7 +23,7 @@ public:
   const Angle _longitude;
   const double _height;
 
-  ~Geodetic3D(){}
+  ~Geodetic3D() {}
   
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
@@ -43,7 +43,7 @@ public:
   
   static Geodetic3D linearInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
-                                        double alpha){
+                                        double alpha) {
     return Geodetic3D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
                       Angle::linearInterpolation(from._longitude, to._longitude, alpha),
                       IMathUtils::instance()->linearInterpolation(from._height, to._height, alpha)

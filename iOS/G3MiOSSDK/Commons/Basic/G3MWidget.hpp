@@ -38,6 +38,7 @@ class CameraRenderer;
 class IStorage;
 class ITextUtils;
 class G3MEventContext;
+class SurfaceElevationProvider;
 
 class GPUProgram;
 class GPUProgramManager;
@@ -247,6 +248,8 @@ private:
   bool _clickOnProcess;
   
   GPUProgramManager* _gpuProgramManager;
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

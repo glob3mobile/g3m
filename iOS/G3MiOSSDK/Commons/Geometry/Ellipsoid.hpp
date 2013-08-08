@@ -33,7 +33,7 @@ public:
                              _radiiSquared._z * _radiiSquared._z)),
   _oneOverRadiiSquared(Vector3D(1.0 / (radii._x * radii._x ),
                                 1.0 / (radii._y * radii._y),
-                                1.0 / (radii._z * radii._z))){}
+                                1.0 / (radii._z * radii._z))) {}
 
   Vector3D getCenter() const {
     return _center;

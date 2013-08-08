@@ -1,5 +1,5 @@
 //
-//  FlatColorMesh.h
+//  FlatColorMesh.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/06/13.
@@ -44,11 +44,11 @@ public:
     createGLState();
   }
   
-  ~FlatColorMesh(){
+  ~FlatColorMesh() {
     if (_ownedMesh) {
       delete _mesh;
     }
-    if (_ownedColor){
+    if (_ownedColor) {
       delete _flatColor;
     }
   }
@@ -72,4 +72,4 @@ public:
   void render(const G3MRenderContext* rc, const GLState* parentState) const;
 };
 
-#endif /* defined(__G3MiOSSDK__FlatColorMesh__) */
+#endif
