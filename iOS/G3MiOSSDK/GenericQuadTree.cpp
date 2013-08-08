@@ -8,6 +8,9 @@
 
 #include "GenericQuadTree.hpp"
 
+#include "StringBuilder_iOS.hpp"
+
+
 GenericQuadTree_Node::~GenericQuadTree_Node() {
   const int elementsSize = _elements.size();
   for (int i = 0; i < elementsSize; i++) {
@@ -21,6 +24,30 @@ GenericQuadTree_Node::~GenericQuadTree_Node() {
 
     delete [] _children;
   }
+}
+
+void GenericQuadTree_Node::computeElementsSector(){
+
+  delete _elementsSector;
+  _elementsSector = new Sector(_sector);
+  if (_children == NULL){
+    const int size = _elements.size();
+    for (int i = 0; i < size; i++) {
+      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
+      delete _elementsSector;
+      _elementsSector = new Sector(newElementSector);
+    }
+
+  } else{
+
+    for (int i = 0; i < 4; i++) {
+      Sector newElementSector =_elementsSector->mergedWith(_children[i]->getElementsSector());
+      delete _elementsSector;
+      _elementsSector = new Sector(newElementSector);
+    }
+
+  }
+  
 }
 
 void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
@@ -57,8 +84,8 @@ void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
 
     for (int j = 0; j < 4; j++){    
       GenericQuadTree_Node* child = _children[j];
-      if (child->getSector().contains( e->getCenter()) ){
-        child->add(e, maxElementsPerNode, maxDepth);
+      if (child->add(e, maxElementsPerNode, maxDepth)){
+        break;
       }
     }
   }
@@ -86,43 +113,22 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
 
     for (int j = 0; j < 4; j++){
       GenericQuadTree_Node* child = _children[j];
-      if (child->getSector().contains( element->getCenter()) ){
-        child->add(element, maxElementsPerNode, maxDepth);
+      if (child->add(element, maxElementsPerNode, maxDepth)){
+        break;
       }
     }
   }
+
+  computeElementsSector();
+
   return true;
 
 }
 
 bool GenericQuadTree_Node::acceptVisitor(const Sector& sector,
                                   const GenericQuadTreeVisitor& visitor) const {
-  if (!_sector.touchesWith(sector)) {
+  if (!_elementsSector->touchesWith(sector)) {
     return false;
-  }
-
-  const int elementsSize = _elements.size();
-  for (int i = 0; i < elementsSize; i++) {
-    GenericQuadTree_Element* element = _elements[i];
-
-    if (element->isSectorElement()){ //Element is associated to sector
-      GenericQuadTree_SectorElement* e = (GenericQuadTree_SectorElement*) element;
-      if (e->_sector.touchesWith(sector)) {
-        const bool abort = visitor.visitElement(e->_sector, element->_element);
-        if (abort) {
-          return true;
-        }
-      }
-    } else{ //Element is associated to geodetic
-      GenericQuadTree_Geodetic2DElement* e = (GenericQuadTree_Geodetic2DElement*) element;
-      if (sector.contains(e->_geodetic)) {
-        const bool abort = visitor.visitElement(e->_geodetic, element->_element);
-        if (abort) {
-          return true;
-        }
-      }
-      
-    }
   }
 
   if (_children != NULL) {
@@ -131,6 +137,31 @@ bool GenericQuadTree_Node::acceptVisitor(const Sector& sector,
       const bool abort = child->acceptVisitor(sector, visitor);
       if (abort) {
         return true;
+      }
+    }
+  } else{
+    
+    const int elementsSize = _elements.size();
+    for (int i = 0; i < elementsSize; i++) {
+      GenericQuadTree_Element* element = _elements[i];
+
+      if (element->isSectorElement()){ //Element is associated to sector
+        GenericQuadTree_SectorElement* e = (GenericQuadTree_SectorElement*) element;
+        if (e->_sector.touchesWith(sector)) {
+          const bool abort = visitor.visitElement(e->_sector, element->_element);
+          if (abort) {
+            return true;
+          }
+        }
+      } else{ //Element is associated to geodetic
+        GenericQuadTree_Geodetic2DElement* e = (GenericQuadTree_Geodetic2DElement*) element;
+        if (sector.contains(e->_geodetic)) {
+          const bool abort = visitor.visitElement(e->_geodetic, element->_element);
+          if (abort) {
+            return true;
+          }
+        }
+        
       }
     }
   }
@@ -164,27 +195,67 @@ bool GenericQuadTree::acceptVisitor(const Sector& sector,
 ///////////////////////////////////////////////////////////////////////
 void GenericQuadTree_TESTER::run(int nElements){
 
+  IStringBuilder::setInstance(new StringBuilder_iOS());
+
+
   GenericQuadTree tree;
+  std::vector<Sector*> sectors;
+  std::vector<Geodetic2D*> geos;
 
   for (int i = 0; i < nElements; i++) {
 
+
+    double minLat = rand()%180 -90;
+    double minLon = rand()%360 -180;
+    
     int type = rand();
     if (type%2 == 0){
 
-      Sector s = Sector::fromDegrees(rand(), rand(), rand(), rand());
-      std::string* element = new std::string();
-      *element = "SECTOR ELEMENT " + s.description();
 
-      tree.add(s, element);
+      double maxLat = rand()%180 -90;
+      double maxLon = rand()%360 -180;
+
+      if (minLat> maxLat){
+        double aux = minLat;
+        minLat = maxLat;
+        maxLat = aux;
+      }
+
+      if (minLon> maxLon){
+        double aux = minLon;
+        minLon  = maxLon;
+        maxLon = aux;
+      }
+
+      Sector s = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
+      sectors.push_back(new Sector(s));
+      std::string desc = "SECTOR ELEMENT " + s.description();
+      std::string* element = new std::string();
+      *element = desc;
+
+      if (!tree.add(s, element)){
+        printf("ERROR");
+      }
 
     } else{
 
-      Geodetic2D geo = Geodetic2D::fromDegrees(rand(), rand());
+      Geodetic2D geo = Geodetic2D::fromDegrees(minLat, minLon);
+      geos.push_back(new Geodetic2D(geo));
+      std::string desc = "GEODETIC ELEMENT " + geo.description();
       std::string* element = new std::string();
-      *element = "GEODETIC ELEMENT " + geo.description();
+      *element = desc;
 
-      tree.add(geo, element);
+      if (!tree.add(geo, element)){
+        printf("ERROR");
+      }
     }
   }
+
+  for (int i = 0; i < sectors.size(); i++){
+    tree.ac
+  }
+
+
+  printf("OK");
   
 }

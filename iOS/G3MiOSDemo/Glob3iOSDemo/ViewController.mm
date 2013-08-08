@@ -218,6 +218,8 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   [super viewDidLoad];
 
+  GenericQuadTree_TESTER::run(100);
+
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];

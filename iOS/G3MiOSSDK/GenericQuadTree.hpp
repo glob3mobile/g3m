@@ -20,8 +20,6 @@ public:
 
   }
 
-  virtual bool isSectorVisitor() const = 0;
-
   virtual bool visitElement(const Sector& sector,
                             const void*   element) const = 0;
   virtual bool visitElement(const Geodetic2D& geodetic,
@@ -43,6 +41,7 @@ public:
 
   virtual bool isSectorElement() const = 0;
   virtual Geodetic2D getCenter() const = 0;
+  virtual Sector getSector() const = 0;
 
   virtual ~GenericQuadTree_Element() {
   }
@@ -58,6 +57,7 @@ public:
   GenericQuadTree_Element(element){ }
   bool isSectorElement() const { return true;}
   Geodetic2D getCenter() const { return _sector.getCenter();}
+  Sector getSector() const { return _sector;}
 
   ~GenericQuadTree_SectorElement() {}
 };
@@ -72,6 +72,7 @@ public:
   GenericQuadTree_Element(element){}
   bool isSectorElement() const { return false;}
   Geodetic2D getCenter() const { return _geodetic;}
+  Sector getSector() const { return Sector(_geodetic, _geodetic);}
 
   ~GenericQuadTree_Geodetic2DElement() {}
 };
@@ -82,6 +83,9 @@ class GenericQuadTree_Node {
 private:
   const int     _depth;
   const Sector  _sector;
+
+  Sector* _elementsSector;
+
   std::vector<GenericQuadTree_Element*> _elements;
 
   GenericQuadTree_Node** _children;
@@ -90,24 +94,29 @@ private:
                 GenericQuadTree_Node* parent) :
   _sector(sector),
   _depth( parent->_depth + 1 ),
-  _children(NULL)
+  _children(NULL),
+  _elementsSector(new Sector(sector))
   {
   }
 
   void splitNode(int maxElementsPerNode,
                  int maxDepth);
 
+  void computeElementsSector();
+
 public:
   GenericQuadTree_Node(const Sector& sector) :
   _sector(sector),
   _depth(1),
-  _children(NULL)
+  _children(NULL),
+  _elementsSector(new Sector(sector))
   {
   }
 
   ~GenericQuadTree_Node();
 
   Sector getSector() const{ return _sector;}
+  Sector getElementsSector() const { return *_elementsSector;}
 
   bool add(GenericQuadTree_Element* element,
            int maxElementsPerNode,
@@ -155,6 +164,27 @@ public:
 ////////////////////////////////////////////////////////////////////////////
 
 class GenericQuadTree_TESTER {
+
+  class GenericQuadTreeVisitor_TESTER {
+  public:
+
+    bool visitElement(const Sector& sector,
+                      const void*   element) const{
+      std::string* s = (std::string*)element;
+      printf("ELEMENT -> %s\n", s->c_str());
+      return true;
+    }
+    
+    bool visitElement(const Geodetic2D& geodetic,
+                              const void*   element) const{
+      std::string* s = (std::string*)element;
+      printf("ELEMENT -> %s\n", s->c_str());
+      return true;
+    }
+
+    void endVisit(bool aborted) const{}
+    
+  };
 
 public:
   static void run(int nElements);
