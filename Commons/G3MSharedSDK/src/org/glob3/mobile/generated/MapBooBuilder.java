@@ -573,6 +573,14 @@ public abstract class MapBooBuilder
               setApplicationDescription(jsonDescription.value());
             }
   
+            // always process defaultSceneIndex before scenes
+            final JSONNumber jsonDefaultSceneIndex = jsonObject.getAsNumber("defaultSceneIndex");
+            if (jsonDefaultSceneIndex != null)
+            {
+              final int defaultSceneIndex = (int) jsonDefaultSceneIndex.value();
+              setApplicationDefaultSceneIndex(defaultSceneIndex);
+            }
+  
             final JSONArray jsonScenes = jsonObject.getAsArray("scenes");
             if (jsonScenes != null)
             {
@@ -590,12 +598,6 @@ public abstract class MapBooBuilder
   
               setApplicationScenes(scenes);
             }
-  
-  //          const JSONNumber* jsonDefaultScene = jsonObject->getAsNumber("defaultScene");
-  //          if (jsonDefaultScene != NULL) {
-  //            const int defaultScene = (int) jsonDefaultScene->value();
-  //            setApplication
-  //          }
   
             int _TODO_Application_Warnings;
   
@@ -626,6 +628,12 @@ public abstract class MapBooBuilder
   //                                                                     autodeleteWebSocket);
   
     context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+  }
+
+  /** Private to G3M, don't call it */
+  public final void setApplicationDefaultSceneIndex(int defaultSceneIndex)
+  {
+    _applicationDefaultSceneIndex = defaultSceneIndex;
   }
 
 
