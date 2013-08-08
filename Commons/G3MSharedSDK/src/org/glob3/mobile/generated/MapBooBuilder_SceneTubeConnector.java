@@ -18,18 +18,3 @@ public class MapBooBuilder_SceneTubeConnector extends GInitializationTask
     return true;
   }
 }
-//void MapBooBuilder::rawChangeApplication(const std::string& applicationId) {
-//  if (applicationId.compare(_applicationId) != 0) {
-//    resetApplication(applicationId);
-//    
-//    resetG3MWidget();
-//    
-//    if (_applicationListener != NULL) {
-//      _applicationListener->onApplicationChanged(applicationId);
-//    }
-//    
-//    if (_sceneTubeWebSocket != NULL) {
-//      _sceneTubeWebSocket->close();
-//    }
-//  }
-//}

@@ -58,4 +58,49 @@ public class MapBoo_Scene
     if (_overlayLayer != null)
        _overlayLayer.dispose();
   }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addString("[Scene name=");
+    isb.addString(_name);
+  
+    isb.addString(", description=");
+    isb.addString(_description);
+  
+    isb.addString(", icon=");
+    isb.addString(_icon);
+  
+    isb.addString(", backgroundColor=");
+    isb.addString(_backgroundColor.description());
+  
+    isb.addString(", baseLayer=");
+    if (_baseLayer == null)
+    {
+      isb.addString("NULL");
+    }
+    else
+    {
+      isb.addString(_baseLayer.description());
+    }
+  
+    isb.addString(", overlayLayer=");
+    if (_overlayLayer == null)
+    {
+      isb.addString("NULL");
+    }
+    else
+    {
+      isb.addString(_overlayLayer.description());
+    }
+  
+    isb.addString("]");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
 }

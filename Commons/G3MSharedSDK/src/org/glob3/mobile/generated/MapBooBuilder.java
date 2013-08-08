@@ -22,7 +22,6 @@ public abstract class MapBooBuilder
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
-//  IWebSocket* _applicationTubeWebSocket;
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -355,8 +354,8 @@ public abstract class MapBooBuilder
     }
   }
 
+
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
-  //_applicationTubeWebSocket(NULL),
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -627,11 +626,6 @@ public abstract class MapBooBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-  //  _applicationTubeWebSocket = context->getFactory()->createWebSocket(createApplicationTubeURL(),
-  //                                                                     new MapBooBuilder_ApplicationTubeListener(this),
-  //                                                                     autodeleteListener,
-  //                                                                     autodeleteWebSocket);
-  
     context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
@@ -641,32 +635,20 @@ public abstract class MapBooBuilder
     _applicationDefaultSceneIndex = defaultSceneIndex;
   }
 
-
-  //class MapBooBuilder_ChangeSceneIdTask : public GTask {
-  //private:
-  //  MapBooBuilder*    _builder;
-  //  const std::string _applicationId;
-  //
-  //public:
-  //  MapBooBuilder_ChangeSceneIdTask(MapBooBuilder* builder,
-  //                                  const std::string& applicationId) :
-  //  _builder(builder),
-  //  _applicationId(applicationId)
-  //  {
-  //  }
-  //
-  //  void run(const G3MContext* context) {
-  //    _builder->rawChangeApplication(_applicationId);
-  //  }
-  //};
-  //
-  //void MapBooBuilder::changeApplication(const std::string& applicationId) {
-  //  if (applicationId.compare(_applicationId) != 0) {
-  //    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
-  //                                             true);
-  //  }
-  //}
+  /** Private to G3M, don't call it */
+  public final void rawChangeScene(int sceneIndex)
+  {
+    _applicationCurrentSceneIndex = sceneIndex;
   
+    changedCurrentScene();
+  
+    if (_applicationListener != null)
+    {
+      _applicationListener.onSceneChanged(_applicationCurrentSceneIndex);
+    }
+  }
+
+
   //void MapBooBuilder::resetApplication(const std::string& applicationId) {
   //  _applicationId = applicationId;
   //
@@ -701,13 +683,7 @@ public abstract class MapBooBuilder
   
   public final void setApplicationTubeOpened(boolean open)
   {
-    if (_isApplicationTubeOpen != open)
-    {
-      _isApplicationTubeOpen = open;
-  //    if (!_isApplicationTubeOpen) {
-  //      _applicationTubeWebSocket = NULL;
-  //    }
-    }
+    _isApplicationTubeOpen = open;
   }
 
   public final boolean isApplicationTubeOpen()
@@ -717,17 +693,23 @@ public abstract class MapBooBuilder
 
 //  void changeApplication(const std::string& applicationId);
 
+
+  //void MapBooBuilder::changeApplication(const std::string& applicationId) {
+  //  if (applicationId.compare(_applicationId) != 0) {
+  //    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
+  //                                             true);
+  //  }
+  //}
+  
+  
   public final void changeScene(int sceneIndex)
   {
     final int currentSceneIndex = getApplicationCurrentSceneIndex();
     if (currentSceneIndex != sceneIndex)
     {
-      final int applicationScenesSize = _applicationScenes.size();
-      if ((sceneIndex >= 0) && (sceneIndex < applicationScenesSize))
+      if ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()))
       {
-        _applicationCurrentSceneIndex = sceneIndex;
-  
-        changedCurrentScene();
+        getThreadUtils().invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneIndex), true);
       }
     }
   }

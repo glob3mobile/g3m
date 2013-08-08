@@ -48,4 +48,9 @@ public class MapBoxLayer extends MercatorTiledLayer
 
   }
 
+  public final String description()
+  {
+    return "[MapBoxLayer]";
+  }
+
 }

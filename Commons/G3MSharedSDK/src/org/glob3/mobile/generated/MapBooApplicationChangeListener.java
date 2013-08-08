@@ -52,7 +52,6 @@ public abstract class MapBooApplicationChangeListener
 {
   public void dispose()
   {
-
   }
 
   public abstract void onNameChanged(String name);
@@ -61,8 +60,9 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onIconChanged(String icon);
 
-  public abstract void onScenesChanged(java.util.ArrayList<MapBoo_Scene> applicationScenes);
+  public abstract void onScenesChanged(java.util.ArrayList<MapBoo_Scene> scenes);
 
-//  virtual void onWarningsChanged() = 0;
+  // virtual void onWarningsChanged() = 0;
 
+  public abstract void onSceneChanged(int sceneIndex);
 }
