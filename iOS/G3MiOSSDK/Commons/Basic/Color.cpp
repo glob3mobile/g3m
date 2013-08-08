@@ -10,7 +10,7 @@
 
 #include "IStringUtils.hpp"
 #include "IMathUtils.hpp"
-
+#include "IStringBuilder.hpp"
 
 Color* Color::parse(const std::string& str) {
   const IStringUtils* su = IStringUtils::instance();
@@ -203,4 +203,20 @@ Color Color::wheelStep(int wheelSize,
                                             getSaturation(),
                                             getBrightness(),
                                             _alpha);
+}
+
+const std::string Color::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("[Color red=");
+  isb->addFloat(_red);
+  isb->addString(", green=");
+  isb->addFloat(_green);
+  isb->addString(", blue=");
+  isb->addFloat(_blue);
+  isb->addString(", alpha=");
+  isb->addFloat(_alpha);
+  isb->addString("]");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

@@ -35,6 +35,7 @@ public:
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
 
+  const std::string description() const;
 
 };
 

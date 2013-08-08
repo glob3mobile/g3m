@@ -7,3 +7,7 @@
 //
 
 #include "CartoDBLayer.hpp"
+
+const std::string CartoDBLayer::description() const {
+  return "[CartoDBLayer]";
+}

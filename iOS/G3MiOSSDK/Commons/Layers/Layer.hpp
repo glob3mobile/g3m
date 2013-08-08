@@ -138,6 +138,8 @@ public:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
     return _parameters;
   }
+
+  virtual const std::string description() const = 0;
   
 };
 

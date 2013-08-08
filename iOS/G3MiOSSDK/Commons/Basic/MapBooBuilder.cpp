@@ -49,6 +49,43 @@ MapBoo_Scene::~MapBoo_Scene() {
   delete _overlayLayer;
 }
 
+const std::string MapBoo_Scene::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("[Scene name=");
+  isb->addString(_name);
+
+  isb->addString(", description=");
+  isb->addString(_description);
+
+  isb->addString(", icon=");
+  isb->addString(_icon);
+
+  isb->addString(", backgroundColor=");
+  isb->addString(_backgroundColor.description());
+
+  isb->addString(", baseLayer=");
+  if (_baseLayer == NULL) {
+    isb->addString("NULL");
+  }
+  else {
+    isb->addString(_baseLayer->description());
+  }
+
+  isb->addString(", overlayLayer=");
+  if (_overlayLayer == NULL) {
+    isb->addString("NULL");
+  }
+  else {
+    isb->addString(_overlayLayer->description());
+  }
+
+  isb->addString("]");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
 
 MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const URL& tubesURL,
@@ -71,7 +108,6 @@ _downloader(NULL),
 _applicationListener(applicationListener),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
-//_applicationTubeWebSocket(NULL),
 _applicationCurrentSceneIndex(-1),
 _applicationDefaultSceneIndex(0)
 {
@@ -650,11 +686,6 @@ void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-//  _applicationTubeWebSocket = context->getFactory()->createWebSocket(createApplicationTubeURL(),
-//                                                                     new MapBooBuilder_ApplicationTubeListener(this),
-//                                                                     autodeleteListener,
-//                                                                     autodeleteWebSocket);
-
   context->getFactory()->createWebSocket(createApplicationTubeURL(),
                                          new MapBooBuilder_ApplicationTubeListener(this),
                                          autodeleteListener,
@@ -760,15 +791,50 @@ void MapBooBuilder::setApplicationDescription(const std::string& description) {
   }
 }
 
+
+class MapBooBuilder_ChangeSceneTask : public GTask {
+private:
+  MapBooBuilder* _builder;
+  const int      _sceneIndex;
+
+public:
+  MapBooBuilder_ChangeSceneTask(MapBooBuilder* builder,
+                                int sceneIndex) :
+  _builder(builder),
+  _sceneIndex(sceneIndex)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _builder->rawChangeScene(_sceneIndex);
+  }
+};
+
+void MapBooBuilder::rawChangeScene(int sceneIndex) {
+  _applicationCurrentSceneIndex = sceneIndex;
+
+  changedCurrentScene();
+
+  if (_applicationListener != NULL) {
+    _applicationListener->onSceneChanged(_applicationCurrentSceneIndex);
+  }
+}
+
+//void MapBooBuilder::changeApplication(const std::string& applicationId) {
+//  if (applicationId.compare(_applicationId) != 0) {
+//    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
+//                                             true);
+//  }
+//}
+
+
 void MapBooBuilder::changeScene(int sceneIndex) {
   const int currentSceneIndex = getApplicationCurrentSceneIndex();
   if (currentSceneIndex != sceneIndex) {
-    const int applicationScenesSize = _applicationScenes.size();
     if ((sceneIndex >= 0) &&
-        (sceneIndex < applicationScenesSize)) {
-      _applicationCurrentSceneIndex = sceneIndex;
-
-      changedCurrentScene();
+        (sceneIndex < _applicationScenes.size())) {
+      getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneIndex),
+                                               true);
     }
   }
 }
@@ -801,31 +867,6 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
     _applicationListener->onScenesChanged(_applicationScenes);
   }
 }
-
-//class MapBooBuilder_ChangeSceneIdTask : public GTask {
-//private:
-//  MapBooBuilder*    _builder;
-//  const std::string _applicationId;
-//
-//public:
-//  MapBooBuilder_ChangeSceneIdTask(MapBooBuilder* builder,
-//                                  const std::string& applicationId) :
-//  _builder(builder),
-//  _applicationId(applicationId)
-//  {
-//  }
-//
-//  void run(const G3MContext* context) {
-//    _builder->rawChangeApplication(_applicationId);
-//  }
-//};
-//
-//void MapBooBuilder::changeApplication(const std::string& applicationId) {
-//  if (applicationId.compare(_applicationId) != 0) {
-//    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
-//                                             true);
-//  }
-//}
 
 //void MapBooBuilder::resetApplication(const std::string& applicationId) {
 //  _applicationId = applicationId;
@@ -860,12 +901,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 //}
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
-  if (_isApplicationTubeOpen != open) {
-    _isApplicationTubeOpen = open;
-//    if (!_isApplicationTubeOpen) {
-//      _applicationTubeWebSocket = NULL;
-//    }
-  }
+  _isApplicationTubeOpen = open;
 }
 
 //void MapBooBuilder::rawChangeApplication(const std::string& applicationId) {

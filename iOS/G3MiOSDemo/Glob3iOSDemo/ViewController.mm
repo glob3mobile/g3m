@@ -234,9 +234,43 @@ Mesh* createSectorMesh(const Planet* planet,
   [[self G3MWidget] startAnimation];
 }
 
+
+class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
+public:
+  void onNameChanged(const std::string& name) {
+    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
+                                 name.c_str());
+  }
+
+  void onDescriptionChanged(const std::string& description) {
+    ILogger::instance()->logInfo("MapBoo application description=\"%s\"",
+                                 description.c_str());
+  }
+
+  void onIconChanged(const std::string& icon) {
+    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
+                                 icon.c_str());
+  }
+
+  void onScenesChanged(const std::vector<MapBoo_Scene*>& scenes) {
+    const int scenesSize = scenes.size();
+    for (int i = 0; i < scenesSize; i++) {
+      ILogger::instance()->logInfo("MapBoo application scene #%l=%s",
+                                   i,
+                                   scenes[i]->description().c_str());
+    }
+  }
+
+  void onSceneChanged(int sceneIndex) {
+    ILogger::instance()->logInfo("MapBoo application current scene=%l",
+                                 sceneIndex);
+  }
+};
+
+
 - (void) initWithMapBooBuilder
 {
-  MapBooApplicationChangeListener* applicationListener = NULL;
+  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
   const bool useWebSockets = true;
 
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],

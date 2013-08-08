@@ -49,7 +49,6 @@ class MapBoo_Scene;
 class MapBooApplicationChangeListener {
 public:
   virtual ~MapBooApplicationChangeListener() {
-
   }
 
   virtual void onNameChanged(const std::string& name) = 0;
@@ -58,11 +57,13 @@ public:
 
   virtual void onIconChanged(const std::string& icon) = 0;
 
-  virtual void onScenesChanged(const std::vector<MapBoo_Scene*>& applicationScenes) = 0;
+  virtual void onScenesChanged(const std::vector<MapBoo_Scene*>& scenes) = 0;
 
-//  virtual void onWarningsChanged() = 0;
+  // virtual void onWarningsChanged() = 0;
 
+  virtual void onSceneChanged(int sceneIndex) = 0;
 };
+
 
 class MapBoo_Scene {
 private:
@@ -108,6 +109,9 @@ public:
   void recreateLayerSet(LayerSet* layerSet) const;
 
   ~MapBoo_Scene();
+
+  const std::string description() const;
+
 };
 
 
@@ -138,9 +142,8 @@ private:
 
   GL* _gl;
   G3MWidget* _g3mWidget;
-  IStorage* _storage;
+  IStorage*  _storage;
 
-//  IWebSocket* _applicationTubeWebSocket;
   bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
@@ -202,6 +205,7 @@ private:
   Color         parseColor(const JSONString* jsonColor) const;
 
   void changedCurrentScene();
+
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -265,6 +269,9 @@ public:
 
   /** Private to G3M, don't call it */
   void setApplicationDefaultSceneIndex(int defaultSceneIndex);
+
+  /** Private to G3M, don't call it */
+  void rawChangeScene(int sceneIndex);
 
   void setApplicationTubeOpened(bool open);
   

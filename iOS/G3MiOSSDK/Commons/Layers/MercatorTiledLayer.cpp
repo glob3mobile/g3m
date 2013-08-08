@@ -121,3 +121,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   
   return petitions;
 }
+
+const std::string MercatorTiledLayer::description() const {
+  return "[MercatorTiledLayer]";
+}

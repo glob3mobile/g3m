@@ -91,6 +91,8 @@ public:
   void onDowloadMetadata(IByteBuffer* buffer);
   void onDownloadErrorMetadata();
 
+  const std::string description() const;
+
 };
 
 #endif

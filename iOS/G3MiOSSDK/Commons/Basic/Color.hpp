@@ -180,7 +180,6 @@ public:
   }
 
   Color muchDarker() {
-//    return adjustBrightness(-0.32f);
     return adjustBrightness(-0.64f);
   }
 
@@ -193,9 +192,10 @@ public:
   }
   
   Color muchLighter() {
-//    return adjustSaturationBrightness(-0.12f, 0.32f);
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
+
+  const std::string description() const;
 
 };
 

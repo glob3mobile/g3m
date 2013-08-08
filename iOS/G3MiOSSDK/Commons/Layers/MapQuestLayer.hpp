@@ -81,6 +81,8 @@ public:
                              readExpired,
                              condition);
   }
+
+  const std::string description() const;
   
 };
 
