@@ -305,14 +305,15 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 //                                 cameraAngle2HorizonInRadians);
 
 
-  // test if sector is back oriented with respect to the camera
+  /*
+   // test if sector is back oriented with respect to the camera
   if (_sector.isBackOriented(rc,
                              getMinHeight(),
                              planet,
                              cameraNormalizedPosition,
                              cameraAngle2HorizonInRadians)) {
     return false;
-  }
+  }*/
 
   const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
 
