@@ -39,7 +39,6 @@
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
-		CC95349117B378D500D73929 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
 		CCB2566415B5F58500079B96 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2566315B5F58500079B96 /* Box.cpp */; };
@@ -227,7 +226,7 @@
 		CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */; };
 		CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */; };
 		CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
-		CFAB754F17AC517500852FA7 /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB673177B60C90034CC52 /* CameraDoubleDragHandler.hpp */; };
+		CFAB754F17AC517500852FA7 /* (null) in CopyFiles */ = {isa = PBXBuildFile; };
 		CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */; };
 		CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -318,6 +317,7 @@
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
 		D80A28711746572E0058CEC3 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286F1746572E0058CEC3 /* GLState.cpp */; };
@@ -581,7 +581,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				CFAB754F17AC517500852FA7 /* CameraDoubleDragHandler.hpp in CopyFiles */,
+				D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */,
+				CFAB754F17AC517500852FA7 /* (null) in CopyFiles */,
 				CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */,
 				CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */,
 				CFAA530617AAFE9E002A9204 /* DecimatedSubviewElevationData.hpp in CopyFiles */,
