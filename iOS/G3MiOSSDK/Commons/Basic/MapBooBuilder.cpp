@@ -401,7 +401,7 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
             setApplicationScenes(scenes);
           }
 
-          int _TODO_Application_Warnings;
+          // int _TODO_Application_Warnings;
 
           setApplicationTimestamp(timestamp);
         }
@@ -760,6 +760,30 @@ void MapBooBuilder::setApplicationDescription(const std::string& description) {
   }
 }
 
+void MapBooBuilder::changeScene(int sceneIndex) {
+  const int currentSceneIndex = getApplicationCurrentSceneIndex();
+  if (currentSceneIndex != sceneIndex) {
+    const int applicationScenesSize = _applicationScenes.size();
+    if ((sceneIndex >= 0) &&
+        (sceneIndex < applicationScenesSize)) {
+      _applicationCurrentSceneIndex = sceneIndex;
+
+      changedCurrentScene();
+    }
+  }
+}
+
+void MapBooBuilder::changedCurrentScene() {
+  recreateLayerSet();
+
+  if (_g3mWidget != NULL) {
+    _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
+
+    // force inmediate ejecution of PeriodicalTasks
+    _g3mWidget->resetPeriodicalTasksTimeouts();
+  }
+}
+
 void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes) {
   const int currentScenesCount = _applicationScenes.size();
   for (int i = 0; i < currentScenesCount; i++) {
@@ -771,15 +795,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 
   _applicationScenes = applicationScenes;
 
-  recreateLayerSet();
-
-  if (_g3mWidget != NULL) {
-    _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
-
-//    // force inmediate ejecution of PeriodicalTasks
-//    _g3mWidget->resetPeriodicalTasksTimeouts();
-  }
-
+  changedCurrentScene();
+  
   if (_applicationListener != NULL) {
     _applicationListener->onScenesChanged(_applicationScenes);
   }

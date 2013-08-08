@@ -201,6 +201,8 @@ private:
   MapBoo_Scene* parseScene(const JSONObject* json) const;
   Color         parseColor(const JSONString* jsonColor) const;
 
+  void changedCurrentScene();
+
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
@@ -271,6 +273,9 @@ public:
   }
   
 //  void changeApplication(const std::string& applicationId);
+
+  void changeScene(int sceneIndex);
+
 };
 
 #endif
