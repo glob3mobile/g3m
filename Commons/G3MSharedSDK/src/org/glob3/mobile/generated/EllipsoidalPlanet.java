@@ -572,9 +572,9 @@ public class EllipsoidalPlanet extends Planet
   
     // move the camera forward
     {
-      MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
-      positionCamera = positionCamera.transformedBy(translation, 1.0);
-      matrix = translation.multiply(matrix);
+      MutableMatrix44D translation2 = MutableMatrix44D.createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
+      positionCamera = positionCamera.transformedBy(translation2, 1.0);
+      matrix = translation2.multiply(matrix);
     }
   
     // compute 3D point of view center
@@ -604,8 +604,8 @@ public class EllipsoidalPlanet extends Planet
     {
       Vector3D normal = geodeticSurfaceNormal(centerPoint2);
       Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-      Vector3D P0 = closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
-      Vector3D v1 = P0.sub(centerPoint2).projectionInPlane(normal);
+      Vector3D p0 = closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
+      Vector3D v1 = p0.sub(centerPoint2).projectionInPlane(normal);
       double angle = v0.angleBetween(v1)._degrees;
       double sign = v1.cross(v0).dot(normal);
       if (sign<0)
