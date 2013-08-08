@@ -342,6 +342,19 @@ public abstract class MapBooBuilder
     return result;
   }
 
+  private void changedCurrentScene()
+  {
+    recreateLayerSet();
+  
+    if (_g3mWidget != null)
+    {
+      _g3mWidget.setBackgroundColor(getCurrentBackgroundColor());
+  
+      // force inmediate ejecution of PeriodicalTasks
+      _g3mWidget.resetPeriodicalTasksTimeouts();
+    }
+  }
+
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
   //_applicationTubeWebSocket(NULL),
   {
@@ -501,15 +514,7 @@ public abstract class MapBooBuilder
   
     _applicationScenes = applicationScenes;
   
-    recreateLayerSet();
-  
-    if (_g3mWidget != null)
-    {
-      _g3mWidget.setBackgroundColor(getCurrentBackgroundColor());
-  
-  //    // force inmediate ejecution of PeriodicalTasks
-  //    _g3mWidget->resetPeriodicalTasksTimeouts();
-    }
+    changedCurrentScene();
   
     if (_applicationListener != null)
     {
@@ -599,7 +604,7 @@ public abstract class MapBooBuilder
               setApplicationScenes(scenes);
             }
   
-            int _TODO_Application_Warnings;
+            // int _TODO_Application_Warnings;
   
             setApplicationTimestamp(timestamp);
           }
@@ -711,4 +716,20 @@ public abstract class MapBooBuilder
   }
 
 //  void changeApplication(const std::string& applicationId);
+
+  public final void changeScene(int sceneIndex)
+  {
+    final int currentSceneIndex = getApplicationCurrentSceneIndex();
+    if (currentSceneIndex != sceneIndex)
+    {
+      final int applicationScenesSize = _applicationScenes.size();
+      if ((sceneIndex >= 0) && (sceneIndex < applicationScenesSize))
+      {
+        _applicationCurrentSceneIndex = sceneIndex;
+  
+        changedCurrentScene();
+      }
+    }
+  }
+
 }
