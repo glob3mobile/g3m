@@ -101,7 +101,6 @@
 #import <G3MiOSSDK/SGMaterialNode.hpp>
 
 #import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
-#import <G3MiOSSDK/MapBooSceneDescription.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 
 #import <G3MiOSSDK/TileRasterizer.hpp>
@@ -234,30 +233,6 @@ Mesh* createSectorMesh(const Planet* planet,
 
   [[self G3MWidget] startAnimation];
 }
-
-
-//class TestMapBooBuilderScenesDescriptionsListener  : public MapBooBuilderScenesDescriptionsListener {
-//public:
-//  void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) {
-//    const int scenesCount = scenesDescriptions->size();
-//    for (int i = 0; i < scenesCount; i++) {
-//      MapBooSceneDescription* sceneDescription = scenesDescriptions->at(i);
-//      ILogger::instance()->logInfo("%s", sceneDescription->description().c_str());
-//    }
-//
-//    for (int i = 0; i < scenesCount; i++) {
-//      delete scenesDescriptions->at(i);
-//    }
-//
-//    delete scenesDescriptions;
-//  }
-//
-//  void onError() {
-//    ILogger::instance()->logError("Error downloading ScenesDescriptions");
-//  }
-//
-//};
-
 
 - (void) initWithMapBooBuilder
 {

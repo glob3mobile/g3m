@@ -25,7 +25,6 @@ class GInitializationTask;
 class PeriodicalTask;
 class Layer;
 class LayerSet;
-//class MapBooApplicationDescription;
 class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
@@ -65,19 +64,6 @@ public:
 
 };
 
-
-//class MapBooBuilderApplicationsDescriptionsListener {
-//public:
-//  virtual ~MapBooBuilderApplicationsDescriptionsListener() {
-//
-//  }
-//
-//  virtual void onDownload(std::vector<MapBooApplicationDescription*>* ApplicationsDescriptions) = 0;
-//
-//  virtual void onError() = 0;
-//
-//};
-
 class MapBoo_Scene {
 private:
   const std::string _name;
@@ -101,7 +87,18 @@ public:
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer)
   {
-    
+  }
+
+  const std::string getName() const {
+    return _name;
+  }
+
+  const std::string getDescription() const {
+    return _description;
+  }
+
+  const std::string getIcon() const {
+    return _icon;
   }
 
   Color getBackgroundColor() const {
@@ -137,12 +134,6 @@ private:
 
   std::vector<MapBoo_Scene*> _applicationScenes;
   int                        _currentScene;
-  
-  //  Layer*      _applicationBaseLayer;
-  //  Layer*      _applicationOverlayLayer;
-  //  std::string _applicationUser;
-  //  Color*      _applicationBackgroundColor;
-
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -161,8 +152,6 @@ private:
   Renderer* createBusyRenderer();
 
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
-
-  //  const URL createApplicationsDescriptionsURL() const;
 
   void recreateLayerSet();
 
@@ -205,7 +194,7 @@ private:
 
   const MapBoo_Scene* getCurrentScene();
 
-  Color getBackgroundColor();
+  Color getCurrentBackgroundColor();
 
   MapBoo_Scene* parseScene(const JSONObject* json) const;
   Color         parseColor(const JSONString* jsonColor) const;
@@ -245,15 +234,6 @@ public:
   /** Private to G3M, don't call it */
   void setApplicationTimestamp(const int timestamp);
 
-//  /** Private to G3M, don't call it */
-//  void setApplicationBaseLayer(Layer* baseLayer);
-//
-//  /** Private to G3M, don't call it */
-//  void setApplicationOverlayLayer(Layer* overlayLayer);
-//
-//  /** Private to G3M, don't call it */
-//  void setApplicationUser(const std::string& user);
-
   /** Private to G3M, don't call it */
   void setApplicationName(const std::string& name);
 
@@ -263,9 +243,6 @@ public:
   /** Private to G3M, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
-//  /** Private to G3M, don't call it */
-//  void setApplicationBackgroundColor(const Color& backgroundColor);
-
   /** Private to G3M, don't call it */
   const URL createPollingApplicationDescriptionURL() const;
 
@@ -274,10 +251,6 @@ public:
 
 //  /** Private to G3M, don't call it */
 //  void rawChangeApplication(const std::string& applicationId);
-
-//  /** Private to G3M, don't call it */
-//  void requestApplicationsDescriptions(MapBooBuilderApplicationsDescriptionsListener* listener,
-//                                       bool autoDelete = true);
 
   /** Private to G3M, don't call it */
   void parseApplicationDescription(const std::string& json,
