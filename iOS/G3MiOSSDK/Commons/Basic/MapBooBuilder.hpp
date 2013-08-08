@@ -29,6 +29,7 @@ class LayerSet;
 class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
+class JSONString;
 class TimeInterval;
 class MapQuestLayer;
 class BingMapsLayer;
@@ -37,6 +38,7 @@ class MapBoxLayer;
 class WMSLayer;
 class G3MContext;
 class IWebSocket;
+class MapBoo_Scene;
 
 #include "URL.hpp"
 #include "Color.hpp"
@@ -57,15 +59,9 @@ public:
 
   virtual void onIconChanged(const std::string& icon) = 0;
 
-  virtual void onScenesChanged() = 0;
+  virtual void onScenesChanged(const std::vector<MapBoo_Scene*>& applicationScenes) = 0;
 
-  virtual void onWarningsChanged() = 0;
-
-  //  virtual void onIdChanged(const std::string& applicationId) = 0;
-  //  virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
-  //  virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
-  //  virtual void onUserChanged(const std::string& user) = 0;
-  //  virtual void onBackgroundColorChanged(const Color& backgroundColor) = 0;
+//  virtual void onWarningsChanged() = 0;
 
 };
 
@@ -111,6 +107,8 @@ public:
   Color getBackgroundColor() const {
     return _backgroundColor;
   }
+
+  void recreateLayerSet(LayerSet* layerSet) const;
 
   ~MapBoo_Scene();
 };
@@ -166,7 +164,7 @@ private:
 
   //  const URL createApplicationsDescriptionsURL() const;
 
-//  void recreateLayerSet();
+  void recreateLayerSet();
 
   IThreadUtils* _threadUtils;
   IThreadUtils* getThreadUtils();
@@ -208,6 +206,9 @@ private:
   const MapBoo_Scene* getCurrentScene();
 
   Color getBackgroundColor();
+
+  MapBoo_Scene* parseScene(const JSONObject* json) const;
+  Color         parseColor(const JSONString* jsonColor) const;
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -258,6 +259,9 @@ public:
 
   /** Private to G3M, don't call it */
   void setApplicationDescription(const std::string& description);
+
+  /** Private to G3M, don't call it */
+  void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
 //  /** Private to G3M, don't call it */
 //  void setApplicationBackgroundColor(const Color& backgroundColor);

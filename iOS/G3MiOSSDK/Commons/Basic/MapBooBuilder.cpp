@@ -274,6 +274,9 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
 
 
 Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
+  if (jsonBaseObjectLayer == NULL) {
+    return NULL;
+  }
 
   if (jsonBaseObjectLayer->asNull() != NULL) {
     return NULL;
@@ -312,6 +315,43 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   }
 }
 
+Color MapBooBuilder::parseColor(const JSONString* jsonColor) const {
+  if (jsonColor == NULL) {
+    return Color::black();
+  }
+
+  const Color* color = Color::parse(jsonColor->value());
+  if (color == NULL) {
+    ILogger::instance()->logError("Invalid format in attribute 'color' (%s)",
+                                  jsonColor->value().c_str());
+    return Color::black();
+  }
+
+  Color result(*color);
+  delete color;
+  return result;
+}
+
+MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  std::string name            = jsonObject->getAsString("name", "");
+  std::string description     = jsonObject->getAsString("description", "");
+  std::string icon            = jsonObject->getAsString("icon", "");
+  Color       backgroundColor = parseColor( jsonObject->getAsString("bgColor") );
+  Layer*      baseLayer       = parseLayer( jsonObject->get("baseLayer") );
+  Layer*      overlayLayer    = parseLayer( jsonObject->get("overlayLayer") );
+
+  return new MapBoo_Scene(name,
+                          description,
+                          icon,
+                          backgroundColor,
+                          baseLayer,
+                          overlayLayer);
+}
+
 
 void MapBooBuilder::parseApplicationDescription(const std::string& json,
                                                 const URL& url) {
@@ -332,13 +372,6 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
         const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
 
         if (getApplicationTimestamp() != timestamp) {
-//          const JSONString* jsonUser = jsonObject->getAsString("user");
-//          if (jsonUser != NULL) {
-//            setApplicationUser(jsonUser->value());
-//          }
-
-          //id
-
           const JSONString* jsonName = jsonObject->getAsString("name");
           if (jsonName != NULL) {
             setApplicationName(jsonName->value());
@@ -349,30 +382,23 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
             setApplicationDescription(jsonDescription->value());
           }
 
-//          const JSONString* jsonBGColor = jsonObject->getAsString("bgColor");
-//          if (jsonBGColor != NULL) {
-//            const Color* bgColor = Color::parse(jsonBGColor->value());
-//            if (bgColor == NULL) {
-//              ILogger::instance()->logError("Invalid format in attribute 'bgColor' (%s)",
-//                                            jsonBGColor->value().c_str());
-//            }
-//            else {
-//              setApplicationBackgroundColor(*bgColor);
-//              delete bgColor;
-//            }
-//          }
+          const JSONArray* jsonScenes = jsonObject->getAsArray("scenes");
+          if (jsonScenes != NULL) {
+            std::vector<MapBoo_Scene*> scenes;
 
-//          const JSONBaseObject* jsonBaseLayer = jsonObject->get("baseLayer");
-//          if (jsonBaseLayer != NULL) {
-//            setApplicationBaseLayer( parseLayer(jsonBaseLayer) );
-//          }
-//
-//          const JSONBaseObject* jsonOverlayLayer = jsonObject->get("overlayLayer");
-//          if (jsonOverlayLayer != NULL) {
-//            setApplicationOverlayLayer( parseLayer(jsonOverlayLayer) );
-//          }
+            const int scenesCount = jsonScenes->size();
+            for (int i = 0; i < scenesCount; i++) {
+              MapBoo_Scene* scene = parseScene( jsonScenes->getAsObject(i) );
+              if (scene != NULL) {
+                scenes.push_back(scene);
+              }
+            }
 
-          //tags
+            setApplicationScenes(scenes);
+          }
+
+//          scenes
+//          warnings
 
           setApplicationTimestamp(timestamp);
         }
@@ -399,11 +425,9 @@ public:
   {
   }
 
-
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-
     _builder->parseApplicationDescription(buffer->getAsString(), url);
     delete buffer;
   }
@@ -422,7 +446,7 @@ public:
                           bool expired) {
     // do nothing
   }
-
+  
 };
 
 
@@ -479,18 +503,24 @@ public:
   }
 };
 
+void MapBoo_Scene::recreateLayerSet(LayerSet* layerSet) const {
+  if (_baseLayer != NULL) {
+    layerSet->addLayer(_baseLayer);
+  }
 
-//void MapBooBuilder::recreateLayerSet() {
-//  _layerSet->removeAllLayers(false);
-//
-//  if (_sceneBaseLayer != NULL) {
-//    _layerSet->addLayer(_sceneBaseLayer);
-//  }
-//
-//  if (_sceneOverlayLayer != NULL) {
-//    _layerSet->addLayer(_sceneOverlayLayer);
-//  }
-//}
+  if (_overlayLayer != NULL) {
+    layerSet->addLayer(_overlayLayer);
+  }
+}
+
+void MapBooBuilder::recreateLayerSet() {
+  _layerSet->removeAllLayers(false);
+
+  const MapBoo_Scene* scene = getCurrentScene();
+  if (scene != NULL) {
+    scene->recreateLayerSet(_layerSet);
+  }
+}
 
 //void MapBooBuilder::setSceneBaseLayer(Layer* baseLayer) {
 //  if (baseLayer == NULL) {
@@ -528,6 +558,13 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
 
   return URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
 }
+
+const URL MapBooBuilder::createPollingApplicationDescriptionURL() const {
+  const std::string tubesPath = _tubesURL.getPath();
+
+  return URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
+}
+
 
 //const URL MapBooBuilder::createApplicationDescriptionURL() const {
 //  const std::string serverPath = _serverURL.getPath();
@@ -598,8 +635,8 @@ public:
   }
 
   void onOpen(IWebSocket* ws) {
-    ILogger::instance()->logError("Tube '%s' opened!",
-                                  ws->getURL().getPath().c_str());
+    ILogger::instance()->logInfo("Tube '%s' opened!",
+                                 ws->getURL().getPath().c_str());
     _builder->setApplicationTubeOpened(true);
   }
 
@@ -872,6 +909,24 @@ void MapBooBuilder::setApplicationDescription(const std::string& description) {
     if (_applicationListener != NULL) {
       _applicationListener->onDescriptionChanged(_applicationDescription);
     }
+  }
+}
+
+void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes) {
+  const int currentScenesCount = _applicationScenes.size();
+  for (int i = 0; i < currentScenesCount; i++) {
+    MapBoo_Scene* scene = _applicationScenes[i];
+    delete scene;
+  }
+
+  _applicationScenes.clear();
+
+  _applicationScenes = applicationScenes;
+
+  recreateLayerSet();
+
+  if (_applicationListener != NULL) {
+    _applicationListener->onScenesChanged(_applicationScenes);
   }
 }
 
