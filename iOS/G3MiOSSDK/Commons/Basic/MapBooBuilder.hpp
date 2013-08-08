@@ -261,6 +261,9 @@ public:
   /** Private to G3M, don't call it */
   void openApplicationTube(const G3MContext* context);
 
+  /** Private to G3M, don't call it */
+  void setApplicationDefaultSceneIndex(int defaultSceneIndex);
+
   void setApplicationTubeOpened(bool open);
   
   bool isApplicationTubeOpen() const {

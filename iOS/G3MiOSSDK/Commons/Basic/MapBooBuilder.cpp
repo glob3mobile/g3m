@@ -379,6 +379,13 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
             setApplicationDescription( jsonDescription->value() );
           }
 
+          // always process defaultSceneIndex before scenes
+          const JSONNumber* jsonDefaultSceneIndex = jsonObject->getAsNumber("defaultSceneIndex");
+          if (jsonDefaultSceneIndex != NULL) {
+            const int defaultSceneIndex = (int) jsonDefaultSceneIndex->value();
+            setApplicationDefaultSceneIndex(defaultSceneIndex);
+          }
+
           const JSONArray* jsonScenes = jsonObject->getAsArray("scenes");
           if (jsonScenes != NULL) {
             std::vector<MapBoo_Scene*> scenes;
@@ -393,12 +400,6 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
 
             setApplicationScenes(scenes);
           }
-
-//          const JSONNumber* jsonDefaultScene = jsonObject->getAsNumber("defaultScene");
-//          if (jsonDefaultScene != NULL) {
-//            const int defaultScene = (int) jsonDefaultScene->value();
-//            setApplication
-//          }
 
           int _TODO_Application_Warnings;
 
@@ -416,6 +417,9 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
   
 }
 
+void MapBooBuilder::setApplicationDefaultSceneIndex(int defaultSceneIndex) {
+  _applicationDefaultSceneIndex = defaultSceneIndex;
+}
 
 class MapBooBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
 private:
