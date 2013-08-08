@@ -15,13 +15,14 @@ public abstract class MapBooBuilder
   private int _applicationTimestamp;
 
   private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
-  private int _currentScene;
+  private int _applicationCurrentSceneIndex;
+  private int _applicationDefaultSceneIndex;
 
   private GL _gl;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
-  private IWebSocket _applicationTubeWebSocket;
+//  IWebSocket* _applicationTubeWebSocket;
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -95,7 +96,7 @@ public abstract class MapBooBuilder
   {
     _layerSet.removeAllLayers(false);
   
-    final MapBoo_Scene scene = getCurrentScene();
+    final MapBoo_Scene scene = getApplicationCurrentScene();
     if (scene != null)
     {
       scene.recreateLayerSet(_layerSet);
@@ -279,19 +280,29 @@ public abstract class MapBooBuilder
   }
 
 
-  private MapBoo_Scene getCurrentScene()
+  private int getApplicationCurrentSceneIndex()
   {
+    if (_applicationCurrentSceneIndex < 0)
+    {
+      _applicationCurrentSceneIndex = _applicationDefaultSceneIndex;
+    }
+    return _applicationCurrentSceneIndex;
+  }
+  private MapBoo_Scene getApplicationCurrentScene()
+  {
+    final int currentSceneIndex = getApplicationCurrentSceneIndex();
     final int applicationScenesSize = _applicationScenes.size();
-    if ((applicationScenesSize == 0) || (_currentScene < 0) || (_currentScene >= applicationScenesSize))
+    if ((applicationScenesSize == 0) || (currentSceneIndex < 0) || (currentSceneIndex >= applicationScenesSize))
     {
       return null;
     }
-    return _applicationScenes.get(_currentScene);
+  
+    return _applicationScenes.get(currentSceneIndex);
   }
 
   private Color getCurrentBackgroundColor()
   {
-    final MapBoo_Scene scene = getCurrentScene();
+    final MapBoo_Scene scene = getApplicationCurrentScene();
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
   }
 
@@ -332,6 +343,7 @@ public abstract class MapBooBuilder
   }
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
+  //_applicationTubeWebSocket(NULL),
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -349,8 +361,8 @@ public abstract class MapBooBuilder
      _applicationListener = applicationListener;
      _gpuProgramManager = null;
      _isApplicationTubeOpen = false;
-     _applicationTubeWebSocket = null;
-     _currentScene = 0;
+     _applicationCurrentSceneIndex = -1;
+     _applicationDefaultSceneIndex = 0;
   
   }
 
@@ -405,7 +417,7 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), getCurrentBackgroundColor(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -491,6 +503,14 @@ public abstract class MapBooBuilder
   
     recreateLayerSet();
   
+    if (_g3mWidget != null)
+    {
+      _g3mWidget.setBackgroundColor(getCurrentBackgroundColor());
+  
+  //    // force inmediate ejecution of PeriodicalTasks
+  //    _g3mWidget->resetPeriodicalTasksTimeouts();
+    }
+  
     if (_applicationListener != null)
     {
       _applicationListener.onScenesChanged(_applicationScenes);
@@ -571,7 +591,13 @@ public abstract class MapBooBuilder
               setApplicationScenes(scenes);
             }
   
-  //          warnings
+  //          const JSONNumber* jsonDefaultScene = jsonObject->getAsNumber("defaultScene");
+  //          if (jsonDefaultScene != NULL) {
+  //            const int defaultScene = (int) jsonDefaultScene->value();
+  //            setApplication
+  //          }
+  
+            int _TODO_Application_Warnings;
   
             setApplicationTimestamp(timestamp);
           }
@@ -594,7 +620,12 @@ public abstract class MapBooBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-    _applicationTubeWebSocket = context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+  //  _applicationTubeWebSocket = context->getFactory()->createWebSocket(createApplicationTubeURL(),
+  //                                                                     new MapBooBuilder_ApplicationTubeListener(this),
+  //                                                                     autodeleteListener,
+  //                                                                     autodeleteWebSocket);
+  
+    context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
 
@@ -660,10 +691,9 @@ public abstract class MapBooBuilder
     if (_isApplicationTubeOpen != open)
     {
       _isApplicationTubeOpen = open;
-      if (!_isApplicationTubeOpen)
-      {
-        _applicationTubeWebSocket = null;
-      }
+  //    if (!_isApplicationTubeOpen) {
+  //      _applicationTubeWebSocket = NULL;
+  //    }
     }
   }
 
