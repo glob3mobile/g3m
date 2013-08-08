@@ -261,6 +261,10 @@ public:
   
   const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
 
+  const double getAngularAreaInSquaredDegrees() const{
+    return _deltaLatitude._degrees * _deltaLongitude._degrees;
+  }
+
 
 #ifdef JAVA_CODE
   @Override

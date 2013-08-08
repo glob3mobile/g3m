@@ -54,7 +54,7 @@ public:
   virtual void onSceneChanged(const std::string& sceneId) = 0;
 
   virtual void onBaseLayerChanged(Layer* baseLayer) = 0;
-  
+
   virtual void onOverlayLayerChanged(Layer* overlayLayer) = 0;
 
   virtual void onUserChanged(const std::string& user) = 0;
@@ -64,7 +64,7 @@ public:
   virtual void onDescriptionChanged(const std::string& description) = 0;
 
   virtual void onBackgroundColorChanged(const Color& backgroundColor) = 0;
-  
+
 };
 
 
@@ -77,7 +77,7 @@ public:
   virtual void onDownload(std::vector<MapBooSceneDescription*>* scenesDescriptions) = 0;
 
   virtual void onError() = 0;
-  
+
 };
 
 
@@ -118,7 +118,7 @@ private:
   PlanetRenderer* createPlanetRenderer();
 
   std::vector<ICameraConstrainer*>* createCameraConstraints();
-  
+
   CameraRenderer* createCameraRenderer();
 
   Renderer* createBusyRenderer();
@@ -134,7 +134,7 @@ private:
 
   IDownloader* _downloader;
   IDownloader* getDownloader();
-  
+
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
 
@@ -147,7 +147,7 @@ private:
 
 
   Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
-  
+
   MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
                                     const TimeInterval& timeToCache) const;
 
@@ -167,11 +167,11 @@ private:
 
 protected:
   MapBooBuilder(const URL& serverURL,
-              const URL& tubesURL,
-              bool useWebSockets,
-              const std::string& sceneId,
-              MapBooSceneChangeListener* sceneListener);
-  
+                const URL& tubesURL,
+                bool useWebSockets,
+                const std::string& sceneId,
+                MapBooSceneChangeListener* sceneListener);
+
   virtual ~MapBooBuilder() {
   }
 
@@ -190,9 +190,9 @@ protected:
   virtual IDownloader* createDownloader() = 0;
 
   virtual IThreadUtils* createThreadUtils() = 0;
-  
+
   virtual GPUProgramManager* createGPUProgramManager() = 0;
-  
+
 public:
   /** Private to G3M, don't call it */
   int getSceneTimestamp() const;
@@ -202,7 +202,7 @@ public:
 
   /** Private to G3M, don't call it */
   void setSceneBaseLayer(Layer* baseLayer);
-  
+
   /** Private to G3M, don't call it */
   void setSceneOverlayLayer(Layer* overlayLayer);
 
@@ -239,11 +239,11 @@ public:
   void openSceneTube(const G3MContext* context);
 
   void setSceneTubeOpened(bool open);
-
+  
   bool isSceneTubeOpen() const {
     return _isSceneTubeOpen;
   }
-
+  
   void changeScene(const std::string& sceneId);
 };
 

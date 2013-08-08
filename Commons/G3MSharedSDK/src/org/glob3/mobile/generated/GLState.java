@@ -117,12 +117,6 @@ public class GLState
         hasChangedStructure();
       }
     }
-<<<<<<< HEAD
-  //  else {
-  //    ILogger::instance()->logInfo("Reusing GLState Parent");
-  //  }
-  
-=======
     else
     {
       final int parentsTimeStamp = parent.getTimeStamp();
@@ -133,7 +127,6 @@ public class GLState
         hasChangedStructure();
       }
     }
->>>>>>> webgl-port
   }
 
   public final void applyOnGPU(GL gl, GPUProgramManager progManager)
@@ -212,21 +205,7 @@ public class GLState
 
   public final void clearGLFeatureGroup(GLFeatureGroupName g)
   {
-<<<<<<< HEAD
-    int __ASK_JM; // replace clear with replaceFeature
-    final int index = g.getValue();
-  
-    GLFeatureGroup group = _featuresGroups[index];
-    if (group != null)
-    {
-      if (group != null)
-         group.dispose();
-      _featuresGroups[index] = null;
-    }
-  
-=======
     _features.clearFeatures(g);
->>>>>>> webgl-port
     hasChangedStructure();
   }
 

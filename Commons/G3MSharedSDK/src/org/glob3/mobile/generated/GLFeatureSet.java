@@ -1,27 +1,4 @@
 package org.glob3.mobile.generated; 
-<<<<<<< HEAD
-//
-//  GLFeatureGroup.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 10/07/13.
-//
-//
-
-//
-//  GLFeatureGroup.hpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 10/07/13.
-//
-//
-
-
-
-//class GLFeature;
-
-=======
->>>>>>> webgl-port
 public class GLFeatureSet
 {
    protected static final int MAX_CONCURRENT_FEATURES_PER_GROUP = 20;
