@@ -32,6 +32,7 @@
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
+#include "JSONNumber.hpp"
 #include "IThreadUtils.hpp"
 #include "OSMLayer.hpp"
 #include "MapQuestLayer.hpp"
@@ -70,8 +71,9 @@ _downloader(NULL),
 _applicationListener(applicationListener),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
-_applicationTubeWebSocket(NULL),
-_currentScene(0)
+//_applicationTubeWebSocket(NULL),
+_applicationCurrentSceneIndex(-1),
+_applicationDefaultSceneIndex(0)
 {
 
 }
@@ -369,12 +371,12 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
         if (getApplicationTimestamp() != timestamp) {
           const JSONString* jsonName = jsonObject->getAsString("name");
           if (jsonName != NULL) {
-            setApplicationName(jsonName->value());
+            setApplicationName( jsonName->value() );
           }
 
           const JSONString* jsonDescription = jsonObject->getAsString("description");
           if (jsonDescription != NULL) {
-            setApplicationDescription(jsonDescription->value());
+            setApplicationDescription( jsonDescription->value() );
           }
 
           const JSONArray* jsonScenes = jsonObject->getAsArray("scenes");
@@ -392,7 +394,13 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
             setApplicationScenes(scenes);
           }
 
-//          warnings
+//          const JSONNumber* jsonDefaultScene = jsonObject->getAsNumber("defaultScene");
+//          if (jsonDefaultScene != NULL) {
+//            const int defaultScene = (int) jsonDefaultScene->value();
+//            setApplication
+//          }
+
+          int _TODO_Application_Warnings;
 
           setApplicationTimestamp(timestamp);
         }
@@ -510,7 +518,7 @@ void MapBoo_Scene::recreateLayerSet(LayerSet* layerSet) const {
 void MapBooBuilder::recreateLayerSet() {
   _layerSet->removeAllLayers(false);
 
-  const MapBoo_Scene* scene = getCurrentScene();
+  const MapBoo_Scene* scene = getApplicationCurrentScene();
   if (scene != NULL) {
     scene->recreateLayerSet(_layerSet);
   }
@@ -638,29 +646,42 @@ void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-  _applicationTubeWebSocket = context->getFactory()->createWebSocket(createApplicationTubeURL(),
-                                                                     new MapBooBuilder_ApplicationTubeListener(this),
-                                                                     autodeleteListener,
-                                                                     autodeleteWebSocket);
-}
+//  _applicationTubeWebSocket = context->getFactory()->createWebSocket(createApplicationTubeURL(),
+//                                                                     new MapBooBuilder_ApplicationTubeListener(this),
+//                                                                     autodeleteListener,
+//                                                                     autodeleteWebSocket);
 
+  context->getFactory()->createWebSocket(createApplicationTubeURL(),
+                                         new MapBooBuilder_ApplicationTubeListener(this),
+                                         autodeleteListener,
+                                         autodeleteWebSocket);
+}
 
 GInitializationTask* MapBooBuilder::createInitializationTask() {
   return _useWebSockets ? new MapBooBuilder_SceneTubeConnector(this) : NULL;
 }
 
-const MapBoo_Scene* MapBooBuilder::getCurrentScene() {
+const int MapBooBuilder::getApplicationCurrentSceneIndex() {
+  if (_applicationCurrentSceneIndex < 0) {
+    _applicationCurrentSceneIndex = _applicationDefaultSceneIndex;
+  }
+  return _applicationCurrentSceneIndex;
+}
+
+const MapBoo_Scene* MapBooBuilder::getApplicationCurrentScene() {
+  const int currentSceneIndex = getApplicationCurrentSceneIndex();
   const int applicationScenesSize = _applicationScenes.size();
   if ((applicationScenesSize == 0) ||
-      (_currentScene < 0) ||
-      (_currentScene >= applicationScenesSize)) {
+      (currentSceneIndex < 0) ||
+      (currentSceneIndex >= applicationScenesSize)) {
     return NULL;
   }
-  return _applicationScenes[_currentScene];
+
+  return _applicationScenes[currentSceneIndex];
 }
 
 Color MapBooBuilder::getCurrentBackgroundColor() {
-  const MapBoo_Scene* scene = getCurrentScene();
+  const MapBoo_Scene* scene = getApplicationCurrentScene();
   return (scene == NULL) ? Color::black() : scene->getBackgroundColor();
 }
 
@@ -694,7 +715,7 @@ G3MWidget* MapBooBuilder::create() {
                                  createCameraRenderer(),
                                  mainRenderer,
                                  createBusyRenderer(),
-                                 getCurrentBackgroundColor(),
+                                 Color::black(),
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics
                                  initializationTask,
@@ -747,6 +768,13 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   _applicationScenes = applicationScenes;
 
   recreateLayerSet();
+
+  if (_g3mWidget != NULL) {
+    _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
+
+//    // force inmediate ejecution of PeriodicalTasks
+//    _g3mWidget->resetPeriodicalTasksTimeouts();
+  }
 
   if (_applicationListener != NULL) {
     _applicationListener->onScenesChanged(_applicationScenes);
@@ -813,9 +841,9 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
   if (_isApplicationTubeOpen != open) {
     _isApplicationTubeOpen = open;
-    if (!_isApplicationTubeOpen) {
-      _applicationTubeWebSocket = NULL;
-    }
+//    if (!_isApplicationTubeOpen) {
+//      _applicationTubeWebSocket = NULL;
+//    }
   }
 }
 

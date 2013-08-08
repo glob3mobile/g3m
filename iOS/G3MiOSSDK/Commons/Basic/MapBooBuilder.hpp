@@ -133,13 +133,14 @@ private:
   int         _applicationTimestamp;
 
   std::vector<MapBoo_Scene*> _applicationScenes;
-  int                        _currentScene;
+  int                        _applicationCurrentSceneIndex;
+  int                        _applicationDefaultSceneIndex;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
   IStorage* _storage;
 
-  IWebSocket* _applicationTubeWebSocket;
+//  IWebSocket* _applicationTubeWebSocket;
   bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
@@ -192,7 +193,8 @@ private:
   WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const;
 
 
-  const MapBoo_Scene* getCurrentScene();
+  const int getApplicationCurrentSceneIndex();
+  const MapBoo_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
 
