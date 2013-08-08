@@ -8,11 +8,11 @@ public class MapBooBuilder_PollingScenePeriodicalTask extends GTask
 
   private URL getURL()
   {
-    final int sceneTimestamp = _builder.getSceneTimestamp();
+    final int applicationTimestamp = _builder.getApplicationTimestamp();
 
-    final URL _sceneDescriptionURL = _builder.createPollingSceneDescriptionURL();
+    final URL _sceneDescriptionURL = _builder.createPollingApplicationDescriptionURL();
 
-    if (sceneTimestamp < 0)
+    if (applicationTimestamp < 0)
     {
       return _sceneDescriptionURL;
     }
@@ -21,7 +21,7 @@ public class MapBooBuilder_PollingScenePeriodicalTask extends GTask
 
     ib.addString(_sceneDescriptionURL.getPath());
     ib.addString("?lastTs=");
-    ib.addInt(sceneTimestamp);
+    ib.addInt(applicationTimestamp);
 
     final String path = ib.getString();
 

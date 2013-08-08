@@ -410,6 +410,11 @@ public class Sector
     return _normalizedCartesianCenter;
   }
 
+  public final double getAngularAreaInSquaredDegrees()
+  {
+    return _deltaLatitude._degrees * _deltaLongitude._degrees;
+  }
+
 
   @Override
   public int hashCode() {

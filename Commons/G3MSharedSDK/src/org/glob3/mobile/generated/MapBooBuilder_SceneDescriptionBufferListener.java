@@ -8,11 +8,9 @@ public class MapBooBuilder_SceneDescriptionBufferListener extends IBufferDownloa
      _builder = builder;
   }
 
-
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-
-    _builder.parseSceneDescription(buffer.getAsString(), url);
+    _builder.parseApplicationDescription(buffer.getAsString(), url);
     if (buffer != null)
        buffer.dispose();
   }

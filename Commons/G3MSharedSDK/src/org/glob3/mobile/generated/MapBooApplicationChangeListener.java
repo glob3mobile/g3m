@@ -31,11 +31,11 @@ package org.glob3.mobile.generated;
 //class PeriodicalTask;
 //class Layer;
 //class LayerSet;
-//class MapBooSceneDescription;
-//class Color;
+//class MapBooApplicationDescription;
 //class GPUProgramManager;
 //class JSONBaseObject;
 //class JSONObject;
+//class JSONString;
 //class TimeInterval;
 //class MapQuestLayer;
 //class BingMapsLayer;
@@ -44,29 +44,26 @@ package org.glob3.mobile.generated;
 //class WMSLayer;
 //class G3MContext;
 //class IWebSocket;
+//class MapBoo_Scene;
 
 
 
 
-public abstract class MapBooSceneChangeListener
+public abstract class MapBooApplicationChangeListener
 {
   public void dispose()
   {
 
   }
 
-  public abstract void onSceneChanged(String sceneId);
-
-  public abstract void onBaseLayerChanged(Layer baseLayer);
-
-  public abstract void onOverlayLayerChanged(Layer overlayLayer);
-
-  public abstract void onUserChanged(String user);
-
   public abstract void onNameChanged(String name);
 
   public abstract void onDescriptionChanged(String description);
 
-  public abstract void onBackgroundColorChanged(Color backgroundColor);
+  public abstract void onIconChanged(String icon);
+
+  public abstract void onScenesChanged(java.util.ArrayList<MapBoo_Scene> applicationScenes);
+
+//  virtual void onWarningsChanged() = 0;
 
 }

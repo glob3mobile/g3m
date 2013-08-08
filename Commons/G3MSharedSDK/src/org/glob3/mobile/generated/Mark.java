@@ -87,9 +87,9 @@ public class Mark extends SurfaceElevationListener
   private static IFloatBuffer _billboardTexCoord = null;
 
   private GLState _glState = new GLState();
-
   private void createGLState(Planet planet)
   {
+  
     if (_vertices == null)
     {
       final Vector3D pos = new Vector3D(planet.toCartesian(_position));
@@ -104,17 +104,9 @@ public class Mark extends SurfaceElevationListener
   
     _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
   
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 78bedcacbff4f612297dc48f28b5bc4fe774f72e
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
-<<<<<<< HEAD
->>>>>>> webgl-port
-=======
->>>>>>> 78bedcacbff4f612297dc48f28b5bc4fe774f72e
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -568,46 +560,11 @@ public class Mark extends SurfaceElevationListener
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  
-            if (_textureId != null)
-            {
-              _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
-            }
-=======
             createGLState(rc.getPlanet());
->>>>>>> webgl-port
-=======
-            createGLState(rc.getPlanet());
->>>>>>> 78bedcacbff4f612297dc48f28b5bc4fe774f72e
           }
         }
         else
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-          final Camera camera = rc.getCurrentCamera();
-          final int viewportWidth = camera.getWidth();
-          final int viewportHeight = camera.getHeight();
-  
-          if ((viewportWidth != _viewportWidth) || (viewportHeight != _viewportHeight))
-          {
-            int __ASK_JM; // move to MarkRenderer
-            createGLState(planet, viewportWidth, viewportHeight);
-          }
-  
-<<<<<<< HEAD
-=======
-  //        GL* gl = rc->getGL();
-  
-=======
->>>>>>> webgl-port
-          GPUProgramManager progManager = rc.getGPUProgramManager();
-  
->>>>>>> webgl-port
-=======
->>>>>>> 78bedcacbff4f612297dc48f28b5bc4fe774f72e
           _glState.setParent(parentGLState); //Linking with parent
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());

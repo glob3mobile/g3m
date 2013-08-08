@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_SceneTubeListener implements IWebSocketListener
+public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
 {
   private MapBooBuilder _builder;
 
-  public MapBooBuilder_SceneTubeListener(MapBooBuilder builder)
+  public MapBooBuilder_ApplicationTubeListener(MapBooBuilder builder)
   {
      _builder = builder;
   }
@@ -14,8 +14,8 @@ public class MapBooBuilder_SceneTubeListener implements IWebSocketListener
 
   public final void onOpen(IWebSocket ws)
   {
-    ILogger.instance().logError("Tube '%s' opened!", ws.getURL().getPath());
-    _builder.setSceneTubeOpened(true);
+    ILogger.instance().logInfo("Tube '%s' opened!", ws.getURL().getPath());
+    _builder.setApplicationTubeOpened(true);
   }
 
   public final void onError(IWebSocket ws, String error)
@@ -25,12 +25,12 @@ public class MapBooBuilder_SceneTubeListener implements IWebSocketListener
 
   public final void onMesssage(IWebSocket ws, String message)
   {
-    _builder.parseSceneDescription(message, ws.getURL());
+    _builder.parseApplicationDescription(message, ws.getURL());
   }
 
   public final void onClose(IWebSocket ws)
   {
     ILogger.instance().logError("Tube '%s' closed!", ws.getURL().getPath());
-    _builder.setSceneTubeOpened(false);
+    _builder.setApplicationTubeOpened(false);
   }
 }

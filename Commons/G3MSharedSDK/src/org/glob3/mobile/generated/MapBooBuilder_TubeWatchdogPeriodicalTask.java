@@ -1,4 +1,11 @@
 package org.glob3.mobile.generated; 
+//const URL MapBooBuilder::createApplicationDescriptionURL() const {
+//  const std::string serverPath = _serverURL.getPath();
+//
+//  return URL(serverPath + "/application/" + _applicationId + "/runtime", false);
+//}
+
+
 public class MapBooBuilder_TubeWatchdogPeriodicalTask extends GTask
 {
   private MapBooBuilder _builder;
@@ -18,9 +25,9 @@ public class MapBooBuilder_TubeWatchdogPeriodicalTask extends GTask
     }
     else
     {
-      if (!_builder.isSceneTubeOpen())
+      if (!_builder.isApplicationTubeOpen())
       {
-        _builder.openSceneTube(context);
+        _builder.openApplicationTube(context);
       }
     }
   }

@@ -36,7 +36,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IG3MBuilder
 {
-
   private GL _gl;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -54,7 +53,6 @@ public abstract class IG3MBuilder
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
-
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
 
 
@@ -437,6 +435,7 @@ public abstract class IG3MBuilder
      _logDownloaderStatistics = false;
      _userData = null;
   }
+
   public void dispose()
   {
     if (_gl != null)
@@ -492,6 +491,7 @@ public abstract class IG3MBuilder
        _planetRendererBuilder.dispose();
   }
 
+
   /**
    * Sets the _gl.
    *
@@ -512,6 +512,7 @@ public abstract class IG3MBuilder
     _gl = gl;
   }
 
+
   /**
    * Sets the _storage.
    *
@@ -526,6 +527,7 @@ public abstract class IG3MBuilder
     }
     _storage = storage;
   }
+
 
   /**
    * Sets the _downloader
@@ -547,6 +549,7 @@ public abstract class IG3MBuilder
     _downloader = downloader;
   }
 
+
   /**
    * Sets the _threadUtils
    *
@@ -566,6 +569,7 @@ public abstract class IG3MBuilder
     }
     _threadUtils = threadUtils;
   }
+
 
   /**
    * Sets the _cameraActivityListener
@@ -587,6 +591,7 @@ public abstract class IG3MBuilder
     _cameraActivityListener = cameraActivityListener;
   }
 
+
   /**
    * Sets the _planet
    *
@@ -607,6 +612,7 @@ public abstract class IG3MBuilder
     _planet = planet;
   }
 
+
   /**
    * Adds a new camera constraint to the constraints list.
    * The camera constraint list will be initializated with a default constraints set.
@@ -623,6 +629,7 @@ public abstract class IG3MBuilder
     }
     getCameraConstraints().add(cameraConstraint);
   }
+
 
   /**
    * Sets the camera constraints list, ignoring the default camera constraints list 
@@ -652,6 +659,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Sets the _cameraRenderer
    *
@@ -671,6 +679,7 @@ public abstract class IG3MBuilder
     }
     _cameraRenderer = cameraRenderer;
   }
+
 
   /**
    * Sets the _backgroundColor
@@ -692,6 +701,7 @@ public abstract class IG3MBuilder
     _backgroundColor = backgroundColor;
   }
 
+
   /**
    * Sets the _busyRenderer
    *
@@ -711,6 +721,7 @@ public abstract class IG3MBuilder
     }
     _busyRenderer = busyRenderer;
   }
+
 
   /**
    * Adds a new renderer to the renderers list.
@@ -732,6 +743,7 @@ public abstract class IG3MBuilder
     }
     getRenderers().add(renderer);
   }
+
 
   /**
    * Sets the renderers list, ignoring the default renderers list and the renderers
@@ -767,6 +779,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Adds a new periodical task to the periodical tasks list.
    * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
@@ -782,6 +795,7 @@ public abstract class IG3MBuilder
     }
     getPeriodicalTasks().add(periodicalTask);
   }
+
 
   /**
    * Sets the periodical tasks list, ignoring the default periodical tasks list and the
@@ -811,6 +825,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Sets the _logFPS
    *
@@ -821,6 +836,7 @@ public abstract class IG3MBuilder
     _logFPS = logFPS;
   }
 
+
   /**
    * Sets the _logDownloaderStatistics
    *
@@ -830,6 +846,7 @@ public abstract class IG3MBuilder
   {
     _logDownloaderStatistics = logDownloaderStatistics;
   }
+
 
   /**
    * Sets the _userData
@@ -850,6 +867,8 @@ public abstract class IG3MBuilder
     }
     _userData = userData;
   }
+
+
   public final void setInitializationTask(GInitializationTask initializationTask) {
     pvtSetInitializationTask(initializationTask,
                              true // parameter ignored in Java code 
