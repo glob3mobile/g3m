@@ -22,6 +22,8 @@ public abstract class MapBooBuilder
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
+  private final G3MContext _context;
+
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -375,6 +377,7 @@ public abstract class MapBooBuilder
      _isApplicationTubeOpen = false;
      _applicationCurrentSceneIndex = -1;
      _applicationDefaultSceneIndex = 0;
+     _context = null;
   
   }
 
@@ -458,19 +461,19 @@ public abstract class MapBooBuilder
 
   protected abstract GPUProgramManager createGPUProgramManager();
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final int getApplicationTimestamp()
   {
     return _applicationTimestamp;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationTimestamp(int timestamp)
   {
     _applicationTimestamp = timestamp;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationName(String name)
   {
     if (_applicationName.compareTo(name) != 0)
@@ -479,12 +482,12 @@ public abstract class MapBooBuilder
   
       if (_applicationListener != null)
       {
-        _applicationListener.onNameChanged(_applicationName);
+        _applicationListener.onNameChanged(_context, _applicationName);
       }
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationDescription(String description)
   {
     if (_applicationDescription.compareTo(description) != 0)
@@ -493,12 +496,12 @@ public abstract class MapBooBuilder
   
       if (_applicationListener != null)
       {
-        _applicationListener.onDescriptionChanged(_applicationDescription);
+        _applicationListener.onDescriptionChanged(_context, _applicationDescription);
       }
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -517,11 +520,11 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onScenesChanged(_applicationScenes);
+      _applicationListener.onScenesChanged(_context, _applicationScenes);
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final URL createPollingApplicationDescriptionURL()
   {
     final String tubesPath = _serverURL.getPath();
@@ -529,7 +532,7 @@ public abstract class MapBooBuilder
     return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final URL createApplicationTubeURL()
   {
     final String tubesPath = _tubesURL.getPath();
@@ -537,10 +540,10 @@ public abstract class MapBooBuilder
     return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
   }
 
-//  /** Private to G3M, don't call it */
+//  /** Private to MapbooBuilder, don't call it */
 //  void rawChangeApplication(const std::string& applicationId);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationDescription(String json, URL url)
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
@@ -620,7 +623,7 @@ public abstract class MapBooBuilder
   
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void openApplicationTube(G3MContext context)
   {
     final boolean autodeleteListener = true;
@@ -629,13 +632,13 @@ public abstract class MapBooBuilder
     context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationDefaultSceneIndex(int defaultSceneIndex)
   {
     _applicationDefaultSceneIndex = defaultSceneIndex;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void rawChangeScene(int sceneIndex)
   {
     _applicationCurrentSceneIndex = sceneIndex;
@@ -644,8 +647,14 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onSceneChanged(_applicationCurrentSceneIndex);
+      _applicationListener.onSceneChanged(_context, _applicationCurrentSceneIndex);
     }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setContext(G3MContext context)
+  {
+    _context = context;
   }
 
 
