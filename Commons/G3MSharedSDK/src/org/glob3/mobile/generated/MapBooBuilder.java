@@ -723,4 +723,17 @@ public abstract class MapBooBuilder
     }
   }
 
+  public final void changeScene(MapBoo_Scene scene)
+  {
+    final int size = _applicationScenes.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_applicationScenes.get(i) == scene)
+      {
+        changeScene(i);
+        break;
+      }
+    }
+  }
+
 }
