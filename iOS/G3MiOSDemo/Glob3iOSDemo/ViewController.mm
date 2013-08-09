@@ -217,8 +217,6 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   [super viewDidLoad];
 
-  GenericQuadTree_TESTER::run(1000);
-
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
@@ -518,12 +516,17 @@ public:
 
 - (void) initCustomizedWithBuilder
 {
+
+
   G3MBuilder_iOS builder([self G3MWidget]);
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+
+
+  GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
 
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);

@@ -13,6 +13,7 @@
 
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
+#include "GEOTileRasterizer.hpp"
 
 class GenericQuadTree_Node;
 
@@ -25,10 +26,15 @@ public:
 };
 
 class GenericQuadTreeVisitor {
-public:
-  virtual ~GenericQuadTreeVisitor() {
 
-  }
+  mutable int _comparisonsDone;
+
+public:
+  GenericQuadTreeVisitor(): _comparisonsDone(0){}
+  virtual ~GenericQuadTreeVisitor() {}
+
+  void addComparisonsDoneWhileVisiting(int n) const { _comparisonsDone += n;}
+  int getNComparisonsDone() const { return _comparisonsDone;}
 
   virtual bool visitElement(const Sector& sector,
                             const void*   element) const = 0;
@@ -145,9 +151,23 @@ public:
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
   double getInsertionCostInSquaredDegrees(const Sector& sector) const;
+  double getAreaInSquaredDegreesAfterInsertion(const Sector& sector) const;
 
   int getDepth() const { return _depth;}
   int getNElements() const { return _elements.size();}
+  bool isLeaf() const { return _children == NULL;}
+
+  int getSubtreeNElements() const{
+    int n = _elements.size();
+    if (_children != NULL){
+      for (int i = 0; i<4;i++){
+        n += _children[i]->getSubtreeNElements();
+      }
+    }
+    return n;
+  }
+
+  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
 };
 
 class GenericQuadTree {
@@ -158,7 +178,6 @@ private:
   const int _maxDepth;
 
   bool add(GenericQuadTree_Element* element);
-
 public:
 
   GenericQuadTree() :
@@ -182,6 +201,8 @@ public:
 
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
+  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -199,7 +220,7 @@ class GenericQuadTree_TESTER {
                       const void*   element) const{
 
       if (_sec.isEqualsTo(sector)){
-        std::string* s = (std::string*)element;
+//        std::string* s = (std::string*)element;
 //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
@@ -213,7 +234,11 @@ class GenericQuadTree_TESTER {
 
     void endVisit(bool aborted) const{
       if (!aborted){
-        printf("COULDN'T FIND ELEMENT");
+        printf("COULDN'T FIND ELEMENT\n");
+      } else{
+//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
+        GenericQuadTree_TESTER::_nElements += 1;
       }
 
     }
@@ -233,7 +258,7 @@ class GenericQuadTree_TESTER {
                       const void*   element) const{
 
       if (geodetic.isEqualsTo(_geo)){
-        std::string* s = (std::string*)element;
+//        std::string* s = (std::string*)element;
 //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
@@ -242,7 +267,11 @@ class GenericQuadTree_TESTER {
 
     void endVisit(bool aborted) const{
       if (!aborted){
-        printf("COULDN'T FIND ELEMENT");
+        printf("COULDN'T FIND ELEMENT\n");
+      } else{
+//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
+                GenericQuadTree_TESTER::_nElements += 1;
       }
       
     }
@@ -258,44 +287,68 @@ class GenericQuadTree_TESTER {
     int _meanElemDepth;
     int _nNodes;
     int _nElem;
-    NodeVisitor_TESTER(): _maxDepth(0), _meanDepth(0), _maxNEle(0), _nNodes(0), _meanElemDepth(0), _nElem(0){}
+
+    int _leafMinDepth;
+    int _leafMeanDepth;
+    int _nLeaf;
+
+    NodeVisitor_TESTER():
+    _maxDepth(0), _meanDepth(0), _maxNEle(0), _nNodes(0), _meanElemDepth(0), _nElem(0),
+    _leafMinDepth(999999), _leafMeanDepth(0), _nLeaf(0){}
     
 
     bool visitNode(const GenericQuadTree_Node* node){
-      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
+//      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
+
+      int depth = node->getDepth();
 
       if (node->getNElements() > _maxNEle){
         _maxNEle = node->getNElements();
       }
 
-      if (_maxDepth < node->getDepth()){
-        _maxDepth = node->getDepth();
+      if (_maxDepth < depth){
+        _maxDepth = depth;
       }
 
-      _meanDepth += node->getDepth();
+      _meanDepth += depth;
 
       _nNodes++;
 
       _nElem += node->getNElements();
 
-      _meanElemDepth += node->getNElements() * node->getDepth();
+      _meanElemDepth += node->getNElements() * depth;
+
+      if (node->isLeaf()){
+        if (depth < _leafMinDepth){
+          _leafMinDepth = depth;
+        }
+        _leafMeanDepth += depth;
+        _nLeaf++;
+      }
 
 
       return false;
     }
     void endVisit(bool aborted) const{
-      printf("TREE WITH %d ELEM. MAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d\n, MEAN ELEM DEPTH: %f",
+      printf("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n",
              _nElem,
              _maxDepth,
              _meanDepth / (float)_nNodes,
              _maxNEle,
-             _meanElemDepth / (float) _nElem
+             _meanElemDepth / (float) _nElem,
+             _nLeaf,
+             _leafMinDepth,
+             _leafMinDepth / (float) _nLeaf
              );
     }
   };
   
 public:
-  static void run(int nElements);
+
+  static int _nComparisons;
+  static int _nElements;
+
+  static void run(int nElements, GEOTileRasterizer* rasterizer);
   
 };
 #endif /* defined(__G3MiOSSDK__GenericGenericQuadTree__) */
