@@ -253,7 +253,7 @@ public:
   void onScenesChanged(const std::vector<MapBoo_Scene*>& scenes) {
     const int scenesSize = scenes.size();
     for (int i = 0; i < scenesSize; i++) {
-      ILogger::instance()->logInfo("MapBoo application scene #%l=%s",
+      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
                                    i,
                                    scenes[i]->description().c_str());
     }
@@ -271,12 +271,12 @@ public:
   MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
   const bool useWebSockets = true;
 
-  const std::string applicationId = "2gl2syurzilwq2noujq";
-  //const std::string applicationId = "2glghma5l2ufxsn2o3k";
+  //const std::string applicationId = "2gl2syurzilwq2noujq";
+  const std::string applicationId = "2glghma5l2ufxsn2o3k";
 
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
-                                       URL("http://127.0.0.1:8080/g3mc-server", false),
-                                       URL("ws://127.0.0.1:8888/tube", false),
+                                       URL("http://192.168.1.2:8080/web", false),
+                                       URL("ws://192.168.1.2:8888/tube", false),
                                        useWebSockets,
                                        applicationId,
                                        applicationListener);
