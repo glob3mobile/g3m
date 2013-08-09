@@ -189,18 +189,15 @@ public class GenericQuadTree_TESTER
   
     for (int i = 0; i < nElements; i++)
     {
+        double minLat = random(180) -90;// rand()%180 -90;
+        double minLon = random(360) - 180;//rand()%360 -180;
   
-  
-      double minLat = RandomNumbers.nextNumber(180) -90; // rand()%180 -90;
-      double minLon = RandomNumbers.nextNumber(360) - 180; //rand()%360 -180;
-  
-      int type = RandomNumbers.nextNumber();
-      if (type%2 == 0)
+      int type = random(2);
+      if (type == 0)
       {
   
-        double maxLat = minLat + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(90 - (int)minLat);
-        double maxLon = minLon + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(180 - (int)minLon);
-  
+    	double maxLat = minLat + random(90 - (int)minLat); //rand()%(90 - (int)minLat);
+        double maxLon = minLon + random(90 - (int)minLat);//rand()%(180 - (int)minLon);  
         Sector s = Sector.fromDegrees(minLat, minLon, maxLat, maxLon);
         sectors.add(new Sector(s));
         String desc = "SECTOR ELEMENT " + s.description();

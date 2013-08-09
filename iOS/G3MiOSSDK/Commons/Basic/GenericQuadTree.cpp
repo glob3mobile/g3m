@@ -464,13 +464,11 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   std::vector<Geodetic2D*> geos;
 
   for (int i = 0; i < nElements; i++) {
-
-
     double minLat = random(180) -90;// rand()%180 -90;
     double minLon = random(360) - 180;//rand()%360 -180;
 
-    int type = rand();
-    if (type%2 == 0){
+    int type = random(2);
+    if (type == 0){
 
       double maxLat = minLat + random(90 - (int)minLat); //rand()%(90 - (int)minLat);
       double maxLon = minLon + random(90 - (int)minLat);//rand()%(180 - (int)minLon);
@@ -500,13 +498,13 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   }
 
   for (int i = 0; i < sectors.size(); i++){
-    Sector s = *sectors[i];
+    Sector s = *(sectors[i]);
     GenericQuadTreeVisitorSector_TESTER vis(s);
     tree.acceptVisitor(s, vis);
   }
 
   for (int i = 0; i < geos.size(); i++){
-    Geodetic2D g = *geos[i];
+    Geodetic2D g = *(geos[i]);
     GenericQuadTreeVisitorGeodetic_TESTER vis(g);
     tree.acceptVisitor(g, vis);
   }
