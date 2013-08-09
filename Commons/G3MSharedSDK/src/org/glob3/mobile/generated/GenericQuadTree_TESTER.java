@@ -229,14 +229,14 @@ public class GenericQuadTree_TESTER
   
     for (int i = 0; i < sectors.size(); i++)
     {
-      Sector s = *(sectors.get(i));
+      Sector s = sectors.get(i);
       GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
       tree.acceptVisitor(s, vis);
     }
   
     for (int i = 0; i < geos.size(); i++)
     {
-      Geodetic2D g = *(geos.get(i));
+      Geodetic2D g = geos.get(i);
       GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(g);
       tree.acceptVisitor(g, vis);
     }

@@ -464,14 +464,14 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   std::vector<Geodetic2D*> geos;
 
   for (int i = 0; i < nElements; i++) {
-    double minLat = random(180) -90;// rand()%180 -90;
-    double minLon = random(360) - 180;//rand()%360 -180;
+    double minLat = randomInt(180) -90;// rand()%180 -90;
+    double minLon = randomInt(360) - 180;//rand()%360 -180;
 
-    int type = random(2);
+    int type = randomInt(2);
     if (type == 0){
 
-      double maxLat = minLat + random(90 - (int)minLat); //rand()%(90 - (int)minLat);
-      double maxLon = minLon + random(90 - (int)minLat);//rand()%(180 - (int)minLon);
+      double maxLat = minLat + randomInt(90 - (int)minLat); //rand()%(90 - (int)minLat);
+      double maxLon = minLon + randomInt(90 - (int)minLat);//rand()%(180 - (int)minLon);
 
       Sector s = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
       sectors.push_back(new Sector(s));
@@ -498,13 +498,23 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   }
 
   for (int i = 0; i < sectors.size(); i++){
+#ifdef C_CODE
     Sector s = *(sectors[i]);
+#endif
+#ifdef JAVA_CODE
+    Sector s = sectors[i];
+#endif
     GenericQuadTreeVisitorSector_TESTER vis(s);
     tree.acceptVisitor(s, vis);
   }
 
   for (int i = 0; i < geos.size(); i++){
+#ifdef C_CODE
     Geodetic2D g = *(geos[i]);
+#endif
+#ifdef JAVA_CODE
+    Geodetic2D g = geos.get(i);
+#endif
     GenericQuadTreeVisitorGeodetic_TESTER vis(g);
     tree.acceptVisitor(g, vis);
   }

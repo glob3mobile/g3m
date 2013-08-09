@@ -348,7 +348,7 @@ public:
   static int _nComparisons;
   static int _nElements;
 
-  static int random(int max){
+  static int randomInt(int max){
 #ifdef C_CODE
     int i = rand();
 #endif
