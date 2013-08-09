@@ -69,8 +69,8 @@ public:
 
   GenericQuadTree_SectorElement(const Sector& sector,
                                 const void*   element) :
-  _sector(sector),
-  GenericQuadTree_Element(element){ }
+  GenericQuadTree_Element(element),
+  _sector(sector){ }
   bool isSectorElement() const { return true;}
   Geodetic2D getCenter() const { return _sector.getCenter();}
   Sector getSector() const { return _sector;}
@@ -84,8 +84,8 @@ public:
 
   GenericQuadTree_Geodetic2DElement(const Geodetic2D& geodetic,
                                     const void*   element) :
-  _geodetic(geodetic),
-  GenericQuadTree_Element(element){}
+  GenericQuadTree_Element(element),
+  _geodetic(geodetic){}
   bool isSectorElement() const { return false;}
   Geodetic2D getCenter() const { return _geodetic;}
   Sector getSector() const { return Sector(_geodetic, _geodetic);}
