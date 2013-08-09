@@ -22,7 +22,7 @@ public abstract class MapBooBuilder
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
-  private final G3MContext _context;
+  private G3MContext _context;
 
   private boolean _isApplicationTubeOpen;
 
