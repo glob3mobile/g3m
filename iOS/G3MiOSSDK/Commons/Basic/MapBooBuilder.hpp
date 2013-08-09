@@ -190,22 +190,22 @@ private:
 
   Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
 
-  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache);
 
-  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
                                   const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache) const;
 
-  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
-  WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const;
+  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
 
 
   const int getApplicationCurrentSceneIndex();

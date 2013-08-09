@@ -218,9 +218,9 @@ Renderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
-MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonLayer,
                                                  const TimeInterval& timeToCache) const {
-  const std::string imagery = jsonBaseLayer->getAsString("imagery", "<imagery not present>");
+  const std::string imagery = jsonLayer->getAsString("imagery", "<imagery not present>");
   if (imagery.compare("OpenAerial") == 0) {
     return MapQuestLayer::newOpenAerial(timeToCache);
   }
@@ -229,53 +229,53 @@ MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonBaseLayer
   return MapQuestLayer::newOSM(timeToCache);
 }
 
-BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonLayer,
                                                  const TimeInterval& timeToCache) const {
-  const std::string key = jsonBaseLayer->getAsString("key", "");
-  const std::string imagerySet = jsonBaseLayer->getAsString("imagerySet", "Aerial");
+  const std::string key = jsonLayer->getAsString("key", "");
+  const std::string imagerySet = jsonLayer->getAsString("imagerySet", "Aerial");
 
   return new BingMapsLayer(imagerySet, key, timeToCache);
 }
 
-CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
                                                const TimeInterval& timeToCache) const {
-  const std::string userName = jsonBaseLayer->getAsString("userName", "");
-  const std::string table    = jsonBaseLayer->getAsString("table",    "");
+  const std::string userName = jsonLayer->getAsString("userName", "");
+  const std::string table    = jsonLayer->getAsString("table",    "");
 
   return new CartoDBLayer(userName, table, timeToCache);
 }
 
-MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
                                              const TimeInterval& timeToCache) const {
-  const std::string mapKey = jsonBaseLayer->getAsString("mapKey", "");
+  const std::string mapKey = jsonLayer->getAsString("mapKey", "");
 
   return new MapBoxLayer(mapKey, timeToCache);
 }
 
-WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
+WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
 
-  const std::string mapLayer = jsonBaseLayer->getAsString("layerName", "");
-  const URL mapServerURL = URL(jsonBaseLayer->getAsString("server", ""), false);
-  const std::string versionStr = jsonBaseLayer->getAsString("version", "");
+  const std::string mapLayer = jsonLayer->getAsString("layerName", "");
+  const URL mapServerURL = URL(jsonLayer->getAsString("server", ""), false);
+  const std::string versionStr = jsonLayer->getAsString("version", "");
   WMSServerVersion mapServerVersion = WMS_1_1_0;
   if (versionStr.compare("WMS_1_3_0") == 0) {
     mapServerVersion = WMS_1_3_0;
   }
-  const std::string queryLayer = jsonBaseLayer->getAsString("queryLayer", "");
-  const std::string style = jsonBaseLayer->getAsString("style", "");
+  const std::string queryLayer = jsonLayer->getAsString("queryLayer", "");
+  const std::string style = jsonLayer->getAsString("style", "");
   const URL queryServerURL = URL("", false);
   const WMSServerVersion queryServerVersion = mapServerVersion;
-  const double lowerLat = jsonBaseLayer->getAsNumber("lowerLat", -90.0);
-  const double lowerLon = jsonBaseLayer->getAsNumber("lowerLon", -180.0);
-  const double upperLat = jsonBaseLayer->getAsNumber("upperLat", 90.0);
-  const double upperLon = jsonBaseLayer->getAsNumber("upperLon", 180.0);
+  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
+  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
+  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
+  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
   const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
                                Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
-  std::string imageFormat = jsonBaseLayer->getAsString("imageFormat", "image/png");
+  std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
   if (imageFormat.compare("JPG") == 0) {
     imageFormat = "image/jpeg";
   }
-  const std::string srs = jsonBaseLayer->getAsString("projection", "EPSG_4326");
+  const std::string srs = jsonLayer->getAsString("projection", "EPSG_4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
   if (srs.compare("EPSG_4326") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
@@ -283,11 +283,11 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonBaseLayer) const {
   else if (srs.compare("EPSG_900913") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
   }
-  const bool isTransparent = jsonBaseLayer->getAsBoolean("transparent", false);
-  const double expiration = jsonBaseLayer->getAsNumber("expiration", 0);
+  const bool isTransparent = jsonLayer->getAsBoolean("transparent", false);
+  const double expiration = jsonLayer->getAsNumber("expiration", 0);
   const long long milliseconds = IMathUtils::instance()->round(expiration);
   const TimeInterval timeToCache = TimeInterval::fromMilliseconds(milliseconds);
-  const bool readExpired = jsonBaseLayer->getAsBoolean("acceptExpiration", false);
+  const bool readExpired = jsonLayer->getAsBoolean("acceptExpiration", false);
 
   return new WMSLayer(mapLayer,
                       mapServerURL,
@@ -318,30 +318,30 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
 
   const TimeInterval defaultTimeToCache = TimeInterval::fromDays(30);
 
-  const JSONObject* jsonBaseLayer = jsonBaseObjectLayer->asObject();
-  if (jsonBaseLayer == NULL) {
+  const JSONObject* jsonLayer = jsonBaseObjectLayer->asObject();
+  if (jsonLayer == NULL) {
     ILogger::instance()->logError("Layer is not a json object");
     return NULL;
   }
 
-  const std::string layerType = jsonBaseLayer->getAsString("layer", "<layer not present>");
+  const std::string layerType = jsonLayer->getAsString("layer", "<layer not present>");
   if (layerType.compare("OSM") == 0) {
     return new OSMLayer(defaultTimeToCache);
   }
   else if (layerType.compare("MapQuest") == 0) {
-    return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+    return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("BingMaps") == 0) {
-    return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+    return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("CartoDB") == 0) {
-    return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+    return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("MapBox") == 0) {
-    return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+    return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("WMS") == 0) {
-    return parseWMSLayer(jsonBaseLayer);
+    return parseWMSLayer(jsonLayer);
   }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
