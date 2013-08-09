@@ -7,8 +7,8 @@ public class GenericQuadTree_SectorElement extends GenericQuadTree_Element
 
   public GenericQuadTree_SectorElement(Sector sector, Object element)
   {
-     _sector = new Sector(sector);
      super(element);
+     _sector = new Sector(sector);
   }
   public final boolean isSectorElement()
   {

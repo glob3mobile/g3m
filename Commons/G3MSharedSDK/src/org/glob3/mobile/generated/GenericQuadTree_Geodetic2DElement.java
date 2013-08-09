@@ -7,8 +7,8 @@ public class GenericQuadTree_Geodetic2DElement extends GenericQuadTree_Element
 
   public GenericQuadTree_Geodetic2DElement(Geodetic2D geodetic, Object element)
   {
-     _geodetic = new Geodetic2D(geodetic);
      super(element);
+     _geodetic = new Geodetic2D(geodetic);
   }
   public final boolean isSectorElement()
   {
