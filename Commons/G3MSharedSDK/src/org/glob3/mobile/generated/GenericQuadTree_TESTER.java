@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 ////////////////////////////////////////////////////////////////////////////
 
 public class GenericQuadTree_TESTER
@@ -168,7 +166,7 @@ public class GenericQuadTree_TESTER
   public static int _nComparisons = 0;
   public static int _nElements = 0;
 
-  public static int random(int max)
+  public static int randomInt(int max)
   {
     java.util.Random r = new java.util.Random();
     int i = r.nextInt();
@@ -189,15 +187,15 @@ public class GenericQuadTree_TESTER
   
     for (int i = 0; i < nElements; i++)
     {
-      double minLat = RandomNumbers.nextNumber(180) -90; // rand()%180 -90;
-      double minLon = RandomNumbers.nextNumber(360) - 180; //rand()%360 -180;
+      double minLat = randomInt(180) -90; // rand()%180 -90;
+      double minLon = randomInt(360) - 180; //rand()%360 -180;
   
-      int type = RandomNumbers.nextNumber(2);
+      int type = randomInt(2);
       if (type == 0)
       {
   
-        double maxLat = minLat + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(90 - (int)minLat);
-        double maxLon = minLon + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(180 - (int)minLon);
+        double maxLat = minLat + randomInt(90 - (int)minLat); //rand()%(90 - (int)minLat);
+        double maxLon = minLon + randomInt(90 - (int)minLat); //rand()%(180 - (int)minLon);
   
         Sector s = Sector.fromDegrees(minLat, minLon, maxLat, maxLon);
         sectors.add(new Sector(s));
@@ -229,7 +227,7 @@ public class GenericQuadTree_TESTER
   
     for (int i = 0; i < sectors.size(); i++)
     {
-      Sector s = sectors.get(i);
+      Sector s = sectors[i];
       GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
       tree.acceptVisitor(s, vis);
     }

@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 public class GenericQuadTree_Geodetic2DElement extends GenericQuadTree_Element
 {
   public final Geodetic2D _geodetic ;
