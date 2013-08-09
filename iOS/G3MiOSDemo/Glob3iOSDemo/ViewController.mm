@@ -558,17 +558,17 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                              TimeInterval::fromSeconds(3));
 
-  //  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
 
-  //  // Busy quad renderer
-  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
-                                    encoding: [NSString defaultCStringEncoding]];
-  UIImage* image = [UIImage imageNamed:fn];
-  IImage* busyImg =  new Image_iOS(image, NULL);
-  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
-                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
-                                                Vector2D(250,194),
-                                                true);
+//  //  // Busy quad renderer
+//  NSString* fn = [NSString stringWithCString: "horizontal-gears.png"
+//                                    encoding: [NSString defaultCStringEncoding]];
+//  UIImage* image = [UIImage imageNamed:fn];
+//  IImage* busyImg =  new Image_iOS(image, NULL);
+//  Renderer* busyRenderer = new BusyQuadRenderer(busyImg,
+//                                                Color::newFromRGBA(0.0, 0.0, 0.0, 1.0),
+//                                                Vector2D(250,194),
+//                                                true);
 
   builder.setBusyRenderer(busyRenderer);
 
@@ -596,7 +596,7 @@ public:
 
   //  [self createInterpolationTest: meshRenderer];
 
-  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
@@ -852,11 +852,11 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
-                                          BingMapType::AerialWithLabels(),
-                                          //BingMapType::Aerial(),
+                                          //BingMapType::AerialWithLabels(),
+                                          BingMapType::Aerial(),
                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
   }
@@ -1134,7 +1134,7 @@ public:
     layerSet->addLayer(catastro);
   }
 
-  if (true) {
+  if (false) {
     WMSLayer* bing = LayerBuilder::createBingLayer(true);
     layerSet->addLayer(bing);
   }
@@ -1235,12 +1235,12 @@ public:
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
 
-  Mark* m3 = new Mark("Washington, DC",
-                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 0),
-                      0);
-  marksRenderer->addMark(m3);
+//  Mark* m3 = new Mark("Washington, DC",
+//                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                 0),
+//                      0);
+//  marksRenderer->addMark(m3);
 
   if (false) {
     for (int i = 0; i < 2000; i++) {
@@ -1456,6 +1456,9 @@ public:
 
 class SampleSymbolizer : public GEOSymbolizer {
 private:
+  mutable int _colorIndex = 0;
+
+private:
 
   //  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
   //    const JSONObject* properties = geometry->getFeature()->getProperties();
@@ -1573,11 +1576,15 @@ private:
     const double volume = population * boxExtent * 3500;
     const double height = volume / baseArea;
 
+    const int wheelSize = 7;
+    _colorIndex = (_colorIndex + 1) % wheelSize;
+
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         Vector3D(boxExtent, boxExtent, height),
                         1,
-                        Color::newFromRGBA(1, 1, 0, 1),
-                        Color::newFromRGBA(0.1, 0.1, 0, 1));
+                        //Color::newFromRGBA(1, 1, 0, 0.6),
+                        new Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                        Color::newFromRGBA(0.2, 0.2, 0, 1));
   }
 
   Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -1588,18 +1595,21 @@ private:
     if (label.compare("") != 0) {
       double scalerank = properties->getAsNumber("scalerank", 0);
 
-      //      const double population = properties->getAsNumber("population", 0);
-      //
-      //      const double boxExtent = 50000;
-      //      const double baseArea = boxExtent*boxExtent;
-      //      const double volume = population * boxExtent * 3500;
-      //      const double height = (volume / baseArea) * 0.7;
+//      const double population = properties->getAsNumber("population", 0);
+//
+//      const double boxExtent = 50000;
+//      const double baseArea = boxExtent*boxExtent;
+//      const double volume = population * boxExtent * 3500;
+//      const double height = (volume / baseArea) / 2 * 1.1;
+
       const double height = 1000;
 
       return new Mark(label,
                       Geodetic3D(geometry->getPosition(), height),
                       0,
-                      25 + (scalerank * -3) );
+                      //25 + (scalerank * -3)
+                      22 + (scalerank * -3)
+                      );
     }
 
     return NULL;
@@ -1607,6 +1617,10 @@ private:
 
 
 public:
+  SampleSymbolizer() :
+  _colorIndex(0) {
+
+  }
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
@@ -1670,12 +1684,18 @@ public:
 
     //symbols->push_back( new GEOShapeSymbol( createCircleShape(geometry) ) );
 
-    symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const double population = properties->getAsNumber("population", 0);
+//
+//    if (population > 2000000) {
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
 
-    Mark* mark = createMark(geometry);
-    if (mark != NULL) {
-      symbols->push_back( new GEOMarkSymbol(mark) );
-    }
+      Mark* mark = createMark(geometry);
+      if (mark != NULL) {
+        symbols->push_back( new GEOMarkSymbol(mark) );
+      }
+//    }
 
     return symbols;
   }
@@ -2071,66 +2091,66 @@ public:
 
       //      testRadarModel(context);
 
-      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
-                                               20,
-                                               Sector::fromDegrees(35, -6,
-                                                                   38, -2),
-                                               Color::white(),
-                                               2) );
+//      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
+//                                               20,
+//                                               Sector::fromDegrees(35, -6,
+//                                                                   38, -2),
+//                                               Color::white(),
+//                                               2) );
+//
+//      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
+//                                               20,
+//                                               Sector::fromDegrees(39.4642996294239623, -6.3829977122432933,
+//                                                                   39.4829891936013553, -6.3645288909498845),
+//                                               Color::magenta(),
+//                                               2) );
 
-      _meshRenderer->addMesh( createSectorMesh(context->getPlanet(),
-                                               20,
-                                               Sector::fromDegrees(39.4642996294239623, -6.3829977122432933,
-                                                                   39.4829891936013553, -6.3645288909498845),
-                                               Color::magenta(),
-                                               2) );
+//      // mesh1
+//      Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
+//      Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
+//
+//      Geodetic2D posFrom(latFrom,
+//                         lonFrom);
+//
+//      Geodetic2D posTo(latFrom.add(Angle::fromDegrees(0.75)),
+//                       lonFrom.add(Angle::fromDegrees(-0.75)));
 
-      // mesh1
-      Angle latFrom(Angle::fromDegreesMinutesSeconds(38, 53, 42.24));
-      Angle lonFrom(Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
-
-      Geodetic2D posFrom(latFrom,
-                         lonFrom);
-
-      Geodetic2D posTo(latFrom.add(Angle::fromDegrees(0.75)),
-                       lonFrom.add(Angle::fromDegrees(-0.75)));
-
-      double fromHeight = 30000;
-      double toHeight   = 2000;
-      //      double middleHeight = 60000;
-
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom, fromHeight, posTo, toHeight, Color::newFromRGBA(1, 1, 0, 1)));
-
-      // mesh2
-      Geodetic2D posFrom2(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
-      Geodetic2D posTo2(latFrom.add(Angle::fromDegrees(0.75)), lonFrom.add(Angle::fromDegrees(+0.75)));
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 100000, posTo2, toHeight, Color::newFromRGBA(1, 0, 0, 1)));
-
-      // mesh3
-      Geodetic2D posTo3(Angle::fromDegrees(37.7658),
-                        Angle::fromDegrees(-122.4185));
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 1000000, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
-
-      // mesh3a
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, fromHeight, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
-
-      // mesh4
-      Geodetic2D posFrom4(Angle::fromDegrees(-79.687184),
-                          Angle::fromDegrees(-81.914062));
-      Geodetic2D posTo4(Angle::fromDegrees(73.124945),
-                        Angle::fromDegrees(-47.460937));
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom4, fromHeight, posTo4, toHeight, Color::newFromRGBA(0, 0, 1, 1)));
-
-      // mesh5
-      Geodetic2D posFrom5(Angle::fromDegrees(39.909736),
-                          Angle::fromDegrees(-3.515625));
-      Geodetic2D posTo5(Angle::fromDegrees(39.909736),
-                        Angle::fromDegrees(-178.945312));
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, 1000000, Color::newFromRGBA(0, 1, 1, 1)));
-
-      // mesh5a
-      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, toHeight, Color::newFromRGBA(0, 1, 1, 1)));
+//      double fromHeight = 30000;
+//      double toHeight   = 2000;
+//      //      double middleHeight = 60000;
+//
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom, fromHeight, posTo, toHeight, Color::newFromRGBA(1, 1, 0, 1)));
+//
+//      // mesh2
+//      Geodetic2D posFrom2(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                          Angle::fromDegreesMinutesSeconds(-77, 2, 10.92));
+//      Geodetic2D posTo2(latFrom.add(Angle::fromDegrees(0.75)), lonFrom.add(Angle::fromDegrees(+0.75)));
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 100000, posTo2, toHeight, Color::newFromRGBA(1, 0, 0, 1)));
+//
+//      // mesh3
+//      Geodetic2D posTo3(Angle::fromDegrees(37.7658),
+//                        Angle::fromDegrees(-122.4185));
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, 1000000, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+//
+//      // mesh3a
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom2, fromHeight, posTo3, toHeight, Color::newFromRGBA(0, 1, 0, 1)));
+//
+//      // mesh4
+//      Geodetic2D posFrom4(Angle::fromDegrees(-79.687184),
+//                          Angle::fromDegrees(-81.914062));
+//      Geodetic2D posTo4(Angle::fromDegrees(73.124945),
+//                        Angle::fromDegrees(-47.460937));
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom4, fromHeight, posTo4, toHeight, Color::newFromRGBA(0, 0, 1, 1)));
+//
+//      // mesh5
+//      Geodetic2D posFrom5(Angle::fromDegrees(39.909736),
+//                          Angle::fromDegrees(-3.515625));
+//      Geodetic2D posTo5(Angle::fromDegrees(39.909736),
+//                        Angle::fromDegrees(-178.945312));
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, 1000000, Color::newFromRGBA(0, 1, 1, 1)));
+//
+//      // mesh5a
+//      _meshRenderer->addMesh(createCameraPathMesh(context, posFrom5, fromHeight, posTo5, toHeight, Color::newFromRGBA(0, 1, 1, 1)));
 
 
 
@@ -2244,7 +2264,7 @@ public:
                                                     10000),
                                          true);
 
-              /**/
+              /*
               const double fromDistance = 75000;
               const double toDistance   = 18750;
 
@@ -2264,9 +2284,9 @@ public:
                                  fromDistance, toDistance,
                                  fromAzimuth,  toAzimuth,
                                  fromAltitude, toAltitude);
+              */
 
               delete buffer;
-              /* */
             }
           }
         }
@@ -2276,9 +2296,9 @@ public:
       /**/
 
       //      NSString* geojsonName = @"geojson/countries";
-      NSString* geojsonName = @"geojson/countries-50m";
+      //      NSString* geojsonName = @"geojson/countries-50m";
       //      NSString* geojsonName = @"geojson/boundary_lines_land";
-      //      NSString* geojsonName = @"geojson/cities";
+      NSString* geojsonName = @"geojson/cities";
       //      NSString* geojsonName = @"geojson/test";
 
       NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
