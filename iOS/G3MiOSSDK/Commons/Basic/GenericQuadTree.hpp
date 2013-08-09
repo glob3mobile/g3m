@@ -234,7 +234,7 @@ class GenericQuadTree_TESTER {
 
     void endVisit(bool aborted) const{
       if (!aborted){
-        printf("COULDN'T FIND ELEMENT\n");
+        ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
 //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
@@ -267,7 +267,7 @@ class GenericQuadTree_TESTER {
 
     void endVisit(bool aborted) const{
       if (!aborted){
-        printf("COULDN'T FIND ELEMENT\n");
+        ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
 //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
@@ -330,7 +330,7 @@ class GenericQuadTree_TESTER {
       return false;
     }
     void endVisit(bool aborted) const{
-      printf("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n",
+      ILogger::instance()->logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n",
              _nElem,
              _maxDepth,
              _meanDepth / (float)_nNodes,
@@ -347,6 +347,18 @@ public:
 
   static int _nComparisons;
   static int _nElements;
+
+  static int random(int max){
+#ifdef C_CODE
+    int i = rand();
+#endif
+#ifdef JAVA_CODE
+    java.util.Random r = new java.util.Random();
+    int i = r.nextInt();
+#endif
+
+    return i % max;
+  }
 
   static void run(int nElements, GEOTileRasterizer* rasterizer);
   

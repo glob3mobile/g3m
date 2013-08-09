@@ -368,7 +368,7 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
     Color c = Color::red().wheelStep(12, _depth);
 
     GEO2DLineRasterStyle ls(c, //const Color&     color,
-                            1.0, //const float      width,
+                            (float)1.0, //const float      width,
                             CAP_ROUND, // const StrokeCap  cap,
                             JOIN_ROUND, //const StrokeJoin join,
                             1,//const float      miterLimit,
@@ -466,14 +466,14 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   for (int i = 0; i < nElements; i++) {
 
 
-    double minLat = rand()%180 -90;
-    double minLon = rand()%360 -180;
+    double minLat = random(90);// rand()%180 -90;
+    double minLon = random(180);//rand()%360 -180;
 
     int type = rand();
     if (type%2 == 0){
 
-      double maxLat = minLat + rand()%(90 - (int)minLat);
-      double maxLon = minLon + rand()%(180 - (int)minLon);
+      double maxLat = minLat + random(90 - (int)minLat); //rand()%(90 - (int)minLat);
+      double maxLon = minLon + random(90 - (int)minLat);//rand()%(180 - (int)minLon);
 
       Sector s = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
       sectors.push_back(new Sector(s));
@@ -482,7 +482,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
       *element = desc;
 
       if (!tree.add(s, element)){
-        printf("ERROR");
+        ILogger::instance()->logInfo("ERROR");
       }
 
     } else{
@@ -494,19 +494,21 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
       *element = desc;
 
       if (!tree.add(geo, element)){
-        printf("ERROR");
+        ILogger::instance()->logInfo("ERROR");
       }
     }
   }
 
   for (int i = 0; i < sectors.size(); i++){
-    GenericQuadTreeVisitorSector_TESTER vis(*sectors[i]);
-    tree.acceptVisitor(*sectors[i], vis);
+    Sector s = *sectors[i];
+    GenericQuadTreeVisitorSector_TESTER vis(s);
+    tree.acceptVisitor(s, vis);
   }
 
   for (int i = 0; i < geos.size(); i++){
-    GenericQuadTreeVisitorGeodetic_TESTER vis(*geos[i]);
-    tree.acceptVisitor(*geos[i], vis);
+    Geodetic2D g = *geos[i];
+    GenericQuadTreeVisitorGeodetic_TESTER vis(g);
+    tree.acceptVisitor(g, vis);
   }
   
   NodeVisitor_TESTER nodeVis;
@@ -517,6 +519,6 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   }
 
   double c_e = (float)_nComparisons / _nElements;
-  printf("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
+  ILogger::instance()->logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
   
 }
