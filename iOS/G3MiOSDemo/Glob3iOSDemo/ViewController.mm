@@ -273,14 +273,15 @@ public:
   MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
   const bool useWebSockets = true;
 
+  //const std::string applicationId = "2gl2syurzilwq2noujq";
+  const std::string applicationId = "2glghma5l2ufxsn2o3k";
+
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
                                        URL("http://127.0.0.1:8080/g3mc-server", false),
                                        URL("ws://127.0.0.1:8888/tube", false),
                                        useWebSockets,
-                                       "2gl2syurzilwq2noujq",
+                                       applicationId,
                                        applicationListener);
-
-  //_g3mcBuilder->requestScenesDescriptions(new TestMapBooBuilderScenesDescriptionsListener(), true);
 
   _g3mcBuilder->initializeWidget();
 }
