@@ -149,7 +149,12 @@ private:
   G3MWidget* _g3mWidget;
   IStorage*  _storage;
 
+#ifdef C_CODE
   const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
 
   bool        _isApplicationTubeOpen;
 
