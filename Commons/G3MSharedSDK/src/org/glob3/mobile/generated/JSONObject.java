@@ -76,19 +76,37 @@ public class JSONObject extends JSONBaseObject
 
   public final boolean getAsBoolean(String key, boolean defaultValue)
   {
-    final JSONBoolean jsBool = getAsBoolean(key);
+    final JSONBaseObject jsValue = get(key);
+    if ((jsValue == null) || (jsValue.asNull() != null))
+    {
+      return defaultValue;
+    }
+  
+    final JSONBoolean jsBool = jsValue.asBoolean();
     return (jsBool == null) ? defaultValue : jsBool.value();
   }
 
   public final double getAsNumber(String key, double defaultValue)
   {
-    final JSONNumber jsNumber = getAsNumber(key);
+    final JSONBaseObject jsValue = get(key);
+    if ((jsValue == null) || (jsValue.asNull() != null))
+    {
+      return defaultValue;
+    }
+  
+    final JSONNumber jsNumber = jsValue.asNumber();
     return (jsNumber == null) ? defaultValue : jsNumber.value();
   }
 
   public final String getAsString(String key, String defaultValue)
   {
-    final JSONString jsString = getAsString(key);
+    final JSONBaseObject jsValue = get(key);
+    if ((jsValue == null) || (jsValue.asNull() != null))
+    {
+      return defaultValue;
+    }
+  
+    final JSONString jsString = jsValue.asString();
     return (jsString == null) ? defaultValue : jsString.value();
   }
 
