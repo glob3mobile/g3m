@@ -37,7 +37,7 @@ public class GenericQuadTree_TESTER
     {
       if (!aborted)
       {
-        System.out.print("COULDN'T FIND ELEMENT\n");
+        ILogger.instance().logInfo("COULDN'T FIND ELEMENT\n");
       }
       else
       {
@@ -80,7 +80,7 @@ public class GenericQuadTree_TESTER
     {
       if (!aborted)
       {
-        System.out.print("COULDN'T FIND ELEMENT\n");
+        ILogger.instance().logInfo("COULDN'T FIND ELEMENT\n");
       }
       else
       {
@@ -160,13 +160,21 @@ public class GenericQuadTree_TESTER
     }
     public final void endVisit(boolean aborted)
     {
-      System.out.printf("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n", _nElem, _maxDepth, _meanDepth / (float)_nNodes, _maxNEle, _meanElemDepth / (float) _nElem, _nLeaf, _leafMinDepth, _leafMinDepth / (float) _nLeaf);
+      ILogger.instance().logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n", _nElem, _maxDepth, _meanDepth / (float)_nNodes, _maxNEle, _meanElemDepth / (float) _nElem, _nLeaf, _leafMinDepth, _leafMinDepth / (float) _nLeaf);
     }
   }
 
 
   public static int _nComparisons = 0;
   public static int _nElements = 0;
+
+  public static int random(int max)
+  {
+    java.util.Random r = new java.util.Random();
+    int i = r.nextInt();
+
+    return i % max;
+  }
 
   public static void run(int nElements, GEOTileRasterizer rasterizer)
   {
@@ -183,15 +191,15 @@ public class GenericQuadTree_TESTER
     {
   
   
-      double minLat = RandomNumbers.nextNumber()%180 -90;
-      double minLon = RandomNumbers.nextNumber()%360 -180;
+      double minLat = RandomNumbers.nextNumber(180) -90; // rand()%180 -90;
+      double minLon = RandomNumbers.nextNumber(360) - 180; //rand()%360 -180;
   
       int type = RandomNumbers.nextNumber();
       if (type%2 == 0)
       {
   
-        double maxLat = minLat + RandomNumbers.nextNumber()%(90 - (int)minLat);
-        double maxLon = minLon + RandomNumbers.nextNumber()%(180 - (int)minLon);
+        double maxLat = minLat + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(90 - (int)minLat);
+        double maxLon = minLon + RandomNumbers.nextNumber(90 - (int)minLat); //rand()%(180 - (int)minLon);
   
         Sector s = Sector.fromDegrees(minLat, minLon, maxLat, maxLon);
         sectors.add(new Sector(s));
@@ -201,7 +209,7 @@ public class GenericQuadTree_TESTER
   
         if (!tree.add(s, element))
         {
-          System.out.print("ERROR");
+          ILogger.instance().logInfo("ERROR");
         }
   
       }
@@ -216,21 +224,23 @@ public class GenericQuadTree_TESTER
   
         if (!tree.add(geo, element))
         {
-          System.out.print("ERROR");
+          ILogger.instance().logInfo("ERROR");
         }
       }
     }
   
     for (int i = 0; i < sectors.size(); i++)
     {
-      GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(*sectors.get(i));
-      tree.acceptVisitor(*sectors.get(i), vis);
+      Sector s = *sectors.get(i);
+      GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
+      tree.acceptVisitor(s, vis);
     }
   
     for (int i = 0; i < geos.size(); i++)
     {
-      GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(*geos.get(i));
-      tree.acceptVisitor(*geos.get(i), vis);
+      Geodetic2D g = *geos.get(i);
+      GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(g);
+      tree.acceptVisitor(g, vis);
     }
   
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
@@ -242,7 +252,7 @@ public class GenericQuadTree_TESTER
     }
   
     double c_e = (float)_nComparisons / _nElements;
-    System.out.printf("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
+    ILogger.instance().logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
   
   }
 
