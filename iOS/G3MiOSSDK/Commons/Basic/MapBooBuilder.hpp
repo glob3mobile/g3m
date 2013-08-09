@@ -298,6 +298,8 @@ public:
 
   void changeScene(int sceneIndex);
 
+  void changeScene(const MapBoo_Scene* scene);
+
 };
 
 #endif

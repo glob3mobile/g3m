@@ -845,6 +845,16 @@ void MapBooBuilder::changeScene(int sceneIndex) {
   }
 }
 
+void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
+  const int size = _applicationScenes.size();
+  for (int i = 0; i < size; i++) {
+    if (_applicationScenes[i] == scene) {
+      changeScene(i);
+      break;
+    }
+  }
+}
+
 void MapBooBuilder::changedCurrentScene() {
   recreateLayerSet();
 
