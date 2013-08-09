@@ -235,22 +235,26 @@ Mesh* createSectorMesh(const Planet* planet,
 
 class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
 public:
-  void onNameChanged(const std::string& name) {
+  void onNameChanged(const G3MContext* context,
+                     const std::string& name) {
     ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
                                  name.c_str());
   }
 
-  void onDescriptionChanged(const std::string& description) {
+  void onDescriptionChanged(const G3MContext* context,
+                            const std::string& description) {
     ILogger::instance()->logInfo("MapBoo application description=\"%s\"",
                                  description.c_str());
   }
 
-  void onIconChanged(const std::string& icon) {
+  void onIconChanged(const G3MContext* context,
+                     const std::string& icon) {
     ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
                                  icon.c_str());
   }
 
-  void onScenesChanged(const std::vector<MapBoo_Scene*>& scenes) {
+  void onScenesChanged(const G3MContext* context,
+                       const std::vector<MapBoo_Scene*>& scenes) {
     const int scenesSize = scenes.size();
     for (int i = 0; i < scenesSize; i++) {
       ILogger::instance()->logInfo("MapBoo application scene #%d %s",
@@ -259,7 +263,8 @@ public:
     }
   }
 
-  void onSceneChanged(int sceneIndex) {
+  void onSceneChanged(const G3MContext* context,
+                      int sceneIndex) {
     ILogger::instance()->logInfo("MapBoo application current scene=%l",
                                  sceneIndex);
   }
@@ -271,8 +276,7 @@ public:
   MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
   const bool useWebSockets = true;
 
-  //const std::string applicationId = "2gl2syurzilwq2noujq";
-  const std::string applicationId = "2glghma5l2ufxsn2o3k";
+  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
 
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
                                        URL("http://192.168.1.2:8080/web", false),

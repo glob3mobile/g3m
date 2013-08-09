@@ -109,7 +109,8 @@ _applicationListener(applicationListener),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
-_applicationDefaultSceneIndex(0)
+_applicationDefaultSceneIndex(0),
+_context(NULL)
 {
 
 }
@@ -674,6 +675,7 @@ public:
   }
 
   void run(const G3MContext* context) {
+    _builder->setContext(context);
     _builder->openApplicationTube(context);
   }
 
@@ -681,6 +683,10 @@ public:
     return true;
   }
 };
+
+void MapBooBuilder::setContext(const G3MContext* context) {
+  _context = context;
+}
 
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
@@ -776,7 +782,7 @@ void MapBooBuilder::setApplicationName(const std::string& name) {
     _applicationName = name;
 
     if (_applicationListener != NULL) {
-      _applicationListener->onNameChanged(_applicationName);
+      _applicationListener->onNameChanged(_context, _applicationName);
     }
   }
 }
@@ -786,7 +792,7 @@ void MapBooBuilder::setApplicationDescription(const std::string& description) {
     _applicationDescription = description;
 
     if (_applicationListener != NULL) {
-      _applicationListener->onDescriptionChanged(_applicationDescription);
+      _applicationListener->onDescriptionChanged(_context, _applicationDescription);
     }
   }
 }
@@ -816,7 +822,7 @@ void MapBooBuilder::rawChangeScene(int sceneIndex) {
   changedCurrentScene();
 
   if (_applicationListener != NULL) {
-    _applicationListener->onSceneChanged(_applicationCurrentSceneIndex);
+    _applicationListener->onSceneChanged(_context, _applicationCurrentSceneIndex);
   }
 }
 
@@ -864,7 +870,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   changedCurrentScene();
   
   if (_applicationListener != NULL) {
-    _applicationListener->onScenesChanged(_applicationScenes);
+    _applicationListener->onScenesChanged(_context, _applicationScenes);
   }
 }
 
