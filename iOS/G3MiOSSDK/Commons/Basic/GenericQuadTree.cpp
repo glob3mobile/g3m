@@ -466,8 +466,8 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   for (int i = 0; i < nElements; i++) {
 
 
-    double minLat = random(90);// rand()%180 -90;
-    double minLon = random(180);//rand()%360 -180;
+    double minLat = random(180) -90;// rand()%180 -90;
+    double minLon = random(360) - 180;//rand()%360 -180;
 
     int type = rand();
     if (type%2 == 0){
