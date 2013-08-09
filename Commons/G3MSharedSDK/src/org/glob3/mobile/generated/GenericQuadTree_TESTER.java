@@ -227,7 +227,7 @@ public class GenericQuadTree_TESTER
   
     for (int i = 0; i < sectors.size(); i++)
     {
-      Sector s = sectors[i];
+      Sector s = sectors.get(i);
       GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
       tree.acceptVisitor(s, vis);
     }

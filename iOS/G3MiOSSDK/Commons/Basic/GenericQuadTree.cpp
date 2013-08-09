@@ -502,7 +502,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
     Sector s = *(sectors[i]);
 #endif
 #ifdef JAVA_CODE
-    Sector s = sectors[i];
+    Sector s = sectors.get(i);
 #endif
     GenericQuadTreeVisitorSector_TESTER vis(s);
     tree.acceptVisitor(s, vis);
