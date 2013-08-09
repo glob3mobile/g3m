@@ -525,9 +525,6 @@ public:
   //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
 
-
-  GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
-
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   builder.addCameraConstraint(scc);
 
@@ -643,6 +640,9 @@ public:
 
   // initialization
   builder.initializeWidget();
+
+
+  GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
 }
 
 - (void)createInterpolationTest: (MeshRenderer*) meshRenderer

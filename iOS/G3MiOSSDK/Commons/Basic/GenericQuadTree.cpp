@@ -8,9 +8,6 @@
 
 #include "GenericQuadTree.hpp"
 
-#include "StringBuilder_iOS.hpp"
-#include "MathUtils_iOS.hpp"
-
 #include "GEORasterLineSymbol.hpp"
 #include "ICanvas.hpp"
 
@@ -457,10 +454,7 @@ int GenericQuadTree_TESTER::_nComparisons = 0;
 int GenericQuadTree_TESTER::_nElements = 0;
 
 void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
-
-  IStringBuilder::setInstance(new StringBuilder_iOS());
-  IMathUtils::setInstance(new MathUtils_iOS());
-
+  
   _nElements = 0;
   _nComparisons = 0;
 
