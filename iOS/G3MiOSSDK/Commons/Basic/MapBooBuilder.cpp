@@ -546,7 +546,7 @@ public:
   }
 };
 
-void MapBoo_Scene::recreateLayerSet(LayerSet* layerSet) const {
+void MapBoo_Scene::fillLayerSet(LayerSet* layerSet) const {
   if (_baseLayer != NULL) {
     layerSet->addLayer(_baseLayer);
   }
@@ -561,7 +561,7 @@ void MapBooBuilder::recreateLayerSet() {
 
   const MapBoo_Scene* scene = getApplicationCurrentScene();
   if (scene != NULL) {
-    scene->recreateLayerSet(_layerSet);
+    scene->fillLayerSet(_layerSet);
   }
 }
 
@@ -711,14 +711,11 @@ const int MapBooBuilder::getApplicationCurrentSceneIndex() {
 
 const MapBoo_Scene* MapBooBuilder::getApplicationCurrentScene() {
   const int currentSceneIndex = getApplicationCurrentSceneIndex();
-  const int applicationScenesSize = _applicationScenes.size();
-  if ((applicationScenesSize == 0) ||
-      (currentSceneIndex < 0) ||
-      (currentSceneIndex >= applicationScenesSize)) {
-    return NULL;
-  }
 
-  return _applicationScenes[currentSceneIndex];
+  const bool validCurrentSceneIndex = ((currentSceneIndex >= 0) &&
+                                       (currentSceneIndex < _applicationScenes.size()));
+
+  return validCurrentSceneIndex ? _applicationScenes[currentSceneIndex] : NULL;
 }
 
 Color MapBooBuilder::getCurrentBackgroundColor() {
@@ -826,14 +823,6 @@ void MapBooBuilder::rawChangeScene(int sceneIndex) {
   }
 }
 
-//void MapBooBuilder::changeApplication(const std::string& applicationId) {
-//  if (applicationId.compare(_applicationId) != 0) {
-//    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
-//                                             true);
-//  }
-//}
-
-
 void MapBooBuilder::changeScene(int sceneIndex) {
   const int currentSceneIndex = getApplicationCurrentSceneIndex();
   if (currentSceneIndex != sceneIndex) {
@@ -861,7 +850,7 @@ void MapBooBuilder::changedCurrentScene() {
   if (_g3mWidget != NULL) {
     _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
 
-    // force inmediate ejecution of PeriodicalTasks
+    // force immediate execution of PeriodicalTasks
     _g3mWidget->resetPeriodicalTasksTimeouts();
   }
 }
@@ -884,54 +873,6 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   }
 }
 
-//void MapBooBuilder::resetApplication(const std::string& applicationId) {
-//  _applicationId = applicationId;
-//
-//  _applicationTimestamp = -1;
-//
-////  delete _sceneBaseLayer;
-////  _sceneBaseLayer = NULL;
-////
-////  delete _sceneOverlayLayer;
-////  _sceneOverlayLayer = NULL;
-//
-////  _sceneUser = "";
-//
-//  _applicationName = "";
-//
-//  _applicationDescription = "";
-//
-////  delete _sceneBackgroundColor;
-////  _sceneBackgroundColor = Color::newFromRGBA(0, 0, 0, 1);
-//}
-
-//void MapBooBuilder::resetG3MWidget() {
-//  _layerSet->removeAllLayers(false);
-//
-//  if (_g3mWidget != NULL) {
-//    _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
-//
-//    // force inmediate ejecution of PeriodicalTasks
-//    _g3mWidget->resetPeriodicalTasksTimeouts();
-//  }
-//}
-
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
   _isApplicationTubeOpen = open;
 }
-
-//void MapBooBuilder::rawChangeApplication(const std::string& applicationId) {
-//  if (applicationId.compare(_applicationId) != 0) {
-//    resetApplication(applicationId);
-//    
-//    resetG3MWidget();
-//    
-//    if (_applicationListener != NULL) {
-//      _applicationListener->onApplicationChanged(applicationId);
-//    }
-//    
-//    if (_sceneTubeWebSocket != NULL) {
-//      _sceneTubeWebSocket->close();
-//    }
-//  }
-//}

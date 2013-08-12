@@ -285,6 +285,10 @@ public:
                                        applicationId,
                                        applicationListener);
 
+//  MarksRenderer* marksRenderer = new MarksRenderer(false);
+//
+//  _g3mcBuilder->addRenderer(marksRenderer);
+
   _g3mcBuilder->initializeWidget();
 }
 

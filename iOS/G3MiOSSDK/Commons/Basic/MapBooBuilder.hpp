@@ -111,7 +111,7 @@ public:
     return _backgroundColor;
   }
 
-  void recreateLayerSet(LayerSet* layerSet) const;
+  void fillLayerSet(LayerSet* layerSet) const;
 
   ~MapBoo_Scene();
 
@@ -179,10 +179,6 @@ private:
 
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
-
-//  void resetApplication(const std::string& applicationId);
-
-//  void resetG3MWidget();
 
   GInitializationTask* createInitializationTask();
 
@@ -269,9 +265,6 @@ public:
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
 
-//  /** Private to MapbooBuilder, don't call it */
-//  void rawChangeApplication(const std::string& applicationId);
-
   /** Private to MapbooBuilder, don't call it */
   void parseApplicationDescription(const std::string& json,
                                    const URL& url);
@@ -288,14 +281,14 @@ public:
   /** Private to MapbooBuilder, don't call it */
   void setContext(const G3MContext* context);
 
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationTubeOpened(bool open);
   
+  /** Private to MapbooBuilder, don't call it */
   bool isApplicationTubeOpen() const {
     return _isApplicationTubeOpen;
   }
   
-//  void changeApplication(const std::string& applicationId);
-
   void changeScene(int sceneIndex);
 
   void changeScene(const MapBoo_Scene* scene);
