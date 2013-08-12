@@ -15,18 +15,3 @@ public class MapBooBuilder_ChangeSceneTask extends GTask
     _builder.rawChangeScene(_sceneIndex);
   }
 }
-//void MapBooBuilder::rawChangeApplication(const std::string& applicationId) {
-//  if (applicationId.compare(_applicationId) != 0) {
-//    resetApplication(applicationId);
-//    
-//    resetG3MWidget();
-//    
-//    if (_applicationListener != NULL) {
-//      _applicationListener->onApplicationChanged(applicationId);
-//    }
-//    
-//    if (_sceneTubeWebSocket != NULL) {
-//      _sceneTubeWebSocket->close();
-//    }
-//  }
-//}
