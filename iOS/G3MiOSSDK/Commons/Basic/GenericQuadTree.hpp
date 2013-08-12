@@ -116,11 +116,13 @@ private:
   }
 
   void splitNode(int maxElementsPerNode,
-                 int maxDepth);
+                 int maxDepth,
+                 double childAreaProportion);
 
   //  void computeElementsSector();
 
-  GenericQuadTree_Node* getBestNodeForInsertion(GenericQuadTree_Element* element);
+  GenericQuadTree_Node* getBestNodeForInsertion(GenericQuadTree_Element* element,
+                                                double childAreaProportion);
 
   void increaseNodeSector(GenericQuadTree_Element* element);
 
@@ -140,7 +142,8 @@ public:
 
   bool add(GenericQuadTree_Element* element,
            int maxElementsPerNode,
-           int maxDepth);
+           int maxDepth,
+           double childAreaProportion);
 
   bool acceptVisitor(const Sector& sector,
                      const GenericQuadTreeVisitor& visitor) const;
@@ -168,6 +171,9 @@ public:
   }
 
   void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+
+  void getGeodetics(std::vector<Geodetic2D*>& geo) const;
+  void getSectors(std::vector<Sector*>& sectors) const;
 };
 
 class GenericQuadTree {
@@ -176,6 +182,7 @@ private:
 
   const int _maxElementsPerNode;
   const int _maxDepth;
+  const double _childAreaProportion;
 
   bool add(GenericQuadTree_Element* element);
 public:
@@ -183,7 +190,16 @@ public:
   GenericQuadTree() :
   _root( NULL ),
   _maxElementsPerNode(1),
-  _maxDepth(12)
+  _maxDepth(12),
+  _childAreaProportion(0.3)
+  {
+  }
+
+  GenericQuadTree(int maxElementsPerNode, int maxDepth, double childAreaProportion) :
+  _root( NULL ),
+  _maxElementsPerNode(maxElementsPerNode),
+  _maxDepth(maxDepth),
+  _childAreaProportion(childAreaProportion)
   {
   }
 
@@ -202,6 +218,17 @@ public:
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
   void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+
+  std::vector<Geodetic2D*> getGeodetics() const{
+    std::vector<Geodetic2D*> geo;
+    _root->getGeodetics(geo);
+    return geo;
+  }
+  std::vector<Sector*> getSectors() const{
+    std::vector<Sector*> sectors;
+    _root->getSectors(sectors);
+    return sectors;
+  }
 
 };
 
@@ -361,6 +388,8 @@ public:
   }
 
   static void run(int nElements, GEOTileRasterizer* rasterizer);
+
+  static void run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer);
   
 };
 #endif /* defined(__G3MiOSSDK__GenericGenericQuadTree__) */

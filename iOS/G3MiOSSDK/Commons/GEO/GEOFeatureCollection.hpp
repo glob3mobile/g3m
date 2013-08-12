@@ -38,6 +38,9 @@ public:
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
 
+  GEOFeature* get(int i) const{ return _features[i];}
+  int size() const{ return _features.size();}
+
 };
 
 #endif
