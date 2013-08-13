@@ -30,6 +30,7 @@ public:
   ~GEORenderer_ObjectSymbolizerPair() {
     delete _geoObject;
     delete _symbolizer;
+    JAVA_POST_DISPOSE
   }
 };
 

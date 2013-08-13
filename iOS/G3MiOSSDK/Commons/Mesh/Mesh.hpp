@@ -17,10 +17,12 @@
 class Vector3D;
 class GPUProgramState;
 
-class Mesh{
+class Mesh {
 public:
   
-  virtual ~Mesh() { }
+  virtual ~Mesh() {
+    JAVA_POST_DISPOSE
+  }
   
   virtual int getVertexCount() const = 0;
   

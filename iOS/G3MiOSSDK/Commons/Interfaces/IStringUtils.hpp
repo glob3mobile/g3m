@@ -36,7 +36,7 @@ public:
   }
 
   virtual ~IStringUtils() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual std::string createString(unsigned char data[],

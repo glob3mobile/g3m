@@ -11,6 +11,9 @@
 
 #include <string>
 
+#include "Disposable.hpp"
+
+
 enum GPUVariableType{
   ATTRIBUTE = 1,
   UNIFORM = 2
@@ -37,7 +40,7 @@ enum GPUAttributeKey{
   NORMAL = 3
 };
 
-class GPUVariable{
+class GPUVariable : public Disposable {
   
 protected:
   
@@ -95,7 +98,9 @@ public:
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;
 
-  virtual ~GPUVariable() {}
+  virtual ~GPUVariable() {
+    JAVA_POST_DISPOSE
+  }
   
   GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {
 //    createMetadata();

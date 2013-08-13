@@ -173,6 +173,7 @@ public:
   
   ~Frustum() {
     delete _boundingVolume;
+    JAVA_POST_DISPOSE
   }
   
   BoundingVolume* getBoundingVolume() const {

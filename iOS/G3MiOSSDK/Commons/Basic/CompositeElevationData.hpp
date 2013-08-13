@@ -43,6 +43,8 @@ public:
       delete _data[i];
     }
     delete _interpolator;
+    
+    JAVA_POST_DISPOSE
   }
 
   double getElevationAt(int x,

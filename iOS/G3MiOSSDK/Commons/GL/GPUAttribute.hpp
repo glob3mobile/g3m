@@ -79,7 +79,9 @@ public:
   bool getNormalized() const { return _normalized;}
   bool getEnabled() const { return _enabled;}
   //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
-  virtual ~GPUAttributeValue() {}
+  virtual ~GPUAttributeValue() {
+    JAVA_POST_DISPOSE
+  }
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
 //  virtual GPUAttributeValue* shallowCopy() const = 0;
@@ -126,6 +128,7 @@ public:
 
   virtual ~GPUAttribute() {
     delete _value;
+    JAVA_POST_DISPOSE
   }
 
   GPUAttribute(const std::string&name, int id, int type, int size):

@@ -18,10 +18,14 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
-class GEOSymbol {
+#include "Disposable.hpp"
+
+class GEOSymbol : public Disposable {
 
 public:
-  virtual ~GEOSymbol() { }
+  virtual ~GEOSymbol() {
+    JAVA_POST_DISPOSE
+  }
 
   virtual bool symbolize(const G3MRenderContext* rc,
                          const GEOSymbolizer*    symbolizer,

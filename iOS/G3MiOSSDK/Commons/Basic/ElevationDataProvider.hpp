@@ -47,7 +47,7 @@ class ElevationDataProvider {
 public:
 
   virtual ~ElevationDataProvider() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;

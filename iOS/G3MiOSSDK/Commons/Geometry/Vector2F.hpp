@@ -33,7 +33,7 @@ public:
   }
 
   ~Vector2F() {
-
+    JAVA_POST_DISPOSE
   }
 
   float x() const {

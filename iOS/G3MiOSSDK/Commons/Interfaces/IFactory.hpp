@@ -42,7 +42,7 @@ public:
   }
 
   virtual ~IFactory() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual void createImageFromFileName(const std::string& filename,

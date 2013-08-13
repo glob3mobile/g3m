@@ -10,12 +10,13 @@
 #define G3MiOSSDK_IByteBuffer_h
 
 #include <string>
+#include "Disposable.hpp"
 
-class IByteBuffer {
+class IByteBuffer : public Disposable {
 public:
 
   virtual ~IByteBuffer() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual int size() const = 0;

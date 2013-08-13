@@ -16,8 +16,9 @@ class Tile;
 class IImageListener;
 class ChangedListener;
 
+#include "Disposable.hpp"
 
-class TileRasterizerContext {
+class TileRasterizerContext : public Disposable {
 private:
   TileRasterizerContext(const TileRasterizerContext& that);
 
@@ -42,17 +43,21 @@ public:
   {
   }
 
+  ~TileRasterizerContext() {
+    JAVA_POST_DISPOSE;
+  }
+
 };
 
 
-class TileRasterizer {
+class TileRasterizer : public Disposable {
 private:
   ChangedListener* _listener;
   
 public:
 
   virtual ~TileRasterizer() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual std::string getId() const = 0;

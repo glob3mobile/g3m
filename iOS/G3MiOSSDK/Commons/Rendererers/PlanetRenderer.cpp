@@ -103,6 +103,7 @@ public:
     }
 
     delete _lastSector;
+    JAVA_POST_DISPOSE
   }
 };
 

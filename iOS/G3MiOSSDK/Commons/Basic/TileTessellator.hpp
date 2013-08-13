@@ -24,7 +24,9 @@ class Geodetic2D;
 
 class TileTessellator {
 public:
-  virtual ~TileTessellator() { };
+  virtual ~TileTessellator() {
+    JAVA_POST_DISPOSE
+  };
 
   virtual bool isReady(const G3MRenderContext *rc) const = 0;
 

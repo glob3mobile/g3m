@@ -21,7 +21,9 @@ public:
 
   virtual long long elapsedTimeInMilliseconds() const = 0;
 
-  virtual ~ITimer() { }
+  virtual ~ITimer() {
+    JAVA_POST_DISPOSE
+  }
   
 };
 

@@ -23,7 +23,9 @@ public:
   const Angle _longitude;
   const double _height;
 
-  ~Geodetic3D() {}
+  ~Geodetic3D() {
+    JAVA_POST_DISPOSE
+  }
   
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);

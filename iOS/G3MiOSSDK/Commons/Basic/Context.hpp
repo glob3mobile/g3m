@@ -29,8 +29,10 @@ class GPUProgramManager;
 class SurfaceElevationProvider;
 
 #include <vector>
+#include "Disposable.hpp"
 
-class G3MContext {
+
+class G3MContext : public Disposable {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
@@ -72,7 +74,7 @@ public:
   }
 
   virtual ~G3MContext() {
-
+    JAVA_POST_DISPOSE
   }
 
   const IFactory* getFactory() const {

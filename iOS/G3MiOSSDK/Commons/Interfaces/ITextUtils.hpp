@@ -34,7 +34,7 @@ public:
   }
 
   virtual ~ITextUtils() {
-
+    JAVA_POST_DISPOSE
   }
 
 

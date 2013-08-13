@@ -12,9 +12,11 @@
 #include "GTask.hpp"
 #include <stdlib.h>
 
+#include "Disposable.hpp"
+
 class G3MContext;
 
-class IThreadUtils {
+class IThreadUtils : public Disposable {
 protected:
 #ifdef C_CODE
   const G3MContext* _context;
@@ -40,7 +42,7 @@ public:
   virtual void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
-    
+    JAVA_POST_DISPOSE
   }
   
   virtual void invokeInRendererThread(GTask* task,

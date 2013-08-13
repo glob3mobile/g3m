@@ -14,7 +14,7 @@
 class QuadTreeVisitor {
 public:
   virtual ~QuadTreeVisitor() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual bool visitElement(const Sector& sector,
@@ -38,6 +38,7 @@ public:
   }
 
   ~QuadTree_Element() {
+    JAVA_POST_DISPOSE
   }
 
 };

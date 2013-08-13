@@ -94,6 +94,7 @@ public:
   }
 
   ~LayerTilesRenderParameters() {
+    JAVA_POST_DISPOSE
   }
   
   

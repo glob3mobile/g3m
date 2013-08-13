@@ -15,11 +15,13 @@
 
 #include <string>
 
+#include "Disposable.hpp"
+
 #define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
 #define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
 
 
-class Angle {
+class Angle : public Disposable {
 private:
   Angle(const double degrees,
         const double radians) :
@@ -229,7 +231,7 @@ public:
 #endif
 
   ~Angle() {
-
+    JAVA_POST_DISPOSE
   }
 
   const std::string description() const;

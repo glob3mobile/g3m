@@ -29,7 +29,7 @@ public:
              bool depthTest = true);
 
   ~DirectMesh() {
-
+    JAVA_POST_DISPOSE
   }
   
 //  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;

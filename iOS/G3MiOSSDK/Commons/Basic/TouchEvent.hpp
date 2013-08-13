@@ -45,7 +45,9 @@ public:
   const Vector2I getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
 
-  ~Touch() {}
+  ~Touch() {
+    JAVA_POST_DISPOSE
+  }
 };
 
 
@@ -137,6 +139,7 @@ public:
     for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
+    JAVA_POST_DISPOSE
   }
 
 };

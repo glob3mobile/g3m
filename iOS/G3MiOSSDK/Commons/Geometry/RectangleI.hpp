@@ -9,7 +9,9 @@
 #ifndef __G3MiOSSDK__RectangleI__
 #define __G3MiOSSDK__RectangleI__
 
-class RectangleI {
+#include "Disposable.hpp"
+
+class RectangleI : public Disposable {
 public:
   const int _x;
   const int _y;
@@ -34,7 +36,7 @@ public:
   }
 
   ~RectangleI() {
-
+    JAVA_POST_DISPOSE
   }
 
   bool equalTo(const RectangleI& that) const{

@@ -17,7 +17,9 @@
 
 class IImage {
 public:
-  virtual ~IImage() {}
+  virtual ~IImage() {
+    JAVA_POST_DISPOSE
+  }
 
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;

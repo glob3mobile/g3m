@@ -30,7 +30,7 @@ public:
   }
 
   virtual ~GEOGeometry() {
-
+    JAVA_POST_DISPOSE
   }
 
   void setFeature(GEOFeature* feature);

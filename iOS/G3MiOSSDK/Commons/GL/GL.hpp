@@ -135,6 +135,7 @@ public:
 #ifdef JAVA_CODE
     _nativeGL.dispose();
 #endif
+    JAVA_POST_DISPOSE
   }
   
   int createProgram() const {

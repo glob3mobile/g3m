@@ -14,7 +14,7 @@
 class VisibleSectorListener {
 public:
   virtual ~VisibleSectorListener() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual void onVisibleSectorChange(const Sector& visibleSector,

@@ -11,10 +11,13 @@
 
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
+#include "Disposable.hpp"
 
-class IBufferDownloadListener {
+class IBufferDownloadListener : public Disposable {
 public:
-  virtual ~IBufferDownloadListener() { }
+  virtual ~IBufferDownloadListener() {
+    JAVA_POST_DISPOSE
+  }
 
   /**
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java

@@ -32,7 +32,7 @@ class GPUProgramState;
 class MarkUserData {
 public:
   virtual ~MarkUserData() {
-    
+    JAVA_POST_DISPOSE
   }
 };
 

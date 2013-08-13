@@ -31,7 +31,9 @@ public:
     return _instance;
   }
 
-  virtual ~IJSONParser() {}
+  virtual ~IJSONParser() {
+    JAVA_POST_DISPOSE
+  }
 
   virtual const JSONBaseObject* parse(const std::string& json) {
     return parse(json, false);

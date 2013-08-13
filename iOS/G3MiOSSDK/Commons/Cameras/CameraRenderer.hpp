@@ -46,7 +46,9 @@ public:
   _nextCamera(nextCamera)
   {}
 
-  ~CameraContext() {}
+  ~CameraContext() {
+    JAVA_POST_DISPOSE
+  }
 
   const Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }

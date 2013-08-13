@@ -20,7 +20,9 @@ public:
   static const Planet* createEarth();
   static const Planet* createSphericalEarth();
   
-  virtual ~Planet() {}
+  virtual ~Planet() {
+    JAVA_POST_DISPOSE
+  }
   
   virtual Vector3D getRadii() const = 0;
   virtual Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;

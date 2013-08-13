@@ -16,10 +16,13 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
-class GEOObject {
+#include "Disposable.hpp"
+
+
+class GEOObject : public Disposable {
 public:
   virtual ~GEOObject() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual void symbolize(const G3MRenderContext* rc,

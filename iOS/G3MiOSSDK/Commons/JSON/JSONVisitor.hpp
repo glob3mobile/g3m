@@ -20,11 +20,12 @@ class JSONInteger;
 class JSONLong;
 
 #include <string>
+#include "Disposable.hpp"
 
-class JSONVisitor {
+class JSONVisitor : public Disposable {
 public:
   virtual ~JSONVisitor() {
-
+    JAVA_POST_DISPOSE
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

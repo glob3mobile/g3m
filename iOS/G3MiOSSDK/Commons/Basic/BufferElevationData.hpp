@@ -25,7 +25,7 @@ public:
                       int bufferSize);
 
   virtual ~BufferElevationData() {
-
+    JAVA_POST_DISPOSE
   }
 
   double getElevationAt(int x,

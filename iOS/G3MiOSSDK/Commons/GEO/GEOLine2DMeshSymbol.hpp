@@ -31,7 +31,7 @@ public:
                       double deltaHeight = 0.0);
 
   virtual ~GEOLine2DMeshSymbol() {
-
+    JAVA_POST_DISPOSE
   }
 
   Mesh* createMesh(const G3MRenderContext* rc) const;

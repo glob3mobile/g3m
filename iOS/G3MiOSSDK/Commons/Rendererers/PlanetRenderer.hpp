@@ -166,6 +166,7 @@ public:
     //      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
     //    }
     delete _renderedSector;
+    JAVA_POST_DISPOSE
   }
 
   int getSplitsCountInFrame() const {

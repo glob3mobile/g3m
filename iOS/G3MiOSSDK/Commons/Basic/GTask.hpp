@@ -11,9 +11,13 @@
 
 class G3MContext;
 
-class GTask {
+#include "Disposable.hpp"
+
+class GTask : public Disposable {
 public:
-  virtual ~GTask() { }
+  virtual ~GTask() {
+    JAVA_POST_DISPOSE
+  }
 
   virtual void run(const G3MContext* context) = 0;
 };

@@ -41,6 +41,7 @@ public:
 
   ~BalloonCanvasElement() {
     delete _child;
+    JAVA_POST_DISPOSE
   }
 
   const Vector2F getExtent(ICanvas* canvas);

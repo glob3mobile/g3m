@@ -24,6 +24,7 @@
 class LazyTextureMappingInitializer {
 public:
   virtual ~LazyTextureMappingInitializer() {
+    JAVA_POST_DISPOSE
   }
 
   virtual void initialize() = 0;
@@ -90,6 +91,7 @@ public:
     _texCoords = NULL;
 
     releaseGLTextureId();
+    JAVA_POST_DISPOSE
   }
 
   bool isValid() const {

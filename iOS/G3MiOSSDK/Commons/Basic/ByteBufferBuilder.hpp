@@ -20,7 +20,7 @@ private:
 public:
 
   ~ByteBufferBuilder() {
-    
+    JAVA_POST_DISPOSE
   }
 
   void addInt64(long long value) {

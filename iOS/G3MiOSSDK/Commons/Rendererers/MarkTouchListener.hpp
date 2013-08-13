@@ -13,11 +13,11 @@ class Mark;
 
 class MarkTouchListener {
 public:
-    virtual ~MarkTouchListener() {
-        
-    }
-    
-    virtual bool touchedMark(Mark* mark) = 0;
+  virtual ~MarkTouchListener() {
+    JAVA_POST_DISPOSE
+  }
+
+  virtual bool touchedMark(Mark* mark) = 0;
 };
 
 #endif

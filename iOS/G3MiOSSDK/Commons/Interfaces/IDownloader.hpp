@@ -17,10 +17,12 @@ class TimeInterval;
 class FrameTasksExecutor;
 
 #include <string>
+#include "Disposable.hpp"
 
-class IDownloader {
+class IDownloader : public Disposable {
 public:
   virtual ~IDownloader() {
+    JAVA_POST_DISPOSE
   }
 
   virtual void initialize(const G3MContext* context,

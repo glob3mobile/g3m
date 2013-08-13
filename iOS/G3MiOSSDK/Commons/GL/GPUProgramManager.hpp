@@ -26,13 +26,13 @@ public:
   GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
   
   ~GPUProgramManager() {
-    
 #ifdef C_CODE
     delete _factory;
     for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
       delete it->second;
     }
 #endif
+    JAVA_POST_DISPOSE
   }
   
   GPUProgram* getCompiledProgram(const std::string& name) {

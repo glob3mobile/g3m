@@ -10,8 +10,9 @@
 #define G3MiOSSDK_IStringBuilder_hpp
 
 #include <string>
+#include "Disposable.hpp"
 
-class IStringBuilder{
+class IStringBuilder : public Disposable {
   
   static IStringBuilder* _instance;
   
@@ -37,7 +38,9 @@ public:
   virtual const std::string getString() const = 0;
   
   // a virtual destructor is needed for conversion to Java
-  virtual ~IStringBuilder() {}
+  virtual ~IStringBuilder() {
+    JAVA_POST_DISPOSE
+  }
   
 };
 

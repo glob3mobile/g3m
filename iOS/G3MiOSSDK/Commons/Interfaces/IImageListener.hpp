@@ -10,10 +10,13 @@
 #define __G3MiOSSDK__IImageListener__
 
 class IImage;
+#include "Disposable.hpp"
 
-class IImageListener {
+class IImageListener : public Disposable {
 public:
-  virtual ~IImageListener() { }
+  virtual ~IImageListener() {
+    JAVA_POST_DISPOSE
+  }
 
   /**
    Callback method for image-creation.  The image has to be deleted in C++ / and disposed() en Java

@@ -37,6 +37,7 @@ public:
   }
   
   virtual ~CompositeRenderer() {
+    JAVA_POST_DISPOSE
   }
   
   bool isEnable() const;

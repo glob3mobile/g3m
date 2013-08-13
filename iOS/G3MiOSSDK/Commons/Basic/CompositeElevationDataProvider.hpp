@@ -53,7 +53,9 @@ private:
     void onCancel(const Sector& sector,
                   const Vector2I& extent);
 
-    ~CompositeElevationDataProvider_RequestStepListener() { }
+    ~CompositeElevationDataProvider_RequestStepListener() {
+      JAVA_POST_DISPOSE
+    }
     
   };
   
@@ -91,7 +93,9 @@ private:
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
-    ~CompositeElevationDataProvider_Request() {}
+    ~CompositeElevationDataProvider_Request() {
+      JAVA_POST_DISPOSE
+    }
     
     bool launchNewStep();
     
@@ -124,6 +128,7 @@ public:
     for (int i = 0; i < size; i++) {
       delete _providers[i];
     }
+    JAVA_POST_DISPOSE
   }
 
   void addElevationDataProvider(ElevationDataProvider* edp);

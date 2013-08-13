@@ -11,6 +11,8 @@
 
 
 #include <string>
+#include "Disposable.hpp"
+
 
 enum LogLevel {
   SilenceLevel,
@@ -20,7 +22,7 @@ enum LogLevel {
 };
 
 
-class ILogger {
+class ILogger : public Disposable {
 protected:
   const LogLevel _level;
   
@@ -46,8 +48,9 @@ public:
   virtual void logWarning(const std::string& x, ...) const = 0;
   virtual void logError  (const std::string& x, ...) const = 0;
   
-  // a virtual destructor is needed for conversion to Java
-  virtual ~ILogger() {}
+  virtual ~ILogger() {
+    JAVA_POST_DISPOSE
+  }
 };
 
 

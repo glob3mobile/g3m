@@ -100,7 +100,7 @@ public:
   }
 
   virtual ~LTMInitializer() {
-
+    JAVA_POST_DISPOSE
   }
 
   void initialize() {
@@ -210,6 +210,7 @@ private:
     }
 
     deletePetitions();
+    JAVA_POST_DISPOSE
   }
 
   MultiLayerTileTexturizer* _texturizer;
@@ -739,6 +740,7 @@ public:
 
   virtual ~BuilderStartTask() {
     _builder->_release();
+    JAVA_POST_DISPOSE
   }
 
   void execute(const G3MRenderContext* rc) {

@@ -33,6 +33,7 @@ public:
   }
 
   ~TilesRenderParameters() {
+    JAVA_POST_DISPOSE
   }
 
 };

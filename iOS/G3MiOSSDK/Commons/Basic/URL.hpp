@@ -10,8 +10,9 @@
 #define G3MiOSSDK_URL_hpp
 
 #include <string>
+#include "Disposable.hpp"
 
-class URL {
+class URL : public Disposable {
 private:
   const std::string _path;
   URL& operator=(const URL& that);
@@ -44,7 +45,7 @@ public:
   }
 
   ~URL() {
-    
+    JAVA_POST_DISPOSE
   }
 
   std::string getPath() const {

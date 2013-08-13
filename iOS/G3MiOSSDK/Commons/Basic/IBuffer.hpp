@@ -10,16 +10,13 @@
 #define __G3MiOSSDK__IBuffer__
 
 #include <string>
+#include "Disposable.hpp"
 
-class IBuffer {
+class IBuffer : public Disposable {
 public:
-  
-#ifdef C_CODE
-  virtual ~IBuffer() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
-#endif
+  virtual ~IBuffer() {
+    JAVA_POST_DISPOSE
+  }
 
   /**
    Answer the size (the count of elements) of the buffer

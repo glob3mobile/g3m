@@ -65,6 +65,7 @@ public:
   ~Petition() {
     delete _sector;
     releaseImage();
+    JAVA_POST_DISPOSE
   }
   
   void releaseImage();

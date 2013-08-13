@@ -18,9 +18,10 @@ class JSONNull;
 class JSONVisitor;
 
 #include <string>
+#include "Disposable.hpp"
 
 
-class JSONBaseObject {
+class JSONBaseObject : public Disposable {
 
 public:
 
@@ -29,6 +30,7 @@ public:
   }
 
   virtual ~JSONBaseObject() {
+    JAVA_POST_DISPOSE
   }
 
   virtual const JSONObject*  asObject()  const;

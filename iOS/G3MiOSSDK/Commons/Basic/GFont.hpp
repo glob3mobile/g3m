@@ -10,8 +10,9 @@
 #define __G3MiOSSDK__GFont__
 
 #include <string>
+#include "Disposable.hpp"
 
-class GFont {
+class GFont : public Disposable {
 private:
   static const std::string SERIF;
   static const std::string SANS_SERIF;
@@ -65,7 +66,7 @@ public:
   }
 
   ~GFont() {
-
+    JAVA_POST_DISPOSE
   }
 
   bool isSerif() const;

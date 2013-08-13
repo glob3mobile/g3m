@@ -32,7 +32,7 @@ public:
   }
   
   ~ShapePendingEffect() {
-    
+    JAVA_POST_DISPOSE
   }
 };
 

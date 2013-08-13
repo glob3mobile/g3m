@@ -29,7 +29,7 @@ public:
   }
 
   virtual ~GEOLine2DStyle() {
-
+    JAVA_POST_DISPOSE
   }
 
   const Color getColor() const {

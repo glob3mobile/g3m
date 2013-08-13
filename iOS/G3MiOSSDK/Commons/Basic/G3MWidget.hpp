@@ -65,7 +65,7 @@ public:
   }
   
   virtual ~WidgetUserData() {
-    
+    JAVA_POST_DISPOSE
   }
   
   void setWidget(G3MWidget* widget) {

@@ -52,6 +52,7 @@ public:
   }
 
   ~TextureHolder() {
+    JAVA_POST_DISPOSE
   }
 
   void retain() {

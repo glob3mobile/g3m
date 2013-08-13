@@ -16,7 +16,9 @@ private:
   const std::string _value;
 
 public:
-  ~JSONString() { }
+  ~JSONString() {
+    JAVA_POST_DISPOSE
+  }
 
   JSONString(const std::string& value) :
   _value(value)

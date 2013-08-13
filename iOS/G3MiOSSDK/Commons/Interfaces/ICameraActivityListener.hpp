@@ -9,9 +9,14 @@
 #ifndef __G3MiOSSDK__ICameraActivityListener__
 #define __G3MiOSSDK__ICameraActivityListener__
 
-class ICameraActivityListener {
+#include "Disposable.hpp"
+
+
+class ICameraActivityListener : public Disposable {
 public:
-  virtual ~ICameraActivityListener() { }
+  virtual ~ICameraActivityListener() {
+    JAVA_POST_DISPOSE
+  }
   
   virtual void touchEventHandled() = 0;
   

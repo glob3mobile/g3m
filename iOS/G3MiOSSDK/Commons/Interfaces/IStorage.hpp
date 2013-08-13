@@ -16,9 +16,10 @@ class G3MContext;
 class TimeInterval;
 
 #include <stddef.h>
+#include "Disposable.hpp"
 
 
-class IImageResult {
+class IImageResult : public Disposable {
 private:
   IImage*    _image;
   const bool _expired;
@@ -32,7 +33,7 @@ public:
   }
 
   ~IImageResult() {
-
+    JAVA_POST_DISPOSE
   }
 
   IImage* getImage() const {
@@ -45,7 +46,7 @@ public:
 };
 
 
-class IByteBufferResult {
+class IByteBufferResult : public Disposable {
 private:
   IByteBuffer* _buffer;
   const bool   _expired;
@@ -59,7 +60,7 @@ public:
   }
 
   ~IByteBufferResult() {
-
+    JAVA_POST_DISPOSE
   }
 
   IByteBuffer* getBuffer() const {
@@ -72,7 +73,7 @@ public:
 };
 
 
-class IStorage {
+class IStorage : public Disposable {
 protected:
 #ifdef C_CODE
   const G3MContext* _context;
@@ -88,6 +89,7 @@ public:
   }
 
   virtual ~IStorage() {
+    JAVA_POST_DISPOSE
   }
 
   virtual void initialize(const G3MContext* context);

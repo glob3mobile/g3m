@@ -13,9 +13,12 @@ class Tile;
 class G3MRenderContext;
 class G3MEventContext;
 
-class LayerCondition {
+#include "Disposable.hpp"
+
+class LayerCondition : public Disposable {
 public:
   virtual ~LayerCondition() {
+    JAVA_POST_DISPOSE
   }
 
   virtual bool isAvailable(const G3MRenderContext* rc,

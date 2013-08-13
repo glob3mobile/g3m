@@ -135,7 +135,7 @@ public:
   }
   
   ~Geodetic2D() {
-    
+    JAVA_POST_DISPOSE
   }
   
   bool closeTo(const Geodetic2D& other) const;

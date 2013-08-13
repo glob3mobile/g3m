@@ -51,6 +51,7 @@ public:
     if (_ownedColor) {
       delete _flatColor;
     }
+    JAVA_POST_DISPOSE
   }
   
   BoundingVolume* getBoundingVolume()  const {

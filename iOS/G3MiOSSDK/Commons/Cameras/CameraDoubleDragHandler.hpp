@@ -30,7 +30,9 @@ public:
   {
   }
   
-  ~CameraDoubleDragHandler() {}
+  ~CameraDoubleDragHandler() {
+    JAVA_POST_DISPOSE
+  }
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,

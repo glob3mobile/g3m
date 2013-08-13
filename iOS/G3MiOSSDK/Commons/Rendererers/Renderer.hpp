@@ -18,7 +18,7 @@ class SurfaceElevationProvider;
 
 #include "Effects.hpp"
 
-class Renderer: public EffectTarget {
+class Renderer: public EffectTarget, Disposable {
 public:
   virtual bool isEnable() const = 0;
   
@@ -46,7 +46,9 @@ public:
   
   virtual void stop(const G3MRenderContext* rc) = 0;
   
-  virtual ~Renderer() { };
+  virtual ~Renderer() {
+    JAVA_POST_DISPOSE
+  };
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;

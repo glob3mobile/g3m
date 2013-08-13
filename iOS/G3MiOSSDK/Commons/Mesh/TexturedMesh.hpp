@@ -53,6 +53,7 @@ public:
     if (_ownedTexMapping) {
       delete _textureMapping;
     }
+    JAVA_POST_DISPOSE
   }
 
   BoundingVolume* getBoundingVolume()  const {

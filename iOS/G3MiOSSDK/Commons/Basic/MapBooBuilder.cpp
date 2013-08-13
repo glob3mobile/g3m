@@ -631,6 +631,7 @@ public:
   }
 
   ~MapBooBuilder_ApplicationTubeListener() {
+    JAVA_POST_DISPOSE
   }
 
   void onOpen(IWebSocket* ws) {

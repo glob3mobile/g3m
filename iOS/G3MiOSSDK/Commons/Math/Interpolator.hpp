@@ -14,8 +14,10 @@ class Geodetic2D;
 
 #include <string>
 
+#include "Disposable.hpp"
 
-class Interpolator {
+
+class Interpolator : public Disposable {
 protected:
   Interpolator() {
 
@@ -24,7 +26,7 @@ protected:
 public:
 
   virtual ~Interpolator() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual double interpolation(const Geodetic2D& sw,

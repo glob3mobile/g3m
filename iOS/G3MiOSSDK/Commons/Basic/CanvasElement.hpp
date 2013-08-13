@@ -23,7 +23,7 @@ public:
   }
 
   virtual ~CanvasElement() {
-
+    JAVA_POST_DISPOSE
   }
 
   virtual const Vector2F getExtent(ICanvas* canvas) = 0;

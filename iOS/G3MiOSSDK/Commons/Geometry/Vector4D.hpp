@@ -35,7 +35,9 @@ public:
     
   }
   
-  ~Vector4D() {}
+  ~Vector4D() {
+    JAVA_POST_DISPOSE
+  }
   
   Vector4D(const Vector4D &v):
   _x(v._x),

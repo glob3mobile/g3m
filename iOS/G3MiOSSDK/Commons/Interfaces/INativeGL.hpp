@@ -21,16 +21,19 @@ class Matrix44D;
 #include <string>
 
 #include "GPUProgram.hpp"
+#include "Disposable.hpp"
 
 class GPUProgram;
 
 class GPUUniform;
 class GPUAttribute;
 
-class INativeGL {
+class INativeGL : public Disposable {
 public:
 
-  virtual ~INativeGL() { };
+  virtual ~INativeGL() {
+    JAVA_POST_DISPOSE
+  };
 
   virtual void useProgram(GPUProgram* program) const = 0;
 

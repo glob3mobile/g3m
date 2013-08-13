@@ -163,7 +163,9 @@ public:
   //  {
   //  }
   
-  ~GLGlobalState() {}
+  ~GLGlobalState() {
+    JAVA_POST_DISPOSE
+  }
   
   void enableDepthTest() {
       _depthTest = true;

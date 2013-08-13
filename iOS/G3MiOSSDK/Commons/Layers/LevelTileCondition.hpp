@@ -25,6 +25,7 @@ public:
   }
 
   virtual ~LevelTileCondition() {
+    JAVA_POST_DISPOSE
   }
   
   bool isAvailable(const G3MRenderContext* rc,

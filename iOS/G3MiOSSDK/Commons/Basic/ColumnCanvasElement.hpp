@@ -23,7 +23,7 @@ public:
   }
 
   virtual ~ColumnCanvasElement() {
-
+    JAVA_POST_DISPOSE
   }
 
   void drawAt(float left,

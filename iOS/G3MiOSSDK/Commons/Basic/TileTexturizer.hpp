@@ -24,6 +24,7 @@ class LayerSet;
 class TileTexturizer {
 public:
   virtual ~TileTexturizer() {
+    JAVA_POST_DISPOSE
   }
 
   virtual bool isReady(const G3MRenderContext *rc,

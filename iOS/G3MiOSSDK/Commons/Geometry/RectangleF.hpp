@@ -40,6 +40,7 @@ public:
   }
 
   ~RectangleF() {
+    JAVA_POST_DISPOSE
   }
 
   bool equalTo(const RectangleF& that) const {

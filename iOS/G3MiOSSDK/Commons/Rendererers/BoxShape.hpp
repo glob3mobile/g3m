@@ -49,6 +49,7 @@ public:
   ~BoxShape() {
     delete _surfaceColor;
     delete _borderColor;
+    JAVA_POST_DISPOSE
   }
 
   void setExtent(const Vector3D& extent) {

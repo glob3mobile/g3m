@@ -32,7 +32,9 @@ public:
     
   }
   
-  ~Vector3D() {}
+  ~Vector3D() {
+    JAVA_POST_DISPOSE
+  }
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     

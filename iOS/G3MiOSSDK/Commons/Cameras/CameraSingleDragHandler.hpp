@@ -60,7 +60,9 @@ public:
   _useInertia(useInertia)
   {}
   
-  ~CameraSingleDragHandler() {}
+  ~CameraSingleDragHandler() {
+    JAVA_POST_DISPOSE
+  }
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,

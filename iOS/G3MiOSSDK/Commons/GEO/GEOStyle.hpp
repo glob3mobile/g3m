@@ -9,12 +9,13 @@
 #ifndef __G3MiOSSDK__GEOStyle__
 #define __G3MiOSSDK__GEOStyle__
 
-class GEOStyle {
+#include "Disposable.hpp"
+
+class GEOStyle : public Disposable {
 public:
   virtual ~GEOStyle() {
-
+    JAVA_POST_DISPOSE
   }
-
 };
 
 #endif 
