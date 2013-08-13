@@ -44,7 +44,10 @@ public:
   }
 
   ~TileRasterizerContext() {
-    JAVA_POST_DISPOSE;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+;
   }
 
 };
@@ -57,7 +60,10 @@ private:
 public:
 
   virtual ~TileRasterizer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual std::string getId() const = 0;

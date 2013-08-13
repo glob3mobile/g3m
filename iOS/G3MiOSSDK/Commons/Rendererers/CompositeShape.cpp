@@ -15,7 +15,10 @@ CompositeShape::~CompositeShape() {
     delete child;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void CompositeShape::addShape(Shape* shape) {

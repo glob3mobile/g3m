@@ -104,7 +104,10 @@ public:
 
     delete _lastSector;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 
@@ -195,7 +198,10 @@ PlanetRenderer::~PlanetRenderer() {
     delete entry;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void PlanetRenderer::clearFirstLevelTiles() {

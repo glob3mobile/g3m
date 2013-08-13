@@ -49,7 +49,10 @@ public:
       Shape* shape = _shapes[i];
       delete shape;
     }
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addShape(Shape* shape) {

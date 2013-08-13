@@ -19,7 +19,10 @@ class G3MRenderContext;
 class FrameTask : public Disposable {
 public:
   virtual ~FrameTask() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual bool isCanceled(const G3MRenderContext *rc) = 0;
@@ -70,7 +73,10 @@ public:
   void doPreRenderCycle(const G3MRenderContext* rc);
   
   ~FrameTasksExecutor() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
 };

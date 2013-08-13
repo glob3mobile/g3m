@@ -63,7 +63,10 @@ GPUVariableValueSet::~GPUVariableValueSet() {
     }
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 int GPUVariableValueSet::getUniformsCode() const{

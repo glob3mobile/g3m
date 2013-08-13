@@ -31,7 +31,10 @@ public:
     delete _geoObject;
     delete _symbolizer;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 
@@ -45,7 +48,10 @@ GEORenderer::~GEORenderer() {
     delete pair;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GEORenderer::addGEOObject(GEOObject* geoObject,

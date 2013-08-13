@@ -26,7 +26,10 @@ BSONGenerator::BSONGenerator() {
 BSONGenerator::~BSONGenerator() {
   delete _builder;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IByteBuffer* BSONGenerator::createBuffer() {

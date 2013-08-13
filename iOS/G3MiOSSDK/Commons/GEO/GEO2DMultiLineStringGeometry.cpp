@@ -25,7 +25,10 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
 
   delete _coordinatesArray;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {

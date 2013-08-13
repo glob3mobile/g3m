@@ -43,7 +43,10 @@ public:
     delete _task;
 
     IFactory::instance()->deleteTimer(_timer);
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void resetTimeout() {

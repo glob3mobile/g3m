@@ -49,7 +49,10 @@ class MapBoo_Scene;
 class MapBooApplicationChangeListener : public Disposable {
 public:
   virtual ~MapBooApplicationChangeListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void onNameChanged(const G3MContext* context,
@@ -220,7 +223,10 @@ protected:
                 MapBooApplicationChangeListener* ApplicationListener);
 
   virtual ~MapBooBuilder() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setGL(GL *gl);

@@ -14,7 +14,10 @@ class Mark;
 class MarkTouchListener : public Disposable {
 public:
   virtual ~MarkTouchListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool touchedMark(Mark* mark) = 0;

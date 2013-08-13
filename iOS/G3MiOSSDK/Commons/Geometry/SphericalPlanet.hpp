@@ -30,7 +30,10 @@ public:
   SphericalPlanet(const Sphere& sphere);
 
   ~SphericalPlanet() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   Vector3D getRadii() const{

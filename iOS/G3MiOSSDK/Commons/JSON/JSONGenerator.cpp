@@ -35,7 +35,10 @@ JSONGenerator::JSONGenerator() {
 JSONGenerator::~JSONGenerator() {
   delete _isb;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 std::string JSONGenerator::getString() {

@@ -18,7 +18,10 @@ class G3MEventContext;
 class LayerCondition : public Disposable {
 public:
   virtual ~LayerCondition() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool isAvailable(const G3MRenderContext* rc,

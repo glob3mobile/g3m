@@ -28,7 +28,10 @@ public:
   }
 
   virtual ~EllipsoidalTileTessellator() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   Vector2I getTileMeshResolution(const Planet* planet,

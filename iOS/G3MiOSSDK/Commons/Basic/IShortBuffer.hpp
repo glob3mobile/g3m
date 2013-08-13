@@ -15,7 +15,10 @@ class IShortBuffer : public IBuffer {
 public:
 
   virtual ~IShortBuffer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual short get(int i) const = 0;

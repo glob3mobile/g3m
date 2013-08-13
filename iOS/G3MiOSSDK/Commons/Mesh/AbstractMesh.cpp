@@ -28,7 +28,10 @@ AbstractMesh::~AbstractMesh() {
   delete _boundingVolume;
   delete _translationMatrix;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 AbstractMesh::AbstractMesh(const int primitive,

@@ -33,7 +33,10 @@ TrailSegment::~TrailSegment() {
     delete position;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Mesh* TrailSegment::getMesh(const Planet* planet) {
@@ -183,7 +186,10 @@ Trail::~Trail() {
     delete segment;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -240,7 +246,10 @@ TrailsRenderer::~TrailsRenderer() {
   }
   _trails.clear();
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {

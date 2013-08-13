@@ -54,7 +54,10 @@ public:
   ~BufferSaverDownloadListener() {
     delete _expiredBuffer;
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void deleteListener() {
@@ -169,7 +172,10 @@ public:
   ~ImageSaverDownloadListener() {
     delete _expiredImage;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void saveImage(const URL& url,
@@ -244,7 +250,10 @@ CachedDownloader::~CachedDownloader() {
   }
   delete _lastImageURL;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void CachedDownloader::start() {

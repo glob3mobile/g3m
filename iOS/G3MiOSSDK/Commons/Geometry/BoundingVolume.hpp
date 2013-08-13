@@ -24,7 +24,10 @@ class GLState;
 class BoundingVolume : public Disposable {
 public:
   virtual ~BoundingVolume() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual double projectedArea(const G3MRenderContext* rc) const = 0;

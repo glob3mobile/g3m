@@ -54,7 +54,10 @@ private:
                   const Vector2I& extent);
 
     ~CompositeElevationDataProvider_RequestStepListener() {
-      JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
     }
     
   };
@@ -94,7 +97,10 @@ private:
                                            bool autodelete);
 
     ~CompositeElevationDataProvider_Request() {
-      JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
     }
     
     bool launchNewStep();
@@ -129,7 +135,10 @@ public:
       delete _providers[i];
     }
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addElevationDataProvider(ElevationDataProvider* edp);

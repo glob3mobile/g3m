@@ -23,7 +23,10 @@ _listener(NULL)
 }
 
 TileElevationDataRequest::~TileElevationDataRequest() {
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void TileElevationDataRequest::onData(const Sector& sector,

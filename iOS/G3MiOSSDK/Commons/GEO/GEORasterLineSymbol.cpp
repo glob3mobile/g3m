@@ -34,7 +34,10 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
     delete _coordinates;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GEORasterLineSymbol::rawRasterize(ICanvas*                   canvas,

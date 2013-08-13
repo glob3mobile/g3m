@@ -80,7 +80,10 @@ public:
   bool getEnabled() const { return _enabled;}
   //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   virtual ~GPUAttributeValue() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
@@ -129,7 +132,10 @@ public:
   virtual ~GPUAttribute() {
     delete _value;
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   GPUAttribute(const std::string&name, int id, int type, int size):

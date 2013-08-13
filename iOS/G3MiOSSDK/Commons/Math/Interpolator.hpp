@@ -26,7 +26,10 @@ protected:
 public:
 
   virtual ~Interpolator() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual double interpolation(const Geodetic2D& sw,

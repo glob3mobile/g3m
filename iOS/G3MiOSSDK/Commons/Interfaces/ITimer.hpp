@@ -22,7 +22,10 @@ public:
   virtual long long elapsedTimeInMilliseconds() const = 0;
 
   virtual ~ITimer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
 };

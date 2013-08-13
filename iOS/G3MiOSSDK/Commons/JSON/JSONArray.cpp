@@ -20,7 +20,10 @@ JSONArray::~JSONArray() {
   }
   _entries.clear();
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 const JSONBaseObject* JSONArray::get(const int index) const {

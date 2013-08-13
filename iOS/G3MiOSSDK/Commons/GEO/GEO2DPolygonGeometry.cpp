@@ -47,7 +47,10 @@ GEO2DPolygonGeometry::~GEO2DPolygonGeometry() {
 //    delete _holesCoordinatesArray;
 //  }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 

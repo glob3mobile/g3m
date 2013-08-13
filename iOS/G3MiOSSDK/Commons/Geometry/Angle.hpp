@@ -231,7 +231,10 @@ public:
 #endif
 
   ~Angle() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   const std::string description() const;

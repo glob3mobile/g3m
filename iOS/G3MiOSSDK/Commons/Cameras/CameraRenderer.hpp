@@ -47,7 +47,10 @@ public:
   {}
 
   ~CameraContext() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   const Gesture getCurrentGesture() const { return _currentGesture; }

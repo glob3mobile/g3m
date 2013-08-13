@@ -44,7 +44,10 @@ public:
     }
     delete _interpolator;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   double getElevationAt(int x,

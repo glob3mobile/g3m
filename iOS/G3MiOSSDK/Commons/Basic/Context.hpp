@@ -74,7 +74,10 @@ public:
   }
 
   virtual ~G3MContext() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   const IFactory* getFactory() const {

@@ -18,7 +18,10 @@
 class IImage : public Disposable {
 public:
   virtual ~IImage() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual int getWidth() const = 0;

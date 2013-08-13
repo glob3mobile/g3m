@@ -35,7 +35,10 @@ public:
   EllipsoidalPlanet(const Ellipsoid& ellipsoid);
   
   ~EllipsoidalPlanet() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   Vector3D getRadii() const{

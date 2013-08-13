@@ -18,7 +18,10 @@ G3MRenderContext::~G3MRenderContext() {
   IFactory::instance()->deleteTimer(_frameStartTimer);
   delete _orderedRenderables;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {

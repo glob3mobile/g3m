@@ -21,7 +21,10 @@ class Mesh : public Disposable {
 public:
   
   virtual ~Mesh() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual int getVertexCount() const = 0;

@@ -42,7 +42,10 @@ struct SingleBillElevationDataProvider_Request {
   }
 
   ~SingleBillElevationDataProvider_Request() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

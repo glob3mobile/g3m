@@ -74,7 +74,10 @@ class CameraDoubleTapHandler: public CameraEventHandler {
 public:
   
   ~CameraDoubleTapHandler() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   bool onTouchEvent(const G3MEventContext *eventContext,

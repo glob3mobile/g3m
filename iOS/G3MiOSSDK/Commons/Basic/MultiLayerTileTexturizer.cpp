@@ -100,7 +100,10 @@ public:
   }
 
   virtual ~LTMInitializer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void initialize() {
@@ -210,7 +213,10 @@ private:
     }
 
     deletePetitions();
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   MultiLayerTileTexturizer* _texturizer;
@@ -685,7 +691,10 @@ BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
     _builder->_release();
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -694,7 +703,10 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
     _builder->_release();
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -722,7 +734,10 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
@@ -744,7 +759,10 @@ public:
 
   virtual ~BuilderStartTask() {
     _builder->_release();
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void execute(const G3MRenderContext* rc) {

@@ -15,7 +15,10 @@
 class ICameraActivityListener : public Disposable {
 public:
   virtual ~ICameraActivityListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual void touchEventHandled() = 0;

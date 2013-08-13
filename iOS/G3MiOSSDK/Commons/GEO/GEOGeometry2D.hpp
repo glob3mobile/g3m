@@ -15,7 +15,10 @@ class GEOGeometry2D : public GEOGeometry  {
 public:
 
   virtual ~GEOGeometry2D() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
 };

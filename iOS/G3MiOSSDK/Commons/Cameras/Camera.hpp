@@ -154,7 +154,10 @@ public:
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void copyFrom(const Camera &c);
@@ -365,7 +368,10 @@ private:
   class CameraEffectTarget: public EffectTarget {
   public:
     ~CameraEffectTarget() {
-      JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
     }
   };
 

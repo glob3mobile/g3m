@@ -57,7 +57,10 @@ MarksRenderer::~MarksRenderer() {
     delete _billboardTexCoord;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 };
 
 

@@ -36,7 +36,10 @@ public:
   
   ~LeveledMesh() {
     delete _mesh;
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   int getVertexCount() const {

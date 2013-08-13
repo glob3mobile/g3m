@@ -40,7 +40,10 @@ _buffer(buffer)
 FloatBufferElevationData::~FloatBufferElevationData() {
   delete _buffer;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {

@@ -23,7 +23,10 @@ SGGeometryNode::~SGGeometryNode() {
   delete _normals;
   delete _indices;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void SGGeometryNode::createGLState() {

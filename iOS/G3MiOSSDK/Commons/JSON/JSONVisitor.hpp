@@ -25,7 +25,10 @@ class JSONLong;
 class JSONVisitor : public Disposable {
 public:
   virtual ~JSONVisitor() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

@@ -37,7 +37,10 @@ public:
   ~CircleShape() {
     delete _color;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setRadius(float radius) {

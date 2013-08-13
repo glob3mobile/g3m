@@ -66,7 +66,10 @@ public:
   }
 
   ~GFont() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   bool isSerif() const;

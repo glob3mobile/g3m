@@ -23,7 +23,10 @@ QuadTree_Node::~QuadTree_Node() {
     delete [] _children;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -135,7 +138,10 @@ bool QuadTree_Node::acceptVisitor(const Sector& sector,
 QuadTree::~QuadTree() {
   delete _root;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 bool QuadTree::add(const Sector& sector,

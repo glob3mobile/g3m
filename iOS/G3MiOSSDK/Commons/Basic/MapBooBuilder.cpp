@@ -48,7 +48,10 @@ MapBoo_Scene::~MapBoo_Scene() {
   delete _baseLayer;
   delete _overlayLayer;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 const std::string MapBoo_Scene::description() const {
@@ -633,7 +636,10 @@ public:
   }
 
   ~MapBooBuilder_ApplicationTubeListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void onOpen(IWebSocket* ws) {

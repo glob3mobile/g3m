@@ -31,7 +31,10 @@ public:
                       int imageHeight);
   
   ~GEORasterProjection() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   Vector2F project(const Geodetic2D* position) const;

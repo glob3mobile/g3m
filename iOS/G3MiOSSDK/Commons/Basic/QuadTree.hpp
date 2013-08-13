@@ -14,7 +14,10 @@
 class QuadTreeVisitor : public Disposable {
 public:
   virtual ~QuadTreeVisitor() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool visitElement(const Sector& sector,
@@ -38,7 +41,10 @@ public:
   }
 
   ~QuadTree_Element() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
 };

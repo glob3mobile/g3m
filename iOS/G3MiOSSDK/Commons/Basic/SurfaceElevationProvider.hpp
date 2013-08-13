@@ -17,7 +17,10 @@ class Geodetic2D;
 class SurfaceElevationListener : public Disposable {
 public:
   virtual ~SurfaceElevationListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

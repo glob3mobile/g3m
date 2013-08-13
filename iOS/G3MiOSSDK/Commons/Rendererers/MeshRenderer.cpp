@@ -27,7 +27,10 @@ MeshRenderer::~MeshRenderer() {
     delete mesh;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void MeshRenderer::updateGLState(const G3MRenderContext* rc) {

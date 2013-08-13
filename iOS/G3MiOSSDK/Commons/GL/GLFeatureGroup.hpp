@@ -73,7 +73,10 @@ class GLFeatureGroup: public GLFeatureSet {
 public:
 
   virtual ~GLFeatureGroup() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);

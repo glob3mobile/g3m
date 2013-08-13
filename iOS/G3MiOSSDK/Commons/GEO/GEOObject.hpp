@@ -22,7 +22,10 @@ class GEOTileRasterizer;
 class GEOObject : public Disposable {
 public:
   virtual ~GEOObject() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void symbolize(const G3MRenderContext* rc,

@@ -31,7 +31,10 @@ public:
 
   virtual ~GPUUniformValue() {
 //    ILogger::instance()->logInfo("Deleting Uniform Value");
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   
@@ -95,7 +98,10 @@ public:
       _value->_release();
     }
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   GPUUniform(const std::string& name,
@@ -316,7 +322,10 @@ public:
       _modelview->_release();
     }
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   Matrix44D* getModelview() const {
@@ -386,7 +395,10 @@ public:
 #endif
 
   ~GPUUniformValueModelview() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
@@ -434,7 +446,10 @@ public:
   ~GPUUniformValueMatrix4Float() {
     _m->_release();
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{

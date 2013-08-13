@@ -26,7 +26,9 @@ public:
 
 //  virtual ~GLFeature() {
 //    delete _globalState;
-//    JAVA_POST_DISPOSE
+//#ifdef JAVA_CODE
+//  super.dispose();
+//#endif
 //  }
 
 //  void applyGLGlobalState(GL* gl) const{
@@ -127,7 +129,10 @@ public:
   }
 #endif
   ~GLCameraGroupFeature() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
   const void setMatrix(const Matrix44D* matrix) {_matrixHolder.setMatrix(matrix);}

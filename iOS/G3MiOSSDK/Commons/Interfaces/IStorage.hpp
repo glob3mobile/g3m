@@ -33,7 +33,10 @@ public:
   }
 
   ~IImageResult() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   IImage* getImage() const {
@@ -60,7 +63,10 @@ public:
   }
 
   ~IByteBufferResult() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   IByteBuffer* getBuffer() const {
@@ -89,7 +95,10 @@ public:
   }
 
   virtual ~IStorage() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void initialize(const G3MContext* context);

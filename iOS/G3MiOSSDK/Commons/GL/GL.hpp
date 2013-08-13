@@ -135,7 +135,10 @@ public:
 #ifdef JAVA_CODE
     _nativeGL.dispose();
 #endif
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   int createProgram() const {

@@ -16,7 +16,10 @@ class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
 
   ~SimpleCameraConstrainer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void onCameraChange(const Planet* planet,

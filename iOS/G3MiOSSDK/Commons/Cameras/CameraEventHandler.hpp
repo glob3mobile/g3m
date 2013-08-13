@@ -26,7 +26,10 @@ public:
                       CameraContext *cameraContext) = 0;
   
   virtual ~CameraEventHandler() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual void onDown(const G3MEventContext *eventContext,

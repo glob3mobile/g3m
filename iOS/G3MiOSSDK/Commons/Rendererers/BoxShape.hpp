@@ -50,7 +50,10 @@ public:
     delete _surfaceColor;
     delete _borderColor;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setExtent(const Vector3D& extent) {

@@ -34,7 +34,10 @@ _buffer( new float[_width * _height] )
 SubviewElevationData::~SubviewElevationData() {
   delete [] _buffer;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double SubviewElevationData::getElevationAt(int x, int y) const {

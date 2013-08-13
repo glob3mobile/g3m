@@ -32,7 +32,10 @@ class GPUProgramState;
 class MarkUserData : public Disposable {
 public:
   virtual ~MarkUserData() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

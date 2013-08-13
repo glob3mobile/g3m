@@ -106,7 +106,10 @@ Tile::~Tile() {
 
   delete _lodTimer;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,

@@ -33,7 +33,10 @@ public:
     }
 #endif
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   GPUProgram* getCompiledProgram(const std::string& name) {

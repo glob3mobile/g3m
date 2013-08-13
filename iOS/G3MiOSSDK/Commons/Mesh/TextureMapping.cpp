@@ -22,7 +22,10 @@ SimpleTextureMapping::~SimpleTextureMapping() {
     delete _texCoords;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void SimpleTextureMapping::modifyGLState(GLState& state) const{

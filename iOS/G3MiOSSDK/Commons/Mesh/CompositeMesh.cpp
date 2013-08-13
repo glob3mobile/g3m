@@ -19,7 +19,10 @@ CompositeMesh::~CompositeMesh() {
 
   delete _boundingVolume;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 int CompositeMesh::getVertexCount() const {

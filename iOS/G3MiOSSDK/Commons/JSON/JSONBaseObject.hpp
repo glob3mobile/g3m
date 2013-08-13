@@ -30,7 +30,10 @@ public:
   }
 
   virtual ~JSONBaseObject() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual const JSONObject*  asObject()  const;

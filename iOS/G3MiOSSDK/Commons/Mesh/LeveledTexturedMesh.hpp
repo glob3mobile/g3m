@@ -24,7 +24,10 @@
 class LazyTextureMappingInitializer : public Disposable {
 public:
   virtual ~LazyTextureMappingInitializer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void initialize() = 0;
@@ -91,7 +94,10 @@ public:
     _texCoords = NULL;
 
     releaseGLTextureId();
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   bool isValid() const {

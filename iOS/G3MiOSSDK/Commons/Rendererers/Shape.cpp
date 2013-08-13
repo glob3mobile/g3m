@@ -47,7 +47,10 @@ Shape::~Shape() {
   
   delete _transformMatrix;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void Shape::cleanTransformMatrix() {

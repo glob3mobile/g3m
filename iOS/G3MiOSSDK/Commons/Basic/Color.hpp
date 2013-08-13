@@ -40,7 +40,10 @@ public:
   }
 
   ~Color() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   static Color* parse(const std::string& str);

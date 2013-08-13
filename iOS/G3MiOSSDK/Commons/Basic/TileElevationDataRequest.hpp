@@ -31,7 +31,10 @@ public:
                 const Vector2I& resolution);
 
   ~TileElevationDataRequestListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

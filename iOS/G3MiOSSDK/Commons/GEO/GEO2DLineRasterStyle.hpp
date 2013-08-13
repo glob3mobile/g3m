@@ -86,7 +86,10 @@ public:
     delete [] _dashLengths;
 #endif
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   bool apply(ICanvas* canvas) const;

@@ -16,7 +16,10 @@ class IByteBuffer : public Disposable {
 public:
 
   virtual ~IByteBuffer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual int size() const = 0;

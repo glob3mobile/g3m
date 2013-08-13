@@ -27,7 +27,10 @@ CanvasTileRasterizer::~CanvasTileRasterizer() {
   delete _canvas;
   delete _transparent;
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 ICanvas* CanvasTileRasterizer::getCanvas(int width, int height) const {

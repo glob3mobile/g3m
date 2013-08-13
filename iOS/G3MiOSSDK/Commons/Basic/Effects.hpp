@@ -88,7 +88,10 @@ public:
   virtual void cancel(const TimeInterval& when) = 0;
 
   virtual ~Effect() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 
@@ -201,7 +204,10 @@ private:
     ~EffectRun() {
       delete _effect;
 
-      JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
     }
   };
 
@@ -231,7 +237,10 @@ public:
       delete effectRun;
     }
 
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   };
 
   void startEffect(Effect* effect,

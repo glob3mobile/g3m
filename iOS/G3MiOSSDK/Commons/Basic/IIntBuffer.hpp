@@ -15,7 +15,10 @@ class IIntBuffer : public IBuffer {
 public:
 
   virtual ~IIntBuffer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual int get(int i) const = 0;

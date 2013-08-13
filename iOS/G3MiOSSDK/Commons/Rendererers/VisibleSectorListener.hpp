@@ -14,7 +14,10 @@
 class VisibleSectorListener : public Disposable {
 public:
   virtual ~VisibleSectorListener() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void onVisibleSectorChange(const Sector& visibleSector,

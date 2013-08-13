@@ -17,7 +17,10 @@ IndexedMesh::~IndexedMesh() {
     delete _indices;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IndexedMesh::IndexedMesh(const int primitive,

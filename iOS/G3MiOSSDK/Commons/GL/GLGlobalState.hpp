@@ -164,7 +164,10 @@ public:
   //  }
   
   ~GLGlobalState() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   void enableDepthTest() {

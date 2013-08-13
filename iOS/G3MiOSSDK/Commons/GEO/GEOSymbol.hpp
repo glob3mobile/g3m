@@ -24,7 +24,10 @@ class GEOSymbol : public Disposable {
 
 public:
   virtual ~GEOSymbol() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool symbolize(const G3MRenderContext* rc,

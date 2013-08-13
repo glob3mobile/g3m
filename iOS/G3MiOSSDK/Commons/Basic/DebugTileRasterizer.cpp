@@ -26,7 +26,10 @@ _color(Color::white())
 
 
 DebugTileRasterizer::~DebugTileRasterizer() {
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {

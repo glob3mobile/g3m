@@ -38,7 +38,10 @@ GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
     delete _coordinatesArray;
   }
 
-  JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GEOMultiLineRasterSymbol::rawRasterize(ICanvas*                   canvas,

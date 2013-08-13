@@ -14,7 +14,10 @@
 class GEOStyle : public Disposable {
 public:
   virtual ~GEOStyle() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

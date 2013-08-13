@@ -25,7 +25,10 @@ class GEO2DMultiPolygonGeometry;
 class GEOSymbolizer : public Disposable {
 public:
   virtual ~GEOSymbolizer() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const = 0;

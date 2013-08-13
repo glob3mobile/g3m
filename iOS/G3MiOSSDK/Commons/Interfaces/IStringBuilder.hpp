@@ -39,7 +39,10 @@ public:
   
   // a virtual destructor is needed for conversion to Java
   virtual ~IStringBuilder() {
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
 };

@@ -86,7 +86,10 @@ public:
     delete _quadMesh;
     delete _backgroundColor;
     
-    JAVA_POST_DISPOSE
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   void incDegrees(double value) {
