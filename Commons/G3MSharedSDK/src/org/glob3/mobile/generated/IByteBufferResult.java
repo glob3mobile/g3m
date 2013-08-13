@@ -12,8 +12,6 @@ public class IByteBufferResult
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final IByteBuffer getBuffer()

@@ -17,8 +17,5 @@ public class GEORenderer_ObjectSymbolizerPair
        _geoObject.dispose();
     if (_symbolizer != null)
        _symbolizer.dispose();
-
-  super.dispose();
-
   }
 }

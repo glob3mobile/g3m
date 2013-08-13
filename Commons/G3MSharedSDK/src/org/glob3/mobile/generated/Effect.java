@@ -60,7 +60,6 @@ public abstract class Effect
 
   public void dispose()
   {
-  super.dispose();
 
   }
 }

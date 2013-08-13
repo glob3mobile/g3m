@@ -101,9 +101,6 @@ public abstract class Layer
     if (_condition != null)
        _condition.dispose();
     _parameters = null;
-  
-    super.dispose();
-  
   }
 
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);

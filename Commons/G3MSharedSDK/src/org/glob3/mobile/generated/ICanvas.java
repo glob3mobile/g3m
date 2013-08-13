@@ -99,9 +99,6 @@ public abstract class ICanvas
   {
     if (_currentFont != null)
        _currentFont.dispose();
-  
-    super.dispose();
-  
   }
 
   /**

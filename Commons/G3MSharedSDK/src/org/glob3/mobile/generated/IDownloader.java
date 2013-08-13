@@ -28,8 +28,6 @@ public abstract class IDownloader
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor);

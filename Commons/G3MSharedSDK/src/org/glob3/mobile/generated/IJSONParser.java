@@ -40,8 +40,6 @@ public abstract class IJSONParser
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public JSONBaseObject parse(String json)

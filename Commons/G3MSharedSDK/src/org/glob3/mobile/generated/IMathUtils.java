@@ -48,8 +48,6 @@ public abstract class IMathUtils
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean isNan(double v);

@@ -31,8 +31,6 @@ public abstract class Interpolator
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)

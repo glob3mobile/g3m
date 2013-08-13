@@ -14,8 +14,6 @@ public abstract class MarkTouchListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean touchedMark(Mark mark);

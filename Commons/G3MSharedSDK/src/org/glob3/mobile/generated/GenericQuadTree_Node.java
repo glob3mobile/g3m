@@ -192,9 +192,6 @@ public class GenericQuadTree_Node
   
     if (_sector != null)
        _sector.dispose();
-  
-    super.dispose();
-  
   }
 
   public final Sector getSector()

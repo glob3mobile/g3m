@@ -25,8 +25,6 @@ public abstract class LayerCondition
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean isAvailable(G3MRenderContext rc, Tile tile);

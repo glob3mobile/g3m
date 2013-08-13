@@ -23,8 +23,6 @@ public abstract class IImageListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   /**

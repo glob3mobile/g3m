@@ -22,7 +22,6 @@ public abstract class CameraEventHandler
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

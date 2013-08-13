@@ -57,8 +57,6 @@ public abstract class ElevationData
       if (_interpolator != null)
          _interpolator.dispose();
     }
-    super.dispose();
-  
   }
 
   public Vector2I getExtent()

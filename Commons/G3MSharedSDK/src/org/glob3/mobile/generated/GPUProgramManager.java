@@ -32,9 +32,6 @@ public class GPUProgramManager
 
   public void dispose()
   {
-
-  super.dispose();
-
   }
 
   public final GPUProgram getCompiledProgram(String name)

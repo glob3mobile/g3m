@@ -13,8 +13,6 @@ public abstract class IImageDownloadListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   /**

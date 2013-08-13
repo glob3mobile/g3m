@@ -57,9 +57,6 @@ public class MapBoo_Scene
        _baseLayer.dispose();
     if (_overlayLayer != null)
        _overlayLayer.dispose();
-  
-    super.dispose();
-  
   }
 
   public final String description()

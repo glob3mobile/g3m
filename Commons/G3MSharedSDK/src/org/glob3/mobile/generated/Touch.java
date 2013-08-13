@@ -58,7 +58,5 @@ public class Touch
 
   public void dispose()
   {
-  super.dispose();
-
   }
 }

@@ -276,8 +276,6 @@ public class Frustum
   {
     if (_boundingVolume != null)
        _boundingVolume.dispose();
-  super.dispose();
-
   }
 
   public final BoundingVolume getBoundingVolume()

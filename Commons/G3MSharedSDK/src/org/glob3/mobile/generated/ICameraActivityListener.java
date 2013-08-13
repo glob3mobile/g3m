@@ -21,8 +21,6 @@ public abstract class ICameraActivityListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void touchEventHandled();

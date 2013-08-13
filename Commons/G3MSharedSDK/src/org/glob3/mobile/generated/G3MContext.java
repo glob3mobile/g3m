@@ -68,7 +68,6 @@ public class G3MContext
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

@@ -62,9 +62,6 @@ public class SGNode
       if (child != null)
          child.dispose();
     }
-  
-    super.dispose();
-  
   }
 
   public void initialize(G3MContext context, SGShape shape)

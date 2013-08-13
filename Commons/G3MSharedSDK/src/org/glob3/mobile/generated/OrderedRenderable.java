@@ -28,7 +28,5 @@ public abstract class OrderedRenderable
 
   public void dispose()
   {
-  super.dispose();
-
   }
 }

@@ -25,9 +25,6 @@ public class QuadTree
   {
     if (_root != null)
        _root.dispose();
-  
-    super.dispose();
-  
   }
 
   public final boolean add(Sector sector, Object element)

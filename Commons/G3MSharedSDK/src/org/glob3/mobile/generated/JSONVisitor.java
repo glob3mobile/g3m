@@ -32,8 +32,6 @@ public abstract class JSONVisitor
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

@@ -184,8 +184,6 @@ public class GPUVariable
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public GPUVariable(String name, GPUVariableType type)

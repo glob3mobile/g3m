@@ -31,8 +31,6 @@ public abstract class Planet
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract Vector3D getRadii();

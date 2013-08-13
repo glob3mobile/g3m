@@ -37,8 +37,6 @@ public abstract class JSONBaseObject
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public JSONObject asObject()

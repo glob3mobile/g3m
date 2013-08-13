@@ -20,9 +20,6 @@ public class EffectsScheduler
     {
       if (_effect != null)
          _effect.dispose();
-
-  super.dispose();
-
     }
   }
 

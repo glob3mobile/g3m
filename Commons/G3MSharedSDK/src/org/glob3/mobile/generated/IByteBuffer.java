@@ -15,8 +15,6 @@ public abstract class IByteBuffer
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract int size();

@@ -25,7 +25,6 @@ public class ByteBufferBuilder
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

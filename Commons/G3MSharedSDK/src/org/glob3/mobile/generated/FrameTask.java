@@ -25,7 +25,6 @@ public abstract class FrameTask
 {
   public void dispose()
   {
-  super.dispose();
 
   }
 

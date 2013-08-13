@@ -10,8 +10,6 @@ public abstract class IStorage
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public void initialize(G3MContext context)

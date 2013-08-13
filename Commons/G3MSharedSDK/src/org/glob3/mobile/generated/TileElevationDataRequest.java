@@ -20,8 +20,7 @@ public class TileElevationDataRequest
 
   public void dispose()
   {
-    super.dispose();
-  
+
   }
 
   public final void onData(Sector sector, Vector2I resolution, ElevationData elevationData)

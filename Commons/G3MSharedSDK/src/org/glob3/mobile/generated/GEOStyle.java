@@ -21,7 +21,5 @@ public class GEOStyle
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 }

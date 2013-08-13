@@ -35,9 +35,6 @@ public class GEO2DPolygonData
 
   public void dispose()
   {
-  
-    super.dispose();
-  
   }
 
   public final java.util.ArrayList<Geodetic2D> getCoordinates()

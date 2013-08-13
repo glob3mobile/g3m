@@ -37,8 +37,6 @@ public class TilesRenderParameters
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
 }

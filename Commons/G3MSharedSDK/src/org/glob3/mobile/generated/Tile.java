@@ -616,9 +616,6 @@ public class Tile
   
     if (_lodTimer != null)
        _lodTimer.dispose();
-  
-    super.dispose();
-  
   }
 
 

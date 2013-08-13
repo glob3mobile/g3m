@@ -173,9 +173,6 @@ public class LayerSet
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
-  
-    super.dispose();
-  
   }
 
   public final void removeAllLayers(boolean deleteLayers)

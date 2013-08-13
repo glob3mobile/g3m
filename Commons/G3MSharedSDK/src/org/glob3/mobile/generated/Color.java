@@ -43,7 +43,6 @@ public class Color
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

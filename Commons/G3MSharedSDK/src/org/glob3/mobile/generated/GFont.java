@@ -102,8 +102,6 @@ public class GFont
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final boolean isSerif()

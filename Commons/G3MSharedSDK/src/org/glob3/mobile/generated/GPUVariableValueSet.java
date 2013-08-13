@@ -60,9 +60,6 @@ public class GPUVariableValueSet
         a._release();
       }
     }
-  
-    super.dispose();
-  
   }
 
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)

@@ -46,9 +46,6 @@ public class Sector
   {
     if (_normalizedCartesianCenter != null)
        _normalizedCartesianCenter.dispose();
-  
-    super.dispose();
-  
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)

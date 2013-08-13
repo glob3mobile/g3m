@@ -161,8 +161,6 @@ public class GLGlobalState
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final void enableDepthTest()

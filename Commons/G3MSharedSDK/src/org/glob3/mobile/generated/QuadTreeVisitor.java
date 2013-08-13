@@ -21,8 +21,6 @@ public abstract class QuadTreeVisitor
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean visitElement(Sector sector, Object element);

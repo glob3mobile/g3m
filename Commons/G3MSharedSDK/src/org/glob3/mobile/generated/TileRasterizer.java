@@ -6,8 +6,6 @@ public abstract class TileRasterizer
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract String getId();

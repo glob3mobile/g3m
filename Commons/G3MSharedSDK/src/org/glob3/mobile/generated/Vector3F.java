@@ -37,8 +37,6 @@ public class Vector3F
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public Vector3F(Vector3F v)

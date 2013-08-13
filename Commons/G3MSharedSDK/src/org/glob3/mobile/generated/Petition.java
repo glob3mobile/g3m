@@ -60,8 +60,6 @@ public class Petition
     if (_sector != null)
        _sector.dispose();
     releaseImage();
-  super.dispose();
-
   }
 
   public final void releaseImage()

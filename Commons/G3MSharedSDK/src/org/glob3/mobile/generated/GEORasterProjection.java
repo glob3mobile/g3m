@@ -45,7 +45,6 @@ public class GEORasterProjection
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

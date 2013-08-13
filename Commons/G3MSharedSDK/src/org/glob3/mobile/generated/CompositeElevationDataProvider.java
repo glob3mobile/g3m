@@ -202,7 +202,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public void dispose()
     {
-  super.dispose();
 
     }
 

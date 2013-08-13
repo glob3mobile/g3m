@@ -23,8 +23,6 @@ public abstract class GTask
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void run(G3MContext context);

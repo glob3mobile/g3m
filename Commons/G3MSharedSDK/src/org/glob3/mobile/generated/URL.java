@@ -51,8 +51,6 @@ public class URL
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final String getPath()

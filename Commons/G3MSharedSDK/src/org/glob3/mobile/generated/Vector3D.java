@@ -41,8 +41,6 @@ public class Vector3D
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public Vector3D(Vector3D v)

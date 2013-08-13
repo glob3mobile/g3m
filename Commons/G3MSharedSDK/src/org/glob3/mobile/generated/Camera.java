@@ -72,9 +72,6 @@ public class Camera
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
-
-  super.dispose();
-
   }
 
   public final void copyFrom(Camera that)

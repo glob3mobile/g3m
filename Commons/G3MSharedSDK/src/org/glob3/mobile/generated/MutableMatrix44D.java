@@ -283,9 +283,6 @@ public class MutableMatrix44D
     {
       _matrix44D._release();
     }
-  
-    super.dispose();
-  
   }
 
   public static MutableMatrix44D identity()

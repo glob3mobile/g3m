@@ -52,8 +52,6 @@ public abstract class MapBooApplicationChangeListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void onNameChanged(G3MContext context, String name);

@@ -28,8 +28,6 @@ public abstract class INativeGL
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void useProgram(GPUProgram program);

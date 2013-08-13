@@ -187,9 +187,6 @@ public class GPUProgram
   {
     _createdAttributes = null;
     _createdUniforms = null;
-  
-    super.dispose();
-  
   }
 
   public final String getName()

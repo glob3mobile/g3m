@@ -22,7 +22,6 @@ public abstract class BoundingVolume
 {
   public void dispose()
   {
-  super.dispose();
 
   }
 

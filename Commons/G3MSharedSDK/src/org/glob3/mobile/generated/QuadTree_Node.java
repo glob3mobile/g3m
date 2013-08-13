@@ -40,9 +40,6 @@ public class QuadTree_Node
   
       _children = null;
     }
-  
-    super.dispose();
-  
   }
 
   public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)

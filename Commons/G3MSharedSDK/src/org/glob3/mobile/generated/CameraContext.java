@@ -12,7 +12,6 @@ public class CameraContext
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

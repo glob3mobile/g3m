@@ -37,8 +37,6 @@ public class IImageResult
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final IImage getImage()

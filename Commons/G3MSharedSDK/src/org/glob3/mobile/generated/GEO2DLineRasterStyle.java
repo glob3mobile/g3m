@@ -59,9 +59,6 @@ public class GEO2DLineRasterStyle
 
   public void dispose()
   {
-
-  super.dispose();
-
   }
 
   public final boolean apply(ICanvas canvas)

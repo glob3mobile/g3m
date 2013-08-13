@@ -4,7 +4,6 @@ public abstract class ElevationDataProvider
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

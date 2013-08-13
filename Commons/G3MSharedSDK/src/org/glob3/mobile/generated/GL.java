@@ -342,8 +342,6 @@ public class GL
   public void dispose()
   {
     _nativeGL.dispose();
-  super.dispose();
-
   }
 
   public final int createProgram()

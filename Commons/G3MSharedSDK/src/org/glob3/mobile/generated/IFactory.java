@@ -52,8 +52,6 @@ public abstract class IFactory
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);

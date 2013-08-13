@@ -29,9 +29,6 @@ public class ModelviewMatrixHolder
     {
       _modelview._release();
     }
-
-  super.dispose();
-
   }
 
   public final Matrix44D getModelview()

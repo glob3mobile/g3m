@@ -31,8 +31,6 @@ public abstract class TileTessellator
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean isReady(G3MRenderContext rc);

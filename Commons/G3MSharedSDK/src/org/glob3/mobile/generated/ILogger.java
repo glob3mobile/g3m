@@ -33,7 +33,6 @@ public abstract class ILogger
 
   public void dispose()
   {
-  super.dispose();
-
   }
+
 }

@@ -41,8 +41,6 @@ public class TileRasterizerContext
 
   public void dispose()
   {
-  super.dispose();
-;
   }
 
 }

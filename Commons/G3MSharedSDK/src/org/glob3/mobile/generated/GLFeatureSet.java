@@ -21,9 +21,6 @@ public class GLFeatureSet
     {
       _features[i]._release();
     }
-  
-    super.dispose();
-  
   }
 
   public final GLFeature get(int i)

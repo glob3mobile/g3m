@@ -42,8 +42,6 @@ public class RectangleI
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final boolean equalTo(RectangleI that)

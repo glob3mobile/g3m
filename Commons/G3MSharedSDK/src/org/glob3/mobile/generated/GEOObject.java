@@ -28,7 +28,6 @@ public abstract class GEOObject
 {
   public void dispose()
   {
-  super.dispose();
 
   }
 

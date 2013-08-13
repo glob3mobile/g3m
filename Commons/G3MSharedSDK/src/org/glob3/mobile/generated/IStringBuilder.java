@@ -54,8 +54,6 @@ public abstract class IStringBuilder
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
-  super.dispose();
-
   }
 
 }

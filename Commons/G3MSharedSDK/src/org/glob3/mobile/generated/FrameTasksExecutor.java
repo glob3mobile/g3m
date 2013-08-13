@@ -137,7 +137,6 @@ public class FrameTasksExecutor
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

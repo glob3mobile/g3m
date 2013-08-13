@@ -76,9 +76,6 @@ public class LayerTilesRenderParameters
 
   public void dispose()
   {
-  super.dispose();
-
   }
-
 
 }

@@ -27,11 +27,8 @@ package org.glob3.mobile.generated;
 
 public abstract class GEOSymbol
 {
-
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer);

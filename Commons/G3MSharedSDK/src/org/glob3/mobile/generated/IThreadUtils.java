@@ -44,8 +44,6 @@ public abstract class IThreadUtils
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);

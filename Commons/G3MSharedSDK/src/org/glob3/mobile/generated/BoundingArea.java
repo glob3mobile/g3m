@@ -21,7 +21,6 @@ public class BoundingArea
 {
   public void dispose()
   {
-  super.dispose();
 
   }
 

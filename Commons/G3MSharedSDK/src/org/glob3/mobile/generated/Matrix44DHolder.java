@@ -15,8 +15,6 @@ public class Matrix44DHolder
   public void dispose()
   {
     _matrix._release();
-  super.dispose();
-
   }
 
   public final void setMatrix(Matrix44D matrix)

@@ -26,8 +26,6 @@ public abstract class Mesh
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract int getVertexCount();

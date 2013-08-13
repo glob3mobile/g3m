@@ -45,8 +45,6 @@ public class Vector2F
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final float x()

@@ -24,7 +24,5 @@ public class SurfaceElevationListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 }

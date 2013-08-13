@@ -31,8 +31,6 @@ public abstract class CanvasElement
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract Vector2F getExtent(ICanvas canvas);

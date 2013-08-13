@@ -287,7 +287,6 @@ public class Angle
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

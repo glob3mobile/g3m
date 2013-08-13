@@ -164,9 +164,6 @@ public class TrailSegment
       if (position != null)
          position.dispose();
     }
-  
-    super.dispose();
-  
   }
 
   public final int getSize()

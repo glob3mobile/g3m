@@ -25,8 +25,6 @@ public abstract class LazyTextureMappingInitializer
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract void initialize();

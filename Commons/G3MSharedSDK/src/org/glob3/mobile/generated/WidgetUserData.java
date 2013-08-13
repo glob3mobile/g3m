@@ -68,7 +68,6 @@ public class WidgetUserData
 
   public void dispose()
   {
-  super.dispose();
 
   }
 

@@ -38,9 +38,6 @@ public class RCObject
     {
       ILogger.instance().logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
     }
-  
-    super.dispose();
-  
   }
 
 

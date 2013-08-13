@@ -14,8 +14,6 @@ public abstract class IBufferDownloadListener
 {
   public void dispose()
   {
-  super.dispose();
-
   }
 
   /**
