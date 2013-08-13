@@ -347,6 +347,8 @@ private:
   ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
 
+  SurfaceElevationProvider_Tree _elevationListenersTree;
+
 public:
   PlanetRenderer(const TileTessellator* tessellator,
                  ElevationDataProvider* elevationDataProvider,
@@ -467,12 +469,14 @@ public:
 
   void addListener(const Angle& latitude,
                    const Angle& longitude,
-                   SurfaceElevationListener* observer);
+                   GeodeticSurfaceElevationListener* observer);
 
   void addListener(const Geodetic2D& position,
-                   SurfaceElevationListener* observer);
+                   GeodeticSurfaceElevationListener* observer);
 
-  void removeListener(SurfaceElevationListener* observer);
+  void removeListener(GeodeticSurfaceElevationListener* observer);
+
+  void sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const;
 
 };
 

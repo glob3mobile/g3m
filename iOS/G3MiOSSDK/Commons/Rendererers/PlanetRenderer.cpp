@@ -26,6 +26,7 @@
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
 #include "TileRasterizer.hpp"
+#include "ElevationData.hpp"
 
 #include <algorithm>
 
@@ -332,7 +333,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
+      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
       if (parameters->_firstLevel == 0) {
         _firstLevelTiles.push_back(tile);
       }
@@ -627,15 +628,32 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
 
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
-                                 SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+                                 GeodeticSurfaceElevationListener* observer) {
+  _elevationListenersTree.add(Geodetic2D(latitude, longitude), observer);
 }
 
 void PlanetRenderer::addListener(const Geodetic2D& position,
-                                 SurfaceElevationListener* observer) {
+                                 GeodeticSurfaceElevationListener* observer) {
+  _elevationListenersTree.add(position, observer);
+}
+
+void PlanetRenderer::removeListener(GeodeticSurfaceElevationListener* observer) {
   int __DGD_AtWork;
 }
 
-void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+void PlanetRenderer::sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const{
+
+  std::vector<GeodeticSurfaceElevationListener*> observers = _elevationListenersTree.getObserversForSector(sector);
+
+  const int size = observers.size();
+  for (int i = 0; i < size; i++) {
+
+    GeodeticSurfaceElevationListener* obs = observers[i];
+
+    double height = elevationData->getElevationAt(obs->getPosition());
+
+    //PROVIDING EXAGGERATED ELEVATION!!!!!
+    observers[i]->elevationChanged(height * _verticalExaggeration);
+  }
+
 }

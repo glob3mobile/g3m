@@ -454,7 +454,10 @@ bool GenericQuadTree::add(const Geodetic2D& geodetic,
 
 bool GenericQuadTree::acceptVisitor(const Sector& sector,
                                     const GenericQuadTreeVisitor& visitor) const {
-  const bool aborted = _root->acceptVisitor(sector, visitor);
+  bool aborted = false;
+  if (_root != NULL){
+    aborted = _root->acceptVisitor(sector, visitor);
+  }
   visitor.endVisit(aborted);
   return aborted;
 }

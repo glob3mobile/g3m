@@ -63,6 +63,7 @@ public:
   }
 
   void clearFeatures(GLFeatureGroupName g);
+  void clearFeatures();
 
 };
 

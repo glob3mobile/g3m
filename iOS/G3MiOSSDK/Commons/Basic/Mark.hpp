@@ -37,7 +37,7 @@ public:
 };
 
 
-class Mark : public SurfaceElevationListener {
+class Mark : public GeodeticSurfaceElevationListener {
 private:
   /**
    * The text the mark displays.
@@ -82,7 +82,7 @@ private:
   /**
    * The point where the mark will be geo-located.
    */
-  const Geodetic3D  _position;
+  Geodetic3D*  _position;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -198,7 +198,7 @@ public:
   }
   
   const Geodetic3D getPosition() const {
-    return _position;
+    return *_position;
   }
   
   void initialize(const G3MContext* context,
@@ -252,6 +252,16 @@ public:
               const GLState* parentGLState,
               const Planet* planet,
               GL* gl);
+
+  void elevationChanged(double newElevation){
+    printf("ELEVATION CHANGED ON MARK");
+
+    Geodetic3D newPos(_position->latitude(), _position->longitude(), newElevation);
+    delete _position;
+    _position = new Geodetic3D(newPos);
+
+    _glState.clearAllGLFeatures();
+  }
 };
 
 #endif

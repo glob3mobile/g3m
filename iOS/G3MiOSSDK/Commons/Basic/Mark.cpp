@@ -143,9 +143,10 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(label),
 _iconURL(iconURL),
-_position(position),
+_position(new Geodetic3D(position)),
 _labelBottom(labelBottom),
 _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
@@ -180,10 +181,11 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
-_position(position),
+_position(new Geodetic3D(position)),
 _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
 _labelShadowColor(labelShadowColor),
@@ -214,10 +216,11 @@ Mark::Mark(const URL          iconURL,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
-_position(position),
+_position(new Geodetic3D(position)),
 _labelFontSize(20),
 _labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
 _labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
@@ -249,10 +252,11 @@ Mark::Mark(IImage*            image,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
-_position(position),
+_position(new Geodetic3D(position)),
 _labelFontSize(20),
 _labelFontColor(NULL),
 _labelShadowColor(NULL),
@@ -281,8 +285,8 @@ void Mark::initialize(const G3MContext* context,
 
   _surfaceElevationProvider = context->getSurfaceElevationProvider();
   if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->addListener(_position._latitude,
-                                           _position._longitude,
+    _surfaceElevationProvider->addListener(_position->_latitude,
+                                           _position->_longitude,
                                            this);
   }
 
@@ -349,6 +353,9 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
+
+  delete _position;
+
   if (_surfaceElevationProvider != NULL) {
     _surfaceElevationProvider->removeListener(this);
   }
@@ -368,7 +375,7 @@ Mark::~Mark() {
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
-    _cartesianPosition = new Vector3D( planet->toCartesian(_position) );
+    _cartesianPosition = new Vector3D( planet->toCartesian(*_position) );
   }
   return _cartesianPosition;
 }
@@ -388,7 +395,7 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL) {
-    const Vector3D pos( planet->toCartesian(_position) );
+    const Vector3D pos( planet->toCartesian(* _position) );
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(pos);
     vertex.add(pos);
@@ -412,15 +419,17 @@ void Mark::createGLState(const Planet* planet){
                                               false, 1.0f), // POINT SIZE
                         false);
 
-  _glState.addGLFeature(new TextureGLFeature(_textureId,
-                                             getBillboardTexCoords(),
-                                             2,
-                                             0,
-                                             false,
-                                             0,
-                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                             false, Vector2D::zero(), Vector2D::zero()),
-                        false);
+  if (_textureId != NULL){
+    _glState.addGLFeature(new TextureGLFeature(_textureId,
+                                               getBillboardTexCoords(),
+                                               2,
+                                               0,
+                                               false,
+                                               0,
+                                               true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
+                                               false, Vector2D::zero(), Vector2D::zero()),
+                          false);
+  }
 }
 
 IFloatBuffer* Mark::getBillboardTexCoords() {
@@ -471,9 +480,14 @@ void Mark::render(const G3MRenderContext* rc,
 
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
-          createGLState(rc->getPlanet());
+          createGLState(planet);
         }
       } else{
+
+        if (_glState.getNumberOfGLFeatures() == 0){
+          createGLState(planet);
+        }
+
         _glState.setParent(parentGLState); //Linking with parent
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),

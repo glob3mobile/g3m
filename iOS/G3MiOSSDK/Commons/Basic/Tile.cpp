@@ -29,12 +29,15 @@
 
 #include "FlatColorMesh.hpp"
 
+#include "PlanetRenderer.hpp"
+
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
            int level,
            int row,
-           int column):
+           int column,
+           const PlanetRenderer* planetRenderer):
 _texturizer(texturizer),
 _parent(parent),
 _sector(sector),
@@ -62,7 +65,8 @@ _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
-_lodTimer(NULL)
+_lodTimer(NULL),
+_planetRenderer(planetRenderer)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -174,6 +178,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                                _verticalExaggeration,
                                                                layerTilesRenderParameters->_mercator,
                                                                prc->getParameters()->_renderDebug);
+
     }
     else {
       Mesh* tessellatorMesh = prc->getTessellator()->createTileMesh(rc->getPlanet(),
@@ -193,6 +198,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
         meshHolder->setMesh(tessellatorMesh);
       }
     }
+
+    _planetRenderer->sectorElevationChanged(_sector, _elevationData);
   }
 
   return _tessellatorMesh;
@@ -634,7 +641,8 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   parent,
                   Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
                   level,
-                  row, column);
+                  row, column,
+                  _planetRenderer);
 }
 
 std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,

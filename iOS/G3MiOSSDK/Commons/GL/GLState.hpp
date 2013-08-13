@@ -71,6 +71,11 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
+  void clearAllGLFeatures();
+
+  int getNumberOfGLFeatures() const{
+    return _features.size();
+  }
 };
 
 #endif
