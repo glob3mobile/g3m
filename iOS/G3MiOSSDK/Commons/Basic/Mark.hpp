@@ -253,28 +253,9 @@ public:
               const Planet* planet,
               GL* gl);
 
-  //  void elevationChanged(double newElevation){
-  //    printf("ELEVATION CHANGED ON MARK");
-  //
-  //    Geodetic3D newPos(_position->latitude(), _position->longitude(), newElevation);
-  //    delete _position;
-  //    _position = new Geodetic3D(newPos);
-  //
-  //    _glState.clearAllGLFeatures();
-  //  }
-
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
-                        double verticalExaggeration){
-
-    Geodetic3D newPos(_position->latitude(), _position->longitude(), rawElevation * verticalExaggeration);
-    delete _position;
-    _position = new Geodetic3D(newPos);
-
-    delete _vertices;
-    _vertices = NULL;
-    _glState.clearAllGLFeatures();
-  }
+                        double verticalExaggeration);
 };
 
 #endif

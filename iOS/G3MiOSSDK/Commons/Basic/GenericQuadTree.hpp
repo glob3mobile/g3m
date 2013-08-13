@@ -174,6 +174,8 @@ public:
 
   void getGeodetics(std::vector<Geodetic2D*>& geo) const;
   void getSectors(std::vector<Sector*>& sectors) const;
+
+  void remove(const void* element);
 };
 
 class GenericQuadTree {
@@ -204,6 +206,8 @@ public:
   }
 
   ~GenericQuadTree();
+
+  void remove(const void* element);
 
   bool add(const Sector& sector, const void* element);
 

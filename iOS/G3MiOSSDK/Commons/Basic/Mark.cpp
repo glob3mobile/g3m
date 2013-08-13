@@ -392,8 +392,6 @@ void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL) {
     const Vector3D pos( planet->toCartesian(* _position) );
-
-    printf("MARK %s -> H: %s\n", _label.c_str(), pos.description().c_str());
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(pos);
     vertex.add(pos);
@@ -499,4 +497,17 @@ void Mark::render(const G3MRenderContext* rc,
     }
   }
   
+}
+
+void Mark::elevationChanged(const Geodetic2D& position,
+                      double rawElevation,            //Without considering vertical exaggeration
+                      double verticalExaggeration){
+
+  Geodetic3D newPos(_position->latitude(), _position->longitude(), rawElevation * verticalExaggeration);
+  delete _position;
+  _position = new Geodetic3D(newPos);
+
+  delete _vertices;
+  _vertices = NULL;
+  _glState.clearAllGLFeatures();
 }

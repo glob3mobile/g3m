@@ -638,7 +638,7 @@ void PlanetRenderer::addListener(const Geodetic2D& position,
 }
 
 void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+  _elevationListenersTree.remove(observer);
 }
 
 void PlanetRenderer::sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const{

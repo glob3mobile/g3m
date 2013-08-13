@@ -188,33 +188,34 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
     }
 
   }
+}
 
-  //  Geodetic2D position = element->getCenter();
-  //
-  //  if (!_sector->contains(position)) {
-  //    return false;
-  //  }
-  //
-  //  if (_children == NULL){ //LEAF NODE
-  //
-  //    _elements.push_back(element);
-  //    if (_elements.size() > maxElementsPerNode && _depth < maxDepth){
-  //      //WE SPLIT THE NODE
-  //      splitNode(maxElementsPerNode, maxDepth);
-  //    }
-  //  } else{ //INNER NODE
-  //
-  //    for (int j = 0; j < 4; j++){
-  //      GenericQuadTree_Node* child = _children[j];
-  //      if (child->add(element, maxElementsPerNode, maxDepth)){
-  //        break;
-  //      }
-  //    }
-  //  }
-  //
-  ////  computeElementsSector();
-  //
-  //  return true;
+void GenericQuadTree_Node::remove(const void* element){
+
+  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
+       it != _elements.end();
+       it++) {
+    if ((*it)->_element == element){
+      _elements.erase(it);
+      break;
+    }
+  }
+
+  if (_children != NULL){
+
+    int nChild = 0;
+    for (int i = 0; i < 4; i++) {
+      nChild += _children[i]->getNElements();
+    }
+
+    if (nChild == 0){
+      for (int i = 0; i < 4; i++) {
+        delete _children[i];
+      }
+      delete [] _children;
+    }
+
+  }
 
 }
 
@@ -438,6 +439,12 @@ bool GenericQuadTree::add(GenericQuadTree_Element* element){
   }
 
   return _root->add(element, _maxElementsPerNode, _maxDepth, _childAreaProportion);
+}
+
+void GenericQuadTree::remove(const void* element){
+  if (_root != NULL){
+    _root->remove(element);
+  }
 }
 
 bool GenericQuadTree::add(const Sector& sector,
