@@ -38,7 +38,7 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
-class GPUProgram{
+class GPUProgram : public Disposable {
   int _programID;
   bool _programCreated;
 

@@ -16,16 +16,13 @@
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-class Geodetic3D : public Disposable {
+class Geodetic3D {
 
 public:
   const Angle _latitude;
   const Angle _longitude;
   const double _height;
 
-  ~Geodetic3D() {
-    JAVA_POST_DISPOSE
-  }
   
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);

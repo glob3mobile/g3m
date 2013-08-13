@@ -14,7 +14,7 @@
 #include "Context.hpp"
 #include "Camera.hpp"
 
-class GEORenderer_ObjectSymbolizerPair {
+class GEORenderer_ObjectSymbolizerPair : public Disposable {
 public:
   const GEOObject*     _geoObject;
   const GEOSymbolizer* _symbolizer;
@@ -30,6 +30,7 @@ public:
   ~GEORenderer_ObjectSymbolizerPair() {
     delete _geoObject;
     delete _symbolizer;
+    
     JAVA_POST_DISPOSE
   }
 };

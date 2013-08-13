@@ -15,7 +15,7 @@
 
 class MutableVector2D;
 
-class Vector2D {
+class Vector2D : public Disposable {
 private:
   
   

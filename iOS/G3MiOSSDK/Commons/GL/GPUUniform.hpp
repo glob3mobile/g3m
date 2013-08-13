@@ -94,6 +94,7 @@ public:
     if (_value != NULL) {
       _value->_release();
     }
+
     JAVA_POST_DISPOSE
   }
 
@@ -281,7 +282,7 @@ public:
 
 /////////////////////
 
-class ModelviewMatrixHolder{
+class ModelviewMatrixHolder : public Disposable {
   const Matrix44D** _matrix;
   const Matrix44DHolder** _matrixHolders;
   int _nMatrix;
@@ -314,6 +315,7 @@ public:
     if (_modelview != NULL) {
       _modelview->_release();
     }
+
     JAVA_POST_DISPOSE
   }
 
@@ -382,6 +384,7 @@ public:
     _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
   }
 #endif
+
   ~GPUUniformValueModelview() {
     JAVA_POST_DISPOSE
   }
@@ -430,6 +433,7 @@ public:
 
   ~GPUUniformValueMatrix4Float() {
     _m->_release();
+    
     JAVA_POST_DISPOSE
   }
 

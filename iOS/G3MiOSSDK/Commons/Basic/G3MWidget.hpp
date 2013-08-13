@@ -78,7 +78,7 @@ public:
 };
 
 
-class G3MWidget {
+class G3MWidget : public Disposable {
 public:
   
   static void initSingletons(ILogger*            logger,

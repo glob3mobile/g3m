@@ -22,7 +22,7 @@
 
 class GPUAttribute;
 
-class GPUAttributeValue : public RCObject{
+class GPUAttributeValue : public RCObject {
 protected:
   const bool _enabled;
   const int _type;
@@ -128,6 +128,7 @@ public:
 
   virtual ~GPUAttribute() {
     delete _value;
+
     JAVA_POST_DISPOSE
   }
 

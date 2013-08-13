@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-class VisibleSectorListenerEntry {
+class VisibleSectorListenerEntry : public Disposable {
 private:
   VisibleSectorListener* _listener;
   const long long        _stabilizationIntervalInMS;
@@ -103,6 +103,7 @@ public:
     }
 
     delete _lastSector;
+    
     JAVA_POST_DISPOSE
   }
 };

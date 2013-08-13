@@ -19,7 +19,7 @@ class Mesh;
 class Planet;
 class Frustum;
 
-class TrailSegment {
+class TrailSegment : public Disposable {
 private:
   Color _color;
   const float _ribbonWidth;
@@ -94,7 +94,7 @@ public:
 
 };
 
-class Trail {
+class Trail : public Disposable {
 private:
   bool _visible;
 

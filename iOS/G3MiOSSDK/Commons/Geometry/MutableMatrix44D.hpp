@@ -31,7 +31,7 @@ class MutableVector3D;
 //#include "MutableMatrix44D.hpp"
 
 
-class MutableMatrix44D {
+class MutableMatrix44D : public Disposable {
 
 private:
 

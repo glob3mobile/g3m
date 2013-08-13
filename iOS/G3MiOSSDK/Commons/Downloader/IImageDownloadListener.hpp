@@ -11,7 +11,7 @@
 
 #include "IImage.hpp"
 
-class IImageDownloadListener {
+class IImageDownloadListener : public Disposable {
 public:
   virtual ~IImageDownloadListener() {
     JAVA_POST_DISPOSE

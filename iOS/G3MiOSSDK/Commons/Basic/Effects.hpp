@@ -200,6 +200,7 @@ private:
 
     ~EffectRun() {
       delete _effect;
+
       JAVA_POST_DISPOSE
     }
   };

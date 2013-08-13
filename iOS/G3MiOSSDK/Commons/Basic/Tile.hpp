@@ -37,7 +37,7 @@ class Box;
 
 #include "GLState.hpp"
 
-class Tile {
+class Tile : public Disposable {
 private:
   TileTexturizer* _texturizer;
   Tile*           _parent;

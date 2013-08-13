@@ -21,7 +21,7 @@
 
 #include "GLState.hpp"
 
-class LazyTextureMappingInitializer {
+class LazyTextureMappingInitializer : public Disposable {
 public:
   virtual ~LazyTextureMappingInitializer() {
     JAVA_POST_DISPOSE

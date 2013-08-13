@@ -68,7 +68,7 @@ public:
   }
 };
 
-class GenericQuadTree_SectorElement: public GenericQuadTree_Element{
+class GenericQuadTree_SectorElement: public GenericQuadTree_Element {
 public:
   const Sector _sector;
 

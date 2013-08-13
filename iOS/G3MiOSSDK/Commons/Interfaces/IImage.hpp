@@ -15,7 +15,7 @@
 //class RectangleI;
 //class IImageListener;
 
-class IImage {
+class IImage : public Disposable {
 public:
   virtual ~IImage() {
     JAVA_POST_DISPOSE

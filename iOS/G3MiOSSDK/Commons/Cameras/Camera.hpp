@@ -153,6 +153,7 @@ public:
     delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
+
     JAVA_POST_DISPOSE
   }
 

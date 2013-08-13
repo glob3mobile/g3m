@@ -11,7 +11,7 @@
 
 #include "Sector.hpp"
 
-class QuadTreeVisitor {
+class QuadTreeVisitor : public Disposable {
 public:
   virtual ~QuadTreeVisitor() {
     JAVA_POST_DISPOSE
@@ -25,7 +25,7 @@ public:
 };
 
 
-class QuadTree_Element {
+class QuadTree_Element : public Disposable {
 public:
   const Sector _sector;
   const void*  _element;
@@ -44,7 +44,7 @@ public:
 };
 
 
-class QuadTree_Node {
+class QuadTree_Node : public Disposable {
 private:
   const int     _depth;
   const Sector  _sector;
@@ -83,7 +83,7 @@ public:
 
 
 
-class QuadTree {
+class QuadTree : public Disposable {
 private:
   QuadTree_Node* _root;
 

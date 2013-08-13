@@ -85,6 +85,7 @@ public:
 #ifdef C_CODE
     delete [] _dashLengths;
 #endif
+    
     JAVA_POST_DISPOSE
   }
 

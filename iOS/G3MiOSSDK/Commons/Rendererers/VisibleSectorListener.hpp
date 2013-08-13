@@ -11,7 +11,7 @@
 
 #include "Sector.hpp"
 
-class VisibleSectorListener {
+class VisibleSectorListener : public Disposable {
 public:
   virtual ~VisibleSectorListener() {
     JAVA_POST_DISPOSE

@@ -108,7 +108,7 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-class GLCameraGroupFeature: public GLFeature{
+class GLCameraGroupFeature: public GLFeature {
 #ifdef C_CODE
   Matrix44DHolder _matrixHolder;
 #endif

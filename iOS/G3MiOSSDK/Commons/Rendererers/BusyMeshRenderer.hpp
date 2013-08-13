@@ -82,6 +82,7 @@ public:
   virtual ~BusyMeshRenderer() {
     delete _mesh;
     delete _backgroundColor;
+    
     JAVA_POST_DISPOSE
   }
 

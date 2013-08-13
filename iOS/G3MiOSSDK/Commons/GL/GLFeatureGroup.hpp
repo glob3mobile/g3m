@@ -69,7 +69,7 @@ public:
 
 
 #define N_GLFEATURES_GROUPS 4
-class GLFeatureGroup: public GLFeatureSet{
+class GLFeatureGroup: public GLFeatureSet {
 public:
 
   virtual ~GLFeatureGroup() {

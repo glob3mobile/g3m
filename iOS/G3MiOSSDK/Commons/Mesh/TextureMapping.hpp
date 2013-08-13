@@ -24,7 +24,6 @@ class TextureMapping {
 public:
   
   virtual ~TextureMapping() {
-    JAVA_POST_DISPOSE
   }
   
   virtual bool isTransparent() const = 0;

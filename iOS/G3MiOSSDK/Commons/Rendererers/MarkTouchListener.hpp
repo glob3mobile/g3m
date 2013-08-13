@@ -11,7 +11,7 @@
 
 class Mark;
 
-class MarkTouchListener {
+class MarkTouchListener : public Disposable {
 public:
   virtual ~MarkTouchListener() {
     JAVA_POST_DISPOSE

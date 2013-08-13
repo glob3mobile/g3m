@@ -129,7 +129,7 @@ public:
 };
 
 
-class TilesStatistics {
+class TilesStatistics : public Disposable {
 private:
   long _tilesProcessed;
   long _tilesVisible;

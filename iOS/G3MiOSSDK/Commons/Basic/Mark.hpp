@@ -29,7 +29,7 @@ class GPUProgramState;
 #include "SurfaceElevationProvider.hpp"
 
 
-class MarkUserData {
+class MarkUserData : public Disposable {
 public:
   virtual ~MarkUserData() {
     JAVA_POST_DISPOSE

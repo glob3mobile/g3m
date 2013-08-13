@@ -16,7 +16,7 @@
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-class Geodetic2D : public Disposable {
+class Geodetic2D {
 public:
   const Angle _latitude;
   const Angle _longitude;
@@ -132,10 +132,6 @@ public:
   Geodetic2D div(const double magnitude) const {
     return Geodetic2D(_latitude.div(magnitude),
                       _longitude.div(magnitude));
-  }
-  
-  ~Geodetic2D() {
-    JAVA_POST_DISPOSE
   }
   
   bool closeTo(const Geodetic2D& other) const;

@@ -46,7 +46,7 @@ class MapBoo_Scene;
 #include <string>
 
 
-class MapBooApplicationChangeListener {
+class MapBooApplicationChangeListener : public Disposable {
 public:
   virtual ~MapBooApplicationChangeListener() {
     JAVA_POST_DISPOSE
@@ -68,7 +68,7 @@ public:
 };
 
 
-class MapBoo_Scene {
+class MapBoo_Scene : public Disposable {
 private:
   const std::string _name;
   const std::string _description;
@@ -118,7 +118,7 @@ public:
 };
 
 
-class MapBooBuilder {
+class MapBooBuilder : public Disposable {
 private:
 
 #ifdef C_CODE

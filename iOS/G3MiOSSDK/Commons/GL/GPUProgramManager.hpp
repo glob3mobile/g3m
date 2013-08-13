@@ -16,7 +16,7 @@
 #include "GPUProgram.hpp"
 #include "GL.hpp"
 
-class GPUProgramManager{
+class GPUProgramManager : public Disposable {
   
   std::map<std::string, GPUProgram*> _programs;
   
@@ -32,6 +32,7 @@ public:
       delete it->second;
     }
 #endif
+    
     JAVA_POST_DISPOSE
   }
   

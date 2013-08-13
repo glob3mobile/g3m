@@ -28,7 +28,7 @@ class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
 
-class IG3MBuilder {
+class IG3MBuilder : public Disposable {
 private:
   GL*                               _gl;
   IDownloader*                      _downloader;

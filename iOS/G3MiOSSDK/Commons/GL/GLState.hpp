@@ -19,7 +19,7 @@
 #include "GLFeature.hpp"
 #include "GPUVariableValueSet.hpp"
 
-class GLState{
+class GLState : public Disposable {
 
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;

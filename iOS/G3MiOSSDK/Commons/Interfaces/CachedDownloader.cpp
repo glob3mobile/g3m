@@ -53,6 +53,7 @@ public:
 
   ~BufferSaverDownloadListener() {
     delete _expiredBuffer;
+
     JAVA_POST_DISPOSE
   }
 
@@ -167,6 +168,7 @@ public:
 
   ~ImageSaverDownloadListener() {
     delete _expiredImage;
+    
     JAVA_POST_DISPOSE
   }
 

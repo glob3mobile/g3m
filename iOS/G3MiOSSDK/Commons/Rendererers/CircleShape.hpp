@@ -36,6 +36,7 @@ public:
 
   ~CircleShape() {
     delete _color;
+    
     JAVA_POST_DISPOSE
   }
 

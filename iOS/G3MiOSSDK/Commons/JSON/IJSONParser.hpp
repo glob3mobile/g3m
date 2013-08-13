@@ -13,7 +13,7 @@
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
 
-class IJSONParser{
+class IJSONParser : public Disposable {
 private:
   static IJSONParser* _instance;
 

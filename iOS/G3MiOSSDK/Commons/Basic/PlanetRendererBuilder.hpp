@@ -14,7 +14,7 @@
 #include "PlanetRenderer.hpp"
 
 
-class PlanetRendererBuilder {
+class PlanetRendererBuilder : public Disposable {
 
 private:
   TileTessellator* _tileTessellator;
