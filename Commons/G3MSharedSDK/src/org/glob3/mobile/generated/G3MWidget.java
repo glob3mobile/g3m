@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class G3MWidget
+public class G3MWidget extends Disposable
 {
 
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)

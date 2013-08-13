@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class LazyTextureMappingInitializer
+public abstract class LazyTextureMappingInitializer extends Disposable
 {
   public void dispose()
   {

@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 
-public class SGNode
+public class SGNode extends Disposable
 {
   protected final String _id;
   protected final String _sId;

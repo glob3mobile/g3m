@@ -31,7 +31,6 @@ public abstract class TextureMapping
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
   }
 
   public abstract boolean isTransparent();

@@ -72,6 +72,7 @@ public class Camera extends Disposable
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
+
     JAVA_POST_DISPOSE
   }
 

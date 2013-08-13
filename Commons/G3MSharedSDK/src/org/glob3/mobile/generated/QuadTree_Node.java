@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class QuadTree_Node
+public class QuadTree_Node extends Disposable
 {
   private final int _depth;
   private final Sector _sector ;

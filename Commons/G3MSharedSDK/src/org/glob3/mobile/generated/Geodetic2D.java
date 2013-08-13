@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-public class Geodetic2D extends Disposable
+public class Geodetic2D
 {
   public final Angle _latitude ;
   public final Angle _longitude ;
@@ -124,11 +124,6 @@ public class Geodetic2D extends Disposable
   public final Geodetic2D div(double magnitude)
   {
     return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
-  }
-
-  public void dispose()
-  {
-    JAVA_POST_DISPOSE
   }
 
   public final boolean closeTo(Geodetic2D other)

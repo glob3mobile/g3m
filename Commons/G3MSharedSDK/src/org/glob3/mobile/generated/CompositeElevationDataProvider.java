@@ -339,6 +339,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_providers.get(i) != null)
          _providers.get(i).dispose();
     }
+
     JAVA_POST_DISPOSE
   }
 

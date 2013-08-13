@@ -12,9 +12,4 @@ public class ShapePendingEffect
      _targetIsCamera = targetIsCamera;
 
   }
-
-  public void dispose()
-  {
-    JAVA_POST_DISPOSE
-  }
 }

@@ -21,17 +21,13 @@ package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-public class Geodetic3D extends Disposable
+public class Geodetic3D
 {
 
   public final Angle _latitude ;
   public final Angle _longitude ;
   public final double _height;
 
-  public void dispose()
-  {
-    JAVA_POST_DISPOSE
-  }
 
   public static Geodetic3D nan()
   {

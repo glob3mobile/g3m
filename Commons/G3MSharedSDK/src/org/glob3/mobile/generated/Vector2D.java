@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class MutableVector2D;
 
-public class Vector2D
+public class Vector2D extends Disposable
 {
 
 

@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IWebSocketListener;
 
-public abstract class IWebSocket
+public abstract class IWebSocket extends Disposable
 {
   final private URL _url; //Conversor creates class "Url"
 

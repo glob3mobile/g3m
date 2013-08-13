@@ -59,6 +59,7 @@ public class GEO2DLineRasterStyle extends Disposable
 
   public void dispose()
   {
+
     JAVA_POST_DISPOSE
   }
 

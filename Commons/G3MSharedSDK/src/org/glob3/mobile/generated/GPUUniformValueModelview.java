@@ -10,6 +10,7 @@ public class GPUUniformValueModelview extends GPUUniformValue
     super(GLType.glMatrix4Float());
     _holder = new ModelviewMatrixHolder(matrixHolders, nMatrix);
   }
+
   public void dispose()
   {
     JAVA_POST_DISPOSE

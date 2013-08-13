@@ -31,7 +31,7 @@ package org.glob3.mobile.generated;
 ///#include "MutableMatrix44D.hpp"
 
 
-public class MutableMatrix44D
+public class MutableMatrix44D extends Disposable
 {
 
 

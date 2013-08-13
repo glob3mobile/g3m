@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class PeriodicalTask
+public class PeriodicalTask extends Disposable
 {
   private long _intervalMS;
   private long _lastExecutionMS;

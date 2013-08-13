@@ -19,8 +19,10 @@ package org.glob3.mobile.generated;
 
 public abstract class GEOGeometry2D extends GEOGeometry
 {
+
   public void dispose()
   {
     JAVA_POST_DISPOSE
   }
+
 }

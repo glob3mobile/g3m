@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class MarkUserData
+public class MarkUserData extends Disposable
 {
   public void dispose()
   {

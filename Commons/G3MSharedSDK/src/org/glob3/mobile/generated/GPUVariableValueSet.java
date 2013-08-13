@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GPUVariableValueSet
+public class GPUVariableValueSet extends Disposable
 {
   private GPUUniformValue[] _uniformValues = new GPUUniformValue[32];
   private GPUAttributeValue[] _attributeValues = new GPUAttributeValue[32];
@@ -40,6 +40,7 @@ public class GPUVariableValueSet
       _attributeValues[i] = null;
     }
   }
+
   public void dispose()
   {
     for (int i = 0; i <= _highestUniformKey; i++)

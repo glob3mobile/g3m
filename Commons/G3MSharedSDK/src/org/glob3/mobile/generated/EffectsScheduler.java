@@ -20,6 +20,7 @@ public class EffectsScheduler extends Disposable
     {
       if (_effect != null)
          _effect.dispose();
+
       JAVA_POST_DISPOSE
     }
   }

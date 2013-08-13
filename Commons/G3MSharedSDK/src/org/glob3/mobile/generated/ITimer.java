@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class ITimer
+public abstract class ITimer extends Disposable
 {
   public abstract TimeInterval now();
 

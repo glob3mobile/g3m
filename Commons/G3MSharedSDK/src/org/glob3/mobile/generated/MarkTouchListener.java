@@ -10,7 +10,7 @@ package org.glob3.mobile.generated;
 
 //class Mark;
 
-public abstract class MarkTouchListener
+public abstract class MarkTouchListener extends Disposable
 {
   public void dispose()
   {

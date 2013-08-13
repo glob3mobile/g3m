@@ -57,6 +57,7 @@ public class FlatColorMesh extends Mesh
       if (_flatColor != null)
          _flatColor.dispose();
     }
+
     JAVA_POST_DISPOSE
   }
 

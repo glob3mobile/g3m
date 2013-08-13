@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GPUProgramManager
+public class GPUProgramManager extends Disposable
 {
 
   private java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();
@@ -32,6 +32,7 @@ public class GPUProgramManager
 
   public void dispose()
   {
+
     JAVA_POST_DISPOSE
   }
 

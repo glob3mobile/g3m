@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class QuadTreeVisitor
+public abstract class QuadTreeVisitor extends Disposable
 {
   public void dispose()
   {

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 /////////////////////
 
-public class ModelviewMatrixHolder
+public class ModelviewMatrixHolder extends Disposable
 {
   private final Matrix44D[] _matrix;
   private final Matrix44DHolder[] _matrixHolders;
@@ -29,6 +29,7 @@ public class ModelviewMatrixHolder
     {
       _modelview._release();
     }
+
     JAVA_POST_DISPOSE
   }
 

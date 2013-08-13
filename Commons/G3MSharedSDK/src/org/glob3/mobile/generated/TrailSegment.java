@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class Planet;
 //class Frustum;
 
-public class TrailSegment
+public class TrailSegment extends Disposable
 {
   private Color _color ;
   private final float _ribbonWidth;

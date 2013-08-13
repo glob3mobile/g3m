@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GEORenderer_ObjectSymbolizerPair
+public class GEORenderer_ObjectSymbolizerPair extends Disposable
 {
   public final GEOObject _geoObject;
   public final GEOSymbolizer _symbolizer;
@@ -17,6 +17,7 @@ public class GEORenderer_ObjectSymbolizerPair
        _geoObject.dispose();
     if (_symbolizer != null)
        _symbolizer.dispose();
+
     JAVA_POST_DISPOSE
   }
 }

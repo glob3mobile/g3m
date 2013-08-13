@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class MapBooBuilder
+public abstract class MapBooBuilder extends Disposable
 {
 
   private final URL _serverURL;

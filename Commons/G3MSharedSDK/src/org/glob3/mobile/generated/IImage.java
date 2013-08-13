@@ -13,7 +13,7 @@ package org.glob3.mobile.generated;
 //class RectangleI;
 //class IImageListener;
 
-public abstract class IImage
+public abstract class IImage extends Disposable
 {
   public void dispose()
   {

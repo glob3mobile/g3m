@@ -57,6 +57,7 @@ public class GeometryGLFeature extends GLFeature
   public void dispose()
   {
   //  _position->_release();
+  
     JAVA_POST_DISPOSE
   }
 

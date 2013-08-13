@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Matrix44DHolder
+public class Matrix44DHolder extends Disposable
 {
   private Matrix44D _matrix;
   public Matrix44DHolder(Matrix44D matrix)

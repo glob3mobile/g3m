@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //class GEORasterProjection;
 
 
-public class Sector
+public class Sector extends Disposable
 {
 
 

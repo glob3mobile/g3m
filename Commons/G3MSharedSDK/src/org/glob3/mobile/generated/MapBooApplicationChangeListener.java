@@ -48,7 +48,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class MapBooApplicationChangeListener
+public abstract class MapBooApplicationChangeListener extends Disposable
 {
   public void dispose()
   {

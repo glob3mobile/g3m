@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 ///#include "GPUProgramState.hpp"
 
 
-public class VisibleSectorListenerEntry
+public class VisibleSectorListenerEntry extends Disposable
 {
   private VisibleSectorListener _listener;
   private final long _stabilizationIntervalInMS;
@@ -87,6 +87,7 @@ public class VisibleSectorListenerEntry
 
     if (_lastSector != null)
        _lastSector.dispose();
+
     JAVA_POST_DISPOSE
   }
 }

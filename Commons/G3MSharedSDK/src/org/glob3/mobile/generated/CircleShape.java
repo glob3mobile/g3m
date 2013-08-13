@@ -68,6 +68,7 @@ public class CircleShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+
     JAVA_POST_DISPOSE
   }
 
