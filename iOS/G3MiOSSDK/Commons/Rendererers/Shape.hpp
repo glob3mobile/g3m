@@ -209,8 +209,7 @@ public:
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
                         double verticalExaggeration){
-    printf("SHAPE CHANGES ELEVATION");
-
+//    printf("SHAPE CHANGES ELEVATION");
     delete _transformMatrix;
     _transformMatrix = NULL;
   }
