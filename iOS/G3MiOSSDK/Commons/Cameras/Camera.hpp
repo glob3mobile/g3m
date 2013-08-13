@@ -269,19 +269,17 @@ public:
     return *_geodeticPosition;
   }
 
-  void setGeodeticPosition(const Geodetic3D& g3d) {
-    _setGeodeticPosition( _planet->toCartesian(g3d) );
-  }
-
+  void setGeodeticPosition(const Geodetic3D& g3d);
+  
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
-    _setGeodeticPosition( _planet->toCartesian(latitude, longitude, height) );
+    setGeodeticPosition(Geodetic3D(latitude, longitude, height));
   }
 
   void setGeodeticPosition(const Geodetic2D &g2d,
                            const double height) {
-    _setGeodeticPosition( _planet->toCartesian(g2d._latitude, g2d._longitude, height) );
+    setGeodeticPosition(Geodetic3D(g2d, height));
   }
 
   /**
@@ -451,7 +449,7 @@ private:
   
   FrustumData calculateFrustumData() const;
   
-  void _setGeodeticPosition(const Vector3D& pos);
+  //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{

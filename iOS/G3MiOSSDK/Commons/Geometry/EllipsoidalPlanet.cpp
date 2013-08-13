@@ -571,3 +571,11 @@ double EllipsoidalPlanet::distanceToHorizon(const Vector3D& position) const
   return sqrt(D*D - R*R);
 }
 
+
+MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
+{
+  return MutableMatrix44D::invalid();
+}
+
+
+

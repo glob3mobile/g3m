@@ -485,3 +485,10 @@ double SphericalPlanet::distanceToHorizon(const Vector3D& position) const
   return sqrt(D*D - R*R);
 }
 
+
+MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
+{
+  return MutableMatrix44D::invalid();
+}
+
+

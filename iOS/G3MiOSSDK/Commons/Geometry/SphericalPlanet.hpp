@@ -149,6 +149,10 @@ public:
                                 const Vector3D& tapRay) const;
 
   double distanceToHorizon(const Vector3D& position) const;
+  
+  MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
+  
+
 
 };
 

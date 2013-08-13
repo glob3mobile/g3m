@@ -147,7 +147,8 @@ public:
 
   double distanceToHorizon(const Vector3D& position) const;
 
-
+  MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
+  
 };
 
 
