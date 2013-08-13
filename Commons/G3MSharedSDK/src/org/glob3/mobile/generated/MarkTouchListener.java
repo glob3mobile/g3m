@@ -12,10 +12,10 @@ package org.glob3.mobile.generated;
 
 public abstract class MarkTouchListener
 {
-    public void dispose()
-    {
+  public void dispose()
+  {
+    super.dispose();
+  }
 
-    }
-
-    public abstract boolean touchedMark(Mark mark);
+  public abstract boolean touchedMark(Mark mark);
 }

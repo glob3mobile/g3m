@@ -12,6 +12,7 @@ public class GPUUniformValueModelview extends GPUUniformValue
   }
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

@@ -58,5 +58,6 @@ public class Touch
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

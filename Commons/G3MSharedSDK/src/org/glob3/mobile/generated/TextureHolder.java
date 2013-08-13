@@ -16,6 +16,7 @@ public class TextureHolder
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final void retain()

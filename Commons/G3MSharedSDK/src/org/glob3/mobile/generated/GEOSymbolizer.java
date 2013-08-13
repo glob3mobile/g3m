@@ -25,10 +25,13 @@ package org.glob3.mobile.generated;
 //class GEO2DMultiPolygonGeometry;
 
 
-public abstract class GEOSymbolizer
+
+
+public abstract class GEOSymbolizer extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DPointGeometry geometry);

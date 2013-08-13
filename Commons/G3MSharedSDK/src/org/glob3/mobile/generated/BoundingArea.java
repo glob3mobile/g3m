@@ -16,11 +16,12 @@ package org.glob3.mobile.generated;
 //
 
 
-public class BoundingArea
+
+public class BoundingArea extends Disposable
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
 }

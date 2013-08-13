@@ -42,7 +42,7 @@ public class GEOMultiLine2DMeshSymbol extends GEOMeshSymbol
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final Mesh createMesh(G3MRenderContext rc)

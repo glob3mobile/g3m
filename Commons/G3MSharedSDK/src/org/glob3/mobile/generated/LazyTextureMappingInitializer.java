@@ -25,6 +25,7 @@ public abstract class LazyTextureMappingInitializer
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract void initialize();

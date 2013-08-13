@@ -24,10 +24,11 @@ package org.glob3.mobile.generated;
 //class FrameTasksExecutor;
 
 
-public abstract class IDownloader
+public abstract class IDownloader extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor);

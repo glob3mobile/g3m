@@ -18,10 +18,12 @@ package org.glob3.mobile.generated;
 
 //class G3MContext;
 
-public abstract class GTask
+
+public abstract class GTask extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract void run(G3MContext context);

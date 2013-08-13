@@ -79,6 +79,7 @@ public class ShapesRenderer extends LeafRenderer
       if (shape != null)
          shape.dispose();
     }
+    JAVA_POST_DISPOSE
   }
 
   public final void addShape(Shape shape)

@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
-public abstract class TileRasterizer
+public abstract class TileRasterizer extends Disposable
 {
   private ChangedListener _listener;
 
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract String getId();

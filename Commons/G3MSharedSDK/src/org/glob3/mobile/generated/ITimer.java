@@ -21,6 +21,7 @@ public abstract class ITimer
 
   public void dispose()
   {
+    super.dispose();
   }
 
 }

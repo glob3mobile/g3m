@@ -16,10 +16,13 @@ package org.glob3.mobile.generated;
 //
 
 
-public abstract class ICameraActivityListener
+
+
+public abstract class ICameraActivityListener extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract void touchEventHandled();

@@ -60,5 +60,6 @@ public abstract class Effect
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

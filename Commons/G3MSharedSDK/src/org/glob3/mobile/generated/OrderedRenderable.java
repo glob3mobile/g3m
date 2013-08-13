@@ -28,6 +28,6 @@ public abstract class OrderedRenderable
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 }

@@ -10,6 +10,7 @@ public class TileTextureBuilder extends RCObject
     }
 
     deletePetitions();
+    JAVA_POST_DISPOSE
   }
 
   private MultiLayerTileTexturizer _texturizer;

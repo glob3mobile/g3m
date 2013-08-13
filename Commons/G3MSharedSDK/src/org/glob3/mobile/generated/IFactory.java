@@ -52,7 +52,7 @@ public abstract class IFactory
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);

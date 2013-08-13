@@ -27,6 +27,7 @@ public class BufferSaverDownloadListener extends IBufferDownloadListener
   {
     if (_expiredBuffer != null)
        _expiredBuffer.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final void deleteListener()

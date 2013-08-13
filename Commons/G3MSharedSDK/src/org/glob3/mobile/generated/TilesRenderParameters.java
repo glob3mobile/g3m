@@ -37,6 +37,7 @@ public class TilesRenderParameters
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 }

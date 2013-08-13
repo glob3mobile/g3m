@@ -12,6 +12,7 @@ public class BuilderStartTask extends FrameTask
   public void dispose()
   {
     _builder._release();
+    JAVA_POST_DISPOSE
   }
 
   public final void execute(G3MRenderContext rc)

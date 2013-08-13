@@ -9,12 +9,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IByteBuffer
+public abstract class IByteBuffer extends Disposable
 {
 
   public void dispose()
   {
-
+    super.dispose();
   }
 
   public abstract int size();

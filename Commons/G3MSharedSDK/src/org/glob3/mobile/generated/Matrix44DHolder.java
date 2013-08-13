@@ -15,6 +15,7 @@ public class Matrix44DHolder
   public void dispose()
   {
     _matrix._release();
+    JAVA_POST_DISPOSE
   }
 
   public final void setMatrix(Matrix44D matrix)

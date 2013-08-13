@@ -38,6 +38,7 @@ public class TilesStatistics
     //    }
     if (_renderedSector != null)
        _renderedSector.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final int getSplitsCountInFrame()

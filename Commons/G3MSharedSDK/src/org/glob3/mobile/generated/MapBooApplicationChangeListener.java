@@ -52,6 +52,7 @@ public abstract class MapBooApplicationChangeListener
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract void onNameChanged(G3MContext context, String name);

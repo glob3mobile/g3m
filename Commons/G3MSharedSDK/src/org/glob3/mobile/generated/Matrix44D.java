@@ -18,14 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Matrix44D;
-//
-//class Matrix44DListener{
-//public:
-//  virtual ~Matrix44DListener() {}
-//  virtual void onMatrixBeingDeleted(const Matrix44D* m) = 0;
-//};
-
 public class Matrix44D extends RCObject
 {
 

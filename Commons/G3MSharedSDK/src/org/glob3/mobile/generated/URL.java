@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class URL
+public class URL extends Disposable
 {
   private final String _path;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -51,7 +51,7 @@ public class URL
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final String getPath()

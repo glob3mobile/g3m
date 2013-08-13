@@ -23,11 +23,12 @@ package org.glob3.mobile.generated;
 //class GPUUniform;
 //class GPUAttribute;
 
-public abstract class INativeGL
+public abstract class INativeGL extends Disposable
 {
 
   public void dispose()
   {
+    super.dispose();
   }
 
   public abstract void useProgram(GPUProgram program);

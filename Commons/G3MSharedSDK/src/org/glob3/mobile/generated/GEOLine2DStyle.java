@@ -33,7 +33,7 @@ public class GEOLine2DStyle extends GEOStyle
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final Color getColor()

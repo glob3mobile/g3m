@@ -128,7 +128,7 @@ public class Geodetic2D
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final boolean closeTo(Geodetic2D other)

@@ -45,6 +45,7 @@ public class GEORasterProjection
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final Vector2F project(Geodetic2D position)

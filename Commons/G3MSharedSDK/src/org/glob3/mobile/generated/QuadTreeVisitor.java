@@ -21,7 +21,7 @@ public abstract class QuadTreeVisitor
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean visitElement(Sector sector, Object element);

@@ -61,6 +61,7 @@ public abstract class IWebSocket
       if (_listener != null)
          _listener.dispose();
     }
+    JAVA_POST_DISPOSE
   }
 
   public abstract void send(String message);

@@ -8,6 +8,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

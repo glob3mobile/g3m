@@ -31,6 +31,7 @@ public abstract class TileTexturizer
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean isReady(G3MRenderContext rc, LayerSet layerSet);

@@ -43,6 +43,7 @@ public class Color
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public static Color parse(String str)

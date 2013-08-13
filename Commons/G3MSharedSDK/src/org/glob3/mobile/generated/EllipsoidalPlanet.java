@@ -36,7 +36,7 @@ public class EllipsoidalPlanet extends Planet
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final Vector3D getRadii()

@@ -24,11 +24,13 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class GEOTileRasterizer;
 
-public abstract class GEOSymbol
+
+public abstract class GEOSymbol extends Disposable
 {
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer);

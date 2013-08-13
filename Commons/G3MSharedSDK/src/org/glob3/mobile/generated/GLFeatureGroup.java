@@ -5,6 +5,7 @@ public abstract class GLFeatureGroup extends GLFeatureSet
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public static GLFeatureGroup createGroup(GLFeatureGroupName name)

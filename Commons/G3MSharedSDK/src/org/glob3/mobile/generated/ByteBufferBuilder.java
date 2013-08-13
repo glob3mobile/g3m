@@ -25,7 +25,7 @@ public class ByteBufferBuilder
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final void addInt64(long value)

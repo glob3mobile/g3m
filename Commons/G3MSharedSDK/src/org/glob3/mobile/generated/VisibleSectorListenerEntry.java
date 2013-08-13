@@ -87,5 +87,6 @@ public class VisibleSectorListenerEntry
 
     if (_lastSector != null)
        _lastSector.dispose();
+    JAVA_POST_DISPOSE
   }
 }

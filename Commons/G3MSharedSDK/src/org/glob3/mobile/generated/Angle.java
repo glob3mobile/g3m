@@ -20,11 +20,12 @@ package org.glob3.mobile.generated;
 
 
 
+
 //#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
 //#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
 
 
-public class Angle
+public class Angle extends Disposable
 {
   private Angle(double degrees, double radians)
   {
@@ -287,7 +288,7 @@ public class Angle
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final String description()

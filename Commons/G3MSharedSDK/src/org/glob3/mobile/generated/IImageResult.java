@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class IImageResult
+public class IImageResult extends Disposable
 {
   private IImage _image;
   private final boolean _expired;
@@ -37,7 +37,7 @@ public class IImageResult
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final IImage getImage()

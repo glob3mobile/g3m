@@ -51,7 +51,7 @@ public class DirectMesh extends AbstractMesh
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
 //  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;

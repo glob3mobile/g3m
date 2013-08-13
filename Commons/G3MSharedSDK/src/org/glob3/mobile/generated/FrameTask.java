@@ -25,7 +25,7 @@ public abstract class FrameTask
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean isCanceled(G3MRenderContext rc);

@@ -90,6 +90,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 

@@ -99,6 +99,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public void dispose()
     {
+      JAVA_POST_DISPOSE
     }
 
   }
@@ -200,6 +201,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public void dispose()
     {
+      JAVA_POST_DISPOSE
     }
 
     public final boolean launchNewStep()
@@ -337,6 +339,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_providers.get(i) != null)
          _providers.get(i).dispose();
     }
+    JAVA_POST_DISPOSE
   }
 
   public final void addElevationDataProvider(ElevationDataProvider edp)

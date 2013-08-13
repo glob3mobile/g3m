@@ -21,5 +21,6 @@ public abstract class GEOGeometry2D extends GEOGeometry
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

@@ -374,6 +374,7 @@ public abstract class MapBooBuilder
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   protected final void setGL(GL gl)

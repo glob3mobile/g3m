@@ -37,6 +37,7 @@ public class ImageSaverDownloadListener extends IImageDownloadListener
   {
     if (_expiredImage != null)
        _expiredImage.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final void saveImage(URL url, IImage image)

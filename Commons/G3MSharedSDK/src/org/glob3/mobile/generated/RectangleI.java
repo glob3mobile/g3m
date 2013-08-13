@@ -16,7 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
-public class RectangleI
+
+public class RectangleI extends Disposable
 {
   public final int _x;
   public final int _y;
@@ -41,7 +42,7 @@ public class RectangleI
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final boolean equalTo(RectangleI that)

@@ -20,6 +20,7 @@ public class EffectsScheduler
     {
       if (_effect != null)
          _effect.dispose();
+      JAVA_POST_DISPOSE
     }
   }
 
@@ -102,6 +103,8 @@ public class EffectsScheduler
       if (effectRun != null)
          effectRun.dispose();
     }
+
+    JAVA_POST_DISPOSE
   }
 
   public final void startEffect(Effect effect, EffectTarget target)

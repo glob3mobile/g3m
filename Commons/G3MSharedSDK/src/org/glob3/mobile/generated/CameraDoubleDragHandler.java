@@ -35,6 +35,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 

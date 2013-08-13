@@ -22,6 +22,7 @@ public abstract class IIntBuffer implements IBuffer
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract int get(int i);

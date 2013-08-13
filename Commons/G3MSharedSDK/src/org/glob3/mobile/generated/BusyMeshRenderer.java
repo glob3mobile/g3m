@@ -177,6 +177,7 @@ public class BusyMeshRenderer extends LeafRenderer
        _mesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final void incDegrees(double value)

@@ -23,5 +23,6 @@ public class GenericQuadTree_Geodetic2DElement extends GenericQuadTree_Element
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

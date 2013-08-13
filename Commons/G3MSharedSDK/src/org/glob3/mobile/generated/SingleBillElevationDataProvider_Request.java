@@ -36,5 +36,6 @@ public class SingleBillElevationDataProvider_Request
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

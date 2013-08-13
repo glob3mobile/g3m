@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStringBuilder
+public abstract class IStringBuilder extends Disposable
 {
 
   private static IStringBuilder _instance = null;
@@ -54,6 +54,7 @@ public abstract class IStringBuilder
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 }

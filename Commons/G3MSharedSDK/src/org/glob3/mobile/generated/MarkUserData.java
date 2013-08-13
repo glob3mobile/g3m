@@ -31,6 +31,6 @@ public class MarkUserData
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 }

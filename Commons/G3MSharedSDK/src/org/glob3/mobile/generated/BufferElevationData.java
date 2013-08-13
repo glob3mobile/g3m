@@ -32,7 +32,7 @@ public abstract class BufferElevationData extends ElevationData
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final double getElevationAt(int x, int y)

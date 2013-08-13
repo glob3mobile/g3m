@@ -32,7 +32,7 @@ public class GPUProgramManager
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final GPUProgram getCompiledProgram(String name)

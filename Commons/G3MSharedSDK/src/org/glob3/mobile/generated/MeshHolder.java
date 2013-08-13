@@ -43,6 +43,7 @@ public class MeshHolder extends Mesh
   {
     if (_mesh != null)
        _mesh.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final int getVertexCount()

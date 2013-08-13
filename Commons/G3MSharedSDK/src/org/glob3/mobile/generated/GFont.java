@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GFont
+public class GFont extends Disposable
 {
   private static final String SERIF = "serif";
   private static final String SANS_SERIF = "sans-serif";
@@ -101,7 +101,7 @@ public class GFont
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final boolean isSerif()

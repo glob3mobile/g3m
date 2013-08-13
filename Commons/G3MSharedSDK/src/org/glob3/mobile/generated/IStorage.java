@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class IStorage
+public abstract class IStorage extends Disposable
 {
   protected G3MContext _context;
 
@@ -10,6 +10,7 @@ public abstract class IStorage
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public void initialize(G3MContext context)

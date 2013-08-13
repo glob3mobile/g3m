@@ -12,6 +12,7 @@ public class QuadTree_Element
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 }

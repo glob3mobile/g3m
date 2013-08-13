@@ -16,11 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
-public class GEOStyle
+
+public class GEOStyle extends Disposable
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
-
 }

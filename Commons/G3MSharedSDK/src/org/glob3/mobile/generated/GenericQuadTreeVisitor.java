@@ -10,6 +10,7 @@ public abstract class GenericQuadTreeVisitor
   }
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final void addComparisonsDoneWhileVisiting(int n)

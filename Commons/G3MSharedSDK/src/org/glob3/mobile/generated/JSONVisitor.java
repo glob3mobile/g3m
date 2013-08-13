@@ -27,11 +27,11 @@ package org.glob3.mobile.generated;
 //class JSONLong;
 
 
-public abstract class JSONVisitor
+public abstract class JSONVisitor extends Disposable
 {
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

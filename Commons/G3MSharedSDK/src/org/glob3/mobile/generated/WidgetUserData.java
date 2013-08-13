@@ -68,7 +68,7 @@ public class WidgetUserData
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final void setWidget(G3MWidget widget)

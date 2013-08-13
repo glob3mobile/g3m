@@ -21,7 +21,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class Interpolator
+
+public abstract class Interpolator extends Disposable
 {
   protected Interpolator()
   {
@@ -31,7 +32,7 @@ public abstract class Interpolator
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)

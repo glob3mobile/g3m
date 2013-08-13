@@ -20,9 +20,10 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 
 
-public class SurfaceElevationListener
+public class SurfaceElevationListener extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

@@ -54,7 +54,7 @@ public class ColumnCanvasElement extends GroupCanvasElement
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final void drawAt(float left, float top, ICanvas canvas)

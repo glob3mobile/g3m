@@ -41,6 +41,7 @@ public class Vector3D
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public Vector3D(Vector3D v)

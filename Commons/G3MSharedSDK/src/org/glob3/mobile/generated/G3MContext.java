@@ -36,7 +36,8 @@ package org.glob3.mobile.generated;
 //class SurfaceElevationProvider;
 
 
-public class G3MContext
+
+public class G3MContext extends Disposable
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
@@ -68,7 +69,7 @@ public class G3MContext
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final IFactory getFactory()

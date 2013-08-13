@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GPUVariable
+public class GPUVariable extends Disposable
 {
 
 
@@ -184,6 +184,7 @@ public class GPUVariable
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public GPUVariable(String name, GPUVariableType type)

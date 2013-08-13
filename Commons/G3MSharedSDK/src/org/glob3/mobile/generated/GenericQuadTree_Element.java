@@ -15,5 +15,6 @@ public abstract class GenericQuadTree_Element
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

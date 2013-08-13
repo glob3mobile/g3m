@@ -43,7 +43,7 @@ public abstract class ITextUtils
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
 

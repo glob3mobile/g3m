@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class IByteBufferResult
+public class IByteBufferResult extends Disposable
 {
   private IByteBuffer _buffer;
   private final boolean _expired;
@@ -12,7 +12,7 @@ public class IByteBufferResult
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final IByteBuffer getBuffer()

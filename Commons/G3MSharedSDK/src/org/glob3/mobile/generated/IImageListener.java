@@ -18,10 +18,11 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
-public abstract class IImageListener
+public abstract class IImageListener extends Disposable
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   /**

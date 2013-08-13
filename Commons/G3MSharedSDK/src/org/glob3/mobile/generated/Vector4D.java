@@ -39,6 +39,7 @@ public class Vector4D
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public Vector4D(Vector4D v)

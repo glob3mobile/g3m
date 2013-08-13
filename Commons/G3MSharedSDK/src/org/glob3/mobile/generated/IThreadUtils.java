@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class G3MContext;
 
-public abstract class IThreadUtils
+public abstract class IThreadUtils extends Disposable
 {
   protected G3MContext _context;
 
@@ -43,7 +44,7 @@ public abstract class IThreadUtils
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);

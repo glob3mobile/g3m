@@ -26,6 +26,7 @@ public abstract class Mesh
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract int getVertexCount();

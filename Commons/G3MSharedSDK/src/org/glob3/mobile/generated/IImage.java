@@ -17,6 +17,7 @@ public abstract class IImage
 {
   public void dispose()
   {
+    super.dispose();
   }
 
   public abstract int getWidth();

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class ILogger
+public abstract class ILogger extends Disposable
 {
   protected final LogLevel _level;
 
@@ -31,8 +31,8 @@ public abstract class ILogger
   public abstract void logWarning(String x, Object... LegacyParamArray);
   public abstract void logError (String x, Object... LegacyParamArray);
 
-  // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 }

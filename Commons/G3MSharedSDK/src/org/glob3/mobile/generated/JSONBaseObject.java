@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class JSONBaseObject
+public abstract class JSONBaseObject extends Disposable
 {
 
 
@@ -37,6 +37,7 @@ public abstract class JSONBaseObject
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public JSONObject asObject()

@@ -31,7 +31,7 @@ public abstract class CanvasElement
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract Vector2F getExtent(ICanvas canvas);

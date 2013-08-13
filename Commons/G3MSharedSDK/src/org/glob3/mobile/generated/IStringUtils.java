@@ -40,7 +40,7 @@ public abstract class IStringUtils
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public abstract String createString(byte[] data, int length);

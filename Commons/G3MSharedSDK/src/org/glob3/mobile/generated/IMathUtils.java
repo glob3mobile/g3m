@@ -48,6 +48,7 @@ public abstract class IMathUtils
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean isNan(double v);

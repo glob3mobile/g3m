@@ -155,6 +155,7 @@ public class BusyQuadRenderer extends LeafRenderer
        _quadMesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final void incDegrees(double value)

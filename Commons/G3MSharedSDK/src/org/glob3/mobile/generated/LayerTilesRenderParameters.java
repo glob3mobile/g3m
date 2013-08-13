@@ -76,6 +76,7 @@ public class LayerTilesRenderParameters
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
 

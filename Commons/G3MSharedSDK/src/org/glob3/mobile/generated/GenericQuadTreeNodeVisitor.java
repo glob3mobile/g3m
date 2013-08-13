@@ -24,6 +24,7 @@ public abstract class GenericQuadTreeNodeVisitor
 {
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public abstract boolean visitNode(GenericQuadTree_Node node);

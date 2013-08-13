@@ -40,6 +40,7 @@ public abstract class IJSONParser
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public JSONBaseObject parse(String json)

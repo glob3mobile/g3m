@@ -72,6 +72,7 @@ public class Camera
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
+    JAVA_POST_DISPOSE
   }
 
   public final void copyFrom(Camera that)
@@ -556,7 +557,7 @@ public class Camera
   {
     public void dispose()
     {
-
+      JAVA_POST_DISPOSE
     }
   }
 

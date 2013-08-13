@@ -53,6 +53,6 @@ public class TileElevationDataRequestListener implements IElevationDataListener
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 }

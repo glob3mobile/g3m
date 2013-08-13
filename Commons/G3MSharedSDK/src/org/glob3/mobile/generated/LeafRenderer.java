@@ -37,7 +37,7 @@ public abstract class LeafRenderer extends Renderer
 
   public void dispose()
   {
-
+    JAVA_POST_DISPOSE
   }
 
   public final boolean isEnable()

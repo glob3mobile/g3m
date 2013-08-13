@@ -31,6 +31,7 @@ public abstract class GLFeature extends RCObject
 
 //  virtual ~GLFeature() {
 //    delete _globalState;
+//    JAVA_POST_DISPOSE
 //  }
 
 //  void applyGLGlobalState(GL* gl) const{

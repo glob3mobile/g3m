@@ -61,6 +61,7 @@ public class LazyTextureMapping extends TextureMapping
     _texCoords = null;
 
     releaseGLTextureId();
+    JAVA_POST_DISPOSE
   }
 
   public final boolean isValid()

@@ -30,6 +30,7 @@ public class Geodetic3D
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public static Geodetic3D nan()
