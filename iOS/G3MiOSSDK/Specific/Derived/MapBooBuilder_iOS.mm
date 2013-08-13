@@ -47,11 +47,16 @@ IThreadUtils* MapBooBuilder_iOS::createThreadUtils() {
 }
 
 GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::string& name) {
-  
+
+  NSURL* pathBundle = [[NSBundle mainBundle] URLForResource:@"G3MSDKLibrary" withExtension:@"bundle"];
+
+  NSBundle *bundle = [NSBundle bundleWithURL:pathBundle];
+
+
   NSString* nsName = [[NSString alloc] initWithUTF8String:name.c_str()];
   
   //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
+  NSString* vertShaderPathname = [bundle pathForResource: nsName
                                                                  ofType: @"vsh"];
   if (!vertShaderPathname) {
     NSLog(@"Can't load Shader.vsh");
@@ -60,7 +65,7 @@ GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::str
                                                              encoding: NSUTF8StringEncoding
                                                                 error: nil] UTF8String]);
   
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
+  NSString* fragShaderPathname = [bundle pathForResource: nsName
                                                                  ofType: @"fsh"];
   if (!fragShaderPathname) {
     NSLog(@"Can't load Shader.fsh");
