@@ -18,18 +18,14 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IBuffer
+public interface IBuffer
 {
-  public void dispose()
-  {
-  super.dispose();
-
-  }
+  public void dispose();
 
   /**
    Answer the size (the count of elements) of the buffer
    **/
-  public abstract int size();
+  int size();
 
   /**
    Answer the timestamp of the buffer.
@@ -37,8 +33,8 @@ public abstract class IBuffer
    This number will be different each time the buffer changes its contents.
    It provides a fast method to check if the Buffer has changed.
    **/
-  public abstract int timestamp();
+  int timestamp();
 
-  public abstract String description();
+  String description();
 
 }

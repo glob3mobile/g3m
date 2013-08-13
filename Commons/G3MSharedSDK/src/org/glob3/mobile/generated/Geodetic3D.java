@@ -76,6 +76,11 @@ public class Geodetic3D
      _height = g._height;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final Angle latitude()
   {
     return _latitude;
