@@ -84,5 +84,29 @@ public class GLFeatureSet
     }
   
   }
+  public final void clearFeatures()
+  {
+  
+    for (int i = 0; i < _nFeatures; i++)
+    {
+      final GLFeature f = _features[i];
+      f._release();
+  
+      for (int j = i; j < _nFeatures; j++)
+      {
+        if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP)
+        {
+          _features[j] = null;
+        }
+        else
+        {
+          _features[j] = _features[j+1];
+        }
+      }
+      i--;
+      _nFeatures--;
+    }
+  
+  }
 
 }

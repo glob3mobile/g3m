@@ -71,7 +71,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
-        Tile tile = new Tile(_texturizer, null, sector, 0, row, col);
+        Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
         if (parameters._firstLevel == 0)
         {
           _firstLevelTiles.add(tile);
@@ -293,6 +293,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       _model.setMatrix(cam.getModelMatrix44D());
     }
   }
+
+  private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
@@ -631,17 +633,22 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener observer)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.add(new Geodetic2D(latitude, longitude), observer);
   }
 
   public final void addListener(Geodetic2D position, SurfaceElevationListener observer)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.add(position, observer);
   }
 
   public final void removeListener(SurfaceElevationListener observer)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.remove(observer);
+  }
+
+  public final void sectorElevationChanged(Sector sector, ElevationData elevationData)
+  {
+    _elevationListenersTree.notifyObservers(sector, elevationData, _verticalExaggeration);
   }
 
 }

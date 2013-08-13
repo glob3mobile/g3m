@@ -54,4 +54,13 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
+  public final GEOFeature get(int i)
+  {
+     return _features.get(i);
+  }
+  public final int size()
+  {
+     return _features.size();
+  }
+
 }

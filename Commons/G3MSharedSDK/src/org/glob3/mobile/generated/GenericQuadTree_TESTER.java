@@ -252,6 +252,47 @@ public class GenericQuadTree_TESTER
   
   }
 
+  public static void run(GenericQuadTree tree, GEOTileRasterizer rasterizer)
+  {
+  
+    _nElements = 0;
+    _nComparisons = 0;
+  
+    java.util.ArrayList<Sector> sectors = tree.getSectors();
+    java.util.ArrayList<Geodetic2D> geos = tree.getGeodetics();
+  
+    for (int i = 0; i < sectors.size(); i++)
+    {
+      Sector s = sectors.get(i);
+      GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
+      tree.acceptVisitor(s, vis);
+      if (sectors.get(i) != null)
+         sectors.get(i).dispose();
+    }
+  
+    for (int i = 0; i < geos.size(); i++)
+    {
+      Geodetic2D g = geos.get(i);
+      GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(g);
+      tree.acceptVisitor(g, vis);
+  
+      if (geos.get(i) != null)
+         geos.get(i).dispose();
+    }
+  
+    NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
+    tree.acceptNodeVisitor(nodeVis);
+  
+    if (rasterizer != null)
+    {
+      tree.symbolize(rasterizer);
+    }
+  
+    double c_e = (float)_nComparisons / _nElements;
+    ILogger.instance().logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
+  
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark NODE

@@ -209,4 +209,14 @@ public class GLState
     hasChangedStructure();
   }
 
+  public final void clearAllGLFeatures()
+  {
+    _features.clearFeatures();
+    hasChangedStructure();
+  }
+
+  public final int getNumberOfGLFeatures()
+  {
+    return _features.size();
+  }
 }
