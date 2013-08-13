@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GenericQuadTree extends Disposable
+public class GenericQuadTree
 {
   private GenericQuadTree_Node _root;
 

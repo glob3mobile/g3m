@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 
 
-public abstract class FrameTask extends Disposable
+public abstract class FrameTask
 {
   public void dispose()
   {

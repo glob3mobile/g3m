@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class Vector4D extends Disposable
+public class Vector4D
 {
   private final double _x;
   private final double _y;

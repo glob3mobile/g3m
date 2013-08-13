@@ -9,7 +9,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IBufferDownloadListener extends Disposable
+
+public abstract class IBufferDownloadListener
 {
   public void dispose()
   {

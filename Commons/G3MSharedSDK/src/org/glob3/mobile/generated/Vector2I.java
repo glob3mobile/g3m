@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class Vector2I extends Disposable
+public class Vector2I
 {
   public final int _x;
   public final int _y;

@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class IImageResult extends Disposable
+public class IImageResult
 {
   private IImage _image;
   private final boolean _expired;

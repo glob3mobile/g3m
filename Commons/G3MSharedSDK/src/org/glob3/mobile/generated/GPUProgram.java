@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GPUProgram extends Disposable
+public class GPUProgram
 {
   private int _programID;
   private boolean _programCreated;

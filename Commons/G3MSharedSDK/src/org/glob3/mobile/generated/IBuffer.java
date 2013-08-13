@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IBuffer extends Disposable
+
+public abstract class IBuffer
 {
   public void dispose()
   {

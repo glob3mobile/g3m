@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IJSONParser extends Disposable
+public abstract class IJSONParser
 {
   private static IJSONParser _instance = null;
 

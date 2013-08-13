@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Trail extends Disposable
+public class Trail
 {
   private boolean _visible;
 

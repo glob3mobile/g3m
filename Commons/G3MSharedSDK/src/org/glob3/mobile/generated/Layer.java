@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class LayerTilesRenderParameters;
 
-public abstract class Layer extends Disposable
+public abstract class Layer
 {
   private LayerCondition _condition;
   private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();

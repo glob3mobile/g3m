@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 
 
-public abstract class LayerCondition extends Disposable
+public abstract class LayerCondition
 {
   public void dispose()
   {

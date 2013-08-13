@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GEORenderer_ObjectSymbolizerPair extends Disposable
+public class GEORenderer_ObjectSymbolizerPair
 {
   public final GEOObject _geoObject;
   public final GEOSymbolizer _symbolizer;

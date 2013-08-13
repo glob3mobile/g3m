@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_Scene extends Disposable
+public class MapBoo_Scene
 {
   private final String _name;
   private final String _description;

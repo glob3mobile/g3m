@@ -13,7 +13,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class CameraContext;
 
-public abstract class CameraEventHandler extends Disposable
+public abstract class CameraEventHandler
 {
 
   public abstract boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);

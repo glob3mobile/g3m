@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class TileRasterizer extends Disposable
+public abstract class TileRasterizer
 {
   private ChangedListener _listener;
 

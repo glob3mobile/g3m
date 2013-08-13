@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class JSONBaseObject extends Disposable
+public abstract class JSONBaseObject
 {
 
 

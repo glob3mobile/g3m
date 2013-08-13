@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class ICanvas extends Disposable
+public abstract class ICanvas
 {
   protected int _canvasWidth;
   protected int _canvasHeight;

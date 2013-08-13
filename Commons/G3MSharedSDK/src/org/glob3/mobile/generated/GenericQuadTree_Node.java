@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-public class GenericQuadTree_Node extends Disposable
+public class GenericQuadTree_Node
 {
   private final int _depth;
   private Sector _sector;

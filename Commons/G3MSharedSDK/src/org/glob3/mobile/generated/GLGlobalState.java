@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //class UniformsStruct;
 //class GPUProgram;
 
-public class GLGlobalState extends Disposable
+public class GLGlobalState
 {
   private boolean _depthTest;
   private boolean _blend;

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Frustum extends Disposable
+public class Frustum
 {
   private final Plane _leftPlane;
   private final Plane _rightPlane;

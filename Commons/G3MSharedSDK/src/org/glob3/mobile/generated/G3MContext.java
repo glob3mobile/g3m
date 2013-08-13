@@ -36,8 +36,7 @@ package org.glob3.mobile.generated;
 //class SurfaceElevationProvider;
 
 
-
-public class G3MContext extends Disposable
+public class G3MContext
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;

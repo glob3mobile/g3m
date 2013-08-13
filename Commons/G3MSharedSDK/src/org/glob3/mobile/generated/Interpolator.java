@@ -21,8 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-
-public abstract class Interpolator extends Disposable
+public abstract class Interpolator
 {
   protected Interpolator()
   {

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class Effect extends Disposable
+public abstract class Effect
 {
 
   protected final double pace(double f)

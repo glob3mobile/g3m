@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GPUProgramManager extends Disposable
+public class GPUProgramManager
 {
 
   private java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();

@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IImageDownloadListener extends Disposable
+public abstract class IImageDownloadListener
 {
   public void dispose()
   {

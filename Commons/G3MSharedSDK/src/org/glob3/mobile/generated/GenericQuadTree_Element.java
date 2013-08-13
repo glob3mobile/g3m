@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 ///////////////////////////////////////////////////////////////////////////////////////
-public abstract class GenericQuadTree_Element extends Disposable
+public abstract class GenericQuadTree_Element
 {
   public final Object _element;
 

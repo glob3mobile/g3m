@@ -56,7 +56,7 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class GLGlobalState;
 
-public class WidgetUserData extends Disposable
+public class WidgetUserData
 {
   private G3MWidget _widget;
 

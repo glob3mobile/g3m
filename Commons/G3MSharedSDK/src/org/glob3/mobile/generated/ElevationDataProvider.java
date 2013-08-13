@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class ElevationDataProvider extends Disposable
+public abstract class ElevationDataProvider
 {
 
   public void dispose()

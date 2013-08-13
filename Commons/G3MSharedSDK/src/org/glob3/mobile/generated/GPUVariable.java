@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GPUVariable extends Disposable
+public class GPUVariable
 {
 
 

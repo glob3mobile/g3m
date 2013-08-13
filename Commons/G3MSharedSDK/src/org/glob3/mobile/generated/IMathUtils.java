@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //#define PI 3.14159265358979323846264338327950288
 //#define HALF_PI 1.57079632679489661923132169163975144
 
-public abstract class IMathUtils extends Disposable
+public abstract class IMathUtils
 {
   private static IMathUtils _instance = null;
 

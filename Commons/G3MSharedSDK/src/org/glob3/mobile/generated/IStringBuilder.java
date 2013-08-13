@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStringBuilder extends Disposable
+public abstract class IStringBuilder
 {
 
   private static IStringBuilder _instance = null;

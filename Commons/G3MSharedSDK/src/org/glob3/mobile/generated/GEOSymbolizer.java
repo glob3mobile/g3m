@@ -26,8 +26,7 @@ package org.glob3.mobile.generated;
 
 
 
-
-public abstract class GEOSymbolizer extends Disposable
+public abstract class GEOSymbolizer
 {
   public void dispose()
   {

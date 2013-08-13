@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 //class Sphere;
 //class GLState;
 
-public abstract class BoundingVolume extends Disposable
+public abstract class BoundingVolume
 {
   public void dispose()
   {

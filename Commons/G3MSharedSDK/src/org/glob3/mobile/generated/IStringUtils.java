@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStringUtils extends Disposable
+public abstract class IStringUtils
 {
   private static IStringUtils _instance;
 

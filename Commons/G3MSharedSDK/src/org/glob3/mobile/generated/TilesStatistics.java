@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TilesStatistics extends Disposable
+public class TilesStatistics
 {
   private int _tilesProcessed;
   private int _tilesVisible;

@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class GEOTileRasterizer;
 
 
-public abstract class GEOSymbol extends Disposable
+public abstract class GEOSymbol
 {
 
   public void dispose()

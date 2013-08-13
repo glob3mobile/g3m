@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class Interpolator;
 
-public abstract class ElevationData extends Disposable
+public abstract class ElevationData
 {
   private Interpolator _interpolator;
   private Interpolator getInterpolator()

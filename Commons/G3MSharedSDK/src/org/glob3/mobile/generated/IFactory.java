@@ -30,7 +30,7 @@ package org.glob3.mobile.generated;
 //class IWebSocketListener;
 //class URL;
 
-public abstract class IFactory extends Disposable
+public abstract class IFactory
 {
   private static IFactory _instance = null;
 

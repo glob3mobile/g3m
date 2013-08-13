@@ -27,7 +27,8 @@ package org.glob3.mobile.generated;
 //class JSONLong;
 
 
-public abstract class JSONVisitor extends Disposable
+
+public abstract class JSONVisitor
 {
   public void dispose()
   {

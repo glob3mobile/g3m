@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class BoundingArea extends Disposable
+public class BoundingArea
 {
   public void dispose()
   {

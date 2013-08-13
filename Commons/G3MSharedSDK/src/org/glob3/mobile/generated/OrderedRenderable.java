@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 //class GLState;
 
-public abstract class OrderedRenderable extends Disposable
+public abstract class OrderedRenderable
 {
   public abstract double squaredDistanceFromEye();
 

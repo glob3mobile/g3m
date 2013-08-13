@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLState extends Disposable
+public class GLState
 {
 
   private GLFeatureSet _features = new GLFeatureSet();

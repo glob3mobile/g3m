@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class IByteBufferResult extends Disposable
+public class IByteBufferResult
 {
   private IByteBuffer _buffer;
   private final boolean _expired;

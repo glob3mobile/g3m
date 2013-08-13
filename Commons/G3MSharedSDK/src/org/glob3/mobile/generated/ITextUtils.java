@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class IImageListener;
 
 
-public abstract class ITextUtils extends Disposable
+public abstract class ITextUtils
 {
   private static ITextUtils _instance = null;
 

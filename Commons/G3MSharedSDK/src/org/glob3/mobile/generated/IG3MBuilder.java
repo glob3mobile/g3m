@@ -35,7 +35,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramManager;
 
 
-public abstract class IG3MBuilder extends Disposable
+public abstract class IG3MBuilder
 {
   private GL _gl;
   private IDownloader _downloader;

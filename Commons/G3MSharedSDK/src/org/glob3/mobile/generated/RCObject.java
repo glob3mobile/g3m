@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class RCObject extends Disposable
+public class RCObject
 {
   private int _referenceCounter;
 

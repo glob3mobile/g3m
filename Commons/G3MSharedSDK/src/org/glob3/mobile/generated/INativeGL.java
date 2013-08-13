@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class GPUUniform;
 //class GPUAttribute;
 
-public abstract class INativeGL extends Disposable
+public abstract class INativeGL
 {
 
   public void dispose()

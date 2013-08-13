@@ -29,7 +29,7 @@ package org.glob3.mobile.generated;
 //class GLState;
 
 
-public class GL extends Disposable
+public class GL
 {
   private final INativeGL _nativeGL;
 

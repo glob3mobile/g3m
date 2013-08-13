@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class PlanetRendererBuilder extends Disposable
+public class PlanetRendererBuilder
 {
 
   private TileTessellator _tileTessellator;

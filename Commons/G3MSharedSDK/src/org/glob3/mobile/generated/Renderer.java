@@ -16,8 +16,7 @@ package org.glob3.mobile.generated;
 //class SurfaceElevationProvider;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public abstract class Renderer implements EffectTarget, Disposable
+public abstract class Renderer implements EffectTarget
 {
   public abstract boolean isEnable();
 

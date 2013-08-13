@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class FrameTasksExecutor;
 
 
-public abstract class IDownloader extends Disposable
+public abstract class IDownloader
 {
   public void dispose()
   {

@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class LayerTilesRenderParameters extends Disposable
+public class LayerTilesRenderParameters
 {
   public final Sector _topSector ;
   public final int _topSectorSplitsByLatitude;

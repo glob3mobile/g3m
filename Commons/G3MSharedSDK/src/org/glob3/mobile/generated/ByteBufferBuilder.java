@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class IByteBuffer;
 
-public class ByteBufferBuilder extends Disposable
+public class ByteBufferBuilder
 {
   private java.util.ArrayList<Byte> _values = new java.util.ArrayList<Byte>();
 

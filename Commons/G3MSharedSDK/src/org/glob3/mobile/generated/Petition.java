@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class IFactory;
 //class MutableVector2D;
 
-public class Petition extends Disposable
+public class Petition
 {
   private final Sector _sector;
   private IImage _image;

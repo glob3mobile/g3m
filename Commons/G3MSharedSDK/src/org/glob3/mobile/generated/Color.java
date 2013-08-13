@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class Color extends Disposable
+public class Color
 {
   private final float _red;
   private final float _green;

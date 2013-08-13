@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class ChangedListener;
 
 
-public class TileRasterizerContext extends Disposable
+public class TileRasterizerContext
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileRasterizerContext(TileRasterizerContext that);

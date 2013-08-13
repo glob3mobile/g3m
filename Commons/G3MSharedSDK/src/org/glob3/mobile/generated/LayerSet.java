@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 //class ChangedListener;
 
-public class LayerSet extends Disposable
+public class LayerSet
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 

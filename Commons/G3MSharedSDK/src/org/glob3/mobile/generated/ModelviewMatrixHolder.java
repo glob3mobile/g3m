@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 /////////////////////
 
-public class ModelviewMatrixHolder extends Disposable
+public class ModelviewMatrixHolder
 {
   private final Matrix44D[] _matrix;
   private final Matrix44DHolder[] _matrixHolders;

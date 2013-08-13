@@ -40,7 +40,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class Tile extends Disposable
+public class Tile
 {
   private TileTexturizer _texturizer;
   private Tile _parent;

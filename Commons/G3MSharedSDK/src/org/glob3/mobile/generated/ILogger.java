@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class ILogger extends Disposable
+public abstract class ILogger
 {
   protected final LogLevel _level;
 

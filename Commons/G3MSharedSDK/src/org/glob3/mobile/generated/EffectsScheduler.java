@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
-public class EffectsScheduler extends Disposable
+public class EffectsScheduler
 {
 
-  private static class EffectRun extends Disposable
+  private static class EffectRun
   {
     public Effect _effect;
     public EffectTarget _target;

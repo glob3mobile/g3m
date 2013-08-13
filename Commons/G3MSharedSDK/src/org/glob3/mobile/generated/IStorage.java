@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class IStorage extends Disposable
+public abstract class IStorage
 {
   protected G3MContext _context;
 

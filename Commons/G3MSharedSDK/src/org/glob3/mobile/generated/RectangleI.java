@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class RectangleI extends Disposable
+public class RectangleI
 {
   public final int _x;
   public final int _y;
