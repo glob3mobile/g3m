@@ -22,7 +22,7 @@ class ICanvas;
 class GEORasterProjection;
 
 
-class Sector : public Disposable {
+class Sector {
 
 private:
   

@@ -19,10 +19,8 @@ class GEO2DMultiPolygonGeometry;
 
 #include <vector>
 
-#include "Disposable.hpp"
 
-
-class GEOSymbolizer : public Disposable {
+class GEOSymbolizer {
 public:
   virtual ~GEOSymbolizer() {
 #ifdef JAVA_CODE

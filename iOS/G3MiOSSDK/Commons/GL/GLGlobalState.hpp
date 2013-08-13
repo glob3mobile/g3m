@@ -26,7 +26,7 @@ struct AttributesStruct;
 class UniformsStruct;
 class GPUProgram;
 
-class GLGlobalState : public Disposable {
+class GLGlobalState {
 private:
   bool _depthTest;
   bool _blend;

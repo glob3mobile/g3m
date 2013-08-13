@@ -12,9 +12,8 @@
 class Angle;
 class Geodetic2D;
 
-#include "Disposable.hpp"
 
-class SurfaceElevationListener : public Disposable {
+class SurfaceElevationListener {
 public:
   virtual ~SurfaceElevationListener() {
 #ifdef JAVA_CODE

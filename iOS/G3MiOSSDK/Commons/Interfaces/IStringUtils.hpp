@@ -14,7 +14,7 @@
 
 #include "ILogger.hpp"
 
-class IStringUtils : public Disposable {
+class IStringUtils {
 private:
 #ifdef C_CODE
   static const IStringUtils* _instance;

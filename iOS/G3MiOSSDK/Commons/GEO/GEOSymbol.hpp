@@ -18,9 +18,8 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
-#include "Disposable.hpp"
 
-class GEOSymbol : public Disposable {
+class GEOSymbol {
 
 public:
   virtual ~GEOSymbol() {

@@ -10,9 +10,9 @@
 #define __G3MiOSSDK__GFont__
 
 #include <string>
-#include "Disposable.hpp"
 
-class GFont : public Disposable {
+
+class GFont {
 private:
   static const std::string SERIF;
   static const std::string SANS_SERIF;

@@ -63,7 +63,7 @@ public:
 };
 
 
-class Frustum : public Disposable {
+class Frustum {
 private:
 #ifdef C_CODE
   const Plane _leftPlane;

@@ -31,7 +31,7 @@
 #define PI       3.14159265358979323846264338327950288
 #define HALF_PI  1.57079632679489661923132169163975144
 
-class IMathUtils : public Disposable {
+class IMathUtils {
 private:
   static IMathUtils* _instance;
 

@@ -53,7 +53,7 @@ class ICameraActivityListener;
 class G3MContext;
 class GLGlobalState;
 
-class WidgetUserData : public Disposable {
+class WidgetUserData {
 private:
   G3MWidget* _widget;
   
@@ -81,7 +81,7 @@ public:
 };
 
 
-class G3MWidget : public Disposable {
+class G3MWidget {
 public:
   
   static void initSingletons(ILogger*            logger,

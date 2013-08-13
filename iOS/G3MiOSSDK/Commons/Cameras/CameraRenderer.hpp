@@ -35,7 +35,7 @@ enum Gesture {
   DoubleDrag
 };
 
-class CameraContext : public Disposable {
+class CameraContext {
 private:
   Gesture _currentGesture;
   Camera* _nextCamera;

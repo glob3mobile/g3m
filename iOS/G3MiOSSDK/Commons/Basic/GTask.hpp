@@ -11,9 +11,8 @@
 
 class G3MContext;
 
-#include "Disposable.hpp"
 
-class GTask : public Disposable {
+class GTask {
 public:
   virtual ~GTask() {
 #ifdef JAVA_CODE

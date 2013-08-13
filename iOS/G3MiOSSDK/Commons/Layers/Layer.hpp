@@ -25,7 +25,7 @@ class LayerSet;
 class Vector2I;
 class LayerTilesRenderParameters;
 
-class Layer : public Disposable {
+class Layer {
 private:
   LayerCondition*                         _condition;
   std::vector<TerrainTouchEventListener*> _listeners;

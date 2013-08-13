@@ -14,7 +14,7 @@ class GLGlobalState;
 class GPUProgramState;
 class GLState;
 
-class OrderedRenderable : public Disposable {
+class OrderedRenderable {
 public:
   virtual double squaredDistanceFromEye() const = 0;
 

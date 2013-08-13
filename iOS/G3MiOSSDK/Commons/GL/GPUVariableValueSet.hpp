@@ -12,7 +12,7 @@
 #include "GPUUniform.hpp"
 #include "GPUAttribute.hpp"
 
-class GPUVariableValueSet : public Disposable {
+class GPUVariableValueSet {
 private:
   GPUUniformValue* _uniformValues[32];
   GPUAttributeValue* _attributeValues[32];

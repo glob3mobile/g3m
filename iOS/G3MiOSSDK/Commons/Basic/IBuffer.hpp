@@ -10,9 +10,9 @@
 #define __G3MiOSSDK__IBuffer__
 
 #include <string>
-#include "Disposable.hpp"
 
-class IBuffer : public Disposable {
+
+class IBuffer {
 public:
   virtual ~IBuffer() {
 #ifdef JAVA_CODE

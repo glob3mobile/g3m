@@ -13,7 +13,7 @@
 
 class IWebSocketListener;
 
-class IWebSocket : public Disposable {
+class IWebSocket {
 private:
 #ifdef C_CODE
   const URL     _url;

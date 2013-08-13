@@ -24,7 +24,7 @@ class Sector;
 class IFactory;
 class MutableVector2D;
 
-class Petition : public Disposable {
+class Petition {
 private:
   const Sector* _sector;
   IImage* _image;

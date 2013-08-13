@@ -11,7 +11,7 @@
 
 #include "IImage.hpp"
 
-class IImageDownloadListener : public Disposable {
+class IImageDownloadListener {
 public:
   virtual ~IImageDownloadListener() {
 #ifdef JAVA_CODE

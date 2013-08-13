@@ -18,7 +18,7 @@ class SurfaceElevationProvider;
 
 #include "Effects.hpp"
 
-class Renderer: public EffectTarget, Disposable {
+class Renderer: public EffectTarget {
 public:
   virtual bool isEnable() const = 0;
   

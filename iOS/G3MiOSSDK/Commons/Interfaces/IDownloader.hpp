@@ -17,9 +17,8 @@ class TimeInterval;
 class FrameTasksExecutor;
 
 #include <string>
-#include "Disposable.hpp"
 
-class IDownloader : public Disposable {
+class IDownloader {
 public:
   virtual ~IDownloader() {
 #ifdef JAVA_CODE

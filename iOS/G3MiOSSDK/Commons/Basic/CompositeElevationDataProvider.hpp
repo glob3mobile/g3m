@@ -64,7 +64,7 @@ private:
   
   
   
-  class CompositeElevationDataProvider_Request : public Disposable {
+  class CompositeElevationDataProvider_Request {
 
     CompositeElevationDataProvider* const       _compProvider;
     

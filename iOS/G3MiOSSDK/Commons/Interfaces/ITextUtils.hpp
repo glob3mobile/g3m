@@ -16,7 +16,7 @@ class IImageListener;
 
 #include "LabelPosition.h"
 
-class ITextUtils : public Disposable {
+class ITextUtils {
 private:
   static ITextUtils* _instance;
 

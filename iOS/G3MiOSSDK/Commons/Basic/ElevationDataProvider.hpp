@@ -43,7 +43,7 @@ public:
 };
 
 
-class ElevationDataProvider : public Disposable {
+class ElevationDataProvider {
 public:
 
   virtual ~ElevationDataProvider() {

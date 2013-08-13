@@ -16,7 +16,7 @@
 #include "GPUProgram.hpp"
 #include "GL.hpp"
 
-class GPUProgramManager : public Disposable {
+class GPUProgramManager {
   
   std::map<std::string, GPUProgram*> _programs;
   

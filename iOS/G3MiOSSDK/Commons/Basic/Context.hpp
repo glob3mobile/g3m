@@ -29,10 +29,8 @@ class GPUProgramManager;
 class SurfaceElevationProvider;
 
 #include <vector>
-#include "Disposable.hpp"
 
-
-class G3MContext : public Disposable {
+class G3MContext {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;

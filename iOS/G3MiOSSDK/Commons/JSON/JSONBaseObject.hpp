@@ -18,10 +18,9 @@ class JSONNull;
 class JSONVisitor;
 
 #include <string>
-#include "Disposable.hpp"
 
 
-class JSONBaseObject : public Disposable {
+class JSONBaseObject {
 
 public:
 

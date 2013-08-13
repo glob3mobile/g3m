@@ -15,7 +15,7 @@ class TouchEvent;
 class G3MRenderContext;
 class CameraContext;
 
-class CameraEventHandler : public Disposable {
+class CameraEventHandler {
   
 public:
   virtual bool onTouchEvent(const G3MEventContext *eventContext,

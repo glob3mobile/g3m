@@ -10,9 +10,9 @@
 #define G3MiOSSDK_IByteBuffer_h
 
 #include <string>
-#include "Disposable.hpp"
 
-class IByteBuffer : public Disposable {
+
+class IByteBuffer {
 public:
 
   virtual ~IByteBuffer() {

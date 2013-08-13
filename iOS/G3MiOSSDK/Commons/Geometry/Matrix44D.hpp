@@ -107,7 +107,7 @@ public:
 };
 
 
-class Matrix44DHolder : public Disposable {
+class Matrix44DHolder {
 #ifdef C_CODE
   const Matrix44D* _matrix;
 #endif

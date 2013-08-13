@@ -11,7 +11,7 @@
 
 #include "Sector.hpp"
 
-class VisibleSectorListener : public Disposable {
+class VisibleSectorListener {
 public:
   virtual ~VisibleSectorListener() {
 #ifdef JAVA_CODE

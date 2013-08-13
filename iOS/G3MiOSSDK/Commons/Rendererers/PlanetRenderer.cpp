@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-class VisibleSectorListenerEntry : public Disposable {
+class VisibleSectorListenerEntry {
 private:
   VisibleSectorListener* _listener;
   const long long        _stabilizationIntervalInMS;

@@ -10,9 +10,8 @@
 #define G3MiOSSDK_IStringBuilder_hpp
 
 #include <string>
-#include "Disposable.hpp"
 
-class IStringBuilder : public Disposable {
+class IStringBuilder {
   
   static IStringBuilder* _instance;
   

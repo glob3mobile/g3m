@@ -11,9 +11,9 @@
 
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
-#include "Disposable.hpp"
 
-class IBufferDownloadListener : public Disposable {
+
+class IBufferDownloadListener {
 public:
   virtual ~IBufferDownloadListener() {
 #ifdef JAVA_CODE

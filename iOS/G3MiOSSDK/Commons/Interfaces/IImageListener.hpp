@@ -10,9 +10,9 @@
 #define __G3MiOSSDK__IImageListener__
 
 class IImage;
-#include "Disposable.hpp"
 
-class IImageListener : public Disposable {
+
+class IImageListener {
 public:
   virtual ~IImageListener() {
 #ifdef JAVA_CODE

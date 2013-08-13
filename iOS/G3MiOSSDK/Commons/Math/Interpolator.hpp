@@ -14,10 +14,8 @@ class Geodetic2D;
 
 #include <string>
 
-#include "Disposable.hpp"
 
-
-class Interpolator : public Disposable {
+class Interpolator {
 protected:
   Interpolator() {
 

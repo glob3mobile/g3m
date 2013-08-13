@@ -13,7 +13,7 @@
 class Geodetic2D;
 #include "Sector.hpp"
 
-class GEORasterProjection : public Disposable {
+class GEORasterProjection {
 private:
   const Sector _sector;
   const bool   _mercator;

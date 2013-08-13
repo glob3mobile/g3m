@@ -9,10 +9,8 @@
 #ifndef __G3MiOSSDK__ICameraActivityListener__
 #define __G3MiOSSDK__ICameraActivityListener__
 
-#include "Disposable.hpp"
 
-
-class ICameraActivityListener : public Disposable {
+class ICameraActivityListener {
 public:
   virtual ~ICameraActivityListener() {
 #ifdef JAVA_CODE

@@ -12,7 +12,7 @@
 #include "Color.hpp"
 #include "ICanvas.hpp"
 
-class GEO2DLineRasterStyle : public Disposable {
+class GEO2DLineRasterStyle {
 private:
   const Color      _color;
   const float      _width;

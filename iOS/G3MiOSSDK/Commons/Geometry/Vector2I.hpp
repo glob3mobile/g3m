@@ -12,7 +12,7 @@
 #include "Angle.hpp"
 #include "MutableVector2I.hpp"
 
-class Vector2I : public Disposable {
+class Vector2I {
 public:
   const int _x;
   const int _y;

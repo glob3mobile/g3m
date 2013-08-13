@@ -10,9 +10,8 @@
 #define G3MiOSSDK_URL_hpp
 
 #include <string>
-#include "Disposable.hpp"
 
-class URL : public Disposable {
+class URL {
 private:
   const std::string _path;
   URL& operator=(const URL& that);

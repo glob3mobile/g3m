@@ -11,7 +11,7 @@
 
 class Mark;
 
-class MarkTouchListener : public Disposable {
+class MarkTouchListener {
 public:
   virtual ~MarkTouchListener() {
 #ifdef JAVA_CODE

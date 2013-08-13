@@ -11,7 +11,7 @@
 
 #include "TimeInterval.hpp"
 
-class ITimer : public Disposable {
+class ITimer {
 public:
   virtual TimeInterval now() const = 0;
   

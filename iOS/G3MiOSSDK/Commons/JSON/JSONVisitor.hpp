@@ -20,9 +20,9 @@ class JSONInteger;
 class JSONLong;
 
 #include <string>
-#include "Disposable.hpp"
 
-class JSONVisitor : public Disposable {
+
+class JSONVisitor {
 public:
   virtual ~JSONVisitor() {
 #ifdef JAVA_CODE

@@ -12,7 +12,7 @@
 #include "IMathUtils.hpp"
 #include "MutableMatrix44D.hpp"
 
-class Vector4D : public Disposable {
+class Vector4D {
 private:
   const double _x;
   const double _y;

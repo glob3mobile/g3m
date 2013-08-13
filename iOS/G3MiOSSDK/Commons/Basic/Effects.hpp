@@ -30,7 +30,7 @@ public:
 #endif
 };
 
-class Effect : public Disposable {
+class Effect {
 protected:
 
   double pace(const double f) const {
@@ -183,10 +183,10 @@ public:
 
 
 
-class EffectsScheduler : public Disposable {
+class EffectsScheduler {
 private:
 
-  class EffectRun : public Disposable {
+  class EffectRun {
   public:
     Effect*       _effect;
     EffectTarget* _target;

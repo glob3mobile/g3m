@@ -21,14 +21,13 @@ class Matrix44D;
 #include <string>
 
 #include "GPUProgram.hpp"
-#include "Disposable.hpp"
 
 class GPUProgram;
 
 class GPUUniform;
 class GPUAttribute;
 
-class INativeGL : public Disposable {
+class INativeGL {
 public:
 
   virtual ~INativeGL() {

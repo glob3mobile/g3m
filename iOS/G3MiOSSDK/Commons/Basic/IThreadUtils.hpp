@@ -12,11 +12,10 @@
 #include "GTask.hpp"
 #include <stdlib.h>
 
-#include "Disposable.hpp"
 
 class G3MContext;
 
-class IThreadUtils : public Disposable {
+class IThreadUtils {
 protected:
 #ifdef C_CODE
   const G3MContext* _context;

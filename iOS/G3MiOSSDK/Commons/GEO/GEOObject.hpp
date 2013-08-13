@@ -16,10 +16,8 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
-#include "Disposable.hpp"
 
-
-class GEOObject : public Disposable {
+class GEOObject {
 public:
   virtual ~GEOObject() {
 #ifdef JAVA_CODE

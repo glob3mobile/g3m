@@ -16,9 +16,8 @@ class Tile;
 class IImageListener;
 class ChangedListener;
 
-#include "Disposable.hpp"
 
-class TileRasterizerContext : public Disposable {
+class TileRasterizerContext {
 private:
   TileRasterizerContext(const TileRasterizerContext& that);
 
@@ -53,7 +52,7 @@ public:
 };
 
 
-class TileRasterizer : public Disposable {
+class TileRasterizer {
 private:
   ChangedListener* _listener;
   

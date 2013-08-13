@@ -9,9 +9,8 @@
 #ifndef __G3MiOSSDK__BoundingArea__
 #define __G3MiOSSDK__BoundingArea__
 
-#include "Disposable.hpp"
 
-class BoundingArea : public Disposable {
+class BoundingArea {
 public:
   virtual ~BoundingArea() {
 #ifdef JAVA_CODE

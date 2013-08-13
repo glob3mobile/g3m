@@ -15,7 +15,7 @@
 //class RectangleI;
 //class IImageListener;
 
-class IImage : public Disposable {
+class IImage {
 public:
   virtual ~IImage() {
 #ifdef JAVA_CODE

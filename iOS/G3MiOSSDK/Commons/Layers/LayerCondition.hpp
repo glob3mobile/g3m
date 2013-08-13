@@ -13,9 +13,8 @@ class Tile;
 class G3MRenderContext;
 class G3MEventContext;
 
-#include "Disposable.hpp"
 
-class LayerCondition : public Disposable {
+class LayerCondition {
 public:
   virtual ~LayerCondition() {
 #ifdef JAVA_CODE

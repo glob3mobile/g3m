@@ -16,10 +16,9 @@ class G3MContext;
 class TimeInterval;
 
 #include <stddef.h>
-#include "Disposable.hpp"
 
 
-class IImageResult : public Disposable {
+class IImageResult {
 private:
   IImage*    _image;
   const bool _expired;
@@ -49,7 +48,7 @@ public:
 };
 
 
-class IByteBufferResult : public Disposable {
+class IByteBufferResult {
 private:
   IByteBuffer* _buffer;
   const bool   _expired;
@@ -79,7 +78,7 @@ public:
 };
 
 
-class IStorage : public Disposable {
+class IStorage {
 protected:
 #ifdef C_CODE
   const G3MContext* _context;

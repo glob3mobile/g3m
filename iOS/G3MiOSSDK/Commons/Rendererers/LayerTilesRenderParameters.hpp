@@ -12,7 +12,7 @@
 #include "Sector.hpp"
 #include "Vector2I.hpp"
 
-class LayerTilesRenderParameters : public Disposable {
+class LayerTilesRenderParameters {
 public:
   const Sector _topSector;
   const int    _topSectorSplitsByLatitude;

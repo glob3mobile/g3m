@@ -18,7 +18,7 @@ class LayerTilesRenderParameters;
 
 class ChangedListener;
 
-class LayerSet : public Disposable {
+class LayerSet {
 private:
   std::vector<Layer*> _layers;
   

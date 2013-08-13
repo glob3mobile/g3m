@@ -288,7 +288,7 @@ public:
 
 /////////////////////
 
-class ModelviewMatrixHolder : public Disposable {
+class ModelviewMatrixHolder {
   const Matrix44D** _matrix;
   const Matrix44DHolder** _matrixHolders;
   int _nMatrix;

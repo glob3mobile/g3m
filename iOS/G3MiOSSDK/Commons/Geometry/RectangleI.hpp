@@ -9,9 +9,8 @@
 #ifndef __G3MiOSSDK__RectangleI__
 #define __G3MiOSSDK__RectangleI__
 
-#include "Disposable.hpp"
 
-class RectangleI : public Disposable {
+class RectangleI {
 public:
   const int _x;
   const int _y;

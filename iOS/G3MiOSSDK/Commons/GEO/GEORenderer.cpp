@@ -14,7 +14,7 @@
 #include "Context.hpp"
 #include "Camera.hpp"
 
-class GEORenderer_ObjectSymbolizerPair : public Disposable {
+class GEORenderer_ObjectSymbolizerPair {
 public:
   const GEOObject*     _geoObject;
   const GEOSymbolizer* _symbolizer;

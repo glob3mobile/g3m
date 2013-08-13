@@ -24,7 +24,7 @@ class IWebSocket;
 class IWebSocketListener;
 class URL;
 
-class IFactory : public Disposable {
+class IFactory {
 private:
   static IFactory* _instance;
 

@@ -11,7 +11,6 @@
 
 
 #include <string>
-#include "Disposable.hpp"
 
 
 enum LogLevel {
@@ -22,7 +21,7 @@ enum LogLevel {
 };
 
 
-class ILogger : public Disposable {
+class ILogger {
 protected:
   const LogLevel _level;
   

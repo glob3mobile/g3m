@@ -29,14 +29,12 @@ class GPUAttributeValue;
 class IFloatBuffer;
 class GL;
 
-#include "Disposable.hpp"
-
 enum ShaderType {
   VERTEX_SHADER,
   FRAGMENT_SHADER
 };
 
-class GPUProgram : public Disposable {
+class GPUProgram {
   int _programID;
   bool _programCreated;
 

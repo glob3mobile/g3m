@@ -20,7 +20,7 @@ class SGShape;
 class GLGlobalState;
 class GPUProgramState;
 
-class SGNode : public Disposable {
+class SGNode {
 protected:
   const std::string _id;
   const std::string _sId;

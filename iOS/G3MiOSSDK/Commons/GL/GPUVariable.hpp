@@ -11,8 +11,6 @@
 
 #include <string>
 
-#include "Disposable.hpp"
-
 
 enum GPUVariableType{
   ATTRIBUTE = 1,
@@ -40,7 +38,7 @@ enum GPUAttributeKey{
   NORMAL = 3
 };
 
-class GPUVariable : public Disposable {
+class GPUVariable {
   
 protected:
   

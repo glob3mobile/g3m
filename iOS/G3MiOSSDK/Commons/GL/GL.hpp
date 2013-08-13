@@ -32,7 +32,7 @@ class GLState;
 
 #include "GPUProgram.hpp"
 
-class GL : public Disposable {
+class GL {
 private:
   INativeGL* const _nativeGL;
 

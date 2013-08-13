@@ -13,7 +13,7 @@
 #include "Vector2F.hpp"
 class ICanvas;
 
-class CanvasElement : public Disposable {
+class CanvasElement {
 private:
   CanvasElement(const CanvasElement& that);
 

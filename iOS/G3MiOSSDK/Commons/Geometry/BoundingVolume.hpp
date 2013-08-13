@@ -21,7 +21,7 @@ class Box;
 class Sphere;
 class GLState;
 
-class BoundingVolume : public Disposable {
+class BoundingVolume {
 public:
   virtual ~BoundingVolume() {
 #ifdef JAVA_CODE

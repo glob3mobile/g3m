@@ -16,7 +16,7 @@
 class G3MRenderContext;
 
 
-class FrameTask : public Disposable {
+class FrameTask {
 public:
   virtual ~FrameTask() {
 #ifdef JAVA_CODE
@@ -33,7 +33,7 @@ public:
 
 
 
-class FrameTasksExecutor : public Disposable {
+class FrameTasksExecutor {
 private:
   const int          _minimumExecutionsPerFrame;
   const int          _maximumExecutionsPerFrame;

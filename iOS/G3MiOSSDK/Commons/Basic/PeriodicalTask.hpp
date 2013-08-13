@@ -14,7 +14,7 @@
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
-class PeriodicalTask : public Disposable {
+class PeriodicalTask {
 private:
   long long _intervalMS;
   long long _lastExecutionMS;
