@@ -22,7 +22,8 @@ public class GPUUniformValueMatrix4Float extends GPUUniformValue
   {
     _m._release();
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

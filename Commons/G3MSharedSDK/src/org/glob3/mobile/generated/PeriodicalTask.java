@@ -40,7 +40,8 @@ public class PeriodicalTask extends Disposable
        _task.dispose();
 
     IFactory.instance().deleteTimer(_timer);
-    super.dispose();
+  super.dispose();
+
   }
 
   public final void resetTimeout()

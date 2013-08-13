@@ -62,7 +62,8 @@ public abstract class IWebSocket extends Disposable
          _listener.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public abstract void send(String message);

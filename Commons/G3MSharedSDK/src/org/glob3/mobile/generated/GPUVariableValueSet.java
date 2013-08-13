@@ -61,7 +61,8 @@ public class GPUVariableValueSet extends Disposable
       }
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)

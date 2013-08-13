@@ -22,7 +22,8 @@ public abstract class BoundingVolume extends Disposable
 {
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract double projectedArea(G3MRenderContext rc);

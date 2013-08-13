@@ -617,7 +617,8 @@ public class Tile extends Disposable
     if (_lodTimer != null)
        _lodTimer.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 

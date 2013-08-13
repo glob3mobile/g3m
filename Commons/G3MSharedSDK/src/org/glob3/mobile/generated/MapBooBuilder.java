@@ -374,7 +374,8 @@ public abstract class MapBooBuilder extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   protected final void setGL(GL gl)

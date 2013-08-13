@@ -342,7 +342,8 @@ public class GL extends Disposable
   public void dispose()
   {
     _nativeGL.dispose();
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final int createProgram()

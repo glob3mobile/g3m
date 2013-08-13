@@ -178,7 +178,8 @@ public class CachedDownloader extends IDownloader
     if (_lastImageURL != null)
        _lastImageURL.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final String statistics()

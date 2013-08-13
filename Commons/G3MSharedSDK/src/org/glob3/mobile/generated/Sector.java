@@ -47,7 +47,8 @@ public class Sector extends Disposable
     if (_normalizedCartesianCenter != null)
        _normalizedCartesianCenter.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)

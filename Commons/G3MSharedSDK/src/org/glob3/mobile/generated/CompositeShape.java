@@ -47,7 +47,8 @@ public abstract class CompositeShape extends Shape
          child.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void addShape(Shape shape)

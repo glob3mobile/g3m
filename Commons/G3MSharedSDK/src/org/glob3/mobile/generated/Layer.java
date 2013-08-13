@@ -102,7 +102,8 @@ public abstract class Layer extends Disposable
        _condition.dispose();
     _parameters = null;
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);

@@ -8,9 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
-//#define JAVA_POST_DISPOSE super.dispose();
-
 public class Disposable
 {
   public void dispose()

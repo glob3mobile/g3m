@@ -276,7 +276,8 @@ public class Frustum extends Disposable
   {
     if (_boundingVolume != null)
        _boundingVolume.dispose();
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final BoundingVolume getBoundingVolume()

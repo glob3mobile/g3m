@@ -93,7 +93,8 @@ public class LeveledTexturedMesh extends Mesh
   
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final int getVertexCount()

@@ -38,7 +38,8 @@ public class JSONGenerator extends JSONVisitor
     if (_isb != null)
        _isb.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 

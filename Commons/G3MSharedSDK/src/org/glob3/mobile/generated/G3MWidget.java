@@ -84,7 +84,8 @@ public class G3MWidget extends Disposable
     if (_context != null)
        _context.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void render(int width, int height)

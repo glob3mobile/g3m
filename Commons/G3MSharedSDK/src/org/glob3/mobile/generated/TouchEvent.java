@@ -79,7 +79,8 @@ public class TouchEvent
       if (_touchs.get(i) != null)
          _touchs.get(i).dispose();
     }
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
 }

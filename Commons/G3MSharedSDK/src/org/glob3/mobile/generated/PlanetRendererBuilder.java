@@ -252,7 +252,8 @@ public class PlanetRendererBuilder extends Disposable
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
   public final PlanetRenderer create()
   {

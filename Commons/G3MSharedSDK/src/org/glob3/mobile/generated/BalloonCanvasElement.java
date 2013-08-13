@@ -63,7 +63,8 @@ public class BalloonCanvasElement extends CanvasElement
     if (_child != null)
        _child.dispose();
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final Vector2F getExtent(ICanvas canvas)

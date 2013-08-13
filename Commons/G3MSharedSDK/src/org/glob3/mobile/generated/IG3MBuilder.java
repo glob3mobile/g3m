@@ -491,7 +491,8 @@ public abstract class IG3MBuilder extends Disposable
     if (_planetRendererBuilder != null)
        _planetRendererBuilder.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 

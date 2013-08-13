@@ -23,7 +23,8 @@ public class CameraRenderer extends LeafRenderer
          handler.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void addHandler(CameraEventHandler handler)

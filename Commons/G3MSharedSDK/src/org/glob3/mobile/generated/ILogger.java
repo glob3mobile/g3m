@@ -33,6 +33,7 @@ public abstract class ILogger extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 }

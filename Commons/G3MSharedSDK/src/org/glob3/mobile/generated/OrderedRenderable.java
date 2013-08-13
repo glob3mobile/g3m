@@ -28,6 +28,7 @@ public abstract class OrderedRenderable extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 }

@@ -60,7 +60,8 @@ public class GEO2DLineRasterStyle extends Disposable
   public void dispose()
   {
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final boolean apply(ICanvas canvas)

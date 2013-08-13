@@ -22,7 +22,8 @@ public class GLFeatureSet extends Disposable
       _features[i]._release();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final GLFeature get(int i)

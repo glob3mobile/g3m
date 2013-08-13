@@ -58,7 +58,8 @@ public class FlatColorMesh extends Mesh
          _flatColor.dispose();
     }
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final BoundingVolume getBoundingVolume()

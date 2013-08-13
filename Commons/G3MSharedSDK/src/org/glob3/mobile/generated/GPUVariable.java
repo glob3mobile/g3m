@@ -184,7 +184,8 @@ public class GPUVariable extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public GPUVariable(String name, GPUVariableType type)

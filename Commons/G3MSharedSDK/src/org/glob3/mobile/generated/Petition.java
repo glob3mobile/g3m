@@ -60,7 +60,8 @@ public class Petition extends Disposable
     if (_sector != null)
        _sector.dispose();
     releaseImage();
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void releaseImage()

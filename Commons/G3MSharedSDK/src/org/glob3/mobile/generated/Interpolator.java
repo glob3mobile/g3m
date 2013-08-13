@@ -32,7 +32,8 @@ public abstract class Interpolator extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)

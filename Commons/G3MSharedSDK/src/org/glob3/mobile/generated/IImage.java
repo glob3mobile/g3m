@@ -17,7 +17,8 @@ public abstract class IImage extends Disposable
 {
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract int getWidth();

@@ -31,7 +31,8 @@ public abstract class JSONVisitor extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

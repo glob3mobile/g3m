@@ -41,7 +41,8 @@ public class QuadTree_Node extends Disposable
       _children = null;
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)

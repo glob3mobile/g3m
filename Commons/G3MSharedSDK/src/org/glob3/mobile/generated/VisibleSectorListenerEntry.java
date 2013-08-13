@@ -88,6 +88,7 @@ public class VisibleSectorListenerEntry extends Disposable
     if (_lastSector != null)
        _lastSector.dispose();
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 }

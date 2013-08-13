@@ -34,7 +34,8 @@ public class GEOMarkSymbol extends GEOSymbol
     if (_mark != null)
        _mark.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)

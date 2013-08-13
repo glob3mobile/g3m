@@ -36,7 +36,8 @@ public class CompositeRenderer extends Renderer
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final boolean isEnable()

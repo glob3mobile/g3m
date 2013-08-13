@@ -14,7 +14,8 @@ public abstract class MarkTouchListener extends Disposable
 {
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract boolean touchedMark(Mark mark);

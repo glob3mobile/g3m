@@ -45,7 +45,8 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
       _builder._release();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 }

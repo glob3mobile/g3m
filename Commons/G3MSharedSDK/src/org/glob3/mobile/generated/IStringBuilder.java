@@ -54,7 +54,8 @@ public abstract class IStringBuilder extends Disposable
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
 }

@@ -58,7 +58,8 @@ public class TexturedMesh extends Mesh
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final BoundingVolume getBoundingVolume()

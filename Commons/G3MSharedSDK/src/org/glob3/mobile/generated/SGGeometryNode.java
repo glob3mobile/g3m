@@ -69,7 +69,8 @@ public class SGGeometryNode extends SGNode
     if (_indices != null)
        _indices.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)

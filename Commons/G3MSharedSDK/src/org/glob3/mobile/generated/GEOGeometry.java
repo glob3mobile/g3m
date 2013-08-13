@@ -34,7 +34,8 @@ public abstract class GEOGeometry extends GEOObject
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void setFeature(GEOFeature feature)

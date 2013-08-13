@@ -23,7 +23,8 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)

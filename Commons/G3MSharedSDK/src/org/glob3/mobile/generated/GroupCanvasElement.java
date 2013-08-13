@@ -54,7 +54,8 @@ public abstract class GroupCanvasElement extends CanvasElement
     if (_extent != null)
        _extent.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void add(CanvasElement child)

@@ -58,7 +58,8 @@ public class MapBoo_Scene extends Disposable
     if (_overlayLayer != null)
        _overlayLayer.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final String description()

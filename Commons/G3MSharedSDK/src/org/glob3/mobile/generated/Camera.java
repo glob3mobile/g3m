@@ -73,7 +73,8 @@ public class Camera extends Disposable
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void copyFrom(Camera that)
@@ -558,7 +559,8 @@ public class Camera extends Disposable
   {
     public void dispose()
     {
-      JAVA_POST_DISPOSE
+  super.dispose();
+
     }
   }
 

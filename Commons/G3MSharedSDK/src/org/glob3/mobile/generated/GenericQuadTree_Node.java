@@ -193,7 +193,8 @@ public class GenericQuadTree_Node extends Disposable
     if (_sector != null)
        _sector.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final Sector getSector()

@@ -30,7 +30,8 @@ public class ModelviewMatrixHolder extends Disposable
       _modelview._release();
     }
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final Matrix44D getModelview()

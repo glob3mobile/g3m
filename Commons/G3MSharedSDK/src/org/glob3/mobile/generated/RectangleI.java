@@ -42,7 +42,8 @@ public class RectangleI extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final boolean equalTo(RectangleI that)

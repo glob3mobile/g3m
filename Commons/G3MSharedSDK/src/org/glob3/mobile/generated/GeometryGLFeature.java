@@ -58,7 +58,8 @@ public class GeometryGLFeature extends GLFeature
   {
   //  _position->_release();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void applyOnGlobalGLState(GLGlobalState state)

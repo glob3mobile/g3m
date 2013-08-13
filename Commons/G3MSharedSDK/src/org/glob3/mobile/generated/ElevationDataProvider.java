@@ -4,7 +4,8 @@ public abstract class ElevationDataProvider extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);

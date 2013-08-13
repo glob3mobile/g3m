@@ -23,7 +23,8 @@ public class TexturesHandler
       ILogger.instance().logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final IGLTextureId getGLTextureId(IImage image, int format, String name, boolean hasMipMap)

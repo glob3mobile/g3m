@@ -40,7 +40,8 @@ public abstract class IStringUtils extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract String createString(byte[] data, int length);

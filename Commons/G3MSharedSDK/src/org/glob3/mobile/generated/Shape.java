@@ -109,7 +109,8 @@ public abstract class Shape implements EffectTarget, Disposable
     if (_transformMatrix != null)
        _transformMatrix.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final Geodetic3D getPosition()

@@ -33,7 +33,8 @@ public class Trail extends Disposable
          segment.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void render(G3MRenderContext rc, Frustum frustum, GLState state)

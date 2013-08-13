@@ -13,7 +13,8 @@ public abstract class VisibleSectorListener extends Disposable
 {
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract void onVisibleSectorChange(Sector visibleSector, Geodetic3D cameraPosition);

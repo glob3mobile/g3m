@@ -23,6 +23,7 @@ public class GenericQuadTree_SectorElement extends GenericQuadTree_Element
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 }

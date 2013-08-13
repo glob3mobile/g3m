@@ -25,7 +25,8 @@ public abstract class FrameTask extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract boolean isCanceled(G3MRenderContext rc);

@@ -13,7 +13,8 @@ public abstract class IImageDownloadListener extends Disposable
 {
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   /**

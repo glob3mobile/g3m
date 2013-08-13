@@ -45,7 +45,8 @@ public abstract class Renderer implements EffectTarget, Disposable
 
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   // Android activity lifecyle

@@ -36,7 +36,8 @@ public class JSONArray extends JSONBaseObject
     }
     _entries.clear();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final JSONBaseObject get(int index)

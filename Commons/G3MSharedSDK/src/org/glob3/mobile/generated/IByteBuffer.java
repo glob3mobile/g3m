@@ -14,7 +14,8 @@ public abstract class IByteBuffer extends Disposable
 
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract int size();

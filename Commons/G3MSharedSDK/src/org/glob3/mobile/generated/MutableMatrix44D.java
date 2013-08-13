@@ -284,7 +284,8 @@ public class MutableMatrix44D extends Disposable
       _matrix44D._release();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public static MutableMatrix44D identity()

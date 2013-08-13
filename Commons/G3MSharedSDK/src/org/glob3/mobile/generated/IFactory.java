@@ -52,7 +52,8 @@ public abstract class IFactory extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);

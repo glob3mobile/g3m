@@ -174,7 +174,8 @@ public class LayerSet extends Disposable
          _layers.get(i).dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void removeAllLayers(boolean deleteLayers)

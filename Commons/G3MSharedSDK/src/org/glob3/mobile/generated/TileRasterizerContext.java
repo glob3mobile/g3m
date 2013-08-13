@@ -41,7 +41,8 @@ public class TileRasterizerContext extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE;
+  super.dispose();
+;
   }
 
 }

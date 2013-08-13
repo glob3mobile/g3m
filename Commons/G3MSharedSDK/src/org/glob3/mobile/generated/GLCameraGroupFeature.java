@@ -11,7 +11,8 @@ public class GLCameraGroupFeature extends GLFeature
   }
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
   public final Matrix44D getMatrix()
   {

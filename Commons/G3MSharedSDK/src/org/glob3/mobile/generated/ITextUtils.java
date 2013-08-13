@@ -43,7 +43,8 @@ public abstract class ITextUtils extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
 

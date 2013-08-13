@@ -58,7 +58,8 @@ public class TrailsRenderer extends LeafRenderer
     }
     _trails.clear();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void onResume(G3MContext context)

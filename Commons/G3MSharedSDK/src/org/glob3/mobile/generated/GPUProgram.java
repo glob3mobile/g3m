@@ -188,7 +188,8 @@ public class GPUProgram extends Disposable
     _createdAttributes = null;
     _createdUniforms = null;
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final String getName()

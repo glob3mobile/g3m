@@ -22,7 +22,8 @@ public abstract class CameraEventHandler extends Disposable
 
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);

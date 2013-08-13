@@ -63,7 +63,8 @@ public class SGNode extends Disposable
          child.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public void initialize(G3MContext context, SGShape shape)

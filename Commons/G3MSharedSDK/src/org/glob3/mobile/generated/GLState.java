@@ -104,7 +104,8 @@ public class GLState extends Disposable
     if (_globalState != null)
        _globalState.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void setParent(GLState parent)

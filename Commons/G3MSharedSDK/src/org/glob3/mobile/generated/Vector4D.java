@@ -39,7 +39,8 @@ public class Vector4D extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public Vector4D(Vector4D v)

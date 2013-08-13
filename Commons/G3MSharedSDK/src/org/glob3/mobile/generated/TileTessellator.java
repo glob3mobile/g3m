@@ -31,7 +31,8 @@ public abstract class TileTessellator extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract boolean isReady(G3MRenderContext rc);

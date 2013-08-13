@@ -22,7 +22,8 @@ public abstract class IFloatBuffer implements IBuffer
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract float get(int i);

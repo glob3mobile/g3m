@@ -31,7 +31,8 @@ public abstract class GEOSymbolizer extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract java.util.ArrayList<GEOSymbol> createSymbols(GEO2DPointGeometry geometry);

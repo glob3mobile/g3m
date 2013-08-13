@@ -47,7 +47,8 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
     }
     _coordinates = null;
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final java.util.ArrayList<Geodetic2D> getCoordinates()

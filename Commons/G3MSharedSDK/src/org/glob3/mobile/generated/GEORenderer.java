@@ -70,7 +70,8 @@ public class GEORenderer extends LeafRenderer
          pair.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   /**

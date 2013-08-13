@@ -26,7 +26,8 @@ public abstract class Mesh extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract int getVertexCount();

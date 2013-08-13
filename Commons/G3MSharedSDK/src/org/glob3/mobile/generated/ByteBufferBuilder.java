@@ -25,7 +25,8 @@ public class ByteBufferBuilder extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void addInt64(long value)

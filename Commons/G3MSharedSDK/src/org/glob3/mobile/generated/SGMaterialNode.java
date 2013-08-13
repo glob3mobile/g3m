@@ -63,7 +63,8 @@ public class SGMaterialNode extends SGNode
     _baseColor = null;
     if (_specularColor != null)
        _specularColor.dispose();
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final String description()

@@ -349,7 +349,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
          entry.dispose();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void initialize(G3MContext context)

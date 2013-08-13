@@ -39,7 +39,8 @@ public class RCObject extends Disposable
       ILogger.instance().logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 

@@ -6,7 +6,8 @@ public abstract class TileRasterizer extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract String getId();

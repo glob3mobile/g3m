@@ -70,7 +70,8 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final String getId()

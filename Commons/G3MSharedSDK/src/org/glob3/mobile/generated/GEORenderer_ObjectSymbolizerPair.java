@@ -18,6 +18,7 @@ public class GEORenderer_ObjectSymbolizerPair extends Disposable
     if (_symbolizer != null)
        _symbolizer.dispose();
 
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 }

@@ -57,7 +57,8 @@ public abstract class ElevationData extends Disposable
       if (_interpolator != null)
          _interpolator.dispose();
     }
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public Vector2I getExtent()

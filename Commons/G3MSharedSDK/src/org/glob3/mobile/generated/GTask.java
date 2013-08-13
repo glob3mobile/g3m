@@ -23,7 +23,8 @@ public abstract class GTask extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract void run(G3MContext context);

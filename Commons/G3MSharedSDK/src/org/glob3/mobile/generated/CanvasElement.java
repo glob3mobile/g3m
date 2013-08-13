@@ -31,7 +31,8 @@ public abstract class CanvasElement extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract Vector2F getExtent(ICanvas canvas);

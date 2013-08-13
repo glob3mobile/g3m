@@ -15,7 +15,8 @@ public class Matrix44DHolder extends Disposable
   public void dispose()
   {
     _matrix._release();
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public final void setMatrix(Matrix44D matrix)

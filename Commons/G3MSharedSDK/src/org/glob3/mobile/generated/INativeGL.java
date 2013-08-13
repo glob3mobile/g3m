@@ -28,7 +28,8 @@ public abstract class INativeGL extends Disposable
 
   public void dispose()
   {
-    super.dispose();
+  super.dispose();
+
   }
 
   public abstract void useProgram(GPUProgram program);

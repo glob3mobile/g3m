@@ -21,7 +21,8 @@ public class TileTextureBuilderHolder implements ITexturizerData
       _builder._release();
     }
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
 }

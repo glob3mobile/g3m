@@ -28,7 +28,8 @@ public abstract class IDownloader extends Disposable
 {
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public abstract void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor);

@@ -56,7 +56,8 @@ public class BSONGenerator extends JSONVisitor
     if (_builder != null)
        _builder.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public static IByteBuffer generate(JSONBaseObject value)

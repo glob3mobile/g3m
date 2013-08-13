@@ -51,7 +51,8 @@ public class GEORasterPolygonSymbol extends GEORasterSymbol
   public void dispose()
   {
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)

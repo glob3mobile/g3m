@@ -10,7 +10,8 @@ public abstract class IStorage extends Disposable
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public void initialize(G3MContext context)

@@ -23,7 +23,8 @@ public class JSONString extends JSONBaseObject
 
   public void dispose()
   {
-    JAVA_POST_DISPOSE
+  super.dispose();
+
   }
 
   public JSONString(String value)

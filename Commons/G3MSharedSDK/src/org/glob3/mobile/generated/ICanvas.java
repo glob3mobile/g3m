@@ -100,7 +100,8 @@ public abstract class ICanvas extends Disposable
     if (_currentFont != null)
        _currentFont.dispose();
   
-    JAVA_POST_DISPOSE
+    super.dispose();
+  
   }
 
   /**
