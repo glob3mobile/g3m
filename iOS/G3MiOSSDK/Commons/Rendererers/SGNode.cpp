@@ -19,11 +19,6 @@ SGNode::~SGNode() {
     SGNode* child = _children[i];
     delete child;
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 

@@ -18,10 +18,6 @@
 class IImage {
 public:
   virtual ~IImage() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   virtual int getWidth() const = 0;

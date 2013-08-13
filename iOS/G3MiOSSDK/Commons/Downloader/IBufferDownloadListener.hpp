@@ -16,10 +16,6 @@
 class IBufferDownloadListener {
 public:
   virtual ~IBufferDownloadListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   /**

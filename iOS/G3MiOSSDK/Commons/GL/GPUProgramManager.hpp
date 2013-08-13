@@ -32,11 +32,6 @@ public:
       delete it->second;
     }
 #endif
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   GPUProgram* getCompiledProgram(const std::string& name) {

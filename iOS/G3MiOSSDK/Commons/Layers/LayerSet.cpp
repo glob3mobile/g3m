@@ -17,11 +17,6 @@ LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,

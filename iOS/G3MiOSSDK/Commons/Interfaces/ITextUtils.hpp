@@ -34,10 +34,6 @@ public:
   }
 
   virtual ~ITextUtils() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
 

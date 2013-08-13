@@ -28,11 +28,6 @@ GenericQuadTree_Node::~GenericQuadTree_Node() {
   }
 
   delete _sector;
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 //void GenericQuadTree_Node::computeElementsSector(){
@@ -401,11 +396,6 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
 
 GenericQuadTree::~GenericQuadTree() {
   delete _root;
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 bool GenericQuadTree::add(GenericQuadTree_Element* element){

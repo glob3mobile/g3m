@@ -40,9 +40,6 @@ public:
   }
 
   ~Color() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

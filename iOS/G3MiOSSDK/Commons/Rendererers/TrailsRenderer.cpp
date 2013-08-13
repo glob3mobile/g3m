@@ -32,11 +32,6 @@ TrailSegment::~TrailSegment() {
     const Geodetic3D* position = _positions[i];
     delete position;
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 Mesh* TrailSegment::getMesh(const Planet* planet) {
@@ -245,11 +240,6 @@ TrailsRenderer::~TrailsRenderer() {
     delete trail;
   }
   _trails.clear();
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {

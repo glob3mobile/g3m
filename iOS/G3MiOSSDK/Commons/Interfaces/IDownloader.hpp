@@ -21,10 +21,6 @@ class FrameTasksExecutor;
 class IDownloader {
 public:
   virtual ~IDownloader() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   virtual void initialize(const G3MContext* context,

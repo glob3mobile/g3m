@@ -65,9 +65,6 @@ public:
   }
   
   virtual ~WidgetUserData() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
   

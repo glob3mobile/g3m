@@ -164,10 +164,6 @@ public:
   //  }
   
   ~GLGlobalState() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   void enableDepthTest() {

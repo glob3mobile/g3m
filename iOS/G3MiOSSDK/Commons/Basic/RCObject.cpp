@@ -12,9 +12,4 @@ RCObject::~RCObject() {
   if (_referenceCounter != 0) {
     ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
   }
-  
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }

@@ -124,10 +124,6 @@ public:
 
   ~Matrix44DHolder() {
     _matrix->_release();
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   void setMatrix(const Matrix44D* matrix) {

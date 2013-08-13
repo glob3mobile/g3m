@@ -47,9 +47,6 @@ class ElevationDataProvider {
 public:
 
   virtual ~ElevationDataProvider() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

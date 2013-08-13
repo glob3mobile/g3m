@@ -31,9 +31,6 @@ public:
                       int imageHeight);
   
   ~GEORasterProjection() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

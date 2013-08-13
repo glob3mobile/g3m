@@ -36,10 +36,6 @@ public:
   }
   
   ~Vector4D() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   Vector4D(const Vector4D &v):

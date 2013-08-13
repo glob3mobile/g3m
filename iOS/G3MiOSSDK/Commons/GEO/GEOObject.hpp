@@ -20,9 +20,6 @@ class GEOTileRasterizer;
 class GEOObject {
 public:
   virtual ~GEOObject() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

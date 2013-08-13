@@ -32,10 +32,6 @@ public:
   }
 
   virtual ~IJSONParser() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   virtual const JSONBaseObject* parse(const std::string& json) {

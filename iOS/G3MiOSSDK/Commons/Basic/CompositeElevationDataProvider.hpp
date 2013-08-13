@@ -97,9 +97,6 @@ private:
                                            bool autodelete);
 
     ~CompositeElevationDataProvider_Request() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
     }
     

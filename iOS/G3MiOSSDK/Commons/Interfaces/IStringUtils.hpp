@@ -36,10 +36,6 @@ public:
   }
 
   virtual ~IStringUtils() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   virtual std::string createString(unsigned char data[],

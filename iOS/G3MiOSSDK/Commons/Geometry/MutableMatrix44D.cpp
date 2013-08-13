@@ -57,11 +57,6 @@ MutableMatrix44D::~MutableMatrix44D() {
   if (_matrix44D != NULL) {
     _matrix44D->_release();
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
