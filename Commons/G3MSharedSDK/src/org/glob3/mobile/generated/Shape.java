@@ -21,10 +21,13 @@ package org.glob3.mobile.generated;
 
 
 
+
+
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape implements EffectTarget
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public abstract class Shape implements EffectTarget, SurfaceElevationListener
 {
   private Geodetic3D _position;
 
@@ -65,6 +68,8 @@ public abstract class Shape implements EffectTarget
   private boolean _enable;
 
   private GLState _glState = new GLState();
+
+  private SurfaceElevationProvider _surfaceElevationProvider;
 
   protected void cleanTransformMatrix()
   {
@@ -274,6 +279,13 @@ public abstract class Shape implements EffectTarget
 
   public void initialize(G3MContext context)
   {
+
+    _surfaceElevationProvider = context.getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+    }
+
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
@@ -281,5 +293,19 @@ public abstract class Shape implements EffectTarget
   public abstract void rawRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
+
+  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration) //Without considering vertical exaggeration
+  {
+//    printf("SHAPE CHANGES ELEVATION");
+
+    Geodetic3D g = new Geodetic3D(_position._latitude, _position._longitude, rawElevation * verticalExaggeration);
+    if (_position != null)
+       _position.dispose();
+    _position = new Geodetic3D(g);
+
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
+  }
 
 }
