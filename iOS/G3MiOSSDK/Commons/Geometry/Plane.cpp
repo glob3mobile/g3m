@@ -9,7 +9,7 @@
 #include "Plane.hpp"
 
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
-  int TODO_Multiplication_with_Matrix;
+  //int TODO_Multiplication_with_Matrix;
 
   const double a = _normal._x*M.get0() + _normal._y*M.get1() + _normal._z*M.get2() + _d*M.get3();
   const double b = _normal._x*M.get4() + _normal._y*M.get5() + _normal._z*M.get6() + _d*M.get7();

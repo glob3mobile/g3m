@@ -363,7 +363,7 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D,
                                      const int vpWidth,
                                      const int vpHeight) const {
 
-  int TODO_Remove_UNPROJECT;//!!!!
+  //int TODO_Remove_UNPROJECT;//!!!!
 
   const double winx = pixel3D._x;
   const double winy = pixel3D._y;
