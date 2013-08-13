@@ -100,4 +100,8 @@ public abstract class Planet
 
   public abstract double distanceToHorizon(Vector3D position);
 
+  public abstract MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination);
+
+  public abstract Vector3D getNorth();
+
 }

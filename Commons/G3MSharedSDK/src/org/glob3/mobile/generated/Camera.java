@@ -446,17 +446,30 @@ public class Camera
 
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
-    _setGeodeticPosition(_planet.toCartesian(g3d));
+    final Angle heading = getHeading();
+    final Angle pitch = getPitch();
+    setPitch(Angle.zero());
+  
+    final double dist = getGeodeticPosition().height() - g3d.height();
+  
+    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid())
+       applyTransform(dragMatrix);
+  
+    moveForward(dist);
+  
+    setHeading(heading);
+    setPitch(pitch);
   }
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(latitude, longitude, height));
+    setGeodeticPosition(new Geodetic3D(latitude, longitude, height));
   }
 
   public final void setGeodeticPosition(Geodetic2D g2d, double height)
   {
-    _setGeodeticPosition(_planet.toCartesian(g2d._latitude, g2d._longitude, height));
+    setGeodeticPosition(new Geodetic3D(g2d, height));
   }
 
   /**
@@ -472,7 +485,7 @@ public class Camera
     // TODO_deal_with_cases_when_center_in_poles
     final Vector3D cartesianCenter = _planet.toCartesian(center);
     final Vector3D normal = _planet.geodeticSurfaceNormal(center);
-    final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
+    final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
     final Vector3D orientedVector = north2D.rotateAroundAxis(normal, azimuth.times(-1));
     final Vector3D axis = orientedVector.cross(normal);
     final Vector3D finalVector = orientedVector.rotateAroundAxis(axis, altitude);
@@ -565,7 +578,7 @@ public class Camera
 
   private Angle getHeading(Vector3D normal)
   {
-    final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
+    final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
     final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
     return up2D.signedAngleBetween(north2D, normal);
   }
@@ -801,28 +814,7 @@ public class Camera
     return new FrustumData(left, right, bottom, top, zNear, zFar);
   }
 
-  private void _setGeodeticPosition(Vector3D pos)
-  {
-    final Angle heading = getHeading();
-    final Angle pitch = getPitch();
-  
-    setPitch(Angle.zero());
-  
-    final MutableVector3D finalPos = pos.asMutableVector3D();
-    final Vector3D axis = _position.cross(finalPos).asVector3D();
-    if (axis.length()<1e-3)
-    {
-      return;
-    }
-    final Angle angle = _position.angleBetween(finalPos);
-    rotateWithAxis(axis, angle);
-  
-    final double dist = _position.length() - pos.length();
-    moveForward(dist);
-  
-    setHeading(heading);
-    setPitch(pitch);
-  }
+  //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
   private MutableMatrix44D getProjectionMatrix()

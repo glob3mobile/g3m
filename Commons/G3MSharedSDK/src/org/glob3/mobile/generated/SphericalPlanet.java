@@ -580,4 +580,22 @@ public class SphericalPlanet extends Planet
     return Math.sqrt(D *D - R *R);
   }
 
+  public final MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination)
+  {
+    final Vector3D P0 = toCartesian(origin);
+    final Vector3D P1 = toCartesian(destination);
+    final Vector3D axis = P0.cross(P1);
+    if (axis.length()<1e-3)
+       return MutableMatrix44D.invalid();
+  
+    final Angle angle = P0.angleBetween(P1);
+    return MutableMatrix44D.createRotationMatrix(angle, axis);
+  }
+
+  public final Vector3D getNorth()
+  {
+    return Vector3D.upZ();
+  }
+
+
 }

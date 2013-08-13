@@ -348,5 +348,16 @@ public class FlatPlanet extends Planet
     return position.sub(fartherCorner).length();
   }
 
+  public final MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination)
+  {
+    final Vector3D P0 = toCartesian(origin.asGeodetic2D());
+    final Vector3D P1 = toCartesian(destination.asGeodetic2D());
+    return MutableMatrix44D.createTranslationMatrix(P1.sub(P0));
+  }
+
+  public final Vector3D getNorth()
+  {
+    return Vector3D.upY();
+  }
 
 }
