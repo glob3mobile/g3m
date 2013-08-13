@@ -20,10 +20,12 @@ class MutableMatrix44D;
 
 #include "GLState.hpp"
 
+#include "SurfaceElevationProvider.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget{
+class Shape : public EffectTarget, SurfaceElevationListener{
 private:
   Geodetic3D* _position;
   
@@ -45,6 +47,8 @@ private:
   bool _enable;
   
   mutable GLState _glState;
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
   
 protected:
   virtual void cleanTransformMatrix();
@@ -183,7 +187,16 @@ public:
               GLState* parentState,
               bool renderNotReadyShapes);
 
-  virtual void initialize(const G3MContext* context) {}
+  virtual void initialize(const G3MContext* context) {
+
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position->_latitude,
+                                             _position->_longitude,
+                                             this);
+    }
+
+  }
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
@@ -192,6 +205,15 @@ public:
                          bool renderNotReadyShapes) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
+
+  void elevationChanged(const Geodetic2D& position,
+                        double rawElevation,            //Without considering vertical exaggeration
+                        double verticalExaggeration){
+    printf("SHAPE CHANGES ELEVATION");
+
+    delete _transformMatrix;
+    _transformMatrix = NULL;
+  }
 
 };
 

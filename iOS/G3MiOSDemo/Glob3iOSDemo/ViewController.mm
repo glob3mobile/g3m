@@ -643,7 +643,7 @@ public:
   // initialization
   builder.initializeWidget();
 
-  [self testGenericQuadTree:geoTileRasterizer];
+//  [self testGenericQuadTree:geoTileRasterizer];
 
 }
 
@@ -687,7 +687,11 @@ public:
 
         delete x;
       }
+
+      delete fc;
+
     }
+
   } else{
     GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
   }
