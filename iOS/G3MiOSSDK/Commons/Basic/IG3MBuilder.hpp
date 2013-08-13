@@ -28,6 +28,8 @@ class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
 
+#include "Disposable.hpp"
+
 class IG3MBuilder : public Disposable {
 private:
   GL*                               _gl;

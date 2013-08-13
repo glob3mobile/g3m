@@ -26,12 +26,10 @@ class GPUAttributeVec3Float;
 class GPUAttributeVec4Float;
 class GPUUniformValue;
 class GPUAttributeValue;
-
-
-
 class IFloatBuffer;
-
 class GL;
+
+#include "Disposable.hpp"
 
 enum ShaderType {
   VERTEX_SHADER,
