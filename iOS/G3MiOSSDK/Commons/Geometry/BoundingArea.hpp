@@ -13,9 +13,6 @@
 class BoundingArea {
 public:
   virtual ~BoundingArea() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
   

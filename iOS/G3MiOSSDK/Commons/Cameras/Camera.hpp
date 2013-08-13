@@ -153,11 +153,6 @@ public:
     delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   void copyFrom(const Camera &c);

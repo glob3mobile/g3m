@@ -26,9 +26,6 @@ public:
                       CameraContext *cameraContext) = 0;
   
   virtual ~CameraEventHandler() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
   

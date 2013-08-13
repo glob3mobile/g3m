@@ -47,9 +47,6 @@ public:
   {}
 
   ~CameraContext() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

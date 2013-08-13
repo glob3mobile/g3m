@@ -20,9 +20,6 @@ private:
 public:
 
   ~ByteBufferBuilder() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 

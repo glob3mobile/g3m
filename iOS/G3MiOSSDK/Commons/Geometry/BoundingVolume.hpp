@@ -24,9 +24,6 @@ class GLState;
 class BoundingVolume {
 public:
   virtual ~BoundingVolume() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
   }
 
