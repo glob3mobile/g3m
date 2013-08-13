@@ -58,6 +58,11 @@ public class GEOFeature extends GEOObject
     return _properties;
   }
 
+  public final GEOGeometry getGeometry()
+  {
+    return _geometry;
+  }
+
   public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     if (_geometry != null)

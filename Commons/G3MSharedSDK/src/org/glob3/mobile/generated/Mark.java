@@ -44,7 +44,7 @@ public class Mark extends SurfaceElevationListener
   /**
    * The point where the mark will be geo-located.
    */
-  private final Geodetic3D _position ;
+  private Geodetic3D _position;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -106,7 +106,10 @@ public class Mark extends SurfaceElevationListener
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
-    _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+    if (_textureId != null)
+    {
+      _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+    }
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -363,6 +366,10 @@ public class Mark extends SurfaceElevationListener
 
   public void dispose()
   {
+  
+    if (_position != null)
+       _position.dispose();
+  
     if (_surfaceElevationProvider != null)
     {
       _surfaceElevationProvider.removeListener(this);
@@ -560,11 +567,17 @@ public class Mark extends SurfaceElevationListener
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
-            createGLState(rc.getPlanet());
+            createGLState(planet);
           }
         }
         else
         {
+  
+          if (_glState.getNumberOfGLFeatures() == 0)
+          {
+            createGLState(planet); //GLState was disposed due to elevation change
+          }
+  
           _glState.setParent(parentGLState); //Linking with parent
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
@@ -574,5 +587,19 @@ public class Mark extends SurfaceElevationListener
       }
     }
   
+  }
+
+  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
+  {
+  
+    Geodetic3D newPos = new Geodetic3D(_position.latitude(), _position.longitude(), rawElevation * verticalExaggeration);
+    if (_position != null)
+       _position.dispose();
+    _position = new Geodetic3D(newPos);
+  
+    if (_vertices != null)
+       _vertices.dispose();
+    _vertices = null;
+    _glState.clearAllGLFeatures();
   }
 }

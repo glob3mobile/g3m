@@ -16,13 +16,25 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
 //class Angle;
 //class Geodetic2D;
 
 
+
 public class SurfaceElevationListener
 {
+
   public void dispose()
+  {
+  }
+
+  public void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration) //Without considering vertical exaggeration
+  {
+  }
+
+  public void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
   {
   }
 }

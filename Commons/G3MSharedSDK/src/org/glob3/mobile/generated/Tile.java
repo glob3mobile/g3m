@@ -37,7 +37,8 @@ package org.glob3.mobile.generated;
 //class TileElevationDataRequest;
 //class Frustum;
 //class Box;
-
+//class PlanetRenderer;
+//class GLState;
 
 
 public class Tile
@@ -96,6 +97,7 @@ public class Tile
       {
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = prc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, layerTilesRenderParameters._mercator, prc.getParameters()._renderDebug);
+  
       }
       else
       {
@@ -112,6 +114,8 @@ public class Tile
           meshHolder.setMesh(tessellatorMesh);
         }
       }
+  
+      _planetRenderer.sectorElevationChanged(_sector, _elevationData);
     }
   
     return _tessellatorMesh;
@@ -295,7 +299,7 @@ public class Tile
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
-    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column, _planetRenderer);
   }
 
 
@@ -516,6 +520,8 @@ public class Tile
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
+  private final PlanetRenderer _planetRenderer;
+
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, PlanetRendererContext prc)
   {
     if (_boundingVolume == null)
@@ -534,7 +540,8 @@ public class Tile
   ///#include "Sphere.hpp"
   
   
-  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
+  
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column, PlanetRenderer planetRenderer)
   {
      _texturizer = texturizer;
      _parent = parent;
@@ -564,6 +571,7 @@ public class Tile
      _lastTileMeshResolutionY = -1;
      _boundingVolume = null;
      _lodTimer = null;
+     _planetRenderer = planetRenderer;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
