@@ -19,6 +19,8 @@ JSONArray::~JSONArray() {
     delete _entries[i];
   }
   _entries.clear();
+
+  JAVA_POST_DISPOSE
 }
 
 const JSONBaseObject* JSONArray::get(const int index) const {

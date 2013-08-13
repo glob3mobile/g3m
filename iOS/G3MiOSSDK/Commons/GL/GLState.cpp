@@ -14,6 +14,8 @@ GLState::~GLState() {
 
   delete _valuesSet;
   delete _globalState;
+
+  JAVA_POST_DISPOSE
 }
 
 void GLState::hasChangedStructure() const {

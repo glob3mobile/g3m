@@ -22,6 +22,8 @@ JSONObject::~JSONObject() {
   }
 #endif
   _entries.clear();
+
+  JAVA_POST_DISPOSE
 }
 
 const JSONBaseObject* JSONObject::get(const std::string& key) const {

@@ -21,7 +21,7 @@ enum GLFeatureGroupName{
   LIGHTING_GROUP = 3
 };
 
-class GLFeatureSet{
+class GLFeatureSet : public Disposable {
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
 #ifdef C_CODE

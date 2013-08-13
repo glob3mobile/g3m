@@ -14,7 +14,7 @@ class Sector;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  const bool         _skirted;
+  const bool _skirted;
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Sector& sector) const;

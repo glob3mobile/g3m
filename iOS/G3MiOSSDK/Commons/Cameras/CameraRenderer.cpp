@@ -18,6 +18,8 @@ CameraRenderer::~CameraRenderer() {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
+
+  JAVA_POST_DISPOSE
 }
 
 void CameraRenderer::initialize(const G3MContext* context) {

@@ -11,6 +11,8 @@
 
 AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;
+
+  JAVA_POST_DISPOSE
 }
 
 void AbstractMeshShape::cleanMesh() {

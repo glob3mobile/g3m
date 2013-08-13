@@ -193,6 +193,8 @@ PlanetRenderer::~PlanetRenderer() {
     VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
     delete entry;
   }
+
+  JAVA_POST_DISPOSE
 }
 
 void PlanetRenderer::clearFirstLevelTiles() {

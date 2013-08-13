@@ -47,6 +47,8 @@
 MapBoo_Scene::~MapBoo_Scene() {
   delete _baseLayer;
   delete _overlayLayer;
+
+  JAVA_POST_DISPOSE
 }
 
 const std::string MapBoo_Scene::description() const {

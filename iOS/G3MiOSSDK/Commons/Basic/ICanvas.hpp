@@ -29,7 +29,7 @@ enum StrokeJoin {
   JOIN_BEVEL
 };
 
-class ICanvas {
+class ICanvas : public Disposable {
 protected:
   int _canvasWidth;
   int _canvasHeight;

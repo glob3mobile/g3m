@@ -32,6 +32,7 @@ ElevationData::~ElevationData() {
   if (_interpolator != NULL) {
     delete _interpolator;
   }
+  JAVA_POST_DISPOSE
 }
 
 double ElevationData::getElevationAt(const Vector2I& position) const {

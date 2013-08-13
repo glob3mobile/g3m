@@ -12,6 +12,8 @@
 
 GEOShapeSymbol::~GEOShapeSymbol() {
   delete _shape;
+
+  JAVA_POST_DISPOSE
 }
 
 

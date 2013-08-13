@@ -12,7 +12,7 @@
 #include <string>
 #include "Angle.hpp"
 
-class Color {
+class Color : public Disposable {
 private:
   const float _red;
   const float _green;

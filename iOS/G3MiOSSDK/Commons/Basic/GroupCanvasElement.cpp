@@ -16,6 +16,8 @@ GroupCanvasElement::~GroupCanvasElement() {
   }
 
   delete _extent;
+
+  JAVA_POST_DISPOSE
 }
 
 void GroupCanvasElement::add(CanvasElement* child) {

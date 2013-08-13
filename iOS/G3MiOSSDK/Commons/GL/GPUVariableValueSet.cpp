@@ -49,7 +49,6 @@ void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{
 }
 
 GPUVariableValueSet::~GPUVariableValueSet() {
-
   for (int i = 0; i <= _highestUniformKey; i++) {
     GPUUniformValue* u = _uniformValues[i];
     if (u != NULL) {
@@ -63,6 +62,8 @@ GPUVariableValueSet::~GPUVariableValueSet() {
       a->_release();
     }
   }
+
+  JAVA_POST_DISPOSE
 }
 
 int GPUVariableValueSet::getUniformsCode() const{

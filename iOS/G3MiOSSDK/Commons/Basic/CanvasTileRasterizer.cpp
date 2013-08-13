@@ -26,6 +26,8 @@ _transparent(Color::newFromRGBA(0, 0, 0, 0))
 CanvasTileRasterizer::~CanvasTileRasterizer() {
   delete _canvas;
   delete _transparent;
+
+  JAVA_POST_DISPOSE
 }
 
 ICanvas* CanvasTileRasterizer::getCanvas(int width, int height) const {

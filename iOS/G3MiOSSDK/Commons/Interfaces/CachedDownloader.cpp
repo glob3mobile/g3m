@@ -241,6 +241,8 @@ CachedDownloader::~CachedDownloader() {
     delete _lastImageResult;
   }
   delete _lastImageURL;
+
+  JAVA_POST_DISPOSE
 }
 
 void CachedDownloader::start() {

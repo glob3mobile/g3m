@@ -23,6 +23,8 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
 
   delete _extent;
   delete _translationMatrix;
+
+  JAVA_POST_DISPOSE
 }
 
 AbstractGeometryMesh::AbstractGeometryMesh(const int primitive,

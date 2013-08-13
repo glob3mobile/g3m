@@ -23,7 +23,7 @@ class MutableMatrix44D;
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget{
+class Shape : public EffectTarget, Disposable {
 private:
   Geodetic3D* _position;
   

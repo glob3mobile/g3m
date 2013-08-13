@@ -20,7 +20,7 @@ class Ellipsoid;
 class Vector3D;
 class Interpolator;
 
-class ElevationData {
+class ElevationData : public Disposable {
 private:
   mutable Interpolator* _interpolator;
   Interpolator* getInterpolator() const;

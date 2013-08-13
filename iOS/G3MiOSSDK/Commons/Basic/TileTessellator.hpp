@@ -22,7 +22,7 @@ class Geodetic2D;
 #include "Vector2D.hpp"
 
 
-class TileTessellator {
+class TileTessellator : public Disposable {
 public:
   virtual ~TileTessellator() {
     JAVA_POST_DISPOSE

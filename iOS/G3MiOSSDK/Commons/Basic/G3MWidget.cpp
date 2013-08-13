@@ -220,6 +220,8 @@ G3MWidget::~G3MWidget() {
   }
 
   delete _context;
+
+  JAVA_POST_DISPOSE
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,

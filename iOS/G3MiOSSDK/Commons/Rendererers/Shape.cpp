@@ -50,6 +50,8 @@ Shape::~Shape() {
   delete _pitch;
   
   delete _transformMatrix;
+
+  JAVA_POST_DISPOSE
 }
 
 void Shape::cleanTransformMatrix() {

@@ -19,7 +19,7 @@
 
 #include "Ellipsoid.hpp"
 
-class EllipsoidalPlanet: public Planet{
+class EllipsoidalPlanet: public Planet {
 private:
   
 #ifdef C_CODE

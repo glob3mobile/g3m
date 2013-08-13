@@ -22,7 +22,9 @@ _listener(NULL)
 
 }
 
-TileElevationDataRequest::~TileElevationDataRequest() {}
+TileElevationDataRequest::~TileElevationDataRequest() {
+  JAVA_POST_DISPOSE
+}
 
 void TileElevationDataRequest::onData(const Sector& sector,
                                       const Vector2I& resolution,

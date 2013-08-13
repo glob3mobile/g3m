@@ -14,6 +14,8 @@
 Layer::~Layer() {
   delete _condition;
   delete _parameters;
+
+  JAVA_POST_DISPOSE
 }
 
 bool Layer::isAvailable(const G3MRenderContext* rc,

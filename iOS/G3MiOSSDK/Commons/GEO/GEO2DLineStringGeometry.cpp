@@ -18,6 +18,8 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
     delete coordinate;
   }
   delete _coordinates;
+
+  JAVA_POST_DISPOSE
 }
 
 std::vector<GEOSymbol*>* GEO2DLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {

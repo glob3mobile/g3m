@@ -25,6 +25,8 @@
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
   delete _borderColor;
+  
+  JAVA_POST_DISPOSE
 }
 
 const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {

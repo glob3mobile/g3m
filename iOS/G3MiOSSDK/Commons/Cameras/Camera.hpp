@@ -116,7 +116,7 @@ public:
 /**
  * Class to control the camera.
  */
-class Camera {
+class Camera : public Disposable {
 public:
   Camera(const Camera &that):
   _width(that._width),

@@ -16,7 +16,7 @@
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-class Geodetic2D {
+class Geodetic2D : public Disposable {
 public:
   const Angle _latitude;
   const Angle _longitude;

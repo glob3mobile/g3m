@@ -156,6 +156,8 @@ GLFeatureSet::~GLFeatureSet() {
   for (int i = 0; i < _nFeatures; i++) {
     _features[i]->_release();
   }
+
+  JAVA_POST_DISPOSE
 }
 
 void GLFeatureLightingGroup::applyOnGlobalGLState(GLGlobalState* state) {

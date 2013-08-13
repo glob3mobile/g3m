@@ -93,6 +93,8 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #ifdef JAVA_CODE
   }
 #endif
+
+  JAVA_POST_DISPOSE
 }
 
 int LeveledTexturedMesh::getVertexCount() const {

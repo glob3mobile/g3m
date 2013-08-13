@@ -89,6 +89,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 
 GeometryGLFeature::~GeometryGLFeature() {
 //  _position->_release();
+  JAVA_POST_DISPOSE
 }
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,

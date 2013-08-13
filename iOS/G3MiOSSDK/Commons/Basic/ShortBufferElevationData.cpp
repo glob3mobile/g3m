@@ -41,6 +41,8 @@ _buffer(buffer)
 
 ShortBufferElevationData::~ShortBufferElevationData() {
   delete [] _buffer;
+
+  JAVA_POST_DISPOSE
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {

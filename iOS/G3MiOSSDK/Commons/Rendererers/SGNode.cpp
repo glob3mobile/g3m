@@ -19,6 +19,8 @@ SGNode::~SGNode() {
     SGNode* child = _children[i];
     delete child;
   }
+
+  JAVA_POST_DISPOSE
 }
 
 

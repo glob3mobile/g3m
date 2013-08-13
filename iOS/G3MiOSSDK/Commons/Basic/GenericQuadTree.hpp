@@ -17,7 +17,7 @@
 
 class GenericQuadTree_Node;
 
-class GenericQuadTreeNodeVisitor {
+class GenericQuadTreeNodeVisitor : public Disposable {
 public:
   virtual ~GenericQuadTreeNodeVisitor() {
     JAVA_POST_DISPOSE
@@ -27,7 +27,7 @@ public:
   virtual void endVisit(bool aborted) const = 0;
 };
 
-class GenericQuadTreeVisitor {
+class GenericQuadTreeVisitor : public Disposable {
 
   mutable int _comparisonsDone;
 
@@ -50,7 +50,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
-class GenericQuadTree_Element {
+class GenericQuadTree_Element : public Disposable {
 public:
   const void*  _element;
 
@@ -104,7 +104,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-class GenericQuadTree_Node {
+class GenericQuadTree_Node : public Disposable {
 private:
   const int     _depth;
   Sector*  _sector;
@@ -179,7 +179,7 @@ public:
   void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
 };
 
-class GenericQuadTree {
+class GenericQuadTree : public Disposable {
 private:
   GenericQuadTree_Node* _root;
 

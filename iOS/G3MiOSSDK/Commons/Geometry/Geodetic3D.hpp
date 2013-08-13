@@ -16,7 +16,7 @@
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-class Geodetic3D {
+class Geodetic3D : public Disposable {
 
 public:
   const Angle _latitude;

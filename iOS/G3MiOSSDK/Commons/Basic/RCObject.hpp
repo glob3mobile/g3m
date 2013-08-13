@@ -11,7 +11,7 @@
 
 #include "ILogger.hpp"
 
-class RCObject {
+class RCObject : public Disposable {
 private:
   mutable long _referenceCounter;
 

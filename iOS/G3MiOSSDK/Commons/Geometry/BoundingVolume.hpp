@@ -21,7 +21,7 @@ class Box;
 class Sphere;
 class GLState;
 
-class BoundingVolume {
+class BoundingVolume : public Disposable {
 public:
   virtual ~BoundingVolume() {
     JAVA_POST_DISPOSE

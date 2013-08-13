@@ -43,6 +43,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _tileRasterizer;
   delete _tileTessellator;
   delete _elevationDataProvider;
+
+  JAVA_POST_DISPOSE
 }
 
 /**

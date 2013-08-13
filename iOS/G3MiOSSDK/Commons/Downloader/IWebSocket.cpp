@@ -16,5 +16,6 @@ IWebSocket::~IWebSocket() {
   if (_autodeleteListener) {
     delete _listener;
   }
+  
   JAVA_POST_DISPOSE
 }

@@ -79,6 +79,8 @@ IG3MBuilder::~IG3MBuilder() {
   }
   delete _userData;
   delete _planetRendererBuilder;
+
+  JAVA_POST_DISPOSE
 }
 
 /**

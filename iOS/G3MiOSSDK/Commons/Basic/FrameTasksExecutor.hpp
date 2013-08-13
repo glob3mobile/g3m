@@ -16,7 +16,7 @@
 class G3MRenderContext;
 
 
-class FrameTask {
+class FrameTask : public Disposable {
 public:
   virtual ~FrameTask() {
     JAVA_POST_DISPOSE
@@ -30,7 +30,7 @@ public:
 
 
 
-class FrameTasksExecutor {
+class FrameTasksExecutor : public Disposable {
 private:
   const int          _minimumExecutionsPerFrame;
   const int          _maximumExecutionsPerFrame;

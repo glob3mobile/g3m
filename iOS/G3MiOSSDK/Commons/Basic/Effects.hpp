@@ -21,7 +21,7 @@
 class G3MRenderContext;
 class G3MContext;
 
-class EffectTarget{
+class EffectTarget {
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
@@ -30,7 +30,7 @@ public:
 #endif
 };
 
-class Effect {
+class Effect : public Disposable {
 protected:
 
   double pace(const double f) const {
@@ -180,10 +180,10 @@ public:
 
 
 
-class EffectsScheduler {
+class EffectsScheduler : public Disposable {
 private:
 
-  class EffectRun {
+  class EffectRun : public Disposable {
   public:
     Effect*       _effect;
     EffectTarget* _target;

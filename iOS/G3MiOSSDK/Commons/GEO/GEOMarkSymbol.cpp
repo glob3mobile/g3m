@@ -14,6 +14,8 @@
 
 GEOMarkSymbol::~GEOMarkSymbol() {
   delete _mark;
+
+  JAVA_POST_DISPOSE
 }
 
 bool GEOMarkSymbol::symbolize(const G3MRenderContext* rc,

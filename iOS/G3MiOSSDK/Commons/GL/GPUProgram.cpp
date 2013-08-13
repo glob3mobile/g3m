@@ -75,6 +75,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 GPUProgram::~GPUProgram() {
   delete[] _createdAttributes;
   delete[] _createdUniforms;
+
+  JAVA_POST_DISPOSE
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {

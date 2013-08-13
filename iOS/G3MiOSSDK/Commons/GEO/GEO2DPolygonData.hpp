@@ -12,7 +12,9 @@
 #include <vector>
 class Geodetic2D;
 
-class GEO2DPolygonData {
+#include "Disposable.hpp"
+
+class GEO2DPolygonData : public Disposable {
 private:
   const std::vector<Geodetic2D*>*               _coordinates;
   const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;

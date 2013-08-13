@@ -43,6 +43,8 @@ GEORenderer::~GEORenderer() {
     GEORenderer_ObjectSymbolizerPair* pair = _children[i];
     delete pair;
   }
+
+  JAVA_POST_DISPOSE
 }
 
 void GEORenderer::addGEOObject(GEOObject* geoObject,

@@ -27,6 +27,8 @@ GEOFeature::~GEOFeature() {
   delete _id;
   delete _geometry;
   delete _properties;
+
+  JAVA_POST_DISPOSE
 }
 
 void GEOFeature::symbolize(const G3MRenderContext* rc,

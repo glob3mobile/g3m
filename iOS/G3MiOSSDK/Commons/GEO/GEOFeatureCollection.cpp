@@ -17,6 +17,8 @@ GEOFeatureCollection::~GEOFeatureCollection() {
     GEOFeature* feature = _features[i];
     delete feature;
   }
+
+  JAVA_POST_DISPOSE
 }
 
 void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,

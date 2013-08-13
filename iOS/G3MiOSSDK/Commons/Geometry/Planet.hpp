@@ -14,7 +14,7 @@
 #include <vector>
 #include "Vector3D.hpp"
 
-class Planet {
+class Planet : public Disposable {
 public:
   
   static const Planet* createEarth();

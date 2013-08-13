@@ -684,6 +684,8 @@ BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
   if (_builder != NULL) {
     _builder->_release();
   }
+
+  JAVA_POST_DISPOSE
 }
 
 
@@ -691,6 +693,8 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
   if (_builder != NULL) {
     _builder->_release();
   }
+
+  JAVA_POST_DISPOSE
 }
 
 
@@ -718,7 +722,7 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-
+  JAVA_POST_DISPOSE
 }
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,

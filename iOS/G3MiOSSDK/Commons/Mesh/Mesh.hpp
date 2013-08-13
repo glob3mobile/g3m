@@ -17,7 +17,7 @@
 class Vector3D;
 class GPUProgramState;
 
-class Mesh {
+class Mesh : public Disposable {
 public:
   
   virtual ~Mesh() {

@@ -185,6 +185,8 @@ bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
 
 GEORasterSymbol::~GEORasterSymbol() {
   delete _sector;
+
+  JAVA_POST_DISPOSE
 }
 
 void GEORasterSymbol::rasterLine(const std::vector<Geodetic2D*>* coordinates,

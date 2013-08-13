@@ -13,7 +13,7 @@
 #include "ILogger.hpp"
 class IByteBuffer;
 
-class ByteBufferBuilder {
+class ByteBufferBuilder : public Disposable {
 private:
   std::vector<unsigned char> _values;
 

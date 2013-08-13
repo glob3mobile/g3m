@@ -19,7 +19,7 @@ SceneJSParserStatistics::SceneJSParserStatistics() {
 }
 
 SceneJSParserStatistics::~SceneJSParserStatistics() {
-  
+  JAVA_POST_DISPOSE
 }
 
 void SceneJSParserStatistics::computeNode() {
