@@ -63,5 +63,7 @@ public class IndexedMesh extends AbstractMesh
       if (_indices != null)
          _indices.dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 }

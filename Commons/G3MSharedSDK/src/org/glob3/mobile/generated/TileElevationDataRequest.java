@@ -20,6 +20,7 @@ public class TileElevationDataRequest
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final void onData(Sector sector, Vector2I resolution, ElevationData elevationData)

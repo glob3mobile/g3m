@@ -123,6 +123,8 @@ public abstract class AbstractGeometryMesh extends Mesh
        _extent.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final BoundingVolume getBoundingVolume()

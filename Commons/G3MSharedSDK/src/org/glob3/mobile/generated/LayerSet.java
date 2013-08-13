@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 //class ChangedListener;
 
-public class LayerSet
+public class LayerSet extends Disposable
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
@@ -173,6 +173,8 @@ public class LayerSet
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void removeAllLayers(boolean deleteLayers)

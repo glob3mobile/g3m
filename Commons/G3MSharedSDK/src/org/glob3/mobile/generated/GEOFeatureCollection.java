@@ -42,6 +42,8 @@ public class GEOFeatureCollection extends GEOObject
       if (feature != null)
          feature.dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)

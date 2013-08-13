@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class ICanvas
+public abstract class ICanvas extends Disposable
 {
   protected int _canvasWidth;
   protected int _canvasHeight;
@@ -99,6 +99,8 @@ public abstract class ICanvas
   {
     if (_currentFont != null)
        _currentFont.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   /**

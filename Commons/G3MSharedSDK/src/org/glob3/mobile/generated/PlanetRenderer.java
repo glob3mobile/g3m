@@ -348,6 +348,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       if (entry != null)
          entry.dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void initialize(G3MContext context)

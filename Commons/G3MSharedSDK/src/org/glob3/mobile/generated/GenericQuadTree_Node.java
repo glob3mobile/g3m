@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-public class GenericQuadTree_Node
+public class GenericQuadTree_Node extends Disposable
 {
   private final int _depth;
   private Sector _sector;
@@ -192,6 +192,8 @@ public class GenericQuadTree_Node
   
     if (_sector != null)
        _sector.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final Sector getSector()

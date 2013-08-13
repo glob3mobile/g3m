@@ -57,6 +57,8 @@ public class MapBoo_Scene
        _baseLayer.dispose();
     if (_overlayLayer != null)
        _overlayLayer.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final String description()

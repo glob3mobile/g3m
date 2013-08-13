@@ -67,6 +67,8 @@ public class Box extends BoundingVolume
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final boolean touchesFrustum(Frustum frustum)

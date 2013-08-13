@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class FrameTasksExecutor
+public class FrameTasksExecutor extends Disposable
 {
   private final int _minimumExecutionsPerFrame;
   private final int _maximumExecutionsPerFrame;

@@ -187,6 +187,8 @@ public class GPUProgram
   {
     _createdAttributes = null;
     _createdUniforms = null;
+  
+    JAVA_POST_DISPOSE
   }
 
   public final String getName()

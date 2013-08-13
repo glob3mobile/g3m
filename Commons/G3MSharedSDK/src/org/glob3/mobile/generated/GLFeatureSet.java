@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GLFeatureSet
+public class GLFeatureSet extends Disposable
 {
    protected static final int MAX_CONCURRENT_FEATURES_PER_GROUP = 20;
   protected final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
@@ -21,6 +21,8 @@ public class GLFeatureSet
     {
       _features[i]._release();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final GLFeature get(int i)

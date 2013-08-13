@@ -489,6 +489,8 @@ public abstract class IG3MBuilder
        _userData.dispose();
     if (_planetRendererBuilder != null)
        _planetRendererBuilder.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
 

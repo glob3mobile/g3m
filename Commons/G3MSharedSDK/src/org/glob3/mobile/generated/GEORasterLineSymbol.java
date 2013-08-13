@@ -55,6 +55,8 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   
       _coordinates = null;
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)

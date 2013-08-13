@@ -251,6 +251,8 @@ public class PlanetRendererBuilder
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
+  
+    JAVA_POST_DISPOSE
   }
   public final PlanetRenderer create()
   {

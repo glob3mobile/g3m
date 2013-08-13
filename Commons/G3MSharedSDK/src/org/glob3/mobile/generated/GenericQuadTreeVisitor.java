@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class GenericQuadTreeVisitor
+public abstract class GenericQuadTreeVisitor extends Disposable
 {
 
   private int _comparisonsDone;

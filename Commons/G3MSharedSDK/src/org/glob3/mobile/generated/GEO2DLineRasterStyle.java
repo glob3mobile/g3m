@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO2DLineRasterStyle
+public class GEO2DLineRasterStyle extends Disposable
 {
   private final Color _color ;
   private final float _width;

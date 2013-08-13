@@ -24,7 +24,8 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape implements EffectTarget
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public abstract class Shape implements EffectTarget, Disposable
 {
   private Geodetic3D _position;
 
@@ -107,6 +108,8 @@ public abstract class Shape implements EffectTarget
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final Geodetic3D getPosition()

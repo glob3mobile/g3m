@@ -42,7 +42,6 @@ public class GPUVariableValueSet
   }
   public void dispose()
   {
-  
     for (int i = 0; i <= _highestUniformKey; i++)
     {
       GPUUniformValue u = _uniformValues[i];
@@ -60,6 +59,8 @@ public class GPUVariableValueSet
         a._release();
       }
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)

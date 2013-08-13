@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class Interpolator;
 
-public abstract class ElevationData
+public abstract class ElevationData extends Disposable
 {
   private Interpolator _interpolator;
   private Interpolator getInterpolator()
@@ -57,6 +57,7 @@ public abstract class ElevationData
       if (_interpolator != null)
          _interpolator.dispose();
     }
+    JAVA_POST_DISPOSE
   }
 
   public Vector2I getExtent()

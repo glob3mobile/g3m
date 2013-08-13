@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class Planet
+public abstract class Planet extends Disposable
 {
 
   public static Planet createEarth()

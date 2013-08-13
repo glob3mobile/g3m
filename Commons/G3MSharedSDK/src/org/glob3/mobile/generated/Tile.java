@@ -616,6 +616,8 @@ public class Tile
   
     if (_lodTimer != null)
        _lodTimer.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
 

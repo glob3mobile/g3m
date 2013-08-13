@@ -51,6 +51,8 @@ public class GEOFeature extends GEOObject
        _geometry.dispose();
     if (_properties != null)
        _properties.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final JSONObject getProperties()

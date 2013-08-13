@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class ICanvas;
 
-public abstract class CanvasElement
+public abstract class CanvasElement extends Disposable
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  CanvasElement(CanvasElement that);

@@ -76,6 +76,7 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
   //    delete _holesCoordinatesArray;
   //  }
   
+    JAVA_POST_DISPOSE
   }
 
   public final GEO2DPolygonData getPolygonData()

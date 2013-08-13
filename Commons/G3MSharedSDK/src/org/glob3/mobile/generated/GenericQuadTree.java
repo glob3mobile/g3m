@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GenericQuadTree
+public class GenericQuadTree extends Disposable
 {
   private GenericQuadTree_Node _root;
 
@@ -28,6 +28,8 @@ public class GenericQuadTree
   {
     if (_root != null)
        _root.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final boolean add(Sector sector, Object element)

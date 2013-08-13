@@ -35,6 +35,8 @@ public class JSONObject extends JSONBaseObject
   public void dispose()
   {
     _entries.clear();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final JSONObject asObject()

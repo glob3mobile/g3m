@@ -139,6 +139,8 @@ public class QuadShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void imageDownloaded(IImage image)

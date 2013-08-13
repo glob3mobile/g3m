@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DPolygonData
+
+public class GEO2DPolygonData extends Disposable
 {
   private final java.util.ArrayList<Geodetic2D> _coordinates;
   private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
@@ -34,6 +35,7 @@ public class GEO2DPolygonData
 
   public void dispose()
   {
+    JAVA_POST_DISPOSE
   }
 
   public final java.util.ArrayList<Geodetic2D> getCoordinates()

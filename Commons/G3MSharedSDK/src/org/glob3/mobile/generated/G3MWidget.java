@@ -83,6 +83,8 @@ public class G3MWidget
   
     if (_context != null)
        _context.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void render(int width, int height)

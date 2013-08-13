@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class GPUProgramState;
 
-public abstract class Mesh
+public abstract class Mesh extends Disposable
 {
 
   public void dispose()

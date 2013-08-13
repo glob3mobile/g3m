@@ -106,7 +106,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
 
 
-  private static class CompositeElevationDataProvider_Request
+  private static class CompositeElevationDataProvider_Request extends Disposable
   {
 
     private final CompositeElevationDataProvider _compProvider;

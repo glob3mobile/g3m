@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 /**
  * Class to control the camera.
  */
-public class Camera
+public class Camera extends Disposable
 {
   public Camera(Camera that)
   {

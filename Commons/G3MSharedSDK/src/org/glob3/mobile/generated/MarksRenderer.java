@@ -118,6 +118,8 @@ public class MarksRenderer extends LeafRenderer
       if (_billboardTexCoord != null)
          _billboardTexCoord.dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public void initialize(G3MContext context)

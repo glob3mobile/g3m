@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
-public class Geodetic3D
+public class Geodetic3D extends Disposable
 {
 
   public final Angle _latitude ;

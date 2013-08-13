@@ -100,6 +100,8 @@ public class Matrix44D extends RCObject
     _columnMajorFloatArray = null;
     if (_columnMajorFloatBuffer != null)
        _columnMajorFloatBuffer.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final Matrix44D createMultiplication(Matrix44D that)

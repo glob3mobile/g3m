@@ -151,6 +151,8 @@ public abstract class AbstractMesh extends Mesh
        _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final BoundingVolume getBoundingVolume()

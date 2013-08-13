@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class TileTessellator
+public abstract class TileTessellator extends Disposable
 {
   public void dispose()
   {

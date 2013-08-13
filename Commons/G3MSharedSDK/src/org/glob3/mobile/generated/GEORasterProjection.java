@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEORasterProjection
+public class GEORasterProjection extends Disposable
 {
   private final Sector _sector ;
   private final boolean _mercator;

@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class LayerTilesRenderParameters;
 
-public abstract class Layer
+public abstract class Layer extends Disposable
 {
   private LayerCondition _condition;
   private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
@@ -101,6 +101,8 @@ public abstract class Layer
     if (_condition != null)
        _condition.dispose();
     _parameters = null;
+  
+    JAVA_POST_DISPOSE
   }
 
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);

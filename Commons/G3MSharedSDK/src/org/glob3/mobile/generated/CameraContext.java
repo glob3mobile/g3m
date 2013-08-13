@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CameraContext
+public class CameraContext extends Disposable
 {
   private Gesture _currentGesture;
   private Camera _nextCamera;

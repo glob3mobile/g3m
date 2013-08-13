@@ -68,6 +68,8 @@ public class MeshRenderer extends LeafRenderer
       if (mesh != null)
          mesh.dispose();
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void addMesh(Mesh mesh)

@@ -58,6 +58,8 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
       }
       _coordinatesArray = null;
     }
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)

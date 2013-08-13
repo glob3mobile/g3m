@@ -75,6 +75,8 @@ public abstract class AbstractMeshShape extends Shape
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

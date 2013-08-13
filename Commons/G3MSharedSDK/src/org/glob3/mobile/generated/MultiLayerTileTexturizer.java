@@ -43,7 +43,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-  
+    JAVA_POST_DISPOSE
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)

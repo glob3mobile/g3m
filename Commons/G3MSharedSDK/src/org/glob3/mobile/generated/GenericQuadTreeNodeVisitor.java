@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GenericQuadTree_Node;
 
-public abstract class GenericQuadTreeNodeVisitor
+public abstract class GenericQuadTreeNodeVisitor extends Disposable
 {
   public void dispose()
   {

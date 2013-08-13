@@ -260,6 +260,8 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void imageDownloaded(IImage image)

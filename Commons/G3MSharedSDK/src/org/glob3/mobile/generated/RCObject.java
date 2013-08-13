@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class RCObject
+public class RCObject extends Disposable
 {
   private int _referenceCounter;
 
@@ -38,6 +38,8 @@ public class RCObject
     {
       ILogger.instance().logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
     }
+  
+    JAVA_POST_DISPOSE
   }
 
 

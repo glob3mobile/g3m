@@ -103,6 +103,8 @@ public class GLState
        _valuesSet.dispose();
     if (_globalState != null)
        _globalState.dispose();
+  
+    JAVA_POST_DISPOSE
   }
 
   public final void setParent(GLState parent)
