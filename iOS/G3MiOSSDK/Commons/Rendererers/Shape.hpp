@@ -22,6 +22,8 @@ class MutableMatrix44D;
 
 #include "SurfaceElevationProvider.hpp"
 
+#include "Geodetic3D.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
@@ -210,6 +212,11 @@ public:
                         double rawElevation,            //Without considering vertical exaggeration
                         double verticalExaggeration){
 //    printf("SHAPE CHANGES ELEVATION");
+
+    Geodetic3D g(_position->_latitude, _position->_longitude, rawElevation * verticalExaggeration);
+    delete _position;
+    _position = new Geodetic3D(g);
+
     delete _transformMatrix;
     _transformMatrix = NULL;
   }
