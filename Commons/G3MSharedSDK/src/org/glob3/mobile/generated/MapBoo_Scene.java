@@ -38,7 +38,7 @@ public class MapBoo_Scene
     return _backgroundColor;
   }
 
-  public final void recreateLayerSet(LayerSet layerSet)
+  public final void fillLayerSet(LayerSet layerSet)
   {
     if (_baseLayer != null)
     {

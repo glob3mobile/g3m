@@ -22,6 +22,8 @@ public abstract class MapBooBuilder
   private G3MWidget _g3mWidget;
   private IStorage _storage;
 
+  private G3MContext _context;
+
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -98,7 +100,7 @@ public abstract class MapBooBuilder
     final MapBoo_Scene scene = getApplicationCurrentScene();
     if (scene != null)
     {
-      scene.recreateLayerSet(_layerSet);
+      scene.fillLayerSet(_layerSet);
     }
   }
 
@@ -132,10 +134,6 @@ public abstract class MapBooBuilder
     return _gpuProgramManager;
   }
 
-//  void resetApplication(const std::string& applicationId);
-
-//  void resetG3MWidget();
-
   private GInitializationTask createInitializationTask()
   {
     return _useWebSockets ? new MapBooBuilder_SceneTubeConnector(this) : null;
@@ -157,37 +155,37 @@ public abstract class MapBooBuilder
   
     final TimeInterval defaultTimeToCache = TimeInterval.fromDays(30);
   
-    final JSONObject jsonBaseLayer = jsonBaseObjectLayer.asObject();
-    if (jsonBaseLayer == null)
+    final JSONObject jsonLayer = jsonBaseObjectLayer.asObject();
+    if (jsonLayer == null)
     {
       ILogger.instance().logError("Layer is not a json object");
       return null;
     }
   
-    final String layerType = jsonBaseLayer.getAsString("layer", "<layer not present>");
+    final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
     if (layerType.compareTo("OSM") == 0)
     {
       return new OSMLayer(defaultTimeToCache);
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
-      return parseMapQuestLayer(jsonBaseLayer, defaultTimeToCache);
+      return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("BingMaps") == 0)
     {
-      return parseBingMapsLayer(jsonBaseLayer, defaultTimeToCache);
+      return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      return parseCartoDBLayer(jsonBaseLayer, defaultTimeToCache);
+      return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
-      return parseMapBoxLayer(jsonBaseLayer, defaultTimeToCache);
+      return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      return parseWMSLayer(jsonBaseLayer);
+      return parseWMSLayer(jsonLayer);
     }
     else
     {
@@ -196,9 +194,9 @@ public abstract class MapBooBuilder
     }
   }
 
-  private MapQuestLayer parseMapQuestLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  private MapQuestLayer parseMapQuestLayer(JSONObject jsonLayer, TimeInterval timeToCache)
   {
-    final String imagery = jsonBaseLayer.getAsString("imagery", "<imagery not present>");
+    final String imagery = jsonLayer.getAsString("imagery", "<imagery not present>");
     if (imagery.compareTo("OpenAerial") == 0)
     {
       return MapQuestLayer.newOpenAerial(timeToCache);
@@ -208,58 +206,58 @@ public abstract class MapBooBuilder
     return MapQuestLayer.newOSM(timeToCache);
   }
 
-  private BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  private BingMapsLayer parseBingMapsLayer(JSONObject jsonLayer, TimeInterval timeToCache)
   {
-    final String key = jsonBaseLayer.getAsString("key", "");
-    final String imagerySet = jsonBaseLayer.getAsString("imagerySet", "Aerial");
+    final String key = jsonLayer.getAsString("key", "");
+    final String imagerySet = jsonLayer.getAsString("imagerySet", "Aerial");
   
     return new BingMapsLayer(imagerySet, key, timeToCache);
   }
 
-  private CartoDBLayer parseCartoDBLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, TimeInterval timeToCache)
   {
-    final String userName = jsonBaseLayer.getAsString("userName", "");
-    final String table = jsonBaseLayer.getAsString("table", "");
+    final String userName = jsonLayer.getAsString("userName", "");
+    final String table = jsonLayer.getAsString("table", "");
   
     return new CartoDBLayer(userName, table, timeToCache);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  BingMapsLayer parseBingMapsLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache);
+//  BingMapsLayer parseBingMapsLayer(JSONObject jsonLayer, TimeInterval timeToCache);
 
-  private MapBoxLayer parseMapBoxLayer(JSONObject jsonBaseLayer, TimeInterval timeToCache)
+  private MapBoxLayer parseMapBoxLayer(JSONObject jsonLayer, TimeInterval timeToCache)
   {
-    final String mapKey = jsonBaseLayer.getAsString("mapKey", "");
+    final String mapKey = jsonLayer.getAsString("mapKey", "");
   
     return new MapBoxLayer(mapKey, timeToCache);
   }
 
-  private WMSLayer parseWMSLayer(JSONObject jsonBaseLayer)
+  private WMSLayer parseWMSLayer(JSONObject jsonLayer)
   {
   
-    final String mapLayer = jsonBaseLayer.getAsString("layerName", "");
-    final URL mapServerURL = new URL(jsonBaseLayer.getAsString("server", ""), false);
-    final String versionStr = jsonBaseLayer.getAsString("version", "");
+    final String mapLayer = jsonLayer.getAsString("layerName", "");
+    final URL mapServerURL = new URL(jsonLayer.getAsString("server", ""), false);
+    final String versionStr = jsonLayer.getAsString("version", "");
     WMSServerVersion mapServerVersion = WMSServerVersion.WMS_1_1_0;
     if (versionStr.compareTo("WMS_1_3_0") == 0)
     {
       mapServerVersion = WMSServerVersion.WMS_1_3_0;
     }
-    final String queryLayer = jsonBaseLayer.getAsString("queryLayer", "");
-    final String style = jsonBaseLayer.getAsString("style", "");
+    final String queryLayer = jsonLayer.getAsString("queryLayer", "");
+    final String style = jsonLayer.getAsString("style", "");
     final URL queryServerURL = new URL("", false);
     final WMSServerVersion queryServerVersion = mapServerVersion;
-    final double lowerLat = jsonBaseLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonBaseLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonBaseLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonBaseLayer.getAsNumber("upperLon", 180.0);
+    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
     final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
-    String imageFormat = jsonBaseLayer.getAsString("imageFormat", "image/png");
+    String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
     if (imageFormat.compareTo("JPG") == 0)
     {
       imageFormat = "image/jpeg";
     }
-    final String srs = jsonBaseLayer.getAsString("projection", "EPSG_4326");
+    final String srs = jsonLayer.getAsString("projection", "EPSG_4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
     if (srs.compareTo("EPSG_4326") == 0)
     {
@@ -269,11 +267,11 @@ public abstract class MapBooBuilder
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
-    final boolean isTransparent = jsonBaseLayer.getAsBoolean("transparent", false);
-    final double expiration = jsonBaseLayer.getAsNumber("expiration", 0);
+    final boolean isTransparent = jsonLayer.getAsBoolean("transparent", false);
+    final double expiration = jsonLayer.getAsNumber("expiration", 0);
     final long milliseconds = IMathUtils.instance().round(expiration);
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
-    final boolean readExpired = jsonBaseLayer.getAsBoolean("acceptExpiration", false);
+    final boolean readExpired = jsonLayer.getAsBoolean("acceptExpiration", false);
   
     return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
@@ -290,13 +288,10 @@ public abstract class MapBooBuilder
   private MapBoo_Scene getApplicationCurrentScene()
   {
     final int currentSceneIndex = getApplicationCurrentSceneIndex();
-    final int applicationScenesSize = _applicationScenes.size();
-    if ((applicationScenesSize == 0) || (currentSceneIndex < 0) || (currentSceneIndex >= applicationScenesSize))
-    {
-      return null;
-    }
   
-    return _applicationScenes.get(currentSceneIndex);
+    final boolean validCurrentSceneIndex = ((currentSceneIndex >= 0) && (currentSceneIndex < _applicationScenes.size()));
+  
+    return validCurrentSceneIndex ? _applicationScenes.get(currentSceneIndex) : null;
   }
 
   private Color getCurrentBackgroundColor()
@@ -349,7 +344,7 @@ public abstract class MapBooBuilder
     {
       _g3mWidget.setBackgroundColor(getCurrentBackgroundColor());
   
-      // force inmediate ejecution of PeriodicalTasks
+      // force immediate execution of PeriodicalTasks
       _g3mWidget.resetPeriodicalTasksTimeouts();
     }
   }
@@ -375,6 +370,7 @@ public abstract class MapBooBuilder
      _isApplicationTubeOpen = false;
      _applicationCurrentSceneIndex = -1;
      _applicationDefaultSceneIndex = 0;
+     _context = null;
   
   }
 
@@ -458,19 +454,19 @@ public abstract class MapBooBuilder
 
   protected abstract GPUProgramManager createGPUProgramManager();
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final int getApplicationTimestamp()
   {
     return _applicationTimestamp;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationTimestamp(int timestamp)
   {
     _applicationTimestamp = timestamp;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationName(String name)
   {
     if (_applicationName.compareTo(name) != 0)
@@ -479,12 +475,12 @@ public abstract class MapBooBuilder
   
       if (_applicationListener != null)
       {
-        _applicationListener.onNameChanged(_applicationName);
+        _applicationListener.onNameChanged(_context, _applicationName);
       }
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationDescription(String description)
   {
     if (_applicationDescription.compareTo(description) != 0)
@@ -493,12 +489,12 @@ public abstract class MapBooBuilder
   
       if (_applicationListener != null)
       {
-        _applicationListener.onDescriptionChanged(_applicationDescription);
+        _applicationListener.onDescriptionChanged(_context, _applicationDescription);
       }
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -517,11 +513,11 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onScenesChanged(_applicationScenes);
+      _applicationListener.onScenesChanged(_context, _applicationScenes);
     }
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final URL createPollingApplicationDescriptionURL()
   {
     final String tubesPath = _serverURL.getPath();
@@ -529,7 +525,7 @@ public abstract class MapBooBuilder
     return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final URL createApplicationTubeURL()
   {
     final String tubesPath = _tubesURL.getPath();
@@ -537,10 +533,7 @@ public abstract class MapBooBuilder
     return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
   }
 
-//  /** Private to G3M, don't call it */
-//  void rawChangeApplication(const std::string& applicationId);
-
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationDescription(String json, URL url)
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
@@ -620,7 +613,7 @@ public abstract class MapBooBuilder
   
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void openApplicationTube(G3MContext context)
   {
     final boolean autodeleteListener = true;
@@ -629,13 +622,13 @@ public abstract class MapBooBuilder
     context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationDefaultSceneIndex(int defaultSceneIndex)
   {
     _applicationDefaultSceneIndex = defaultSceneIndex;
   }
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   public final void rawChangeScene(int sceneIndex)
   {
     _applicationCurrentSceneIndex = sceneIndex;
@@ -644,64 +637,28 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onSceneChanged(_applicationCurrentSceneIndex);
+      _applicationListener.onSceneChanged(_context, _applicationCurrentSceneIndex);
     }
   }
 
+  /** Private to MapbooBuilder, don't call it */
+  public final void setContext(G3MContext context)
+  {
+    _context = context;
+  }
 
-  //void MapBooBuilder::resetApplication(const std::string& applicationId) {
-  //  _applicationId = applicationId;
-  //
-  //  _applicationTimestamp = -1;
-  //
-  ////  delete _sceneBaseLayer;
-  ////  _sceneBaseLayer = NULL;
-  ////
-  ////  delete _sceneOverlayLayer;
-  ////  _sceneOverlayLayer = NULL;
-  //
-  ////  _sceneUser = "";
-  //
-  //  _applicationName = "";
-  //
-  //  _applicationDescription = "";
-  //
-  ////  delete _sceneBackgroundColor;
-  ////  _sceneBackgroundColor = Color::newFromRGBA(0, 0, 0, 1);
-  //}
-  
-  //void MapBooBuilder::resetG3MWidget() {
-  //  _layerSet->removeAllLayers(false);
-  //
-  //  if (_g3mWidget != NULL) {
-  //    _g3mWidget->setBackgroundColor(*_sceneBackgroundColor);
-  //
-  //    // force inmediate ejecution of PeriodicalTasks
-  //    _g3mWidget->resetPeriodicalTasksTimeouts();
-  //  }
-  //}
-  
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationTubeOpened(boolean open)
   {
     _isApplicationTubeOpen = open;
   }
 
+  /** Private to MapbooBuilder, don't call it */
   public final boolean isApplicationTubeOpen()
   {
     return _isApplicationTubeOpen;
   }
 
-//  void changeApplication(const std::string& applicationId);
-
-
-  //void MapBooBuilder::changeApplication(const std::string& applicationId) {
-  //  if (applicationId.compare(_applicationId) != 0) {
-  //    getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneIdTask(this, applicationId),
-  //                                             true);
-  //  }
-  //}
-  
-  
   public final void changeScene(int sceneIndex)
   {
     final int currentSceneIndex = getApplicationCurrentSceneIndex();
@@ -710,6 +667,19 @@ public abstract class MapBooBuilder
       if ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()))
       {
         getThreadUtils().invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneIndex), true);
+      }
+    }
+  }
+
+  public final void changeScene(MapBoo_Scene scene)
+  {
+    final int size = _applicationScenes.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_applicationScenes.get(i) == scene)
+      {
+        changeScene(i);
+        break;
       }
     }
   }

@@ -10,6 +10,7 @@ public class MapBooBuilder_SceneTubeConnector extends GInitializationTask
 
   public final void run(G3MContext context)
   {
+    _builder.setContext(context);
     _builder.openApplicationTube(context);
   }
 

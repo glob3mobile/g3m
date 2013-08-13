@@ -51,17 +51,22 @@ public:
   virtual ~MapBooApplicationChangeListener() {
   }
 
-  virtual void onNameChanged(const std::string& name) = 0;
+  virtual void onNameChanged(const G3MContext* context,
+                             const std::string& name) = 0;
 
-  virtual void onDescriptionChanged(const std::string& description) = 0;
+  virtual void onDescriptionChanged(const G3MContext* context,
+                                    const std::string& description) = 0;
 
-  virtual void onIconChanged(const std::string& icon) = 0;
+  virtual void onIconChanged(const G3MContext* context,
+                             const std::string& icon) = 0;
 
-  virtual void onScenesChanged(const std::vector<MapBoo_Scene*>& scenes) = 0;
+  virtual void onScenesChanged(const G3MContext* context,
+                               const std::vector<MapBoo_Scene*>& scenes) = 0;
 
   // virtual void onWarningsChanged() = 0;
 
-  virtual void onSceneChanged(int sceneIndex) = 0;
+  virtual void onSceneChanged(const G3MContext* context,
+                              int sceneIndex) = 0;
 };
 
 
@@ -106,7 +111,7 @@ public:
     return _backgroundColor;
   }
 
-  void recreateLayerSet(LayerSet* layerSet) const;
+  void fillLayerSet(LayerSet* layerSet) const;
 
   ~MapBoo_Scene();
 
@@ -144,6 +149,13 @@ private:
   G3MWidget* _g3mWidget;
   IStorage*  _storage;
 
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
   bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
@@ -168,32 +180,28 @@ private:
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
 
-//  void resetApplication(const std::string& applicationId);
-
-//  void resetG3MWidget();
-
   GInitializationTask* createInitializationTask();
 
 
 
   Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
 
-  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonBaseLayer,
+  MapQuestLayer* parseMapQuestLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache);
 
-  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonBaseLayer,
+  CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
                                   const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonBaseLayer,
+  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
                                     const TimeInterval& timeToCache) const;
 
-  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonBaseLayer,
+  MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
-  WMSLayer* parseWMSLayer(const JSONObject* jsonBaseLayer) const;
+  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
 
 
   const int getApplicationCurrentSceneIndex();
@@ -236,52 +244,54 @@ protected:
   virtual GPUProgramManager* createGPUProgramManager() = 0;
 
 public:
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationTimestamp(const int timestamp);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationName(const std::string& name);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationDescription(const std::string& description);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   const URL createPollingApplicationDescriptionURL() const;
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
 
-//  /** Private to G3M, don't call it */
-//  void rawChangeApplication(const std::string& applicationId);
-
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void parseApplicationDescription(const std::string& json,
                                    const URL& url);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void openApplicationTube(const G3MContext* context);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationDefaultSceneIndex(int defaultSceneIndex);
 
-  /** Private to G3M, don't call it */
+  /** Private to MapbooBuilder, don't call it */
   void rawChangeScene(int sceneIndex);
 
+  /** Private to MapbooBuilder, don't call it */
+  void setContext(const G3MContext* context);
+
+  /** Private to MapbooBuilder, don't call it */
   void setApplicationTubeOpened(bool open);
   
+  /** Private to MapbooBuilder, don't call it */
   bool isApplicationTubeOpen() const {
     return _isApplicationTubeOpen;
   }
   
-//  void changeApplication(const std::string& applicationId);
-
   void changeScene(int sceneIndex);
+
+  void changeScene(const MapBoo_Scene* scene);
 
 };
 

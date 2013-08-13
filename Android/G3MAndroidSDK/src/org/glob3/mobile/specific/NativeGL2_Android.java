@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public final class NativeGL2_Android
    }
 
 
-   private void checkOpenGLThread() {
+   private final void checkOpenGLThread() {
       if (_openglThread != null) {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openglThread) {
@@ -294,13 +295,16 @@ public final class NativeGL2_Android
                                    final IFloatBuffer buffer) {
       checkOpenGLThread();
 
-      //      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
-      //GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
+      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
 
 
-      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-      buffer_Android.bindAsVBOToGPU();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
+      // =========================================================================
+      // dgd: the above code generates GPU memory problems on Android
+      // =========================================================================
+      //      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
+      //      buffer_Android.bindAsVBOToGPU();
+      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
 
 
       //      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
@@ -756,9 +760,9 @@ public final class NativeGL2_Android
             return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
             return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
-         case GLES20.GL_SAMPLER_2D:
-            final int NOT_IMPLEMENTED_YET;
-            return null;
+            //         case GLES20.GL_SAMPLER_2D:
+            //            final int NOT_IMPLEMENTED_YET;
+            //            return null;
          default:
             return null;
       }

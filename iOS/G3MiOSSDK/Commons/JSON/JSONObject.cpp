@@ -75,19 +75,37 @@ const JSONString* JSONObject::getAsString(const std::string& key) const {
 
 bool JSONObject::getAsBoolean(const std::string& key,
                               bool defaultValue) const {
-  const JSONBoolean* jsBool = getAsBoolean(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONBoolean* jsBool = jsValue->asBoolean();
   return (jsBool == NULL) ? defaultValue : jsBool->value();
 }
 
 double JSONObject::getAsNumber(const std::string& key,
                                double defaultValue) const {
-  const JSONNumber* jsNumber = getAsNumber(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONNumber* jsNumber = jsValue->asNumber();
   return (jsNumber == NULL) ? defaultValue : jsNumber->value();
 }
 
 const std::string JSONObject::getAsString(const std::string& key,
                                           const std::string& defaultValue) const {
-  const JSONString* jsString = getAsString(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONString* jsString = jsValue->asString();
   return (jsString == NULL) ? defaultValue : jsString->value();
 }
 
