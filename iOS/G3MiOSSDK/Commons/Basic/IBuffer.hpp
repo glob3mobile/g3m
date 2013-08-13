@@ -14,12 +14,12 @@
 
 class IBuffer {
 public:
-  virtual ~IBuffer() {
-#ifdef JAVA_CODE
-  super.dispose();
+#ifdef C_CODE
+  virtual ~IBuffer() { }
 #endif
-
-  }
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
   /**
    Answer the size (the count of elements) of the buffer

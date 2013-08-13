@@ -105,6 +105,10 @@ public:
   _longitude(g._longitude)
   {
   }
+
+  ~Geodetic2D() {
+
+  }
   
   const Angle latitude() const {
     return _latitude;

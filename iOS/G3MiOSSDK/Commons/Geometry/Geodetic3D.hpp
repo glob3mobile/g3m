@@ -73,6 +73,10 @@ public:
   _height(g._height)
   {
   }
+
+  ~Geodetic3D() {
+    
+  }
   
   const Angle latitude() const {
     return _latitude;
