@@ -149,6 +149,10 @@ public:
 
   MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
   
+  Vector3D getNorth() const {
+    return Vector3D::upY();
+  }
+
 };
 
 

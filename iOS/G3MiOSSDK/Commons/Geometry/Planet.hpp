@@ -102,6 +102,8 @@ public:
   virtual double distanceToHorizon(const Vector3D& position) const = 0;
   
   virtual MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const = 0;
+  
+  virtual Vector3D getNorth() const = 0;
 
 };
 

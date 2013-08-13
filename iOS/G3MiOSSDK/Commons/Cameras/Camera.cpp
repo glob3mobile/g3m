@@ -154,7 +154,7 @@ void Camera::print() {
 }
 
 const Angle Camera::getHeading(const Vector3D& normal) const {
-  const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
+  const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }
@@ -185,44 +185,18 @@ void Camera::setPitch(const Angle& angle) {
   //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
 }
 
-/*void Camera::_setGeodeticPosition(const Vector3D& pos) {
-  const Angle heading = getHeading();
-  const Angle pitch = getPitch();
-
-  setPitch(Angle::zero());
-  
-  const MutableVector3D finalPos = pos.asMutableVector3D();
-  const Vector3D        axis     = _position.cross(finalPos).asVector3D();
-  if (axis.length()<1e-3) {
-    return;
-  }
-  const Angle angle = _position.angleBetween(finalPos);
-  rotateWithAxis(axis, angle);
-
-  const double dist = _position.length() - pos.length();
-  moveForward(dist);
-
-  setHeading(heading);
-  setPitch(pitch);
-}*/
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d)
 {
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
-  
   setPitch(Angle::zero());
+
+  const double dist = getGeodeticPosition().height() - g3d.height();
   
-  const Vector3D pos = _planet->toCartesian(g3d);
-  const MutableVector3D finalPos = pos.asMutableVector3D();
-  const Vector3D        axis     = _position.cross(finalPos).asVector3D();
-  if (axis.length()<1e-3) {
-    return;
-  }
-  const Angle angle = _position.angleBetween(finalPos);
-  rotateWithAxis(axis, angle);
+  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+  if (dragMatrix.isValid()) applyTransform(dragMatrix);
   
-  const double dist = _position.length() - pos.length();
   moveForward(dist);
   
   setHeading(heading);
@@ -378,7 +352,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
   // TODO_deal_with_cases_when_center_in_poles
   const Vector3D cartesianCenter = _planet->toCartesian(center);
   const Vector3D normal          = _planet->geodeticSurfaceNormal(center);
-  const Vector3D north2D         = Vector3D::upZ().projectionInPlane(normal);
+  const Vector3D north2D         = _planet->getNorth().projectionInPlane(normal);
   const Vector3D orientedVector  = north2D.rotateAroundAxis(normal, azimuth.times(-1));
   const Vector3D axis            = orientedVector.cross(normal);
   const Vector3D finalVector     = orientedVector.rotateAroundAxis(axis, altitude);

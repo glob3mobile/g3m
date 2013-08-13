@@ -517,9 +517,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  builder.setPlanet(Planet::createEarth());
+  //builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-  //builder.setPlanet(Planet::createFlatEarth());
+  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -631,7 +631,7 @@ public:
   // initialization
   builder.initializeWidget();
   
-  G3MWidget.widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3), Geodetic3D(Angle::fromDegrees(45), Angle::fromDegrees(0), 3000000));
+  //G3MWidget.widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3), Geodetic3D(Angle::fromDegrees(45), Angle::fromDegrees(10), 3000000));
 }
 
 - (void)createInterpolationTest: (MeshRenderer*) meshRenderer

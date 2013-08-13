@@ -574,7 +574,13 @@ double EllipsoidalPlanet::distanceToHorizon(const Vector3D& position) const
 
 MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
 {
-  return MutableMatrix44D::invalid();
+  const Vector3D P0 = toCartesian(origin);
+  const Vector3D P1 = toCartesian(destination);
+  const Vector3D axis = P0.cross(P1);
+  if (axis.length()<1e-3) return MutableMatrix44D::invalid();
+  
+  const Angle angle = P0.angleBetween(P1);
+  return MutableMatrix44D::createRotationMatrix(angle, axis);
 }
 
 
