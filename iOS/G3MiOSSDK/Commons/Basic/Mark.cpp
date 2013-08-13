@@ -143,7 +143,6 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(label),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
@@ -181,7 +180,6 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -216,7 +214,6 @@ Mark::Mark(const URL          iconURL,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
@@ -252,7 +249,6 @@ Mark::Mark(IImage*            image,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-GeodeticSurfaceElevationListener(position.asGeodetic2D()),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -396,6 +392,8 @@ void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL) {
     const Vector3D pos( planet->toCartesian(* _position) );
+
+    printf("MARK %s -> H: %s\n", _label.c_str(), pos.description().c_str());
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(pos);
     vertex.add(pos);
@@ -484,8 +482,8 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-        if (_glState.getNumberOfGLFeatures() == 0){
-          createGLState(planet);
+        if (_glState.getNumberOfGLFeatures() == 0){ 
+          createGLState(planet);    //GLState was disposed due to elevation change
         }
 
         _glState.setParent(parentGLState); //Linking with parent

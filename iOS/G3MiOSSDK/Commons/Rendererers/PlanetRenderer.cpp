@@ -628,32 +628,19 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
 
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
-                                 GeodeticSurfaceElevationListener* observer) {
+                                 SurfaceElevationListener* observer) {
   _elevationListenersTree.add(Geodetic2D(latitude, longitude), observer);
 }
 
 void PlanetRenderer::addListener(const Geodetic2D& position,
-                                 GeodeticSurfaceElevationListener* observer) {
+                                 SurfaceElevationListener* observer) {
   _elevationListenersTree.add(position, observer);
 }
 
-void PlanetRenderer::removeListener(GeodeticSurfaceElevationListener* observer) {
+void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
   int __DGD_AtWork;
 }
 
 void PlanetRenderer::sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const{
-
-  std::vector<GeodeticSurfaceElevationListener*> observers = _elevationListenersTree.getObserversForSector(sector);
-
-  const int size = observers.size();
-  for (int i = 0; i < size; i++) {
-
-    GeodeticSurfaceElevationListener* obs = observers[i];
-
-    double height = elevationData->getElevationAt(obs->getPosition());
-
-    //PROVIDING EXAGGERATED ELEVATION!!!!!
-    observers[i]->elevationChanged(height * _verticalExaggeration);
-  }
-
+  _elevationListenersTree.notifyObservers(sector, elevationData, _verticalExaggeration);
 }
