@@ -54,9 +54,6 @@ public:
   virtual void onNameChanged(const G3MContext* context,
                              const std::string& name) = 0;
 
-  virtual void onDescriptionChanged(const G3MContext* context,
-                                    const std::string& description) = 0;
-
   virtual void onIconChanged(const G3MContext* context,
                              const std::string& icon) = 0;
 
@@ -138,7 +135,6 @@ private:
 
   std::string _applicationId;
   std::string _applicationName;
-  std::string _applicationDescription;
   int         _applicationTimestamp;
 
   std::vector<MapBoo_Scene*> _applicationScenes;
@@ -252,9 +248,6 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationName(const std::string& name);
-
-  /** Private to MapbooBuilder, don't call it */
-  void setApplicationDescription(const std::string& description);
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);

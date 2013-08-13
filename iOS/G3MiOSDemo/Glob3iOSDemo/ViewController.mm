@@ -241,12 +241,6 @@ public:
                                  name.c_str());
   }
 
-  void onDescriptionChanged(const G3MContext* context,
-                            const std::string& description) {
-    ILogger::instance()->logInfo("MapBoo application description=\"%s\"",
-                                 description.c_str());
-  }
-
   void onIconChanged(const G3MContext* context,
                      const std::string& icon) {
     ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",

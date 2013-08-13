@@ -97,7 +97,6 @@ _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),
 _applicationId(applicationId),
 _applicationName(""),
-_applicationDescription(""),
 _applicationTimestamp(-1),
 _gl(NULL),
 _g3mWidget(NULL),
@@ -409,11 +408,6 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
           const JSONString* jsonName = jsonObject->getAsString("name");
           if (jsonName != NULL) {
             setApplicationName( jsonName->value() );
-          }
-
-          const JSONString* jsonDescription = jsonObject->getAsString("description");
-          if (jsonDescription != NULL) {
-            setApplicationDescription( jsonDescription->value() );
           }
 
           // always process defaultSceneIndex before scenes
@@ -783,17 +777,6 @@ void MapBooBuilder::setApplicationName(const std::string& name) {
     }
   }
 }
-
-void MapBooBuilder::setApplicationDescription(const std::string& description) {
-  if (_applicationDescription.compare(description) != 0) {
-    _applicationDescription = description;
-
-    if (_applicationListener != NULL) {
-      _applicationListener->onDescriptionChanged(_context, _applicationDescription);
-    }
-  }
-}
-
 
 class MapBooBuilder_ChangeSceneTask : public GTask {
 private:
