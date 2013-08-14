@@ -54,10 +54,6 @@ private:
                   const Vector2I& extent);
 
     ~CompositeElevationDataProvider_RequestStepListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
     }
     
   };

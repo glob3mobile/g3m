@@ -228,12 +228,7 @@ public:
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  };
+  }
 
   void startEffect(Effect* effect,
                    EffectTarget* target);
