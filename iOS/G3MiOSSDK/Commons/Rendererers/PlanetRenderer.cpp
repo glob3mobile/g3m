@@ -103,6 +103,11 @@ public:
     }
 
     delete _lastSector;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

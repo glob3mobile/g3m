@@ -220,6 +220,11 @@ G3MWidget::~G3MWidget() {
   }
 
   delete _context;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,

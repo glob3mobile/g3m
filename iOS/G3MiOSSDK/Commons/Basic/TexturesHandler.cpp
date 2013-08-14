@@ -204,4 +204,9 @@ TexturesHandler::~TexturesHandler() {
   if (_textureHolders.size() > 0) {
     ILogger::instance()->logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }

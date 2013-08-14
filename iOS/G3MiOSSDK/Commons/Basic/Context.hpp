@@ -72,6 +72,9 @@ public:
   }
 
   virtual ~G3MContext() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

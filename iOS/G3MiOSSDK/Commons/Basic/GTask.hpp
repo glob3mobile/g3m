@@ -15,6 +15,10 @@ class G3MContext;
 class GTask {
 public:
   virtual ~GTask() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void run(const G3MContext* context) = 0;

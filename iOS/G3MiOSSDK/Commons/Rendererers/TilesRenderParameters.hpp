@@ -33,6 +33,10 @@ public:
   }
 
   ~TilesRenderParameters() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
 };

@@ -42,6 +42,10 @@ public:
   }
 
   virtual ~IFactory() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void createImageFromFileName(const std::string& filename,

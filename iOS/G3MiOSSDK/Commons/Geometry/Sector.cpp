@@ -62,6 +62,11 @@ const Angle Sector::getInnerPointLatitude(double v) const {
 
 Sector::~Sector() {
   delete _normalizedCartesianCenter;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 

@@ -33,6 +33,10 @@ public:
   }
   
   ~Vector3D() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {

@@ -49,6 +49,10 @@ public:
   }
 
   virtual ~IMathUtils() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool isNan(double v) const = 0;

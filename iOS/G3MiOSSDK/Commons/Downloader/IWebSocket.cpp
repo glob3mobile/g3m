@@ -16,4 +16,9 @@ IWebSocket::~IWebSocket() {
   if (_autodeleteListener) {
     delete _listener;
   }
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }

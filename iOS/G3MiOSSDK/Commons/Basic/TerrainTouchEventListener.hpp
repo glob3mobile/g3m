@@ -13,7 +13,7 @@
 #include "Sector.hpp"
 class Layer;
 
-class TerrainTouchEvent {
+class TerrainTouchEvent{
 private:
   const Geodetic3D _position;
   const Sector     _sector;

@@ -35,6 +35,10 @@ public:
   }
 
   ~RectangleI() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   bool equalTo(const RectangleI& that) const{

@@ -21,6 +21,10 @@ public:
   virtual void render(const G3MRenderContext* rc) = 0;
 
   virtual ~OrderedRenderable() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

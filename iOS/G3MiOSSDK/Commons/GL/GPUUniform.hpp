@@ -321,6 +321,11 @@ public:
     if (_modelview != NULL) {
       _modelview->_release();
     }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   Matrix44D* getModelview() const {

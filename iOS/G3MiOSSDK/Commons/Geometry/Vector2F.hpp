@@ -33,6 +33,10 @@ public:
   }
 
   ~Vector2F() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   float x() const {

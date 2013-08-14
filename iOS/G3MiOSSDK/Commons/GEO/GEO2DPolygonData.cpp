@@ -38,4 +38,9 @@ GEO2DPolygonData::~GEO2DPolygonData() {
     delete _holesCoordinatesArray;
   }
 #endif
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }

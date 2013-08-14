@@ -20,6 +20,10 @@ class GenericQuadTree_Node;
 class GenericQuadTreeNodeVisitor {
 public:
   virtual ~GenericQuadTreeNodeVisitor() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool visitNode(const GenericQuadTree_Node* node) = 0;
@@ -33,6 +37,10 @@ class GenericQuadTreeVisitor {
 public:
   GenericQuadTreeVisitor(): _comparisonsDone(0){}
   virtual ~GenericQuadTreeVisitor() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addComparisonsDoneWhileVisiting(int n) const { _comparisonsDone += n;}
@@ -62,6 +70,10 @@ public:
   virtual Sector getSector() const = 0;
 
   virtual ~GenericQuadTree_Element() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 };
 

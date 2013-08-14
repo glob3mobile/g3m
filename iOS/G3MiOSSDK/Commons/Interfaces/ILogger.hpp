@@ -48,8 +48,11 @@ public:
   virtual void logError  (const std::string& x, ...) const = 0;
   
   virtual ~ILogger() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
-  
 };
 
 

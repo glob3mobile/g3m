@@ -97,6 +97,10 @@ public:
 //  static const int GROUP_NOGROUP;
 
   virtual ~GPUVariable() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {

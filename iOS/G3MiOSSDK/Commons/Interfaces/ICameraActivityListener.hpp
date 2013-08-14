@@ -13,6 +13,10 @@
 class ICameraActivityListener {
 public:
   virtual ~ICameraActivityListener() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual void touchEventHandled() = 0;

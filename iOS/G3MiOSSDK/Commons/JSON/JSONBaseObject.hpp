@@ -29,6 +29,10 @@ public:
   }
 
   virtual ~JSONBaseObject() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual const JSONObject*  asObject()  const;

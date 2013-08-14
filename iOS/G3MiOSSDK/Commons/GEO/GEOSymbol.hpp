@@ -20,8 +20,13 @@ class GEOTileRasterizer;
 
 
 class GEOSymbol {
+
 public:
   virtual ~GEOSymbol() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual bool symbolize(const G3MRenderContext* rc,

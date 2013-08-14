@@ -19,6 +19,9 @@ class G3MRenderContext;
 class FrameTask {
 public:
   virtual ~FrameTask() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
   
@@ -70,6 +73,9 @@ public:
   void doPreRenderCycle(const G3MRenderContext* rc);
   
   ~FrameTasksExecutor() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
   

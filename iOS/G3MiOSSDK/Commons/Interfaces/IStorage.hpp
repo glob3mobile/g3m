@@ -32,6 +32,10 @@ public:
   }
 
   ~IImageResult() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   IImage* getImage() const {
@@ -58,6 +62,10 @@ public:
   }
 
   ~IByteBufferResult() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   IByteBuffer* getBuffer() const {
@@ -86,6 +94,10 @@ public:
   }
 
   virtual ~IStorage() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void initialize(const G3MContext* context);

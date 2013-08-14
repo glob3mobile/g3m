@@ -24,6 +24,10 @@
 class LazyTextureMappingInitializer {
 public:
   virtual ~LazyTextureMappingInitializer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   virtual void initialize() = 0;

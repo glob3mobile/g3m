@@ -41,6 +41,10 @@ public:
   virtual void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   virtual void invokeInRendererThread(GTask* task,

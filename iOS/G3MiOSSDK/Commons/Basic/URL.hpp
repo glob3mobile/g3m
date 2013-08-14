@@ -44,6 +44,10 @@ public:
   }
 
   ~URL() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   std::string getPath() const {
