@@ -75,12 +75,12 @@ public class Tile
   
     ElevationDataProvider elevationDataProvider = prc.getElevationDataProvider();
   
-  //  const TileTessellator* tessellator = trc->getTessellator();
-  //  const bool renderDebug = trc->getParameters()->_renderDebug;
-  //  const Planet* planet = rc->getPlanet();
-  //
-  //  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
-  //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
+    //  const TileTessellator* tessellator = trc->getTessellator();
+    //  const bool renderDebug = trc->getParameters()->_renderDebug;
+    //  const Planet* planet = rc->getPlanet();
+    //
+    //  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+    //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
@@ -115,6 +115,7 @@ public class Tile
         }
       }
   
+      //Notifying when the tile is first created and every time the elevation data changes
       _planetRenderer.sectorElevationChanged(_sector, _elevationData);
     }
   
@@ -137,22 +138,22 @@ public class Tile
   private boolean isVisible(G3MRenderContext rc, PlanetRendererContext prc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
-  ////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  //  if (boundingVolume == NULL) {
-  //    return false;
-  //  }
-  //
-  //  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
-  //    return false;
-  //  }
-  //
-  //  // test if sector is back oriented with respect to the camera
-  //  return !_sector.isBackOriented(rc,
-  //                                 getMinHeight(),
-  //                                 planet,
-  //                                 cameraNormalizedPosition,
-  //                                 cameraAngle2HorizonInRadians);
+    ////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+    //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+    //  if (boundingVolume == NULL) {
+    //    return false;
+    //  }
+    //
+    //  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+    //    return false;
+    //  }
+    //
+    //  // test if sector is back oriented with respect to the camera
+    //  return !_sector.isBackOriented(rc,
+    //                                 getMinHeight(),
+    //                                 planet,
+    //                                 cameraNormalizedPosition,
+    //                                 cameraAngle2HorizonInRadians);
   
   
     /* //AGUSTIN:now that zfar is located in the horizon, this test is not needed anymore
@@ -248,6 +249,7 @@ public class Tile
 
   private void rawRender(G3MRenderContext rc, PlanetRendererContext prc, GLState glState)
   {
+  
     Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
@@ -286,8 +288,8 @@ public class Tile
     }
   
   
-  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  //  boundingVolume->render(rc, parentState);
+    //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+    //  boundingVolume->render(rc, parentState);
   }
 
   private void debugRender(G3MRenderContext rc, PlanetRendererContext prc, GLState glState)
@@ -533,7 +535,7 @@ public class Tile
       Mesh mesh = getTessellatorMesh(rc, prc);
       if (mesh != null)
       {
-  //      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+        //      _boundingVolume = mesh->getBoundingVolume()->createSphere();
         _boundingVolume = mesh.getBoundingVolume();
       }
     }
@@ -588,7 +590,7 @@ public class Tile
   {
     prune(null, null);
   
-  //  delete _boundingVolume;
+    //  delete _boundingVolume;
   
     if (_debugMesh != null)
        _debugMesh.dispose();
@@ -838,9 +840,8 @@ public class Tile
     if (_subtiles != null)
     {
   
-      //    printf("= pruned tile %s\n", getKey().description().c_str());
-  
-      //    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
+      //Notifying elevation event when LOD decreases
+      _planetRenderer.sectorElevationChanged(_sector, _elevationData);
   
       final int subtilesSize = _subtiles.size();
       for (int i = 0; i < subtilesSize; i++)
@@ -854,10 +855,6 @@ public class Tile
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
-  
-        //      if (elevationDataProvider != NULL) {
-        //        //subtile->cancelElevationDataRequest(elevationDataProvider);
-        //      }
   
         if (subtile != null)
            subtile.dispose();
@@ -1010,14 +1007,14 @@ public class Tile
     _lastTileMeshResolutionY = tileMeshResolution._y;
     if (_elevationDataRequest == null)
     {
-  //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
-  //                                                     -6.3829977122432933,
-  //                                                     39.4829891936013553,
-  //                                                     -6.3645288909498845);
-  //
-  //    if (caceresSector.touchesWith(_sector)) {
-  //      printf("break point on me\n");
-  //    }
+      //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
+      //                                                     -6.3829977122432933,
+      //                                                     39.4829891936013553,
+      //                                                     -6.3645288909498845);
+      //
+      //    if (caceresSector.touchesWith(_sector)) {
+      //      printf("break point on me\n");
+      //    }
   
       final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
       _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);

@@ -10,7 +10,8 @@ public enum GPUUniformKey
   SCALE_TEXTURE_COORDS(5),
   POINT_SIZE(6),
   POINT_LIGHT_POSITION(7),
-  POINT_LIGHT_COLOR(8);
+  POINT_LIGHT_COLOR(8),
+  BILLBOARD_POSITION(9);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

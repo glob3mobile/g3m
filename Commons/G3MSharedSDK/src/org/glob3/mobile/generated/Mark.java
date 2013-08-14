@@ -74,8 +74,6 @@ public class Mark extends SurfaceElevationListener
 
   private Vector3D _cartesianPosition;
 
-  private IFloatBuffer _vertices;
-
   private boolean _textureSolved;
   private IImage _textureImage;
   private int _textureWidth;
@@ -90,21 +88,16 @@ public class Mark extends SurfaceElevationListener
   private void createGLState(Planet planet)
   {
   
-    if (_vertices == null)
-    {
-      final Vector3D pos = new Vector3D(planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
   
-      _vertices = vertex.create();
-    }
+  //  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+  //                                          _position->_longitude,
+  //                                          _position->_height + _currentSurfaceElevation);
+  //
+  //  const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
   
-    _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+  
+    _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
   
     if (_textureId != null)
     {
@@ -127,6 +120,7 @@ public class Mark extends SurfaceElevationListener
   }
 
   private SurfaceElevationProvider _surfaceElevationProvider;
+  private double _currentSurfaceElevation;
 
   /**
    * Creates a marker with icon and label
@@ -183,7 +177,6 @@ public class Mark extends SurfaceElevationListener
      _labelGapSize = labelGapSize;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -196,6 +189,7 @@ public class Mark extends SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
      _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
   
   }
 
@@ -246,7 +240,6 @@ public class Mark extends SurfaceElevationListener
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -259,6 +252,7 @@ public class Mark extends SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
      _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
   
   }
 
@@ -297,7 +291,6 @@ public class Mark extends SurfaceElevationListener
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -310,6 +303,7 @@ public class Mark extends SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
      _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
   
   }
 
@@ -348,7 +342,6 @@ public class Mark extends SurfaceElevationListener
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = true;
      _textureImage = image;
      _renderedMark = false;
@@ -361,6 +354,7 @@ public class Mark extends SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
      _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
   
   }
 
@@ -377,8 +371,6 @@ public class Mark extends SurfaceElevationListener
   
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
-    if (_vertices != null)
-       _vertices.dispose();
     if (_autoDeleteListener)
     {
       if (_listener != null)
@@ -526,7 +518,12 @@ public class Mark extends SurfaceElevationListener
   {
     if (_cartesianPosition == null)
     {
-      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+  
+      Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, _position._height + _currentSurfaceElevation);
+  
+      _cartesianPosition = new Vector3D(planet.toCartesian(positionWithSurfaceElevation));
+  
+  //    _cartesianPosition = new Vector3D( planet->toCartesian(*_position) );
     }
     return _cartesianPosition;
   }
@@ -592,14 +589,11 @@ public class Mark extends SurfaceElevationListener
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
   
-    Geodetic3D newPos = new Geodetic3D(_position.latitude(), _position.longitude(), rawElevation * verticalExaggeration);
-    if (_position != null)
-       _position.dispose();
-    _position = new Geodetic3D(newPos);
+    _currentSurfaceElevation = rawElevation * verticalExaggeration;
+    if (_cartesianPosition != null)
+       _cartesianPosition.dispose();
+    _cartesianPosition = null;
   
-    if (_vertices != null)
-       _vertices.dispose();
-    _vertices = null;
     _glState.clearAllGLFeatures();
   }
 }

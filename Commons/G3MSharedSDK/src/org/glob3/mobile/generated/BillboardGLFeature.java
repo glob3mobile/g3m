@@ -15,14 +15,19 @@ package org.glob3.mobile.generated;
 //
 //};
 
-public class TextureExtentGLFeature extends GLFeature
+public class BillboardGLFeature extends GLFeature
 {
-  public TextureExtentGLFeature(int textureWidth, int textureHeight)
+  public BillboardGLFeature(Vector3D position, int textureWidth, int textureHeight)
   {
      super(GLFeatureGroupName.NO_GROUP);
     _values.addUniformValue(GPUUniformKey.TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);
+  
+    _values.addUniformValue(GPUUniformKey.BILLBOARD_POSITION, new GPUUniformValueVec4Float((float)position._x, (float)position._y, (float)position._z, 1.0), false);
   }
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
+    state.disableDepthTest();
+    state.disableCullFace();
+    state.disPolygonOffsetFill();
   }
 }

@@ -75,6 +75,11 @@ public class GPUVariable
       return GPUUniformKey.POINT_SIZE;
     }
   
+    if (name.compareTo("uBillboardPosition") == 0)
+    {
+      return GPUUniformKey.BILLBOARD_POSITION;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
