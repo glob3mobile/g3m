@@ -20,9 +20,6 @@ public class TileTextureBuilderHolder implements ITexturizerData
     {
       _builder._release();
     }
-  
-    super.dispose();
-  
   }
 
 }

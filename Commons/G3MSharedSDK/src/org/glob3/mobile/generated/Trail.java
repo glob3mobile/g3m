@@ -32,9 +32,6 @@ public class Trail
       if (segment != null)
          segment.dispose();
     }
-  
-    super.dispose();
-  
   }
 
   public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
