@@ -327,23 +327,6 @@
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
-		D8689E4517BA8520002C8CA8 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8689E4417BA8520002C8CA8 /* CoreFoundation.framework */; };
-		D8689E5017BA853E002C8CA8 /* TexturedMesh+PointLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8E23D0B179D4C8700E358DC /* TexturedMesh+PointLight.fsh */; };
-		D8689E5117BA853E002C8CA8 /* TexturedMesh+PointLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8E23D0C179D4C8700E358DC /* TexturedMesh+PointLight.vsh */; };
-		D8689E5217BA853E002C8CA8 /* TransformedTexCoorTexturedMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */; };
-		D8689E5317BA853E002C8CA8 /* TransformedTexCoorTexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */; };
-		D8689E5417BA853E002C8CA8 /* ColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625DD177732A900FC4862 /* ColorMesh.fsh */; };
-		D8689E5517BA853E002C8CA8 /* ColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625DE177732A900FC4862 /* ColorMesh.vsh */; };
-		D8689E5617BA853E002C8CA8 /* TexturedMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625D51777291F00FC4862 /* TexturedMesh.fsh */; };
-		D8689E5717BA853E002C8CA8 /* TexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625D61777291F00FC4862 /* TexturedMesh.vsh */; };
-		D8689E5817BA853E002C8CA8 /* FlatColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */; };
-		D8689E5917BA853E002C8CA8 /* FlatColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */; };
-		D8689E5A17BA853E002C8CA8 /* Billboard.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */; };
-		D8689E5B17BA853E002C8CA8 /* Billboard.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */; };
-		D8689E5C17BA853E002C8CA8 /* Default.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D32173BB5D800C7AAE6 /* Default.vsh */; };
-		D8689E5D17BA853E002C8CA8 /* Default.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D33173BB5D800C7AAE6 /* Default.fsh */; };
-		D8689E5E17BA853E002C8CA8 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E70B56E116D3CCCD00C5FFFB /* Shader.fsh */; };
-		D8689E5F17BA853E002C8CA8 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E70B56E216D3CCCD00C5FFFB /* Shader.vsh */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -1255,7 +1238,7 @@
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
 		CFC3F8F817510DA700986630 /* MapBooBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBooBuilder.cpp; path = Commons/Basic/MapBooBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC3F8F917510DA700986630 /* MapBooBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapBooBuilder.hpp; path = Commons/Basic/MapBooBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFC3F8FC175110FE00986630 /* MapBooBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = MapBooBuilder_iOS.mm; path = Specific/Derived/MapBooBuilder_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CFC3F8FC175110FE00986630 /* MapBooBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = MapBooBuilder_iOS.mm; path = Specific/Derived/MapBooBuilder_iOS.mm; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CFC3F8FD175110FE00986630 /* MapBooBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapBooBuilder_iOS.hpp; path = Specific/Derived/MapBooBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORenderer.cpp; path = Commons/GEO/GEORenderer.cpp; sourceTree = "<group>"; };
 		CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
@@ -1365,7 +1348,6 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D8689E4317BA8520002C8CA8 /* G3MSDKLibrary.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = G3MSDKLibrary.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8689E4417BA8520002C8CA8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		D8689E4817BA8520002C8CA8 /* G3MSDKLibrary-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "G3MSDKLibrary-Info.plist"; sourceTree = "<group>"; };
 		D8689E4A17BA8520002C8CA8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1486,14 +1468,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D8689E4017BA8520002C8CA8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D8689E4517BA8520002C8CA8 /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D8EEF3B21577924D003FEB5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2269,7 +2243,6 @@
 			isa = PBXGroup;
 			children = (
 				D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */,
-				D8689E4317BA8520002C8CA8 /* G3MSDKLibrary.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2338,23 +2311,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D8689E4217BA8520002C8CA8 /* G3MSDKLibrary */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D8689E4D17BA8520002C8CA8 /* Build configuration list for PBXNativeTarget "G3MSDKLibrary" */;
-			buildPhases = (
-				D8689E3F17BA8520002C8CA8 /* Sources */,
-				D8689E4017BA8520002C8CA8 /* Frameworks */,
-				D8689E4117BA8520002C8CA8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = G3MSDKLibrary;
-			productName = G3MSDKLibrary;
-			productReference = D8689E4317BA8520002C8CA8 /* G3MSDKLibrary.bundle */;
-			productType = "com.apple.product-type.bundle";
-		};
 		D8EEF3B41577924D003FEB5E /* G3MiOSSDK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8EEF3C21577924D003FEB5E /* Build configuration list for PBXNativeTarget "G3MiOSSDK" */;
@@ -2362,7 +2318,6 @@
 				D8EEF3B11577924D003FEB5E /* Sources */,
 				D8EEF3B21577924D003FEB5E /* Frameworks */,
 				E780A4FC16D3ADBE000F0395 /* CopyFiles */,
-				D8689E3E17BA837D002C8CA8 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -2394,52 +2349,11 @@
 			projectRoot = "";
 			targets = (
 				D8EEF3B41577924D003FEB5E /* G3MiOSSDK */,
-				D8689E4217BA8520002C8CA8 /* G3MSDKLibrary */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		D8689E3E17BA837D002C8CA8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D8689E4117BA8520002C8CA8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D8689E5017BA853E002C8CA8 /* TexturedMesh+PointLight.fsh in Resources */,
-				D8689E5117BA853E002C8CA8 /* TexturedMesh+PointLight.vsh in Resources */,
-				D8689E5217BA853E002C8CA8 /* TransformedTexCoorTexturedMesh.fsh in Resources */,
-				D8689E5317BA853E002C8CA8 /* TransformedTexCoorTexturedMesh.vsh in Resources */,
-				D8689E5417BA853E002C8CA8 /* ColorMesh.fsh in Resources */,
-				D8689E5517BA853E002C8CA8 /* ColorMesh.vsh in Resources */,
-				D8689E5617BA853E002C8CA8 /* TexturedMesh.fsh in Resources */,
-				D8689E5717BA853E002C8CA8 /* TexturedMesh.vsh in Resources */,
-				D8689E5817BA853E002C8CA8 /* FlatColorMesh.fsh in Resources */,
-				D8689E5917BA853E002C8CA8 /* FlatColorMesh.vsh in Resources */,
-				D8689E5A17BA853E002C8CA8 /* Billboard.fsh in Resources */,
-				D8689E5B17BA853E002C8CA8 /* Billboard.vsh in Resources */,
-				D8689E5C17BA853E002C8CA8 /* Default.vsh in Resources */,
-				D8689E5D17BA853E002C8CA8 /* Default.fsh in Resources */,
-				D8689E5E17BA853E002C8CA8 /* Shader.fsh in Resources */,
-				D8689E5F17BA853E002C8CA8 /* Shader.vsh in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		D8689E3F17BA8520002C8CA8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D8EEF3B11577924D003FEB5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2726,54 +2640,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		D8689E4E17BA8520002C8CA8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "G3MSDKLibrary/G3MSDKLibrary-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "G3MSDKLibrary/G3MSDKLibrary-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		D8689E4F17BA8520002C8CA8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "G3MSDKLibrary/G3MSDKLibrary-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "G3MSDKLibrary/G3MSDKLibrary-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		D8EEF3C01577924D003FEB5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2890,14 +2756,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D8689E4D17BA8520002C8CA8 /* Build configuration list for PBXNativeTarget "G3MSDKLibrary" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D8689E4E17BA8520002C8CA8 /* Debug */,
-				D8689E4F17BA8520002C8CA8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
 		D8EEF3AF1577924D003FEB5E /* Build configuration list for PBXProject "G3MiOSSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

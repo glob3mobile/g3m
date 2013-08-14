@@ -48,9 +48,7 @@ IThreadUtils* MapBooBuilder_iOS::createThreadUtils() {
 
 GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::string& name) {
 
-  NSURL* pathBundle = [[NSBundle mainBundle] URLForResource:@"G3MSDKLibrary" withExtension:@"bundle"];
-
-  NSBundle *bundle = [NSBundle bundleWithURL:pathBundle];
+  NSBundle *bundle = [NSBundle mainBundle];
 
 
   NSString* nsName = [[NSString alloc] initWithUTF8String:name.c_str()];
