@@ -10,8 +10,6 @@ public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public final void onOpen(IWebSocket ws)
