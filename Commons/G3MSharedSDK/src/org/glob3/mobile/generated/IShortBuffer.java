@@ -22,8 +22,6 @@ public abstract class IShortBuffer implements IBuffer
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract short get(int i);

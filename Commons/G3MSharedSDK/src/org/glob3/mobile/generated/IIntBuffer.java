@@ -22,8 +22,6 @@ public abstract class IIntBuffer implements IBuffer
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public abstract int get(int i);
