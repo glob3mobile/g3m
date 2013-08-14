@@ -153,7 +153,6 @@ _labelShadowColor(labelShadowColor),
 _labelGapSize(labelGapSize),
 _textureId(NULL),
 _cartesianPosition(NULL),
-//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -191,7 +190,6 @@ _labelShadowColor(labelShadowColor),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -226,7 +224,6 @@ _labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -262,7 +259,6 @@ _labelShadowColor(NULL),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-//_vertices(NULL),
 _textureSolved(true),
 _textureImage(image),
 _renderedMark(false),
@@ -361,7 +357,6 @@ Mark::~Mark() {
   }
 
   delete _cartesianPosition;
-//  delete _vertices;
   if (_autoDeleteListener) {
     delete _listener;
   }
