@@ -179,6 +179,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (void)layoutSubviews {
+  [super layoutSubviews];
+
   int w = (int) [self frame].size.width;
   int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
