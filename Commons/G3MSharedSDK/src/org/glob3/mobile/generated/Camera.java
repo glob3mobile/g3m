@@ -556,8 +556,6 @@ public class Camera
   {
     public void dispose()
     {
-  super.dispose();
-
     }
   }
 
