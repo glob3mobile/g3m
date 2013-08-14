@@ -47,10 +47,6 @@ public:
   virtual void stop(const G3MRenderContext* rc) = 0;
   
   virtual ~Renderer() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   };
 
   // Android activity lifecyle

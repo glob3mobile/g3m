@@ -363,10 +363,6 @@ private:
   class CameraEffectTarget: public EffectTarget {
   public:
     ~CameraEffectTarget() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
     }
   };
 

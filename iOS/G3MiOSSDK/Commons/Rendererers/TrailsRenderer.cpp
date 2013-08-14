@@ -180,11 +180,6 @@ Trail::~Trail() {
     TrailSegment* segment = _segments[i];
     delete segment;
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 

@@ -15,10 +15,6 @@ class IFloatBuffer : public IBuffer {
 public:
   
   virtual ~IFloatBuffer() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   virtual float get(int i) const = 0;

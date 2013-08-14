@@ -102,9 +102,6 @@ public class EffectsScheduler
       if (effectRun != null)
          effectRun.dispose();
     }
-
-  super.dispose();
-
   }
 
   public final void startEffect(Effect effect, EffectTarget target)
