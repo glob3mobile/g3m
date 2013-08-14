@@ -702,11 +702,6 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
   if (_builder != NULL) {
     _builder->_release();
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 
