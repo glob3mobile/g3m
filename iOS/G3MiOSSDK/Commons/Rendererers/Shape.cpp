@@ -30,6 +30,10 @@ public:
   {
 
   }
+
+  ~ShapePendingEffect() {
+
+  }
 };
 
 

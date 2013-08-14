@@ -39,6 +39,10 @@ public:
   {
   }
 
+  ~RectangleF() {
+
+  }
+
   bool equalTo(const RectangleF& that) const {
     return ((_x     == that._x)     && (_y      == that._y) &&
             (_width == that._width) && (_height == that._height));
