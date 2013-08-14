@@ -21,7 +21,7 @@ GLFeature(NO_GROUP) {
   _values.addUniformValue(BILLBOARD_POSITION, new GPUUniformValueVec4Float((float)position._x,
                                                                            (float)position._y,
                                                                            (float)position._z,
-                                                                           1.0), false);
+                                                                           (float)1.0), false);
 }
 
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {

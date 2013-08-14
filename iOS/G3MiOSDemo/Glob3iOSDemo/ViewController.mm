@@ -472,7 +472,7 @@ public:
 
    compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
 
-   //  builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+     builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
    */
 }
 
