@@ -135,6 +135,7 @@ private:
   IFloatBuffer* getBillboardTexCoords();
 
   SurfaceElevationProvider* _surfaceElevationProvider;
+  double _currentSurfaceElevation;
 
 public:
   /**

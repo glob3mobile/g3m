@@ -165,7 +165,8 @@ _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
-_surfaceElevationProvider(NULL)
+_surfaceElevationProvider(NULL),
+_currentSurfaceElevation(0.0)
 {
 
 }
@@ -202,7 +203,8 @@ _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
-_surfaceElevationProvider(NULL)
+_surfaceElevationProvider(NULL),
+_currentSurfaceElevation(0.0)
 {
 
 }
@@ -236,7 +238,8 @@ _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
-_surfaceElevationProvider(NULL)
+_surfaceElevationProvider(NULL),
+_currentSurfaceElevation(0.0)
 {
 
 }
@@ -271,7 +274,8 @@ _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
-_surfaceElevationProvider(NULL)
+_surfaceElevationProvider(NULL),
+_currentSurfaceElevation(0.0)
 {
 
 }
@@ -391,7 +395,14 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet){
 
   if (_vertices == NULL) {
-    const Vector3D pos( planet->toCartesian(* _position) );
+
+    Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                            _position->_longitude,
+                                            _position->_height + _currentSurfaceElevation);
+
+//    const Vector3D pos( planet->toCartesian(* _position) );
+    const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
+
     FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(pos);
     vertex.add(pos);
@@ -480,7 +491,7 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-        if (_glState.getNumberOfGLFeatures() == 0){ 
+        if (_glState.getNumberOfGLFeatures() == 0){
           createGLState(planet);    //GLState was disposed due to elevation change
         }
 
@@ -491,22 +502,24 @@ void Mark::render(const G3MRenderContext* rc,
                                 4,
                                 &_glState,
                                 *rc->getGPUProgramManager());
-        
+
         _renderedMark = true;
       }
     }
   }
-  
+
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,
-                      double rawElevation,            //Without considering vertical exaggeration
-                      double verticalExaggeration){
+                            double rawElevation,            //Without considering vertical exaggeration
+                            double verticalExaggeration){
 
-  Geodetic3D newPos(_position->latitude(), _position->longitude(), rawElevation * verticalExaggeration);
-  delete _position;
-  _position = new Geodetic3D(newPos);
+  //  Geodetic3D newPos(_position->latitude(), _position->longitude(), rawElevation * verticalExaggeration);
+  //  delete _position;
+  //  _position = new Geodetic3D(newPos);
 
+  _currentSurfaceElevation = rawElevation * verticalExaggeration;
+  
   delete _vertices;
   _vertices = NULL;
   _glState.clearAllGLFeatures();
