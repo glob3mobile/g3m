@@ -370,7 +370,14 @@ Mark::~Mark() {
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
-    _cartesianPosition = new Vector3D( planet->toCartesian(*_position) );
+
+    Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                            _position->_longitude,
+                                            _position->_height + _currentSurfaceElevation);
+
+    _cartesianPosition = new Vector3D( planet->toCartesian(positionWithSurfaceElevation) );
+
+//    _cartesianPosition = new Vector3D( planet->toCartesian(*_position) );
   }
   return _cartesianPosition;
 }
@@ -390,13 +397,17 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet){
 
 
-  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
-                                          _position->_longitude,
-                                          _position->_height + _currentSurfaceElevation);
+//  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+//                                          _position->_longitude,
+//                                          _position->_height + _currentSurfaceElevation);
+//
+//  const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
 
-  const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
+  
 
-  _glState.addGLFeature(new BillboardGLFeature(pos, _textureWidth, _textureHeight), false);
+  _glState.addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
+                                               _textureWidth, _textureHeight),
+                        false);
 
   if (_textureId != NULL){
     _glState.addGLFeature(new TextureGLFeature(_textureId,
@@ -487,6 +498,8 @@ void Mark::elevationChanged(const Geodetic2D& position,
                             double verticalExaggeration){
 
   _currentSurfaceElevation = rawElevation * verticalExaggeration;
+  delete _cartesianPosition;
+  _cartesianPosition = NULL;
 
   _glState.clearAllGLFeatures();
 }

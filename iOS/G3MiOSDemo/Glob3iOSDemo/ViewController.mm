@@ -1351,6 +1351,19 @@ public:
   marksRenderer->addMark(m1);
 
 
+  for (int i = 0; i < 10; i+=2){
+    for (int j = 0; j < 10; j+=2){
+
+//      Geodetic3D g(Angle::fromDegrees(i), Angle::fromDegrees(j), 0);
+      Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
+
+      Mark* m1 = new Mark("M", g);
+      marksRenderer->addMark(m1);
+
+    }
+  }
+
+
   Mark* m2 = new Mark(URL("file:///plane.png", false),
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
   marksRenderer->addMark(m2);
