@@ -177,6 +177,7 @@ public:
   MutableVector3D asMutableVector3D() const;
   
   double maxAxis() const;
+  double minAxis() const;
   
   double axisAverage() const;
   

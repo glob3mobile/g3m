@@ -367,6 +367,8 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
+  
+  int agustin_todo_planet_onCameraChange;
 
 
   //  _nextCamera->forceMatrixCreation();

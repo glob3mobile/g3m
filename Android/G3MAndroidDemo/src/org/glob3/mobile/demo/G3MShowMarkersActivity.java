@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -48,6 +49,8 @@ public class G3MShowMarkersActivity
 
       builder.addRenderer(_weatherMarkers);
       builder.setLogFPS(true);
+      final Planet planet = Planet.createFlatEarth();
+      builder.setPlanet(planet);
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();

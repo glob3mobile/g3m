@@ -1,0 +1,363 @@
+package org.glob3.mobile.generated; 
+//
+//  FlatPlanet.cpp
+//  G3MiOSSDK
+//
+//  Created by Agustín Trujillo on 10/07/13.
+//
+//
+
+//
+//  FlatPlanet.hpp
+//  G3MiOSSDK
+//
+//  Created by Agustín Trujillo on 10/07/13.
+//
+//
+
+
+
+
+public class FlatPlanet extends Planet
+{
+  private final Vector2D _size ;
+
+  private MutableVector3D _origin = new MutableVector3D();
+  private MutableVector3D _initialPoint = new MutableVector3D();
+  private MutableVector3D _lastFinalPoint = new MutableVector3D();
+  private boolean _validSingleDrag;
+  private MutableVector3D _lastDirection = new MutableVector3D();
+
+  private MutableVector3D _centerRay = new MutableVector3D();
+  private MutableVector3D _initialPoint0 = new MutableVector3D();
+  private MutableVector3D _initialPoint1 = new MutableVector3D();
+  private double _distanceBetweenInitialPoints;
+  private MutableVector3D _centerPoint = new MutableVector3D();
+  private double _angleBetweenInitialRays;
+
+
+
+
+  public FlatPlanet(Vector2D size)
+  {
+     _size = new Vector2D(size);
+  
+  }
+
+  public void dispose()
+  {
+
+  }
+
+  public final Vector3D getRadii()
+  {
+    return new Vector3D(_size._x, _size._y, 0);
+  }
+
+  public final Vector3D centricSurfaceNormal(Vector3D position)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+  public final Vector3D geodeticSurfaceNormal(Vector3D position)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+  public final Vector3D geodeticSurfaceNormal(MutableVector3D position)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+
+  public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+  public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
+  {
+    return new Vector3D(0, 0, 1);
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+  
+    // compute intersection with plane
+    if (direction.z() == 0)
+       return intersections;
+    final double t = -origin.z() / direction.z();
+    final double x = origin.x() + t * direction.x();
+    final double halfWidth = 0.5 * _size._x;
+    if (x < -halfWidth || x > halfWidth)
+       return intersections;
+    final double y = origin.y() + t * direction.y();
+    final double halfHeight = 0.5 * _size._y;
+    if (y < -halfHeight || y > halfHeight)
+       return intersections;
+    intersections.add(t);
+    return intersections;
+  }
+
+  public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
+  {
+    return toCartesian(new Geodetic3D(latitude, longitude, height));
+  }
+
+  public final Vector3D toCartesian(Geodetic3D geodetic)
+  {
+    final double x = geodetic.longitude().degrees() * _size._x / 360.0;
+    final double y = geodetic.latitude().degrees() * _size._y / 180.0;
+    return new Vector3D(x, y, geodetic.height());
+  }
+
+
+  public final Vector3D toCartesian(Geodetic2D geodetic)
+  {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
+  }
+
+  public final Vector3D toCartesian(Geodetic2D geodetic, double height)
+  {
+    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+  }
+
+  public final Geodetic2D toGeodetic2D(Vector3D position)
+  {
+    final double longitude = position._x * 360.0 / _size._x;
+    final double latitude = position._y * 180.0 / _size._y;
+    return (new Geodetic2D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude)));
+  }
+
+  public final Geodetic3D toGeodetic3D(Vector3D position)
+  {
+    return new Geodetic3D(toGeodetic2D(position), position._z);
+  }
+
+  public final Vector3D scaleToGeodeticSurface(Vector3D position)
+  {
+    return new Vector3D(position._x, position._y, 0);
+  }
+
+  public final Vector3D scaleToGeocentricSurface(Vector3D position)
+  {
+    return scaleToGeodeticSurface(position);
+  }
+
+  public final java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity)
+  {
+    int TODO_compute_plane_curve;
+    java.util.LinkedList<Vector3D> positions = new java.util.LinkedList<Vector3D>();
+    return positions;
+  }
+
+  public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
+  {
+    return new Geodetic2D(P0.latitude().add(P1.latitude()).times(0.5), P0.longitude().add(P1.longitude()).times(0.5));
+  }
+
+
+
+  // compute distance from two points
+  public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2)
+  {
+    return toCartesian(g1).sub(toCartesian(g2)).length();
+  }
+
+
+  // compute distance from two points
+  public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
+  {
+    return computePreciseLatLonDistance(g1, g2);
+  }
+
+  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
+  {
+    int TODO_agustin;
+    return Vector3D.zero();
+  }
+
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return pos.add(ray.times(distances.get(0)));
+  }
+
+
+  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  {
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
+    return translation;
+  
+    //const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
+    //return translation.multiply(rotation);
+  }
+
+  public final boolean isFlat()
+  {
+     return true;
+  }
+
+  public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
+  {
+    _origin = origin.asMutableVector3D();
+    _initialPoint = Plane.intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+    _lastFinalPoint = _initialPoint;
+    _validSingleDrag = false;
+  }
+
+  public final MutableMatrix44D singleDrag(Vector3D finalRay)
+  {
+    // test if initialPoint is valid
+    if (_initialPoint.isNan())
+       return MutableMatrix44D.invalid();
+  
+    // compute final point
+    final Vector3D origin = _origin.asVector3D();
+    MutableVector3D finalPoint = Plane.intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
+    if (finalPoint.isNan())
+       return MutableMatrix44D.invalid();
+  
+    // save params for possible inertial animations
+    _validSingleDrag = true;
+    _lastDirection = _lastFinalPoint.sub(finalPoint);
+    _lastFinalPoint = finalPoint;
+  
+    // return rotation matrix
+    return MutableMatrix44D.createTranslationMatrix(_initialPoint.sub(finalPoint).asVector3D());
+  }
+
+  public final Effect createEffectFromLastSingleDrag()
+  {
+    if (!_validSingleDrag)
+       return null;
+    return new SingleTranslationEffect(_lastDirection.asVector3D());
+  }
+
+  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
+  {
+    _origin = origin.asMutableVector3D();
+    _centerRay = centerRay.asMutableVector3D();
+    _initialPoint0 = Plane.intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
+    _initialPoint1 = Plane.intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+    _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
+    _centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+    _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+  
+    // middle point in 3D
+    _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+  }
+
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
+  {
+    // test if initialPoints are valid
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+      return MutableMatrix44D.invalid();
+  
+    // init params
+    final IMathUtils mu = IMathUtils.instance();
+    MutableVector3D positionCamera = _origin;
+  
+    // compute distance to translate camera
+    double d0 = _distanceBetweenInitialPoints;
+    final Vector3D r1 = finalRay0;
+    final Vector3D r2 = finalRay1;
+    double k = (r1.x()/r1.z() - r2.x()/r2.z()) * (r1.x()/r1.z() - r2.x()/r2.z()) + (r1.y()/r1.z() - r2.y()/r2.z()) * (r1.y()/r1.z() - r2.y()/r2.z());
+    double zc = _origin.z();
+    double uz = _centerRay.z();
+    double t2 = (d0 / mu.sqrt(k) - zc) / uz;
+  
+    // start to compound matrix
+    MutableMatrix44D matrix = MutableMatrix44D.identity();
+    positionCamera = _origin;
+    MutableVector3D viewDirection = _centerRay;
+    MutableVector3D ray0 = finalRay0.asMutableVector3D();
+    MutableVector3D ray1 = finalRay1.asMutableVector3D();
+  
+    // drag from initialPoint to centerPoint and move the camera forward
+    {
+      MutableVector3D delta = _initialPoint.sub((_centerPoint));
+      delta = delta.add(viewDirection.times(t2));
+      MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
+      positionCamera = positionCamera.transformedBy(translation, 1.0);
+      matrix = translation.multiply(matrix);
+    }
+  
+    // compute 3D point of view center
+    Vector3D centerPoint2 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D());
+  
+    // compute middle point in 3D
+    Vector3D P0 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+    Vector3D P1 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D());
+    Vector3D finalPoint = P0.add(P1).times(0.5);
+  
+    // drag globe from centerPoint to finalPoint
+    {
+      MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(centerPoint2.sub(finalPoint));
+      positionCamera = positionCamera.transformedBy(translation, 1.0);
+      matrix = translation.multiply(matrix);
+    }
+  
+    // camera rotation
+    {
+      Vector3D normal = geodeticSurfaceNormal(centerPoint2);
+      Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
+      Vector3D p0 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+      Vector3D v1 = p0.sub(centerPoint2).projectionInPlane(normal);
+      double angle = v0.angleBetween(v1)._degrees;
+      double sign = v1.cross(v0).dot(normal);
+      if (sign<0)
+         angle = -angle;
+      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
+      matrix = rotation.multiply(matrix);
+    }
+  
+    return matrix;
+  }
+
+  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay)
+  {
+    final Vector3D initialPoint = Plane.intersectionXYPlaneWithRay(origin, tapRay);
+    if (initialPoint.isNan())
+       return null;
+    final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay);
+  
+    // create effect
+    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin).height()*0.6);
+  }
+
+  public final double distanceToHorizon(Vector3D position)
+  {
+    double xCorner = 0.5 * _size.x();
+    if (position.x()>0)
+       xCorner *= -1;
+    double yCorner = 0.5 * _size.y();
+    if (position.y()>0)
+       yCorner *= -1;
+    final Vector3D fartherCorner = new Vector3D(xCorner, yCorner, 0.0);
+    return position.sub(fartherCorner).length();
+  }
+
+  public final MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination)
+  {
+    final Vector3D P0 = toCartesian(origin.asGeodetic2D());
+    final Vector3D P1 = toCartesian(destination.asGeodetic2D());
+    return MutableMatrix44D.createTranslationMatrix(P1.sub(P0));
+  }
+
+  public final Vector3D getNorth()
+  {
+    return Vector3D.upY();
+  }
+
+}

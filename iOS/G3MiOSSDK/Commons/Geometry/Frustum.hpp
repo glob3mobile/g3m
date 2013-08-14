@@ -85,7 +85,7 @@ private:
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
-  BoundingVolume*   _boundingVolume;
+  mutable BoundingVolume*   _boundingVolume;
   
   Frustum(const Frustum *that,
           const MutableMatrix44D& matrix,
@@ -103,12 +103,13 @@ private:
   _bottomPlane(that->_bottomPlane.transformedByTranspose(matrix)),
   _topPlane(that->_topPlane.transformedByTranspose(matrix)),
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
-  _farPlane(that->_farPlane.transformedByTranspose(matrix))
+  _farPlane(that->_farPlane.transformedByTranspose(matrix)),
+  _boundingVolume(NULL)
   {
-    _boundingVolume = computeBoundingVolume();
+    //_boundingVolume = computeBoundingVolume();
   }
   
-  BoundingVolume* computeBoundingVolume();
+  BoundingVolume* computeBoundingVolume() const;
   
   
 public:
@@ -171,11 +172,12 @@ public:
     return new Frustum(this, matrix, matrix.inversed());
   }
   
-  ~Frustum() {
-    delete _boundingVolume;
+  ~Frustum(){
+    if (_boundingVolume) delete _boundingVolume;
   }
   
   BoundingVolume* getBoundingVolume() const {
+    if (_boundingVolume == NULL) _boundingVolume = computeBoundingVolume();
     return _boundingVolume;
   }
   

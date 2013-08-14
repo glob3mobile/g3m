@@ -22,14 +22,16 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
   const double cameraHeight = cameraPosition._height;
 
   if (cameraHeight > maxHeight) {
-    nextCamera->setGeodeticPosition(cameraPosition._latitude,
+    nextCamera->copyFrom(*previousCamera);
+    /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
                                     cameraPosition._longitude,
-                                    maxHeight);
+                                    maxHeight);*/
   }
   else if (cameraHeight < minHeight) {
-    nextCamera->setGeodeticPosition(cameraPosition._latitude,
+    nextCamera->copyFrom(*previousCamera);
+    /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
                                     cameraPosition._longitude,
-                                    minHeight);
+                                    minHeight);*/
   }
   
 }

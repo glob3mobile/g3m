@@ -541,7 +541,8 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
 
   builder.setPlanet(Planet::createEarth());
-  //  builder.setPlanet(Planet::createSphericalEarth());
+  //builder.setPlanet(Planet::createSphericalEarth());
+//  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -560,7 +561,9 @@ public:
   //                                  NULL)
   //                     );
 
-  [self initializeElevationDataProvider: builder];
+  bool useElevations = false;
+  if (useElevations)
+    [self initializeElevationDataProvider: builder];
 
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
@@ -650,7 +653,6 @@ public:
 
   // initialization
   builder.initializeWidget();
-
 //  [self testGenericQuadTree:geoTileRasterizer];
 
 }
@@ -901,10 +903,7 @@ public:
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool processRotation = true;
-  const bool processZoom = true;
-
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+  cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
 
   cameraRenderer->addHandler(new CameraRotationHandler());
@@ -2310,13 +2309,16 @@ public:
       //                                                     //Angle::fromDegrees(30)
       //                                                     );
       // go to Grand Canyon
-      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
-                                                                Angle::fromDegreesMinutes(-112, 6),
-                                                                25000),
-                                                     Angle::zero(),
-                                                     Angle::fromDegrees(75)
-                                                     );
+
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+      //                                                     Geodetic3D(Angle::fromDegreesMinutes(36, 6),
+      //                                                                Angle::fromDegreesMinutes(-112, 6),
+      //                                                                25000),
+      //                                                     Angle::zero(),
+      //                                                     Angle::fromDegrees(75)
+      //                                                     );
+
+
       /*
        NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
        ofType: @"bson"];
@@ -2366,7 +2368,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
         if (planeFilePath) {
@@ -2426,8 +2428,6 @@ public:
       }
       /**/
 
-      /**/
-
       //      NSString* geojsonName = @"geojson/countries";
       //      NSString* geojsonName = @"geojson/countries-50m";
       //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2450,43 +2450,44 @@ public:
           _geoRenderer->addGEOObject(geoObject);
         }
       }
-      /**/
 
 
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                                ofType: @"json"];
-      if (planeFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
+      if (false){
+        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                  ofType: @"json"];
+        if (planeFilePath) {
+          NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsPlaneJSON) {
+            std::string planeJSON = [nsPlaneJSON UTF8String];
 
-          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
+            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
 
-          // Washington, DC
-          plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                            Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                            10000) );
-          const double scale = 200;
-          plane->setScale(scale, scale, scale);
-          plane->setPitch(Angle::fromDegrees(90));
-          _shapesRenderer->addShape(plane);
+            // Washington, DC
+            plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                              10000) );
+            const double scale = 200;
+            plane->setScale(scale, scale, scale);
+            plane->setPitch(Angle::fromDegrees(90));
+            _shapesRenderer->addShape(plane);
 
 
-          //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
-          //
-          //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-          //          printf("%s\n", bson->description().c_str());
-          //
-          //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
-          //          printf("%s\n", bsonObject->description().c_str());
-          //
-          //          delete bson;
-          //
-          //          delete jsonObject;
-          //
-          //          delete bsonObject;
+            //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+            //
+            //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+            //          printf("%s\n", bson->description().c_str());
+            //
+            //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+            //          printf("%s\n", bsonObject->description().c_str());
+            //
+            //          delete bson;
+            //
+            //          delete jsonObject;
+            //
+            //          delete bsonObject;
+          }
         }
       }
 
@@ -2538,17 +2539,17 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
+  
   //  renderers.push_back(new GLErrorRenderer());
-
+  
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-
+    
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
-
+    
   public:
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :

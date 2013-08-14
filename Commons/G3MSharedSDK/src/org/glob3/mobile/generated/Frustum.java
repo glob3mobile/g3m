@@ -36,7 +36,8 @@ public class Frustum
      _topPlane = that._topPlane.transformedByTranspose(matrix);
      _nearPlane = that._nearPlane.transformedByTranspose(matrix);
      _farPlane = that._farPlane.transformedByTranspose(matrix);
-    _boundingVolume = computeBoundingVolume();
+     _boundingVolume = null;
+    //_boundingVolume = computeBoundingVolume();
   }
 
   private BoundingVolume computeBoundingVolume()
@@ -275,11 +276,14 @@ public class Frustum
   public void dispose()
   {
     if (_boundingVolume != null)
-       _boundingVolume.dispose();
+       if (_boundingVolume != null)
+          _boundingVolume.dispose();
   }
 
   public final BoundingVolume getBoundingVolume()
   {
+    if (_boundingVolume == null)
+       _boundingVolume = computeBoundingVolume();
     return _boundingVolume;
   }
 

@@ -17,6 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+
+//class Effect;
+
+
 public abstract class Planet
 {
 
@@ -28,6 +32,11 @@ public abstract class Planet
   {
     return new SphericalPlanet(new Sphere(Vector3D.zero(), 6378137.0));
   }
+  public static Planet createFlatEarth()
+  {
+    return new FlatPlanet(new Vector2D(4 *6378137.0, 2 *6378137.0));
+  }
+
 
   public void dispose()
   {
@@ -74,5 +83,25 @@ public abstract class Planet
 
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position);
+
+  public abstract boolean isFlat();
+
+  public abstract void beginSingleDrag(Vector3D origin, Vector3D initialRay);
+
+  public abstract MutableMatrix44D singleDrag(Vector3D finalRay);
+
+  public abstract Effect createEffectFromLastSingleDrag();
+
+  public abstract void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1);
+
+  public abstract MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1);
+
+  public abstract Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay);
+
+  public abstract double distanceToHorizon(Vector3D position);
+
+  public abstract MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination);
+
+  public abstract Vector3D getNorth();
 
 }

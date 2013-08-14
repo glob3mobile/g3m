@@ -70,6 +70,16 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
                             const Planet* planet,
                             const Vector3D& cameraNormalizedPosition,
                             double cameraAngle2HorizonInRadians) const {
+//  const Camera* camera = rc->getCurrentCamera();
+//  const Planet* planet = rc->getPlanet();
+//
+//  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+//  const double angleInRadians = IMathUtils::instance()->acos(dot);
+//
+//  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+
+  if (planet->isFlat()) return false;
+
   const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
 #ifdef C_CODE
   const double angleInRadians = IMathUtils::instance()->acos(dot);

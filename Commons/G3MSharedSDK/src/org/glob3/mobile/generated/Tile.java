@@ -155,11 +155,15 @@ public class Tile
   //                                 cameraAngle2HorizonInRadians);
   
   
-    // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians))
-    {
+    /* //AGUSTIN:now that zfar is located in the horizon, this test is not needed anymore
+     // test if sector is back oriented with respect to the camera
+    if (_sector.isBackOriented(rc,
+                               getMinHeight(),
+                               planet,
+                               cameraNormalizedPosition,
+                               cameraAngle2HorizonInRadians)) {
       return false;
-    }
+    }*/
   
     final BoundingVolume boundingVolume = getBoundingVolume(rc, prc);
   

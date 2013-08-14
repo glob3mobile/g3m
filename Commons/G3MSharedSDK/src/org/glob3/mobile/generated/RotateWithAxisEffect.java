@@ -1,32 +1,38 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraSingleDragHandler.cpp
+//  CameraEffects.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Agustín Trujillo on 17/07/13.
+//
 //
 
-
 //
-//  CameraSingleDragHandler.hpp
+//  CameraEffects.h
 //  G3MiOSSDK
 //
-//  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Agustín Trujillo on 17/07/13.
+//
 //
 
 
 
 
+//class Angle;
 
-public class SingleDragEffect extends EffectWithForce
+
+
+public class RotateWithAxisEffect extends EffectWithForce
 {
 
-  public SingleDragEffect(Vector3D axis, Angle angle)
+  public RotateWithAxisEffect(Vector3D axis, Angle angle)
   {
      super(angle._degrees, 0.975);
      _axis = new Vector3D(axis);
+  }
+
+  public void dispose()
+  {
   }
 
   public void start(G3MRenderContext rc, TimeInterval when)
@@ -46,7 +52,6 @@ public class SingleDragEffect extends EffectWithForce
 
   public void cancel(TimeInterval when)
   {
-    // do nothing, just leave the effect in the intermediate state
   }
 
   private Vector3D _axis ;

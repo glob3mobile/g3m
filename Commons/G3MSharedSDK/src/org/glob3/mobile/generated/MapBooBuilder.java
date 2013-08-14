@@ -63,9 +63,7 @@ public abstract class MapBooBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean processRotation = true;
-    final boolean processZoom = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
