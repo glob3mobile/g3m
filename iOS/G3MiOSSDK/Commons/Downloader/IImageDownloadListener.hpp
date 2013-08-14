@@ -14,10 +14,6 @@
 class IImageDownloadListener {
 public:
   virtual ~IImageDownloadListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   /**

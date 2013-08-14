@@ -46,10 +46,6 @@ public:
   const unsigned char getTapCount() const { return _tapCount; }
 
   ~Touch() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 };
 
@@ -142,10 +138,6 @@ public:
     for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
 };

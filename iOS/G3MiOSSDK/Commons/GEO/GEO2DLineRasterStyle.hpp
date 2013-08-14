@@ -85,11 +85,6 @@ public:
 #ifdef C_CODE
     delete [] _dashLengths;
 #endif
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   bool apply(ICanvas* canvas) const;

@@ -14,11 +14,6 @@
 
 ICanvas::~ICanvas() {
   delete _currentFont;
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 void ICanvas::initialize(int width, int height) {

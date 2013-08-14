@@ -94,12 +94,7 @@ public:
   }
 
   ~LayerTilesRenderParameters() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
-  
   
 };
 

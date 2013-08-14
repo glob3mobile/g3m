@@ -16,10 +16,6 @@ class Geodetic2D;
 class SurfaceElevationListener {
 public:
   virtual ~SurfaceElevationListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 };
 

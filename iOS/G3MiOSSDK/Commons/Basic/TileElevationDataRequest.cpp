@@ -22,13 +22,6 @@ _listener(NULL)
 
 }
 
-TileElevationDataRequest::~TileElevationDataRequest() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-}
-
 void TileElevationDataRequest::onData(const Sector& sector,
                                       const Vector2I& resolution,
                                       ElevationData* elevationData) {

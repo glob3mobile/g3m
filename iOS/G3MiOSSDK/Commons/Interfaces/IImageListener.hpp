@@ -15,10 +15,6 @@ class IImage;
 class IImageListener {
 public:
   virtual ~IImageListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   /**

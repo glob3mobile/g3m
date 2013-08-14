@@ -13,10 +13,6 @@
 class GEOStyle {
 public:
   virtual ~GEOStyle() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 };
 

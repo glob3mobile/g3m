@@ -28,10 +28,6 @@ public:
   }
 
   ~Vector3F() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   Vector3F(const Vector3F &v): _x(v._x), _y(v._y), _z(v._z) {

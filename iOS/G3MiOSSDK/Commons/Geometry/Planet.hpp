@@ -21,10 +21,6 @@ public:
   static const Planet* createSphericalEarth();
   
   virtual ~Planet() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   virtual Vector3D getRadii() const = 0;

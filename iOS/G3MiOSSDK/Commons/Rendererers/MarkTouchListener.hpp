@@ -14,10 +14,6 @@ class Mark;
 class MarkTouchListener {
 public:
   virtual ~MarkTouchListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   virtual bool touchedMark(Mark* mark) = 0;

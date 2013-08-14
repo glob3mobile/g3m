@@ -31,11 +31,7 @@ class INativeGL {
 public:
 
   virtual ~INativeGL() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  };
+  }
 
   virtual void useProgram(GPUProgram* program) const = 0;
 
