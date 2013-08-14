@@ -153,7 +153,7 @@ _labelShadowColor(labelShadowColor),
 _labelGapSize(labelGapSize),
 _textureId(NULL),
 _cartesianPosition(NULL),
-_vertices(NULL),
+//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -191,7 +191,7 @@ _labelShadowColor(labelShadowColor),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-_vertices(NULL),
+//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -226,7 +226,7 @@ _labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-_vertices(NULL),
+//_vertices(NULL),
 _textureSolved(false),
 _textureImage(NULL),
 _renderedMark(false),
@@ -262,7 +262,7 @@ _labelShadowColor(NULL),
 _labelGapSize(2),
 _textureId(NULL),
 _cartesianPosition(NULL),
-_vertices(NULL),
+//_vertices(NULL),
 _textureSolved(true),
 _textureImage(image),
 _renderedMark(false),
@@ -361,7 +361,7 @@ Mark::~Mark() {
   }
 
   delete _cartesianPosition;
-  delete _vertices;
+//  delete _vertices;
   if (_autoDeleteListener) {
     delete _listener;
   }
@@ -394,37 +394,14 @@ double Mark::getMinDistanceToCamera() {
 
 void Mark::createGLState(const Planet* planet){
 
-  if (_vertices == NULL) {
 
-    Geodetic3D positionWithSurfaceElevation(_position->_latitude,
-                                            _position->_longitude,
-                                            _position->_height + _currentSurfaceElevation);
+  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                          _position->_longitude,
+                                          _position->_height + _currentSurfaceElevation);
 
-//    const Vector3D pos( planet->toCartesian(* _position) );
-    const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
+  const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
 
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
-    vertex.add(pos);
-    vertex.add(pos);
-    vertex.add(pos);
-    vertex.add(pos);
-
-    _vertices = vertex.create();
-  }
-
-  _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
-
-  _glState.addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
-                                              3,            // Our buffer contains elements of 3
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,
-                                              false,        // NO DEPTH TEST
-                                              false, 0,     // NO CULLING
-                                              false, 0, 0,  // NO POLYGON OFFSET
-                                              1.0f,         // LINE WIDTH
-                                              false, 1.0f), // POINT SIZE
-                        false);
+  _glState.addGLFeature(new BillboardGLFeature(pos, _textureWidth, _textureHeight), false);
 
   if (_textureId != NULL){
     _glState.addGLFeature(new TextureGLFeature(_textureId,
@@ -514,13 +491,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,            //Without considering vertical exaggeration
                             double verticalExaggeration){
 
-  //  Geodetic3D newPos(_position->latitude(), _position->longitude(), rawElevation * verticalExaggeration);
-  //  delete _position;
-  //  _position = new Geodetic3D(newPos);
-
   _currentSurfaceElevation = rawElevation * verticalExaggeration;
-  
-  delete _vertices;
-  _vertices = NULL;
+
   _glState.clearAllGLFeatures();
 }

@@ -129,6 +129,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return  POINT_SIZE;
   }
 
+  if (name.compare("uBillboardPosition") == 0) {
+    return  BILLBOARD_POSITION;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 

@@ -117,8 +117,6 @@ private:
 
   Vector3D* _cartesianPosition;
 
-  IFloatBuffer* _vertices;
-
   bool    _textureSolved;
   IImage* _textureImage;
   int     _textureWidth;

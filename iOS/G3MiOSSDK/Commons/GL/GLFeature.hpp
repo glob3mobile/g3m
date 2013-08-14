@@ -66,10 +66,10 @@ protected:
 //
 //};
 
-class TextureExtentGLFeature: public GLFeature{
+class BillboardGLFeature: public GLFeature{
 public:
-  TextureExtentGLFeature(int textureWidth, int textureHeight);
-  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  BillboardGLFeature(const Vector3D& position, int textureWidth, int textureHeight);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
 class ViewportExtentGLFeature: public GLFeature{
