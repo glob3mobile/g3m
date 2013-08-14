@@ -19,10 +19,6 @@ SceneJSParserStatistics::SceneJSParserStatistics() {
 }
 
 SceneJSParserStatistics::~SceneJSParserStatistics() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 void SceneJSParserStatistics::computeNode() {

@@ -631,10 +631,6 @@ public:
   }
 
   ~MapBooBuilder_ApplicationTubeListener() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
 
   void onOpen(IWebSocket* ws) {

@@ -42,11 +42,8 @@ struct SingleBillElevationDataProvider_Request {
   }
 
   ~SingleBillElevationDataProvider_Request() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
+  
 };
 
 class SingleBillElevationDataProvider : public ElevationDataProvider {
