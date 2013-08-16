@@ -109,7 +109,8 @@ _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
 _applicationDefaultSceneIndex(0),
-_context(NULL)
+_context(NULL),
+_webSocket(NULL)
 {
 
 }
@@ -602,11 +603,11 @@ std::vector<PeriodicalTask*>* MapBooBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   if (_useWebSockets) {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
   }
   else {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_PollingScenePeriodicalTask(this)));
   }
 
@@ -682,14 +683,29 @@ void MapBooBuilder::setContext(const G3MContext* context) {
   _context = context;
 }
 
+void MapBooBuilder::cleanupWebSocket() {
+  if (_webSocket != NULL) {
+    _webSocket->close();
+    delete _webSocket;
+    _webSocket = NULL;
+  }
+}
+
+MapBooBuilder::~MapBooBuilder() {
+  cleanupWebSocket();
+}
+
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-  context->getFactory()->createWebSocket(createApplicationTubeURL(),
-                                         new MapBooBuilder_ApplicationTubeListener(this),
-                                         autodeleteListener,
-                                         autodeleteWebSocket);
+  cleanupWebSocket();
+
+  const IFactory* factory = context->getFactory();
+  _webSocket = factory->createWebSocket(createApplicationTubeURL(),
+                                        new MapBooBuilder_ApplicationTubeListener(this),
+                                        autodeleteListener,
+                                        autodeleteWebSocket);
 }
 
 GInitializationTask* MapBooBuilder::createInitializationTask() {
@@ -800,10 +816,6 @@ void MapBooBuilder::rawChangeScene(int sceneIndex) {
   _applicationCurrentSceneIndex = sceneIndex;
 
   changedCurrentScene();
-
-  if (_applicationListener != NULL) {
-    _applicationListener->onSceneChanged(_context, _applicationCurrentSceneIndex);
-  }
 }
 
 void MapBooBuilder::changeScene(int sceneIndex) {
@@ -835,6 +847,13 @@ void MapBooBuilder::changedCurrentScene() {
 
     // force immediate execution of PeriodicalTasks
     _g3mWidget->resetPeriodicalTasksTimeouts();
+  }
+
+  const MapBoo_Scene* currentScene = getApplicationCurrentScene();
+  if (_applicationListener != NULL) {
+    _applicationListener->onSceneChanged(_context,
+                                         getApplicationCurrentSceneIndex(),
+                                         currentScene);
   }
 }
 

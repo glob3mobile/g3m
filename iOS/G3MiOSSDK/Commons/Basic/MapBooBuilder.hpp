@@ -63,7 +63,8 @@ public:
   // virtual void onWarningsChanged() = 0;
 
   virtual void onSceneChanged(const G3MContext* context,
-                              int sceneIndex) = 0;
+                              int sceneIndex,
+                              const MapBoo_Scene* scene) = 0;
 };
 
 
@@ -152,6 +153,8 @@ private:
   private G3MContext _context;
 #endif
 
+  IWebSocket* _webSocket;
+
   bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
@@ -210,6 +213,7 @@ private:
 
   void changedCurrentScene();
 
+  void cleanupWebSocket();
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -218,8 +222,7 @@ protected:
                 const std::string& applicationId,
                 MapBooApplicationChangeListener* ApplicationListener);
 
-  virtual ~MapBooBuilder() {
-  }
+  virtual ~MapBooBuilder();
 
   void setGL(GL *gl);
 

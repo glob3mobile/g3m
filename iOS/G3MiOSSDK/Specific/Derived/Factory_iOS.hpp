@@ -46,7 +46,7 @@ public:
                                IImageListener* listener,
                                bool autodelete) const {
     NSString* fn = [NSString stringWithCString: filename.c_str()
-                                      encoding: [NSString defaultCStringEncoding]];
+                                      encoding: NSUTF8StringEncoding];
 
     UIImage* image = [UIImage imageNamed:fn];
     if (image) {
