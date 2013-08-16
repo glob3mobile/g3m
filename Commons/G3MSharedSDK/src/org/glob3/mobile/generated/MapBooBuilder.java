@@ -360,7 +360,7 @@ public abstract class MapBooBuilder
   {
     if (_webSocket != null)
     {
-      _webSocket.close();
+  //    _webSocket->close();
       if (_webSocket != null)
          _webSocket.dispose();
       _webSocket = null;
