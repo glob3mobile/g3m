@@ -685,7 +685,7 @@ void MapBooBuilder::setContext(const G3MContext* context) {
 
 void MapBooBuilder::cleanupWebSocket() {
   if (_webSocket != NULL) {
-    _webSocket->close();
+//    _webSocket->close();
     delete _webSocket;
     _webSocket = NULL;
   }
