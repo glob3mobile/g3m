@@ -23,6 +23,8 @@ public abstract class MapBooBuilder
 
   private G3MContext _context;
 
+  private IWebSocket _webSocket;
+
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -82,11 +84,11 @@ public abstract class MapBooBuilder
   
     if (_useWebSockets)
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
     }
     else
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_PollingScenePeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_PollingScenePeriodicalTask(this)));
     }
   
     return periodicalTasks;
@@ -346,8 +348,24 @@ public abstract class MapBooBuilder
       // force immediate execution of PeriodicalTasks
       _g3mWidget.resetPeriodicalTasksTimeouts();
     }
+  
+    final MapBoo_Scene currentScene = getApplicationCurrentScene();
+    if (_applicationListener != null)
+    {
+      _applicationListener.onSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
+    }
   }
 
+  private void cleanupWebSocket()
+  {
+    if (_webSocket != null)
+    {
+      _webSocket.close();
+      if (_webSocket != null)
+         _webSocket.dispose();
+      _webSocket = null;
+    }
+  }
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
   {
@@ -369,11 +387,13 @@ public abstract class MapBooBuilder
      _applicationCurrentSceneIndex = -1;
      _applicationDefaultSceneIndex = 0;
      _context = null;
+     _webSocket = null;
   
   }
 
   public void dispose()
   {
+    cleanupWebSocket();
   }
 
   protected final void setGL(GL gl)
@@ -597,7 +617,10 @@ public abstract class MapBooBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-    context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+    cleanupWebSocket();
+  
+    final IFactory factory = context.getFactory();
+    _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -612,11 +635,6 @@ public abstract class MapBooBuilder
     _applicationCurrentSceneIndex = sceneIndex;
   
     changedCurrentScene();
-  
-    if (_applicationListener != null)
-    {
-      _applicationListener.onSceneChanged(_context, _applicationCurrentSceneIndex);
-    }
   }
 
   /** Private to MapbooBuilder, don't call it */

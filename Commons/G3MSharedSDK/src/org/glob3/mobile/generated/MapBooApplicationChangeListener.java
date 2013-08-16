@@ -62,5 +62,5 @@ public abstract class MapBooApplicationChangeListener
 
   // virtual void onWarningsChanged() = 0;
 
-  public abstract void onSceneChanged(G3MContext context, int sceneIndex);
+  public abstract void onSceneChanged(G3MContext context, int sceneIndex, MapBoo_Scene scene);
 }
