@@ -109,8 +109,7 @@ _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
 _applicationDefaultSceneIndex(0),
-_context(NULL),
-_webSocket(NULL)
+_context(NULL)
 {
 
 }
@@ -645,6 +644,7 @@ public:
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
                                   ws->getURL().getPath().c_str());
+    _builder->setApplicationTubeOpened(false);
   }
 
   void onMesssage(IWebSocket* ws,
@@ -683,29 +683,19 @@ void MapBooBuilder::setContext(const G3MContext* context) {
   _context = context;
 }
 
-void MapBooBuilder::cleanupWebSocket() {
-  if (_webSocket != NULL) {
-//    _webSocket->close();
-    delete _webSocket;
-    _webSocket = NULL;
-  }
-}
-
 MapBooBuilder::~MapBooBuilder() {
-  cleanupWebSocket();
+
 }
 
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-  cleanupWebSocket();
-
   const IFactory* factory = context->getFactory();
-  _webSocket = factory->createWebSocket(createApplicationTubeURL(),
-                                        new MapBooBuilder_ApplicationTubeListener(this),
-                                        autodeleteListener,
-                                        autodeleteWebSocket);
+  factory->createWebSocket(createApplicationTubeURL(),
+                           new MapBooBuilder_ApplicationTubeListener(this),
+                           autodeleteListener,
+                           autodeleteWebSocket);
 }
 
 GInitializationTask* MapBooBuilder::createInitializationTask() {
@@ -876,5 +866,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
-  _isApplicationTubeOpen = open;
+  if (_isApplicationTubeOpen != open) {
+    _isApplicationTubeOpen = open;
+  }
 }

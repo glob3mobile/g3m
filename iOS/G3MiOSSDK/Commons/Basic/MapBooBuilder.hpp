@@ -153,8 +153,6 @@ private:
   private G3MContext _context;
 #endif
 
-  IWebSocket* _webSocket;
-
   bool        _isApplicationTubeOpen;
 
   LayerSet* _layerSet;
@@ -212,8 +210,6 @@ private:
   Color         parseColor(const JSONString* jsonColor) const;
 
   void changedCurrentScene();
-
-  void cleanupWebSocket();
 
 protected:
   MapBooBuilder(const URL& serverURL,

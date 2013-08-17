@@ -36,12 +36,14 @@
 - (void) webSocket: (SRWebSocket*) webSocket
  didReceiveMessage: (id) message
 {
-  if ([message isKindOfClass:[NSString class]]) {
-    _listener->onMesssage( _websocket, toSTDString( message ) );
-  }
-  else {
-    NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
-    _listener->onError( _websocket, toSTDString(msg) );
+  if (_websocket) {
+    if ([message isKindOfClass:[NSString class]]) {
+      _listener->onMesssage( _websocket, toSTDString( message ) );
+    }
+    else {
+      NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
+      _listener->onError( _websocket, toSTDString(msg) );
+    }
   }
 }
 
@@ -53,12 +55,14 @@
 - (void) webSocket: (SRWebSocket*) webSocket
   didFailWithError: (NSError*) error
 {
-//  NSInteger     code        = [error code];
-//  NSString*     domain      = [error domain];
-//  NSDictionary* userInfo    = [error userInfo];
-  NSString*     description = [error localizedDescription];
-
-  _listener->onError( _websocket, toSTDString(description) );
+  if (_websocket) {
+    NSString*     description = [error localizedDescription];
+    _listener->onError( _websocket, toSTDString(description) );
+    if (_websocket->getAutodeleteWebSocket()) {
+      delete _websocket;
+      _websocket = NULL;
+    }
+  }
 }
 
 - (void) webSocket: (SRWebSocket*) webSocket
@@ -66,10 +70,12 @@
             reason: (NSString*) reason
           wasClean: (BOOL) wasClean
 {
-  _listener->onClose( _websocket );
-  if (_websocket->getAutodeleteWebSocket()) {
-    delete _websocket;
-    _websocket = NULL;
+  if (_websocket) {
+    _listener->onClose( _websocket );
+    if (_websocket->getAutodeleteWebSocket()) {
+      delete _websocket;
+      _websocket = NULL;
+    }
   }
 }
 
