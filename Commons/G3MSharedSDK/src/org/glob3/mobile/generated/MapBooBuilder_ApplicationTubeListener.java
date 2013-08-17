@@ -21,6 +21,7 @@ public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
   public final void onError(IWebSocket ws, String error)
   {
     ILogger.instance().logError("Error '%s' on Tube '%s'", error, ws.getURL().getPath());
+    _builder.setApplicationTubeOpened(false);
   }
 
   public final void onMesssage(IWebSocket ws, String message)

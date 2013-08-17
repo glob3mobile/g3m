@@ -23,8 +23,6 @@ public abstract class MapBooBuilder
 
   private G3MContext _context;
 
-  private IWebSocket _webSocket;
-
   private boolean _isApplicationTubeOpen;
 
   private LayerSet _layerSet;
@@ -356,17 +354,6 @@ public abstract class MapBooBuilder
     }
   }
 
-  private void cleanupWebSocket()
-  {
-    if (_webSocket != null)
-    {
-  //    _webSocket->close();
-      if (_webSocket != null)
-         _webSocket.dispose();
-      _webSocket = null;
-    }
-  }
-
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
   {
      _serverURL = serverURL;
@@ -387,13 +374,12 @@ public abstract class MapBooBuilder
      _applicationCurrentSceneIndex = -1;
      _applicationDefaultSceneIndex = 0;
      _context = null;
-     _webSocket = null;
   
   }
 
   public void dispose()
   {
-    cleanupWebSocket();
+  
   }
 
   protected final void setGL(GL gl)
@@ -617,10 +603,8 @@ public abstract class MapBooBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-    cleanupWebSocket();
-  
     final IFactory factory = context.getFactory();
-    _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+    factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -646,7 +630,10 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void setApplicationTubeOpened(boolean open)
   {
-    _isApplicationTubeOpen = open;
+    if (_isApplicationTubeOpen != open)
+    {
+      _isApplicationTubeOpen = open;
+    }
   }
 
   /** Private to MapbooBuilder, don't call it */
