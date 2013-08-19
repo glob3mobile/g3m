@@ -251,8 +251,8 @@ class GenericQuadTree_TESTER {
                       const void*   element) const{
 
       if (_sec.isEqualsTo(sector)){
-//        std::string* s = (std::string*)element;
-//        printf("ELEMENT -> %s\n", s->c_str());
+        //        std::string* s = (std::string*)element;
+        //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
       return false;
@@ -267,7 +267,7 @@ class GenericQuadTree_TESTER {
       if (!aborted){
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
-//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER::_nElements += 1;
       }
@@ -289,8 +289,8 @@ class GenericQuadTree_TESTER {
                       const void*   element) const{
 
       if (geodetic.isEqualsTo(_geo)){
-//        std::string* s = (std::string*)element;
-//        printf("ELEMENT -> %s\n", s->c_str());
+        //        std::string* s = (std::string*)element;
+        //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
       return false;
@@ -300,13 +300,13 @@ class GenericQuadTree_TESTER {
       if (!aborted){
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
-//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
-                GenericQuadTree_TESTER::_nElements += 1;
+        GenericQuadTree_TESTER::_nElements += 1;
       }
-      
+
     }
-    
+
   };
 
   class NodeVisitor_TESTER: public GenericQuadTreeNodeVisitor{
@@ -326,10 +326,10 @@ class GenericQuadTree_TESTER {
     NodeVisitor_TESTER():
     _maxDepth(0), _meanDepth(0), _maxNEle(0), _nNodes(0), _meanElemDepth(0), _nElem(0),
     _leafMinDepth(999999), _leafMeanDepth(0), _nLeaf(0){}
-    
+
 
     bool visitNode(const GenericQuadTree_Node* node){
-//      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
+      //      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
 
       int depth = node->getDepth();
 
@@ -361,24 +361,24 @@ class GenericQuadTree_TESTER {
       return false;
     }
     void endVisit(bool aborted) const{
-      ILogger::instance()->logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n",
-             _nElem,
-             _maxDepth,
-             _meanDepth / (float)_nNodes,
-             _maxNEle,
-             _meanElemDepth / (float) _nElem,
-             _nLeaf,
-             _leafMinDepth,
-             _leafMinDepth / (float) _nLeaf
-             );
+      ILogger::instance()->logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MEAN DEPTH: %f\n============== \n",
+                                   _nElem,
+                                   _maxDepth,
+                                   _meanDepth / (float)_nNodes,
+                                   _maxNEle,
+                                   _meanElemDepth / (float) _nElem,
+                                   _nLeaf,
+                                   _leafMinDepth,
+                                   _leafMeanDepth / (float) _nLeaf
+                                   );
     }
   };
-  
-public:
 
+public:
+  
   static int _nComparisons;
   static int _nElements;
-
+  
   static int randomInt(int max){
 #ifdef C_CODE
     int i = rand();
@@ -387,12 +387,12 @@ public:
     java.util.Random r = new java.util.Random();
     int i = r.nextInt();
 #endif
-
+    
     return i % max;
   }
-
+  
   static void run(int nElements, GEOTileRasterizer* rasterizer);
-
+  
   static void run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer);
   
 };

@@ -210,16 +210,11 @@ public:
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
-                        double verticalExaggeration){
-//    printf("SHAPE CHANGES ELEVATION");
+                        double verticalExaggeration);
 
-    Geodetic3D g(_position->_latitude, _position->_longitude, rawElevation * verticalExaggeration);
-    delete _position;
-    _position = new Geodetic3D(g);
-
-    delete _transformMatrix;
-    _transformMatrix = NULL;
-  }
+  void elevationChanged(const Sector& position,
+                   const ElevationData* rawElevationData, //Without considering vertical exaggeration
+                        double verticalExaggeration){}
 
 };
 

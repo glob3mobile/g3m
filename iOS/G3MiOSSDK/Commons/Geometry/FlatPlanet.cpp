@@ -173,8 +173,8 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
   _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
   _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
   _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
-  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
-  
+//  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
 }

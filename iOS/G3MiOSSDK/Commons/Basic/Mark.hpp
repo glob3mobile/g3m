@@ -255,6 +255,10 @@ public:
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
                         double verticalExaggeration);
+
+  void elevationChanged(const Sector& position,
+                        const ElevationData* rawElevationData, //Without considering vertical exaggeration
+                        double verticalExaggeration){}
 };
 
 #endif

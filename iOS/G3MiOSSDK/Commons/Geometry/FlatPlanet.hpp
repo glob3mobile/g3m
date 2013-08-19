@@ -30,8 +30,8 @@ private:
   mutable MutableVector3D _initialPoint1;
   mutable double          _distanceBetweenInitialPoints;
   mutable MutableVector3D _centerPoint;
-  mutable double          _angleBetweenInitialRays;
-  
+//  mutable double          _angleBetweenInitialRays;
+
 
   
 public:

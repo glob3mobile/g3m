@@ -451,11 +451,11 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   }
   
   // compute estimated camera translation: steps 2..n until convergence
-  int iter=0;
+
   double precision = mu->pow(10, mu->log10(distance)-8.0);
   double angle_n1=angle0, angle_n=angle1;
   while (mu->abs(angle_n-_angleBetweenInitialPoints) > precision) {
-    iter++;
+
     if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0) d*=-0.5;
     translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
     positionCamera = positionCamera.transformedBy(translation, 1.0);

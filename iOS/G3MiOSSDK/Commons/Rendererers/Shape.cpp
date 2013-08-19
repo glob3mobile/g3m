@@ -154,3 +154,14 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                linearInterpolation);
   addShapeEffect(effect);
 }
+
+void Shape::elevationChanged(const Geodetic2D& position,
+                      double rawElevation,
+                      double verticalExaggeration){
+  Geodetic3D g(_position->_latitude, _position->_longitude, rawElevation * verticalExaggeration);
+  delete _position;
+  _position = new Geodetic3D(g);
+
+  delete _transformMatrix;
+  _transformMatrix = NULL;
+}
