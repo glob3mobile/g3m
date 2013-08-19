@@ -116,7 +116,7 @@ public class Tile
       }
   
       //Notifying when the tile is first created and every time the elevation data changes
-      _planetRenderer.sectorElevationChanged(_sector, _elevationData);
+      _planetRenderer.sectorElevationChanged(_elevationData);
     }
   
     return _tessellatorMesh;
@@ -841,7 +841,7 @@ public class Tile
     {
   
       //Notifying elevation event when LOD decreases
-      _planetRenderer.sectorElevationChanged(_sector, _elevationData);
+      _planetRenderer.sectorElevationChanged(_elevationData);
   
       final int subtilesSize = _subtiles.size();
       for (int i = 0; i < subtilesSize; i++)

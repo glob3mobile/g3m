@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-public abstract class Shape implements EffectTarget implements SurfaceElevationListener
+public abstract class Shape implements SurfaceElevationListener, EffectTarget
 {
   private Geodetic3D _position;
 

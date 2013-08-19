@@ -1,13 +1,11 @@
 package org.glob3.mobile.generated; 
 public class SurfaceElevationProvider_Visitor extends GenericQuadTreeVisitor
 {
-  private final Sector _sector ;
   private final ElevationData _elevationData;
   private final double _verticalExaggeration;
 
-  public SurfaceElevationProvider_Visitor(Sector sector, ElevationData ed, double verticalExaggeration)
+  public SurfaceElevationProvider_Visitor(ElevationData ed, double verticalExaggeration)
   {
-     _sector = new Sector(sector);
      _elevationData = ed;
      _verticalExaggeration = verticalExaggeration;
   }
