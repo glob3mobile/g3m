@@ -628,19 +628,19 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
 
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
-                                 SurfaceElevationListener* observer) {
-  _elevationListenersTree.add(Geodetic2D(latitude, longitude), observer);
+                                 SurfaceElevationListener* listener) {
+  _elevationListenersTree.add(Geodetic2D(latitude, longitude), listener);
 }
 
 void PlanetRenderer::addListener(const Geodetic2D& position,
-                                 SurfaceElevationListener* observer) {
-  _elevationListenersTree.add(position, observer);
+                                 SurfaceElevationListener* listener) {
+  _elevationListenersTree.add(position, listener);
 }
 
-void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
-  _elevationListenersTree.remove(observer);
+void PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
+  _elevationListenersTree.remove(listener);
 }
 
 void PlanetRenderer::sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const{
-  _elevationListenersTree.notifyObservers(sector, elevationData, _verticalExaggeration);
+  _elevationListenersTree.notifyListeners(sector, elevationData, _verticalExaggeration);
 }

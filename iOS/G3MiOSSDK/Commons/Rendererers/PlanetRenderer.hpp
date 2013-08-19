@@ -469,12 +469,12 @@ public:
 
   void addListener(const Angle& latitude,
                    const Angle& longitude,
-                   SurfaceElevationListener* observer);
+                   SurfaceElevationListener* listener);
 
   void addListener(const Geodetic2D& position,
-                   SurfaceElevationListener* observer);
+                   SurfaceElevationListener* listener);
 
-  void removeListener(SurfaceElevationListener* observer);
+  void removeListener(SurfaceElevationListener* listener);
 
   void sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const;
 
