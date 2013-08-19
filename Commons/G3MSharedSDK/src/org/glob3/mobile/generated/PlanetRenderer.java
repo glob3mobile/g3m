@@ -631,24 +631,24 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return (_elevationDataProvider == null) ? null : this;
   }
 
-  public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener observer)
+  public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener)
   {
-    _elevationListenersTree.add(new Geodetic2D(latitude, longitude), observer);
+    _elevationListenersTree.add(new Geodetic2D(latitude, longitude), listener);
   }
 
-  public final void addListener(Geodetic2D position, SurfaceElevationListener observer)
+  public final void addListener(Geodetic2D position, SurfaceElevationListener listener)
   {
-    _elevationListenersTree.add(position, observer);
+    _elevationListenersTree.add(position, listener);
   }
 
-  public final void removeListener(SurfaceElevationListener observer)
+  public final void removeListener(SurfaceElevationListener listener)
   {
-    _elevationListenersTree.remove(observer);
+    _elevationListenersTree.remove(listener);
   }
 
   public final void sectorElevationChanged(Sector sector, ElevationData elevationData)
   {
-    _elevationListenersTree.notifyObservers(sector, elevationData, _verticalExaggeration);
+    _elevationListenersTree.notifyListeners(sector, elevationData, _verticalExaggeration);
   }
 
 }
