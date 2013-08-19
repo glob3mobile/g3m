@@ -42,7 +42,10 @@ public abstract class Shape implements EffectTarget implements SurfaceElevationL
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
+  
+    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, _position._height + _surfaceElevation);
+  
+    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
@@ -69,6 +72,7 @@ public abstract class Shape implements EffectTarget implements SurfaceElevationL
   private GLState _glState = new GLState();
 
   private SurfaceElevationProvider _surfaceElevationProvider;
+  private double _surfaceElevation;
 
   protected void cleanTransformMatrix()
   {
@@ -78,7 +82,6 @@ public abstract class Shape implements EffectTarget implements SurfaceElevationL
   }
 
   public Shape(Geodetic3D position)
-//  _planet(NULL),
   {
      _position = position;
      _heading = new Angle(Angle.zero());
@@ -88,6 +91,7 @@ public abstract class Shape implements EffectTarget implements SurfaceElevationL
      _scaleZ = 1;
      _transformMatrix = null;
      _enable = true;
+     _surfaceElevation = 0;
 
   }
 
@@ -295,10 +299,7 @@ public abstract class Shape implements EffectTarget implements SurfaceElevationL
 
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
-    Geodetic3D g = new Geodetic3D(_position._latitude, _position._longitude, rawElevation * verticalExaggeration);
-    if (_position != null)
-       _position.dispose();
-    _position = new Geodetic3D(g);
+    _surfaceElevation = rawElevation * verticalExaggeration;
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();
