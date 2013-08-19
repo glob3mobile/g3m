@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Mark extends SurfaceElevationListener
+public class Mark implements SurfaceElevationListener
 {
   /**
    * The text the mark displays.
@@ -595,5 +595,9 @@ public class Mark extends SurfaceElevationListener
     _cartesianPosition = null;
   
     _glState.clearAllGLFeatures();
+  }
+
+  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
+  {
   }
 }

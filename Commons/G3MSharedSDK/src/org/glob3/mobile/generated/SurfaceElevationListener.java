@@ -23,18 +23,12 @@ package org.glob3.mobile.generated;
 
 
 
-public class SurfaceElevationListener
+public interface SurfaceElevationListener
 {
 
-  public void dispose()
-  {
-  }
+  public void dispose();
 
-  public void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration) //Without considering vertical exaggeration
-  {
-  }
+  void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration); //Without considering vertical exaggeration
 
-  public void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
-  {
-  }
+  void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration); //Without considering vertical exaggeration
 }

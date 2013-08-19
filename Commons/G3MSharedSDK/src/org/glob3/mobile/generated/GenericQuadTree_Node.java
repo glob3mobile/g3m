@@ -101,7 +101,7 @@ public class GenericQuadTree_Node
   
   
     Sector sector = element.getSector();
-  //  double myArea = _sector->getAngularAreaInSquaredDegrees();
+    //  double myArea = _sector->getAngularAreaInSquaredDegrees();
     double myArea = getAreaInSquaredDegreesAfterInsertion(sector);
   
     if (sector.getAngularAreaInSquaredDegrees() > (myArea * childAreaProportion))
@@ -125,7 +125,7 @@ public class GenericQuadTree_Node
   
         if (cost == minChildInsertionCost)
         {
-  //        printf("BOTH CHILDREN WITH SAME COST");
+          //        printf("BOTH CHILDREN WITH SAME COST");
   
           int n1 = bestChildForInsertion.getSubtreeNElements();
           int n2 = child.getSubtreeNElements();
@@ -216,28 +216,23 @@ public class GenericQuadTree_Node
       //Node must create children
       splitNode(maxElementsPerNode, maxDepth, childAreaProportion); //We must split
       return this.add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
-  
-    } //INNER NODE
-    else
-    {
-  
-      //Calculate best node for insertion
-      GenericQuadTree_Node bestInsertionNode = getBestNodeForInsertion(element, childAreaProportion);
-  
-      if (bestInsertionNode == this)
-      {
-        _elements.add(element);
-        increaseNodeSector(element);
-        return true;
-  
-      } //Inserting into child
-      else
-      {
-        increaseNodeSector(element);
-        return bestInsertionNode.add(element, maxElementsPerNode, maxDepth, childAreaProportion);
-      }
-  
     }
+  
+    //INNER NODE
+  
+    //Calculate best node for insertion
+    GenericQuadTree_Node bestInsertionNode = getBestNodeForInsertion(element, childAreaProportion);
+  
+    if (bestInsertionNode == this)
+    {
+      _elements.add(element);
+      increaseNodeSector(element);
+      return true;
+    }
+  
+    //Inserting into child
+    increaseNodeSector(element);
+    return bestInsertionNode.add(element, maxElementsPerNode, maxDepth, childAreaProportion);
   }
 
   public final boolean acceptVisitor(Sector sector, GenericQuadTreeVisitor visitor)
@@ -437,7 +432,7 @@ public class GenericQuadTree_Node
       line.add(new Geodetic2D(_sector.getSE()));
       line.add(new Geodetic2D(_sector.getSW()));
   
-  //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+      //    printf("RESTERIZING: %s\n", _sector->description().c_str());
   
       float[] dashLengths = {};
       int dashCount = 0;
@@ -507,11 +502,11 @@ public class GenericQuadTree_Node
   
     for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
     {
-      if ((it.next())._element == element)
+      GenericQuadTree_Element qTElement = it.next();
+      if (qTElement._element == element)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-        _elements.erase(it);
-        break;
+        _elements.remove(qTElement);
+        return;
       }
     }
   

@@ -26,8 +26,7 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GPUProgramState;
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public abstract class Shape implements EffectTarget, SurfaceElevationListener
+public abstract class Shape implements EffectTarget implements SurfaceElevationListener
 {
   private Geodetic3D _position;
 
@@ -294,18 +293,20 @@ public abstract class Shape implements EffectTarget, SurfaceElevationListener
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 
-  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration) //Without considering vertical exaggeration
+  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
-//    printf("SHAPE CHANGES ELEVATION");
-
     Geodetic3D g = new Geodetic3D(_position._latitude, _position._longitude, rawElevation * verticalExaggeration);
     if (_position != null)
        _position.dispose();
     _position = new Geodetic3D(g);
-
+  
     if (_transformMatrix != null)
        _transformMatrix.dispose();
     _transformMatrix = null;
+  }
+
+  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
+  {
   }
 
 }
