@@ -21,7 +21,7 @@
 
 - (std::string) toCppString
 {
-  return [self cStringUsingEncoding: NSUTF8StringEncoding ];
+  return [self cStringUsingEncoding: NSUTF8StringEncoding];
 }
 
 @end
