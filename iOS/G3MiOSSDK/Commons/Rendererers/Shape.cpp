@@ -58,7 +58,12 @@ void Shape::cleanTransformMatrix() {
 }
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
-  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
+
+  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                          _position->_longitude,
+                                          _position->_height + _surfaceElevation);
+
+  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
@@ -158,9 +163,7 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
 void Shape::elevationChanged(const Geodetic2D& position,
                       double rawElevation,
                       double verticalExaggeration){
-  Geodetic3D g(_position->_latitude, _position->_longitude, rawElevation * verticalExaggeration);
-  delete _position;
-  _position = new Geodetic3D(g);
+  _surfaceElevation = rawElevation * verticalExaggeration;
 
   delete _transformMatrix;
   _transformMatrix = NULL;

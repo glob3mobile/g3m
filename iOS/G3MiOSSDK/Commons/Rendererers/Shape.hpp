@@ -51,6 +51,7 @@ private:
   mutable GLState _glState;
 
   SurfaceElevationProvider* _surfaceElevationProvider;
+  double _surfaceElevation;
   
 protected:
   virtual void cleanTransformMatrix();
@@ -64,8 +65,8 @@ public:
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
-//  _planet(NULL),
-  _enable(true)
+  _enable(true),
+  _surfaceElevation(0)
   {
     
   }
