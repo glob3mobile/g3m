@@ -11,6 +11,7 @@
 #import "SRWebSocket.h"
 #include "IWebSocketListener.hpp"
 
+#import "NSString_CppAdditions.h"
 
 @interface WebSocketDelegate : NSObject<SRWebSocketDelegate>
 {
@@ -38,11 +39,11 @@
 {
   if (_websocket) {
     if ([message isKindOfClass:[NSString class]]) {
-      _listener->onMesssage( _websocket, toSTDString( message ) );
+      _listener->onMesssage( _websocket, [message toCppString] );
     }
     else {
       NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
-      _listener->onError( _websocket, toSTDString(msg) );
+      _listener->onError( _websocket, [msg toCppString] );
     }
   }
 }
@@ -57,7 +58,7 @@
 {
   if (_websocket) {
     NSString*     description = [error localizedDescription];
-    _listener->onError( _websocket, toSTDString(description) );
+    _listener->onError( _websocket, [description toCppString] );
     if (_websocket->getAutodeleteWebSocket()) {
       delete _websocket;
       _websocket = NULL;
@@ -81,22 +82,13 @@
 
 @end
 
-std::string toSTDString(NSString* nsString) {
-  return [nsString cStringUsingEncoding: NSUTF8StringEncoding ];
-}
-
-NSString* toNSString(const std::string& cppStr) {
-  return [ NSString stringWithCString: cppStr.c_str()
-                             encoding: NSUTF8StringEncoding ];
-}
-
 WebSocket_iOS::WebSocket_iOS(const URL& url,
                              IWebSocketListener* listener,
                              bool autodeleteListener,
                              bool autodeleteWebSocket) :
 IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
 {
-  NSURL* nsURL = [NSURL URLWithString: toNSString(getURL().getPath())];
+  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: getURL().getPath()] ];
 
 
   IWebSocketListener* list = getListener();
@@ -123,7 +115,7 @@ WebSocket_iOS::~WebSocket_iOS() {
 }
 
 void WebSocket_iOS::send(const std::string& message) {
-  [_srWebSocket send: toNSString(message) ];
+  [_srWebSocket send: [NSString stringWithCppString: message] ];
 }
 
 void WebSocket_iOS::close() {
