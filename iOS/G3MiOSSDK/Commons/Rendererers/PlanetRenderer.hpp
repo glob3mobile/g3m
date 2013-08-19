@@ -476,7 +476,7 @@ public:
 
   void removeListener(SurfaceElevationListener* listener);
 
-  void sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const;
+  void sectorElevationChanged(ElevationData* elevationData) const;
 
 };
 

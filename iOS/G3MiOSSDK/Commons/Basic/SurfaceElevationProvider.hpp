@@ -39,13 +39,11 @@ public:
 
 
 class SurfaceElevationProvider_Visitor: public GenericQuadTreeVisitor{
-  const Sector _sector;
   const ElevationData* _elevationData;
   const double _verticalExaggeration;
 
 public:
-  SurfaceElevationProvider_Visitor(const Sector& sector,
-                                   const ElevationData* ed,
+  SurfaceElevationProvider_Visitor(const ElevationData* ed,
                                    double verticalExaggeration);
 
   bool visitElement(const Sector& sector,
@@ -60,7 +58,7 @@ public:
 //Every SurfaceElevationProvider should store petitions in a SurfaceElevationProvider_Tree
 class SurfaceElevationProvider_Tree: public GenericQuadTree{
 public:
-  void notifyListeners(const Sector& sector, const ElevationData* ed, double verticalExaggeration) const;
+  void notifyListeners(const ElevationData* ed, double verticalExaggeration) const;
 };
 
 class SurfaceElevationProvider {

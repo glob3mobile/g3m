@@ -27,7 +27,7 @@ class MutableMatrix44D;
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget, SurfaceElevationListener{
+class Shape : public SurfaceElevationListener, EffectTarget{
 private:
   Geodetic3D* _position;
   

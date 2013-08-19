@@ -641,6 +641,8 @@ void PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
   _elevationListenersTree.remove(listener);
 }
 
-void PlanetRenderer::sectorElevationChanged(const Sector& sector, ElevationData* elevationData) const{
-  _elevationListenersTree.notifyListeners(sector, elevationData, _verticalExaggeration);
+void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
+  if (elevationData != NULL){
+    _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
+  }
 }
