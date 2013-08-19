@@ -38,40 +38,39 @@ public:
 };
 
 
+class SurfaceElevationProvider_Visitor: public GenericQuadTreeVisitor{
+  const Sector _sector;
+  const ElevationData* _elevationData;
+  const double _verticalExaggeration;
 
+public:
+  SurfaceElevationProvider_Visitor(const Sector& sector,
+                                   const ElevationData* ed,
+                                   double verticalExaggeration);
 
+  bool visitElement(const Sector& sector,
+                    const void*   element) const;
+
+  bool visitElement(const Geodetic2D& geodetic,
+                    const void*   element) const;
+
+  void endVisit(bool aborted) const{}
+};
+
+//Every SurfaceElevationProvider should store petitions in a SurfaceElevationProvider_Tree
+class SurfaceElevationProvider_Tree: public GenericQuadTree{
+public:
+  void notifyListeners(const Sector& sector, const ElevationData* ed, double verticalExaggeration) const;
+};
 
 class SurfaceElevationProvider {
 
 private:
   
-  class SurfaceElevationProvider_Visitor: public GenericQuadTreeVisitor{
-    const Sector _sector;
-    const ElevationData* _elevationData;
-    const double _verticalExaggeration;
 
-  public:
-
-    SurfaceElevationProvider_Visitor(const Sector& sector,
-                                     const ElevationData* ed,
-                                     double verticalExaggeration);
-
-    bool visitElement(const Sector& sector,
-                      const void*   element) const;
-
-    bool visitElement(const Geodetic2D& geodetic,
-                      const void*   element) const;
-
-    void endVisit(bool aborted) const{}
-  };
 
 protected:
 
-  //Every SurfaceElevationProvider should store petitions in a SurfaceElevationProvider_Tree
-  class SurfaceElevationProvider_Tree: public GenericQuadTree{
-  public:
-    void notifyListeners(const Sector& sector, const ElevationData* ed, double verticalExaggeration) const;
-  };
 
 public:
 #ifdef C_CODE
