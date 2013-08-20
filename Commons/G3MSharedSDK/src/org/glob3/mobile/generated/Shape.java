@@ -29,6 +29,7 @@ package org.glob3.mobile.generated;
 public abstract class Shape implements SurfaceElevationListener, EffectTarget
 {
   private Geodetic3D _position;
+  private AltitudeMode _altitudeMode;
 
   private Angle _heading;
   private Angle _pitch;
@@ -43,7 +44,13 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
   
-    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, _position._height + _surfaceElevation);
+    double altitude = _position._height;
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      altitude += _surfaceElevation;
+    }
+  
+    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
   
     final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
@@ -81,9 +88,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _transformMatrix = null;
   }
 
-  public Shape(Geodetic3D position)
+  public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {
      _position = position;
+     _altitudeMode = altitudeMode;
      _heading = new Angle(Angle.zero());
      _pitch = new Angle(Angle.zero());
      _scaleX = 1;
