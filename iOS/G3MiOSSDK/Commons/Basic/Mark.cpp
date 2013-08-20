@@ -133,6 +133,7 @@ IFloatBuffer* Mark::_billboardTexCoord = NULL;
 Mark::Mark(const std::string& label,
            const URL          iconURL,
            const Geodetic3D&  position,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            const bool         labelBottom,
            const float        labelFontSize,
@@ -146,6 +147,7 @@ Mark::Mark(const std::string& label,
 _label(label),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
+_altitudeMode(altitudeMode),
 _labelBottom(labelBottom),
 _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
@@ -172,6 +174,7 @@ _currentSurfaceElevation(0.0)
 
 Mark::Mark(const std::string& label,
            const Geodetic3D&  position,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            const float        labelFontSize,
            const Color*       labelFontColor,
@@ -184,6 +187,7 @@ _label(label),
 _labelBottom(true),
 _iconURL("", false),
 _position(new Geodetic3D(position)),
+_altitudeMode(altitudeMode),
 _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
 _labelShadowColor(labelShadowColor),
@@ -209,6 +213,7 @@ _currentSurfaceElevation(0.0)
 
 Mark::Mark(const URL          iconURL,
            const Geodetic3D&  position,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            MarkUserData*      userData,
            bool               autoDeleteUserData,
@@ -218,6 +223,7 @@ _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
+_altitudeMode(altitudeMode),
 _labelFontSize(20),
 _labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
 _labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
@@ -244,6 +250,7 @@ _currentSurfaceElevation(0.0)
 Mark::Mark(IImage*            image,
            const std::string& imageID,
            const Geodetic3D&  position,
+           AltitudeMode altitudeMode,
            double             minDistanceToCamera,
            MarkUserData*      userData,
            bool               autoDeleteUserData,
@@ -253,6 +260,7 @@ _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
 _position(new Geodetic3D(position)),
+_altitudeMode(altitudeMode),
 _labelFontSize(20),
 _labelFontColor(NULL),
 _labelShadowColor(NULL),
@@ -367,18 +375,19 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
 
+    double altitude = _position->_height;
+    if (_altitudeMode == RELATIVE_TO_GROUND){
+      altitude += _currentSurfaceElevation;
+    }
+
     Geodetic3D positionWithSurfaceElevation(_position->_latitude,
                                             _position->_longitude,
-                                            _position->_height + _currentSurfaceElevation);
+                                            altitude);
 
     _cartesianPosition = new Vector3D( planet->toCartesian(positionWithSurfaceElevation) );
 
@@ -400,15 +409,6 @@ double Mark::getMinDistanceToCamera() {
 }
 
 void Mark::createGLState(const Planet* planet){
-
-
-//  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
-//                                          _position->_longitude,
-//                                          _position->_height + _currentSurfaceElevation);
-//
-//  const Vector3D pos( planet->toCartesian(positionWithSurfaceElevation) );
-
-  
 
   _glState.addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
                                                _textureWidth, _textureHeight),

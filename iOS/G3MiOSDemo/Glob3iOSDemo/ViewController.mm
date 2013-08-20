@@ -535,9 +535,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  builder.setPlanet(Planet::createEarth());
+//  builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-//  builder.setPlanet(Planet::createFlatEarth());
+  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -1344,7 +1344,8 @@ public:
 
   Mark* m1 = new Mark("Fuerteventura",
                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
+                      RELATIVE_TO_GROUND);
   marksRenderer->addMark(m1);
 
 
@@ -1354,7 +1355,7 @@ public:
 //      Geodetic3D g(Angle::fromDegrees(i), Angle::fromDegrees(j), 0);
       Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
-      Mark* m1 = new Mark("M", g);
+      Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
       marksRenderer->addMark(m1);
 
     }
@@ -1362,7 +1363,8 @@ public:
 
 
   Mark* m2 = new Mark(URL("file:///plane.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0),
+                      RELATIVE_TO_GROUND);
   marksRenderer->addMark(m2);
 
   //  Mark* m3 = new Mark("Washington, DC",
@@ -1379,7 +1381,7 @@ public:
 
       marksRenderer->addMark(new Mark("Random",
                                       URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                                      Geodetic3D(latitude, longitude, 0)));
+                                      Geodetic3D(latitude, longitude, 0), RELATIVE_TO_GROUND));
     }
   }
 
@@ -1393,6 +1395,7 @@ public:
   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-122),
                                               8000),
+                               RELATIVE_TO_GROUND,
                                URL("file:///g3m-marker.png", false),
                                50000, 50000);
   shapesRenderer->addShape(quad1);
@@ -1400,6 +1403,7 @@ public:
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-123),
                                               8000),
+                               RELATIVE_TO_GROUND,
                                35000, 75000,
                                Color::newFromRGBA(1, 0, 1, 0.5));
   shapesRenderer->addShape(quad2);
@@ -1407,6 +1411,7 @@ public:
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
                                                  Angle::fromDegrees(-123),
                                                  8000),
+                                  ABSOLUTE,
                                   50000,
                                   Color::newFromRGBA(1, 1, 0, 0.5));
   //  circle->setHeading( Angle::fromDegrees(45) );
@@ -1417,6 +1422,7 @@ public:
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
                                            Angle::fromDegrees(-122),
                                            45000),
+                            ABSOLUTE,
                             Vector3D(20000, 30000, 50000),
                             2,
                             Color::newFromRGBA(0,    1, 0, 0.5),
@@ -1560,6 +1566,7 @@ public:
       Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
                                                        Angle::fromDegrees(-16.339417),
                                                        8000),
+                                        RELATIVE_TO_GROUND,
                                         image,
                                         49000, 38000);
 
@@ -1692,6 +1699,7 @@ private:
     Color* color = Color::newFromRGBA(1, 1, 0, 1);
 
     return new CircleShape(new Geodetic3D(geometry->getPosition(), 200),
+                           RELATIVE_TO_GROUND,
                            radius,
                            color);
   }
@@ -1710,6 +1718,7 @@ private:
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+                        RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
@@ -1736,6 +1745,7 @@ private:
 
       return new Mark(label,
                       Geodetic3D(geometry->getPosition(), height),
+                      RELATIVE_TO_GROUND,
                       0,
                       //25 + (scalerank * -3)
                       22 + (scalerank * -3)
@@ -2143,6 +2153,7 @@ public:
           Shape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                                      Angle::fromDegrees(-121.5),
                                                      8000),
+                                      RELATIVE_TO_GROUND,
                                       image,
                                       50000, 50000);
           _shapesRenderer->addShape(quad);

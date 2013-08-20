@@ -33,10 +33,11 @@ protected:
 
 public:
   QuadShape(Geodetic3D* position,
+            AltitudeMode altitudeMode,
             const URL& textureURL,
             float width,
             float height) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _width(width),
   _height(height),
@@ -48,10 +49,11 @@ public:
   }
 
   QuadShape(Geodetic3D* position,
+            AltitudeMode altitudeMode,
             IImage* textureImage,
             float width,
             float height) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _width(width),
   _height(height),
@@ -64,10 +66,11 @@ public:
 
 
   QuadShape(Geodetic3D* position,
+            AltitudeMode altitudeMode,
             float width,
             float height,
             Color* color) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _width(width),
   _height(height),

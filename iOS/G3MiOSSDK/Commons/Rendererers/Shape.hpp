@@ -30,6 +30,7 @@ class GPUProgramState;
 class Shape : public SurfaceElevationListener, EffectTarget{
 private:
   Geodetic3D* _position;
+  AltitudeMode _altitudeMode;
   
   Angle*      _heading;
   Angle*      _pitch;
@@ -57,8 +58,9 @@ protected:
   virtual void cleanTransformMatrix();
   
 public:
-  Shape(Geodetic3D* position) :
+  Shape(Geodetic3D* position, AltitudeMode altitudeMode) :
   _position( position ),
+  _altitudeMode(altitudeMode),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
   _scaleX(1),

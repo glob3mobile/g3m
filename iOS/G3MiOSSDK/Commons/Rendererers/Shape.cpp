@@ -59,9 +59,14 @@ void Shape::cleanTransformMatrix() {
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 
+  double altitude = _position->_height;
+  if (_altitudeMode == RELATIVE_TO_GROUND){
+    altitude += _surfaceElevation;
+  }
+
   Geodetic3D positionWithSurfaceElevation(_position->_latitude,
                                           _position->_longitude,
-                                          _position->_height + _surfaceElevation);
+                                          altitude);
 
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
   

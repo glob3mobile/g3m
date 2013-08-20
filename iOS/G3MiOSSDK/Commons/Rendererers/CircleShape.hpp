@@ -23,10 +23,11 @@ protected:
 
 public:
   CircleShape(Geodetic3D* position,
+              AltitudeMode altitudeMode,
               float radius,
               Color* color = NULL,
               int steps = 64) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _radius(radius),
   _color(color),
   _steps(steps)
