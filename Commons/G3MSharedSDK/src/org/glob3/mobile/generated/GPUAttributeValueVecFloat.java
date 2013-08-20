@@ -10,32 +10,6 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
      _timeStamp = buffer.timestamp();
   }
 
-//  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
-//
-//    if (oldAtt == NULL) {
-//      GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
-//                                                                   _arrayElementSize,
-//                                                                   _index,
-//                                                                   _stride,
-//                                                                   _normalized);
-//      v->_timeStamp = _timeStamp;
-//      return v;
-//    }
-//    GPUAttributeValueVecFloat* oldAttVF = (GPUAttributeValueVecFloat*)oldAtt;
-//
-//    oldAttVF->changeParameters(_enabled,
-//                               _type,
-//                               _attributeSize,
-//                               _arrayElementSize,
-//                               _index,
-//                               _stride,
-//                               _normalized);
-//    oldAttVF->_buffer = _buffer;
-//    oldAttVF->_timeStamp = _timeStamp;
-//    return oldAttVF;
-//
-//  }
-
   public final void setAttribute(GL gl, int id)
   {
     if (_index != 0)
@@ -57,16 +31,6 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
     return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized()));
   }
-
-//  GPUAttributeValue* shallowCopy() const{
-//    GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
-//                                                                 _arrayElementSize,
-//                                                                 _index,
-//                                                                 _stride,
-//                                                                 _normalized);
-//    v->_timeStamp = _timeStamp;
-//    return v;
-//  }
 
   public final String description()
   {

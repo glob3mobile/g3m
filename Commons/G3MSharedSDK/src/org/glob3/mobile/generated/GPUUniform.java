@@ -93,8 +93,6 @@ public class GPUUniform extends GPUVariable
         if (_value == null || !_value.isEqualsTo(v))
         {
           _dirty = true;
-          //        _value = v->copyOrCreate(_value);
-
           v._retain();
           if (_value != null)
           {

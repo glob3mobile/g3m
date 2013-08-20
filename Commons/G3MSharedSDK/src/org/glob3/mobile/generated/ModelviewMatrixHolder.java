@@ -7,24 +7,54 @@ public class ModelviewMatrixHolder
   private final Matrix44DHolder[] _matrixHolders;
   private int _nMatrix;
   private Matrix44D _modelview;
+
+  private void pullMatrixes()
+  {
+    for (int j = 0; j < _nMatrix; j++)
+    {
+      final Matrix44D newMatrix = _matrixHolders[j].getMatrix();
+
+      if (newMatrix != _matrix[j])
+      {
+        if (_matrix[j] != null)
+        {
+          _matrix[j]._release();
+        }
+
+        _matrix[j] = newMatrix;
+        _matrix[j]._retain();
+      }
+    }
+  }
+
   public ModelviewMatrixHolder(Matrix44DHolder[] matrixHolders, int nMatrix)
   {
      _matrixHolders = matrixHolders;
      _nMatrix = nMatrix;
      _modelview = null;
     _matrix = new Matrix44D[nMatrix];
+
     for (int i = 0; i < _nMatrix; i++)
     {
-      _matrix[i] = matrixHolders[i].getMatrix();
-      if (_matrix[i] == null)
-      {
-        ILogger.instance().logError("Modelview multiplication failure");
-      }
+      _matrix[i] = null;
     }
+
+    pullMatrixes();
   }
+
+
 
   public void dispose()
   {
+
+    for (int j = 0; j < _nMatrix; j++)
+    {
+      if (_matrix[j] != null)
+      {
+        _matrix[j]._release();
+      }
+    }
+
     if (_modelview != null)
     {
       _modelview._release();
@@ -51,10 +81,7 @@ public class ModelviewMatrixHolder
           _modelview._release(); //NEW MODELVIEW NEEDED
           _modelview = null;
 
-          for (int j = 0; j < _nMatrix; j++)
-          {
-            _matrix[j] = _matrixHolders[j].getMatrix();
-          }
+          pullMatrixes();
           break;
         }
       }

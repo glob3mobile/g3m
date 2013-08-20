@@ -37,6 +37,4 @@ public class GPUUniformValueModelview extends GPUUniformValue
        isb.dispose();
     return s;
   }
-
-//  const Matrix44D* getMatrix() const { return _m;}
 }

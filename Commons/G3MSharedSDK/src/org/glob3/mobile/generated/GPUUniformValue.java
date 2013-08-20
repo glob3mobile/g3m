@@ -24,10 +24,7 @@ public abstract class GPUUniformValue extends RCObject
 {
   private final int _type;
 
-  //  mutable GPUUniform* _uniform;
-
   public GPUUniformValue(int type)
-  //, _uniform(NULL)
   {
      _type = type;
   }
@@ -47,34 +44,5 @@ public abstract class GPUUniformValue extends RCObject
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEqualsTo(GPUUniformValue v);
 
-  //  GPUUniform* getLinkedUniform() const { return _uniform;}
-
   public abstract String description();
-
-  //  void linkToGPUUniform(GPUUniform* u) const{
-  //    _uniform = u;
-  //  }
-  //
-  //  void unLinkToGPUUniform() {
-  //    _uniform = NULL;
-  //  }
-
-  //  void setValueToLinkedUniform() const;
-
-  //  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    return value;
-  //  }
-
-  //  virtual GPUUniformValue* copyOrCreate(GPUUniformValue* value) const = 0;
-
-  //  bool linkToGPUProgram(const GPUProgram* prog, int key) const{
-  //    GPUUniform* u = prog->getGPUUniform(key);
-  //    if (u == NULL) {
-  //      ILogger::instance()->logError("UNIFORM WITH KEY %d NOT FOUND", key);
-  //      return false;
-  //    } else{
-  //      _uniform = u;
-  //      return true;
-  //    }
-  //  }
 }
