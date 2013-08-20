@@ -36,7 +36,6 @@ public:
   }
 
   virtual ~IStringUtils() {
-
   }
 
   virtual std::string createString(unsigned char data[],

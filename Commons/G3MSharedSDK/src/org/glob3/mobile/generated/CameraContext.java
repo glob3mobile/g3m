@@ -12,6 +12,7 @@ public class CameraContext
 
   public void dispose()
   {
+
   }
 
   public final Gesture getCurrentGesture()

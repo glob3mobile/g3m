@@ -25,6 +25,9 @@ public:
                       int bufferSize);
 
   virtual ~BufferElevationData() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

@@ -28,6 +28,5 @@ public abstract class OrderedRenderable
 
   public void dispose()
   {
-
   }
 }

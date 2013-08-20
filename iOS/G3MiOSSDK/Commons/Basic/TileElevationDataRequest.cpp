@@ -22,8 +22,6 @@ _listener(NULL)
 
 }
 
-TileElevationDataRequest::~TileElevationDataRequest() {}
-
 void TileElevationDataRequest::onData(const Sector& sector,
                                       const Vector2I& resolution,
                                       ElevationData* elevationData) {

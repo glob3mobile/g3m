@@ -12,6 +12,11 @@
 
 GEOShapeSymbol::~GEOShapeSymbol() {
   delete _shape;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 

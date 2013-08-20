@@ -71,6 +71,9 @@ public class G3MRenderContext extends G3MContext
     //  delete _frameStartTimer;
     IFactory.instance().deleteTimer(_frameStartTimer);
     _orderedRenderables = null;
+  
+    super.dispose();
+  
   }
 
   /*

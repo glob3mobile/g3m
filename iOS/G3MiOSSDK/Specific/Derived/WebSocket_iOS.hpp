@@ -13,9 +13,6 @@
 @class SRWebSocket;
 @class WebSocketDelegate;
 
-NSString* toNSString(const std::string& cppStr);
-std::string toSTDString(NSString* nsString);
-
 
 class WebSocket_iOS : public IWebSocket {
 private:

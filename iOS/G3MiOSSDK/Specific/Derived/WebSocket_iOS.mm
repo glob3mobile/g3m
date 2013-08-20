@@ -11,6 +11,7 @@
 #import "SRWebSocket.h"
 #include "IWebSocketListener.hpp"
 
+#import "NSString_CppAdditions.h"
 
 @interface WebSocketDelegate : NSObject<SRWebSocketDelegate>
 {
@@ -36,12 +37,14 @@
 - (void) webSocket: (SRWebSocket*) webSocket
  didReceiveMessage: (id) message
 {
-  if ([message isKindOfClass:[NSString class]]) {
-    _listener->onMesssage( _websocket, toSTDString( message ) );
-  }
-  else {
-    NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
-    _listener->onError( _websocket, toSTDString(msg) );
+  if (_websocket) {
+    if ([message isKindOfClass:[NSString class]]) {
+      _listener->onMesssage( _websocket, [message toCppString] );
+    }
+    else {
+      NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
+      _listener->onError( _websocket, [msg toCppString] );
+    }
   }
 }
 
@@ -53,12 +56,14 @@
 - (void) webSocket: (SRWebSocket*) webSocket
   didFailWithError: (NSError*) error
 {
-//  NSInteger     code        = [error code];
-//  NSString*     domain      = [error domain];
-//  NSDictionary* userInfo    = [error userInfo];
-  NSString*     description = [error localizedDescription];
-
-  _listener->onError( _websocket, toSTDString(description) );
+  if (_websocket) {
+    NSString*     description = [error localizedDescription];
+    _listener->onError( _websocket, [description toCppString] );
+    if (_websocket->getAutodeleteWebSocket()) {
+      delete _websocket;
+      _websocket = NULL;
+    }
+  }
 }
 
 - (void) webSocket: (SRWebSocket*) webSocket
@@ -66,23 +71,16 @@
             reason: (NSString*) reason
           wasClean: (BOOL) wasClean
 {
-  _listener->onClose( _websocket );
-  if (_websocket->getAutodeleteWebSocket()) {
-    delete _websocket;
-    _websocket = NULL;
+  if (_websocket) {
+    _listener->onClose( _websocket );
+    if (_websocket->getAutodeleteWebSocket()) {
+      delete _websocket;
+      _websocket = NULL;
+    }
   }
 }
 
 @end
-
-std::string toSTDString(NSString* nsString) {
-  return [nsString cStringUsingEncoding: NSUTF8StringEncoding ];
-}
-
-NSString* toNSString(const std::string& cppStr) {
-  return [ NSString stringWithCString: cppStr.c_str()
-                             encoding: NSUTF8StringEncoding ];
-}
 
 WebSocket_iOS::WebSocket_iOS(const URL& url,
                              IWebSocketListener* listener,
@@ -90,7 +88,7 @@ WebSocket_iOS::WebSocket_iOS(const URL& url,
                              bool autodeleteWebSocket) :
 IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
 {
-  NSURL* nsURL = [NSURL URLWithString: toNSString(getURL().getPath())];
+  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: getURL().getPath()] ];
 
 
   IWebSocketListener* list = getListener();
@@ -117,7 +115,7 @@ WebSocket_iOS::~WebSocket_iOS() {
 }
 
 void WebSocket_iOS::send(const std::string& message) {
-  [_srWebSocket send: toNSString(message) ];
+  [_srWebSocket send: [NSString stringWithCppString: message] ];
 }
 
 void WebSocket_iOS::close() {

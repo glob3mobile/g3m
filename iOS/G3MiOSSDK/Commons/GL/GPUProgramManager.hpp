@@ -16,7 +16,7 @@
 #include "GPUProgram.hpp"
 #include "GL.hpp"
 
-class GPUProgramManager{
+class GPUProgramManager {
   
   std::map<std::string, GPUProgram*> _programs;
   
@@ -26,7 +26,6 @@ public:
   GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
   
   ~GPUProgramManager() {
-    
 #ifdef C_CODE
     delete _factory;
     for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {

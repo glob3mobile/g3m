@@ -65,7 +65,7 @@ public:
   }
   
   virtual ~WidgetUserData() {
-    
+
   }
   
   void setWidget(G3MWidget* widget) {

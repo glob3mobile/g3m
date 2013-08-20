@@ -19,7 +19,7 @@
 
 #include "Ellipsoid.hpp"
 
-class EllipsoidalPlanet: public Planet{
+class EllipsoidalPlanet: public Planet {
 private:
   
 #ifdef C_CODE
@@ -48,7 +48,10 @@ public:
   EllipsoidalPlanet(const Ellipsoid& ellipsoid);
   
   ~EllipsoidalPlanet() {
-    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   Vector3D getRadii() const{

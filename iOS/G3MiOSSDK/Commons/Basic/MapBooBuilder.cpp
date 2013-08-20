@@ -97,7 +97,6 @@ _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),
 _applicationId(applicationId),
 _applicationName(""),
-_applicationDescription(""),
 _applicationTimestamp(-1),
 _gl(NULL),
 _g3mWidget(NULL),
@@ -408,11 +407,6 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
             setApplicationName( jsonName->value() );
           }
 
-          const JSONString* jsonDescription = jsonObject->getAsString("description");
-          if (jsonDescription != NULL) {
-            setApplicationDescription( jsonDescription->value() );
-          }
-
           // always process defaultSceneIndex before scenes
           const JSONNumber* jsonDefaultSceneIndex = jsonObject->getAsNumber("defaultSceneIndex");
           if (jsonDefaultSceneIndex != NULL) {
@@ -605,11 +599,11 @@ std::vector<PeriodicalTask*>* MapBooBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   if (_useWebSockets) {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
   }
   else {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_PollingScenePeriodicalTask(this)));
   }
 
@@ -647,6 +641,7 @@ public:
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
                                   ws->getURL().getPath().c_str());
+    _builder->setApplicationTubeOpened(false);
   }
 
   void onMesssage(IWebSocket* ws,
@@ -685,14 +680,19 @@ void MapBooBuilder::setContext(const G3MContext* context) {
   _context = context;
 }
 
+MapBooBuilder::~MapBooBuilder() {
+
+}
+
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-  context->getFactory()->createWebSocket(createApplicationTubeURL(),
-                                         new MapBooBuilder_ApplicationTubeListener(this),
-                                         autodeleteListener,
-                                         autodeleteWebSocket);
+  const IFactory* factory = context->getFactory();
+  factory->createWebSocket(createApplicationTubeURL(),
+                           new MapBooBuilder_ApplicationTubeListener(this),
+                           autodeleteListener,
+                           autodeleteWebSocket);
 }
 
 GInitializationTask* MapBooBuilder::createInitializationTask() {
@@ -781,17 +781,6 @@ void MapBooBuilder::setApplicationName(const std::string& name) {
   }
 }
 
-void MapBooBuilder::setApplicationDescription(const std::string& description) {
-  if (_applicationDescription.compare(description) != 0) {
-    _applicationDescription = description;
-
-    if (_applicationListener != NULL) {
-      _applicationListener->onDescriptionChanged(_context, _applicationDescription);
-    }
-  }
-}
-
-
 class MapBooBuilder_ChangeSceneTask : public GTask {
 private:
   MapBooBuilder* _builder;
@@ -814,10 +803,6 @@ void MapBooBuilder::rawChangeScene(int sceneIndex) {
   _applicationCurrentSceneIndex = sceneIndex;
 
   changedCurrentScene();
-
-  if (_applicationListener != NULL) {
-    _applicationListener->onSceneChanged(_context, _applicationCurrentSceneIndex);
-  }
 }
 
 void MapBooBuilder::changeScene(int sceneIndex) {
@@ -850,6 +835,13 @@ void MapBooBuilder::changedCurrentScene() {
     // force immediate execution of PeriodicalTasks
     _g3mWidget->resetPeriodicalTasksTimeouts();
   }
+
+  const MapBoo_Scene* currentScene = getApplicationCurrentScene();
+  if (_applicationListener != NULL) {
+    _applicationListener->onSceneChanged(_context,
+                                         getApplicationCurrentSceneIndex(),
+                                         currentScene);
+  }
 }
 
 void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes) {
@@ -871,5 +863,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
-  _isApplicationTubeOpen = open;
+  if (_isApplicationTubeOpen != open) {
+    _isApplicationTubeOpen = open;
+  }
 }

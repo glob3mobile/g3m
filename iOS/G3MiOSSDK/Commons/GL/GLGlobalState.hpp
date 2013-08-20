@@ -163,7 +163,8 @@ public:
   //  {
   //  }
   
-  ~GLGlobalState() {}
+  ~GLGlobalState() {
+  }
   
   void enableDepthTest() {
       _depthTest = true;

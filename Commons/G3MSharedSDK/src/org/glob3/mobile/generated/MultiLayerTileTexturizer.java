@@ -43,6 +43,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
+    super.dispose();
   
   }
 

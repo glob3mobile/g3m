@@ -100,6 +100,9 @@ public:
   }
 
   virtual ~LTMInitializer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 
@@ -210,6 +213,10 @@ private:
     }
 
     deletePetitions();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   MultiLayerTileTexturizer* _texturizer;
@@ -683,6 +690,11 @@ BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
   if (_builder != NULL) {
     _builder->_release();
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -717,6 +729,9 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
 }
 
@@ -739,6 +754,10 @@ public:
 
   virtual ~BuilderStartTask() {
     _builder->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void execute(const G3MRenderContext* rc) {

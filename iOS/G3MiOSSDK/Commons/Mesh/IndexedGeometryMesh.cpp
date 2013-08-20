@@ -16,6 +16,11 @@ IndexedGeometryMesh::~IndexedGeometryMesh() {
   if (_owner) {
     delete _indices;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,

@@ -22,7 +22,6 @@ public abstract class IFloatBuffer implements IBuffer
 
   public void dispose()
   {
-
   }
 
   public abstract float get(int i);

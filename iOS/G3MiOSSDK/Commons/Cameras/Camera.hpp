@@ -365,7 +365,6 @@ private:
   class CameraEffectTarget: public EffectTarget {
   public:
     ~CameraEffectTarget() {
-
     }
   };
 

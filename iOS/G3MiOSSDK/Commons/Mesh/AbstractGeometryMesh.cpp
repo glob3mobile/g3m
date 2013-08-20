@@ -23,6 +23,10 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
 
   delete _extent;
   delete _translationMatrix;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 AbstractGeometryMesh::AbstractGeometryMesh(const int primitive,

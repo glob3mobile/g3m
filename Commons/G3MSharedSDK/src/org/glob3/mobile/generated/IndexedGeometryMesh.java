@@ -50,6 +50,9 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
       if (_indices != null)
          _indices.dispose();
     }
+  
+    super.dispose();
+  
   }
 
 

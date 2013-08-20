@@ -21,7 +21,7 @@ enum GLFeatureGroupName{
   LIGHTING_GROUP = 3
 };
 
-class GLFeatureSet{
+class GLFeatureSet {
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
 #ifdef C_CODE
@@ -70,10 +70,15 @@ public:
 
 
 #define N_GLFEATURES_GROUPS 4
-class GLFeatureGroup: public GLFeatureSet{
+class GLFeatureGroup: public GLFeatureSet {
 public:
 
-  virtual ~GLFeatureGroup() {}
+  virtual ~GLFeatureGroup() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroupName getGroupName(int i);

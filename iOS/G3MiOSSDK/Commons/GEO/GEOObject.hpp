@@ -16,6 +16,7 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
+
 class GEOObject {
 public:
   virtual ~GEOObject() {

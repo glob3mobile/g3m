@@ -26,6 +26,9 @@ _color(Color::white())
 
 
 DebugTileRasterizer::~DebugTileRasterizer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
 }
 

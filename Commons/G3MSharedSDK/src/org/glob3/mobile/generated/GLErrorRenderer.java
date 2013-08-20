@@ -46,6 +46,8 @@ public abstract class GLErrorRenderer extends LeafRenderer
 
   public void dispose()
   {
+    super.dispose();
+  
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

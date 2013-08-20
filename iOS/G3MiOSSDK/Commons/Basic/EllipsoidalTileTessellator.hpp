@@ -14,7 +14,7 @@ class Sector;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  const bool         _skirted;
+  const bool _skirted;
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Sector& sector) const;
@@ -27,7 +27,12 @@ public:
 
   }
 
-  virtual ~EllipsoidalTileTessellator() { }
+  virtual ~EllipsoidalTileTessellator() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   Vector2I getTileMeshResolution(const Planet* planet,
                                  const Vector2I& resolution,

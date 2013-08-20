@@ -51,6 +51,11 @@ public:
     if (_ownedColor) {
       delete _flatColor;
     }
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   BoundingVolume* getBoundingVolume()  const {

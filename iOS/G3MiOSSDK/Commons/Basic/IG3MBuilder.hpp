@@ -28,6 +28,7 @@ class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
 
+
 class IG3MBuilder {
 private:
   GL*                               _gl;

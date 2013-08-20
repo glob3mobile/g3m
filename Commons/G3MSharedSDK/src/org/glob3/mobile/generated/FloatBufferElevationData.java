@@ -61,6 +61,9 @@ public class FloatBufferElevationData extends BufferElevationData
   {
     if (_buffer != null)
        _buffer.dispose();
+  
+    super.dispose();
+  
   }
 
   public final String description(boolean detailed)

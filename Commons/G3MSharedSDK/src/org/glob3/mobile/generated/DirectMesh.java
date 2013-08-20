@@ -51,6 +51,7 @@ public class DirectMesh extends AbstractMesh
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

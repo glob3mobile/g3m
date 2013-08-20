@@ -43,6 +43,9 @@ public:
   SphericalPlanet(const Sphere& sphere);
 
   ~SphericalPlanet() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

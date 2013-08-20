@@ -38,6 +38,8 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

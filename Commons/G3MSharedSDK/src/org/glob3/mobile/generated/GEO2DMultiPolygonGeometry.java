@@ -48,6 +48,9 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
       }
       _polygonsData = null;
     }
+  
+    super.dispose();
+  
   }
 
   public final java.util.ArrayList<GEO2DPolygonData> getPolygonsData()

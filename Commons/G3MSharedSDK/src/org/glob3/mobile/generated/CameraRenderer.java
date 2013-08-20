@@ -22,6 +22,9 @@ public class CameraRenderer extends LeafRenderer
       if (handler != null)
          handler.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addHandler(CameraEventHandler handler)

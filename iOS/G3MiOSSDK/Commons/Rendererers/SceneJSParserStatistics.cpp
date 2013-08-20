@@ -19,7 +19,6 @@ SceneJSParserStatistics::SceneJSParserStatistics() {
 }
 
 SceneJSParserStatistics::~SceneJSParserStatistics() {
-  
 }
 
 void SceneJSParserStatistics::computeNode() {

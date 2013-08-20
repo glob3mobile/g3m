@@ -40,9 +40,9 @@ public class GPUVariableValueSet
       _attributeValues[i] = null;
     }
   }
+
   public void dispose()
   {
-  
     for (int i = 0; i <= _highestUniformKey; i++)
     {
       GPUUniformValue u = _uniformValues[i];

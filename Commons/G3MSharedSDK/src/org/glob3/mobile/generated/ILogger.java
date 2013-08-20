@@ -31,8 +31,8 @@ public abstract class ILogger
   public abstract void logWarning(String x, Object... LegacyParamArray);
   public abstract void logError (String x, Object... LegacyParamArray);
 
-  // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
   }
+
 }

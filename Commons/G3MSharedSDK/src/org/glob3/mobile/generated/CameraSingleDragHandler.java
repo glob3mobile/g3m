@@ -34,6 +34,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
 

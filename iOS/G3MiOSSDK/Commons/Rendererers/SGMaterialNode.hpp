@@ -73,6 +73,10 @@ public:
   ~SGMaterialNode() {
     delete _baseColor;
     delete _specularColor;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   std::string description() {

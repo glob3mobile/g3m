@@ -39,6 +39,11 @@ _buffer(buffer)
 
 FloatBufferElevationData::~FloatBufferElevationData() {
   delete _buffer;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {

@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class GFont
 {
   private static final String SERIF = "serif";
@@ -101,7 +102,6 @@ public class GFont
 
   public void dispose()
   {
-
   }
 
   public final boolean isSerif()

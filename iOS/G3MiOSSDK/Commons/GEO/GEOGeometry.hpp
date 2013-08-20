@@ -30,6 +30,9 @@ public:
   }
 
   virtual ~GEOGeometry() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

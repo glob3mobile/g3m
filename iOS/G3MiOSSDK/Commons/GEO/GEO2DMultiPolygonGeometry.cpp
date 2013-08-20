@@ -20,6 +20,11 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
     }
     delete _polygonsData;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 

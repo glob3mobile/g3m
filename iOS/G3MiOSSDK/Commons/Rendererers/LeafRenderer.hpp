@@ -31,7 +31,10 @@ public:
   }
   
   ~LeafRenderer() {
-    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   bool isEnable() const {

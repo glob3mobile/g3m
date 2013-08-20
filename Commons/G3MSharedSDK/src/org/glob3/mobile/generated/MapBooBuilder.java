@@ -11,7 +11,6 @@ public abstract class MapBooBuilder
 
   private String _applicationId;
   private String _applicationName;
-  private String _applicationDescription;
   private int _applicationTimestamp;
 
   private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
@@ -81,11 +80,11 @@ public abstract class MapBooBuilder
   
     if (_useWebSockets)
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
     }
     else
     {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(2), new MapBooBuilder_PollingScenePeriodicalTask(this)));
+      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_PollingScenePeriodicalTask(this)));
     }
   
     return periodicalTasks;
@@ -345,8 +344,13 @@ public abstract class MapBooBuilder
       // force immediate execution of PeriodicalTasks
       _g3mWidget.resetPeriodicalTasksTimeouts();
     }
+  
+    final MapBoo_Scene currentScene = getApplicationCurrentScene();
+    if (_applicationListener != null)
+    {
+      _applicationListener.onSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
+    }
   }
-
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
   {
@@ -355,7 +359,6 @@ public abstract class MapBooBuilder
      _useWebSockets = useWebSockets;
      _applicationId = applicationId;
      _applicationName = "";
-     _applicationDescription = "";
      _applicationTimestamp = -1;
      _gl = null;
      _g3mWidget = null;
@@ -374,6 +377,7 @@ public abstract class MapBooBuilder
 
   public void dispose()
   {
+  
   }
 
   protected final void setGL(GL gl)
@@ -479,20 +483,6 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationDescription(String description)
-  {
-    if (_applicationDescription.compareTo(description) != 0)
-    {
-      _applicationDescription = description;
-  
-      if (_applicationListener != null)
-      {
-        _applicationListener.onDescriptionChanged(_context, _applicationDescription);
-      }
-    }
-  }
-
-  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -562,12 +552,6 @@ public abstract class MapBooBuilder
               setApplicationName(jsonName.value());
             }
   
-            final JSONString jsonDescription = jsonObject.getAsString("description");
-            if (jsonDescription != null)
-            {
-              setApplicationDescription(jsonDescription.value());
-            }
-  
             // always process defaultSceneIndex before scenes
             final JSONNumber jsonDefaultSceneIndex = jsonObject.getAsNumber("defaultSceneIndex");
             if (jsonDefaultSceneIndex != null)
@@ -617,7 +601,8 @@ public abstract class MapBooBuilder
     final boolean autodeleteListener = true;
     final boolean autodeleteWebSocket = true;
   
-    context.getFactory().createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+    final IFactory factory = context.getFactory();
+    factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -632,11 +617,6 @@ public abstract class MapBooBuilder
     _applicationCurrentSceneIndex = sceneIndex;
   
     changedCurrentScene();
-  
-    if (_applicationListener != null)
-    {
-      _applicationListener.onSceneChanged(_context, _applicationCurrentSceneIndex);
-    }
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -648,7 +628,10 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void setApplicationTubeOpened(boolean open)
   {
-    _isApplicationTubeOpen = open;
+    if (_isApplicationTubeOpen != open)
+    {
+      _isApplicationTubeOpen = open;
+    }
   }
 
   /** Private to MapbooBuilder, don't call it */

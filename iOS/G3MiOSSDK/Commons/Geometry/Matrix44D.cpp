@@ -46,6 +46,11 @@ Matrix44D::~Matrix44D()
 
   delete[] _columnMajorFloatArray;
   delete _columnMajorFloatBuffer;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Matrix44D::Matrix44D(const Matrix44D& m):

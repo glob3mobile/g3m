@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
 public class GPUProgramFactory
 {
-
   private java.util.HashMap<String, GPUProgramSources> _sources = new java.util.HashMap<String, GPUProgramSources>();
+
 
   public GPUProgramFactory()
   {

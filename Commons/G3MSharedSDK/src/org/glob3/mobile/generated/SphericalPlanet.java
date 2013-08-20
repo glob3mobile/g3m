@@ -45,6 +45,7 @@ public class SphericalPlanet extends Planet
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

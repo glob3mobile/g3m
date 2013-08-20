@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class GEOTileRasterizer;
 
+
 public abstract class GEOObject
 {
   public void dispose()

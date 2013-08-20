@@ -34,6 +34,10 @@ public:
 
   ~MeshHolder() {
     delete _mesh;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   int getVertexCount() const {

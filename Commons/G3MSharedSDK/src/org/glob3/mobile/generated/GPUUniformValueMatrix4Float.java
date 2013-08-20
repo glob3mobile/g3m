@@ -21,6 +21,9 @@ public class GPUUniformValueMatrix4Float extends GPUUniformValue
   public void dispose()
   {
     _m._release();
+
+  super.dispose();
+
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

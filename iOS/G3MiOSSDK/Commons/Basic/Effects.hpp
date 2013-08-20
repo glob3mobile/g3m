@@ -21,7 +21,7 @@
 class G3MRenderContext;
 class G3MContext;
 
-class EffectTarget{
+class EffectTarget {
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
@@ -87,7 +87,9 @@ public:
 
   virtual void cancel(const TimeInterval& when) = 0;
 
-  virtual ~Effect() { }
+  virtual ~Effect() {
+
+  }
 };
 
 
@@ -226,7 +228,7 @@ public:
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }
-  };
+  }
 
   void startEffect(Effect* effect,
                    EffectTarget* target);

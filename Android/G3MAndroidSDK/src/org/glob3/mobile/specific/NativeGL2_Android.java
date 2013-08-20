@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
@@ -295,32 +294,20 @@ public final class NativeGL2_Android
                                    final IFloatBuffer buffer) {
       checkOpenGLThread();
 
-      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
-
-
-      // =========================================================================
-      // dgd: the above code generates GPU memory problems on Android
-      // =========================================================================
-      //      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-      //      buffer_Android.bindAsVBOToGPU();
-      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
-
-
       //      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
       //                               ", size=" + size + //
       //                               ", normalized=" + normalized + //
       //                               ", stride=" + stride + //
       //                               ", floatBuffer=" + floatBuffer + ")");
-      //            final FloatBuffer_Android bufferAndroid = (FloatBuffer_Android) buffer;
-      //            final int webGLBuffer = bufferAndroid.getGLBuffer();
-      //            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, webGLBuffer);
-      //      
-      //      
-      //            final FloatBuffer array = bufferAndroid.getBuffer();
-      //            GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, size, array, GLES20.GL_STATIC_DRAW);
-      //      
-      //            GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
+
+
+      //      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
+
+
+      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
+      buffer_Android.bindAsVBOToGPU();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
    }
 
 

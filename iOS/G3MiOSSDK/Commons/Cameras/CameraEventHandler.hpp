@@ -25,7 +25,9 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       CameraContext *cameraContext) = 0;
   
-  virtual ~CameraEventHandler() {}
+  virtual ~CameraEventHandler() {
+
+  }
   
   virtual void onDown(const G3MEventContext *eventContext,
                       const TouchEvent& touchEvent,

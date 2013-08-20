@@ -11,6 +11,7 @@
 
 #include <string>
 
+
 enum GPUVariableType{
   ATTRIBUTE = 1,
   UNIFORM = 2
@@ -38,7 +39,7 @@ enum GPUAttributeKey{
   NORMAL = 3
 };
 
-class GPUVariable{
+class GPUVariable {
   
 protected:
   
@@ -96,7 +97,8 @@ public:
 //  static const int GROUP_COLOR;
 //  static const int GROUP_NOGROUP;
 
-  virtual ~GPUVariable() {}
+  virtual ~GPUVariable() {
+  }
   
   GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {
 //    createMetadata();

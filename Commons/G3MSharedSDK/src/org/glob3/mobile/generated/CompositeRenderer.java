@@ -36,6 +36,8 @@ public class CompositeRenderer extends Renderer
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final boolean isEnable()

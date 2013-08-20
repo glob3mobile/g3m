@@ -22,7 +22,7 @@
 
 class GPUAttribute;
 
-class GPUAttributeValue : public RCObject{
+class GPUAttributeValue : public RCObject {
 protected:
   const bool _enabled;
   const int _type;
@@ -32,8 +32,6 @@ protected:
   const bool          _normalized;
 
   const int _arrayElementSize;
-
-  //  mutable GPUAttribute* _attribute;
 
 public:
 
@@ -45,8 +43,6 @@ public:
   _stride(0),
   _normalized(0),
   _arrayElementSize(0)
-  //  ,
-  //  _attribute(NULL)
   {}
 
   GPUAttributeValue(int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
@@ -57,20 +53,7 @@ public:
   _stride(stride),
   _normalized(normalized),
   _arrayElementSize(arrayElementSize)
-  //,
-  //  _attribute(NULL)
   {}
-
-//  void changeParameters(bool enabled, int type, int attributeSize, int arrayElementSize, int index, int stride, bool normalized) {
-//    _enabled = enabled;
-//    _type = type;
-//    _attributeSize = attributeSize;
-//    _index = index;
-//    _stride = stride;
-//    _normalized = normalized;
-//    _arrayElementSize = arrayElementSize;
-//    //    _attribute = NULL;
-//  }
 
   int getType() const { return _type;}
   int getAttributeSize() const { return _attributeSize;}
@@ -78,27 +61,15 @@ public:
   int getStride() const { return _stride;}
   bool getNormalized() const { return _normalized;}
   bool getEnabled() const { return _enabled;}
-  //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
-  virtual ~GPUAttributeValue() {}
+  virtual ~GPUAttributeValue() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+
+  }
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
-//  virtual GPUAttributeValue* shallowCopy() const = 0;
-
   virtual std::string description() const = 0;
-
-  //  void linkToGPUAttribute(GPUAttribute* a) const{
-  //    _attribute = a;
-  //  }
-  //
-  //  void unLinkToGPUAttribute() {
-  //    _attribute = NULL;
-  //  }
-
-  //  void setValueToLinkedAttribute() const;
-
-  //  bool linkToGPUProgram(const GPUProgram* prog, int key) const;
-
-//  virtual GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const = 0;
 
 };
 
@@ -116,8 +87,6 @@ private:
 
   const int _type;
   const int _size;
-
-//  bool _dirtyEnabled;
   bool _enabled;
 
   const GPUAttributeKey _key;
@@ -126,6 +95,11 @@ public:
 
   virtual ~GPUAttribute() {
     delete _value;
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+
   }
 
   GPUAttribute(const std::string&name, int id, int type, int size):
@@ -136,7 +110,6 @@ public:
   _type(type),
   _size(size),
   _enabled(false),
-//  _dirtyEnabled(false),
   _key(getAttributeKey(name)) {}
 
   const std::string getName() const{ return _name;}
@@ -159,13 +132,11 @@ public:
 
   void unset(GL* gl) {
     if (_value != NULL) {
-//      delete _value;
       _value->_release();
       _value = NULL;
     }
     _enabled = false;
     _dirty = false;
-//    _dirtyEnabled = false;
 
     gl->disableVertexAttribArray(_id);
   }
@@ -173,26 +144,20 @@ public:
   void set(const GPUAttributeValue* v) {
     if (v != _value) {
 
-    if (v->getEnabled() && _type != v->getType()) { //type checking
-      //delete v;
-      ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == NULL || !_value->isEqualsTo(v)) {
-      _dirty = true;
-      //      if (_value != NULL) {
-      //        delete _value;
-      //      }
-      //      _value = v->shallowCopy();
-//      _value = v->copyOrCreate(_value);
-
-      if (_value != NULL) {
-        _value->_release();
+      if (v->getEnabled() && _type != v->getType()) { //type checking
+        ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
+        return;
       }
-      _value = v;
-      _value->_retain();
+      if (_value == NULL || !_value->isEqualsTo(v)) {
+        _dirty = true;
 
-    }
+        if (_value != NULL) {
+          _value->_release();
+        }
+        _value = v;
+        _value->_retain();
+
+      }
     }
   }
 
@@ -271,32 +236,6 @@ public:
   _buffer(buffer),
   _timeStamp(buffer->timestamp()) {}
 
-//  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
-//
-//    if (oldAtt == NULL) {
-//      GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
-//                                                                   _arrayElementSize,
-//                                                                   _index,
-//                                                                   _stride,
-//                                                                   _normalized);
-//      v->_timeStamp = _timeStamp;
-//      return v;
-//    }
-//    GPUAttributeValueVecFloat* oldAttVF = (GPUAttributeValueVecFloat*)oldAtt;
-//
-//    oldAttVF->changeParameters(_enabled,
-//                               _type,
-//                               _attributeSize,
-//                               _arrayElementSize,
-//                               _index,
-//                               _stride,
-//                               _normalized);
-//    oldAttVF->_buffer = _buffer;
-//    oldAttVF->_timeStamp = _timeStamp;
-//    return oldAttVF;
-//
-//  }
-
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0) {
       //TODO: Change vertexAttribPointer
@@ -319,16 +258,6 @@ public:
             (_stride        == v->getStride())        &&
             (_normalized    == v->getNormalized()) );
   }
-
-//  GPUAttributeValue* shallowCopy() const{
-//    GPUAttributeValueVecFloat* v = new GPUAttributeValueVecFloat(_buffer, _attributeSize,
-//                                                                 _arrayElementSize,
-//                                                                 _index,
-//                                                                 _stride,
-//                                                                 _normalized);
-//    v->_timeStamp = _timeStamp;
-//    return v;
-//  }
 
   std::string description() const{
 

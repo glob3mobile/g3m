@@ -53,6 +53,11 @@ GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
     delete _holesCoordinatesArray;
   }
 #endif
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 

@@ -34,7 +34,6 @@ public:
   }
 
   virtual ~ITextUtils() {
-
   }
 
 

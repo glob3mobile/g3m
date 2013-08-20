@@ -28,9 +28,6 @@ public class Geodetic3D
   public final Angle _longitude ;
   public final double _height;
 
-  public void dispose()
-  {
-  }
 
   public static Geodetic3D nan()
   {
@@ -77,6 +74,11 @@ public class Geodetic3D
      _latitude = new Angle(g._latitude);
      _longitude = new Angle(g._longitude);
      _height = g._height;
+  }
+
+  public void dispose()
+  {
+
   }
 
   public final Angle latitude()

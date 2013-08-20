@@ -200,6 +200,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public void dispose()
     {
+
     }
 
     public final boolean launchNewStep()
@@ -337,6 +338,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_providers.get(i) != null)
          _providers.get(i).dispose();
     }
+
+  super.dispose();
+
   }
 
   public final void addElevationDataProvider(ElevationDataProvider edp)

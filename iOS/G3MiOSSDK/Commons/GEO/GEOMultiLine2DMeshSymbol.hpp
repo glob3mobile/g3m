@@ -28,6 +28,9 @@ public:
                            double deltaHeight = 0.0);
 
   virtual ~GEOMultiLine2DMeshSymbol() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

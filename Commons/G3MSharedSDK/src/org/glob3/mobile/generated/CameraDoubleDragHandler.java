@@ -29,6 +29,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
 

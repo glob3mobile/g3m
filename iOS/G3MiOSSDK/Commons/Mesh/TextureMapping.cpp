@@ -21,6 +21,11 @@ SimpleTextureMapping::~SimpleTextureMapping() {
   if (_ownedTexCoords) {
     delete _texCoords;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void SimpleTextureMapping::modifyGLState(GLState& state) const{

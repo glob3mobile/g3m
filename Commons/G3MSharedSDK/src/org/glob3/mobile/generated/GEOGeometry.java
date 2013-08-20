@@ -34,6 +34,7 @@ public abstract class GEOGeometry extends GEOObject
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

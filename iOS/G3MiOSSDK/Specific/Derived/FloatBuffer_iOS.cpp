@@ -38,7 +38,6 @@ const std::string FloatBuffer_iOS::description() const {
 }
 
 FloatBuffer_iOS::~FloatBuffer_iOS() {
-
   if (_vertexBufferCreated) {
     glDeleteBuffers(1, &_vertexBuffer);
     if (GL_NO_ERROR != glGetError()) {

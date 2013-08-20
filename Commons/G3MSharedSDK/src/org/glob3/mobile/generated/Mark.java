@@ -385,6 +385,9 @@ public class Mark implements SurfaceElevationListener
     {
       IFactory.instance().deleteImage(_textureImage);
     }
+  
+    super.dispose();
+  
   }
 
   public final String getLabel()

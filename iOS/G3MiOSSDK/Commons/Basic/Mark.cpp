@@ -366,6 +366,11 @@ Mark::~Mark() {
   if (_textureImage != NULL) {
     IFactory::instance()->deleteImage(_textureImage);
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {

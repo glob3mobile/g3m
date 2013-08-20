@@ -40,7 +40,12 @@ public:
   {
   }
   
-  ~CameraZoomAndRotateHandler() {}
+  ~CameraZoomAndRotateHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,

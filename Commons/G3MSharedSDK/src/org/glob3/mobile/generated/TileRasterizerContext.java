@@ -39,4 +39,8 @@ public class TileRasterizerContext
      _mercator = mercator;
   }
 
+  public void dispose()
+  {
+  }
+
 }

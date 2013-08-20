@@ -56,6 +56,11 @@ MarksRenderer::~MarksRenderer() {
   if (_billboardTexCoord != NULL) {
     delete _billboardTexCoord;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 };
 
 

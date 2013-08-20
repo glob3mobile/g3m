@@ -22,17 +22,17 @@ class ShapePendingEffect {
 public:
   Effect* _effect;
   bool    _targetIsCamera;
-  
+
   ShapePendingEffect(Effect* effect,
                      bool    targetIsCamera) :
   _effect(effect),
   _targetIsCamera(targetIsCamera)
   {
-    
+
   }
-  
+
   ~ShapePendingEffect() {
-    
+
   }
 };
 

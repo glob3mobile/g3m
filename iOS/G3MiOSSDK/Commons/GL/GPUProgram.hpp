@@ -26,11 +26,7 @@ class GPUAttributeVec3Float;
 class GPUAttributeVec4Float;
 class GPUUniformValue;
 class GPUAttributeValue;
-
-
-
 class IFloatBuffer;
-
 class GL;
 
 enum ShaderType {
@@ -38,7 +34,7 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
-class GPUProgram{
+class GPUProgram {
   int _programID;
   bool _programCreated;
 

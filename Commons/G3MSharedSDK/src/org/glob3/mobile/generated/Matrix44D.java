@@ -18,14 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Matrix44D;
-//
-//class Matrix44DListener{
-//public:
-//  virtual ~Matrix44DListener() {}
-//  virtual void onMatrixBeingDeleted(const Matrix44D* m) = 0;
-//};
-
 public class Matrix44D extends RCObject
 {
 
@@ -108,6 +100,9 @@ public class Matrix44D extends RCObject
     _columnMajorFloatArray = null;
     if (_columnMajorFloatBuffer != null)
        _columnMajorFloatBuffer.dispose();
+  
+    super.dispose();
+  
   }
 
   public final Matrix44D createMultiplication(Matrix44D that)

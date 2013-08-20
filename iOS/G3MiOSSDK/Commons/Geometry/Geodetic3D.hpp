@@ -23,7 +23,6 @@ public:
   const Angle _longitude;
   const double _height;
 
-  ~Geodetic3D() {}
   
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
@@ -73,6 +72,10 @@ public:
   _longitude(g._longitude),
   _height(g._height)
   {
+  }
+
+  ~Geodetic3D() {
+    
   }
   
   const Angle latitude() const {

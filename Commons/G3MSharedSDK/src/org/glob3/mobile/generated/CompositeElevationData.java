@@ -82,6 +82,9 @@ public class CompositeElevationData extends ElevationData
     }
     if (_interpolator != null)
        _interpolator.dispose();
+
+  super.dispose();
+
   }
 
   public final double getElevationAt(int x, int y)

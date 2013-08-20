@@ -41,6 +41,11 @@ _buffer(buffer)
 
 ShortBufferElevationData::~ShortBufferElevationData() {
   delete [] _buffer;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {

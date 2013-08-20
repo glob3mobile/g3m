@@ -51,6 +51,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)

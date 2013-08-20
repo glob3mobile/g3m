@@ -344,7 +344,7 @@ public class Camera
 
   public final Vector3D getHorizontalVector()
   {
-    int todo_remove_get_in_matrix;
+    //int todo_remove_get_in_matrix;
     final MutableMatrix44D M = getModelMatrix();
     return new Vector3D(M.get0(), M.get4(), M.get8());
   }
@@ -619,7 +619,6 @@ public class Camera
   {
     public void dispose()
     {
-
     }
   }
 

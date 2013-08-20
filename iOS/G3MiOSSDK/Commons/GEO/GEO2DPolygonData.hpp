@@ -12,6 +12,7 @@
 #include <vector>
 class Geodetic2D;
 
+
 class GEO2DPolygonData {
 private:
   const std::vector<Geodetic2D*>*               _coordinates;

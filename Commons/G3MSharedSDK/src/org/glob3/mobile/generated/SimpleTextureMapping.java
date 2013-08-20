@@ -40,6 +40,9 @@ public class SimpleTextureMapping extends TextureMapping
       if (_texCoords != null)
          _texCoords.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final IGLTextureId getGLTextureId()

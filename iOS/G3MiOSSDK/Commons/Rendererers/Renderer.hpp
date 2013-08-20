@@ -46,7 +46,8 @@ public:
   
   virtual void stop(const G3MRenderContext* rc) = 0;
   
-  virtual ~Renderer() { };
+  virtual ~Renderer() {
+  };
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;

@@ -69,6 +69,9 @@ public class GEORenderer extends LeafRenderer
       if (pair != null)
          pair.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   /**

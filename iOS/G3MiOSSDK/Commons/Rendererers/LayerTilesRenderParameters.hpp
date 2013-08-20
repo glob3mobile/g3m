@@ -96,7 +96,6 @@ public:
   ~LayerTilesRenderParameters() {
   }
   
-  
 };
 
 #endif

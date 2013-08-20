@@ -49,6 +49,7 @@ public class EllipsoidalPlanet extends Planet
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

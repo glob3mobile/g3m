@@ -11,6 +11,11 @@
 
 AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void AbstractMeshShape::cleanMesh() {

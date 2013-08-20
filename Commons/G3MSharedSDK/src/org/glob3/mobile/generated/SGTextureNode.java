@@ -41,6 +41,9 @@ public class SGTextureNode extends SGNode
       if (layer != null)
          layer.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addLayer(SGLayerNode layer)

@@ -18,6 +18,9 @@ public class GPUAttribute extends GPUVariable
   public void dispose()
   {
     _value = null;
+
+  super.dispose();
+
   }
 
   public GPUAttribute(String name, int id, int type, int size)

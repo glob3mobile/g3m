@@ -32,7 +32,6 @@ class GPUProgramState;
 class MarkUserData {
 public:
   virtual ~MarkUserData() {
-
   }
 };
 

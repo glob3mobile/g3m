@@ -18,10 +18,11 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
 
-class GEOSymbol {
 
+class GEOSymbol {
 public:
-  virtual ~GEOSymbol() { }
+  virtual ~GEOSymbol() {
+  }
 
   virtual bool symbolize(const G3MRenderContext* rc,
                          const GEOSymbolizer*    symbolizer,

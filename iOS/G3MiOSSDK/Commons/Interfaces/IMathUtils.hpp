@@ -48,7 +48,8 @@ public:
     return _instance;
   }
 
-  virtual ~IMathUtils() { }
+  virtual ~IMathUtils() {
+  }
 
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v)  const = 0;

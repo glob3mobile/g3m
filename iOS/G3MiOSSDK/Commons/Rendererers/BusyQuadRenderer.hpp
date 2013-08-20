@@ -85,6 +85,11 @@ public:
   virtual ~BusyQuadRenderer() {
     delete _quadMesh;
     delete _backgroundColor;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   void incDegrees(double value) {

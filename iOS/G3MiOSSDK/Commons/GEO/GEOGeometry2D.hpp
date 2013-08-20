@@ -13,7 +13,14 @@
 
 class GEOGeometry2D : public GEOGeometry  {
 public:
-  virtual ~GEOGeometry2D() { }
+
+  virtual ~GEOGeometry2D() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
+
 };
 
 #endif

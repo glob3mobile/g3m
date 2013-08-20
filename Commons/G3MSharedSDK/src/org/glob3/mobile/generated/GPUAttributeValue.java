@@ -101,6 +101,8 @@ public abstract class GPUAttributeValue extends RCObject
   //  GPUAttribute* getLinkedAttribute() const { return _attribute;}
   public void dispose()
   {
+  super.dispose();
+
   }
   public abstract void setAttribute(GL gl, int id);
   public abstract boolean isEqualsTo(GPUAttributeValue v);

@@ -258,6 +258,9 @@ public abstract class GEORasterSymbol extends GEOSymbol
   {
     if (_sector != null)
        _sector.dispose();
+  
+    super.dispose();
+  
   }
 
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)

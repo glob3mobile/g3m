@@ -42,6 +42,9 @@ public class SubviewElevationData extends ElevationData
   public void dispose()
   {
     _buffer = null;
+  
+    super.dispose();
+  
   }
 
   public final double getElevationAt(int x, int y)

@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class GEO2DMultiPolygonGeometry;
 
 
+
 public abstract class GEOSymbolizer
 {
   public void dispose()

@@ -24,9 +24,9 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class GEOTileRasterizer;
 
+
 public abstract class GEOSymbol
 {
-
   public void dispose()
   {
   }

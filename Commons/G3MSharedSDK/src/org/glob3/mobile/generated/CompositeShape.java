@@ -46,6 +46,9 @@ public abstract class CompositeShape extends Shape
       if (child != null)
          child.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addShape(Shape shape)

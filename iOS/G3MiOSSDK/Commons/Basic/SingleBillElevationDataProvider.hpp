@@ -43,6 +43,7 @@ struct SingleBillElevationDataProvider_Request {
 
   ~SingleBillElevationDataProvider_Request() {
   }
+  
 };
 
 class SingleBillElevationDataProvider : public ElevationDataProvider {

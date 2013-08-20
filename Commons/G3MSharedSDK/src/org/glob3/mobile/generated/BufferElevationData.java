@@ -32,6 +32,7 @@ public abstract class BufferElevationData extends ElevationData
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

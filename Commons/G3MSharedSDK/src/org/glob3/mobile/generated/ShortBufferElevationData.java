@@ -65,6 +65,9 @@ public class ShortBufferElevationData extends BufferElevationData
   public void dispose()
   {
     _buffer = null;
+  
+    super.dispose();
+  
   }
 
   public final String description(boolean detailed)

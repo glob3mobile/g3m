@@ -32,7 +32,6 @@ public class GPUProgramManager
 
   public void dispose()
   {
-
   }
 
   public final GPUProgram getCompiledProgram(String name)

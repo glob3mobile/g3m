@@ -37,6 +37,7 @@ public abstract class LeafRenderer extends Renderer
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

@@ -39,7 +39,9 @@ public:
   _alpha(that._alpha) {
   }
 
-  ~Color() { }
+  ~Color() {
+
+  }
 
   static Color* parse(const std::string& str);
 

@@ -31,8 +31,8 @@ public:
                 const Vector2I& resolution);
 
   ~TileElevationDataRequestListener() {
-
   }
+  
 };
 
 
@@ -55,7 +55,9 @@ public:
                            const Vector2I& resolution,
                            ElevationDataProvider* provider);
   
-  ~TileElevationDataRequest();
+  ~TileElevationDataRequest() {
+    
+  }
   
   void onData(const Sector& sector,
               const Vector2I& resolution,

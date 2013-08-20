@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public abstract class ICameraActivityListener
 {
   public void dispose()

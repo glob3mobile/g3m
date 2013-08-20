@@ -35,7 +35,8 @@ public:
     
   }
   
-  ~Vector4D() {}
+  ~Vector4D() {
+  }
   
   Vector4D(const Vector4D &v):
   _x(v._x),

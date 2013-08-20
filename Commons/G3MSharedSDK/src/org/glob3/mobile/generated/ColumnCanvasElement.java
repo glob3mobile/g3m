@@ -54,6 +54,7 @@ public class ColumnCanvasElement extends GroupCanvasElement
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

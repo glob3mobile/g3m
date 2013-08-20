@@ -13,7 +13,7 @@
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
 
-class IJSONParser{
+class IJSONParser {
 private:
   static IJSONParser* _instance;
 
@@ -31,7 +31,8 @@ public:
     return _instance;
   }
 
-  virtual ~IJSONParser() {}
+  virtual ~IJSONParser() {
+  }
 
   virtual const JSONBaseObject* parse(const std::string& json) {
     return parse(json, false);

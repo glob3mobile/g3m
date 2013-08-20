@@ -13,14 +13,6 @@
 
 #include "RCObject.hpp"
 
-//class Matrix44D;
-//
-//class Matrix44DListener{
-//public:
-//  virtual ~Matrix44DListener() {}
-//  virtual void onMatrixBeingDeleted(const Matrix44D* m) = 0;
-//};
-
 class Matrix44D: public RCObject {
 
 public:
@@ -115,7 +107,7 @@ public:
 };
 
 
-class Matrix44DHolder{
+class Matrix44DHolder {
 #ifdef C_CODE
   const Matrix44D* _matrix;
 #endif

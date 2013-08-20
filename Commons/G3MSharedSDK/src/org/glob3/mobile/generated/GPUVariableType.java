@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public enum GPUVariableType
 {
   ATTRIBUTE(1),

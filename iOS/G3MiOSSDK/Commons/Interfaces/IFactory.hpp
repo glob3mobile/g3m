@@ -42,7 +42,6 @@ public:
   }
 
   virtual ~IFactory() {
-
   }
 
   virtual void createImageFromFileName(const std::string& filename,

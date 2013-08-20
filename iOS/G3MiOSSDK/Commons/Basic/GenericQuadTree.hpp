@@ -19,7 +19,8 @@ class GenericQuadTree_Node;
 
 class GenericQuadTreeNodeVisitor {
 public:
-  virtual ~GenericQuadTreeNodeVisitor() {}
+  virtual ~GenericQuadTreeNodeVisitor() {
+  }
 
   virtual bool visitNode(const GenericQuadTree_Node* node) = 0;
   virtual void endVisit(bool aborted) const = 0;
@@ -31,7 +32,8 @@ class GenericQuadTreeVisitor {
 
 public:
   GenericQuadTreeVisitor(): _comparisonsDone(0){}
-  virtual ~GenericQuadTreeVisitor() {}
+  virtual ~GenericQuadTreeVisitor() {
+  }
 
   void addComparisonsDoneWhileVisiting(int n) const { _comparisonsDone += n;}
   int getNComparisonsDone() const { return _comparisonsDone;}
@@ -63,7 +65,7 @@ public:
   }
 };
 
-class GenericQuadTree_SectorElement: public GenericQuadTree_Element{
+class GenericQuadTree_SectorElement: public GenericQuadTree_Element {
 public:
   const Sector _sector;
 
@@ -75,7 +77,12 @@ public:
   Geodetic2D getCenter() const { return _sector.getCenter();}
   Sector getSector() const { return _sector;}
 
-  ~GenericQuadTree_SectorElement() {}
+  ~GenericQuadTree_SectorElement() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 };
 
 class GenericQuadTree_Geodetic2DElement: public GenericQuadTree_Element {
@@ -90,7 +97,12 @@ public:
   Geodetic2D getCenter() const { return _geodetic;}
   Sector getSector() const { return Sector(_geodetic, _geodetic);}
 
-  ~GenericQuadTree_Geodetic2DElement() {}
+  ~GenericQuadTree_Geodetic2DElement() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 

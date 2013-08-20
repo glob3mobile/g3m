@@ -26,7 +26,8 @@ public:
   static const Planet* createFlatEarth();
 
   
-  virtual ~Planet() {}
+  virtual ~Planet() {
+  }
   
   virtual Vector3D getRadii() const = 0;
   virtual Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;

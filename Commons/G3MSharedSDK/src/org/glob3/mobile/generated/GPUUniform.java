@@ -18,6 +18,9 @@ public class GPUUniform extends GPUVariable
     {
       _value._release();
     }
+
+  super.dispose();
+
   }
 
   public GPUUniform(String name, IGLUniformID id, int type)

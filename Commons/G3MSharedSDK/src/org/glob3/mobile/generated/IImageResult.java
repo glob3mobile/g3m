@@ -37,7 +37,6 @@ public class IImageResult
 
   public void dispose()
   {
-
   }
 
   public final IImage getImage()

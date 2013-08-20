@@ -12,7 +12,7 @@
 #include "GPUUniform.hpp"
 #include "GPUAttribute.hpp"
 
-class GPUVariableValueSet{
+class GPUVariableValueSet {
 private:
   GPUUniformValue* _uniformValues[32];
   GPUAttributeValue* _attributeValues[32];
@@ -34,6 +34,7 @@ public:
       _attributeValues[i] = NULL;
     }
   }
+  
   ~GPUVariableValueSet();
 
   void addUniformValue(GPUUniformKey key, GPUUniformValue* v, bool mustRetain) {

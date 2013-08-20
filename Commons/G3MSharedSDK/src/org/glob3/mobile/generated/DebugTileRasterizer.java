@@ -70,6 +70,7 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
 
   public void dispose()
   {
+    super.dispose();
   
   }
 

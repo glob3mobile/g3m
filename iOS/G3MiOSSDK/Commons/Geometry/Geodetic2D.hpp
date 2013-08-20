@@ -105,6 +105,10 @@ public:
   _longitude(g._longitude)
   {
   }
+
+  ~Geodetic2D() {
+
+  }
   
   const Angle latitude() const {
     return _latitude;
@@ -132,10 +136,6 @@ public:
   Geodetic2D div(const double magnitude) const {
     return Geodetic2D(_latitude.div(magnitude),
                       _longitude.div(magnitude));
-  }
-  
-  ~Geodetic2D() {
-    
   }
   
   bool closeTo(const Geodetic2D& other) const;

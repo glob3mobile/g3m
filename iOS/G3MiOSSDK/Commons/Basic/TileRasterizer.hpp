@@ -42,6 +42,9 @@ public:
   {
   }
 
+  ~TileRasterizerContext() {
+  }
+
 };
 
 
@@ -52,7 +55,6 @@ private:
 public:
 
   virtual ~TileRasterizer() {
-
   }
 
   virtual std::string getId() const = 0;

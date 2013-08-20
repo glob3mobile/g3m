@@ -22,6 +22,7 @@ public abstract class BoundingVolume
 {
   public void dispose()
   {
+
   }
 
   public abstract double projectedArea(G3MRenderContext rc);

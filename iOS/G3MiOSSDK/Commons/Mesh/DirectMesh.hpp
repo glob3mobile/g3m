@@ -29,6 +29,9 @@ public:
              bool depthTest = true);
 
   ~DirectMesh() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
   

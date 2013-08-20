@@ -22,6 +22,10 @@ bool GLErrorRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 GLErrorRenderer::~GLErrorRenderer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GLErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,

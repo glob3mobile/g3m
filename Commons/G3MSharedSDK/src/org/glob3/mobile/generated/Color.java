@@ -43,6 +43,7 @@ public class Color
 
   public void dispose()
   {
+
   }
 
   public static Color parse(String str)

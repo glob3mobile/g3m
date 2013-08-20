@@ -10,6 +10,7 @@
 
 #import "Downloader_iOS_Handler.h"
 #include "IStringBuilder.hpp"
+#import "NSString_CppAdditions.h"
 
 #include <UIKit/UIKit.h>
 
@@ -199,7 +200,7 @@ long long Downloader_iOS::request(const URL &url,
 
   //printf("URL=%s\n", url.getPath().c_str());
 
-  NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
+  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: url.getPath()] ];
 
   if (!nsURL) {
     [iosListener onErrorURL:url];

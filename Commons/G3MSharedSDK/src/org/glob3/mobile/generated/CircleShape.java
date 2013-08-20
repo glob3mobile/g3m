@@ -68,6 +68,9 @@ public class CircleShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+
+  super.dispose();
+
   }
 
   public final void setRadius(float radius)

@@ -26,6 +26,9 @@ public:
 
 //  virtual ~GLFeature() {
 //    delete _globalState;
+//#ifdef JAVA_CODE
+//  super.dispose();
+//#endif
 //  }
 
 //  void applyGLGlobalState(GL* gl) const{
@@ -107,7 +110,7 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-class GLCameraGroupFeature: public GLFeature{
+class GLCameraGroupFeature: public GLFeature {
 #ifdef C_CODE
   Matrix44DHolder _matrixHolder;
 #endif
@@ -125,7 +128,12 @@ public:
     _matrixHolder = new Matrix44DHolder(matrix);
   }
 #endif
-  ~GLCameraGroupFeature() {}
+  ~GLCameraGroupFeature() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
   const void setMatrix(const Matrix44D* matrix) {_matrixHolder.setMatrix(matrix);}
   const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}

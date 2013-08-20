@@ -45,6 +45,7 @@ public class GEORasterProjection
 
   public void dispose()
   {
+
   }
 
   public final Vector2F project(Geodetic2D position)

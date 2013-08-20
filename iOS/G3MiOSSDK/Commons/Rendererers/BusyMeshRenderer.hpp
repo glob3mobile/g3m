@@ -82,6 +82,11 @@ public:
   virtual ~BusyMeshRenderer() {
     delete _mesh;
     delete _backgroundColor;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void incDegrees(double value) {
