@@ -416,7 +416,7 @@ void Mark::createGLState(const Planet* planet){
                                              false,
                                              0,
                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                             false, Vector2D::zero(), Vector2D::zero()),
+                                             false, Vector2D::zero(), Vector2D::zero(), NULL),
                         false);
 }
 

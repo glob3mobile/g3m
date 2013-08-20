@@ -91,6 +91,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
       for (int j = 0; j < accumulatedFeatures->size(); j++) {
         const GLFeature* f = accumulatedFeatures->get(j);
+
+        if (!f->isValid() ){
+          printf("LOLLLLLL");
+        }
+
         if (f->getGroup() == groupName){
           group->add(f);
         }

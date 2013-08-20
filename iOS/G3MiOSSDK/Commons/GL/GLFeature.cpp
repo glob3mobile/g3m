@@ -106,14 +106,41 @@ GeometryGLFeature::~GeometryGLFeature(){
 //  _position->_release();
 }
 
+std::vector<TextureGLFeature*> TextureGLFeature::texFEATURES;
+
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
                                    bool blend, int sFactor, int dFactor,
-                                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
+                                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale,
+                                   const void* creator,
+                                   const void* LMTI):
 GLColorGroupFeature(4, blend, sFactor, dFactor),
 _texID(texID)
 {
 //  _globalState->bindTexture(texID);
+
+    _valid = true;
+  if (creator != NULL){ //ONLY LTM
+  _texCoords = texCoords; //BUG
+
+  _creator = creator;
+  _LMTI = LMTI;
+
+  for (int i = 0; i < texFEATURES.size(); i++){
+
+    if(texFEATURES[i]->_texCoords == _texCoords){
+      TextureGLFeature* dopple = texFEATURES[i];
+      printf("DOUBLE TEX COORDS");
+    }
+
+  }
+
+
+
+  texFEATURES.push_back(this);
+  }
+
+
 
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);

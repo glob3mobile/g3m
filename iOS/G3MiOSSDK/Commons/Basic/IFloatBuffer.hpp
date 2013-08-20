@@ -13,10 +13,10 @@
 
 class IFloatBuffer : public IBuffer {
 public:
+
+  IFloatBuffer();
   
-  virtual ~IFloatBuffer() {
-    
-  }
+  virtual ~IFloatBuffer();
   
   virtual float get(int i) const = 0;
   

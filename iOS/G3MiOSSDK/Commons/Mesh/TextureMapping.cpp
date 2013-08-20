@@ -56,14 +56,18 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
                                                         isTransparent(),
                                                         GLBlendFactor::srcAlpha(),
                                                         GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM
+                                                        true, _translation.asVector2D(), _scale.asVector2D(),
+                                              NULL),
+                         false); //TRANSFORM
     } else{
       state.addGLFeature(new TextureGLFeature(_glTextureId,
                                                         _texCoords, 2, 0, false, 0,
                                                         isTransparent(),
                                                         GLBlendFactor::srcAlpha(),
                                                         GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                                        false, Vector2D::zero(), Vector2D::zero() ), false); //TRANSFORM
+                                                        false, Vector2D::zero(), Vector2D::zero(),
+                                              NULL),
+                         false); //TRANSFORM
     }
     
 //    progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());

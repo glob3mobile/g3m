@@ -19,6 +19,9 @@
 #include "GLState.hpp"
 
 void LazyTextureMapping::modifyGLState(GLState& state) const{
+
+
+  LazyTextureMappingInitializer *lmti = _initializer;
   if (!_initialized) {
     _initializer->initialize();
 
@@ -32,6 +35,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
     _initialized = true;
   }
 
+
   if (_texCoords != NULL) {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
@@ -42,7 +46,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               isTransparent(),
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true, _translation.asVector2D(), _scale.asVector2D()),
+                                              true, _translation.asVector2D(), _scale.asVector2D(), this, lmti),
                          false); //TRANSFORM
     }
     else {
@@ -51,7 +55,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               isTransparent(),
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false, Vector2D::zero(), Vector2D::zero() ),
+                                              false, Vector2D::zero(), Vector2D::zero(), this , lmti),
                          false); //TRANSFORM
     }
 

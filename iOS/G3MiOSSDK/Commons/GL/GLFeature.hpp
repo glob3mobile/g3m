@@ -43,6 +43,8 @@ public:
 
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
 
+  virtual bool isValid() const { return true;}
+
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
@@ -198,13 +200,37 @@ class TextureGLFeature: public GLColorGroupFeature{
 #ifdef JAVA_CODE
   private IGLTextureId _texID = null;
 #endif
-  
+
+  explicit TextureGLFeature(const TextureGLFeature& tex);
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
                    bool blend, int sFactor, int dFactor,
-                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
+                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale,
+                   const void* creator = NULL,
+                   const void* LMTI = NULL);
   void applyOnGlobalGLState(GLGlobalState* state) const;
+
+  //BUG ///////////////////////////
+  ~TextureGLFeature(){
+    if (_creator != NULL){ //ONLY LTM
+    for (int i = 0; i < texFEATURES.size(); i++) {
+      if (texFEATURES[i] == this){
+        texFEATURES.erase(texFEATURES.begin()+i);
+        return;
+      }
+    }
+    printf("NO DELETED!!!!");
+    }
+  }
+
+  static std::vector<TextureGLFeature*> texFEATURES; //BUG
+  bool _valid;
+    IFloatBuffer* _texCoords;
+  bool isValid() const { return _valid;}
+  const void * _creator;
+  const void * _LMTI;
 };
 
 class ColorGLFeature: public GLColorGroupFeature{
