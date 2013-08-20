@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.demo;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -108,6 +109,7 @@ public class G3MShowMarkersActivity
                               city.getAsString("name", ""), //
                               new URL("http://openweathermap.org/img/w/" + icon, false), //
                               new Geodetic3D(position, 0), //
+                              AltitudeMode.RELATIVE_TO_GROUND,
                               0, //
                               true, //
                               14));

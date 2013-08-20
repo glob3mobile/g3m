@@ -4,6 +4,7 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.BoxShape;
@@ -159,7 +160,7 @@ public class G3MNetCDFActivity
                         final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(meridWinds.get(i), -10, 10, 1, 0));
                         final Geodetic3D position3D = new Geodetic3D(position, levels.get(i) * 10000);
 
-                        _boxShapes.add(new BoxShape(position3D, extent, borderWidth, interpolatedColor, interpolatedColor));
+                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth, interpolatedColor, interpolatedColor));
 
                      }
                   }
@@ -396,7 +397,8 @@ public class G3MNetCDFActivity
 
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
-                           _shapesRenderer.addShape(new BoxShape(position3D, extent, borderWidth, interpolatedColor,
+                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND,
+                        		   extent, borderWidth, interpolatedColor,
                                     interpolatedColor));
                         }
 

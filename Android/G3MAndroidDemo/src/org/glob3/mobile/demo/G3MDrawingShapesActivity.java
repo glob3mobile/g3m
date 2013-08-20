@@ -2,9 +2,11 @@
 
 package org.glob3.mobile.demo;
 
+import java.lang.annotation.ElementType;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
@@ -145,12 +147,12 @@ public class G3MDrawingShapesActivity
       final Color surfaceColor = Color.fromRGBA(0, 0.7f, 0, 0.5f);
       final Color boderColor = Color.fromRGBA(0, 0.5f, 0, 0.75f);
       final Geodetic3D positionLA = new Geodetic3D(G3MGlob3Constants.LOS_ANGELES_POSITION, 10000);
-      _boxShape = new BoxShape(positionLA, boxExtent, borderWidth, surfaceColor, boderColor);
+      _boxShape = new BoxShape(positionLA, AltitudeMode.RELATIVE_TO_GROUND, boxExtent, borderWidth, surfaceColor, boderColor);
       //CIRCLE SHAPE
 
       final Color surfaceColorCircle = Color.fromRGBA(0.75f, 0.75f, 0, 0.75f);
       final Geodetic3D positionSF = new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION, 10000);
-      _circleShape = new CircleShape(positionSF, 100000, surfaceColorCircle);
+      _circleShape = new CircleShape(positionSF, AltitudeMode.RELATIVE_TO_GROUND, 100000, surfaceColorCircle);
 
 
       final ShapesRenderer _shapesRenderer = new ShapesRenderer();
