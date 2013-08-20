@@ -185,6 +185,11 @@ public class GPUProgramManager
       return getProgram(gl, "ColorMesh");
     }
   
+    if (!flatColor && !texture && !color)
+    {
+      return getProgram(gl, "NoColorMesh");
+    }
+  
     return null;
   }
 
