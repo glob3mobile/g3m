@@ -388,6 +388,10 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
                GL2Shaders._flatColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+              GL2Shaders._noColorMeshFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 

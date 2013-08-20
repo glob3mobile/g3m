@@ -89,6 +89,9 @@ public class MapBooBuilder_Android
 
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
                GL2Shaders._flatColorMeshFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", 
+				GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
 
       return new GPUProgramManager(gpuProgramFactory);
    }

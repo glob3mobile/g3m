@@ -45,6 +45,9 @@ public class G3MBuilder_Android
       addGPUProgramSources(new GPUProgramSources("FlatColorMesh", 
 				GL2Shaders._flatColorMeshVertexShader, GL2Shaders._flatColorMeshFragmentShader));
       
+      addGPUProgramSources(new GPUProgramSources("NoColorMesh", 
+				GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
+      
 
       setGL(_nativeWidget.getGL());
 
