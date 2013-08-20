@@ -93,7 +93,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
         const GLFeature* f = accumulatedFeatures->get(j);
 
         if (!f->isValid() ){
-          printf("LOLLLLLL");
+          printf("F NO VALIDA");
+        }
+
+        if (!contains(f)){
+          printf("NO CONTIENE FEATURE!!!\n");
         }
 
         if (f->getGroup() == groupName){

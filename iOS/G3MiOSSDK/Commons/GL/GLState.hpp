@@ -73,6 +73,18 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
+  bool contains(const GLFeature* f) const{
+    for (int i = 0; i < _features.size(); i++) {
+      if (_features.get(i) == f){
+        return true;
+      }
+    }
+    if (_parentGLState == NULL){
+      return false;
+    }
+    return _parentGLState->contains(f);
+  }
+
 };
 
 #endif /* defined(__G3MiOSSDK__GLState__) */
