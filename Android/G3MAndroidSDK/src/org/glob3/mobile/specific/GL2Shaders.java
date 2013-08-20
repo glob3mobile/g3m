@@ -194,6 +194,19 @@ public final class GL2Shaders {
 			"  gl_PointSize = uPointSize;\n" + 
 			"}";
 	
+	public final static String _noColorMeshFragmentShader = "void main() {\n" + 
+			"  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" + 
+			"}";
+
+	public final static String _noColorMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 

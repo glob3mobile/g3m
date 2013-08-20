@@ -648,6 +648,9 @@ public:
   GPUProgramSources sourcesTexturedMeshPointLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+PointLight"];
   builder.addGPUProgramSources(sourcesTexturedMeshPointLight);
 
+  GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
+  builder.addGPUProgramSources(sourcesNoColorMesh);
+
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
 

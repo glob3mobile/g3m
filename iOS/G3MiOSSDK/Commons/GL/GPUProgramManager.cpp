@@ -95,6 +95,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     return getProgram(gl, "ColorMesh");
   }
 
+  if (!flatColor && !texture && !color) {
+    return getProgram(gl, "NoColorMesh");
+  }
+
   return NULL;
 }
 
