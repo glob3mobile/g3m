@@ -309,7 +309,7 @@ public abstract class MapBooBuilder
     String name = jsonObject.getAsString("name", "");
     String description = jsonObject.getAsString("description", "");
     String screenshotURL = jsonObject.getAsString("icon", "");
-    Color backgroundColor = parseColor(jsonObject.getAsString("bgColor"));
+    Color backgroundColor = parseColor(jsonObject.getAsString("backgroundColor"));
   
     int __parse_from_json;
     Color screenshotColor = Color.gray();
