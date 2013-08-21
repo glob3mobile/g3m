@@ -14,6 +14,10 @@ GLState::~GLState() {
 
   delete _valuesSet;
   delete _globalState;
+
+  if (_parentGLState != NULL){
+    _parentGLState->_release();
+  }
 }
 
 void GLState::hasChangedStructure() const {
@@ -68,7 +72,14 @@ void GLState::setParent(const GLState* parent) const{
     const int parentsTimeStamp = parent->getTimeStamp();
     if ((parent != _parentGLState) ||
         (_parentsTimeStamp != parentsTimeStamp)) {
+
+      if (_parentGLState != NULL){
+        _parentGLState->_release();
+      }
       _parentGLState    = parent;
+      _parentGLState->_retain();
+
+
       _parentsTimeStamp = parentsTimeStamp;
       hasChangedStructure();
     }
