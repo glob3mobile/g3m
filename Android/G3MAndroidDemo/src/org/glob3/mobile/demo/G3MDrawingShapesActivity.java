@@ -15,6 +15,8 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
@@ -68,6 +70,13 @@ public class G3MDrawingShapesActivity
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
       initializeShapes(renderers);
+      
+      MarksRenderer marksRenderer = new MarksRenderer(true);
+      renderers.add(marksRenderer);
+      marksRenderer.addMark(new Mark("Everest", 
+    		  Geodetic3D.fromDegrees(27.987778, 86.944444,0), AltitudeMode.RELATIVE_TO_GROUND, 
+    		  6e7, 20, Color.red(), Color.black(), null, false, null));
+      
       for (final Renderer renderer : renderers) {
          g3mBuilder.addRenderer(renderer);
       }
