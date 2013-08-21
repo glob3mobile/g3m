@@ -120,6 +120,7 @@
 
 #import <G3MiOSSDK/GenericQuadTree.hpp>
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
+#import <G3MiOSSDK/Angle.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -2377,6 +2378,26 @@ public:
           }
         }
       }
+
+
+      class FlightTask: public GTask{
+        G3MWidget_iOS* _iosWidget;
+      public:
+        FlightTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+
+        void run(const G3MContext* context){
+
+          [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                         Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
+                                                         Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
+                                                         Angle::fromDegrees(0), Angle::fromDegrees(0),
+                                                         Angle::fromDegrees(0), Angle::fromDegrees(0));
+        }
+      };
+      
+
+
+      [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(10), new FlightTask(_iosWidget));
 
       if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
