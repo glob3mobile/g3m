@@ -184,6 +184,23 @@ public class Color
     return Color.fromRGBA(0, 0, 0, 1);
   }
 
+  public static Color gray()
+  {
+    return Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
+  }
+
+  public static Color darkGray()
+  {
+    final float oneThird = 1.0f / 3.0f;
+    return Color.fromRGBA(oneThird, oneThird, oneThird, 1);
+  }
+
+  public static Color lightGray()
+  {
+    final float twoThirds = 2.0f / 3.0f;
+    return Color.fromRGBA(twoThirds, twoThirds, twoThirds, 1);
+  }
+
   public static Color white()
   {
     return Color.fromRGBA(1, 1, 1, 1);

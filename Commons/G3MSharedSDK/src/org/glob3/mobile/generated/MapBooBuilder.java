@@ -308,12 +308,15 @@ public abstract class MapBooBuilder
   
     String name = jsonObject.getAsString("name", "");
     String description = jsonObject.getAsString("description", "");
-    String icon = jsonObject.getAsString("icon", "");
+    String screenshotURL = jsonObject.getAsString("icon", "");
     Color backgroundColor = parseColor(jsonObject.getAsString("bgColor"));
+  
+    int __parse_from_json;
+    Color screenshotColor = Color.gray();
     Layer baseLayer = parseLayer(jsonObject.get("baseLayer"));
     Layer overlayLayer = parseLayer(jsonObject.get("overlayLayer"));
   
-    return new MapBoo_Scene(name, description, icon, backgroundColor, baseLayer, overlayLayer);
+    return new MapBoo_Scene(name, description, screenshotURL, screenshotColor, backgroundColor, baseLayer, overlayLayer);
   }
   private Color parseColor(JSONString jsonColor)
   {
@@ -403,7 +406,6 @@ public abstract class MapBooBuilder
     {
       ILogger.instance().logError("Logic Error: _gl not initialized");
     }
-  
     return _gl;
   }
 
