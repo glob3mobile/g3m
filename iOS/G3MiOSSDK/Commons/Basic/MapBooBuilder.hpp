@@ -72,7 +72,8 @@ class MapBoo_Scene {
 private:
   const std::string _name;
   const std::string _description;
-  const std::string _icon;
+  const std::string _iconURL;
+  const Color       _screenshotColor;
   const Color       _backgroundColor;
   Layer*            _baseLayer;
   Layer*            _overlayLayer;
@@ -80,13 +81,15 @@ private:
 public:
   MapBoo_Scene(const std::string& name,
                const std::string& description,
-               const std::string& icon,
+               const std::string& iconURL,
+               const Color&       screenshotColor,
                const Color&       backgroundColor,
                Layer*             baseLayer,
                Layer*             overlayLayer) :
   _name(name),
   _description(description),
-  _icon(icon),
+  _iconURL(iconURL),
+  _screenshotColor(screenshotColor),
   _backgroundColor(backgroundColor),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer)
@@ -102,7 +105,11 @@ public:
   }
 
   const std::string getIcon() const {
-    return _icon;
+    return _iconURL;
+  }
+
+  const Color getScreenshotColor() const {
+    return _screenshotColor;
   }
 
   Color getBackgroundColor() const {

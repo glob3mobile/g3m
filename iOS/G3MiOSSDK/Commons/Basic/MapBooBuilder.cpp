@@ -58,8 +58,11 @@ const std::string MapBoo_Scene::description() const {
   isb->addString(", description=");
   isb->addString(_description);
 
-  isb->addString(", icon=");
-  isb->addString(_icon);
+  isb->addString(", iconURL=");
+  isb->addString(_iconURL);
+
+  isb->addString(", screenshotColor=");
+  isb->addString(_screenshotColor.description());
 
   isb->addString(", backgroundColor=");
   isb->addString(_backgroundColor.description());
@@ -136,11 +139,11 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 }
 
 void MapBooBuilder::setGL(GL *gl) {
-  if (_gl) {
+  if (_gl != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
     return;
   }
-  if (!gl) {
+  if (gl == NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
     return;
   }
@@ -148,10 +151,9 @@ void MapBooBuilder::setGL(GL *gl) {
 }
 
 GL* MapBooBuilder::getGL() {
-  if (!_gl) {
+  if (_gl == NULL) {
     ILogger::instance()->logError("Logic Error: _gl not initialized");
   }
-
   return _gl;
 }
 
@@ -372,19 +374,22 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   std::string name            = jsonObject->getAsString("name", "");
   std::string description     = jsonObject->getAsString("description", "");
-  std::string icon            = jsonObject->getAsString("icon", "");
+  std::string screenshotURL   = jsonObject->getAsString("icon", "");
   Color       backgroundColor = parseColor( jsonObject->getAsString("bgColor") );
+
+  int __parse_from_json;
+  Color       screenshotColor = Color::gray();
   Layer*      baseLayer       = parseLayer( jsonObject->get("baseLayer") );
   Layer*      overlayLayer    = parseLayer( jsonObject->get("overlayLayer") );
 
   return new MapBoo_Scene(name,
                           description,
-                          icon,
+                          screenshotURL,
+                          screenshotColor,
                           backgroundColor,
                           baseLayer,
                           overlayLayer);
 }
-
 
 void MapBooBuilder::parseApplicationDescription(const std::string& json,
                                                 const URL& url) {

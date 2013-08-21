@@ -72,6 +72,20 @@ public:
     return Color::fromRGBA(0, 0, 0, 1);
   }
 
+  static Color gray() {
+    return Color::fromRGBA(0.5f, 0.5f, 0.5f, 1);
+  }
+
+  static Color darkGray() {
+    const float oneThird = 1.0f / 3.0f;
+    return Color::fromRGBA(oneThird, oneThird, oneThird, 1);
+  }
+
+  static Color lightGray() {
+    const float twoThirds = 2.0f / 3.0f;
+    return Color::fromRGBA(twoThirds, twoThirds, twoThirds, 1);
+  }
+
   static Color white() {
     return Color::fromRGBA(1, 1, 1, 1);
   }
