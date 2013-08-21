@@ -42,7 +42,7 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   
-  GLState _glState;
+  GLState* _glState;
   
   void updateGLState(const G3MRenderContext* rc);
 

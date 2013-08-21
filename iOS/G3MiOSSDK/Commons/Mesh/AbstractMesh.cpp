@@ -28,6 +28,8 @@ AbstractMesh::~AbstractMesh() {
   delete _boundingVolume;
   delete _translationMatrix;
 
+  _glState->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -57,7 +59,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
 _pointSize(pointSize),
-_depthTest(depthTest)
+_depthTest(depthTest),
+_glState(new GLState())
 {
   createGLState();
 }
@@ -125,7 +128,7 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -138,12 +141,12 @@ void AbstractMesh::createGLState() {
                         false);   //POINT SIZE
 
   if (_translationMatrix != NULL) {
-    _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 
   if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
 
-    _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
+    _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                  _flatColor->isTransparent(),
                                                  GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                           false);
@@ -155,7 +158,7 @@ void AbstractMesh::createGLState() {
   }
 
   if (_colors != NULL) {
-    _glState.addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
+    _glState->addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
                                              4,            //Our buffer contains elements of 4
                                              0,            //Index 0
                                              false,        //Not normalized
@@ -167,6 +170,6 @@ void AbstractMesh::createGLState() {
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
 
-  _glState.setParent(parentGLState);
+  _glState->setParent(parentGLState);
   rawRender(rc);
 }

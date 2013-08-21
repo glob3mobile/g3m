@@ -49,7 +49,7 @@ private:
 
   bool _enable;
   
-  mutable GLState _glState;
+  mutable GLState* _glState;
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _surfaceElevation;
@@ -68,7 +68,8 @@ public:
   _scaleZ(1),
   _transformMatrix(NULL),
   _enable(true),
-  _surfaceElevation(0)
+  _surfaceElevation(0),
+  _glState(new GLState())
   {
     
   }

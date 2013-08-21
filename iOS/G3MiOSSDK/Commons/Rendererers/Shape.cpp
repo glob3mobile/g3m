@@ -50,6 +50,8 @@ Shape::~Shape() {
   delete _pitch;
   
   delete _transformMatrix;
+
+  _glState->_release();
 }
 
 void Shape::cleanTransformMatrix() {
@@ -81,8 +83,8 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
-    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
+    _glState->clearGLFeatureGroup(CAMERA_GROUP);
+    _glState->addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
   }
   return _transformMatrix;
 }
@@ -108,8 +110,8 @@ void Shape::render(const G3MRenderContext* rc,
     }
     
     getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
-    _glState.setParent(parentGLState);
-    rawRender(rc, &_glState, renderNotReadyShapes);
+    _glState->setParent(parentGLState);
+    rawRender(rc, _glState, renderNotReadyShapes);
   }
 }
 

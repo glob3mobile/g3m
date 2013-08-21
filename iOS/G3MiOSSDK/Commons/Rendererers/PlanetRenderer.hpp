@@ -342,7 +342,7 @@ private:
 
   bool _recreateTilesPending;
 
-  GLState _glState;
+  GLState* _glState;
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);

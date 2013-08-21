@@ -535,9 +535,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-//  builder.setPlanet(Planet::createEarth());
+  builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-  builder.setPlanet(Planet::createFlatEarth());
+//  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -2377,7 +2377,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
         if (planeFilePath) {

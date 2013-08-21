@@ -135,7 +135,8 @@ _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _projection(NULL),
-_model(NULL)
+_model(NULL),
+_glState(new GLState())
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -462,14 +463,14 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-    _glState.addGLFeature(_projection, true);
+    _glState->addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState.addGLFeature(_model, true);
+    _glState->addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
@@ -517,7 +518,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc) {
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &prc,
-                   _glState,
+                   *_glState,
                    NULL,
                    planet,
                    cameraNormalizedPosition,
@@ -541,7 +542,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc) {
 
         tile->render(rc,
                      &prc,
-                     _glState,
+                     *_glState,
                      &toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,

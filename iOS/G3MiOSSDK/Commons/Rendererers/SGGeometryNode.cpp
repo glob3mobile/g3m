@@ -23,6 +23,8 @@ SGGeometryNode::~SGGeometryNode() {
   delete _normals;
   delete _indices;
 
+  _glState->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -31,7 +33,7 @@ SGGeometryNode::~SGGeometryNode() {
 
 void SGGeometryNode::createGLState() {
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -44,7 +46,7 @@ void SGGeometryNode::createGLState() {
                         false);
 
   if (_uv != NULL) {
-    _glState.addGLFeature(new TextureCoordsGLFeature(_uv,
+    _glState->addGLFeature(new TextureCoordsGLFeature(_uv,
                                                      2,
                                                      0,
                                                      false,

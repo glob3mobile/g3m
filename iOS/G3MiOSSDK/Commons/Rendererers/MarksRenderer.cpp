@@ -37,7 +37,8 @@ _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
 _model(NULL),
-_projection(NULL)
+_projection(NULL),
+_glState(new GLState())
 {
 }
 
@@ -56,6 +57,8 @@ MarksRenderer::~MarksRenderer() {
   if (_billboardTexCoord != NULL) {
     delete _billboardTexCoord;
   }
+
+  _glState->_release();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -204,7 +207,7 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
     if (mark->isReady()) {
       mark->render(rc,
                    cameraPosition,
-                   &_glState,
+                   _glState,
                    planet,
                    gl);
     }
@@ -277,18 +280,18 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam);
-    _glState.addGLFeature(_projection, true);
+    _glState->addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
     _model = new ModelGLFeature(cam);
-    _glState.addGLFeature(_model, true);
+    _glState->addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
 
-  _glState.clearGLFeatureGroup(NO_GROUP);
-  _glState.addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
+  _glState->clearGLFeatureGroup(NO_GROUP);
+  _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
 }

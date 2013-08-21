@@ -131,7 +131,7 @@ private:
 
   LazyTextureMapping* getCurrentTextureMapping() const;
 
-  mutable GLState _glState;
+  mutable GLState* _glState;
 
 public:
   LeveledTexturedMesh(const Mesh* mesh,
@@ -140,7 +140,8 @@ public:
   _mesh(mesh),
   _ownedMesh(ownedMesh),
   _mappings(mappings),
-  _currentLevel(-1)
+  _currentLevel(-1),
+  _glState(new GLState())
   {
     if (_mappings->size() <= 0) {
       ILogger::instance()->logError("LeveledTexturedMesh: empty mappings");

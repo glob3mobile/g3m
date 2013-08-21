@@ -90,6 +90,8 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
       _mappings = NULL;
     }
 
+    _glState->_release();
+
 #ifdef JAVA_CODE
   }
 #endif
@@ -134,7 +136,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
       //                              newCurrentLevel);
       _currentLevel = newCurrentLevel;
 
-      _mappings->at(_currentLevel)->modifyGLState(_glState);
+      _mappings->at(_currentLevel)->modifyGLState(*_glState);
 
       if (_currentLevel < levelsCount-1) {
         for (int i = levelsCount-1; i > _currentLevel; i--) {
@@ -202,7 +204,7 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
     _mesh->render(rc, parentGLState);
   }
   else {
-    _glState.setParent(parentGLState);
-    _mesh->render(rc, &_glState);
+    _glState->setParent(parentGLState);
+    _mesh->render(rc, _glState);
   }
 }

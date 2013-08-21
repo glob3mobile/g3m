@@ -167,7 +167,8 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0)
+_currentSurfaceElevation(0.0),
+_glState(new GLState())
 {
 
 }
@@ -206,7 +207,8 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0)
+_currentSurfaceElevation(0.0),
+_glState(new GLState())
 {
 
 }
@@ -242,7 +244,8 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0)
+_currentSurfaceElevation(0.0),
+_glState(new GLState())
 {
 
 }
@@ -279,7 +282,8 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0)
+_currentSurfaceElevation(0.0),
+_glState(new GLState())
 {
 
 }
@@ -375,6 +379,8 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
+  _glState->_release();
+
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
@@ -410,12 +416,12 @@ double Mark::getMinDistanceToCamera() {
 
 void Mark::createGLState(const Planet* planet){
 
-  _glState.addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
+  _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
                                                _textureWidth, _textureHeight),
                         false);
 
   if (_textureId != NULL){
-    _glState.addGLFeature(new TextureGLFeature(_textureId,
+    _glState->addGLFeature(new TextureGLFeature(_textureId,
                                                getBillboardTexCoords(),
                                                2,
                                                0,
@@ -479,16 +485,16 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-        if (_glState.getNumberOfGLFeatures() == 0){
+        if (_glState->getNumberOfGLFeatures() == 0){
           createGLState(planet);    //GLState was disposed due to elevation change
         }
 
-        _glState.setParent(parentGLState); //Linking with parent
+        _glState->setParent(parentGLState); //Linking with parent
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
                                 4,
-                                &_glState,
+                                _glState,
                                 *rc->getGPUProgramManager());
 
         _renderedMark = true;
@@ -506,5 +512,5 @@ void Mark::elevationChanged(const Geodetic2D& position,
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 
-  _glState.clearAllGLFeatures();
+  _glState->clearAllGLFeatures();
 }

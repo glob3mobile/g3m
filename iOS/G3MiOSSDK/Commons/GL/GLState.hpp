@@ -19,7 +19,9 @@
 #include "GLFeature.hpp"
 #include "GPUVariableValueSet.hpp"
 
-class GLState {
+#include "RCObject.hpp"
+
+class GLState: public RCObject {
 
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
