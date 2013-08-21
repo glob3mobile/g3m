@@ -266,7 +266,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private boolean _recreateTilesPending;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
   private void updateGLState(G3MRenderContext rc)
@@ -317,6 +317,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _recreateTilesPending = false;
      _projection = null;
      _model = null;
+     _glState = new GLState();
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {

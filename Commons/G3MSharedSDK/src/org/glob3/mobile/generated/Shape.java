@@ -76,7 +76,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   private boolean _enable;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private SurfaceElevationProvider _surfaceElevationProvider;
   private double _surfaceElevation;
@@ -100,6 +100,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _transformMatrix = null;
      _enable = true;
      _surfaceElevation = 0;
+     _glState = new GLState();
 
   }
 
@@ -123,6 +124,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();
+  
+    _glState._release();
   }
 
   public final Geodetic3D getPosition()

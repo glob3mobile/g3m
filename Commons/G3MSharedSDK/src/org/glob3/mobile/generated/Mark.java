@@ -84,7 +84,7 @@ public class Mark implements SurfaceElevationListener
 
   private static IFloatBuffer _billboardTexCoord = null;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState(Planet planet)
   {
   
@@ -183,6 +183,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
@@ -247,6 +248,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
@@ -299,6 +301,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_";
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
@@ -351,6 +354,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = imageID;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
@@ -381,6 +385,8 @@ public class Mark implements SurfaceElevationListener
     {
       IFactory.instance().deleteImage(_textureImage);
     }
+  
+    _glState._release();
   
   }
 

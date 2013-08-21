@@ -156,37 +156,8 @@ public class GL
 //                    GPUProgramManager& progManager,
 //                    const GPUProgramState* gpuState);
 
-
-  //void GL::drawElements(int mode,
-  //                      IShortBuffer* indices, const GLGlobalState& state,
-  //                      GPUProgramManager& progManager,
-  //                      const GPUProgramState* gpuState) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-  //                                 mode,
-  //                                 indices->description().c_str());
-  //  }
-  //  
-  ////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  ////  glState.applyOnGPU(this, progManager);
-  ////  
-  ////  //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  ////  
-  ////  _nativeGL->drawElements(mode,
-  ////                          indices->size(),
-  ////                          indices);
-  ////  
-  //  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //  //progManager.getProgram(*gpuState)->onUnused();
-  //}
-  
   public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-  //                                 mode,
-  //                                 indices->description().c_str());
-  //  }
   
     state.applyOnGPU(this, progManager);
   
@@ -199,33 +170,6 @@ public class GL
 //                  GPUProgramManager& progManager,
 //                  const GPUProgramState* gpuState);
 
-
-  //void GL::drawArrays(int mode,
-  //                    int first,
-  //                    int count, const GLGlobalState& state,
-  //                    GPUProgramManager& progManager,
-  //                    const GPUProgramState* gpuState) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
-  //  
-  ////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  ////  glState.applyOnGPU(this, progManager);
-  ////  
-  //////  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  ////  
-  ////  
-  ////  _nativeGL->drawArrays(mode,
-  ////                        first,
-  ////                        count);
-  ////  
-  //  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //  //progManager.getProgram(*gpuState)->onUnused();
-  //}
-  
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
   //  if (_verbose) {
@@ -261,21 +205,12 @@ public class GL
     {
       int texture2D = GLTextureType.texture2D();
   
-  //    GLGlobalState state(*GLState::getCurrentGLGlobalState());
-  //    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
       newState.bindTexture(texId);
   
       newState.applyChanges(this, _currentGLGlobalState);
-  
-  //    GLState glState(state, NULL);
-  //    glState.applyGlobalStateOnGPU(this);
-  //    delete state;
-  
-  //    setGLGlobalState(state);
   
       int linear = GLTextureParameterValue.linear();
       int clampToEdge = GLTextureParameterValue.clampToEdge();

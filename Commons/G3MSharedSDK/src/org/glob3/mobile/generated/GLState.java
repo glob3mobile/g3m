@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLState
+
+public class GLState extends RCObject
 {
 
   private GLFeatureSet _features = new GLFeatureSet();
@@ -103,6 +104,11 @@ public class GLState
        _valuesSet.dispose();
     if (_globalState != null)
        _globalState.dispose();
+  
+    if (_parentGLState != null)
+    {
+      _parentGLState._release();
+    }
   }
 
   public final void setParent(GLState parent)
@@ -122,7 +128,15 @@ public class GLState
       final int parentsTimeStamp = parent.getTimeStamp();
       if ((parent != _parentGLState) || (_parentsTimeStamp != parentsTimeStamp))
       {
+  
+        if (_parentGLState != null)
+        {
+          _parentGLState._release();
+        }
         _parentGLState = parent;
+        _parentGLState._retain();
+  
+  
         _parentsTimeStamp = parentsTimeStamp;
         hasChangedStructure();
       }

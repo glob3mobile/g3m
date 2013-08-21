@@ -40,7 +40,7 @@ public class MarksRenderer extends LeafRenderer
 
   private IFloatBuffer _billboardTexCoord;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void updateGLState(G3MRenderContext rc)
   {
@@ -83,6 +83,7 @@ public class MarksRenderer extends LeafRenderer
      _downloadPriority = DownloadPriority.MEDIUM;
      _model = null;
      _projection = null;
+     _glState = new GLState();
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -118,6 +119,8 @@ public class MarksRenderer extends LeafRenderer
       if (_billboardTexCoord != null)
          _billboardTexCoord.dispose();
     }
+  
+    _glState._release();
   
     super.dispose();
   

@@ -81,7 +81,7 @@ public class BusyQuadRenderer extends LeafRenderer
   private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState()
   {
   
@@ -102,6 +102,7 @@ public class BusyQuadRenderer extends LeafRenderer
      _animated = animated;
      _size = new Vector2D(size);
      _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
+     _glState = new GLState();
     createGLState();
   }
 
@@ -155,6 +156,8 @@ public class BusyQuadRenderer extends LeafRenderer
        _quadMesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
+
+    _glState._release();
 
   super.dispose();
 

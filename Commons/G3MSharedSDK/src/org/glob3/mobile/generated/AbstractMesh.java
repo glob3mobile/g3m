@@ -95,13 +95,14 @@ public abstract class AbstractMesh extends Mesh
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
+     _glState = new GLState();
     createGLState();
   }
 
   protected abstract void rawRender(G3MRenderContext rc);
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
-  protected GLState _glState = new GLState();
+  protected GLState _glState;
 
   protected final void createGLState()
   {
@@ -151,6 +152,8 @@ public abstract class AbstractMesh extends Mesh
        _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
+  
+    _glState._release();
   
     super.dispose();
   

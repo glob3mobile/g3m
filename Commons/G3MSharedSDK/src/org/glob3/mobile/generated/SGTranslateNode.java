@@ -26,7 +26,7 @@ public class SGTranslateNode extends SGNode
 
   private MutableMatrix44D _translationMatrix = new MutableMatrix44D();
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
 
   public SGTranslateNode(String id, String sId, double x, double y, double z)
@@ -36,6 +36,7 @@ public class SGTranslateNode extends SGNode
      _y = y;
      _z = z;
      _translationMatrix = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_x, _y, _z));
+     _glState = new GLState();
     _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
   }
 

@@ -31,7 +31,7 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IShortBuffer _indices;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState()
   {
   
@@ -53,6 +53,7 @@ public class SGGeometryNode extends SGNode
      _uv = uv;
      _normals = normals;
      _indices = indices;
+     _glState = new GLState();
     createGLState();
   }
 
@@ -68,6 +69,8 @@ public class SGGeometryNode extends SGNode
        _normals.dispose();
     if (_indices != null)
        _indices.dispose();
+  
+    _glState._release();
   
     super.dispose();
   

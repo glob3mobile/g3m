@@ -40,7 +40,7 @@ public class BusyMeshRenderer extends LeafRenderer
   private ProjectionGLFeature _projectionFeature;
   private ModelGLFeature _modelFeature;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void createGLState()
   {
@@ -64,11 +64,6 @@ public class BusyMeshRenderer extends LeafRenderer
     {
       _modelFeature.setMatrix(_modelviewMatrix.asMatrix44D());
     }
-  
-  //  _glState.clearGLFeatureGroup(CAMERA_GROUP);
-  //  _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-  //  _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
-  
   }
 
   public BusyMeshRenderer(Color backgroundColor)
@@ -77,6 +72,7 @@ public class BusyMeshRenderer extends LeafRenderer
      _backgroundColor = backgroundColor;
      _projectionFeature = null;
      _modelFeature = null;
+     _glState = new GLState();
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D.invalid();
   }
@@ -134,17 +130,6 @@ public class BusyMeshRenderer extends LeafRenderer
   {
     GL gl = rc.getGL();
   
-  //  if (!_projectionMatrix.isValid()) {
-  //    // init modelview matrix
-  //    int currentViewport[4];
-  //    gl->getViewport(currentViewport);
-  //    const int halfWidth = currentViewport[2] / 2;
-  //    const int halfHeight = currentViewport[3] / 2;
-  //    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-  //                                                                             -halfHeight, halfHeight,
-  //                                                                             -halfWidth, halfWidth);
-  //  }
-  
     createGLState();
   
     gl.clearScreen(_backgroundColor);
@@ -177,6 +162,8 @@ public class BusyMeshRenderer extends LeafRenderer
        _mesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
+
+    _glState._release();
 
   super.dispose();
 

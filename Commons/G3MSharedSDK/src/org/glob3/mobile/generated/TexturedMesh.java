@@ -27,7 +27,7 @@ public class TexturedMesh extends Mesh
   private final boolean _ownedTexMapping;
   private final boolean _transparent;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void createGLState()
   {
@@ -43,6 +43,7 @@ public class TexturedMesh extends Mesh
      _textureMapping = textureMapping;
      _ownedTexMapping = ownedTexMapping;
      _transparent = transparent;
+     _glState = new GLState();
     createGLState();
   }
 
@@ -58,6 +59,9 @@ public class TexturedMesh extends Mesh
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
+
+    _glState._release();
+
   super.dispose();
 
   }
