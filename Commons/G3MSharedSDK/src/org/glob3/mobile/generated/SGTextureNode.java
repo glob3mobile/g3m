@@ -99,8 +99,7 @@ public class SGTextureNode extends SGNode
         SGLayerNode layer = _layers.get(i);
         if (!layer.modifyGLState(rc, _glState))
         {
-          if (_glState != null)
-             _glState.dispose();
+          _glState._release();
           _glState = null;
           return parentState;
         }
