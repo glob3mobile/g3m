@@ -282,9 +282,9 @@ public:
                                        applicationId,
                                        applicationListener);
 
-//  MarksRenderer* marksRenderer = new MarksRenderer(false);
-//
-//  _g3mcBuilder->addRenderer(marksRenderer);
+  //  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  //
+  //  _g3mcBuilder->addRenderer(marksRenderer);
 
   _g3mcBuilder->initializeWidget();
 }
@@ -468,7 +468,7 @@ public:
 
    compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
 
-     builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
+   builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
    */
 }
 
@@ -538,7 +538,7 @@ public:
 
   builder.setPlanet(Planet::createEarth());
   //builder.setPlanet(Planet::createSphericalEarth());
-//  builder.setPlanet(Planet::createFlatEarth());
+  //  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -652,7 +652,7 @@ public:
 
   // initialization
   builder.initializeWidget();
-//  [self testGenericQuadTree:geoTileRasterizer];
+  //  [self testGenericQuadTree:geoTileRasterizer];
 
 }
 
@@ -1353,7 +1353,7 @@ public:
   for (int i = 0; i < 10; i+=2){
     for (int j = 0; j < 10; j+=2){
 
-//      Geodetic3D g(Angle::fromDegrees(i), Angle::fromDegrees(j), 0);
+      //      Geodetic3D g(Angle::fromDegrees(i), Angle::fromDegrees(j), 0);
       Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
       Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
@@ -2387,14 +2387,21 @@ public:
 
         void run(const G3MContext* context){
 
-          [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
-                                                         Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
-                                                         Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
-                                                         Angle::fromDegrees(0), Angle::fromDegrees(0),
-                                                         Angle::fromDegrees(0), Angle::fromDegrees(0));
+          if (rand() % 2 == 0){
+            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
+                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
+                                                           Angle::fromDegrees(0), Angle::fromDegrees(0),
+                                                           Angle::fromDegrees(0), Angle::fromDegrees(0));
+          }else{
+
+            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
+                                                           Angle::fromDegrees(0), Angle::fromDegrees(0));
+          }
         }
       };
-      
+
 
 
       [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(10), new FlightTask(_iosWidget));
@@ -2570,13 +2577,13 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-  
+
   //  renderers.push_back(new GLErrorRenderer());
-  
+
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-    
+
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;
