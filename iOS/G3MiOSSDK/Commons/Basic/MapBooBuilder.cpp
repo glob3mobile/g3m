@@ -375,7 +375,7 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   std::string name            = jsonObject->getAsString("name", "");
   std::string description     = jsonObject->getAsString("description", "");
   std::string screenshotURL   = jsonObject->getAsString("icon", "");
-  Color       backgroundColor = parseColor( jsonObject->getAsString("bgColor") );
+  Color       backgroundColor = parseColor( jsonObject->getAsString("backgroundColor") );
 
   int __parse_from_json;
   Color       screenshotColor = Color::gray();
