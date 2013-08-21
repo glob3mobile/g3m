@@ -41,7 +41,7 @@ public class SGMaterialNode extends SGNode
      _baseColor = baseColor;
      _specularColor = specularColor;
      _glState = new GLState();
-    _glState->addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

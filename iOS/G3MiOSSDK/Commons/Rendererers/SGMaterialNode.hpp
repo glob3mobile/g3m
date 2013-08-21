@@ -54,7 +54,7 @@ public:
     _glState->addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
 #endif
 #ifdef JAVA_CODE
-    _glState->addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
 #endif
   }
 
