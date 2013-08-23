@@ -2420,31 +2420,30 @@ public:
       }
 
 
-      class FlightTask: public GTask{
-        G3MWidget_iOS* _iosWidget;
-      public:
-        FlightTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+      if (false){ //Infinite random flights
+        class FlightTask: public GTask{
+          G3MWidget_iOS* _iosWidget;
+        public:
+          FlightTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
 
-        void run(const G3MContext* context){
+          void run(const G3MContext* context){
 
-          if (rand() % 2 == 0){
-            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
-                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
-                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
-                                                           Angle::fromDegrees(0), Angle::fromDegrees(0),
-                                                           Angle::fromDegrees(0), Angle::fromDegrees(0));
-          }else{
+            if (rand() % 2 == 0){
+              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                             Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
+                                                             Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
+                                                             Angle::fromDegrees(0), Angle::fromDegrees(0),
+                                                             Angle::fromDegrees(0), Angle::fromDegrees(0));
+            }else{
 
-            [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
-                                                           Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
-                                                           Angle::fromDegrees(0), Angle::fromDegrees(0));
+              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                             Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
+                                                             Angle::fromDegrees(0), Angle::fromDegrees(0));
+            }
           }
-        }
-      };
-
-
-
-      [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(10), new FlightTask(_iosWidget));
+        };
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(10), new FlightTask(_iosWidget));
+      }
 
       if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
@@ -2626,11 +2625,11 @@ public:
   builder->addRenderer(trailsRenderer);
 
   //  renderers.push_back(new GLErrorRenderer());
-
+  
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-
+    
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;

@@ -97,6 +97,9 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                                                              _renderNotReadyShapes));
       }
       else {
+
+        _glState->setParent(glState);
+
         shape->render(rc, _glState, _renderNotReadyShapes);
       }
     }

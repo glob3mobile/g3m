@@ -37,6 +37,8 @@
 
 #include "ICameraActivityListener.hpp"
 
+#include "SceneLighting.hpp"
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -436,6 +438,9 @@ void G3MWidget::render(int width, int height) {
   _gl->clearScreen(*_backgroundColor);
 
   GLState* rootState = new GLState();
+
+  DefaultSceneLighting ligthing;
+  ligthing.modifyGLState(rootState);
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc, rootState);

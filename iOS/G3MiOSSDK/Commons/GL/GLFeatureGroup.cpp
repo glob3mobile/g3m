@@ -84,21 +84,21 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
   int modelTransformCount = 0;
   for (int i = 0; i < _nFeatures; i++){
     GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
-    GLCameraGroupFeatureType t = f->getType();
+    GLFeatureID t = f->getID();
     switch (t) {
-      case F_PROJECTION:
+      case GLF_PROJECTION:
         modelTransformHolders[0] = f->getMatrixHolder();
         break;
-      case F_CAMERA_MODEL:
+      case GLF_MODEL:
         modelTransformHolders[1] = f->getMatrixHolder();
         break;
-      case F_MODEL_TRANSFORM:
+      case GLF_MODEL_TRANSFORM:
       {
         const Matrix44D* m = f->getMatrixHolder()->getMatrix();
 
         if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
           modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
-        } 
+        }
       }
         break;
       default:
@@ -220,10 +220,22 @@ void GLFeatureLightingGroup::applyOnGlobalGLState(GLGlobalState* state){
 }
 
 void GLFeatureLightingGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
+
+  bool normalsAvailable = false;
   for(int i = 0; i < _nFeatures; i++){
     const GLFeature* f = _features[i];
-    if (f != NULL){
-      vs->combineWith(f->getGPUVariableValueSet());
+    if (f->getID() == GLF_VERTEX_NORMAL){
+      normalsAvailable = true;
+      break;
+    }
+  }
+
+  if (normalsAvailable){
+    for(int i = 0; i < _nFeatures; i++){
+      const GLFeature* f = _features[i];
+      if (f != NULL){
+        vs->combineWith(f->getGPUVariableValueSet());
+      }
     }
   }
 }

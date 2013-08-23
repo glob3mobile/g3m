@@ -17,25 +17,28 @@
 
 class Camera;
 
+enum GLFeatureID{
+  GLF_BILLBOARD,
+  GLF_VIEWPORT_EXTENT,
+  GLF_GEOMETRY,
+  GLF_MODEL,
+  GLF_PROJECTION,
+  GLF_MODEL_TRANSFORM,
+  GLF_TEXTURE,
+  GLF_COLOR,
+  GLF_FLATCOLOR,
+  GLF_TEXTURE_ID,
+  GLF_TEXTURE_COORDS,
+  GLF_DIRECTION_LIGTH,
+  GLF_VERTEX_NORMAL
+};
+
 class GLFeature: public RCObject {
 public:
 
-  GLFeature(GLFeatureGroupName group): _group(group)
-  //, _globalState(NULL)
+  GLFeature(GLFeatureGroupName group, GLFeatureID id): _group(group), _id(id)
   {}
 
-//  virtual ~GLFeature() {
-//    delete _globalState;
-//#ifdef JAVA_CODE
-//  super.dispose();
-//#endif
-//  }
-
-//  void applyGLGlobalState(GL* gl) const{
-//    if (_globalState != NULL) {
-//      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
-//    }
-//  }
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
@@ -44,30 +47,17 @@ public:
     return _group;
   }
 
+  GLFeatureID getID() const{
+    return _id;
+  }
+
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
 
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
-//  GLGlobalState* _globalState;
-
+  const GLFeatureID _id;
 };
-
-//class BillboardGLFeature: public GLFeature{
-//
-//  GPUUniformValueVec2Float* _texExtent;
-//  GPUUniformValueVec2Float* _viewportExtent;
-//  
-//
-//public:
-//
-//  BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight);
-//
-//  ~BillboardGLFeature();
-//
-//  void applyOnGlobalGLState(GLGlobalState* state)  const {}
-//
-//};
 
 class BillboardGLFeature: public GLFeature{
 public:
@@ -110,12 +100,10 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-enum GLCameraGroupFeatureType{
-  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
-};
+//enum GLCameraGroupFeatureType{
+//  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
+//};
 class GLCameraGroupFeature: public GLFeature{
-protected:
-  const enum GLCameraGroupFeatureType _type;
 private:
 
 #ifdef C_CODE
@@ -127,8 +115,8 @@ private:
 public:
 #ifdef C_CODE
 
-  GLCameraGroupFeature(Matrix44D* matrix, GLCameraGroupFeatureType type):
-  GLFeature(CAMERA_GROUP), _matrixHolder(new Matrix44DHolder(matrix)), _type(type){}
+  GLCameraGroupFeature(Matrix44D* matrix, GLFeatureID id):
+  GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)){}
 
 #endif
 #ifdef JAVA_CODE
@@ -152,13 +140,11 @@ public:
   const Matrix44DHolder* getMatrixHolder() const{ return _matrixHolder;}
 
   void applyOnGlobalGLState(GLGlobalState* state) const {}
-
-  GLCameraGroupFeatureType getType() const{ return _type;}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, F_CAMERA_MODEL){}
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, GLF_MODEL){}
 
   ModelGLFeature(const Camera* cam);
 };
@@ -166,14 +152,14 @@ public:
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
 
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, F_PROJECTION){}
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, GLF_PROJECTION){}
   ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
 
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, F_MODEL_TRANSFORM){}
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM){}
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +167,7 @@ public:
 class PriorityGLFeature: public GLFeature{
   const int _priority;
 public:
-  PriorityGLFeature(GLFeatureGroupName g, int p): GLFeature(g), _priority(p) {}
+  PriorityGLFeature(GLFeatureGroupName g, GLFeatureID id, int p): GLFeature(g, id), _priority(p) {}
 
   int getPriority() const { return _priority;}
 };
@@ -193,7 +179,7 @@ class GLColorGroupFeature: public PriorityGLFeature{
   const int _dFactor;
   
 public:
-  GLColorGroupFeature(int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, p),
+  GLColorGroupFeature(GLFeatureID id, int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, id, p),
   _blend(blend),
   _sFactor(sFactor),
   _dFactor(dFactor)

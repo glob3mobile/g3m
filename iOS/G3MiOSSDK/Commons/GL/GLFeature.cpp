@@ -10,12 +10,12 @@
 #include "Camera.hpp"
 
 ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth, int viewportHeight):
-GLFeature(NO_GROUP) {
+GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT) {
   _values.addUniformValue(VIEWPORT_EXTENT, new GPUUniformValueVec2Float(viewportWidth, viewportHeight), false);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position, int textureWidth, int textureHeight):
-GLFeature(NO_GROUP) {
+GLFeature(NO_GROUP, GLF_BILLBOARD) {
   _values.addUniformValue(TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);
 
   _values.addUniformValue(BILLBOARD_POSITION, new GPUUniformValueVec4Float((float)position._x,
@@ -36,7 +36,7 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize,
                   bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
                   float lineWidth,
                   bool needsPointSize, float pointSize):
-GLFeature(NO_GROUP),
+GLFeature(NO_GROUP, GLF_GEOMETRY),
 _depthTestEnabled(depthTestEnabled),
 _cullFace(cullFace),
 _culledFace(culledFace),
@@ -111,7 +111,7 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
                                    bool blend, int sFactor, int dFactor,
                                    bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
-GLColorGroupFeature(4, blend, sFactor, dFactor),
+GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID)
 {
 //  _globalState->bindTexture(texID);
@@ -134,7 +134,7 @@ void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 
 ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
                                bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(3, blend, sFactor, dFactor)
+GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
 {
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(COLOR, value, false);
@@ -142,7 +142,7 @@ GLColorGroupFeature(3, blend, sFactor, dFactor)
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,
                                        bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(2, blend, sFactor, dFactor)
+GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)
 {
   _values.addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color.getRed(),
                                                            color.getGreen(),
@@ -156,7 +156,7 @@ GLColorGroupFeature(2, blend, sFactor, dFactor)
 
 TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID,
                                        bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(4, blend, sFactor, dFactor),
+GLColorGroupFeature(GLF_TEXTURE_ID, 4, blend, sFactor, dFactor),
 _texID(texID) {
 
   
@@ -169,7 +169,7 @@ void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized,
                                            int stride,
                                                bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
-PriorityGLFeature(COLOR_GROUP, 4)
+PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 {
 
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
@@ -188,13 +188,13 @@ void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getProjectionMatrix44D(), F_PROJECTION){}
+GLCameraGroupFeature(cam->getProjectionMatrix44D(), GLF_PROJECTION){}
 
 ModelGLFeature::ModelGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getModelMatrix44D(), F_CAMERA_MODEL){}
+GLCameraGroupFeature(cam->getModelMatrix44D(), GLF_MODEL){}
 
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
-GLFeature(LIGHTING_GROUP){
+GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH){
   _values.addUniformValue(AMBIENT_LIGHT,
                           new GPUUniformValueFloat(ambientLight), false);
 
@@ -210,7 +210,7 @@ GLFeature(LIGHTING_GROUP){
 }
 
 VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride):
-GLFeature(LIGHTING_GROUP)
+GLFeature(LIGHTING_GROUP, GLF_VERTEX_NORMAL)
 {
   _values.addAttributeValue(NORMAL,
                             new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
