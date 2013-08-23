@@ -249,7 +249,7 @@ class Matrix44DMultiplicationHolder : public Matrix44DProvider{
 
 public:
   Matrix44DMultiplicationHolder(const Matrix44DProvider* matrixHolders[], int nMatrix):
-  _matrixHolders(matrixHolders),
+  _matrixHolders(new const Matrix44DProvider*[nMatrix]),
   _nMatrix(nMatrix),
   _modelview(NULL)
   {
@@ -261,6 +261,7 @@ public:
     #endif
     for (int i = 0; i < _nMatrix; i++) {
       _matrix[i] = NULL;
+      _matrixHolders[i] = matrixHolders[i];
     }
 
     pullMatrixes();

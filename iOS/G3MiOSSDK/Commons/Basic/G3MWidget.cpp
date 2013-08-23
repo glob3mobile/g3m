@@ -445,7 +445,8 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->render(&rc, rootState);
   }
 
-  delete rootState;
+  rootState->_release();
+  rootState = NULL;
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {

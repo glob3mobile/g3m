@@ -112,7 +112,6 @@ public:
         }
         _value = v;
       }
-      _value = v;
     }
     else {
       ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
