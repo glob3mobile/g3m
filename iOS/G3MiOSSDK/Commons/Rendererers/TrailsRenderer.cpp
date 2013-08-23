@@ -245,7 +245,7 @@ void TrailsRenderer::addTrail(Trail* trail) {
   }
 }
 
-void TrailsRenderer::render(const G3MRenderContext* rc) {
+void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int trailsCount = _trails.size();
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   updateGLState(rc);

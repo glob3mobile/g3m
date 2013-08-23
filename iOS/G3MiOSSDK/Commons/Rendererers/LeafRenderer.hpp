@@ -59,7 +59,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const G3MRenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc, GLState* glState) = 0;
   
   virtual bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent) = 0;

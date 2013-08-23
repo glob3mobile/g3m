@@ -67,7 +67,7 @@ public:
   }
   
   void render(const G3MRenderContext* rc,
-              const GLGlobalState& parentState);
+              GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

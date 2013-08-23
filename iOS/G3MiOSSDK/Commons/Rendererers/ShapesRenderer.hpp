@@ -99,7 +99,7 @@ public:
   void stop(const G3MRenderContext* rc) {
   }
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
 
 };
 

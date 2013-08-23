@@ -494,7 +494,7 @@ void TileRenderer::updateGLState(const G3MRenderContext* rc){
   }
 }
 
-void TileRenderer::render(const G3MRenderContext* rc) {
+void TileRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   updateGLState(rc);
 

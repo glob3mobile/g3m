@@ -181,7 +181,7 @@ bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-void MarksRenderer::render(const G3MRenderContext* rc) {
+void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   

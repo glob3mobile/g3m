@@ -75,7 +75,7 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc){
   }
 }
 
-void ShapesRenderer::render(const G3MRenderContext* rc) {
+void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes

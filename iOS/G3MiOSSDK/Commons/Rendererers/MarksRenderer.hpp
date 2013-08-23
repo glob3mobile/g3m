@@ -60,7 +60,7 @@ public:
 
   virtual void initialize(const G3MContext* context);
 
-  virtual void render(const G3MRenderContext* rc);
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void addMark(Mark* mark);
 

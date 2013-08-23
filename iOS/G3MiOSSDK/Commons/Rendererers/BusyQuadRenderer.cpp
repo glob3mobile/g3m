@@ -96,7 +96,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
 //TODO: REMOVE???
 void BusyQuadRenderer::render(const G3MRenderContext* rc,
-                              const GLGlobalState& parentState) {
+                              GLState* glState) {
   GL* gl = rc->getGL();
 
   if (_quadMesh == NULL){

@@ -45,7 +45,7 @@ public:
   
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);

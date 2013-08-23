@@ -28,7 +28,7 @@
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
-#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
 #import <G3MiOSSDK/TrailsRenderer.hpp>
 #import <G3MiOSSDK/Mark.hpp>
@@ -122,6 +122,7 @@
 
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {

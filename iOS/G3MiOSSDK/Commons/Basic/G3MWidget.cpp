@@ -427,13 +427,17 @@ void G3MWidget::render(int width, int height) {
 
   _gl->clearScreen(*_backgroundColor);
 
+  GLState* rootState = new GLState();
+
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc);
+    _cameraRenderer->render(&rc, rootState);
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc);
+    _selectedRenderer->render(&rc, rootState);
   }
+
+  delete rootState;
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {

@@ -46,7 +46,7 @@ void MeshRenderer::updateGLState(const G3MRenderContext* rc){
   }
 }
 
-void MeshRenderer::render(const G3MRenderContext* rc) {
+void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   updateGLState(rc);
 
