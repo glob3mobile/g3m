@@ -39,11 +39,6 @@ _m33(m33) {
 
 Matrix44D::~Matrix44D()
 {
-  //ILogger::instance()->logError("N LISTENERS %d", _listeners.size());
-  //  for (int i = 0; i < _listeners.size(); i++) {
-  //    _listeners[i]->onMatrixBeingDeleted(this);
-  //  }
-
   delete[] _columnMajorFloatArray;
   delete _columnMajorFloatBuffer;
 

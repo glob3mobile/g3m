@@ -107,22 +107,23 @@ void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
     }
   }
 
-  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
-
+  Matrix44DProvider* modelProvider = NULL;
   if (modelTransformCount > 0){
-    Matrix44DProvider* modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
-    vs->addUniformValue(MODEL,
-                        new GPUUniformValueMatrix4(modelProvider),
-                        false);
-
+    modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
   } else{
     const Matrix44D* id = Matrix44D::createIdentity();
-    vs->addUniformValue(MODEL, new GPUUniformValueMatrix4(id), false);
+    modelProvider = new Matrix44DHolder(id);
     id->_release();
   }
 
+  vs->addUniformValue(MODEL,
+                      new GPUUniformValueMatrix4(modelProvider, true),
+                      false);
+
+
+  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
   vs->addUniformValue(MODELVIEW,
-                      new GPUUniformValueMatrix4(modelViewProvider),
+                      new GPUUniformValueMatrix4(modelViewProvider, true),
                       false);
 
   delete [] modelTransformHolders;

@@ -17,6 +17,8 @@
 
 #include "RCObject.hpp"
 
+#include "Matrix44DProvider.hpp"
+
 class GPUUniform;
 
 class GPUUniformValue: public RCObject{
@@ -300,11 +302,11 @@ public:
 #endif
 
 #ifdef C_CODE
-  GPUUniformValueMatrix4(const Matrix44DProvider* provider):
+  GPUUniformValueMatrix4(const Matrix44DProvider* provider, bool ownsProvider):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
   _lastModelSet(NULL),
-  _ownsProvider(false)
+  _ownsProvider(ownsProvider)
   {
   }
 #endif
