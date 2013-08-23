@@ -33,16 +33,20 @@ public:
 
   ~GEOFeature();
   
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
-//              const GEOSymbolizer* symbolizer);
-
   const JSONObject* getProperties() const {
     return _properties;
   }
-  
+
+  const GEOGeometry* getGeometry() const {
+    return _geometry;
+  }
+
   void symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
+                 const GEOSymbolizer*    symbolizer,
+                 MeshRenderer*           meshRenderer,
+                 ShapesRenderer*         shapesRenderer,
+                 MarksRenderer*          marksRenderer,
+                 GEOTileRasterizer*      geoTileRasterizer) const;
 
 };
 

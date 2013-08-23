@@ -14,7 +14,7 @@
 #include "LeveledTexturedMesh.hpp"
 #include "RectangleI.hpp"
 #include "TexturesHandler.hpp"
-#include "TileRenderer.hpp"
+#include "PlanetRenderer.hpp"
 #include "TileTessellator.hpp"
 #include "Geodetic3D.hpp"
 #include "RCObject.hpp"
@@ -100,6 +100,9 @@ public:
   }
 
   virtual ~LTMInitializer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 
@@ -210,6 +213,10 @@ private:
     }
 
     deletePetitions();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   MultiLayerTileTexturizer* _texturizer;
@@ -238,7 +245,7 @@ private:
 
   const TileTessellator* _tessellator;
 
-  const int    _firstLevel;
+//  const int    _firstLevel;
 
   std::vector<TileTextureBuilder_PetitionStatus> _status;
   std::vector<long long>                         _requestsIds;
@@ -246,7 +253,7 @@ private:
 
   bool _finalized;
   bool _canceled;
-  bool _anyCanceled;
+//  bool _anyCanceled;
   bool _alreadyStarted;
 
   long long _texturePriority;
@@ -307,12 +314,12 @@ public:
   _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
   _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
   _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
-  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
+//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
-  _anyCanceled(false),
+//  _anyCanceled(false),
   _mesh(NULL),
   _tessellator(tessellator),
   _finalized(false),
@@ -405,7 +412,7 @@ public:
           const Sector intersectionSector = tileSector.intersection(imageSector);
 
           RectangleF* sourceRect = NULL;
-          if (!intersectionSector.isEqualsTo(imageSector)){
+          if (!intersectionSector.isEqualsTo(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
                                            imageSector,
                                            intersectionSector);
@@ -577,7 +584,7 @@ public:
     }
     //checkIsPending(position);
 
-    _anyCanceled = true;
+//    _anyCanceled = true;
     _status[position] = STATUS_CANCELED;
 
     stepDone();
@@ -588,51 +595,31 @@ public:
 
     Tile* ancestor = _tile;
     bool fallbackSolved = false;
-    while (ancestor != NULL) {
-      LazyTextureMapping* mapping;
-      if (fallbackSolved) {
-        mapping = NULL;
-      }
-      else {
-        const bool ownedTexCoords = true;
-        const bool transparent    = false;
-        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
-                                                            _tile,
-                                                            ancestor,
-                                                            _tessellator,
-                                                            _mercator),
-                                         _texturesHandler,
-                                         ownedTexCoords,
-                                         transparent);
-      }
+    while (ancestor != NULL && !fallbackSolved) {
+      const bool ownedTexCoords = true;
+      const bool transparent    = false;
+      LazyTextureMapping* mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
+                                                                              _tile,
+                                                                              ancestor,
+                                                                              _tessellator,
+                                                                              _mercator),
+                                                           _texturesHandler,
+                                                           ownedTexCoords,
+                                                           transparent);
 
       if (ancestor != _tile) {
-        if (!fallbackSolved) {
-          const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId != NULL) {
-            _texturesHandler->retainGLTextureId(glTextureId);
-            mapping->setGLTextureId(glTextureId);
-            fallbackSolved = true;
-          }
+        const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
+        if (glTextureId != NULL) {
+          _texturesHandler->retainGLTextureId(glTextureId);
+          mapping->setGLTextureId(glTextureId);
+          fallbackSolved = true;
         }
       }
-//      else {
-//        if (mapping != NULL) {
-//          if ( mapping->getGLTextureId() != NULL ) {
-//            ILogger::instance()->logInfo("break (point) on me 3\n");
-//          }
-//        }
-//      }
 
       mappings->push_back(mapping);
+
       ancestor = ancestor->getParent();
     }
-
-//    if ((mappings != NULL) && (_tile != NULL)) {
-//      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
-//        ILogger::instance()->logInfo("break (point) me\n");
-//      }
-//    }
 
     return new LeveledTexturedMesh(_tessellatorMesh,
                                    false,
@@ -673,9 +660,8 @@ void TextureUploader::imageCreated(IImage* image) {
                            _textureId);
   }
   else {
-    _tileRasterizer->rasterize(image,
-                               _tile,
-                               _mercator,
+    const TileRasterizerContext trc(image, _tile, _mercator);
+    _tileRasterizer->rasterize(trc,
                                new TextureUploader(_builder,
                                                    _tile,
                                                    _mercator,
@@ -704,6 +690,11 @@ BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
   if (_builder != NULL) {
     _builder->_release();
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
@@ -738,6 +729,9 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
 }
 
@@ -760,6 +754,10 @@ public:
 
   virtual ~BuilderStartTask() {
     _builder->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void execute(const G3MRenderContext* rc) {
@@ -773,7 +771,7 @@ public:
 
 
 Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
-                                          const TileRenderContext* trc,
+                                          const PlanetRendererContext* prc,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
@@ -784,21 +782,21 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
 
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
-                                                                        trc->getTileRasterizer(),
+                                                                        prc->getTileRasterizer(),
                                                                         rc,
-                                                                        trc->getLayerSet(),
+                                                                        prc->getLayerSet(),
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
-                                                                        trc->getTessellator(),
-                                                                        trc->getTexturePriority()
+                                                                        prc->getTessellator(),
+                                                                        prc->getTexturePriority()
                                                                         )
                                                  );
     tile->setTexturizerData(builderHolder);
   }
 
   TileTextureBuilder* builder = builderHolder->get();
-  if (trc->isForcedFullRender()) {
+  if (prc->isForcedFullRender()) {
     builder->start();
   }
   else {

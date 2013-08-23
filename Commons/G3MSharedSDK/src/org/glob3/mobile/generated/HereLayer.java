@@ -164,5 +164,9 @@ public class HereLayer extends Layer
     return new URL();
   }
 
+  public final String description()
+  {
+    return "[HereLayer]";
+  }
 
 }

@@ -17,9 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
+
 public interface IBuffer
 {
-
   public void dispose();
 
   /**

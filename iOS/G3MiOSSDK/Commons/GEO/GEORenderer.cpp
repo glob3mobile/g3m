@@ -10,7 +10,6 @@
 
 #include "GEOObject.hpp"
 #include "GEOSymbolizer.hpp"
-#include "GEOSymbolizationContext.hpp"
 #include "ILogger.hpp"
 #include "Context.hpp"
 #include "Camera.hpp"
@@ -43,6 +42,11 @@ GEORenderer::~GEORenderer() {
     GEORenderer_ObjectSymbolizerPair* pair = _children[i];
     delete pair;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GEORenderer::addGEOObject(GEOObject* geoObject,
@@ -65,12 +69,12 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
       if (pair->_geoObject != NULL) {
         const GEOSymbolizer* symbolizer = (pair->_symbolizer == NULL) ? _defaultSymbolizer : pair->_symbolizer;
 
-        const GEOSymbolizationContext sc(symbolizer,
-                                         _meshRenderer,
-                                         _shapesRenderer,
-                                         _marksRenderer,
-                                         _geoTileRasterizer);
-        pair->_geoObject->symbolize(rc, sc);
+        pair->_geoObject->symbolize(rc,
+                                    symbolizer,
+                                    _meshRenderer,
+                                    _shapesRenderer,
+                                    _marksRenderer,
+                                    _geoTileRasterizer);
       }
 
       delete pair;

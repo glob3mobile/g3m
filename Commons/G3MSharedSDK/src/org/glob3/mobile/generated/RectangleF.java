@@ -39,6 +39,7 @@ public class RectangleF
 
   public void dispose()
   {
+
   }
 
   public final boolean equalTo(RectangleF that)

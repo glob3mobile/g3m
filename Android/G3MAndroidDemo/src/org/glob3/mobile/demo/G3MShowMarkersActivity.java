@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.demo;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -16,6 +17,7 @@ import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -48,6 +50,8 @@ public class G3MShowMarkersActivity
 
       builder.addRenderer(_weatherMarkers);
       builder.setLogFPS(true);
+      final Planet planet = Planet.createFlatEarth();
+      builder.setPlanet(planet);
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();
@@ -105,6 +109,7 @@ public class G3MShowMarkersActivity
                               city.getAsString("name", ""), //
                               new URL("http://openweathermap.org/img/w/" + icon, false), //
                               new Geodetic3D(position, 0), //
+                              AltitudeMode.RELATIVE_TO_GROUND,
                               0, //
                               true, //
                               14));

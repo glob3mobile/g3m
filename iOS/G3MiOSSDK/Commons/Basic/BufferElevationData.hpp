@@ -25,12 +25,11 @@ public:
                       int bufferSize);
 
   virtual ~BufferElevationData() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
-
-//  const Geodetic2D getRealResolution() const {
-//    return _realResolution;
-//  }
 
   double getElevationAt(int x,
                         int y) const;

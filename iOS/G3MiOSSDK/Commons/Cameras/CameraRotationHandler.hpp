@@ -28,7 +28,12 @@ public:
   _pivotPixel(0, 0)
   {}
   
-  ~CameraRotationHandler() {}
+  ~CameraRotationHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent, 

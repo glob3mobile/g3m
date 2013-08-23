@@ -18,6 +18,11 @@ CameraRenderer::~CameraRenderer() {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void CameraRenderer::initialize(const G3MContext* context) {
@@ -53,7 +58,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
   if (_processTouchEvents) {
     // abort all the camera effect currently running
-    if (touchEvent->getType() == Down){
+    if (touchEvent->getType() == Down) {
       EffectTarget* target = _cameraContext->getNextCamera()->getEffectTarget();
       ec->getEffectsScheduler()->cancelAllEffectsFor(target);
     }

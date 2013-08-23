@@ -19,8 +19,8 @@ _imageWidth(imageWidth),
 _imageHeight(imageHeight)
 {
   if (_mercator) {
-    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector.lower().latitude());
-    _mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector.upper().latitude());
+    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
+    _mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
     _mercatorDeltaGlobalV = mercatorLowerGlobalV - _mercatorUpperGlobalV;
   }
 }

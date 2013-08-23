@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
+
 public class GEO2DPolygonData
 {
   private final java.util.ArrayList<Geodetic2D> _coordinates;

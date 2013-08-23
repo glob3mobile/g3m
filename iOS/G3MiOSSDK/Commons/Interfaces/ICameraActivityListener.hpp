@@ -9,9 +9,11 @@
 #ifndef __G3MiOSSDK__ICameraActivityListener__
 #define __G3MiOSSDK__ICameraActivityListener__
 
+
 class ICameraActivityListener {
 public:
-  virtual ~ICameraActivityListener() { }
+  virtual ~ICameraActivityListener() {
+  }
   
   virtual void touchEventHandled() = 0;
   

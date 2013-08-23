@@ -22,7 +22,7 @@ void main() {
   if (EnableTexture) {
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
     
-    if (EnableFlatColor || EnableColorPerVertex){
+    if (EnableFlatColor || EnableColorPerVertex) {
       lowp vec4 color;
       if (EnableFlatColor) {
         color = uFlatColor;

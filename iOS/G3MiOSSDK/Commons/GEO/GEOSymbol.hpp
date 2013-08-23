@@ -12,15 +12,24 @@
 #include <vector>
 
 class G3MRenderContext;
-class GEOSymbolizationContext;
+class GEOSymbolizer;
+class MeshRenderer;
+class ShapesRenderer;
+class MarksRenderer;
+class GEOTileRasterizer;
+
 
 class GEOSymbol {
-
 public:
-  virtual ~GEOSymbol() { }
+  virtual ~GEOSymbol() {
+  }
 
   virtual bool symbolize(const G3MRenderContext* rc,
-                         const GEOSymbolizationContext& sc) const = 0 ;
+                         const GEOSymbolizer*    symbolizer,
+                         MeshRenderer*           meshRenderer,
+                         ShapesRenderer*         shapesRenderer,
+                         MarksRenderer*          marksRenderer,
+                         GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
 
 };
 

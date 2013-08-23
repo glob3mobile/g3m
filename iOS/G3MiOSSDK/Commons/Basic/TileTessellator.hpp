@@ -24,7 +24,8 @@ class Geodetic2D;
 
 class TileTessellator {
 public:
-  virtual ~TileTessellator() { };
+  virtual ~TileTessellator() {
+  }
 
   virtual bool isReady(const G3MRenderContext *rc) const = 0;
 

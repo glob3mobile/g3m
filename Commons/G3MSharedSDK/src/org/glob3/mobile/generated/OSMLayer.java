@@ -47,4 +47,9 @@ public class OSMLayer extends MercatorTiledLayer
 
   }
 
+  public final String description()
+  {
+    return "[OSMLayer]";
+  }
+
 }

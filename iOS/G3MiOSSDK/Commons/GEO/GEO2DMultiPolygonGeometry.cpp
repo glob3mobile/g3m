@@ -8,7 +8,6 @@
 
 #include "GEO2DMultiPolygonGeometry.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "GEOSymbolizer.hpp"
 #include "GEO2DPolygonData.hpp"
 
@@ -21,10 +20,14 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
     }
     delete _polygonsData;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
-std::vector<GEOSymbol*>* GEO2DMultiPolygonGeometry::createSymbols(const G3MRenderContext* rc,
-                                                                  const GEOSymbolizationContext& sc) const {
-  return sc.getSymbolizer()->createSymbols(this);
+std::vector<GEOSymbol*>* GEO2DMultiPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
 }

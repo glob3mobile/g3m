@@ -1,26 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  GLFeatureGroup.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 10/07/13.
-//
-//
-
-//
-//  GLFeatureGroup.h
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 10/07/13.
-//
-//
-
-
-
-
-
-//class GLFeature;
-
 public class GLFeatureSet
 {
    protected static final int MAX_CONCURRENT_FEATURES_PER_GROUP = 20;
@@ -77,6 +55,58 @@ public class GLFeatureSet
   public final int size()
   {
     return _nFeatures;
+  }
+
+  public final void clearFeatures(GLFeatureGroupName g)
+  {
+  
+    for (int i = 0; i < _nFeatures; i++)
+    {
+      final GLFeature f = _features[i];
+      if (f.getGroup() == g)
+      {
+        f._release();
+  
+        for (int j = i; j < _nFeatures; j++)
+        {
+          if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP)
+          {
+            _features[j] = null;
+          }
+          else
+          {
+            _features[j] = _features[j+1];
+          }
+        }
+        i--;
+        _nFeatures--;
+      }
+    }
+  
+  }
+  public final void clearFeatures()
+  {
+  
+    for (int i = 0; i < _nFeatures; i++)
+    {
+      final GLFeature f = _features[i];
+      f._release();
+  
+      for (int j = i; j < _nFeatures; j++)
+      {
+        if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP)
+        {
+          _features[j] = null;
+        }
+        else
+        {
+          _features[j] = _features[j+1];
+        }
+      }
+      i--;
+      _nFeatures--;
+    }
+  
   }
 
 }

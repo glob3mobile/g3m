@@ -19,9 +19,11 @@ class GEO2DMultiPolygonGeometry;
 
 #include <vector>
 
+
 class GEOSymbolizer {
 public:
-  virtual ~GEOSymbolizer() { }
+  virtual ~GEOSymbolizer() {
+  }
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const = 0;
 

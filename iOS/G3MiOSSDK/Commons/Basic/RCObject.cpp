@@ -9,7 +9,7 @@
 #include "RCObject.hpp"
 
 RCObject::~RCObject() {
-  if (_referenceCounter != 0){
+  if (_referenceCounter != 0) {
     ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
   }
 }

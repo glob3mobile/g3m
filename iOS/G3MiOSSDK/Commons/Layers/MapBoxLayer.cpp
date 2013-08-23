@@ -7,3 +7,7 @@
 //
 
 #include "MapBoxLayer.hpp"
+
+const std::string MapBoxLayer::description() const {
+  return "[MapBoxLayer]";
+}

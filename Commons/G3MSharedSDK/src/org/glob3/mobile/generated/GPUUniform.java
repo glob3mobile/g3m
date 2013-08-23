@@ -18,6 +18,9 @@ public class GPUUniform extends GPUVariable
     {
       _value._release();
     }
+
+  super.dispose();
+
   }
 
   public GPUUniform(String name, IGLUniformID id, int type)
@@ -88,6 +91,7 @@ public class GPUUniform extends GPUVariable
     {
       if (_value == null || !_value.isEqualsTo(v))
       {
+<<<<<<< HEAD
         _dirty = true;
         //        _value = v->copyOrCreate(_value);
 
@@ -95,6 +99,17 @@ public class GPUUniform extends GPUVariable
         if (_value != null)
         {
           _value._release();
+=======
+        if (_value == null || !_value.isEqualsTo(v))
+        {
+          _dirty = true;
+          v._retain();
+          if (_value != null)
+          {
+            _value._release();
+          }
+          _value = v;
+>>>>>>> glstate-rc
         }
         _value = v;
       }

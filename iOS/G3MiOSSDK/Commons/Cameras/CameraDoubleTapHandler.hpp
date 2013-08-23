@@ -14,66 +14,16 @@
 #include "Effects.hpp"
 
 
-//***************************************************************
-
-class DoubleTapEffect : public EffectWithDuration {
-public:
-  
-  DoubleTapEffect(const TimeInterval& duration,
-                  const Vector3D& axis,
-                  const Angle& angle,
-                  double distance,
-                  const bool linearTiming=false):
-  EffectWithDuration(duration, linearTiming),
-  _axis(axis),
-  _angle(angle),
-  _distance(distance)
-  {}
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when) {
-    EffectWithDuration::start(rc, when);
-    _lastAlpha = 0;
-  }
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when) {
-    const double alpha = getAlpha(when);
-    Camera *camera = rc->getNextCamera();
-    const double step = alpha - _lastAlpha;
-    camera->rotateWithAxis(_axis, _angle.times(step));
-    camera->moveForward(_distance * step);
-    _lastAlpha = alpha;
-  }
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
-    Camera *camera = rc->getNextCamera();
-
-    const double step = 1.0 - _lastAlpha;
-    camera->rotateWithAxis(_axis, _angle.times(step));
-    camera->moveForward(_distance * step);
-  }
-  
-  virtual void cancel(const TimeInterval& when) {
-    // do nothing, just leave the effect in the intermediate state
-  }
-  
-private:
-  Vector3D _axis;
-  Angle    _angle;
-  double   _distance;
-  double   _lastAlpha;
-};
-
-//***************************************************************
-
-
 class CameraDoubleTapHandler: public CameraEventHandler {
   
 public:
   
-  ~CameraDoubleTapHandler() {}
+  ~CameraDoubleTapHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,

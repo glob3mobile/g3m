@@ -36,13 +36,6 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
 
-  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
-  //      delete value;
-  //    }
-  //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-  //  }
-
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

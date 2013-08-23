@@ -19,7 +19,7 @@
 
 #include "Ellipsoid.hpp"
 
-class EllipsoidalPlanet: public Planet{
+class EllipsoidalPlanet: public Planet {
 private:
   
 #ifdef C_CODE
@@ -29,13 +29,29 @@ private:
   private final Ellipsoid _ellipsoid;
 #endif
 
+  mutable MutableVector3D _origin;
+  mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _centerPoint;
+  mutable MutableVector3D _centerRay;
+  mutable MutableVector3D _initialPoint0;
+  mutable MutableVector3D _initialPoint1;
+  mutable MutableVector3D _lastDragAxis;
+  mutable double          _lastDragRadians;
+  mutable double          _lastDragRadiansStep;
+  mutable double          _angleBetweenInitialRays;
+  mutable double          _angleBetweenInitialPoints;
+  mutable bool            _validSingleDrag;
+
 
 public:
   
   EllipsoidalPlanet(const Ellipsoid& ellipsoid);
   
   ~EllipsoidalPlanet() {
-    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   Vector3D getRadii() const{
@@ -120,6 +136,34 @@ public:
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
+  bool isFlat() const { return false; }
+
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  
+  MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
+    
+  Effect* createEffectFromLastSingleDrag() const;
+  
+  void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
+                       const Vector3D& initialRay0,
+                       const Vector3D& initialRay1) const;
+  
+  MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                              const Vector3D& finalRay1) const;
+  
+  Effect* createDoubleTapEffect(const Vector3D& origin,
+                                        const Vector3D& centerRay,
+                                        const Vector3D& tapRay) const;
+  
+  double distanceToHorizon(const Vector3D& position) const;
+  
+  MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
+
+  Vector3D getNorth() const {
+    return Vector3D::upZ();
+  }
+
 };
 
 

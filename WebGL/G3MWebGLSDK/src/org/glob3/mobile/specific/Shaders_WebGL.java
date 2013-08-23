@@ -78,10 +78,11 @@ public final class Shaders_WebGL {
 			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
 			"}";
 
-	public final static String _billboardVertexShader = "attribute vec4 aPosition;\n" + 
-			"attribute vec2 aTextureCoord;\n" + 
+	public final static String _billboardVertexShader = "attribute vec2 aTextureCoord;\n" + 
 			"\n" + 
 			"uniform mat4 uModelview;\n" + 
+			"\n" + 
+			"uniform vec4 uBillboardPosition;\n" + 
 			"\n" + 
 			"uniform vec2 uTextureExtent;\n" + 
 			"uniform vec2 uViewPortExtent;\n" + 
@@ -89,13 +90,15 @@ public final class Shaders_WebGL {
 			"varying vec2 TextureCoordOut;\n" + 
 			"\n" + 
 			"void main() {\n" + 
-			"  gl_Position = uModelview * aPosition;\n" + 
+			"\n" + 
+			"  gl_Position = uModelview * uBillboardPosition;\n" + 
 			"  \n" + 
 			"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
 			"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
 			"  \n" + 
 			"  TextureCoordOut = aTextureCoord;\n" + 
-			"}";
+			"}\n" + 
+			"";
 
 	public final static String _colorMeshFragmentShader = "varying mediump vec4 VertexColor;\n"
 			+ "\n"
@@ -116,6 +119,20 @@ public final class Shaders_WebGL {
 			+ "  VertexColor = aColor;\n"
 			+ "  gl_PointSize = uPointSize;\n"
 			+ "}";
+	
+	public final static String _noColorMeshFragmentShader = "void main() {\n" + 
+			"  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" + 
+			"}";
+
+	public final static String _noColorMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
 
 	public final static String _texturedMeshFragmentShader = "varying mediump vec2 TextureCoordOut;\n" + 
 			"varying mediump vec4 VertexColor;\n" + 

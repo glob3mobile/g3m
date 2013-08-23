@@ -38,6 +38,7 @@ class CameraRenderer;
 class IStorage;
 class ITextUtils;
 class G3MEventContext;
+class SurfaceElevationProvider;
 
 class GPUProgram;
 class GPUProgramManager;
@@ -64,7 +65,7 @@ public:
   }
   
   virtual ~WidgetUserData() {
-    
+
   }
   
   void setWidget(G3MWidget* widget) {
@@ -98,7 +99,7 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
-                           Color                            backgroundColor,
+                           const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
                            GInitializationTask*             initializationTask,
@@ -247,6 +248,8 @@ private:
   bool _clickOnProcess;
   
   GPUProgramManager* _gpuProgramManager;
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -258,7 +261,7 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
-            Color                            backgroundColor,
+            const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
             GInitializationTask*             initializationTask,

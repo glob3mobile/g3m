@@ -41,7 +41,7 @@ protected:
                        float pointSize,
                        bool depthTest);
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
   
@@ -64,4 +64,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__AbstractGeometryMesh__) */
+#endif

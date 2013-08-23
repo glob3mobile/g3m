@@ -9,12 +9,11 @@
 #ifndef __G3MiOSSDK__GEOStyle__
 #define __G3MiOSSDK__GEOStyle__
 
+
 class GEOStyle {
 public:
   virtual ~GEOStyle() {
-
   }
-
 };
 
-#endif 
+#endif

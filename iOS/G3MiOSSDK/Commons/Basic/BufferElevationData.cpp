@@ -17,8 +17,6 @@ BufferElevationData::BufferElevationData(const Sector& sector,
                                          int bufferSize) :
 ElevationData(sector, extent),
 _bufferSize(bufferSize)
-//_realResolution(realSector._deltaLatitude.div(realExtent._y),
-//                realSector._deltaLongitude.div(realExtent._x))
 {
 
 }

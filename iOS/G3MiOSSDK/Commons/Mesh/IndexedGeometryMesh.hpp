@@ -1,5 +1,5 @@
 //
-//  IndexedGeometryMesh.h
+//  IndexedGeometryMesh.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/06/13.
@@ -34,4 +34,4 @@ public:
 
 };
 
-#endif /* defined(__G3MiOSSDK__IndexedGeometryMesh__) */
+#endif

@@ -22,8 +22,8 @@ bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
   return codeContainsUniform(code, index);
 }
 
-bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a){
-  if (a == UNRECOGNIZED_ATTRIBUTE){
+bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a) {
+  if (a == UNRECOGNIZED_ATTRIBUTE) {
     return false;
   }
 #ifdef C_CODE
@@ -35,23 +35,23 @@ bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a){
   return codeContainsAttribute(code, index);
 }
 
-bool GPUVariable::codeContainsUniform(int code, int u){
+bool GPUVariable::codeContainsUniform(int code, int u) {
   return ((code >> u) & 0x00000001) != 0;
 }
 
-bool GPUVariable::codeContainsAttribute(int code, int a){
+bool GPUVariable::codeContainsAttribute(int code, int a) {
   return ((code >> a) & 0x00000001) != 0;
 }
 
-int GPUVariable::getUniformCode(int u){
+int GPUVariable::getUniformCode(int u) {
   return 0x00000001  << u;
 }
-int GPUVariable::getAttributeCode(int a){
+int GPUVariable::getAttributeCode(int a) {
   return 0x00000001  << a;
 }
 
-int GPUVariable::getUniformCode(GPUUniformKey u){
-  if (u == UNRECOGNIZED_UNIFORM){
+int GPUVariable::getUniformCode(GPUUniformKey u) {
+  if (u == UNRECOGNIZED_UNIFORM) {
     return 0;
   }
 #ifdef C_CODE
@@ -63,8 +63,8 @@ int GPUVariable::getUniformCode(GPUUniformKey u){
   return getUniformCode(index);
 }
 
-int GPUVariable::getAttributeCode(GPUAttributeKey a){
-  if (a == UNRECOGNIZED_ATTRIBUTE){
+int GPUVariable::getAttributeCode(GPUAttributeKey a) {
+  if (a == UNRECOGNIZED_ATTRIBUTE) {
     return 0;
   }
 #ifdef C_CODE
@@ -76,33 +76,33 @@ int GPUVariable::getAttributeCode(GPUAttributeKey a){
   return getUniformCode(index);
 }
 
-GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
+GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
 
-  if (name.compare("uFlatColor") == 0){
+  if (name.compare("uFlatColor") == 0) {
     return FLAT_COLOR;
   }
 
-  if (name.compare("uModelview") == 0){
+  if (name.compare("uModelview") == 0) {
     return MODELVIEW;
   }
 
-  if (name.compare("uTextureExtent") == 0){
+  if (name.compare("uTextureExtent") == 0) {
     return TEXTURE_EXTENT;
   }
 
-  if (name.compare("uViewPortExtent") == 0){
+  if (name.compare("uViewPortExtent") == 0) {
     return  VIEWPORT_EXTENT;
   }
 
-  if (name.compare("uTranslationTexCoord") == 0){
+  if (name.compare("uTranslationTexCoord") == 0) {
     return  TRANSLATION_TEXTURE_COORDS;
   }
 
-  if (name.compare("uScaleTexCoord") == 0){
+  if (name.compare("uScaleTexCoord") == 0) {
     return  SCALE_TEXTURE_COORDS;
   }
 
-  if (name.compare("uPointSize") == 0){
+  if (name.compare("uPointSize") == 0) {
     return  POINT_SIZE;
   }
 
@@ -125,25 +125,29 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name){
   if (name.compare("uCameraModel") == 0){
     return CAMERA_MODEL;
   }
-  
+
   if (name.compare("uModel") == 0){
     return MODEL;
+  }
+
+  if (name.compare("uBillboardPosition") == 0) {
+    return  BILLBOARD_POSITION;
   }
 
   return UNRECOGNIZED_UNIFORM;
 }
 
-GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name){
+GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
 
-  if (name.compare("aPosition") == 0){
+  if (name.compare("aPosition") == 0) {
     return POSITION;
   }
 
-  if (name.compare("aColor") == 0){
+  if (name.compare("aColor") == 0) {
     return  COLOR;
   }
 
-  if (name.compare("aTextureCoord") == 0){
+  if (name.compare("aTextureCoord") == 0) {
     return  TEXTURE_COORDS;
   }
 

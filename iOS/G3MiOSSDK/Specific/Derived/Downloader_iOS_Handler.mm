@@ -13,6 +13,8 @@
 #include "IFactory.hpp"
 #include "IStringUtils.hpp"
 
+#import "NSString_CppAdditions.h"
+
 @implementation ListenerEntry
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
@@ -181,11 +183,9 @@
     const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(), URL::FILE_PROTOCOL, "");
     const int dotPos = su->indexOf(fileFullName, ".");
 
-    NSString* fileName = [ NSString stringWithCString: su->left(fileFullName, dotPos).c_str()
-                                             encoding: NSUTF8StringEncoding ];
+    NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
 
-    NSString* fileExt = [ NSString stringWithCString: su->substring(fileFullName, dotPos + 1, fileFullName.size()).c_str()
-                                            encoding: NSUTF8StringEncoding ];
+    NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
 
     NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                          ofType: fileExt];

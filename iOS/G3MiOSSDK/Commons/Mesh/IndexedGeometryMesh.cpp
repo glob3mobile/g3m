@@ -16,6 +16,11 @@ IndexedGeometryMesh::~IndexedGeometryMesh() {
   if (_ownsIndices) {
     delete _indices;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
@@ -40,5 +45,5 @@ _ownsIndices(ownsIndices)
 
 void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, &_glState, *rc->getGPUProgramManager());
+  gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
 }

@@ -96,6 +96,11 @@ public class Geodetic2D
      _longitude = new Angle(g._longitude);
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final Angle latitude()
   {
     return _latitude;
@@ -124,11 +129,6 @@ public class Geodetic2D
   public final Geodetic2D div(double magnitude)
   {
     return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
-  }
-
-  public void dispose()
-  {
-
   }
 
   public final boolean closeTo(Geodetic2D other)

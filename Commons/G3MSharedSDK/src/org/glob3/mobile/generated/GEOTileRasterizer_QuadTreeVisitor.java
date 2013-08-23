@@ -3,18 +3,20 @@ public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
 {
   private ICanvas _canvas;
   private final GEORasterProjection _projection;
+  private final int _tileLevel;
 
-  public GEOTileRasterizer_QuadTreeVisitor(ICanvas canvas, GEORasterProjection projection)
+  public GEOTileRasterizer_QuadTreeVisitor(ICanvas canvas, GEORasterProjection projection, int tileLevel)
   {
      _canvas = canvas;
      _projection = projection;
+     _tileLevel = tileLevel;
   }
 
   public final boolean visitElement(Sector sector, Object element)
   {
     GEORasterSymbol symbol = (GEORasterSymbol) element;
 
-    symbol.rasterize(_canvas, _projection);
+    symbol.rasterize(_canvas, _projection, _tileLevel);
 
     return false;
   }

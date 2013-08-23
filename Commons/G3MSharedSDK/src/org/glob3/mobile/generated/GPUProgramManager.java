@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUProgramManager.h
+//  GPUProgramManager.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 02/04/13.
@@ -17,9 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
-
-///#include "GPUProgramState.hpp"
 
 public class GPUProgramManager
 {
@@ -35,7 +32,6 @@ public class GPUProgramManager
 
   public void dispose()
   {
-
   }
 
   public final GPUProgram getCompiledProgram(String name)
@@ -68,6 +64,39 @@ public class GPUProgramManager
     return prog;
   }
 
+<<<<<<< HEAD
+=======
+//  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
+///#ifdef C_CODE
+//    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
+//        it != _programs.end(); it++) {
+//      if (state.isLinkableToProgram(*it->second)) {
+//        return it->second;
+//      }
+//    }
+///#endif
+///#ifdef JAVA_CODE
+//    for (final GPUProgram p : _programs.values()) {
+//    	if (state.isLinkableToProgram(p)) {
+//        return p;
+//      }
+//    }
+///#endif
+//    
+//    int WORKING_JM;
+//    
+//    std::vector<std::string>* us = state.getUniformsNames();
+//    int size = us->size();
+//    for (int i = 0; i < size; i++) {
+//      if (us->at(i).compare("ViewPortExtent") == 0) {
+//        return getProgram(gl, "Billboard");
+//      }
+//    }
+//    
+//    return getProgram(gl, "Default");
+//  }
+
+>>>>>>> glstate-rc
   public final GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
@@ -77,6 +106,7 @@ public class GPUProgramManager
     boolean color = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.COLOR);
     boolean transformTC = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS);
   
+<<<<<<< HEAD
     boolean hasLight = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT);
   
     /*
@@ -137,6 +167,8 @@ public class GPUProgramManager
      thisGLState = thisGLState->getParent();
      }
      */
+=======
+>>>>>>> glstate-rc
     if (billboard)
     {
       return getProgram(gl, "Billboard");
@@ -164,6 +196,11 @@ public class GPUProgramManager
     if (!flatColor && !texture && color)
     {
       return getProgram(gl, "ColorMesh");
+    }
+  
+    if (!flatColor && !texture && !color)
+    {
+      return getProgram(gl, "NoColorMesh");
     }
   
     return null;

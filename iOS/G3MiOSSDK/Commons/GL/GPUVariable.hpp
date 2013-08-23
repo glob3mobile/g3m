@@ -1,5 +1,5 @@
 //
-//  GPUVariable.h
+//  GPUVariable.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 20/06/13.
@@ -30,7 +30,10 @@ enum GPUUniformKey{
   LIGHT_COLOR = 9,
   PROJECTION = 10,
   CAMERA_MODEL = 11,
-  MODEL = 12
+  MODEL = 12,
+  POINT_LIGHT_POSITION= 13,
+  POINT_LIGHT_COLOR= 14,
+  BILLBOARD_POSITION = 15
 };
 
 enum GPUAttributeKey{
@@ -41,7 +44,7 @@ enum GPUAttributeKey{
   NORMAL = 3
 };
 
-class GPUVariable{
+class GPUVariable {
   
 protected:
   
@@ -69,6 +72,7 @@ public:
   
   GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type){}
 
+
 };
 
-#endif /* defined(__G3MiOSSDK__GPUVariable__) */
+#endif

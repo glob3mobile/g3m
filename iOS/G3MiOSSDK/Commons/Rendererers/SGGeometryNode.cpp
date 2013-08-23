@@ -23,11 +23,18 @@ SGGeometryNode::~SGGeometryNode() {
   delete _uv;
   delete _normals;
   delete _indices;
+
+  _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-void SGGeometryNode::createGLState(){
+void SGGeometryNode::createGLState() {
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -41,17 +48,17 @@ void SGGeometryNode::createGLState(){
 
   if (_normals != NULL){
 
-    _glState.addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
+    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
                                                       (float)0.0), false);
 
-    _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0),
+    _glState->addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0),
                           false);
 
 
   }
 
   if (_uv != NULL){
-    _glState.addGLFeature(new TextureCoordsGLFeature(_uv,
+    _glState->addGLFeature(new TextureCoordsGLFeature(_uv,
                                                      2,
                                                      0,
                                                      false,
@@ -61,7 +68,7 @@ void SGGeometryNode::createGLState(){
   }
 }
 
-void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glState){
+void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glState) {
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, glState, *rc->getGPUProgramManager());
 }

@@ -142,7 +142,7 @@ enum {
 //  
 //  try {
 //    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
-//    if (_gpuProgram != NULL){
+//    if (_gpuProgram != NULL) {
 //      NSLog(@"GPU Program Loaded");
 //      try {
 //        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());

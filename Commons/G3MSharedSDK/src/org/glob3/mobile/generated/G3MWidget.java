@@ -141,13 +141,15 @@ public class G3MWidget
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
   
+    int agustin_todo_planet_onCameraChange;
+  
   
     //  _nextCamera->forceMatrixCreation();
     //
     //  _currentCamera->copyFrom(*_nextCamera);
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager);
+    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
@@ -264,7 +266,7 @@ public class G3MWidget
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
   
     // notify the original event
@@ -307,7 +309,7 @@ public class G3MWidget
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
     _nextCamera.resizeViewport(width, height);
     _currentCamera.resizeViewport(width, height);
@@ -594,6 +596,8 @@ public class G3MWidget
 
   private GPUProgramManager _gpuProgramManager;
 
+  private SurfaceElevationProvider _surfaceElevationProvider;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -625,7 +629,8 @@ public class G3MWidget
      _userData = null;
      _initializationTask = initializationTask;
      _autoDeleteInitializationTask = autoDeleteInitializationTask;
-     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
+     _surfaceElevationProvider = mainRenderer.getSurfaceElevationProvider();
+     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider());
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;

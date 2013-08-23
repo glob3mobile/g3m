@@ -185,19 +185,19 @@ Trail::~Trail() {
 }
 
 
-void TrailsRenderer::updateGLState(const G3MRenderContext* rc){
+void TrailsRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL){
+  if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-    _glState.addGLFeature(_projection, true);
+    _glState->addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
-  if (_model == NULL){
+  if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState.addGLFeature(_model, true);
+    _glState->addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
@@ -237,6 +237,8 @@ TrailsRenderer::~TrailsRenderer() {
     delete trail;
   }
   _trails.clear();
+
+  _glState->_release();
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {
@@ -252,7 +254,7 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
     if (trail != NULL) {
-      trail->render(rc, frustum, &_glState);
+      trail->render(rc, frustum, _glState);
     }
   }
 }

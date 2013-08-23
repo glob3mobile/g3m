@@ -87,43 +87,27 @@ void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
 void BusyMeshRenderer::render(const G3MRenderContext* rc, GLState* glState)
 {
   GL* gl = rc->getGL();
-  
-//  if (!_projectionMatrix.isValid()){
-//    // init modelview matrix
-//    int currentViewport[4];
-//    gl->getViewport(currentViewport);
-//    const int halfWidth = currentViewport[2] / 2;
-//    const int halfHeight = currentViewport[3] / 2;
-//    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-//                                                                             -halfHeight, halfHeight,
-//                                                                             -halfWidth, halfWidth);
-//  }
 
   createGLState();
   
   gl->clearScreen(*_backgroundColor);
   
-  _mesh->render(rc, &_glState);
+  _mesh->render(rc, _glState);
 }
 
-void BusyMeshRenderer::createGLState(){
+void BusyMeshRenderer::createGLState() {
 
-  if (_projectionFeature == NULL){
+  if (_projectionFeature == NULL) {
     _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
-    _glState.addGLFeature(_projectionFeature, false);
+    _glState->addGLFeature(_projectionFeature, false);
   } else{
     _projectionFeature->setMatrix(_projectionMatrix.asMatrix44D());
   }
 
-  if (_modelFeature == NULL){
+  if (_modelFeature == NULL) {
     _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
-    _glState.addGLFeature(_modelFeature, false);
+    _glState->addGLFeature(_modelFeature, false);
   } else{
     _modelFeature->setMatrix(_modelviewMatrix.asMatrix44D());
   }
-
-//  _glState.clearGLFeatureGroup(CAMERA_GROUP);
-//  _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-//  _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
-
 }

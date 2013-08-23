@@ -292,7 +292,7 @@ public final class G3MWidget_Android
          if (_layerSet != null) {
             final boolean showStatistics = false;
 
-            final TileRenderer tr = new TileRenderer( //
+            final PlanetRenderer tr = new PlanetRenderer( //
                      new EllipsoidalTileTessellator(parameters._tileResolution, true), //
                      new MultiLayerTileTexturizer(), //
                      _layerSet, //
@@ -377,22 +377,21 @@ public final class G3MWidget_Android
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-      
-      factory.add(new GPUProgramSources("ColorMesh",
-				GL2Shaders._colorMeshVertexShader,
-				GL2Shaders._colorMeshFragmentShader));
 
-      factory.add(new GPUProgramSources("TexturedMesh",
-				GL2Shaders._texturedMeshVertexShader,
-				GL2Shaders._texturedMeshFragmentShader));
+      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
+               GL2Shaders._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
+               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
+               GL2Shaders._flatColorMeshFragmentShader));
       
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
-				GL2Shaders._transformedTexCoortexturedMeshVertexShader,
-				GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-   
-      factory.add(new GPUProgramSources("FlatColorMesh",
-				GL2Shaders._flatColorMeshVertexShader,
-				GL2Shaders._flatColorMeshFragmentShader));
+      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+              GL2Shaders._noColorMeshFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 

@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TileElevationDataListener.h
+//  TileElevationDataListener.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/04/13.
 //
 //
-
 
 
 
@@ -54,6 +53,6 @@ public class TileElevationDataRequestListener implements IElevationDataListener
 
   public void dispose()
   {
-
   }
+
 }

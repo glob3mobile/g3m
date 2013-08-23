@@ -325,7 +325,7 @@ public class MutableMatrix44D
 
 
   //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
-  //  if (_columnMajorFloatBuffer == NULL){
+  //  if (_columnMajorFloatBuffer == NULL) {
   //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
   //                                                                      (float) _m00,
   //                                                                      (float) _m10,
@@ -717,7 +717,7 @@ public class MutableMatrix44D
   public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight)
   {
   
-    int TODO_Remove_UNPROJECT; //!!!!
+    //int TODO_Remove_UNPROJECT;//!!!!
   
     final double winx = pixel3D._x;
     final double winy = pixel3D._y;

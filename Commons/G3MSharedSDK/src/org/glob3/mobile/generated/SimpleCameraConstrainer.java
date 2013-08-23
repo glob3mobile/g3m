@@ -23,7 +23,6 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
   public void dispose()
   {
-
   }
 
   public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
@@ -38,11 +37,17 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   
     if (cameraHeight > maxHeight)
     {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      maxHeight);*/
     }
     else if (cameraHeight < minHeight)
     {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      minHeight);*/
     }
   
   }

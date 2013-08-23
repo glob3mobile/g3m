@@ -119,7 +119,7 @@ bool Frustum::touchesWithBox(const Box* that) const {
 }
 
 
-BoundingVolume* Frustum::computeBoundingVolume() {
+BoundingVolume* Frustum::computeBoundingVolume() const {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
 

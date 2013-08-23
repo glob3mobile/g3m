@@ -12,6 +12,12 @@
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"
 
+//Altitude modes taken from KML standard (with the exception of relative to sea floor)
+enum AltitudeMode{
+  RELATIVE_TO_GROUND,   //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
+  ABSOLUTE              //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
+};
+
 
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
@@ -23,7 +29,6 @@ public:
   const Angle _longitude;
   const double _height;
 
-  ~Geodetic3D(){}
   
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
@@ -43,7 +48,7 @@ public:
   
   static Geodetic3D linearInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
-                                        double alpha){
+                                        double alpha) {
     return Geodetic3D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
                       Angle::linearInterpolation(from._longitude, to._longitude, alpha),
                       IMathUtils::instance()->linearInterpolation(from._height, to._height, alpha)
@@ -73,6 +78,10 @@ public:
   _longitude(g._longitude),
   _height(g._height)
   {
+  }
+
+  ~Geodetic3D() {
+    
   }
   
   const Angle latitude() const {

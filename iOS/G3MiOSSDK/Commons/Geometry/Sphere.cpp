@@ -55,7 +55,7 @@ void Sphere::createWireframeMesh(Color* color,
 
   // create border indices for horizontal lines
   for (short j=1; j<resolution-1; j++) {
-    for (short i=0; i<2*resolution-3; i++){
+    for (short i=0; i<2*resolution-3; i++) {
       indices.add((short) (j+i*resolution));
       indices.add((short) (j+(i+1)*resolution));
     }

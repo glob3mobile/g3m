@@ -229,7 +229,7 @@ public class Vector3D
 
   public final Vector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {
-    int __TODO_move_to_matrix;
+    //int __TODO_move_to_matrix;
     return new Vector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(), _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(), _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
   }
 
@@ -245,6 +245,21 @@ public class Vector3D
       return _x;
     }
     else if (_y >= _z)
+    {
+      return _y;
+    }
+    else
+    {
+      return _z;
+    }
+  }
+  public final double minAxis()
+  {
+    if (_x <= _y && _x <= _z)
+    {
+      return _x;
+    }
+    else if (_y <= _z)
     {
       return _y;
     }

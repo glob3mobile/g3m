@@ -44,6 +44,9 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
     {
       _builder._release();
     }
+  
+    super.dispose();
+  
   }
 
 }

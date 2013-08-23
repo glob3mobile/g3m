@@ -50,13 +50,13 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -113,9 +113,7 @@ public class G3MSimplestGlob3Activity
       final CameraRenderer cameraRenderer = new CameraRenderer();
       final boolean useInertia = true;
       cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-      final boolean processRotation = true;
-      final boolean processZoom = true;
-      cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+      cameraRenderer.addHandler(new CameraDoubleDragHandler());
       cameraRenderer.addHandler(new CameraRotationHandler());
       cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
@@ -305,7 +303,7 @@ public class G3MSimplestGlob3Activity
                geoTileRasterizer);
 
 
-      final TileRendererBuilder tileRendererBuilder = new TileRendererBuilder();
+      final PlanetRendererBuilder planetRendererBuilder = new PlanetRendererBuilder();
 
 
       final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider( //
@@ -313,17 +311,17 @@ public class G3MSimplestGlob3Activity
                Sector.fullSphere(), //
                new Vector2I(2048, 1024) //
       );
-      tileRendererBuilder.setElevationDataProvider(elevationDataProvider);
+      planetRendererBuilder.setElevationDataProvider(elevationDataProvider);
 
-      tileRendererBuilder.setVerticalExaggeration(20);
-
-
-      tileRendererBuilder.setLayerSet(layerSet);
-      tileRendererBuilder.setRenderDebug(false);
-      tileRendererBuilder.setTileRasterizer(geoTileRasterizer);
+      planetRendererBuilder.setVerticalExaggeration(20);
 
 
-      mainRenderer.addRenderer(tileRendererBuilder.create());
+      planetRendererBuilder.setLayerSet(layerSet);
+      planetRendererBuilder.setRenderDebug(false);
+      planetRendererBuilder.setTileRasterizer(geoTileRasterizer);
+
+
+      mainRenderer.addRenderer(planetRendererBuilder.create());
 
       mainRenderer.addRenderer(geoRenderer);
       mainRenderer.addRenderer(shapesRenderer);

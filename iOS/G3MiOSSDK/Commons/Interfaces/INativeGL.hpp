@@ -30,7 +30,8 @@ class GPUAttribute;
 class INativeGL {
 public:
 
-  virtual ~INativeGL() { };
+  virtual ~INativeGL() {
+  }
 
   virtual void useProgram(GPUProgram* program) const = 0;
 

@@ -48,17 +48,17 @@ public class CircleShape extends AbstractMeshShape
     return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color);
   }
 
-  public CircleShape(Geodetic3D position, float radius, Color color)
+  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color)
   {
-     this(position, radius, color, 64);
+     this(position, altitudeMode, radius, color, 64);
   }
-  public CircleShape(Geodetic3D position, float radius)
+  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius)
   {
-     this(position, radius, null, 64);
+     this(position, altitudeMode, radius, null, 64);
   }
-  public CircleShape(Geodetic3D position, float radius, Color color, int steps)
+  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps)
   {
-     super(position);
+     super(position, altitudeMode);
      _radius = radius;
      _color = color;
      _steps = steps;
@@ -69,6 +69,9 @@ public class CircleShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+
+  super.dispose();
+
   }
 
   public final void setRadius(float radius)

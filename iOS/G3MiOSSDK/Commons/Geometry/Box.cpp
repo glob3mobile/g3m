@@ -19,6 +19,11 @@
 
 Box::~Box() {
   delete _mesh;
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 };
 
 const std::vector<Vector3D> Box::getCorners() const {

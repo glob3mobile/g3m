@@ -214,13 +214,13 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
   {
-     this(position, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null);
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null);
   }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
      _radiusX = radius.x();
      _radiusY = radius.y();
@@ -236,9 +236,9 @@ public class EllipsoidShape extends AbstractMeshShape
 
   }
 
-  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(textureURL);
      _radiusX = radius.x();
      _radiusY = radius.y();
@@ -261,6 +261,9 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    super.dispose();
+  
   }
 
   public final void imageDownloaded(IImage image)

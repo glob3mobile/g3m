@@ -35,7 +35,8 @@ public:
     
   }
   
-  ~Vector3D() {}
+  ~Vector3D() {
+  }
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     
@@ -180,6 +181,7 @@ public:
   MutableVector3D asMutableVector3D() const;
   
   double maxAxis() const;
+  double minAxis() const;
   
   double axisAverage() const;
   

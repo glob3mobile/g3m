@@ -31,12 +31,13 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IShortBuffer _indices;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState()
   {
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
+<<<<<<< HEAD
     if (_normals != null)
     {
   
@@ -47,6 +48,8 @@ public class SGGeometryNode extends SGNode
   
     }
   
+=======
+>>>>>>> glstate-rc
     if (_uv != null)
     {
       _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2D.zero(), Vector2D.zero()), false);
@@ -63,6 +66,7 @@ public class SGGeometryNode extends SGNode
      _uv = uv;
      _normals = normals;
      _indices = indices;
+     _glState = new GLState();
     createGLState();
   }
 
@@ -78,6 +82,11 @@ public class SGGeometryNode extends SGNode
        _normals.dispose();
     if (_indices != null)
        _indices.dispose();
+  
+    _glState._release();
+  
+    super.dispose();
+  
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)

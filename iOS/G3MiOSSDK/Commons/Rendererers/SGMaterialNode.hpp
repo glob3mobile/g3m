@@ -29,7 +29,7 @@ private:
 //  const double _emit;
 
 
-  GLState _glState;
+  GLState* _glState;
 
 public:
 
@@ -43,14 +43,15 @@ public:
                  double emit) :
   SGNode(id, sId),
   _baseColor(baseColor),
-  _specularColor(specularColor)
+  _specularColor(specularColor),
+  _glState(new GLState())
 //  _specular(specular),
 //  _shine(shine),
 //  _alpha(alpha),
 //  _emit(emit)
   {
 #ifdef C_CODE
-    _glState.addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
+    _glState->addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
 #endif
 #ifdef JAVA_CODE
     _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
@@ -58,9 +59,9 @@ public:
   }
 
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState){
-    _glState.setParent(parentState);
-    return &_glState;
+                             const GLState* parentState) {
+    _glState->setParent(parentState);
+    return _glState;
   }
 
   void setBaseColor(Color* baseColor) {
@@ -73,9 +74,15 @@ public:
   ~SGMaterialNode() {
     delete _baseColor;
     delete _specularColor;
+
+    _glState->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
-  std::string description(){
+  std::string description() {
     return "SGMaterialNode";
   }
 

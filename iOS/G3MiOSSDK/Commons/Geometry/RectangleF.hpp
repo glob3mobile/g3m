@@ -40,6 +40,7 @@ public:
   }
 
   ~RectangleF() {
+
   }
 
   bool equalTo(const RectangleF& that) const {

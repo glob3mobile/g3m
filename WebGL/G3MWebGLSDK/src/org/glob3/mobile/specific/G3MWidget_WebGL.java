@@ -357,6 +357,10 @@ public final class G3MWidget_WebGL
 				Shaders_WebGL._flatColorMeshVertexShader,
 				Shaders_WebGL._flatColorMeshFragmentShader));
       
+      factory.add(new GPUProgramSources("NoColorMesh",
+				Shaders_WebGL._noColorMeshVertexShader,
+				Shaders_WebGL._noColorMeshFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 

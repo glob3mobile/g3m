@@ -20,7 +20,10 @@ class ICanvas;
 class GEORasterSymbol : public GEOSymbol {
 private:
   GEORasterSymbol(const GEORasterSymbol& that);
-  
+
+  const int _minTileLevel;
+  const int _maxTileLevel;
+
 protected:
   const Sector* _sector;
 
@@ -30,8 +33,12 @@ protected:
   static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
   static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  GEORasterSymbol(const Sector* sector) :
-  _sector(sector)
+  GEORasterSymbol(const Sector* sector,
+                  const int minTileLevel,
+                  const int maxTileLevel) :
+  _sector(sector),
+  _minTileLevel(minTileLevel),
+  _maxTileLevel(maxTileLevel)
   {
 //    if (_sector == NULL) {
 //      printf("break point on me\n");
@@ -54,7 +61,11 @@ public:
   virtual ~GEORasterSymbol();
 
   bool symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
+                 const GEOSymbolizer*    symbolizer,
+                 MeshRenderer*           meshRenderer,
+                 ShapesRenderer*         shapesRenderer,
+                 MarksRenderer*          marksRenderer,
+                 GEOTileRasterizer*      geoTileRasterizer) const;
 
   bool deleteAfterSymbolize() const {
     return false;
@@ -64,9 +75,13 @@ public:
     return _sector;
   }
 
-  virtual void rasterize(ICanvas*                   canvas,
-                         const GEORasterProjection* projection) const = 0;
-  
+  void rasterize(ICanvas*                   canvas,
+                 const GEORasterProjection* projection,
+                 int tileLevel) const;
+
+  virtual void rawRasterize(ICanvas*                   canvas,
+                            const GEORasterProjection* projection) const = 0;
+
 };
 
 #endif

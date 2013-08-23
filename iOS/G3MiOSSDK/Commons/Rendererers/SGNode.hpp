@@ -71,7 +71,7 @@ public:
                       bool renderNotReadyShapes);
 
   virtual const GLState* createState(const G3MRenderContext* rc,
-                                     const GLState* parentState){ return parentState;}
+                                     const GLState* parentState) { return parentState;}
 
   int getChildrenCount() const {
     return _children.size();
@@ -81,9 +81,9 @@ public:
     return _children[i];
   }
 
-  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState){}
+  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) {}
 
-  virtual std::string description(){
+  virtual std::string description() {
     return "SGNode";
   };
 };

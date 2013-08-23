@@ -1,5 +1,5 @@
 //
-//  GLState.h
+//  GLState.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 17/05/13.
@@ -11,8 +11,6 @@
 #ifndef __G3MiOSSDK__GLState__
 #define __G3MiOSSDK__GLState__
 
-#include <iostream>
-
 #include "GLGlobalState.hpp"
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
@@ -21,10 +19,12 @@
 #include "GLFeature.hpp"
 #include "GPUVariableValueSet.hpp"
 
-class GLState{
+#include "RCObject.hpp"
+
+class GLState: public RCObject {
 
   GLFeatureSet _features;
-//  mutable GLFeatureSet* _accumulatedFeatures;
+  mutable GLFeatureSet* _accumulatedFeatures;
 
   mutable int _timeStamp;
   mutable int _parentsTimeStamp;
@@ -53,15 +53,15 @@ public:
   _parentsTimeStamp(-1),
   _timeStamp(0),
   _valuesSet(NULL),
-  _globalState(NULL)//,
-//  _accumulatedFeatures(NULL)
+  _globalState(NULL),
+  _accumulatedFeatures(NULL)
   {
   }
 
   int getTimeStamp() const { return _timeStamp;}
 
-//  GLFeatureSet* getAccumulatedFeatures() const;
-  GLFeatureSet* createAccumulatedFeatures() const;
+  GLFeatureSet* getAccumulatedFeatures() const;
+//  GLFeatureSet* createAccumulatedFeatures() const;
 
   ~GLState();
 
@@ -73,6 +73,11 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
+  void clearAllGLFeatures();
+
+  int getNumberOfGLFeatures() const{
+    return _features.size();
+  }
 };
 
-#endif /* defined(__G3MiOSSDK__GLState__) */
+#endif

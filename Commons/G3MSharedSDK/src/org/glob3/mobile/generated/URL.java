@@ -51,7 +51,6 @@ public class URL
 
   public void dispose()
   {
-
   }
 
   public final String getPath()

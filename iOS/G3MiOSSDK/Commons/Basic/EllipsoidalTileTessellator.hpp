@@ -16,7 +16,7 @@ class IShortBuffer;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
-  const bool         _skirted;
+  const bool _skirted;
 
 #ifdef C_CODE
   class OrderableVector2I: public Vector2I{
@@ -47,7 +47,7 @@ public:
 
   }
 
-  virtual ~EllipsoidalTileTessellator();
+  ~EllipsoidalTileTessellator();
 
   Vector2I getTileMeshResolution(const Planet* planet,
                                  const Vector2I& resolution,

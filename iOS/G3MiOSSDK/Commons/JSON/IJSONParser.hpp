@@ -13,14 +13,14 @@
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
 
-class IJSONParser{
+class IJSONParser {
 private:
   static IJSONParser* _instance;
 
 public:
 
   static void setInstance(IJSONParser* parser) {
-    if (_instance != NULL){
+    if (_instance != NULL) {
       ILogger::instance()->logWarning("IJSONParser instance already set!");
       delete _instance;
     }
@@ -31,7 +31,8 @@ public:
     return _instance;
   }
 
-  virtual ~IJSONParser(){}
+  virtual ~IJSONParser() {
+  }
 
   virtual const JSONBaseObject* parse(const std::string& json) {
     return parse(json, false);

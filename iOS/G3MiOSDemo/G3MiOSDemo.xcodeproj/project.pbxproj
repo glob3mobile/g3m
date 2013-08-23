@@ -41,6 +41,8 @@
 		D84625DC1777292B00FC4862 /* TexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625DA1777292B00FC4862 /* TexturedMesh.vsh */; };
 		D84625E3177732B500FC4862 /* ColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E1177732B500FC4862 /* ColorMesh.fsh */; };
 		D84625E4177732B500FC4862 /* ColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E2177732B500FC4862 /* ColorMesh.vsh */; };
+		D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */; };
+		D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D9017C3951500CEF074 /* NoColorMesh.vsh */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8CE5D52173BB9AF00C7AAE6 /* Billboard.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4A173BB9A200C7AAE6 /* Billboard.fsh */; };
 		D8CE5D53173BB9AF00C7AAE6 /* Billboard.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4B173BB9A200C7AAE6 /* Billboard.vsh */; };
@@ -135,6 +137,8 @@
 		D84625DA1777292B00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625E1177732B500FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
 		D84625E2177732B500FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
+		D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = NoColorMesh.fsh; sourceTree = "<group>"; };
+		D8769D9017C3951500CEF074 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = NoColorMesh.vsh; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8CE5D4A173BB9A200C7AAE6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.fsh; sourceTree = "<group>"; };
 		D8CE5D4B173BB9A200C7AAE6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
@@ -142,6 +146,8 @@
 		D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
 		D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
 		D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
+		D8E23D0F179D4CA100E358DC /* TexturedMesh+PointLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+PointLight.fsh"; sourceTree = "<group>"; };
+		D8E23D10179D4CA100E358DC /* TexturedMesh+PointLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+PointLight.vsh"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -225,16 +231,16 @@
 			isa = PBXGroup;
 			children = (
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
-				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
-				CF4027EA1770E90000D5A80C /* Security.framework */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
-				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
+				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
 				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
+				D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */,
+				D8EEF38C1577920B003FEB5E /* Foundation.framework */,
+				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
 				D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */,
 				D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */,
+				CF4027EA1770E90000D5A80C /* Security.framework */,
 				D8EEF38A1577920B003FEB5E /* UIKit.framework */,
-				D8EEF38C1577920B003FEB5E /* Foundation.framework */,
-				D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -327,6 +333,8 @@
 			children = (
 				D8FFA6A017A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh */,
 				D8FFA6A117A14DA8006EE310 /* TexturedMesh+DirectionLight.vsh */,
+				D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */,
+				D8769D9017C3951500CEF074 /* NoColorMesh.vsh */,
 				D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
 				D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 				D84625E1177732B500FC4862 /* ColorMesh.fsh */,
@@ -472,6 +480,8 @@
 				D8024492177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh in Resources */,
 				D8FFA6A217A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh in Resources */,
 				D8FFA6A317A14DA8006EE310 /* TexturedMesh+DirectionLight.vsh in Resources */,
+				D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */,
+				D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

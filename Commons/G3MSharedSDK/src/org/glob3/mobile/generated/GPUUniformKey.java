@@ -9,12 +9,18 @@ public enum GPUUniformKey
   TRANSLATION_TEXTURE_COORDS(4),
   SCALE_TEXTURE_COORDS(5),
   POINT_SIZE(6),
+<<<<<<< HEAD
   AMBIENT_LIGHT(7),
   LIGHT_DIRECTION(8),
   LIGHT_COLOR(9),
   PROJECTION(10),
   CAMERA_MODEL(11),
   MODEL(12);
+=======
+  POINT_LIGHT_POSITION(7),
+  POINT_LIGHT_COLOR(8),
+  BILLBOARD_POSITION(9);
+>>>>>>> glstate-rc
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

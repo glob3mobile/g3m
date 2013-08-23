@@ -361,3 +361,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 	return URL(req, false);
 }
+
+const std::string WMSLayer::description() const {
+  return "[WMSLayer]";
+}

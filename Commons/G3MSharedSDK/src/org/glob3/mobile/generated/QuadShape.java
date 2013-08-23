@@ -100,9 +100,9 @@ public class QuadShape extends AbstractMeshShape
     return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, URL textureURL, float width, float height)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(textureURL);
      _width = width;
      _height = height;
@@ -112,9 +112,9 @@ public class QuadShape extends AbstractMeshShape
 
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, float width, float height)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
      _width = width;
      _height = height;
@@ -125,9 +125,9 @@ public class QuadShape extends AbstractMeshShape
   }
 
 
-  public QuadShape(Geodetic3D position, float width, float height, Color color)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, float width, float height, Color color)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
      _width = width;
      _height = height;
@@ -140,6 +140,9 @@ public class QuadShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+  
+    super.dispose();
+  
   }
 
   public final void imageDownloaded(IImage image)

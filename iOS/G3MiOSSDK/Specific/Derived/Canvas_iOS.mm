@@ -16,6 +16,7 @@
 #import <UIKit/UIKit.h>
 #include "Image_iOS.hpp"
 
+#import "NSString_CppAdditions.h"
 
 Canvas_iOS::~Canvas_iOS() {
   if (_path != NULL) {
@@ -305,9 +306,8 @@ void Canvas_iOS::_setFont(const GFont& font) {
 }
 
 const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
-  NSString* nsString = [NSString stringWithCString: text.c_str()
-                                          encoding: NSUTF8StringEncoding];
-  
+  NSString* nsString = [NSString stringWithCppString: text];
+
   CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
   
   return Vector2F(cgSize.width, cgSize.height);
@@ -328,9 +328,8 @@ void Canvas_iOS::_fillText(const std::string& text,
   CGContextTranslateCTM(_context, 0.0f, _canvasHeight);
   CGContextScaleCTM(_context, 1.0f, -1.0f);
   
-  NSString* nsText = [NSString stringWithCString: text.c_str()
-                                        encoding: NSUTF8StringEncoding];
-  
+  NSString* nsText = [NSString stringWithCppString: text.c_str()];
+
   [nsText drawAtPoint: CGPointMake(left, top)
              withFont: _currentUIFont];
   
@@ -340,7 +339,7 @@ void Canvas_iOS::_fillText(const std::string& text,
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop){
+                            float destLeft, float destTop) {
 UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
 CGImage* cgImage = [uiImage CGImage];
 
@@ -353,7 +352,7 @@ CGContextDrawImage(_context,
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop, float destWidth, float destHeight){
+                            float destLeft, float destTop, float destWidth, float destHeight) {
   
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
@@ -368,7 +367,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
 void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                            float destLeft, float destTop, float destWidth, float destHeight){
+                            float destLeft, float destTop, float destWidth, float destHeight) {
   
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];

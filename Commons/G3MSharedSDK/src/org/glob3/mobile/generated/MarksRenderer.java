@@ -40,7 +40,7 @@ public class MarksRenderer extends LeafRenderer
 
   private IFloatBuffer _billboardTexCoord;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void updateGLState(G3MRenderContext rc)
   {
@@ -64,6 +64,9 @@ public class MarksRenderer extends LeafRenderer
     {
       _model.setMatrix(cam.getModelMatrix44D());
     }
+  
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
+    _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
   }
 
   private ProjectionGLFeature _projection;
@@ -80,6 +83,7 @@ public class MarksRenderer extends LeafRenderer
      _downloadPriority = DownloadPriority.MEDIUM;
      _model = null;
      _projection = null;
+     _glState = new GLState();
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -115,6 +119,11 @@ public class MarksRenderer extends LeafRenderer
       if (_billboardTexCoord != null)
          _billboardTexCoord.dispose();
     }
+  
+    _glState._release();
+  
+    super.dispose();
+  
   }
 
   public void initialize(G3MContext context)
@@ -139,13 +148,16 @@ public class MarksRenderer extends LeafRenderer
   
     updateGLState(rc);
   
+    final Planet planet = rc.getPlanet();
+    GL gl = rc.getGL();
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition, _glState);
+        mark.render(rc, cameraPosition, _glState, planet, gl);
       }
     }
   }

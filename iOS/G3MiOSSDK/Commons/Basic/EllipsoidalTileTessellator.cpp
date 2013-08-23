@@ -49,6 +49,10 @@ EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
   }
 #endif
 
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,

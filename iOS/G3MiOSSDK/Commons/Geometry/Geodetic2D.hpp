@@ -41,7 +41,7 @@ public:
 
   static Geodetic2D linearInterpolation(const Geodetic2D& from,
                                         const Geodetic2D& to,
-                                        double alpha){
+                                        double alpha) {
     return Geodetic2D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
                       Angle::linearInterpolation(from._longitude, to._longitude, alpha));
   }
@@ -105,6 +105,10 @@ public:
   _longitude(g._longitude)
   {
   }
+
+  ~Geodetic2D() {
+
+  }
   
   const Angle latitude() const {
     return _latitude;
@@ -132,10 +136,6 @@ public:
   Geodetic2D div(const double magnitude) const {
     return Geodetic2D(_latitude.div(magnitude),
                       _longitude.div(magnitude));
-  }
-  
-  ~Geodetic2D() {
-    
   }
   
   bool closeTo(const Geodetic2D& other) const;

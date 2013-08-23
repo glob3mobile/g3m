@@ -32,7 +32,7 @@ _buffer(buffer)
   const int size = _bufferSize;
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
-    if (buffer[i] == NO_DATA_VALUE){
+    if (buffer[i] == NO_DATA_VALUE) {
       _hasNoData = true;
       break;
     }
@@ -41,11 +41,16 @@ _buffer(buffer)
 
 ShortBufferElevationData::~ShortBufferElevationData() {
   delete [] _buffer;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
   const short value = _buffer[index];
-  if (value == NO_DATA_VALUE){
+  if (value == NO_DATA_VALUE) {
     return IMathUtils::instance()->NanD();
   }
   return value;

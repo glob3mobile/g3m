@@ -1,5 +1,5 @@
 //
-//  GLFeatureGroup.h
+//  GLFeatureGroup.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
@@ -8,9 +8,6 @@
 
 #ifndef __G3MiOSSDK__GLFeatureGroup__
 #define __G3MiOSSDK__GLFeatureGroup__
-
-#include <iostream>
-
 
 #include "GPUVariableValueSet.hpp"
 
@@ -24,7 +21,7 @@ enum GLFeatureGroupName{
   LIGHTING_GROUP = 3
 };
 
-class GLFeatureSet{
+class GLFeatureSet {
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
 #ifdef C_CODE
@@ -37,7 +34,7 @@ protected:
 
 public:
 
-  GLFeatureSet():_nFeatures(0){
+  GLFeatureSet():_nFeatures(0) {
     for (int i = 0; i < MAX_CONCURRENT_FEATURES_PER_GROUP; i++) {
       _features[i] = NULL;
     }
@@ -51,7 +48,7 @@ public:
   GLFeature* get(int i) const
 #endif
   {
-    if (_nFeatures < i){
+    if (_nFeatures < i) {
       return NULL;
     }
     return _features[i];
@@ -66,16 +63,22 @@ public:
   }
 
   void clearFeatures(GLFeatureGroupName g);
+  void clearFeatures();
 
 };
 
 
 
 #define N_GLFEATURES_GROUPS 4
-class GLFeatureGroup: public GLFeatureSet{
+class GLFeatureGroup: public GLFeatureSet {
 public:
 
-  virtual ~GLFeatureGroup(){}
+  virtual ~GLFeatureGroup() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroupName getGroupName(int i);
@@ -92,7 +95,7 @@ public:
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state){}
+  void applyOnGlobalGLState(GLGlobalState* state) {}
   void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
@@ -109,4 +112,4 @@ public:
   void addToGPUVariableSet(GPUVariableValueSet* vs);
 };
 
-#endif /* defined(__G3MiOSSDK__GLFeatureGroup__) */
+#endif

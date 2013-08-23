@@ -157,3 +157,7 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 
   return petitions;
 }
+
+const std::string HereLayer::description() const {
+  return "[HereLayer]";
+}

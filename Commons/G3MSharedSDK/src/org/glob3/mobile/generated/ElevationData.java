@@ -79,8 +79,6 @@ public abstract class ElevationData
     return _resolution;
   }
 
-  //  virtual const Geodetic2D getRealResolution() const = 0;
-
   public abstract double getElevationAt(int x, int y);
 
   public final double getElevationAt(Vector2I position)
@@ -357,7 +355,7 @@ public abstract class ElevationData
     return getElevationAt(position._latitude, position._longitude);
   }
 
-  //  bool isEquivalentTo(const ElevationData* ed){
+  //  bool isEquivalentTo(const ElevationData* ed) {
   //    bool equivalent = true;
   //    const int width  = 3;
   //    const int height = 3;
@@ -372,7 +370,7 @@ public abstract class ElevationData
   //        const double elevation = getElevationAt(position);
   //        const double elevation2 = ed->getElevationAt(position);
   //
-  //        if (elevation != elevation2){
+  //        if (elevation != elevation2) {
   //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
   //          equivalent = false;
   //        }

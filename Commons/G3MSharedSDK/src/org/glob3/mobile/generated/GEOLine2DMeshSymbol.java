@@ -45,6 +45,7 @@ public class GEOLine2DMeshSymbol extends GEOMeshSymbol
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

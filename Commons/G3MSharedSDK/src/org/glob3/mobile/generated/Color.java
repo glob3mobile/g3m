@@ -43,6 +43,7 @@ public class Color
 
   public void dispose()
   {
+
   }
 
   public static Color parse(String str)
@@ -377,7 +378,6 @@ public class Color
 
   public final Color muchDarker()
   {
-//    return adjustBrightness(-0.32f);
     return adjustBrightness(-0.64f);
   }
 
@@ -393,8 +393,25 @@ public class Color
 
   public final Color muchLighter()
   {
-//    return adjustSaturationBrightness(-0.12f, 0.32f);
     return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("[Color red=");
+    isb.addFloat(_red);
+    isb.addString(", green=");
+    isb.addFloat(_green);
+    isb.addString(", blue=");
+    isb.addFloat(_blue);
+    isb.addString(", alpha=");
+    isb.addFloat(_alpha);
+    isb.addString("]");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

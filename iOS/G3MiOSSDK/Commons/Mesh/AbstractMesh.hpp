@@ -49,7 +49,7 @@ protected:
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
 

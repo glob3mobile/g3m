@@ -36,6 +36,8 @@ public class TextCanvasElement extends CanvasElement
   {
     if (_font != null)
        _font.dispose();
+  super.dispose();
+
   }
 
   public final Vector2F getExtent(ICanvas canvas)

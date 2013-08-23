@@ -20,7 +20,7 @@ private:
   float _cy;
   float _cz;
 
-  void setCenter(double x, double y, double z){
+  void setCenter(double x, double y, double z) {
     _cx = (float) x;
     _cy = (float) y;
     _cz = (float) z;
@@ -92,7 +92,7 @@ public:
     }
   }
 
-  Vector3D getCenter(){
+  Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }
   

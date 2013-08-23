@@ -23,6 +23,9 @@ public:
   }
 
   virtual ~ColumnCanvasElement() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

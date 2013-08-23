@@ -34,6 +34,10 @@ public:
 
   virtual ~TextCanvasElement() {
     delete _font;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   const Vector2F getExtent(ICanvas* canvas);

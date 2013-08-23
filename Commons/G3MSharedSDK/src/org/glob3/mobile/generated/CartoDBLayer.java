@@ -48,4 +48,9 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   }
 
+  public final String description()
+  {
+    return "[CartoDBLayer]";
+  }
+
 }

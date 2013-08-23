@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Geodetic3D.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  Geodetic3D.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
@@ -28,9 +9,6 @@ public class Geodetic3D
   public final Angle _longitude ;
   public final double _height;
 
-  public void dispose()
-  {
-  }
 
   public static Geodetic3D nan()
   {
@@ -77,6 +55,11 @@ public class Geodetic3D
      _latitude = new Angle(g._latitude);
      _longitude = new Angle(g._longitude);
      _height = g._height;
+  }
+
+  public void dispose()
+  {
+
   }
 
   public final Angle latitude()

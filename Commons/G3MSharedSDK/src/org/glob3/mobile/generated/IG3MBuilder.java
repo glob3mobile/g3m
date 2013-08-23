@@ -27,16 +27,16 @@ package org.glob3.mobile.generated;
 //class GInitializationTask;
 //class PeriodicalTask;
 //class G3MWidget;
-//class TileRendererBuilder;
+//class PlanetRendererBuilder;
 //class Planet;
 //class Renderer;
 //class WidgetUserData;
 //class GPUProgramSources;
 //class GPUProgramManager;
 
+
 public abstract class IG3MBuilder
 {
-
   private GL _gl;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -45,7 +45,7 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
-  private TileRendererBuilder _tileRendererBuilder;
+  private PlanetRendererBuilder _planetRendererBuilder;
   private Renderer _busyRenderer;
   private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
@@ -54,7 +54,6 @@ public abstract class IG3MBuilder
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
-
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
 
 
@@ -278,9 +277,7 @@ public abstract class IG3MBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean processRotation = true;
-    final boolean processZoom = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -318,15 +315,15 @@ public abstract class IG3MBuilder
 
   /**
    * Returns TRUE if the given renderer list contains, at least, an instance of 
-   * the TileRenderer class. Returns FALSE if not.
+   * the PlanetRenderer class. Returns FALSE if not.
    *
    * @return bool
    */
-  private boolean containsTileRenderer(java.util.ArrayList<Renderer> renderers)
+  private boolean containsPlanetRenderer(java.util.ArrayList<Renderer> renderers)
   {
     for (int i = 0; i < renderers.size(); i++)
     {
-      if (renderers.get(i).isTileRenderer())
+      if (renderers.get(i).isPlanetRenderer())
       {
         return true;
       }
@@ -362,17 +359,17 @@ public abstract class IG3MBuilder
   {
     /**
      * If any renderers were set or added, the main renderer will be a composite renderer.
-     *    If the renderers list does not contain a tileRenderer, it will be created and added.
+     *    If the renderers list does not contain a planetRenderer, it will be created and added.
      *    The renderers contained in the list, will be added to the main renderer.
-     * If not, the main renderer will be made up of an only renderer (tileRenderer).
+     * If not, the main renderer will be made up of an only renderer (planetRenderer).
      */
     Renderer mainRenderer = null;
     if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
-      if (!containsTileRenderer(getRenderers()))
+      if (!containsPlanetRenderer(getRenderers()))
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(getTileRendererBuilder().create());
+        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create());
       }
       for (int i = 0; i < getRenderers().size(); i++)
       {
@@ -381,7 +378,7 @@ public abstract class IG3MBuilder
     }
     else
     {
-      mainRenderer = getTileRendererBuilder().create();
+      mainRenderer = getPlanetRendererBuilder().create();
     }
   
   
@@ -427,7 +424,7 @@ public abstract class IG3MBuilder
      _cameraConstraints = null;
      _cameraRenderer = null;
      _backgroundColor = null;
-     _tileRendererBuilder = null;
+     _planetRendererBuilder = null;
      _busyRenderer = null;
      _renderers = null;
      _initializationTask = null;
@@ -437,6 +434,7 @@ public abstract class IG3MBuilder
      _logDownloaderStatistics = false;
      _userData = null;
   }
+
   public void dispose()
   {
     if (_gl != null)
@@ -488,9 +486,10 @@ public abstract class IG3MBuilder
     }
     if (_userData != null)
        _userData.dispose();
-    if (_tileRendererBuilder != null)
-       _tileRendererBuilder.dispose();
+    if (_planetRendererBuilder != null)
+       _planetRendererBuilder.dispose();
   }
+
 
   /**
    * Sets the _gl.
@@ -512,6 +511,7 @@ public abstract class IG3MBuilder
     _gl = gl;
   }
 
+
   /**
    * Sets the _storage.
    *
@@ -526,6 +526,7 @@ public abstract class IG3MBuilder
     }
     _storage = storage;
   }
+
 
   /**
    * Sets the _downloader
@@ -547,6 +548,7 @@ public abstract class IG3MBuilder
     _downloader = downloader;
   }
 
+
   /**
    * Sets the _threadUtils
    *
@@ -566,6 +568,7 @@ public abstract class IG3MBuilder
     }
     _threadUtils = threadUtils;
   }
+
 
   /**
    * Sets the _cameraActivityListener
@@ -587,6 +590,7 @@ public abstract class IG3MBuilder
     _cameraActivityListener = cameraActivityListener;
   }
 
+
   /**
    * Sets the _planet
    *
@@ -607,6 +611,7 @@ public abstract class IG3MBuilder
     _planet = planet;
   }
 
+
   /**
    * Adds a new camera constraint to the constraints list.
    * The camera constraint list will be initializated with a default constraints set.
@@ -623,6 +628,7 @@ public abstract class IG3MBuilder
     }
     getCameraConstraints().add(cameraConstraint);
   }
+
 
   /**
    * Sets the camera constraints list, ignoring the default camera constraints list 
@@ -652,6 +658,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Sets the _cameraRenderer
    *
@@ -671,6 +678,7 @@ public abstract class IG3MBuilder
     }
     _cameraRenderer = cameraRenderer;
   }
+
 
   /**
    * Sets the _backgroundColor
@@ -692,6 +700,7 @@ public abstract class IG3MBuilder
     _backgroundColor = backgroundColor;
   }
 
+
   /**
    * Sets the _busyRenderer
    *
@@ -712,11 +721,12 @@ public abstract class IG3MBuilder
     _busyRenderer = busyRenderer;
   }
 
+
   /**
    * Adds a new renderer to the renderers list.
    * The renderers list will be initializated with a default renderers set (empty set at the moment).
    *
-   * @param renderer - cannot be either NULL or an instance of TileRenderer
+   * @param renderer - cannot be either NULL or an instance of PlanetRenderer
    */
   public final void addRenderer(Renderer renderer)
   {
@@ -725,26 +735,27 @@ public abstract class IG3MBuilder
       ILogger.instance().logError("LOGIC ERROR: trying to add a NULL renderer object");
       return;
     }
-    if (renderer.isTileRenderer())
+    if (renderer.isPlanetRenderer())
     {
-      ILogger.instance().logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+      ILogger.instance().logError("LOGIC ERROR: a new PlanetRenderer is not expected to be added");
       return;
     }
     getRenderers().add(renderer);
   }
 
+
   /**
    * Sets the renderers list, ignoring the default renderers list and the renderers
    * previously added, if added.
-   * The renderers list must contain at least an instance of the TileRenderer class.
+   * The renderers list must contain at least an instance of the PlanetRenderer class.
    *
    * @param renderers - std::vector<Renderer*>
    */
   public final void setRenderers(java.util.ArrayList<Renderer> renderers)
   {
-    if (!containsTileRenderer(renderers))
+    if (!containsPlanetRenderer(renderers))
     {
-      ILogger.instance().logError("LOGIC ERROR: renderers list must contain at least an instance of the TileRenderer class");
+      ILogger.instance().logError("LOGIC ERROR: renderers list must contain at least an instance of the PlanetRenderer class");
       return;
     }
     if (_renderers != null)
@@ -767,6 +778,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Adds a new periodical task to the periodical tasks list.
    * The periodical tasks list will be initializated with a default periodical task set (empty set at the moment).
@@ -782,6 +794,7 @@ public abstract class IG3MBuilder
     }
     getPeriodicalTasks().add(periodicalTask);
   }
+
 
   /**
    * Sets the periodical tasks list, ignoring the default periodical tasks list and the
@@ -811,6 +824,7 @@ public abstract class IG3MBuilder
     }
   }
 
+
   /**
    * Sets the _logFPS
    *
@@ -821,6 +835,7 @@ public abstract class IG3MBuilder
     _logFPS = logFPS;
   }
 
+
   /**
    * Sets the _logDownloaderStatistics
    *
@@ -830,6 +845,7 @@ public abstract class IG3MBuilder
   {
     _logDownloaderStatistics = logDownloaderStatistics;
   }
+
 
   /**
    * Sets the _userData
@@ -850,6 +866,8 @@ public abstract class IG3MBuilder
     }
     _userData = userData;
   }
+
+
   public final void setInitializationTask(GInitializationTask initializationTask) {
     pvtSetInitializationTask(initializationTask,
                              true // parameter ignored in Java code 
@@ -872,18 +890,18 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _tileRendererBuilder. If it does not exist, it will be default initializated. 
+   * Returns the _planetRendererBuilder. If it does not exist, it will be default initializated. 
    *
-   * @return _tileRendererBuilder: TileRendererBuilder*
+   * @return _planetRendererBuilder: PlanetRendererBuilder*
    */
-  public final TileRendererBuilder getTileRendererBuilder()
+  public final PlanetRendererBuilder getPlanetRendererBuilder()
   {
-    if (_tileRendererBuilder == null)
+    if (_planetRendererBuilder == null)
     {
-      _tileRendererBuilder = new TileRendererBuilder();
+      _planetRendererBuilder = new PlanetRendererBuilder();
     }
   
-    return _tileRendererBuilder;
+    return _planetRendererBuilder;
   }
 
   public final void addGPUProgramSources(GPUProgramSources s)
