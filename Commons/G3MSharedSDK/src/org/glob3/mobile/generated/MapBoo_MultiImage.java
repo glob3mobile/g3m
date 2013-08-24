@@ -18,7 +18,6 @@ public class MapBoo_MultiImage
   public final java.util.ArrayList<MapBoo_MultiImage_Level> getLevels()
   {
     return _levels;
-    return unmodificable list;
   }
 
   public final MapBoo_MultiImage_Level getBestLevel(int width)
