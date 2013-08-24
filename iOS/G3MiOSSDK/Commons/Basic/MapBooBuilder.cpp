@@ -51,12 +51,12 @@ MapBoo_Scene::~MapBoo_Scene() {
 
 const std::string MapBoo_MultiImage_Level::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->addString("[Level _url=");
-  isb->addString(_url.description());
-  isb->addString(", size=");
+  isb->addString("[Level size=");
   isb->addInt(_width);
   isb->addString("x");
   isb->addInt(_height);
+  isb->addString(", url=");
+  isb->addString(_url.description());
   isb->addString("]");
   const std::string s = isb->getString();
   delete isb;
@@ -82,23 +82,24 @@ const std::string MapBoo_MultiImage::description() const {
 }
 
 MapBoo_MultiImage_Level* MapBoo_MultiImage::getBestLevel(int width) const {
-  MapBoo_MultiImage_Level* bestLevel = NULL;
   const int levelsSize = _levels.size();
-  //for (int i = 0; i < levelsSize; i++) {
-  for (int i = levelsSize-1; i >= 0; i--) {
+  if (levelsSize == 0) {
+    return NULL;
+  }
+
+  for (int i = 0; i < levelsSize; i++) {
     MapBoo_MultiImage_Level* level = _levels[i];
-    if (level != NULL) {
-      if (bestLevel == NULL) {
-        bestLevel = level;
+    const int levelWidth = level->getWidth();
+    if (levelWidth <= width) {
+      if ((levelWidth < width) && (i > 0)) {
+        return _levels[i - 1];
       }
-      else {
-        if (bestLevel->getWidth() > level->getWidth()) {
-          bestLevel = level;
-        }
-      }
+      return level;
     }
   }
-  return bestLevel;
+
+  // all levels are widther than width, so select the level with the less resolution
+  return _levels[levelsSize - 1];
 }
 
 const std::string MapBoo_Scene::description() const {
