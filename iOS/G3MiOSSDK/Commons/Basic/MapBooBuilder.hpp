@@ -77,7 +77,12 @@ public:
 
 class MapBoo_MultiImage_Level {
 private:
+#ifdef C_CODE
   const URL _url;
+#endif
+#ifdef JAVA_CODE
+  private final URL _url;
+#endif
   const int _width;
   const int _height;
 
@@ -127,9 +132,6 @@ public:
 
   std::vector<MapBoo_MultiImage_Level*> getLevels() const {
     return _levels;
-#ifdef JAVA_CODE
-    return unmodificable list;
-#endif
   }
 
   MapBoo_MultiImage_Level* getBestLevel(int width) const;
