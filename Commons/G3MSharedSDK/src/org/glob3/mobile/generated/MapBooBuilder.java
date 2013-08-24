@@ -11,6 +11,9 @@ public abstract class MapBooBuilder
 
   private String _applicationId;
   private String _applicationName;
+  private String _applicationWebsite;
+  private String _applicationEMail;
+  private String _applicationAbout;
   private int _applicationTimestamp;
 
   private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
@@ -306,17 +309,7 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    String name = jsonObject.getAsString("name", "");
-    String description = jsonObject.getAsString("description", "");
-    String screenshotURL = jsonObject.getAsString("icon", "");
-    Color backgroundColor = parseColor(jsonObject.getAsString("backgroundColor"));
-  
-    int __parse_from_json;
-    Color screenshotColor = Color.gray();
-    Layer baseLayer = parseLayer(jsonObject.get("baseLayer"));
-    Layer overlayLayer = parseLayer(jsonObject.get("overlayLayer"));
-  
-    return new MapBoo_Scene(name, description, screenshotURL, screenshotColor, backgroundColor, baseLayer, overlayLayer);
+    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")));
   }
   private Color parseColor(JSONString jsonColor)
   {
@@ -336,6 +329,56 @@ public abstract class MapBooBuilder
     if (color != null)
        color.dispose();
     return result;
+  }
+
+  private MapBoo_MultiImage parseMultiImage(JSONObject jsonObject)
+  {
+    if (jsonObject == null)
+    {
+      return null;
+    }
+  
+    Color averageColor = parseColor(jsonObject.getAsString("averageColor"));
+  
+    java.util.ArrayList<MapBoo_MultiImage_Level> levels = new java.util.ArrayList<MapBoo_MultiImage_Level>();
+  
+    final JSONArray jsLevels = jsonObject.getAsArray("levels");
+    if (jsLevels != null)
+    {
+      final int levelsCount = jsLevels.size();
+      for (int i = 0; i < levelsCount; i++)
+      {
+        MapBoo_MultiImage_Level level = parseMultiImageLevel(jsLevels.getAsObject(i));
+        if (level != null)
+        {
+          levels.add(level);
+        }
+      }
+    }
+  
+    return new MapBoo_MultiImage(averageColor, levels);
+  }
+  private MapBoo_MultiImage_Level parseMultiImageLevel(JSONObject jsonObject)
+  {
+    final JSONString jsURL = jsonObject.getAsString("url");
+    if (jsURL == null)
+    {
+      return null;
+    }
+  
+    final JSONNumber jsWidth = jsonObject.getAsNumber("width");
+    if (jsWidth == null)
+    {
+      return null;
+    }
+  
+    final JSONNumber jsHeight = jsonObject.getAsNumber("height");
+    if (jsHeight == null)
+    {
+      return null;
+    }
+  
+    return new MapBoo_MultiImage_Level(new URL(_serverURL, "/images/" + jsURL.value()), (int) jsWidth.value(), (int) jsHeight.value());
   }
 
   private void changedCurrentScene()
@@ -364,6 +407,9 @@ public abstract class MapBooBuilder
      _useWebSockets = useWebSockets;
      _applicationId = applicationId;
      _applicationName = "";
+     _applicationWebsite = "";
+     _applicationEMail = "";
+     _applicationAbout = "";
      _applicationTimestamp = -1;
      _gl = null;
      _g3mWidget = null;
@@ -487,6 +533,48 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationWebsite(String website)
+  {
+    if (_applicationWebsite.compareTo(website) != 0)
+    {
+      _applicationWebsite = website;
+  
+      if (_applicationListener != null)
+      {
+        _applicationListener.onWebsiteChanged(_context, _applicationWebsite);
+      }
+    }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationEMail(String eMail)
+  {
+    if (_applicationEMail.compareTo(eMail) != 0)
+    {
+      _applicationEMail = eMail;
+  
+      if (_applicationListener != null)
+      {
+        _applicationListener.onEMailChanged(_context, _applicationEMail);
+      }
+    }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationAbout(String about)
+  {
+    if (_applicationAbout.compareTo(about) != 0)
+    {
+      _applicationAbout = about;
+  
+      if (_applicationListener != null)
+      {
+        _applicationListener.onAboutChanged(_context, _applicationAbout);
+      }
+    }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -530,16 +618,18 @@ public abstract class MapBooBuilder
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
+  //  ILogger::instance()->logInfo("%d", json.size());
+  
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse SceneJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
     }
     else
     {
       final JSONObject jsonObject = jsonBaseObject.asObject();
       if (jsonObject == null)
       {
-        ILogger.instance().logError("Invalid SceneJSON (1)");
+        ILogger.instance().logError("Invalid ApplicationJSON");
       }
       else
       {
@@ -554,6 +644,25 @@ public abstract class MapBooBuilder
             if (jsonName != null)
             {
               setApplicationName(jsonName.value());
+            }
+  
+            final JSONString jsonWebsite = jsonObject.getAsString("website");
+            if (jsonWebsite != null)
+            {
+              setApplicationWebsite(jsonWebsite.value());
+            }
+  
+            final JSONString jsonEMail = jsonObject.getAsString("email");
+            if (jsonEMail != null)
+            {
+              setApplicationEMail(jsonEMail.value());
+            }
+  
+            //          "about"
+            final JSONString jsonAbout = jsonObject.getAsString("about");
+            if (jsonAbout != null)
+            {
+              setApplicationAbout(jsonAbout.value());
             }
   
             // always process defaultSceneIndex before scenes

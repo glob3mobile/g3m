@@ -3,18 +3,16 @@ public class MapBoo_Scene
 {
   private final String _name;
   private final String _description;
-  private final String _iconURL;
-  private final Color _screenshotColor ;
+  private final MapBoo_MultiImage _screenshot;
   private final Color _backgroundColor ;
   private Layer _baseLayer;
   private Layer _overlayLayer;
 
-  public MapBoo_Scene(String name, String description, String iconURL, Color screenshotColor, Color backgroundColor, Layer baseLayer, Layer overlayLayer)
+  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, Layer baseLayer, Layer overlayLayer)
   {
      _name = name;
      _description = description;
-     _iconURL = iconURL;
-     _screenshotColor = new Color(screenshotColor);
+     _screenshot = screenshot;
      _backgroundColor = new Color(backgroundColor);
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
@@ -30,14 +28,9 @@ public class MapBoo_Scene
     return _description;
   }
 
-  public final String getIcon()
+  public final MapBoo_MultiImage getScreenshot()
   {
-    return _iconURL;
-  }
-
-  public final Color getScreenshotColor()
-  {
-    return _screenshotColor;
+    return _screenshot;
   }
 
   public final Color getBackgroundColor()
@@ -76,11 +69,8 @@ public class MapBoo_Scene
     isb.addString(", description=");
     isb.addString(_description);
   
-    isb.addString(", iconURL=");
-    isb.addString(_iconURL);
-  
-    isb.addString(", screenshotColor=");
-    isb.addString(_screenshotColor.description());
+    isb.addString(", screenshot=");
+    isb.addString((_screenshot == null) ? "null" : _screenshot.description());
   
     isb.addString(", backgroundColor=");
     isb.addString(_backgroundColor.description());
