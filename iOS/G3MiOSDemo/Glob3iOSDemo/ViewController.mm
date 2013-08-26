@@ -272,6 +272,17 @@ public:
     ILogger::instance()->logInfo("MapBoo application current scene=%l",
                                  sceneIndex);
   }
+
+  void onWebsiteChanged(const G3MContext* context,
+                        const std::string& website){}
+
+  void onEMailChanged(const G3MContext* context,
+                      const std::string& eMail){}
+
+  void onAboutChanged(const G3MContext* context,
+                      const std::string& about){}
+
+  
 };
 
 
