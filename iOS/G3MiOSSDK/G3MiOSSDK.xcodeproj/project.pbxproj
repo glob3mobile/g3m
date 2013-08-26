@@ -326,6 +326,7 @@
 		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
 		D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */; };
 		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
+		D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -375,8 +376,6 @@
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		D8FCE63417C78AAD00CE1EBE /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FCE63217C78AAD00CE1EBE /* SceneLighting.cpp */; };
-		D8FCE63717C795A900CE1EBE /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FCE63517C795A900CE1EBE /* Matrix44DProvider.cpp */; };
-		D8FCE63817C797BD00CE1EBE /* Matrix44DProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FCE63617C795A900CE1EBE /* Matrix44DProvider.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */; };
@@ -588,7 +587,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D8FCE63817C797BD00CE1EBE /* Matrix44DProvider.hpp in CopyFiles */,
 				CF3C992E17C274A500937BD3 /* NSString_CppAdditions.h in CopyFiles */,
 				CF3CCC6417B53A4100581468 /* GenericQuadTree.hpp in CopyFiles */,
 				CFAB754F17AC517500852FA7 /* (null) in CopyFiles */,
@@ -1352,6 +1350,9 @@
 		D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramFactory.cpp; sourceTree = "<group>"; };
 		D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgramManager.cpp; sourceTree = "<group>"; };
 		D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramManager.hpp; sourceTree = "<group>"; };
+		D80FAAD917CB81B600ACD249 /* Extent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Extent.hpp; path = Commons/Geometry/Extent.hpp; sourceTree = "<group>"; };
+		D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Matrix44DProvider.hpp; path = Commons/Geometry/Matrix44DProvider.hpp; sourceTree = "<group>"; };
+		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -1454,8 +1455,6 @@
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FCE63217C78AAD00CE1EBE /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneLighting.cpp; sourceTree = "<group>"; };
 		D8FCE63317C78AAD00CE1EBE /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneLighting.hpp; sourceTree = "<group>"; };
-		D8FCE63517C795A900CE1EBE /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix44DProvider.cpp; sourceTree = "<group>"; };
-		D8FCE63617C795A900CE1EBE /* Matrix44DProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix44DProvider.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
@@ -1780,6 +1779,9 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
+				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
+				D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */,
 				D8A6C0D21781D807007BC175 /* Matrix44D.cpp */,
 				D8A6C0D31781D807007BC175 /* Matrix44D.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
@@ -1838,8 +1840,6 @@
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF5C1193178C76F2000ED715 /* BoundingArea.cpp */,
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
-				D8FCE63517C795A900CE1EBE /* Matrix44DProvider.cpp */,
-				D8FCE63617C795A900CE1EBE /* Matrix44DProvider.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2645,7 +2645,7 @@
 				D8769D8E17C394AC00CEF074 /* NoColorMesh.vsh in Sources */,
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
 				D8FCE63417C78AAD00CE1EBE /* SceneLighting.cpp in Sources */,
-				D8FCE63717C795A900CE1EBE /* Matrix44DProvider.cpp in Sources */,
+				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
