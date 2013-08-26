@@ -393,12 +393,50 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
 
 
   if (normalsAvailable){
+
+    int modelTransformCount = 0;
+
     for(int i = 0; i < features.size(); i++){
       const GLFeature* f = features.get(i);
+
+      if (f->getID() == GLF_MODEL_TRANSFORM){
+        modelTransformCount++;
+      }
+      
       if (f->getGroup() == LIGHTING_GROUP){
         f->applyOnGlobalGLState(&state);
         vs.combineWith(f->getGPUVariableValueSet());
       }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[modelTransformCount];
+
+    modelTransformCount = 0;
+    for (int i = 0; i < features.size(); i++){
+      const GLFeature* f = features.get(i);
+      if (f->getID() == GLF_MODEL_TRANSFORM){
+        GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
+        const Matrix44D* m = cf->getMatrixHolder()->getMatrix();
+
+        if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
+          modelTransformHolders[modelTransformCount++] = cf->getMatrixHolder();
+        }
+      }
+
+    }
+
+    Matrix44DProvider* modelProvider = NULL;
+    if (modelTransformCount > 0){
+      modelProvider = new Matrix44DMultiplicationHolder(modelTransformHolders, modelTransformCount);
+
+      vs.addUniformValue(MODEL,
+                         new GPUUniformValueMatrix4(modelProvider, true),
+                         false);
+    }
+    
+    delete [] modelTransformHolders;
+    
+    
   }
 }
