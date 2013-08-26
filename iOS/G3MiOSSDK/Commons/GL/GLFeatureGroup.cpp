@@ -124,6 +124,25 @@ GLFeatureSet::~GLFeatureSet() {
 //  }
 //}
 
+GLFeatureGroup** GLFeatureGroup::_groups = NULL;
+
+void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
+
+  if (_groups == NULL){
+    _groups = new GLFeatureGroup*[N_GLFEATURES_GROUPS];
+
+    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+      _groups[i] = GLFeatureGroup::createGroup(groupName);
+    }
+  }
+
+  for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+    _groups[i]->apply(features, vs, state);
+  }
+
+}
+
 void GLFeatureNoGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
   for(int i = 0; i < features.size(); i++) {

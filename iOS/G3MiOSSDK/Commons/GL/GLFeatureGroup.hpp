@@ -70,7 +70,11 @@ public:
 
 
 #define N_GLFEATURES_GROUPS 4
+
 class GLFeatureGroup/*: public GLFeatureSet */{
+
+  static GLFeatureGroup** _groups;
+
 public:
 
   virtual ~GLFeatureGroup() {
@@ -85,6 +89,8 @@ public:
 
 //  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
 //  virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
+
+  static void applyToAllGroups(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
 
   virtual void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) = 0;
 };
