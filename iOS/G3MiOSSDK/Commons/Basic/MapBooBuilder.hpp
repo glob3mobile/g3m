@@ -39,6 +39,8 @@ class G3MContext;
 class IWebSocket;
 class MapBoo_Scene;
 
+class SceneLighting;
+
 #include "URL.hpp"
 #include "Color.hpp"
 
@@ -237,6 +239,8 @@ protected:
   virtual IThreadUtils* createThreadUtils() = 0;
 
   virtual GPUProgramManager* createGPUProgramManager() = 0;
+
+  SceneLighting* createSceneLighting();
 
 public:
   /** Private to MapbooBuilder, don't call it */

@@ -25,6 +25,7 @@
 #include "SimpleCameraConstrainer.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUProgramFactory.hpp"
+#include "SceneLighting.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -44,7 +45,8 @@ _autoDeleteInitializationTask(true),
 _periodicalTasks(NULL),
 _logFPS(false),
 _logDownloaderStatistics(false),
-_userData(NULL)
+_userData(NULL),
+_sceneLighting(NULL)
 {
 }
 
@@ -636,8 +638,6 @@ G3MWidget* IG3MBuilder::create() {
     mainRenderer = getPlanetRendererBuilder()->create();
   }
   
-
-  
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
                                             getStorage(), //
@@ -655,7 +655,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getInitializationTask(), //
                                             getAutoDeleteInitializationTask(), //
                                             *getPeriodicalTasks(),
-                                            getGPUProgramManager());
+                                            getGPUProgramManager(),
+                                            getSceneLighting());
   
   g3mWidget->setUserData(getUserData());
 
@@ -729,6 +730,10 @@ void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s) {
   _sources.push_back(s);
 }
 
+void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting){
+  _sceneLighting = sceneLighting;
+}
+
 GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
   //GPU Program Manager
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
@@ -737,4 +742,11 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
   }
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
   return gpuProgramManager;
+}
+
+SceneLighting* IG3MBuilder::getSceneLighting() {
+  if (_sceneLighting == NULL){
+    _sceneLighting = new DefaultSceneLighting();
+  }
+  return _sceneLighting;
 }

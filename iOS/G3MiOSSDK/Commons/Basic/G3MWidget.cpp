@@ -76,7 +76,8 @@ G3MWidget::G3MWidget(GL*                              gl,
                      GInitializationTask*             initializationTask,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks,
-                     GPUProgramManager*               gpuProgramManager):
+                     GPUProgramManager*               gpuProgramManager,
+                     SceneLighting*                   sceneLighting):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -123,7 +124,8 @@ _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
 _clickOnProcess(false),
-_gpuProgramManager(gpuProgramManager)
+_gpuProgramManager(gpuProgramManager),
+_sceneLighting(sceneLighting)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -167,7 +169,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              GInitializationTask*             initializationTask,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks,
-                             GPUProgramManager*               gpuProgramManager) {
+                             GPUProgramManager*               gpuProgramManager,
+                             SceneLighting*                   sceneLighting) {
 
   return new G3MWidget(gl,
                        storage,
@@ -185,7 +188,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        initializationTask,
                        autoDeleteInitializationTask,
                        periodicalTasks,
-                       gpuProgramManager);
+                       gpuProgramManager,
+                       sceneLighting);
 }
 
 G3MWidget::~G3MWidget() {

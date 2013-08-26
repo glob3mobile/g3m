@@ -169,44 +169,24 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
 
 void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
-  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[features.size()];
+  const int size = features.size();
+  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[size];
 
-  int modelTransformCount = 0;
-  for (int i = 0; i < features.size(); i++){
+  int modelViewCount = 0;
+  for (int i = 0; i < size; i++){
     const GLFeature* f = features.get(i);
     if (f->getGroup() == CAMERA_GROUP){
       GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
-      GLFeatureID t = f->getID();
-      switch (t) {
-        case GLF_PROJECTION:
-          modelTransformHolders[0] = cf->getMatrixHolder();
-          break;
-        case GLF_MODEL:
-          modelTransformHolders[1] = cf->getMatrixHolder();
-          break;
-        case GLF_MODEL_TRANSFORM:
-        {
-          const Matrix44D* m = cf->getMatrixHolder()->getMatrix();
-
-          if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
-            modelTransformHolders[2 + modelTransformCount++] = cf->getMatrixHolder();
-          }
-        }
-          break;
-        default:
-          ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
-          break;
-      }
+      modelTransformHolders[modelViewCount++] = cf->getMatrixHolder();
     }
   }
 
-  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
+  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelViewCount);
   vs.addUniformValue(MODELVIEW,
                      new GPUUniformValueMatrix4(modelViewProvider, true),
                      false);
 
   delete [] modelTransformHolders;
-
 }
 
 void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){

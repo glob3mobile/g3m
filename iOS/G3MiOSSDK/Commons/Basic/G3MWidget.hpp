@@ -52,6 +52,7 @@ class ICameraActivityListener;
 
 class G3MContext;
 class GLGlobalState;
+class SceneLighting;
 
 class WidgetUserData {
 private:
@@ -105,7 +106,8 @@ public:
                            GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
                            std::vector<PeriodicalTask*>     periodicalTasks,
-                           GPUProgramManager*               gpuProgramManager);
+                           GPUProgramManager*               gpuProgramManager,
+                           SceneLighting*                   sceneLighting);
   
   ~G3MWidget();
   
@@ -250,6 +252,8 @@ private:
   GPUProgramManager* _gpuProgramManager;
 
   SurfaceElevationProvider* _surfaceElevationProvider;
+
+  SceneLighting*            _sceneLighting;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -267,7 +271,8 @@ private:
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks,
-            GPUProgramManager*               gpuProgramManager);
+            GPUProgramManager*               gpuProgramManager,
+            SceneLighting*                   sceneLighting);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

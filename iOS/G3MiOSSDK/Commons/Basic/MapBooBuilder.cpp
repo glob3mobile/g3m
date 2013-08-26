@@ -43,6 +43,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IWebSocketListener.hpp"
 #include "IWebSocket.hpp"
+#include "SceneLighting.hpp"
 
 MapBoo_Scene::~MapBoo_Scene() {
   delete _baseLayer;
@@ -756,7 +757,8 @@ G3MWidget* MapBooBuilder::create() {
                                  initializationTask,
                                  true,       // autoDeleteInitializationTask
                                  *periodicalTasks,
-                                 getGPUProgramManager());
+                                 getGPUProgramManager(),
+                                 createSceneLighting());
   delete cameraConstraints;
   delete periodicalTasks;
 
@@ -866,4 +868,8 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
   if (_isApplicationTubeOpen != open) {
     _isApplicationTubeOpen = open;
   }
+}
+
+SceneLighting* MapBooBuilder::createSceneLighting() {
+  return new DefaultSceneLighting();
 }
