@@ -8,7 +8,6 @@ import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -244,8 +243,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
-                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                    		 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
                      for (int i = 0; i < features.size(); i++) {
@@ -491,8 +490,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
-                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                    		 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
 

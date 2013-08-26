@@ -855,6 +855,19 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+@Override
+public native void uniform3f(IGLUniformID location, float x, float y, float z) /*-{
+	var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x, y, z);
+}-*/;
+
+
+@Override
+public native int Type_Vec3Float() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
+}-*/;
+
+
    // @Override
    //   public void uniform2f(final IGLUniformID loc,
    //                         final float x,

@@ -66,6 +66,7 @@ public class G3MDrawingShapesActivity
       g3mBuilder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
       g3mBuilder.getPlanetRendererBuilder().setVerticalExaggeration(20);
       
+      g3mBuilder.setLogFPS(true);
       
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();

@@ -797,4 +797,17 @@ public final class NativeGL2_Android
    }
 
 
+@Override
+public void uniform3f(IGLUniformID location, float v0, float v1, float v2) {
+    int loc = ((GLUniformID_Android)location).getID();
+    GLES20.glUniform3f(loc, v0, v1, v2);
+}
+
+
+@Override
+public int Type_Vec3Float() {
+	return GLES20.GL_FLOAT_VEC3;
+}
+
+
 }

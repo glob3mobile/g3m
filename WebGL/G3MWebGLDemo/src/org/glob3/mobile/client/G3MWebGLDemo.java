@@ -11,10 +11,10 @@ import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -77,6 +77,7 @@ import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
 import org.glob3.mobile.generated.SceneJSShapesParser;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -469,8 +470,8 @@ public class G3MWebGLDemo implements EntryPoint {
 	}
 
 	private Mesh createPointsMesh(final Planet planet) {
-		final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
-				CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+		final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+
 		final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
 		final Angle centerLat = Angle.fromDegreesMinutesSeconds(38, 53, 42);
@@ -826,6 +827,8 @@ public class G3MWebGLDemo implements EntryPoint {
 			final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
 			final WidgetUserData userData = null;
+			
+			SceneLighting lighting = new DefaultSceneLighting();
 
 			final ICameraActivityListener cameraActivityListener = null;
 			_widget.initWidget(//
@@ -844,7 +847,8 @@ public class G3MWebGLDemo implements EntryPoint {
 					initializationTask, //
 					autoDeleteInitializationTask, //
 					periodicalTasks, //
-					userData);
+					userData,
+					lighting);
 		}
 	}
 

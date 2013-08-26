@@ -31,6 +31,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
@@ -411,7 +412,8 @@ public final class G3MWidget_Android
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -429,7 +431,9 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager());
+               periodicalTasks, 
+               createGPUProgramManager(), 
+               sceneLighting);
 
       _g3mWidget.setUserData(userData);
    }

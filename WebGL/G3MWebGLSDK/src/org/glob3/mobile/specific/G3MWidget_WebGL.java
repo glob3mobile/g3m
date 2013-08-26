@@ -33,6 +33,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.WidgetUserData;
 
@@ -381,7 +382,8 @@ public final class G3MWidget_WebGL
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -400,7 +402,9 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager());
+               periodicalTasks, 
+               createGPUProgramManager(),
+               sceneLighting);
 
       _g3mWidget.setUserData(userData);
 

@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
@@ -51,6 +52,7 @@ import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -456,6 +458,8 @@ public class G3MSimplestGlob3Activity
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
       final WidgetUserData userData = null;
+      
+      SceneLighting lighting = new DefaultSceneLighting();
 
       _widgetAndroid.initWidget(//
                storage, // 
@@ -473,7 +477,8 @@ public class G3MSimplestGlob3Activity
                initializationTask, //
                autoDeleteInitializationTask, //
                periodicalTasks, //
-               userData);
+               userData,
+               lighting);
 
       setContentView(_widgetAndroid);
 
