@@ -179,14 +179,19 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (void)layoutSubviews {
-  int w = (int) [self frame].size.width;
-  int h = (int) [self frame].size.height;
-  NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  
-  if ([self widget]) {
-    [self widget]->onResizeViewportEvent(w,h);
-    
+  [super layoutSubviews];
+
+  CGSize size = [self frame].size;
+  const int width  = (int) size.width;
+  const int height = (int) size.height;
+  //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
+
+  G3MWidget* widget = [self widget];
+  if (widget) {
+    widget->onResizeViewportEvent(width, height);
+
     [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
+
     [self drawView:nil];
   }
   else {

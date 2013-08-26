@@ -49,6 +49,59 @@ MapBoo_Scene::~MapBoo_Scene() {
   delete _overlayLayer;
 }
 
+const std::string MapBoo_MultiImage_Level::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("[Level size=");
+  isb->addInt(_width);
+  isb->addString("x");
+  isb->addInt(_height);
+  isb->addString(", url=");
+  isb->addString(_url.description());
+  isb->addString("]");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+const std::string MapBoo_MultiImage::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->addString("[MultiImage averageColor=");
+  isb->addString(_averageColor.description());
+  isb->addString(", _levels=[");
+  const int levelsSize = _levels.size();
+  for (int i = 0; i < levelsSize; i++) {
+    if (i > 0) {
+      isb->addString(", ");
+    }
+    isb->addString(_levels[i]->description());
+  }
+  isb->addString("]]");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+MapBoo_MultiImage_Level* MapBoo_MultiImage::getBestLevel(int width) const {
+  const int levelsSize = _levels.size();
+  if (levelsSize == 0) {
+    return NULL;
+  }
+
+  for (int i = 0; i < levelsSize; i++) {
+    MapBoo_MultiImage_Level* level = _levels[i];
+    const int levelWidth = level->getWidth();
+    if (levelWidth <= width) {
+      if ((levelWidth < width) && (i > 0)) {
+        return _levels[i - 1];
+      }
+      return level;
+    }
+  }
+
+  // all levels are widther than width, so select the level with the less resolution
+  return _levels[levelsSize - 1];
+}
+
 const std::string MapBoo_Scene::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
@@ -58,8 +111,8 @@ const std::string MapBoo_Scene::description() const {
   isb->addString(", description=");
   isb->addString(_description);
 
-  isb->addString(", icon=");
-  isb->addString(_icon);
+  isb->addString(", screenshot=");
+  isb->addString((_screenshot == NULL) ? "null" : _screenshot->description());
 
   isb->addString(", backgroundColor=");
   isb->addString(_backgroundColor.description());
@@ -97,6 +150,9 @@ _tubesURL(tubesURL),
 _useWebSockets(useWebSockets),
 _applicationId(applicationId),
 _applicationName(""),
+_applicationWebsite(""),
+_applicationEMail(""),
+_applicationAbout(""),
 _applicationTimestamp(-1),
 _gl(NULL),
 _g3mWidget(NULL),
@@ -136,11 +192,11 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 }
 
 void MapBooBuilder::setGL(GL *gl) {
-  if (_gl) {
+  if (_gl != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
     return;
   }
-  if (!gl) {
+  if (gl == NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
     return;
   }
@@ -148,10 +204,9 @@ void MapBooBuilder::setGL(GL *gl) {
 }
 
 GL* MapBooBuilder::getGL() {
-  if (!_gl) {
+  if (_gl == NULL) {
     ILogger::instance()->logError("Logic Error: _gl not initialized");
   }
-
   return _gl;
 }
 
@@ -365,39 +420,77 @@ Color MapBooBuilder::parseColor(const JSONString* jsonColor) const {
   return result;
 }
 
+MapBoo_MultiImage_Level* MapBooBuilder::parseMultiImageLevel(const JSONObject* jsonObject) const {
+  const JSONString* jsURL = jsonObject->getAsString("url");
+  if (jsURL == NULL) {
+    return NULL;
+  }
+
+  const JSONNumber* jsWidth = jsonObject->getAsNumber("width");
+  if (jsWidth == NULL) {
+    return NULL;
+  }
+
+  const JSONNumber* jsHeight = jsonObject->getAsNumber("height");
+  if (jsHeight == NULL) {
+    return NULL;
+  }
+
+  return new MapBoo_MultiImage_Level(URL(_serverURL, "/images/" + jsURL->value()),
+                                     (int) jsWidth->value(),
+                                     (int) jsHeight->value());
+}
+
+MapBoo_MultiImage* MapBooBuilder::parseMultiImage(const JSONObject* jsonObject) const {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  Color averageColor = parseColor( jsonObject->getAsString("averageColor") );
+
+  std::vector<MapBoo_MultiImage_Level*> levels;
+
+  const JSONArray* jsLevels = jsonObject->getAsArray("levels");
+  if (jsLevels != NULL) {
+    const int levelsCount = jsLevels->size();
+    for (int i = 0; i < levelsCount; i++) {
+      MapBoo_MultiImage_Level* level = parseMultiImageLevel( jsLevels->getAsObject(i) );
+      if (level != NULL) {
+        levels.push_back(level);
+      }
+    }
+  }
+
+  return new MapBoo_MultiImage(averageColor, levels);
+}
+
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
   }
 
-  std::string name            = jsonObject->getAsString("name", "");
-  std::string description     = jsonObject->getAsString("description", "");
-  std::string icon            = jsonObject->getAsString("icon", "");
-  Color       backgroundColor = parseColor( jsonObject->getAsString("bgColor") );
-  Layer*      baseLayer       = parseLayer( jsonObject->get("baseLayer") );
-  Layer*      overlayLayer    = parseLayer( jsonObject->get("overlayLayer") );
-
-  return new MapBoo_Scene(name,
-                          description,
-                          icon,
-                          backgroundColor,
-                          baseLayer,
-                          overlayLayer);
+  return new MapBoo_Scene(jsonObject->getAsString("name", ""),
+                          jsonObject->getAsString("description", ""),
+                          parseMultiImage( jsonObject->getAsObject("screenshot") ),
+                          parseColor( jsonObject->getAsString("backgroundColor") ),
+                          parseLayer( jsonObject->get("baseLayer") ),
+                          parseLayer( jsonObject->get("overlayLayer") ) );
 }
-
 
 void MapBooBuilder::parseApplicationDescription(const std::string& json,
                                                 const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
 
+//  ILogger::instance()->logInfo("%d", json.size());
+
   if (jsonBaseObject == NULL) {
-    ILogger::instance()->logError("Can't parse SceneJSON from %s",
+    ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
                                   url.getPath().c_str());
   }
   else {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
     if (jsonObject == NULL) {
-      ILogger::instance()->logError("Invalid SceneJSON (1)");
+      ILogger::instance()->logError("Invalid ApplicationJSON");
     }
     else {
       const JSONString* error = jsonObject->getAsString("error");
@@ -408,6 +501,22 @@ void MapBooBuilder::parseApplicationDescription(const std::string& json,
           const JSONString* jsonName = jsonObject->getAsString("name");
           if (jsonName != NULL) {
             setApplicationName( jsonName->value() );
+          }
+
+          const JSONString* jsonWebsite = jsonObject->getAsString("website");
+          if (jsonWebsite != NULL) {
+            setApplicationWebsite( jsonWebsite->value() );
+          }
+
+          const JSONString* jsonEMail = jsonObject->getAsString("email");
+          if (jsonEMail != NULL) {
+            setApplicationEMail( jsonEMail->value() );
+          }
+
+          //          "about"
+          const JSONString* jsonAbout = jsonObject->getAsString("about");
+          if (jsonAbout != NULL) {
+            setApplicationAbout( jsonAbout->value() );
           }
 
           // always process defaultSceneIndex before scenes
@@ -470,7 +579,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download SceneJSON from %s",
+    ILogger::instance()->logError("Can't download ApplicationJSON from %s",
                                   url.getPath().c_str());
   }
 
@@ -602,11 +711,11 @@ std::vector<PeriodicalTask*>* MapBooBuilder::createPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>();
 
   if (_useWebSockets) {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
   }
   else {
-    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(2),
+    periodicalTasks->push_back(new PeriodicalTask(TimeInterval::fromSeconds(5),
                                                   new MapBooBuilder_PollingScenePeriodicalTask(this)));
   }
 
@@ -644,6 +753,7 @@ public:
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
                                   ws->getURL().getPath().c_str());
+    _builder->setApplicationTubeOpened(false);
   }
 
   void onMesssage(IWebSocket* ws,
@@ -682,14 +792,19 @@ void MapBooBuilder::setContext(const G3MContext* context) {
   _context = context;
 }
 
+MapBooBuilder::~MapBooBuilder() {
+
+}
+
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
   const bool autodeleteListener  = true;
   const bool autodeleteWebSocket = true;
 
-  context->getFactory()->createWebSocket(createApplicationTubeURL(),
-                                         new MapBooBuilder_ApplicationTubeListener(this),
-                                         autodeleteListener,
-                                         autodeleteWebSocket);
+  const IFactory* factory = context->getFactory();
+  factory->createWebSocket(createApplicationTubeURL(),
+                           new MapBooBuilder_ApplicationTubeListener(this),
+                           autodeleteListener,
+                           autodeleteWebSocket);
 }
 
 GInitializationTask* MapBooBuilder::createInitializationTask() {
@@ -778,6 +893,37 @@ void MapBooBuilder::setApplicationName(const std::string& name) {
   }
 }
 
+void MapBooBuilder::setApplicationWebsite(const std::string& website) {
+  if (_applicationWebsite.compare(website) != 0) {
+    _applicationWebsite = website;
+
+    if (_applicationListener != NULL) {
+      _applicationListener->onWebsiteChanged(_context, _applicationWebsite);
+    }
+  }
+}
+
+void MapBooBuilder::setApplicationEMail(const std::string& eMail) {
+  if (_applicationEMail.compare(eMail) != 0) {
+    _applicationEMail = eMail;
+
+    if (_applicationListener != NULL) {
+      _applicationListener->onEMailChanged(_context, _applicationEMail);
+    }
+  }
+}
+
+void MapBooBuilder::setApplicationAbout(const std::string& about) {
+  if (_applicationAbout.compare(about) != 0) {
+    _applicationAbout = about;
+
+    if (_applicationListener != NULL) {
+      _applicationListener->onAboutChanged(_context, _applicationAbout);
+    }
+  }
+}
+
+
 class MapBooBuilder_ChangeSceneTask : public GTask {
 private:
   MapBooBuilder* _builder;
@@ -800,10 +946,6 @@ void MapBooBuilder::rawChangeScene(int sceneIndex) {
   _applicationCurrentSceneIndex = sceneIndex;
 
   changedCurrentScene();
-
-  if (_applicationListener != NULL) {
-    _applicationListener->onSceneChanged(_context, _applicationCurrentSceneIndex);
-  }
 }
 
 void MapBooBuilder::changeScene(int sceneIndex) {
@@ -836,6 +978,13 @@ void MapBooBuilder::changedCurrentScene() {
     // force immediate execution of PeriodicalTasks
     _g3mWidget->resetPeriodicalTasksTimeouts();
   }
+
+  const MapBoo_Scene* currentScene = getApplicationCurrentScene();
+  if (_applicationListener != NULL) {
+    _applicationListener->onSceneChanged(_context,
+                                         getApplicationCurrentSceneIndex(),
+                                         currentScene);
+  }
 }
 
 void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes) {
@@ -857,5 +1006,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
-  _isApplicationTubeOpen = open;
+  if (_isApplicationTubeOpen != open) {
+    _isApplicationTubeOpen = open;
+  }
 }

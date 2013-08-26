@@ -56,11 +56,15 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onNameChanged(G3MContext context, String name);
 
+  public abstract void onWebsiteChanged(G3MContext context, String website);
+
+  public abstract void onEMailChanged(G3MContext context, String eMail);
+
+  public abstract void onAboutChanged(G3MContext context, String about);
+
   public abstract void onIconChanged(G3MContext context, String icon);
 
   public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
 
-  // virtual void onWarningsChanged() = 0;
-
-  public abstract void onSceneChanged(G3MContext context, int sceneIndex);
+  public abstract void onSceneChanged(G3MContext context, int sceneIndex, MapBoo_Scene scene);
 }

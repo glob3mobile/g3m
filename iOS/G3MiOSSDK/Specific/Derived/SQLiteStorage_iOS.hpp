@@ -15,6 +15,7 @@
 
 #include <string>
 
+
 class SQLiteStorage_iOS : public IStorage {
 private:
   const std::string _databaseName;
@@ -23,11 +24,6 @@ private:
   SQDatabase* _writeDB;
 
   NSLock* _lock;
-
-  NSString* toNSString(const std::string& cppStr) const {
-    return [ NSString stringWithCString: cppStr.c_str()
-                               encoding: NSUTF8StringEncoding ];
-  }
 
   NSString* getDBPath() const;
 

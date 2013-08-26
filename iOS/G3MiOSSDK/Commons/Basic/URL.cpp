@@ -27,24 +27,22 @@ bool URL::isFileProtocol() const {
   return (IStringUtils::instance()->beginsWith(_path, FILE_PROTOCOL));
 }
 
-
 const std::string URL::escape(const std::string& path) {
-//    std::string escapedURL = IStringUtils::instance()->replaceSubstring(path, "%", "%25");
-    std::string escapedURL = IStringUtils::instance()->replaceSubstring(path, "\n", "%0A");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, " ", "%20");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "\"", "%22");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "-", "%2D");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, ".", "%2E");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "<", "%3C");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, ">", "%3E");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "\\", "%5C");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "^", "%5E");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "_", "%5F");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "`", "%60");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "{", "%7B");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "|", "%7C");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "}", "%7D");
-    escapedURL = IStringUtils::instance()->replaceSubstring(escapedURL, "~", "%7E");
-    
-    return escapedURL;
+  const IStringUtils* su = IStringUtils::instance();
+  std::string result = su->replaceSubstring(path, "\n", "%0A");
+  result = su->replaceSubstring(result, " ", "%20");
+  result = su->replaceSubstring(result, "\"", "%22");
+  result = su->replaceSubstring(result, "-", "%2D");
+  result = su->replaceSubstring(result, ".", "%2E");
+  result = su->replaceSubstring(result, "<", "%3C");
+  result = su->replaceSubstring(result, ">", "%3E");
+  result = su->replaceSubstring(result, "\\", "%5C");
+  result = su->replaceSubstring(result, "^", "%5E");
+  result = su->replaceSubstring(result, "_", "%5F");
+  result = su->replaceSubstring(result, "`", "%60");
+  result = su->replaceSubstring(result, "{", "%7B");
+  result = su->replaceSubstring(result, "|", "%7C");
+  result = su->replaceSubstring(result, "}", "%7D");
+  result = su->replaceSubstring(result, "~", "%7E");
+  return result;
 }
