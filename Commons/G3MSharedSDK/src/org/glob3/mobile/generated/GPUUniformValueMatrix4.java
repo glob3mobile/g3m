@@ -4,9 +4,10 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueMatrix4 extends GPUUniformValue
 {
-  protected final Matrix44D _lastModelSet;
-  protected final boolean _ownsProvider;
-  protected Matrix44DProvider _holder = null;
+  private final boolean _ownsProvider;
+  protected Matrix44DProvider _provider = null;
+  protected  Matrix44D _lastModelSet;
+
 
 
 

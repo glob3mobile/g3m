@@ -56,34 +56,34 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(NO_CENTER, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.zero);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(FIRST_VERTEX, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.zero);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Vector3D center)
   {
-    return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Geodetic2D center)
   {
-    return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Geodetic3D center)
   {
-    return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
   public final void add(Angle latitude, Angle longitude, double height)
   {
     final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
   
-    if (_centerStrategy == FIRST_VERTEX)
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -91,7 +91,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
       }
     }
   
-    if (_centerStrategy == NO_CENTER)
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back((float) vector._x);
       _values.push_back((float) vector._y);

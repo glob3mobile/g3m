@@ -106,10 +106,10 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
 
   public Matrix44DMultiplicationHolder(Matrix44DProvider[] providers, int nMatrix)
   {
-     _providers = new const Matrix44DProvider[nMatrix];
      _nMatrix = nMatrix;
      _modelview = null;
     _matrix = new Matrix44D[nMatrix];
+    _providers = new Matrix44DProvider[nMatrix];
     for (int i = 0; i < _nMatrix; i++)
     {
       _matrix[i] = null;

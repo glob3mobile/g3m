@@ -8,7 +8,7 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
   {
   
     final int size = features.size();
-    Matrix44DProvider[] modelTransformHolders = new const Matrix44DProvider[size];
+    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
   
     int modelViewCount = 0;
     for (int i = 0; i < size; i++)

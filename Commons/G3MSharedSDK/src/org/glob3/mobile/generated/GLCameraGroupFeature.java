@@ -1,18 +1,15 @@
 package org.glob3.mobile.generated; 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-//enum GLCameraGroupFeatureType{
-//  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
-//};
 public class GLCameraGroupFeature extends GLFeature
 {
 
   private Matrix44DHolder _matrixHolder = null;
-  public GLCameraGroupFeature(Matrix44D matrix, GLCameraGroupFeatureType type)
+
+  public GLCameraGroupFeature(Matrix44D matrix, GLFeatureID id)
   {
-    super(GLFeatureGroupName.CAMERA_GROUP);
-    _matrixHolder = new Matrix44DHolder(matrix);
-    _type = type;
+     super(GLFeatureGroupName.CAMERA_GROUP, id);
+     _matrixHolder = new Matrix44DHolder(matrix);
   }
 
   public void dispose()

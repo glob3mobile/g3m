@@ -34,17 +34,17 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public static FloatBufferBuilderFromCartesian3D builderWithoutCenter()
   {
-    return new FloatBufferBuilderFromCartesian3D(NO_CENTER, Vector3D.zero);
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
   }
 
   public static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter()
   {
-    return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX, Vector3D.zero);
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
   }
 
   public static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(Vector3D center)
   {
-    return new FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);
   }
 
   public final void add(Vector3D vector)

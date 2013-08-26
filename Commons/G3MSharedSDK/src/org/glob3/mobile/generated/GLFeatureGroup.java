@@ -9,8 +9,6 @@ public abstract class GLFeatureGroup //: public GLFeatureSet
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public static GLFeatureGroup createGroup(GLFeatureGroupName name)
