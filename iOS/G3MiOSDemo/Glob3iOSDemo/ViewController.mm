@@ -2420,29 +2420,33 @@ public:
       }
 
 
-      if (false){ //Infinite random flights
+      if (true){ //Infinite random flights
+
+        int time = rand()%10; //SECS OF FLIGHT
+
         class FlightTask: public GTask{
           G3MWidget_iOS* _iosWidget;
+          int _time;
         public:
-          FlightTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+          FlightTask(G3MWidget_iOS* iosWidget, int time): _iosWidget(iosWidget), _time(time){}
 
           void run(const G3MContext* context){
 
             if (rand() % 2 == 0){
-              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(_time),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
-                                                             Angle::fromDegrees(0), Angle::fromDegrees(0),
-                                                             Angle::fromDegrees(0), Angle::fromDegrees(0));
+                                                             Angle::fromDegrees(rand()%360), Angle::fromDegrees(rand()%360),
+                                                             Angle::fromDegrees(45), Angle::fromDegrees(45));
             }else{
 
-              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+              [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(_time),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
-                                                             Angle::fromDegrees(0), Angle::fromDegrees(0));
+                                                             Angle::fromDegrees(rand()%360), Angle::fromDegrees(45));
             }
           }
         };
-        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(10), new FlightTask(_iosWidget));
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new FlightTask(_iosWidget, time));
       }
 
       if (true) {

@@ -41,112 +41,6 @@ GLFeatureGroup* GLFeatureGroup::createGroup(GLFeatureGroupName name) {
   }
 }
 
-void GLFeatureNoGroup::applyOnGlobalGLState(GLGlobalState* state) {
-  for(int i = 0; i < _nFeatures; i++) {
-    const GLFeature* f = _features[i];
-    if (f != NULL) {
-      f->applyOnGlobalGLState(state);
-    }
-  }
-}
-
-void GLFeatureColorGroup::applyOnGlobalGLState(GLGlobalState* state) {
-
-  int priority = -1;
-  for (int i = 0; i < _nFeatures; i++) {
-    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
-    if (f->getPriority() > priority) {
-      priority = f->getPriority();
-    }
-  }
-
-  for (int i = 0; i < _nFeatures; i++) {
-    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
-    if (f->getPriority() == priority) {
-      f->applyOnGlobalGLState(state);
-    }
-  }
-}
-
-void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs) {
-  for(int i = 0; i < _nFeatures; i++) {
-    const GLFeature* f = _features[i];
-    if (f != NULL) {
-      vs->combineWith(f->getGPUVariableValueSet());
-    }
-  }
-}
-
-void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
-
-  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures];
-
-  int modelTransformCount = 0;
-  for (int i = 0; i < _nFeatures; i++){
-    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
-    GLFeatureID t = f->getID();
-    switch (t) {
-      case GLF_PROJECTION:
-        modelTransformHolders[0] = f->getMatrixHolder();
-        break;
-      case GLF_MODEL:
-        modelTransformHolders[1] = f->getMatrixHolder();
-        break;
-      case GLF_MODEL_TRANSFORM:
-      {
-        const Matrix44D* m = f->getMatrixHolder()->getMatrix();
-
-        if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
-          modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
-        }
-      }
-        break;
-      default:
-        ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
-        break;
-    }
-  }
-
-  Matrix44DProvider* modelProvider = NULL;
-  if (modelTransformCount > 0){
-    modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
-  } else{
-    const Matrix44D* id = Matrix44D::createIdentity();
-    modelProvider = new Matrix44DHolder(id);
-    id->_release();
-  }
-
-  vs->addUniformValue(MODEL,
-                      new GPUUniformValueMatrix4(modelProvider, true),
-                      false);
-
-
-  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
-  vs->addUniformValue(MODELVIEW,
-                      new GPUUniformValueMatrix4(modelViewProvider, true),
-                      false);
-
-  delete [] modelTransformHolders;
-}
-
-void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs) {
-
-  int priority = -1;
-  for (int i = 0; i < _nFeatures; i++) {
-    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
-    if (f->getPriority() > priority) {
-      priority = f->getPriority();
-    }
-  }
-
-  for (int i = 0; i < _nFeatures; i++) {
-    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
-    if (f->getPriority() == priority) {
-      priority = f->getPriority();
-      vs->combineWith(f->getGPUVariableValueSet());
-    }
-  }
-}
 
 
 void GLFeatureSet::add(const GLFeature* f) {
@@ -208,6 +102,119 @@ void GLFeatureSet::add(const GLFeatureSet* fs) {
 GLFeatureSet::~GLFeatureSet() {
   for (int i = 0; i < _nFeatures; i++) {
     _features[i]->_release();
+  }
+}
+
+void GLFeatureNoGroup::applyOnGlobalGLState(GLGlobalState* state) {
+
+  for(int i = 0; i < _nFeatures; i++) {
+    const GLFeature* f = _features[i];
+    if (f->getGroup() == NO_GROUP){
+      f->applyOnGlobalGLState(state);
+    }
+  }
+}
+
+void GLFeatureNoGroup::addToGPUVariableSet(GPUVariableValueSet* vs) {
+  for(int i = 0; i < _nFeatures; i++) {
+    const GLFeature* f = _features[i];
+    if (f->getGroup() == NO_GROUP){
+      vs->combineWith(f->getGPUVariableValueSet());
+    }
+  }
+}
+
+void GLFeatureColorGroup::applyOnGlobalGLState(GLGlobalState* state) {
+
+  int priority = -1;
+  for (int i = 0; i < _nFeatures; i++) {
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
+    if (f->getPriority() > priority) {
+      priority = f->getPriority();
+    }
+  }
+
+  for (int i = 0; i < _nFeatures; i++) {
+    PriorityGLFeature* f = ((PriorityGLFeature*) _features[i]);
+    if (f->getPriority() == priority) {
+      f->applyOnGlobalGLState(state);
+    }
+  }
+}
+
+void GLFeatureCameraGroup::addToGPUVariableSet(GPUVariableValueSet* vs){
+
+  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[_nFeatures];
+
+  int modelTransformCount = 0;
+  for (int i = 0; i < _nFeatures; i++){
+    GLCameraGroupFeature* f = ((GLCameraGroupFeature*) _features[i]);
+    GLFeatureID t = f->getID();
+    switch (t) {
+      case GLF_PROJECTION:
+        modelTransformHolders[0] = f->getMatrixHolder();
+        break;
+      case GLF_MODEL:
+        modelTransformHolders[1] = f->getMatrixHolder();
+        break;
+      case GLF_MODEL_TRANSFORM:
+      {
+        const Matrix44D* m = f->getMatrixHolder()->getMatrix();
+
+        if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
+          modelTransformHolders[2 + modelTransformCount++] = f->getMatrixHolder();
+        }
+      }
+        break;
+      default:
+        ILogger::instance()->logError("Error on GLFeatureCameraGroup::addToGPUVariableSet");
+        break;
+    }
+  }
+
+  Matrix44DProvider* modelProvider = NULL;
+  if (modelTransformCount > 0){
+    modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
+  } else{
+    const Matrix44D* id = Matrix44D::createIdentity();
+    modelProvider = new Matrix44DHolder(id);
+    id->_release();
+  }
+
+  vs->addUniformValue(MODEL,
+                      new GPUUniformValueMatrix4(modelProvider, true),
+                      false);
+
+
+  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
+  vs->addUniformValue(MODELVIEW,
+                      new GPUUniformValueMatrix4(modelViewProvider, true),
+                      false);
+
+  delete [] modelTransformHolders;
+}
+
+void GLFeatureColorGroup::addToGPUVariableSet(GPUVariableValueSet *vs) {
+
+  int priority = -1;
+  for (int i = 0; i < _nFeatures; i++) {
+    const GLFeature* f = _features[i];
+    if (f->getGroup() == COLOR_GROUP){
+      const PriorityGLFeature* pf = ((PriorityGLFeature*) f);
+      if (pf->getPriority() > priority) {
+        priority = pf->getPriority();
+      }
+    }
+  }
+
+  for (int i = 0; i < _nFeatures; i++) {
+    const GLFeature* f = _features[i];
+    if (f->getGroup() == COLOR_GROUP){
+      const PriorityGLFeature* pf = ((PriorityGLFeature*) f);
+      if (pf->getPriority() == priority) {
+        vs->combineWith(f->getGPUVariableValueSet());
+      }
+    }
   }
 }
 
