@@ -70,13 +70,25 @@ public:
   }
 
   void add(double x, double y, double z) {
-    if (_centerStrategy == FIRST_VERTEX) {
+    if (_centerStrategy ==
+#ifdef C_CODE
+        FIRST_VERTEX
+#else
+        CenterStrategy.FIRST_VERTEX
+#endif
+        ) {
       if (_values.size() == 0) {
         setCenter(x, y, z);
       }
     }
 
-    if (_centerStrategy == NO_CENTER) {
+    if (_centerStrategy ==
+#ifdef C_CODE
+        NO_CENTER
+#else
+        CenterStrategy.NO_CENTER
+#endif
+        ) {
       _values.push_back( (float) x );
       _values.push_back( (float) y );
       _values.push_back( (float) z );
@@ -89,13 +101,25 @@ public:
   }
 
   void add(float x, float y, float z) {
-    if (_centerStrategy == FIRST_VERTEX) {
+    if (_centerStrategy ==
+#ifdef C_CODE
+        FIRST_VERTEX
+#else
+        CenterStrategy.FIRST_VERTEX
+#endif
+        ) {
       if (_values.size() == 0) {
         setCenter(x, y, z);
       }
     }
 
-    if (_centerStrategy == NO_CENTER) {
+    if (_centerStrategy ==
+#ifdef C_CODE
+        NO_CENTER
+#else
+        CenterStrategy.NO_CENTER
+#endif
+        ) {
       _values.push_back( x );
       _values.push_back( y );
       _values.push_back( z );

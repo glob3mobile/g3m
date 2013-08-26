@@ -290,7 +290,6 @@ private:
 #endif
 public:
   
-#ifdef C_CODE
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
@@ -298,12 +297,7 @@ public:
   _ownsProvider(true)
   {
   }
-#endif
-#ifdef JAVA_CODE
 
-#endif
-
-#ifdef C_CODE
   GPUUniformValueMatrix4(const Matrix44DProvider* provider, bool ownsProvider):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
@@ -311,10 +305,6 @@ public:
   _ownsProvider(ownsProvider)
   {
   }
-#endif
-#ifdef JAVA_CODE
-
-#endif
 
   GPUUniformValueMatrix4(const Matrix44D* m):
   GPUUniformValue(GLType::glMatrix4Float()),

@@ -195,8 +195,11 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueS
 }
 
 void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
+
+  const int size = features.size();
+
   bool normalsAvailable = false;
-  for(int i = 0; i < features.size(); i++){
+  for(int i = 0; i < size; i++){
     const GLFeature* f = features.get(i);
     if (f->getID() == GLF_VERTEX_NORMAL){
       normalsAvailable = true;
@@ -209,7 +212,7 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
 
     int modelTransformCount = 0;
 
-    for(int i = 0; i < features.size(); i++){
+    for(int i = 0; i < size; i++){
       const GLFeature* f = features.get(i);
 
       if (f->getID() == GLF_MODEL_TRANSFORM){
@@ -227,11 +230,11 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
     const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[modelTransformCount];
 #endif
 #ifdef JAVA_CODE
-    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
+    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[modelTransformCount];
 #endif
 
     modelTransformCount = 0;
-    for (int i = 0; i < features.size(); i++){
+    for (int i = 0; i < size; i++){
       const GLFeature* f = features.get(i);
       if (f->getID() == GLF_MODEL_TRANSFORM){
         GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
