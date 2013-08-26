@@ -170,7 +170,12 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
 void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
   const int size = features.size();
+#ifdef C_CODE
   const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[size];
+#endif
+#ifdef JAVA_CODE
+  Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
+#endif
 
   int modelViewCount = 0;
   for (int i = 0; i < size; i++){
@@ -218,7 +223,12 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef C_CODE
     const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[modelTransformCount];
+#endif
+#ifdef JAVA_CODE
+    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
+#endif
 
     modelTransformCount = 0;
     for (int i = 0; i < features.size(); i++){

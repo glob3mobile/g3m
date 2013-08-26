@@ -77,12 +77,7 @@ class GLFeatureGroup/*: public GLFeatureSet */{
 
 public:
 
-  virtual ~GLFeatureGroup() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  }
+  virtual ~GLFeatureGroup() {}
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroupName getGroupName(int i);

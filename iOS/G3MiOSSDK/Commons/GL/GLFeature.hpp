@@ -100,9 +100,6 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-//enum GLCameraGroupFeatureType{
-//  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
-//};
 class GLCameraGroupFeature: public GLFeature{
 private:
 
@@ -113,20 +110,9 @@ private:
   private Matrix44DHolder _matrixHolder = null;
 #endif
 public:
-#ifdef C_CODE
 
   GLCameraGroupFeature(Matrix44D* matrix, GLFeatureID id):
   GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)){}
-
-#endif
-#ifdef JAVA_CODE
-  public GLCameraGroupFeature(Matrix44D matrix, GLCameraGroupFeatureType type)
-  {
-    super(GLFeatureGroupName.CAMERA_GROUP);
-    _matrixHolder = new Matrix44DHolder(matrix);
-    _type = type;
-  }
-#endif
 
   ~GLCameraGroupFeature(){
     _matrixHolder->_release();

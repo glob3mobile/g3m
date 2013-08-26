@@ -24,15 +24,16 @@ void Matrix44DMultiplicationHolder::pullMatrixes() const{
 }
 
 Matrix44DMultiplicationHolder::Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix):
-_providers(new const Matrix44DProvider*[nMatrix]),
 _nMatrix(nMatrix),
 _modelview(NULL)
 {
 #ifdef C_CODE
   _matrix = new const Matrix44D*[nMatrix];
+  _providers = new const Matrix44DProvider*[nMatrix];
 #endif
 #ifdef JAVA_CODE
   _matrix = new Matrix44D[nMatrix];
+  _providers = new Matrix44DProvider[nMatrix];
 #endif
   for (int i = 0; i < _nMatrix; i++) {
     _matrix[i] = NULL;

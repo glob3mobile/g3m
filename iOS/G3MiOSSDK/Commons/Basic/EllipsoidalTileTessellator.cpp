@@ -44,7 +44,7 @@ EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
   java.util.Iterator it = _indicesMap.entrySet().iterator();
   while (it.hasNext()) {
     java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    IShortBuffer b =  pairs.getValue();
+    IShortBuffer b = (IShortBuffer) pairs.getValue();
     b.dispose();
   }
 #endif

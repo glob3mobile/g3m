@@ -278,16 +278,18 @@ public:
 
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
-protected:
-  mutable const Matrix44D* _lastModelSet;
+private:
   const bool _ownsProvider;
 #ifdef C_CODE
   const Matrix44DProvider* _provider;
+  mutable const Matrix44D* _lastModelSet;
 #endif
 #ifdef JAVA_CODE
-  protected Matrix44DProvider _holder = null;
+  protected Matrix44DProvider _provider = null;
+  protected  Matrix44D _lastModelSet;
 #endif
 public:
+  
 #ifdef C_CODE
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),

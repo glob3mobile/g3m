@@ -62,23 +62,53 @@ private:
 public:
 
   static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet){
-    return FloatBufferBuilderFromGeodetic(NO_CENTER, planet, Vector3D::zero);
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          NO_CENTER,
+#else
+                                          CenterStrategy.NO_CENTER,
+#endif
+                                          planet, Vector3D::zero);
   }
 
   static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet){
-    return FloatBufferBuilderFromGeodetic(FIRST_VERTEX, planet, Vector3D::zero);
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          FIRST_VERTEX,
+#else
+                                          CenterStrategy.FIRST_VERTEX,
+#endif
+                                          planet, Vector3D::zero);
   }
 
   static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center){
-    return FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
   }
 
   static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center){
-    return FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
   }
- 
+
   static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center){
-    return FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
   }
 
   void add(const Angle& latitude,
