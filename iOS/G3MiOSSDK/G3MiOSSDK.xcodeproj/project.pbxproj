@@ -337,8 +337,6 @@
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
 		D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */; };
 		D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */; };
-		D8769D8D17C394AC00CEF074 /* NoColorMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */; };
-		D8769D8E17C394AC00CEF074 /* NoColorMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
@@ -1445,8 +1443,6 @@
 		D8D894EC17731870007E41A5 /* GPUVariable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUVariable.hpp; sourceTree = "<group>"; };
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
-		D8E23D0B179D4C8700E358DC /* TexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
-		D8E23D0C179D4C8700E358DC /* TexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
 		D8E76950160742FD008EC7B9 /* GLConstants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLConstants.hpp; sourceTree = "<group>"; };
 		D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraGoToPositionEffect.hpp; path = Commons/Basic/CameraGoToPositionEffect.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2300,12 +2296,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				D8E23D0B179D4C8700E358DC /* TexturedMesh+DirectionLight.fsh */,
-				D8E23D0C179D4C8700E358DC /* TexturedMesh+DirectionLight.vsh */,
 				D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */,
 				D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */,
-				D8E23D0B179D4C8700E358DC /* TexturedMesh+DirectionLight.fsh */,
-				D8E23D0C179D4C8700E358DC /* TexturedMesh+DirectionLight.vsh */,
 				D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
 				D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 				D84625DD177732A900FC4862 /* ColorMesh.fsh */,
@@ -2641,8 +2633,6 @@
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
 				D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */,
-				D8769D8D17C394AC00CEF074 /* NoColorMesh.fsh in Sources */,
-				D8769D8E17C394AC00CEF074 /* NoColorMesh.vsh in Sources */,
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
 				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
