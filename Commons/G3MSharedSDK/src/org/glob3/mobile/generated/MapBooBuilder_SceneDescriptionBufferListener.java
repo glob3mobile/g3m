@@ -17,7 +17,7 @@ public class MapBooBuilder_SceneDescriptionBufferListener extends IBufferDownloa
 
   public final void onError(URL url)
   {
-    ILogger.instance().logError("Can't download SceneJSON from %s", url.getPath());
+    ILogger.instance().logError("Can't download ApplicationJSON from %s", url.getPath());
   }
 
   public final void onCancel(URL url)
