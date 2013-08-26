@@ -118,7 +118,7 @@ public class MeshRenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
     updateGLState(rc);

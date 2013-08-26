@@ -62,6 +62,20 @@ public class GPUVariableValueSet
     }
   }
 
+  public final boolean containsUniform(GPUUniformKey key)
+  {
+    final int index = key.getValue();
+
+    return _uniformValues[index] != null;
+  }
+
+  public final boolean containsAttribute(GPUAttributeKey key)
+  {
+    final int index = key.getValue();
+
+    return _attributeValues[index] != null;
+  }
+
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)
   {
     final int index = key.getValue();

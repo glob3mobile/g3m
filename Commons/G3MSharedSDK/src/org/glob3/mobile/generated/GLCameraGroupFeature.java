@@ -1,7 +1,12 @@
 package org.glob3.mobile.generated; 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+//enum GLCameraGroupFeatureType{
+//  F_PROJECTION, F_CAMERA_MODEL, F_MODEL_TRANSFORM
+//};
 public class GLCameraGroupFeature extends GLFeature
 {
-  protected final GLCameraGroupFeatureType _type;
+
   private Matrix44DHolder _matrixHolder = null;
   public GLCameraGroupFeature(Matrix44D matrix, GLCameraGroupFeatureType type)
   {
@@ -9,14 +14,12 @@ public class GLCameraGroupFeature extends GLFeature
     _matrixHolder = new Matrix44DHolder(matrix);
     _type = type;
   }
+
   public void dispose()
   {
-<<<<<<< HEAD
     _matrixHolder._release();
-=======
-  super.dispose();
 
->>>>>>> glstate-rc
+    super.dispose();
   }
   public final Matrix44D getMatrix()
   {
@@ -30,12 +33,8 @@ public class GLCameraGroupFeature extends GLFeature
   {
      return _matrixHolder;
   }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
-  }
-
-  public final GLCameraGroupFeatureType getType()
-  {
-     return _type;
   }
 }

@@ -106,7 +106,7 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final int trailsCount = _trails.size();
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();

@@ -4,9 +4,9 @@ package org.glob3.mobile.generated;
 public abstract class PriorityGLFeature extends GLFeature
 {
   private final int _priority;
-  public PriorityGLFeature(GLFeatureGroupName g, int p)
+  public PriorityGLFeature(GLFeatureGroupName g, GLFeatureID id, int p)
   {
-     super(g);
+     super(g, id);
      _priority = p;
   }
 

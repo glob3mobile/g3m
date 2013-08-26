@@ -61,7 +61,7 @@ public class GLState extends RCObject
   {
      _parentGLState = null;
      _lastGPUProgramUsed = null;
-     _parentsTimeStamp = 0;
+     _parentsTimeStamp = -1;
      _timeStamp = 0;
      _valuesSet = null;
      _globalState = null;
@@ -136,7 +136,6 @@ public class GLState extends RCObject
         _parentGLState = parent;
         _parentGLState._retain();
   
-  
         _parentsTimeStamp = parentsTimeStamp;
         hasChangedStructure();
       }
@@ -155,25 +154,25 @@ public class GLState extends RCObject
   
       GLFeatureSet accumulatedFeatures = getAccumulatedFeatures();
   
-      for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
-      {
-        GLFeatureGroupName groupName = GLFeatureGroup.getGroupName(i);
-        GLFeatureGroup group = GLFeatureGroup.createGroup(groupName);
+  //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+  //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+  //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+  //
+  ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+  ////        const GLFeature* f = accumulatedFeatures->get(j);
+  ////        if (f->getGroup() == groupName) {
+  ////          group->add(f);
+  ////        }
+  ////      }
+  ////      group->addToGPUVariableSet(_valuesSet);
+  ////      group->applyOnGlobalGLState(_globalState);
+  //
+  //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
+  //
+  //      delete group;
+  //    }
   
-        for (int j = 0; j < accumulatedFeatures.size(); j++)
-        {
-          final GLFeature f = accumulatedFeatures.get(j);
-          if (f.getGroup() == groupName)
-          {
-            group.add(f);
-          }
-        }
-        group.addToGPUVariableSet(_valuesSet);
-        group.applyOnGlobalGLState(_globalState);
-  
-        if (group != null)
-           group.dispose();
-      }
+      GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();

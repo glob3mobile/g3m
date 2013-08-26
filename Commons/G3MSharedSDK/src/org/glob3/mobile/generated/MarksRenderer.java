@@ -138,7 +138,7 @@ public class MarksRenderer extends LeafRenderer
     }
   }
 
-  public void render(G3MRenderContext rc)
+  public void render(G3MRenderContext rc, GLState glState)
   {
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();

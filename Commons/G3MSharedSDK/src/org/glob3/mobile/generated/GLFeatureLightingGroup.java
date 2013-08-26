@@ -1,26 +1,74 @@
 package org.glob3.mobile.generated; 
 public class GLFeatureLightingGroup extends GLFeatureGroup
 {
-  public final void applyOnGlobalGLState(GLGlobalState state)
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+  public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
-    for(int i = 0; i < _nFeatures; i++)
+    boolean normalsAvailable = false;
+    for(int i = 0; i < features.size(); i++)
     {
-      final GLFeature f = _features[i];
-      if (f != null)
+      final GLFeature f = features.get(i);
+      if (f.getID() == GLFeatureID.GLF_VERTEX_NORMAL)
       {
-        f.applyOnGlobalGLState(state);
+        normalsAvailable = true;
+        break;
       }
     }
-  }
-  public final void addToGPUVariableSet(GPUVariableValueSet vs)
-  {
-    for(int i = 0; i < _nFeatures; i++)
+  
+  
+    if (normalsAvailable)
     {
-      final GLFeature f = _features[i];
-      if (f != null)
+  
+      int modelTransformCount = 0;
+  
+      for(int i = 0; i < features.size(); i++)
       {
-        vs.combineWith(f.getGPUVariableValueSet());
+        final GLFeature f = features.get(i);
+  
+        if (f.getID() == GLFeatureID.GLF_MODEL_TRANSFORM)
+        {
+          modelTransformCount++;
+        }
+  
+        if (f.getGroup() == GLFeatureGroupName.LIGHTING_GROUP)
+        {
+          f.applyOnGlobalGLState(state);
+          vs.combineWith(f.getGPUVariableValueSet());
+        }
       }
+  
+      /////////////////////////////////////////////////////////////////////////////////////////////
+      Matrix44DProvider[] modelTransformHolders = new const Matrix44DProvider[modelTransformCount];
+  
+      modelTransformCount = 0;
+      for (int i = 0; i < features.size(); i++)
+      {
+        final GLFeature f = features.get(i);
+        if (f.getID() == GLFeatureID.GLF_MODEL_TRANSFORM)
+        {
+          GLCameraGroupFeature cf = ((GLCameraGroupFeature) f);
+          final Matrix44D m = cf.getMatrixHolder().getMatrix();
+  
+          if (!m.isScaleMatrix() && !m.isTranslationMatrix())
+          {
+            modelTransformHolders[modelTransformCount++] = cf.getMatrixHolder();
+          }
+        }
+  
+      }
+  
+      Matrix44DProvider modelProvider = null;
+      if (modelTransformCount > 0)
+      {
+        modelProvider = new Matrix44DMultiplicationHolder(modelTransformHolders, modelTransformCount);
+  
+        vs.addUniformValue(GPUUniformKey.MODEL, new GPUUniformValueMatrix4(modelProvider, true), false);
+      }
+  
+      modelTransformHolders = null;
+  
+  
     }
   }
 }

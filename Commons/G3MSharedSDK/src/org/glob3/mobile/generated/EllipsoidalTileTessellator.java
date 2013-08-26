@@ -128,7 +128,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public void dispose()
   {
-<<<<<<< HEAD
     java.util.Iterator it = _indicesMap.entrySet().iterator();
     while (it.hasNext()) {
       java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
@@ -136,10 +135,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
       b.dispose();
     }
   
-=======
-  super.dispose();
-
->>>>>>> glstate-rc
+    super.dispose();
+  
   }
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)

@@ -375,7 +375,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
   
     updateGLState(rc);

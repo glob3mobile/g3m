@@ -118,7 +118,7 @@ public class BusyQuadRenderer extends LeafRenderer
 
 
   //TODO: REMOVE???
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
   
@@ -138,6 +138,7 @@ public class BusyQuadRenderer extends LeafRenderer
     // draw mesh
     _quadMesh.render(rc, _glState);
   }
+
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {

@@ -180,7 +180,7 @@ public class FlatPlanet extends Planet
   public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
   {
     int TODO_agustin;
-    return Vector3D.zero();
+    return Vector3D.zero;
   }
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)

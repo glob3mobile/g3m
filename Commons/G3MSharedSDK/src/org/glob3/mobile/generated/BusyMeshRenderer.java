@@ -128,7 +128,7 @@ public class BusyMeshRenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
   

@@ -64,39 +64,6 @@ public class GPUProgramManager
     return prog;
   }
 
-<<<<<<< HEAD
-=======
-//  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
-///#ifdef C_CODE
-//    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
-//        it != _programs.end(); it++) {
-//      if (state.isLinkableToProgram(*it->second)) {
-//        return it->second;
-//      }
-//    }
-///#endif
-///#ifdef JAVA_CODE
-//    for (final GPUProgram p : _programs.values()) {
-//    	if (state.isLinkableToProgram(p)) {
-//        return p;
-//      }
-//    }
-///#endif
-//    
-//    int WORKING_JM;
-//    
-//    std::vector<std::string>* us = state.getUniformsNames();
-//    int size = us->size();
-//    for (int i = 0; i < size; i++) {
-//      if (us->at(i).compare("ViewPortExtent") == 0) {
-//        return getProgram(gl, "Billboard");
-//      }
-//    }
-//    
-//    return getProgram(gl, "Default");
-//  }
-
->>>>>>> glstate-rc
   public final GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
@@ -106,69 +73,8 @@ public class GPUProgramManager
     boolean color = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.COLOR);
     boolean transformTC = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS);
   
-<<<<<<< HEAD
     boolean hasLight = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT);
   
-    /*
-     #ifdef C_CODE
-     const GLState* thisGLState = glState;
-     #endif
-     #ifdef JAVA_CODE
-     GLState thisGLState = glState;
-     #endif
-     while (thisGLState != NULL) {
-     std::vector<int>* ui = thisGLState->getGPUProgramState()->getUniformsKeys();
-     int sizeI = ui->size();
-     for (int j = 0; j < sizeI; j++) {
-     int key = ui->at(j);
-  
-     if (key == VIEWPORT_EXTENT){
-     billboard = true;
-  
-     if (!GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT)){
-     int a = 0;
-     a++;
-     }
-  
-     }
-  
-     if (key == FLAT_COLOR){
-     flatColor = true;
-     }
-  
-     //      if (key == TRANSLATION_TEXTURE_COORDS){
-     //        texture = true;
-     //      }
-  
-     if (key == TRANSLATION_TEXTURE_COORDS || key == SCALE_TEXTURE_COORDS){
-     transformTC = true;
-     }
-     }
-  
-     std::vector<int>* ai = thisGLState->getGPUProgramState()->getAttributeKeys();
-     sizeI = ai->size();
-     for (int j = 0; j < sizeI; j++) {
-     int key = ai->at(j);
-  
-     //      if (key == TEXTURE_COORDS){
-     //        texture = true;
-     //      }
-  
-     if (key == COLOR){
-     color = true;
-  
-     if (!GPUVariable::codeContainsAttribute(attributesCode, COLOR)){
-     int a = 0;
-     a++;
-     }
-     }
-     }
-  
-     thisGLState = thisGLState->getParent();
-     }
-     */
-=======
->>>>>>> glstate-rc
     if (billboard)
     {
       return getProgram(gl, "Billboard");

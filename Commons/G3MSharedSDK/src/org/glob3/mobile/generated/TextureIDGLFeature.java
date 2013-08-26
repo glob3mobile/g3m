@@ -8,7 +8,7 @@ public class TextureIDGLFeature extends GLColorGroupFeature
   
   public TextureIDGLFeature(IGLTextureId texID, boolean blend, int sFactor, int dFactor)
   {
-     super(4, blend, sFactor, dFactor);
+     super(GLFeatureID.GLF_TEXTURE_ID, 4, blend, sFactor, dFactor);
      _texID = texID;
   
   

@@ -92,19 +92,7 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-<<<<<<< HEAD
-      final Vector3D pos = new Vector3D(planet.toCartesian(_position));
-  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
-      FloatBufferBuilderFromCartesian3D vertex = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      _vertices = vertex.create();
-=======
       _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
->>>>>>> glstate-rc
     }
   }
 
@@ -543,8 +531,6 @@ public class Mark implements SurfaceElevationListener
       Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
   
       _cartesianPosition = new Vector3D(planet.toCartesian(positionWithSurfaceElevation));
-  
-  //    _cartesianPosition = new Vector3D( planet->toCartesian(*_position) );
     }
     return _cartesianPosition;
   }

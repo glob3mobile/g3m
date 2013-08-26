@@ -43,20 +43,8 @@ public class LeveledTexturedMesh extends Mesh
           {
             final LazyTextureMapping mapping = _mappings.get(i);
             if (mapping != null)
-<<<<<<< HEAD
-            {
-              _mappings.get(i).dispose();
-              if (mapping != null)
-                 mapping.dispose();
-              _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-            }
-=======
                mapping.dispose();
-<<<<<<< HEAD
->>>>>>> hotfix
-=======
             _mappings.remove(i);
->>>>>>> glstate-rc
           }
           _mappings.trimToSize();
         }
@@ -66,15 +54,7 @@ public class LeveledTexturedMesh extends Mesh
     return (_currentLevel >= 0) ? _mappings.get(_currentLevel) : null;
   }
 
-<<<<<<< HEAD
-  private GLState _glState = new GLState();
-<<<<<<< HEAD
-  private LazyTextureMapping _mappingOnGLState;
-=======
->>>>>>> hotfix
-=======
   private GLState _glState;
->>>>>>> glstate-rc
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
@@ -137,11 +117,8 @@ public class LeveledTexturedMesh extends Mesh
 
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
-<<<<<<< HEAD
-    if (glTextureId != null)
-=======
+  
     if (_mappings.size() > 0)
->>>>>>> hotfix
     {
       if (glTextureId != null)
       {
@@ -185,24 +162,6 @@ public class LeveledTexturedMesh extends Mesh
 
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
-<<<<<<< HEAD
-  
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping != null)
-    {
-      if (mapping != _mappingOnGLState)
-      {
-        _mappingOnGLState = mapping;
-        mapping.modifyGLState(_glState);
-      }
-  
-      _glState.setParent(parentGLState);
-      _mesh.render(rc, _glState);
-    }
-    else
-    {
-      ILogger.instance().logError("No Texture Mapping");
-=======
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
@@ -213,7 +172,6 @@ public class LeveledTexturedMesh extends Mesh
     {
       _glState.setParent(parentGLState);
       _mesh.render(rc, _glState);
->>>>>>> hotfix
     }
   }
 

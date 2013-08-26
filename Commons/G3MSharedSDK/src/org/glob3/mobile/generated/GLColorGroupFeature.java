@@ -6,24 +6,12 @@ public abstract class GLColorGroupFeature extends PriorityGLFeature
   private final int _sFactor;
   private final int _dFactor;
 
-  public GLColorGroupFeature(int p, boolean blend, int sFactor, int dFactor)
+  public GLColorGroupFeature(GLFeatureID id, int p, boolean blend, int sFactor, int dFactor)
   {
-     super(GLFeatureGroupName.COLOR_GROUP, p);
+     super(GLFeatureGroupName.COLOR_GROUP, id, p);
      _blend = blend;
      _sFactor = sFactor;
      _dFactor = dFactor;
-<<<<<<< HEAD
-=======
-//    _globalState = new GLGlobalState();
-//
-//    if (blend) {
-//      _globalState->enableBlend();
-//      _globalState->setBlendFactors(sFactor, dFactor);
-//    } else{
-//      _globalState->disableBlend();
-//    }
-
->>>>>>> glstate-rc
   }
 
   public final void blendingOnGlobalGLState(GLGlobalState state)

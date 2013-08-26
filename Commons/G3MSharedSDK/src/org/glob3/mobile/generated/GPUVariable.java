@@ -45,7 +45,6 @@ public class GPUVariable
       return GPUUniformKey.POINT_SIZE;
     }
   
-<<<<<<< HEAD
     if (name.compareTo("uAmbientLight") == 0)
     {
       return GPUUniformKey.AMBIENT_LIGHT;
@@ -74,11 +73,11 @@ public class GPUVariable
     if (name.compareTo("uModel") == 0)
     {
       return GPUUniformKey.MODEL;
-=======
+    }
+  
     if (name.compareTo("uBillboardPosition") == 0)
     {
       return GPUUniformKey.BILLBOARD_POSITION;
->>>>>>> glstate-rc
     }
   
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
@@ -173,77 +172,7 @@ public class GPUVariable
   {
      _name = name;
      _variableType = type;
-<<<<<<< HEAD
-=======
-//    createMetadata();
   }
 
-  //Uniform metadata based in our shaders
-//  long getKey() const { return _key;}
-//  long getGroup() const { return _group;}
-//  long getPriority() const { return _priority;}
-
-}
-/*
-void createMetadata() {
-  _group = GROUP_NOGROUP;
-  _priority = -1;
-  _key = getKeyForName(_name, _variableType);
-
-  if (_key == UNRECOGNIZED) {
-    ILogger::instance()->logError("Unrecognized GPU VARAIBLE %s\n", _name.c_str());
-  }
-
-  if (_variableType == UNIFORM) {
-    if (_key == FLAT_COLOR) {
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TEXTURE_EXTENT) {
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TRANSLATION_TEXTURE_COORDS) {
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TRANSLATION_TEXTURE_COORDS) {
-      _group = GROUP_COLOR;
-    }
-//
-//    if (true) { //DELETE
-//      if (_key == EnableColorPerVertex) {
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == EnableTexture) {
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if ( _key == EnableFlatColor) {
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == FlatColorIntensity) {
-//        _group = GROUP_COLOR;
-//      }
-//
-//      if (_key == ColorPerVertexIntensity) {
-//        _group = GROUP_COLOR;
-//      }
-//    }
-  }
-
-  if (_variableType == ATTRIBUTE) {
-
-    if (_key == COLOR) {
-      _group = GROUP_COLOR;
-    }
-
-    if (_key == TEXTURE_COORDS) {
-      _group = GROUP_COLOR;
-    }
->>>>>>> glstate-rc
-  }
 
 }

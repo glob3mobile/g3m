@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GPUUniform;
 
 public abstract class GPUUniformValue extends RCObject
@@ -31,13 +32,8 @@ public abstract class GPUUniformValue extends RCObject
 
   public void dispose()
   {
-<<<<<<< HEAD
     //    ILogger::instance()->logInfo("Deleting Uniform Value");
-=======
-//    ILogger::instance()->logInfo("Deleting Uniform Value");
-  super.dispose();
-
->>>>>>> glstate-rc
+    super.dispose();
   }
 
 
