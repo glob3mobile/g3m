@@ -2420,7 +2420,7 @@ public:
       }
 
 
-      if (true){ //Infinite random flights
+      if (false){ //Infinite random flights
 
         int time = rand()%10; //SECS OF FLIGHT
 

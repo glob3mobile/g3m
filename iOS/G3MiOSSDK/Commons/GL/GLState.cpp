@@ -99,14 +99,16 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
       GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
       GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
 
-      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-        const GLFeature* f = accumulatedFeatures->get(j);
-        if (f->getGroup() == groupName) {
-          group->add(f);
-        }
-      }
-      group->addToGPUVariableSet(_valuesSet);
-      group->applyOnGlobalGLState(_globalState);
+//      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+//        const GLFeature* f = accumulatedFeatures->get(j);
+//        if (f->getGroup() == groupName) {
+//          group->add(f);
+//        }
+//      }
+//      group->addToGPUVariableSet(_valuesSet);
+//      group->applyOnGlobalGLState(_globalState);
+
+      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
 
       delete group;
     }
