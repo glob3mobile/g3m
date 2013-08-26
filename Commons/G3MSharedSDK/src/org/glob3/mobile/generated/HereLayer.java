@@ -58,7 +58,7 @@ public class HereLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }
@@ -84,18 +84,18 @@ public class HereLayer extends Layer
     isb.addInt(_parameters._tileTextureResolution._y);
   
     isb.addString("&ctr=");
-    isb.addDouble(tileSector.getCenter().latitude().degrees());
+    isb.addDouble(tileSector._center._latitude._degrees);
     isb.addString(",");
-    isb.addDouble(tileSector.getCenter().longitude().degrees());
+    isb.addDouble(tileSector._center._longitude._degrees);
   
   //  isb->addString("&poi=");
-  //  isb->addDouble(tileSector.lower().latitude().degrees());
+  //  isb->addDouble(tileSector._lower._latitude._degrees);
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.lower().longitude().degrees());
+  //  isb->addDouble(tileSector._lower._longitude._degrees);
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.upper().latitude().degrees());
+  //  isb->addDouble(tileSector._upper._latitude._degrees);
   //  isb->addString(",");
-  //  isb->addDouble(tileSector.upper().longitude().degrees());
+  //  isb->addDouble(tileSector._upper._longitude._degrees);
   //  isb->addString("&nomrk");
   
     isb.addString("&z=");
@@ -164,5 +164,9 @@ public class HereLayer extends Layer
     return new URL();
   }
 
+  public final String description()
+  {
+    return "[HereLayer]";
+  }
 
 }

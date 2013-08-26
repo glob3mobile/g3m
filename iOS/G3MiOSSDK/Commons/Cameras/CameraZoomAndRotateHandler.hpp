@@ -1,8 +1,8 @@
 //
-//  CameraZoomAndRotateHandler.h
+//  CameraZoomAndRotateHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 26/06/13.
+//  Created by Agustin Trujillo on 26/06/13.
 //
 //
 
@@ -19,7 +19,13 @@ private:
   const bool _processRotation;
   const bool _processZoom;
   
-  void zoom();
+  double _fingerSep0;
+  double _lastAngle;
+  double _angle0;
+  
+  MutableVector3D _centralGlobePoint;
+  
+  void zoom(Camera* camera, Vector2I difCurrentPixels);
   void rotate();
   
   
@@ -34,7 +40,12 @@ public:
   {
   }
   
-  ~CameraZoomAndRotateHandler() {}
+  ~CameraZoomAndRotateHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,
@@ -65,4 +76,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__CameraZoomAndRotateHandler__) */
+#endif

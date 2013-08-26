@@ -23,10 +23,10 @@ package org.glob3.mobile.generated;
 public class IndexedMesh extends AbstractMesh
 {
   private IShortBuffer _indices;
-  protected final void rawRender(G3MRenderContext rc, GLState parentState)
+  protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices);
+    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
   }
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IShortBuffer indices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
@@ -63,6 +63,8 @@ public class IndexedMesh extends AbstractMesh
       if (_indices != null)
          _indices.dispose();
     }
+  
+    super.dispose();
+  
   }
-
 }

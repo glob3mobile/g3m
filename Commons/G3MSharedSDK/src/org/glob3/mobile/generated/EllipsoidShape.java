@@ -7,8 +7,6 @@ package org.glob3.mobile.generated;
 //
 //
 
-///#include <math.h>
-
 //
 //  EllipsoidShape.hpp
 //  G3MiOSSDK
@@ -175,7 +173,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    final Ellipsoid ellipsoid = new Ellipsoid(new Vector3D(_radiusX, _radiusY, _radiusZ));
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero(), new Vector3D(_radiusX, _radiusY, _radiusZ)));
     final Sector sector = new Sector(Sector.fullSphere());
   
     FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, Vector3D.zero());
@@ -195,7 +193,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
         vertices.add(innerPoint);
   
-        final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint.latitude()) : v;
+        final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint._latitude) : v;
   
         texCoords.add((float) u, (float) vv);
       }
@@ -262,6 +260,9 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    super.dispose();
+  
   }
 
   public final void imageDownloaded(IImage image)

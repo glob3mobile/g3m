@@ -2,7 +2,7 @@
 //  IFactory.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -42,7 +42,6 @@ public:
   }
 
   virtual ~IFactory() {
-
   }
 
   virtual void createImageFromFileName(const std::string& filename,
@@ -97,7 +96,13 @@ public:
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,
                                       bool autodeleteWebSocket) const = 0;
+#ifdef JAVA_CODE
 
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+#endif
+  
 };
 
 #endif

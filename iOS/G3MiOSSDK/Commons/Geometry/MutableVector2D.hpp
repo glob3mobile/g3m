@@ -44,6 +44,10 @@ public:
                            mu->NanD());
   }
   
+  bool isEqualsTo(double x, double y) const{
+    return _x == x && _y == y;
+  }
+  
   bool isNan() const {
     const IMathUtils* mu = IMathUtils::instance();
 

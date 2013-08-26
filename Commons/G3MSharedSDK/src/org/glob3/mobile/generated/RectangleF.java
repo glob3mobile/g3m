@@ -39,6 +39,7 @@ public class RectangleF
 
   public void dispose()
   {
+
   }
 
   public final boolean equalTo(RectangleF that)
@@ -99,5 +100,11 @@ public class RectangleF
 
     return true;
   }
+
+  public final boolean contains(float x, float y)
+  {
+    return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
+  }
+
 
 }

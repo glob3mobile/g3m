@@ -24,7 +24,7 @@ public abstract class GEOGeometry extends GEOObject
 {
   private GEOFeature _feature;
 
-  protected abstract java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc);
+  protected abstract java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer);
 
   public GEOGeometry()
   {
@@ -34,7 +34,8 @@ public abstract class GEOGeometry extends GEOObject
 
   public void dispose()
   {
-  
+  super.dispose();
+
   }
 
   public final void setFeature(GEOFeature feature)
@@ -52,26 +53,29 @@ public abstract class GEOGeometry extends GEOObject
     return _feature;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
-    java.util.ArrayList<GEOSymbol> symbols = createSymbols(rc, sc);
-    if (symbols == null)
+    java.util.ArrayList<GEOSymbol> symbols = createSymbols(symbolizer);
+    if (symbols != null)
     {
-      return;
+  
+      final int symbolsSize = symbols.size();
+      for (int i = 0; i < symbolsSize; i++)
+      {
+        final GEOSymbol symbol = symbols.get(i);
+        if (symbol != null)
+        {
+          final boolean deleteSymbol = symbol.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+          if (deleteSymbol)
+          {
+            if (symbol != null)
+               symbol.dispose();
+          }
+        }
+      }
+  
+      symbols = null;
     }
-  
-    final int symbolsSize = symbols.size();
-    for (int i = 0; i < symbolsSize; i++)
-    {
-      final GEOSymbol symbol = symbols.get(i);
-  
-      symbol.symbolize(rc, sc);
-  
-      if (symbol != null)
-         symbol.dispose();
-    }
-  
-    symbols = null;
   }
 
 }

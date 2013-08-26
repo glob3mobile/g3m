@@ -50,14 +50,38 @@ void ICanvas::setFillColor(const Color& color) {
   _setFillColor(color);
 }
 
-void ICanvas::setStrokeColor(const Color& color) {
+void ICanvas::setLineColor(const Color& color) {
   checkInitialized();
-  _setStrokeColor(color);
+  _setLineColor(color);
 }
 
-void ICanvas::setStrokeWidth(float width) {
+void ICanvas::setLineWidth(float width) {
   checkInitialized();
-  _setStrokeWidth(width);
+  _setLineWidth(width);
+}
+
+void ICanvas::setLineCap(StrokeCap cap) {
+  checkInitialized();
+  _setLineCap(cap);
+}
+
+void ICanvas::setLineJoin(StrokeJoin join) {
+  checkInitialized();
+  _setLineJoin(join);
+}
+
+void ICanvas::setLineMiterLimit(float limit) {
+  checkInitialized();
+  _setLineMiterLimit(limit);
+}
+
+void ICanvas::setLineDash(float lengths[],
+                          int count,
+                          int phase) {
+  checkInitialized();
+  _setLineDash(lengths,
+               count,
+               phase);
 }
 
 void ICanvas::setShadow(const Color& color,
@@ -163,11 +187,46 @@ void ICanvas::drawImage(const IImage* image,
   checkInitialized();
 
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
-                                srcLeft, srcTop, srcWidth, srcHeight)){
+                                srcLeft, srcTop, srcWidth, srcHeight)) {
     ILogger::instance()->logError("Invalid source rectangle in drawImage");
   }
 
   _drawImage(image,
              srcLeft, srcTop, srcWidth, srcHeight,
              destLeft, destTop, destWidth, destHeight);
+}
+
+void ICanvas::beginPath() {
+  checkInitialized();
+  _beginPath();
+}
+
+void ICanvas::closePath() {
+  checkInitialized();
+  _closePath();
+}
+
+void ICanvas::stroke() {
+  checkInitialized();
+  _stroke();
+}
+
+void ICanvas::fill() {
+  checkInitialized();
+  _fill();
+}
+
+void ICanvas::fillAndStroke() {
+  checkInitialized();
+  _fillAndStroke();
+}
+
+void ICanvas::moveTo(float x, float y) {
+  checkInitialized();
+  _moveTo(x, y);
+}
+
+void ICanvas::lineTo(float x, float y) {
+  checkInitialized();
+  _lineTo(x, y);
 }

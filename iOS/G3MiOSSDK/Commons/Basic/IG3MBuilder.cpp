@@ -19,10 +19,12 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
-#include "TileRendererBuilder.hpp"
+#include "PlanetRendererBuilder.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CompositeRenderer.hpp"
 #include "SimpleCameraConstrainer.hpp"
+#include "GPUProgramManager.hpp"
+#include "GPUProgramFactory.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -34,7 +36,7 @@ _planet(NULL),
 _cameraConstraints(NULL),
 _cameraRenderer(NULL), 
 _backgroundColor(NULL),
-_tileRendererBuilder(NULL),
+_planetRendererBuilder(NULL),
 _busyRenderer(NULL),
 _renderers(NULL),
 _initializationTask(NULL),
@@ -76,7 +78,7 @@ IG3MBuilder::~IG3MBuilder() {
     delete _periodicalTasks;
   }
   delete _userData;
-  delete _tileRendererBuilder;
+  delete _planetRendererBuilder;
 }
 
 /**
@@ -208,16 +210,16 @@ Color* IG3MBuilder::getBackgroundColor() {
 }
 
 /**
- * Returns the _tileRendererBuilder. If it does not exist, it will be default initializated. 
+ * Returns the _planetRendererBuilder. If it does not exist, it will be default initializated. 
  *
- * @return _tileRendererBuilder: TileRendererBuilder*
+ * @return _planetRendererBuilder: PlanetRendererBuilder*
  */
-TileRendererBuilder* IG3MBuilder::getTileRendererBuilder() {
-  if (!_tileRendererBuilder) {
-    _tileRendererBuilder = new TileRendererBuilder();
+PlanetRendererBuilder* IG3MBuilder::getPlanetRendererBuilder() {
+  if (!_planetRendererBuilder) {
+    _planetRendererBuilder = new PlanetRendererBuilder();
   }
   
-  return _tileRendererBuilder;
+  return _planetRendererBuilder;
 }
 
 /**
@@ -482,15 +484,15 @@ void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
  * Adds a new renderer to the renderers list.
  * The renderers list will be initializated with a default renderers set (empty set at the moment).
  *
- * @param renderer - cannot be either NULL or an instance of TileRenderer
+ * @param renderer - cannot be either NULL or an instance of PlanetRenderer
  */
 void IG3MBuilder::addRenderer(Renderer *renderer) {
   if (!renderer) {
     ILogger::instance()->logError("LOGIC ERROR: trying to add a NULL renderer object");
     return;
   }
-  if (renderer->isTileRenderer()) {
-    ILogger::instance()->logError("LOGIC ERROR: a new TileRenderer is not expected to be added");
+  if (renderer->isPlanetRenderer()) {
+    ILogger::instance()->logError("LOGIC ERROR: a new PlanetRenderer is not expected to be added");
     return;
   }
   getRenderers()->push_back(renderer);
@@ -499,13 +501,13 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
 /**
  * Sets the renderers list, ignoring the default renderers list and the renderers
  * previously added, if added.
- * The renderers list must contain at least an instance of the TileRenderer class.
+ * The renderers list must contain at least an instance of the PlanetRenderer class.
  *
  * @param renderers - std::vector<Renderer*>
  */
 void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
-  if (!containsTileRenderer(renderers)) {
-    ILogger::instance()->logError("LOGIC ERROR: renderers list must contain at least an instance of the TileRenderer class");
+  if (!containsPlanetRenderer(renderers)) {
+    ILogger::instance()->logError("LOGIC ERROR: renderers list must contain at least an instance of the PlanetRenderer class");
     return;
   }
   if (_renderers) {
@@ -616,23 +618,26 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
 G3MWidget* IG3MBuilder::create() {
   /**
    * If any renderers were set or added, the main renderer will be a composite renderer.
-   *    If the renderers list does not contain a tileRenderer, it will be created and added.
+   *    If the renderers list does not contain a planetRenderer, it will be created and added.
    *    The renderers contained in the list, will be added to the main renderer.
-   * If not, the main renderer will be made up of an only renderer (tileRenderer).
+   * If not, the main renderer will be made up of an only renderer (planetRenderer).
    */
   Renderer* mainRenderer = NULL;
   if (getRenderers()->size() > 0) {
     mainRenderer = new CompositeRenderer();
-    if (!containsTileRenderer(*getRenderers())) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getTileRendererBuilder()->create());
+    if (!containsPlanetRenderer(*getRenderers())) {
+      ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create());
     }
     for (unsigned int i = 0; i < getRenderers()->size(); i++) {
       ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i));
     }
   }
   else {
-    mainRenderer = getTileRendererBuilder()->create();
+    mainRenderer = getPlanetRendererBuilder()->create();
   }
+  
+
+  
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
                                             getStorage(), //
@@ -649,7 +654,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getLogDownloaderStatistics(), //
                                             getInitializationTask(), //
                                             getAutoDeleteInitializationTask(), //
-                                            *getPeriodicalTasks());
+                                            *getPeriodicalTasks(),
+                                            getGPUProgramManager());
   
   g3mWidget->setUserData(getUserData());
 
@@ -709,15 +715,29 @@ std::vector<Renderer*>* IG3MBuilder::createDefaultRenderers() {
 
 /**
  * Returns TRUE if the given renderer list contains, at least, an instance of 
- * the TileRenderer class. Returns FALSE if not.
+ * the PlanetRenderer class. Returns FALSE if not.
  *
  * @return bool
  */
-bool IG3MBuilder::containsTileRenderer(std::vector<Renderer*> renderers) {
+bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
   for (unsigned int i = 0; i < renderers.size(); i++) {
-    if (renderers[i]->isTileRenderer()) {
+    if (renderers[i]->isPlanetRenderer()) {
       return true;
     }
   }
   return false;
+}
+
+void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s) {
+  _sources.push_back(s);
+}
+
+GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
+  //GPU Program Manager
+  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
+  for(int i = 0; i < _sources.size(); i++) {
+    gpuProgramFactory->add(_sources[i]);
+  }
+  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+  return gpuProgramManager;
 }

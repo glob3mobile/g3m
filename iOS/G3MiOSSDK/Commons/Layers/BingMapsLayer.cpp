@@ -257,8 +257,8 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   }
 
   const Sector sector = tileSector.intersection(_sector);
-  if (sector.getDeltaLatitude().isZero() ||
-      sector.getDeltaLongitude().isZero() ) {
+  if (sector._deltaLatitude.isZero() ||
+      sector._deltaLongitude.isZero() ) {
     return petitions;
   }
 
@@ -291,4 +291,8 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                     true) );
   
   return petitions;
+}
+
+const std::string BingMapsLayer::description() const {
+  return "[BingMapsLayer]";
 }

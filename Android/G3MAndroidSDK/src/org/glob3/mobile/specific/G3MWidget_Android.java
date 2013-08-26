@@ -12,6 +12,9 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -289,7 +292,7 @@ public final class G3MWidget_Android
          if (_layerSet != null) {
             final boolean showStatistics = false;
 
-            final TileRenderer tr = new TileRenderer( //
+            final PlanetRenderer tr = new PlanetRenderer( //
                      new EllipsoidalTileTessellator(parameters._tileResolution, true), //
                      new MultiLayerTileTexturizer(), //
                      _layerSet, //
@@ -370,6 +373,24 @@ public final class G3MWidget_Android
       }
    */
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+
+      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
+               GL2Shaders._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
+               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
+               GL2Shaders._flatColorMeshFragmentShader));
+      return new GPUProgramManager(factory);
+   }
+
 
    public void initWidget(final IStorage storage,
                           final IDownloader downloader,
@@ -404,7 +425,7 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, createGPUProgramManager());
 
       _g3mWidget.setUserData(userData);
    }
@@ -483,6 +504,7 @@ public final class G3MWidget_Android
    public void stopCameraAnimation() {
       getG3MWidget().stopCameraAnimation();
    }
+
 
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);

@@ -16,6 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Vector2I;
+
+
 public class MutableVector2I
 {
   private int _x;
@@ -64,4 +67,8 @@ public class MutableVector2I
     return _y;
   }
 
+  public final Vector2I asVector2I()
+  {
+  return new Vector2I(_x, _y);
+  }
 }

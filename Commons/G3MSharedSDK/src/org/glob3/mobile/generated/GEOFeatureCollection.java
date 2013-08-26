@@ -19,6 +19,10 @@ package org.glob3.mobile.generated;
 
 
 //class GEOFeature;
+//class GPUProgramState;
+//class GLGlobalState;
+//class GPUProgramState;
+//class GEOSymbolizer;
 
 public class GEOFeatureCollection extends GEOObject
 {
@@ -27,7 +31,6 @@ public class GEOFeatureCollection extends GEOObject
   public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
      _features = features;
-
   }
 
   public void dispose()
@@ -39,15 +42,18 @@ public class GEOFeatureCollection extends GEOObject
       if (feature != null)
          feature.dispose();
     }
+  
+    super.dispose();
+  
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.symbolize(rc, sc);
+      feature.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
     }
   }
 

@@ -11,6 +11,7 @@
 
 #include <string>
 
+
 class GFont {
 private:
   static const std::string SERIF;
@@ -65,7 +66,6 @@ public:
   }
 
   ~GFont() {
-
   }
 
   bool isSerif() const;

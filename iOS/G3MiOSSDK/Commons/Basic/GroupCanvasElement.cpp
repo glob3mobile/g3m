@@ -14,6 +14,13 @@ GroupCanvasElement::~GroupCanvasElement() {
     CanvasElement* child = _children[i];
     delete child;
   }
+
+  delete _extent;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GroupCanvasElement::add(CanvasElement* child) {

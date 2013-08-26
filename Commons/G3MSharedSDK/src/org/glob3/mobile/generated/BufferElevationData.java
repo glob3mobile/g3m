@@ -19,15 +19,11 @@ package org.glob3.mobile.generated;
 
 public abstract class BufferElevationData extends ElevationData
 {
-  private final int _bufferSize;
-
-//  const Geodetic2D _realResolution;
+  protected final int _bufferSize;
 
   protected abstract double getValueInBufferAt(int index);
 
   public BufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, int bufferSize)
-  //_realResolution(realSector.getDeltaLatitude().div(realExtent._y),
-  //                realSector.getDeltaLongitude().div(realExtent._x))
   {
      super(sector, extent);
      _bufferSize = bufferSize;
@@ -36,23 +32,18 @@ public abstract class BufferElevationData extends ElevationData
 
   public void dispose()
   {
+  super.dispose();
 
   }
-
-//  const Geodetic2D getRealResolution() const {
-//    return _realResolution;
-//  }
 
   public final double getElevationAt(int x, int y)
   {
     final int index = ((_height-1-y) * _width) + x;
-    //const int index = ((_width-1-x) * _height) + y;
   
-    if ((index < 0) || (index >= _bufferSize))
-    {
-      System.out.print("break point on me\n");
-      return IMathUtils.instance().NanD();
-    }
+  //  if ( (index < 0) || (index >= _bufferSize) ) {
+  //    printf("break point on me\n");
+  //    return IMathUtils::instance()->NanD();
+  //  }
   
     return getValueInBufferAt(index);
   }

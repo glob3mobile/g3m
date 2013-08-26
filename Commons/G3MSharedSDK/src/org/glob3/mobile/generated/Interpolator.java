@@ -31,27 +31,26 @@ public abstract class Interpolator
 
   public void dispose()
   {
-
   }
 
   public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Geodetic2D position)
   {
-    return interpolation(sw, ne, valueSW, valueSE, valueNE, valueNW, position.latitude(), position.longitude());
+    return interpolation(sw, ne, valueSW, valueSE, valueNE, valueNW, position._latitude, position._longitude);
   }
 
   public double interpolation(Geodetic2D sw, Geodetic2D ne, double valueSW, double valueSE, double valueNE, double valueNW, Angle latitude, Angle longitude)
   {
   
-    final double swLatRadians = sw.latitude().radians();
-    final double swLonRadians = sw.longitude().radians();
-    final double neLatRadians = ne.latitude().radians();
-    final double neLonRadians = ne.longitude().radians();
+    final double swLatRadians = sw._latitude._radians;
+    final double swLonRadians = sw._longitude._radians;
+    final double neLatRadians = ne._latitude._radians;
+    final double neLonRadians = ne._longitude._radians;
   
     final double deltaLonRadians = neLonRadians - swLonRadians;
     final double deltaLatRadians = neLatRadians - swLatRadians;
   
-    final double u = (longitude.radians() - swLonRadians) / deltaLonRadians;
-    final double v = (neLatRadians - latitude.radians()) / deltaLatRadians;
+    final double u = (longitude._radians - swLonRadians) / deltaLonRadians;
+    final double v = (neLatRadians - latitude._radians) / deltaLatRadians;
   
     return interpolation(valueSW, valueSE, valueNE, valueNW, u, v);
   }

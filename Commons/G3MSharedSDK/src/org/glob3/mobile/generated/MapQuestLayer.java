@@ -77,4 +77,9 @@ public class MapQuestLayer extends MercatorTiledLayer
     return new MapQuestLayer("MapQuest-OpenAerial", "mqcdn.com/tiles/1.0.0/sat", getSubdomains(), initialLevel, 11, timeToCache, readExpired, condition);
   }
 
+  public final String description()
+  {
+    return "[MapQuestLayer]";
+  }
+
 }

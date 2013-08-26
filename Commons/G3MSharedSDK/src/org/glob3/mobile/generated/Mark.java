@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Mark
+public class Mark extends SurfaceElevationListener
 {
   /**
    * The text the mark displays.
@@ -75,22 +75,6 @@ public class Mark
   private Vector3D _cartesianPosition;
 
   private IFloatBuffer _vertices;
-  private IFloatBuffer getVertices(Planet planet)
-  {
-    if (_vertices == null)
-    {
-      final Vector3D pos = getCartesianPosition(planet);
-  
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      _vertices = vertex.create();
-    }
-    return _vertices;
-  }
 
   private boolean _textureSolved;
   private IImage _textureImage;
@@ -99,6 +83,47 @@ public class Mark
   private final String _imageID;
 
   private boolean _renderedMark;
+
+  private static IFloatBuffer _billboardTexCoord = null;
+
+  private GLState _glState = new GLState();
+  private void createGLState(Planet planet)
+  {
+  
+    if (_vertices == null)
+    {
+      final Vector3D pos = new Vector3D(planet.toCartesian(_position));
+      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+      vertex.add(pos);
+      vertex.add(pos);
+      vertex.add(pos);
+      vertex.add(pos);
+  
+      _vertices = vertex.create();
+    }
+  
+    _glState.addGLFeature(new TextureExtentGLFeature(_textureWidth, _textureHeight), false);
+  
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, 1.0f, false, 1.0f), false); // POINT SIZE -  LINE WIDTH -  NO POLYGON OFFSET -  NO CULLING -  NO DEPTH TEST -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+  
+    _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+  }
+
+  private IFloatBuffer getBillboardTexCoords()
+  {
+    if (_billboardTexCoord == null)
+    {
+      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
+      texCoor.add(1,1);
+      texCoor.add(1,0);
+      texCoor.add(0,1);
+      texCoor.add(0,0);
+      _billboardTexCoord = texCoor.create();
+    }
+    return _billboardTexCoord;
+  }
+
+  private SurfaceElevationProvider _surfaceElevationProvider;
 
   /**
    * Creates a marker with icon and label
@@ -167,6 +192,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
+     _surfaceElevationProvider = null;
   
   }
 
@@ -229,6 +255,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
+     _surfaceElevationProvider = null;
   
   }
 
@@ -279,6 +306,7 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
+     _surfaceElevationProvider = null;
   
   }
 
@@ -329,11 +357,17 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
+     _surfaceElevationProvider = null;
   
   }
 
   public void dispose()
   {
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.removeListener(this);
+    }
+  
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
     if (_vertices != null)
@@ -352,6 +386,9 @@ public class Mark
     {
       IFactory.instance().deleteImage(_textureImage);
     }
+  
+    super.dispose();
+  
   }
 
   public final String getLabel()
@@ -366,6 +403,13 @@ public class Mark
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
+  
+    _surfaceElevationProvider = context.getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+    }
+  
     if (!_textureSolved)
     {
       final boolean hasLabel = (_label.length() != 0);
@@ -391,56 +435,8 @@ public class Mark
     }
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition)
-  {
-    final Planet planet = rc.getPlanet();
-  
-    final Vector3D markPosition = getCartesianPosition(planet);
-  
-    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-  
-    // mark will be renderered only if is renderable by distance and placed on a visible globe area
-    boolean renderableByDistance;
-    if (_minDistanceToCamera == 0)
-    {
-      renderableByDistance = true;
-    }
-    else
-    {
-      final double squaredDistanceToCamera = markCameraVector.squaredLength();
-      renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
-    }
-  
-    _renderedMark = false;
-    if (renderableByDistance)
-    {
-      final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
-  
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
-      {
-  
-        if (_textureId == null)
-        {
-          if (_textureImage != null)
-          {
-            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
-  
-            rc.getFactory().deleteImage(_textureImage);
-            _textureImage = null;
-          }
-        }
-  
-        if (_textureId != null)
-        {
-          GL gl = rc.getGL();
-  
-          gl.drawBillBoard(_textureId, getVertices(planet), _textureWidth, _textureHeight);
-  
-          _renderedMark = true;
-        }
-      }
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void render(G3MRenderContext rc, Vector3D cameraPosition);
 
   public final boolean isReady()
   {
@@ -472,11 +468,10 @@ public class Mark
        _labelFontColor.dispose();
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
-  //  _textureImage = image->shallowCopy();
+  
     _textureImage = image;
     _textureWidth = _textureImage.getWidth();
     _textureHeight = _textureImage.getHeight();
-  //  IFactory::instance()->deleteImage(image);
   }
 
   public final int getTextureWidth()
@@ -512,19 +507,6 @@ public class Mark
   public final boolean touched()
   {
     return (_listener == null) ? false : _listener.touchedMark(this);
-  //  if (_listener == NULL) {
-  //    return false;
-  //  }
-  //  return _listener->touchedMark(this);
-  }
-
-  public final Vector3D getCartesianPosition(Planet planet)
-  {
-    if (_cartesianPosition == null)
-    {
-      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
-    }
-    return _cartesianPosition;
   }
 
   public final void setMinDistanceToCamera(double minDistanceToCamera)
@@ -536,4 +518,64 @@ public class Mark
     return _minDistanceToCamera;
   }
 
+  public final Vector3D getCartesianPosition(Planet planet)
+  {
+    if (_cartesianPosition == null)
+    {
+      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+    }
+    return _cartesianPosition;
+  }
+
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
+  {
+  
+    final Vector3D markPosition = getCartesianPosition(planet);
+  
+    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+  
+    // mark will be renderered only if is renderable by distance and placed on a visible globe area
+    boolean renderableByDistance;
+    if (_minDistanceToCamera == 0)
+    {
+      renderableByDistance = true;
+    }
+    else
+    {
+      final double squaredDistanceToCamera = markCameraVector.squaredLength();
+      renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
+    }
+  
+    _renderedMark = false;
+  
+    if (renderableByDistance)
+    {
+      final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+  
+      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > DefineConstants.HALF_PI)
+      {
+  
+        if (_textureId == null)
+        {
+          if (_textureImage != null)
+          {
+            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
+  
+            rc.getFactory().deleteImage(_textureImage);
+            _textureImage = null;
+            createGLState(rc.getPlanet());
+          }
+        }
+        else
+        {
+          _glState.setParent(parentGLState); //Linking with parent
+  
+          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+  
+          _renderedMark = true;
+        }
+      }
+    }
+  
+  }
 }

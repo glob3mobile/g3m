@@ -11,6 +11,8 @@
 #include <sstream>
 #include <OpenGLES/ES2/gl.h>
 
+GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
+
 
 const std::string FloatBuffer_iOS::description() const {
   std::ostringstream oss;
@@ -36,26 +38,12 @@ const std::string FloatBuffer_iOS::description() const {
 }
 
 FloatBuffer_iOS::~FloatBuffer_iOS() {
-  delete [] _values;
-//  if (_glBufferBound) {
-//    const unsigned int buffers[] = {
-//      _glBuffer
-//    };
-//
-//    glDeleteBuffers(1, buffers);
-//  }
-}
+  if (_vertexBufferCreated) {
+    glDeleteBuffers(1, &_vertexBuffer);
+    if (GL_NO_ERROR != glGetError()) {
+      ILogger::instance()->logError("Problem deleting VBO");
+    }
+  }
 
-//unsigned int FloatBuffer_iOS::getGLBuffer(int size) {
-//  if (!_glBufferBound) {
-//    GLuint glBuffer = 0;
-//    glGenBuffers(1, &glBuffer);
-//
-////    glBindBuffer(GL_ARRAY_BUFFER, glBuffer);
-////    glBufferData(GL_ARRAY_BUFFER, size * 4, _values, GL_STATIC_DRAW);
-//
-//    _glBuffer = glBuffer;
-//    _glBufferBound = true;
-//  }
-//  return _glBuffer;
-//}
+  delete [] _values;
+}

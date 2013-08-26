@@ -20,10 +20,9 @@ class GEOObject;
 class GEOFeatureCollection;
 class GEOFeature;
 class GEOGeometry;
-class GEOLineStringGeometry;
-class GEOMultiLineStringGeometry;
-class GEOPointGeometry;
 class Geodetic2D;
+class GEO2DPolygonData;
+
 #include <vector>
 
 class GEOJSONParser {
@@ -38,7 +37,9 @@ private:
   mutable int _lineStringsInMultiLineString2DCount;
   mutable int _featuresCount;
   mutable int _featuresCollectionCount;
-
+  mutable int _polygon2DCount;
+  mutable int _holesLineStringsInPolygon2DCount;
+  mutable int _multiPolygon2DCount;
 
   GEOJSONParser(const std::string& json) :
   _json(json),
@@ -48,7 +49,10 @@ private:
   _multiLineStrings2DCount(0),
   _lineStringsInMultiLineString2DCount(0),
   _featuresCount(0),
-  _featuresCollectionCount(0)
+  _featuresCollectionCount(0),
+  _polygon2DCount(0),
+  _holesLineStringsInPolygon2DCount(0),
+  _multiPolygon2DCount(0)
   {
 
   }
@@ -60,11 +64,15 @@ private:
   GEOFeatureCollection* createFeaturesCollection(const JSONObject* jsonObject) const;
   GEOFeature*           createFeature(const JSONObject* jsonObject) const;
 
-  GEOGeometry*                createGeometry(const JSONObject* jsonObject) const;
-  GEOLineStringGeometry*      createLineStringGeometry(const JSONObject* jsonObject) const;
-  GEOMultiLineStringGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
-  GEOPointGeometry*           createPointGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createLineStringGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createMultiLineStringGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createPointGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createPolygonGeometry(const JSONObject* jsonObject) const;
+  GEOGeometry* createMultiPolygonGeometry(const JSONObject* jsonObject) const;
 
+  GEO2DPolygonData* parsePolygon2DData(const JSONObject* jsonObject) const;
+  GEO2DPolygonData* parsePolygon2DData(const JSONArray* jsCoordinatesArray) const;
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
 

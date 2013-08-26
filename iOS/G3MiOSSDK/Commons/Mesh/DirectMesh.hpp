@@ -13,8 +13,7 @@
 
 class DirectMesh : public AbstractMesh {
 protected:
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState) const;
+  void rawRender(const G3MRenderContext* rc) const;
 
 
 public:
@@ -30,8 +29,13 @@ public:
              bool depthTest = true);
 
   ~DirectMesh() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
+  
+//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
 };
 

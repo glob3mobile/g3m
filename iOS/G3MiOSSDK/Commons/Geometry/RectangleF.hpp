@@ -40,6 +40,7 @@ public:
   }
 
   ~RectangleF() {
+
   }
 
   bool equalTo(const RectangleF& that) const {
@@ -91,7 +92,12 @@ public:
     
     return true;
   }
-  
+
+  bool contains(float x, float y) const {
+    return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
+  }
+
+
 };
 
 #endif

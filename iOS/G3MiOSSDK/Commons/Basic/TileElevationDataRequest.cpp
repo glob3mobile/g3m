@@ -22,13 +22,11 @@ _listener(NULL)
 
 }
 
-TileElevationDataRequest::~TileElevationDataRequest() {}
-
 void TileElevationDataRequest::onData(const Sector& sector,
                                       const Vector2I& resolution,
                                       ElevationData* elevationData) {
   _listener = NULL;
-  if (_tile != NULL){
+  if (_tile != NULL) {
     _tile->setElevationData(elevationData, _tile->getLevel());
   }
 }

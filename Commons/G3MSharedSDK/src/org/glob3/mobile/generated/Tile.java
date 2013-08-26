@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  Tile.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  Tile.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -24,16 +24,20 @@ package org.glob3.mobile.generated;
 //class TilesRenderParameters;
 //class ITimer;
 //class TilesStatistics;
-//class TileRenderContext;
+//class PlanetRendererContext;
 //class TileKey;
 //class Vector3D;
 //class GLState;
-//class Extent;
+//class BoundingVolume;
 //class ElevationDataProvider;
 //class ElevationData;
 //class MeshHolder;
 //class Vector2I;
+//class GPUProgramState;
 //class TileElevationDataRequest;
+//class Frustum;
+//class Box;
+
 
 
 public class Tile
@@ -51,6 +55,8 @@ public class Tile
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
 
+  private Mesh _flatColorMesh;
+
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
   private boolean _justCreatedSubtiles;
@@ -61,36 +67,39 @@ public class Tile
   private double _minHeight;
   private double _maxHeight;
 
-  private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
+  private BoundingVolume _boundingVolume;
+
+  private Mesh getTessellatorMesh(G3MRenderContext rc, PlanetRendererContext prc)
   {
   
-    final TileTessellator tessellator = trc.getTessellator();
-    final boolean renderDebug = trc.getParameters()._renderDebug;
-    ElevationDataProvider elevationDataProvider = trc.getElevationDataProvider();
-    final Planet planet = rc.getPlanet();
+    ElevationDataProvider elevationDataProvider = prc.getElevationDataProvider();
   
-    final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
-    final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  //  const TileTessellator* tessellator = trc->getTessellator();
+  //  const bool renderDebug = trc->getParameters()->_renderDebug;
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const LayerTilesRenderParameters* layerTilesRenderParameters = trc->getLayerTilesRenderParameters();
+  //  const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
   
     if ((_elevationData == null) && (elevationDataProvider != null))
     {
-      initializeElevationData(elevationDataProvider, tessellator, tileMeshResolution, planet, renderDebug);
+      initializeElevationData(elevationDataProvider, prc.getTessellator(), prc.getLayerTilesRenderParameters()._tileMeshResolution, rc.getPlanet(), prc.getParameters()._renderDebug);
     }
-  
-    final boolean mercator = trc.getLayerTilesRenderParameters()._mercator;
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
+      final LayerTilesRenderParameters layerTilesRenderParameters = prc.getLayerTilesRenderParameters();
+  
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, null, _verticalExaggeration, mercator, renderDebug);
+        _tessellatorMesh = prc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, layerTilesRenderParameters._mercator, prc.getParameters()._renderDebug);
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(planet, tileMeshResolution, this, _elevationData, _verticalExaggeration, mercator, renderDebug);
+        Mesh tessellatorMesh = prc.getTessellator().createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, layerTilesRenderParameters._mercator, prc.getParameters()._renderDebug);
   
         MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
         if (meshHolder == null)
@@ -103,61 +112,67 @@ public class Tile
           meshHolder.setMesh(tessellatorMesh);
         }
       }
-  
     }
   
     return _tessellatorMesh;
   }
 
-  private Mesh getDebugMesh(G3MRenderContext rc, TileRenderContext trc)
+  private Mesh getDebugMesh(G3MRenderContext rc, PlanetRendererContext prc)
   {
     if (_debugMesh == null)
     {
-      final LayerTilesRenderParameters layerTilesRenderParameters = trc.getLayerTilesRenderParameters();
+      final LayerTilesRenderParameters layerTilesRenderParameters = prc.getLayerTilesRenderParameters();
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
       //TODO: CHECK
-      _debugMesh = trc.getTessellator().createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
+      _debugMesh = prc.getTessellator().createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
     }
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
+  private boolean isVisible(G3MRenderContext rc, PlanetRendererContext prc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
+  
+  ////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
+  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  //  if (boundingVolume == NULL) {
+  //    return false;
+  //  }
+  //
+  //  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
+  //    return false;
+  //  }
+  //
+  //  // test if sector is back oriented with respect to the camera
+  //  return !_sector.isBackOriented(rc,
+  //                                 getMinHeight(),
+  //                                 planet,
+  //                                 cameraNormalizedPosition,
+  //                                 cameraAngle2HorizonInRadians);
+  
+  
     // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc, getMinHeight()))
+    if (_sector.isBackOriented(rc, getMinHeight(), planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians))
     {
       return false;
     }
   
-    final Extent extent = getTessellatorMesh(rc, trc).getExtent();
-    if (extent == null)
-    {
-      return false;
-    }
+    final BoundingVolume boundingVolume = getBoundingVolume(rc, prc);
   
-    ////const Extent* extent = getTileExtent(rc);
-    //const Extent* tileExtent = getTileExtent(rc);
-    //if (!tileExtent->fullContains(extent)) {
-    //  printf("break point on me\n");
-    //}
-  
-    return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
-    //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
+    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
 
-  private boolean meetsRenderCriteria(G3MRenderContext rc, TileRenderContext trc)
+  private ITimer _lodTimer;
+  private boolean _lastLodTest;
+  private boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRendererContext prc)
   {
     //  const TilesRenderParameters* parameters = trc->getParameters();
   
-    final LayerTilesRenderParameters parameters = trc.getLayerTilesRenderParameters();
+    final LayerTilesRenderParameters parameters = prc.getLayerTilesRenderParameters();
   
-    if (_level >= parameters._maxLevelForPoles)
+    if ((_level >= parameters._maxLevelForPoles) && (_sector.touchesPoles()))
     {
-      if (_sector.touchesNorthPole() || _sector.touchesSouthPole())
-      {
-        return true;
-      }
+      return true;
     }
   
     if (_level >= parameters._maxLevel)
@@ -165,7 +180,7 @@ public class Tile
       return true;
     }
   
-    TileTexturizer texturizer = trc.getTexturizer();
+    TileTexturizer texturizer = prc.getTexturizer();
     if (texturizer != null)
     {
       if (texturizer.tileMeetsRenderCriteria(this))
@@ -174,37 +189,17 @@ public class Tile
       }
     }
   
-    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-    final Extent extent = getTileExtent(rc);
-    if (extent == null)
-    {
-      return true;
-    }
-  
-    //  const double projectedSize = extent->squaredProjectedArea(rc);
-    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    //    return true;
-    //  }
-    final Vector2I ex = extent.projectedExtent(rc);
-    //const double t = extent.maxAxis() * 2;
-    final int t = (ex._x + ex._y);
-    if (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75))
-    {
-      return true;
-    }
-  
-  
-    if (trc.getParameters()._useTilesSplitBudget)
+    if (prc.getParameters()._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
       {
-        if (trc.getStatistics().getSplitsCountInFrame() > 1)
+        if (prc.getStatistics().getSplitsCountInFrame() > 1)
         {
           // there are not more splitsCount-budget to spend
           return true;
         }
   
-        if (trc.getLastSplitTimer().elapsedTime().milliseconds() < 25)
+        if (prc.getLastSplitTimer().elapsedTimeInMilliseconds() < 25)
         {
           // there are not more time-budget to spend
           return true;
@@ -212,22 +207,49 @@ public class Tile
       }
     }
   
-    return false;
+    //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
+    final Box boundingVolume = getTileBoundingVolume(rc);
+    if (boundingVolume == null)
+    {
+      return true;
+    }
+  
+    if ((_lodTimer != null) && (_lodTimer.elapsedTimeInMilliseconds() < 500))
+    {
+      return _lastLodTest;
+    }
+  
+    if (_lodTimer == null)
+    {
+      _lodTimer = rc.getFactory().createTimer();
+    }
+    else
+    {
+      _lodTimer.start();
+    }
+  
+    //  const double projectedSize = extent->squaredProjectedArea(rc);
+    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+    //    return true;
+    //  }
+    final Vector2F ex = boundingVolume.projectedExtent(rc);
+    final float t = (ex._x + ex._y);
+    _lastLodTest = (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75f));
+    return _lastLodTest;
   }
 
-  private void rawRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void rawRender(G3MRenderContext rc, PlanetRendererContext prc, GLState glState)
   {
-  
-    Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
       return;
     }
   
-    TileTexturizer texturizer = trc.getTexturizer();
+    TileTexturizer texturizer = prc.getTexturizer();
     if (texturizer == null)
     {
-      tessellatorMesh.render(rc, parentState);
+      tessellatorMesh.render(rc, glState);
     }
     else
     {
@@ -235,27 +257,38 @@ public class Tile
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+        _texturizedMesh = texturizer.texturize(rc, prc, this, tessellatorMesh, _texturizedMesh);
       }
   
       if (_texturizedMesh != null)
       {
-        _texturizedMesh.render(rc, parentState);
+        _texturizedMesh.render(rc, glState);
       }
       else
       {
-        tessellatorMesh.render(rc, parentState);
+        //Adding flat color if no texture set on the mesh
+        if (_flatColorMesh == null)
+        {
+          _flatColorMesh = new FlatColorMesh(tessellatorMesh, false, Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+        }
+        _flatColorMesh.render(rc, glState);
+  
+        //tessellatorMesh->render(rc, glState);
       }
     }
   
+  
+  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+  //  boundingVolume->render(rc, parentState);
   }
 
-  private void debugRender(G3MRenderContext rc, TileRenderContext trc, GLState parentState)
+  private void debugRender(G3MRenderContext rc, PlanetRendererContext prc, GLState glState)
   {
-    Mesh debugMesh = getDebugMesh(rc, trc);
+    Mesh debugMesh = getDebugMesh(rc, prc);
     if (debugMesh != null)
     {
-      debugMesh.render(rc, parentState);
+      //debugMesh->render(rc);
+      debugMesh.render(rc, glState);
     }
   }
 
@@ -344,17 +377,17 @@ public class Tile
 
   private ITexturizerData _texturizerData;
 
-  private Extent _tileExtent;
-  private Extent getTileExtent(G3MRenderContext rc)
+  private Box _tileBoundingVolume;
+  private Box getTileBoundingVolume(G3MRenderContext rc)
   {
-    if (_tileExtent == null)
+    if (_tileBoundingVolume == null)
     {
       final Planet planet = rc.getPlanet();
   
       final double minHeight = getMinHeight() * _verticalExaggeration;
       final double maxHeight = getMaxHeight() * _verticalExaggeration;
   
-      final Vector3D v0 = planet.toCartesian(_sector.getCenter(), maxHeight);
+      final Vector3D v0 = planet.toCartesian(_sector._center, maxHeight);
       final Vector3D v1 = planet.toCartesian(_sector.getNE(), minHeight);
       final Vector3D v2 = planet.toCartesian(_sector.getNW(), minHeight);
       final Vector3D v3 = planet.toCartesian(_sector.getSE(), minHeight);
@@ -471,9 +504,9 @@ public class Tile
       }
   
   
-      _tileExtent = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
+      _tileBoundingVolume = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     }
-    return _tileExtent;
+    return _tileBoundingVolume;
   }
 
   private int _elevationDataLevel;
@@ -483,6 +516,24 @@ public class Tile
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
+  private BoundingVolume getBoundingVolume(G3MRenderContext rc, PlanetRendererContext prc)
+  {
+    if (_boundingVolume == null)
+    {
+      Mesh mesh = getTessellatorMesh(rc, prc);
+      if (mesh != null)
+      {
+  //      _boundingVolume = mesh->getBoundingVolume()->createSphere();
+        _boundingVolume = mesh.getBoundingVolume();
+      }
+    }
+    return _boundingVolume;
+  }
+
+
+  ///#include "Sphere.hpp"
+  
+  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
   {
      _texturizer = texturizer;
@@ -493,6 +544,7 @@ public class Tile
      _column = column;
      _tessellatorMesh = null;
      _debugMesh = null;
+     _flatColorMesh = null;
      _texturizedMesh = null;
      _textureSolved = false;
      _texturizerDirty = true;
@@ -500,7 +552,7 @@ public class Tile
      _justCreatedSubtiles = false;
      _isVisible = false;
      _texturizerData = null;
-     _tileExtent = null;
+     _tileBoundingVolume = null;
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
@@ -510,11 +562,13 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
+     _boundingVolume = null;
+     _lodTimer = null;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
-    //         _sector.getDeltaLatitude().description().c_str(),
-    //         _sector.getDeltaLongitude().description().c_str()
+    //         _sector._deltaLatitude.description().c_str(),
+    //         _sector._deltaLongitude.description().c_str()
     //         );
   }
 
@@ -522,9 +576,15 @@ public class Tile
   {
     prune(null, null);
   
+  //  delete _boundingVolume;
+  
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
+  
+    if (_flatColorMesh != null)
+       _flatColorMesh.dispose();
+    _flatColorMesh = null;
   
     if (_tessellatorMesh != null)
        _tessellatorMesh.dispose();
@@ -538,9 +598,9 @@ public class Tile
        _texturizedMesh.dispose();
     _texturizedMesh = null;
   
-    if (_tileExtent != null)
-       _tileExtent.dispose();
-    _tileExtent = null;
+    if (_tileBoundingVolume != null)
+       _tileBoundingVolume.dispose();
+    _tileBoundingVolume = null;
   
     if (_elevationData != null)
        _elevationData.dispose();
@@ -553,6 +613,9 @@ public class Tile
          _elevationDataRequest.dispose();
       _elevationDataRequest = null;
     }
+  
+    if (_lodTimer != null)
+       _lodTimer.dispose();
   }
 
 
@@ -586,76 +649,76 @@ public class Tile
     return _parent;
   }
 
-  public final void prepareForFullRendering(G3MRenderContext rc, TileRenderContext trc)
+  public final void prepareForFullRendering(G3MRenderContext rc, PlanetRendererContext prc)
   {
-    Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
       return;
     }
   
-    TileTexturizer texturizer = trc.getTexturizer();
+    TileTexturizer texturizer = prc.getTexturizer();
     if (texturizer != null)
     {
       final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+        _texturizedMesh = texturizer.texturize(rc, prc, this, tessellatorMesh, _texturizedMesh);
       }
     }
   }
 
-  public final void render(G3MRenderContext rc, TileRenderContext trc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, PlanetRendererContext prc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
-    final float verticalExaggeration = trc.getVerticalExaggeration();
+    final float verticalExaggeration = prc.getVerticalExaggeration();
     if (verticalExaggeration != _verticalExaggeration)
     {
       // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
   
-      _verticalExaggeration = trc.getVerticalExaggeration();
+      _verticalExaggeration = prc.getVerticalExaggeration();
     }
   
-    TilesStatistics statistics = trc.getStatistics();
+    TilesStatistics statistics = prc.getStatistics();
     statistics.computeTileProcessed(this);
   
-    if (isVisible(rc, trc))
+    if (isVisible(rc, prc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates))
     {
-      setIsVisible(true, trc.getTexturizer());
+      setIsVisible(true, prc.getTexturizer());
   
       statistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, trc) || (trc.getParameters()._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, prc) || (prc.getParameters()._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
-        rawRender(rc, trc, parentState);
-        if (trc.getParameters()._renderDebug)
+        rawRender(rc, prc, parentState);
+        if (prc.getParameters()._renderDebug)
         {
-          debugRender(rc, trc, parentState);
+          debugRender(rc, prc, parentState);
         }
   
-        statistics.computeTileRendered(this);
+        statistics.computePlanetRenderered(this);
   
-        prune(trc.getTexturizer(), trc.getElevationDataProvider());
+        prune(prc.getTexturizer(), prc.getElevationDataProvider());
         //TODO: AVISAR CAMBIO DE TERRENO
       }
       else
       {
-        final Geodetic2D lower = _sector.lower();
-        final Geodetic2D upper = _sector.upper();
+        final Geodetic2D lower = _sector._lower;
+        final Geodetic2D upper = _sector._upper;
   
-        final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
+        final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-        final Angle splitLatitude = trc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower.latitude(), upper.latitude()) : Angle.midAngle(lower.latitude(), upper.latitude());
+        final Angle splitLatitude = prc.getLayerTilesRenderParameters()._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
         /*                               */
         /*                               */
   
         java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
         if (_justCreatedSubtiles)
         {
-          trc.getLastSplitTimer().start();
+          prc.getLastSplitTimer().start();
           statistics.computeSplitInFrame();
           _justCreatedSubtiles = false;
         }
@@ -670,9 +733,9 @@ public class Tile
     }
     else
     {
-      setIsVisible(false, trc.getTexturizer());
+      setIsVisible(false, prc.getTexturizer());
   
-      prune(trc.getTexturizer(), trc.getElevationDataProvider());
+      prune(prc.getTexturizer(), prc.getElevationDataProvider());
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   }
@@ -842,8 +905,8 @@ public class Tile
 
   public final java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude, boolean setParent)
   {
-    final Geodetic2D lower = _sector.lower();
-    final Geodetic2D upper = _sector.upper();
+    final Geodetic2D lower = _sector._lower;
+    final Geodetic2D upper = _sector._upper;
   
     final int nextLevel = _level + 1;
   
@@ -852,13 +915,13 @@ public class Tile
   
     java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
   
-    subTiles.add(createSubTile(lower.latitude(), lower.longitude(), splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+    subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
   
-    subTiles.add(createSubTile(lower.latitude(), splitLongitude, splitLatitude, upper.longitude(), nextLevel, row2, column2 + 1, setParent));
+    subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
   
-    subTiles.add(createSubTile(splitLatitude, lower.longitude(), upper.latitude(), splitLongitude, nextLevel, row2 + 1, column2, setParent));
+    subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
   
-    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper.latitude(), upper.longitude(), nextLevel, row2 + 1, column2 + 1, setParent));
+    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
   
     return subTiles;
   }
@@ -998,13 +1061,7 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-  //    ElevationData* subView = _lastElevationDataProvider->createSubviewOfElevationData(ed,
-  //                                                                                      getSector(),
-  //                                                                                      Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
-  //    return subView;
-  
-      return new SubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY), true);
-                                      //bool ownsElevationData,
+      return new DecimatedSubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
     ILogger.instance().logError("Can't create subview of elevation data from ancestor");

@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public class RectangleI
 {
   public final int _x;
@@ -41,7 +42,6 @@ public class RectangleI
 
   public void dispose()
   {
-
   }
 
   public final boolean equalTo(RectangleI that)

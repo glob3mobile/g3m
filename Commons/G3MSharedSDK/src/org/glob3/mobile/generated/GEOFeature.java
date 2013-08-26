@@ -21,6 +21,9 @@ package org.glob3.mobile.generated;
 //class GEOGeometry;
 //class JSONBaseObject;
 //class JSONObject;
+//class GPUProgramState;
+//class GLGlobalState;
+//class GEOSymbolizer;
 
 public class GEOFeature extends GEOObject
 {
@@ -48,6 +51,9 @@ public class GEOFeature extends GEOObject
        _geometry.dispose();
     if (_properties != null)
        _properties.dispose();
+  
+    super.dispose();
+  
   }
 
   public final JSONObject getProperties()
@@ -55,11 +61,11 @@ public class GEOFeature extends GEOObject
     return _properties;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     if (_geometry != null)
     {
-      _geometry.symbolize(rc, sc);
+      _geometry.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
     }
   }
 

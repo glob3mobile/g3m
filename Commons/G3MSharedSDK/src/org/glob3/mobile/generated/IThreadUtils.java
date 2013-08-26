@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class G3MContext;
 
 public abstract class IThreadUtils
@@ -43,7 +44,6 @@ public abstract class IThreadUtils
 
   public void dispose()
   {
-
   }
 
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);

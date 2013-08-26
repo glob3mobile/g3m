@@ -40,7 +40,6 @@ public abstract class IStringUtils
 
   public void dispose()
   {
-
   }
 
   public abstract String createString(byte[] data, int length);

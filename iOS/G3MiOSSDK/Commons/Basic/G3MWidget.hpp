@@ -29,7 +29,6 @@ class ITimer;
 class PeriodicalTask;
 class ICameraConstrainer;
 class FrameTasksExecutor;
-class TextureBuilder;
 class G3MWidget;
 class IStringBuilder;
 class IMathUtils;
@@ -39,7 +38,10 @@ class CameraRenderer;
 class IStorage;
 class ITextUtils;
 class G3MEventContext;
+class SurfaceElevationProvider;
 
+class GPUProgram;
+class GPUProgramManager;
 class ICameraActivityListener;
 
 #include <vector>
@@ -49,7 +51,7 @@ class ICameraActivityListener;
 #include "Angle.hpp"
 
 class G3MContext;
-class GLState;
+class GLGlobalState;
 
 class WidgetUserData {
 private:
@@ -63,7 +65,7 @@ public:
   }
   
   virtual ~WidgetUserData() {
-    
+
   }
   
   void setWidget(G3MWidget* widget) {
@@ -97,12 +99,13 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
-                           Color                            backgroundColor,
+                           const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
                            GInitializationTask*             initializationTask,
                            bool                             autoDeleteInitializationTask,
-                           std::vector<PeriodicalTask*>     periodicalTasks);
+                           std::vector<PeriodicalTask*>     periodicalTasks,
+                           GPUProgramManager*               gpuProgramManager);
   
   ~G3MWidget();
   
@@ -214,7 +217,6 @@ private:
   Camera*          _currentCamera;
   Camera*          _nextCamera;
   TexturesHandler* _texturesHandler;
-  TextureBuilder*  _textureBuilder;
 
   Color*           _backgroundColor;
 
@@ -240,13 +242,14 @@ private:
   const G3MContext* _context;
   
   bool _paused;
-  
-  const GLState* _rootState;
-  
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
   
   bool _clickOnProcess;
+  
+  GPUProgramManager* _gpuProgramManager;
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -258,13 +261,14 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
-            Color                            backgroundColor,
+            const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
             GInitializationTask*             initializationTask,
             bool                             autoDeleteInitializationTask,
-            std::vector<PeriodicalTask*>     periodicalTasks);
-  
+            std::vector<PeriodicalTask*>     periodicalTasks,
+            GPUProgramManager*               gpuProgramManager);
+
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
   

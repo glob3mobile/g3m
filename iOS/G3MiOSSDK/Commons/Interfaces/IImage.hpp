@@ -17,7 +17,8 @@
 
 class IImage {
 public:
-  virtual ~IImage() {}
+  virtual ~IImage() {
+  }
 
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;

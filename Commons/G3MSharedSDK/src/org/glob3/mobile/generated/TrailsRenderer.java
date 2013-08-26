@@ -3,13 +3,48 @@ public class TrailsRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
+
+  private GLState _glState = new GLState();
+
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _glState.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+
   public TrailsRenderer()
   {
+     _projection = null;
+     _model = null;
   }
 
   public final void addTrail(Trail trail)
   {
-    _trails.add(trail);
+    if (trail != null)
+    {
+      _trails.add(trail);
+    }
   }
 
   public void dispose()
@@ -41,7 +76,6 @@ public class TrailsRenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -69,14 +103,24 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     final int trailsCount = _trails.size();
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+    updateGLState(rc);
     for (int i = 0; i < trailsCount; i++)
     {
       Trail trail = _trails.get(i);
-      trail.render(rc, parentState);
+      if (trail != null)
+      {
+        trail.render(rc, frustum, _glState);
+      }
     }
   }
 
 }
+//#define MAX_POSITIONS_PER_SEGMENT 64
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TrailsRenderer
+

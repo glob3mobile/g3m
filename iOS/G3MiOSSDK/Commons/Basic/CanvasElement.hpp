@@ -23,7 +23,6 @@ public:
   }
 
   virtual ~CanvasElement() {
-
   }
 
   virtual const Vector2F getExtent(ICanvas* canvas) = 0;
@@ -31,6 +30,8 @@ public:
   virtual void drawAt(float left,
                       float top,
                       ICanvas* canvas) = 0;
+
+  virtual void drawCentered(ICanvas* canvas);
   
 };
 

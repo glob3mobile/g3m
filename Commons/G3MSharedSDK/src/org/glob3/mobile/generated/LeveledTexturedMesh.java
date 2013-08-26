@@ -5,66 +5,66 @@ public class LeveledTexturedMesh extends Mesh
   private final boolean _ownedMesh;
 
   private java.util.ArrayList<LazyTextureMapping> _mappings;
-
-
-  private final int _levelsCount;
-
   private int _currentLevel;
-  private boolean _currentLevelIsValid;
 
   private LazyTextureMapping getCurrentTextureMapping()
   {
-    if (_mappings == null)
+    if (_currentLevel < 0)
     {
-      return null;
-    }
+      int newCurrentLevel = -1;
   
-    if (!_currentLevelIsValid)
-    {
-      for (int i = 0; i < _levelsCount; i++)
+      final int levelsCount = _mappings.size();
+  
+      for (int i = 0; i < levelsCount; i++)
       {
-        LazyTextureMapping mapping = _mappings.get(i);
+        final LazyTextureMapping mapping = _mappings.get(i);
         if (mapping != null)
         {
           if (mapping.isValid())
           {
-            //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
-            _currentLevel = i;
-            _currentLevelIsValid = true;
+            newCurrentLevel = i;
             break;
           }
         }
       }
   
-      if (_currentLevelIsValid)
+      if (newCurrentLevel >= 0)
       {
-        for (int i = _currentLevel+1; i < _levelsCount; i++)
+        // ILogger::instance()->logInfo("LeveledTexturedMesh: changed from level %d to %d",
+        //                              _currentLevel,
+        //                              newCurrentLevel);
+        _currentLevel = newCurrentLevel;
+  
+        _mappings.get(_currentLevel).modifyGLState(_glState);
+  
+        if (_currentLevel < levelsCount-1)
         {
-          LazyTextureMapping mapping = _mappings.get(i);
-          if (mapping != null)
+          for (int i = levelsCount-1; i > _currentLevel; i--)
           {
-            _mappings.get(i).dispose();
+            final LazyTextureMapping mapping = _mappings.get(i);
             if (mapping != null)
                mapping.dispose();
+            _mappings.remove(i);
           }
+          _mappings.trimToSize();
         }
       }
     }
   
-    return _currentLevelIsValid ? _mappings.get(_currentLevel) : null;
+    return (_currentLevel >= 0) ? _mappings.get(_currentLevel) : null;
   }
+
+  private GLState _glState = new GLState();
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
      _mesh = mesh;
      _ownedMesh = ownedMesh;
      _mappings = mappings;
-     _levelsCount = mappings.size();
-     _currentLevel = mappings.size() + 1;
-     _currentLevelIsValid = false;
+     _currentLevel = -1;
     if (_mappings.size() <= 0)
     {
-      ILogger.instance().logError("LOGIC ERROR\n");
+      ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
     }
   }
 
@@ -92,6 +92,9 @@ public class LeveledTexturedMesh extends Mesh
       }
   
     }
+  
+    super.dispose();
+  
   }
 
   public final int getVertexCount()
@@ -104,51 +107,28 @@ public class LeveledTexturedMesh extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-    LazyTextureMapping mapping = getCurrentTextureMapping();
-    if (mapping == null)
-    {
-      _mesh.render(rc, parentState);
-    }
-    else
-    {
-      GLState state = new GLState(parentState);
-      state.enableTextures();
-      state.enableTexture2D();
-  
-      mapping.bind(rc);
-  
-      _mesh.render(rc, state);
-    }
-  }
-
-  public final Extent getExtent()
-  {
-    return (_mesh == null) ? null : _mesh.getExtent();
+    return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
-    if (_mappings.size() <= 0)
+    if (_mappings.size() > 0)
     {
-      return false;
-    }
-    if (glTextureId != null)
-    {
-      if (!_currentLevelIsValid || (level < _currentLevel))
+      if (glTextureId != null)
       {
-        _mappings.get(level).setGLTextureId(glTextureId);
-        _currentLevelIsValid = false;
-        return true;
+        if ((_currentLevel < 0) || (level < _currentLevel))
+        {
+          _mappings.get(level).setGLTextureId(glTextureId);
+          _currentLevel = -1;
+          return true;
+        }
       }
     }
   
     return false;
   }
-
-//  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const const GLTextureId*glTextureId);
 
   public final IGLTextureId getTopLevelGLTextureId()
   {
@@ -164,13 +144,6 @@ public class LeveledTexturedMesh extends Mesh
     return null;
   }
 
-
-  //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-  //                                                         const const GLTextureId*glTextureId) {
-  //  const int level = _mappings->size() - inversedLevel - 1;
-  //  setGLTextureIdForLevel(level, glTextureId);
-  //}
-  
   public final boolean isTransparent(G3MRenderContext rc)
   {
     if (_mesh.isTransparent(rc))
@@ -180,12 +153,22 @@ public class LeveledTexturedMesh extends Mesh
   
     LazyTextureMapping mapping = getCurrentTextureMapping();
   
+    return (mapping == null) ? false : mapping.isTransparent();
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+    LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-      return false;
+      ILogger.instance().logError("LeveledTexturedMesh: No Texture Mapping");
+      _mesh.render(rc, parentGLState);
     }
-  
-    return mapping.isTransparent(rc);
+    else
+    {
+      _glState.setParent(parentGLState);
+      _mesh.render(rc, _glState);
+    }
   }
 
 }

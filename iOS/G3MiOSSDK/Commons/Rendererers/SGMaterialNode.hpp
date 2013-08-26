@@ -11,6 +11,7 @@
 
 #include "SGNode.hpp"
 #include "Color.hpp"
+#include "GLFeature.hpp"
 
 class SGMaterialNode : public SGNode {
 private:
@@ -26,6 +27,9 @@ private:
 //  const double _shine;
 //  const double _alpha;
 //  const double _emit;
+
+
+  GLState _glState;
 
 public:
 
@@ -45,7 +49,18 @@ public:
 //  _alpha(alpha),
 //  _emit(emit)
   {
+#ifdef C_CODE
+    _glState.addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
+#endif
+#ifdef JAVA_CODE
+    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+#endif
+  }
 
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState* parentState) {
+    _glState.setParent(parentState);
+    return &_glState;
   }
 
   void setBaseColor(Color* baseColor) {
@@ -58,10 +73,15 @@ public:
   ~SGMaterialNode() {
     delete _baseColor;
     delete _specularColor;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
-  const GLState* createState(const G3MRenderContext* rc,
-                             const GLState& parentState);
+  std::string description() {
+    return "SGMaterialNode";
+  }
 
 };
 

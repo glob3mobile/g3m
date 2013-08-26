@@ -84,8 +84,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     else
     {
       //int _DGD_working_on_terrain;
-      final boolean useDecimation = false;
-      ElevationData elevationData = new SubviewElevationData(_elevationData, sector, extent, useDecimation);
+      ElevationData elevationData = new InterpolatedSubviewElevationData(_elevationData, sector, extent);
       listener.onData(sector, extent, elevationData);
     }
   

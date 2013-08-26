@@ -11,7 +11,6 @@
 
 #include "IImage.hpp"
 #include "Context.hpp"
-#include "TextureBuilder.hpp"
 
 #include "IStringBuilder.hpp"
 #include "GL.hpp"

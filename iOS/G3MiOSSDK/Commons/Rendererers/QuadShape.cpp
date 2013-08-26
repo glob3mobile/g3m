@@ -83,6 +83,11 @@ void QuadShape::imageDownloaded(IImage* image) {
 
 QuadShape::~QuadShape() {
   delete _color;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {

@@ -2,7 +2,7 @@
 //  Tile.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -19,18 +19,23 @@ class TileTexturizer;
 class TilesRenderParameters;
 class ITimer;
 class TilesStatistics;
-class TileRenderContext;
+class PlanetRendererContext;
 class TileKey;
 class Vector3D;
 class GLState;
-class Extent;
+class BoundingVolume;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
 class Vector2I;
+class GPUProgramState;
 class TileElevationDataRequest;
+class Frustum;
+class Box;
 
 #include "ITexturizerData.hpp"
+
+#include "GLState.hpp"
 
 class Tile {
 private:
@@ -46,6 +51,8 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
+  
+  Mesh* _flatColorMesh;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
@@ -57,25 +64,32 @@ private:
   double _minHeight;
   double _maxHeight;
 
+  BoundingVolume* _boundingVolume;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
+                                  const PlanetRendererContext* prc);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
-                     const TileRenderContext* trc);
+                     const PlanetRendererContext* prc);
 
   inline bool isVisible(const G3MRenderContext* rc,
-                        const TileRenderContext* trc);
+                        const PlanetRendererContext* prc,
+                        const Planet* planet,
+                        const Vector3D& cameraNormalizedPosition,
+                        double cameraAngle2HorizonInRadians,
+                        const Frustum* cameraFrustumInModelCoordinates);
 
+  ITimer* _lodTimer;
+  bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
+                                  const PlanetRendererContext* prc);
 
   inline void rawRender(const G3MRenderContext* rc,
-                        const TileRenderContext* trc,
-                        const GLState& parentState);
+                        const PlanetRendererContext* prc,
+                        const GLState* glState);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc,
-                   const GLState& parentState);
+                   const PlanetRendererContext* prc, const GLState* glState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -100,8 +114,8 @@ private:
 
   ITexturizerData* _texturizerData;
 
-  Extent* _tileExtent;
-  Extent* getTileExtent(const G3MRenderContext *rc);
+  Box* _tileBoundingVolume;
+  Box* getTileBoundingVolume(const G3MRenderContext *rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
@@ -109,6 +123,9 @@ private:
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
+
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+                                          const PlanetRendererContext* prc);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -146,12 +163,16 @@ public:
   }
 
   void prepareForFullRendering(const G3MRenderContext* rc,
-                               const TileRenderContext* trc);
+                               const PlanetRendererContext* prc);
 
   void render(const G3MRenderContext* rc,
-              const TileRenderContext* trc,
+              const PlanetRendererContext* prc,
               const GLState& parentState,
-              std::list<Tile*>* toVisitInNextIteration);
+              std::list<Tile*>* toVisitInNextIteration,
+              const Planet* planet,
+              const Vector3D& cameraNormalizedPosition,
+              double cameraAngle2HorizonInRadians,
+              const Frustum* cameraFrustumInModelCoordinates);
 
   const TileKey getKey() const;
 

@@ -31,11 +31,16 @@ public abstract class CanvasElement
 
   public void dispose()
   {
-
   }
 
   public abstract Vector2F getExtent(ICanvas canvas);
 
   public abstract void drawAt(float left, float top, ICanvas canvas);
+
+  public void drawCentered(ICanvas canvas)
+  {
+    final Vector2F extent = getExtent(canvas);
+    drawAt((canvas.getWidth() - extent._x) / 2, (canvas.getHeight() - extent._y) / 2, canvas);
+  }
 
 }

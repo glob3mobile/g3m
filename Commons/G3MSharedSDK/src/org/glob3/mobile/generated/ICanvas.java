@@ -1,27 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  ICanvas.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/9/13.
-//
-//
-
-//
-//  ICanvas.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/9/13.
-//
-//
-
-
-//class Color;
-//class IImageListener;
-//class GFont;
-//class IImage;
-
-
 public abstract class ICanvas
 {
   protected int _canvasWidth;
@@ -48,16 +25,21 @@ public abstract class ICanvas
     }
   }
 
-
   protected abstract void _initialize(int width, int height);
-
 
   protected abstract void _setFillColor(Color color);
 
-  protected abstract void _setStrokeColor(Color color);
+  protected abstract void _setLineColor(Color color);
 
-  protected abstract void _setStrokeWidth(float width);
+  protected abstract void _setLineWidth(float width);
 
+  protected abstract void _setLineCap(StrokeCap cap);
+
+  protected abstract void _setLineJoin(StrokeJoin join);
+
+  protected abstract void _setLineMiterLimit(float limit);
+
+  protected abstract void _setLineDash(float[] lengths, int count, int phase);
 
   protected abstract void _fillRectangle(float left, float top, float width, float height);
 
@@ -89,6 +71,22 @@ public abstract class ICanvas
   protected abstract void _drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight);
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
+
+
+  protected abstract void _beginPath();
+
+  protected abstract void _closePath();
+
+  protected abstract void _stroke();
+
+  protected abstract void _fill();
+
+  protected abstract void _fillAndStroke();
+
+  protected abstract void _moveTo(float x, float y);
+
+  protected abstract void _lineTo(float x, float y);
+
 
   public ICanvas()
   {
@@ -128,7 +126,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-   
+
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -140,7 +138,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-   
+
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)
@@ -157,18 +155,46 @@ public abstract class ICanvas
     _setFillColor(color);
   }
 
-  public final void setStrokeColor(Color color)
+  public final void setLineColor(Color color)
   {
     checkInitialized();
-    _setStrokeColor(color);
+    _setLineColor(color);
   }
 
-  public final void setStrokeWidth(float width)
+  public final void setLineWidth(float width)
   {
     checkInitialized();
-    _setStrokeWidth(width);
+    _setLineWidth(width);
   }
 
+  public final void setLineCap(StrokeCap cap)
+  {
+    checkInitialized();
+    _setLineCap(cap);
+  }
+
+  public final void setLineJoin(StrokeJoin join)
+  {
+    checkInitialized();
+    _setLineJoin(join);
+  }
+
+  public final void setLineMiterLimit(float limit)
+  {
+    checkInitialized();
+    _setLineMiterLimit(limit);
+  }
+
+  public final void setLineDash(float[] lengths, int count, int phase)
+  {
+    checkInitialized();
+    _setLineDash(lengths, count, phase);
+  }
+
+  void setLineDash(float[] lengths,
+                   int phase) {
+    setLineDash(lengths, lengths.length, phase);
+  }
 
   public final void setShadow(Color color, float blur, float offsetX, float offsetY)
   {
@@ -264,6 +290,58 @@ public abstract class ICanvas
   public final int getHeight()
   {
     return _canvasHeight;
+  }
+
+  public final void beginPath()
+  {
+    checkInitialized();
+    _beginPath();
+  }
+
+  public final void closePath()
+  {
+    checkInitialized();
+    _closePath();
+  }
+
+  public final void stroke()
+  {
+    checkInitialized();
+    _stroke();
+  }
+
+  public final void fill()
+  {
+    checkInitialized();
+    _fill();
+  }
+
+  public final void fillAndStroke()
+  {
+    checkInitialized();
+    _fillAndStroke();
+  }
+
+  public final void moveTo(float x, float y)
+  {
+    checkInitialized();
+    _moveTo(x, y);
+  }
+
+  public final void moveTo(Vector2F position)
+  {
+    moveTo(position._x, position._y);
+  }
+
+  public final void lineTo(float x, float y)
+  {
+    checkInitialized();
+    _lineTo(x, y);
+  }
+
+  public final void lineTo(Vector2F position)
+  {
+    lineTo(position._x, position._y);
   }
 
 }

@@ -2,7 +2,7 @@
 //  BusyQuadRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -17,13 +17,14 @@
 #include "TexturesHandler.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
+#include "GPUProgram.hpp"
+#include "Camera.hpp"
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
@@ -93,47 +94,30 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   return true;
 }
 
-
-void BusyQuadRenderer::render(const G3MRenderContext* rc,
-                              const GLState& parentState) {
+//TODO: REMOVE???
+void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
 
-  GLState state(parentState);
-  state.enableBlend();
-
-  if (_quadMesh == NULL){
+  if (_quadMesh == NULL) {
     if (!initMesh(rc)) {
       return;
     }
   }
 
-  // init modelview matrix
-  int currentViewport[4];
-  gl->getViewport(currentViewport);
-  const int halfWidth = currentViewport[2] / 2;
-  const int halfHeight = currentViewport[3] / 2;
-  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                            -halfHeight, halfHeight,
-                                                                            -halfWidth, halfWidth);
-  gl->setProjection(M);
-  gl->loadMatrixf(MutableMatrix44D::identity());
-
+  createGLState();
+  
   // clear screen
-  gl->clearScreen(_backgroundColor->getRed(),
-                  _backgroundColor->getGreen(),
-                  _backgroundColor->getBlue(),
-                  _backgroundColor->getAlpha());
-
-  gl->setState(state);
-
-  gl->setBlendFuncSrcAlpha();
-
-  gl->pushMatrix();
-  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  gl->multMatrixf(R2);
+  gl->clearScreen(*_backgroundColor);
 
   // draw mesh
-  _quadMesh->render(rc, parentState);
+  _quadMesh->render(rc, &_glState);
+}
 
-  gl->popMatrix();
+void BusyQuadRenderer::createGLState() {
+  
+  //Modelview and projection
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+  _glState.clearGLFeatureGroup(CAMERA_GROUP);
+  _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+  _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
 }

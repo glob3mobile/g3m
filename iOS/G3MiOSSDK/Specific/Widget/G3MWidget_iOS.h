@@ -2,7 +2,7 @@
 //  EAGLView.h
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -27,7 +27,7 @@ class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class WidgetUserData;
-class TileRenderer;
+class PlanetRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;

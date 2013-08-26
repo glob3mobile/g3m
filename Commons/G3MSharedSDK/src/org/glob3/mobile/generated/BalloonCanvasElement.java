@@ -62,6 +62,9 @@ public class BalloonCanvasElement extends CanvasElement
   {
     if (_child != null)
        _child.dispose();
+
+  super.dispose();
+
   }
 
   public final Vector2F getExtent(ICanvas canvas)
@@ -79,8 +82,8 @@ public class BalloonCanvasElement extends CanvasElement
   
     canvas.setFillColor(_color);
   
-  //  canvas->setStrokeColor(Color::black());
-  //  canvas->setStrokeWidth(0.2f);
+  //  canvas->setLineColor(Color::black());
+  //  canvas->setLineWidth(0.2f);
   
     final float halfArrowPointSize = _arrowPointSize / 2;
   //  canvas->fillRoundedRectangle(left + (extent._x / 2) - halfArrowPointSize,

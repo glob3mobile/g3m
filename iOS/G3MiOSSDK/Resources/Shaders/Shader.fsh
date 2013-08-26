@@ -1,7 +1,7 @@
 //
 //  Shader.fsh
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -25,7 +25,7 @@ void main() {
   if (EnableTexture) {
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
 
-    if (EnableFlatColor || EnableColorPerVertex){
+    if (EnableFlatColor || EnableColorPerVertex) {
       lowp vec4 color;
       if (EnableFlatColor) {
         color = FlatColor;

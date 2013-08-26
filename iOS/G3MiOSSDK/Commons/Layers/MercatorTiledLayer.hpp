@@ -45,6 +45,8 @@ public:
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const Tile* tile) const;
 
+  virtual const std::string description() const;
+
 };
 
 #endif

@@ -16,6 +16,9 @@ class IGLTextureId;
 
 class G3MRenderContext;
 class IFloatBuffer;
+class GLGlobalState;
+class GPUProgramState;
+class GLState;
 
 class TextureMapping {
 public:
@@ -23,10 +26,9 @@ public:
   virtual ~TextureMapping() {
   }
   
-  virtual void bind(const G3MRenderContext* rc) const = 0;
-
-  virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
-
+  virtual bool isTransparent() const = 0;
+  
+  virtual void modifyGLState(GLState& state) const = 0;
 };
 
 
@@ -75,11 +77,17 @@ public:
     return _texCoords;
   }
   
-  void bind(const G3MRenderContext* rc) const;
+//  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
 
-  bool isTransparent(const G3MRenderContext* rc) const {
+  bool isTransparent() const {
     return _isTransparent;
   }
+  
+//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
+//  
+//  void modifyGPUProgramState(GPUProgramState& progState) const;
+  
+  void modifyGLState(GLState& state) const;
 
 };
 #endif

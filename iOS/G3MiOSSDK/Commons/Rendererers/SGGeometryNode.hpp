@@ -11,8 +11,11 @@
 
 #include "SGNode.hpp"
 
+#include "GLState.hpp"
+
 class IFloatBuffer;
 class IShortBuffer;
+class GPUProgramState;
 
 class SGGeometryNode : public SGNode {
 private:
@@ -22,6 +25,9 @@ private:
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
+  
+  GLState _glState;
+  void createGLState();
 
 public:
 
@@ -41,18 +47,21 @@ public:
   _normals(normals),
   _indices(indices)
   {
-
+    createGLState();
   }
 
   ~SGGeometryNode();
 
-
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
-
+  void rawRender(const G3MRenderContext* rc, const GLState* glState);
+  
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState& parentState) {
-    return NULL;
+                             const GLState* parentState) {
+    _glState.setParent(parentState);
+    return &_glState;
+  }
+
+  std::string description() {
+    return "SGGeometryNode";
   }
   
 };

@@ -13,9 +13,12 @@ class TouchEvent;
 class G3MContext;
 class G3MRenderContext;
 class G3MEventContext;
-class GLState;
+class GLGlobalState;
+class SurfaceElevationProvider;
 
-class Renderer {
+#include "Effects.hpp"
+
+class Renderer: public EffectTarget {
 public:
   virtual bool isEnable() const = 0;
   
@@ -26,8 +29,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) = 0;
+  virtual void render(const G3MRenderContext* rc) = 0;
 
   /*
    Gives to Renderer the opportunity to process touch, events.
@@ -44,7 +46,8 @@ public:
   
   virtual void stop(const G3MRenderContext* rc) = 0;
   
-  virtual ~Renderer() { };
+  virtual ~Renderer() {
+  };
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;
@@ -54,13 +57,15 @@ public:
   virtual void onDestroy(const G3MContext* context) = 0;
   
   /**
-   * Allows us to know if the renderer is a TileRenderer.
-   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of TileRenderer.
+   * Allows us to know if the renderer is a PlanetRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  virtual bool isTileRenderer() {
+  virtual bool isPlanetRenderer() {
     return false;
   }
+  
+  virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
 
 };
 

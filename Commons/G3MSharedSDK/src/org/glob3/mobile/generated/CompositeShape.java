@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class GPUProgramState;
+
 public abstract class CompositeShape extends Shape
 {
   private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
@@ -44,6 +46,9 @@ public abstract class CompositeShape extends Shape
       if (child != null)
          child.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addShape(Shape shape)
@@ -75,5 +80,4 @@ public abstract class CompositeShape extends Shape
       child.render(rc, parentState, renderNotReadyShapes);
     }
   }
-
 }

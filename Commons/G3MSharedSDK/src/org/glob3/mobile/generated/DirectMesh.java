@@ -19,12 +19,12 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
-  protected final void rawRender(G3MRenderContext rc, GLState parentState)
+  protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
   
     final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount);
+    gl.drawArrays(_primitive, 0, verticesCount, _glState, rc.getGPUProgramManager());
   }
 
 
@@ -51,7 +51,10 @@ public class DirectMesh extends AbstractMesh
 
   public void dispose()
   {
+  super.dispose();
 
   }
+
+//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
 }

@@ -33,8 +33,8 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
 
     // rough estimation of distance using lat/lon degrees
-    final double deltaLatInDeg = _fromPosition.latitude()._degrees - _toPosition.latitude()._degrees;
-    final double deltaLonInDeg = _fromPosition.longitude()._degrees - _toPosition.longitude()._degrees;
+    final double deltaLatInDeg = _fromPosition._latitude._degrees - _toPosition._latitude._degrees;
+    final double deltaLonInDeg = _fromPosition._longitude._degrees - _toPosition._longitude._degrees;
     final double distanceInDeg = IMathUtils.instance().sqrt((deltaLatInDeg * deltaLatInDeg) + (deltaLonInDeg * deltaLonInDeg));
 
     if (distanceInDeg >= distanceInDegreesMaxHeight)
@@ -44,13 +44,13 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
     final double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
 
-    final double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+    final double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
     if (middleHeight < averageHeight)
     {
       final double delta = (averageHeight - middleHeight) / 2.0;
       return averageHeight + delta;
     }
-//    const double averageHeight = (_fromPosition.height() + _toPosition.height()) / 2;
+//    const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
 //    if (middleHeight < averageHeight) {
 //      return (averageHeight + middleHeight) / 2.0;
 //    }
@@ -79,15 +79,15 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     double height;
     if (_linearHeight)
     {
-      height = IMathUtils.instance().linearInterpolation(_fromPosition.height(), _toPosition.height(), alpha);
+      height = IMathUtils.instance().linearInterpolation(_fromPosition._height, _toPosition._height, alpha);
     }
     else
     {
-      height = IMathUtils.instance().quadraticBezierInterpolation(_fromPosition.height(), _middleHeight, _toPosition.height(), alpha);
+      height = IMathUtils.instance().quadraticBezierInterpolation(_fromPosition._height, _middleHeight, _toPosition._height, alpha);
     }
 
     Camera camera = rc.getNextCamera();
-    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition.latitude(), _toPosition.latitude(), alpha), Angle.linearInterpolation(_fromPosition.longitude(), _toPosition.longitude(), alpha), height);
+    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition._latitude, _toPosition._latitude, alpha), Angle.linearInterpolation(_fromPosition._longitude, _toPosition._longitude, alpha), height);
 
 
     final Angle heading = Angle.linearInterpolation(_fromHeading, _toHeading, alpha);

@@ -2,7 +2,7 @@
 //  CameraDoubleDragHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -30,7 +30,12 @@ public:
   {
   }
   
-  ~CameraDoubleDragHandler() {}
+  ~CameraDoubleDragHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   
   
   bool onTouchEvent(const G3MEventContext *eventContext,

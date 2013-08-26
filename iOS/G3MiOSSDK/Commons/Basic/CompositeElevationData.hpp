@@ -43,6 +43,11 @@ public:
       delete _data[i];
     }
     delete _interpolator;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   double getElevationAt(int x,
@@ -59,8 +64,6 @@ public:
   bool hasNoData() const{
     return _hasNoData;
   }
-
-//  const Geodetic2D getRealResolution() const;
 
 };
 

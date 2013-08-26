@@ -13,6 +13,11 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
+//#include "GPUProgramState.hpp"
+#include "Camera.hpp"
+
+#include "GLFeature.hpp"
+
 AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
@@ -20,8 +25,13 @@ AbstractMesh::~AbstractMesh() {
     delete _flatColor;
   }
 
-  delete _extent;
+  delete _boundingVolume;
   delete _translationMatrix;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 AbstractMesh::AbstractMesh(const int primitive,
@@ -40,7 +50,7 @@ _vertices(vertices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
-_extent(NULL),
+_boundingVolume(NULL),
 _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
@@ -49,10 +59,10 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest)
 {
-
+  createGLState();
 }
 
-Extent* AbstractMesh::computeExtent() const {
+BoundingVolume* AbstractMesh::computeBoundingVolume() const {
   const int vertexCount = getVertexCount();
 
   if (vertexCount <= 0) {
@@ -88,11 +98,11 @@ Extent* AbstractMesh::computeExtent() const {
                  Vector3D(maxX, maxY, maxZ));
 }
 
-Extent* AbstractMesh::getExtent() const {
-  if (_extent == NULL) {
-    _extent = computeExtent();
+BoundingVolume* AbstractMesh::getBoundingVolume() const {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = computeBoundingVolume();
   }
-  return _extent;
+  return _boundingVolume;
 }
 
 const Vector3D AbstractMesh::getVertex(int i) const {
@@ -113,42 +123,50 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
   return _flatColor->isTransparent();
 }
 
+void AbstractMesh::createGLState() {
 
-void AbstractMesh::render(const G3MRenderContext *rc,
-                          const GLState& parentState) const {
-  GL* gl = rc->getGL();
-
-  GLState state(parentState);
-  state.enableVerticesPosition();
-  state.setLineWidth(_lineWidth);
-  state.setPointSize(_pointSize);
-  if (_colors) {
-    state.enableVertexColor(_colors, _colorsIntensity);
-  }
-  if (_flatColor) {
-    state.enableFlatColor(*_flatColor, _colorsIntensity);
-    if (_flatColor->isTransparent()) {
-      state.enableBlend();
-      gl->setBlendFuncSrcAlpha();
-    }
-  }
-
-  if (!_depthTest) {
-    state.disableDepthTest();
-  }
-
-  gl->vertexPointer(3, 0, _vertices);
-
-  if (_translationMatrix != NULL){
-    gl->pushMatrix();
-    gl->multMatrixf(*_translationMatrix);
-  }
-
-  gl->setState(state);
-  rawRender(rc, state);
+  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true,         //Depth test
+                                              false, 0,
+                                              false, (float)0.0, (float)0.0,
+                                              _lineWidth,
+                                              true, _pointSize),
+                        false);   //POINT SIZE
 
   if (_translationMatrix != NULL) {
-    gl->popMatrix();
+    _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
-  
+
+  if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
+
+    _glState.addGLFeature(new FlatColorGLFeature(*_flatColor,
+                                                 _flatColor->isTransparent(),
+                                                 GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
+
+
+
+
+    return;
+  }
+
+  if (_colors != NULL) {
+    _glState.addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
+                                             4,            //Our buffer contains elements of 4
+                                             0,            //Index 0
+                                             false,        //Not normalized
+                                             0,            //Stride 0
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+
+  }
+}
+
+void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+
+  _glState.setParent(parentGLState);
+  rawRender(rc);
 }

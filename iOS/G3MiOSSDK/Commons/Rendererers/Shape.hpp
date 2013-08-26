@@ -18,7 +18,10 @@ class MutableMatrix44D;
 #include "Effects.hpp"
 #include <vector>
 
+#include "GLState.hpp"
+
 class ShapePendingEffect;
+class GPUProgramState;
 
 class Shape : public EffectTarget {
 private:
@@ -31,13 +34,17 @@ private:
   double      _scaleY;
   double      _scaleZ;
   
-  MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* createTransformMatrix(const Planet* planet);
-  MutableMatrix44D* getTransformMatrix(const Planet* planet);
+//  const Planet* _planet;
+
+  mutable MutableMatrix44D* _transformMatrix;
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
 
   bool _enable;
+  
+  mutable GLState _glState;
   
 protected:
   virtual void cleanTransformMatrix();
@@ -51,6 +58,7 @@ public:
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
+//  _planet(NULL),
   _enable(true)
   {
     
@@ -170,19 +178,17 @@ public:
   void setEnable(bool enable) {
     _enable = enable;
   }
-  
+
   void render(const G3MRenderContext* rc,
-              const GLState& parentState,
+              GLState* parentState,
               bool renderNotReadyShapes);
 
-  virtual void initialize(const G3MContext* context) {
-
-  }
+  virtual void initialize(const G3MContext* context) {}
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
   virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState,
+                         GLState* parentGLState,
                          bool renderNotReadyShapes) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;

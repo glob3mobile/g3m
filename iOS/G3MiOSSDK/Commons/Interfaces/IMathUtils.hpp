@@ -9,9 +9,27 @@
 #ifndef G3MiOSSDK_IMathUtils_hpp
 #define G3MiOSSDK_IMathUtils_hpp
 
-#include <string.h>
+#include <string>
 #include <cstdio>
 #include "ILogger.hpp"
+
+#ifdef C_CODE
+
+#include <math.h>
+#define SIN(x) sin(x)
+#define COS(x) cos(x)
+#define TAN(x) tan(x)
+
+#else
+
+#define SIN(x) java.lang.Math.sin(x)
+#define COS(x) java.lang.Math.cos(x)
+#define TAN(x) java.lang.Math.tan(x)
+
+#endif
+
+#define PI       3.14159265358979323846264338327950288
+#define HALF_PI  1.57079632679489661923132169163975144
 
 class IMathUtils {
 private:
@@ -30,10 +48,8 @@ public:
     return _instance;
   }
 
-  virtual ~IMathUtils() { }
-
-  virtual double pi() const = 0;
-  virtual double halfPi() const = 0;
+  virtual ~IMathUtils() {
+  }
 
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v)  const = 0;
@@ -122,6 +138,10 @@ public:
     return max(max(f1, f2), f3);
   }
 
+  virtual float min(float f1, float f2, float f3)  const {
+    return min(min(f1, f2), f3);
+  }
+
   virtual double floor(double d) const = 0;
   virtual float  floor(float f)  const = 0;
 
@@ -201,6 +221,23 @@ public:
                          float max) const {
     return (value >= min) && (value <= max);
   }
+
+  virtual double pseudoModule(double numerator,
+                              double denominator) const {
+
+    const double result = numerator / denominator;
+    const long long intPart = (long long) result; // integer part
+    const double fracPart = result - intPart;     // fractional part
+
+//    if (closeTo(fracPart, 1.0)) {
+    if (fracPart == 1.0) {
+      return 0;
+    }
+
+    return fracPart * denominator;
+  }
+
+
 };
 
 #endif

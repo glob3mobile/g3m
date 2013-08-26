@@ -11,9 +11,9 @@
 
 #include <string>
 
+
 class IBuffer {
 public:
-  
 #ifdef C_CODE
   virtual ~IBuffer() { }
 #endif

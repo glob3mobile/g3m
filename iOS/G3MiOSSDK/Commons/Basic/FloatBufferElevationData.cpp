@@ -30,7 +30,7 @@ _buffer(buffer)
   const int size = buffer->size();
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
-    if (buffer->get(i) == NO_DATA_VALUE){
+    if (buffer->get(i) == NO_DATA_VALUE) {
       _hasNoData = true;
       break;
     }
@@ -39,11 +39,16 @@ _buffer(buffer)
 
 FloatBufferElevationData::~FloatBufferElevationData() {
   delete _buffer;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
   const float value = _buffer->get(index);
-  if (value == NO_DATA_VALUE){
+  if (value == NO_DATA_VALUE) {
     return IMathUtils::instance()->NanD();
   }
   return value;

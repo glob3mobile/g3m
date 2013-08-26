@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
+  private int _renderersSize;
 
   private G3MContext _context;
 
@@ -29,11 +30,14 @@ public class CompositeRenderer extends Renderer
   {
      _context = null;
      _enable = true;
-    _renderers = new java.util.ArrayList<Renderer>();
+     _renderersSize = 0;
+//    _renderers = std::vector<Renderer*>();
   }
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final boolean isEnable()
@@ -43,8 +47,7 @@ public class CompositeRenderer extends Renderer
       return false;
     }
   
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       if (_renderers.get(i).isEnable())
       {
@@ -63,8 +66,7 @@ public class CompositeRenderer extends Renderer
   {
     _context = context;
   
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).initialize(context);
     }
@@ -72,8 +74,7 @@ public class CompositeRenderer extends Renderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i);
       if (renderer.isEnable())
@@ -88,17 +89,16 @@ public class CompositeRenderer extends Renderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
     //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i);
       if (renderer.isEnable())
       {
-        renderer.render(rc, parentState);
+        renderer.render(rc);
       }
     }
   }
@@ -106,8 +106,7 @@ public class CompositeRenderer extends Renderer
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     // the events are processed bottom to top
-    final int rendersSize = _renderers.size();
-    for (int i = rendersSize - 1; i >= 0; i--)
+    for (int i = _renderersSize - 1; i >= 0; i--)
     {
       Renderer renderer = _renderers.get(i);
       if (renderer.isEnable())
@@ -124,8 +123,7 @@ public class CompositeRenderer extends Renderer
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     // the events are processed bottom to top
-    final int rendersSize = _renderers.size();
-    for (int i = rendersSize - 1; i >= 0; i--)
+    for (int i = _renderersSize - 1; i >= 0; i--)
     {
       _renderers.get(i).onResizeViewportEvent(ec, width, height);
     }
@@ -134,6 +132,8 @@ public class CompositeRenderer extends Renderer
   public final void addRenderer(Renderer renderer)
   {
     _renderers.add(renderer);
+    _renderersSize = _renderers.size();
+  
     if (_context != null)
     {
       renderer.initialize(_context);
@@ -142,8 +142,7 @@ public class CompositeRenderer extends Renderer
 
   public final void start(G3MRenderContext rc)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).start(rc);
     }
@@ -151,8 +150,7 @@ public class CompositeRenderer extends Renderer
 
   public final void stop(G3MRenderContext rc)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).stop(rc);
     }
@@ -160,8 +158,7 @@ public class CompositeRenderer extends Renderer
 
   public final void onResume(G3MContext context)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).onResume(context);
     }
@@ -169,8 +166,7 @@ public class CompositeRenderer extends Renderer
 
   public final void onPause(G3MContext context)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).onPause(context);
     }
@@ -178,11 +174,34 @@ public class CompositeRenderer extends Renderer
 
   public final void onDestroy(G3MContext context)
   {
-    final int rendersSize = _renderers.size();
-    for (int i = 0; i < rendersSize; i++)
+    for (int i = 0; i < _renderersSize; i++)
     {
       _renderers.get(i).onDestroy(context);
     }
+  }
+
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    SurfaceElevationProvider result = null;
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      SurfaceElevationProvider childSurfaceElevationProvider = renderer.getSurfaceElevationProvider();
+      if (childSurfaceElevationProvider != null)
+      {
+        if (result == null)
+        {
+          result = childSurfaceElevationProvider;
+        }
+        else
+        {
+          ILogger.instance().logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+        }
+      }
+    }
+  
+    return result;
   }
 
 }

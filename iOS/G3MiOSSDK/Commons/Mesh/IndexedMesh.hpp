@@ -13,12 +13,11 @@
 
 class IShortBuffer;
 
-class IndexedMesh : public AbstractMesh {
+class IndexedMesh : public AbstractMesh{
 private:
   IShortBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState) const;
+  void rawRender(const G3MRenderContext* rc) const;
 
 public:
   IndexedMesh(const int primitive,
@@ -34,7 +33,6 @@ public:
               bool depthTest = true);
 
   ~IndexedMesh();
-
 };
 
 #endif

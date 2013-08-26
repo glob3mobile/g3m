@@ -27,18 +27,23 @@ public:
 
   }
 
-  ~Vector3F() {}
+  ~Vector3F() {
+  }
 
   Vector3F(const Vector3F &v): _x(v._x), _y(v._y), _z(v._z) {
 
   }
 
   inline float dot(const Vector3D& v) const {
-    return _x * (float) v._x + _y * (float) v._y + _z * (float) v._z;
+    return ((_x * (float) v._x) +
+            (_y * (float) v._y) +
+            (_z * (float) v._z));
   }
   
   inline float dot(const Vector3F& v) const {
-    return _x * v._x + _y * v._y + _z * v._z;
+    return ((_x * v._x) +
+            (_y * v._y) +
+            (_z * v._z));
   }
 
   Vector3F normalized() const;

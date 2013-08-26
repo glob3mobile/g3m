@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  Box.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 17/07/12.
+//  Created by Agustin Trujillo Pino on 17/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,9 +11,10 @@ package org.glob3.mobile.generated;
 //  Box.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 16/07/12.
+//  Created by Agustin Trujillo Pino on 16/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
+
 
 
 
@@ -21,7 +22,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Color;
 
-public class Box extends Extent
+public class Box extends BoundingVolume
 {
   private final Vector3D _lower ;
   private final Vector3D _upper ;
@@ -66,9 +67,12 @@ public class Box extends Extent
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    super.dispose();
+  
   }
 
-  public final boolean touches(Frustum frustum)
+  public final boolean touchesFrustum(Frustum frustum)
   {
     return frustum.touchesWithBox(this);
   }
@@ -115,31 +119,30 @@ public class Box extends Extent
     return _cornersF;
   }
 
-  public final double squaredProjectedArea(G3MRenderContext rc)
+
+  public final double projectedArea(G3MRenderContext rc)
   {
-    final Vector2I extent = projectedExtent(rc);
-    return extent._x * extent._y;
-  }
-  public final Vector2I projectedExtent(G3MRenderContext rc)
-  {
+  //  const Vector2I extent = projectedExtent(rc);
+  //  return extent._x * extent._y;
+  
     final java.util.ArrayList<Vector3F> corners = getCornersF();
   
     final Camera currentCamera = rc.getCurrentCamera();
   
-    final Vector2I pixel0 = currentCamera.point2Pixel(corners.get(0));
+    final Vector2F pixel0 = currentCamera.point2Pixel(corners.get(0));
   
-    int lowerX = pixel0._x;
-    int upperX = pixel0._x;
-    int lowerY = pixel0._y;
-    int upperY = pixel0._y;
+    float lowerX = pixel0._x;
+    float upperX = pixel0._x;
+    float lowerY = pixel0._y;
+    float upperY = pixel0._y;
   
     final int cornersSize = corners.size();
     for (int i = 1; i < cornersSize; i++)
     {
-      final Vector2I pixel = currentCamera.point2Pixel(corners.get(i));
+      final Vector2F pixel = currentCamera.point2Pixel(corners.get(i));
   
-      final int x = pixel._x;
-      final int y = pixel._y;
+      final float x = pixel._x;
+      final float y = pixel._y;
   
       if (x < lowerX)
       {
@@ -160,32 +163,57 @@ public class Box extends Extent
       }
     }
   
-    final int width = upperX - lowerX;
-    final int height = upperY - lowerY;
+    final float width = upperX - lowerX;
+    final float height = upperY - lowerY;
   
-    return new Vector2I(width, height);
+    return width * height;
+  }
+  public final Vector2F projectedExtent(G3MRenderContext rc)
+  {
+    final java.util.ArrayList<Vector3F> corners = getCornersF();
+  
+    final Camera currentCamera = rc.getCurrentCamera();
+  
+    final Vector2F pixel0 = currentCamera.point2Pixel(corners.get(0));
+  
+    float lowerX = pixel0._x;
+    float upperX = pixel0._x;
+    float lowerY = pixel0._y;
+    float upperY = pixel0._y;
+  
+    final int cornersSize = corners.size();
+    for (int i = 1; i < cornersSize; i++)
+    {
+      final Vector2F pixel = currentCamera.point2Pixel(corners.get(i));
+  
+      final float x = pixel._x;
+      final float y = pixel._y;
+  
+      if (x < lowerX)
+      {
+         lowerX = x;
+      }
+      if (y < lowerY)
+      {
+         lowerY = y;
+      }
+  
+      if (x > upperX)
+      {
+         upperX = x;
+      }
+      if (y > upperY)
+      {
+         upperY = y;
+      }
+    }
+  
+    final float width = upperX - lowerX;
+    final float height = upperY - lowerY;
+  
+    return new Vector2F(width, height);
   }
 
-  public final boolean contains(Vector3D p)
-  {
-    final double margin = 1e-3;
-    if (p._x < _lower._x - margin)
-       return false;
-    if (p._x > _upper._x + margin)
-       return false;
-  
-    if (p._y < _lower._y - margin)
-       return false;
-    if (p._y > _upper._y + margin)
-       return false;
-  
-    if (p._z < _lower._z - margin)
-       return false;
-    if (p._z > _upper._z + margin)
-       return false;
-  
-    return true;
-  }
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
   {
@@ -249,36 +277,49 @@ public class Box extends Extent
     _mesh.render(rc, parentState);
   }
 
-  public final boolean touchesBox(Box box)
+  public final boolean touches(BoundingVolume that)
   {
-    if (_lower._x > box._upper._x)
+    if (that == null)
+    {
+      return false;
+    }
+    return that.touchesBox(this);
+  }
+
+  public final boolean touchesBox(Box that)
+  {
+    if (_lower._x > that._upper._x)
     {
        return false;
     }
-    if (_upper._x < box._lower._x)
+    if (_upper._x < that._lower._x)
     {
        return false;
     }
-    if (_lower._y > box._upper._y)
+    if (_lower._y > that._upper._y)
     {
        return false;
     }
-    if (_upper._y < box._lower._y)
+    if (_upper._y < that._lower._y)
     {
        return false;
     }
-    if (_lower._z > box._upper._z)
+    if (_lower._z > that._upper._z)
     {
        return false;
     }
-    if (_upper._z < box._lower._z)
+    if (_upper._z < that._lower._z)
     {
        return false;
     }
     return true;
   }
+  public final boolean touchesSphere(Sphere that)
+  {
+    return that.touchesBox(this);
+  }
 
-  public final Extent mergedWith(Extent that)
+  public final BoundingVolume mergedWith(BoundingVolume that)
   {
     if (that == null)
     {
@@ -287,7 +328,7 @@ public class Box extends Extent
     return that.mergedWithBox(this);
   }
 
-  public final Extent mergedWithBox(Box that)
+  public final BoundingVolume mergedWithBox(Box that)
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -301,17 +342,73 @@ public class Box extends Extent
   
     return new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
   }
+  public final BoundingVolume mergedWithSphere(Sphere that)
+  {
+    return that.mergedWithBox(this);
+  }
 
-  public final boolean fullContains(Extent that)
+  public final Vector3D closestPoint(Vector3D point)
+  {
+    return point.clamp(_lower, _upper);
+  }
+
+  public final boolean contains(Vector3D p)
+  {
+    final double margin = 1e-3;
+    if (p._x < _lower._x - margin)
+       return false;
+    if (p._x > _upper._x + margin)
+       return false;
+  
+    if (p._y < _lower._y - margin)
+       return false;
+    if (p._y > _upper._y + margin)
+       return false;
+  
+    if (p._z < _lower._z - margin)
+       return false;
+    if (p._z > _upper._z + margin)
+       return false;
+  
+    return true;
+  }
+
+  public final boolean fullContains(BoundingVolume that)
   {
     return that.fullContainedInBox(this);
   }
 
   public final boolean fullContainedInBox(Box box)
   {
-  //  return contains(box->_upper) && contains(box->_lower);
     return box.contains(_upper) && box.contains(_lower);
   }
+  public final boolean fullContainedInSphere(Sphere that)
+  {
+    return that.contains(_lower) && that.contains(_upper);
+  }
 
+  public final Sphere createSphere()
+  {
+    final Vector3D center = _lower.add(_upper).div(2);
+    final double radius = center.distanceTo(_upper);
+    return new Sphere(center, radius);
+  }
+
+  private Vector3F[] _cornersArray = null;
+  public Vector3F[] getCornersArray() {
+    if (_cornersArray == null) {
+      _cornersArray = new Vector3F[8];
+
+      _cornersArray[0] = new Vector3F((float) _lower._x, (float) _lower._y, (float) _lower._z);
+      _cornersArray[1] = new Vector3F((float) _lower._x, (float) _lower._y, (float) _upper._z);
+      _cornersArray[2] = new Vector3F((float) _lower._x, (float) _upper._y, (float) _lower._z);
+      _cornersArray[3] = new Vector3F((float) _lower._x, (float) _upper._y, (float) _upper._z);
+      _cornersArray[4] = new Vector3F((float) _upper._x, (float) _lower._y, (float) _lower._z);
+      _cornersArray[5] = new Vector3F((float) _upper._x, (float) _lower._y, (float) _upper._z);
+      _cornersArray[6] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _lower._z);
+      _cornersArray[7] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z);
+    }
+    return _cornersArray;
+  }
 
 }

@@ -2,7 +2,7 @@
 //  CameraDoubleTapHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -73,7 +73,12 @@ class CameraDoubleTapHandler: public CameraEventHandler {
   
 public:
   
-  ~CameraDoubleTapHandler() {}
+  ~CameraDoubleTapHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
   
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,

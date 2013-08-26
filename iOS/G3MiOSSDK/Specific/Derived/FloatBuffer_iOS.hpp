@@ -11,6 +11,9 @@
 
 #include "IFloatBuffer.hpp"
 #include "ILogger.hpp"
+#include <OpenGLES/ES2/gl.h>
+
+#include "GL.hpp"
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
@@ -18,16 +21,21 @@ private:
   float*    _values;
   int       _timestamp;
 
-//  bool         _glBufferBound;
-//  unsigned int _glBuffer;
+  static GLuint     _boundVertexBuffer;
+  mutable bool      _vertexBufferCreated;
+  mutable GLuint    _vertexBuffer; //VBO
+  mutable int       _vertexBufferTimeStamp;
 
 public:
   FloatBuffer_iOS(int size) :
   _size(size),
   _timestamp(0),
-  _values(new float[size])
+  _values(new float[size]),
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
-    if (_values == NULL){
+    if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
@@ -49,9 +57,10 @@ public:
                   float f14,
                   float f15) :
   _size(16),
-  _timestamp(0)
-//  _glBufferBound(false),
-//  _glBuffer(0)
+  _timestamp(0),
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
     _values = new float[16];
     _values[ 0] = f0;
@@ -84,7 +93,7 @@ public:
   
   float get(int i) const {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
     
@@ -94,7 +103,7 @@ public:
   void put(int i,
            float value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -108,7 +117,7 @@ public:
               float value) {
     
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -119,10 +128,37 @@ public:
     return _values;
   }
 
-//  unsigned int getGLBuffer(int size);
-
   const std::string description() const;
-  
+
+  void bindAsVBOToGPU() const {
+
+    if (!_vertexBufferCreated) {
+      glGenBuffers(1, &_vertexBuffer);
+      _vertexBufferCreated = true;
+    }
+
+    if (_vertexBuffer != _boundVertexBuffer) {
+      glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+      _boundVertexBuffer = _vertexBuffer;
+    }
+//    else {
+//      printf("REUSING");
+//    }
+
+    if (_vertexBufferTimeStamp != _timestamp) {
+      _vertexBufferTimeStamp = _timestamp;
+
+      float* vertices = getPointer();
+      int vboSize = sizeof(float) * size();
+
+      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+    }
+
+//    if (GL_NO_ERROR != glGetError()) {
+//      ILogger::instance()->logError("Problem using VBO");
+//    }
+  }
+
 };
 
 #endif

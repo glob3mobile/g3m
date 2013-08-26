@@ -8,6 +8,8 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
@@ -46,7 +48,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
     final Angle angle = Angle.fromRadians(- IMathUtils.instance().asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = camera.getGeodeticPosition().height();
+    final double height = camera.getGeodeticPosition()._height;
     final double distance = height * 0.6;
   
     // create effect

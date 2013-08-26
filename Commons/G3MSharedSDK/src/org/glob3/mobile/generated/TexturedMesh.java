@@ -18,30 +18,32 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TexturedMesh extends Mesh
 {
-  private final Mesh _mesh;
+  private Mesh _mesh;
   private final TextureMapping _textureMapping;
   private final boolean _ownedMesh;
   private final boolean _ownedTexMapping;
   private final boolean _transparent;
 
+  private GLState _glState = new GLState();
+
+  private void createGLState()
+  {
+    _textureMapping.modifyGLState(_glState);
+  }
+
 
 
   public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
-
   {
      _mesh = mesh;
      _ownedMesh = ownedMesh;
      _textureMapping = textureMapping;
      _ownedTexMapping = ownedTexMapping;
      _transparent = transparent;
-//    GLState* state = _mesh->getGLState();
-//    state->enableTextures();
-//    state->enableTexture2D();
-//    if (_transparent) {
-//      state->enableBlend();
-//    }
+    createGLState();
   }
 
   public void dispose()
@@ -56,29 +58,13 @@ public class TexturedMesh extends Mesh
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
+  super.dispose();
+
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-    GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.enableTextures();
-    state.enableTexture2D();
-    if (_transparent)
-    {
-      state.enableBlend();
-      gl.setBlendFuncSrcAlpha();
-    }
-  
-    _textureMapping.bind(rc);
-  
-    _mesh.render(rc, state);
-  }
-
-  public final Extent getExtent()
-  {
-    return (_mesh == null) ? null : _mesh.getExtent();
+    return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
   public final int getVertexCount()
@@ -99,5 +85,11 @@ public class TexturedMesh extends Mesh
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _transparent;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    _glState.setParent(parentState);
+    _mesh.render(rc, _glState);
   }
 }

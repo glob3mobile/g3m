@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  CameraDoubleDragHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -35,6 +35,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
 
@@ -96,7 +98,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   //
   //
   //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-  //      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
+  //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
   //    }
   //  }
   

@@ -523,7 +523,14 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
 
   const JSONArray* jsNormals = jsonObject->getAsArray("normals");
   IFloatBuffer* normals = NULL;
+  //TODO: WORKING JM
   if (jsNormals != NULL) {
+    const int normalsCount = jsNormals->size();
+    normals = IFactory::instance()->createFloatBuffer(normalsCount);
+    for (int i = 0; i < normalsCount; i++) {
+      float value = (float) jsNormals->getAsNumber(i)->value();
+      normals->put(i, value);
+    }
     processedKeys++;
   }
 

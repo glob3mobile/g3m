@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Effects_hpp
 #define G3MiOSSDK_Effects_hpp
 
-#include "Renderer.hpp"
+
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
@@ -18,13 +18,15 @@
 
 #include <vector>
 
+class G3MRenderContext;
+class G3MContext;
+
 class EffectTarget {
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
+#else
+  void dispose();
 #endif
 };
 
@@ -85,7 +87,9 @@ public:
 
   virtual void cancel(const TimeInterval& when) = 0;
 
-  virtual ~Effect() { }
+  virtual ~Effect() {
+
+  }
 };
 
 
@@ -224,7 +228,7 @@ public:
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }
-  };
+  }
 
   void startEffect(Effect* effect,
                    EffectTarget* target);

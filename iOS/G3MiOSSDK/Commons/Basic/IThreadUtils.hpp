@@ -12,6 +12,7 @@
 #include "GTask.hpp"
 #include <stdlib.h>
 
+
 class G3MContext;
 
 class IThreadUtils {
@@ -40,7 +41,6 @@ public:
   virtual void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
-    
   }
   
   virtual void invokeInRendererThread(GTask* task,

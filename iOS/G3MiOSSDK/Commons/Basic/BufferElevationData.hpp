@@ -12,12 +12,9 @@
 #include "ElevationData.hpp"
 
 class BufferElevationData : public ElevationData {
-private:
+protected:
   const int _bufferSize;
 
-//  const Geodetic2D _realResolution;
-
-protected:
   virtual double getValueInBufferAt(int index) const = 0;
 
 public:
@@ -28,12 +25,11 @@ public:
                       int bufferSize);
 
   virtual ~BufferElevationData() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
-
-//  const Geodetic2D getRealResolution() const {
-//    return _realResolution;
-//  }
 
   double getElevationAt(int x,
                         int y) const;

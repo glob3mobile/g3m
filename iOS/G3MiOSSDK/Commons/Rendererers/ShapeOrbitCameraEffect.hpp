@@ -39,10 +39,10 @@ public:
   _shape(shape),
   _fromDistance(fromDistance),
   _toDistance(toDistance),
-  _fromAzimuthInRadians(fromAzimuth.radians()),
-  _toAzimuthInRadians(toAzimuth.radians()),
-  _fromAltitudeInRadians(fromAltitude.radians()),
-  _toAltitudeInRadians(toAltitude.radians())
+  _fromAzimuthInRadians(fromAzimuth._radians),
+  _toAzimuthInRadians(toAzimuth._radians),
+  _fromAltitudeInRadians(fromAltitude._radians),
+  _toAltitudeInRadians(toAltitude._radians)
   {
 
   }

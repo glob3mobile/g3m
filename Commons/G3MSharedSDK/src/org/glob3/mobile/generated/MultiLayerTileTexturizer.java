@@ -43,6 +43,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
+    super.dispose();
   
   }
 
@@ -60,7 +61,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, PlanetRendererContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
     _texturesHandler = rc.getTexturesHandler();
   
@@ -69,12 +70,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator(), trc.getTexturePriority()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, prc.getTileRasterizer(), rc, prc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, prc.getTessellator(), prc.getTexturePriority()));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (trc.isForcedFullRender())
+    if (prc.isForcedFullRender())
     {
       builder.start();
     }
@@ -99,13 +100,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cleanTile();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 4\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 4\n");
+  //    }
+  //  }
   }
 
   public final boolean tileMeetsRenderCriteria(Tile tile)
@@ -181,13 +180,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cancel();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 5\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 5\n");
+  //    }
+  //  }
   }
 
 }

@@ -12,9 +12,11 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class G3MRenderContext;
 //class G3MEventContext;
-//class GLState;
+//class GLGlobalState;
+//class SurfaceElevationProvider;
 
-public abstract class Renderer
+
+public abstract class Renderer implements EffectTarget
 {
   public abstract boolean isEnable();
 
@@ -25,7 +27,7 @@ public abstract class Renderer
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc);
 
   /*
    Gives to Renderer the opportunity to process touch, events.
@@ -52,13 +54,15 @@ public abstract class Renderer
   public abstract void onDestroy(G3MContext context);
 
   /**
-   * Allows us to know if the renderer is a TileRenderer.
-   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of TileRenderer.
+   * Allows us to know if the renderer is a PlanetRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  public boolean isTileRenderer()
+  public boolean isPlanetRenderer()
   {
     return false;
   }
+
+  public abstract SurfaceElevationProvider getSurfaceElevationProvider();
 
 }

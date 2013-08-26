@@ -25,6 +25,10 @@ public:
   }
 
   virtual ~LevelTileCondition() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   bool isAvailable(const G3MRenderContext* rc,

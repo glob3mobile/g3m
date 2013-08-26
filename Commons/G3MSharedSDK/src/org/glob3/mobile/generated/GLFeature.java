@@ -1,36 +1,60 @@
 package org.glob3.mobile.generated; 
-public class GLFeature
+//
+//  GLFeature.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 18/03/13.
+//
+//
+
+//
+//  GLFeature.hpp
+//  G3MiOSSDK
+//
+//  Created by Agustín Trujillo Pino on 27/10/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//
+
+
+
+
+//class Camera;
+
+public abstract class GLFeature extends RCObject
 {
-  private static int _polygonOffsetFill = 0;
-  private static int _depthTest = 0;
-  private static int _blend = 0;
-  private static int _cullFace = 0;
 
-  public static int polygonOffsetFill()
+  public GLFeature(GLFeatureGroupName group)
+  //, _globalState(NULL)
   {
-    return _polygonOffsetFill;
+     _group = group;
   }
 
-  public static int depthTest()
+//  virtual ~GLFeature() {
+//    delete _globalState;
+///#ifdef JAVA_CODE
+//  super.dispose();
+///#endif
+//  }
+
+//  void applyGLGlobalState(GL* gl) const{
+//    if (_globalState != NULL) {
+//      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+//    }
+//  }
+  public final GPUVariableValueSet getGPUVariableValueSet()
   {
-    return _depthTest;
+    return _values;
   }
 
-  public static int blend()
+  public final GLFeatureGroupName getGroup()
   {
-    return _blend;
+    return _group;
   }
 
-  public static int cullFace()
-  {
-    return _cullFace;
-  }
+  public abstract void applyOnGlobalGLState(GLGlobalState state);
 
-  public static void init(INativeGL ngl)
-  {
-    _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
-    _depthTest = ngl.Feature_DepthTest();
-    _blend = ngl.Feature_Blend();
-    _cullFace = ngl.Feature_CullFace();
-  }
+  protected final GLFeatureGroupName _group;
+  protected GPUVariableValueSet _values = new GPUVariableValueSet();
+//  GLGlobalState* _globalState;
+
 }

@@ -21,28 +21,29 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class Color;
 //class Ellipsoid;
+//class Planet;
 
 public abstract class GEOMeshSymbol extends GEOSymbol
 {
 
-  protected final Mesh createLine2DMesh(java.util.ArrayList<Geodetic2D> coordinates, Color lineColor, float lineWidth, double deltaHeight, Ellipsoid ellipsoid)
+  protected final Mesh createLine2DMesh(java.util.ArrayList<Geodetic2D> coordinates, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Geodetic2D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic2D.zero());
   
     final int coordinatesCount = coordinates.size();
     for (int i = 0; i < coordinatesCount; i++)
     {
       final Geodetic2D coordinate = coordinates.get(i);
-      vertices.add(coordinate.latitude(), coordinate.longitude(), deltaHeight);
+      vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
     }
   
     return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
   }
 
-  protected final Mesh createLines2DMesh(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color lineColor, float lineWidth, double deltaHeight, Ellipsoid ellipsoid)
+  protected final Mesh createLines2DMesh(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ellipsoid, Geodetic2D.zero());
+    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Geodetic2D.zero());
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int coordinatesArrayCount = coordinatesArray.size();
@@ -55,7 +56,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       {
         final Geodetic2D coordinate = coordinates.get(j);
   
-        vertices.add(coordinate.latitude(), coordinate.longitude(), deltaHeight);
+        vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
   
         indices.add(index);
         if ((j > 0) && (j < (coordinatesCount-1)))
@@ -73,9 +74,8 @@ public abstract class GEOMeshSymbol extends GEOSymbol
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
-    MeshRenderer meshRenderer = sc.getMeshRenderer();
     if (meshRenderer == null)
     {
       ILogger.instance().logError("Can't simbolize with Mesh, MeshRenderer was not set");
@@ -88,6 +88,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
         meshRenderer.addMesh(mesh);
       }
     }
+    return true;
   }
 
 

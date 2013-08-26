@@ -27,11 +27,25 @@ GEOFeature::~GEOFeature() {
   delete _id;
   delete _geometry;
   delete _properties;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GEOFeature::symbolize(const G3MRenderContext* rc,
-                           const GEOSymbolizationContext& sc) const {
+                           const GEOSymbolizer*    symbolizer,
+                           MeshRenderer*           meshRenderer,
+                           ShapesRenderer*         shapesRenderer,
+                           MarksRenderer*          marksRenderer,
+                           GEOTileRasterizer*      geoTileRasterizer) const {
   if (_geometry != NULL) {
-    _geometry->symbolize(rc, sc);
+    _geometry->symbolize(rc,
+                         symbolizer,
+                         meshRenderer,
+                         shapesRenderer,
+                         marksRenderer,
+                         geoTileRasterizer);
   }
 }

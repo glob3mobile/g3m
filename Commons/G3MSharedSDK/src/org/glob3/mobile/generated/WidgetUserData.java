@@ -36,7 +36,6 @@ package org.glob3.mobile.generated;
 //class PeriodicalTask;
 //class ICameraConstrainer;
 //class FrameTasksExecutor;
-//class TextureBuilder;
 //class G3MWidget;
 //class IStringBuilder;
 //class IMathUtils;
@@ -46,13 +45,16 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class ITextUtils;
 //class G3MEventContext;
+//class SurfaceElevationProvider;
 
+//class GPUProgram;
+//class GPUProgramManager;
 //class ICameraActivityListener;
 
 
 
 //class G3MContext;
-//class GLState;
+//class GLGlobalState;
 
 public class WidgetUserData
 {

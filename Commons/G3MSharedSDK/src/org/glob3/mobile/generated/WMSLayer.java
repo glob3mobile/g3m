@@ -85,7 +85,7 @@ public class WMSLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }
@@ -129,13 +129,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
   
         req += isb.getString();
         if (isb != null)
@@ -159,13 +159,13 @@ public class WMSLayer extends Layer
         isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
   
         req += isb.getString();
         if (isb != null)
@@ -275,13 +275,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
   
         req += isb.getString();
   
@@ -306,13 +306,13 @@ public class WMSLayer extends Layer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLongitude(sector.lower().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.lower().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector.upper().longitude()));
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector.upper().latitude()));
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
   
         req += isb.getString();
   
@@ -332,8 +332,8 @@ public class WMSLayer extends Layer
     double v;
     if (_parameters._mercator)
     {
-      u = sector.getUCoordinate(position.longitude());
-      v = MercatorUtils.getMercatorV(position.latitude());
+      u = sector.getUCoordinate(position._longitude);
+      v = MercatorUtils.getMercatorV(position._latitude);
     }
     else
     {
@@ -364,6 +364,11 @@ public class WMSLayer extends Layer
   {
     _extraParameter = extraParameter;
     notifyChanges();
+  }
+
+  public final String description()
+  {
+    return "[WMSLayer]";
   }
 
 }

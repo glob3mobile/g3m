@@ -32,7 +32,8 @@ public:
     
   }
   
-  ~Vector3D() {}
+  ~Vector3D() {
+  }
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     
@@ -105,13 +106,25 @@ public:
                     _y + v._y,
                     _z + v._z);
   }
-  
+
+  Vector3D add(double d) const {
+    return Vector3D(_x + d,
+                    _y + d,
+                    _z + d);
+  }
+
   Vector3D sub(const Vector3D& v) const {
     return Vector3D(_x - v._x,
                     _y - v._y,
                     _z - v._z);
   }
-  
+
+  Vector3D sub(double d) const {
+    return Vector3D(_x - d,
+                    _y - d,
+                    _z - d);
+  }
+
   Vector3D times(const Vector3D& v) const {
     return Vector3D(_x * v._x,
                     _y * v._y,
@@ -171,7 +184,14 @@ public:
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;
-  
+
+  const Vector3D clamp(const Vector3D& min,
+                       const Vector3D& max) const;
+
+  const double squaredDistanceTo(const Vector3D& that) const;
+
+  const double distanceTo(const Vector3D& that) const;
+
 };
 
 

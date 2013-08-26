@@ -25,9 +25,17 @@ public:
   }
 
   virtual ~GEOMarkSymbol();
-  
-  void symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
+
+  bool symbolize(const G3MRenderContext* rc,
+                 const GEOSymbolizer*    symbolizer,
+                 MeshRenderer*           meshRenderer,
+                 ShapesRenderer*         shapesRenderer,
+                 MarksRenderer*          marksRenderer,
+                 GEOTileRasterizer*      geoTileRasterizer) const;
+
+  bool deleteAfterSymbolize() const {
+    return true;
+  }
 
 };
 

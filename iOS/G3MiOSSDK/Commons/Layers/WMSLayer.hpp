@@ -90,7 +90,9 @@ public:
     _extraParameter = extraParameter;
     notifyChanges();
   }
-  
+
+  const std::string description() const;
+
 };
 
 #endif

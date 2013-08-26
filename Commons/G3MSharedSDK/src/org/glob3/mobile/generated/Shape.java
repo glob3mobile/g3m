@@ -20,7 +20,9 @@ package org.glob3.mobile.generated;
 //class MutableMatrix44D;
 
 
+
 //class ShapePendingEffect;
+//class GPUProgramState;
 
 public abstract class Shape implements EffectTarget
 {
@@ -32,6 +34,8 @@ public abstract class Shape implements EffectTarget
   private double _scaleX;
   private double _scaleY;
   private double _scaleZ;
+
+//  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
@@ -50,6 +54,8 @@ public abstract class Shape implements EffectTarget
     if (_transformMatrix == null)
     {
       _transformMatrix = createTransformMatrix(planet);
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
     }
     return _transformMatrix;
   }
@@ -57,6 +63,8 @@ public abstract class Shape implements EffectTarget
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
   private boolean _enable;
+
+  private GLState _glState = new GLState();
 
   protected void cleanTransformMatrix()
   {
@@ -66,6 +74,7 @@ public abstract class Shape implements EffectTarget
   }
 
   public Shape(Geodetic3D position)
+//  _planet(NULL),
   {
      _position = position;
      _heading = new Angle(Angle.zero());
@@ -233,11 +242,10 @@ public abstract class Shape implements EffectTarget
     _enable = enable;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
+  public final void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
     if (renderNotReadyShapes || isReadyToRender(rc))
     {
-  
       final int pendingEffectsCount = _pendingEffects.size();
       if (pendingEffectsCount > 0)
       {
@@ -258,27 +266,19 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
-  
-      GL gl = rc.getGL();
-  
-      gl.pushMatrix();
-  
-      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
-  
-      rawRender(rc, parentState, renderNotReadyShapes);
-  
-      gl.popMatrix();
+      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+      _glState.setParent(parentGLState);
+      rawRender(rc, _glState, renderNotReadyShapes);
     }
   }
 
   public void initialize(G3MContext context)
   {
-
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 

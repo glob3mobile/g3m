@@ -32,7 +32,7 @@ public class CircleShape extends AbstractMeshShape
     // first is the center
     vertices.add(0.0, 0.0, 0.0);
   
-    final double twicePi = mu.pi() * 2;
+    final double twicePi = DefineConstants.PI * 2;
   
     for (int i = 0; i <= _steps; i++)
     {
@@ -68,6 +68,9 @@ public class CircleShape extends AbstractMeshShape
   {
     if (_color != null)
        _color.dispose();
+
+  super.dispose();
+
   }
 
   public final void setRadius(float radius)

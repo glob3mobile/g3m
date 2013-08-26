@@ -17,6 +17,8 @@
 #include "TexturesHandler.hpp"
 #include "IStringBuilder.hpp"
 
+#include "GPUProgramManager.hpp"
+#include "GPUProgram.hpp"
 
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
@@ -110,8 +112,27 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
-const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
-                                        const GLState& parentState) {
+//const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
+//  if (!_initialized) {
+//    _initialized = true;
+//    requestImage(rc);
+//  }
+//
+//  const IGLTextureId* textureId = getTextureId(rc);
+//  if (textureId == NULL) {
+//    return NULL;
+//  }
+//  _glState.setParent(parentGLState);
+//  _glState.clearGLFeatureGroup(COLOR_GROUP);
+//
+//  _glState.addGLFeature(new TextureIDGLFeature(textureId,
+//                                               false, 0,0), false);
+//
+//  return &_glState;
+//}
+
+bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
+
   if (!_initialized) {
     _initialized = true;
     requestImage(rc);
@@ -119,17 +140,14 @@ const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
 
   const IGLTextureId* textureId = getTextureId(rc);
   if (textureId == NULL) {
-    return NULL;
+    return false;
   }
+  state->clearGLFeatureGroup(COLOR_GROUP);
 
-  GLState* state = new GLState(parentState);
-  state->enableTextures();
-  state->enableTexture2D();
-  state->enableBlend();
-  //int __WORKING;
+  state->addGLFeature(new TextureIDGLFeature(textureId,
+                                               false, 0,0), false);
 
-  GL* gl = rc->getGL();
-  gl->bindTexture(textureId);
 
-  return state;
+  return true;
+  
 }

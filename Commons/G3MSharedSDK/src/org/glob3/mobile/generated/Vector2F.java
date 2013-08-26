@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Vector2I;
 
 public class Vector2F
 {
@@ -44,7 +45,6 @@ public class Vector2F
 
   public void dispose()
   {
-
   }
 
   public final float x()
@@ -62,6 +62,20 @@ public class Vector2F
     final IMathUtils mu = IMathUtils.instance();
 
     return new Vector2F(mu.NanF(), mu.NanF());
+  }
+
+  public final double squaredDistanceTo(Vector2I that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    return (dx * dx) + (dy * dy);
+  }
+
+  public final double squaredDistanceTo(Vector2F that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    return (dx * dx) + (dy * dy);
   }
 
 }

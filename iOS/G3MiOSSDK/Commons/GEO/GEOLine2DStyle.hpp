@@ -29,6 +29,9 @@ public:
   }
 
   virtual ~GEOLine2DStyle() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

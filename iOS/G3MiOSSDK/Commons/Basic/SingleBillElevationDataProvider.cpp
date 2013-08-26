@@ -13,7 +13,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "TimeInterval.hpp"
 #include "BilParser.hpp"
-#include "SubviewElevationData.hpp"
+#include "InterpolatedSubviewElevationData.hpp"
 #include "ShortBufferElevationData.hpp"
 
 
@@ -118,11 +118,9 @@ const long long SingleBillElevationDataProvider::requestElevationData(const Sect
   }
   else {
     //int _DGD_working_on_terrain;
-    const bool useDecimation = false;
-    ElevationData *elevationData = new SubviewElevationData(_elevationData,
-                                                            sector,
-                                                            extent,
-                                                            useDecimation);
+    ElevationData *elevationData = new InterpolatedSubviewElevationData(_elevationData,
+                                                                        sector,
+                                                                        extent);
     listener->onData(sector,
                      extent,
                      elevationData);
@@ -179,7 +177,7 @@ const long long SingleBillElevationDataProvider::queueRequest(const Sector& sect
 void SingleBillElevationDataProvider::removeQueueRequest(const long long requestId) {
 #ifdef C_CODE
   std::map<long long, SingleBillElevationDataProvider_Request*>::iterator it = _requestsQueue.find(requestId);
-  if (it != _requestsQueue.end()){
+  if (it != _requestsQueue.end()) {
     delete it->second;
     _requestsQueue.erase(it);
   }

@@ -24,6 +24,41 @@ public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
+  private GLState _glState = new GLState();
+
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam);
+      _glState.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+
+  public MeshRenderer()
+  {
+     _projection = null;
+     _model = null;
+  }
+
   public void dispose()
   {
     final int meshesCount = _meshes.size();
@@ -33,6 +68,9 @@ public class MeshRenderer extends LeafRenderer
       if (mesh != null)
          mesh.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addMesh(Mesh mesh)
@@ -77,20 +115,20 @@ public class MeshRenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc)
   {
-  
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+    updateGLState(rc);
+  
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
     {
       Mesh mesh = _meshes.get(i);
-      final Extent extent = mesh.getExtent();
-  
-      if (extent.touches(frustum))
+      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+      if (boundingVolume.touchesFrustum(frustum))
       {
-        mesh.render(rc, parentState);
+        mesh.render(rc, _glState);
       }
     }
   }

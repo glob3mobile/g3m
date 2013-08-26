@@ -16,16 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class Geodetic2D;
 
-public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
+
+public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
-    return sc.getSymbolizer().createSymbols(this);
+    return symbolizer.createSymbols(this);
   }
 
 
@@ -52,6 +52,9 @@ public class GEO2DMultiLineStringGeometry extends GEOMultiLineStringGeometry
     }
   
     _coordinatesArray = null;
+  
+    super.dispose();
+  
   }
 
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getCoordinatesArray()

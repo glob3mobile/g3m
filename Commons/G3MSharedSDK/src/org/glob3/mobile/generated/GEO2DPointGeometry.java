@@ -18,13 +18,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO2DPointGeometry extends GEOPointGeometry
+public class GEO2DPointGeometry extends GEOGeometry2D
 {
   private final Geodetic2D _position ;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(G3MRenderContext rc, GEOSymbolizationContext sc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
-    return sc.getSymbolizer().createSymbols(this);
+    return symbolizer.createSymbols(this);
   }
 
 

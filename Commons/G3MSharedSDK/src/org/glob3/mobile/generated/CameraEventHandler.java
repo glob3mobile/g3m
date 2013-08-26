@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraEventHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 07/08/12.
+//  Created by Agustin Trujillo Pino on 07/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -22,6 +22,7 @@ public abstract class CameraEventHandler
 
   public void dispose()
   {
+
   }
 
   public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);

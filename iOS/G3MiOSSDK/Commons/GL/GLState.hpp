@@ -2,152 +2,75 @@
 //  GLState.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 27/10/12.
+//  Created by Jose Miguel SN on 17/05/13.
+//
+//  Created by Agustin Trujillo Pino on 27/10/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLState_hpp
-#define G3MiOSSDK_GLState_hpp
+#ifndef __G3MiOSSDK__GLState__
+#define __G3MiOSSDK__GLState__
 
-class IFloatBuffer;
+#include "GLGlobalState.hpp"
+#include "GPUProgram.hpp"
+#include "GPUProgramManager.hpp"
 
-#include "Color.hpp"
-#include "GLConstants.hpp"
+#include "GLFeatureGroup.hpp"
+#include "GLFeature.hpp"
+#include "GPUVariableValueSet.hpp"
 
 class GLState {
-private:
-  bool _depthTest;
-  bool _blend;
-  bool _textures;
-  bool _texture2D;
-  bool _vertexColor;
-  bool _verticesPosition;
-  bool _flatColor;
-  bool _cullFace;
-  int  _culledFace;
 
-  IFloatBuffer* _colors;
-  float         _intensity;
-  float         _flatColorR;
-  float         _flatColorG;
-  float         _flatColorB;
-  float         _flatColorA;
+  GLFeatureSet _features;
+  mutable GLFeatureSet* _accumulatedFeatures;
 
-  float _lineWidth;
-  float _pointSize;
+  mutable int _timeStamp;
+  mutable int _parentsTimeStamp;
 
+  mutable GPUVariableValueSet* _valuesSet;
+  mutable GLGlobalState*   _globalState;
 
-  GLState() :
-  _depthTest(true),
-  _blend(false),
-  _textures(false),
-  _texture2D(false),
-  _vertexColor(false),
-  _verticesPosition(false),
-  _flatColor(false),
-  _cullFace(true),
-  _culledFace(GLCullFace::back()),
-  _colors(NULL),
-  _intensity(0),
-  _flatColorR(0),
-  _flatColorG(0),
-  _flatColorB(0),
-  _flatColorA(0),
-  _lineWidth(1),
-  _pointSize(1)
-  {
-  }
+  mutable GPUProgram* _lastGPUProgramUsed;
 
+#ifdef C_CODE
+  mutable const GLState* _parentGLState;
+#endif
+#ifdef JAVA_CODE
+  private GLState _parentGLState;
+#endif
 
+  GLState(const GLState& state);
+
+  void hasChangedStructure() const;
 
 public:
-  static GLState* newDefault() {
-    return new GLState();
-  }
 
-  explicit GLState(const GLState& parentState) :
-  _depthTest(parentState._depthTest),
-  _blend(parentState._blend),
-  _textures(parentState._textures),
-  _texture2D(parentState._texture2D),
-  _vertexColor(parentState._vertexColor),
-  _verticesPosition(parentState._verticesPosition),
-  _flatColor(parentState._flatColor),
-  _cullFace(parentState._cullFace),
-  _culledFace(parentState._culledFace),
-  _colors(parentState._colors),
-  _intensity(parentState._intensity),
-  _flatColorR(parentState._flatColorR),
-  _flatColorG(parentState._flatColorG),
-  _flatColorB(parentState._flatColorB),
-  _flatColorA(parentState._flatColorA),
-  _lineWidth(parentState._lineWidth),
-  _pointSize(parentState._pointSize)
+  GLState():
+  _parentGLState(NULL),
+  _lastGPUProgramUsed(NULL),
+  _parentsTimeStamp(0),
+  _timeStamp(0),
+  _valuesSet(NULL),
+  _globalState(NULL),
+  _accumulatedFeatures(NULL)
   {
   }
 
-  ~GLState() {}
+  int getTimeStamp() const { return _timeStamp;}
 
-  void enableDepthTest() { _depthTest = true; }
-  void disableDepthTest() { _depthTest = false; }
-  bool isEnabledDepthTest() const { return _depthTest; }
+  GLFeatureSet* getAccumulatedFeatures() const;
+//  GLFeatureSet* createAccumulatedFeatures() const;
 
-  void enableBlend() { _blend = true; }
-  void disableBlend() { _blend = false; }
-  bool isEnabledBlend() const { return _blend; }
+  ~GLState();
 
-  void enableTextures() { _textures = true; }
-  void disableTextures() { _textures = false; }
-  bool isEnabledTextures() const { return _textures; }
+  void setParent(const GLState* p) const;
 
-  void enableTexture2D() { _texture2D = true; }
-  void disableTexture2D() { _texture2D = false; }
-  bool isEnabledTexture2D() const { return _texture2D; }
+  void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
-  void enableVertexColor(IFloatBuffer* colors,
-                         float intensity) {
-    _vertexColor  = true;
-    _colors       = colors;
-    _intensity    = intensity;
-  }
-  void disableVertexColor() { _vertexColor = false; }
-  bool isEnabledVertexColor() const { return _vertexColor; }
-  IFloatBuffer* getColors() const { return _colors; }
-  float getIntensity() const { return _intensity; }
+  void addGLFeature(const GLFeature* f, bool mustRetain);
 
-  void enableVerticesPosition() { _verticesPosition = true; }
-  void disableVerticesPosition() { _verticesPosition = false; }
-  bool isEnabledVerticesPosition() const { return _verticesPosition; }
+  void clearGLFeatureGroup(GLFeatureGroupName g);
 
-  void enableFlatColor(const Color& color,
-                       float intensity) {
-    _flatColor = true;
-    _flatColorR = color.getRed();
-    _flatColorG = color.getGreen();
-    _flatColorB = color.getBlue();
-    _flatColorA= color.getAlpha();
-    _intensity = intensity;
-  }
-  void disableFlatColor() { _flatColor = false; }
-  bool isEnabledFlatColor() const { return _flatColor; }
-  Color getFlatColor() const {
-    return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
-  }
-
-  void enableCullFace(int face) {
-    _cullFace   = true;
-    _culledFace = face;
-  }
-  void disableCullFace() { _cullFace = false; }
-  bool isEnabledCullFace() const { return _cullFace; }
-  int getCulledFace() const { return _culledFace; }
-
-  void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
-  float lineWidth() const { return _lineWidth; }
-
-  void setPointSize(float pointSize) { _pointSize = pointSize; }
-  float pointSize() const { return _pointSize; }
-  
 };
 
 #endif

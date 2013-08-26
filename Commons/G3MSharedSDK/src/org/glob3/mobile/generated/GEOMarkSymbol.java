@@ -33,23 +33,33 @@ public class GEOMarkSymbol extends GEOSymbol
   {
     if (_mark != null)
        _mark.dispose();
+  
+    super.dispose();
+  
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
-  
-    MarksRenderer marksRenderer = sc.getMarksRenderer();
-    if (marksRenderer == null)
+    if (_mark != null)
     {
-      ILogger.instance().logError("Can't simbolize with Mark, MarksRenderer was not set");
-      if (_mark != null)
-         _mark.dispose();
+      if (marksRenderer == null)
+      {
+        ILogger.instance().logError("Can't simbolize with Mark, MarksRenderer was not set");
+        if (_mark != null)
+           _mark.dispose();
+      }
+      else
+      {
+        marksRenderer.addMark(_mark);
+      }
+      _mark = null;
     }
-    else
-    {
-      marksRenderer.addMark(_mark);
-    }
-    _mark = null;
+    return true;
+  }
+
+  public final boolean deleteAfterSymbolize()
+  {
+    return true;
   }
 
 }

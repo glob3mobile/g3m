@@ -90,7 +90,7 @@ public class BingMapsLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }
@@ -247,6 +247,11 @@ public class BingMapsLayer extends Layer
   public final void onDownloadErrorMetadata()
   {
     ILogger.instance().logError("BingMapsLayer: Error while downloading metadata.");
+  }
+
+  public final String description()
+  {
+    return "[BingMapsLayer]";
   }
 
 }

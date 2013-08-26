@@ -12,6 +12,9 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -30,7 +33,6 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.ShaderProgram;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.WidgetUserData;
 
@@ -135,8 +137,6 @@ public final class G3MWidget_WebGL
    private int                  _height;
    private MotionEventProcessor _motionEventProcessor;
    private GL                   _gl;
-   private ShaderProgram        _shaderProgram;
-   //   private ShaderProgram                 _shaderProgram2;
    private G3MWidget            _g3mWidget;
 
 
@@ -336,6 +336,31 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
+      
+      factory.add(new GPUProgramSources("ColorMesh",
+				Shaders_WebGL._colorMeshVertexShader,
+				Shaders_WebGL._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh",
+				Shaders_WebGL._texturedMeshVertexShader,
+				Shaders_WebGL._texturedMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				Shaders_WebGL._transformedTexCoortexturedMeshVertexShader, 
+				Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh",
+				Shaders_WebGL._flatColorMeshVertexShader,
+				Shaders_WebGL._flatColorMeshFragmentShader));
+      
+      return new GPUProgramManager(factory);
+   }
+
+
    public void initWidget(/*final INativeGL nativeGL,*/
                           final IStorage storage,
                           final IDownloader downloader,
@@ -354,6 +379,7 @@ public final class G3MWidget_WebGL
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData) {
 
+
       _g3mWidget = G3MWidget.create(//
                _gl, //
                storage, //
@@ -370,7 +396,7 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, createGPUProgramManager());
 
       _g3mWidget.setUserData(userData);
 
@@ -380,10 +406,10 @@ public final class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
-         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
-            ILogger.instance().logInfo("Failed to load shaders");
-         }
+         //         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
+         //         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
+         //            ILogger.instance().logInfo("Failed to load shaders");
+         //         }
 
          _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
          jsAddResizeHandler(_canvas.getCanvasElement());
@@ -411,7 +437,7 @@ public final class G3MWidget_WebGL
       //USING PROGRAM
       //      if (_program != null) {
       //jsGLInit();
-      _g3mWidget.getGL().useProgram(_shaderProgram);
+      //      _g3mWidget.getGL().useProgram(_shaderProgram);
       _g3mWidget.render(_width, _height);
 
       //      }

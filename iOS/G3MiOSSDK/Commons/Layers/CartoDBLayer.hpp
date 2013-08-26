@@ -48,6 +48,8 @@ public:
 
   }
 
+  const std::string description() const;
+
 };
 
 #endif
