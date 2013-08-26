@@ -291,18 +291,18 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueS
     }
   }
 
-  Matrix44DProvider* modelProvider = NULL;
-  if (modelTransformCount > 0){
-    modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
-  } else{
-    const Matrix44D* id = Matrix44D::createIdentity();
-    modelProvider = new Matrix44DHolder(id);
-    id->_release();
-  }
+//  Matrix44DProvider* modelProvider = NULL;
+//  if (modelTransformCount > 0){
+//    modelProvider = new Matrix44DMultiplicationHolder(&modelTransformHolders[2],modelTransformCount);
+//  } else{
+//    const Matrix44D* id = Matrix44D::createIdentity();
+//    modelProvider = new Matrix44DHolder(id);
+//    id->_release();
+//  }
 
-  vs.addUniformValue(MODEL,
-                     new GPUUniformValueMatrix4(modelProvider, true),
-                     false);
+//  vs.addUniformValue(MODEL,
+//                     new GPUUniformValueMatrix4(modelProvider, true),
+//                     false);
 
 
   Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelTransformCount+2);
