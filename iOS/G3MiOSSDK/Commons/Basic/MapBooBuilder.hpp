@@ -54,38 +54,112 @@ public:
   virtual void onNameChanged(const G3MContext* context,
                              const std::string& name) = 0;
 
+  virtual void onWebsiteChanged(const G3MContext* context,
+                                const std::string& website) = 0;
+
+  virtual void onEMailChanged(const G3MContext* context,
+                              const std::string& eMail) = 0;
+
+  virtual void onAboutChanged(const G3MContext* context,
+                              const std::string& about) = 0;
+
   virtual void onIconChanged(const G3MContext* context,
                              const std::string& icon) = 0;
 
   virtual void onScenesChanged(const G3MContext* context,
                                const std::vector<MapBoo_Scene*>& scenes) = 0;
 
-  // virtual void onWarningsChanged() = 0;
-
   virtual void onSceneChanged(const G3MContext* context,
-                              int sceneIndex) = 0;
+                              int sceneIndex,
+                              const MapBoo_Scene* scene) = 0;
+};
+
+
+class MapBoo_MultiImage_Level {
+private:
+#ifdef C_CODE
+  const URL _url;
+#endif
+#ifdef JAVA_CODE
+  private final URL _url;
+#endif
+  const int _width;
+  const int _height;
+
+public:
+  MapBoo_MultiImage_Level(const URL& url,
+                          int width,
+                          int height) :
+  _url(url),
+  _width(width),
+  _height(height)
+  {
+  }
+
+  const URL getUrl() const {
+    return _url;
+  }
+
+  int getWidth() const {
+    return _width;
+  }
+
+  int getHeight() const {
+    return _height;
+  }
+
+  const std::string description() const;
+
+};
+
+
+class MapBoo_MultiImage {
+private:
+  const Color                           _averageColor;
+  std::vector<MapBoo_MultiImage_Level*> _levels;
+
+public:
+  MapBoo_MultiImage(const Color&                          averageColor,
+                    std::vector<MapBoo_MultiImage_Level*> levels) :
+  _averageColor(averageColor),
+  _levels(levels)
+  {
+  }
+
+  const Color getAverageColor() const {
+    return _averageColor;
+  }
+
+  std::vector<MapBoo_MultiImage_Level*> getLevels() const {
+    return _levels;
+  }
+
+  MapBoo_MultiImage_Level* getBestLevel(int width) const;
+
+  const std::string description() const;
+
 };
 
 
 class MapBoo_Scene {
 private:
-  const std::string _name;
-  const std::string _description;
-  const std::string _icon;
-  const Color       _backgroundColor;
-  Layer*            _baseLayer;
-  Layer*            _overlayLayer;
+  const std::string        _name;
+  const std::string        _description;
+  const MapBoo_MultiImage* _screenshot;
+  const Color              _backgroundColor;
+  Layer*                   _baseLayer;
+  Layer*                   _overlayLayer;
 
 public:
   MapBoo_Scene(const std::string& name,
                const std::string& description,
-               const std::string& icon,
+               MapBoo_MultiImage* screenshot,
                const Color&       backgroundColor,
                Layer*             baseLayer,
                Layer*             overlayLayer) :
   _name(name),
   _description(description),
-  _icon(icon),
+  _screenshot(screenshot),
   _backgroundColor(backgroundColor),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer)
@@ -100,8 +174,8 @@ public:
     return _description;
   }
 
-  const std::string getIcon() const {
-    return _icon;
+  const MapBoo_MultiImage* getScreenshot() const {
+    return _screenshot;
   }
 
   Color getBackgroundColor() const {
@@ -135,6 +209,9 @@ private:
 
   std::string _applicationId;
   std::string _applicationName;
+  std::string _applicationWebsite;
+  std::string _applicationEMail;
+  std::string _applicationAbout;
   int         _applicationTimestamp;
 
   std::vector<MapBoo_Scene*> _applicationScenes;
@@ -207,9 +284,11 @@ private:
 
   MapBoo_Scene* parseScene(const JSONObject* json) const;
   Color         parseColor(const JSONString* jsonColor) const;
+  
+  MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
+  MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
-
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -218,8 +297,7 @@ protected:
                 const std::string& applicationId,
                 MapBooApplicationChangeListener* ApplicationListener);
 
-  virtual ~MapBooBuilder() {
-  }
+  virtual ~MapBooBuilder();
 
   void setGL(GL *gl);
 
@@ -248,6 +326,15 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationName(const std::string& name);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationWebsite(const std::string& website);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationEMail(const std::string& eMail);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationAbout(const std::string& about);
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);

@@ -305,15 +305,13 @@ public class MathUtils_JavaDesktop
 
    @Override
    public double sinh(final double v) {
-      // TODO Auto-generated method stub
-      return 0;
+      return Math.sinh(v);
    }
 
 
    @Override
    public float sinh(final float v) {
-      // TODO Auto-generated method stub
-      return 0;
+      return (float) Math.sinh(v);
    }
 
 

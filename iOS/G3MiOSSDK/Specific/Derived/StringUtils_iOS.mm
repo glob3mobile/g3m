@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <sstream>
 
+#import "NSString_CppAdditions.h"
+
 std::string StringUtils_iOS::createString(unsigned char* data,
                                           int            length) const {
   unsigned char* cStr = new unsigned char[length + 1];
@@ -20,7 +22,7 @@ std::string StringUtils_iOS::createString(unsigned char* data,
 }
 
 std::vector<std::string> StringUtils_iOS::splitLines(const std::string& string) const {
-  NSString* nsString = toNSString(string);
+  NSString* nsString = [NSString stringWithCppString: string];
   
   NSArray* nsLines = [nsString componentsSeparatedByString:@"\n"];
   

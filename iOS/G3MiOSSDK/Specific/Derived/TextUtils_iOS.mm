@@ -15,6 +15,8 @@
 
 #include <math.h>
 #include "IFactory.hpp"
+#import "NSString_CppAdditions.h"
+
 
 CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
   if (color == NULL) {
@@ -34,8 +36,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
                                      const Color* shadowColor,
                                      IImageListener* listener,
                                      bool autodelete) {
-  NSString* text = [NSString stringWithCString: label.c_str()
-                                      encoding: NSUTF8StringEncoding];
+  NSString* text = [NSString stringWithCppString: label];
 
   
   UIFont *font = [UIFont systemFontOfSize: fontSize];
@@ -92,8 +93,7 @@ void TextUtils_iOS::labelImage(const IImage* image,
                      autodelete);
   }
   else {
-    NSString* text = [NSString stringWithCString: label.c_str()
-                                        encoding: NSUTF8StringEncoding];
+    NSString* text = [NSString stringWithCppString: label];
 
     UIFont *font = [UIFont systemFontOfSize: fontSize];
     CGSize textSize = [text sizeWithFont: font];

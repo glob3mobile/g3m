@@ -20,6 +20,7 @@
 #include "IImageListener.hpp"
 #include "Canvas_iOS.hpp"
 #include "WebSocket_iOS.hpp"
+#import "NSString_CppAdditions.h"
 
 
 class Factory_iOS: public IFactory {
@@ -45,8 +46,7 @@ public:
   void createImageFromFileName(const std::string& filename,
                                IImageListener* listener,
                                bool autodelete) const {
-    NSString* fn = [NSString stringWithCString: filename.c_str()
-                                      encoding: [NSString defaultCStringEncoding]];
+    NSString* fn = [NSString stringWithCppString: filename];
 
     UIImage* image = [UIImage imageNamed:fn];
     if (image) {
