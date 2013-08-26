@@ -49,27 +49,6 @@ _lineWidth(lineWidth)
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(POSITION, _position, false);
 
-//  _globalState = new GLGlobalState();
-//  if (depthTestEnabled) {
-//    _globalState->enableDepthTest();
-//  } else{
-//    _globalState->disableDepthTest();
-//  }
-//
-//  if (cullFace) {
-//    _globalState->enableCullFace(culledFace);
-//  } else{
-//    _globalState->disableCullFace();
-//  }
-//
-//  if (polygonOffsetFill) {
-//    _globalState->enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
-//  } else{
-//    _globalState->disPolygonOffsetFill();
-//  }
-//
-//  _globalState->setLineWidth(lineWidth);
-
   if (needsPointSize) {
     _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
@@ -114,7 +93,6 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID)
 {
-//  _globalState->bindTexture(texID);
 
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);

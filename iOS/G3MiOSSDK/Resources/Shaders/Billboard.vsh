@@ -8,9 +8,6 @@ attribute vec2 aTextureCoord;
 
 uniform mat4 uModelview;
 
-
-uniform mat4 uModel;
-
 uniform vec4 uBillboardPosition;
 
 uniform vec2 uTextureExtent;
@@ -19,7 +16,6 @@ uniform vec2 uViewPortExtent;
 varying vec2 TextureCoordOut;
 
 void main() {
-  mat4 model = uModel;
   gl_Position = uModelview * uBillboardPosition;
   
   gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;
