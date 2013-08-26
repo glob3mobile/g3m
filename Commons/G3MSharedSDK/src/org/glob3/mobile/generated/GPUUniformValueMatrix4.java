@@ -8,9 +8,21 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
   protected Matrix44DProvider _provider = null;
   protected  Matrix44D _lastModelSet;
 
+  public GPUUniformValueMatrix4(Matrix44DProvider[] providers, int nMatrix)
+  {
+     super(GLType.glMatrix4Float());
+     _provider = new Matrix44DMultiplicationHolder(providers, nMatrix);
+     _lastModelSet = null;
+     _ownsProvider = true;
+  }
 
-
-
+  public GPUUniformValueMatrix4(Matrix44DProvider provider, boolean ownsProvider)
+  {
+     super(GLType.glMatrix4Float());
+     _provider = provider;
+     _lastModelSet = null;
+     _ownsProvider = ownsProvider;
+  }
 
   public GPUUniformValueMatrix4(Matrix44D m)
   {

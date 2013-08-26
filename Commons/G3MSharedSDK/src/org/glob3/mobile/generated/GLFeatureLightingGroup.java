@@ -5,8 +5,11 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
 //  void addToGPUVariableSet(GPUVariableValueSet* vs);
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
+  
+    final int size = features.size();
+  
     boolean normalsAvailable = false;
-    for(int i = 0; i < features.size(); i++)
+    for(int i = 0; i < size; i++)
     {
       final GLFeature f = features.get(i);
       if (f.getID() == GLFeatureID.GLF_VERTEX_NORMAL)
@@ -22,7 +25,7 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
   
       int modelTransformCount = 0;
   
-      for(int i = 0; i < features.size(); i++)
+      for(int i = 0; i < size; i++)
       {
         final GLFeature f = features.get(i);
   
@@ -39,10 +42,10 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
       }
   
       /////////////////////////////////////////////////////////////////////////////////////////////
-      Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
+      Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[modelTransformCount];
   
       modelTransformCount = 0;
-      for (int i = 0; i < features.size(); i++)
+      for (int i = 0; i < size; i++)
       {
         final GLFeature f = features.get(i);
         if (f.getID() == GLFeatureID.GLF_MODEL_TRANSFORM)

@@ -54,7 +54,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(double x, double y, double z)
   {
-    if (_centerStrategy == FIRST_VERTEX)
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -62,7 +62,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
       }
     }
 
-    if (_centerStrategy == NO_CENTER)
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back((float) x);
       _values.push_back((float) y);
@@ -78,7 +78,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(float x, float y, float z)
   {
-    if (_centerStrategy == FIRST_VERTEX)
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -86,7 +86,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
       }
     }
 
-    if (_centerStrategy == NO_CENTER)
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back(x);
       _values.push_back(y);
