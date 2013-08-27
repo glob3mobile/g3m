@@ -99,15 +99,13 @@ public final class GL2Shaders {
 			"varying vec2 TextureCoordOut;\n" + 
 			"\n" + 
 			"void main() {\n" + 
-			"\n" + 
 			"  gl_Position = uModelview * uBillboardPosition;\n" + 
 			"  \n" + 
 			"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
 			"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
 			"  \n" + 
 			"  TextureCoordOut = aTextureCoord;\n" + 
-			"}\n" + 
-			"";
+			"}";
 
 	public final static String _colorMeshFragmentShader = "varying mediump vec4 VertexColor;\n"
 			+ "\n"
