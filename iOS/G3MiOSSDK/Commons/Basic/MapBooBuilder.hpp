@@ -126,6 +126,14 @@ public:
   {
   }
 
+  ~MapBoo_MultiImage() {
+    const int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++) {
+      MapBoo_MultiImage_Level* level = _levels[i];
+      delete level;
+    }
+  }
+
   const Color getAverageColor() const {
     return _averageColor;
   }

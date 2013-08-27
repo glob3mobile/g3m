@@ -10,6 +10,17 @@ public class MapBoo_MultiImage
      _levels = levels;
   }
 
+  public void dispose()
+  {
+    final int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++)
+    {
+      MapBoo_MultiImage_Level level = _levels.get(i);
+      if (level != null)
+         level.dispose();
+    }
+  }
+
   public final Color getAverageColor()
   {
     return _averageColor;
