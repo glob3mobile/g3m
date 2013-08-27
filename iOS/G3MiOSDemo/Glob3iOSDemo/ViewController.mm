@@ -282,7 +282,7 @@ public:
   void onAboutChanged(const G3MContext* context,
                       const std::string& about){}
 
-  
+
 };
 
 
@@ -2519,74 +2519,78 @@ public:
           }
         }
       }
-      /**/
 
-      //      NSString* geojsonName = @"geojson/countries";
-      //      NSString* geojsonName = @"geojson/countries-50m";
-      //      NSString* geojsonName = @"geojson/boundary_lines_land";
-      NSString* geojsonName = @"geojson/cities";
-      //      NSString* geojsonName = @"geojson/test";
+      if (true) {
+        //      NSString* geojsonName = @"geojson/countries";
+        //      NSString* geojsonName = @"geojson/countries-50m";
+        //      NSString* geojsonName = @"geojson/boundary_lines_land";
+        NSString* geojsonName = @"geojson/cities";
+        //      NSString* geojsonName = @"geojson/test";
 
-      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
-                                                                  ofType: @"geojson"];
+        NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
+                                                                    ofType: @"geojson"];
 
-      if (geoJSONFilePath) {
-        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-                                                        encoding: NSUTF8StringEncoding
-                                                           error: nil];
+        if (geoJSONFilePath) {
+          NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
 
-        if (nsGEOJSON) {
-          std::string geoJSON = [nsGEOJSON UTF8String];
+          if (nsGEOJSON) {
+            std::string geoJSON = [nsGEOJSON UTF8String];
 
-          GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+            GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
 
-          _geoRenderer->addGEOObject(geoObject);
+            _geoRenderer->addGEOObject(geoObject);
+          }
         }
       }
 
-      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                                ofType: @"json"];
-      if (planeFilePath) {
-        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
-                                                          encoding: NSUTF8StringEncoding
-                                                             error: nil];
-        if (nsPlaneJSON) {
-          std::string planeJSON = [nsPlaneJSON UTF8String];
 
-          Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
+      if (true){
+        NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                  ofType: @"json"];
+        if (planeFilePath) {
+          NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                            encoding: NSUTF8StringEncoding
+                                                               error: nil];
+          if (nsPlaneJSON) {
+            std::string planeJSON = [nsPlaneJSON UTF8String];
 
-          // Washington, DC
-          plane->setPosition(new Geodetic3D(Angle::fromDegrees(28.127222),
-                                            Angle::fromDegrees(-15.431389),
-                                            10000) );
-          const double scale = 1000;
-          plane->setScale(scale, scale, scale);
-          plane->setPitch(Angle::fromDegrees(90));
-          plane->setHeading(Angle::fromDegrees(0));
-          _shapesRenderer->addShape(plane);
+            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
 
-
-          plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
-                                     Geodetic3D(Angle::fromDegrees(28.127222),
-                                                Angle::fromDegrees(-15.431389),
-                                                10000),
-                                     Angle::fromDegrees(90), Angle::fromDegrees(720));
+            // Washington, DC
+            plane->setPosition(new Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000) );
+            const double scale = 1000;
+            plane->setScale(scale, scale, scale);
+            plane->setPitch(Angle::fromDegrees(90));
+            plane->setHeading(Angle::fromDegrees(0));
+            _shapesRenderer->addShape(plane);
 
 
+            plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
+                                       Geodetic3D(Angle::fromDegrees(28.127222),
+                                                  Angle::fromDegrees(-15.431389),
+                                                  10000),
+                                       Angle::fromDegrees(90), Angle::fromDegrees(720));
 
-          //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
-          //
-          //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-          //          printf("%s\n", bson->description().c_str());
-          //
-          //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
-          //          printf("%s\n", bsonObject->description().c_str());
-          //
-          //          delete bson;
-          //
-          //          delete jsonObject;
-          //
-          //          delete bsonObject;
+
+
+            //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
+            //
+            //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
+            //          printf("%s\n", bson->description().c_str());
+            //
+            //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
+            //          printf("%s\n", bsonObject->description().c_str());
+            //
+            //          delete bson;
+            //
+            //          delete jsonObject;
+            //
+            //          delete bsonObject;
+          }
         }
       }
 
@@ -2638,7 +2642,7 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
+  
   //  renderers.push_back(new GLErrorRenderer());
   
   class TestTrailTask : public GTask {
