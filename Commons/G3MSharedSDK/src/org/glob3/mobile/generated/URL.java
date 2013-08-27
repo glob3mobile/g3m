@@ -30,7 +30,7 @@ public class URL
     String result = iu.replaceSubstring(parent.getPath() + "/" + path, "//", "/");
     if (iu.beginsWith(result, "http:/"))
     {
-      result = "http://" + iu.substring(result, result + 6);
+      result = "http://" + iu.substring(result, 6);
     }
 
     return result;

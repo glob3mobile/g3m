@@ -43,4 +43,9 @@ public class MapBoo_MultiImage_Level
     return s;
   }
 
+  public void dispose()
+  {
+
+  }
+
 }
