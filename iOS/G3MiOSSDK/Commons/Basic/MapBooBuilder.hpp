@@ -110,6 +110,10 @@ public:
 
   const std::string description() const;
 
+  ~MapBoo_MultiImage_Level() {
+
+  }
+
 };
 
 

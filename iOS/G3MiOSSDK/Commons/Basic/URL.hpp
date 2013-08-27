@@ -23,7 +23,12 @@ private:
 
     std::string result = iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
     if (iu->beginsWith(result, "http:/")) {
+#ifdef C_CODE
       result = "http://" + iu->substring(result, 6);
+#endif
+#ifdef JAVA_CODE
+      result = "http://" + iu.substring(result, 6);
+#endif
     }
 
     return result;
