@@ -27,7 +27,13 @@ public class URL
   {
     final IStringUtils iu = IStringUtils.instance();
 
-    return iu.replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    String result = iu.replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    if (iu.beginsWith(result, "http:/"))
+    {
+      result = "http://" + iu.substring(result, result + 6);
+    }
+
+    return result;
   }
 
 
