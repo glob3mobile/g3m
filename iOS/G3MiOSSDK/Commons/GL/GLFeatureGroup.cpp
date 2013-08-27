@@ -105,6 +105,8 @@ GLFeatureSet::~GLFeatureSet() {
   }
 }
 
+#pragma mark GLFeatureGroup
+
 GLFeatureGroup** GLFeatureGroup::_groups = NULL;
 
 void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){

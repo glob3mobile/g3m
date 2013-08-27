@@ -46,9 +46,6 @@ private:
   
   void updateGLState(const G3MRenderContext* rc);
 
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
-  
 public:
 
   MarksRenderer(bool readyWhenMarksReady);
@@ -72,8 +69,7 @@ public:
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-  }
+                             int width, int height);
 
   bool isReadyToRender(const G3MRenderContext* rc);
 

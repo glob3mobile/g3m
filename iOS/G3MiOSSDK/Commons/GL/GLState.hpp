@@ -75,9 +75,9 @@ public:
 
   void clearAllGLFeatures();
 
-  int getNumberOfGLFeatures() const{
-    return _features.size();
-  }
+  int getNumberOfGLFeatures() const;
+
+  const GLFeature* getGLFeature(GLFeatureID id) const;
 };
 
 #endif

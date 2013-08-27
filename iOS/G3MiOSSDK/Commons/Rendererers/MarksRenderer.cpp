@@ -36,8 +36,6 @@ _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
-_model(NULL),
-_projection(NULL),
 _glState(new GLState())
 {
 }
@@ -278,20 +276,31 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL) {
-    _projection = new ProjectionGLFeature(cam);
-    _glState->addGLFeature(_projection, true);
+
+  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+  if (projection == NULL) {
+    projection = new ProjectionGLFeature(cam);
+    _glState->addGLFeature(projection, true);
   } else{
-    _projection->setMatrix(cam->getProjectionMatrix44D());
+    projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
-  if (_model == NULL) {
-    _model = new ModelGLFeature(cam);
-    _glState->addGLFeature(_model, true);
+  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
+  if (model == NULL) {
+    model = new ModelGLFeature(cam);
+    _glState->addGLFeature(model, true);
   } else{
-    _model->setMatrix(cam->getModelMatrix44D());
+    model->setMatrix(cam->getModelMatrix44D());
   }
 
+  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL){
+    _glState->clearGLFeatureGroup(NO_GROUP);
+    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
+  }
+}
+
+void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                           int width, int height) {
   _glState->clearGLFeatureGroup(NO_GROUP);
-  _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
+  _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
 }

@@ -153,3 +153,19 @@ void GLState::clearAllGLFeatures(){
   _features.clearFeatures();
   hasChangedStructure();
 }
+
+int GLState::getNumberOfGLFeatures() const{
+  return _features.size();
+}
+
+const GLFeature* GLState::getGLFeature(GLFeatureID id) const{
+  const int size = _features.size();
+  for (int i = 0; i < size; i++) {
+    const GLFeature* f = _features.get(i);
+    if (f->getID() == id){
+      return f;
+    }
+  }
+
+  return NULL;
+}
