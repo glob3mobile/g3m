@@ -199,10 +199,6 @@ public class G3MShowMarkersActivity
             //////
             
             final URL planeFilePath = new URL("file:///seymour-plane.json", false);
-            
-//            Shape plane = SceneJSShapesParser.parseFromJSON("seymour-plane.json", URL.FILE_PROTOCOL + "/" , false);
-            
-
             final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
 
 
@@ -222,48 +218,21 @@ public class G3MShowMarkersActivity
           	   plane.setScale(scale, scale, scale);
           	   plane.setPitch(Angle.fromDegrees(90));
           	   plane.setHeading(Angle.fromDegrees(0));
-          	   //_shapesRenderer->addShape(plane);
-          	   //
-          	   //
-          	   //plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
-//          	         Geodetic3D(Angle::fromDegrees(28.127222),
-//          	                    Angle::fromDegrees(-15.431389),
-//          	                    10000),
-//          	         Angle::fromDegrees(90), Angle::fromDegrees(720));
+          	   plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
+          	         new Geodetic3D(Angle.fromDegrees(28.127222),
+          	                    Angle.fromDegrees(-15.431389),
+          	                    10000),
+          	         Angle.fromDegrees(90), Angle.fromDegrees(720));
             	 
             	 if (plane != null){
             		 _shapeRenderer.addShape(plane);
             		 ILogger.instance().logInfo("PLANE SHOWN");
             	 }
-            	 
-//            	 FloatBufferBuilder x = FloatBufferBuilderFromGeodetic.builderWithoutCenter(null);
-//            	 ShortBufferBuilder y = new ShortBufferBuilder();
-//            	 
-//            	 SGGeometryNode n = new SGGeometryNode("", "", GLPrimitive.lineLoop(), x.create(), x.create(), x.create(), x.create(), y.create());
-//            	 
-//            	 SGShape shape = new SGShape(n, "", false);
-//            	 _shapeRenderer.addShape(shape);
-//            	 
-            	   //const double scale = 1000;
-            	   //plane->setScale(scale, scale, scale);
-            	   //plane->setPitch(Angle::fromDegrees(90));
-            	   //plane->setHeading(Angle::fromDegrees(0));
-            	   //_shapesRenderer->addShape(plane);
-            	   //
-            	   //
-            	   //plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
-//            	         Geodetic3D(Angle::fromDegrees(28.127222),
-//            	                    Angle::fromDegrees(-15.431389),
-//            	                    10000),
-//            	         Angle::fromDegrees(90), Angle::fromDegrees(720));
-
                }
 
 
                @Override
                public void onError(final URL url) {
-                  Toast.makeText(getApplicationContext(), "Error retrieving  weather data", Toast.LENGTH_SHORT).show();
-
                }
 
 
