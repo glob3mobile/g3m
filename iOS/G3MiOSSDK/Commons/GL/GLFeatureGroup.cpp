@@ -126,7 +126,8 @@ void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features, GPUVariableV
 
 void GLFeatureNoGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
-  for(int i = 0; i < features.size(); i++) {
+  const int size = features.size();
+  for(int i = 0; i < size; i++) {
     const GLFeature* f = features.get(i);
     if (f->getGroup() == NO_GROUP){
       f->applyOnGlobalGLState(&state);
@@ -137,8 +138,9 @@ void GLFeatureNoGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& 
 
 void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
+  const int size = features.size();
   int priority = -1;
-  for (int i = 0; i < features.size(); i++) {
+  for (int i = 0; i < size; i++) {
     const GLFeature* f = features.get(i);
     if (f->getGroup() == COLOR_GROUP){
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
@@ -148,7 +150,7 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
     }
   }
 
-  for (int i = 0; i < features.size(); i++) {
+  for (int i = 0; i < size; i++) {
     const GLFeature* f = features.get(i);
     if (f->getGroup() == COLOR_GROUP){
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
@@ -158,12 +160,6 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
       }
     }
   }
-
-  if (vs.containsUniform(FLAT_COLOR) && vs.containsAttribute(TEXTURE_COORDS)){
-    int a = 0;
-    a++;
-  }
-
 }
 
 

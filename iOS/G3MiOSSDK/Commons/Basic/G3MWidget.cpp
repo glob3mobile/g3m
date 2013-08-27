@@ -125,7 +125,8 @@ _initializationTaskWasRun(false),
 _initializationTaskReady(true),
 _clickOnProcess(false),
 _gpuProgramManager(gpuProgramManager),
-_sceneLighting(sceneLighting)
+_sceneLighting(sceneLighting),
+_rootState(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -226,6 +227,8 @@ G3MWidget::~G3MWidget() {
   }
 
   delete _context;
+
+  delete _rootState;
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
@@ -373,7 +376,7 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
-  
+
   int agustin_todo_planet_onCameraChange;
 
 
@@ -441,21 +444,21 @@ void G3MWidget::render(int width, int height) {
 
   _gl->clearScreen(*_backgroundColor);
 
-  GLState* rootState = new GLState();
-
-  DefaultSceneLighting ligthing;
-  ligthing.modifyGLState(rootState);
+  if (_rootState == NULL){
+    _rootState = new GLState();
+    _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
+  }
 
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc, rootState);
+    _cameraRenderer->render(&rc, _rootState);
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc, rootState);
+    _selectedRenderer->render(&rc, _rootState);
   }
 
-  rootState->_release();
-  rootState = NULL;
+  //  rootState->_release();
+  //  rootState = NULL;
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {

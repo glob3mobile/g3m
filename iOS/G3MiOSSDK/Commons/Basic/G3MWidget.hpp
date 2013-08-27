@@ -43,6 +43,7 @@ class SurfaceElevationProvider;
 class GPUProgram;
 class GPUProgramManager;
 class ICameraActivityListener;
+class GLState;
 
 #include <vector>
 #include <string>
@@ -254,6 +255,7 @@ private:
   SurfaceElevationProvider* _surfaceElevationProvider;
 
   SceneLighting*            _sceneLighting;
+  GLState*                  _rootState;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

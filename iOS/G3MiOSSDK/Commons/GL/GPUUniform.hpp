@@ -318,12 +318,22 @@ public:
     if (_ownsProvider){
       _provider->_release();
     }
+    if (_lastModelSet != NULL){
+      _lastModelSet->_release();
+    }
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
+
+    if (_lastModelSet != NULL){
+      _lastModelSet->_release();
+    }
+
     _lastModelSet = _provider->getMatrix();
 
-    gl->uniformMatrix4fv(id, false, _provider->getMatrix());
+    _lastModelSet->_retain();
+
+    gl->uniformMatrix4fv(id, false, _lastModelSet);
   }
 
   bool isEqualsTo(const GPUUniformValue* v) const{

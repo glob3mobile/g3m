@@ -72,12 +72,14 @@ void GLState::setParent(const GLState* parent) const{
     const int parentsTimeStamp = parent->getTimeStamp();
     if ((parent != _parentGLState) ||
         (_parentsTimeStamp != parentsTimeStamp)) {
-      
-      if (_parentGLState != NULL){
-        _parentGLState->_release();
+
+      if (_parentGLState != parent){
+        if (_parentGLState != NULL){
+          _parentGLState->_release();
+        }
+        _parentGLState    = parent;
+        _parentGLState->_retain();
       }
-      _parentGLState    = parent;
-      _parentGLState->_retain();
 
       _parentsTimeStamp = parentsTimeStamp;
       hasChangedStructure();
@@ -89,29 +91,29 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
   if (_valuesSet == NULL && _globalState == NULL) {
-    
+
     _valuesSet = new GPUVariableValueSet();
     _globalState = new GLGlobalState();
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
 
-//    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-//      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-//      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
-//
-////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-////        const GLFeature* f = accumulatedFeatures->get(j);
-////        if (f->getGroup() == groupName) {
-////          group->add(f);
-////        }
-////      }
-////      group->addToGPUVariableSet(_valuesSet);
-////      group->applyOnGlobalGLState(_globalState);
-//
-//      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
-//
-//      delete group;
-//    }
+    //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+    //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+    //
+    ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+    ////        const GLFeature* f = accumulatedFeatures->get(j);
+    ////        if (f->getGroup() == groupName) {
+    ////          group->add(f);
+    ////        }
+    ////      }
+    ////      group->addToGPUVariableSet(_valuesSet);
+    ////      group->applyOnGlobalGLState(_globalState);
+    //
+    //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
+    //
+    //      delete group;
+    //    }
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
@@ -125,7 +127,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     ILogger::instance()->logError("GLState logic error.");
     return;
   }
-  
+
   if (_lastGPUProgramUsed != NULL) {
     gl->useProgram(_lastGPUProgramUsed);
 

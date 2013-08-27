@@ -1400,15 +1400,15 @@ public:
   marksRenderer->addMark(m1);
 
 
-  for (int i = 0; i < 10; i+=2){
-    for (int j = 0; j < 10; j+=2){
+  if (true){
+    for (int i = 0; i < 10; i+=2){
+      for (int j = 0; j < 10; j+=2){
+        Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
-      //      Geodetic3D g(Angle::fromDegrees(i), Angle::fromDegrees(j), 0);
-      Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
-
-      Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
-      marksRenderer->addMark(m1);
-
+        Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
+        marksRenderer->addMark(m1);
+        
+      }
     }
   }
 
@@ -2460,7 +2460,7 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new FlightTask(_iosWidget, time));
       }
 
-      if (true) {
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
         if (planeFilePath) {
@@ -2520,7 +2520,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
         //      NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2546,7 +2546,7 @@ public:
       }
 
 
-      if (true){
+      if (false){
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
