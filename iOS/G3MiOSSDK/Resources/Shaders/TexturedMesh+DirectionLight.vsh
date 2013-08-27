@@ -9,8 +9,6 @@ attribute vec2 aTextureCoord;
 attribute vec3 aNormal;
 
 uniform mat4 uModelview;
-//uniform mat4 uProjection;
-//uniform mat4 uCameraModel;
 uniform mat4 uModel;
 
 uniform float uPointSize;

@@ -362,6 +362,10 @@ public final class G3MWidget_WebGL
 				Shaders_WebGL._noColorMeshVertexShader,
 				Shaders_WebGL._noColorMeshFragmentShader));
       
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 

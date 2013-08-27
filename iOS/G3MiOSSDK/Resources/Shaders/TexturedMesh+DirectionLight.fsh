@@ -22,6 +22,4 @@ void main() {
   
   vec4 lightColor = vec4(1.0,1.0,1.0,1.0) * uAmbientLight + uLightColor * diffuseLightIntensity;
   gl_FragColor *= lightColor;
-
-//  gl_FragColor *= (uAmbientLight + diffuseLightIntensity);
 }

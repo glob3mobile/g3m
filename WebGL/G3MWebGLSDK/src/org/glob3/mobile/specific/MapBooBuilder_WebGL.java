@@ -91,6 +91,10 @@ public class MapBooBuilder_WebGL
       gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", 
     		  Shaders_WebGL._noColorMeshVertexShader,
                Shaders_WebGL._noColorMeshFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
 
       return new GPUProgramManager(gpuProgramFactory);
    }

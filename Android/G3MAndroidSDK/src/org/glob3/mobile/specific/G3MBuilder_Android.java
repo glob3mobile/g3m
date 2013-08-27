@@ -48,6 +48,9 @@ public class G3MBuilder_Android
       addGPUProgramSources(new GPUProgramSources("NoColorMesh", 
 				GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
       
+      addGPUProgramSources(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+      
 
       setGL(_nativeWidget.getGL());
 
