@@ -38,13 +38,25 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
     {
       _provider._release();
     }
+    if (_lastModelSet != null)
+    {
+      _lastModelSet._release();
+    }
   }
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
+
+    if (_lastModelSet != null)
+    {
+      _lastModelSet._release();
+    }
+
     _lastModelSet = _provider.getMatrix();
 
-    gl.uniformMatrix4fv(id, false, _provider.getMatrix());
+    _lastModelSet._retain();
+
+    gl.uniformMatrix4fv(id, false, _lastModelSet);
   }
 
   public final boolean isEqualsTo(GPUUniformValue v)

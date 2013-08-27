@@ -75,3 +75,5 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
     }
   }
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark GLFeatureGroup

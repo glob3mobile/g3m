@@ -129,12 +129,15 @@ public class GLState extends RCObject
       if ((parent != _parentGLState) || (_parentsTimeStamp != parentsTimeStamp))
       {
   
-        if (_parentGLState != null)
+        if (_parentGLState != parent)
         {
-          _parentGLState._release();
+          if (_parentGLState != null)
+          {
+            _parentGLState._release();
+          }
+          _parentGLState = parent;
+          _parentGLState._retain();
         }
-        _parentGLState = parent;
-        _parentGLState._retain();
   
         _parentsTimeStamp = parentsTimeStamp;
         hasChangedStructure();
@@ -154,23 +157,23 @@ public class GLState extends RCObject
   
       GLFeatureSet accumulatedFeatures = getAccumulatedFeatures();
   
-  //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-  //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-  //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
-  //
-  ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-  ////        const GLFeature* f = accumulatedFeatures->get(j);
-  ////        if (f->getGroup() == groupName) {
-  ////          group->add(f);
-  ////        }
-  ////      }
-  ////      group->addToGPUVariableSet(_valuesSet);
-  ////      group->applyOnGlobalGLState(_globalState);
-  //
-  //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
-  //
-  //      delete group;
-  //    }
+      //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+      //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+      //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+      //
+      ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+      ////        const GLFeature* f = accumulatedFeatures->get(j);
+      ////        if (f->getGroup() == groupName) {
+      ////          group->add(f);
+      ////        }
+      ////      }
+      ////      group->addToGPUVariableSet(_valuesSet);
+      ////      group->applyOnGlobalGLState(_globalState);
+      //
+      //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
+      //
+      //      delete group;
+      //    }
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
@@ -231,5 +234,20 @@ public class GLState extends RCObject
   public final int getNumberOfGLFeatures()
   {
     return _features.size();
+  }
+
+  public final GLFeature getGLFeature(GLFeatureID id)
+  {
+    final int size = _features.size();
+    for (int i = 0; i < size; i++)
+    {
+      final GLFeature f = _features.get(i);
+      if (f.getID() == id)
+      {
+        return f;
+      }
+    }
+  
+    return null;
   }
 }

@@ -6,8 +6,9 @@ public class GLFeatureColorGroup extends GLFeatureGroup
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
   
+    final int size = features.size();
     int priority = -1;
-    for (int i = 0; i < features.size(); i++)
+    for (int i = 0; i < size; i++)
     {
       final GLFeature f = features.get(i);
       if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
@@ -20,7 +21,7 @@ public class GLFeatureColorGroup extends GLFeatureGroup
       }
     }
   
-    for (int i = 0; i < features.size(); i++)
+    for (int i = 0; i < size; i++)
     {
       final GLFeature f = features.get(i);
       if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
@@ -33,12 +34,5 @@ public class GLFeatureColorGroup extends GLFeatureGroup
         }
       }
     }
-  
-    if (vs.containsUniform(GPUUniformKey.FLAT_COLOR) && vs.containsAttribute(GPUAttributeKey.TEXTURE_COORDS))
-    {
-      int a = 0;
-      a++;
-    }
-  
   }
 }

@@ -50,6 +50,7 @@ package org.glob3.mobile.generated;
 //class GPUProgram;
 //class GPUProgramManager;
 //class ICameraActivityListener;
+//class GLState;
 
 
 
