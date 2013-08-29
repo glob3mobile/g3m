@@ -36,6 +36,7 @@ public:
                     const URL& tubesURL,
                     bool useWebSockets,
                     const std::string& applicationId,
+                    MapBoo_ViewType viewType,
                     MapBooApplicationChangeListener* applicationListener);
 
   void initializeWidget();
