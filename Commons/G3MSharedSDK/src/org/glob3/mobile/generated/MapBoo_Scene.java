@@ -53,6 +53,8 @@ public class MapBoo_Scene
 
   public void dispose()
   {
+    if (_screenshot != null)
+       _screenshot.dispose();
     if (_baseLayer != null)
        _baseLayer.dispose();
     if (_overlayLayer != null)
