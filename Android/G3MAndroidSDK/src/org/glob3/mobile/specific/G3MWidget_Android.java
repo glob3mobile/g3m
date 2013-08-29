@@ -396,6 +396,10 @@ public final class G3MWidget_Android
       factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
 				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
       
+      factory.add(new GPUProgramSources("FlatColor+DirectionLight", 
+				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      
       return new GPUProgramManager(factory);
    }
 

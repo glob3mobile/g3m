@@ -95,6 +95,10 @@ public class MapBooBuilder_WebGL
       gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
 				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
 				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
+				Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
+				Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
 
       return new GPUProgramManager(gpuProgramFactory);
    }
