@@ -111,6 +111,11 @@ public abstract class AbstractMesh extends Mesh
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
+    if (_normals != null)
+    {
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
+    }
+  
     if (_translationMatrix != null)
     {
       _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
@@ -133,10 +138,6 @@ public abstract class AbstractMesh extends Mesh
   
     }
   
-    if (_normals != null)
-    {
-      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
-    }
   }
 
 
@@ -153,6 +154,8 @@ public abstract class AbstractMesh extends Mesh
          _colors.dispose();
       if (_flatColor != null)
          _flatColor.dispose();
+      if (_normals != null)
+         _normals.dispose();
     }
   
     if (_boundingVolume != null)
