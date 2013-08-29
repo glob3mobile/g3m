@@ -1,6 +1,43 @@
 package org.glob3.mobile.generated; 
+//
+//  FloatBufferBuilder.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/09/12.
+//
+//
+
+//
+//  FloatBufferBuilder.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 05/09/12.
+//
+//
+
+
+
+//class IFloatBuffer;
+
 public class FloatBufferBuilder
 {
+  protected enum CenterStrategy
+  {
+    NO_CENTER,
+    FIRST_VERTEX,
+    GIVEN_CENTER;
+
+     public int getValue()
+     {
+        return this.ordinal();
+     }
+
+     public static CenterStrategy forValue(int value)
+     {
+        return values()[value];
+     }
+  }
+
   
   public final class FloatArrayList {
     private float[] _array;

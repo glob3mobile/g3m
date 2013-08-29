@@ -36,7 +36,8 @@ public class Frustum
      _topPlane = that._topPlane.transformedByTranspose(matrix);
      _nearPlane = that._nearPlane.transformedByTranspose(matrix);
      _farPlane = that._farPlane.transformedByTranspose(matrix);
-    _boundingVolume = computeBoundingVolume();
+     _boundingVolume = null;
+    //_boundingVolume = computeBoundingVolume();
   }
 
   private BoundingVolume computeBoundingVolume()
@@ -186,10 +187,10 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
      _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
      _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
-     _leftPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
-     _bottomPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
-     _rightPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear));
-     _topPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear));
+     _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
+     _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
+     _rightPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear));
+     _topPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(right, top, -znear), new Vector3D(left, top, -znear));
      _nearPlane = new Plane(new Vector3D(0, 0, 1), znear);
      _farPlane = new Plane(new Vector3D(0, 0, -1), -zfar);
      _boundingVolume = null;
@@ -205,10 +206,10 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
      _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
      _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
-     _leftPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
-     _bottomPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
-     _rightPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear));
-     _topPlane = Plane.fromPoints(Vector3D.zero(), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear));
+     _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
+     _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
+     _rightPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear));
+     _topPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear));
      _nearPlane = new Plane(new Vector3D(0, 0, 1), data._znear);
      _farPlane = new Plane(new Vector3D(0, 0, -1), -data._zfar);
      _boundingVolume = null;
@@ -275,11 +276,14 @@ public class Frustum
   public void dispose()
   {
     if (_boundingVolume != null)
-       _boundingVolume.dispose();
+       if (_boundingVolume != null)
+          _boundingVolume.dispose();
   }
 
   public final BoundingVolume getBoundingVolume()
   {
+    if (_boundingVolume == null)
+       _boundingVolume = computeBoundingVolume();
     return _boundingVolume;
   }
 

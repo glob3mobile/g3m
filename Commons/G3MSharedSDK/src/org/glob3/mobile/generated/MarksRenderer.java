@@ -40,37 +40,40 @@ public class MarksRenderer extends LeafRenderer
 
   private IFloatBuffer _billboardTexCoord;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void updateGLState(G3MRenderContext rc)
   {
     final Camera cam = rc.getCurrentCamera();
-    if (_projection == null)
+  
+    ProjectionGLFeature projection = (ProjectionGLFeature) _glState.getGLFeature(GLFeatureID.GLF_PROJECTION);
+    if (projection == null)
     {
-      _projection = new ProjectionGLFeature(cam);
-      _glState.addGLFeature(_projection, true);
+      projection = new ProjectionGLFeature(cam);
+      _glState.addGLFeature(projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+      projection.setMatrix(cam.getProjectionMatrix44D());
     }
   
-    if (_model == null)
+    ModelGLFeature model = (ModelGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL);
+    if (model == null)
     {
-      _model = new ModelGLFeature(cam);
-      _glState.addGLFeature(_model, true);
+      model = new ModelGLFeature(cam);
+      _glState.addGLFeature(model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      model.setMatrix(cam.getModelMatrix44D());
     }
   
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
+    if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)
+    {
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
+      _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
+    }
   }
-
-  private ProjectionGLFeature _projection;
-  private ModelGLFeature _model;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
@@ -81,8 +84,7 @@ public class MarksRenderer extends LeafRenderer
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
-     _model = null;
-     _projection = null;
+     _glState = new GLState();
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -119,6 +121,8 @@ public class MarksRenderer extends LeafRenderer
          _billboardTexCoord.dispose();
     }
   
+    _glState._release();
+  
     super.dispose();
   
   }
@@ -135,7 +139,7 @@ public class MarksRenderer extends LeafRenderer
     }
   }
 
-  public void render(G3MRenderContext rc)
+  public void render(G3MRenderContext rc, GLState glState)
   {
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -273,6 +277,8 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
+    _glState.addGLFeature(new ViewportExtentGLFeature(width, height), false);
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)

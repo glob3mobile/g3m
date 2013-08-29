@@ -43,9 +43,6 @@ private:
 #endif
 
   URL getURL() const;
-  
-//  GLState _glState;
-
 
 public:
 

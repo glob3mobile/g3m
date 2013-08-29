@@ -90,10 +90,11 @@ public abstract class AbstractGeometryMesh extends Mesh
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
+     _glState = new GLState();
     createGLState();
   }
 
-  protected GLState _glState = new GLState();
+  protected GLState _glState;
 
   protected final void createGLState()
   {
@@ -111,6 +112,7 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   ///#include "GPUProgramState.hpp"
   
+  
   public void dispose()
   {
     if (_owner)
@@ -123,6 +125,8 @@ public abstract class AbstractGeometryMesh extends Mesh
        _extent.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
+  
+    _glState._release();
   
     super.dispose();
   }

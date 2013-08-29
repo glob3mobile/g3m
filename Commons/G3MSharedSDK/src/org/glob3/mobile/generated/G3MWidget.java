@@ -20,10 +20,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting);
   }
 
   public void dispose()
@@ -83,6 +83,9 @@ public class G3MWidget
   
     if (_context != null)
        _context.dispose();
+  
+    if (_rootState != null)
+       _rootState.dispose();
   }
 
   public final void render(int width, int height)
@@ -141,6 +144,8 @@ public class G3MWidget
       constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
     }
   
+    int agustin_todo_planet_onCameraChange;
+  
   
     //  _nextCamera->forceMatrixCreation();
     //
@@ -191,15 +196,24 @@ public class G3MWidget
   
     _gl.clearScreen(_backgroundColor);
   
+    if (_rootState == null)
+    {
+      _rootState = new GLState();
+      _sceneLighting.modifyGLState(_rootState); //Applying ilumination to rootState
+    }
+  
     if (_mainRendererReady)
     {
-      _cameraRenderer.render(rc);
+      _cameraRenderer.render(rc, _rootState);
     }
   
     if (_selectedRenderer.isEnable())
     {
-      _selectedRenderer.render(rc);
+      _selectedRenderer.render(rc, _rootState);
     }
+  
+    //  rootState->_release();
+    //  rootState = NULL;
   
     java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
     if (orderedRenderables != null)
@@ -596,7 +610,10 @@ public class G3MWidget
 
   private SurfaceElevationProvider _surfaceElevationProvider;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager)
+  private SceneLighting _sceneLighting;
+  private GLState _rootState;
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -634,6 +651,8 @@ public class G3MWidget
      _initializationTaskReady = true;
      _clickOnProcess = false;
      _gpuProgramManager = gpuProgramManager;
+     _sceneLighting = sceneLighting;
+     _rootState = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

@@ -31,11 +31,12 @@ protected:
 
 public:
   BoxShape(Geodetic3D* position,
+           AltitudeMode altitudeMode,
            const Vector3D& extent,
            float borderWidth,
            Color* surfaceColor = NULL,
            Color* borderColor = NULL) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),

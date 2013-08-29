@@ -37,6 +37,28 @@ public:
   
   ~GPUVariableValueSet();
 
+  bool containsUniform(GPUUniformKey key) const{
+#ifdef C_CODE
+    const int index = key;
+#endif
+#ifdef JAVA_CODE
+    final int index = key.getValue();
+#endif
+
+    return _uniformValues[index] != NULL;
+  }
+
+  bool containsAttribute(GPUAttributeKey key) const{
+#ifdef C_CODE
+    const int index = key;
+#endif
+#ifdef JAVA_CODE
+    final int index = key.getValue();
+#endif
+
+    return _attributeValues[index] != NULL;
+  }
+
   void addUniformValue(GPUUniformKey key, GPUUniformValue* v, bool mustRetain) {
 #ifdef C_CODE
     const int index = key;

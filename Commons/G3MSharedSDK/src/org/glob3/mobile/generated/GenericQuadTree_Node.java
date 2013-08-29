@@ -46,7 +46,7 @@ public class GenericQuadTree_Node
   //
   //}
   
-  private void splitNode(int maxElementsPerNode, int maxDepth)
+  private void splitNode(int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
     _children = new GenericQuadTree_Node[4];
   
@@ -75,7 +75,7 @@ public class GenericQuadTree_Node
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
-      this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth);
+      this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
   
   
@@ -96,15 +96,15 @@ public class GenericQuadTree_Node
 
   //  void computeElementsSector();
 
-  private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element)
+  private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element, double childAreaProportion)
   {
   
   
     Sector sector = element.getSector();
-  //  double myArea = _sector->getAngularAreaInSquaredDegrees();
+    //  double myArea = _sector->getAngularAreaInSquaredDegrees();
     double myArea = getAreaInSquaredDegreesAfterInsertion(sector);
   
-    if (sector.getAngularAreaInSquaredDegrees() > (myArea * 0.3))
+    if (sector.getAngularAreaInSquaredDegrees() > (myArea * childAreaProportion))
     {
       return this;
     }
@@ -125,7 +125,7 @@ public class GenericQuadTree_Node
   
         if (cost == minChildInsertionCost)
         {
-  //        printf("BOTH CHILDREN WITH SAME COST");
+          //        printf("BOTH CHILDREN WITH SAME COST");
   
           int n1 = bestChildForInsertion.getSubtreeNElements();
           int n2 = child.getSubtreeNElements();
@@ -200,7 +200,7 @@ public class GenericQuadTree_Node
   }
   //  Sector getElementsSector() const { return *_elementsSector;}
 
-  public final boolean add(GenericQuadTree_Element element, int maxElementsPerNode, int maxDepth)
+  public final boolean add(GenericQuadTree_Element element, int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
   
     if (_children == null) //LEAF NODE
@@ -214,58 +214,25 @@ public class GenericQuadTree_Node
       }
   
       //Node must create children
-      splitNode(maxElementsPerNode, maxDepth); //We must split
-      return this.add(element, maxElementsPerNode, maxDepth); //We try it again, this time as inner node
-  
-    } //INNER NODE
-    else
-    {
-  
-      //Calculate best node for insertion
-      GenericQuadTree_Node bestInsertionNode = getBestNodeForInsertion(element);
-  
-      if (bestInsertionNode == this)
-      {
-        _elements.add(element);
-        increaseNodeSector(element);
-        return true;
-  
-      } //Inserting into child
-      else
-      {
-        increaseNodeSector(element);
-        return bestInsertionNode.add(element, maxElementsPerNode, maxDepth);
-      }
-  
+      splitNode(maxElementsPerNode, maxDepth, childAreaProportion); //We must split
+      return this.add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
     }
   
-    //  Geodetic2D position = element->getCenter();
-    //
-    //  if (!_sector->contains(position)) {
-    //    return false;
-    //  }
-    //
-    //  if (_children == NULL){ //LEAF NODE
-    //
-    //    _elements.push_back(element);
-    //    if (_elements.size() > maxElementsPerNode && _depth < maxDepth){
-    //      //WE SPLIT THE NODE
-    //      splitNode(maxElementsPerNode, maxDepth);
-    //    }
-    //  } else{ //INNER NODE
-    //
-    //    for (int j = 0; j < 4; j++){
-    //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(element, maxElementsPerNode, maxDepth)){
-    //        break;
-    //      }
-    //    }
-    //  }
-    //
-    ////  computeElementsSector();
-    //
-    //  return true;
+    //INNER NODE
   
+    //Calculate best node for insertion
+    GenericQuadTree_Node bestInsertionNode = getBestNodeForInsertion(element, childAreaProportion);
+  
+    if (bestInsertionNode == this)
+    {
+      _elements.add(element);
+      increaseNodeSector(element);
+      return true;
+    }
+  
+    //Inserting into child
+    increaseNodeSector(element);
+    return bestInsertionNode.add(element, maxElementsPerNode, maxDepth, childAreaProportion);
   }
 
   public final boolean acceptVisitor(Sector sector, GenericQuadTreeVisitor visitor)
@@ -465,7 +432,7 @@ public class GenericQuadTree_Node
       line.add(new Geodetic2D(_sector.getSE()));
       line.add(new Geodetic2D(_sector.getSW()));
   
-  //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+      //    printf("RESTERIZING: %s\n", _sector->description().c_str());
   
       float[] dashLengths = {};
       int dashCount = 0;
@@ -488,6 +455,81 @@ public class GenericQuadTree_Node
       }
     }
   
+  
+  }
+
+  public final void getGeodetics(java.util.ArrayList<Geodetic2D> geo)
+  {
+    for (int i = 0; i < _elements.size(); i++)
+    {
+      if (!_elements.get(i).isSectorElement())
+      {
+        geo.add(new Geodetic2D(_elements.get(i).getCenter()));
+      }
+    }
+  
+    if (_children != null)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        _children[i].getGeodetics(geo);
+      }
+    }
+  
+  }
+  public final void getSectors(java.util.ArrayList<Sector> sectors)
+  {
+    for (int i = 0; i < _elements.size(); i++)
+    {
+      if (_elements.get(i).isSectorElement())
+      {
+        sectors.add(new Sector(_elements.get(i).getSector()));
+      }
+    }
+  
+    if (_children != null)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        _children[i].getSectors(sectors);
+      }
+    }
+  
+  }
+
+  public final void remove(Object element)
+  {
+  
+    for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
+    {
+      GenericQuadTree_Element qTElement = it.next();
+      if (qTElement._element == element)
+      {
+        _elements.remove(qTElement);
+        return;
+      }
+    }
+  
+    if (_children != null)
+    {
+  
+      int nChild = 0;
+      for (int i = 0; i < 4; i++)
+      {
+        nChild += _children[i].getNElements();
+      }
+  
+      if (nChild == 0)
+      {
+        for (int i = 0; i < 4; i++)
+        {
+          if (_children[i] != null)
+             _children[i].dispose();
+        }
+        _children = null;
+      }
+  
+    }
   
   }
 }

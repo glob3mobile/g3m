@@ -820,6 +820,8 @@ public final class NativeGL_WebGL
 			return @org.glob3.mobile.generated.GPUUniformFloat::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
 		case gl.FLOAT_VEC2:
 			return @org.glob3.mobile.generated.GPUUniformVec2Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
+		case gl.FLOAT_VEC3:
+             return @org.glob3.mobile.generated.GPUUniformVec3Float::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
 		case gl.BOOL:
 			return @org.glob3.mobile.generated.GPUUniformBool::new(Ljava/lang/String;Lorg/glob3/mobile/generated/IGLUniformID;)(info.name, glUniformID);
 		case gl.SAMPLER_2D:
@@ -844,6 +846,8 @@ public final class NativeGL_WebGL
 		var id = gl.getAttribLocation(jsoProgram, info.name);
 
 		switch (info.type) {
+		case gl.FLOAT_VEC3:
+             return @org.glob3.mobile.generated.GPUAttributeVec3Float::new(Ljava/lang/String;I)(info.name, id);
 		case gl.FLOAT_VEC4:
 			return @org.glob3.mobile.generated.GPUAttributeVec4Float::new(Ljava/lang/String;I)(info.name, id);
 		case gl.FLOAT_VEC2:
@@ -853,6 +857,19 @@ public final class NativeGL_WebGL
 			break;
 		}
    }-*/;
+
+
+@Override
+public native void uniform3f(IGLUniformID location, float x, float y, float z) /*-{
+	var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x, y, z);
+}-*/;
+
+
+@Override
+public native int Type_Vec3Float() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
+}-*/;
 
 
    // @Override

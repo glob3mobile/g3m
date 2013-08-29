@@ -13,7 +13,7 @@
 #include "IShortBuffer.hpp"
 
 IndexedGeometryMesh::~IndexedGeometryMesh() {
-  if (_owner) {
+  if (_ownsIndices) {
     delete _indices;
   }
 
@@ -24,26 +24,26 @@ IndexedGeometryMesh::~IndexedGeometryMesh() {
 }
 
 IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
-                         bool owner,
                          const Vector3D& center,
-                         IFloatBuffer* vertices,
-                         IShortBuffer* indices,
+                         IFloatBuffer* vertices, bool ownsVertices,
+                         IShortBuffer* indices, bool ownsIndices,
                          float lineWidth,
                          float pointSize,
                          bool depthTest) :
 AbstractGeometryMesh(primitive,
-             owner,
+             ownsVertices,
              center,
              vertices,
              lineWidth,
              pointSize,
              depthTest),
-_indices(indices)
+_indices(indices),
+_ownsIndices(ownsIndices)
 {
   
 }
 
 void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, &_glState, *rc->getGPUProgramManager());
+  gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
 }

@@ -19,7 +19,9 @@
 #include "GLFeature.hpp"
 #include "GPUVariableValueSet.hpp"
 
-class GLState {
+#include "RCObject.hpp"
+
+class GLState: public RCObject {
 
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
@@ -48,7 +50,7 @@ public:
   GLState():
   _parentGLState(NULL),
   _lastGPUProgramUsed(NULL),
-  _parentsTimeStamp(0),
+  _parentsTimeStamp(-1),
   _timeStamp(0),
   _valuesSet(NULL),
   _globalState(NULL),
@@ -71,6 +73,11 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
+  void clearAllGLFeatures();
+
+  int getNumberOfGLFeatures() const;
+
+  const GLFeature* getGLFeature(GLFeatureID id) const;
 };
 
 #endif

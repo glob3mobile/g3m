@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 {
 
-  private final int _centerStrategy;
+  private final CenterStrategy _centerStrategy;
   private float _cx;
   private float _cy;
   private float _cz;
@@ -32,33 +32,58 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   private final Planet _ellipsoid;
 
-
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Vector3D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Vector3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic2D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Geodetic2D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(_ellipsoid.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(int centerStrategy, Planet ellipsoid, Geodetic3D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Geodetic3D center)
   {
      _ellipsoid = ellipsoid;
      _centerStrategy = centerStrategy;
     setCenter(_ellipsoid.toCartesian(center));
+  }
+
+
+  public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
+  {
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.zero);
+  }
+
+  public static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(Planet planet)
+  {
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.zero);
+  }
+
+  public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Vector3D center)
+  {
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
+  }
+
+  public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Geodetic2D center)
+  {
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
+  }
+
+  public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Geodetic3D center)
+  {
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
   public final void add(Angle latitude, Angle longitude, double height)
   {
     final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
   
-    if (_centerStrategy == CenterStrategy.firstVertex())
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -66,7 +91,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
       }
     }
   
-    if (_centerStrategy == CenterStrategy.noCenter())
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back((float) vector._x);
       _values.push_back((float) vector._y);

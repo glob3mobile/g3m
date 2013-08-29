@@ -38,7 +38,9 @@ public class Box extends BoundingVolume
   
     short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+  //                                             Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;

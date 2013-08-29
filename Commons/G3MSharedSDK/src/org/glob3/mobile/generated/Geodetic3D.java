@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Geodetic3D.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  Geodetic3D.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */

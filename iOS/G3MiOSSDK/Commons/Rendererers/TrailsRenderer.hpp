@@ -136,7 +136,7 @@ private:
   std::vector<Trail*> _trails;
 
 
-  GLState _glState;
+  GLState* _glState;
 
   void updateGLState(const G3MRenderContext* rc);
   ProjectionGLFeature* _projection;
@@ -145,7 +145,8 @@ private:
 public:
   TrailsRenderer():
   _projection(NULL),
-  _model(NULL)
+  _model(NULL),
+  _glState(new GLState())
   {
   }
 
@@ -189,7 +190,7 @@ public:
 
   }
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
   
 };
 

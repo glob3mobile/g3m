@@ -110,4 +110,16 @@ public class Plane
     return intersection;
   }
 
+  public static Vector3D intersectionXYPlaneWithRay(Vector3D origin, Vector3D direction)
+  {
+    if (direction.z() == 0)
+       return Vector3D.nan();
+    final double t = -origin.z() / direction.z();
+    if (t<0)
+       return Vector3D.nan();
+    Vector3D point = origin.add(direction.times(t));
+    return point;
+  }
+
+
 }

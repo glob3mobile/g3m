@@ -46,6 +46,8 @@ public abstract class INativeGL
 
   public abstract void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3);
 
+  public abstract void uniform3f(IGLUniformID location, float v0, float v1, float v2);
+
   public abstract void enable(int feature);
 
   public abstract void disable(int feature);
@@ -105,6 +107,7 @@ public abstract class INativeGL
   public abstract int Type_UnsignedInt();
   public abstract int Type_Int();
   public abstract int Type_Vec2Float();
+  public abstract int Type_Vec3Float();
   public abstract int Type_Vec4Float();
   public abstract int Type_Bool();
   public abstract int Type_Matrix4Float();

@@ -281,6 +281,17 @@ public class Sector
 
   public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
   {
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+  //
+  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+  
+    if (planet.isFlat())
+       return false;
+  
     final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
     final double angleInRadians = java.lang.Math.acos(dot);
   

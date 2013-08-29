@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLState
+
+public class GLState extends RCObject
 {
 
   private GLFeatureSet _features = new GLFeatureSet();
@@ -60,7 +61,7 @@ public class GLState
   {
      _parentGLState = null;
      _lastGPUProgramUsed = null;
-     _parentsTimeStamp = 0;
+     _parentsTimeStamp = -1;
      _timeStamp = 0;
      _valuesSet = null;
      _globalState = null;
@@ -103,6 +104,11 @@ public class GLState
        _valuesSet.dispose();
     if (_globalState != null)
        _globalState.dispose();
+  
+    if (_parentGLState != null)
+    {
+      _parentGLState._release();
+    }
   }
 
   public final void setParent(GLState parent)
@@ -122,7 +128,17 @@ public class GLState
       final int parentsTimeStamp = parent.getTimeStamp();
       if ((parent != _parentGLState) || (_parentsTimeStamp != parentsTimeStamp))
       {
-        _parentGLState = parent;
+  
+        if (_parentGLState != parent)
+        {
+          if (_parentGLState != null)
+          {
+            _parentGLState._release();
+          }
+          _parentGLState = parent;
+          _parentGLState._retain();
+        }
+  
         _parentsTimeStamp = parentsTimeStamp;
         hasChangedStructure();
       }
@@ -141,25 +157,25 @@ public class GLState
   
       GLFeatureSet accumulatedFeatures = getAccumulatedFeatures();
   
-      for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
-      {
-        GLFeatureGroupName groupName = GLFeatureGroup.getGroupName(i);
-        GLFeatureGroup group = GLFeatureGroup.createGroup(groupName);
+      //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+      //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+      //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+      //
+      ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+      ////        const GLFeature* f = accumulatedFeatures->get(j);
+      ////        if (f->getGroup() == groupName) {
+      ////          group->add(f);
+      ////        }
+      ////      }
+      ////      group->addToGPUVariableSet(_valuesSet);
+      ////      group->applyOnGlobalGLState(_globalState);
+      //
+      //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
+      //
+      //      delete group;
+      //    }
   
-        for (int j = 0; j < accumulatedFeatures.size(); j++)
-        {
-          final GLFeature f = accumulatedFeatures.get(j);
-          if (f.getGroup() == groupName)
-          {
-            group.add(f);
-          }
-        }
-        group.addToGPUVariableSet(_valuesSet);
-        group.applyOnGlobalGLState(_globalState);
-  
-        if (group != null)
-           group.dispose();
-      }
+      GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
@@ -209,4 +225,29 @@ public class GLState
     hasChangedStructure();
   }
 
+  public final void clearAllGLFeatures()
+  {
+    _features.clearFeatures();
+    hasChangedStructure();
+  }
+
+  public final int getNumberOfGLFeatures()
+  {
+    return _features.size();
+  }
+
+  public final GLFeature getGLFeature(GLFeatureID id)
+  {
+    final int size = _features.size();
+    for (int i = 0; i < size; i++)
+    {
+      final GLFeature f = _features.get(i);
+      if (f.getID() == id)
+      {
+        return f;
+      }
+    }
+  
+    return null;
+  }
 }

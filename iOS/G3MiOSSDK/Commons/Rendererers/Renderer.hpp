@@ -14,6 +14,7 @@ class G3MContext;
 class G3MRenderContext;
 class G3MEventContext;
 class GLGlobalState;
+class GLState;
 class SurfaceElevationProvider;
 
 #include "Effects.hpp"
@@ -29,7 +30,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const G3MRenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc, GLState* glState) = 0;
 
   /*
    Gives to Renderer the opportunity to process touch, events.

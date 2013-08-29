@@ -8,8 +8,6 @@ public class GPUAttribute extends GPUVariable
 
   private final int _type;
   private final int _size;
-
-//  bool _dirtyEnabled;
   private boolean _enabled;
 
   private final GPUAttributeKey _key;
@@ -19,12 +17,11 @@ public class GPUAttribute extends GPUVariable
   {
     _value = null;
 
-  super.dispose();
+    super.dispose();
 
   }
 
   public GPUAttribute(String name, int id, int type, int size)
-//  _dirtyEnabled(false),
   {
      super(name, GPUVariableType.ATTRIBUTE);
      _id = id;
@@ -75,13 +72,11 @@ public class GPUAttribute extends GPUVariable
   {
     if (_value != null)
     {
-//      delete _value;
       _value._release();
       _value = null;
     }
     _enabled = false;
     _dirty = false;
-//    _dirtyEnabled = false;
 
     gl.disableVertexAttribArray(_id);
   }
@@ -91,29 +86,23 @@ public class GPUAttribute extends GPUVariable
     if (v != _value)
     {
 
-    if (v.getEnabled() && _type != v.getType()) //type checking
-    {
-      //delete v;
-      ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
-      return;
-    }
-    if (_value == null || !_value.isEqualsTo(v))
-    {
-      _dirty = true;
-      //      if (_value != NULL) {
-      //        delete _value;
-      //      }
-      //      _value = v->shallowCopy();
-//      _value = v->copyOrCreate(_value);
-
-      if (_value != null)
+      if (v.getEnabled() && _type != v.getType()) //type checking
       {
-        _value._release();
+        ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
+        return;
       }
-      _value = v;
-      _value._retain();
+      if (_value == null || !_value.isEqualsTo(v))
+      {
+        _dirty = true;
 
-    }
+        if (_value != null)
+        {
+          _value._release();
+        }
+        _value = v;
+        _value._retain();
+
+      }
     }
   }
 

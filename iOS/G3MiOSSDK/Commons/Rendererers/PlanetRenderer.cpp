@@ -26,6 +26,7 @@
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
 #include "TileRasterizer.hpp"
+#include "ElevationData.hpp"
 
 #include <algorithm>
 
@@ -134,7 +135,8 @@ _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _projection(NULL),
-_model(NULL)
+_model(NULL),
+_glState(new GLState())
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -337,7 +339,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col);
+      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
       if (parameters->_firstLevel == 0) {
         _firstLevelTiles.push_back(tile);
       }
@@ -461,20 +463,20 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-    _glState.addGLFeature(_projection, true);
+    _glState->addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState.addGLFeature(_model, true);
+    _glState->addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
 }
 
-void PlanetRenderer::render(const G3MRenderContext* rc) {
+void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   updateGLState(rc);
 
@@ -516,7 +518,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc) {
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    &prc,
-                   _glState,
+                   *_glState,
                    NULL,
                    planet,
                    cameraNormalizedPosition,
@@ -540,7 +542,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc) {
 
         tile->render(rc,
                      &prc,
-                     _glState,
+                     *_glState,
                      &toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,
@@ -632,15 +634,21 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
 
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
-                                 SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+                                 SurfaceElevationListener* listener) {
+  _elevationListenersTree.add(Geodetic2D(latitude, longitude), listener);
 }
 
 void PlanetRenderer::addListener(const Geodetic2D& position,
-                                 SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+                                 SurfaceElevationListener* listener) {
+  _elevationListenersTree.add(position, listener);
 }
 
-void PlanetRenderer::removeListener(SurfaceElevationListener* observer) {
-  int __DGD_AtWork;
+void PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
+  _elevationListenersTree.remove(listener);
+}
+
+void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
+  if (elevationData != NULL){
+    _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
+  }
 }

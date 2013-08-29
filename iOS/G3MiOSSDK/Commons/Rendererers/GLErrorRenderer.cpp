@@ -32,8 +32,7 @@ void GLErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                             int width, int height) {
 }
 
-void GLErrorRenderer::render(const G3MRenderContext *rc,
-                             const GLGlobalState& parentState) {
+void GLErrorRenderer::render(const G3MRenderContext *rc, GLState* glState) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   

@@ -27,6 +27,7 @@ class Renderer;
 class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
+class SceneLighting;
 
 
 class IG3MBuilder {
@@ -49,6 +50,7 @@ private:
   bool                              _logDownloaderStatistics;
   WidgetUserData*                   _userData;
   std::vector<GPUProgramSources>    _sources;
+  SceneLighting*                    _sceneLighting;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -148,6 +150,9 @@ public:
   PlanetRendererBuilder* getPlanetRendererBuilder();
 
   void addGPUProgramSources(GPUProgramSources& s);
+
+  void setSceneLighting(SceneLighting* sceneLighting);
+  SceneLighting* getSceneLighting();
 };
 
 #endif

@@ -34,7 +34,8 @@ public class Sphere extends BoundingVolume
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.firstVertex(), Vector3D.zero());
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     for (int i = 0; i<2 *resolution-2; i++)
     {
       final double longitude = -DefineConstants.PI + i *delta;

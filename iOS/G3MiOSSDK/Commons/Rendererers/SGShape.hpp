@@ -27,7 +27,7 @@ public:
   SGShape(SGNode* node,
           const std::string& uriPrefix,
           bool isTransparent) :
-  Shape(NULL),
+  Shape(NULL, ABSOLUTE),
   _node(node),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent)

@@ -5,18 +5,26 @@ package org.glob3.mobile.demo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -50,9 +58,26 @@ public class G3MDrawingShapesActivity
       initializeToolbar();
 
       final G3MBuilder_Android g3mBuilder = new G3MBuilder_Android(this);
+      
+      ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(
+    		  new URL("file:///full-earth-2048x1024.bil", false),
+              Sector.fullSphere(),
+              new Vector2I(2048, 1024));
+      g3mBuilder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+      g3mBuilder.getPlanetRendererBuilder().setVerticalExaggeration(20);
+      
+      g3mBuilder.setLogFPS(true);
+      
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
       initializeShapes(renderers);
+      
+      MarksRenderer marksRenderer = new MarksRenderer(true);
+      renderers.add(marksRenderer);
+      marksRenderer.addMark(new Mark("Everest", 
+    		  Geodetic3D.fromDegrees(27.987778, 86.944444,0), AltitudeMode.RELATIVE_TO_GROUND, 
+    		  6e7, 20, Color.red(), Color.black(), null, false, null));
+      
       for (final Renderer renderer : renderers) {
          g3mBuilder.addRenderer(renderer);
       }
@@ -145,12 +170,12 @@ public class G3MDrawingShapesActivity
       final Color surfaceColor = Color.fromRGBA(0, 0.7f, 0, 0.5f);
       final Color boderColor = Color.fromRGBA(0, 0.5f, 0, 0.75f);
       final Geodetic3D positionLA = new Geodetic3D(G3MGlob3Constants.LOS_ANGELES_POSITION, 10000);
-      _boxShape = new BoxShape(positionLA, boxExtent, borderWidth, surfaceColor, boderColor);
+      _boxShape = new BoxShape(positionLA, AltitudeMode.RELATIVE_TO_GROUND, boxExtent, borderWidth, surfaceColor, boderColor);
       //CIRCLE SHAPE
 
       final Color surfaceColorCircle = Color.fromRGBA(0.75f, 0.75f, 0, 0.75f);
       final Geodetic3D positionSF = new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION, 10000);
-      _circleShape = new CircleShape(positionSF, 100000, surfaceColorCircle);
+      _circleShape = new CircleShape(positionSF, AltitudeMode.RELATIVE_TO_GROUND, 100000, surfaceColorCircle);
 
 
       final ShapesRenderer _shapesRenderer = new ShapesRenderer();

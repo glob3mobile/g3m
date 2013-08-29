@@ -1,34 +1,14 @@
 package org.glob3.mobile.generated; 
-//
-//  CameraDoubleTapHandler.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 07/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
-//
-
-
-//
-//  CameraDoubleTapHandler.hpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 07/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
-//
-
-
-
-
 //***************************************************************
 
-public class DoubleTapEffect extends EffectWithDuration
+public class DoubleTapRotationEffect extends EffectWithDuration
 {
 
-  public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance)
+  public DoubleTapRotationEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance)
   {
      this(duration, axis, angle, distance, false);
   }
-  public DoubleTapEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance, boolean linearTiming)
+  public DoubleTapRotationEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance, boolean linearTiming)
   {
      super(duration, linearTiming);
      _axis = new Vector3D(axis);
@@ -55,7 +35,6 @@ public class DoubleTapEffect extends EffectWithDuration
   public void stop(G3MRenderContext rc, TimeInterval when)
   {
     Camera camera = rc.getNextCamera();
-
     final double step = 1.0 - _lastAlpha;
     camera.rotateWithAxis(_axis, _angle.times(step));
     camera.moveForward(_distance * step);
@@ -63,7 +42,6 @@ public class DoubleTapEffect extends EffectWithDuration
 
   public void cancel(TimeInterval when)
   {
-    // do nothing, just leave the effect in the intermediate state
   }
 
   private Vector3D _axis ;

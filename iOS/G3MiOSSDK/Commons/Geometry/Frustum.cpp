@@ -19,16 +19,16 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
-_leftPlane(Plane::fromPoints(Vector3D::zero(),
+_leftPlane(Plane::fromPoints(Vector3D::zero,
                              Vector3D(data._left, data._top, -data._znear),
                              Vector3D(data._left, data._bottom, -data._znear))),
-_bottomPlane(Plane::fromPoints(Vector3D::zero(),
+_bottomPlane(Plane::fromPoints(Vector3D::zero,
                                Vector3D(data._left, data._bottom, -data._znear),
                                Vector3D(data._right, data._bottom, -data._znear))),
-_rightPlane(Plane::fromPoints(Vector3D::zero(),
+_rightPlane(Plane::fromPoints(Vector3D::zero,
                               Vector3D(data._right, data._bottom, -data._znear),
                               Vector3D(data._right, data._top, -data._znear))),
-_topPlane(Plane::fromPoints(Vector3D::zero(),
+_topPlane(Plane::fromPoints(Vector3D::zero,
                             Vector3D(data._right, data._top, -data._znear),
                             Vector3D(data._left, data._top, -data._znear))),
 _nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
@@ -119,7 +119,7 @@ bool Frustum::touchesWithBox(const Box* that) const {
 }
 
 
-BoundingVolume* Frustum::computeBoundingVolume() {
+BoundingVolume* Frustum::computeBoundingVolume() const {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
 

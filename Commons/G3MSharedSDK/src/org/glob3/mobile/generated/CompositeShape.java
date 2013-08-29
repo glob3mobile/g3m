@@ -26,13 +26,13 @@ public abstract class CompositeShape extends Shape
 
   public CompositeShape()
   {
-     super(null);
+     super(null, AltitudeMode.ABSOLUTE);
 
   }
 
-  public CompositeShape(Geodetic3D position)
+  public CompositeShape(Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(position);
+     super(position, altitudeMode);
 
   }
 

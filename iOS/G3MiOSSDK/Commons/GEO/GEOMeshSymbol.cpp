@@ -22,9 +22,11 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                       float lineWidth,
                                       double deltaHeight,
                                       const Planet* planet) const {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
@@ -52,9 +54,10 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                                        double deltaHeight,
                                        const Planet* planet) const {
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   ShortBufferBuilder indices;
 
   const int coordinatesArrayCount = coordinatesArray->size();

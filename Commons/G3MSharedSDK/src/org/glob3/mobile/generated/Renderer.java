@@ -13,6 +13,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class G3MEventContext;
 //class GLGlobalState;
+//class GLState;
 //class SurfaceElevationProvider;
 
 
@@ -27,7 +28,7 @@ public abstract class Renderer implements EffectTarget
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc);
+  public abstract void render(G3MRenderContext rc, GLState glState);
 
   /*
    Gives to Renderer the opportunity to process touch, events.

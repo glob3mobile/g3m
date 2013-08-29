@@ -54,7 +54,7 @@ public class LeveledTexturedMesh extends Mesh
     return (_currentLevel >= 0) ? _mappings.get(_currentLevel) : null;
   }
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   public LeveledTexturedMesh(Mesh mesh, boolean ownedMesh, java.util.ArrayList<LazyTextureMapping> mappings)
   {
@@ -62,6 +62,7 @@ public class LeveledTexturedMesh extends Mesh
      _ownedMesh = ownedMesh;
      _mappings = mappings;
      _currentLevel = -1;
+     _glState = new GLState();
     if (_mappings.size() <= 0)
     {
       ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
@@ -91,6 +92,8 @@ public class LeveledTexturedMesh extends Mesh
         _mappings = null;
       }
   
+      _glState._release();
+  
     }
   
     super.dispose();
@@ -114,6 +117,7 @@ public class LeveledTexturedMesh extends Mesh
 
   public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
+  
     if (_mappings.size() > 0)
     {
       if (glTextureId != null)

@@ -16,6 +16,8 @@
 //#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 
+#include "GLState.hpp"
+
 AbstractGeometryMesh::~AbstractGeometryMesh() {
   if (_owner) {
     delete _vertices;
@@ -23,6 +25,8 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
 
   delete _extent;
   delete _translationMatrix;
+
+  _glState->_release();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -46,7 +50,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
 _pointSize(pointSize),
-_depthTest(depthTest)
+_depthTest(depthTest),
+_glState(new GLState())
 {
   createGLState();
 }
@@ -107,7 +112,7 @@ int AbstractGeometryMesh::getVertexCount() const {
 
 void AbstractGeometryMesh::createGLState() {
 
-  _glState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                               3,            //Our buffer contains elements of 3
                                               0,            //Index 0
                                               false,        //Not normalized
@@ -119,11 +124,11 @@ void AbstractGeometryMesh::createGLState() {
                                               true, _pointSize), false);
 
   if (_translationMatrix != NULL) {
-    _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 }
 
 void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
-  _glState.setParent(parentGLState);
+  _glState->setParent(parentGLState);
   rawRender(rc);
 }

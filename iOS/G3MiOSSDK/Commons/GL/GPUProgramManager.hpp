@@ -71,37 +71,7 @@ public:
     }
     return prog;
   }
-  
-//  GPUProgram* getProgram(GL* gl, const GPUProgramState& state) {
-//#ifdef C_CODE
-//    for(std::map<std::string, GPUProgram*>::const_iterator it = _programs.begin();
-//        it != _programs.end(); it++) {
-//      if (state.isLinkableToProgram(*it->second)) {
-//        return it->second;
-//      }
-//    }
-//#endif
-//#ifdef JAVA_CODE
-//    for (final GPUProgram p : _programs.values()) {
-//    	if (state.isLinkableToProgram(p)) {
-//        return p;
-//      }
-//    }
-//#endif
-//    
-//    int WORKING_JM;
-//    
-//    std::vector<std::string>* us = state.getUniformsNames();
-//    int size = us->size();
-//    for (int i = 0; i < size; i++) {
-//      if (us->at(i).compare("ViewPortExtent") == 0) {
-//        return getProgram(gl, "Billboard");
-//      }
-//    }
-//    
-//    return getProgram(gl, "Default");
-//  }
-  
+
   GPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
 
   GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);

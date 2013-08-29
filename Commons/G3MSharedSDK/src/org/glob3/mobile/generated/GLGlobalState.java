@@ -55,17 +55,6 @@ public class GLGlobalState
   private float _clearColorB;
   private float _clearColorA;
 
-  //Marks of state changed
-  private boolean _depthTestChanged;
-  private boolean _blendChanged;
-  private boolean _cullFaceChanged;
-  private boolean _lineWidthChanged;
-  private boolean _polygonOffsetChanged;
-  private boolean _blendFactorsChanged;
-  private boolean _boundTextureChanged;
-  private boolean _pixelStoreIChanged;
-  private boolean _clearColorChanged;
-
   private GLGlobalState(GLGlobalState parentState)
   {
      _depthTest = parentState._depthTest;
@@ -84,15 +73,6 @@ public class GLGlobalState
      _clearColorG = parentState._clearColorG;
      _clearColorB = parentState._clearColorB;
      _clearColorA = parentState._clearColorA;
-     _depthTestChanged = parentState._depthTestChanged;
-     _blendChanged = parentState._blendChanged;
-     _cullFaceChanged = parentState._cullFaceChanged;
-     _lineWidthChanged = parentState._lineWidthChanged;
-     _polygonOffsetChanged = parentState._polygonOffsetChanged;
-     _blendFactorsChanged = parentState._blendFactorsChanged;
-     _boundTextureChanged = parentState._boundTextureChanged;
-     _pixelStoreIChanged = parentState._pixelStoreIChanged;
-     _clearColorChanged = parentState._clearColorChanged;
   }
 
 
@@ -114,18 +94,7 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
-     _depthTestChanged = false;
-     _blendChanged = false;
-     _cullFaceChanged = false;
-     _lineWidthChanged = false;
-     _polygonOffsetChanged = false;
-     _blendFactorsChanged = false;
-     _boundTextureChanged = false;
-     _pixelStoreIChanged = false;
-     _clearColorChanged = false;
   }
-
-  //GLGlobalState* createCombinationWithMorePriorityGLGlobalState(const GLGlobalState* that);
 
   public static GLGlobalState newDefault()
   {
@@ -137,28 +106,6 @@ public class GLGlobalState
     return new GLGlobalState(this);
   }
 
-
-
-  //  explicit GLGlobalState(const GLGlobalState& parentState) :
-  //  _depthTest(parentState._depthTest),
-  //  _blend(parentState._blend),
-  //  _cullFace(parentState._cullFace),
-  //  _culledFace(parentState._culledFace),
-  //  _lineWidth(parentState._lineWidth),
-  //  _polygonOffsetFactor(parentState._polygonOffsetFactor),
-  //  _polygonOffsetUnits(parentState._polygonOffsetUnits),
-  //  _polygonOffsetFill(parentState._polygonOffsetFill),
-  //  _blendDFactor(parentState._blendDFactor),
-  //  _blendSFactor(parentState._blendSFactor),
-  //  _boundTextureId(parentState._boundTextureId),
-  //  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
-  //  _clearColorR(parentState._clearColorR),
-  //  _clearColorG(parentState._clearColorG),
-  //  _clearColorB(parentState._clearColorB),
-  //  _clearColorA(parentState._clearColorA)
-  //  {
-  //  }
-
   public void dispose()
   {
   }
@@ -166,12 +113,10 @@ public class GLGlobalState
   public final void enableDepthTest()
   {
       _depthTest = true;
-    _depthTestChanged = true;
   }
   public final void disableDepthTest()
   {
       _depthTest = false;
-    _depthTestChanged = true;
   }
   public final boolean isEnabledDepthTest()
   {
@@ -181,12 +126,10 @@ public class GLGlobalState
   public final void enableBlend()
   {
       _blend = true;
-    _blendChanged = true;
   }
   public final void disableBlend()
   {
       _blend = false;
-    _blendChanged = true;
   }
   public final boolean isEnabledBlend()
   {
@@ -197,12 +140,10 @@ public class GLGlobalState
   {
     _cullFace = true;
     _culledFace = face;
-    _cullFaceChanged = true;
   }
   public final void disableCullFace()
   {
     _cullFace = false;
-    _cullFaceChanged = true;
   }
   public final boolean isEnabledCullFace()
   {
@@ -216,7 +157,6 @@ public class GLGlobalState
   public final void setLineWidth(float lineWidth)
   {
     _lineWidth = lineWidth;
-    _lineWidthChanged = true;
   }
   public final float lineWidth()
   {
@@ -228,14 +168,10 @@ public class GLGlobalState
     _polygonOffsetFill = true;
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
-
-    _polygonOffsetChanged = true;
   }
   public final void disPolygonOffsetFill()
   {
     _polygonOffsetFill = false;
-
-    _polygonOffsetChanged = true;
   }
 
   public final boolean getPolygonOffsetFill()
@@ -255,15 +191,11 @@ public class GLGlobalState
   {
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
-
-    _blendFactorsChanged = true;
   }
 
   public final void bindTexture(IGLTextureId textureId)
   {
     _boundTextureId = textureId;
-
-    _boundTextureChanged = true;
   }
 
   public final IGLTextureId getBoundTexture()
@@ -274,8 +206,6 @@ public class GLGlobalState
   public final void setPixelStoreIAlignmentUnpack(int p)
   {
     _pixelStoreIAlignmentUnpack = p;
-
-    _pixelStoreIChanged = true;
   }
 
   public final void setClearColor(Color color)
@@ -284,8 +214,6 @@ public class GLGlobalState
     _clearColorG = color.getGreen();
     _clearColorB = color.getBlue();
     _clearColorA = color.getAlpha();
-
-    _clearColorChanged = true;
   }
 
   public final void applyChanges(GL gl, GLGlobalState currentState)
@@ -294,144 +222,123 @@ public class GLGlobalState
     INativeGL nativeGL = gl.getNative();
   
     // Depth Test
-    if (_depthTestChanged)
+    if (_depthTest != currentState._depthTest)
     {
-      if (_depthTest != currentState._depthTest)
+      if (_depthTest)
       {
-        if (_depthTest)
-        {
-          nativeGL.enable(GLStage.depthTest());
-        }
-        else
-        {
-          nativeGL.disable(GLStage.depthTest());
-        }
-        currentState._depthTest = _depthTest;
+        nativeGL.enable(GLStage.depthTest());
       }
+      else
+      {
+        nativeGL.disable(GLStage.depthTest());
+      }
+      currentState._depthTest = _depthTest;
     }
   
     // Blending
-    if (_blendChanged)
+    if (_blend != currentState._blend)
     {
-      if (_blend != currentState._blend)
+      if (_blend)
       {
-        if (_blend)
-        {
-          nativeGL.enable(GLStage.blend());
-        }
-        else
-        {
-          nativeGL.disable(GLStage.blend());
-        }
-        currentState._blend = _blend;
+        nativeGL.enable(GLStage.blend());
       }
+      else
+      {
+        nativeGL.disable(GLStage.blend());
+      }
+      currentState._blend = _blend;
     }
   
     // Cull Face
-    if (_cullFaceChanged)
+    if (_cullFace != currentState._cullFace)
     {
-      if (_cullFace != currentState._cullFace)
+      currentState._cullFace = _cullFace;
+      if (_cullFace)
       {
-        currentState._cullFace = _cullFace;
-        if (_cullFace)
+        nativeGL.enable(GLStage.cullFace());
+        if (_culledFace != currentState._culledFace)
         {
-          nativeGL.enable(GLStage.cullFace());
-          if (_culledFace != currentState._culledFace)
-          {
-            nativeGL.cullFace(_culledFace);
-            currentState._culledFace = _culledFace;
-          }
+          nativeGL.cullFace(_culledFace);
+          currentState._culledFace = _culledFace;
         }
-        else
-        {
-          nativeGL.disable(GLStage.cullFace());
-        }
+      }
+      else
+      {
+        nativeGL.disable(GLStage.cullFace());
       }
     }
   
-    if (_lineWidthChanged)
+    if (_lineWidth != currentState._lineWidth)
     {
-      if (_lineWidth != currentState._lineWidth)
-      {
-        nativeGL.lineWidth(_lineWidth);
-        currentState._lineWidth = _lineWidth;
-      }
+      nativeGL.lineWidth(_lineWidth);
+      currentState._lineWidth = _lineWidth;
     }
   
     //Polygon Offset
-    if (_polygonOffsetChanged)
+    if (_polygonOffsetFill != currentState._polygonOffsetFill)
     {
-      if (_polygonOffsetFill != currentState._polygonOffsetFill)
+      currentState._polygonOffsetFill = _polygonOffsetFill;
+      if (_polygonOffsetFill)
       {
-        currentState._polygonOffsetFill = _polygonOffsetFill;
-        if (_polygonOffsetFill)
+        nativeGL.enable(GLStage.polygonOffsetFill());
+  
+        if (_polygonOffsetFactor != currentState._polygonOffsetFactor || _polygonOffsetUnits != currentState._polygonOffsetUnits)
         {
-          nativeGL.enable(GLStage.polygonOffsetFill());
+          nativeGL.polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
   
-          if (_polygonOffsetFactor != currentState._polygonOffsetFactor || _polygonOffsetUnits != currentState._polygonOffsetUnits)
-          {
-            nativeGL.polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
-  
-            currentState._polygonOffsetUnits = _polygonOffsetUnits;
-            currentState._polygonOffsetFactor = _polygonOffsetFactor;
-          }
-  
+          currentState._polygonOffsetUnits = _polygonOffsetUnits;
+          currentState._polygonOffsetFactor = _polygonOffsetFactor;
         }
-        else
-        {
-          nativeGL.disable(GLStage.polygonOffsetFill());
-        }
+  
+      }
+      else
+      {
+        nativeGL.disable(GLStage.polygonOffsetFill());
       }
     }
   
     //Blending Factors
-    if (_blendFactorsChanged)
+    if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor)
     {
-      if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor)
-      {
-        nativeGL.blendFunc(_blendSFactor, _blendDFactor);
-        currentState._blendDFactor = _blendDFactor;
-        currentState._blendSFactor = _blendSFactor;
-      }
+      nativeGL.blendFunc(_blendSFactor, _blendDFactor);
+      currentState._blendDFactor = _blendDFactor;
+      currentState._blendSFactor = _blendSFactor;
     }
   
     //Texture (After blending factors)
-    if (_boundTextureChanged)
+    if (_boundTextureId != null)
     {
-      if (_boundTextureId != null)
+      if (currentState._boundTextureId == null || !_boundTextureId.isEqualsTo(currentState._boundTextureId))
       {
-        if (currentState._boundTextureId == null || !_boundTextureId.isEqualsTo(currentState._boundTextureId))
-        {
-          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId);
+        nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId);
   
-          currentState._boundTextureId = _boundTextureId;
-        }
-        else
-        {
-          //ILogger::instance()->logInfo("Texture already bound.\n");
-        }
+        currentState._boundTextureId = _boundTextureId;
+      }
+      else
+      {
+        //ILogger::instance()->logInfo("Texture already bound.\n");
       }
     }
   
-    if (_pixelStoreIChanged)
+    if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
     {
-      if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
-      {
-        nativeGL.pixelStorei(GLAlignment.unpack(), _pixelStoreIAlignmentUnpack);
-        currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
-      }
+      nativeGL.pixelStorei(GLAlignment.unpack(), _pixelStoreIAlignmentUnpack);
+      currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
     }
   
-    if (_clearColorChanged)
+    if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)
     {
-      if (_clearColorR != currentState._clearColorR || _clearColorG != currentState._clearColorG || _clearColorB != currentState._clearColorB || _clearColorA != currentState._clearColorA)
-      {
-        nativeGL.clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
-        currentState._clearColorR = _clearColorR;
-        currentState._clearColorG = _clearColorG;
-        currentState._clearColorB = _clearColorB;
-        currentState._clearColorA = _clearColorA;
-      }
+      nativeGL.pixelStorei(GLAlignment.unpack(), _pixelStoreIAlignmentUnpack);
+      currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
+    }
+  
+    if (_clearColorR != currentState._clearColorR || _clearColorG != currentState._clearColorG || _clearColorB != currentState._clearColorB || _clearColorA != currentState._clearColorA)
+    {
+      nativeGL.clearColor(_clearColorR, _clearColorG, _clearColorB, _clearColorA);
+      currentState._clearColorR = _clearColorR;
+      currentState._clearColorG = _clearColorG;
+      currentState._clearColorB = _clearColorB;
+      currentState._clearColorA = _clearColorA;
     }
   
   }

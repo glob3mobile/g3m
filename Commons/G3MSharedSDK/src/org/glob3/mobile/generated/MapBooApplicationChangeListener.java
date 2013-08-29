@@ -45,6 +45,8 @@ package org.glob3.mobile.generated;
 //class IWebSocket;
 //class MapBoo_Scene;
 
+//class SceneLighting;
+
 
 
 

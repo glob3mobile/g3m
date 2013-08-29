@@ -1,48 +1,37 @@
 package org.glob3.mobile.generated; 
 public class GLFeatureColorGroup extends GLFeatureGroup
 {
-  public final void applyOnGlobalGLState(GLGlobalState state)
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+  public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
   
+    final int size = features.size();
     int priority = -1;
-    for (int i = 0; i < _nFeatures; i++)
+    for (int i = 0; i < size; i++)
     {
-      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
-      if (f.getPriority() > priority)
+      final GLFeature f = features.get(i);
+      if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
       {
-        priority = f.getPriority();
+        PriorityGLFeature pf = ((PriorityGLFeature) f);
+        if (pf.getPriority() > priority)
+        {
+          priority = pf.getPriority();
+        }
       }
     }
   
-    for (int i = 0; i < _nFeatures; i++)
+    for (int i = 0; i < size; i++)
     {
-      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
-      if (f.getPriority() == priority)
+      final GLFeature f = features.get(i);
+      if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
       {
-        f.applyOnGlobalGLState(state);
-      }
-    }
-  }
-  public final void addToGPUVariableSet(GPUVariableValueSet vs)
-  {
-  
-    int priority = -1;
-    for (int i = 0; i < _nFeatures; i++)
-    {
-      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
-      if (f.getPriority() > priority)
-      {
-        priority = f.getPriority();
-      }
-    }
-  
-    for (int i = 0; i < _nFeatures; i++)
-    {
-      PriorityGLFeature f = ((PriorityGLFeature) _features[i]);
-      if (f.getPriority() == priority)
-      {
-        priority = f.getPriority();
-        vs.combineWith(f.getGPUVariableValueSet());
+        PriorityGLFeature pf = ((PriorityGLFeature) f);
+        if (pf.getPriority() == priority)
+        {
+          pf.applyOnGlobalGLState(state);
+          vs.combineWith(f.getGPUVariableValueSet());
+        }
       }
     }
   }

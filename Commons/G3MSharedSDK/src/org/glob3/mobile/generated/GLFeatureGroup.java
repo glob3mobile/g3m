@@ -1,12 +1,14 @@
 package org.glob3.mobile.generated; 
 //#define N_GLFEATURES_GROUPS 4
-public abstract class GLFeatureGroup extends GLFeatureSet
+
+public abstract class GLFeatureGroup //: public GLFeatureSet
 {
+
+  private static GLFeatureGroup[] _groups = null;
+
 
   public void dispose()
   {
-  super.dispose();
-
   }
 
   public static GLFeatureGroup createGroup(GLFeatureGroupName name)
@@ -44,6 +46,29 @@ public abstract class GLFeatureGroup extends GLFeatureSet
     }
   }
 
-  public abstract void addToGPUVariableSet(GPUVariableValueSet vs);
-  public abstract void applyOnGlobalGLState(GLGlobalState state);
+//  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
+//  virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
+
+  public static void applyToAllGroups(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
+  {
+  
+    if (_groups == null)
+    {
+      _groups = new GLFeatureGroup[DefineConstants.N_GLFEATURES_GROUPS];
+  
+      for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+      {
+        GLFeatureGroupName groupName = GLFeatureGroup.getGroupName(i);
+        _groups[i] = GLFeatureGroup.createGroup(groupName);
+      }
+    }
+  
+    for (int i = 0; i < DefineConstants.N_GLFEATURES_GROUPS; i++)
+    {
+      _groups[i].apply(features, vs, state);
+    }
+  
+  }
+
+  public abstract void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state);
 }

@@ -38,7 +38,7 @@ void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   //  }
 }
 
-void CameraRenderer::render(const G3MRenderContext* rc) {
+void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   // create the CameraContext
   if (_cameraContext == NULL) {

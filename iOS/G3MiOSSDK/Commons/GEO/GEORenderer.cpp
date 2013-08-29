@@ -60,7 +60,7 @@ void GEORenderer::addGEOObject(GEOObject* geoObject,
   }
 }
 
-void GEORenderer::render(const G3MRenderContext* rc) {
+void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int childrenCount = _children.size();
   if (childrenCount > 0) {
     for (int i = 0; i < childrenCount; i++) {

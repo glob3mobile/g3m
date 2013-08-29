@@ -40,7 +40,7 @@ private:
   mutable MutableMatrix44D _modelviewMatrix;
   MutableMatrix44D _projectionMatrix;
   
-  GLState _glState;
+  GLState* _glState;
   void createGLState();
   
   
@@ -55,7 +55,8 @@ public:
   _backgroundColor(backgroundColor),
   _animated(animated),
   _size(size),
-  _projectionMatrix(MutableMatrix44D::invalid())
+  _projectionMatrix(MutableMatrix44D::invalid()),
+  _glState(new GLState())
   {
     createGLState();
   }
@@ -66,7 +67,9 @@ public:
     return true;
   }
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -85,6 +88,8 @@ public:
   virtual ~BusyQuadRenderer() {
     delete _quadMesh;
     delete _backgroundColor;
+
+    _glState->_release();
     
 #ifdef JAVA_CODE
   super.dispose();

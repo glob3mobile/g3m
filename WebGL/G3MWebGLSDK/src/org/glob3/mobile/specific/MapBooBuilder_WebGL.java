@@ -84,8 +84,21 @@ public class MapBooBuilder_WebGL
                Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
                Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", 
+    		  Shaders_WebGL._flatColorMeshVertexShader,
                Shaders_WebGL._flatColorMeshFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", 
+    		  Shaders_WebGL._noColorMeshVertexShader,
+               Shaders_WebGL._noColorMeshFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+      
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
+				Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
+				Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
 
       return new GPUProgramManager(gpuProgramFactory);
    }

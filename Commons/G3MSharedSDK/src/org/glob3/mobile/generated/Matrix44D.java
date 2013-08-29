@@ -43,8 +43,6 @@ public class Matrix44D extends RCObject
   public float[] _columnMajorFloatArray;
   public IFloatBuffer _columnMajorFloatBuffer;
 
-  //  std::vector<Matrix44DListener*> _listeners;
-
 
   public Matrix44D(Matrix44D m)
   {
@@ -92,11 +90,6 @@ public class Matrix44D extends RCObject
 
   public void dispose()
   {
-    //ILogger::instance()->logError("N LISTENERS %d", _listeners.size());
-  //  for (int i = 0; i < _listeners.size(); i++) {
-  //    _listeners[i]->onMatrixBeingDeleted(this);
-  //  }
-  
     _columnMajorFloatArray = null;
     if (_columnMajorFloatBuffer != null)
        _columnMajorFloatBuffer.dispose();
@@ -196,18 +189,38 @@ public class Matrix44D extends RCObject
     return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
   }
 
-  //    void addListener(Matrix44DListener* l) {
-  //      _listeners.push_back(l);
-  //    }
-  //
-  //    void removeListener(Matrix44DListener* l) {
-  //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
-  //           it != _listeners.end(); it++) {
-  //        if (*it == l) {
-  //          _listeners.erase(it);
-  //          return;
-  //        }
-  //      }
-  //    }
+  public static Matrix44D createIdentity()
+  {
+    return new Matrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
+
+  public final boolean isScaleMatrix()
+  {
+  
+    return (_m01 == 0 && _m02 == 0 && _m03 == 0 && _m10 == 0 && _m12 == 0 && _m13 == 0 && _m20 == 0 && _m21 == 0 && _m23 == 0 && _m30 == 0 && _m31 == 0 && _m32 == 0 && _m33 == 1.0);
+  
+  
+    //
+    //  return MutableMatrix44D(scale._x, 0, 0, 0,
+    //                          0, scale._y, 0, 0,
+    //                          0, 0, scale._z, 0,
+    //                          0, 0, 0, 1);
+  
+  }
+
+  public final boolean isTranslationMatrix()
+  {
+  
+    return (_m00 == 1 && _m01 == 0 && _m02 == 0 && _m03 == 0 && _m10 == 0 && _m11 == 1 && _m12 == 0 && _m13 == 0 && _m20 == 0 && _m21 == 0 && _m22 == 1 && _m23 == 0 && _m33 == 1);
+  
+  
+  
+  //  return MutableMatrix44D(1, 0, 0, 0,
+  //                          0, 1, 0, 0,
+  //                          0, 0, 1, 0,
+  //                          x, y, z, 1);
+  
+  }
 
 }

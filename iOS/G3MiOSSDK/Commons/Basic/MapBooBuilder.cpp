@@ -43,6 +43,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "IWebSocketListener.hpp"
 #include "IWebSocket.hpp"
+#include "SceneLighting.hpp"
 
 MapBoo_Scene::~MapBoo_Scene() {
   delete _screenshot;
@@ -262,10 +263,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool processRotation = true;
-  const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
+  cameraRenderer->addHandler(new CameraDoubleDragHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
@@ -901,7 +899,8 @@ G3MWidget* MapBooBuilder::create() {
                                  initializationTask,
                                  true,       // autoDeleteInitializationTask
                                  *periodicalTasks,
-                                 getGPUProgramManager());
+                                 getGPUProgramManager(),
+                                 createSceneLighting());
   delete cameraConstraints;
   delete periodicalTasks;
 
@@ -1068,4 +1067,8 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
       _webSocket = NULL;
     }
   }
+}
+
+SceneLighting* MapBooBuilder::createSceneLighting() {
+  return new DefaultSceneLighting();
 }

@@ -65,9 +65,7 @@ public abstract class MapBooBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean processRotation = true;
-    final boolean processZoom = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -477,7 +475,7 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -505,6 +503,11 @@ public abstract class MapBooBuilder
   protected abstract IThreadUtils createThreadUtils();
 
   protected abstract GPUProgramManager createGPUProgramManager();
+
+  protected final SceneLighting createSceneLighting()
+  {
+    return new DefaultSceneLighting();
+  }
 
   /** Private to MapbooBuilder, don't call it */
   public final int getApplicationTimestamp()

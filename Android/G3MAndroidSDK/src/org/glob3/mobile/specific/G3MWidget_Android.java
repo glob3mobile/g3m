@@ -31,6 +31,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
@@ -388,6 +389,17 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
                GL2Shaders._flatColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+              GL2Shaders._noColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+      
+      factory.add(new GPUProgramSources("FlatColor+DirectionLight", 
+				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      
       return new GPUProgramManager(factory);
    }
 
@@ -407,7 +419,8 @@ public final class G3MWidget_Android
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -425,7 +438,9 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager());
+               periodicalTasks, 
+               createGPUProgramManager(), 
+               sceneLighting);
 
       _g3mWidget.setUserData(userData);
    }

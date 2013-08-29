@@ -87,10 +87,11 @@ public final class GL2Shaders {
 			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
 			"}";
 
-	public final static String _billboardVertexShader = "attribute vec4 aPosition;\n" + 
-			"attribute vec2 aTextureCoord;\n" + 
+	public final static String _billboardVertexShader = "attribute vec2 aTextureCoord;\n" + 
 			"\n" + 
 			"uniform mat4 uModelview;\n" + 
+			"\n" + 
+			"uniform vec4 uBillboardPosition;\n" + 
 			"\n" + 
 			"uniform vec2 uTextureExtent;\n" + 
 			"uniform vec2 uViewPortExtent;\n" + 
@@ -98,7 +99,7 @@ public final class GL2Shaders {
 			"varying vec2 TextureCoordOut;\n" + 
 			"\n" + 
 			"void main() {\n" + 
-			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_Position = uModelview * uBillboardPosition;\n" + 
 			"  \n" + 
 			"  gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w;\n" + 
 			"  gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w;\n" + 
@@ -191,6 +192,110 @@ public final class GL2Shaders {
 			"  gl_PointSize = uPointSize;\n" + 
 			"}";
 	
+	public final static String _noColorMeshFragmentShader = "void main() {\n" + 
+			"  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" + 
+			"}";
+
+	public final static String _noColorMeshVertexShader = "attribute vec4 aPosition;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
+	
+	public final static String _TexturedMesh_DirectionLightFragmentShader = "precision highp float;\n" + 
+			"\n" + 
+			"varying mediump vec2 TextureCoordOut;\n" + 
+			"varying mediump vec4 VertexColor;\n" + 
+			"\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"uniform float uAmbientLight;\n" + 
+			"\n" + 
+			"uniform vec4 uLightColor;\n" + 
+			"\n" + 
+			"varying float diffuseLightIntensity;\n" + 
+			"\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
+			"  \n" + 
+			"  vec4 lightColor = vec4(uAmbientLight,uAmbientLight,uAmbientLight,1.0) + uLightColor * diffuseLightIntensity;\n" + 
+			"  gl_FragColor *= lightColor;\n" + 
+			"}";
+
+	public final static String _TexturedMesh_DirectionLightVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec2 aTextureCoord;\n" + 
+			"attribute vec3 aNormal;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform mat4 uModel;\n" + 
+			"\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"varying vec4 VertexColor;\n" + 
+			"varying vec2 TextureCoordOut;\n" + 
+			"\n" + 
+			"uniform vec3 uLightDirection; //MUST BE NORMALIZED\n" + 
+			"varying float diffuseLightIntensity;\n" + 
+			"\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"\n" + 
+			"  vec3 normal = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" + 
+			"  vec3 lightDir = normalize( uLightDirection );\n" + 
+			"  \n" + 
+			"  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);\n" + 
+			"\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  \n" + 
+			"  TextureCoordOut = aTextureCoord;\n" + 
+			"\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
+	
+	public final static String _FlatColorMesh_DirectionLightFragmentShader = "precision highp float;\n" + 
+			"\n" + 
+			"uniform sampler2D Sampler;\n" + 
+			"uniform float uAmbientLight;\n" + 
+			"\n" + 
+			"uniform vec4 uLightColor;\n" + 
+			"\n" + 
+			"varying float diffuseLightIntensity;\n" + 
+			"\n" + 
+			"uniform lowp vec4 uFlatColor;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_FragColor = uFlatColor;\n" + 
+			"  \n" + 
+			"  vec4 lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uLightColor * diffuseLightIntensity;\n" + 
+			"  gl_FragColor *= lightColor;\n" + 
+			"}";
+
+	public final static String _FlatColorMesh_DirectionLightVertexShader = "attribute vec4 aPosition;\n" + 
+			"attribute vec3 aNormal;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform mat4 uModel;\n" + 
+			"\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"uniform vec3 uLightDirection; //MUST BE NORMALIZED\n" + 
+			"varying float diffuseLightIntensity;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"\n" + 
+			"  vec3 normal = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" + 
+			"  vec3 lightDir = normalize( uLightDirection );\n" + 
+			"  \n" + 
+			"  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);\n" + 
+			"\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 

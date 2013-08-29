@@ -22,7 +22,7 @@ private:
   
   MutableMatrix44D _rotationMatrix;
   
-  GLState _glState;
+  GLState* _glState;
   
 public:
   SGRotateNode(const std::string& id,
@@ -36,15 +36,20 @@ public:
   _y(y),
   _z(z),
   _angle(angle),
-  _rotationMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle), Vector3D(_x, _y, _z)))
+  _rotationMatrix(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle), Vector3D(_x, _y, _z))),
+  _glState(new GLState())
   {
-    _glState.addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
+  }
+
+  ~SGRotateNode(){
+    _glState->_release();
   }
 
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState) {
-    _glState.setParent(parentState);
-    return &_glState;
+    _glState->setParent(parentState);
+    return _glState;
   }
 
   std::string description() {

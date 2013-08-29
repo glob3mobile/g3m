@@ -37,7 +37,7 @@ public class CameraRenderer extends LeafRenderer
     _processTouchEvents = processTouchEvents;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
   
     // create the CameraContext
