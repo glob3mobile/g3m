@@ -65,6 +65,7 @@ import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -97,6 +98,7 @@ import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
+import org.glob3.mobile.specific.Logger_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -217,6 +219,40 @@ public class G3MWebGLDemo implements EntryPoint {
 		// test bson parser and 3D model
 		final ShapesRenderer shapeRenderer = new ShapesRenderer();
 		builder.addRenderer(shapeRenderer);
+		
+		QuadShape quad = new QuadShape(
+				new Geodetic3D(Angle.fromDegrees(28.116956),
+						Angle.fromDegrees(-15.440453), 2000), //
+				AltitudeMode.RELATIVE_TO_GROUND, 10000, 10000, Color.red(), true);
+		
+		QuadShape quad2 = new QuadShape(
+				new Geodetic3D(Angle.fromDegrees(28),
+						Angle.fromDegrees(-15.440453), 2000), //
+				AltitudeMode.RELATIVE_TO_GROUND, 
+				new URL("http://serdis.dis.ulpgc.es/~a044526/android/glob3.png", false), 10000, 10000, true);
+		
+		shapeRenderer.addShape(quad);
+		shapeRenderer.addShape(quad2);
+		
+		quad.setPitch(Angle.fromDegrees(90));
+		quad.setHeading(Angle.fromDegrees(0));
+		quad.setAnimatedPosition(
+				TimeInterval.fromSeconds(60),
+				new Geodetic3D(
+						Angle.fromDegrees(28.127222), Angle
+								.fromDegrees(-15.431389),
+						10000), Angle.fromDegrees(90),
+				Angle.fromDegrees(720));
+		
+		quad2.setPitch(Angle.fromDegrees(90));
+		quad2.setHeading(Angle.fromDegrees(0));
+		quad2.setAnimatedPosition(
+				TimeInterval.fromSeconds(60),
+				new Geodetic3D(
+						Angle.fromDegrees(28), Angle
+								.fromDegrees(-15.431389),
+						10000), Angle.fromDegrees(90),
+				Angle.fromDegrees(720));
 
 		final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
 			@Override
@@ -458,63 +494,63 @@ public class G3MWebGLDemo implements EntryPoint {
 						true, //
 						listener, //
 						true);
-				
-				
 
-	            final URL planeFilePath = new URL("http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json2", false);
-	            final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
+				if (true) {
+					final URL planeFilePath = new URL(
+							"http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json",
+							false);
+					final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
 
+						@Override
+						public void onDownload(final URL url,
+								final IByteBuffer buffer, final boolean expired) {
 
-	               @Override
-	               public void onDownload(final URL url,
-	                                      final IByteBuffer buffer,
-	                                      final boolean expired) {
-	            	   
-	            	 Shape plane = SceneJSShapesParser.parseFromJSON(buffer, URL.FILE_PROTOCOL + "/" , false);
-	            	 
-	            	 plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222),
-	     	                Angle.fromDegrees(-15.431389),
-	     	                10000) );
-	            	 
-	            	double scale = 1000;
-	          	   plane.setScale(scale, scale, scale);
-	          	   plane.setPitch(Angle.fromDegrees(90));
-	          	   plane.setHeading(Angle.fromDegrees(0));
-	          	   plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
-	          	         new Geodetic3D(Angle.fromDegrees(28.127222),
-	          	                    Angle.fromDegrees(-15.431389),
-	          	                    10000),
-	          	         Angle.fromDegrees(90), Angle.fromDegrees(720));
-	            	 
-	            	 if (plane != null){
-	            		 _shapesRenderer.addShape(plane);
-	            		 ILogger.instance().logInfo("PLANE SHOWN");
-	            	 }
-	               }
+							Shape plane = SceneJSShapesParser.parseFromJSON(
+									buffer, "http://serdis.dis.ulpgc.es/~a044526/", false);
 
+							plane.setPosition(new Geodetic3D(Angle
+									.fromDegrees(28.127222), Angle
+									.fromDegrees(-15.431389), 10000));
 
-	               @Override
-	               public void onError(final URL url) {
-	            	   ILogger.instance().logError("NO SEYMOUR");
-	               }
+							double scale = 1000;
+							plane.setScale(scale, scale, scale);
+							plane.setPitch(Angle.fromDegrees(90));
+							plane.setHeading(Angle.fromDegrees(0));
+							plane.setAnimatedPosition(
+									TimeInterval.fromSeconds(60),
+									new Geodetic3D(
+											Angle.fromDegrees(28.127222), Angle
+													.fromDegrees(-15.431389),
+											10000), Angle.fromDegrees(90),
+									Angle.fromDegrees(720));
 
+							if (plane != null) {
+								_shapesRenderer.addShape(plane);
+								ILogger.instance().logInfo("PLANE SHOWN");
+							}
+						}
 
-	               @Override
-	               public void onCancel(final URL url) {
-	                  //DO Nothing
-	               }
+						@Override
+						public void onError(final URL url) {
+							ILogger.instance().logError("NO SEYMOUR");
+						}
 
+						@Override
+						public void onCancel(final URL url) {
+							// DO Nothing
+						}
 
-	               @Override
-	               public void onCanceledDownload(final URL url,
-	                                              final IByteBuffer data,
-	                                              final boolean expired) {
-	                  //Do Nothing
-	               }
-	            };
-	            
-	            downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
+						@Override
+						public void onCanceledDownload(final URL url,
+								final IByteBuffer data, final boolean expired) {
+							// Do Nothing
+						}
+					};
 
+					downloader.requestBuffer(planeFilePath, 1000,
+							TimeInterval.fromHours(1.0), true, listenerPlane,
+							true);
+				}
 			}
 
 			@Override
@@ -527,7 +563,8 @@ public class G3MWebGLDemo implements EntryPoint {
 	}
 
 	private Mesh createPointsMesh(final Planet planet) {
-		final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+		final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic
+				.builderWithFirstVertexAsCenter(planet);
 
 		final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -814,7 +851,6 @@ public class G3MWebGLDemo implements EntryPoint {
 
 								public QuadListener(final ShapesRenderer sr) {
 									_sr = sr;
-
 								}
 
 								@Override
@@ -825,7 +861,7 @@ public class G3MWebGLDemo implements EntryPoint {
 													Angle.fromDegrees(-16.339417),
 													8000),
 											AltitudeMode.RELATIVE_TO_GROUND,
-											image2, 50000, 50000);
+											image2, 50000, 50000, true);
 
 									_sr.addShape(quadImages);
 								}
@@ -884,7 +920,7 @@ public class G3MWebGLDemo implements EntryPoint {
 			final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
 			final WidgetUserData userData = null;
-			
+
 			SceneLighting lighting = new DefaultSceneLighting();
 
 			final ICameraActivityListener cameraActivityListener = null;
@@ -904,8 +940,7 @@ public class G3MWebGLDemo implements EntryPoint {
 					initializationTask, //
 					autoDeleteInitializationTask, //
 					periodicalTasks, //
-					userData,
-					lighting);
+					userData, lighting);
 		}
 	}
 

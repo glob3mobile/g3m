@@ -861,7 +861,7 @@ public final class NativeGL_WebGL
 
 @Override
 public native void uniform3f(IGLUniformID location, float x, float y, float z) /*-{
-	var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+	var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x, y, z);
 }-*/;
 
