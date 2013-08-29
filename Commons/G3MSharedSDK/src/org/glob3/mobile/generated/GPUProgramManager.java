@@ -81,6 +81,12 @@ public class GPUProgramManager
     }
     if (flatColor && !texture && !color)
     {
+  
+      if (hasLight)
+      {
+        return getProgram(gl, "FlatColorMesh+DirectionLight");
+      }
+  
       return getProgram(gl, "FlatColorMesh");
     }
   

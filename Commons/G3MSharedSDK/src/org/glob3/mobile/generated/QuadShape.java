@@ -51,6 +51,8 @@ public class QuadShape extends AbstractMeshShape
     return texId;
   }
 
+  private final boolean _withNormals;
+
   protected final Mesh createMesh(G3MRenderContext rc)
   {
     if (!_textureRequested)
@@ -70,18 +72,28 @@ public class QuadShape extends AbstractMeshShape
     final float bottom = -halfHeight;
     final float top = +halfHeight;
   
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(left, bottom, 0);
     vertices.add(right, bottom, 0);
     vertices.add(left, top, 0);
     vertices.add(right, top, 0);
   
-  //  const Vector3D center = Vector3D::zero;
-  
     Color color = (_color == null) ? null : new Color(_color);
+    Mesh im = null;
+    if (_withNormals)
+    {
+      FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
   
-    Mesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, 1.0, true, normals.create());
+    }
+    else
+    {
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
+    }
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)
@@ -100,7 +112,7 @@ public class QuadShape extends AbstractMeshShape
     return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height, boolean withNormals)
   {
      super(position, altitudeMode);
      _textureURL = new URL(textureURL);
@@ -109,10 +121,11 @@ public class QuadShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _color = null;
+     _withNormals = withNormals;
 
   }
 
-  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height, boolean withNormals)
   {
      super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
@@ -121,11 +134,12 @@ public class QuadShape extends AbstractMeshShape
      _textureRequested = true;
      _textureImage = textureImage;
      _color = null;
+     _withNormals = withNormals;
 
   }
 
 
-  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, float width, float height, Color color)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, float width, float height, Color color, boolean withNormals)
   {
      super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
@@ -134,6 +148,7 @@ public class QuadShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _color = color;
+     _withNormals = withNormals;
 
   }
   public void dispose()

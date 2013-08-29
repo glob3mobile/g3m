@@ -123,6 +123,8 @@ public class MeshRenderer extends LeafRenderer
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
     updateGLState(rc);
   
+    _glState.setParent(glState);
+  
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
