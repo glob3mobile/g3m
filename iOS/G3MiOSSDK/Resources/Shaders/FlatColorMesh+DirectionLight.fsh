@@ -18,6 +18,6 @@ uniform lowp vec4 uFlatColor;
 void main() {
   gl_FragColor = uFlatColor;
   
-  vec4 lightColor = vec4(1.0,1.0,1.0,1.0) * uAmbientLight + uLightColor * diffuseLightIntensity;
+  vec4 lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uLightColor * diffuseLightIntensity;
   gl_FragColor *= lightColor;
 }
