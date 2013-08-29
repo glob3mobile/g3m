@@ -311,7 +311,14 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")));
+    final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
+  
+    if (hasWarnings && (_viewType != MapBoo_ViewType.VIEW_PRESENTATION))
+    {
+      return null;
+    }
+  
+    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
   private Color parseColor(JSONString jsonColor)
   {
