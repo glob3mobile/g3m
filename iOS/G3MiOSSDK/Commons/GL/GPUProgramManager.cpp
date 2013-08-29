@@ -25,6 +25,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     return getProgram(gl, "Billboard");
   }
   if (flatColor && !texture && !color) {
+
+    if (hasLight){
+      return getProgram(gl, "FlatColorMesh+DirectionLight");
+    }
+
     return getProgram(gl, "FlatColorMesh");
   }
 

@@ -45,7 +45,8 @@ AbstractMesh::AbstractMesh(const int primitive,
                            Color* flatColor,
                            IFloatBuffer* colors,
                            const float colorsIntensity,
-                           bool depthTest) :
+                           bool depthTest,
+                           IFloatBuffer* normals) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -60,7 +61,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
-_glState(new GLState())
+_glState(new GLState()),
+_normals(normals)
 {
   createGLState();
 }
@@ -165,6 +167,11 @@ void AbstractMesh::createGLState() {
                                              0,            //Stride 0
                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
+  }
+
+  if (_normals != NULL){
+    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                           false);
   }
 }
 

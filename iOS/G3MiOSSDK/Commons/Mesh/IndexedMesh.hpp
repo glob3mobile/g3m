@@ -30,7 +30,8 @@ public:
               Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = 0.0f,
-              bool depthTest = true);
+              bool depthTest = true,
+              IFloatBuffer* normals = NULL);
 
   ~IndexedMesh();
 };

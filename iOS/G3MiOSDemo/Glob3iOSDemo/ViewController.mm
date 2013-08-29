@@ -518,7 +518,7 @@ public:
   NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: name
                                                                  ofType: @"vsh"];
   if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
+    NSLog(@"Can't load %@.vsh", name);
   }
   const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
                                                              encoding: NSUTF8StringEncoding
@@ -527,7 +527,7 @@ public:
   NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: name
                                                                  ofType: @"fsh"];
   if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
+    NSLog(@"Can't load %@.fsh", name);
   }
 
   const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
@@ -685,8 +685,11 @@ public:
   GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
   builder.addGPUProgramSources(sourcesTCTexturedMesh);
 
-  GPUProgramSources sourcesTexturedMeshPointLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
-  builder.addGPUProgramSources(sourcesTexturedMeshPointLight);
+  GPUProgramSources sourcesTexturedMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
+  builder.addGPUProgramSources(sourcesTexturedMeshDirectionLight);
+
+  GPUProgramSources sourcesFlatColorMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh+DirectionLight"];
+  builder.addGPUProgramSources(sourcesFlatColorMeshDirectionLight);
 
   GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
   builder.addGPUProgramSources(sourcesNoColorMesh);
@@ -1445,7 +1448,8 @@ public:
                                               8000),
                                RELATIVE_TO_GROUND,
                                URL("file:///g3m-marker.png", false),
-                               50000, 50000);
+                               50000, 50000,
+                               false);
   shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -1453,7 +1457,8 @@ public:
                                               8000),
                                RELATIVE_TO_GROUND,
                                35000, 75000,
-                               Color::newFromRGBA(1, 0, 1, 0.5));
+                               Color::newFromRGBA(1, 0, 1, 0.5),
+                               false);
   shapesRenderer->addShape(quad2);
 
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
@@ -1610,13 +1615,13 @@ public:
 
     void imageCreated(IImage* image) {
 
-
       Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
                                                        Angle::fromDegrees(-16.339417),
                                                        8000),
                                         RELATIVE_TO_GROUND,
                                         image,
-                                        49000, 38000);
+                                        49000, 38000,
+                                        true);
 
       _sr->addShape(quadImages);
     }
@@ -2204,7 +2209,8 @@ public:
                                                      8000),
                                       RELATIVE_TO_GROUND,
                                       image,
-                                      50000, 50000);
+                                      50000, 50000,
+                                      false);
           _shapesRenderer->addShape(quad);
         }
       };

@@ -31,6 +31,7 @@ protected:
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
+  IFloatBuffer*           _normals;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -44,7 +45,8 @@ protected:
                Color* flatColor,
                IFloatBuffer* colors,
                const float colorsIntensity,
-               bool depthTest);
+               bool depthTest,
+               IFloatBuffer* normals);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;

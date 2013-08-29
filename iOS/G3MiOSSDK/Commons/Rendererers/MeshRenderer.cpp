@@ -57,6 +57,8 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   updateGLState(rc);
 
+  _glState->setParent(glState);
+
 
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {

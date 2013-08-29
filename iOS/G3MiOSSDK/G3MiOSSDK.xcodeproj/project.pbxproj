@@ -337,6 +337,8 @@
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
 		D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */; };
 		D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */; };
+		D87DFC7217CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */; };
+		D87DFC7317CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
@@ -1381,6 +1383,8 @@
 		D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.fsh; sourceTree = "<group>"; };
 		D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.vsh; sourceTree = "<group>"; };
 		D87BF6DB170F0628004D467D /* GPUUniform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUUniform.hpp; sourceTree = "<group>"; };
+		D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "FlatColorMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
+		D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "FlatColorMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
 		D87EC5C115BEB12F00E38C36 /* Layer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Layer.hpp; sourceTree = "<group>"; };
 		D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerSet.cpp; sourceTree = "<group>"; };
 		D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayerSet.hpp; sourceTree = "<group>"; };
@@ -2300,6 +2304,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */,
+				D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */,
 				D89ABFA917CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh */,
 				D89ABFAA17CCD31F00E25A0C /* TexturedMesh+DirectionLight.vsh */,
 				D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */,
@@ -2644,6 +2650,8 @@
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
 				D89ABFAB17CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh in Sources */,
 				D89ABFAC17CCD31F00E25A0C /* TexturedMesh+DirectionLight.vsh in Sources */,
+				D87DFC7217CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh in Sources */,
+				D87DFC7317CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -83,6 +83,7 @@ GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
   gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh+DirectionLight"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh+DirectionLight"));
   gpuProgramFactory->add( loadDefaultGPUProgramSources("NoColorMesh") );
 
 

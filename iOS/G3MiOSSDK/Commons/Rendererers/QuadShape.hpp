@@ -28,6 +28,8 @@ private:
   IImage* _textureImage;
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
+  const bool _withNormals;
+
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
 
@@ -36,14 +38,16 @@ public:
             AltitudeMode altitudeMode,
             const URL& textureURL,
             float width,
-            float height) :
+            float height,
+            bool withNormals) :
   AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _width(width),
   _height(height),
   _textureRequested(false),
   _textureImage(NULL),
-  _color(NULL)
+  _color(NULL),
+  _withNormals(withNormals)
   {
 
   }
@@ -52,14 +56,16 @@ public:
             AltitudeMode altitudeMode,
             IImage* textureImage,
             float width,
-            float height) :
+            float height,
+            bool withNormals) :
   AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _width(width),
   _height(height),
   _textureRequested(true),
   _textureImage(textureImage),
-  _color(NULL)
+  _color(NULL),
+  _withNormals(withNormals)
   {
 
   }
@@ -69,14 +75,16 @@ public:
             AltitudeMode altitudeMode,
             float width,
             float height,
-            Color* color) :
+            Color* color,
+            bool withNormals) :
   AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _width(width),
   _height(height),
   _textureRequested(false),
   _textureImage(NULL),
-  _color(color)
+  _color(color),
+  _withNormals(withNormals)
   {
 
   }

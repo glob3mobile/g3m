@@ -80,7 +80,10 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   
   //Setting camera matrixes
   updateGLState(rc);
-  
+
+  _glState->setParent(glState);
+  _glStateTransparent->setParent(glState);
+
 
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
@@ -97,9 +100,6 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                                                              _renderNotReadyShapes));
       }
       else {
-
-        _glState->setParent(glState);
-
         shape->render(rc, _glState, _renderNotReadyShapes);
       }
     }
