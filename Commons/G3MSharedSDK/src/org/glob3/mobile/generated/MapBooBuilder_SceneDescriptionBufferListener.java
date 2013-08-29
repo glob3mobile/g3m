@@ -10,7 +10,7 @@ public class MapBooBuilder_SceneDescriptionBufferListener extends IBufferDownloa
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    _builder.parseApplicationDescription(buffer.getAsString(), url);
+    _builder.parseApplicationJSON(buffer.getAsString(), url);
     if (buffer != null)
        buffer.dispose();
   }
