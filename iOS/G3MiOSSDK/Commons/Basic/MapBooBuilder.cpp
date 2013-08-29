@@ -690,9 +690,11 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
     case VIEW_PRESENTATION:
       view = "presentation";
       break;
-    case VIEW_RUNTIME:
+//    case VIEW_RUNTIME:
+//      view = "runtime";
+//      break;
+    default:
       view = "runtime";
-      break;
   }
 
   return URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
@@ -706,9 +708,11 @@ const URL MapBooBuilder::createPollingApplicationDescriptionURL() const {
     case VIEW_PRESENTATION:
       view = "presentation";
       break;
-    case VIEW_RUNTIME:
+//    case VIEW_RUNTIME:
+//      view = "runtime";
+//      break;
+    default:
       view = "runtime";
-      break;
   }
 
   return URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
