@@ -28,25 +28,29 @@ public class DirectMesh extends AbstractMesh
   }
 
 
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, null);
+  }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true, null);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true, null);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true, null);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true, null);
   }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
   {
-     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest);
+     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals);
   }
 
   public void dispose()

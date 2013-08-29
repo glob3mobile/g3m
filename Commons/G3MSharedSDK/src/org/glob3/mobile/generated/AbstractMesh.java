@@ -35,6 +35,7 @@ public abstract class AbstractMesh extends Mesh
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
+  protected IFloatBuffer _normals;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
@@ -81,7 +82,7 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
   {
      _primitive = primitive;
      _owner = owner;
@@ -96,6 +97,7 @@ public abstract class AbstractMesh extends Mesh
      _pointSize = pointSize;
      _depthTest = depthTest;
      _glState = new GLState();
+     _normals = normals;
     createGLState();
   }
 
@@ -129,6 +131,11 @@ public abstract class AbstractMesh extends Mesh
     {
       _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
   
+    }
+  
+    if (_normals != null)
+    {
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
     }
   }
 

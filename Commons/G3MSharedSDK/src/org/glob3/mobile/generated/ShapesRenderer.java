@@ -189,6 +189,9 @@ public class ShapesRenderer extends LeafRenderer
     //Setting camera matrixes
     updateGLState(rc);
   
+    _glState.setParent(glState);
+    _glStateTransparent.setParent(glState);
+  
   
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)
@@ -206,9 +209,6 @@ public class ShapesRenderer extends LeafRenderer
         }
         else
         {
-  
-          _glState.setParent(glState);
-  
           shape.render(rc, _glState, _renderNotReadyShapes);
         }
       }
