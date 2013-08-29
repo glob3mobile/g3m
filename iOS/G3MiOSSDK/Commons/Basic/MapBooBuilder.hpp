@@ -171,19 +171,23 @@ private:
   Layer*                   _baseLayer;
   Layer*                   _overlayLayer;
 
+  const bool               _hasWarnings;
+
 public:
   MapBoo_Scene(const std::string& name,
                const std::string& description,
                MapBoo_MultiImage* screenshot,
                const Color&       backgroundColor,
                Layer*             baseLayer,
-               Layer*             overlayLayer) :
+               Layer*             overlayLayer,
+               const bool         hasWarnings) :
   _name(name),
   _description(description),
   _screenshot(screenshot),
   _backgroundColor(backgroundColor),
   _baseLayer(baseLayer),
-  _overlayLayer(overlayLayer)
+  _overlayLayer(overlayLayer),
+  _hasWarnings(hasWarnings)
   {
   }
 
@@ -201,6 +205,10 @@ public:
 
   Color getBackgroundColor() const {
     return _backgroundColor;
+  }
+
+  bool hasWarnings() const {
+    return _hasWarnings;
   }
 
   void fillLayerSet(LayerSet* layerSet) const;

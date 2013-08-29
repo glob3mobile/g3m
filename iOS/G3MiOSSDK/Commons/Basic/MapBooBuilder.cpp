@@ -471,12 +471,19 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
     return NULL;
   }
 
+  const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
+
+  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+    return NULL;
+  }
+
   return new MapBoo_Scene(jsonObject->getAsString("name", ""),
                           jsonObject->getAsString("description", ""),
                           parseMultiImage( jsonObject->getAsObject("screenshot") ),
                           parseColor( jsonObject->getAsString("backgroundColor") ),
                           parseLayer( jsonObject->get("baseLayer") ),
-                          parseLayer( jsonObject->get("overlayLayer") ) );
+                          parseLayer( jsonObject->get("overlayLayer") ),
+                          hasWarnings);
 }
 
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
