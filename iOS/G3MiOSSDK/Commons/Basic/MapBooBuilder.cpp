@@ -46,6 +46,7 @@
 #include "SceneLighting.hpp"
 
 MapBoo_Scene::~MapBoo_Scene() {
+  delete _screenshot;
   delete _baseLayer;
   delete _overlayLayer;
 }

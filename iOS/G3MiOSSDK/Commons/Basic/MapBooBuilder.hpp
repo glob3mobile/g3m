@@ -112,6 +112,10 @@ public:
 
   const std::string description() const;
 
+  ~MapBoo_MultiImage_Level() {
+
+  }
+
 };
 
 
@@ -126,6 +130,14 @@ public:
   _averageColor(averageColor),
   _levels(levels)
   {
+  }
+
+  ~MapBoo_MultiImage() {
+    const int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++) {
+      MapBoo_MultiImage_Level* level = _levels[i];
+      delete level;
+    }
   }
 
   const Color getAverageColor() const {

@@ -20,8 +20,18 @@ private:
   static const std::string concatenatePath(const URL& parent,
                                            const std::string& path) {
     const IStringUtils* iu = IStringUtils::instance();
-    
-    return iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+
+    std::string result = iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    if (iu->beginsWith(result, "http:/")) {
+#ifdef C_CODE
+      result = "http://" + iu->substring(result, 6);
+#endif
+#ifdef JAVA_CODE
+      result = "http://" + iu.substring(result, 6);
+#endif
+    }
+
+    return result;
   }
 
 public:
