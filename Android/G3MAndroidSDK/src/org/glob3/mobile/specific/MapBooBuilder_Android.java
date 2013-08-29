@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.MapBooApplicationChangeListener;
 import org.glob3.mobile.generated.MapBooBuilder;
+import org.glob3.mobile.generated.MapBoo_ViewType;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -47,8 +48,9 @@ public class MapBooBuilder_Android
                                 final URL tubesURL,
                                 final boolean useWebSockets,
                                 final String sceneId,
+                                final MapBoo_ViewType viewType,
                                 final MapBooApplicationChangeListener applicationListener) {
-      super(serverURL, tubesURL, useWebSockets, sceneId, applicationListener);
+      super(serverURL, tubesURL, useWebSockets, sceneId, viewType, applicationListener);
 
       _nativeWidget = new G3MWidget_Android(context);
    }
@@ -89,17 +91,17 @@ public class MapBooBuilder_Android
 
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
                GL2Shaders._flatColorMeshFragmentShader));
-      
-      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", 
-				GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
-      
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
-				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-    
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
-				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-    
-      
+
+      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+               GL2Shaders._noColorMeshFragmentShader));
+
+      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
+               GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
+               GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+
+
       return new GPUProgramManager(gpuProgramFactory);
    }
 
