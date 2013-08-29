@@ -23,6 +23,7 @@ AbstractMesh::~AbstractMesh() {
     delete _vertices;
     delete _colors;
     delete _flatColor;
+    delete _normals;
   }
 
   delete _boundingVolume;
