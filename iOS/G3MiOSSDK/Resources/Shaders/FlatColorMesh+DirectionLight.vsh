@@ -23,8 +23,6 @@ void main() {
   diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
 
   gl_Position = uModelview * aPosition;
-  
-  TextureCoordOut = aTextureCoord;
 
   gl_PointSize = uPointSize;
 }

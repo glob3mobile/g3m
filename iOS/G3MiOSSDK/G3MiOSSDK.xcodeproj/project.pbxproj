@@ -337,15 +337,11 @@
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
 		D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */; };
 		D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */; };
-		D87DFC7217CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */; };
-		D87DFC7317CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */; };
 		D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */; };
 		D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */; };
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
-		D89ABFAB17CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D89ABFA917CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh */; };
-		D89ABFAC17CCD31F00E25A0C /* TexturedMesh+DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D89ABFAA17CCD31F00E25A0C /* TexturedMesh+DirectionLight.vsh */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
@@ -2648,10 +2644,6 @@
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
 				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
-				D89ABFAB17CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh in Sources */,
-				D89ABFAC17CCD31F00E25A0C /* TexturedMesh+DirectionLight.vsh in Sources */,
-				D87DFC7217CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh in Sources */,
-				D87DFC7317CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

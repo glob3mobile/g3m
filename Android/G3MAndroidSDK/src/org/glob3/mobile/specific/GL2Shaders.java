@@ -222,7 +222,7 @@ public final class GL2Shaders {
 			"void main() {\n" + 
 			"  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + 
 			"  \n" + 
-			"  vec4 lightColor = vec4(1.0,1.0,1.0,1.0) * uAmbientLight + uLightColor * diffuseLightIntensity;\n" + 
+			"  vec4 lightColor = vec4(uAmbientLight,uAmbientLight,uAmbientLight,1.0) + uLightColor * diffuseLightIntensity;\n" + 
 			"  gl_FragColor *= lightColor;\n" + 
 			"}";
 

@@ -1458,7 +1458,7 @@ public:
                                RELATIVE_TO_GROUND,
                                35000, 75000,
                                Color::newFromRGBA(1, 0, 1, 0.5),
-                               false);
+                               true);
   shapesRenderer->addShape(quad2);
 
   Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
@@ -1621,7 +1621,7 @@ public:
                                         RELATIVE_TO_GROUND,
                                         image,
                                         49000, 38000,
-                                        true);
+                                        false);
 
       _sr->addShape(quadImages);
     }
@@ -2548,7 +2548,7 @@ public:
       }
 
 
-      if (true){
+      if (false){
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {

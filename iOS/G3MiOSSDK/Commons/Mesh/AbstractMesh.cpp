@@ -142,6 +142,11 @@ void AbstractMesh::createGLState() {
                                               true, _pointSize),
                         false);   //POINT SIZE
 
+  if (_normals != NULL){
+    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                           false);
+  }
+
   if (_translationMatrix != NULL) {
     _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
@@ -169,10 +174,6 @@ void AbstractMesh::createGLState() {
 
   }
 
-  if (_normals != NULL){
-    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
-                           false);
-  }
 }
 
 void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
