@@ -648,9 +648,11 @@ public abstract class MapBooBuilder
       case VIEW_PRESENTATION:
         view = "presentation";
         break;
-      case VIEW_RUNTIME:
+  //    case VIEW_RUNTIME:
+  //      view = "runtime";
+  //      break;
+      default:
         view = "runtime";
-        break;
     }
   
     return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
@@ -667,9 +669,11 @@ public abstract class MapBooBuilder
       case VIEW_PRESENTATION:
         view = "presentation";
         break;
-      case VIEW_RUNTIME:
+  //    case VIEW_RUNTIME:
+  //      view = "runtime";
+  //      break;
+      default:
         view = "runtime";
-        break;
     }
   
     return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
