@@ -227,7 +227,6 @@
 		CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */; };
 		CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */; };
 		CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
-		CFAB754F17AC517500852FA7 /* (null) in CopyFiles */ = {isa = PBXBuildFile; };
 		CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */; };
 		CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -342,6 +341,11 @@
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
+		D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */; };
+		D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBC2309817972F4F009343FC /* CameraEffects.hpp */; };
+		D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAAD917CB81B600ACD249 /* Extent.hpp */; };
+		D88CC14417CF86E80001BF4D /* Matrix44DProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */; };
+		D88CC14517CF86E80001BF4D /* FlatPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
@@ -585,11 +589,14 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */,
+				D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */,
+				D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */,
+				D88CC14417CF86E80001BF4D /* Matrix44DProvider.hpp in CopyFiles */,
+				D88CC14517CF86E80001BF4D /* FlatPlanet.hpp in CopyFiles */,
 				CF3C992E17C274A500937BD3 /* NSString_CppAdditions.h in CopyFiles */,
 				CF3CCC6417B53A4100581468 /* GenericQuadTree.hpp in CopyFiles */,
-				CFAB754F17AC517500852FA7 /* (null) in CopyFiles */,
 				D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */,
-				CFAB754F17AC517500852FA7 /* (null) in CopyFiles */,
 				CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */,
 				CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */,
 				CFAA530617AAFE9E002A9204 /* DecimatedSubviewElevationData.hpp in CopyFiles */,
