@@ -113,6 +113,7 @@ public class G3MWebGLDemo implements EntryPoint {
 
 	private boolean _markersParsed = false;
 	private MarksRenderer _markersRenderer;
+	private ShapesRenderer _shapesRenderer = new ShapesRenderer();
 
 	@Override
 	public void onModuleLoad() {
@@ -457,6 +458,62 @@ public class G3MWebGLDemo implements EntryPoint {
 						true, //
 						listener, //
 						true);
+				
+				
+
+	            final URL planeFilePath = new URL("http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json2", false);
+	            final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
+
+
+	               @Override
+	               public void onDownload(final URL url,
+	                                      final IByteBuffer buffer,
+	                                      final boolean expired) {
+	            	   
+	            	 Shape plane = SceneJSShapesParser.parseFromJSON(buffer, URL.FILE_PROTOCOL + "/" , false);
+	            	 
+	            	 plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222),
+	     	                Angle.fromDegrees(-15.431389),
+	     	                10000) );
+	            	 
+	            	double scale = 1000;
+	          	   plane.setScale(scale, scale, scale);
+	          	   plane.setPitch(Angle.fromDegrees(90));
+	          	   plane.setHeading(Angle.fromDegrees(0));
+	          	   plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
+	          	         new Geodetic3D(Angle.fromDegrees(28.127222),
+	          	                    Angle.fromDegrees(-15.431389),
+	          	                    10000),
+	          	         Angle.fromDegrees(90), Angle.fromDegrees(720));
+	            	 
+	            	 if (plane != null){
+	            		 _shapesRenderer.addShape(plane);
+	            		 ILogger.instance().logInfo("PLANE SHOWN");
+	            	 }
+	               }
+
+
+	               @Override
+	               public void onError(final URL url) {
+	            	   ILogger.instance().logError("NO SEYMOUR");
+	               }
+
+
+	               @Override
+	               public void onCancel(final URL url) {
+	                  //DO Nothing
+	               }
+
+
+	               @Override
+	               public void onCanceledDownload(final URL url,
+	                                              final IByteBuffer data,
+	                                              final boolean expired) {
+	                  //Do Nothing
+	               }
+	            };
+	            
+	            downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
 
 			}
 

@@ -234,11 +234,8 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initDefaultWithBuilder];
 
   // initialize a customized widget by using a buider
-<<<<<<< HEAD
+
   [self initCustomizedWithBuilder];
-=======
-  //  [self initCustomizedWithBuilder];
->>>>>>> webgl-port
 
   //  [self initWithMapBooBuilder];
 
@@ -285,14 +282,6 @@ public:
 
   void onAboutChanged(const G3MContext* context,
                       const std::string& about){}
-
-<<<<<<< HEAD
-
-=======
-  void onSceneChanged(const G3MContext* context,
-                      int sceneIndex,
-                      const MapBoo_Scene* scene){}
->>>>>>> webgl-port
 };
 
 
@@ -634,8 +623,7 @@ public:
   //  [self createInterpolationTest: meshRenderer];
 
   //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
-<<<<<<< HEAD
-
+  
   //Draw light direction
   if (true){
 
@@ -661,10 +649,6 @@ public:
 
 
   }
-
-
-=======
->>>>>>> webgl-port
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
@@ -2558,7 +2542,7 @@ public:
       }
 
 
-      if (false){
+      if (true){
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
