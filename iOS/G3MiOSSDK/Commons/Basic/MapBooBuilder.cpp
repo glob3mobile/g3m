@@ -1026,7 +1026,9 @@ void MapBooBuilder::changedCurrentScene() {
     }
     else {
       if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
-        _webSocket->send( getApplicationCurrentSceneCommand() );
+        if (_lastApplicationCurrentSceneIndex >= 0) {
+          _webSocket->send( getApplicationCurrentSceneCommand() );
+        }
         _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
       }
     }
