@@ -134,7 +134,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
                         1,
                         color,
                         NULL,
-                        1.0,
+                        (float)1.0,
                         true,
                         normals.create());
   } else{
