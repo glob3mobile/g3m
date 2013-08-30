@@ -108,6 +108,8 @@ public:
   virtual void applyCameraConstrainers(const Camera* previousCamera,
                                        Camera* nextCamera) const = 0;
 
+  virtual Geodetic3D getInitialCameraPosition() const = 0;
+
 };
 
 #endif

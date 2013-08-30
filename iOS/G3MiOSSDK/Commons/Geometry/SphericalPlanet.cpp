@@ -9,6 +9,8 @@
 #include "SphericalPlanet.hpp"
 #include "CameraEffects.hpp"
 
+#include "Camera.hpp"
+
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
 _sphere(sphere)
@@ -495,6 +497,27 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
   
   const Angle angle = P0.angleBetween(P1);
   return MutableMatrix44D::createRotationMatrix(angle, axis);
+}
+
+void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
+                                                Camera* nextCamera) const{
+
+  Vector3D pos = nextCamera->getCartesianPosition();
+  Vector3D origin = _origin.asVector3D();
+  double maxDist = _sphere.getRadius() * 5;
+
+  if (pos.distanceTo(origin) > maxDist){
+    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+
+    //     Vector3D prevPos = previousCamera->getCartesianPosition();
+    //    if (prevPos.distanceTo(origin) <= maxDist){
+    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    //    }
+
+    Vector3D pos2 = nextCamera->getCartesianPosition();
+    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+  }
+  
 }
 
 

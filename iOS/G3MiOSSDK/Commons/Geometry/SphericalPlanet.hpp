@@ -160,8 +160,12 @@ public:
   }
 
   void applyCameraConstrainers(const Camera* previousCamera,
-                               Camera* nextCamera) const{}
+                               Camera* nextCamera) const;
 
+  Geodetic3D getInitialCameraPosition() const{
+    Vector3D v(_sphere.getRadius() * 5, 0, 0);
+    return toGeodetic3D(v);
+  }
 
 };
 

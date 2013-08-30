@@ -151,6 +151,11 @@ _rootState(NULL)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
+
+  Geodetic3D initialPosition = _planet->getInitialCameraPosition();
+
+  _currentCamera->setGeodeticPosition(initialPosition);
+  _nextCamera->setGeodeticPosition(initialPosition);
 }
 
 
@@ -378,9 +383,6 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  //  _nextCamera->forceMatrixCreation();
-  //
-  //  _currentCamera->copyFrom(*_nextCamera);
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
   G3MRenderContext rc(_frameTasksExecutor,

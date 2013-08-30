@@ -10,6 +10,7 @@
 
 #include "EllipsoidalPlanet.hpp"
 #include "CameraEffects.hpp"
+#include "Camera.hpp"
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
@@ -581,6 +582,27 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
   
   const Angle angle = P0.angleBetween(P1);
   return MutableMatrix44D::createRotationMatrix(angle, axis);
+}
+
+void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
+                             Camera* nextCamera) const{
+
+  Vector3D pos = nextCamera->getCartesianPosition();
+  Vector3D origin = _origin.asVector3D();
+  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
+
+  if (pos.distanceTo(origin) > maxDist){
+    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+
+    //     Vector3D prevPos = previousCamera->getCartesianPosition();
+    //    if (prevPos.distanceTo(origin) <= maxDist){
+    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    //    }
+
+    Vector3D pos2 = nextCamera->getCartesianPosition();
+    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+  }
+
 }
 
 

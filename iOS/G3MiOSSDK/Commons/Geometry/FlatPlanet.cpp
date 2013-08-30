@@ -9,6 +9,7 @@
 #include "FlatPlanet.hpp"
 #include "Plane.hpp"
 #include "CameraEffects.hpp"
+#include "Camera.hpp"
 
 
 
@@ -280,6 +281,25 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
   const Vector3D P0 = toCartesian(origin.asGeodetic2D());
   const Vector3D P1 = toCartesian(destination.asGeodetic2D());
   return MutableMatrix44D::createTranslationMatrix(P1.sub(P0));
+}
+
+void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
+                             Camera* nextCamera) const{
+
+  Vector3D pos = nextCamera->getCartesianPosition();
+  Vector3D origin = _origin.asVector3D();
+  double maxDist = _size.length() * 1.5;
+
+  if (pos.distanceTo(origin) > maxDist){
+    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+
+//     Vector3D prevPos = previousCamera->getCartesianPosition();
+//    if (prevPos.distanceTo(origin) <= maxDist){
+      nextCamera->copyFrom(*previousCamera);
+//    }
+  }
+
+
 }
 
 

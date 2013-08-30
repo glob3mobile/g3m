@@ -154,7 +154,11 @@ public:
   }
 
   void applyCameraConstrainers(const Camera* previousCamera,
-                               Camera* nextCamera) const{}
+                               Camera* nextCamera) const;
+
+  Geodetic3D getInitialCameraPosition() const{
+    return Geodetic3D::fromDegrees(0, 0, _size.length());
+  }
 
 };
 
