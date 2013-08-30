@@ -1065,12 +1065,12 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   _applicationScenes.clear();
   
   _applicationScenes = applicationScenes;
-  
-  changedCurrentScene();
-  
+
   if (_applicationListener != NULL) {
     _applicationListener->onScenesChanged(_context, _applicationScenes);
   }
+
+  changedCurrentScene();
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
