@@ -376,9 +376,7 @@ void G3MWidget::render(int width, int height) {
                                 _currentCamera,
                                 _nextCamera);
   }
-
-  int agustin_todo_planet_onCameraChange;
-
+  _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
   //  _nextCamera->forceMatrixCreation();
   //
@@ -447,18 +445,17 @@ void G3MWidget::render(int width, int height) {
   if (_rootState == NULL){
     _rootState = new GLState();
   }
-  _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
+
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc, _rootState);
+
+    _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
   }
 
   if (_selectedRenderer->isEnable()) {
     _selectedRenderer->render(&rc, _rootState);
   }
-
-  //  rootState->_release();
-  //  rootState = NULL;
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {

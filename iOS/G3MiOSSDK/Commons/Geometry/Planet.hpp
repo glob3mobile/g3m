@@ -14,9 +14,8 @@
 #include <vector>
 #include "Vector3D.hpp"
 
-
 class Effect;
-
+class Camera;
 
 class Planet {
 public:
@@ -105,6 +104,9 @@ public:
   virtual MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const = 0;
   
   virtual Vector3D getNorth() const = 0;
+
+  virtual void applyCameraConstrainers(const Camera* previousCamera,
+                                       Camera* nextCamera) const = 0;
 
 };
 

@@ -159,6 +159,9 @@ public:
     return Vector3D::upZ();
   }
 
+  void applyCameraConstrainers(const Camera* previousCamera,
+                               Camera* nextCamera) const{}
+
 
 };
 
