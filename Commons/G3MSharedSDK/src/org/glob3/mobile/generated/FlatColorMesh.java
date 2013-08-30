@@ -27,7 +27,7 @@ public class FlatColorMesh extends Mesh
   private final Color _flatColor;
   private final boolean _ownedColor;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void createGLState()
   {
@@ -42,6 +42,7 @@ public class FlatColorMesh extends Mesh
      _ownedMesh = ownedMesh;
      _flatColor = color;
      _ownedColor = ownedColor;
+     _glState = new GLState();
     createGLState();
   }
 
@@ -57,6 +58,8 @@ public class FlatColorMesh extends Mesh
       if (_flatColor != null)
          _flatColor.dispose();
     }
+
+    _glState._release();
 
   super.dispose();
 

@@ -2,20 +2,36 @@
 
 package org.glob3.mobile.demo;
 
+import java.io.IOException;
+
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.FloatBufferBuilder;
+import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IJSONParser;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SGGeometryNode;
+import org.glob3.mobile.generated.SGShape;
+import org.glob3.mobile.generated.SceneJSShapesParser;
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -32,6 +48,7 @@ public class G3MShowMarkersActivity
          extends
             Activity {
 
+	ShapesRenderer			_shapeRenderer = new ShapesRenderer();
    MarksRenderer             _weatherMarkers = new MarksRenderer(false);
    private G3MWidget_Android _widgetAndroid;
    private boolean           _WeatherMarkerIsDone;
@@ -47,7 +64,10 @@ public class G3MShowMarkersActivity
       builder.setInitializationTask(getWeatherMarkerLayersTask());
 
       builder.addRenderer(_weatherMarkers);
+      builder.addRenderer(_shapeRenderer);
       builder.setLogFPS(true);
+      final Planet planet = Planet.createFlatEarth();
+      builder.setPlanet(planet);
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();
@@ -105,6 +125,7 @@ public class G3MShowMarkersActivity
                               city.getAsString("name", ""), //
                               new URL("http://openweathermap.org/img/w/" + icon, false), //
                               new Geodetic3D(position, 0), //
+                              AltitudeMode.RELATIVE_TO_GROUND,
                               0, //
                               true, //
                               14));
@@ -143,6 +164,63 @@ public class G3MShowMarkersActivity
                      false, //
                      listener, //
                      false);
+            
+            //////
+            
+            //Seymour-plane on Gran Canaria
+            if (true){
+					final URL planeFilePath = new URL(
+							"file:///seymour-plane.json", false);
+					final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
+
+						@Override
+						public void onDownload(final URL url,
+								final IByteBuffer buffer, final boolean expired) {
+							Toast.makeText(getApplicationContext(), "OK",
+									Toast.LENGTH_SHORT).show();
+
+							Shape plane = SceneJSShapesParser.parseFromJSON(
+									buffer, URL.FILE_PROTOCOL, false);
+
+							plane.setPosition(new Geodetic3D(Angle
+									.fromDegrees(28.127222), Angle
+									.fromDegrees(-15.431389), 10000));
+
+							double scale = 1000;
+							plane.setScale(scale, scale, scale);
+							plane.setPitch(Angle.fromDegrees(90));
+							plane.setHeading(Angle.fromDegrees(0));
+							plane.setAnimatedPosition(
+									TimeInterval.fromSeconds(60),
+									new Geodetic3D(
+											Angle.fromDegrees(28.127222), Angle
+													.fromDegrees(-15.431389),
+											10000), Angle.fromDegrees(90),
+									Angle.fromDegrees(720));
+
+							if (plane != null) {
+								_shapeRenderer.addShape(plane);
+								ILogger.instance().logInfo("PLANE SHOWN");
+							}
+						}
+
+						@Override
+						public void onError(final URL url) {
+						}
+
+						@Override
+						public void onCancel(final URL url) {
+						}
+
+						@Override
+						public void onCanceledDownload(final URL url,
+								final IByteBuffer data, final boolean expired) {
+						}
+					};
+
+					downloader.requestBuffer(planeFilePath, 1000,
+							TimeInterval.fromHours(1.0), true, listenerPlane, true);
+            }
          }
 
 

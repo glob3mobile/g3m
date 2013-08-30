@@ -20,12 +20,17 @@ class MutableMatrix44D;
 
 #include "GLState.hpp"
 
+#include "SurfaceElevationProvider.hpp"
+
+#include "Geodetic3D.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public EffectTarget {
+class Shape : public SurfaceElevationListener, EffectTarget{
 private:
   Geodetic3D* _position;
+  AltitudeMode _altitudeMode;
   
   Angle*      _heading;
   Angle*      _pitch;
@@ -44,22 +49,27 @@ private:
 
   bool _enable;
   
-  mutable GLState _glState;
+  mutable GLState* _glState;
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
+  double _surfaceElevation;
   
 protected:
   virtual void cleanTransformMatrix();
   
 public:
-  Shape(Geodetic3D* position) :
+  Shape(Geodetic3D* position, AltitudeMode altitudeMode) :
   _position( position ),
+  _altitudeMode(altitudeMode),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
   _transformMatrix(NULL),
-//  _planet(NULL),
-  _enable(true)
+  _enable(true),
+  _surfaceElevation(0),
+  _glState(new GLState())
   {
     
   }
@@ -183,7 +193,16 @@ public:
               GLState* parentState,
               bool renderNotReadyShapes);
 
-  virtual void initialize(const G3MContext* context) {}
+  virtual void initialize(const G3MContext* context) {
+
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position->_latitude,
+                                             _position->_longitude,
+                                             this);
+    }
+
+  }
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
@@ -192,6 +211,14 @@ public:
                          bool renderNotReadyShapes) = 0;
 
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
+
+  void elevationChanged(const Geodetic2D& position,
+                        double rawElevation,            //Without considering vertical exaggeration
+                        double verticalExaggeration);
+
+  void elevationChanged(const Sector& position,
+                   const ElevationData* rawElevationData, //Without considering vertical exaggeration
+                        double verticalExaggeration){}
 
 };
 

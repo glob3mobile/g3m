@@ -72,6 +72,12 @@ public:
     glUniform4f(loc, v0, v1, v2, v3);
   }
 
+  void uniform3f(const IGLUniformID* location,
+                 float v0, float v1, float v2) const {
+    const int loc = ((GLUniformID_iOS*)location)->getID();
+    glUniform3f(loc, v0, v1, v2);
+  }
+
   void enable(int feature) const {
     glEnable(feature);
   }
@@ -131,11 +137,11 @@ public:
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
+
 //    printf("-----DRAW\n");
 //    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
 //    bufferIOS->bindAsIBOToGPU();
 //    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
-
 
     const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
     glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
@@ -299,6 +305,9 @@ public:
   
   int Type_Vec2Float() const{
     return GL_FLOAT_VEC2;
+  }
+  int Type_Vec3Float() const{
+    return GL_FLOAT_VEC3;
   }
   virtual int Type_Vec4Float() const{
     return GL_FLOAT_VEC4;
@@ -515,6 +524,8 @@ public:
     
     //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
     switch (type) {
+      case GL_FLOAT_VEC3:
+        return new GPUAttributeVec3Float(name, id);
       case GL_FLOAT_VEC4:
         return new GPUAttributeVec4Float(name, id);
       case GL_FLOAT_VEC2:
@@ -556,6 +567,8 @@ public:
         return new GPUUniformFloat(name, new GLUniformID_iOS(id));
       case GL_FLOAT_VEC2:
         return new GPUUniformVec2Float(name, new GLUniformID_iOS(id));
+      case GL_FLOAT_VEC3:
+        return new GPUUniformVec3Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
         return new GPUUniformBool(name, new GLUniformID_iOS(id));
       case GL_SAMPLER_2D:

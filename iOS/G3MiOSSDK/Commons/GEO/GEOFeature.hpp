@@ -36,7 +36,11 @@ public:
   const JSONObject* getProperties() const {
     return _properties;
   }
-  
+
+  const GEOGeometry* getGeometry() const {
+    return _geometry;
+  }
+
   void symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizer*    symbolizer,
                  MeshRenderer*           meshRenderer,

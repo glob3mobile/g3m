@@ -21,13 +21,13 @@ private:
 
 public:
   CompositeShape() :
-  Shape(NULL)
+  Shape(NULL, ABSOLUTE)
   {
 
   }
 
-  CompositeShape(Geodetic3D* position) :
-  Shape(position)
+  CompositeShape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  Shape(position, altitudeMode)
   {
 
   }

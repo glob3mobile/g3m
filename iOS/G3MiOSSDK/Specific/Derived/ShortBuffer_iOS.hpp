@@ -102,7 +102,7 @@ public:
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
       _boundIBO = _indexBuffer;
     } else{
-      printf("REUSING");
+      //printf("REUSING");
     }
 
     if (_indexBufferTimeStamp != _timestamp) {

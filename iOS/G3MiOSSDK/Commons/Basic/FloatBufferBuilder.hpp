@@ -13,25 +13,12 @@
 
 class IFloatBuffer;
 
-
-class CenterStrategy {
-private:
-  static const int _noCenter    = 0;
-  static const int _firstVertex = 1;
-  static const int _givenCenter = 2;
-
-  CenterStrategy() {
-  }
-
-public:
-  static int noCenter()    { return _noCenter;    }
-  static int firstVertex() { return _firstVertex; }
-  static int givenCenter() { return _givenCenter; }
-};
-
-
 class FloatBufferBuilder {
 protected:
+  enum CenterStrategy{
+    NO_CENTER,FIRST_VERTEX,GIVEN_CENTER
+  };
+
 #ifdef C_CODE
   std::vector<float> _values;
 #endif

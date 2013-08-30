@@ -26,6 +26,9 @@ public class Vector3D
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector3D operator =(Vector3D that);
 
+
+  public static Vector3D zero = new Vector3D(0,0,0);
+
   public final double _x;
   public final double _y;
   public final double _z;
@@ -58,10 +61,9 @@ public class Vector3D
     return new Vector3D(mu.NanD(), mu.NanD(), mu.NanD());
   }
 
-  public static Vector3D zero()
-  {
-    return new Vector3D(0, 0, 0);
-  }
+//  static Vector3D zero() {
+//    return Vector3D(0, 0, 0);
+//  }
 
   public static Vector3D upX()
   {
@@ -243,6 +245,21 @@ public class Vector3D
       return _x;
     }
     else if (_y >= _z)
+    {
+      return _y;
+    }
+    else
+    {
+      return _z;
+    }
+  }
+  public final double minAxis()
+  {
+    if (_x <= _y && _x <= _z)
+    {
+      return _x;
+    }
+    else if (_y <= _z)
     {
       return _y;
     }

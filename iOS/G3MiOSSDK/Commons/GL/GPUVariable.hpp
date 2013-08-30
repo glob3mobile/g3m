@@ -11,7 +11,6 @@
 
 #include <string>
 
-
 enum GPUVariableType{
   ATTRIBUTE = 1,
   UNIFORM = 2
@@ -26,8 +25,15 @@ enum GPUUniformKey{
   TRANSLATION_TEXTURE_COORDS = 4,
   SCALE_TEXTURE_COORDS = 5,
   POINT_SIZE= 6,
-  POINT_LIGHT_POSITION= 7,
-  POINT_LIGHT_COLOR= 8
+  AMBIENT_LIGHT = 7,
+  LIGHT_DIRECTION = 8,
+  LIGHT_COLOR = 9,
+  PROJECTION = 10,
+  CAMERA_MODEL = 11,
+  MODEL = 12,
+  POINT_LIGHT_POSITION= 13,
+  POINT_LIGHT_COLOR= 14,
+  BILLBOARD_POSITION = 15
 };
 
 enum GPUAttributeKey{
@@ -44,38 +50,8 @@ protected:
   
   const GPUVariableType _variableType;
   const std::string _name;
-  
-  //Uniform metadata based in our shaders
-//  long _key;
-//  long _group;
-//  long _priority;
-
-//  void createMetadata();
 
 public:
-  
-//  static const int UNRECOGNIZED;
-//  
-//  static const int FLAT_COLOR;
-//  static const int MODELVIEW;
-//  static const int TEXTURE_EXTENT;
-//  static const int VIEWPORT_EXTENT;
-//  static const int TRANSLATION_TEXTURE_COORDS;
-//  static const int SCALE_TEXTURE_COORDS;
-//  static const int POINT_SIZE;
-//  
-//  static const int POSITION;
-//  static const int TEXTURE_COORDS;
-//  static const int COLOR;
-//  
-//  //To be deleted
-//  static const int EnableColorPerVertex;
-//  static const int EnableTexture;
-//  static const int EnableFlatColor;
-//  static const int FlatColorIntensity;
-//  static const int ColorPerVertexIntensity;
-
-//  static int getKeyForName(const std::string& name, GPUVariableType variableType);
 
   static GPUUniformKey getUniformKey(const std::string& name);
   static GPUAttributeKey getAttributeKey(const std::string& name);
@@ -92,21 +68,10 @@ public:
   static bool codeContainsUniform(int code, GPUUniformKey u);
   static bool codeContainsAttribute(int code, GPUAttributeKey a);
 
-
-//  static const int GROUP_COLOR;
-//  static const int GROUP_NOGROUP;
-
-  virtual ~GPUVariable() {
-  }
+  virtual ~GPUVariable(){}
   
-  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {
-//    createMetadata();
-  }
-  
-  //Uniform metadata based in our shaders
-//  long getKey() const { return _key;}
-//  long getGroup() const { return _group;}
-//  long getPriority() const { return _priority;}
+  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type){}
+
 
 };
 

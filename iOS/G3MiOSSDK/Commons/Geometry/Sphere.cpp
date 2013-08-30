@@ -30,7 +30,8 @@ void Sphere::createWireframeMesh(Color* color,
   const double delta = PI / (resolution-1);
 
   // create vertices
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero());
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   for (int i=0; i<2*resolution-2; i++) {
     const double longitude = -PI + i*delta;
     for (int j=0; j<resolution; j++) {

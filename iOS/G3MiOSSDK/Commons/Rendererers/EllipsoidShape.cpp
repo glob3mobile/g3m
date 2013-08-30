@@ -204,12 +204,13 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero(),
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
                                               Vector3D(_radiusX, _radiusY, _radiusZ)
                                               ));
   const Sector sector(Sector::fullSphere());
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
 
   const short resolution2Minus2 = (short) (2*_resolution-2);

@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class WidgetUserData;
 //class GPUProgramSources;
 //class GPUProgramManager;
+//class SceneLighting;
 
 
 public abstract class IG3MBuilder
@@ -55,6 +56,7 @@ public abstract class IG3MBuilder
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
+  private SceneLighting _sceneLighting;
 
 
   /**
@@ -277,9 +279,7 @@ public abstract class IG3MBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean processRotation = true;
-    final boolean processZoom = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -384,9 +384,7 @@ public abstract class IG3MBuilder
     }
   
   
-  
-  
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager());
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting());
   
     g3mWidget.setUserData(getUserData());
   
@@ -435,6 +433,7 @@ public abstract class IG3MBuilder
      _logFPS = false;
      _logDownloaderStatistics = false;
      _userData = null;
+     _sceneLighting = null;
   }
 
   public void dispose()
@@ -909,5 +908,18 @@ public abstract class IG3MBuilder
   public final void addGPUProgramSources(GPUProgramSources s)
   {
     _sources.add(s);
+  }
+
+  public final void setSceneLighting(SceneLighting sceneLighting)
+  {
+    _sceneLighting = sceneLighting;
+  }
+  public final SceneLighting getSceneLighting()
+  {
+    if (_sceneLighting == null)
+    {
+      _sceneLighting = new DefaultSceneLighting();
+    }
+    return _sceneLighting;
   }
 }

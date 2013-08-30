@@ -12,6 +12,8 @@
 
 #include "IStringBuilder.hpp"
 
+Vector3D Vector3D::zero = Vector3D(0,0,0);
+
 
 Vector3D Vector3D::normalized() const {
   const double d = length();
@@ -74,6 +76,18 @@ double Vector3D::maxAxis() const {
     return _x;
   }
   else if (_y >= _z) {
+    return _y;
+  }
+  else {
+    return _z;
+  }
+}
+
+double Vector3D::minAxis() const {
+  if (_x <= _y && _x <= _z) {
+    return _x;
+  }
+  else if (_y <= _z) {
     return _y;
   }
   else {

@@ -71,7 +71,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
-        Tile tile = new Tile(_texturizer, null, sector, 0, row, col);
+        Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
         if (parameters._firstLevel == 0)
         {
           _firstLevelTiles.add(tile);
@@ -266,7 +266,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private boolean _recreateTilesPending;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
   private void updateGLState(G3MRenderContext rc)
@@ -294,6 +294,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
+  private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
   {
      _tessellator = tessellator;
@@ -315,6 +317,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _recreateTilesPending = false;
      _projection = null;
      _model = null;
+     _glState = new GLState();
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -372,7 +375,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
   
     updateGLState(rc);
@@ -632,19 +635,27 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return (_elevationDataProvider == null) ? null : this;
   }
 
-  public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener observer)
+  public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.add(new Geodetic2D(latitude, longitude), listener);
   }
 
-  public final void addListener(Geodetic2D position, SurfaceElevationListener observer)
+  public final void addListener(Geodetic2D position, SurfaceElevationListener listener)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.add(position, listener);
   }
 
-  public final void removeListener(SurfaceElevationListener observer)
+  public final void removeListener(SurfaceElevationListener listener)
   {
-    int __DGD_AtWork;
+    _elevationListenersTree.remove(listener);
+  }
+
+  public final void sectorElevationChanged(ElevationData elevationData)
+  {
+    if (elevationData != null)
+    {
+      _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
+    }
   }
 
 }

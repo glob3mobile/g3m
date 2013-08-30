@@ -8,7 +8,9 @@ public class MapBoo_Scene
   private Layer _baseLayer;
   private Layer _overlayLayer;
 
-  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, Layer baseLayer, Layer overlayLayer)
+  private final boolean _hasWarnings;
+
+  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
   {
      _name = name;
      _description = description;
@@ -16,6 +18,7 @@ public class MapBoo_Scene
      _backgroundColor = new Color(backgroundColor);
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
+     _hasWarnings = hasWarnings;
   }
 
   public final String getName()
@@ -36,6 +39,11 @@ public class MapBoo_Scene
   public final Color getBackgroundColor()
   {
     return _backgroundColor;
+  }
+
+  public final boolean hasWarnings()
+  {
+    return _hasWarnings;
   }
 
   public final void fillLayerSet(LayerSet layerSet)

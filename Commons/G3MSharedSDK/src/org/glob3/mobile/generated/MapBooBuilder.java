@@ -5,6 +5,8 @@ public abstract class MapBooBuilder
   private final URL _serverURL;
   private final URL _tubesURL;
 
+  private MapBoo_ViewType _viewType;
+
   private final boolean _useWebSockets;
 
   private MapBooApplicationChangeListener _applicationListener;
@@ -18,11 +20,13 @@ public abstract class MapBooBuilder
 
   private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
   private int _applicationCurrentSceneIndex;
-  private int _applicationDefaultSceneIndex;
+  private int _lastApplicationCurrentSceneIndex;
 
   private GL _gl;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
+
+  private IWebSocket _webSocket;
 
   private G3MContext _context;
 
@@ -65,9 +69,7 @@ public abstract class MapBooBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean processRotation = true;
-    final boolean processZoom = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -283,17 +285,17 @@ public abstract class MapBooBuilder
   {
     if (_applicationCurrentSceneIndex < 0)
     {
-      _applicationCurrentSceneIndex = _applicationDefaultSceneIndex;
+      _applicationCurrentSceneIndex = 0;
     }
     return _applicationCurrentSceneIndex;
   }
   private MapBoo_Scene getApplicationCurrentScene()
   {
-    final int currentSceneIndex = getApplicationCurrentSceneIndex();
+    final int sceneIndex = getApplicationCurrentSceneIndex();
   
-    final boolean validCurrentSceneIndex = ((currentSceneIndex >= 0) && (currentSceneIndex < _applicationScenes.size()));
+    final boolean validSceneIndex = ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()));
   
-    return validCurrentSceneIndex ? _applicationScenes.get(currentSceneIndex) : null;
+    return validSceneIndex ? _applicationScenes.get(sceneIndex) : null;
   }
 
   private Color getCurrentBackgroundColor()
@@ -309,7 +311,14 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")));
+    final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
+  
+    if (hasWarnings && (_viewType != MapBoo_ViewType.VIEW_PRESENTATION))
+    {
+      return null;
+    }
+  
+    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
   private Color parseColor(JSONString jsonColor)
   {
@@ -393,19 +402,51 @@ public abstract class MapBooBuilder
       _g3mWidget.resetPeriodicalTasksTimeouts();
     }
   
-    final MapBoo_Scene currentScene = getApplicationCurrentScene();
     if (_applicationListener != null)
     {
+      final MapBoo_Scene currentScene = getApplicationCurrentScene();
       _applicationListener.onSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
+    }
+  
+    if (_viewType == MapBoo_ViewType.VIEW_PRESENTATION)
+    {
+      if (_webSocket == null)
+      {
+        ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+      }
+      else
+      {
+        if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex)
+        {
+          if (_lastApplicationCurrentSceneIndex >= 0)
+          {
+            _webSocket.send(getApplicationCurrentSceneCommand());
+          }
+          _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
+        }
+      }
     }
   }
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBooApplicationChangeListener applicationListener)
+  private String getApplicationCurrentSceneCommand()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("currentSceneIndex=");
+    isb.addInt(_applicationCurrentSceneIndex);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+
+  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
      _useWebSockets = useWebSockets;
      _applicationId = applicationId;
+     _viewType = viewType;
      _applicationName = "";
      _applicationWebsite = "";
      _applicationEMail = "";
@@ -421,8 +462,9 @@ public abstract class MapBooBuilder
      _gpuProgramManager = null;
      _isApplicationTubeOpen = false;
      _applicationCurrentSceneIndex = -1;
-     _applicationDefaultSceneIndex = 0;
+     _lastApplicationCurrentSceneIndex = -1;
      _context = null;
+     _webSocket = null;
   
   }
 
@@ -477,7 +519,7 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -505,6 +547,11 @@ public abstract class MapBooBuilder
   protected abstract IThreadUtils createThreadUtils();
 
   protected abstract GPUProgramManager createGPUProgramManager();
+
+  protected final SceneLighting createSceneLighting()
+  {
+    return new DefaultSceneLighting();
+  }
 
   /** Private to MapbooBuilder, don't call it */
   public final int getApplicationTimestamp()
@@ -602,7 +649,20 @@ public abstract class MapBooBuilder
   {
     final String tubesPath = _serverURL.getPath();
   
-    return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
+    String view;
+    switch (_viewType)
+    {
+      case VIEW_PRESENTATION:
+        view = "presentation";
+        break;
+  //    case VIEW_RUNTIME:
+  //      view = "runtime";
+  //      break;
+      default:
+        view = "runtime";
+    }
+  
+    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -610,15 +670,28 @@ public abstract class MapBooBuilder
   {
     final String tubesPath = _tubesURL.getPath();
   
-    return new URL(tubesPath + "/application/" + _applicationId + "/runtime", false);
+    String view;
+    switch (_viewType)
+    {
+      case VIEW_PRESENTATION:
+        view = "presentation";
+        break;
+  //    case VIEW_RUNTIME:
+  //      view = "runtime";
+  //      break;
+      default:
+        view = "runtime";
+    }
+  
+    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void parseApplicationDescription(String json, URL url)
+  public final void parseApplicationJSON(String json, URL url)
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
-  //  ILogger::instance()->logInfo("%d", json.size());
+    //  ILogger::instance()->logInfo("%d", json.size());
   
     if (jsonBaseObject == null)
     {
@@ -633,8 +706,8 @@ public abstract class MapBooBuilder
       }
       else
       {
-        final JSONString error = jsonObject.getAsString("error");
-        if (error == null)
+        final JSONString jsonError = jsonObject.getAsString("error");
+        if (jsonError == null)
         {
           final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
   
@@ -658,20 +731,18 @@ public abstract class MapBooBuilder
               setApplicationEMail(jsonEMail.value());
             }
   
-            //          "about"
             final JSONString jsonAbout = jsonObject.getAsString("about");
             if (jsonAbout != null)
             {
               setApplicationAbout(jsonAbout.value());
             }
   
-            // always process defaultSceneIndex before scenes
-            final JSONNumber jsonDefaultSceneIndex = jsonObject.getAsNumber("defaultSceneIndex");
-            if (jsonDefaultSceneIndex != null)
-            {
-              final int defaultSceneIndex = (int) jsonDefaultSceneIndex.value();
-              setApplicationDefaultSceneIndex(defaultSceneIndex);
-            }
+            //          // always process defaultSceneIndex before scenes
+            //          const JSONNumber* jsonDefaultSceneIndex = jsonObject->getAsNumber("defaultSceneIndex");
+            //          if (jsonDefaultSceneIndex != NULL) {
+            //            const int defaultSceneIndex = (int) jsonDefaultSceneIndex->value();
+            //            setApplicationDefaultSceneIndex(defaultSceneIndex);
+            //          }
   
             final JSONArray jsonScenes = jsonObject.getAsArray("scenes");
             if (jsonScenes != null)
@@ -695,10 +766,16 @@ public abstract class MapBooBuilder
   
             setApplicationTimestamp(timestamp);
           }
+  
+          final JSONNumber jsonCurrentSceneIndex = jsonObject.getAsNumber("currentSceneIndex");
+          if (jsonCurrentSceneIndex != null)
+          {
+            setApplicationCurrentSceneIndex((int) jsonCurrentSceneIndex.value());
+          }
         }
         else
         {
-          ILogger.instance().logError("Server Error: %s", error.value());
+          ILogger.instance().logError("Server Error: %s", jsonError.value());
         }
       }
   
@@ -711,17 +788,23 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void openApplicationTube(G3MContext context)
   {
-    final boolean autodeleteListener = true;
-    final boolean autodeleteWebSocket = true;
-  
     final IFactory factory = context.getFactory();
-    factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), autodeleteListener, autodeleteWebSocket);
+    _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationDefaultSceneIndex(int defaultSceneIndex)
+  public final void setApplicationCurrentSceneIndex(int sceneIndex)
   {
-    _applicationDefaultSceneIndex = defaultSceneIndex;
+    if (sceneIndex != _applicationCurrentSceneIndex)
+    {
+      final boolean validSceneIndex = ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()));
+  
+      if (validSceneIndex)
+      {
+        _applicationCurrentSceneIndex = sceneIndex;
+        changedCurrentScene();
+      }
+    }
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -744,6 +827,10 @@ public abstract class MapBooBuilder
     if (_isApplicationTubeOpen != open)
     {
       _isApplicationTubeOpen = open;
+      if (!_isApplicationTubeOpen)
+      {
+        _webSocket = null;
+      }
     }
   }
 
@@ -758,7 +845,9 @@ public abstract class MapBooBuilder
     final int currentSceneIndex = getApplicationCurrentSceneIndex();
     if (currentSceneIndex != sceneIndex)
     {
-      if ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()))
+      final boolean validSceneIndex = ((sceneIndex >= 0) && (sceneIndex < _applicationScenes.size()));
+  
+      if (validSceneIndex)
       {
         getThreadUtils().invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneIndex), true);
       }

@@ -26,7 +26,7 @@ public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
 
   public final void onMesssage(IWebSocket ws, String message)
   {
-    _builder.parseApplicationDescription(message, ws.getURL());
+    _builder.parseApplicationJSON(message, ws.getURL());
   }
 
   public final void onClose(IWebSocket ws)

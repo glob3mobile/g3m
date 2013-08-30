@@ -63,52 +63,62 @@ public:
   }
 
   void clearFeatures(GLFeatureGroupName g);
+  void clearFeatures();
 
 };
 
 
 
 #define N_GLFEATURES_GROUPS 4
-class GLFeatureGroup: public GLFeatureSet {
+
+class GLFeatureGroup/*: public GLFeatureSet */{
+
+  static GLFeatureGroup** _groups;
+
 public:
 
-  virtual ~GLFeatureGroup() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  }
+  virtual ~GLFeatureGroup() {}
 
   static GLFeatureGroup* createGroup(GLFeatureGroupName name);
   static GLFeatureGroupName getGroupName(int i);
 
-  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
-  virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
+//  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
+//  virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
+
+  static void applyToAllGroups(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
+
+  virtual void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) = 0;
 };
 
 class GLFeatureNoGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state);
-  void addToGPUVariableSet(GPUVariableValueSet* vs);
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+
+  void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
 };
 
 class GLFeatureCameraGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state) {}
-  void addToGPUVariableSet(GPUVariableValueSet* vs);
+//  void applyOnGlobalGLState(GLGlobalState* state) {}
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+
+  void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
 };
 
 
 class GLFeatureColorGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state);
-  void addToGPUVariableSet(GPUVariableValueSet* vs);
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+  void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
 };
 
 class GLFeatureLightingGroup: public GLFeatureGroup{
 public:
-  void applyOnGlobalGLState(GLGlobalState* state);
-  void addToGPUVariableSet(GPUVariableValueSet* vs);
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+  void apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state);
 };
 
 #endif

@@ -45,6 +45,8 @@ package org.glob3.mobile.generated;
 //class IWebSocket;
 //class MapBoo_Scene;
 
+//class SceneLighting;
+
 
 
 
@@ -67,4 +69,5 @@ public abstract class MapBooApplicationChangeListener
   public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
 
   public abstract void onSceneChanged(G3MContext context, int sceneIndex, MapBoo_Scene scene);
+
 }

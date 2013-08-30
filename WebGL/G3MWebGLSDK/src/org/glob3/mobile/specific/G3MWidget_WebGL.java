@@ -33,6 +33,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.WidgetUserData;
 
@@ -357,6 +358,18 @@ public final class G3MWidget_WebGL
 				Shaders_WebGL._flatColorMeshVertexShader,
 				Shaders_WebGL._flatColorMeshFragmentShader));
       
+      factory.add(new GPUProgramSources("NoColorMesh",
+				Shaders_WebGL._noColorMeshVertexShader,
+				Shaders_WebGL._noColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+      
+      factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
+				Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
+				Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+      
       return new GPUProgramManager(factory);
    }
 
@@ -377,7 +390,8 @@ public final class G3MWidget_WebGL
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -396,7 +410,9 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager());
+               periodicalTasks, 
+               createGPUProgramManager(),
+               sceneLighting);
 
       _g3mWidget.setUserData(userData);
 

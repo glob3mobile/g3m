@@ -25,7 +25,7 @@ private:
   Color* const _flatColor;
   const bool _ownedColor;
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
   
@@ -39,7 +39,8 @@ public:
   _mesh(mesh),
   _ownedMesh(ownedMesh),
   _flatColor(color),
-  _ownedColor(ownedColor)
+  _ownedColor(ownedColor),
+  _glState(new GLState())
   {
     createGLState();
   }
@@ -51,6 +52,8 @@ public:
     if (_ownedColor) {
       delete _flatColor;
     }
+
+    _glState->_release();
     
 #ifdef JAVA_CODE
   super.dispose();

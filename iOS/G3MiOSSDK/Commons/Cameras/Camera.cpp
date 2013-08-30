@@ -22,7 +22,13 @@
 void Camera::initialize(const G3MContext* context)
 {
   _planet = context->getPlanet();
-  setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
+  if (_planet->isFlat()) {
+    setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
+    setUp(MutableVector3D(0, 1, 0));
+  } else {
+    setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
+    setUp(MutableVector3D(0, 0, 1));
+  }
   _dirtyFlags.setAll(true);
 }
 
@@ -148,7 +154,7 @@ void Camera::print() {
 }
 
 const Angle Camera::getHeading(const Vector3D& normal) const {
-  const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
+  const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }
@@ -179,26 +185,24 @@ void Camera::setPitch(const Angle& angle) {
   //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
 }
 
-void Camera::_setGeodeticPosition(const Vector3D& pos) {
+
+void Camera::setGeodeticPosition(const Geodetic3D& g3d)
+{
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
-
   setPitch(Angle::zero());
+
+  const double dist = getGeodeticPosition().height() - g3d.height();
   
-  const MutableVector3D finalPos = pos.asMutableVector3D();
-  const Vector3D        axis     = _position.cross(finalPos).asVector3D();
-  if (axis.length()<1e-3) {
-    return;
-  }
-  const Angle angle = _position.angleBetween(finalPos);
-  rotateWithAxis(axis, angle);
-
-  const double dist = _position.length() - pos.length();
+  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+  if (dragMatrix.isValid()) applyTransform(dragMatrix);
+  
   moveForward(dist);
-
+  
   setHeading(heading);
   setPitch(pitch);
 }
+
 
 //void Camera::render(const G3MRenderContext* rc,
 //                    const GLGlobalState& parentState) const {
@@ -287,12 +291,18 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 }
 
 
+void Camera::translateCamera(const Vector3D &desp)
+{
+  applyTransform(MutableMatrix44D::createTranslationMatrix(desp));
+}
+
+
 void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 
 void Camera::moveForward(double d) {
-  const Vector3D view = _center.sub(_position).normalized().asVector3D();
+  const Vector3D view = getViewDirection().normalized();
   applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(d)));
 }
 
@@ -311,8 +321,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
 //}
 
 Vector3D Camera::centerOfViewOnPlanet() const {
-  const Vector3D ray = _center.sub(_position).asVector3D();
-  return _planet->closestIntersection(_position.asVector3D(), ray);
+  return _planet->closestIntersection(_position.asVector3D(), getViewDirection());
 }
 
 Vector3D Camera::getHorizontalVector() {
@@ -343,7 +352,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
   // TODO_deal_with_cases_when_center_in_poles
   const Vector3D cartesianCenter = _planet->toCartesian(center);
   const Vector3D normal          = _planet->geodeticSurfaceNormal(center);
-  const Vector3D north2D         = Vector3D::upZ().projectionInPlane(normal);
+  const Vector3D north2D         = _planet->getNorth().projectionInPlane(normal);
   const Vector3D orientedVector  = north2D.rotateAroundAxis(normal, azimuth.times(-1));
   const Vector3D axis            = orientedVector.cross(normal);
   const Vector3D finalVector     = orientedVector.rotateAroundAxis(axis, altitude);
@@ -404,11 +413,14 @@ FrustumData Camera::calculateFrustumData() const {
   printf ("ratio z = %f\n", zfar/znear);
    */
 
-  double zFar = 10000 * zNear;
+  /*
+   double zFar = 10000 * zNear;
   const double distance2ToPlanetCenter = _position.squaredLength();
   if ((zFar * zFar) > distance2ToPlanetCenter) {
-    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter);
-  }
+    zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter) * 1.001;
+  }*/
+  
+  double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
   const double goalRatio = 1000;
   const double ratio = zFar / zNear;

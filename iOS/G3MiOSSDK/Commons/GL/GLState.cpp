@@ -14,6 +14,10 @@ GLState::~GLState() {
 
   delete _valuesSet;
   delete _globalState;
+
+  if (_parentGLState != NULL){
+    _parentGLState->_release();
+  }
 }
 
 void GLState::hasChangedStructure() const {
@@ -68,7 +72,15 @@ void GLState::setParent(const GLState* parent) const{
     const int parentsTimeStamp = parent->getTimeStamp();
     if ((parent != _parentGLState) ||
         (_parentsTimeStamp != parentsTimeStamp)) {
-      _parentGLState    = parent;
+
+      if (_parentGLState != parent){
+        if (_parentGLState != NULL){
+          _parentGLState->_release();
+        }
+        _parentGLState    = parent;
+        _parentGLState->_retain();
+      }
+
       _parentsTimeStamp = parentsTimeStamp;
       hasChangedStructure();
     }
@@ -79,27 +91,31 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
 
   if (_valuesSet == NULL && _globalState == NULL) {
-    
+
     _valuesSet = new GPUVariableValueSet();
     _globalState = new GLGlobalState();
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
 
-    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+    //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
+    //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
+    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
+    //
+    ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
+    ////        const GLFeature* f = accumulatedFeatures->get(j);
+    ////        if (f->getGroup() == groupName) {
+    ////          group->add(f);
+    ////        }
+    ////      }
+    ////      group->addToGPUVariableSet(_valuesSet);
+    ////      group->applyOnGlobalGLState(_globalState);
+    //
+    //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
+    //
+    //      delete group;
+    //    }
 
-      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-        const GLFeature* f = accumulatedFeatures->get(j);
-        if (f->getGroup() == groupName) {
-          group->add(f);
-        }
-      }
-      group->addToGPUVariableSet(_valuesSet);
-      group->applyOnGlobalGLState(_globalState);
-
-      delete group;
-    }
+    GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
     const int uniformsCode = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
@@ -111,7 +127,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     ILogger::instance()->logError("GLState logic error.");
     return;
   }
-  
+
   if (_lastGPUProgramUsed != NULL) {
     gl->useProgram(_lastGPUProgramUsed);
 
@@ -131,4 +147,25 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
   _features.clearFeatures(g);
   hasChangedStructure();
+}
+
+void GLState::clearAllGLFeatures(){
+  _features.clearFeatures();
+  hasChangedStructure();
+}
+
+int GLState::getNumberOfGLFeatures() const{
+  return _features.size();
+}
+
+const GLFeature* GLState::getGLFeature(GLFeatureID id) const{
+  const int size = _features.size();
+  for (int i = 0; i < size; i++) {
+    const GLFeature* f = _features.get(i);
+    if (f->getID() == id){
+      return f;
+    }
+  }
+
+  return NULL;
 }

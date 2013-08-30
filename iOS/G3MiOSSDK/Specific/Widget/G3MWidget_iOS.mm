@@ -20,6 +20,7 @@
 #include "TextUtils_iOS.hpp"
 
 #include "GPUProgramManager.hpp"
+#include "SceneLighting.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -61,6 +62,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+
+  SceneLighting* sceneLighting = new DefaultSceneLighting();
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -78,7 +81,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   initializationTask,
                                   autoDeleteInitializationTask,
                                   periodicalTasks,
-                                  gpuProgramManager); //GPUProgramManager
+                                  gpuProgramManager,//GPUProgramManager
+                                  sceneLighting);   //Scene Lighting
     [self widget]->setUserData(userData);
 }
 

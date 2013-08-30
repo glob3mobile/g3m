@@ -14,11 +14,17 @@
 #include <vector>
 #include "Vector3D.hpp"
 
+
+class Effect;
+
+
 class Planet {
 public:
   
   static const Planet* createEarth();
   static const Planet* createSphericalEarth();
+  static const Planet* createFlatEarth();
+
   
   virtual ~Planet() {
   }
@@ -74,6 +80,32 @@ public:
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
+  virtual bool isFlat() const = 0;
+
+  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  
+  virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;
+    
+  virtual Effect* createEffectFromLastSingleDrag() const = 0;
+
+  virtual void beginDoubleDrag(const Vector3D& origin,
+                               const Vector3D& centerRay,
+                               const Vector3D& initialRay0,
+                               const Vector3D& initialRay1) const = 0;
+  
+  virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                                      const Vector3D& finalRay1) const = 0;
+  
+  virtual Effect* createDoubleTapEffect(const Vector3D& origin,
+                                        const Vector3D& centerRay,
+                                        const Vector3D& tapRay) const = 0;
+  
+  virtual double distanceToHorizon(const Vector3D& position) const = 0;
+  
+  virtual MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const = 0;
+  
+  virtual Vector3D getNorth() const = 0;
+
 };
 
 #endif

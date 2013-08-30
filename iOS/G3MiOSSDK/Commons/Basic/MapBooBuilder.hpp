@@ -39,6 +39,8 @@ class G3MContext;
 class IWebSocket;
 class MapBoo_Scene;
 
+class SceneLighting;
+
 #include "URL.hpp"
 #include "Color.hpp"
 
@@ -72,6 +74,13 @@ public:
   virtual void onSceneChanged(const G3MContext* context,
                               int sceneIndex,
                               const MapBoo_Scene* scene) = 0;
+
+};
+
+
+enum MapBoo_ViewType {
+  VIEW_RUNTIME,
+  VIEW_PRESENTATION
 };
 
 
@@ -162,19 +171,23 @@ private:
   Layer*                   _baseLayer;
   Layer*                   _overlayLayer;
 
+  const bool               _hasWarnings;
+
 public:
   MapBoo_Scene(const std::string& name,
                const std::string& description,
                MapBoo_MultiImage* screenshot,
                const Color&       backgroundColor,
                Layer*             baseLayer,
-               Layer*             overlayLayer) :
+               Layer*             overlayLayer,
+               const bool         hasWarnings) :
   _name(name),
   _description(description),
   _screenshot(screenshot),
   _backgroundColor(backgroundColor),
   _baseLayer(baseLayer),
-  _overlayLayer(overlayLayer)
+  _overlayLayer(overlayLayer),
+  _hasWarnings(hasWarnings)
   {
   }
 
@@ -192,6 +205,10 @@ public:
 
   Color getBackgroundColor() const {
     return _backgroundColor;
+  }
+
+  bool hasWarnings() const {
+    return _hasWarnings;
   }
 
   void fillLayerSet(LayerSet* layerSet) const;
@@ -215,6 +232,8 @@ private:
   private final URL _tubesURL;
 #endif
 
+  MapBoo_ViewType _viewType;
+
   const bool _useWebSockets;
 
   MapBooApplicationChangeListener* _applicationListener;
@@ -228,11 +247,13 @@ private:
 
   std::vector<MapBoo_Scene*> _applicationScenes;
   int                        _applicationCurrentSceneIndex;
-  int                        _applicationDefaultSceneIndex;
-
+  int                        _lastApplicationCurrentSceneIndex;
+  
   GL* _gl;
   G3MWidget* _g3mWidget;
   IStorage*  _storage;
+
+  IWebSocket* _webSocket;
 
 #ifdef C_CODE
   const G3MContext* _context;
@@ -296,17 +317,21 @@ private:
 
   MapBoo_Scene* parseScene(const JSONObject* json) const;
   Color         parseColor(const JSONString* jsonColor) const;
-  
+
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
   MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
+
+  const std::string getApplicationCurrentSceneCommand() const;
+
 
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
                 bool useWebSockets,
                 const std::string& applicationId,
+                MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* ApplicationListener);
 
   virtual ~MapBooBuilder();
@@ -328,6 +353,8 @@ protected:
   virtual IThreadUtils* createThreadUtils() = 0;
 
   virtual GPUProgramManager* createGPUProgramManager() = 0;
+
+  SceneLighting* createSceneLighting();
 
 public:
   /** Private to MapbooBuilder, don't call it */
@@ -358,14 +385,14 @@ public:
   const URL createApplicationTubeURL() const;
 
   /** Private to MapbooBuilder, don't call it */
-  void parseApplicationDescription(const std::string& json,
-                                   const URL& url);
+  void parseApplicationJSON(const std::string& json,
+                            const URL& url);
 
   /** Private to MapbooBuilder, don't call it */
   void openApplicationTube(const G3MContext* context);
 
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationDefaultSceneIndex(int defaultSceneIndex);
+  void setApplicationCurrentSceneIndex(int currentSceneIndex);
 
   /** Private to MapbooBuilder, don't call it */
   void rawChangeScene(int sceneIndex);
@@ -375,16 +402,16 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationTubeOpened(bool open);
-  
+
   /** Private to MapbooBuilder, don't call it */
   bool isApplicationTubeOpen() const {
     return _isApplicationTubeOpen;
   }
   
   void changeScene(int sceneIndex);
-
+  
   void changeScene(const MapBoo_Scene* scene);
-
+  
 };
 
 #endif

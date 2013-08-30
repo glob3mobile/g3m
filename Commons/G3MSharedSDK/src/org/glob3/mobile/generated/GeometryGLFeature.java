@@ -15,7 +15,7 @@ public class GeometryGLFeature extends GLFeature
 
   public GeometryGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, boolean depthTestEnabled, boolean cullFace, int culledFace, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, float lineWidth, boolean needsPointSize, float pointSize)
   {
-     super(GLFeatureGroupName.NO_GROUP);
+     super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_GEOMETRY);
      _depthTestEnabled = depthTestEnabled;
      _cullFace = cullFace;
      _culledFace = culledFace;
@@ -26,27 +26,6 @@ public class GeometryGLFeature extends GLFeature
   
     _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
-  
-  //  _globalState = new GLGlobalState();
-  //  if (depthTestEnabled) {
-  //    _globalState->enableDepthTest();
-  //  } else{
-  //    _globalState->disableDepthTest();
-  //  }
-  //
-  //  if (cullFace) {
-  //    _globalState->enableCullFace(culledFace);
-  //  } else{
-  //    _globalState->disableCullFace();
-  //  }
-  //
-  //  if (polygonOffsetFill) {
-  //    _globalState->enablePolygonOffsetFill(polygonOffsetFactor, polygonOffsetFill);
-  //  } else{
-  //    _globalState->disPolygonOffsetFill();
-  //  }
-  //
-  //  _globalState->setLineWidth(lineWidth);
   
     if (needsPointSize)
     {

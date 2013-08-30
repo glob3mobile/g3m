@@ -19,8 +19,8 @@ public class GenericQuadTree_TESTER
 
       if (_sec.isEqualsTo(sector))
       {
-//        std::string* s = (std::string*)element;
-//        printf("ELEMENT -> %s\n", s->c_str());
+        //        std::string* s = (std::string*)element;
+        //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
       return false;
@@ -39,7 +39,7 @@ public class GenericQuadTree_TESTER
       }
       else
       {
-//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER._nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER._nElements += 1;
       }
@@ -67,8 +67,8 @@ public class GenericQuadTree_TESTER
 
       if (geodetic.isEqualsTo(_geo))
       {
-//        std::string* s = (std::string*)element;
-//        printf("ELEMENT -> %s\n", s->c_str());
+        //        std::string* s = (std::string*)element;
+        //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
       }
       return false;
@@ -82,9 +82,9 @@ public class GenericQuadTree_TESTER
       }
       else
       {
-//        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
+        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER._nComparisons += getNComparisonsDone();
-                GenericQuadTree_TESTER._nElements += 1;
+        GenericQuadTree_TESTER._nElements += 1;
       }
 
     }
@@ -121,7 +121,7 @@ public class GenericQuadTree_TESTER
 
     public final boolean visitNode(GenericQuadTree_Node node)
     {
-//      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
+      //      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
 
       int depth = node.getDepth();
 
@@ -158,7 +158,7 @@ public class GenericQuadTree_TESTER
     }
     public final void endVisit(boolean aborted)
     {
-      ILogger.instance().logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MAX DEPTH %f\n============== \n", _nElem, _maxDepth, _meanDepth / (float)_nNodes, _maxNEle, _meanElemDepth / (float) _nElem, _nLeaf, _leafMinDepth, _leafMinDepth / (float) _nLeaf);
+      ILogger.instance().logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MEAN DEPTH: %f\n============== \n", _nElem, _maxDepth, _meanDepth / (float)_nNodes, _maxNEle, _meanElemDepth / (float) _nElem, _nLeaf, _leafMinDepth, _leafMeanDepth / (float) _nLeaf);
     }
   }
 
@@ -237,6 +237,47 @@ public class GenericQuadTree_TESTER
       Geodetic2D g = geos.get(i);
       GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(g);
       tree.acceptVisitor(g, vis);
+    }
+  
+    NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
+    tree.acceptNodeVisitor(nodeVis);
+  
+    if (rasterizer != null)
+    {
+      tree.symbolize(rasterizer);
+    }
+  
+    double c_e = (float)_nComparisons / _nElements;
+    ILogger.instance().logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
+  
+  }
+
+  public static void run(GenericQuadTree tree, GEOTileRasterizer rasterizer)
+  {
+  
+    _nElements = 0;
+    _nComparisons = 0;
+  
+    java.util.ArrayList<Sector> sectors = tree.getSectors();
+    java.util.ArrayList<Geodetic2D> geos = tree.getGeodetics();
+  
+    for (int i = 0; i < sectors.size(); i++)
+    {
+      Sector s = sectors.get(i);
+      GenericQuadTreeVisitorSector_TESTER vis = new GenericQuadTreeVisitorSector_TESTER(s);
+      tree.acceptVisitor(s, vis);
+      if (sectors.get(i) != null)
+         sectors.get(i).dispose();
+    }
+  
+    for (int i = 0; i < geos.size(); i++)
+    {
+      Geodetic2D g = geos.get(i);
+      GenericQuadTreeVisitorGeodetic_TESTER vis = new GenericQuadTreeVisitorGeodetic_TESTER(g);
+      tree.acceptVisitor(g, vis);
+  
+      if (geos.get(i) != null)
+         geos.get(i).dispose();
     }
   
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();

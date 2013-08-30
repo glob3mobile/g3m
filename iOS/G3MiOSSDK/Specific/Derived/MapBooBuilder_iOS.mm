@@ -17,9 +17,10 @@ MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                  const URL& serverURL,
                                  const URL& tubesURL,
                                  bool useWebSockets,
-                                 const std::string& applicationId,
-                                 MapBooApplicationChangeListener* applicationListener) :
-MapBooBuilder(serverURL, tubesURL, useWebSockets, applicationId, applicationListener),
+                                     const std::string& applicationId,
+                                     MapBoo_ViewType viewType,
+                                     MapBooApplicationChangeListener* applicationListener) :
+MapBooBuilder(serverURL, tubesURL, useWebSockets, applicationId, viewType, applicationListener),
 _nativeWidget(nativeWidget)
 {
   [_nativeWidget initSingletons];
@@ -76,13 +77,16 @@ GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::str
 GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("Billboard") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("Default") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("FlatColorMesh") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("TexturedMesh") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("ColorMesh") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh") );
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("TexturedMesh+PointLight") );
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("Billboard"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("Default"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh+DirectionLight"));
+  gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh+DirectionLight"));
+  gpuProgramFactory->add( loadDefaultGPUProgramSources("NoColorMesh") );
+
 
   return new GPUProgramManager(gpuProgramFactory);
 }

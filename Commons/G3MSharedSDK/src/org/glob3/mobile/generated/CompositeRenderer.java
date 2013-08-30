@@ -89,7 +89,7 @@ public class CompositeRenderer extends Renderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
@@ -98,7 +98,7 @@ public class CompositeRenderer extends Renderer
       Renderer renderer = _renderers.get(i);
       if (renderer.isEnable())
       {
-        renderer.render(rc);
+        renderer.render(rc, glState);
       }
     }
   }

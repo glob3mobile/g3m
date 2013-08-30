@@ -19,8 +19,9 @@ protected:
 
 public:
   MeshShape(Geodetic3D* position,
+            AltitudeMode altitudeMode,
             Mesh* mesh) :
-  AbstractMeshShape(position, mesh)
+  AbstractMeshShape(position, altitudeMode, mesh)
   {
 
   }

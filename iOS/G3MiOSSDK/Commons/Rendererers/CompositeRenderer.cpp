@@ -25,13 +25,13 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   }
 }
 
-void CompositeRenderer::render(const G3MRenderContext* rc) {
+void CompositeRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
 
   for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {
-      renderer->render(rc);
+      renderer->render(rc, glState);
     }
   }
 }

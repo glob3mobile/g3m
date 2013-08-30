@@ -342,10 +342,12 @@ private:
 
   bool _recreateTilesPending;
 
-  GLState _glState;
+  GLState* _glState;
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
+
+  SurfaceElevationProvider_Tree _elevationListenersTree;
 
 public:
   PlanetRenderer(const TileTessellator* tessellator,
@@ -362,7 +364,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
@@ -467,12 +469,14 @@ public:
 
   void addListener(const Angle& latitude,
                    const Angle& longitude,
-                   SurfaceElevationListener* observer);
+                   SurfaceElevationListener* listener);
 
   void addListener(const Geodetic2D& position,
-                   SurfaceElevationListener* observer);
+                   SurfaceElevationListener* listener);
 
-  void removeListener(SurfaceElevationListener* observer);
+  void removeListener(SurfaceElevationListener* listener);
+
+  void sectorElevationChanged(ElevationData* elevationData) const;
 
 };
 

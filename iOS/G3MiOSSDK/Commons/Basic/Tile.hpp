@@ -32,10 +32,10 @@ class GPUProgramState;
 class TileElevationDataRequest;
 class Frustum;
 class Box;
+class PlanetRenderer;
+class GLState;
 
 #include "ITexturizerData.hpp"
-
-#include "GLState.hpp"
 
 class Tile {
 private:
@@ -124,6 +124,8 @@ private:
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
 
+  const PlanetRenderer* _planetRenderer;
+
   const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
                                           const PlanetRendererContext* prc);
 
@@ -133,7 +135,8 @@ public:
        const Sector& sector,
        int level,
        int row,
-       int column);
+       int column,
+       const PlanetRenderer* planetRenderer);
 
   ~Tile();
 

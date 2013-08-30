@@ -122,7 +122,7 @@ public class GEORenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final int childrenCount = _children.size();
     if (childrenCount > 0)

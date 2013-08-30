@@ -38,8 +38,6 @@ public:
   mutable float*        _columnMajorFloatArray;
   mutable IFloatBuffer* _columnMajorFloatBuffer;
 
-  //  std::vector<Matrix44DListener*> _listeners;
-
 public:
 
   explicit Matrix44D(const Matrix44D& m);
@@ -90,60 +88,18 @@ public:
 
   bool isEqualsTo(const Matrix44D& m) const;
 
-  //    void addListener(Matrix44DListener* l) {
-  //      _listeners.push_back(l);
-  //    }
-  //
-  //    void removeListener(Matrix44DListener* l) {
-  //      for (std::vector<Matrix44DListener*>::iterator it = _listeners.begin();
-  //           it != _listeners.end(); it++) {
-  //        if (*it == l) {
-  //          _listeners.erase(it);
-  //          return;
-  //        }
-  //      }
-  //    }
+  static Matrix44D* createIdentity() {
+    return new Matrix44D(1, 0, 0, 0,
+                         0, 1, 0, 0,
+                         0, 0, 1, 0,
+                         0, 0, 0, 1);
+  }
+
+
+  bool isScaleMatrix() const;
+
+  bool isTranslationMatrix() const;
 
 };
 
-
-class Matrix44DHolder {
-#ifdef C_CODE
-  const Matrix44D* _matrix;
-#endif
-#ifdef JAVA_CODE
-  private Matrix44D _matrix;
-#endif
-public:
-  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
-    if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
-    }
-    _matrix->_retain();
-  }
-
-  ~Matrix44DHolder() {
-    _matrix->_release();
-  }
-
-  void setMatrix(const Matrix44D* matrix) {
-    if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
-    }
-
-    if (matrix != _matrix) {
-      if (_matrix != NULL) {
-        _matrix->_release();
-      }
-      _matrix = matrix;
-      _matrix->_retain();
-    }
-  }
-
-  const Matrix44D* getMatrix() const{
-    return _matrix;
-  }
-};
-
-
-#endif
+#endif /* defined(__G3MiOSSDK__Matrix44D__) */

@@ -41,7 +41,7 @@ protected:
                        float pointSize,
                        bool depthTest);
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
   

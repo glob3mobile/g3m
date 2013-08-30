@@ -17,25 +17,28 @@
 
 class Camera;
 
+enum GLFeatureID{
+  GLF_BILLBOARD,
+  GLF_VIEWPORT_EXTENT,
+  GLF_GEOMETRY,
+  GLF_MODEL,
+  GLF_PROJECTION,
+  GLF_MODEL_TRANSFORM,
+  GLF_TEXTURE,
+  GLF_COLOR,
+  GLF_FLATCOLOR,
+  GLF_TEXTURE_ID,
+  GLF_TEXTURE_COORDS,
+  GLF_DIRECTION_LIGTH,
+  GLF_VERTEX_NORMAL
+};
+
 class GLFeature: public RCObject {
 public:
 
-  GLFeature(GLFeatureGroupName group): _group(group)
-  //, _globalState(NULL)
+  GLFeature(GLFeatureGroupName group, GLFeatureID id): _group(group), _id(id)
   {}
 
-//  virtual ~GLFeature() {
-//    delete _globalState;
-//#ifdef JAVA_CODE
-//  super.dispose();
-//#endif
-//  }
-
-//  void applyGLGlobalState(GL* gl) const{
-//    if (_globalState != NULL) {
-//      _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
-//    }
-//  }
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
@@ -44,35 +47,22 @@ public:
     return _group;
   }
 
+  GLFeatureID getID() const{
+    return _id;
+  }
+
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
 
 protected:
   const GLFeatureGroupName _group;
   GPUVariableValueSet _values;
-//  GLGlobalState* _globalState;
-
+  const GLFeatureID _id;
 };
 
-//class BillboardGLFeature: public GLFeature{
-//
-//  GPUUniformValueVec2Float* _texExtent;
-//  GPUUniformValueVec2Float* _viewportExtent;
-//  
-//
-//public:
-//
-//  BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight);
-//
-//  ~BillboardGLFeature();
-//
-//  void applyOnGlobalGLState(GLGlobalState* state)  const {}
-//
-//};
-
-class TextureExtentGLFeature: public GLFeature{
+class BillboardGLFeature: public GLFeature{
 public:
-  TextureExtentGLFeature(int textureWidth, int textureHeight);
-  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  BillboardGLFeature(const Vector3D& position, int textureWidth, int textureHeight);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
 class ViewportExtentGLFeature: public GLFeature{
@@ -110,58 +100,60 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-class GLCameraGroupFeature: public GLFeature {
+class GLCameraGroupFeature: public GLFeature{
+private:
+
 #ifdef C_CODE
-  Matrix44DHolder _matrixHolder;
+  Matrix44DHolder *_matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
 #endif
 public:
-#ifdef C_CODE
-  GLCameraGroupFeature(Matrix44D* matrix): GLFeature(CAMERA_GROUP), _matrixHolder(matrix) {}
-#endif
-#ifdef JAVA_CODE
-  public GLCameraGroupFeature(Matrix44D matrix)
-  {
-    super(GLFeatureGroupName.CAMERA_GROUP);
-    _matrixHolder = new Matrix44DHolder(matrix);
-  }
-#endif
-  ~GLCameraGroupFeature() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 
+  GLCameraGroupFeature(Matrix44D* matrix, GLFeatureID id):
+  GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)){}
+
+  ~GLCameraGroupFeature(){
+    _matrixHolder->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
-  const Matrix44D* getMatrix() const{ return _matrixHolder.getMatrix();}
-  const void setMatrix(const Matrix44D* matrix) {_matrixHolder.setMatrix(matrix);}
-  const Matrix44DHolder* getMatrixHolder() const{ return &_matrixHolder;}
+  const Matrix44D* getMatrix() const{ return _matrixHolder->getMatrix();}
+  const void setMatrix(const Matrix44D* matrix){_matrixHolder->setMatrix(matrix);}
+  const Matrix44DHolder* getMatrixHolder() const{ return _matrixHolder;}
+
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model) {}
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, GLF_MODEL){}
+
   ModelGLFeature(const Camera* cam);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection) {}
+
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, GLF_PROJECTION){}
   ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform) {}
+
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM){}
+
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 class PriorityGLFeature: public GLFeature{
   const int _priority;
 public:
-  PriorityGLFeature(GLFeatureGroupName g, int p): GLFeature(g), _priority(p) {}
+  PriorityGLFeature(GLFeatureGroupName g, GLFeatureID id, int p): GLFeature(g, id), _priority(p) {}
 
   int getPriority() const { return _priority;}
 };
@@ -173,20 +165,11 @@ class GLColorGroupFeature: public PriorityGLFeature{
   const int _dFactor;
   
 public:
-  GLColorGroupFeature(int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, p),
+  GLColorGroupFeature(GLFeatureID id, int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, id, p),
   _blend(blend),
   _sFactor(sFactor),
   _dFactor(dFactor)
   {
-//    _globalState = new GLGlobalState();
-//
-//    if (blend) {
-//      _globalState->enableBlend();
-//      _globalState->setBlendFactors(sFactor, dFactor);
-//    } else{
-//      _globalState->disableBlend();
-//    }
-
   }
 
   void blendingOnGlobalGLState(GLGlobalState* state) const {
@@ -254,9 +237,16 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class PointLightGLFeature: public GLFeature{
+class DirectionLightGLFeature: public GLFeature{
 public:
-  PointLightGLFeature(const Vector3D& pos, const Vector3D& ):GLFeature(LIGHTING_GROUP) {}
+  DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight);
+  void applyOnGlobalGLState(GLGlobalState* state) const{}
+};
+
+class VertexNormalGLFeature: public GLFeature{
+public:
+  VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride);
+
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 

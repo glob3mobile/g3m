@@ -24,15 +24,15 @@ protected:
 
   void cleanMesh();
 
-  AbstractMeshShape(Geodetic3D* position) :
-  Shape(position),
+  AbstractMeshShape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  Shape(position, altitudeMode),
   _mesh(NULL) {
 
   }
 
-  AbstractMeshShape(Geodetic3D* position,
+  AbstractMeshShape(Geodetic3D* position, AltitudeMode altitudeMode,
                     Mesh* mesh) :
-  Shape(position),
+  Shape(position, altitudeMode),
   _mesh(mesh) {
 
   }

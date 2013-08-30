@@ -24,9 +24,9 @@ public class MeshShape extends AbstractMeshShape
     return null;
   }
 
-  public MeshShape(Geodetic3D position, Mesh mesh)
+  public MeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
-     super(position, mesh);
+     super(position, altitudeMode, mesh);
 
   }
 

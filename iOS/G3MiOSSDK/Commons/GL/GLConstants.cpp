@@ -25,6 +25,7 @@ int GLType::_unsignedByte = 0;
 int GLType::_unsignedInt = 0;
 int GLType::_int = 0;
 int GLType::_vec2Float = 0;
+int GLType::_vec3Float = 0;
 int GLType::_vec4Float = 0;
 int GLType::_bool = 0;
 int GLType::_matrix4Float = 0;

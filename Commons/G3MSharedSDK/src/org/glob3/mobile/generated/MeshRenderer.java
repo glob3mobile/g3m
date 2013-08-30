@@ -24,7 +24,7 @@ public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
@@ -57,6 +57,7 @@ public class MeshRenderer extends LeafRenderer
   {
      _projection = null;
      _model = null;
+     _glState = new GLState();
   }
 
   public void dispose()
@@ -68,6 +69,8 @@ public class MeshRenderer extends LeafRenderer
       if (mesh != null)
          mesh.dispose();
     }
+  
+    _glState._release();
   
     super.dispose();
   
@@ -115,10 +118,12 @@ public class MeshRenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
     updateGLState(rc);
+  
+    _glState.setParent(glState);
   
   
     final int meshesCount = _meshes.size();
