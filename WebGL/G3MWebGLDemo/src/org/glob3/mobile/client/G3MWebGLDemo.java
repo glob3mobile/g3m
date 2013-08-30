@@ -129,7 +129,7 @@ public class G3MWebGLDemo
          // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         // initDefaultWithBuilder();
+         //         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          initCustomizedWithBuilder();
@@ -142,6 +142,10 @@ public class G3MWebGLDemo
 
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      //      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
+      //      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
@@ -1213,6 +1217,8 @@ public class G3MWebGLDemo
 
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);
+
+      //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
 
       /*
        * final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
