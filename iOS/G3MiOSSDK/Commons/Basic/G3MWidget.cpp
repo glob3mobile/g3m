@@ -446,8 +446,8 @@ void G3MWidget::render(int width, int height) {
 
   if (_rootState == NULL){
     _rootState = new GLState();
-    _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
   }
+  _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
 
   if (_mainRendererReady) {
     _cameraRenderer->render(&rc, _rootState);

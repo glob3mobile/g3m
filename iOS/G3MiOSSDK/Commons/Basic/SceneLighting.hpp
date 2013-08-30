@@ -19,9 +19,11 @@ public:
   virtual void modifyGLState(GLState* glState) = 0;
 };
 
-class DefaultSceneLighting: public SceneLighting{
+class ITimer;
 
+class DefaultSceneLighting: public SceneLighting{
 public:
+
   void modifyGLState(GLState* glState);
   
 };

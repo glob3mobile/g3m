@@ -33,6 +33,28 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
 
+  if (_useNormals){
+
+    FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    for (int i = 0; i <= _steps+1; i++) {
+      normals.add(0.0, 0.0, 1.0);
+    }
+
+    return new DirectMesh(GLPrimitive::triangleFan(),
+                          true,
+                          Vector3D::zero,
+                          vertices.create(),
+                          1,
+                          1,
+                          color,
+                          NULL,
+                          1.0,
+                          true,
+                          normals.create());
+
+  }
+
+
   return new DirectMesh(GLPrimitive::triangleFan(),
                         true,
                         Vector3D::zero,

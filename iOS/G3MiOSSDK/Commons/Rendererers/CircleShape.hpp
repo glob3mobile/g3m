@@ -18,6 +18,8 @@ private:
   int    _steps;
   Color* _color;
 
+  const bool _useNormals;
+
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
 
@@ -26,11 +28,13 @@ public:
               AltitudeMode altitudeMode,
               float radius,
               Color* color = NULL,
-              int steps = 64) :
+              int steps = 64,
+              bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _radius(radius),
   _color(color),
-  _steps(steps)
+  _steps(steps),
+  _useNormals(useNormals)
   {
 
   }
