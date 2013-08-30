@@ -623,7 +623,7 @@ public:
   //  [self createInterpolationTest: meshRenderer];
 
   //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
-  
+
   //Draw light direction
   if (true){
 
@@ -1407,7 +1407,7 @@ public:
 
         Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
         marksRenderer->addMark(m1);
-        
+
       }
     }
   }
@@ -2548,7 +2548,7 @@ public:
       }
 
 
-      if (true){
+      if (false){
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
@@ -2594,6 +2594,31 @@ public:
             //          delete bsonObject;
           }
         }
+      }
+
+      if (true){
+
+        Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
+                                                   Angle::fromDegrees(-15.431389),
+                                                   1000000),
+                                    RELATIVE_TO_GROUND,
+                                    Vector3D(100, 100, 100),
+                                    1.0,
+                                    Color::newFromRGBA(1.0, 0.0, 0.0, 1.0),
+                                    Color::newFromRGBA(0.0, 1.0, 0.0, 1.0),
+                                    true);
+        const double scale = 1000;
+        plane->setScale(scale, scale, scale);
+        plane->setPitch(Angle::fromDegrees(90));
+        plane->setHeading(Angle::fromDegrees(0));
+        _shapesRenderer->addShape(plane);
+
+
+        plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
+                                   Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000),
+                                   Angle::fromDegrees(90), Angle::fromDegrees(720));
       }
 
 
@@ -2644,13 +2669,13 @@ public:
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-  
+
   //  renderers.push_back(new GLErrorRenderer());
-  
+
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-    
+
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;

@@ -20,11 +20,15 @@ private:
 
   float _borderWidth;
 
+  bool _useNormals;
+
   Color* _surfaceColor;
   Color* _borderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc);
+
+  Mesh* createSurfaceMeshWithNormals(const G3MRenderContext* rc);
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -35,14 +39,16 @@ public:
            const Vector3D& extent,
            float borderWidth,
            Color* surfaceColor = NULL,
-           Color* borderColor = NULL) :
+           Color* borderColor = NULL,
+           bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
   _borderWidth(borderWidth),
   _surfaceColor(surfaceColor),
-  _borderColor(borderColor)
+  _borderColor(borderColor),
+  _useNormals(useNormals)
   {
 
   }

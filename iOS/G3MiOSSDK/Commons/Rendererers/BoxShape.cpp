@@ -13,6 +13,7 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
+#include "DirectMesh.hpp"
 
 Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
@@ -119,14 +120,137 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
                          surfaceColor);
 }
 
+Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc){
+  const float lowerX = (float) -(_extentX / 2);
+  const float upperX = (float) +(_extentX / 2);
+  const float lowerY = (float) -(_extentY / 2);
+  const float upperY = (float) +(_extentY / 2);
+  const float lowerZ = (float) -(_extentZ / 2);
+  const float upperZ = (float) +(_extentZ / 2);
+
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  const float v[] = {
+    //FACE 1
+    lowerX, upperY, lowerZ,
+    lowerX, upperY, upperZ,
+    upperX, upperY, lowerZ,
+
+    upperX, upperY, lowerZ,
+    lowerX, upperY, upperZ,
+    upperX, upperY, upperZ,
+
+    //FACE 2
+    lowerX, lowerY, lowerZ,
+    lowerX, lowerY, upperZ,
+    upperX, lowerY, lowerZ,
+
+    upperX, lowerY, lowerZ,
+    lowerX, lowerY, upperZ,
+    upperX, lowerY, upperZ,
+
+    //FACE 3
+    lowerX, lowerY, upperZ,
+    lowerX, upperY, upperZ,
+    upperX, lowerY, upperZ,
+
+    upperX, lowerY, upperZ,
+    lowerX, upperY, upperZ,
+    upperX, upperY, upperZ,
+
+    //FACE 4
+    lowerX, lowerY, lowerZ,
+    lowerX, upperY, lowerZ,
+    upperX, lowerY, lowerZ,
+
+    upperX, lowerY, lowerZ,
+    lowerX, upperY, lowerZ,
+    upperX, upperY, lowerZ,
+
+    //FACE 5
+    upperX, lowerY, lowerZ,
+    upperX, lowerY, upperZ,
+    upperX, upperY, lowerZ,
+
+    upperX, upperY, lowerZ,
+    upperX, lowerY, upperZ,
+    upperX, upperY, upperZ,
+    
+    //FACE 6
+    lowerX, lowerY, lowerZ,
+    lowerX, lowerY, upperZ,
+    lowerX, upperY, lowerZ,
+
+    lowerX, upperY, lowerZ,
+    lowerX, lowerY, upperZ,
+    lowerX, upperY, upperZ,
+  };
+
+  const float n[] = {
+    //FACE 1
+    0.0, 1.0, 0.0,
+    //FACE 2
+    0.0, -1.0, 0.0,
+    //FACE 3
+    0.0, 0.0, 1.0,
+    //FACE 4
+    0.0, 0.0, -1.0,
+    //FACE 5
+    1.0, 0.0, 0.0,
+    //FACE 6
+    -1.0, 0.0, 0.0
+  };
+
+
+  const unsigned int numFaces = 6;
+  const unsigned int numVertices = 6 * numFaces;
+  
+  for (unsigned int i=0; i<numVertices; i++) {
+    vertices.add(v[i*3], v[i*3+1], v[i*3+2]);
+  }
+
+  for (unsigned int i=0; i<numFaces; i++) {
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+  }
+
+  Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
+
+  return new DirectMesh(GLPrimitive::triangles(),
+                         true,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         _borderWidth,
+                         1,
+                         surfaceColor,
+                        NULL,
+                        1.0,
+                        true,
+                        normals.create());
+}
+
 
 Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
+
+  Mesh* surface = NULL;
+  if (_useNormals){
+    surface = createSurfaceMeshWithNormals(rc);
+//    surface = createSurfaceMesh(rc);
+  } else{
+    surface = createSurfaceMesh(rc);
+  }
+  
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
-    compositeMesh->addMesh(createSurfaceMesh(rc));
+    compositeMesh->addMesh(surface);
     compositeMesh->addMesh(createBorderMesh(rc));
     return compositeMesh;
   }
 
-  return createSurfaceMesh(rc);
+  return surface;
 }
