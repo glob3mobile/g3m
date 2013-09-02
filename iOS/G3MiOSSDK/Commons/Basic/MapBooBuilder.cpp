@@ -989,15 +989,26 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   changedCurrentScene();
 }
 
+SceneLighting* MapBooBuilder::createSceneLighting() {
+  return new DefaultSceneLighting();
+}
+
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
   if (_isApplicationTubeOpen != open) {
     _isApplicationTubeOpen = open;
     if (!_isApplicationTubeOpen) {
       _webSocket = NULL;
     }
-  }
-}
 
-SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new DefaultSceneLighting();
+    if (_isApplicationTubeOpen) {
+      if (_applicationListener != NULL) {
+        _applicationListener->onWebSocketOpen(_context);
+      }
+    }
+    else {
+      if (_applicationListener != NULL) {
+        _applicationListener->onWebSocketClose(_context);
+      }
+    }
+  }
 }

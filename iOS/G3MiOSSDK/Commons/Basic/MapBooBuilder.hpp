@@ -75,6 +75,10 @@ public:
                               int sceneIndex,
                               const MapBoo_Scene* scene) = 0;
 
+  virtual void onWebSocketOpen(const G3MContext* context) = 0;
+
+  virtual void onWebSocketClose(const G3MContext* context) = 0;
+  
 };
 
 
