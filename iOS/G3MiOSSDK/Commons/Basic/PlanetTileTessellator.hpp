@@ -1,20 +1,20 @@
 //
-//  EllipsoidalTileTessellator.hpp
+//  PlanetTileTessellator.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_EllipsoidalTileTessellator_hpp
-#define G3MiOSSDK_EllipsoidalTileTessellator_hpp
+#ifndef G3MiOSSDK_PlanetTileTessellator_hpp
+#define G3MiOSSDK_PlanetTileTessellator_hpp
 
 #include "TileTessellator.hpp"
 #include <map>
 class Sector;
 class IShortBuffer;
 
-class EllipsoidalTileTessellator : public TileTessellator {
+class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
 
@@ -41,13 +41,13 @@ private:
 
 public:
 
-  EllipsoidalTileTessellator(const bool skirted) :
+  PlanetTileTessellator(const bool skirted) :
   _skirted(skirted)
   {
 
   }
 
-  ~EllipsoidalTileTessellator();
+  ~PlanetTileTessellator();
 
   Vector2I getTileMeshResolution(const Planet* planet,
                                  const Vector2I& resolution,

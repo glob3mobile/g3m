@@ -12,7 +12,7 @@
 #include "CompositeRenderer.hpp"
 #include "PlanetRenderer.hpp"
 
-#include "EllipsoidalTileTessellator.hpp"
+#include "PlanetTileTessellator.hpp"
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
@@ -213,7 +213,7 @@ GL* MapBooBuilder::getGL() {
 }
 
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
-  const TileTessellator* tessellator = new EllipsoidalTileTessellator(true);
+  const TileTessellator* tessellator = new PlanetTileTessellator(true);
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;

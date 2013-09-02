@@ -1,12 +1,12 @@
 //
-//  EllipsoidalTileTessellator.cpp
+//  PlanetTileTessellator.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#include "EllipsoidalTileTessellator.hpp"
+#include "PlanetTileTessellator.hpp"
 
 #include "Tile.hpp"
 #include "Context.hpp"
@@ -32,7 +32,7 @@
 
 #include "IShortBuffer.hpp"
 
-EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
+PlanetTileTessellator::~PlanetTileTessellator() {
 #ifdef C_CODE
   for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
        it != _indicesMap.end();
@@ -55,14 +55,14 @@ EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
 
 }
 
-Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
+Vector2I PlanetTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
                                                            const Tile* tile,
                                                            bool debug) const {
   return calculateResolution(rawResolution, tile->getSector());
 }
 
-Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawResolution,
+Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& rawResolution,
                                                          const Sector& sector) const {
   return rawResolution;
 
@@ -82,7 +82,7 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
 //  return Vector2I(resolutionX, resolutionY);
 }
 
-IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet,
+IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
                                                             const Sector& sector,
                                                             const Vector2I& tileResolution) const{
 
@@ -138,7 +138,7 @@ IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet
   return indices.create();
 }
 
-IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
+IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
                                                          const Sector& sector,
                                                          const Vector2I& tileResolution) const{
 #ifdef C_CODE
@@ -163,7 +163,7 @@ IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
   
 }
 
-Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
+Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile,
                                                  const ElevationData* elevationData,
@@ -262,7 +262,7 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                          1);
 }
 
-const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
+const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                         const Angle& latitude,
                                                         const Angle& longitude,
                                                         bool mercator) const {
@@ -283,7 +283,7 @@ const Vector2D EllipsoidalTileTessellator::getTextCoord(const Tile* tile,
   return Vector2D(linearUV._x, localV);
 }
 
-IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawResolution,
+IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
                                                            const Tile* tile,
                                                            bool mercator) const {
 
@@ -362,7 +362,7 @@ IFloatBuffer* EllipsoidalTileTessellator::createTextCoords(const Vector2I& rawRe
 }
 
 
-Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
+Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                       const Vector2I& rawResolution,
                                                       const Tile* tile) const {
   const Sector sector = tile->getSector();

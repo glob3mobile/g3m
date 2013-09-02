@@ -203,7 +203,7 @@
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
 		CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */; };
 		CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */; };
-		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
+		CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
 		CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */; };
@@ -407,7 +407,7 @@
 		E780A51416D3AE37000F0395 /* Context.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD38F1577EE500012AC53 /* Context.hpp */; };
 		E780A51616D3AE37000F0395 /* DownloadPriority.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */; };
 		E780A51716D3AE37000F0395 /* Effects.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF31CBEE158776020085E8F1 /* Effects.hpp */; };
-		E780A51816D3AE37000F0395 /* EllipsoidalTileTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */; };
+		E780A51816D3AE37000F0395 /* PlanetTileTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */; };
 		E780A51916D3AE37000F0395 /* FloatBufferBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */; };
 		E780A51A16D3AE37000F0395 /* FloatBufferBuilderFromCartesian2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */; };
 		E780A51B16D3AE37000F0395 /* FloatBufferBuilderFromCartesian3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */; };
@@ -833,7 +833,7 @@
 				E780A51416D3AE37000F0395 /* Context.hpp in CopyFiles */,
 				E780A51616D3AE37000F0395 /* DownloadPriority.hpp in CopyFiles */,
 				E780A51716D3AE37000F0395 /* Effects.hpp in CopyFiles */,
-				E780A51816D3AE37000F0395 /* EllipsoidalTileTessellator.hpp in CopyFiles */,
+				E780A51816D3AE37000F0395 /* PlanetTileTessellator.hpp in CopyFiles */,
 				E780A51916D3AE37000F0395 /* FloatBufferBuilder.hpp in CopyFiles */,
 				E780A51A16D3AE37000F0395 /* FloatBufferBuilderFromCartesian2D.hpp in CopyFiles */,
 				E780A51B16D3AE37000F0395 /* FloatBufferBuilderFromCartesian3D.hpp in CopyFiles */,
@@ -1191,8 +1191,8 @@
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
 		CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrderedRenderable.hpp; path = Commons/Basic/OrderedRenderable.hpp; sourceTree = "<group>"; };
 		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
-		CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalTileTessellator.hpp; path = Commons/Basic/EllipsoidalTileTessellator.hpp; sourceTree = "<group>"; };
-		CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalTileTessellator.cpp; path = Commons/Basic/EllipsoidalTileTessellator.cpp; sourceTree = "<group>"; };
+		CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PlanetTileTessellator.hpp; path = Commons/Basic/PlanetTileTessellator.hpp; sourceTree = "<group>"; };
+		CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetTileTessellator.cpp; path = Commons/Basic/PlanetTileTessellator.cpp; sourceTree = "<group>"; };
 		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; };
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
@@ -1653,8 +1653,8 @@
 				CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */,
 				CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */,
 				CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */,
-				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
-				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
+				CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */,
+				CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */,
 				CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */,
 				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
@@ -2400,7 +2400,7 @@
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
 				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
-				CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */,
+				CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */,
 				CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */,
 				CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */,
 				D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */,

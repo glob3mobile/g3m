@@ -9,7 +9,7 @@
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
-#include "EllipsoidalTileTessellator.hpp"
+#include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
@@ -314,7 +314,7 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-  return new EllipsoidalTileTessellator(true);
+  return new PlanetTileTessellator(true);
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {
