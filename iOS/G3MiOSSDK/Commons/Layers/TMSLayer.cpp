@@ -85,3 +85,8 @@ URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   return URL::nullURL();
   
 }
+
+const std::string TMSLayer::description() const {
+  return "[TMSLayer]";
+}
+

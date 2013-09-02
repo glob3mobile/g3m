@@ -17,10 +17,11 @@
 class Vector3D;
 class GPUProgramState;
 
-class Mesh{
+class Mesh {
 public:
   
-  virtual ~Mesh() { }
+  virtual ~Mesh() {
+  }
   
   virtual int getVertexCount() const = 0;
   

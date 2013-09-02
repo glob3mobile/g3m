@@ -16,7 +16,8 @@
 Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
   const IMathUtils* mu = IMathUtils::instance();
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   // first is the center
   vertices.add(0.0, 0.0, 0.0);
@@ -34,7 +35,7 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   return new DirectMesh(GLPrimitive::triangleFan(),
                         true,
-                        Vector3D::zero(),
+                        Vector3D::zero,
                         vertices.create(),
                         1,
                         1,

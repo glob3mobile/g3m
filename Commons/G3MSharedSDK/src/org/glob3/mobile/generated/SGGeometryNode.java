@@ -31,7 +31,7 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IShortBuffer _indices;
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState()
   {
   
@@ -39,8 +39,11 @@ public class SGGeometryNode extends SGNode
   
     if (_normals != null)
     {
-      //TODO
-      ILogger.instance().logInfo("LUZ");
+  
+  //    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
+  //                                                      (float)0.0), false);
+  
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0), false);
   
   
     }
@@ -61,6 +64,7 @@ public class SGGeometryNode extends SGNode
      _uv = uv;
      _normals = normals;
      _indices = indices;
+     _glState = new GLState();
     createGLState();
   }
 
@@ -76,6 +80,11 @@ public class SGGeometryNode extends SGNode
        _normals.dispose();
     if (_indices != null)
        _indices.dispose();
+  
+    _glState._release();
+  
+    super.dispose();
+  
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)

@@ -19,6 +19,11 @@
 
 Box::~Box() {
   delete _mesh;
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 };
 
 const std::vector<Vector3D> Box::getCorners() const {
@@ -236,8 +241,9 @@ void Box::createMesh(Color* color) const {
     0, 1, 1, 5, 5, 4, 4, 0
   };
   
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-                                             Vector3D::zero());
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+//                                             Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;

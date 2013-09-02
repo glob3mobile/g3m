@@ -67,7 +67,7 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
 //  ILogger::instance()->logInfo("Rendering SG: " + description());
 
   const GLState* glState = createState(rc, parentGLState);
-  if (glState != NULL){
+  if (glState != NULL) {
 
     prepareRender(rc);
 

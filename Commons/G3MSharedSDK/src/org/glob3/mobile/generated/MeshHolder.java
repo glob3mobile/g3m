@@ -43,6 +43,8 @@ public class MeshHolder extends Mesh
   {
     if (_mesh != null)
        _mesh.dispose();
+  super.dispose();
+
   }
 
   public final int getVertexCount()

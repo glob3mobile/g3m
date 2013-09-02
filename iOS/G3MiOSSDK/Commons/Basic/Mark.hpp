@@ -26,15 +26,17 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 
+#include "SurfaceElevationProvider.hpp"
+
+
 class MarkUserData {
 public:
   virtual ~MarkUserData() {
-    
   }
 };
 
 
-class Mark {
+class Mark : public SurfaceElevationListener {
 private:
   /**
    * The text the mark displays.
@@ -79,7 +81,7 @@ private:
   /**
    * The point where the mark will be geo-located.
    */
-  const Geodetic3D  _position;
+  Geodetic3D*  _position;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -104,18 +106,15 @@ private:
    * Default value: FALSE
    */
   const bool        _autoDeleteListener;
-  
+
 #ifdef C_CODE
   const IGLTextureId* _textureId;
 #endif
 #ifdef JAVA_CODE
   private IGLTextureId _textureId;
 #endif
-  
+
   Vector3D* _cartesianPosition;
-  
-  IFloatBuffer* _vertices;
-//  IFloatBuffer* getVertices(const Planet* planet);
 
 
   bool    _textureSolved;
@@ -123,19 +122,20 @@ private:
   int     _textureWidth;
   int     _textureHeight;
   const std::string _imageID;
-  
+
   bool    _renderedMark;
-  
+
   static IFloatBuffer* _billboardTexCoord;
-  int _viewportWidth;
-  int _viewportHeight;
-  
-  GLState _glState;
-  
-  void createGLState(const Planet* planet, int viewportWidth, int viewportHeight);
+
+  GLState* _glState;
+  void createGLState(const Planet* planet);
 
   IFloatBuffer* getBillboardTexCoords();
-  
+
+  SurfaceElevationProvider* _surfaceElevationProvider;
+  double _currentSurfaceElevation;
+  AltitudeMode _altitudeMode;
+
 public:
   /**
    * Creates a marker with icon and label
@@ -143,6 +143,7 @@ public:
   Mark(const std::string& label,
        const URL          iconURL,
        const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
        const bool         labelBottom=true,
        const float        labelFontSize=20,
@@ -153,12 +154,13 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-  
+
   /**
    * Creates a marker just with label, without icon
    */
   Mark(const std::string& label,
        const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
        const float        labelFontSize=20,
        const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
@@ -167,89 +169,101 @@ public:
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-  
+
   /**
    * Creates a marker just with icon, without label
    */
   Mark(const URL          iconURL,
        const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
        MarkUserData*      userData=NULL,
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-  
+
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
   Mark(IImage*            image,
        const std::string& imageID,
        const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
        MarkUserData*      userData=NULL,
        bool               autoDeleteUserData=true,
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
-  
+
   ~Mark();
-  
+
   const std::string getLabel() const {
     return _label;
   }
-  
+
   const Geodetic3D getPosition() const {
-    return _position;
+    return *_position;
   }
-  
+
   void initialize(const G3MContext* context,
                   long long downloadPriority);
-  
+
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition);
-  
+
   bool isReady() const;
-  
+
   bool isRendered() const {
     return _renderedMark;
   }
-  
+
   void onTextureDownloadError();
-  
+
   void onTextureDownload(IImage* image);
-  
+
   int getTextureWidth() const {
     return _textureWidth;
   }
-  
+
   int getTextureHeight() const {
     return _textureHeight;
   }
-  
+
   Vector2I getTextureExtent() const {
     return Vector2I(_textureWidth, _textureHeight);
   }
-  
+
   const MarkUserData* getUserData() const {
     return _userData;
   }
-  
+
   void setUserData(MarkUserData* userData) {
     if (_autoDeleteUserData) {
       delete _userData;
     }
     _userData = userData;
   }
-  
+
   bool touched();
-  
-  Vector3D* getCartesianPosition(const Planet* planet);
-  
+
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
 
+  Vector3D* getCartesianPosition(const Planet* planet);
+
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition, const GLState* parentGLState);
-  
+              const Vector3D& cameraPosition,
+              const GLState* parentGLState,
+              const Planet* planet,
+              GL* gl);
+
+  void elevationChanged(const Geodetic2D& position,
+                        double rawElevation,            //Without considering vertical exaggeration
+                        double verticalExaggeration);
+
+  void elevationChanged(const Sector& position,
+                        const ElevationData* rawElevationData, //Without considering vertical exaggeration
+                        double verticalExaggeration){}
 };
 
 #endif

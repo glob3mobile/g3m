@@ -12,13 +12,6 @@
 #include "IStringUtils.hpp"
 
 class StringUtils_iOS : public IStringUtils {
-private:
-  
-  static NSString* toNSString(const std::string& cppStr) {
-    return [ NSString stringWithCString: cppStr.c_str()
-                               encoding: NSUTF8StringEncoding ];
-  }
-
 public:
   std::string createString(unsigned char data[],
                            int            length) const;

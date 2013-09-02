@@ -51,24 +51,29 @@ SGTextureNode::~SGTextureNode() {
     SGLayerNode* layer = _layers[i];
     delete layer;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLState* parentState) {
-  if (_glState == NULL){
+  if (_glState == NULL) {
     _glState = new GLState();
 
     const int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++) {
       SGLayerNode* layer = _layers[i];
-      if (!layer->modifyGLState(rc, _glState)){
-        delete _glState;
+      if (!layer->modifyGLState(rc, _glState)) {
+        _glState->_release();
         _glState = NULL;
         return parentState;
       }
     }
 
   }
-  if (_glState != NULL){
+  if (_glState != NULL) {
     _glState->setParent(parentState);
   }
   return _glState;

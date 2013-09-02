@@ -30,7 +30,8 @@ class GPUAttribute;
 class INativeGL {
 public:
 
-  virtual ~INativeGL() { };
+  virtual ~INativeGL() {
+  }
 
   virtual void useProgram(GPUProgram* program) const = 0;
 
@@ -60,6 +61,11 @@ public:
                          float v1,
                          float v2,
                          float v3) const = 0;
+
+  virtual void uniform3f(const IGLUniformID* location,
+                         float v0,
+                         float v1,
+                         float v2) const = 0;
 
   virtual void enable(int feature) const = 0;
 
@@ -134,6 +140,7 @@ public:
   virtual int Type_UnsignedInt() const = 0;
   virtual int Type_Int() const = 0;
   virtual int Type_Vec2Float() const = 0;
+  virtual int Type_Vec3Float() const = 0;
   virtual int Type_Vec4Float() const = 0;
   virtual int Type_Bool() const = 0;
   virtual int Type_Matrix4Float() const = 0;

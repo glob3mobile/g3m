@@ -90,9 +90,16 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
       _mappings = NULL;
     }
 
+    _glState->_release();
+
 #ifdef JAVA_CODE
   }
 #endif
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 int LeveledTexturedMesh::getVertexCount() const {
@@ -111,11 +118,12 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   if (_currentLevel < 0) {
     int newCurrentLevel = -1;
 
-    for (int i = 0; i < _levelsCount; i++) {
-      LazyTextureMapping* mapping = _mappings->at(i);
+    const int levelsCount = _mappings->size();
+
+    for (int i = 0; i < levelsCount; i++) {
+      const LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
         if (mapping->isValid()) {
-          //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
           newCurrentLevel = i;
           break;
         }
@@ -123,16 +131,28 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
     }
 
     if (newCurrentLevel >= 0) {
+      // ILogger::instance()->logInfo("LeveledTexturedMesh: changed from level %d to %d",
+      //                              _currentLevel,
+      //                              newCurrentLevel);
       _currentLevel = newCurrentLevel;
 
-      _mappings->at(_currentLevel)->modifyGLState(_glState);
+      _mappings->at(_currentLevel)->modifyGLState(*_glState);
 
-      for (int i = _currentLevel+1; i < _levelsCount; i++) {
-        LazyTextureMapping* mapping = _mappings->at(i);
-        if (mapping != NULL) {
-          _mappings->at(i) = NULL;
+      if (_currentLevel < levelsCount-1) {
+        for (int i = levelsCount-1; i > _currentLevel; i--) {
+          const LazyTextureMapping* mapping = _mappings->at(i);
           delete mapping;
+#ifdef JAVA_CODE
+          _mappings.remove(i);
+#endif
         }
+#ifdef C_CODE
+        _mappings->erase(_mappings->begin() + _currentLevel + 1,
+                         _mappings->end());
+#endif
+#ifdef JAVA_CODE
+        _mappings.trimToSize();
+#endif
       }
     }
   }
@@ -153,6 +173,7 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
                                                  const IGLTextureId* glTextureId) {
+
   if (_mappings->size() > 0) {
     if (glTextureId != NULL) {
       if ((_currentLevel < 0) || (level < _currentLevel)) {
@@ -176,14 +197,15 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return (mapping == NULL) ? false : mapping->isTransparent();
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void LeveledTexturedMesh::render(const G3MRenderContext* rc,
+                                 const GLState* parentGLState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
-    ILogger::instance()->logError("No Texture Mapping");
+    ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");
     _mesh->render(rc, parentGLState);
   }
   else {
-    _glState.setParent(parentGLState);
-    _mesh->render(rc, &_glState);
+    _glState->setParent(parentGLState);
+    _mesh->render(rc, _glState);
   }
 }

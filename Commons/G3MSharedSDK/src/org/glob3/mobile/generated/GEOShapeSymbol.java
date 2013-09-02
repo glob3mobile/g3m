@@ -32,14 +32,16 @@ public class GEOShapeSymbol extends GEOSymbol
   {
     if (_shape != null)
        _shape.dispose();
+  
+    super.dispose();
+  
   }
 
-  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     if (_shape != null)
     {
-      ShapesRenderer shapeRenderer = sc.getShapesRenderer();
-      if (shapeRenderer == null)
+      if (shapesRenderer == null)
       {
         ILogger.instance().logError("Can't simbolize with Shape, ShapesRenderer was not set");
         if (_shape != null)
@@ -47,7 +49,7 @@ public class GEOShapeSymbol extends GEOSymbol
       }
       else
       {
-        shapeRenderer.addShape(_shape);
+        shapesRenderer.addShape(_shape);
       }
       _shape = null;
     }

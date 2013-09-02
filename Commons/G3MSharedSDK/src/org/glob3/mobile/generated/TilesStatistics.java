@@ -97,7 +97,7 @@ public class TilesStatistics
     }
   }
 
-  public final void computeTileRendered(Tile tile)
+  public final void computePlanetRenderered(Tile tile)
   {
     _tilesRendered++;
 

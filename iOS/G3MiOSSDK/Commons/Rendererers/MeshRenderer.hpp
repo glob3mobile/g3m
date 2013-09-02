@@ -20,7 +20,7 @@ class MeshRenderer : public LeafRenderer {
 private:
   std::vector<Mesh*> _meshes;
   
-  GLState _glState;
+  GLState* _glState;
 
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
@@ -29,7 +29,8 @@ public:
   
   MeshRenderer():
   _projection(NULL),
-  _model(NULL)
+  _model(NULL),
+  _glState(new GLState())
   {
   }
   
@@ -61,7 +62,7 @@ public:
     return true;
   }
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {

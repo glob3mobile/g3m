@@ -1,22 +1,29 @@
 package org.glob3.mobile.generated; 
 public class GLFeatureCameraGroup extends GLFeatureGroup
 {
-  public final void applyOnGlobalGLState(GLGlobalState state)
+//  void applyOnGlobalGLState(GLGlobalState* state) {}
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+
+  public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
-  }
-  public final void addToGPUVariableSet(GPUVariableValueSet vs)
-  {
-    final Matrix44DHolder[] matrixHolders = new Matrix44DHolder[_nFeatures];
-    for (int i = 0; i < _nFeatures; i++)
+  
+    final int size = features.size();
+    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
+  
+    int modelViewCount = 0;
+    for (int i = 0; i < size; i++)
     {
-      GLCameraGroupFeature f = ((GLCameraGroupFeature) _features[i]);
-      matrixHolders[i] = f.getMatrixHolder();
-      if (matrixHolders[i] == null)
+      final GLFeature f = features.get(i);
+      if (f.getGroup() == GLFeatureGroupName.CAMERA_GROUP)
       {
-        ILogger.instance().logError("MatrixHolder NULL");
+        GLCameraGroupFeature cf = ((GLCameraGroupFeature) f);
+        modelTransformHolders[modelViewCount++] = cf.getMatrixHolder();
       }
     }
   
-    vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueModelview(matrixHolders, _nFeatures), false);
+    Matrix44DProvider modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelViewCount);
+    vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(modelViewProvider, true), false);
+  
+    modelTransformHolders = null;
   }
 }

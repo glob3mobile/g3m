@@ -30,11 +30,6 @@ public class IconDownloadListener extends IImageDownloadListener
       LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
 
       ITextUtils.instance().labelImage(image, _label, labelPosition, _labelGapSize, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(image, _mark), true);
-      //      ITextUtils::instance()->labelImage(image,
-      //                                         _label,
-      //                                         labelPosition,
-      //                                         new MarkLabelImageListener(image, _mark),
-      //                                         true);
     }
     else
     {

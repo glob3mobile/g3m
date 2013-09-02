@@ -41,16 +41,16 @@ public abstract class AbstractMeshShape extends Shape
     _mesh = null;
   }
 
-  protected AbstractMeshShape(Geodetic3D position)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(position);
+     super(position, altitudeMode);
      _mesh = null;
 
   }
 
-  protected AbstractMeshShape(Geodetic3D position, Mesh mesh)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
-     super(position);
+     super(position, altitudeMode);
      _mesh = mesh;
 
   }
@@ -75,6 +75,9 @@ public abstract class AbstractMeshShape extends Shape
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    super.dispose();
+  
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

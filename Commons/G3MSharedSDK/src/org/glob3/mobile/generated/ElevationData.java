@@ -79,8 +79,6 @@ public abstract class ElevationData
     return _resolution;
   }
 
-  //  virtual const Geodetic2D getRealResolution() const = 0;
-
   public abstract double getElevationAt(int x, int y);
 
   public final double getElevationAt(Vector2I position)
@@ -104,7 +102,10 @@ public abstract class ElevationData
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet, Vector3D.zero());
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+  //                                          planet,
+  //                                          Vector3D::zero);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
@@ -157,8 +158,12 @@ public abstract class ElevationData
   
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
   //                                          ellipsoid,
-  //                                          Vector3D::zero());
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector._center);
+  //                                          Vector3D::zero);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+  //                                          planet,
+  //                                          sector._center);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
+  
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
@@ -350,7 +355,7 @@ public abstract class ElevationData
     return getElevationAt(position._latitude, position._longitude);
   }
 
-  //  bool isEquivalentTo(const ElevationData* ed){
+  //  bool isEquivalentTo(const ElevationData* ed) {
   //    bool equivalent = true;
   //    const int width  = 3;
   //    const int height = 3;
@@ -365,7 +370,7 @@ public abstract class ElevationData
   //        const double elevation = getElevationAt(position);
   //        const double elevation2 = ed->getElevationAt(position);
   //
-  //        if (elevation != elevation2){
+  //        if (elevation != elevation2) {
   //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
   //          equivalent = false;
   //        }

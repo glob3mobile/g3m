@@ -35,15 +35,15 @@ public:
   _indexBufferCreated(false)
   {
     _values = new short[size];
-    if (_values == NULL){
+    if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
 
   virtual ~ShortBuffer_iOS() {
-    if (_indexBufferCreated){
+    if (_indexBufferCreated) {
       glDeleteBuffers(1, &_indexBuffer);
-      if (GL_NO_ERROR != glGetError()){
+      if (GL_NO_ERROR != glGetError()) {
         ILogger::instance()->logError("Problem deleting IBO");
       }
     }
@@ -60,7 +60,7 @@ public:
 
   short get(int i) const {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -69,7 +69,7 @@ public:
 
   void put(int i, short value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -80,7 +80,7 @@ public:
   }
 
   void rawPut(int i, short value) {
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     _values[i] = value;
@@ -92,20 +92,20 @@ public:
 
   const std::string description() const;
 
-  void bindAsIBOToGPU(){
-    if (!_indexBufferCreated){
+  void bindAsIBOToGPU() {
+    if (!_indexBufferCreated) {
       glGenBuffers(1, &_indexBuffer);
       _indexBufferCreated = true;
     }
 
-    if (_boundIBO != _indexBuffer){
+    if (_boundIBO != _indexBuffer) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
       _boundIBO = _indexBuffer;
     } else{
-      printf("REUSING");
+      //printf("REUSING");
     }
 
-    if (_indexBufferTimeStamp != _timestamp){
+    if (_indexBufferTimeStamp != _timestamp) {
       _indexBufferTimeStamp = _timestamp;
       short* index = getPointer();
       int iboSize = sizeof(short) * size();
@@ -113,7 +113,7 @@ public:
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
     }
 
-//    if (GL_NO_ERROR != glGetError()){
+//    if (GL_NO_ERROR != glGetError()) {
 //      ILogger::instance()->logError("Problem using IBO");
 //    }
   }

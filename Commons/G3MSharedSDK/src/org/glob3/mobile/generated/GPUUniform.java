@@ -18,6 +18,9 @@ public class GPUUniform extends GPUVariable
     {
       _value._release();
     }
+
+    super.dispose();
+
   }
 
   public GPUUniform(String name, IGLUniformID id, int type)
@@ -84,27 +87,23 @@ public class GPUUniform extends GPUVariable
 
   public final void set(GPUUniformValue v)
   {
-//    if (v != _value) {
-      if (_type == v.getType()) //type checking
+    if (_type == v.getType()) //type checking
+    {
+      if (_value == null || !_value.isEqualsTo(v))
       {
-        if (_value == null || !_value.isEqualsTo(v))
+        _dirty = true;
+        v._retain();
+        if (_value != null)
         {
-          _dirty = true;
-          //        _value = v->copyOrCreate(_value);
-
-          v._retain();
-          if (_value != null)
-          {
-            _value._release();
-          }
-          _value = v;
+          _value._release();
         }
+        _value = v;
       }
-      else
-      {
-        ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
-      }
-//    }
+    }
+    else
+    {
+      ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+    }
   }
 
   public final void applyChanges(GL gl)

@@ -37,14 +37,15 @@ public class GEORasterProjection
      _imageHeight = imageHeight;
     if (_mercator)
     {
-      final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector.lower().latitude());
-      _mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector.upper().latitude());
+      final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
+      _mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
       _mercatorDeltaGlobalV = mercatorLowerGlobalV - _mercatorUpperGlobalV;
     }
   }
 
   public void dispose()
   {
+
   }
 
   public final Vector2F project(Geodetic2D position)

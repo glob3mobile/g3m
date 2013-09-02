@@ -57,7 +57,8 @@ public class BusyQuadRenderer extends LeafRenderer
   
     final double halfWidth = _size._x / 2;
     final double hadfHeight = _size._y / 2;
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(-halfWidth, +hadfHeight, 0);
     vertices.add(-halfWidth, -hadfHeight, 0);
     vertices.add(+halfWidth, +hadfHeight, 0);
@@ -81,7 +82,7 @@ public class BusyQuadRenderer extends LeafRenderer
   private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
   private void createGLState()
   {
   
@@ -102,6 +103,7 @@ public class BusyQuadRenderer extends LeafRenderer
      _animated = animated;
      _size = new Vector2D(size);
      _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
+     _glState = new GLState();
     createGLState();
   }
 
@@ -116,7 +118,7 @@ public class BusyQuadRenderer extends LeafRenderer
 
 
   //TODO: REMOVE???
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
   
@@ -128,18 +130,6 @@ public class BusyQuadRenderer extends LeafRenderer
       }
     }
   
-    // init modelview matrix
-  //  if (!_projectionMatrix.isValid()){
-  //    // init modelview matrix
-  //    int currentViewport[4];
-  //    gl->getViewport(currentViewport);
-  //    const int halfWidth = currentViewport[2] / 2;
-  //    const int halfHeight = currentViewport[3] / 2;
-  //    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-  //                                                                             -halfHeight, halfHeight,
-  //                                                                             -halfWidth, halfWidth);
-  //  }
-  
     createGLState();
   
     // clear screen
@@ -149,6 +139,7 @@ public class BusyQuadRenderer extends LeafRenderer
     _quadMesh.render(rc, _glState);
   }
 
+
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     return false;
@@ -156,7 +147,9 @@ public class BusyQuadRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
+    final int halfWidth = width / 2;
+    final int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   }
 
   public void dispose()
@@ -165,6 +158,11 @@ public class BusyQuadRenderer extends LeafRenderer
        _quadMesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
+
+    _glState._release();
+
+  super.dispose();
+
   }
 
   public final void incDegrees(double value)
@@ -173,10 +171,6 @@ public class BusyQuadRenderer extends LeafRenderer
     if (_degrees>360)
        _degrees -= 360;
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public final void start(G3MRenderContext rc)

@@ -34,7 +34,6 @@ public class SceneJSParserStatistics
   }
   public void dispose()
   {
-  
   }
   public final void computeNode()
   {

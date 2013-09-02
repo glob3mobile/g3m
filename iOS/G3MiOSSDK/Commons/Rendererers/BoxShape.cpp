@@ -43,7 +43,8 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
     0, 1, 1, 5, 5, 4, 4, 0
   };
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;
@@ -93,7 +94,8 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
     5, 5, 4, 1, 0, 0
   };
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;

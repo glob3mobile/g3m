@@ -15,7 +15,6 @@
 #include "GLConstants.hpp"
 #include "Color.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "MeshRenderer.hpp"
 
 Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinates,
@@ -23,9 +22,11 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                       float lineWidth,
                                       double deltaHeight,
                                       const Planet* planet) const {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
@@ -53,9 +54,10 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                                        double deltaHeight,
                                        const Planet* planet) const {
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   ShortBufferBuilder indices;
 
   const int coordinatesArrayCount = coordinatesArray->size();
@@ -92,8 +94,11 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
 }
 
 bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
-                              const GEOSymbolizationContext& sc) const {
-  MeshRenderer* meshRenderer = sc.getMeshRenderer();
+                              const GEOSymbolizer*    symbolizer,
+                              MeshRenderer*           meshRenderer,
+                              ShapesRenderer*         shapesRenderer,
+                              MarksRenderer*          marksRenderer,
+                              GEOTileRasterizer*      geoTileRasterizer) const {
   if (meshRenderer == NULL) {
     ILogger::instance()->logError("Can't simbolize with Mesh, MeshRenderer was not set");
   }

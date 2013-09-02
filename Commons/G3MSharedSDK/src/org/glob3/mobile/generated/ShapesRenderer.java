@@ -25,8 +25,8 @@ public class ShapesRenderer extends LeafRenderer
 
   private G3MContext _context;
 
-  private GLState _glState = new GLState();
-  private GLState _glStateTransparent = new GLState();
+  private GLState _glState;
+  private GLState _glStateTransparent;
 
   private ProjectionGLFeature _projection;
   private ModelGLFeature _model;
@@ -68,6 +68,8 @@ public class ShapesRenderer extends LeafRenderer
      _context = null;
      _projection = null;
      _model = null;
+     _glState = new GLState();
+     _glStateTransparent = new GLState();
   }
 
   public void dispose()
@@ -79,6 +81,12 @@ public class ShapesRenderer extends LeafRenderer
       if (shape != null)
          shape.dispose();
     }
+
+    _glState._release();
+    _glStateTransparent._release();
+
+  super.dispose();
+
   }
 
   public final void addShape(Shape shape)
@@ -174,12 +182,15 @@ public class ShapesRenderer extends LeafRenderer
   {
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
     updateGLState(rc);
+  
+    _glState.setParent(glState);
+    _glStateTransparent.setParent(glState);
   
   
     final int shapesCount = _shapes.size();

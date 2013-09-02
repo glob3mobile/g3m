@@ -26,9 +26,13 @@ public:
              Color* flatColor = NULL,
              IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
-             bool depthTest = true);
+             bool depthTest = true,
+             IFloatBuffer* normals = NULL);
 
   ~DirectMesh() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
   

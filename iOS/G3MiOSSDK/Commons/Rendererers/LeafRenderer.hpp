@@ -31,24 +31,20 @@ public:
   }
   
   ~LeafRenderer() {
-    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   bool isEnable() const {
     return _enable;
   }
 
-#ifdef C_CODE
-  void setEnable(bool enable) {
+  virtual void setEnable(bool enable) {
     _enable = enable;
   }
-#endif
-#ifdef JAVA_CODE
-  public void setEnable(final boolean enable) {
-    _enable = enable;
-  }
-#endif
-  
+
   virtual void onResume(const G3MContext* context) = 0;
   
   virtual void onPause(const G3MContext* context) = 0;
@@ -59,7 +55,7 @@ public:
   
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const G3MRenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc, GLState* glState) = 0;
   
   virtual bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent) = 0;
@@ -70,6 +66,10 @@ public:
   virtual void start(const G3MRenderContext* rc) = 0;
   
   virtual void stop(const G3MRenderContext* rc) = 0;
+
+  virtual SurfaceElevationProvider* getSurfaceElevationProvider() {
+    return NULL;
+  }
 
 };
 

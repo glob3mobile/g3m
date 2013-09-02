@@ -12,8 +12,10 @@
 #include "ICanvas.hpp"
 
 GEORasterLineSymbol::GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
-                                         const GEO2DLineRasterStyle& style):
-GEORasterSymbol( calculateSectorFromCoordinates(coordinates) ),
+                                         const GEO2DLineRasterStyle& style,
+                                         const int minTileLevel,
+                                         const int maxTileLevel):
+GEORasterSymbol( calculateSectorFromCoordinates(coordinates), minTileLevel, maxTileLevel ),
 _coordinates( copyCoordinates(coordinates) ),
 _style(style)
 {
@@ -31,10 +33,15 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
 
     delete _coordinates;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-void GEORasterLineSymbol::rasterize(ICanvas*                   canvas,
-                                    const GEORasterProjection* projection) const {
+void GEORasterLineSymbol::rawRasterize(ICanvas*                   canvas,
+                                       const GEORasterProjection* projection) const {
   if (_style.apply(canvas)) {
     rasterLine(_coordinates,
                canvas,

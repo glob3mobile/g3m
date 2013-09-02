@@ -13,6 +13,7 @@ class Tile;
 class G3MRenderContext;
 class G3MEventContext;
 
+
 class LayerCondition {
 public:
   virtual ~LayerCondition() {

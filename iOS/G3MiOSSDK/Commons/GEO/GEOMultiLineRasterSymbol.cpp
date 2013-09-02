@@ -12,8 +12,10 @@
 #include "ICanvas.hpp"
 
 GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
-                                                   const GEO2DLineRasterStyle& style) :
-GEORasterSymbol( calculateSectorFromCoordinatesArray(coordinatesArray) ),
+                                                   const GEO2DLineRasterStyle& style,
+                                                   const int minTileLevel,
+                                                   const int maxTileLevel) :
+GEORasterSymbol( calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel ),
 _coordinatesArray( copyCoordinatesArray(coordinatesArray) ),
 _style(style)
 //_lineColor( style.getColor() ),
@@ -35,12 +37,15 @@ GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
     }
     delete _coordinatesArray;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-void GEOMultiLineRasterSymbol::rasterize(ICanvas*                   canvas,
-                                         const GEORasterProjection* projection) const {
-//  canvas->setLineColor(_lineColor);
-//  canvas->setLineWidth(_lineWidth);
+void GEOMultiLineRasterSymbol::rawRasterize(ICanvas*                   canvas,
+                                            const GEORasterProjection* projection) const {
   if (_style.apply(canvas)) {
     const int coordinatesArrayCount = _coordinatesArray->size();
     for (int i = 0; i < coordinatesArrayCount; i++) {

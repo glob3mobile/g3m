@@ -9,9 +9,7 @@
 #include "GEO2DPointGeometry.hpp"
 
 #include "GEOSymbolizer.hpp"
-#include "GEOSymbolizationContext.hpp"
 
-std::vector<GEOSymbol*>* GEO2DPointGeometry::createSymbols(const G3MRenderContext* rc,
-                                                           const GEOSymbolizationContext& sc) const {
-  return sc.getSymbolizer()->createSymbols(this);
+std::vector<GEOSymbol*>* GEO2DPointGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
 }

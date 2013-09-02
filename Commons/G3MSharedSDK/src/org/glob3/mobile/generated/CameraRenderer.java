@@ -22,6 +22,9 @@ public class CameraRenderer extends LeafRenderer
       if (handler != null)
          handler.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addHandler(CameraEventHandler handler)
@@ -34,7 +37,7 @@ public class CameraRenderer extends LeafRenderer
     _processTouchEvents = processTouchEvents;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
   
     // create the CameraContext

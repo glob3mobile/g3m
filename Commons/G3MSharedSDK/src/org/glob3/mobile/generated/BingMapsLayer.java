@@ -249,4 +249,9 @@ public class BingMapsLayer extends Layer
     ILogger.instance().logError("BingMapsLayer: Error while downloading metadata.");
   }
 
+  public final String description()
+  {
+    return "[BingMapsLayer]";
+  }
+
 }

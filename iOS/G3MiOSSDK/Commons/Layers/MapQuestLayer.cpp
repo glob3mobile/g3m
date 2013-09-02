@@ -7,3 +7,7 @@
 //
 
 #include "MapQuestLayer.hpp"
+
+const std::string MapQuestLayer::description() const {
+  return "[MapQuestLayer]";
+}

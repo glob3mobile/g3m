@@ -109,4 +109,9 @@ public class MercatorTiledLayer extends Layer
     return petitions;
   }
 
+  public String description()
+  {
+    return "[MercatorTiledLayer]";
+  }
+
 }

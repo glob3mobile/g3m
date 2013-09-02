@@ -14,7 +14,6 @@
 class QuadTreeVisitor {
 public:
   virtual ~QuadTreeVisitor() {
-
   }
 
   virtual bool visitElement(const Sector& sector,

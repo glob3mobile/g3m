@@ -24,7 +24,6 @@ protected:
 public:
 
   virtual ~Interpolator() {
-
   }
 
   virtual double interpolation(const Geodetic2D& sw,

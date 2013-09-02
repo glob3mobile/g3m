@@ -10,7 +10,6 @@
 
 #include "Geodetic2D.hpp"
 #include "GEOSymbolizer.hpp"
-#include "GEOSymbolizationContext.hpp"
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();
@@ -25,9 +24,13 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   }
   
   delete _coordinatesArray;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const G3MRenderContext* rc,
-                                                                     const GEOSymbolizationContext& sc) const {
-  return sc.getSymbolizer()->createSymbols(this);
+std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
 }

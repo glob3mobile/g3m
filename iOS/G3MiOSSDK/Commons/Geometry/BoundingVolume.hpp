@@ -24,6 +24,7 @@ class GLState;
 class BoundingVolume {
 public:
   virtual ~BoundingVolume() {
+
   }
 
   virtual double projectedArea(const G3MRenderContext* rc) const = 0;

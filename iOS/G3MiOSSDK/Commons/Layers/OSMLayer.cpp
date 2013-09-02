@@ -8,3 +8,6 @@
 
 #include "OSMLayer.hpp"
 
+const std::string OSMLayer::description() const {
+  return "[OSMLayer]";
+}

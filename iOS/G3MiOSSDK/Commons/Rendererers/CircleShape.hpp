@@ -23,10 +23,11 @@ protected:
 
 public:
   CircleShape(Geodetic3D* position,
+              AltitudeMode altitudeMode,
               float radius,
               Color* color = NULL,
               int steps = 64) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _radius(radius),
   _color(color),
   _steps(steps)
@@ -36,6 +37,11 @@ public:
 
   ~CircleShape() {
     delete _color;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setRadius(float radius) {

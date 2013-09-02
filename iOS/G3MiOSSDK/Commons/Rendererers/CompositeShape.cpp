@@ -14,6 +14,11 @@ CompositeShape::~CompositeShape() {
     Shape* child = _children[i];
     delete child;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void CompositeShape::addShape(Shape* shape) {

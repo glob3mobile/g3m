@@ -1,31 +1,17 @@
 package org.glob3.mobile.generated; 
 public class BillboardGLFeature extends GLFeature
 {
-
-  private GPUUniformValueVec2Float _texExtent;
-  private GPUUniformValueVec2Float _viewportExtent;
-
-
-
-  public BillboardGLFeature(int textureWidth, int textureHeight, int viewportWidth, int viewportHeight)
+  public BillboardGLFeature(Vector3D position, int textureWidth, int textureHeight)
   {
-     super(GLFeatureGroupName.NO_GROUP);
+     super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_BILLBOARD);
+    _values.addUniformValue(GPUUniformKey.TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);
   
-    _texExtent = new GPUUniformValueVec2Float(textureWidth, textureHeight);
-    _values.addUniformValue(GPUUniformKey.TEXTURE_EXTENT, _texExtent, false);
-  
-    _viewportExtent = new GPUUniformValueVec2Float(viewportWidth, viewportHeight);
-    _values.addUniformValue(GPUUniformKey.VIEWPORT_EXTENT, _viewportExtent, false);
+    _values.addUniformValue(GPUUniformKey.BILLBOARD_POSITION, new GPUUniformValueVec4Float((float)position._x, (float)position._y, (float)position._z, (float)1.0), false);
   }
-
-  public void dispose()
-  {
-  //  _texExtent->_release();
-  //  _viewportExtent->_release();
-  }
-
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
+    state.disableDepthTest();
+    state.disableCullFace();
+    state.disPolygonOffsetFill();
   }
-
 }

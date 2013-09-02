@@ -119,4 +119,9 @@ public class GoogleMapsLayer extends Layer
     return petitions;
   }
 
+  public final String description()
+  {
+    return "[GoogleMapsLayer]";
+  }
+
 }

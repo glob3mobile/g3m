@@ -20,6 +20,7 @@
 #include "TextUtils_iOS.hpp"
 
 #include "GPUProgramManager.hpp"
+#include "SceneLighting.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -61,6 +62,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+
+  SceneLighting* sceneLighting = new DefaultSceneLighting();
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -78,7 +81,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   initializationTask,
                                   autoDeleteInitializationTask,
                                   periodicalTasks,
-                                  gpuProgramManager); //GPUProgramManager
+                                  gpuProgramManager,//GPUProgramManager
+                                  sceneLighting);   //Scene Lighting
     [self widget]->setUserData(userData);
 }
 
@@ -180,14 +184,19 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (void)layoutSubviews {
-  int w = (int) [self frame].size.width;
-  int h = (int) [self frame].size.height;
-  NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  
-  if ([self widget]) {
-    [self widget]->onResizeViewportEvent(w,h);
-    
+  [super layoutSubviews];
+
+  CGSize size = [self frame].size;
+  const int width  = (int) size.width;
+  const int height = (int) size.height;
+  //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
+
+  G3MWidget* widget = [self widget];
+  if (widget) {
+    widget->onResizeViewportEvent(width, height);
+
     [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
+
     [self drawView:nil];
   }
   else {

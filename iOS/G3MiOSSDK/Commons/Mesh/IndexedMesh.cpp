@@ -16,6 +16,11 @@ IndexedMesh::~IndexedMesh() {
   if (_owner) {
     delete _indices;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
@@ -28,7 +33,8 @@ IndexedMesh::IndexedMesh(const int primitive,
                          Color* flatColor,
                          IFloatBuffer* colors,
                          const float colorsIntensity,
-                         bool depthTest) :
+                         bool depthTest,
+                         IFloatBuffer* normals) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -38,7 +44,8 @@ AbstractMesh(primitive,
              flatColor,
              colors,
              colorsIntensity,
-             depthTest),
+             depthTest,
+             normals),
 _indices(indices)
 {
 
@@ -46,5 +53,5 @@ _indices(indices)
 
 void IndexedMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, &_glState, *rc->getGPUProgramManager());
+  gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
 }

@@ -31,6 +31,7 @@ public:
                       int imageHeight);
   
   ~GEORasterProjection() {
+
   }
 
   Vector2F project(const Geodetic2D* position) const;

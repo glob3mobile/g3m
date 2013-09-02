@@ -25,7 +25,7 @@ public abstract class GLErrorRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc, GLGlobalState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
     final ILogger logger = rc.getLogger();
@@ -46,13 +46,15 @@ public abstract class GLErrorRenderer extends LeafRenderer
 
   public void dispose()
   {
+    super.dispose();
+  
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc, GLState glState)
   {
     return true;
   }

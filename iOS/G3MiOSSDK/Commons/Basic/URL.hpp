@@ -10,11 +10,29 @@
 #define G3MiOSSDK_URL_hpp
 
 #include <string>
+#include "IStringUtils.hpp"
 
 class URL {
 private:
   const std::string _path;
   URL& operator=(const URL& that);
+
+  static const std::string concatenatePath(const URL& parent,
+                                           const std::string& path) {
+    const IStringUtils* iu = IStringUtils::instance();
+
+    std::string result = iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    if (iu->beginsWith(result, "http:/")) {
+#ifdef C_CODE
+      result = "http://" + iu->substring(result, 6);
+#endif
+#ifdef JAVA_CODE
+      result = "http://" + iu.substring(result, 6);
+#endif
+    }
+
+    return result;
+  }
 
 public:
 
@@ -39,12 +57,11 @@ public:
 
   URL(const URL& parent,
       const std::string& path) :
-  _path( parent.getPath() + "/" + path )
+  _path( concatenatePath(parent, path) )
   {
   }
 
   ~URL() {
-    
   }
 
   std::string getPath() const {

@@ -21,7 +21,7 @@ private:
   
   MutableMatrix44D _translationMatrix;
   
-  GLState _glState;
+  GLState* _glState;
 
 public:
 
@@ -34,18 +34,19 @@ public:
   _x(x),
   _y(y),
   _z(z),
-  _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z))
+  _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z)),
+  _glState(new GLState())
   {
-    _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
   }
   
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState){
-    _glState.setParent(parentState);
-    return &_glState;
+                             const GLState* parentState) {
+    _glState->setParent(parentState);
+    return _glState;
   }
 
-  std::string description(){
+  std::string description() {
     return "SGTranslateNode";
   }
 

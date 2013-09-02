@@ -39,7 +39,7 @@ public:
                   const TilesRenderParameters* parameters);
   
   Mesh* texturize(const G3MRenderContext* rc,
-                  const TileRenderContext* trc,
+                  const PlanetRendererContext* prc,
                   Tile* tile,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh);

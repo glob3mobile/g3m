@@ -31,26 +31,8 @@ public class GEOFeatureCollection extends GEOObject
   public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
      _features = features;
-
   }
 
-//  void addFeature(GEOFeature* feature);
-
-
-  //void GEOFeatureCollection::addFeature(GEOFeature* feature) {
-  //  _features.push_back(feature);
-  //}
-  
-  //void GEOFeatureCollection::render(const G3MRenderContext* rc,
-  //                                  const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
-  //                                  const GEOSymbolizer* symbolizer) {
-  //  const int featuresCount = _features.size();
-  //  for (int i = 0; i < featuresCount; i++) {
-  //    GEOFeature* feature = _features[i];
-  //    feature->render(rc, parentState, parentProgramState, symbolizer);
-  //  }
-  //}
-  
   public void dispose()
   {
     final int featuresCount = _features.size();
@@ -60,20 +42,28 @@ public class GEOFeatureCollection extends GEOObject
       if (feature != null)
          feature.dispose();
     }
+  
+    super.dispose();
+  
   }
 
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState, const GPUProgramState* parentProgramState,
-//              const GEOSymbolizer* symbolizer);
-
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizationContext sc)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.symbolize(rc, sc);
+      feature.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
     }
+  }
+
+  public final GEOFeature get(int i)
+  {
+     return _features.get(i);
+  }
+  public final int size()
+  {
+     return _features.size();
   }
 
 }

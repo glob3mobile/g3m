@@ -11,11 +11,11 @@
 
 #include <string>
 
+
 class IByteBuffer {
 public:
 
   virtual ~IByteBuffer() {
-
   }
 
   virtual int size() const = 0;

@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUVariableValueSet.h
+//  GPUVariableValueSet.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/07/13.
 //
 //
-
 
 
 
@@ -41,9 +40,9 @@ public class GPUVariableValueSet
       _attributeValues[i] = null;
     }
   }
+
   public void dispose()
   {
-  
     for (int i = 0; i <= _highestUniformKey; i++)
     {
       GPUUniformValue u = _uniformValues[i];
@@ -61,6 +60,20 @@ public class GPUVariableValueSet
         a._release();
       }
     }
+  }
+
+  public final boolean containsUniform(GPUUniformKey key)
+  {
+    final int index = key.getValue();
+
+    return _uniformValues[index] != null;
+  }
+
+  public final boolean containsAttribute(GPUAttributeKey key)
+  {
+    final int index = key.getValue();
+
+    return _attributeValues[index] != null;
   }
 
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)
@@ -92,7 +105,7 @@ public class GPUVariableValueSet
     }
   }
 
-//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v){
+//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v) {
 ///#ifdef C_CODE
 //    const int index = key;
 ///#endif
@@ -100,12 +113,12 @@ public class GPUVariableValueSet
 //    final int index = key.getValue();
 ///#endif
 //    _attributeValues[key] = v;
-//    if (key > _highestAttributeKey){
+//    if (key > _highestAttributeKey) {
 //      _highestAttributeKey = key;
 //    }
 //  }
 //
-//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v){
+//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v) {
 ///#ifdef C_CODE
 //    const int index = key;
 ///#endif
@@ -113,7 +126,7 @@ public class GPUVariableValueSet
 //    final int index = key.getValue();
 ///#endif
 //    _uniformValues[key] = v;
-//    if (key > _highestUniformKey){
+//    if (key > _highestUniformKey) {
 //      _highestUniformKey = key;
 //    }
 //  }

@@ -35,7 +35,7 @@ private:
   ProjectionGLFeature* _projectionFeature;
   ModelGLFeature* _modelFeature;
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
   
@@ -44,7 +44,8 @@ public:
   _degrees(0),
   _backgroundColor(backgroundColor),
   _projectionFeature(NULL),
-  _modelFeature(NULL)
+  _modelFeature(NULL),
+  _glState(new GLState())
   {
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D::invalid();
@@ -56,7 +57,7 @@ public:
     return true;
   }
   
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -82,6 +83,13 @@ public:
   virtual ~BusyMeshRenderer() {
     delete _mesh;
     delete _backgroundColor;
+
+    _glState->_release();
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void incDegrees(double value) {

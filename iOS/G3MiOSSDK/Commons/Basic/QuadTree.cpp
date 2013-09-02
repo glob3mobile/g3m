@@ -45,20 +45,20 @@ bool QuadTree_Node::add(const Sector& sector,
   if (_children == NULL) {
     _children = new QuadTree_Node*[4];
 
-    const Geodetic2D lower = _sector.lower();
-    const Geodetic2D upper = _sector.upper();
+    const Geodetic2D lower = _sector._lower;
+    const Geodetic2D upper = _sector._upper;
 
-    const Angle splitLongitude = Angle::midAngle(lower.longitude(), upper.longitude());
-    const Angle splitLatitude  = Angle::midAngle(lower.latitude(),  upper.latitude());
+    const Angle splitLongitude = Angle::midAngle(lower._longitude, upper._longitude);
+    const Angle splitLatitude  = Angle::midAngle(lower._latitude,  upper._latitude);
 
     const Sector sector0(lower,
                          Geodetic2D(splitLatitude, splitLongitude));
 
-    const Sector sector1(Geodetic2D(lower.latitude(), splitLongitude),
-                         Geodetic2D(splitLatitude, upper.longitude()));
+    const Sector sector1(Geodetic2D(lower._latitude, splitLongitude),
+                         Geodetic2D(splitLatitude, upper._longitude));
 
-    const Sector sector2(Geodetic2D(splitLatitude, lower.longitude()),
-                         Geodetic2D(upper.latitude(), splitLongitude));
+    const Sector sector2(Geodetic2D(splitLatitude, lower._longitude),
+                         Geodetic2D(upper._latitude, splitLongitude));
 
     const Sector sector3(Geodetic2D(splitLatitude, splitLongitude),
                          upper);

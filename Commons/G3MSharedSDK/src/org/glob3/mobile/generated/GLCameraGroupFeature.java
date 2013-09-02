@@ -3,14 +3,20 @@ package org.glob3.mobile.generated;
 
 public class GLCameraGroupFeature extends GLFeature
 {
+
   private Matrix44DHolder _matrixHolder = null;
-  public GLCameraGroupFeature(Matrix44D matrix)
+
+  public GLCameraGroupFeature(Matrix44D matrix, GLFeatureID id)
   {
-    super(GLFeatureGroupName.CAMERA_GROUP);
-    _matrixHolder = new Matrix44DHolder(matrix);
+     super(GLFeatureGroupName.CAMERA_GROUP, id);
+     _matrixHolder = new Matrix44DHolder(matrix);
   }
+
   public void dispose()
   {
+    _matrixHolder._release();
+
+    super.dispose();
   }
   public final Matrix44D getMatrix()
   {
@@ -24,6 +30,7 @@ public class GLCameraGroupFeature extends GLFeature
   {
      return _matrixHolder;
   }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
   }

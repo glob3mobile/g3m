@@ -28,7 +28,7 @@ class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class WidgetUserData;
-class TileRenderer;
+class PlanetRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;

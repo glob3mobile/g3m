@@ -36,8 +36,7 @@ _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
-_model(NULL),
-_projection(NULL)
+_glState(new GLState())
 {
 }
 
@@ -53,9 +52,16 @@ MarksRenderer::~MarksRenderer() {
   }
   _markTouchListener = NULL;
   
-  if (_billboardTexCoord != NULL){
+  if (_billboardTexCoord != NULL) {
     delete _billboardTexCoord;
   }
+
+  _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 };
 
 
@@ -76,7 +82,7 @@ void MarksRenderer::addMark(Mark* mark) {
   }
 }
 
-void MarksRenderer::removeMark(Mark* mark){
+void MarksRenderer::removeMark(Mark* mark) {
   int pos = -1;
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -182,8 +188,7 @@ bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
   return true;
 }
 
-
-void MarksRenderer::render(const G3MRenderContext* rc) {
+void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
@@ -193,11 +198,18 @@ void MarksRenderer::render(const G3MRenderContext* rc) {
 
   updateGLState(rc);
 
+  const Planet* planet = rc->getPlanet();
+  GL* gl = rc->getGL();
+
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (mark->isReady()) {
-      mark->render(rc, cameraPosition, &_glState);
+      mark->render(rc,
+                   cameraPosition,
+                   _glState,
+                   planet,
+                   gl);
     }
   }
 }
@@ -221,7 +233,7 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
           continue;
         }
         
-        if (!mark->isRendered()){
+        if (!mark->isRendered()) {
           continue;
         }
         
@@ -264,19 +276,33 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
   }
 }
 
-void MarksRenderer::updateGLState(const G3MRenderContext* rc){
+void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL){
-    _projection = new ProjectionGLFeature(cam);
-    _glState.addGLFeature(_projection, true);
+
+  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+  if (projection == NULL) {
+    projection = new ProjectionGLFeature(cam);
+    _glState->addGLFeature(projection, true);
   } else{
-    _projection->setMatrix(cam->getProjectionMatrix44D());
+    projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
-  if (_model == NULL){
-    _model = new ModelGLFeature(cam);
-    _glState.addGLFeature(_model, true);
+  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
+  if (model == NULL) {
+    model = new ModelGLFeature(cam);
+    _glState->addGLFeature(model, true);
   } else{
-    _model->setMatrix(cam->getModelMatrix44D());
+    model->setMatrix(cam->getModelMatrix44D());
   }
+
+  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL){
+    _glState->clearGLFeatureGroup(NO_GROUP);
+    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
+  }
+}
+
+void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                           int width, int height) {
+  _glState->clearGLFeatureGroup(NO_GROUP);
+  _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
 }

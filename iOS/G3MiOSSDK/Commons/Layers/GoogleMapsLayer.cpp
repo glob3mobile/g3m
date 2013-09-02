@@ -115,3 +115,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   
   return petitions;
 }
+
+const std::string GoogleMapsLayer::description() const {
+  return "[GoogleMapsLayer]";
+}

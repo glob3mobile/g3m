@@ -19,7 +19,7 @@
 class FloatBufferBuilderFromGeodetic: public FloatBufferBuilder {
 private:
 
-  const int _centerStrategy;
+  const CenterStrategy _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
@@ -32,9 +32,7 @@ private:
 
   const Planet * _ellipsoid;
 
-public:
-
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* ellipsoid,
                                  const Vector3D& center):
   _ellipsoid(ellipsoid),
@@ -43,7 +41,7 @@ public:
     setCenter( center );
   }
 
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* ellipsoid,
                                  const Geodetic2D& center):
   _ellipsoid(ellipsoid),
@@ -52,13 +50,65 @@ public:
     setCenter( _ellipsoid->toCartesian(center) );
   }
 
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* ellipsoid,
                                  const Geodetic3D& center):
   _ellipsoid(ellipsoid),
   _centerStrategy(centerStrategy)
   {
     setCenter( _ellipsoid->toCartesian(center) );
+  }
+
+public:
+
+  static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          NO_CENTER,
+#else
+                                          CenterStrategy.NO_CENTER,
+#endif
+                                          planet, Vector3D::zero);
+  }
+
+  static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          FIRST_VERTEX,
+#else
+                                          CenterStrategy.FIRST_VERTEX,
+#endif
+                                          planet, Vector3D::zero);
+  }
+
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
+  }
+
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
+  }
+
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
   }
 
   void add(const Angle& latitude,

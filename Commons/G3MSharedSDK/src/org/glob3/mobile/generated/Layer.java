@@ -194,4 +194,6 @@ public abstract class Layer
     return _parameters;
   }
 
+  public abstract String description();
+
 }

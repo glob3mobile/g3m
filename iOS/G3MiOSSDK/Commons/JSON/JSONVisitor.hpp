@@ -21,10 +21,10 @@ class JSONLong;
 
 #include <string>
 
+
 class JSONVisitor {
 public:
   virtual ~JSONVisitor() {
-
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;

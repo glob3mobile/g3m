@@ -22,13 +22,6 @@ public class Vector2I
   public final int _x;
   public final int _y;
 
-//  Vector2I() :
-//  _x(0),
-//  _y(0)
-//  {
-//    
-//  }
-
   public Vector2I(int x, int y)
   {
      _x = x;

@@ -22,6 +22,7 @@ public abstract class CameraEventHandler
 
   public void dispose()
   {
+
   }
 
   public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);

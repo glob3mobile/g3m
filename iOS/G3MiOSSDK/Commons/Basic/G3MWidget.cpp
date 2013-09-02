@@ -37,6 +37,8 @@
 
 #include "ICameraActivityListener.hpp"
 
+#include "SceneLighting.hpp"
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -68,13 +70,14 @@ G3MWidget::G3MWidget(GL*                              gl,
                      CameraRenderer*                  cameraRenderer,
                      Renderer*                        mainRenderer,
                      Renderer*                        busyRenderer,
-                     Color                            backgroundColor,
+                     const Color&                     backgroundColor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
                      GInitializationTask*             initializationTask,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks,
-                     GPUProgramManager*               gpuProgramManager):
+                     GPUProgramManager*               gpuProgramManager,
+                     SceneLighting*                   sceneLighting):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -104,6 +107,7 @@ _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
+_surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
 _context(new G3MContext(IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
@@ -113,12 +117,16 @@ _context(new G3MContext(IFactory::instance(),
                         _planet,
                         downloader,
                         _effectsScheduler,
-                        storage)),
+                        storage,
+                        mainRenderer->getSurfaceElevationProvider()
+                        )),
 _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
 _clickOnProcess(false),
-_gpuProgramManager(gpuProgramManager)
+_gpuProgramManager(gpuProgramManager),
+_sceneLighting(sceneLighting),
+_rootState(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -135,7 +143,7 @@ _gpuProgramManager(gpuProgramManager)
     _storage->initialize(_context);
   }
 
-  if (_downloader != NULL){
+  if (_downloader != NULL) {
     _downloader->initialize(_context, _frameTasksExecutor);
     _downloader->start();
   }
@@ -156,13 +164,14 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              CameraRenderer*                  cameraRenderer,
                              Renderer*                        mainRenderer,
                              Renderer*                        busyRenderer,
-                             Color                            backgroundColor,
+                             const Color&                     backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
                              GInitializationTask*             initializationTask,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks,
-                             GPUProgramManager*               gpuProgramManager) {
+                             GPUProgramManager*               gpuProgramManager,
+                             SceneLighting*                   sceneLighting) {
 
   return new G3MWidget(gl,
                        storage,
@@ -180,7 +189,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        initializationTask,
                        autoDeleteInitializationTask,
                        periodicalTasks,
-                       gpuProgramManager);
+                       gpuProgramManager,
+                       sceneLighting);
 }
 
 G3MWidget::~G3MWidget() {
@@ -211,17 +221,19 @@ G3MWidget::~G3MWidget() {
   }
   delete _frameTasksExecutor;
 
-  for (int i = 0; i < _periodicalTasks.size(); i++){
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
     PeriodicalTask* periodicalTask =  _periodicalTasks[i];
     delete periodicalTask;
   }
 
   delete _context;
+
+  delete _rootState;
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  if (_mainRendererReady){
+  if (_mainRendererReady) {
     bool handled = false;
     if (_mainRenderer->isEnable()) {
       handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
@@ -251,7 +263,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _planet,
                      _downloader,
                      _effectsScheduler,
-                     _storage);
+                     _storage,
+                     _surfaceElevationProvider);
 
 
   // notify the original event
@@ -296,7 +309,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _planet,
                      _downloader,
                      _effectsScheduler,
-                     _storage);
+                     _storage,
+                     _surfaceElevationProvider);
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);
@@ -363,6 +377,8 @@ void G3MWidget::render(int width, int height) {
                                 _nextCamera);
   }
 
+  int agustin_todo_planet_onCameraChange;
+
 
   //  _nextCamera->forceMatrixCreation();
   //
@@ -385,7 +401,8 @@ void G3MWidget::render(int width, int height) {
                       _effectsScheduler,
                       IFactory::instance()->createTimer(),
                       _storage,
-                      _gpuProgramManager);
+                      _gpuProgramManager,
+                      _surfaceElevationProvider);
 
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
@@ -427,13 +444,21 @@ void G3MWidget::render(int width, int height) {
 
   _gl->clearScreen(*_backgroundColor);
 
+  if (_rootState == NULL){
+    _rootState = new GLState();
+    _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
+  }
+
   if (_mainRendererReady) {
-    _cameraRenderer->render(&rc);
+    _cameraRenderer->render(&rc, _rootState);
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc);
+    _selectedRenderer->render(&rc, _rootState);
   }
+
+  //  rootState->_release();
+  //  rootState = NULL;
 
   std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
@@ -474,7 +499,7 @@ void G3MWidget::render(int width, int height) {
   if (_logDownloaderStatistics) {
     std::string cacheStatistics = "";
 
-    if (_downloader != NULL){
+    if (_downloader != NULL) {
       cacheStatistics = _downloader->statistics();
     }
 

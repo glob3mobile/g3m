@@ -156,37 +156,8 @@ public class GL
 //                    GPUProgramManager& progManager,
 //                    const GPUProgramState* gpuState);
 
-
-  //void GL::drawElements(int mode,
-  //                      IShortBuffer* indices, const GLGlobalState& state,
-  //                      GPUProgramManager& progManager,
-  //                      const GPUProgramState* gpuState) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-  //                                 mode,
-  //                                 indices->description().c_str());
-  //  }
-  //  
-  ////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  ////  glState.applyOnGPU(this, progManager);
-  ////  
-  ////  //applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  ////  
-  ////  _nativeGL->drawElements(mode,
-  ////                          indices->size(),
-  ////                          indices);
-  ////  
-  //  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //  //progManager.getProgram(*gpuState)->onUnused();
-  //}
-  
   public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-  //                                 mode,
-  //                                 indices->description().c_str());
-  //  }
   
     state.applyOnGPU(this, progManager);
   
@@ -199,33 +170,6 @@ public class GL
 //                  GPUProgramManager& progManager,
 //                  const GPUProgramState* gpuState);
 
-
-  //void GL::drawArrays(int mode,
-  //                    int first,
-  //                    int count, const GLGlobalState& state,
-  //                    GPUProgramManager& progManager,
-  //                    const GPUProgramState* gpuState) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
-  //  
-  ////  GLState glState((GLGlobalState*)&state, (GPUProgramState*)gpuState);
-  ////  glState.applyOnGPU(this, progManager);
-  ////  
-  //////  applyGLGlobalStateAndGPUProgramState(state, progManager, *gpuState);
-  ////  
-  ////  
-  ////  _nativeGL->drawArrays(mode,
-  ////                        first,
-  ////                        count);
-  ////  
-  //  //TODO: CHECKING GPU STATUS BY DELETING ALL
-  //  //progManager.getProgram(*gpuState)->onUnused();
-  //}
-  
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
   //  if (_verbose) {
@@ -261,21 +205,12 @@ public class GL
     {
       int texture2D = GLTextureType.texture2D();
   
-  //    GLGlobalState state(*GLState::getCurrentGLGlobalState());
-  //    GLGlobalState* state = GLState::createCopyOfCurrentGLGlobalState();
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
       newState.bindTexture(texId);
   
       newState.applyChanges(this, _currentGLGlobalState);
-  
-  //    GLState glState(state, NULL);
-  //    glState.applyGlobalStateOnGPU(this);
-  //    delete state;
-  
-  //    setGLGlobalState(state);
   
       int linear = GLTextureParameterValue.linear();
       int clampToEdge = GLTextureParameterValue.clampToEdge();
@@ -326,7 +261,7 @@ public class GL
   
   //    GLState::textureHasBeenDeleted(textureId);
   
-  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId){
+  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
   //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
   //    }
   
@@ -418,6 +353,11 @@ public class GL
      _nativeGL.uniform4f(location, v0, v1, v2, v3);
   }
 
+  public final void uniform3f(IGLUniformID location, float v0, float v1, float v2)
+  {
+     _nativeGL.uniform3f(location, v0, v1, v2);
+  }
+
   public final void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer)
   {
     _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);
@@ -479,7 +419,7 @@ public class GL
 
 
 }
-//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState){
+//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {
 //  state.applyChanges(this, *_currentState);
 //  setProgramState(progManager, progState);
 //}

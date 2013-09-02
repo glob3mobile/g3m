@@ -19,13 +19,6 @@ public class GPUUniformValueFloat extends GPUUniformValue
     return _value == v2._value;
   }
 
-  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
-  //      delete value;
-  //    }
-  //    return new GPUUniformValueFloat(_value);
-  //  }
-
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

@@ -94,7 +94,7 @@ bool LayerSet::isReady() const {
     return false;
   }
   
-  for (int i = 0; i < layersCount; i++){
+  for (int i = 0; i < layersCount; i++) {
     if (!(_layers[i]->isReady())) {
       return false;
     }
@@ -135,7 +135,7 @@ void LayerSet::addLayer(Layer* layer) {
 void LayerSet::removeAllLayers(const bool deleteLayers) {
   const int layersSize = _layers.size();
   if (layersSize > 0) {
-    for (unsigned int i = 0; i < layersSize; i++) {
+    for (int i = 0; i < layersSize; i++) {
       Layer* layer = _layers[i];
       layer->removeLayerSet(this);
       if (deleteLayers) {

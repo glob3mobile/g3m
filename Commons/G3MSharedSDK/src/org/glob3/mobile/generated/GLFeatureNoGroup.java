@@ -1,24 +1,20 @@
 package org.glob3.mobile.generated; 
+ //: public GLFeatureSet
 public class GLFeatureNoGroup extends GLFeatureGroup
 {
-  public final void applyOnGlobalGLState(GLGlobalState state)
+//  void applyOnGlobalGLState(GLGlobalState* state);
+//  void addToGPUVariableSet(GPUVariableValueSet* vs);
+
+  public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
-    for(int i = 0; i < _nFeatures; i++)
+  
+    final int size = features.size();
+    for(int i = 0; i < size; i++)
     {
-      final GLFeature f = _features[i];
-      if (f != null)
+      final GLFeature f = features.get(i);
+      if (f.getGroup() == GLFeatureGroupName.NO_GROUP)
       {
         f.applyOnGlobalGLState(state);
-      }
-    }
-  }
-  public final void addToGPUVariableSet(GPUVariableValueSet vs)
-  {
-    for(int i = 0; i < _nFeatures; i++)
-    {
-      final GLFeature f = _features[i];
-      if (f != null)
-      {
         vs.combineWith(f.getGPUVariableValueSet());
       }
     }

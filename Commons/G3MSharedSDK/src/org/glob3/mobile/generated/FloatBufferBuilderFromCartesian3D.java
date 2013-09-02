@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 
 public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 {
-  private final int _centerStrategy;
+  private final CenterStrategy _centerStrategy;
   private float _cx;
   private float _cy;
   private float _cz;
@@ -23,11 +23,27 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
     _cz = (float) z;
   }
 
-
-  public FloatBufferBuilderFromCartesian3D(int centerStrategy, Vector3D center)
+  private FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy, Vector3D center)
   {
      _centerStrategy = centerStrategy;
     setCenter(center._x, center._y, center._z);
+  }
+
+
+
+  public static FloatBufferBuilderFromCartesian3D builderWithoutCenter()
+  {
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
+  }
+
+  public static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter()
+  {
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
+  }
+
+  public static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(Vector3D center)
+  {
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);
   }
 
   public final void add(Vector3D vector)
@@ -37,7 +53,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(double x, double y, double z)
   {
-    if (_centerStrategy == CenterStrategy.firstVertex())
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -45,7 +61,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
       }
     }
 
-    if (_centerStrategy == CenterStrategy.noCenter())
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back((float) x);
       _values.push_back((float) y);
@@ -61,7 +77,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(float x, float y, float z)
   {
-    if (_centerStrategy == CenterStrategy.firstVertex())
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)
       {
@@ -69,7 +85,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
       }
     }
 
-    if (_centerStrategy == CenterStrategy.noCenter())
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back(x);
       _values.push_back(y);

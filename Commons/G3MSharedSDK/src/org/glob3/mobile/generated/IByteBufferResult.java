@@ -12,7 +12,6 @@ public class IByteBufferResult
 
   public void dispose()
   {
-
   }
 
   public final IByteBuffer getBuffer()

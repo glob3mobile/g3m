@@ -22,11 +22,19 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
   private final GEO2DLineRasterStyle                           _style;
 
+  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel)
+  {
+     this(coordinatesArray, style, minTileLevel, -1);
+  }
   public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style)
+  {
+     this(coordinatesArray, style, -1, -1);
+  }
+  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
   //_lineColor( style.getColor() ),
   //_lineWidth( style.getWidth() )
   {
-     super(calculateSectorFromCoordinatesArray(coordinatesArray));
+     super(calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel);
      _coordinatesArray = copyCoordinatesArray(coordinatesArray);
      _style = style;
   }
@@ -50,12 +58,13 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
       }
       _coordinatesArray = null;
     }
+  
+    super.dispose();
+  
   }
 
-  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {
-  //  canvas->setLineColor(_lineColor);
-  //  canvas->setLineWidth(_lineWidth);
     if (_style.apply(canvas))
     {
       final int coordinatesArrayCount = _coordinatesArray.size();

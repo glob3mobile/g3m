@@ -4,7 +4,7 @@ public class TrailsRenderer extends LeafRenderer
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
 
-  private GLState _glState = new GLState();
+  private GLState _glState;
 
   private void updateGLState(G3MRenderContext rc)
   {
@@ -37,6 +37,7 @@ public class TrailsRenderer extends LeafRenderer
   {
      _projection = null;
      _model = null;
+     _glState = new GLState();
   }
 
   public final void addTrail(Trail trail)
@@ -57,6 +58,8 @@ public class TrailsRenderer extends LeafRenderer
          trail.dispose();
     }
     _trails.clear();
+  
+    _glState._release();
   }
 
   public final void onResume(G3MContext context)
@@ -103,7 +106,7 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final int trailsCount = _trails.size();
     final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();

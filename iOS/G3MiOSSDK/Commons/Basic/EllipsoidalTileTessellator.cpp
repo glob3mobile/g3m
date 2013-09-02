@@ -30,6 +30,31 @@
 
 #include "IndexedGeometryMesh.hpp"
 
+#include "IShortBuffer.hpp"
+
+EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
+#ifdef C_CODE
+  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
+       it != _indicesMap.end();
+       it++){
+    delete it->second;
+  }
+#endif
+#ifdef JAVA_CODE
+  java.util.Iterator it = _indicesMap.entrySet().iterator();
+  while (it.hasNext()) {
+    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+    IShortBuffer b = (IShortBuffer) pairs.getValue();
+    b.dispose();
+  }
+#endif
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+}
+
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,
                                                            const Vector2I& rawResolution,
                                                            const Tile* tile,
@@ -57,6 +82,87 @@ Vector2I EllipsoidalTileTessellator::calculateResolution(const Vector2I& rawReso
 //  return Vector2I(resolutionX, resolutionY);
 }
 
+IShortBuffer* EllipsoidalTileTessellator::createTileIndices(const Planet* planet,
+                                                            const Sector& sector,
+                                                            const Vector2I& tileResolution) const{
+
+  ShortBufferBuilder indices;
+  for (short j = 0; j < (tileResolution._y-1); j++) {
+    const short jTimesResolution = (short) (j*tileResolution._x);
+    if (j > 0) {
+      indices.add(jTimesResolution);
+    }
+    for (short i = 0; i < tileResolution._x; i++) {
+      indices.add((short) (jTimesResolution + i));
+      indices.add((short) (jTimesResolution + i + tileResolution._x));
+    }
+    indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
+  }
+
+
+  // create skirts
+  if (_skirted) {
+
+    int posS = tileResolution._x * tileResolution._y;
+    indices.add((short) (posS-1));
+
+    // east side
+    for (int j = tileResolution._y-1; j > 0; j--) {
+      indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
+      indices.add((short) posS++);
+    }
+
+    // north side
+    for (int i = tileResolution._x-1; i > 0; i--) {
+      indices.add((short) i);
+      indices.add((short) posS++);
+    }
+
+    // west side
+    for (int j = 0; j < tileResolution._y-1; j++) {
+      indices.add((short) (j*tileResolution._x));
+      indices.add((short) posS++);
+    }
+
+    // south side
+    for (int i = 0; i < tileResolution._x-1; i++) {
+      indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
+      indices.add((short) posS++);
+    }
+
+    // last triangle
+    indices.add((short) ((tileResolution._x*tileResolution._y)-1));
+    indices.add((short) (tileResolution._x*tileResolution._y));
+  }
+
+  return indices.create();
+}
+
+IShortBuffer* EllipsoidalTileTessellator::getTileIndices(const Planet* planet,
+                                                         const Sector& sector,
+                                                         const Vector2I& tileResolution) const{
+#ifdef C_CODE
+  std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
+  if (it != _indicesMap.end()){
+    return it->second;
+  }
+
+  IShortBuffer* indices = createTileIndices(planet, sector, tileResolution);
+  _indicesMap[tileResolution] = indices;
+
+  return indices;
+#endif
+#ifdef JAVA_CODE
+  IShortBuffer indices = _indicesMap.get(tileResolution);
+  if (indices == null){
+    indices = createTileIndices(planet, sector, tileResolution);
+    _indicesMap.put(tileResolution, indices);
+  }
+  return indices;
+#endif
+  
+}
+
 Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile,
@@ -69,9 +175,10 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
   const Vector2I tileResolution = calculateResolution(rawResolution, sector);
 
   double minElevation = 0;
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -102,21 +209,6 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     }
   }
 
-
-  ShortBufferBuilder indices;
-  for (short j = 0; j < (tileResolution._y-1); j++) {
-    const short jTimesResolution = (short) (j*tileResolution._x);
-    if (j > 0) {
-      indices.add(jTimesResolution);
-    }
-    for (short i = 0; i < tileResolution._x; i++) {
-      indices.add((short) (jTimesResolution + i));
-      indices.add((short) (jTimesResolution + i + tileResolution._x));
-    }
-    indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
-  }
-
-
   // create skirts
   if (_skirted) {
     // compute skirt height
@@ -124,48 +216,29 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D nw = planet->toCartesian(sector.getNW());
     const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
-    int posS = tileResolution._x * tileResolution._y;
-    indices.add((short) (posS-1));
-
     // east side
     for (int j = tileResolution._y-1; j > 0; j--) {
       vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-
-      indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
-      indices.add((short) posS++);
     }
 
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0),
                    skirtHeight);
-
-      indices.add((short) i);
-      indices.add((short) posS++);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
                    skirtHeight);
-
-      indices.add((short) (j*tileResolution._x));
-      indices.add((short) posS++);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
                    skirtHeight);
-
-      indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
-      indices.add((short) posS++);
     }
-
-    // last triangle
-    indices.add((short) ((tileResolution._x*tileResolution._y)-1));
-    indices.add((short) (tileResolution._x*tileResolution._y));
   }
 
 //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
@@ -182,10 +255,9 @@ Mesh* EllipsoidalTileTessellator::createTileMesh(const Planet* planet,
 //                         color);
 
   return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-                         true,
                          vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
+                         vertices.create(), true,
+                         getTileIndices(planet, sector, tileResolution), false,
                          1,
                          1);
 }
@@ -304,9 +376,11 @@ Mesh* EllipsoidalTileTessellator::createTileDebugMesh(const Planet* planet,
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-                                          planet,
-                                          sector._center);
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
+//                                          planet,
+//                                          sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+
 
   ShortBufferBuilder indices;
 

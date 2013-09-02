@@ -54,6 +54,9 @@ public class CompositeMesh extends Mesh
   
     if (_boundingVolume != null)
        _boundingVolume.dispose();
+  
+    super.dispose();
+  
   }
 
   public final int getVertexCount()

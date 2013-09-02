@@ -25,7 +25,7 @@ public:
   {
     _values = new int[size];
     
-    if (_values == NULL){
+    if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
@@ -43,7 +43,7 @@ public:
   }
   
   int get(int i) const {
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
     
@@ -52,7 +52,7 @@ public:
   
   void put(int i, int value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -64,7 +64,7 @@ public:
   
   void rawPut(int i, int value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     

@@ -9,6 +9,7 @@
 #ifndef __G3MiOSSDK__BoundingArea__
 #define __G3MiOSSDK__BoundingArea__
 
+
 class BoundingArea {
 public:
   virtual ~BoundingArea() {

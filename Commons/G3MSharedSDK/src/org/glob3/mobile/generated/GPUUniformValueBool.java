@@ -25,13 +25,6 @@ public class GPUUniformValueBool extends GPUUniformValue
     return _value == ((GPUUniformValueBool)v)._value;
   }
 
-  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
-  //      delete value;
-  //    }
-  //    return new GPUUniformValueBool(_value);
-  //  }
-
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

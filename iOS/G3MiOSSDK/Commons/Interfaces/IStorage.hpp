@@ -32,7 +32,6 @@ public:
   }
 
   ~IImageResult() {
-
   }
 
   IImage* getImage() const {
@@ -59,7 +58,6 @@ public:
   }
 
   ~IByteBufferResult() {
-
   }
 
   IByteBuffer* getBuffer() const {

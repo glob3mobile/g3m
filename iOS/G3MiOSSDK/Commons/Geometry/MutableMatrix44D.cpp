@@ -19,7 +19,7 @@
 
 
 MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
-  if (this != &that){
+  if (this != &that) {
     _m00 = that._m00;
     _m01 = that._m01;
     _m02 = that._m02;
@@ -42,7 +42,7 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 
     _isValid = that._isValid;
 
-    if (_matrix44D != NULL){
+    if (_matrix44D != NULL) {
       _matrix44D->_release();
       _matrix44D = NULL;
     }
@@ -54,13 +54,13 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 MutableMatrix44D::~MutableMatrix44D() {
   //  delete _columnMajorFloatBuffer;
   //  delete [] _columnMajorFloatArray;
-  if (_matrix44D != NULL){
+  if (_matrix44D != NULL) {
     _matrix44D->_release();
   }
 }
 
 //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
-//  if (_columnMajorFloatBuffer == NULL){
+//  if (_columnMajorFloatBuffer == NULL) {
 //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(
 //                                                                      (float) _m00,
 //                                                                      (float) _m10,
@@ -86,7 +86,7 @@ MutableMatrix44D::~MutableMatrix44D() {
 //  return _columnMajorFloatBuffer;
 //}
 
-void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2){
+void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2) {
 
   const double m1_00 = m1._m00;
   const double m1_10 = m1._m10;
@@ -151,7 +151,7 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
   _m32 = (m1_30 * m2_02) + (m1_31 * m2_12) + (m1_32 * m2_22) + (m1_33 * m2_32);
   _m33 = (m1_30 * m2_03) + (m1_31 * m2_13) + (m1_32 * m2_23) + (m1_33 * m2_33);
 
-  if (_matrix44D != NULL){
+  if (_matrix44D != NULL) {
     _matrix44D->_release();
     _matrix44D = NULL;
   }
@@ -219,10 +219,10 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const {
 
-  if (this->isIdentity()){
+  if (this->isIdentity()) {
     return that;
   }
-  if (that.isIdentity()){
+  if (that.isIdentity()) {
     return *this;
   }
 
@@ -363,7 +363,7 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D,
                                      const int vpWidth,
                                      const int vpHeight) const {
 
-  int TODO_Remove_UNPROJECT;//!!!!
+  //int TODO_Remove_UNPROJECT;//!!!!
 
   const double winx = pixel3D._x;
   const double winy = pixel3D._y;
@@ -548,12 +548,12 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
 
 
 
-void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
+void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
   //  if (isEqualsTo(m)) {
   //    return;
   //  }
 
-  if (_matrix44D != NULL && _matrix44D == m._matrix44D){
+  if (_matrix44D != NULL && _matrix44D == m._matrix44D) {
     return;
   }
 
@@ -579,12 +579,12 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m){
   _m32  = m._m32;
   _m33  = m._m33;
 
-  if (_matrix44D != NULL){
+  if (_matrix44D != NULL) {
     _matrix44D->_release();
   }
   
   _matrix44D = m._matrix44D;
-  if (_matrix44D != NULL){
+  if (_matrix44D != NULL) {
     _matrix44D->_retain();
   }
 }

@@ -20,8 +20,7 @@ private:
   GEOFeature* _feature;
 
 protected:
-  virtual std::vector<GEOSymbol*>* createSymbols(const G3MRenderContext* rc,
-                                                 const GEOSymbolizationContext& sc) const = 0;
+  virtual std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const = 0;
 
 public:
   GEOGeometry() :
@@ -31,6 +30,9 @@ public:
   }
 
   virtual ~GEOGeometry() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 
@@ -41,8 +43,12 @@ public:
   }
 
   void symbolize(const G3MRenderContext* rc,
-                 const GEOSymbolizationContext& sc) const;
-  
+                 const GEOSymbolizer*    symbolizer,
+                 MeshRenderer*           meshRenderer,
+                 ShapesRenderer*         shapesRenderer,
+                 MarksRenderer*          marksRenderer,
+                 GEOTileRasterizer*      geoTileRasterizer) const;
+
 };
 
 #endif

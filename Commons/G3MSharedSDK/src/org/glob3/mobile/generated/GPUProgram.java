@@ -134,10 +134,11 @@ public class GPUProgram
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
     if (!p.compileShader(gl, vertexShader, vertexSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader\n");
+      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader :\n %s\n", vertexSource);
+      gl.printShaderInfoLog(vertexShader);
+  
       p.deleteShader(gl, vertexShader);
       p.deleteProgram(gl, p._programID);
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader");
       return null;
     }
   
@@ -147,10 +148,11 @@ public class GPUProgram
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
     if (!p.compileShader(gl, fragmentShader, fragmentSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader\n");
+      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader :\n %s\n", fragmentSource);
+      gl.printShaderInfoLog(fragmentShader);
+  
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p._programID);
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader");
       return null;
     }
   
@@ -360,16 +362,19 @@ public class GPUProgram
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      _createdAttributes[i].unset(gl);
+      if (_createdAttributes[i] != null)
+      {
+        _createdAttributes[i].unset(gl);
+      }
     }
   
     //  for (int i = 0; i < 32; i++) {
     //    GPUUniform* u = _uniforms[i];
     //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL){
+    //    if (u != NULL) {
     //      u->unset();
     //    }
-    //    if (a != NULL){
+    //    if (a != NULL) {
     //      a->unset(gl);
     //    }
     //  }
@@ -391,17 +396,20 @@ public class GPUProgram
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      _createdAttributes[i].applyChanges(gl);
+      if (_createdAttributes[i] != null)
+      {
+        _createdAttributes[i].applyChanges(gl);
+      }
     }
   
   
     //  for (int i = 0; i < 32; i++) {
     //    GPUUniform* u = _uniforms[i];
     //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL){
+    //    if (u != NULL) {
     //      u->applyChanges(gl);
     //    }
-    //    if (a != NULL){
+    //    if (a != NULL) {
     //      a->applyChanges(gl);
     //    }
     //  }

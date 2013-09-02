@@ -25,7 +25,7 @@ private:
   const bool            _ownedTexMapping;
   const bool            _transparent;
   
-  GLState _glState;
+  GLState* _glState;
   
   void createGLState();
 
@@ -41,18 +41,26 @@ public:
   _ownedMesh(ownedMesh),
   _textureMapping(textureMapping),
   _ownedTexMapping(ownedTexMapping),
-  _transparent(transparent)
+  _transparent(transparent),
+  _glState(new GLState())
   {
     createGLState();
   }
   
-  ~TexturedMesh(){
+  ~TexturedMesh() {
     if (_ownedMesh) {
       delete _mesh;
     } 
-    if (_ownedTexMapping){
+    if (_ownedTexMapping) {
       delete _textureMapping;
     }
+
+    _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   BoundingVolume* getBoundingVolume()  const {

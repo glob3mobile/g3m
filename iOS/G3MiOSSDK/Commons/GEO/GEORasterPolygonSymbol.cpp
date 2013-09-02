@@ -13,8 +13,10 @@
 
 GEORasterPolygonSymbol::GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
                                                const GEO2DLineRasterStyle&    lineStyle,
-                                               const GEO2DSurfaceRasterStyle& surfaceStyle) :
-GEORasterSymbol( calculateSectorFromCoordinates(polygonData->getCoordinates()) ),
+                                               const GEO2DSurfaceRasterStyle& surfaceStyle,
+                                               const int minTileLevel,
+                                               const int maxTileLevel) :
+GEORasterSymbol( calculateSectorFromCoordinates(polygonData->getCoordinates()), minTileLevel, maxTileLevel ),
 _coordinates( copyCoordinates(polygonData->getCoordinates()) ),
 _holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
 _lineStyle(lineStyle),
@@ -51,11 +53,16 @@ GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
     delete _holesCoordinatesArray;
   }
 #endif
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
-void GEORasterPolygonSymbol::rasterize(ICanvas*                   canvas,
-                                       const GEORasterProjection* projection) const {
+void GEORasterPolygonSymbol::rawRasterize(ICanvas*                   canvas,
+                                          const GEORasterProjection* projection) const {
   const bool rasterSurface  = _surfaceStyle.apply(canvas);
   const bool rasterBoundary = _lineStyle.apply(canvas);
 

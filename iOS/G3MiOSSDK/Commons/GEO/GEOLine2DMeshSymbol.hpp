@@ -31,6 +31,9 @@ public:
                       double deltaHeight = 0.0);
 
   virtual ~GEOLine2DMeshSymbol() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
 

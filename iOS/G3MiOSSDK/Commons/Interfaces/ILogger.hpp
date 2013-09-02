@@ -12,6 +12,7 @@
 
 #include <string>
 
+
 enum LogLevel {
   SilenceLevel,
   InfoLevel,
@@ -46,8 +47,9 @@ public:
   virtual void logWarning(const std::string& x, ...) const = 0;
   virtual void logError  (const std::string& x, ...) const = 0;
   
-  // a virtual destructor is needed for conversion to Java
-  virtual ~ILogger() {}
+  virtual ~ILogger() {
+  }
+  
 };
 
 

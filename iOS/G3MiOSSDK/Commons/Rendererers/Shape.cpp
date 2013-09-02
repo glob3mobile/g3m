@@ -22,17 +22,17 @@ class ShapePendingEffect {
 public:
   Effect* _effect;
   bool    _targetIsCamera;
-  
+
   ShapePendingEffect(Effect* effect,
                      bool    targetIsCamera) :
   _effect(effect),
   _targetIsCamera(targetIsCamera)
   {
-    
+
   }
-  
+
   ~ShapePendingEffect() {
-    
+
   }
 };
 
@@ -50,6 +50,8 @@ Shape::~Shape() {
   delete _pitch;
   
   delete _transformMatrix;
+
+  _glState->_release();
 }
 
 void Shape::cleanTransformMatrix() {
@@ -58,7 +60,17 @@ void Shape::cleanTransformMatrix() {
 }
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
-  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
+
+  double altitude = _position->_height;
+  if (_altitudeMode == RELATIVE_TO_GROUND){
+    altitude += _surfaceElevation;
+  }
+
+  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                          _position->_longitude,
+                                          altitude);
+
+  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
@@ -71,8 +83,8 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
-    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-    _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
+    _glState->clearGLFeatureGroup(CAMERA_GROUP);
+    _glState->addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
   }
   return _transformMatrix;
 }
@@ -98,8 +110,8 @@ void Shape::render(const G3MRenderContext* rc,
     }
     
     getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
-    _glState.setParent(parentGLState);
-    rawRender(rc, &_glState, renderNotReadyShapes);
+    _glState->setParent(parentGLState);
+    rawRender(rc, _glState, renderNotReadyShapes);
   }
 }
 
@@ -126,7 +138,7 @@ void Shape::orbitCamera(const TimeInterval& duration,
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
 }
 
-void Shape::addShapeEffect(Effect* effect){
+void Shape::addShapeEffect(Effect* effect) {
   _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
 }
 
@@ -153,4 +165,13 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                                *_pitch, pitch,*_heading,heading,
                                                linearInterpolation);
   addShapeEffect(effect);
+}
+
+void Shape::elevationChanged(const Geodetic2D& position,
+                      double rawElevation,
+                      double verticalExaggeration){
+  _surfaceElevation = rawElevation * verticalExaggeration;
+
+  delete _transformMatrix;
+  _transformMatrix = NULL;
 }

@@ -9,7 +9,7 @@
 #include "Plane.hpp"
 
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
-  int TODO_Multiplication_with_Matrix;
+  //int TODO_Multiplication_with_Matrix;
 
   const double a = _normal._x*M.get0() + _normal._y*M.get1() + _normal._z*M.get2() + _d*M.get3();
   const double b = _normal._x*M.get4() + _normal._y*M.get5() + _normal._z*M.get6() + _d*M.get7();
@@ -30,7 +30,7 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
 
   const double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
 
-  if (den == 0){
+  if (den == 0) {
     return Vector3D::nan();
   }
 
@@ -40,3 +40,15 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
   const Vector3D intersection = origin.add(direction.times(t));
   return intersection;
 }
+
+
+Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
+                                           const Vector3D& direction)
+{
+  if (direction.z()==0) return Vector3D::nan();
+  const double t = -origin.z() / direction.z();
+  if (t<0) return Vector3D::nan();
+  Vector3D point = origin.add(direction.times(t));
+  return point;
+}
+

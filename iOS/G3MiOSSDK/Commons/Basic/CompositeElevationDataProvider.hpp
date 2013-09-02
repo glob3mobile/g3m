@@ -53,7 +53,8 @@ private:
     void onCancel(const Sector& sector,
                   const Vector2I& extent);
 
-    ~CompositeElevationDataProvider_RequestStepListener() { }
+    ~CompositeElevationDataProvider_RequestStepListener() {
+    }
     
   };
   
@@ -91,7 +92,9 @@ private:
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
-    ~CompositeElevationDataProvider_Request(){}
+    ~CompositeElevationDataProvider_Request() {
+
+    }
     
     bool launchNewStep();
     
@@ -117,13 +120,18 @@ private:
   void requestFinished(CompositeElevationDataProvider_Request* req);
 
 public:
-  CompositeElevationDataProvider():_context(NULL), _currentID(0){}
+  CompositeElevationDataProvider():_context(NULL), _currentID(0) {}
 
   ~CompositeElevationDataProvider() {
     int size =  _providers.size();
     for (int i = 0; i < size; i++) {
       delete _providers[i];
     }
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addElevationDataProvider(ElevationDataProvider* edp);

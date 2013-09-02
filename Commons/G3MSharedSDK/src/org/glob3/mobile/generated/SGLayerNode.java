@@ -76,9 +76,6 @@ public class SGLayerNode extends SGNode
     return new URL(path, false);
   }
 
-//  GLState _glState;
-
-
 
   public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
   {

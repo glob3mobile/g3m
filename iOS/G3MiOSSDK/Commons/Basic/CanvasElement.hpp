@@ -23,7 +23,6 @@ public:
   }
 
   virtual ~CanvasElement() {
-
   }
 
   virtual const Vector2F getExtent(ICanvas* canvas) = 0;

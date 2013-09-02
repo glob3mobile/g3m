@@ -99,8 +99,10 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-                                             Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
+  //                                             Vector3D::zero);
+
 
   const Vector3D rotationAxis = Vector3D::downZ();
   for (int i = 0; i < positionsSize; i++) {
@@ -183,19 +185,19 @@ Trail::~Trail() {
 }
 
 
-void TrailsRenderer::updateGLState(const G3MRenderContext* rc){
+void TrailsRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL){
+  if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-    _glState.addGLFeature(_projection, true);
+    _glState->addGLFeature(_projection, true);
   } else{
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
-  if (_model == NULL){
+  if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState.addGLFeature(_model, true);
+    _glState->addGLFeature(_model, true);
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
@@ -235,6 +237,8 @@ TrailsRenderer::~TrailsRenderer() {
     delete trail;
   }
   _trails.clear();
+
+  _glState->_release();
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {
@@ -243,14 +247,14 @@ void TrailsRenderer::addTrail(Trail* trail) {
   }
 }
 
-void TrailsRenderer::render(const G3MRenderContext* rc) {
+void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int trailsCount = _trails.size();
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   updateGLState(rc);
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
     if (trail != NULL) {
-      trail->render(rc, frustum, &_glState);
+      trail->render(rc, frustum, _glState);
     }
   }
 }

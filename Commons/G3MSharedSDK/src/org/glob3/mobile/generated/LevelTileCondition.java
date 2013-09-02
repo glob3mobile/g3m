@@ -30,6 +30,8 @@ public class LevelTileCondition extends LayerCondition
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
   public final boolean isAvailable(G3MRenderContext rc, Tile tile)

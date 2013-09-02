@@ -15,7 +15,6 @@ class IFloatBuffer : public IBuffer {
 public:
   
   virtual ~IFloatBuffer() {
-    
   }
   
   virtual float get(int i) const = 0;

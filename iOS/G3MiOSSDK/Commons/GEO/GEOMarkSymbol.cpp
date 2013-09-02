@@ -8,19 +8,26 @@
 
 #include "GEOMarkSymbol.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "ILogger.hpp"
 #include "Mark.hpp"
 #include "MarksRenderer.hpp"
 
 GEOMarkSymbol::~GEOMarkSymbol() {
   delete _mark;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 bool GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
-                              const GEOSymbolizationContext& sc) const {
+                              const GEOSymbolizer*    symbolizer,
+                              MeshRenderer*           meshRenderer,
+                              ShapesRenderer*         shapesRenderer,
+                              MarksRenderer*          marksRenderer,
+                              GEOTileRasterizer*      geoTileRasterizer) const {
   if (_mark != NULL) {
-    MarksRenderer* marksRenderer = sc.getMarksRenderer();
     if (marksRenderer == NULL) {
       ILogger::instance()->logError("Can't simbolize with Mark, MarksRenderer was not set");
       delete _mark;

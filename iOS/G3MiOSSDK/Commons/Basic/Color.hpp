@@ -83,7 +83,9 @@ public:
   _alpha(that._alpha) {
   }
 
-  ~Color() { }
+  ~Color() {
+
+  }
 
   static Color* parse(const std::string& str);
 
@@ -116,6 +118,20 @@ public:
 
   static Color black() {
     return Color::fromRGBA(0, 0, 0, 1);
+  }
+
+  static Color gray() {
+    return Color::fromRGBA(0.5f, 0.5f, 0.5f, 1);
+  }
+
+  static Color darkGray() {
+    const float oneThird = 1.0f / 3.0f;
+    return Color::fromRGBA(oneThird, oneThird, oneThird, 1);
+  }
+
+  static Color lightGray() {
+    const float twoThirds = 2.0f / 3.0f;
+    return Color::fromRGBA(twoThirds, twoThirds, twoThirds, 1);
   }
 
   static Color white() {
@@ -228,7 +244,6 @@ public:
   }
 
   Color muchDarker() {
-//    return adjustBrightness(-0.32f);
     return adjustBrightness(-0.64f);
   }
 
@@ -241,9 +256,10 @@ public:
   }
   
   Color muchLighter() {
-//    return adjustSaturationBrightness(-0.12f, 0.32f);
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
+
+  const std::string description() const;
 
 };
 

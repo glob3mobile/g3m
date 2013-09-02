@@ -7,7 +7,3 @@
 //
 
 #include "SGMaterialNode.hpp"
-
-#include "Context.hpp"
-#include "GLGlobalState.hpp"
-

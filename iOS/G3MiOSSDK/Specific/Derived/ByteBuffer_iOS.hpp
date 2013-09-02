@@ -23,7 +23,7 @@ public:
   _values(new unsigned char[size]),
   _size(size),
   _timestamp(-1) {
-    if (_values == NULL){
+    if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
@@ -49,7 +49,7 @@ public:
 
   unsigned char get(int i) const {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
     
@@ -58,7 +58,7 @@ public:
 
   void put(int i, unsigned char value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
@@ -70,7 +70,7 @@ public:
 
   void rawPut(int i, unsigned char value) {
     
-    if (i < 0 || i > _size){
+    if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     

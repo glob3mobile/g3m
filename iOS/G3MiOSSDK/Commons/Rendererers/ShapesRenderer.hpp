@@ -26,8 +26,8 @@ private:
   private G3MContext _context;
 #endif
   
-  GLState _glState;
-  GLState _glStateTransparent;
+  GLState* _glState;
+  GLState* _glStateTransparent;
 
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
@@ -39,7 +39,9 @@ public:
   _renderNotReadyShapes(renderNotReadyShapes),
   _context(NULL),
   _projection(NULL),
-  _model(NULL)
+  _model(NULL),
+  _glState(new GLState()),
+  _glStateTransparent(new GLState())
   {
   }
 
@@ -49,6 +51,14 @@ public:
       Shape* shape = _shapes[i];
       delete shape;
     }
+
+    _glState->_release();
+    _glStateTransparent->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addShape(Shape* shape) {
@@ -99,7 +109,7 @@ public:
   void stop(const G3MRenderContext* rc) {
   }
 
-  void render(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc, GLState* glState);
 
 };
 

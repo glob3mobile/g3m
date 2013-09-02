@@ -292,3 +292,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   
   return petitions;
 }
+
+const std::string BingMapsLayer::description() const {
+  return "[BingMapsLayer]";
+}

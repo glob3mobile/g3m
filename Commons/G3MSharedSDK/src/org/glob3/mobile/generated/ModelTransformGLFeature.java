@@ -1,8 +1,10 @@
 package org.glob3.mobile.generated; 
 public class ModelTransformGLFeature extends GLCameraGroupFeature
 {
+
   public ModelTransformGLFeature(Matrix44D transform)
   {
-     super(transform);
+     super(transform, GLFeatureID.GLF_MODEL_TRANSFORM);
   }
+
 }

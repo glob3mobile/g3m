@@ -10,6 +10,8 @@ public class TileTextureBuilder extends RCObject
     }
 
     deletePetitions();
+  super.dispose();
+
   }
 
   private MultiLayerTileTexturizer _texturizer;
@@ -32,7 +34,7 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
-  private final int _firstLevel;
+//  const int    _firstLevel;
 
   private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
@@ -40,7 +42,7 @@ public class TileTextureBuilder extends RCObject
 
   private boolean _finalized;
   private boolean _canceled;
-  private boolean _anyCanceled;
+//  bool _anyCanceled;
   private boolean _alreadyStarted;
 
   private long _texturePriority;
@@ -95,6 +97,8 @@ public class TileTextureBuilder extends RCObject
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
+//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
+//  _anyCanceled(false),
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -102,12 +106,10 @@ public class TileTextureBuilder extends RCObject
      _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
      _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
      _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
-     _firstLevel = layerSet.getLayerTilesRenderParameters()._firstLevel;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
      _stepsDone = 0;
-     _anyCanceled = false;
      _mesh = null;
      _tessellator = tessellator;
      _finalized = false;
@@ -371,7 +373,7 @@ public class TileTextureBuilder extends RCObject
     }
     //checkIsPending(position);
 
-    _anyCanceled = true;
+//    _anyCanceled = true;
     _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
     stepDone();
@@ -383,50 +385,27 @@ public class TileTextureBuilder extends RCObject
 
     Tile ancestor = _tile;
     boolean fallbackSolved = false;
-    while (ancestor != null)
+    while (ancestor != null && !fallbackSolved)
     {
-      LazyTextureMapping mapping;
-      if (fallbackSolved)
-      {
-        mapping = null;
-      }
-      else
-      {
-        final boolean ownedTexCoords = true;
-        final boolean transparent = false;
-        mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
-      }
+      final boolean ownedTexCoords = true;
+      final boolean transparent = false;
+      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
 
       if (ancestor != _tile)
       {
-        if (!fallbackSolved)
+        final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
+        if (glTextureId != null)
         {
-          final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId != null)
-          {
-            _texturesHandler.retainGLTextureId(glTextureId);
-            mapping.setGLTextureId(glTextureId);
-            fallbackSolved = true;
-          }
+          _texturesHandler.retainGLTextureId(glTextureId);
+          mapping.setGLTextureId(glTextureId);
+          fallbackSolved = true;
         }
       }
-//      else {
-//        if (mapping != NULL) {
-//          if ( mapping->getGLTextureId() != NULL ) {
-//            ILogger::instance()->logInfo("break (point) on me 3\n");
-//          }
-//        }
-//      }
 
       mappings.add(mapping);
+
       ancestor = ancestor.getParent();
     }
-
-//    if ((mappings != NULL) && (_tile != NULL)) {
-//      if (mappings->size() != (_tile->getLevel() - _firstLevel + 1) ) {
-//        ILogger::instance()->logInfo("break (point) me\n");
-//      }
-//    }
 
     return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
   }

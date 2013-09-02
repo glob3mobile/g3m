@@ -26,6 +26,7 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

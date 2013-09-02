@@ -16,6 +16,38 @@ class Tile;
 class IImageListener;
 class ChangedListener;
 
+
+class TileRasterizerContext {
+private:
+  TileRasterizerContext(const TileRasterizerContext& that);
+
+public:
+#ifdef C_CODE
+  const IImage* const _image;
+  const Tile*   const _tile;
+  const bool          _mercator;
+#endif
+#ifdef JAVA_CODE
+  public final IImage  _image;
+  public final Tile    _tile;
+  public final boolean _mercator;
+#endif
+
+  TileRasterizerContext(IImage* image,
+                        const Tile* tile,
+                        bool mercator) :
+  _image(image),
+  _tile(tile),
+  _mercator(mercator)
+  {
+  }
+
+  ~TileRasterizerContext() {
+  }
+
+};
+
+
 class TileRasterizer {
 private:
   ChangedListener* _listener;
@@ -23,14 +55,11 @@ private:
 public:
 
   virtual ~TileRasterizer() {
-
   }
 
   virtual std::string getId() const = 0;
 
-  virtual void rasterize(IImage* image,
-                         const Tile* tile,
-                         bool mercator,
+  virtual void rasterize(const TileRasterizerContext& trc,
                          IImageListener* listener,
                          bool autodelete) const = 0;
 

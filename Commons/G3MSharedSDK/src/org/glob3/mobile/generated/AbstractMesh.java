@@ -35,6 +35,7 @@ public abstract class AbstractMesh extends Mesh
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
+  protected IFloatBuffer _normals;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
@@ -81,7 +82,7 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
   {
      _primitive = primitive;
      _owner = owner;
@@ -95,18 +96,25 @@ public abstract class AbstractMesh extends Mesh
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
+     _glState = new GLState();
+     _normals = normals;
     createGLState();
   }
 
   protected abstract void rawRender(G3MRenderContext rc);
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
-  protected GLState _glState = new GLState();
+  protected GLState _glState;
 
   protected final void createGLState()
   {
   
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_normals != null)
+    {
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
+    }
   
     if (_translationMatrix != null)
     {
@@ -129,6 +137,7 @@ public abstract class AbstractMesh extends Mesh
       _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
   
     }
+  
   }
 
 
@@ -145,12 +154,19 @@ public abstract class AbstractMesh extends Mesh
          _colors.dispose();
       if (_flatColor != null)
          _flatColor.dispose();
+      if (_normals != null)
+         _normals.dispose();
     }
   
     if (_boundingVolume != null)
        _boundingVolume.dispose();
     if (_translationMatrix != null)
        _translationMatrix.dispose();
+  
+    _glState._release();
+  
+    super.dispose();
+  
   }
 
   public final BoundingVolume getBoundingVolume()

@@ -1,10 +1,21 @@
 package org.glob3.mobile.generated; 
+////////////////////////////////////////////////////////////
+
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
   public final float _x;
   public final float _y;
   public final float _z;
   public final float _w;
+
+  public GPUUniformValueVec4Float(Color color)
+  {
+     super(GLType.glVec4Float());
+     _x = color.getRed();
+     _y = color.getGreen();
+     _z = color.getBlue();
+     _w = color.getAlpha();
+  }
 
   public GPUUniformValueVec4Float(float x, float y, float z, float w)
   {
@@ -24,13 +35,6 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     GPUUniformValueVec4Float v2 = (GPUUniformValueVec4Float)v;
     return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
-
-  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
-  //      delete value;
-  //    }
-  //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-  //  }
 
   public final String description()
   {

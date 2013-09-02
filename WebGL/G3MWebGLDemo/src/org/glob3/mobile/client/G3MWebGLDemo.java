@@ -4,6 +4,7 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.BusyMeshRenderer;
@@ -12,10 +13,10 @@ import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -73,9 +74,12 @@ import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRenderer;
+import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
 import org.glob3.mobile.generated.SceneJSShapesParser;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -84,8 +88,6 @@ import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TerrainTouchEvent;
 import org.glob3.mobile.generated.TerrainTouchEventListener;
-import org.glob3.mobile.generated.TileRenderer;
-import org.glob3.mobile.generated.TileRendererBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -110,13 +112,13 @@ public class G3MWebGLDemo
          implements
             EntryPoint {
 
-   private final String    _g3mWidgetHolderId = "g3mWidgetHolder";
+   private final String         _g3mWidgetHolderId = "g3mWidgetHolder";
 
+   private G3MWidget_WebGL      _widget            = null;
 
-   private G3MWidget_WebGL _widget            = null;
-
-   private boolean         _markersParsed     = false;
-   private MarksRenderer   _markersRenderer;
+   private boolean              _markersParsed     = false;
+   private MarksRenderer        _markersRenderer;
+   private final ShapesRenderer _shapesRenderer    = new ShapesRenderer();
 
 
    @Override
@@ -124,10 +126,10 @@ public class G3MWebGLDemo
       if (_widget == null) {
 
          // initialize a customized widget without using any builder
-         //initWithoutBuilder();
+         // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         //initDefaultWithBuilder();
+         //         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          initCustomizedWithBuilder();
@@ -141,10 +143,13 @@ public class G3MWebGLDemo
    public void initCustomizedWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
+      //      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
+      //      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
-
 
       final boolean useMarkers = true;
       if (useMarkers) {
@@ -160,58 +165,76 @@ public class G3MWebGLDemo
             }
          }, true);
 
-
-         final Mark m1 = new Mark( //
-                  "Label", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-         //m1->addTouchListener(listener);
+         final Mark m1 = new Mark("Label", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0), AltitudeMode.RELATIVE_TO_GROUND);
+         // m1->addTouchListener(listener);
          marksRenderer.addMark(m1);
 
          final Mark m2 = new Mark( //
                   "Las Palmas", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0), //
-                  0, //
+                  AltitudeMode.RELATIVE_TO_GROUND, 0, //
                   false);
-         //m2->addTouchListener(listener);
+         // m2->addTouchListener(listener);
          marksRenderer.addMark(m2);
-
 
          final Mark m3 = new Mark( //
                   "Washington, DC", //
                   new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
                            100), //
-                  0);
+                  AltitudeMode.RELATIVE_TO_GROUND, 0);
          marksRenderer.addMark(m3);
-
 
          final boolean randomMarkers = false;
          if (randomMarkers) {
             for (int i = 0; i < 500; i++) {
                final Angle latitude = Angle.fromDegrees((Random.nextInt() % 180) - 90);
                final Angle longitude = Angle.fromDegrees((Random.nextInt() % 360) - 180);
-               //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+               // NSLog(@"lat=%f, lon=%f", latitude.degrees(),
+               // longitude.degrees());
 
-               marksRenderer.addMark(new Mark( //
+               marksRenderer.addMark(new Mark(
+               //
                         "Random", //
                         new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
-                        new Geodetic3D(latitude, longitude, 0)));
+                        new Geodetic3D(latitude, longitude, 0), AltitudeMode.RELATIVE_TO_GROUND));
             }
          }
          builder.addRenderer(marksRenderer);
       }
 
-      //builder.setInitializationTask(createMarkersInitializationTask());
+      // builder.setInitializationTask(createMarkersInitializationTask());
 
       final String proxy = "";
       final Downloader_WebGL downloader = new Downloader_WebGL(8, 10, proxy);
       builder.setDownloader(downloader);
 
-
       // test bson parser and 3D model
       final ShapesRenderer shapeRenderer = new ShapesRenderer();
       builder.addRenderer(shapeRenderer);
 
+      final QuadShape quad = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.116956), Angle.fromDegrees(-15.440453), 2000), //
+               AltitudeMode.RELATIVE_TO_GROUND, 10000, 10000, Color.red(), true);
+
+      final QuadShape quad2 = new QuadShape(
+               new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-15.440453), 2000), //
+               AltitudeMode.RELATIVE_TO_GROUND, new URL("http://serdis.dis.ulpgc.es/~a044526/android/glob3.png", false), 10000,
+               10000, true);
+
+      shapeRenderer.addShape(quad);
+      shapeRenderer.addShape(quad2);
+
+      quad.setPitch(Angle.fromDegrees(90));
+      quad.setHeading(Angle.fromDegrees(0));
+      quad.setAnimatedPosition(TimeInterval.fromSeconds(60),
+               new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90),
+               Angle.fromDegrees(720));
+
+      quad2.setPitch(Angle.fromDegrees(90));
+      quad2.setHeading(Angle.fromDegrees(0));
+      quad2.setAnimatedPosition(TimeInterval.fromSeconds(60), new Geodetic3D(Angle.fromDegrees(28),
+               Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90), Angle.fromDegrees(720));
 
       final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
          @Override
@@ -316,7 +339,6 @@ public class G3MWebGLDemo
       };
       final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 
-
       final ShapesRenderer shapesRenderer = null;
       final MarksRenderer marksRenderer = null;
       final GEORenderer geoRenderer = new GEORenderer( //
@@ -328,8 +350,7 @@ public class G3MWebGLDemo
 
       builder.addRenderer(geoRenderer);
 
-      builder.getTileRendererBuilder().setTileRasterizer(geoTileRasterizer);
-
+      builder.getPlanetRendererBuilder().setTileRasterizer(geoTileRasterizer);
 
       builder.setInitializationTask(new GInitializationTask() {
 
@@ -338,7 +359,7 @@ public class G3MWebGLDemo
 
          @Override
          public void run(final G3MContext context) {
-            //            meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
+            // meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
 
             context.getDownloader().requestBuffer( //
                      new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
@@ -389,7 +410,6 @@ public class G3MWebGLDemo
                         }
                      }, false);
 
-
             final IBufferDownloadListener listener = new IBufferDownloadListener() {
 
                @Override
@@ -423,9 +443,11 @@ public class G3MWebGLDemo
                }
             };
 
-            //            final URL geoJSONURL = new URL("http://127.0.0.1:8888/countries-50m.geojson", false);
+            // final URL geoJSONURL = new
+            // URL("http://127.0.0.1:8888/countries-50m.geojson", false);
             final URL geoJSONURL = new URL("/countries-50m.geojson", false);
-            // final URL geoJSONURL = new URL("file:///boundary_lines_land.geojson", false);
+            // final URL geoJSONURL = new
+            // URL("file:///boundary_lines_land.geojson", false);
             context.getDownloader().requestBuffer( //
                      geoJSONURL, //
                      DownloadPriority.HIGHER, //
@@ -434,6 +456,54 @@ public class G3MWebGLDemo
                      listener, //
                      true);
 
+            if (true) {
+               final URL planeFilePath = new URL("http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json", false);
+               final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
+
+                  @Override
+                  public void onDownload(final URL url,
+                                         final IByteBuffer buffer,
+                                         final boolean expired) {
+
+                     final Shape plane = SceneJSShapesParser.parseFromJSON(buffer, "http://serdis.dis.ulpgc.es/~a044526/", false);
+
+                     plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
+
+                     final double scale = 1000;
+                     plane.setScale(scale, scale, scale);
+                     plane.setPitch(Angle.fromDegrees(90));
+                     plane.setHeading(Angle.fromDegrees(0));
+                     plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
+                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000),
+                              Angle.fromDegrees(90), Angle.fromDegrees(720));
+
+                     _shapesRenderer.addShape(plane);
+                     ILogger.instance().logInfo("PLANE SHOWN");
+                  }
+
+
+                  @Override
+                  public void onError(final URL url) {
+                     ILogger.instance().logError("NO SEYMOUR");
+                  }
+
+
+                  @Override
+                  public void onCancel(final URL url) {
+                     // DO Nothing
+                  }
+
+
+                  @Override
+                  public void onCanceledDownload(final URL url,
+                                                 final IByteBuffer data,
+                                                 final boolean expired) {
+                     // Do Nothing
+                  }
+               };
+
+               downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
+            }
          }
 
 
@@ -448,8 +518,8 @@ public class G3MWebGLDemo
 
 
    private Mesh createPointsMesh(final Planet planet) {
-      final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), planet,
-               Geodetic3D.zero());
+      final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+
       final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
       final Angle centerLat = Angle.fromDegreesMinutesSeconds(38, 53, 42);
@@ -508,9 +578,7 @@ public class G3MWebGLDemo
          final CameraRenderer cameraRenderer = new CameraRenderer();
          final boolean useInertia = true;
          cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-         final boolean processRotation = true;
-         final boolean processZoom = true;
-         cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
+         cameraRenderer.addHandler(new CameraDoubleDragHandler());
          cameraRenderer.addHandler(new CameraRotationHandler());
          cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
@@ -529,7 +597,7 @@ public class G3MWebGLDemo
                      "EPSG:4326", //
                      "", //
                      false, //
-                     //new LevelTileCondition(0, 6),
+                     // new LevelTileCondition(0, 6),
                      null, //
                      TimeInterval.fromDays(30), //
                      true);
@@ -560,7 +628,6 @@ public class G3MWebGLDemo
             layerSet.addLayer(ortoAyto);
          }
 
-
          final boolean useBing = false;
          if (useBing) {
             final WMSLayer bing = new WMSLayer( //
@@ -579,17 +646,17 @@ public class G3MWebGLDemo
          }
          final boolean useOSMLatLon = false;
          if (useOSMLatLon) {
-            //         final WMSLayer osm = new WMSLayer( //
-            //                  "osm", //
-            //                  new URL("http://wms.latlon.org/", false), //
-            //                  WMSServerVersion.WMS_1_1_0, //
-            //                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
-            //                  "image/jpeg", //
-            //                  "EPSG:4326", //
-            //                  "", //
-            //                  false, //
-            //                  null);
-            //         layerSet.addLayer(osm);
+            // final WMSLayer osm = new WMSLayer( //
+            // "osm", //
+            // new URL("http://wms.latlon.org/", false), //
+            // WMSServerVersion.WMS_1_1_0, //
+            // Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
+            // "image/jpeg", //
+            // "EPSG:4326", //
+            // "", //
+            // false, //
+            // null);
+            // layerSet.addLayer(osm);
 
             final WMSLayer osm = new WMSLayer( //
                      "osm_auto:all", //
@@ -628,7 +695,7 @@ public class G3MWebGLDemo
          if (testURLescape) {
             final WMSLayer ayto = new WMSLayer(URL.escape("Ejes de via"), //
                      new URL("http://sig.caceres.es/wms_callejero.mapdef?", false), //
-                     WMSServerVersion.WMS_1_1_0,//  
+                     WMSServerVersion.WMS_1_1_0,//
                      Sector.fullSphere(), //
                      "image/png", //
                      "EPSG:4326", //
@@ -640,46 +707,45 @@ public class G3MWebGLDemo
             layerSet.addLayer(ayto);
          }
 
-
-         final TileRendererBuilder tlBuilder = new TileRendererBuilder();
+         final PlanetRendererBuilder tlBuilder = new PlanetRendererBuilder();
          tlBuilder.setLayerSet(layerSet);
          tlBuilder.setRenderDebug(true);
-         final TileRenderer tileRenderer = tlBuilder.create();
-         mainRenderer.addRenderer(tileRenderer);
-
+         final PlanetRenderer planetRenderer = tlBuilder.create();
+         mainRenderer.addRenderer(planetRenderer);
 
          final boolean useQuadShapes = true;
          if (useQuadShapes) {
             final ShapesRenderer shapesRenderer = new ShapesRenderer();
 
-            //         final String textureFileName = "g3m-marker.png";
-            //         final IImage textureImage = IFactory.instance().createImageFromFileName(textureFileName);
+            // final String textureFileName = "g3m-marker.png";
+            // final IImage textureImage =
+            // IFactory.instance().createImageFromFileName(textureFileName);
             //
-            //         final QuadShape quad = new QuadShape( //
-            //                  new Geodetic3D(Angle.fromDegrees(37.78333333), //
-            //                           Angle.fromDegrees(-122.41666666666667), //
-            //                           10000), //
-            //                  textureImage, //
-            //                  true, //
-            //                  textureFileName, //
-            //                  500000, //
-            //                  500000);
-            //         quad.setHeading(Angle.fromDegrees(0));
-            //         quad.setPitch(Angle.fromDegrees(0));
-            //         shapesRenderer.addShape(quad);
+            // final QuadShape quad = new QuadShape( //
+            // new Geodetic3D(Angle.fromDegrees(37.78333333), //
+            // Angle.fromDegrees(-122.41666666666667), //
+            // 10000), //
+            // textureImage, //
+            // true, //
+            // textureFileName, //
+            // 500000, //
+            // 500000);
+            // quad.setHeading(Angle.fromDegrees(0));
+            // quad.setPitch(Angle.fromDegrees(0));
+            // shapesRenderer.addShape(quad);
 
             final Geodetic3D circlePosition = new Geodetic3D( //
                      Angle.fromDegrees(37.78333333), //
                      Angle.fromDegrees(-122.41666666666667), //
                      8000);
 
-            //circle.setHeading(Angle.fromDegrees(45));
-            //circle.setPitch(Angle.fromDegrees(45));
-            //circle.setScale(2.0, 0.5, 1);
-            //circle.setRadius(circleRadius);
+            // circle.setHeading(Angle.fromDegrees(45));
+            // circle.setPitch(Angle.fromDegrees(45));
+            // circle.setScale(2.0, 0.5, 1);
+            // circle.setRadius(circleRadius);
 
             final Color circleColor = Color.newFromRGBA(1, 1, 0, 0.5f);
-            final Shape circle = new CircleShape(circlePosition, 50000, circleColor);
+            final Shape circle = new CircleShape(circlePosition, AltitudeMode.RELATIVE_TO_GROUND, 50000, circleColor);
             shapesRenderer.addShape(circle);
 
             final Geodetic3D boxPosition = new Geodetic3D(Angle.fromDegrees(37.78333333), //
@@ -688,11 +754,10 @@ public class G3MWebGLDemo
             final Vector3D size = new Vector3D(20000, 30000, 50000);
             final Color boxColor = Color.newFromRGBA(0, 1, 0, 0.5f);
             final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
-            final Shape box = new BoxShape(boxPosition, size, 2, boxColor, edgeColor);
+            final Shape box = new BoxShape(boxPosition, AltitudeMode.RELATIVE_TO_GROUND, size, 2, boxColor, edgeColor);
             shapesRenderer.addShape(box);
 
             mainRenderer.addRenderer(shapesRenderer);
-
 
             final boolean testingImagesCombine = false;
             if (testingImagesCombine) {
@@ -728,19 +793,18 @@ public class G3MWebGLDemo
 
                         public QuadListener(final ShapesRenderer sr) {
                            _sr = sr;
-
                         }
 
 
                         @Override
                         public void imageCreated(final IImage image2) {
                            final Shape quadImages = new QuadShape(new Geodetic3D(Angle.fromDegrees(28.410728),
-                                    Angle.fromDegrees(-16.339417), 8000), image2, 50000, 50000);
+                                    Angle.fromDegrees(-16.339417), 8000), AltitudeMode.RELATIVE_TO_GROUND, image2, 50000, 50000,
+                                    true);
 
                            _sr.addShape(quadImages);
                         }
                      }
-
 
                      IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
 
@@ -765,7 +829,6 @@ public class G3MWebGLDemo
 
                }
 
-
                downloader.requestImage( //
                         new URL(
                                  "http://www.nasa.network.com/wms?REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1&WIDTH=256&HEIGHT=256&BBOX=-45.0,-90.0,0.0,-45.0&LAYERS=bmng200405&FORMAT=image/jpeg&SRS=EPSG:4326&STYLES=&TRANSPARENT=FALSE",
@@ -779,7 +842,6 @@ public class G3MWebGLDemo
             }
 
          }
-
 
          final BusyMeshRenderer busyRenderer = new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
 
@@ -797,10 +859,11 @@ public class G3MWebGLDemo
 
          final WidgetUserData userData = null;
 
+         final SceneLighting lighting = new DefaultSceneLighting();
 
          final ICameraActivityListener cameraActivityListener = null;
          _widget.initWidget(//
-                  storage, // 
+                  storage, //
                   downloader, //
                   threadUtils, //
                   cameraActivityListener, //
@@ -815,7 +878,7 @@ public class G3MWebGLDemo
                   initializationTask, //
                   autoDeleteInitializationTask, //
                   periodicalTasks, //
-                  userData);
+                  userData, lighting);
       }
    }
 
@@ -829,7 +892,6 @@ public class G3MWebGLDemo
             final IDownloader downloader = context.getDownloader();
 
             final IBufferDownloadListener listener = new IBufferDownloadListener() {
-
 
                @Override
                public void onDownload(final URL url,
@@ -851,7 +913,6 @@ public class G3MWebGLDemo
                      final JSONArray weather = city.getAsArray("weather");
                      final JSONObject weatherObject = weather.getAsObject(0);
 
-
                      String icon = "";
                      if (weatherObject.getAsString("icon", "DOUBLE").equals("DOUBLE")) {
                         icon = "" + (int) weatherObject.getAsNumber("icon").value() + "d.png";
@@ -867,14 +928,13 @@ public class G3MWebGLDemo
                               city.getAsString("name", ""), //
                               new URL("http://openweathermap.org/img/w/" + icon, false), //
                               new Geodetic3D(position, 0), //
-                              0, //
+                              AltitudeMode.RELATIVE_TO_GROUND, 0, //
                               true, //
                               14, //
                               Color.white(), //
                               Color.black(), //
                               2));
                   }
-
 
                   _markersParsed = true;
                }
@@ -888,7 +948,7 @@ public class G3MWebGLDemo
 
                @Override
                public void onCancel(final URL url) {
-                  //DO Nothing
+                  // DO Nothing
                }
 
 
@@ -896,7 +956,7 @@ public class G3MWebGLDemo
                public void onCanceledDownload(final URL url,
                                               final IByteBuffer data,
                                               final boolean expired) {
-                  //Do Nothing
+                  // Do Nothing
                }
             };
 
@@ -932,22 +992,23 @@ public class G3MWebGLDemo
          final boolean readyWhenMarksReady = true;
          final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-         /*marksRenderer.setMarkTouchListener(new MarkTouchListener() {
-            @Override
-            public boolean touchedMark(final Mark mark) {
-               Window.alert("Touched on mark: " + mark.getLabel());
-               return true;
-            }
-         }, true);*/
+         /*
+          * marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+          * 
+          * @Override public boolean touchedMark(final Mark mark) {
+          * Window.alert("Touched on mark: " + mark.getLabel()); return true;
+          * } }, true);
+          */
 
-
-         final Mark m1 = new Mark( //
+         final Mark m1 = new Mark(
+                  //
                   "Paris",
                   new URL(
                            "http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Left-Chartreuse-icon.png",
                            false), //
-                  new Geodetic3D(Angle.fromDegrees(48.859746), Angle.fromDegrees(2.352051), 0), 0, true, 15);
-         //m1->addTouchListener(listener);
+                  new Geodetic3D(Angle.fromDegrees(48.859746), Angle.fromDegrees(2.352051), 0), AltitudeMode.RELATIVE_TO_GROUND,
+                  0, true, 15);
+         // m1->addTouchListener(listener);
          marksRenderer.addMark(m1);
 
          final Mark m2 = new Mark( //
@@ -956,10 +1017,10 @@ public class G3MWebGLDemo
                            "http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Flag-3-Right-Pink-icon.png",
                            false), //
                   new Geodetic3D(Angle.fromDegrees(28.116956), Angle.fromDegrees(-15.440453), 0), //
-                  0, //
+                  AltitudeMode.RELATIVE_TO_GROUND, 0, //
                   true, 15);
 
-         //m2->addTouchListener(listener);
+         // m2->addTouchListener(listener);
          marksRenderer.addMark(m2);
 
          builder.addRenderer(marksRenderer);
@@ -968,7 +1029,7 @@ public class G3MWebGLDemo
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
 
-      //builder.setInitializationTask(createMarkersInitializationTask());
+      // builder.setInitializationTask(createMarkersInitializationTask());
 
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
@@ -1007,7 +1068,6 @@ public class G3MWebGLDemo
             };
             context.getFactory().createWebSocket(url, listener, true, true);
 
-
          }
 
 
@@ -1019,35 +1079,23 @@ public class G3MWebGLDemo
 
       final LayerSet layerSet = new LayerSet();
 
-      /*      final boolean blueMarble = false;
-           if (blueMarble) {
-              final WMSLayer blueMarbleL = new WMSLayer( //
-                       "bmng200405", //
-                       new URL("http://www.nasa.network.com/wms?", false), //
-                       WMSServerVersion.WMS_1_1_0, //
-                       Sector.fullSphere(), //
-                       "image/jpeg", //
-                       "EPSG:4326", //
-                       "", //
-                       false, //
-                       //new LevelTileCondition(0, 6),
-                       null, //
-                       TimeInterval.fromDays(30), //
-                       true);
-              layerSet.addLayer(blueMarbleL);
-              blueMarbleL.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-      
-             	 @Override
-      		public boolean onTerrainTouch(G3MEventContext context,
-      				TerrainTouchEvent ev) {
-                 	Window.alert("touching terrain blueMarble");
-        				return false;
-      		}
-
-      		@Override
-      		public void dispose() {}
-               });
-           }*/
+      /*
+       * final boolean blueMarble = false; if (blueMarble) { final WMSLayer
+       * blueMarbleL = new WMSLayer( // "bmng200405", // new
+       * URL("http://www.nasa.network.com/wms?", false), //
+       * WMSServerVersion.WMS_1_1_0, // Sector.fullSphere(), // "image/jpeg",
+       * // "EPSG:4326", // "", // false, // //new LevelTileCondition(0, 6),
+       * null, // TimeInterval.fromDays(30), // true);
+       * layerSet.addLayer(blueMarbleL);
+       * blueMarbleL.addTerrainTouchEventListener(new
+       * TerrainTouchEventListener() {
+       * 
+       * @Override public boolean onTerrainTouch(G3MEventContext context,
+       * TerrainTouchEvent ev) { Window.alert("touching terrain blueMarble");
+       * return false; }
+       * 
+       * @Override public void dispose() {} }); }
+       */
 
       final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
@@ -1076,11 +1124,12 @@ public class G3MWebGLDemo
       final boolean useOsm = false;
       if (useOsm) {
          final WMSLayer osm = new WMSLayer("osm_auto:all", // layer name
-                  new URL("http://129.206.228.72/cached/osm", false), // server url 
+                  new URL("http://129.206.228.72/cached/osm", false), // server
+                  // url
                   WMSServerVersion.WMS_1_1_0, // server version
                   Sector.fullSphere(), // initial bounding box
                   "image/jpeg", // image format
-                  "EPSG:4326", // SRS 
+                  "EPSG:4326", // SRS
                   "", // style
                   false, // include transparency
                   null, // layer condition
@@ -1131,40 +1180,50 @@ public class G3MWebGLDemo
          layerSet.addLayer(bing);
       }
 
-      /*final WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30), true);
-      layerSet.addLayer(political);*/
-
-      /*final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
-      layerSet.addLayer(mqlOSM);*/
+      /*
+       * final WMSLayer political = new WMSLayer("topp:cia", new
+       * URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
+       * WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png",
+       * "EPSG:4326", "countryboundaries", true, null,
+       * TimeInterval.fromDays(30), true); layerSet.addLayer(political);
+       */
 
       /*
-      final WMSLayer bingLayer = LayerBuilder.createOSMLayer(true);
-      layerSet.addLayer(bingLayer);
-      bingLayer.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-        
-       @Override
-      	public boolean onTerrainTouch(G3MEventContext context,
-      			TerrainTouchEvent ev) {
-      	 Geodetic2D position = ev.getPosition().asGeodetic2D();
-      	 Window.alert("touching terrain at coords (" +
-      				NumberFormat.getFormat("#.00").format(position.latitude().degrees()) + ", " +
-      			NumberFormat.getFormat("#.00").format(position.longitude().degrees()) + ")");
-      	 //URL url = bingLayer.getFeatureInfoURL(position, ev.getSector());
-      	 //Window.alert(url.toString());
-      	 
-      		return false;
-      	}
+       * final MapQuestLayer mqlOSM =
+       * MapQuestLayer.newOSM(TimeInterval.fromDays(30));
+       * layerSet.addLayer(mqlOSM);
+       */
 
-      	@Override
-      	public void dispose() {}
-       });*/
-
+      /*
+       * final WMSLayer bingLayer = LayerBuilder.createOSMLayer(true);
+       * layerSet.addLayer(bingLayer);
+       * bingLayer.addTerrainTouchEventListener(new
+       * TerrainTouchEventListener() {
+       * 
+       * @Override public boolean onTerrainTouch(G3MEventContext context,
+       * TerrainTouchEvent ev) { Geodetic2D position =
+       * ev.getPosition().asGeodetic2D();
+       * Window.alert("touching terrain at coords (" +
+       * NumberFormat.getFormat("#.00").format(position.latitude().degrees())
+       * + ", " +
+       * NumberFormat.getFormat("#.00").format(position.longitude().degrees())
+       * + ")"); //URL url = bingLayer.getFeatureInfoURL(position,
+       * ev.getSector()); //Window.alert(url.toString());
+       * 
+       * return false; }
+       * 
+       * @Override public void dispose() {} });
+       */
 
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);
 
-      /*final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
-      layerSet.addLayer(pnoa);*/
+      //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
+
+      /*
+       * final WMSLayer pnoa = LayerBuilder.createPNOALayer(true);
+       * layerSet.addLayer(pnoa);
+       */
 
       // testing visible sector listener
       final VisibleSectorListener myListener = new VisibleSectorListener() {
@@ -1177,110 +1236,78 @@ public class G3MWebGLDemo
          }
       };
 
-      builder.getTileRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-
+      builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
 
       /*
-      // testing getfeatureinfo
-      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
-         @Override
-         public void onDownload(final URL url,
-                                final IByteBuffer buffer,
-                                final boolean expired) {
-            final String response = buffer.getAsString();
-            Window.alert("GetFeatureInfo URL: " + response);
-         }
-
-
-         @Override
-         public void onError(final URL url) {
-         }
-
-
-         @Override
-         public void onCancel(final URL url) {
-         }
-
-
-         @Override
-         public void onCanceledDownload(final URL url,
-                                        final IByteBuffer data,
-                                        final boolean expired) {
-         }
-      };
-
-      pnoa.addTerrainTouchEventListener(new TerrainTouchEventListener() {
-
-         @Override
-         public boolean onTerrainTouch(final G3MEventContext context,
-                                       final TerrainTouchEvent event) {
-            final URL url = event.getLayer().getFeatureInfoURL(event.getPosition().asGeodetic2D(), event.getSector());
-            Window.alert("Get Feature Info URL for this position: " + url.getPath());
-            //final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
-            //myDownloader.requestBuffer(url, (long)0,
-            //TimeInterval.fromHours(1.0), false, myListener, false);
-            return false;
-         }
-
-
-         @Override
-         public void dispose() {
-         }
-      });*/
-
-      //>>>>>>> webgl-port
-      //      builder.setInitializationTask(initializationTask);
-      //      builder.getTileRendererBuilder().setLayerSet(layerSet);
-      //
-      //      _widget = builder.createWidget();
-      //<<<<<<< HEAD
-      //
-      //      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6);
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));
-      //=======
-      //      
-      //      /*Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383), Angle.fromDegrees(-3.703187), 2.5e6); 
-      //      _widget.setAnimatedCameraPosition(position, TimeInterval.fromSeconds(5));*/
-      //      
-      //>>>>>>> webgl-port
+       * // testing getfeatureinfo final IBufferDownloadListener myListener =
+       * new IBufferDownloadListener() {
+       * 
+       * @Override public void onDownload(final URL url, final IByteBuffer
+       * buffer, final boolean expired) { final String response =
+       * buffer.getAsString(); Window.alert("GetFeatureInfo URL: " +
+       * response); }
+       * 
+       * 
+       * @Override public void onError(final URL url) { }
+       * 
+       * 
+       * @Override public void onCancel(final URL url) { }
+       * 
+       * 
+       * @Override public void onCanceledDownload(final URL url, final
+       * IByteBuffer data, final boolean expired) { } };
+       * 
+       * pnoa.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+       * 
+       * @Override public boolean onTerrainTouch(final G3MEventContext
+       * context, final TerrainTouchEvent event) { final URL url =
+       * event.getLayer
+       * ().getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+       * event.getSector());
+       * Window.alert("Get Feature Info URL for this position: " +
+       * url.getPath()); //final IDownloader myDownloader =
+       * _widget.getG3MContext().getDownloader();
+       * //myDownloader.requestBuffer(url, (long)0,
+       * //TimeInterval.fromHours(1.0), false, myListener, false); return
+       * false; }
+       * 
+       * 
+       * @Override public void dispose() { } });
+       */
 
       builder.setInitializationTask(initializationTask);
-      builder.getTileRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       _widget = builder.createWidget();
 
-      /*// testing downloading from url
-      final IBufferDownloadListener myListener = new IBufferDownloadListener() {
-
-          @Override
-          public void onDownload(final URL url, final IByteBuffer buffer, boolean expired) {
-        	  final String response = buffer.getAsString();
-        	  Window.alert("Downloaded text: " + response);
-          }
-
-
-          @Override
-          public void onError(final URL url) {
-          }
-
-
-          @Override
-          public void onCancel(final URL url) {
-             // TODO Auto-generated method stub
-          }
-
-
-          @Override
-          public void onCanceledDownload(final URL url,
-                                         final IByteBuffer data, boolean expired) {
-          }
-
-       };
-
-      final IDownloader myDownloader = _widget.getG3MContext().getDownloader();
-      myDownloader.requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/sample.txt", false), (long)0,
-      TimeInterval.fromHours(1.0), false, myListener, false);
-      */
+      /*
+       * // testing downloading from url final IBufferDownloadListener
+       * myListener = new IBufferDownloadListener() {
+       * 
+       * @Override public void onDownload(final URL url, final IByteBuffer
+       * buffer, boolean expired) { final String response =
+       * buffer.getAsString(); Window.alert("Downloaded text: " + response); }
+       * 
+       * 
+       * @Override public void onError(final URL url) { }
+       * 
+       * 
+       * @Override public void onCancel(final URL url) { // TODO
+       * Auto-generated method stub }
+       * 
+       * 
+       * @Override public void onCanceledDownload(final URL url, final
+       * IByteBuffer data, boolean expired) { }
+       * 
+       * };
+       * 
+       * final IDownloader myDownloader =
+       * _widget.getG3MContext().getDownloader();
+       * myDownloader.requestBuffer(new
+       * URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/sample.txt"
+       * , false), (long)0, TimeInterval.fromHours(1.0), false, myListener,
+       * false);
+       */
 
    }
 

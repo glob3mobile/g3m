@@ -85,6 +85,7 @@ public class Color
 
   public void dispose()
   {
+
   }
 
   public static Color parse(String str)
@@ -228,6 +229,23 @@ public class Color
   public static Color black()
   {
     return Color.fromRGBA(0, 0, 0, 1);
+  }
+
+  public static Color gray()
+  {
+    return Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
+  }
+
+  public static Color darkGray()
+  {
+    final float oneThird = 1.0f / 3.0f;
+    return Color.fromRGBA(oneThird, oneThird, oneThird, 1);
+  }
+
+  public static Color lightGray()
+  {
+    final float twoThirds = 2.0f / 3.0f;
+    return Color.fromRGBA(twoThirds, twoThirds, twoThirds, 1);
   }
 
   public static Color white()
@@ -424,7 +442,6 @@ public class Color
 
   public final Color muchDarker()
   {
-//    return adjustBrightness(-0.32f);
     return adjustBrightness(-0.64f);
   }
 
@@ -440,8 +457,25 @@ public class Color
 
   public final Color muchLighter()
   {
-//    return adjustSaturationBrightness(-0.12f, 0.32f);
     return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("[Color red=");
+    isb.addFloat(_red);
+    isb.addString(", green=");
+    isb.addFloat(_green);
+    isb.addString(", blue=");
+    isb.addFloat(_blue);
+    isb.addString(", alpha=");
+    isb.addFloat(_alpha);
+    isb.addString("]");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

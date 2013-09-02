@@ -63,17 +63,17 @@ public class QuadTree_Node
     {
       _children = new QuadTree_Node[4];
   
-      final Geodetic2D lower = _sector.lower();
-      final Geodetic2D upper = _sector.upper();
+      final Geodetic2D lower = _sector._lower;
+      final Geodetic2D upper = _sector._upper;
   
-      final Angle splitLongitude = Angle.midAngle(lower.longitude(), upper.longitude());
-      final Angle splitLatitude = Angle.midAngle(lower.latitude(), upper.latitude());
+      final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+      final Angle splitLatitude = Angle.midAngle(lower._latitude, upper._latitude);
   
       final Sector sector0 = new Sector(lower, new Geodetic2D(splitLatitude, splitLongitude));
   
-      final Sector sector1 = new Sector(new Geodetic2D(lower.latitude(), splitLongitude), new Geodetic2D(splitLatitude, upper.longitude()));
+      final Sector sector1 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
   
-      final Sector sector2 = new Sector(new Geodetic2D(splitLatitude, lower.longitude()), new Geodetic2D(upper.latitude(), splitLongitude));
+      final Sector sector2 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
   
       final Sector sector3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), upper);
   

@@ -14,7 +14,6 @@
 class VisibleSectorListener {
 public:
   virtual ~VisibleSectorListener() {
-
   }
 
   virtual void onVisibleSectorChange(const Sector& visibleSector,

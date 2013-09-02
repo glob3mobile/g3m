@@ -41,13 +41,10 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   
-  GLState _glState;
+  GLState* _glState;
   
   void updateGLState(const G3MRenderContext* rc);
 
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
-  
 public:
   
   MarksRenderer(bool readyWhenMarksReady);
@@ -59,7 +56,7 @@ public:
   
   virtual void initialize(const G3MContext* context);
 
-  virtual void render(const G3MRenderContext* rc);
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void addMark(Mark* mark);
   
@@ -71,9 +68,8 @@ public:
                     const TouchEvent* touchEvent);
   
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-  }
-  
+                             int width, int height);
+
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void start(const G3MRenderContext* rc) {
@@ -105,11 +101,11 @@ public:
     return _downloadPriority;
   }
   
-  bool isVisible(const G3MRenderContext* rc){
+  bool isVisible(const G3MRenderContext* rc) {
     return true;
   }
   
-  void modifiyGLState(GLState* state){
+  void modifiyGLState(GLState* state) {
     
   }
   

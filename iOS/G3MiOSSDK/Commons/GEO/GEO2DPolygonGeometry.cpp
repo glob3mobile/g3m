@@ -8,10 +8,7 @@
 
 #include "GEO2DPolygonGeometry.hpp"
 
-#include "GEOSymbolizationContext.hpp"
 #include "GEOSymbolizer.hpp"
-#include "GEOSymbolizationContext.hpp"
-//#include "Geodetic2D.hpp"
 #include "GEO2DPolygonData.hpp"
 
 const std::vector<Geodetic2D*>* GEO2DPolygonGeometry::getCoordinates() const {
@@ -50,10 +47,13 @@ GEO2DPolygonGeometry::~GEO2DPolygonGeometry() {
 //    delete _holesCoordinatesArray;
 //  }
 
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 
-std::vector<GEOSymbol*>* GEO2DPolygonGeometry::createSymbols(const G3MRenderContext* rc,
-                                                             const GEOSymbolizationContext& sc) const {
-  return sc.getSymbolizer()->createSymbols(this);
+std::vector<GEOSymbol*>* GEO2DPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
 }

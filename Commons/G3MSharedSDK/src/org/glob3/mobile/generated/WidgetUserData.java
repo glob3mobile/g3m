@@ -45,15 +45,18 @@ package org.glob3.mobile.generated;
 //class IStorage;
 //class ITextUtils;
 //class G3MEventContext;
+//class SurfaceElevationProvider;
 
 //class GPUProgram;
 //class GPUProgramManager;
 //class ICameraActivityListener;
+//class GLState;
 
 
 
 //class G3MContext;
 //class GLGlobalState;
+//class SceneLighting;
 
 public class WidgetUserData
 {

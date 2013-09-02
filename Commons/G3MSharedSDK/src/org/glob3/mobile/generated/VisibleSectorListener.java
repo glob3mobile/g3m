@@ -13,7 +13,6 @@ public abstract class VisibleSectorListener
 {
   public void dispose()
   {
-
   }
 
   public abstract void onVisibleSectorChange(Sector visibleSector, Geodetic3D cameraPosition);

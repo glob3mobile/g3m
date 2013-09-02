@@ -368,4 +368,9 @@ public class WMSLayer extends Layer
     notifyChanges();
   }
 
+  public final String description()
+  {
+    return "[WMSLayer]";
+  }
+
 }

@@ -69,6 +69,9 @@ public class GEORenderer extends LeafRenderer
       if (pair != null)
          pair.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   /**
@@ -119,7 +122,7 @@ public class GEORenderer extends LeafRenderer
     return true;
   }
 
-  public final void render(G3MRenderContext rc)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     final int childrenCount = _children.size();
     if (childrenCount > 0)
@@ -133,8 +136,7 @@ public class GEORenderer extends LeafRenderer
   
           final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
   
-          final GEOSymbolizationContext sc = new GEOSymbolizationContext(symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
-          pair._geoObject.symbolize(rc, sc);
+          pair._geoObject.symbolize(rc, symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
         }
   
         if (pair != null)

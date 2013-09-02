@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUAttributeVec2Float;
+import org.glob3.mobile.generated.GPUAttributeVec3Float;
 import org.glob3.mobile.generated.GPUAttributeVec4Float;
 import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
@@ -15,6 +16,7 @@ import org.glob3.mobile.generated.GPUUniformBool;
 import org.glob3.mobile.generated.GPUUniformFloat;
 import org.glob3.mobile.generated.GPUUniformMatrix4Float;
 import org.glob3.mobile.generated.GPUUniformVec2Float;
+import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
@@ -44,7 +46,7 @@ public final class NativeGL2_Android
    }
 
 
-   private void checkOpenGLThread() {
+   private final void checkOpenGLThread() {
       if (_openglThread != null) {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openglThread) {
@@ -294,29 +296,20 @@ public final class NativeGL2_Android
                                    final IFloatBuffer buffer) {
       checkOpenGLThread();
 
-      //      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
-      //GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
-
-
-      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-      buffer_Android.bindAsVBOToGPU();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
-
-
       //      ILogger.instance().logInfo("vertexAttribPointer(index=" + index + //
       //                               ", size=" + size + //
       //                               ", normalized=" + normalized + //
       //                               ", stride=" + stride + //
       //                               ", floatBuffer=" + floatBuffer + ")");
-      //            final FloatBuffer_Android bufferAndroid = (FloatBuffer_Android) buffer;
-      //            final int webGLBuffer = bufferAndroid.getGLBuffer();
-      //            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, webGLBuffer);
-      //      
-      //      
-      //            final FloatBuffer array = bufferAndroid.getBuffer();
-      //            GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, size, array, GLES20.GL_STATIC_DRAW);
-      //      
-      //            GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
+
+
+      //      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      //      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
+
+
+      final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
+      buffer_Android.bindAsVBOToGPU();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, 0);
    }
 
 
@@ -754,11 +747,13 @@ public final class NativeGL2_Android
             return new GPUUniformFloat(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT_VEC2:
             return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
+         case GLES20.GL_FLOAT_VEC3:
+             return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
             return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
-         case GLES20.GL_SAMPLER_2D:
-            final int NOT_IMPLEMENTED_YET;
-            return null;
+            //         case GLES20.GL_SAMPLER_2D:
+            //            final int NOT_IMPLEMENTED_YET;
+            //            return null;
          default:
             return null;
       }
@@ -789,6 +784,8 @@ public final class NativeGL2_Android
          ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
 
          switch (type[0]) {
+         	case GLES20.GL_FLOAT_VEC3:
+             return new GPUAttributeVec3Float(nameStr, id);
             case GLES20.GL_FLOAT_VEC4:
                return new GPUAttributeVec4Float(nameStr, id);
             case GLES20.GL_FLOAT_VEC2:
@@ -804,6 +801,19 @@ public final class NativeGL2_Android
          return null;
       }
    }
+
+
+@Override
+public void uniform3f(IGLUniformID location, float v0, float v1, float v2) {
+    int loc = ((GLUniformID_Android)location).getID();
+    GLES20.glUniform3f(loc, v0, v1, v2);
+}
+
+
+@Override
+public int Type_Vec3Float() {
+	return GLES20.GL_FLOAT_VEC3;
+}
 
 
 }

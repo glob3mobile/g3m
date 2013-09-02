@@ -33,6 +33,7 @@ public class GEOLine2DStyle extends GEOStyle
 
   public void dispose()
   {
+  super.dispose();
 
   }
 

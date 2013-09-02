@@ -84,7 +84,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     //void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
     //                                                                                                  const Vector2I& extent) {
-    //  if (_request != NULL){
+    //  if (_request != NULL) {
     //    _request->onCancel(sector, extent);
     //  }
     //}
@@ -165,12 +165,12 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     //  double selectedRes = IMathUtils::instance()->maxDouble();
     //  double selectedResDistance = IMathUtils::instance()->maxDouble();
     //  IMathUtils *mu = IMathUtils::instance();
-    //  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it){
+    //  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it) {
     //    double res = (*it)->getMinResolution().squaredLength();
     //    double newResDistance = mu->abs(bestRes - res);
     //
     //    if (newResDistance < selectedResDistance || //Closer Resolution
-    //        (newResDistance == selectedResDistance && res < selectedRes)){ //or equal and higher resolution
+    //        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
     //      selectedResDistance = newResDistance;
     //      selectedRes = res;
     //      edp = it;
@@ -178,7 +178,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     //  }
     //
     //  ElevationDataProvider* provider = NULL;
-    //  if (edp != ps.end()){
+    //  if (edp != ps.end()) {
     //    provider = *edp;
     //    ps.erase(edp);
     //  }
@@ -200,6 +200,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public void dispose()
     {
+
     }
 
     public final boolean launchNewStep()
@@ -337,6 +338,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_providers.get(i) != null)
          _providers.get(i).dispose();
     }
+
+  super.dispose();
+
   }
 
   public final void addElevationDataProvider(ElevationDataProvider edp)

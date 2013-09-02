@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class Mark
+public class Mark implements SurfaceElevationListener
 {
   /**
    * The text the mark displays.
@@ -44,7 +44,7 @@ public class Mark
   /**
    * The point where the mark will be geo-located.
    */
-  private final Geodetic3D _position ;
+  private Geodetic3D _position;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -74,10 +74,6 @@ public class Mark
 
   private Vector3D _cartesianPosition;
 
-  private IFloatBuffer _vertices;
-//  IFloatBuffer* getVertices(const Planet* planet);
-
-
   private boolean _textureSolved;
   private IImage _textureImage;
   private int _textureWidth;
@@ -87,33 +83,17 @@ public class Mark
   private boolean _renderedMark;
 
   private static IFloatBuffer _billboardTexCoord = null;
-  private int _viewportWidth;
-  private int _viewportHeight;
 
-  private GLState _glState = new GLState();
-
-  private void createGLState(Planet planet, int viewportWidth, int viewportHeight)
+  private GLState _glState;
+  private void createGLState(Planet planet)
   {
   
-    _viewportHeight = viewportHeight;
-    _viewportWidth = viewportWidth;
+    _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
   
-    if (_vertices == null)
+    if (_textureId != null)
     {
-      final Vector3D pos = new Vector3D(planet.toCartesian(_position));
-      FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-      vertex.add(pos);
-  
-      _vertices = vertex.create();
+      _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
     }
-  
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new BillboardGLFeature(_textureWidth, _textureHeight, viewportWidth, viewportHeight), false);
-  
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, false, false, 0, false, 0, 0, (float)1.0, false, (float)1.0), false); //POINT SIZE - LINE WIDTH - NO POLYGON OFFSET - NO CULLING - NO DEPTH TEST - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   }
 
   private IFloatBuffer getBillboardTexCoords()
@@ -130,54 +110,59 @@ public class Mark
     return _billboardTexCoord;
   }
 
+  private SurfaceElevationProvider _surfaceElevationProvider;
+  private double _currentSurfaceElevation;
+  private AltitudeMode _altitudeMode;
+
   /**
    * Creates a marker with icon and label
    */
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, listener, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom)
   {
-     this(label, iconURL, position, minDistanceToCamera, labelBottom, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
   {
-     this(label, iconURL, position, minDistanceToCamera, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, minDistanceToCamera, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     this(label, iconURL, position, 4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
+     this(label, iconURL, position, altitudeMode, 4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
   }
-  public Mark(String label, URL iconURL, Geodetic3D position, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = label;
      _iconURL = new URL(iconURL);
      _position = new Geodetic3D(position);
+     _altitudeMode = altitudeMode;
      _labelBottom = labelBottom;
      _labelFontSize = labelFontSize;
      _labelFontColor = labelFontColor;
@@ -185,7 +170,6 @@ public class Mark
      _labelGapSize = labelGapSize;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -197,57 +181,60 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
+     _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
   /**
    * Creates a marker just with label, without icon
    */
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, listener, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, true, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, null, true, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize)
   {
-     this(label, position, minDistanceToCamera, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
   {
-     this(label, position, minDistanceToCamera, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
+     this(label, position, altitudeMode, minDistanceToCamera, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     this(label, position, 4.5e+06, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
+     this(label, position, altitudeMode, 4.5e+06, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
   }
-  public Mark(String label, Geodetic3D position, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = label;
      _labelBottom = true;
      _iconURL = new URL("", false);
      _position = new Geodetic3D(position);
+     _altitudeMode = altitudeMode;
      _labelFontSize = labelFontSize;
      _labelFontColor = labelFontColor;
      _labelShadowColor = labelShadowColor;
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -259,45 +246,48 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
+     _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
   /**
    * Creates a marker just with icon, without label
    */
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(iconURL, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData)
   {
-     this(iconURL, position, minDistanceToCamera, userData, true, null, false);
+     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
   {
-     this(iconURL, position, minDistanceToCamera, null, true, null, false);
+     this(iconURL, position, altitudeMode, minDistanceToCamera, null, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     this(iconURL, position, 4.5e+06, null, true, null, false);
+     this(iconURL, position, altitudeMode, 4.5e+06, null, true, null, false);
   }
-  public Mark(URL iconURL, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = "";
      _labelBottom = true;
      _iconURL = new URL(iconURL);
      _position = new Geodetic3D(position);
+     _altitudeMode = altitudeMode;
      _labelFontSize = 20F;
      _labelFontColor = Color.newFromRGBA(1, 1, 1, 1);
      _labelShadowColor = Color.newFromRGBA(0, 0, 0, 1);
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
@@ -309,45 +299,48 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
+     _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
-  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
-     this(image, imageID, position, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
+     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
   }
-  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
   {
-     this(image, imageID, position, minDistanceToCamera, userData, autoDeleteUserData, null, false);
+     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, null, false);
   }
-  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData)
   {
-     this(image, imageID, position, minDistanceToCamera, userData, true, null, false);
+     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, true, null, false);
   }
-  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
   {
-     this(image, imageID, position, minDistanceToCamera, null, true, null, false);
+     this(image, imageID, position, altitudeMode, minDistanceToCamera, null, true, null, false);
   }
-  public Mark(IImage image, String imageID, Geodetic3D position)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     this(image, imageID, position, 4.5e+06, null, true, null, false);
+     this(image, imageID, position, altitudeMode, 4.5e+06, null, true, null, false);
   }
-  public Mark(IImage image, String imageID, Geodetic3D position, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
+  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _label = "";
      _labelBottom = true;
      _iconURL = new URL(new URL("", false));
      _position = new Geodetic3D(position);
+     _altitudeMode = altitudeMode;
      _labelFontSize = 20F;
      _labelFontColor = null;
      _labelShadowColor = null;
      _labelGapSize = 2;
      _textureId = null;
      _cartesianPosition = null;
-     _vertices = null;
      _textureSolved = true;
      _textureImage = image;
      _renderedMark = false;
@@ -359,15 +352,25 @@ public class Mark
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
+     _surfaceElevationProvider = null;
+     _currentSurfaceElevation = 0.0;
+     _glState = new GLState();
   
   }
 
   public void dispose()
   {
+  
+    if (_position != null)
+       _position.dispose();
+  
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.removeListener(this);
+    }
+  
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
-    if (_vertices != null)
-       _vertices.dispose();
     if (_autoDeleteListener)
     {
       if (_listener != null)
@@ -382,6 +385,9 @@ public class Mark
     {
       IFactory.instance().deleteImage(_textureImage);
     }
+  
+    _glState._release();
+  
   }
 
   public final String getLabel()
@@ -396,6 +402,13 @@ public class Mark
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
+  
+    _surfaceElevationProvider = context.getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+    }
+  
     if (!_textureSolved)
     {
       final boolean hasLabel = (_label.length() != 0);
@@ -454,11 +467,10 @@ public class Mark
        _labelFontColor.dispose();
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
-    //  _textureImage = image->shallowCopy();
+  
     _textureImage = image;
     _textureWidth = _textureImage.getWidth();
     _textureHeight = _textureImage.getHeight();
-    //  IFactory::instance()->deleteImage(image);
   }
 
   public final int getTextureWidth()
@@ -494,19 +506,6 @@ public class Mark
   public final boolean touched()
   {
     return (_listener == null) ? false : _listener.touchedMark(this);
-    //  if (_listener == NULL) {
-    //    return false;
-    //  }
-    //  return _listener->touchedMark(this);
-  }
-
-  public final Vector3D getCartesianPosition(Planet planet)
-  {
-    if (_cartesianPosition == null)
-    {
-      _cartesianPosition = new Vector3D(planet.toCartesian(_position));
-    }
-    return _cartesianPosition;
   }
 
   public final void setMinDistanceToCamera(double minDistanceToCamera)
@@ -518,9 +517,26 @@ public class Mark
     return _minDistanceToCamera;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState)
+  public final Vector3D getCartesianPosition(Planet planet)
   {
-    final Planet planet = rc.getPlanet();
+    if (_cartesianPosition == null)
+    {
+  
+      double altitude = _position._height;
+      if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+      {
+        altitude += _currentSurfaceElevation;
+      }
+  
+      Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
+  
+      _cartesianPosition = new Vector3D(planet.toCartesian(positionWithSurfaceElevation));
+    }
+    return _cartesianPosition;
+  }
+
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
+  {
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
@@ -539,6 +555,7 @@ public class Mark
     }
   
     _renderedMark = false;
+  
     if (renderableByDistance)
     {
       final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
@@ -554,24 +571,20 @@ public class Mark
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;
-  
-            _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+            createGLState(planet);
           }
         }
         else
         {
-          if (rc.getCurrentCamera().getWidth() != _viewportWidth || rc.getCurrentCamera().getHeight() != _viewportHeight)
+  
+          if (_glState.getNumberOfGLFeatures() == 0)
           {
-            createGLState(rc.getPlanet(), rc.getCurrentCamera().getWidth(), rc.getCurrentCamera().getHeight());
+            createGLState(planet); //GLState was disposed due to elevation change
           }
-  
-          GL gl = rc.getGL();
-  
-          GPUProgramManager progManager = rc.getGPUProgramManager();
   
           _glState.setParent(parentGLState); //Linking with parent
   
-          gl.drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, progManager);
+          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   
           _renderedMark = true;
         }
@@ -580,4 +593,18 @@ public class Mark
   
   }
 
+  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
+  {
+  
+    _currentSurfaceElevation = rawElevation * verticalExaggeration;
+    if (_cartesianPosition != null)
+       _cartesianPosition.dispose();
+    _cartesianPosition = null;
+  
+    _glState.clearAllGLFeatures();
+  }
+
+  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
+  {
+  }
 }

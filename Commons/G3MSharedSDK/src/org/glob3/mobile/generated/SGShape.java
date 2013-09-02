@@ -30,7 +30,7 @@ public class SGShape extends Shape
 
   public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
   {
-     super(null);
+     super(null, AltitudeMode.ABSOLUTE);
      _node = node;
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;

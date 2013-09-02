@@ -26,7 +26,7 @@ private:
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
   
-  GLState _glState;
+  GLState* _glState;
   void createGLState();
 
 public:
@@ -45,7 +45,8 @@ public:
   _colors(colors),
   _uv(uv),
   _normals(normals),
-  _indices(indices)
+  _indices(indices),
+  _glState(new GLState())
   {
     createGLState();
   }
@@ -55,12 +56,12 @@ public:
   void rawRender(const G3MRenderContext* rc, const GLState* glState);
   
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState){
-    _glState.setParent(parentState);
-    return &_glState;
+                             const GLState* parentState) {
+    _glState->setParent(parentState);
+    return _glState;
   }
 
-  std::string description(){
+  std::string description() {
     return "SGGeometryNode";
   }
   
