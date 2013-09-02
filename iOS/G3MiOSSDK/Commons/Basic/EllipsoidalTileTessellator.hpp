@@ -10,7 +10,7 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
-#include <map.h>
+#include <map>
 class Sector;
 class IShortBuffer;
 

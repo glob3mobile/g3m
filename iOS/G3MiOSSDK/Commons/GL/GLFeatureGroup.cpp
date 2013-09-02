@@ -168,28 +168,54 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
 void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
 
   const int size = features.size();
-#ifdef C_CODE
-  const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[size];
-#endif
-#ifdef JAVA_CODE
-  Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[size];
-#endif
 
-  int modelViewCount = 0;
+  Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder;
+  Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder;
+
+  bool normalsAvailable = false;
+
   for (int i = 0; i < size; i++){
     const GLFeature* f = features.get(i);
-    if (f->getGroup() == CAMERA_GROUP){
+    const GLFeatureGroupName group = f->getGroup();
+    const GLFeatureID id = f->getID();
+    if (group == CAMERA_GROUP){
       GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
-      modelTransformHolders[modelViewCount++] = cf->getMatrixHolder();
+
+      if (id == GLF_MODEL_TRANSFORM){
+        modelTransformHolderBuilder.add(cf->getMatrixHolder());
+      } else{
+        modelViewHolderBuilder.add(cf->getMatrixHolder());
+      }
+
+    } else{
+      if (group == LIGHTING_GROUP){
+        if (id == GLF_VERTEX_NORMAL){
+          normalsAvailable = true;
+        }
+      }
     }
   }
 
-  Matrix44DProvider* modelViewProvider = new Matrix44DMultiplicationHolder(modelTransformHolders,modelViewCount);
+  if (modelTransformHolderBuilder.size() > 0){
+    Matrix44DProvider* prov = modelTransformHolderBuilder.create();
+    modelViewHolderBuilder.add(prov);
+    
+    if (normalsAvailable){
+      vs.addUniformValue(MODEL,     //FOR LIGHTING
+                         new GPUUniformValueMatrix4(prov),
+                         false);
+    }
+
+    prov->_release();
+  }
+
+  Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
+
   vs.addUniformValue(MODELVIEW,
-                     new GPUUniformValueMatrix4(modelViewProvider, true),
+                     new GPUUniformValueMatrix4(modelViewProvider),
                      false);
 
-  delete [] modelTransformHolders;
+  modelViewProvider->_release();
 }
 
 void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state){
@@ -208,54 +234,13 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
 
   if (normalsAvailable){
 
-    int modelTransformCount = 0;
-
     for(int i = 0; i < size; i++){
       const GLFeature* f = features.get(i);
 
-      if (f->getID() == GLF_MODEL_TRANSFORM){
-        modelTransformCount++;
-      }
-      
       if (f->getGroup() == LIGHTING_GROUP){
         f->applyOnGlobalGLState(&state);
         vs.combineWith(f->getGPUVariableValueSet());
       }
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef C_CODE
-    const Matrix44DProvider** modelTransformHolders = new const Matrix44DProvider*[modelTransformCount];
-#endif
-#ifdef JAVA_CODE
-    Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[modelTransformCount];
-#endif
-
-    modelTransformCount = 0;
-    for (int i = 0; i < size; i++){
-      const GLFeature* f = features.get(i);
-      if (f->getID() == GLF_MODEL_TRANSFORM){
-        GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
-        const Matrix44D* m = cf->getMatrixHolder()->getMatrix();
-
-        if (!m->isScaleMatrix() && !m->isTranslationMatrix()){
-          modelTransformHolders[modelTransformCount++] = cf->getMatrixHolder();
-        }
-      }
-
-    }
-
-    Matrix44DProvider* modelProvider = NULL;
-    if (modelTransformCount > 0){
-      modelProvider = new Matrix44DMultiplicationHolder(modelTransformHolders, modelTransformCount);
-
-      vs.addUniformValue(MODEL,
-                         new GPUUniformValueMatrix4(modelProvider, true),
-                         false);
-    }
-    
-    delete [] modelTransformHolders;
-    
-    
   }
 }
