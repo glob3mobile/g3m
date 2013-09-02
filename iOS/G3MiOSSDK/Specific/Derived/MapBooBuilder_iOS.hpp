@@ -34,7 +34,6 @@ public:
   MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                     const URL& serverURL,
                     const URL& tubesURL,
-                    bool useWebSockets,
                     const std::string& applicationId,
                     MapBoo_ViewType viewType,
                     MapBooApplicationChangeListener* applicationListener);
