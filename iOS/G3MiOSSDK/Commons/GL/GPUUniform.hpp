@@ -279,7 +279,7 @@ public:
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
 private:
-  const bool _ownsProvider;
+//  const bool _ownsProvider;
 #ifdef C_CODE
   const Matrix44DProvider* _provider;
   mutable const Matrix44D* _lastModelSet;
@@ -293,31 +293,32 @@ public:
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
-  _lastModelSet(NULL),
-  _ownsProvider(true)
+  _lastModelSet(NULL)
+//  _ownsProvider(true)
   {
   }
 
-  GPUUniformValueMatrix4(const Matrix44DProvider* provider, bool ownsProvider):
+  GPUUniformValueMatrix4(const Matrix44DProvider* provider):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
-  _lastModelSet(NULL),
-  _ownsProvider(ownsProvider)
+  _lastModelSet(NULL)
+//  _ownsProvider(ownsProvider)
   {
+    _provider->_retain();
   }
 
   GPUUniformValueMatrix4(const Matrix44D* m):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DHolder(m)),
-  _lastModelSet(NULL),
-  _ownsProvider(true)
+  _lastModelSet(NULL)
+//  _ownsProvider(true)
   {
   }
 
   ~GPUUniformValueMatrix4(){
-    if (_ownsProvider){
+//    if (_ownsProvider){
       _provider->_release();
-    }
+//    }
     if (_lastModelSet != NULL){
       _lastModelSet->_release();
     }
