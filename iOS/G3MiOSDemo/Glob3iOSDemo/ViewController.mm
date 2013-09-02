@@ -1757,6 +1757,28 @@ private:
                            color);
   }
 
+  EllipsoidShape* createEllipsoidShape(const GEO2DPointGeometry* geometry) const {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const double population = properties->getAsNumber("population", 0);
+
+    double radius = population / 1e2;
+
+    const int wheelSize = 7;
+    _colorIndex = (_colorIndex + 1) % wheelSize;
+
+    return new EllipsoidShape(new Geodetic3D(geometry->getPosition(), 0),
+                              RELATIVE_TO_GROUND,
+                              Vector3D(radius, radius, radius),
+                              10,
+                              0.0,
+                              false,
+                              false,
+                              new Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                              Color::newFromRGBA(0.2, 0.2, 0, 1),
+                              true);
+  }
+
   BoxShape* createBoxShape(const GEO2DPointGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
@@ -1770,6 +1792,7 @@ private:
     const int wheelSize = 7;
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
+    
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
@@ -1777,6 +1800,7 @@ private:
                         //Color::newFromRGBA(1, 1, 0, 0.6),
                         new Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
+
   }
 
   Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -1882,7 +1906,11 @@ public:
     //    const double population = properties->getAsNumber("population", 0);
     //
     //    if (population > 2000000) {
-    symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+    if (rand()%2 == 0){
+      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
+    } else{
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+    }
 
     Mark* mark = createMark(geometry);
     if (mark != NULL) {

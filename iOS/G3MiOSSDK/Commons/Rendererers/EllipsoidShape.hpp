@@ -14,6 +14,8 @@
 class Color;
 class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
+class FloatBufferBuilderFromCartesian3D;
+
 class IGLTextureId;
 
 #include "URL.hpp"
@@ -35,6 +37,8 @@ private:
 
   const bool _mercator;
 
+  const bool _withNormals;
+
   Color* _surfaceColor;
   Color* _borderColor;
 
@@ -42,7 +46,8 @@ private:
                          FloatBufferBuilderFromGeodetic *vertices);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc,
                           FloatBufferBuilderFromGeodetic* vertices,
-                          FloatBufferBuilderFromCartesian2D* texCoords);
+                          FloatBufferBuilderFromCartesian2D* texCoords,
+                          FloatBufferBuilderFromCartesian3D* normals);
 
   bool _textureRequested;
   IImage* _textureImage;
@@ -60,7 +65,8 @@ public:
                  bool texturedInside,
                  bool mercator,
                  Color* surfaceColor,
-                 Color* borderColor = NULL) :
+                 Color* borderColor = NULL,
+                 bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _radiusX(radius.x()),
@@ -73,7 +79,8 @@ public:
   _surfaceColor(surfaceColor),
   _borderColor(borderColor),
   _textureRequested(false),
-  _textureImage(NULL)
+  _textureImage(NULL),
+  _withNormals(withNormals)
   {
 
   }
@@ -85,7 +92,8 @@ public:
                  short resolution,
                  float borderWidth,
                  bool texturedInside,
-                 bool mercator) :
+                 bool mercator,
+                 bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _radiusX(radius.x()),
@@ -98,7 +106,8 @@ public:
   _surfaceColor(NULL),
   _borderColor(NULL),
   _textureRequested(false),
-  _textureImage(NULL)
+  _textureImage(NULL),
+  _withNormals(withNormals)
   {
 
   }

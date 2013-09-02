@@ -15,6 +15,7 @@
 #include "Color.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
@@ -99,7 +100,8 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
 
 Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                                         FloatBufferBuilderFromGeodetic* vertices,
-                                        FloatBufferBuilderFromCartesian2D* texCoords) {
+                                        FloatBufferBuilderFromCartesian2D* texCoords,
+                                        FloatBufferBuilderFromCartesian3D* normals) {
 
   // create surface indices
   ShortBufferBuilder indices;
@@ -135,7 +137,11 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              indices.create(),
                              (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
-                             surfaceColor);
+                             surfaceColor,
+                             NULL,
+                             1.0,
+                             true,
+                             _withNormals? normals->create() : NULL);
 
   const IGLTextureId* texId = getTextureId(rc);
   if (texId == NULL) {
@@ -213,6 +219,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
 
+  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
   const short resolution2Minus2 = (short) (2*_resolution-2);
   const short resolutionMinus1  = (short) (_resolution-1);
 
@@ -224,6 +232,11 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
       vertices.add(innerPoint);
+
+      if (_withNormals){
+        Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
+        normals.add(n);
+      }
       
       const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
@@ -232,7 +245,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
 
-  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords);
+  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords, &normals);
 
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
