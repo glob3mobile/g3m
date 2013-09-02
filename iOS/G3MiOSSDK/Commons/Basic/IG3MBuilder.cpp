@@ -637,6 +637,9 @@ G3MWidget* IG3MBuilder::create() {
   else {
     mainRenderer = getPlanetRendererBuilder()->create();
   }
+
+  int TODO_VIEWPORT;
+  Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
@@ -656,7 +659,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getAutoDeleteInitializationTask(), //
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
-                                            getSceneLighting());
+                                            getSceneLighting(),
+                                            initialCameraPosition);
   
   g3mWidget->setUserData(getUserData());
 

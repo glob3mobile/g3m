@@ -21,6 +21,8 @@
 
 #include "GPUProgramManager.hpp"
 #include "SceneLighting.hpp"
+#include "Planet.hpp"
+#include "Sector.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -64,6 +66,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
   SceneLighting* sceneLighting = new DefaultSceneLighting();
+
+  int TODO_VIEWPORT;
+  Geodetic3D initialPos = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -82,7 +87,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   autoDeleteInitializationTask,
                                   periodicalTasks,
                                   gpuProgramManager,//GPUProgramManager
-                                  sceneLighting);   //Scene Lighting
+                                  sceneLighting,    //Scene Lighting
+                                  initialPos);   
     [self widget]->setUserData(userData);
 }
 

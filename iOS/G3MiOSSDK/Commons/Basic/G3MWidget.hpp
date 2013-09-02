@@ -108,7 +108,8 @@ public:
                            bool                             autoDeleteInitializationTask,
                            std::vector<PeriodicalTask*>     periodicalTasks,
                            GPUProgramManager*               gpuProgramManager,
-                           SceneLighting*                   sceneLighting);
+                           SceneLighting*                   sceneLighting,
+                           const Geodetic3D&                initialCameraPosition);
   
   ~G3MWidget();
   
@@ -274,7 +275,8 @@ private:
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks,
             GPUProgramManager*               gpuProgramManager,
-            SceneLighting*                   sceneLighting);
+            SceneLighting*                   sceneLighting,
+            const Geodetic3D&                initialCameraPosition);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

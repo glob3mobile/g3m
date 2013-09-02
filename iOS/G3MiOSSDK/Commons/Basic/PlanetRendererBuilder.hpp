@@ -57,6 +57,9 @@ private:
   ElevationDataProvider* getElevationDataProvider();
   float getVerticalExaggeration();
 
+  Sector* _renderedSector;
+  Sector getRenderedSector();
+
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
@@ -81,6 +84,8 @@ public:
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 
   void setVerticalExaggeration(float verticalExaggeration);
+
+  void setRenderedSector(const Sector& sector);
 
 };
 

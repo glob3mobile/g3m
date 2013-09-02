@@ -77,7 +77,8 @@ G3MWidget::G3MWidget(GL*                              gl,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks,
                      GPUProgramManager*               gpuProgramManager,
-                     SceneLighting*                   sceneLighting):
+                     SceneLighting*                   sceneLighting,
+                     const Geodetic3D&                initialCameraPosition):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -152,10 +153,8 @@ _rootState(NULL)
     addPeriodicalTask(periodicalTasks[i]);
   }
 
-  Geodetic3D initialPosition = _planet->getInitialCameraPosition();
-
-  _currentCamera->setGeodeticPosition(initialPosition);
-  _nextCamera->setGeodeticPosition(initialPosition);
+  _currentCamera->setGeodeticPosition(initialCameraPosition);
+  _nextCamera->setGeodeticPosition(initialCameraPosition);
 }
 
 
@@ -176,7 +175,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks,
                              GPUProgramManager*               gpuProgramManager,
-                             SceneLighting*                   sceneLighting) {
+                             SceneLighting*                   sceneLighting,
+                             const Geodetic3D&                initialCameraPosition) {
 
   return new G3MWidget(gl,
                        storage,
@@ -195,7 +195,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        autoDeleteInitializationTask,
                        periodicalTasks,
                        gpuProgramManager,
-                       sceneLighting);
+                       sceneLighting,
+                       initialCameraPosition);
 }
 
 G3MWidget::~G3MWidget() {

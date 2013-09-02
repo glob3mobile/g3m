@@ -167,7 +167,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getInitialCameraPosition() const{
+  Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
     Vector3D v(_ellipsoid.getRadii().maxAxis() * 5, 0, 0);
     return toGeodetic3D(v);
   }

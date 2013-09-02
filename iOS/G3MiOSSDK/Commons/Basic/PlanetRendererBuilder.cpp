@@ -34,6 +34,8 @@ PlanetRendererBuilder::PlanetRendererBuilder() {
 
   _elevationDataProvider = NULL;
   _verticalExaggeration = 0.0f;
+
+  _renderedSector = NULL;
 }
 
 PlanetRendererBuilder::~PlanetRendererBuilder() {
@@ -319,4 +321,19 @@ TileTessellator* PlanetRendererBuilder::createTileTessellator() {
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {
   return LayerBuilder::createDefaultSatelliteImagery();
+}
+
+void PlanetRendererBuilder::setRenderedSector(const Sector& sector){
+  if (_renderedSector != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _renderedSector already initialized");
+    return;
+  }
+  _renderedSector = new Sector(sector);
+}
+
+Sector PlanetRendererBuilder::getRenderedSector(){
+  if (_renderedSector == NULL){
+    return Sector::fullSphere();
+  }
+  return *_renderedSector;
 }

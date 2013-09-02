@@ -851,12 +851,16 @@ G3MWidget* MapBooBuilder::create() {
 
   ICameraActivityListener* cameraActivityListener = NULL;
 
+  int TODO_VIEWPORT;
+  const Planet* planet = createPlanet();
+  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
+
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
                                  getThreadUtils(),
                                  cameraActivityListener,
-                                 createPlanet(),
+                                 planet,
                                  *cameraConstraints,
                                  createCameraRenderer(),
                                  mainRenderer,
@@ -868,7 +872,8 @@ G3MWidget* MapBooBuilder::create() {
                                  true,       // autoDeleteInitializationTask
                                  *periodicalTasks,
                                  getGPUProgramManager(),
-                                 createSceneLighting());
+                                 createSceneLighting(),
+                                 initialCameraPosition);
   delete cameraConstraints;
   delete periodicalTasks;
 
