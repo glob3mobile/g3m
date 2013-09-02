@@ -116,7 +116,8 @@ PlanetRenderer::PlanetRenderer(const TileTessellator* tessellator,
                                LayerSet* layerSet,
                                const TilesRenderParameters* parameters,
                                bool showStatistics,
-                               long long texturePriority) :
+                               long long texturePriority,
+                               const Sector& renderedSector) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
@@ -136,7 +137,8 @@ _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _projection(NULL),
 _model(NULL),
-_glState(new GLState())
+_glState(new GLState()),
+_renderedSector(renderedSector)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -409,7 +411,8 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
                                 _lastSplitTimer,
                                 true,
                                 _texturePriority,
-                                _verticalExaggeration);
+                                _verticalExaggeration,
+                                _renderedSector);
 
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -500,7 +503,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                             _lastSplitTimer,
                             _firstRender /* if first render, force full render */,
                             _texturePriority,
-                            _verticalExaggeration);
+                            _verticalExaggeration,
+                            _renderedSector);
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 

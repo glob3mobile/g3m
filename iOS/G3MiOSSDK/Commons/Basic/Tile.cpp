@@ -323,6 +323,10 @@ bool Tile::isVisible(const G3MRenderContext *rc,
     return false;
   }*/
 
+  if (!prc->getRenderedSector().touchesWith(_sector)){ //Incomplete world
+    return false;
+  }
+
   const BoundingVolume* boundingVolume = getBoundingVolume(rc, prc);
 
   return ((boundingVolume != NULL)  &&
@@ -557,15 +561,14 @@ void Tile::render(const G3MRenderContext* rc,
                   double cameraAngle2HorizonInRadians,
                   const Frustum* cameraFrustumInModelCoordinates) {
 
+  TilesStatistics* statistics = prc->getStatistics();
+  statistics->computeTileProcessed(this);
+
   const float verticalExaggeration =  prc->getVerticalExaggeration();
   if (verticalExaggeration != _verticalExaggeration) {
     // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-
     _verticalExaggeration = prc->getVerticalExaggeration();
   }
-
-  TilesStatistics* statistics = prc->getStatistics();
-  statistics->computeTileProcessed(this);
 
   if (isVisible(rc, prc, planet,
                 cameraNormalizedPosition,

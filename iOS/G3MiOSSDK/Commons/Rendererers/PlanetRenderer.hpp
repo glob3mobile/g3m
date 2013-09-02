@@ -51,6 +51,8 @@ private:
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   long long _texturePriority;
+
+  Sector _renderedSector;
 public:
   PlanetRendererContext(const TileTessellator*       tessellator,
                         ElevationDataProvider*       elevationDataProvider,
@@ -62,7 +64,8 @@ public:
                         ITimer*                      lastSplitTimer,
                         bool                         isForcedFullRender,
                         long long                    texturePriority,
-                        const float                  verticalExaggeration) :
+                        const float                  verticalExaggeration,
+                        const Sector&                renderedSector) :
   _tessellator(tessellator),
   _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
@@ -73,7 +76,8 @@ public:
   _lastSplitTimer(lastSplitTimer),
   _isForcedFullRender(isForcedFullRender),
   _texturePriority(texturePriority),
-  _verticalExaggeration(verticalExaggeration)
+  _verticalExaggeration(verticalExaggeration),
+  _renderedSector(renderedSector)
   {
 
   }
@@ -124,6 +128,10 @@ public:
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
     return _layerSet->getLayerTilesRenderParameters();
+  }
+
+  const Sector getRenderedSector() const{
+    return _renderedSector;
   }
 
 };
@@ -349,6 +357,8 @@ private:
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
 
+  Sector _renderedSector;
+
 public:
   PlanetRenderer(const TileTessellator* tessellator,
                  ElevationDataProvider* elevationDataProvider,
@@ -358,7 +368,8 @@ public:
                  LayerSet* layerSet,
                  const TilesRenderParameters* parameters,
                  bool showStatistics,
-                 long long texturePriority);
+                 long long texturePriority,
+                 const Sector& renderedSector = Sector::fullSphere());
 
   ~PlanetRenderer();
 
