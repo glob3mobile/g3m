@@ -636,12 +636,12 @@ public abstract class MapBooBuilder
   
     _applicationScenes = applicationScenes;
   
-    changedCurrentScene();
-  
     if (_applicationListener != null)
     {
       _applicationListener.onScenesChanged(_context, _applicationScenes);
     }
+  
+    changedCurrentScene();
   }
 
   /** Private to MapbooBuilder, don't call it */

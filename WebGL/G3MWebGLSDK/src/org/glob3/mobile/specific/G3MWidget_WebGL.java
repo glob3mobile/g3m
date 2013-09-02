@@ -146,6 +146,7 @@ public final class G3MWidget_WebGL
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
+      _canvas.getCanvasElement().setId("_g3m_canvas");
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
          return;
@@ -175,7 +176,41 @@ public final class G3MWidget_WebGL
          sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
       }
 
+      exportJSFunctions();
    }
+
+
+   private native void exportJSFunctions() /*-{
+		var that = this;
+		if (!$wnd.G3M) {
+			$wnd.G3M = {};
+		}
+		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+		});
+		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+		});
+   }-*/;
+
+
+   public native String takeScreenshotAsBase64() /*-{
+		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+		var dataURL = canvas.toDataURL("image/jpeg");
+		return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+   }-*/;
+
+
+   public native JavaScriptObject takeScreenshotAsImage() /*-{
+		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+		var image = new Image();
+		image.width = canvas.width;
+		image.height = canvas.height;
+		image.src = canvas.toDataURL("image/jpeg");
+		return image;
+   }-*/;
 
 
    private VerticalPanel createUnsupportedMessage(final String message) {
@@ -254,8 +289,7 @@ public final class G3MWidget_WebGL
 		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
 
 		webGLContext.viewport(0, 0, width, height);
-		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
-				| webGLContext.DEPTH_BUFFER_BIT);
+		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT | webGLContext.DEPTH_BUFFER_BIT);
    }-*/;
 
 
@@ -277,12 +311,9 @@ public final class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
+			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -290,8 +321,7 @@ public final class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -303,23 +333,23 @@ public final class G3MWidget_WebGL
 
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
-		//		debugger;
 		var context = null;
-		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
-				"moz-webgl" ];
+		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d", "moz-webgl" ];
 
 		if (jsCanvas != null) {
 			for ( var cn in contextNames) {
 				try {
-					context = jsCanvas.getContext(contextNames[cn]);
+					context = jsCanvas.getContext(contextNames[cn], {
+						preserveDrawingBuffer : true
+					});
 					//STORING SIZE FOR GLVIEWPORT
 					context.viewportWidth = jsCanvas.width;
 					context.viewportHeight = jsCanvas.height;
-				} catch (e) {
+				}
+				catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
+					jsCanvas.addEventListener("webglcontextlost", function(event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);
@@ -329,7 +359,8 @@ public final class G3MWidget_WebGL
 			if (context == null) {
 				alert("No WebGL context available");
 			}
-		} else {
+		}
+		else {
 			alert("No canvas available");
 		}
 
@@ -341,35 +372,28 @@ public final class G3MWidget_WebGL
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
-      
-      factory.add(new GPUProgramSources("ColorMesh",
-				Shaders_WebGL._colorMeshVertexShader,
-				Shaders_WebGL._colorMeshFragmentShader));
 
-      factory.add(new GPUProgramSources("TexturedMesh",
-				Shaders_WebGL._texturedMeshVertexShader,
-				Shaders_WebGL._texturedMeshFragmentShader));
-      
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
-				Shaders_WebGL._transformedTexCoortexturedMeshVertexShader, 
-				Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
+      factory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader, Shaders_WebGL._colorMeshFragmentShader));
 
-      factory.add(new GPUProgramSources("FlatColorMesh",
-				Shaders_WebGL._flatColorMeshVertexShader,
-				Shaders_WebGL._flatColorMeshFragmentShader));
-      
-      factory.add(new GPUProgramSources("NoColorMesh",
-				Shaders_WebGL._noColorMeshVertexShader,
-				Shaders_WebGL._noColorMeshFragmentShader));
-      
-      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
-				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
-				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
-      
-      factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
-				Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
-				Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
-      
+      factory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
+               Shaders_WebGL._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
+               Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
+               Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
+               Shaders_WebGL._flatColorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
+               Shaders_WebGL._noColorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+               Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
+               Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+
       return new GPUProgramManager(factory);
    }
 
@@ -410,9 +434,7 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, 
-               createGPUProgramManager(),
-               sceneLighting);
+               periodicalTasks, createGPUProgramManager(), sceneLighting);
 
       _g3mWidget.setUserData(userData);
 
@@ -522,6 +544,7 @@ public final class G3MWidget_WebGL
    public void stopCameraAnimation() {
       getG3MWidget().stopCameraAnimation();
    }
+
 
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
