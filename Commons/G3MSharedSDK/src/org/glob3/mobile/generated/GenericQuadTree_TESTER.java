@@ -17,7 +17,7 @@ public class GenericQuadTree_TESTER
     public final boolean visitElement(Sector sector, Object element)
     {
 
-      if (_sec.isEqualsTo(sector))
+      if (_sec.isEquals(sector))
       {
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());
@@ -65,7 +65,7 @@ public class GenericQuadTree_TESTER
     public final boolean visitElement(Geodetic2D geodetic, Object element)
     {
 
-      if (geodetic.isEqualsTo(_geo))
+      if (geodetic.isEquals(_geo))
       {
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());

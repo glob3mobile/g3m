@@ -195,9 +195,9 @@ public class Geodetic2D
     return s;
   }
 
-  public final boolean isEqualsTo(Geodetic2D that)
+  public final boolean isEquals(Geodetic2D that)
   {
-    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+    return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }
 
   @Override

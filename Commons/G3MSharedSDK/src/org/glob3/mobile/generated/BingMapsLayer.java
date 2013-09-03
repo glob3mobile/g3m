@@ -3,7 +3,6 @@ public class BingMapsLayer extends Layer
 {
   private final String _imagerySet;
   private final String _key;
-  private final Sector _sector ;
 
   private final int _initialLevel;
 
@@ -46,6 +45,34 @@ public class BingMapsLayer extends Layer
     return result;
   }
 
+  protected final String getLayerType()
+  {
+    return "BingMaps";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    BingMapsLayer t = (BingMapsLayer) that;
+  
+    if (!_imagerySet.equals(t._imagerySet))
+    {
+      return false;
+    }
+  
+    if (!_key.equals(t._key))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
@@ -69,7 +96,6 @@ public class BingMapsLayer extends Layer
      _imagerySet = imagerySet;
      _key = key;
      _initialLevel = initialLevel;
-     _sector = new Sector(Sector.fullSphere());
      _isInitialized = false;
   
   }
@@ -82,18 +108,6 @@ public class BingMapsLayer extends Layer
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final Sector tileSector = tile.getSector();
-    if (!_sector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_sector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
   
     final IStringUtils su = IStringUtils.instance();
   
@@ -118,7 +132,7 @@ public class BingMapsLayer extends Layer
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
+    petitions.add(new Petition(tile.getSector(), new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }
@@ -252,6 +266,11 @@ public class BingMapsLayer extends Layer
   public final String description()
   {
     return "[BingMapsLayer]";
+  }
+
+  public final BingMapsLayer copy()
+  {
+    return new BingMapsLayer(_imagerySet, _key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

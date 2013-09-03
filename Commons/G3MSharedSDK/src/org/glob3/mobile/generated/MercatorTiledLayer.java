@@ -17,14 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
-public class MercatorTiledLayer extends Layer
+public abstract class MercatorTiledLayer extends Layer
 {
-  private final String _protocol;
-  private final String _domain;
+  protected final String _protocol;
+  protected final String _domain;
   private final java.util.ArrayList<String> _subdomains;
-  private final String _imageFormat;
+  protected final String _imageFormat;
 
-  private final Sector _sector ;
+  protected final Sector _sector ;
 
 
 

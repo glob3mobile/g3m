@@ -90,12 +90,22 @@ public abstract class MapBooBuilder
 
   private void recreateLayerSet()
   {
-    _layerSet.removeAllLayers(false);
-  
     final MapBoo_Scene scene = getApplicationCurrentScene();
-    if (scene != null)
+  
+    if (scene == null)
     {
-      scene.fillLayerSet(_layerSet);
+      _layerSet.removeAllLayers(true);
+    }
+    else
+    {
+      LayerSet newLayerSet = scene.createLayerSet();
+      if (!newLayerSet.isEquals(_layerSet))
+      {
+        _layerSet.removeAllLayers(true);
+        _layerSet.takeLayersFrom(newLayerSet);
+      }
+      if (newLayerSet != null)
+         newLayerSet.dispose();
     }
   }
 
@@ -654,8 +664,6 @@ public abstract class MapBooBuilder
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
-    //  ILogger::instance()->logInfo("%d", json.size());
-  
     if (jsonBaseObject == null)
     {
       ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
@@ -700,13 +708,6 @@ public abstract class MapBooBuilder
               setApplicationAbout(jsonAbout.value());
             }
   
-            //          // always process defaultSceneIndex before scenes
-            //          const JSONNumber* jsonDefaultSceneIndex = jsonObject->getAsNumber("defaultSceneIndex");
-            //          if (jsonDefaultSceneIndex != NULL) {
-            //            const int defaultSceneIndex = (int) jsonDefaultSceneIndex->value();
-            //            setApplicationDefaultSceneIndex(defaultSceneIndex);
-            //          }
-  
             final JSONArray jsonScenes = jsonObject.getAsArray("scenes");
             if (jsonScenes != null)
             {
@@ -724,8 +725,6 @@ public abstract class MapBooBuilder
   
               setApplicationScenes(scenes);
             }
-  
-            // int _TODO_Application_Warnings;
   
             setApplicationTimestamp(timestamp);
           }

@@ -20,7 +20,7 @@ public class GPUUniformValueBool extends GPUUniformValue
       gl.uniform1i(id, 0);
     }
   }
-  public final boolean isEqualsTo(GPUUniformValue v)
+  public final boolean isEquals(GPUUniformValue v)
   {
     return _value == ((GPUUniformValueBool)v)._value;
   }

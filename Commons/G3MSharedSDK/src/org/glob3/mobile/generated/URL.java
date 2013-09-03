@@ -81,7 +81,7 @@ public class URL
     return (_path.equals("__NULL__"));
   }
 
-  public final boolean isEqualsTo(URL that)
+  public final boolean isEquals(URL that)
   {
     return (_path.equals(that._path));
   }

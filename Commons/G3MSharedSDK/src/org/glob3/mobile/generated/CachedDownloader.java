@@ -33,7 +33,7 @@ public class CachedDownloader extends IDownloader
   {
     if ((_lastImageResult != null) && (_lastImageURL != null))
     {
-      if (_lastImageURL.isEqualsTo(url))
+      if (_lastImageURL.isEquals(url))
       {
         // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
         return new IImageResult(_lastImageResult.getImage().shallowCopy(), _lastImageResult.isExpired());

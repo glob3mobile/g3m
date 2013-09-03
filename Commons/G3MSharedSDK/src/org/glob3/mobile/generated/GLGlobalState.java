@@ -308,7 +308,7 @@ public class GLGlobalState
     //Texture (After blending factors)
     if (_boundTextureId != null)
     {
-      if (currentState._boundTextureId == null || !_boundTextureId.isEqualsTo(currentState._boundTextureId))
+      if (currentState._boundTextureId == null || !_boundTextureId.isEquals(currentState._boundTextureId))
       {
         nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId);
   

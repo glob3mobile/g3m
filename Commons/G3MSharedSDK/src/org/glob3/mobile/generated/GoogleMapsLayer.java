@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GoogleMapsLayer extends Layer
+public abstract class GoogleMapsLayer extends Layer
 {
   private final String _key;
   private final Sector _sector ;

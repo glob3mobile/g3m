@@ -41,7 +41,7 @@ public class VisibleSectorListenerEntry
   {
     if (_stabilizationIntervalInMS == 0)
     {
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();
@@ -54,7 +54,7 @@ public class VisibleSectorListenerEntry
     {
       final long now = getTimer().now().milliseconds();
 
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();
