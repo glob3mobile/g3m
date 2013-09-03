@@ -21,7 +21,7 @@ public abstract class MercatorTiledLayer extends Layer
 {
   protected final String _protocol;
   protected final String _domain;
-  private final java.util.ArrayList<String> _subdomains;
+  protected final java.util.ArrayList<String> _subdomains;
   protected final String _imageFormat;
 
   protected final Sector _sector ;
