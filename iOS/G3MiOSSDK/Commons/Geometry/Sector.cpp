@@ -15,6 +15,10 @@
 #include "GEORasterProjection.hpp"
 #include "ICanvas.hpp"
 
+#include "GEOSymbol.hpp"
+#include "GEO2DLineRasterStyle.hpp"
+#include "GEORasterLineSymbol.hpp"
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
   return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
@@ -183,4 +187,33 @@ const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const 
     _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
   }
   return *_normalizedCartesianCenter;
+}
+
+const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
+
+  std::vector<Geodetic2D*> line;
+
+  line.push_back( new Geodetic2D( getSW() ) );
+  line.push_back( new Geodetic2D( getNW() ) );
+  line.push_back( new Geodetic2D( getNE() ) );
+  line.push_back( new Geodetic2D( getSE() ) );
+  line.push_back( new Geodetic2D( getSW() ) );
+
+  //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+
+  float dashLengths[] = {};
+  int dashCount = 0;
+
+  GEO2DLineRasterStyle ls(c, //const Color&     color,
+                          (float)1.0, //const float      width,
+                          CAP_ROUND, // const StrokeCap  cap,
+                          JOIN_ROUND, //const StrokeJoin join,
+                          1,//const float      miterLimit,
+                          dashLengths,//float            dashLengths[],
+                          dashCount,//const int        dashCount,
+                          0);//const int        dashPhase) :
+
+
+  return new GEORasterLineSymbol(&line, ls);
+
 }

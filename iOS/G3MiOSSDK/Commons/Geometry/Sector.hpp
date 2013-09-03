@@ -17,7 +17,9 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
+#include "Color.hpp"
 
+class GEORasterSymbol;
 class ICanvas;
 class GEORasterProjection;
 
@@ -264,6 +266,8 @@ public:
   const double getAngularAreaInSquaredDegrees() const{
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
   }
+
+  const GEORasterSymbol* createGEOSymbol(const Color& c) const;
 
 
 #ifdef JAVA_CODE
