@@ -7,8 +7,6 @@ public abstract class MapBooBuilder
 
   private MapBoo_ViewType _viewType;
 
-  private final boolean _useWebSockets;
-
   private MapBooApplicationChangeListener _applicationListener;
 
   private String _applicationId;
@@ -85,14 +83,7 @@ public abstract class MapBooBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    if (_useWebSockets)
-    {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
-    }
-    else
-    {
-      periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_PollingScenePeriodicalTask(this)));
-    }
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
   
     return periodicalTasks;
   }
@@ -137,12 +128,6 @@ public abstract class MapBooBuilder
     }
     return _gpuProgramManager;
   }
-
-  private GInitializationTask createInitializationTask()
-  {
-    return _useWebSockets ? new MapBooBuilder_SceneTubeConnector(this) : null;
-  }
-
 
 
   private Layer parseLayer(JSONBaseObject jsonBaseObjectLayer)
@@ -440,11 +425,10 @@ public abstract class MapBooBuilder
   }
 
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, boolean useWebSockets, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener)
+  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
-     _useWebSockets = useWebSockets;
      _applicationId = applicationId;
      _viewType = viewType;
      _applicationName = "";
@@ -513,7 +497,7 @@ public abstract class MapBooBuilder
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
-    GInitializationTask initializationTask = createInitializationTask();
+    GInitializationTask initializationTask = new MapBooBuilder_SceneTubeConnector(this);
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
@@ -642,27 +626,6 @@ public abstract class MapBooBuilder
     }
   
     changedCurrentScene();
-  }
-
-  /** Private to MapbooBuilder, don't call it */
-  public final URL createPollingApplicationDescriptionURL()
-  {
-    final String tubesPath = _serverURL.getPath();
-  
-    String view;
-    switch (_viewType)
-    {
-      case VIEW_PRESENTATION:
-        view = "presentation";
-        break;
-  //    case VIEW_RUNTIME:
-  //      view = "runtime";
-  //      break;
-      default:
-        view = "runtime";
-    }
-  
-    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -830,6 +793,21 @@ public abstract class MapBooBuilder
       if (!_isApplicationTubeOpen)
       {
         _webSocket = null;
+      }
+  
+      if (_isApplicationTubeOpen)
+      {
+        if (_applicationListener != null)
+        {
+          _applicationListener.onWebSocketOpen(_context);
+        }
+      }
+      else
+      {
+        if (_applicationListener != null)
+        {
+          _applicationListener.onWebSocketClose(_context);
+        }
       }
     }
   }

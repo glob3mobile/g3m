@@ -75,6 +75,10 @@ public:
                               int sceneIndex,
                               const MapBoo_Scene* scene) = 0;
 
+  virtual void onWebSocketOpen(const G3MContext* context) = 0;
+
+  virtual void onWebSocketClose(const G3MContext* context) = 0;
+  
 };
 
 
@@ -234,8 +238,6 @@ private:
 
   MapBoo_ViewType _viewType;
 
-  const bool _useWebSockets;
-
   MapBooApplicationChangeListener* _applicationListener;
 
   std::string _applicationId;
@@ -286,9 +288,6 @@ private:
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
 
-  GInitializationTask* createInitializationTask();
-
-
 
   Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
 
@@ -329,7 +328,6 @@ private:
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
-                bool useWebSockets,
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* ApplicationListener);
@@ -377,9 +375,6 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
-
-  /** Private to MapbooBuilder, don't call it */
-  const URL createPollingApplicationDescriptionURL() const;
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;

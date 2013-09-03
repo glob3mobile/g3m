@@ -46,11 +46,10 @@ public class MapBooBuilder_Android
    public MapBooBuilder_Android(final Context context,
                                 final URL serverURL,
                                 final URL tubesURL,
-                                final boolean useWebSockets,
                                 final String sceneId,
                                 final MapBoo_ViewType viewType,
                                 final MapBooApplicationChangeListener applicationListener) {
-      super(serverURL, tubesURL, useWebSockets, sceneId, viewType, applicationListener);
+      super(serverURL, tubesURL, sceneId, viewType, applicationListener);
 
       _nativeWidget = new G3MWidget_Android(context);
    }
