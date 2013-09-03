@@ -12,7 +12,7 @@
 #include "Layer.hpp"
 
 class MercatorTiledLayer : public Layer {
-private:
+protected:
   const std::string _protocol;
   const std::string _domain;
 #ifdef C_CODE

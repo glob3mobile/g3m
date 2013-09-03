@@ -231,8 +231,8 @@ public:
                   _upper.sub( delta ) );
   }
 
-  bool isEqualsTo(const Sector& that) const {
-    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
+  bool isEquals(const Sector& that) const {
+    return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
   }
   
   bool touchesNorthPole() const {

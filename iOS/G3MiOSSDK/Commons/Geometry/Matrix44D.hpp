@@ -86,7 +86,7 @@ public:
 
   const IFloatBuffer* getColumnMajorFloatBuffer() const;
 
-  bool isEqualsTo(const Matrix44D& m) const;
+  bool isEquals(const Matrix44D& m) const;
 
   static Matrix44D* createIdentity() {
     return new Matrix44D(1, 0, 0, 0,

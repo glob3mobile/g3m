@@ -26,8 +26,6 @@
 #include "BusyMeshRenderer.hpp"
 #include "GInitializationTask.hpp"
 #include "PeriodicalTask.hpp"
-#include "IDownloader.hpp"
-#include "IBufferDownloadListener.hpp"
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
@@ -488,8 +486,6 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
 
-  //  ILogger::instance()->logInfo("%d", json.size());
-
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
                                   url.getPath().c_str());
@@ -525,13 +521,6 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
             setApplicationAbout( jsonAbout->value() );
           }
 
-          //          // always process defaultSceneIndex before scenes
-          //          const JSONNumber* jsonDefaultSceneIndex = jsonObject->getAsNumber("defaultSceneIndex");
-          //          if (jsonDefaultSceneIndex != NULL) {
-          //            const int defaultSceneIndex = (int) jsonDefaultSceneIndex->value();
-          //            setApplicationDefaultSceneIndex(defaultSceneIndex);
-          //          }
-
           const JSONArray* jsonScenes = jsonObject->getAsArray("scenes");
           if (jsonScenes != NULL) {
             std::vector<MapBoo_Scene*> scenes;
@@ -546,8 +535,6 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
             setApplicationScenes(scenes);
           }
-
-          // int _TODO_Application_Warnings;
 
           setApplicationTimestamp(timestamp);
         }
@@ -580,56 +567,30 @@ void MapBooBuilder::setApplicationCurrentSceneIndex(int sceneIndex) {
   }
 }
 
-class MapBooBuilder_SceneDescriptionBufferListener : public IBufferDownloadListener {
-private:
-  MapBooBuilder* _builder;
-
-public:
-  MapBooBuilder_SceneDescriptionBufferListener(MapBooBuilder* builder) :
-  _builder(builder)
-  {
-  }
-
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    _builder->parseApplicationJSON(buffer->getAsString(), url);
-    delete buffer;
-  }
-
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download ApplicationJSON from %s",
-                                  url.getPath().c_str());
-  }
-
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-    // do nothing
-  }
-
-};
-
-void MapBoo_Scene::fillLayerSet(LayerSet* layerSet) const {
+LayerSet* MapBoo_Scene::createLayerSet() const {
+  LayerSet* layerSet = new LayerSet();
   if (_baseLayer != NULL) {
-    layerSet->addLayer(_baseLayer);
+    layerSet->addLayer(_baseLayer->copy());
   }
-
   if (_overlayLayer != NULL) {
-    layerSet->addLayer(_overlayLayer);
+    layerSet->addLayer(_overlayLayer->copy());
   }
+  return layerSet;
 }
 
 void MapBooBuilder::recreateLayerSet() {
-  _layerSet->removeAllLayers(false);
-
   const MapBoo_Scene* scene = getApplicationCurrentScene();
-  if (scene != NULL) {
-    scene->fillLayerSet(_layerSet);
+
+  if (scene == NULL) {
+    _layerSet->removeAllLayers(true);
+  }
+  else {
+    LayerSet* newLayerSet = scene->createLayerSet();
+    if (!newLayerSet->isEquals(_layerSet)) {
+      _layerSet->removeAllLayers(true);
+      _layerSet->takeLayersFrom(newLayerSet);
+    }
+    delete newLayerSet;
   }
 }
 

@@ -17,6 +17,8 @@
 
 class MapQuestLayer : public MercatorTiledLayer {
 private:
+  const int _initialLevel;
+  const int _maxLevel;
 
   static const std::vector<std::string> getSubdomains() {
     std::vector<std::string> result;
@@ -45,10 +47,20 @@ private:
                      Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
-                     condition)
+                     condition),
+  _initialLevel(initialLevel),
+  _maxLevel(maxLevel)
   {
 
   }
+
+
+protected:
+  std::string getLayerType() const {
+    return "MapQuest";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 
 public:
@@ -83,7 +95,9 @@ public:
   }
 
   const std::string description() const;
-  
+
+  MapQuestLayer* copy() const;
+
 };
 
 

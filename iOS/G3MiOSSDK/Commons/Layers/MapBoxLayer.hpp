@@ -13,6 +13,7 @@
 
 class MapBoxLayer : public MercatorTiledLayer {
 private:
+  const std::string _mapKey;
 
   static const std::vector<std::string> getSubdomains() {
     std::vector<std::string> result;
@@ -23,10 +24,17 @@ private:
     return result;
   }
 
+protected:
+  std::string getLayerType() const {
+    return "MapBox";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
 public:
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/3/3/3.png
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/7/62/48.png?updated=f0e992c
-  
+
   MapBoxLayer(const std::string& mapKey,
               const TimeInterval& timeToCache,
               bool readExpired = true,
@@ -42,12 +50,15 @@ public:
                      Sector::fullSphere(),
                      1, //initialMapBoxLevel,
                      17,
-                     condition)
+                     condition),
+  _mapKey(mapKey)
   {
 
   }
 
   const std::string description() const;
+
+  MapBoxLayer* copy() const;
 
 };
 

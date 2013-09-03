@@ -84,7 +84,7 @@ Color* Color::parse(const std::string& str) {
   return Color::newFromRGBA(r, g, b, a);
 }
 
-bool Color::isEqualsTo(const Color& that) const {
+bool Color::isEquals(const Color& that) const {
   return ((_red   == that._red  ) &&
           (_green == that._green) &&
           (_blue  == that._blue ) &&

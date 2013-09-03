@@ -69,7 +69,7 @@ public:
   void tryToNotifyListener(const Sector* visibleSector,
                            const G3MRenderContext* rc) {
     if ( _stabilizationIntervalInMS == 0 ) {
-      if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+      if ( (_lastSector == NULL) || (!_lastSector->isEquals(*visibleSector)) ) {
         delete _lastSector;
         _lastSector = new Sector(*visibleSector);
 
@@ -79,7 +79,7 @@ public:
     else {
       const long long now = getTimer()->now().milliseconds();
 
-      if ( (_lastSector == NULL) || (!_lastSector->isEqualsTo(*visibleSector)) ) {
+      if ( (_lastSector == NULL) || (!_lastSector->isEquals(*visibleSector)) ) {
         delete _lastSector;
         _lastSector = new Sector(*visibleSector);
         _whenNotifyInMS = now + _stabilizationIntervalInMS;
@@ -561,7 +561,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   const Sector* renderedSector = statistics.getRenderedSector();
   if (renderedSector != NULL) {
-    if ( (_lastVisibleSector == NULL) || !renderedSector->isEqualsTo(*_lastVisibleSector) ) {
+    if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {
       delete _lastVisibleSector;
       _lastVisibleSector = new Sector(*renderedSector);
     }

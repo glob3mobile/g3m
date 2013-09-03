@@ -36,7 +36,7 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
 //  Sector s = data->getSector();
 //  Sector s2 = d0->getSector();
 
-  if (!data->getSector().isEqualsTo(getSector())) {
+  if (!data->getSector().isEquals(getSector())) {
     ILogger::instance()->logError("Sectors don't match.");
   }
 

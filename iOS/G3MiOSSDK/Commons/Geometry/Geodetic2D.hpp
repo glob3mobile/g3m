@@ -175,8 +175,8 @@ public:
   
   const std::string description() const;
   
-  bool isEqualsTo(const Geodetic2D& that) const {
-    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+  bool isEquals(const Geodetic2D& that) const {
+    return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }
   
 #ifdef JAVA_CODE

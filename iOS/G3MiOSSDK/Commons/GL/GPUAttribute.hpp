@@ -68,7 +68,7 @@ public:
 
   }
   virtual void setAttribute(GL* gl, const int id) const = 0;
-  virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
+  virtual bool isEquals(const GPUAttributeValue* v) const = 0;
   virtual std::string description() const = 0;
 
 };
@@ -148,7 +148,7 @@ public:
         ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
         return;
       }
-      if (_value == NULL || !_value->isEqualsTo(v)) {
+      if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
 
         if (_value != NULL) {
@@ -200,7 +200,7 @@ public:
   void setAttribute(GL* gl, const int id) const{
   }
 
-  bool isEqualsTo(const GPUAttributeValue* v) const{
+  bool isEquals(const GPUAttributeValue* v) const{
     return (v->getEnabled() == false);
   }
 
@@ -245,7 +245,7 @@ public:
     gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
-  bool isEqualsTo(const GPUAttributeValue* v) const{
+  bool isEquals(const GPUAttributeValue* v) const{
 
     if (!v->getEnabled()) {
       return false;          //Is a disabled value

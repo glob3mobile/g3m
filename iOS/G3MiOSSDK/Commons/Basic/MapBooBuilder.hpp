@@ -215,7 +215,7 @@ public:
     return _hasWarnings;
   }
 
-  void fillLayerSet(LayerSet* layerSet) const;
+  LayerSet* createLayerSet() const;
 
   ~MapBoo_Scene();
 

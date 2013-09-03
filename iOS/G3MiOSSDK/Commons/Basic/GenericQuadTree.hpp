@@ -262,7 +262,7 @@ class GenericQuadTree_TESTER {
     bool visitElement(const Sector& sector,
                       const void*   element) const{
 
-      if (_sec.isEqualsTo(sector)){
+      if (_sec.isEquals(sector)){
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
@@ -300,7 +300,7 @@ class GenericQuadTree_TESTER {
     bool visitElement(const Geodetic2D& geodetic,
                       const void*   element) const{
 
-      if (geodetic.isEqualsTo(_geo)){
+      if (geodetic.isEquals(_geo)){
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());
         return true;

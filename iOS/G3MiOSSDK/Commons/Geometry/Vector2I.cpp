@@ -22,3 +22,7 @@ double Vector2I::length() const {
 Angle Vector2I::orientation() const {
   return Angle::fromRadians(IMathUtils::instance()->atan2((double) _y, (double) _x));
 }
+
+bool Vector2I::isEquals(const Vector2I& that) const {
+  return ((_x == that._x) && (_y == that._y));
+}
