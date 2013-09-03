@@ -85,4 +85,9 @@ public class TMSLayer extends Layer
   
   }
 
+  public final String description()
+  {
+    return "[TMSLayer]";
+  }
+
 }

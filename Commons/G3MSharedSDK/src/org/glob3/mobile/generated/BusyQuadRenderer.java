@@ -139,7 +139,6 @@ public class BusyQuadRenderer extends LeafRenderer
     _quadMesh.render(rc, _glState);
   }
 
-
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     return false;
