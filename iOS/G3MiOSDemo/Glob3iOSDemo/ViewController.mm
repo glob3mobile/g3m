@@ -558,6 +558,13 @@ public:
   //builder.setPlanet(Planet::createSphericalEarth());
   //  builder.setPlanet(Planet::createFlatEarth());
 
+  if (true){ //Incomplete world
+
+    Sector spain = Sector::fromDegrees(27.7174927, -18.5284423,  45.0299024, 5.4084426);
+
+    builder.setShownSector(spain );
+  }
+  
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
   builder.setBackgroundColor(bgColor);

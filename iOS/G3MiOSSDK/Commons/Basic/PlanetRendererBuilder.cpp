@@ -286,7 +286,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getLayerSet(),
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTexturePriority());
+                                                      getTexturePriority(),
+                                                      getRenderedSector());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),

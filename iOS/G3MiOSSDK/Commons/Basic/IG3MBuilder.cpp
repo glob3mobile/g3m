@@ -26,6 +26,7 @@
 #include "GPUProgramManager.hpp"
 #include "GPUProgramFactory.hpp"
 #include "SceneLighting.hpp"
+#include "Sector.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -46,7 +47,8 @@ _periodicalTasks(NULL),
 _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
-_sceneLighting(NULL)
+_sceneLighting(NULL),
+_shownSector(NULL)
 {
 }
 
@@ -81,6 +83,7 @@ IG3MBuilder::~IG3MBuilder() {
   }
   delete _userData;
   delete _planetRendererBuilder;
+  delete _shownSector;
 }
 
 /**
@@ -618,6 +621,11 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
  * @return G3MWidget*
  */
 G3MWidget* IG3MBuilder::create() {
+
+
+  Sector shownSector = getShownSector();
+  getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
+
   /**
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -639,7 +647,7 @@ G3MWidget* IG3MBuilder::create() {
   }
 
   int TODO_VIEWPORT;
-  Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
+  Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1,1), shownSector);
   
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
@@ -680,6 +688,9 @@ G3MWidget* IG3MBuilder::create() {
   delete _periodicalTasks;
   _periodicalTasks = NULL;
   _userData = NULL;
+
+  delete _shownSector;
+  _shownSector = NULL;
   
   return g3mWidget;
 }
@@ -753,4 +764,19 @@ SceneLighting* IG3MBuilder::getSceneLighting() {
     _sceneLighting = new DefaultSceneLighting();
   }
   return _sceneLighting;
+}
+
+void IG3MBuilder::setShownSector(const Sector& sector){
+  if (_shownSector != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _shownSector already initialized");
+    return;
+  }
+  _shownSector = new Sector(sector);
+}
+
+Sector IG3MBuilder::getShownSector() const{
+  if (_shownSector == NULL){
+    return Sector::fullSphere();
+  }
+  return *_shownSector;
 }

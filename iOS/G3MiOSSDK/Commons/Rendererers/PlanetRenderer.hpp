@@ -369,7 +369,7 @@ public:
                  const TilesRenderParameters* parameters,
                  bool showStatistics,
                  long long texturePriority,
-                 const Sector& renderedSector = Sector::fullSphere());
+                 const Sector& renderedSector);
 
   ~PlanetRenderer();
 

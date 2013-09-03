@@ -13,6 +13,7 @@
 #include "Geodetic3D.hpp"
 #include "Planet.hpp"
 #include "Vector2D.hpp"
+#include "Sector.hpp"
 
 
 class FlatPlanet: public Planet {
@@ -157,7 +158,8 @@ public:
                                Camera* nextCamera) const;
 
   Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
-    return Geodetic3D::fromDegrees(0, 0, _size.length());
+    Geodetic2D g = shownSector._center;
+    return Geodetic3D::fromDegrees(g._latitude._degrees, g._longitude._degrees, _size.length());
   }
 
 };

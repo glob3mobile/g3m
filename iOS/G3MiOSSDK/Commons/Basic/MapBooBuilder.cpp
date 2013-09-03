@@ -233,6 +233,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
 
+  int TODO_CHECK_MAPBOO_FULLSPHERE;
+
   return new PlanetRenderer(tessellator,
                             elevationDataProvider,
                             verticalExaggeration,
@@ -241,7 +243,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                             _layerSet,
                             parameters,
                             showStatistics,
-                            texturePriority);
+                            texturePriority,
+                            Sector::fullSphere());
 }
 
 const Planet* MapBooBuilder::createPlanet() {

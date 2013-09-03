@@ -28,6 +28,7 @@ class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
 class SceneLighting;
+class Sector;
 
 
 class IG3MBuilder {
@@ -51,6 +52,7 @@ private:
   WidgetUserData*                   _userData;
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
+  Sector*                           _shownSector;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -72,11 +74,14 @@ private:
   CameraRenderer*                   createDefaultCameraRenderer();
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
+  Sector                            getShownSector() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
 
   bool containsPlanetRenderer(std::vector<Renderer*> renderers);
+
+  
 
 protected:
   IStorage* _storage;
@@ -153,6 +158,8 @@ public:
 
   void setSceneLighting(SceneLighting* sceneLighting);
   SceneLighting* getSceneLighting();
+
+  void setShownSector(const Sector& sector);
 };
 
 #endif

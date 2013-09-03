@@ -14,6 +14,7 @@
 #include "Planet.hpp"
 
 #include "Sphere.hpp"
+#include "Sector.hpp"
 
 class SphericalPlanet: public Planet {
 private:
@@ -164,7 +165,8 @@ public:
 
   Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
     Vector3D v(_sphere.getRadius() * 5, 0, 0);
-    return toGeodetic3D(v);
+    Geodetic2D center = shownSector._center;
+    return Geodetic3D(center._latitude, center._longitude, toGeodetic3D(v)._height);
   }
 
 };
