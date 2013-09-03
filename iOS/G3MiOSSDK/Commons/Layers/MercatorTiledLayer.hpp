@@ -19,7 +19,7 @@ protected:
   const std::vector<std::string> _subdomains;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<String> _subdomains;
+  protected final java.util.ArrayList<String> _subdomains;
 #endif
   const std::string _imageFormat;
   
