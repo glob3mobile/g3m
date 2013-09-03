@@ -31,7 +31,7 @@ public abstract class MapBooBuilder
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
-    final TileTessellator tessellator = new EllipsoidalTileTessellator(true);
+    final TileTessellator tessellator = new PlanetTileTessellator(true);
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
@@ -48,7 +48,9 @@ public abstract class MapBooBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    return new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority);
+    int TODO_CHECK_MAPBOO_FULLSPHERE;
+  
+    return new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, Sector.fullSphere());
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
@@ -475,7 +477,11 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, createPlanet(), cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    int TODO_VIEWPORT;
+    final Planet planet = createPlanet();
+    Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(new Vector2I(1,1), Sector.fullSphere());
+  
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), initialCameraPosition); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   

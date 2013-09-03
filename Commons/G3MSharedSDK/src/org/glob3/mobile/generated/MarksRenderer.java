@@ -46,26 +46,30 @@ public class MarksRenderer extends LeafRenderer
   {
     final Camera cam = rc.getCurrentCamera();
   
-    ProjectionGLFeature projection = (ProjectionGLFeature) _glState.getGLFeature(GLFeatureID.GLF_PROJECTION);
-    if (projection == null)
-    {
-      projection = new ProjectionGLFeature(cam);
-      _glState.addGLFeature(projection, true);
-    }
-    else
-    {
-      projection.setMatrix(cam.getProjectionMatrix44D());
-    }
+  //  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+  //  if (projection == NULL) {
+  //    projection = new ProjectionGLFeature(cam);
+  //    _glState->addGLFeature(projection, true);
+  //  } else{
+  //    projection->setMatrix(cam->getProjectionMatrix44D());
+  //  }
+  //
+  //  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
+  //  if (model == NULL) {
+  //    model = new ModelGLFeature(cam);
+  //    _glState->addGLFeature(model, true);
+  //  } else{
+  //    model->setMatrix(cam->getModelMatrix44D());
+  //  }
   
-    ModelGLFeature model = (ModelGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL);
-    if (model == null)
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
     {
-      model = new ModelGLFeature(cam);
-      _glState.addGLFeature(model, true);
+      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
     }
     else
     {
-      model.setMatrix(cam.getModelMatrix44D());
+      f.setMatrix(cam.getModelViewMatrix44D());
     }
   
     if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)

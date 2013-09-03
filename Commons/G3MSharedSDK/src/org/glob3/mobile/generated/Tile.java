@@ -166,6 +166,11 @@ public class Tile
       return false;
     }*/
   
+    if (!prc.getRenderedSector().touchesWith(_sector)) //Incomplete world
+    {
+      return false;
+    }
+  
     final BoundingVolume boundingVolume = getBoundingVolume(rc, prc);
   
     return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
@@ -686,16 +691,15 @@ public class Tile
   public final void render(G3MRenderContext rc, PlanetRendererContext prc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
+    TilesStatistics statistics = prc.getStatistics();
+    statistics.computeTileProcessed(this);
+  
     final float verticalExaggeration = prc.getVerticalExaggeration();
     if (verticalExaggeration != _verticalExaggeration)
     {
       // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-  
       _verticalExaggeration = prc.getVerticalExaggeration();
     }
-  
-    TilesStatistics statistics = prc.getStatistics();
-    statistics.computeTileProcessed(this);
   
     if (isVisible(rc, prc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates))
     {

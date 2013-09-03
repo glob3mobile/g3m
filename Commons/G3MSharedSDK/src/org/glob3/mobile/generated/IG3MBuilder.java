@@ -34,6 +34,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramSources;
 //class GPUProgramManager;
 //class SceneLighting;
+//class Sector;
 
 
 public abstract class IG3MBuilder
@@ -57,6 +58,7 @@ public abstract class IG3MBuilder
   private WidgetUserData _userData;
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
+  private Sector _shownSector;
 
 
   /**
@@ -297,6 +299,14 @@ public abstract class IG3MBuilder
   
     return periodicalTasks;
   }
+  private Sector getShownSector()
+  {
+    if (_shownSector == null)
+    {
+      return Sector.fullSphere();
+    }
+    return _shownSector;
+  }
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
@@ -333,6 +343,8 @@ public abstract class IG3MBuilder
     return false;
   }
 
+
+
   protected IStorage _storage;
 
 
@@ -359,6 +371,11 @@ public abstract class IG3MBuilder
    */
   protected final G3MWidget create()
   {
+  
+  
+    Sector shownSector = getShownSector();
+    getPlanetRendererBuilder().setRenderedSector(shownSector); //Shown sector
+  
     /**
      * If any renderers were set or added, the main renderer will be a composite renderer.
      *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -383,8 +400,11 @@ public abstract class IG3MBuilder
       mainRenderer = getPlanetRendererBuilder().create();
     }
   
+    int TODO_VIEWPORT;
+    Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1,1), shownSector);
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting());
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), initialCameraPosition);
   
     g3mWidget.setUserData(getUserData());
   
@@ -404,6 +424,10 @@ public abstract class IG3MBuilder
     _periodicalTasks = null;
     _periodicalTasks = null;
     _userData = null;
+  
+    if (_shownSector != null)
+       _shownSector.dispose();
+    _shownSector = null;
   
     return g3mWidget;
   }
@@ -434,6 +458,7 @@ public abstract class IG3MBuilder
      _logDownloaderStatistics = false;
      _userData = null;
      _sceneLighting = null;
+     _shownSector = null;
   }
 
   public void dispose()
@@ -489,6 +514,8 @@ public abstract class IG3MBuilder
        _userData.dispose();
     if (_planetRendererBuilder != null)
        _planetRendererBuilder.dispose();
+    if (_shownSector != null)
+       _shownSector.dispose();
   }
 
 
@@ -921,5 +948,15 @@ public abstract class IG3MBuilder
       _sceneLighting = new DefaultSceneLighting();
     }
     return _sceneLighting;
+  }
+
+  public final void setShownSector(Sector sector)
+  {
+    if (_shownSector != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _shownSector already initialized");
+      return;
+    }
+    _shownSector = new Sector(sector);
   }
 }

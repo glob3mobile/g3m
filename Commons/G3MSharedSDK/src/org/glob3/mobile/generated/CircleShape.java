@@ -23,6 +23,8 @@ public class CircleShape extends AbstractMeshShape
   private int _steps;
   private Color _color;
 
+  private final boolean _useNormals;
+
   protected final Mesh createMesh(G3MRenderContext rc)
   {
     final IMathUtils mu = IMathUtils.instance();
@@ -45,23 +47,42 @@ public class CircleShape extends AbstractMeshShape
   
     Color color = (_color == null) ? null : new Color(_color);
   
+    if (_useNormals)
+    {
+  
+      FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      for (int i = 0; i <= _steps+1; i++)
+      {
+        normals.add(0.0, 0.0, 1.0);
+      }
+  
+      return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color, null, 1.0, true, normals.create());
+  
+    }
+  
+  
     return new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color);
   }
 
+  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps)
+  {
+     this(position, altitudeMode, radius, color, steps, true);
+  }
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color)
   {
-     this(position, altitudeMode, radius, color, 64);
+     this(position, altitudeMode, radius, color, 64, true);
   }
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius)
   {
-     this(position, altitudeMode, radius, null, 64);
+     this(position, altitudeMode, radius, null, 64, true);
   }
-  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps)
+  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps, boolean useNormals)
   {
      super(position, altitudeMode);
      _radius = radius;
      _color = color;
      _steps = steps;
+     _useNormals = useNormals;
 
   }
 

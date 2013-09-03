@@ -34,7 +34,8 @@ public enum GLFeatureID
   GLF_TEXTURE_ID,
   GLF_TEXTURE_COORDS,
   GLF_DIRECTION_LIGTH,
-  GLF_VERTEX_NORMAL;
+  GLF_VERTEX_NORMAL,
+  GLF_MODEL_VIEW;
 
    public int getValue()
    {

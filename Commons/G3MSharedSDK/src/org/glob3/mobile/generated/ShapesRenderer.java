@@ -28,33 +28,50 @@ public class ShapesRenderer extends LeafRenderer
   private GLState _glState;
   private GLState _glStateTransparent;
 
-  private ProjectionGLFeature _projection;
-  private ModelGLFeature _model;
+//  ProjectionGLFeature* _projection;
+//  ModelGLFeature*      _model;
   private void updateGLState(G3MRenderContext rc)
   {
   
     final Camera cam = rc.getCurrentCamera();
-    if (_projection == null)
-    {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
-      _glState.addGLFeature(_projection, true);
-      _glStateTransparent.addGLFeature(_projection, true);
-    }
-    else
-    {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+    /*
+  
+    if (_projection == NULL) {
+      _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+      _glState->addGLFeature(_projection, true);
+      _glStateTransparent->addGLFeature(_projection, true);
+    } else{
+      _projection->setMatrix(cam->getProjectionMatrix44D());
     }
   
-    if (_model == null)
+    if (_model == NULL) {
+      _model = new ModelGLFeature(cam->getModelMatrix44D());
+      _glState->addGLFeature(_model, true);
+      _glStateTransparent->addGLFeature(_model, true);
+    } else{
+      _model->setMatrix(cam->getModelMatrix44D());
+    }
+  */
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
-      _glState.addGLFeature(_model, true);
-      _glStateTransparent.addGLFeature(_model, true);
+      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      f.setMatrix(cam.getModelViewMatrix44D());
     }
+  
+    f = (ModelViewGLFeature) _glStateTransparent.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
+    {
+      _glStateTransparent.addGLFeature(new ModelViewGLFeature(cam), true);
+    }
+    else
+    {
+      f.setMatrix(cam.getModelViewMatrix44D());
+    }
+  
   }
 
 
@@ -63,11 +80,11 @@ public class ShapesRenderer extends LeafRenderer
      this(true);
   }
   public ShapesRenderer(boolean renderNotReadyShapes)
+//  _projection(NULL),
+//  _model(NULL),
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
-     _projection = null;
-     _model = null;
      _glState = new GLState();
      _glStateTransparent = new GLState();
   }

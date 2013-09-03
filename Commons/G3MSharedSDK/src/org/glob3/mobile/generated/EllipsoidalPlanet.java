@@ -664,4 +664,34 @@ public class EllipsoidalPlanet extends Planet
     return Vector3D.upZ();
   }
 
+  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  {
+  
+    Vector3D pos = nextCamera.getCartesianPosition();
+    Vector3D origin = _origin.asVector3D();
+    double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
+  
+    if (pos.distanceTo(origin) > maxDist)
+    {
+      System.out.printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+  
+      //     Vector3D prevPos = previousCamera->getCartesianPosition();
+      //    if (prevPos.distanceTo(origin) <= maxDist){
+      nextCamera.copyFromForcingMatrixCreation(previousCamera);
+      //    }
+  
+      Vector3D pos2 = nextCamera.getCartesianPosition();
+      System.out.printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+    }
+  
+  }
+
+  public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
+  {
+    Vector3D v = new Vector3D(_ellipsoid.getRadii().maxAxis() * 5, 0, 0);
+    Geodetic2D center = shownSector._center;
+    return new Geodetic3D(center._latitude, center._longitude, toGeodetic3D(v)._height);
+  }
+
+
 }

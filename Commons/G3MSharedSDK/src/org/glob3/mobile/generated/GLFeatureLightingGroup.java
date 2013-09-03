@@ -23,16 +23,9 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
     if (normalsAvailable)
     {
   
-      int modelTransformCount = 0;
-  
       for(int i = 0; i < size; i++)
       {
         final GLFeature f = features.get(i);
-  
-        if (f.getID() == GLFeatureID.GLF_MODEL_TRANSFORM)
-        {
-          modelTransformCount++;
-        }
   
         if (f.getGroup() == GLFeatureGroupName.LIGHTING_GROUP)
         {
@@ -40,38 +33,6 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
           vs.combineWith(f.getGPUVariableValueSet());
         }
       }
-  
-      /////////////////////////////////////////////////////////////////////////////////////////////
-      Matrix44DProvider[] modelTransformHolders = new Matrix44DProvider[modelTransformCount];
-  
-      modelTransformCount = 0;
-      for (int i = 0; i < size; i++)
-      {
-        final GLFeature f = features.get(i);
-        if (f.getID() == GLFeatureID.GLF_MODEL_TRANSFORM)
-        {
-          GLCameraGroupFeature cf = ((GLCameraGroupFeature) f);
-          final Matrix44D m = cf.getMatrixHolder().getMatrix();
-  
-          if (!m.isScaleMatrix() && !m.isTranslationMatrix())
-          {
-            modelTransformHolders[modelTransformCount++] = cf.getMatrixHolder();
-          }
-        }
-  
-      }
-  
-      Matrix44DProvider modelProvider = null;
-      if (modelTransformCount > 0)
-      {
-        modelProvider = new Matrix44DMultiplicationHolder(modelTransformHolders, modelTransformCount);
-  
-        vs.addUniformValue(GPUUniformKey.MODEL, new GPUUniformValueMatrix4(modelProvider, true), false);
-      }
-  
-      modelTransformHolders = null;
-  
-  
     }
   }
 }

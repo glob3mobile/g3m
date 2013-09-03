@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  EllipsoidalTileTessellator.cpp
+//  PlanetTileTessellator.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  EllipsoidalTileTessellator.hpp
+//  PlanetTileTessellator.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class IShortBuffer;
 
-public class EllipsoidalTileTessellator extends TileTessellator
+public class PlanetTileTessellator extends TileTessellator
 {
   private final boolean _skirted;
 
@@ -120,7 +120,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 
-  public EllipsoidalTileTessellator(boolean skirted)
+  public PlanetTileTessellator(boolean skirted)
   {
      _skirted = skirted;
 

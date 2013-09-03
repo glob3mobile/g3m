@@ -208,7 +208,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       {
         TilesStatistics statistics = new TilesStatistics();
   
-        PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration);
+        PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration, _renderedSector);
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
@@ -267,36 +267,49 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private boolean _recreateTilesPending;
 
   private GLState _glState;
-  private ProjectionGLFeature _projection;
-  private ModelGLFeature _model;
+//  ProjectionGLFeature* _projection;
+//  ModelGLFeature*      _model;
   private void updateGLState(G3MRenderContext rc)
   {
   
     final Camera cam = rc.getCurrentCamera();
-    if (_projection == null)
-    {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
-      _glState.addGLFeature(_projection, true);
-    }
-    else
-    {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+    /*
+    if (_projection == NULL) {
+      _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+      _glState->addGLFeature(_projection, true);
+    } else{
+      _projection->setMatrix(cam->getProjectionMatrix44D());
     }
   
-    if (_model == null)
+    if (_model == NULL) {
+      _model = new ModelGLFeature(cam->getModelMatrix44D());
+      _glState->addGLFeature(_model, true);
+    } else{
+      _model->setMatrix(cam->getModelMatrix44D());
+    }
+     */
+  
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
-      _glState.addGLFeature(_model, true);
+      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      f.setMatrix(cam.getModelViewMatrix44D());
     }
+  
+  
+  
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+  private Sector _renderedSector ;
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority, Sector renderedSector)
+  //_projection(NULL),
+  //_model(NULL),
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -315,9 +328,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
-     _projection = null;
-     _model = null;
      _glState = new GLState();
+     _renderedSector = new Sector(renderedSector);
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -390,7 +402,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     TilesStatistics statistics = new TilesStatistics();
   
-    PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration); // if first render, force full render
+    PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration, _renderedSector); // if first render, force full render
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   

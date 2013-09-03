@@ -26,37 +26,41 @@ public class MeshRenderer extends LeafRenderer
 
   private GLState _glState;
 
-  private ProjectionGLFeature _projection;
-  private ModelGLFeature _model;
+//  ProjectionGLFeature* _projection;
+//  ModelGLFeature*      _model;
   private void updateGLState(G3MRenderContext rc)
   {
   
     final Camera cam = rc.getCurrentCamera();
-    if (_projection == null)
-    {
-      _projection = new ProjectionGLFeature(cam);
-      _glState.addGLFeature(_projection, true);
-    }
-    else
-    {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
-    }
+  //  if (_projection == NULL) {
+  //    _projection = new ProjectionGLFeature(cam);
+  //    _glState->addGLFeature(_projection, true);
+  //  } else{
+  //    _projection->setMatrix(cam->getProjectionMatrix44D());
+  //  }
+  //
+  //  if (_model == NULL) {
+  //    _model = new ModelGLFeature(cam->getModelMatrix44D());
+  //    _glState->addGLFeature(_model, true);
+  //  } else{
+  //    _model->setMatrix(cam->getModelMatrix44D());
+  //  }
   
-    if (_model == null)
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
-      _glState.addGLFeature(_model, true);
+      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      f.setMatrix(cam.getModelViewMatrix44D());
     }
   }
 
   public MeshRenderer()
+//  _projection(NULL),
+//  _model(NULL),
   {
-     _projection = null;
-     _model = null;
      _glState = new GLState();
   }
 

@@ -201,7 +201,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    return new EllipsoidalTileTessellator(true);
+    return new PlanetTileTessellator(true);
   }
 
   private ElevationDataProvider getElevationDataProvider()
@@ -215,6 +215,16 @@ public class PlanetRendererBuilder
       _verticalExaggeration = 1.0f;
     }
     return _verticalExaggeration;
+  }
+
+  private Sector _renderedSector;
+  private Sector getRenderedSector()
+  {
+    if (_renderedSector == null)
+    {
+      return Sector.fullSphere();
+    }
+    return _renderedSector;
   }
 
   public PlanetRendererBuilder()
@@ -236,6 +246,8 @@ public class PlanetRendererBuilder
   
     _elevationDataProvider = null;
     _verticalExaggeration = 0.0f;
+  
+    _renderedSector = null;
   }
   public void dispose()
   {
@@ -254,7 +266,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -372,6 +384,16 @@ public class PlanetRendererBuilder
       return;
     }
     _verticalExaggeration = verticalExaggeration;
+  }
+
+  public final void setRenderedSector(Sector sector)
+  {
+    if (_renderedSector != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _renderedSector already initialized");
+      return;
+    }
+    _renderedSector = new Sector(sector);
   }
 
 }

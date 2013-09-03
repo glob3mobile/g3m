@@ -49,7 +49,9 @@ public class PlanetRendererContext
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
   private long _texturePriority;
-  public PlanetRendererContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
+
+  private Sector _renderedSector ;
+  public PlanetRendererContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -62,6 +64,7 @@ public class PlanetRendererContext
      _isForcedFullRender = isForcedFullRender;
      _texturePriority = texturePriority;
      _verticalExaggeration = verticalExaggeration;
+     _renderedSector = new Sector(renderedSector);
 
   }
 
@@ -123,6 +126,11 @@ public class PlanetRendererContext
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
     return _layerSet.getLayerTilesRenderParameters();
+  }
+
+  public final Sector getRenderedSector()
+  {
+    return _renderedSector;
   }
 
 }

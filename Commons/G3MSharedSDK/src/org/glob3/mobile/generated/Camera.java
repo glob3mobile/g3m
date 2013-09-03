@@ -526,6 +526,11 @@ public class Camera
     return getProjectionMatrix().asMatrix44D();
   }
 
+  public final Matrix44D getModelViewMatrix44D()
+  {
+    return getModelViewMatrix().asMatrix44D();
+  }
+
   public final double getAngle2HorizonInRadians()
   {
      return _angle2Horizon;

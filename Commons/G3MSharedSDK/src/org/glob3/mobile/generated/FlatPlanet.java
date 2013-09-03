@@ -360,4 +360,30 @@ public class FlatPlanet extends Planet
     return Vector3D.upY();
   }
 
+  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  {
+  
+    Vector3D pos = nextCamera.getCartesianPosition();
+    Vector3D origin = _origin.asVector3D();
+    double maxDist = _size.length() * 1.5;
+  
+    if (pos.distanceTo(origin) > maxDist)
+    {
+      System.out.printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+  
+  //     Vector3D prevPos = previousCamera->getCartesianPosition();
+  //    if (prevPos.distanceTo(origin) <= maxDist){
+        nextCamera.copyFrom(previousCamera);
+  //    }
+    }
+  
+  
+  }
+
+  public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
+  {
+    Geodetic2D g = shownSector._center;
+    return Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, _size.length());
+  }
+
 }

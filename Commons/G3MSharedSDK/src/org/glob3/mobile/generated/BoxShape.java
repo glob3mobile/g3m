@@ -25,6 +25,8 @@ public class BoxShape extends AbstractMeshShape
 
   private float _borderWidth;
 
+  private boolean _useNormals;
+
   private Color _surfaceColor;
   private Color _borderColor;
 
@@ -95,28 +97,96 @@ public class BoxShape extends AbstractMeshShape
     return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
   }
 
+  private Mesh createSurfaceMeshWithNormals(G3MRenderContext rc)
+  {
+    final float lowerX = (float) -(_extentX / 2);
+    final float upperX = (float) +(_extentX / 2);
+    final float lowerY = (float) -(_extentY / 2);
+    final float upperY = (float) +(_extentY / 2);
+    final float lowerZ = (float) -(_extentZ / 2);
+    final float upperZ = (float) +(_extentZ / 2);
+  
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
+    float[] v = { lowerX, upperY, lowerZ, lowerX, upperY, upperZ, upperX, upperY, lowerZ, upperX, upperY, lowerZ, lowerX, upperY, upperZ, upperX, upperY, upperZ, lowerX, lowerY, lowerZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, lowerY, lowerZ, lowerX, lowerY, upperZ, upperX, lowerY, upperZ, lowerX, lowerY, upperZ, lowerX, upperY, upperZ, upperX, lowerY, upperZ, upperX, lowerY, upperZ, lowerX, upperY, upperZ, upperX, upperY, upperZ, lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, upperX, lowerY, lowerZ, upperX, lowerY, lowerZ, lowerX, upperY, lowerZ, upperX, upperY, lowerZ, upperX, lowerY, lowerZ, upperX, lowerY, upperZ, upperX, upperY, lowerZ, upperX, upperY, lowerZ, upperX, lowerY, upperZ, upperX, upperY, upperZ, lowerX, lowerY, lowerZ, lowerX, lowerY, upperZ, lowerX, upperY, lowerZ, lowerX, upperY, lowerZ, lowerX, lowerY, upperZ, lowerX, upperY, upperZ};
+      //FACE 1
+      //FACE 2
+      //FACE 3
+      //FACE 4
+      //FACE 5
+      //FACE 6
+  
+    float[] n = { 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0 };
+      //FACE 1
+      //FACE 2
+      //FACE 3
+      //FACE 4
+      //FACE 5
+      //FACE 6
+  
+  
+    final int numFaces = 6;
+    final int numVertices = 6 * numFaces;
+  
+    for (int i = 0; i<numVertices; i++)
+    {
+      vertices.add(v[i *3], v[i *3+1], v[i *3+2]);
+    }
+  
+    for (int i = 0; i<numFaces; i++)
+    {
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+      normals.add(n[i *3], n[i *3+1], n[i *3+2]);
+    }
+  
+    Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
+  
+    return new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), _borderWidth, 1, surfaceColor, null, 1.0, true, normals.create());
+  }
+
   protected final Mesh createMesh(G3MRenderContext rc)
   {
+  
+    Mesh surface = null;
+    if (_useNormals)
+    {
+      surface = createSurfaceMeshWithNormals(rc);
+  //    surface = createSurfaceMesh(rc);
+    }
+    else
+    {
+      surface = createSurfaceMesh(rc);
+    }
+  
     if (_borderWidth > 0)
     {
       CompositeMesh compositeMesh = new CompositeMesh();
-      compositeMesh.addMesh(createSurfaceMesh(rc));
+      compositeMesh.addMesh(surface);
       compositeMesh.addMesh(createBorderMesh(rc));
       return compositeMesh;
     }
   
-    return createSurfaceMesh(rc);
+    return surface;
   }
 
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  {
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, borderColor, true);
+  }
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, altitudeMode, extent, borderWidth, surfaceColor, null);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
   }
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth)
   {
-     this(position, altitudeMode, extent, borderWidth, null, null);
+     this(position, altitudeMode, extent, borderWidth, null, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
      _extentX = extent._x;
@@ -125,6 +195,7 @@ public class BoxShape extends AbstractMeshShape
      _borderWidth = borderWidth;
      _surfaceColor = surfaceColor;
      _borderColor = borderColor;
+     _useNormals = useNormals;
 
   }
 

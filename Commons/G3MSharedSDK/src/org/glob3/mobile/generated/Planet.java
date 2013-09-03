@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class Effect;
-
+//class Camera;
+//class Sector;
+//class Vector2I;
 
 public abstract class Planet
 {
@@ -103,5 +104,9 @@ public abstract class Planet
   public abstract MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination);
 
   public abstract Vector3D getNorth();
+
+  public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
+
+  public abstract Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector);
 
 }
