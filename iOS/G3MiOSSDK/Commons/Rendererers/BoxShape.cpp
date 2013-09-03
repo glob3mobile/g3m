@@ -189,17 +189,17 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc){
 
   const float n[] = {
     //FACE 1
-    0.0, 1.0, 0.0,
+    0, 1, 0,
     //FACE 2
-    0.0, -1.0, 0.0,
+    0, -1, 0,
     //FACE 3
-    0.0, 0.0, 1.0,
+    0, 0, 1,
     //FACE 4
-    0.0, 0.0, -1.0,
+    0, 0, -1,
     //FACE 5
-    1.0, 0.0, 0.0,
+    1, 0, 0,
     //FACE 6
-    -1.0, 0.0, 0.0
+    -1, 0, 0
   };
 
 
@@ -229,7 +229,7 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc){
                          1,
                          surfaceColor,
                         NULL,
-                        1.0,
+                        1,
                         true,
                         normals.create());
 }

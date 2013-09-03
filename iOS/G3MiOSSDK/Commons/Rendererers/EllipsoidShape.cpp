@@ -139,7 +139,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              1,
                              surfaceColor,
                              NULL,
-                             1.0,
+                             1,
                              true,
                              _withNormals? normals->create() : NULL);
 
