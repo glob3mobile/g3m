@@ -74,13 +74,13 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
                             const Planet* planet,
                             const Vector3D& cameraNormalizedPosition,
                             double cameraAngle2HorizonInRadians) const {
-//  const Camera* camera = rc->getCurrentCamera();
-//  const Planet* planet = rc->getPlanet();
-//
-//  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-//  const double angleInRadians = IMathUtils::instance()->acos(dot);
-//
-//  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+  //
+  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
 
   if (planet->isFlat()) return false;
 
@@ -159,7 +159,7 @@ const std::string Sector::description() const {
   isb->addString(")");
   const std::string s = isb->getString();
   delete isb;
-  return s;  
+  return s;
 }
 
 const Vector2D Sector::div(const Sector& that) const {
@@ -173,7 +173,7 @@ void Sector::rasterize(ICanvas*                   canvas,
 
   const Vector2F l = projection->project(&_lower);
   const Vector2F u = projection->project(&_upper);
-  
+
   const float left   = l._x;
   const float top    = l._y;
   const float width  = u._x - left;
@@ -216,4 +216,27 @@ const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
 
   return new GEORasterLineSymbol(&line, ls);
 
+}
+
+Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
+  double lat = g._latitude._degrees;
+  double lon = g._longitude._degrees;
+
+  if (lat > _upper._latitude.degrees()){
+    lat = _upper._latitude.degrees();
+  } else{
+    if (lat < _lower._latitude.degrees()){
+      lat = _lower._latitude.degrees();
+    }
+  }
+
+  if (lon > _upper._longitude.degrees()){
+    lon = _upper._longitude.degrees();
+  } else{
+    if (lon < _lower._longitude.degrees()){
+      lon = _lower._longitude.degrees();
+    }
+  }
+
+  return Geodetic2D::fromDegrees(lat, lon);
 }

@@ -117,7 +117,7 @@ public class BoxShape extends AbstractMeshShape
       //FACE 5
       //FACE 6
   
-    float[] n = { 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 1, 0, 0, -1, 0, 0 };
+    float[] n = { 0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0 };
       //FACE 1
       //FACE 2
       //FACE 3
@@ -146,7 +146,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    return new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), _borderWidth, 1, surfaceColor, null, 1, true, normals.create());
+    return new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), _borderWidth, 1, surfaceColor, null, 1.0, true, normals.create());
   }
 
   protected final Mesh createMesh(G3MRenderContext rc)

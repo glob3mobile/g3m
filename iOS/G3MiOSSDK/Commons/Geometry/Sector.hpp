@@ -269,6 +269,8 @@ public:
 
   const GEORasterSymbol* createGEOSymbol(const Color& c) const;
 
+  Geodetic2D getClosesInnerPoint(const Geodetic2D& g) const;
+
 
 #ifdef JAVA_CODE
   @Override

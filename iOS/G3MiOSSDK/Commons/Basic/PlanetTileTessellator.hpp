@@ -16,6 +16,36 @@
 class IShortBuffer;
 class Sector;
 
+class LatLonGrid{
+
+  double _latMax;
+  double _lonMax;
+  int _latCount;
+  int _lonCount;
+  double _latMin;
+  double _lonMin;
+
+  const Sector _sector;
+  const Vector2I _resolution;
+
+public:
+
+  LatLonGrid(const Sector& sector,
+             const Vector2I& res):
+  _sector(sector),
+  _resolution(res){}
+
+
+  Geodetic2D getGeodetic(int i, int j){
+    double deltaLat = _sector.getDeltaLatitude()._degrees / _resolution._y;
+    double deltaLon = _sector.getDeltaLongitude()._degrees / _resolution._x;
+
+    return Geodetic2D::fromDegrees(_latMin + deltaLat * i,
+                                   _lonMin + deltaLon * j);
+  }
+  
+};
+
 class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
@@ -41,6 +71,19 @@ private:
   IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
 
   IShortBuffer* getTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
+
+  Geodetic3D getGeodeticOnPlanetSurface(const IMathUtils* mu,
+                                        const Planet* planet,
+                                        const ElevationData* elevationData,
+                                        float verticalExaggeration,
+                                        const Geodetic2D& g) const;
+
+  bool needsEastSkirt(const Sector& s) const{
+    return _renderedSector.upperLongitude().greaterThan(s.upperLongitude());
+  }
+
+  LatLonGrid createLatLonGrid(const Vector2I& rawResolution,
+                              const Tile* tile) const;
 
 public:
 
