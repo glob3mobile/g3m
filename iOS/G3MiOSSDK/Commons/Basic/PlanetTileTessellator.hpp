@@ -11,12 +11,15 @@
 
 #include "TileTessellator.hpp"
 #include <map>
-class Sector;
+#include "Sector.hpp"
+
 class IShortBuffer;
+class Sector;
 
 class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
+  const Sector _renderedSector;
 
 #ifdef C_CODE
   class OrderableVector2I: public Vector2I{
@@ -41,11 +44,7 @@ private:
 
 public:
 
-  PlanetTileTessellator(const bool skirted) :
-  _skirted(skirted)
-  {
-
-  }
+  PlanetTileTessellator(const bool skirted, const Sector& sector);
 
   ~PlanetTileTessellator();
 

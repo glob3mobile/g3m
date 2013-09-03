@@ -317,7 +317,7 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-  return new PlanetTileTessellator(true);
+  return new PlanetTileTessellator(true, getRenderedSector());
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {

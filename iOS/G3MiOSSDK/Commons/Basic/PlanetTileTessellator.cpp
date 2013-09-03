@@ -26,11 +26,15 @@
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
-
 #include "IndexedGeometryMesh.hpp"
-
 #include "IShortBuffer.hpp"
+
+PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector) :
+_skirted(skirted),
+_renderedSector(sector)
+{
+
+}
 
 PlanetTileTessellator::~PlanetTileTessellator() {
 #ifdef C_CODE
