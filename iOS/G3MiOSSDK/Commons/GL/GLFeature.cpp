@@ -171,6 +171,9 @@ GLCameraGroupFeature(cam->getProjectionMatrix44D(), GLF_PROJECTION){}
 ModelGLFeature::ModelGLFeature(const Camera* cam):
 GLCameraGroupFeature(cam->getModelMatrix44D(), GLF_MODEL){}
 
+ModelViewGLFeature::ModelViewGLFeature(const Camera* cam):
+GLCameraGroupFeature(cam->getModelViewMatrix44D(), GLF_MODEL_VIEW){}
+
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH){
   _values.addUniformValue(AMBIENT_LIGHT,

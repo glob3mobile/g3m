@@ -49,7 +49,7 @@ GLFeatureSet* GLState::getAccumulatedFeatures() const{
   return _accumulatedFeatures;
 }
 
-void GLState::addGLFeature(const GLFeature* f, bool mustRetain) {
+void GLState::addGLFeature(GLFeature* f, bool mustRetain) {
   _features.add(f);
 
   if (!mustRetain) {
@@ -158,10 +158,10 @@ int GLState::getNumberOfGLFeatures() const{
   return _features.size();
 }
 
-const GLFeature* GLState::getGLFeature(GLFeatureID id) const{
+GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   const int size = _features.size();
   for (int i = 0; i < size; i++) {
-    const GLFeature* f = _features.get(i);
+    GLFeature* f = _features.get(i);
     if (f->getID() == id){
       return f;
     }

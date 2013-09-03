@@ -135,8 +135,8 @@ _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
-_projection(NULL),
-_model(NULL),
+//_projection(NULL),
+//_model(NULL),
 _glState(new GLState()),
 _renderedSector(renderedSector)
 {
@@ -464,6 +464,7 @@ bool PlanetRenderer::isReadyToRender(const G3MRenderContext *rc) {
 void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
+  /*
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
     _glState->addGLFeature(_projection, true);
@@ -477,6 +478,17 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
+   */
+
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL){
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+  } else{
+    f->setMatrix(cam->getModelViewMatrix44D());
+  }
+
+  
+
 }
 
 void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {

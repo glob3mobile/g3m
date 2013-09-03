@@ -29,8 +29,8 @@ private:
   GLState* _glState;
   GLState* _glStateTransparent;
 
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
+//  ProjectionGLFeature* _projection;
+//  ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
 
 public:
@@ -38,8 +38,8 @@ public:
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
   _context(NULL),
-  _projection(NULL),
-  _model(NULL),
+//  _projection(NULL),
+//  _model(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState())
   {

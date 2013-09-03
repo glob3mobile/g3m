@@ -22,14 +22,14 @@ private:
   
   GLState* _glState;
 
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
+//  ProjectionGLFeature* _projection;
+//  ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
 public:
   
   MeshRenderer():
-  _projection(NULL),
-  _model(NULL),
+//  _projection(NULL),
+//  _model(NULL),
   _glState(new GLState())
   {
   }

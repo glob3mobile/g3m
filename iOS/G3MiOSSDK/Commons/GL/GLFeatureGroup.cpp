@@ -43,7 +43,7 @@ GLFeatureGroup* GLFeatureGroup::createGroup(GLFeatureGroupName name) {
 
 
 
-void GLFeatureSet::add(const GLFeature* f) {
+void GLFeatureSet::add(GLFeature* f) {
   _features[_nFeatures++] = f;
   f->_retain();
 

@@ -38,18 +38,25 @@ MeshRenderer::~MeshRenderer() {
 void MeshRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
-  if (_projection == NULL) {
-    _projection = new ProjectionGLFeature(cam);
-    _glState->addGLFeature(_projection, true);
-  } else{
-    _projection->setMatrix(cam->getProjectionMatrix44D());
-  }
+//  if (_projection == NULL) {
+//    _projection = new ProjectionGLFeature(cam);
+//    _glState->addGLFeature(_projection, true);
+//  } else{
+//    _projection->setMatrix(cam->getProjectionMatrix44D());
+//  }
+//
+//  if (_model == NULL) {
+//    _model = new ModelGLFeature(cam->getModelMatrix44D());
+//    _glState->addGLFeature(_model, true);
+//  } else{
+//    _model->setMatrix(cam->getModelMatrix44D());
+//  }
 
-  if (_model == NULL) {
-    _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState->addGLFeature(_model, true);
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL){
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
-    _model->setMatrix(cam->getModelMatrix44D());
+    f->setMatrix(cam->getModelViewMatrix44D());
   }
 }
 

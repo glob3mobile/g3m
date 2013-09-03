@@ -277,20 +277,27 @@ void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEv
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
 
-  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
-  if (projection == NULL) {
-    projection = new ProjectionGLFeature(cam);
-    _glState->addGLFeature(projection, true);
-  } else{
-    projection->setMatrix(cam->getProjectionMatrix44D());
-  }
+//  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+//  if (projection == NULL) {
+//    projection = new ProjectionGLFeature(cam);
+//    _glState->addGLFeature(projection, true);
+//  } else{
+//    projection->setMatrix(cam->getProjectionMatrix44D());
+//  }
+//
+//  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
+//  if (model == NULL) {
+//    model = new ModelGLFeature(cam);
+//    _glState->addGLFeature(model, true);
+//  } else{
+//    model->setMatrix(cam->getModelMatrix44D());
+//  }
 
-  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
-  if (model == NULL) {
-    model = new ModelGLFeature(cam);
-    _glState->addGLFeature(model, true);
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL){
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
-    model->setMatrix(cam->getModelMatrix44D());
+    f->setMatrix(cam->getModelViewMatrix44D());
   }
 
   if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL){

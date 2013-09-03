@@ -58,6 +58,8 @@ bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
 void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
+  /*
+
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
     _glState->addGLFeature(_projection, true);
@@ -73,6 +75,21 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
   } else{
     _model->setMatrix(cam->getModelMatrix44D());
   }
+*/
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL){
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+  } else{
+    f->setMatrix(cam->getModelViewMatrix44D());
+  }
+
+  f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL){
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
+  } else{
+    f->setMatrix(cam->getModelViewMatrix44D());
+  }
+
 }
 
 void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {

@@ -25,7 +25,7 @@ class GLFeatureSet {
 protected:
 #define MAX_CONCURRENT_FEATURES_PER_GROUP 20
 #ifdef C_CODE
-  GLFeature const* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
+  GLFeature* _features[MAX_CONCURRENT_FEATURES_PER_GROUP];
 #endif
 #ifdef JAVA_CODE
   protected final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
@@ -43,7 +43,7 @@ public:
   virtual ~GLFeatureSet();
 
 #ifdef C_CODE
-  GLFeature const* get(int i) const
+  GLFeature* get(int i) const
 #else
   GLFeature* get(int i) const
 #endif
@@ -54,7 +54,7 @@ public:
     return _features[i];
   }
 
-  void add(const GLFeature* f);
+  void add(GLFeature* f);
 
   void add(const GLFeatureSet* fs);
 

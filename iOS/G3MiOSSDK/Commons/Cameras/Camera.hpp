@@ -321,6 +321,10 @@ public:
     return getProjectionMatrix().asMatrix44D();
   }
 
+  Matrix44D* getModelViewMatrix44D() const{
+    return getModelViewMatrix().asMatrix44D();
+  }
+
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
   double getProjectedSphereArea(const Sphere& sphere) const;
