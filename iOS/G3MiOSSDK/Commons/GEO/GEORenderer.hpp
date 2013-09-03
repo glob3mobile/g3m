@@ -106,6 +106,23 @@ public:
   void stop(const G3MRenderContext* rc) {
     
   }
+  
+  MeshRenderer* getMeshRenderer(){
+    return _meshRenderer;
+  }
+  
+  MarksRenderer* getMarksRenderer(){
+    return _marksRenderer;
+  }
+  
+  ShapesRenderer* getShapesRenderer(){
+    return _shapesRenderer;
+  }
+  
+  GEOTileRasterizer* getGeoTileRasterizer(){
+    return _geoTileRasterizer;
+  }
+  
 };
 
 #endif

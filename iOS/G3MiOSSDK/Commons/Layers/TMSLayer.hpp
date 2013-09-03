@@ -43,14 +43,14 @@ public:
            bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL);
 
-
-  std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                         const Tile* tile,
-                                         const Vector2I& tileTextureResolution) const;
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                         const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-
+  
+  const std::string description() const;
+  
 };
 
 #endif
