@@ -85,6 +85,8 @@ private:
   LatLonGrid createLatLonGrid(const Vector2I& rawResolution,
                               const Tile* tile) const;
 
+  Sector getRenderedSectorForTile(const Tile* tile) const;
+
 public:
 
   PlanetTileTessellator(const bool skirted, const Sector& sector);
