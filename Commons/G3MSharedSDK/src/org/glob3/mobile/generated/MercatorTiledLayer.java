@@ -26,6 +26,15 @@ public class MercatorTiledLayer extends Layer
 
   protected final Sector _sector ;
 
+  protected final String getLayerType()
+  {
+    return "MercatorTiled";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
 
 
   /*
@@ -114,15 +123,6 @@ public class MercatorTiledLayer extends Layer
     return "[MercatorTiledLayer]";
   }
 
-  public final String getLayerType()
-  {
-    int DIEGO;
-  }
-
-  public final boolean rawIsEquals(Layer that)
-  {
-    int DIEGO;
-  }
 
   public final Layer copy()
   {

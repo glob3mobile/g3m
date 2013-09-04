@@ -22,6 +22,15 @@ public class GoogleMapsLayer extends Layer
   private final String _key;
   private final Sector _sector ;
 
+  protected final String getLayerType()
+  {
+    return "GoogleMaps";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
 
 
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
@@ -122,16 +131,6 @@ public class GoogleMapsLayer extends Layer
   public final String description()
   {
     return "[GoogleMapsLayer]";
-  }
-
-  public final String getLayerType()
-  {
-    int DIEGO;
-  }
-
-  public final boolean rawIsEquals(Layer that)
-  {
-    int DIEGO;
   }
 
   public final Layer copy()

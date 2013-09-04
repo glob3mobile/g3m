@@ -25,6 +25,16 @@ public class HereLayer extends Layer
   private final String _appId;
   private final String _appCode;
 
+  protected final String getLayerType()
+  {
+    return "Here";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
+
 
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
@@ -167,16 +177,6 @@ public class HereLayer extends Layer
   public final String description()
   {
     return "[HereLayer]";
-  }
-
-  public final String getLayerType()
-  {
-    int DIEGO;
-  }
-
-  public final boolean rawIsEquals(Layer that)
-  {
-    int DIEGO;
   }
 
   public final Layer copy()
