@@ -386,13 +386,13 @@ public:
                           (float) (heightFactor * wholeSectorHeight));
   }
 
-  void composeAndUploadTexture() {
+  bool composeAndUploadTexture() {
 #ifdef JAVA_CODE
     synchronized (this) {
 #endif
 
       if (_mesh == NULL) {
-        return;
+        return false;
       }
 
       std::vector<const IImage*>     images;
@@ -456,6 +456,10 @@ public:
                                                  destRects,
                                                  textureId),
                              true);
+
+        return true;
+      } else{
+        return false;
       }
 
 #ifdef JAVA_CODE
@@ -506,12 +510,14 @@ public:
       _finalized = true;
 
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-        composeAndUploadTexture();
-      }
 
-      if (_tile != NULL) {
-        _tile->setTextureSolved(true);
+        if (composeAndUploadTexture()){
+           //If the image could be properly turn into texture
+          _tile->setTextureSolved(true);   
+        }
+        
       }
+      
     }
   }
 

@@ -620,7 +620,7 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (true){ //Incomplete world
+  if (false){ //Incomplete world
 
     Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
 
@@ -1031,7 +1031,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -1346,6 +1346,22 @@ public:
     };
 
     temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+  }
+
+  //Worng TEMP Layer
+  if (true) {
+    WMSLayer* temp = new WMSLayer("temp",
+                                  URL("http://wms.openweathermap.org/service", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/png2",  //WRONG
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::zero(),
+                                  true);
+    layerSet->addLayer(temp);
   }
 
 
