@@ -341,12 +341,14 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
-      if (parameters->_firstLevel == 0) {
-        _firstLevelTiles.push_back(tile);
-      }
-      else {
-        topLevelTiles.push_back(tile);
+      if (sector.touchesWith(_renderedSector)){ //Do not create innecesary tiles
+        Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
+        if (parameters->_firstLevel == 0) {
+          _firstLevelTiles.push_back(tile);
+        }
+        else {
+          topLevelTiles.push_back(tile);
+        }
       }
     }
   }
@@ -465,19 +467,19 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
   /*
-  if (_projection == NULL) {
-    _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-    _glState->addGLFeature(_projection, true);
-  } else{
-    _projection->setMatrix(cam->getProjectionMatrix44D());
-  }
+   if (_projection == NULL) {
+   _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+   _glState->addGLFeature(_projection, true);
+   } else{
+   _projection->setMatrix(cam->getProjectionMatrix44D());
+   }
 
-  if (_model == NULL) {
-    _model = new ModelGLFeature(cam->getModelMatrix44D());
-    _glState->addGLFeature(_model, true);
-  } else{
-    _model->setMatrix(cam->getModelMatrix44D());
-  }
+   if (_model == NULL) {
+   _model = new ModelGLFeature(cam->getModelMatrix44D());
+   _glState->addGLFeature(_model, true);
+   } else{
+   _model->setMatrix(cam->getModelMatrix44D());
+   }
    */
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
@@ -487,7 +489,7 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
     f->setMatrix(cam->getModelViewMatrix44D());
   }
 
-  
+
 
 }
 
