@@ -352,7 +352,8 @@ public class G3MWebGLDemo
 
       builder.getPlanetRendererBuilder().setTileRasterizer(geoTileRasterizer);
 
-      builder.setInitializationTask(new GInitializationTask() {
+    		  
+    		  GInitializationTask initializationTask = 		  new GInitializationTask() {
 
          private boolean done = false;
 
@@ -511,7 +512,10 @@ public class G3MWebGLDemo
          public boolean isDone(final G3MContext context) {
             return done;
          }
-      });
+      };
+      
+
+      //builder.setInitializationTask(initializationTask);
 
       _widget = builder.createWidget();
    }
