@@ -22,8 +22,6 @@ private:
     return result;
   }
 
-  int _initialLevel;
-
 
 protected:
   std::string getLayerType() const {
@@ -47,8 +45,7 @@ public:
                      Sector::fullSphere(),
                      initialLevel,
                      18,
-                     condition),
-  _initialLevel(initialLevel)
+                     condition)
   {
 
   }

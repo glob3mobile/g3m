@@ -17,11 +17,32 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GoogleMapsLayer extends Layer
+public class GoogleMapsLayer extends Layer
 {
   private final String _key;
-  private final Sector _sector ;
+  private final int _initialLevel;
 
+  protected final String getLayerType()
+  {
+    return "GoogleMaps";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    GoogleMapsLayer t = (GoogleMapsLayer) that;
+  
+    if (!_key.equals(t._key))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    return true;
+  }
 
 
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
@@ -40,7 +61,7 @@ public abstract class GoogleMapsLayer extends Layer
   {
      super(condition, "GoogleMaps", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _key = key;
-     _sector = new Sector(Sector.fullSphere());
+     _initialLevel = initialLevel;
   
   }
 
@@ -55,17 +76,6 @@ public abstract class GoogleMapsLayer extends Layer
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile.getSector();
-    if (!_sector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_sector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
-  
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -122,6 +132,11 @@ public abstract class GoogleMapsLayer extends Layer
   public final String description()
   {
     return "[GoogleMapsLayer]";
+  }
+
+  public final GoogleMapsLayer copy()
+  {
+    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

@@ -13,6 +13,7 @@
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
+#include "LayerCondition.hpp"
 
 /*
  Implementation details: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
@@ -45,7 +46,9 @@ _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
-_sector(sector)
+_sector(sector),
+_initialLevel(initialLevel),
+_maxLevel(maxLevel)
 {
 
 }
@@ -118,10 +121,75 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
                                     getTimeToCache(),
                                     getReadExpired(),
                                     true) );
-  
+
   return petitions;
 }
 
 const std::string MercatorTiledLayer::description() const {
   return "[MercatorTiledLayer]";
+}
+
+MercatorTiledLayer* MercatorTiledLayer::copy() const {
+  return new MercatorTiledLayer(_name,
+                                _protocol,
+                                _domain,
+                                _subdomains,
+                                _imageFormat,
+                                TimeInterval::fromMilliseconds(_timeToCacheMS),
+                                _readExpired,
+                                _sector,
+                                _initialLevel,
+                                _maxLevel,
+                                (_condition == NULL) ? NULL : _condition->copy());
+}
+
+bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
+  MercatorTiledLayer* t = (MercatorTiledLayer*) that;
+
+  if (_protocol != t->_protocol) {
+    return false;
+  }
+
+  if (_domain != t->_domain) {
+    return false;
+  }
+
+  if (_imageFormat != t->_imageFormat) {
+    return false;
+  }
+
+  if (!_sector.isEquals(t->_sector)) {
+    return false;
+  }
+
+  if (_initialLevel != t->_initialLevel) {
+    return false;
+  }
+
+  if (_maxLevel != t->_maxLevel) {
+    return false;
+  }
+
+  const int thisSubdomainsSize = _subdomains.size();
+  const int thatSubdomainsSize = t->_subdomains.size();
+
+  if (thisSubdomainsSize != thatSubdomainsSize) {
+    return false;
+  }
+
+  for (int i = 0; i < thisSubdomainsSize; i++) {
+#ifdef C_CODE
+    const std::string thisSubdomain = _subdomains[i];
+    const std::string thatSubdomain = t->_subdomains[i];
+#endif
+#ifdef JAVA_CODE
+    final String thisSubdomain = _subdomains.get(i);
+    final String thatSubdomain = t._subdomains.get(i);
+#endif
+    if (thisSubdomain != thatSubdomain) {
+      return false;
+    }
+  }
+
+  return true;
 }

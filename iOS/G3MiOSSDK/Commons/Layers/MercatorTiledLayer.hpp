@@ -24,7 +24,14 @@ protected:
   const std::string _imageFormat;
   
   const Sector _sector;
+  const int    _initialLevel;
+  const int    _maxLevel;
 
+  virtual std::string getLayerType() const{
+    return "MercatorTiled";
+  }
+
+  virtual bool rawIsEquals(const Layer* that) const;
 
 public:
   MercatorTiledLayer(const std::string&              name,
@@ -46,6 +53,9 @@ public:
                                                 const Tile* tile) const;
 
   virtual const std::string description() const;
+
+
+  virtual MercatorTiledLayer* copy() const;
 
 };
 

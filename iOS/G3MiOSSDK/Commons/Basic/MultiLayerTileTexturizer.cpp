@@ -386,13 +386,13 @@ public:
                           (float) (heightFactor * wholeSectorHeight));
   }
 
-  void composeAndUploadTexture() {
+  bool composeAndUploadTexture() {
 #ifdef JAVA_CODE
     synchronized (this) {
 #endif
 
       if (_mesh == NULL) {
-        return;
+        return false;
       }
 
       std::vector<const IImage*>     images;
@@ -435,6 +435,9 @@ public:
           textureId += petition->getURL().getPath();
           textureId += "_";
         }
+        else{
+          return false;
+        }
       }
 
       if (images.size() > 0) {
@@ -456,7 +459,10 @@ public:
                                                  destRects,
                                                  textureId),
                              true);
+        return true;
       }
+
+      return false;
 
 #ifdef JAVA_CODE
     }
@@ -506,11 +512,9 @@ public:
       _finalized = true;
 
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-        composeAndUploadTexture();
-      }
-
-      if (_tile != NULL) {
-        _tile->setTextureSolved(true);
+        if (composeAndUploadTexture()){
+          _tile->setTextureSolved(true);
+        }
       }
     }
   }

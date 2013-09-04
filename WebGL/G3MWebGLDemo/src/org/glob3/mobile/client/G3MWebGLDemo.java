@@ -604,7 +604,7 @@ public class G3MWebGLDemo
             layerSet.addLayer(blueMarbleL);
          }
 
-         final boolean useOrtoAyto = true;
+         final boolean useOrtoAyto = false;
          if (useOrtoAyto) {
 
             final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19,

@@ -173,13 +173,13 @@ public class TileTextureBuilder extends RCObject
     return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
   }
 
-  public final void composeAndUploadTexture()
+  public final boolean composeAndUploadTexture()
   {
     synchronized (this) {
 
       if (_mesh == null)
       {
-        return;
+        return false;
       }
 
       final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
@@ -220,6 +220,10 @@ public class TileTextureBuilder extends RCObject
           textureId += petition.getURL().getPath();
           textureId += "_";
         }
+        else
+        {
+          return false;
+        }
       }
 
       if (images.size() > 0)
@@ -232,7 +236,10 @@ public class TileTextureBuilder extends RCObject
         }
 
         IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
+        return true;
       }
+
+      return false;
 
     }
   }
@@ -281,12 +288,10 @@ public class TileTextureBuilder extends RCObject
 
       if (!_canceled && (_tile != null) && (_mesh != null))
       {
-        composeAndUploadTexture();
-      }
-
-      if (_tile != null)
-      {
-        _tile.setTextureSolved(true);
+        if (composeAndUploadTexture())
+        {
+          _tile.setTextureSolved(true);
+        }
       }
     }
   }
