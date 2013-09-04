@@ -17,6 +17,13 @@ private:
   const Sector      _sector;
 
 protected:
+  std::string getLayerType() const{
+    return "GoogleMaps";
+  }
+
+  bool rawIsEquals(const Layer* that) const{
+    int DIEGO;
+  }
 
 public:
 
@@ -34,14 +41,6 @@ public:
                                                 const Tile* tile) const;
 
   const std::string description() const;
-
-  std::string getLayerType() const{
-    int DIEGO;
-  }
-
-  bool rawIsEquals(const Layer* that) const{
-    int DIEGO;
-  }
 
   Layer* copy() const{
     int DIEGO;

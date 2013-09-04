@@ -20,6 +20,15 @@ private:
   const std::string _appId;
   const std::string _appCode;
 
+protected:
+  std::string getLayerType() const{
+    return "Here";
+  }
+
+  bool rawIsEquals(const Layer* that) const{
+    int DIEGO;
+  }
+
 public:
 
   HereLayer(const std::string& appId,
@@ -36,14 +45,6 @@ public:
                         const Sector& sector) const;
 
   const std::string description() const;
-
-  std::string getLayerType() const{
-    int DIEGO;
-  }
-
-  bool rawIsEquals(const Layer* that) const{
-    int DIEGO;
-  }
 
   Layer* copy() const{
     int DIEGO;

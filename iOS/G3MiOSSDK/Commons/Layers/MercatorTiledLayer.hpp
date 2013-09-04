@@ -25,6 +25,13 @@ protected:
   
   const Sector _sector;
 
+  std::string getLayerType() const{
+    return "MercatorTiled";
+  }
+
+  bool rawIsEquals(const Layer* that) const{
+    int DIEGO;
+  }
 
 public:
   MercatorTiledLayer(const std::string&              name,
@@ -47,13 +54,6 @@ public:
 
   virtual const std::string description() const;
 
-  std::string getLayerType() const{
-    int DIEGO;
-  }
-
-  bool rawIsEquals(const Layer* that) const{
-    int DIEGO;
-  }
 
   Layer* copy() const{
     int DIEGO;
