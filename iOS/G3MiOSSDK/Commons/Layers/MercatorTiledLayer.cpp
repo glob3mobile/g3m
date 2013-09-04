@@ -178,8 +178,14 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
   }
 
   for (int i = 0; i < thisSubdomainsSize; i++) {
+#ifdef C_CODE
     const std::string thisSubdomain = _subdomains[i];
     const std::string thatSubdomain = t->_subdomains[i];
+#endif
+#ifdef JAVA_CODE
+    final String thisSubdomain = _subdomains.get(i);
+    final String thatSubdomain = t._subdomains.get(i);
+#endif
     if (thisSubdomain != thatSubdomain) {
       return false;
     }

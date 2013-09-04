@@ -27,11 +27,11 @@ protected:
   const int    _initialLevel;
   const int    _maxLevel;
 
-  std::string getLayerType() const{
+  virtual std::string getLayerType() const{
     return "MercatorTiled";
   }
 
-  bool rawIsEquals(const Layer* that) const;
+  virtual bool rawIsEquals(const Layer* that) const;
 
 public:
   MercatorTiledLayer(const std::string&              name,
@@ -55,7 +55,7 @@ public:
   virtual const std::string description() const;
 
 
-  MercatorTiledLayer* copy() const;
+  virtual MercatorTiledLayer* copy() const;
 
 };
 
