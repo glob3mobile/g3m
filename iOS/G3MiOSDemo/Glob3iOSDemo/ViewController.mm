@@ -620,7 +620,7 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (false){ //Incomplete world
+  if (true){ //Incomplete world
 
     Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
 
@@ -1064,7 +1064,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1349,7 +1349,7 @@ public:
   }
 
   //Worng TEMP Layer
-  if (true) {
+  if (false) {
     WMSLayer* temp = new WMSLayer("temp",
                                   URL("http://wms.openweathermap.org/service", false),
                                   WMS_1_1_0,

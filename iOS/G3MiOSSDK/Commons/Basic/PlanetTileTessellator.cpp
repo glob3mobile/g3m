@@ -172,7 +172,7 @@ Geodetic3D PlanetTileTessellator::getGeodeticOnPlanetSurface(const IMathUtils* m
                                                              const ElevationData* elevationData,
                                                              float verticalExaggeration,
                                                              const Geodetic2D& g) const{
-  const Geodetic2D position = _renderedSector.getClosesInnerPoint( g );
+  const Geodetic2D position = g;// _renderedSector.getClosesInnerPoint( g );
   double elevation = 0;
 
   //TODO: MERCATOR!!!
@@ -368,11 +368,9 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   // create skirts
   if (_skirted) {
     // east side
-    if (needsEastSkirt(sector)){
     for (int j = tileResolution._y-1; j > 0; j--) {
       const int pos = j*tileResolution._x + tileResolution._x-1;
       textCoords.add(u[pos], v[pos]);
-    }
     }
 
     // north side

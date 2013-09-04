@@ -98,13 +98,21 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 Sector Sector::intersection(const Sector& that) const {
   const Angle lowLat = Angle::max(_lower._latitude,  that._lower._latitude);
   const Angle lowLon = Angle::max(_lower._longitude, that._lower._longitude);
-  const Geodetic2D low(lowLat, lowLon);
 
   const Angle upLat = Angle::min(_upper._latitude,  that._upper._latitude);
   const Angle upLon = Angle::min(_upper._longitude, that._upper._longitude);
-  const Geodetic2D up(upLat, upLon);
 
-  return Sector(low, up);
+  if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon)){;
+
+    const Geodetic2D low(lowLat, lowLon);
+    const Geodetic2D up(upLat, upLon);
+
+    return Sector(low, up);
+  }
+
+  bool x = this->touchesWith(that);
+
+  return Sector::fromDegrees(0, 0, 0, 0); //invalid
 }
 
 Sector Sector::mergedWith(const Sector& that) const {
