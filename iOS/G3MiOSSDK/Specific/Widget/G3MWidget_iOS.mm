@@ -117,16 +117,17 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
       glver = OpenGL_2;
     }
     
-    
-    NSLog(@"----------------------------------------------------------------------------");
-    NSLog(@"OpenGL Extensions:");
-    NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    for (NSString *extension in extensions) {
-      NSLog(@"  %@", extension);
+    bool showOpenGLExtensions = false;
+    if (showOpenGLExtensions) {
+      NSLog(@"----------------------------------------------------------------------------");
+      NSLog(@"OpenGL Extensions:");
+      NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      for (NSString *extension in extensions) {
+        NSLog(@"  %@", extension);
+      }
+      NSLog(@"----------------------------------------------------------------------------");
     }
-    NSLog(@"----------------------------------------------------------------------------");
-    
     
     _lastTouchEvent = NULL;
     
