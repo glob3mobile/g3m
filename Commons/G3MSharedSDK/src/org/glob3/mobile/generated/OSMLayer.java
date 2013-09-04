@@ -29,6 +29,19 @@ public class OSMLayer extends MercatorTiledLayer
     return result;
   }
 
+  private int _initialLevel;
+
+
+  protected final String getLayerType()
+  {
+    return "OSM";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    return true;
+  }
+
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
      this(timeToCache, readExpired, initialLevel, null);
@@ -44,12 +57,18 @@ public class OSMLayer extends MercatorTiledLayer
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
      super("OpenStreetMap", "http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, condition);
+     _initialLevel = initialLevel;
 
   }
 
   public final String description()
   {
     return "[OSMLayer]";
+  }
+
+  public final OSMLayer copy()
+  {
+    return new OSMLayer(TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

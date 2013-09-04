@@ -13,6 +13,8 @@
 
 class CartoDBLayer : public MercatorTiledLayer {
 private:
+  const std::string _userName;
+  const std::string _table;
 
   static const std::vector<std::string> getSubdomains() {
     std::vector<std::string> result;
@@ -22,6 +24,13 @@ private:
     result.push_back("3.");
     return result;
   }
+
+protected:
+  std::string getLayerType() const {
+    return "CartoDB";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 
@@ -43,12 +52,16 @@ public:
                      Sector::fullSphere(),
                      2,
                      17,
-                     condition)
+                     condition),
+  _userName(userName),
+  _table(table)
   {
 
   }
 
   const std::string description() const;
+
+  CartoDBLayer* copy() const;
 
 };
 

@@ -76,7 +76,7 @@ public:
     return (_path == "__NULL__");
   }
 
-  bool isEqualsTo(const URL& that) const {
+  bool isEquals(const URL& that) const {
     return (_path == that._path);
   }
   

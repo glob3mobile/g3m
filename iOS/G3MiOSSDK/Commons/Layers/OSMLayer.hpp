@@ -22,6 +22,16 @@ private:
     return result;
   }
 
+  int _initialLevel;
+
+
+protected:
+  std::string getLayerType() const {
+    return "OSM";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
 public:
   OSMLayer(const TimeInterval& timeToCache,
            bool readExpired = true,
@@ -37,12 +47,15 @@ public:
                      Sector::fullSphere(),
                      initialLevel,
                      18,
-                     condition)
+                     condition),
+  _initialLevel(initialLevel)
   {
 
   }
 
   const std::string description() const;
+
+  OSMLayer* copy() const;
 
 };
 

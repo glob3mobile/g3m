@@ -76,13 +76,17 @@ public:
     _listener = listener;
   }
   
-  Layer* get(int index);
+  Layer* getLayer(int index) const;
   
-  Layer* getLayer(const std::string& name);
+  Layer* getLayer(const std::string& name) const;
   
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
   
   //  const Angle calculateSplitLatitude(const Tile* tile) const;
+
+  bool isEquals(const LayerSet* that) const;
+
+  void takeLayersFrom(LayerSet* that);
   
 };
 

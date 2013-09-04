@@ -46,17 +46,18 @@ public class MapBoo_Scene
     return _hasWarnings;
   }
 
-  public final void fillLayerSet(LayerSet layerSet)
+  public final LayerSet createLayerSet()
   {
+    LayerSet layerSet = new LayerSet();
     if (_baseLayer != null)
     {
-      layerSet.addLayer(_baseLayer);
+      layerSet.addLayer(_baseLayer.copy());
     }
-  
     if (_overlayLayer != null)
     {
-      layerSet.addLayer(_overlayLayer);
+      layerSet.addLayer(_overlayLayer.copy());
     }
+    return layerSet;
   }
 
   public void dispose()

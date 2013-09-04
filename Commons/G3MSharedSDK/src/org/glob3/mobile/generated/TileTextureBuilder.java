@@ -201,7 +201,7 @@ public class TileTextureBuilder extends RCObject
           final Sector intersectionSector = tileSector.intersection(imageSector);
 
           RectangleF sourceRect = null;
-          if (!intersectionSector.isEqualsTo(imageSector))
+          if (!intersectionSector.isEquals(imageSector))
           {
             sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
           }

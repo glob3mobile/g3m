@@ -47,6 +47,14 @@ private:
   inline double toBBOXLongitude(const Angle& longitude) const;
   inline double toBBOXLatitude (const Angle& latitude)  const;
 
+protected:
+  std::string getLayerType() const {
+    return "WMS";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
+
 public:
 
   WMSLayer(const std::string& mapLayer,
@@ -92,6 +100,8 @@ public:
   }
 
   const std::string description() const;
+
+  WMSLayer* copy() const;
 
 };
 

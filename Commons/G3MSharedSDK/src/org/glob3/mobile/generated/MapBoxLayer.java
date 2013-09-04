@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 public class MapBoxLayer extends MercatorTiledLayer
 {
+  private final String _mapKey;
 
   private static java.util.ArrayList<String> getSubdomains()
   {
@@ -28,6 +29,17 @@ public class MapBoxLayer extends MercatorTiledLayer
     result.add("c.");
     result.add("d.");
     return result;
+  }
+
+  protected final String getLayerType()
+  {
+    return "MapBox";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    MapBoxLayer t = (MapBoxLayer) that;
+    return (_domain.equals(t._domain));
   }
 
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/3/3/3.png
@@ -45,12 +57,18 @@ public class MapBoxLayer extends MercatorTiledLayer
               //int initialMapBoxLevel = 1,
   {
      super("MapBoxLayer", "http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 1, 17, condition);
+     _mapKey = mapKey;
 
   }
 
   public final String description()
   {
     return "[MapBoxLayer]";
+  }
+
+  public final MapBoxLayer copy()
+  {
+    return new MapBoxLayer(_mapKey, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
   }
 
 }

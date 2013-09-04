@@ -21,7 +21,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     gl.vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
-  public final boolean isEqualsTo(GPUAttributeValue v)
+  public final boolean isEquals(GPUAttributeValue v)
   {
 
     if (!v.getEnabled())

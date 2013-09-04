@@ -91,7 +91,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   //Texture (After blending factors)
   if (_boundTextureId != NULL) {
     if (currentState._boundTextureId == NULL ||
-        !_boundTextureId->isEqualsTo(currentState._boundTextureId)) {
+        !_boundTextureId->isEquals(currentState._boundTextureId)) {
       nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
 
       currentState._boundTextureId = _boundTextureId;

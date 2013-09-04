@@ -62,7 +62,9 @@ public:
   MutableVector2I asMutableVector2I() const {
     return MutableVector2I(_x, _y);
   }
-  
+
+  bool isEquals(const Vector2I& that) const;
+
 };
 
 #endif

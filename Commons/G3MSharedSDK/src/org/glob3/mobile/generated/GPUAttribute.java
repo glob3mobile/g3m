@@ -91,7 +91,7 @@ public class GPUAttribute extends GPUVariable
         ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
         return;
       }
-      if (_value == null || !_value.isEqualsTo(v))
+      if (_value == null || !_value.isEquals(v))
       {
         _dirty = true;
 

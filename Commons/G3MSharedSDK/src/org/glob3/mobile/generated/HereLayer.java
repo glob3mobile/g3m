@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class HereLayer extends Layer
+public abstract class HereLayer extends Layer
 {
   private final Sector _sector ;
   private final String _appId;

@@ -549,7 +549,7 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
 
 
 void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
-  //  if (isEqualsTo(m)) {
+  //  if (isEquals(m)) {
   //    return;
   //  }
 

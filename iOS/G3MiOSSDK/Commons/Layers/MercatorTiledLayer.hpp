@@ -12,14 +12,14 @@
 #include "Layer.hpp"
 
 class MercatorTiledLayer : public Layer {
-private:
+protected:
   const std::string _protocol;
   const std::string _domain;
 #ifdef C_CODE
   const std::vector<std::string> _subdomains;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<String> _subdomains;
+  protected final java.util.ArrayList<String> _subdomains;
 #endif
   const std::string _imageFormat;
   

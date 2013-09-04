@@ -33,7 +33,7 @@ public:
   static std::string CollinsBart() {
     return "CollinsBart";
   }
-  
+
 };
 
 
@@ -41,10 +41,9 @@ class BingMapsLayer : public Layer {
 private:
   const std::string _imagerySet;
   const std::string _key;
-  const Sector      _sector;
 
   const int _initialLevel;
-  
+
   bool _isInitialized;
 
   std::string _brandLogoUri;
@@ -65,6 +64,14 @@ private:
                                const int column,
                                const int row) const;
 
+protected:
+  std::string getLayerType() const {
+    return "BingMaps";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
+
 public:
 
   /**
@@ -83,7 +90,7 @@ public:
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const Tile* tile) const;
-  
+
   bool isReady() const;
 
   void initialize(const G3MContext* context);
@@ -92,6 +99,8 @@ public:
   void onDownloadErrorMetadata();
 
   const std::string description() const;
+
+  BingMapsLayer* copy() const;
 
 };
 

@@ -44,7 +44,7 @@ public:
                            mu->NanD());
   }
   
-  bool isEqualsTo(double x, double y) const{
+  bool isEquals(double x, double y) const{
     return _x == x && _y == y;
   }
   
