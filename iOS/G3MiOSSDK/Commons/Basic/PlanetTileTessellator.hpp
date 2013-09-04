@@ -66,7 +66,8 @@ private:
 #endif
 
   Vector2I calculateResolution(const Vector2I& resolution,
-                               const Sector& sector) const;
+                               const Tile* tile,
+                               const Sector& renderedSector) const;
 
   IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
 
