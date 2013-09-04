@@ -13,6 +13,7 @@
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
+#include "LayerCondition.hpp"
 
 GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  const TimeInterval& timeToCache,
@@ -32,7 +33,7 @@ Layer(condition,
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true) ),
 _key(key),
-_sector(Sector::fullSphere())
+_initialLevel(initialLevel)
 {
 
 }
@@ -50,16 +51,6 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->getSector();
-  if (!_sector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  const Sector sector = tileSector.intersection(_sector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
-
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
@@ -118,4 +109,26 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
 
 const std::string GoogleMapsLayer::description() const {
   return "[GoogleMapsLayer]";
+}
+
+GoogleMapsLayer* GoogleMapsLayer::copy() const {
+  return new GoogleMapsLayer(_key,
+                             TimeInterval::fromMilliseconds(_timeToCacheMS),
+                             _readExpired,
+                             _initialLevel,
+                             (_condition == NULL) ? NULL : _condition->copy() );
+}
+
+bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
+  GoogleMapsLayer* t = (GoogleMapsLayer*) that;
+  
+  if (_key != t->_key) {
+    return false;
+  }
+
+  if (_initialLevel != t->_initialLevel) {
+    return false;
+  }
+
+  return true;
 }
