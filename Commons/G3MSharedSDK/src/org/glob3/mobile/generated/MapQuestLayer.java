@@ -23,8 +23,6 @@ package org.glob3.mobile.generated;
 
 public class MapQuestLayer extends MercatorTiledLayer
 {
-  private final int _initialLevel;
-  private final int _maxLevel;
 
   private static java.util.ArrayList<String> getSubdomains()
   {
@@ -39,8 +37,6 @@ public class MapQuestLayer extends MercatorTiledLayer
   private MapQuestLayer(String name, String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
   {
      super(name, "http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
-     _initialLevel = initialLevel;
-     _maxLevel = maxLevel;
 
   }
 
