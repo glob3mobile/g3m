@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class HereLayer extends Layer
+public class HereLayer extends Layer
 {
   private final Sector _sector ;
   private final String _appId;
@@ -167,6 +167,21 @@ public abstract class HereLayer extends Layer
   public final String description()
   {
     return "[HereLayer]";
+  }
+
+  public final String getLayerType()
+  {
+    int DIEGO;
+  }
+
+  public final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
+
+  public final Layer copy()
+  {
+    int DIEGO;
   }
 
 }

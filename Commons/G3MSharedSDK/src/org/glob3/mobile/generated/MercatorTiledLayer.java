@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class MercatorTiledLayer extends Layer
+public class MercatorTiledLayer extends Layer
 {
   protected final String _protocol;
   protected final String _domain;
@@ -112,6 +112,21 @@ public abstract class MercatorTiledLayer extends Layer
   public String description()
   {
     return "[MercatorTiledLayer]";
+  }
+
+  public final String getLayerType()
+  {
+    int DIEGO;
+  }
+
+  public final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
+
+  public final Layer copy()
+  {
+    int DIEGO;
   }
 
 }

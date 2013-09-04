@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GoogleMapsLayer extends Layer
+public class GoogleMapsLayer extends Layer
 {
   private final String _key;
   private final Sector _sector ;
@@ -122,6 +122,21 @@ public abstract class GoogleMapsLayer extends Layer
   public final String description()
   {
     return "[GoogleMapsLayer]";
+  }
+
+  public final String getLayerType()
+  {
+    int DIEGO;
+  }
+
+  public final boolean rawIsEquals(Layer that)
+  {
+    int DIEGO;
+  }
+
+  public final Layer copy()
+  {
+    int DIEGO;
   }
 
 }
