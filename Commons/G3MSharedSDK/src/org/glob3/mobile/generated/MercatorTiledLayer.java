@@ -25,6 +25,8 @@ public class MercatorTiledLayer extends Layer
   protected final String _imageFormat;
 
   protected final Sector _sector ;
+  protected final int _initialLevel;
+  protected final int _maxLevel;
 
   protected final String getLayerType()
   {
@@ -33,7 +35,57 @@ public class MercatorTiledLayer extends Layer
 
   protected final boolean rawIsEquals(Layer that)
   {
-    int DIEGO;
+    MercatorTiledLayer t = (MercatorTiledLayer) that;
+  
+    if (!_protocol.equals(t._protocol))
+    {
+      return false;
+    }
+  
+    if (!_domain.equals(t._domain))
+    {
+      return false;
+    }
+  
+    if (!_imageFormat.equals(t._imageFormat))
+    {
+      return false;
+    }
+  
+    if (!_sector.isEquals(t._sector))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    if (_maxLevel != t._maxLevel)
+    {
+      return false;
+    }
+  
+    final int thisSubdomainsSize = _subdomains.size();
+    final int thatSubdomainsSize = t._subdomains.size();
+  
+    if (thisSubdomainsSize != thatSubdomainsSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisSubdomainsSize; i++)
+    {
+      final String thisSubdomain = _subdomains[i];
+      final String thatSubdomain = t._subdomains[i];
+      if (!thisSubdomain.equals(thatSubdomain))
+      {
+        return false;
+      }
+    }
+  
+    return true;
   }
 
 
@@ -49,6 +101,8 @@ public class MercatorTiledLayer extends Layer
      _subdomains = subdomains;
      _imageFormat = imageFormat;
      _sector = new Sector(sector);
+     _initialLevel = initialLevel;
+     _maxLevel = maxLevel;
   
   }
 
@@ -124,9 +178,9 @@ public class MercatorTiledLayer extends Layer
   }
 
 
-  public final Layer copy()
+  public final MercatorTiledLayer copy()
   {
-    int DIEGO;
+    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

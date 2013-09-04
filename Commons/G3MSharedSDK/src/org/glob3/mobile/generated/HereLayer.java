@@ -21,9 +21,9 @@ package org.glob3.mobile.generated;
 
 public class HereLayer extends Layer
 {
-  private final Sector _sector ;
   private final String _appId;
   private final String _appCode;
+  private final int _initialLevel;
 
   protected final String getLayerType()
   {
@@ -32,7 +32,24 @@ public class HereLayer extends Layer
 
   protected final boolean rawIsEquals(Layer that)
   {
-    int DIEGO;
+    HereLayer t = (HereLayer) that;
+  
+    if (!_appId.equals(t._appId))
+    {
+      return false;
+    }
+  
+    if (!_appCode.equals(t._appCode))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    return true;
   }
 
 
@@ -53,7 +70,7 @@ public class HereLayer extends Layer
      super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
      _appId = appId;
      _appCode = appCode;
-     _sector = new Sector(Sector.fullSphere());
+     _initialLevel = initialLevel;
   
   }
 
@@ -62,17 +79,6 @@ public class HereLayer extends Layer
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile.getSector();
-    if (!_sector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_sector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
-  
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -179,9 +185,9 @@ public class HereLayer extends Layer
     return "[HereLayer]";
   }
 
-  public final Layer copy()
+  public final HereLayer copy()
   {
-    int DIEGO;
+    return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }
