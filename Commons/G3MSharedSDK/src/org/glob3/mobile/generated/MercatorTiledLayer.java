@@ -28,12 +28,12 @@ public class MercatorTiledLayer extends Layer
   protected final int _initialLevel;
   protected final int _maxLevel;
 
-  protected final String getLayerType()
+  protected String getLayerType()
   {
     return "MercatorTiled";
   }
 
-  protected final boolean rawIsEquals(Layer that)
+  protected boolean rawIsEquals(Layer that)
   {
     MercatorTiledLayer t = (MercatorTiledLayer) that;
   
@@ -77,9 +77,9 @@ public class MercatorTiledLayer extends Layer
   
     for (int i = 0; i < thisSubdomainsSize; i++)
     {
-      final String thisSubdomain = _subdomains[i];
-      final String thatSubdomain = t._subdomains[i];
-      if (!thisSubdomain.equals(thatSubdomain))
+      final String thisSubdomain = _subdomains.get(i);
+      final String thatSubdomain = t._subdomains.get(i);
+      if (thisSubdomain != thatSubdomain)
       {
         return false;
       }
@@ -178,7 +178,7 @@ public class MercatorTiledLayer extends Layer
   }
 
 
-  public final MercatorTiledLayer copy()
+  public MercatorTiledLayer copy()
   {
     return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
