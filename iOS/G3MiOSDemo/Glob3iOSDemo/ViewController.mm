@@ -282,6 +282,10 @@ public:
 
   void onAboutChanged(const G3MContext* context,
                       const std::string& about){}
+
+  virtual void onWebSocketOpen(const G3MContext* context){}
+
+  virtual void onWebSocketClose(const G3MContext* context){}
 };
 
 
@@ -295,8 +299,8 @@ public:
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
                                        URL("http://192.168.1.2:8080/web", false),
                                        URL("ws://192.168.1.2:8888/tube", false),
-                                       useWebSockets,
-                                       applicationId,
+                                       "",
+                                       VIEW_RUNTIME,
                                        applicationListener);
 
   //  MarksRenderer* marksRenderer = new MarksRenderer(false);
@@ -1020,7 +1024,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -1053,7 +1057,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),

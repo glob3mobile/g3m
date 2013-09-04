@@ -37,6 +37,18 @@ public:
 
   const std::string description() const;
 
+  std::string getLayerType() const{
+    int DIEGO;
+  }
+
+  bool rawIsEquals(const Layer* that) const{
+    int DIEGO;
+  }
+
+  Layer* copy() const{
+    int DIEGO;
+  }
+
 };
 
 #endif
