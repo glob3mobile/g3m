@@ -33,7 +33,7 @@
 #include "IShortBuffer.hpp"
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
-_skirted(false),
+_skirted(skirted),
 _renderedSector(sector)
 {
 }
