@@ -33,10 +33,9 @@
 #include "IShortBuffer.hpp"
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
-_skirted(skirted),
+_skirted(false),
 _renderedSector(sector)
 {
-
 }
 
 PlanetTileTessellator::~PlanetTileTessellator() {
@@ -82,6 +81,8 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
 
   const Vector2I meshRes = Vector2I((int)(resolution._x / lonRatio) + 2,
                                     (int)(resolution._y / latRatio) + 2);
+
+//  return Vector2I(4,4);
 
   return meshRes;
 
@@ -318,51 +319,9 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
-  if (sector.isEqualsTo(tile->getSector())){
+  printf("RES: %s", tileResolution.description().c_str()  );
 
-    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
-    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
-    const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-
-    for (int j = 0; j < tileResolution._y; j++) {
-      for (int i = 0; i < tileResolution._x; i++) {
-        const int pos = j*tileResolution._x + i;
-
-        u[pos] = (float) i / (tileResolution._x-1);
-
-        const double linearV = (double) j / (tileResolution._y-1);
-        if (mercator) {
-          const Angle latitude = sector.getInnerPointLatitude(linearV);
-          const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-          const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-          v[pos] = (float) mercatorLocalV;
-        }
-        else {
-          v[pos] = (float) linearV;
-        }
-      }
-    }
-
-  } else{
-
-    for (int j = 0; j < tileResolution._y; j++) {
-      for (int i = 0; i < tileResolution._x; i++) {
-        const int pos = j*tileResolution._x + i;
-        
-        Geodetic2D g = sector.getInnerPoint(i,j);
-
-        printf("TCV: %s\n", g.description().c_str()  );
-
-        Vector2D uv = tileSector.getUVCoordinates(g);
-        if (mercator){
-          //TODO....
-        }
-
-        u[pos] = (float)uv._x;
-        v[pos] = (float)uv._y;
-      }
-    }
-
+//  if (sector.isEqualsTo(tile->getSector())){
 //
 //    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
 //    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
@@ -386,8 +345,63 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 //        }
 //      }
 //    }
+//
+//  } else{
+//
+    for (int j = 0; j < tileResolution._y; j++) {
+      for (int i = 0; i < tileResolution._x; i++) {
+        const int pos = j*tileResolution._x + i;
 
-  }
+        const double meshSectorU = (double)i / tileResolution._x;
+        const double meshSectorV = (double)j / tileResolution._y;
+        
+        Geodetic2D g = sector.getInnerPoint(meshSectorU,meshSectorV);
+
+        if (!tileSector.contains(g)){
+          int a = 0;a++;
+        }
+
+        Vector2D uv = tileSector.getUVCoordinates(g);
+        if (mercator){
+          //TODO....
+        }
+
+        u[pos] = (float)uv._x;
+        v[pos] = (float)uv._y;
+
+
+//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
+      }
+    }
+
+//  printf("---------------------------------------");
+
+//    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
+//    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
+//    const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+//
+//    for (int j = 0; j < tileResolution._y; j++) {
+//      for (int i = 0; i < tileResolution._x; i++) {
+//        const int pos = j*tileResolution._x + i;
+//
+//        u[pos] = (float) i / (tileResolution._x-1);
+//
+//        const double linearV = (double) j / (tileResolution._y-1);
+//        if (mercator) {
+//          const Angle latitude = sector.getInnerPointLatitude(linearV);
+//          const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+//          const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+//          v[pos] = (float) mercatorLocalV;
+//        }
+//        else {
+//          v[pos] = (float) linearV;
+//        }
+//
+//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]);
+//      }
+//    }
+
+//  }
 
   FloatBufferBuilderFromCartesian2D textCoords;
 
