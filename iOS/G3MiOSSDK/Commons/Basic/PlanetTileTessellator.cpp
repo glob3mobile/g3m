@@ -252,12 +252,18 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
       const double x = 1;
       const double y = (double)j/(tileResolution._y-1);
+      const Geodetic2D g = meshSector.getInnerPoint(x, y);
+
       double h = skirtHeight;
       if (!hasSkirt){
-        
+        if (elevationData != NULL){
+          h = verticalExaggeration * elevationData->getElevationAt(g);
+        } else{
+          h = 0;
+        }
       }
 
-      vertices.add(meshSector.getInnerPoint(x, y), h);
+      vertices.add(g, h);
     }
 
     // north side
