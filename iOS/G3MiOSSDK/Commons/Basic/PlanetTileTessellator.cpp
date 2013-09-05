@@ -175,7 +175,7 @@ IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
     return createTileIndices(planet, sector, tileResolution);
   }
   
-#ifdef C_CODEb
+#ifdef C_CODE
   std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
   if (it != _indicesMap.end()){
     return it->second;
@@ -345,14 +345,14 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
                                                       bool mercator) const {
 
   const Sector tileSector = tile->getSector();
-  const Sector sector = getRenderedSectorForTile(tile);
-  const Vector2I tileResolution = calculateResolution(rawResolution, tile, sector);
+  const Sector meshSector = getRenderedSectorForTile(tile);
+  const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
 
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
-  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
-  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     for (int j = 0; j < tileResolution._y; j++) {
@@ -360,7 +360,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
       double linearV = (float) j / (tileResolution._y-1);
 
       if (mercator){
-        const Angle latitude = sector.getInnerPointLatitude(linearV);
+        const Angle latitude = meshSector.getInnerPointLatitude(linearV);
         const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
         const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
         linearV = mercatorLocalV;
@@ -370,7 +370,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
         const int pos = j*tileResolution._x + i;
 
         const double linearU = (float) i / (tileResolution._x-1);
-        Geodetic2D g = sector.getInnerPoint(linearU,linearV);
+        Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
 
         Vector2D uv = tileSector.getUVCoordinates(g);
         u[pos] = (float)uv._x;

@@ -623,10 +623,13 @@ public:
   if (true){ //Incomplete world
 
     Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-
     builder.setShownSector(spain );
 
+    builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
     geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
+
+    
   }
 
 

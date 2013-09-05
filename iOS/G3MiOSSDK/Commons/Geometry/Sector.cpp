@@ -110,8 +110,6 @@ Sector Sector::intersection(const Sector& that) const {
     return Sector(low, up);
   }
 
-  bool x = this->touchesWith(that);
-
   return Sector::fromDegrees(0, 0, 0, 0); //invalid
 }
 
