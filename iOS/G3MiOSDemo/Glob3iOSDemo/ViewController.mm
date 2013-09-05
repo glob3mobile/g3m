@@ -292,7 +292,6 @@ public:
 - (void) initWithMapBooBuilder
 {
   MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
-  const bool useWebSockets = true;
 
   const std::string applicationId = "2glgs5j2mq5i9nxx68q";
 
