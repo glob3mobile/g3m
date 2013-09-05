@@ -76,7 +76,8 @@ private:
 
   double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
 
-  void createSurface(const Sector& meshSector,
+  void createSurface(const Sector& tileSector,
+                     const Sector& meshSector,
                      const Vector2I& meshResolution,
                      const ElevationData* elevationData,
                      float verticalExaggeration,
@@ -84,6 +85,19 @@ private:
                      FloatBufferBuilderFromGeodetic& vertices,
                      ShortBufferBuilder& indices,
                      FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  void createEastSkirt(const Planet* planet,
+                       const Sector& tileSector,
+                     const Sector& meshSector,
+                     const Vector2I& meshResolution,
+                     const ElevationData* elevationData,
+                     float verticalExaggeration,
+                     bool mercator,
+                     FloatBufferBuilderFromGeodetic& vertices,
+                     ShortBufferBuilder& indices,
+                     FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  
 
 public:
 
