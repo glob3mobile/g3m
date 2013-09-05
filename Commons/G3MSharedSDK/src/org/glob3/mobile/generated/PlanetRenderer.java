@@ -71,14 +71,17 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
-        Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
-        if (parameters._firstLevel == 0)
+        if (sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
-          _firstLevelTiles.add(tile);
-        }
-        else
-        {
-          topLevelTiles.add(tile);
+          Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
+          if (parameters._firstLevel == 0)
+          {
+            _firstLevelTiles.add(tile);
+          }
+          else
+          {
+            topLevelTiles.add(tile);
+          }
         }
       }
     }
@@ -274,19 +277,19 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     final Camera cam = rc.getCurrentCamera();
     /*
-    if (_projection == NULL) {
-      _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-      _glState->addGLFeature(_projection, true);
-    } else{
-      _projection->setMatrix(cam->getProjectionMatrix44D());
-    }
+     if (_projection == NULL) {
+     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+     _glState->addGLFeature(_projection, true);
+     } else{
+     _projection->setMatrix(cam->getProjectionMatrix44D());
+     }
   
-    if (_model == NULL) {
-      _model = new ModelGLFeature(cam->getModelMatrix44D());
-      _glState->addGLFeature(_model, true);
-    } else{
-      _model->setMatrix(cam->getModelMatrix44D());
-    }
+     if (_model == NULL) {
+     _model = new ModelGLFeature(cam->getModelMatrix44D());
+     _glState->addGLFeature(_model, true);
+     } else{
+     _model->setMatrix(cam->getModelMatrix44D());
+     }
      */
   
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);

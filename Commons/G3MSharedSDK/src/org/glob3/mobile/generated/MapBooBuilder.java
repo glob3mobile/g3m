@@ -33,7 +33,7 @@ public abstract class MapBooBuilder
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
-    final TileTessellator tessellator = new PlanetTileTessellator(true);
+    final TileTessellator tessellator = new PlanetTileTessellator(true, Sector.fullSphere());
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;

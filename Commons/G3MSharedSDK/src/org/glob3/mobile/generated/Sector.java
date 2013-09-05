@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class GEORasterSymbol;
 //class ICanvas;
 //class GEORasterProjection;
 
@@ -110,13 +111,21 @@ public class Sector
   {
     final Angle lowLat = Angle.max(_lower._latitude, that._lower._latitude);
     final Angle lowLon = Angle.max(_lower._longitude, that._lower._longitude);
-    final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
     final Angle upLat = Angle.min(_upper._latitude, that._upper._latitude);
     final Angle upLon = Angle.min(_upper._longitude, that._upper._longitude);
-    final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
-    return new Sector(low, up);
+    if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon))
+    {
+       ;
+  
+      final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
+      final Geodetic2D up = new Geodetic2D(upLat, upLon);
+  
+      return new Sector(low, up);
+    }
+  
+    return Sector.fromDegrees(0, 0, 0, 0); //invalid
   }
 
   public final Sector mergedWith(Sector that)
@@ -281,13 +290,13 @@ public class Sector
 
   public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
   {
-  //  const Camera* camera = rc->getCurrentCamera();
-  //  const Planet* planet = rc->getPlanet();
-  //
-  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
-  //
-  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+    //  const Camera* camera = rc->getCurrentCamera();
+    //  const Planet* planet = rc->getPlanet();
+    //
+    //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+    //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+    //
+    //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
   
     if (planet.isFlat())
        return false;
@@ -424,6 +433,61 @@ public class Sector
   public final double getAngularAreaInSquaredDegrees()
   {
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
+  }
+
+  public final GEORasterSymbol createGEOSymbol(Color c)
+  {
+  
+    java.util.ArrayList<Geodetic2D> line = new java.util.ArrayList<Geodetic2D>();
+  
+    line.add(new Geodetic2D(getSW()));
+    line.add(new Geodetic2D(getNW()));
+    line.add(new Geodetic2D(getNE()));
+    line.add(new Geodetic2D(getSE()));
+    line.add(new Geodetic2D(getSW()));
+  
+    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+  
+    float[] dashLengths = {};
+    int dashCount = 0;
+  
+    GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
+  
+  
+    return new GEORasterLineSymbol(line, ls);
+  
+  }
+
+  public final Geodetic2D getClosesInnerPoint(Geodetic2D g)
+  {
+    double lat = g._latitude._degrees;
+    double lon = g._longitude._degrees;
+  
+    if (lat > _upper._latitude.degrees())
+    {
+      lat = _upper._latitude.degrees();
+    }
+    else
+    {
+      if (lat < _lower._latitude.degrees())
+      {
+        lat = _lower._latitude.degrees();
+      }
+    }
+  
+    if (lon > _upper._longitude.degrees())
+    {
+      lon = _upper._longitude.degrees();
+    }
+    else
+    {
+      if (lon < _lower._longitude.degrees())
+      {
+        lon = _lower._longitude.degrees();
+      }
+    }
+  
+    return Geodetic2D.fromDegrees(lat, lon);
   }
 
 

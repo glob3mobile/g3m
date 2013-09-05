@@ -201,7 +201,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    return new PlanetTileTessellator(true);
+    return new PlanetTileTessellator(true, getRenderedSector());
   }
 
   private ElevationDataProvider getElevationDataProvider()

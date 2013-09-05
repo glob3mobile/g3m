@@ -290,9 +290,11 @@ public class TileTextureBuilder extends RCObject
       {
         if (composeAndUploadTexture())
         {
+           //If the image could be properly turn into texture
           _tile.setTextureSolved(true);
         }
       }
+
     }
   }
 

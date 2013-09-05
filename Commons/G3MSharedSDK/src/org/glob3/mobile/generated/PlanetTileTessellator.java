@@ -17,33 +17,57 @@ package org.glob3.mobile.generated;
 
 
 
-//class Sector;
 //class IShortBuffer;
+//class Sector;
 
 public class PlanetTileTessellator extends TileTessellator
 {
   private final boolean _skirted;
+  private final Sector _renderedSector ;
 
   private java.util.HashMap<Vector2I, IShortBuffer> _indicesMap = new java.util.HashMap<Vector2I, IShortBuffer>();
 
-  private Vector2I calculateResolution(Vector2I rawResolution, Sector sector)
+  private Vector2I calculateResolution(Vector2I resolution, Tile tile, Sector renderedSector)
   {
-    return rawResolution;
+    Sector sector = tile.getSector();
   
-  //  /* testing for dynamic latitude-resolution */
-  //  const double cos = sector._center._latitude.cosinus();
-  //
-  //  int resolutionY = (int) (rawResolution._y * cos);
-  //  if (resolutionY < 8) {
-  //    resolutionY = 8;
-  //  }
-  //
-  //  int resolutionX = (int) (rawResolution._x * cos);
-  //  if (resolutionX < 8) {
-  //    resolutionX = 8;
-  //  }
-  //
-  //  return Vector2I(resolutionX, resolutionY);
+    final double latRatio = sector.getDeltaLatitude()._degrees / renderedSector.getDeltaLatitude()._degrees;
+    final double lonRatio = sector.getDeltaLongitude()._degrees / renderedSector.getDeltaLongitude()._degrees;
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    int resX = (int) mu.ceil((resolution._x / lonRatio));
+    if (resX < 2)
+    {
+      resX = 2;
+    }
+  
+    int resY = (int) mu.ceil((resolution._y / latRatio));
+    if (resY < 2)
+    {
+      resY = 2;
+    }
+  
+    final Vector2I meshRes = new Vector2I(resX, resY);
+    return meshRes;
+  
+  
+    //  return rawResolution;
+  
+    //  /* testing for dynamic latitude-resolution */
+    //  const double cos = sector._center._latitude.cosinus();
+    //
+    //  int resolutionY = (int) (rawResolution._y * cos);
+    //  if (resolutionY < 8) {
+    //    resolutionY = 8;
+    //  }
+    //
+    //  int resolutionX = (int) (rawResolution._x * cos);
+    //  if (resolutionX < 8) {
+    //    resolutionX = 8;
+    //  }
+    //
+    //  return Vector2I(resolutionX, resolutionY);
   }
 
   private IShortBuffer createTileIndices(Planet planet, Sector sector, Vector2I tileResolution)
@@ -109,8 +133,13 @@ public class PlanetTileTessellator extends TileTessellator
     return indices.create();
   }
 
-  private IShortBuffer getTileIndices(Planet planet, Sector sector, Vector2I tileResolution)
+  private IShortBuffer getTileIndices(Planet planet, Sector sector, Vector2I tileResolution, boolean reusableIndices)
   {
+    if (reusableIndices)
+    {
+      return createTileIndices(planet, sector, tileResolution);
+    }
+  
     IShortBuffer indices = _indicesMap.get(tileResolution);
     if (indices == null){
       indices = createTileIndices(planet, sector, tileResolution);
@@ -120,11 +149,54 @@ public class PlanetTileTessellator extends TileTessellator
   
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Geodetic3D getGeodeticOnPlanetSurface(IMathUtils mu, Planet planet, ElevationData elevationData, float verticalExaggeration, Geodetic2D g);
 
-  public PlanetTileTessellator(boolean skirted)
+  private boolean needsEastSkirt(Sector tileSector)
+  {
+    return _renderedSector.upperLongitude().greaterThan(tileSector.upperLongitude());
+  }
+
+  private boolean needsNorthSkirt(Sector tileSector)
+  {
+    return _renderedSector.upperLatitude().greaterThan(tileSector.upperLatitude());
+  }
+
+  private boolean needsWestSkirt(Sector tileSector)
+  {
+    return _renderedSector.lowerLongitude().lowerThan(tileSector.lowerLongitude());
+  }
+
+  private boolean needsSouthSkirt(Sector tileSector)
+  {
+    return _renderedSector.lowerLatitude().lowerThan(tileSector.lowerLatitude());
+  }
+
+  private Sector getRenderedSectorForTile(Tile tile)
+  {
+    return tile.getSector().intersection(_renderedSector);
+  }
+
+  private double getHeight(Geodetic2D g, ElevationData elevationData, double verticalExaggeration)
+  {
+    if (elevationData == null)
+    {
+      return 0;
+    }
+    final double h = elevationData.getElevationAt(g);
+    if (IMathUtils.instance().isNan(h))
+    {
+      return 0;
+    }
+  
+    return h;
+  }
+
+
+  public PlanetTileTessellator(boolean skirted, Sector sector)
   {
      _skirted = skirted;
-
+     _renderedSector = new Sector(sector);
   }
 
   public void dispose()
@@ -142,21 +214,20 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)
   {
-    return calculateResolution(rawResolution, tile.getSector());
+    Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
+    return calculateResolution(rawResolution, tile, sector);
   }
 
 
   public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
   {
   
-    final Sector sector = tile.getSector();
-    final Vector2I tileResolution = calculateResolution(rawResolution, sector);
+    final Sector tileSector = tile.getSector();
+    final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+    final Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
   
     double minElevation = 0;
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-  //                                          planet,
-  //                                          sector._center);
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, meshSector._center);
   
     final IMathUtils mu = IMathUtils.instance();
   
@@ -168,7 +239,7 @@ public class PlanetTileTessellator extends TileTessellator
       {
         final double u = (double) i / (tileResolution._x - 1);
   
-        final Geodetic2D position = sector.getInnerPoint(u, v);
+        final Geodetic2D position = meshSector.getInnerPoint(u, v);
   
         double elevation = 0;
   
@@ -187,7 +258,6 @@ public class PlanetTileTessellator extends TileTessellator
             }
           }
         }
-  
         vertices.add(position, elevation);
       }
     }
@@ -196,54 +266,88 @@ public class PlanetTileTessellator extends TileTessellator
     if (_skirted)
     {
       // compute skirt height
-      final Vector3D sw = planet.toCartesian(sector.getSW());
-      final Vector3D nw = planet.toCartesian(sector.getNW());
+      final Vector3D sw = planet.toCartesian(meshSector.getSW());
+      final Vector3D nw = planet.toCartesian(meshSector.getNW());
       final double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
   
       // east side
+      boolean hasSkirt = needsEastSkirt(tileSector);
       for (int j = tileResolution._y-1; j > 0; j--)
       {
-        vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)), skirtHeight);
+  
+        final double x = 1;
+        final double y = (double)j/(tileResolution._y-1);
+        final Geodetic2D g = meshSector.getInnerPoint(x, y);
+  
+        double h = skirtHeight;
+        if (!hasSkirt)
+        {
+          h = getHeight(g, elevationData, verticalExaggeration);
+        }
+  
+        vertices.add(g, h);
       }
   
       // north side
+      hasSkirt = needsNorthSkirt(tileSector);
       for (int i = tileResolution._x-1; i > 0; i--)
       {
-        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0), skirtHeight);
+        final double x = (double)i/(tileResolution._x-1);
+        final double y = 0;
+        final Geodetic2D g = meshSector.getInnerPoint(x, y);
+  
+        double h = skirtHeight;
+        if (!hasSkirt)
+        {
+          h = getHeight(g, elevationData, verticalExaggeration);
+        }
+  
+        vertices.add(g, h);
       }
   
       // west side
+      hasSkirt = needsWestSkirt(tileSector);
       for (int j = 0; j < tileResolution._y-1; j++)
       {
-        vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)), skirtHeight);
+        final double x = 0;
+        final double y = (double)j/(tileResolution._y-1);
+        final Geodetic2D g = meshSector.getInnerPoint(x, y);
+  
+        double h = skirtHeight;
+        if (!hasSkirt)
+        {
+          h = getHeight(g, elevationData, verticalExaggeration);
+        }
+  
+        vertices.add(g, h);
       }
   
       // south side
+      hasSkirt = needsSouthSkirt(tileSector);
       for (int i = 0; i < tileResolution._x-1; i++)
       {
-        vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1), skirtHeight);
+        final double x = (double)i/(tileResolution._x-1);
+        final double y = 1;
+        final Geodetic2D g = meshSector.getInnerPoint(x, y);
+  
+        double h = skirtHeight;
+        if (!hasSkirt)
+        {
+          h = getHeight(g, elevationData, verticalExaggeration);
+        }
+  
+        vertices.add(g, h);
       }
     }
   
-  //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
+    final boolean reusableMeshIndex = _renderedSector.fullContains(meshSector);
   
-  //  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
-  //                         GLPrimitive::triangleStrip(),
-  //                         //GLPrimitive::lineStrip(),
-  //                         true,
-  //                         vertices.getCenter(),
-  //                         vertices.create(),
-  //                         indices.create(),
-  //                         1,
-  //                         1,
-  //                         color);
-  
-    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, getTileIndices(planet, sector, tileResolution), false, 1, 1);
+    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, getTileIndices(planet, meshSector, tileResolution, reusableMeshIndex), !reusableMeshIndex, 1, 1);
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
   {
-    final Sector sector = tile.getSector();
+    final Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
   
     final int resolutionXMinus1 = rawResolution._x - 1;
     final int resolutionYMinus1 = rawResolution._y - 1;
@@ -254,12 +358,7 @@ public class PlanetTileTessellator extends TileTessellator
     final Vector3D nw = planet.toCartesian(sector.getNW());
     final double offset = nw.sub(sw).length() * 1e-3;
   
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-  //                                          planet,
-  //                                          sector._center);
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
-  
-  
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     // west side
@@ -303,39 +402,42 @@ public class PlanetTileTessellator extends TileTessellator
   public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile, boolean mercator)
   {
   
-    final Vector2I tileResolution = calculateResolution(rawResolution, tile.getSector());
+    final Sector tileSector = tile.getSector();
+    final Sector meshSector = getRenderedSectorForTile(tile);
+    final Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
   
     float[] u = new float[tileResolution._x * tileResolution._y];
     float[] v = new float[tileResolution._x * tileResolution._y];
   
-    final Sector sector = tile.getSector();
-  
-    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
-    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(meshSector._lower._latitude);
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(meshSector._upper._latitude);
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
-    for (int j = 0; j < tileResolution._y; j++)
-    {
-      for (int i = 0; i < tileResolution._x; i++)
+      for (int j = 0; j < tileResolution._y; j++)
       {
-        final int pos = j *tileResolution._x + i;
   
-        u[pos] = (float) i / (tileResolution._x-1);
+        double linearV = (float) j / (tileResolution._y-1);
   
-        final double linearV = (double) j / (tileResolution._y-1);
         if (mercator)
         {
-          final Angle latitude = sector.getInnerPointLatitude(linearV);
+          final Angle latitude = meshSector.getInnerPointLatitude(linearV);
           final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
           final double mercatorLocalV = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-          v[pos] = (float) mercatorLocalV;
+          linearV = mercatorLocalV;
         }
-        else
+  
+        for (int i = 0; i < tileResolution._x; i++)
         {
-          v[pos] = (float) linearV;
+          final int pos = j *tileResolution._x + i;
+  
+          final double linearU = (float) i / (tileResolution._x-1);
+          Geodetic2D g = meshSector.getInnerPoint(linearU, linearV);
+  
+          Vector2D uv = tileSector.getUVCoordinates(g);
+          u[pos] = (float)uv._x;
+          v[pos] = (float)uv._y;
         }
       }
-    }
   
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
@@ -384,7 +486,6 @@ public class PlanetTileTessellator extends TileTessellator
     u = null;
     v = null;
   
-    //  return textCoords.create();
     return textCoords.create();
   }
 
