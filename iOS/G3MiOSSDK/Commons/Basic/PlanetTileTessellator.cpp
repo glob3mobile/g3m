@@ -77,13 +77,19 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   const double latRatio = sector.getDeltaLatitude()._degrees / renderedSector.getDeltaLatitude()._degrees;
   const double lonRatio = sector.getDeltaLongitude()._degrees / renderedSector.getDeltaLongitude()._degrees;
 
+  const IMathUtils* mu = IMathUtils::instance();
 
+  int resX = (int) mu->ceil((resolution._x / lonRatio));
+  if (resX < 2){
+    resX = 2;
+  }
 
-  const Vector2I meshRes = Vector2I((int)(resolution._x / lonRatio) + 2,
-                                    (int)(resolution._y / latRatio) + 2);
+  int resY = (int) mu->ceil((resolution._y / latRatio) );
+  if (resY < 2){
+    resY = 2;
+  }
 
-//  return Vector2I(4,4);
-
+  const Vector2I meshRes = Vector2I(resX, resY);
   return meshRes;
 
 
@@ -163,13 +169,13 @@ IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
 
 IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
                                                     const Sector& sector,
-                                                    const Vector2I& tileResolution) const{
-
+                                                    const Vector2I& tileResolution,
+                                                    bool reusableIndices) const{
+  if (reusableIndices){
+    return createTileIndices(planet, sector, tileResolution);
+  }
   
-
-  return createTileIndices(planet, sector, tileResolution);
-  
-#ifdef C_CODE
+#ifdef C_CODEb
   std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
   if (it != _indicesMap.end()){
     return it->second;
@@ -199,14 +205,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             bool mercator,
                                             bool renderDebug) const {
 
-  const Sector sector = getRenderedSectorForTile(tile);// tile->getSector();
-  const Vector2I tileResolution = calculateResolution(rawResolution, tile, sector);
+  const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
+  const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
 
   double minElevation = 0;
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-  //                                          planet,
-  //                                          sector._center);
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
 
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -216,7 +219,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     for (int i = 0; i < tileResolution._x; i++) {
       const double u = (double) i / (tileResolution._x - 1);
 
-      const Geodetic2D position = sector.getInnerPoint(u, v);
+      const Geodetic2D position = meshSector.getInnerPoint(u, v);
 
       double elevation = 0;
 
@@ -232,9 +235,6 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
           }
         }
       }
-
-//      printf("V: %s\n", position.description().c_str()  );
-
       vertices.add( position, elevation );
     }
   }
@@ -242,52 +242,49 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   // create skirts
   if (_skirted) {
     // compute skirt height
-    const Vector3D sw = planet->toCartesian(sector.getSW());
-    const Vector3D nw = planet->toCartesian(sector.getNW());
+    const Vector3D sw = planet->toCartesian(meshSector.getSW());
+    const Vector3D nw = planet->toCartesian(meshSector.getNW());
     const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     // east side
+    bool hasSkirt = needsEastSkirt(tile->getSector());
     for (int j = tileResolution._y-1; j > 0; j--) {
-      vertices.add(sector.getInnerPoint(1, (double)j/(tileResolution._y-1)),
-                   skirtHeight);
+
+      const double x = 1;
+      const double y = (double)j/(tileResolution._y-1);
+      double h = skirtHeight;
+      if (!hasSkirt){
+        
+      }
+
+      vertices.add(meshSector.getInnerPoint(x, y), h);
     }
 
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
-      vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 0),
+      vertices.add(meshSector.getInnerPoint((double)i/(tileResolution._x-1), 0),
                    skirtHeight);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
-      vertices.add(sector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
+      vertices.add(meshSector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
                    skirtHeight);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
-      vertices.add(sector.getInnerPoint((double)i/(tileResolution._x-1), 1),
+      vertices.add(meshSector.getInnerPoint((double)i/(tileResolution._x-1), 1),
                    skirtHeight);
     }
   }
 
-  //  Color* color = Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0);
-
-  //  return new IndexedMesh(//renderDebug ? GLPrimitive::lineStrip() : GLPrimitive::triangleStrip(),
-  //                         GLPrimitive::triangleStrip(),
-  //                         //GLPrimitive::lineStrip(),
-  //                         true,
-  //                         vertices.getCenter(),
-  //                         vertices.create(),
-  //                         indices.create(),
-  //                         1,
-  //                         1,
-  //                         color);
+  const bool reusableMeshIndex = _renderedSector.fullContains(meshSector);
 
   return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                  vertices.getCenter(),
                                  vertices.create(), true,
-                                 getTileIndices(planet, sector, tileResolution), false,
+                                 getTileIndices(planet, meshSector, tileResolution, reusableMeshIndex), !reusableMeshIndex,
                                  1,
                                  1);
 }
@@ -324,36 +321,6 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
-//  printf("RES: %s\n", tileResolution.description().c_str()  );
-
-//  if (sector.isEqualsTo(tile->getSector())){
-//
-//    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
-//    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
-//    const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-//
-//    for (int j = 0; j < tileResolution._y; j++) {
-//      for (int i = 0; i < tileResolution._x; i++) {
-//        const int pos = j*tileResolution._x + i;
-//
-//        u[pos] = (float) i / (tileResolution._x-1);
-//
-//        const double linearV = (double) j / (tileResolution._y-1);
-//        if (mercator) {
-//          const Angle latitude = sector.getInnerPointLatitude(linearV);
-//          const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-//          const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-//          v[pos] = (float) mercatorLocalV;
-//        }
-//        else {
-//          v[pos] = (float) linearV;
-//        }
-//      }
-//    }
-//
-//  } else{
-//
-
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
@@ -375,47 +342,11 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
         const double linearU = (float) i / (tileResolution._x-1);
         Geodetic2D g = sector.getInnerPoint(linearU,linearV);
 
-//        if (!tileSector.contains(g)){
-//          int a = 0;a++;
-//        }
-
         Vector2D uv = tileSector.getUVCoordinates(g);
         u[pos] = (float)uv._x;
         v[pos] = (float)uv._y;
-
-
-//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
       }
     }
-
-//  printf("---------------------------------------");
-
-//    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
-//    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
-//    const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-//
-//    for (int j = 0; j < tileResolution._y; j++) {
-//      for (int i = 0; i < tileResolution._x; i++) {
-//        const int pos = j*tileResolution._x + i;
-//
-//        u[pos] = (float) i / (tileResolution._x-1);
-//
-//        const double linearV = (double) j / (tileResolution._y-1);
-//        if (mercator) {
-//          const Angle latitude = sector.getInnerPointLatitude(linearV);
-//          const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-//          const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-//          v[pos] = (float) mercatorLocalV;
-//        }
-//        else {
-//          v[pos] = (float) linearV;
-//        }
-//
-//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]);
-//      }
-//    }
-
-//  }
 
   FloatBufferBuilderFromCartesian2D textCoords;
 
@@ -457,7 +388,6 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   delete[] u;
   delete[] v;
 
-  //  return textCoords.create();
   return textCoords.create();
 }
 
@@ -476,12 +406,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
 
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-  //                                          planet,
-  //                                          sector._center);
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
-
-
   ShortBufferBuilder indices;
 
   // west side
