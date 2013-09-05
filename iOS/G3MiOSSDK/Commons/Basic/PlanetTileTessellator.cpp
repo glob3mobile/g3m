@@ -319,7 +319,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
-  printf("RES: %s", tileResolution.description().c_str()  );
+  printf("RES: %s\n", tileResolution.description().c_str()  );
 
 //  if (sector.isEqualsTo(tile->getSector())){
 //
@@ -370,7 +370,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
         v[pos] = (float)uv._y;
 
 
-//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
+        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
       }
     }
 
