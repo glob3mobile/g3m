@@ -15,6 +15,10 @@
 
 class IShortBuffer;
 class Sector;
+class FloatBufferBuilderFromGeodetic;
+class ShortBufferBuilder;
+class FloatBufferBuilderFromCartesian2D;
+
 
 class PlanetTileTessellator : public TileTessellator {
 private:
@@ -71,6 +75,15 @@ private:
   Sector getRenderedSectorForTile(const Tile* tile) const;
 
   double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
+
+  void createSurface(const Sector& meshSector,
+                     const Vector2I& meshResolution,
+                     const ElevationData* elevationData,
+                     float verticalExaggeration,
+                     bool mercator,
+                     FloatBufferBuilderFromGeodetic& vertices,
+                     ShortBufferBuilder& indices,
+                     FloatBufferBuilderFromCartesian2D& textCoords) const;
 
 public:
 

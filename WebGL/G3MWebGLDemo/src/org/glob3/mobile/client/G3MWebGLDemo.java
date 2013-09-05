@@ -866,6 +866,9 @@ public class G3MWebGLDemo
          final SceneLighting lighting = new DefaultSceneLighting();
 
          final ICameraActivityListener cameraActivityListener = null;
+         
+         Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
+         
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -882,7 +885,9 @@ public class G3MWebGLDemo
                   initializationTask, //
                   autoDeleteInitializationTask, //
                   periodicalTasks, //
-                  userData, lighting);
+                  userData, 
+                  lighting,
+                  initialCameraPosition);
       }
    }
 

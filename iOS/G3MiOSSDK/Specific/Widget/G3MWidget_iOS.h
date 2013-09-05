@@ -82,7 +82,8 @@ enum GL_version {
           initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-                    userData: (WidgetUserData*) userData;
+                    userData: (WidgetUserData*) userData
+       initialCameraPosition: (Geodetic3D) initialCameraPosition;
 
 - (GL*)getGL;
 

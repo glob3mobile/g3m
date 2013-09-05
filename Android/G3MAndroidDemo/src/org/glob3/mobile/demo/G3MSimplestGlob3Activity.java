@@ -36,6 +36,7 @@ import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
 import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraActivityListener;
@@ -460,7 +461,9 @@ public class G3MSimplestGlob3Activity
       final WidgetUserData userData = null;
       
       SceneLighting lighting = new DefaultSceneLighting();
-
+     
+      Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
+      
       _widgetAndroid.initWidget(//
                storage, // 
                downloader, //
@@ -478,7 +481,8 @@ public class G3MSimplestGlob3Activity
                autoDeleteInitializationTask, //
                periodicalTasks, //
                userData,
-               lighting);
+               lighting,
+               initialCameraPosition);
 
       setContentView(_widgetAndroid);
 

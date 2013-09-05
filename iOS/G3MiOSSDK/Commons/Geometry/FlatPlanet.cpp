@@ -291,12 +291,8 @@ void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
   double maxDist = _size.length() * 1.5;
 
   if (pos.distanceTo(origin) > maxDist){
-    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-
-//     Vector3D prevPos = previousCamera->getCartesianPosition();
-//    if (prevPos.distanceTo(origin) <= maxDist){
+//    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
       nextCamera->copyFrom(*previousCamera);
-//    }
   }
 
 

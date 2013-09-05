@@ -128,35 +128,34 @@ IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
     indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
   }
 
-
   // create skirts
   if (_skirted) {
 
-    int posS = tileResolution._x * tileResolution._y;
-    indices.add((short) (posS-1));
+    int skirtIndexCursor = tileResolution._x * tileResolution._y;
+    indices.add((short) (skirtIndexCursor-1));
 
     // east side
     for (int j = tileResolution._y-1; j > 0; j--) {
       indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
-      indices.add((short) posS++);
+      indices.add((short) skirtIndexCursor++);
     }
 
     // north side
     for (int i = tileResolution._x-1; i > 0; i--) {
       indices.add((short) i);
-      indices.add((short) posS++);
+      indices.add((short) skirtIndexCursor++);
     }
 
     // west side
     for (int j = 0; j < tileResolution._y-1; j++) {
       indices.add((short) (j*tileResolution._x));
-      indices.add((short) posS++);
+      indices.add((short) skirtIndexCursor++);
     }
 
     // south side
     for (int i = 0; i < tileResolution._x-1; i++) {
       indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
-      indices.add((short) posS++);
+      indices.add((short) skirtIndexCursor++);
     }
 
     // last triangle
@@ -174,7 +173,7 @@ IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
   if (reusableIndices){
     return createTileIndices(planet, sector, tileResolution);
   }
-  
+
 #ifdef C_CODE
   std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
   if (it != _indicesMap.end()){
@@ -354,29 +353,29 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-  
-    for (int j = 0; j < tileResolution._y; j++) {
 
-      double linearV = (float) j / (tileResolution._y-1);
+  for (int j = 0; j < tileResolution._y; j++) {
 
-      if (mercator){
-        const Angle latitude = meshSector.getInnerPointLatitude(linearV);
-        const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-        const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-        linearV = mercatorLocalV;
-      }
+    double linearV = (float) j / (tileResolution._y-1);
 
-      for (int i = 0; i < tileResolution._x; i++) {
-        const int pos = j*tileResolution._x + i;
-
-        const double linearU = (float) i / (tileResolution._x-1);
-        Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
-
-        Vector2D uv = tileSector.getUVCoordinates(g);
-        u[pos] = (float)uv._x;
-        v[pos] = (float)uv._y;
-      }
+    if (mercator){
+      const Angle latitude = meshSector.getInnerPointLatitude(linearV);
+      const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+      const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+      linearV = mercatorLocalV;
     }
+
+    for (int i = 0; i < tileResolution._x; i++) {
+      const int pos = j*tileResolution._x + i;
+
+      const double linearU = (float) i / (tileResolution._x-1);
+      Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
+
+      Vector2D uv = tileSector.getUVCoordinates(g);
+      u[pos] = (float)uv._x;
+      v[pos] = (float)uv._y;
+    }
+  }
 
   FloatBufferBuilderFromCartesian2D textCoords;
 
@@ -496,4 +495,15 @@ double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData
   }
 
   return h;
+}
+
+void PlanetTileTessellator::createSurface(const Sector& meshSector,
+                                          const Vector2I& meshResolution,
+                                          const ElevationData* elevationData,
+                                          float verticalExaggeration,
+                                          bool mercator,
+                                          FloatBufferBuilderFromGeodetic& vertices,
+                                          ShortBufferBuilder& indices,
+                                          FloatBufferBuilderFromCartesian2D& textCoords) const{
+  
 }

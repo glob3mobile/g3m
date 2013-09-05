@@ -415,7 +415,8 @@ public final class G3MWidget_WebGL
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
-                          final SceneLighting sceneLighting) {
+                          final SceneLighting sceneLighting,
+                          final Geodetic3D initialCameraPosition) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -434,7 +435,10 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager(), sceneLighting);
+               periodicalTasks, 
+               createGPUProgramManager(),
+               sceneLighting,
+               initialCameraPosition);
 
       _g3mWidget.setUserData(userData);
 

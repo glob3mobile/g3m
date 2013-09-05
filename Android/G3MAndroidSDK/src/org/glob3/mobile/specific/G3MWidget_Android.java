@@ -420,7 +420,8 @@ public final class G3MWidget_Android
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
-                          final SceneLighting sceneLighting) {
+                          final SceneLighting sceneLighting,
+                          final Geodetic3D initialCameraPosition) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -440,7 +441,8 @@ public final class G3MWidget_Android
                autoDeleteInitializationTask, //
                periodicalTasks, 
                createGPUProgramManager(), 
-               sceneLighting);
+               sceneLighting,
+               initialCameraPosition);
 
       _g3mWidget.setUserData(userData);
    }

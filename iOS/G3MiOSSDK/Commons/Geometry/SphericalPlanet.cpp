@@ -507,15 +507,9 @@ void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
   double maxDist = _sphere.getRadius() * 5;
 
   if (pos.distanceTo(origin) > maxDist){
-    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-
-    //     Vector3D prevPos = previousCamera->getCartesianPosition();
-    //    if (prevPos.distanceTo(origin) <= maxDist){
     nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-    //    }
-
-    Vector3D pos2 = nextCamera->getCartesianPosition();
-    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+//    Vector3D pos2 = nextCamera->getCartesianPosition();
+//    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
   }
   
 }

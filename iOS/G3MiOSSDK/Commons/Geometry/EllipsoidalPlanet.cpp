@@ -592,15 +592,9 @@ void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
   double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
 
   if (pos.distanceTo(origin) > maxDist){
-    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-
-    //     Vector3D prevPos = previousCamera->getCartesianPosition();
-    //    if (prevPos.distanceTo(origin) <= maxDist){
     nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-    //    }
-
-    Vector3D pos2 = nextCamera->getCartesianPosition();
-    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+//    Vector3D pos2 = nextCamera->getCartesianPosition();
+//    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
   }
 
 }

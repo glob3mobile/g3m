@@ -61,14 +61,12 @@
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
+       initialCameraPosition: (Geodetic3D) initialCameraPosition;
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
   SceneLighting* sceneLighting = new DefaultSceneLighting();
-
-  int TODO_VIEWPORT;
-  Geodetic3D initialPos = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -88,7 +86,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   periodicalTasks,
                                   gpuProgramManager,//GPUProgramManager
                                   sceneLighting,    //Scene Lighting
-                                  initialPos);   
+                                  initialCameraPosition);   
     [self widget]->setUserData(userData);
 }
 
