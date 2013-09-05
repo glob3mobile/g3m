@@ -233,7 +233,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
         }
       }
 
-      printf("V: %s\n", position.description().c_str()  );
+//      printf("V: %s\n", position.description().c_str()  );
 
       vertices.add( position, elevation );
     }
@@ -324,7 +324,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   float* u = new float[tileResolution._x * tileResolution._y];
   float* v = new float[tileResolution._x * tileResolution._y];
 
-  printf("RES: %s\n", tileResolution.description().c_str()  );
+//  printf("RES: %s\n", tileResolution.description().c_str()  );
 
 //  if (sector.isEqualsTo(tile->getSector())){
 //
@@ -353,18 +353,26 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 //
 //  } else{
 //
+
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
+  const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+  
     for (int j = 0; j < tileResolution._y; j++) {
 
-      const double linearV = (float) j / (tileResolution._y-1);
+      double linearV = (float) j / (tileResolution._y-1);
+
+      if (mercator){
+        const Angle latitude = sector.getInnerPointLatitude(linearV);
+        const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+        const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+        linearV = mercatorLocalV;
+      }
+
       for (int i = 0; i < tileResolution._x; i++) {
         const int pos = j*tileResolution._x + i;
 
         const double linearU = (float) i / (tileResolution._x-1);
-
-        if (mercator){
-          
-        }
-        
         Geodetic2D g = sector.getInnerPoint(linearU,linearV);
 
 //        if (!tileSector.contains(g)){
@@ -372,10 +380,6 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 //        }
 
         Vector2D uv = tileSector.getUVCoordinates(g);
-        if (mercator){
-          //TODO....
-        }
-
         u[pos] = (float)uv._x;
         v[pos] = (float)uv._y;
 
