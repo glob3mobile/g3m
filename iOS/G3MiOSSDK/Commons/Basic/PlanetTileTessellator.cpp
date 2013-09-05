@@ -164,6 +164,11 @@ IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
 IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
                                                     const Sector& sector,
                                                     const Vector2I& tileResolution) const{
+
+  
+
+  return createTileIndices(planet, sector, tileResolution);
+  
 #ifdef C_CODE
   std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
   if (it != _indicesMap.end()){
@@ -349,17 +354,22 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 //  } else{
 //
     for (int j = 0; j < tileResolution._y; j++) {
+
+      const double linearV = (float) j / (tileResolution._y-1);
       for (int i = 0; i < tileResolution._x; i++) {
         const int pos = j*tileResolution._x + i;
 
-        const double meshSectorU = (double)i / tileResolution._x;
-        const double meshSectorV = (double)j / tileResolution._y;
-        
-        Geodetic2D g = sector.getInnerPoint(meshSectorU,meshSectorV);
+        const double linearU = (float) i / (tileResolution._x-1);
 
-        if (!tileSector.contains(g)){
-          int a = 0;a++;
+        if (mercator){
+          
         }
+        
+        Geodetic2D g = sector.getInnerPoint(linearU,linearV);
+
+//        if (!tileSector.contains(g)){
+//          int a = 0;a++;
+//        }
 
         Vector2D uv = tileSector.getUVCoordinates(g);
         if (mercator){
@@ -370,7 +380,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
         v[pos] = (float)uv._y;
 
 
-        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
+//        printf("UV: %d -> %f, %f\n", pos, u[pos], v[pos]  );
       }
     }
 
