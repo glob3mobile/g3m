@@ -205,6 +205,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             bool mercator,
                                             bool renderDebug) const {
 
+  const Sector tileSector = tile->getSector();
   const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
   const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
 
@@ -247,7 +248,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     // east side
-    bool hasSkirt = needsEastSkirt(tile->getSector());
+    bool hasSkirt = needsEastSkirt(tileSector);
     for (int j = tileResolution._y-1; j > 0; j--) {
 
       const double x = 1;
@@ -256,32 +257,55 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
       double h = skirtHeight;
       if (!hasSkirt){
-        if (elevationData != NULL){
-          h = verticalExaggeration * elevationData->getElevationAt(g);
-        } else{
-          h = 0;
-        }
+        h = getHeight(g, elevationData, verticalExaggeration);
       }
 
       vertices.add(g, h);
     }
 
     // north side
+    hasSkirt = needsNorthSkirt(tileSector);
     for (int i = tileResolution._x-1; i > 0; i--) {
-      vertices.add(meshSector.getInnerPoint((double)i/(tileResolution._x-1), 0),
-                   skirtHeight);
+      const double x = (double)i/(tileResolution._x-1);
+      const double y = 0;
+      const Geodetic2D g = meshSector.getInnerPoint(x, y);
+
+      double h = skirtHeight;
+      if (!hasSkirt){
+        h = getHeight(g, elevationData, verticalExaggeration);
+      }
+
+      vertices.add(g, h);
     }
 
     // west side
+    hasSkirt = needsWestSkirt(tileSector);
     for (int j = 0; j < tileResolution._y-1; j++) {
-      vertices.add(meshSector.getInnerPoint(0, (double)j/(tileResolution._y-1)),
-                   skirtHeight);
+      const double x = 0;
+      const double y = (double)j/(tileResolution._y-1);
+      const Geodetic2D g = meshSector.getInnerPoint(x, y);
+
+      double h = skirtHeight;
+      if (!hasSkirt){
+        h = getHeight(g, elevationData, verticalExaggeration);
+      }
+
+      vertices.add(g, h);
     }
 
     // south side
+    hasSkirt = needsSouthSkirt(tileSector);
     for (int i = 0; i < tileResolution._x-1; i++) {
-      vertices.add(meshSector.getInnerPoint((double)i/(tileResolution._x-1), 1),
-                   skirtHeight);
+      const double x = (double)i/(tileResolution._x-1);
+      const double y = 1;
+      const Geodetic2D g = meshSector.getInnerPoint(x, y);
+
+      double h = skirtHeight;
+      if (!hasSkirt){
+        h = getHeight(g, elevationData, verticalExaggeration);
+      }
+
+      vertices.add(g, h);
     }
   }
 
@@ -460,4 +484,16 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
   return tile->getSector().intersection(_renderedSector);
+}
+
+double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const{
+  if (elevationData == NULL){
+    return 0;
+  }
+  const double h = elevationData->getElevationAt(g);
+  if (IMathUtils::instance()->isNan(h)){
+    return 0;
+  }
+
+  return h;
 }

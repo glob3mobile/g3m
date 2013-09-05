@@ -56,7 +56,21 @@ private:
     return _renderedSector.upperLongitude().greaterThan(tileSector.upperLongitude());
   }
 
+  bool needsNorthSkirt(const Sector& tileSector) const{
+    return _renderedSector.upperLatitude().greaterThan(tileSector.upperLatitude());
+  }
+
+  bool needsWestSkirt(const Sector& tileSector) const{
+    return _renderedSector.lowerLongitude().lowerThan(tileSector.lowerLongitude());
+  }
+
+  bool needsSouthSkirt(const Sector& tileSector) const{
+    return _renderedSector.lowerLatitude().lowerThan(tileSector.lowerLatitude());
+  }
+
   Sector getRenderedSectorForTile(const Tile* tile) const;
+
+  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
 
 public:
 
