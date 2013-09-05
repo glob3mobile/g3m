@@ -250,7 +250,7 @@ public class Angle
     return (_degrees == 0);
   }
 
-  public final boolean isEqualsTo(Angle that)
+  public final boolean isEquals(Angle that)
   {
     final IMathUtils mu = IMathUtils.instance();
     return mu.isEquals(_degrees, that._degrees) || mu.isEquals(_radians, that._radians);

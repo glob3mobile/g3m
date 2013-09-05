@@ -13,6 +13,7 @@
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
+#include "LayerCondition.hpp"
 
 HereLayer::HereLayer(const std::string& appId,
                      const std::string& appCode,
@@ -34,7 +35,7 @@ Layer(condition,
                                      true)),
 _appId(appId),
 _appCode(appCode),
-_sector(Sector::fullSphere())
+_initialLevel(initialLevel)
 {
 
 }
@@ -49,16 +50,6 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->getSector();
-  if (!_sector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  const Sector sector = tileSector.intersection(_sector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
-
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   
@@ -160,4 +151,31 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
 
 const std::string HereLayer::description() const {
   return "[HereLayer]";
+}
+
+HereLayer* HereLayer::copy() const {
+  return new HereLayer(_appId,
+                       _appCode,
+                       TimeInterval::fromMilliseconds(_timeToCacheMS),
+                       _readExpired,
+                       _initialLevel,
+                       (_condition == NULL) ? NULL : _condition->copy());
+}
+
+bool HereLayer::rawIsEquals(const Layer* that) const {
+  HereLayer* t = (HereLayer*) that;
+  
+  if (_appId != t->_appId) {
+    return false;
+  }
+
+  if (_appCode != t->_appCode) {
+    return false;
+  }
+
+  if (_initialLevel != t->_initialLevel) {
+    return false;
+  }
+
+  return true;
 }

@@ -12,7 +12,7 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
   {
   }
 
-  public final boolean isEqualsTo(GPUAttributeValue v)
+  public final boolean isEquals(GPUAttributeValue v)
   {
     return (v.getEnabled() == false);
   }

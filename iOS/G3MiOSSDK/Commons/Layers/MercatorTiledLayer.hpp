@@ -12,19 +12,26 @@
 #include "Layer.hpp"
 
 class MercatorTiledLayer : public Layer {
-private:
+protected:
   const std::string _protocol;
   const std::string _domain;
 #ifdef C_CODE
   const std::vector<std::string> _subdomains;
 #endif
 #ifdef JAVA_CODE
-  private final java.util.ArrayList<String> _subdomains;
+  protected final java.util.ArrayList<String> _subdomains;
 #endif
   const std::string _imageFormat;
   
   const Sector _sector;
+  const int    _initialLevel;
+  const int    _maxLevel;
 
+  virtual std::string getLayerType() const{
+    return "MercatorTiled";
+  }
+
+  virtual bool rawIsEquals(const Layer* that) const;
 
 public:
   MercatorTiledLayer(const std::string&              name,
@@ -46,6 +53,9 @@ public:
                                                 const Tile* tile) const;
 
   virtual const std::string description() const;
+
+
+  virtual MercatorTiledLayer* copy() const;
 
 };
 

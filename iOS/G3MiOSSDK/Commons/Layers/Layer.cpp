@@ -69,3 +69,55 @@ void Layer::setParameters(const LayerTilesRenderParameters* parameters) {
     notifyChanges();
   }
 }
+
+bool Layer::isEquals(const Layer* that) const {
+  if (this == that) {
+    return true;
+  }
+
+  if (that == NULL) {
+    return false;
+  }
+
+  if (getLayerType() != that->getLayerType()) {
+    return false;
+  }
+
+  if (_condition != that->_condition) {
+    return false;
+  }
+
+  const int thisListenersSize = _listeners.size();
+  const int thatListenersSize = that->_listeners.size();
+  if (thisListenersSize != thatListenersSize) {
+    return false;
+  }
+
+  for (int i = 0; i < thisListenersSize; i++) {
+    if (_listeners[i] != that->_listeners[i]) {
+      return false;
+    }
+  }
+
+  if (_enable != that->_enable) {
+    return false;
+  }
+
+  if (!(_name == that->_name)) {
+    return false;
+  }
+
+  if (!_parameters->isEquals(that->_parameters)) {
+    return false;
+  }
+
+  if (_timeToCacheMS != that->_timeToCacheMS) {
+    return false;
+  }
+
+  if (_readExpired != that->_readExpired) {
+    return false;
+  }
+
+  return rawIsEquals(that);
+}

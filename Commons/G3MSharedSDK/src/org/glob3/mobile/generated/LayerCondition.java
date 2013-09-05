@@ -31,4 +31,6 @@ public abstract class LayerCondition
 
   public abstract boolean isAvailable(G3MEventContext ec, Tile tile);
 
+  public abstract LayerCondition copy();
+
 }

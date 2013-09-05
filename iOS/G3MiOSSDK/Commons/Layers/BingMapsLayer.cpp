@@ -21,6 +21,7 @@
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
+#include "LayerCondition.hpp"
 
 BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              const std::string& key,
@@ -36,7 +37,6 @@ Layer(condition,
 _imagerySet(imagerySet),
 _key(key),
 _initialLevel(initialLevel),
-_sector(Sector::fullSphere()),
 _isInitialized(false)
 {
 
@@ -251,17 +251,6 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                                              const Tile* tile) const {
   std::vector<Petition*> petitions;
 
-  const Sector tileSector = tile->getSector();
-  if (!_sector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  const Sector sector = tileSector.intersection(_sector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
-
   const IStringUtils* su = IStringUtils::instance();
   
   const int level   = tile->getLevel();
@@ -284,7 +273,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   path = su->replaceSubstring(path, "{quadkey}",   quadkey);
   path = su->replaceSubstring(path, "{culture}",   "en-US");
 
-  petitions.push_back( new Petition(tileSector,
+  petitions.push_back( new Petition(tile->getSector(),
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
@@ -295,4 +284,31 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
 
 const std::string BingMapsLayer::description() const {
   return "[BingMapsLayer]";
+}
+
+bool BingMapsLayer::rawIsEquals(const Layer* that) const {
+  BingMapsLayer* t = (BingMapsLayer*) that;
+
+  if (_imagerySet != t->_imagerySet) {
+    return false;
+  }
+
+  if (_key != t->_key) {
+    return false;
+  }
+
+  if (_initialLevel != t->_initialLevel) {
+    return false;
+  }
+
+  return true;
+}
+
+BingMapsLayer* BingMapsLayer::copy() const {
+  return new BingMapsLayer(_imagerySet,
+                           _key,
+                           TimeInterval::fromMilliseconds(_timeToCacheMS),
+                           _readExpired,
+                           _initialLevel,
+                           (_condition == NULL) ? NULL : _condition->copy());
 }

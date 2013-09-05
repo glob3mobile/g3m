@@ -455,7 +455,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     final Sector renderedSector = statistics.getRenderedSector();
     if (renderedSector != null)
     {
-      if ((_lastVisibleSector == null) || !renderedSector.isEqualsTo(_lastVisibleSector))
+      if ((_lastVisibleSector == null) || !renderedSector.isEquals(_lastVisibleSector))
       {
         if (_lastVisibleSector != null)
            _lastVisibleSector.dispose();

@@ -38,7 +38,7 @@ public:
 
   int getType() const { return _type;}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
-  virtual bool isEqualsTo(const GPUUniformValue* v) const = 0;
+  virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
   virtual std::string description() const = 0;
 };
@@ -106,7 +106,7 @@ public:
 
   void set(const GPUUniformValue* v) {
     if (_type == v->getType()) { //type checking
-      if (_value == NULL || !_value->isEqualsTo(v)) {
+      if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
         v->_retain();
         if (_value != NULL) {
@@ -138,7 +138,7 @@ public:
       gl->uniform1i(id, 0);
     }
   }
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
 
@@ -168,7 +168,7 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform2f(id, _x, _y);
   }
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
   }
@@ -201,7 +201,7 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform3f(id, _x, _y, _z);
   }
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
@@ -247,7 +247,7 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform4f(id, _x, _y, _z, _w);
   }
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
@@ -337,7 +337,7 @@ public:
     gl->uniformMatrix4fv(id, false, _lastModelSet);
   }
 
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()){
       return true;
     }
@@ -372,7 +372,7 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform1f(id, _value);
   }
-  bool isEqualsTo(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
   }

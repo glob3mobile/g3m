@@ -59,7 +59,7 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
     gl.uniformMatrix4fv(id, false, _lastModelSet);
   }
 
-  public final boolean isEqualsTo(GPUUniformValue v)
+  public final boolean isEquals(GPUUniformValue v)
   {
     if (_lastModelSet == ((GPUUniformValueMatrix4)v)._provider.getMatrix())
     {

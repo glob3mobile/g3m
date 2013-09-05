@@ -304,7 +304,7 @@ void CachedDownloader::initialize(const G3MContext* context,
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
-    if (_lastImageURL->isEqualsTo(url)) {
+    if (_lastImageURL->isEquals(url)) {
       // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
       return IImageResult(_lastImageResult->getImage()->shallowCopy(),
                           _lastImageResult->isExpired());

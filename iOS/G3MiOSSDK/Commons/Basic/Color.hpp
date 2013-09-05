@@ -154,7 +154,7 @@ public:
     return (_alpha < 0.01);
   }
 
-  bool isEqualsTo(const Color& that) const;
+  bool isEquals(const Color& that) const;
 
   Color wheelStep(int wheelSize,
                   int step) const;

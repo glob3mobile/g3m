@@ -282,21 +282,24 @@ public:
 
   void onAboutChanged(const G3MContext* context,
                       const std::string& about){}
+
+  virtual void onWebSocketOpen(const G3MContext* context){}
+
+  virtual void onWebSocketClose(const G3MContext* context){}
 };
 
 
 - (void) initWithMapBooBuilder
 {
   MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
-  const bool useWebSockets = true;
 
   const std::string applicationId = "2glgs5j2mq5i9nxx68q";
 
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
                                        URL("http://192.168.1.2:8080/web", false),
                                        URL("ws://192.168.1.2:8888/tube", false),
-                                       useWebSockets,
-                                       applicationId,
+                                       "",
+                                       VIEW_RUNTIME,
                                        applicationListener);
 
   //  MarksRenderer* marksRenderer = new MarksRenderer(false);

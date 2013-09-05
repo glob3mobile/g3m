@@ -95,6 +95,11 @@ public:
 
   ~LayerTilesRenderParameters() {
   }
+
+
+  bool isEquals(const LayerTilesRenderParameters* that) const;
+
+  LayerTilesRenderParameters* copy() const;
   
 };
 

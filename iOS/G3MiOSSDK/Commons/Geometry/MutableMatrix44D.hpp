@@ -195,7 +195,7 @@ public:
 
   void copyValue(const MutableMatrix44D &m);
 
-  bool isEqualsTo(const MutableMatrix44D& m) const{
+  bool isEquals(const MutableMatrix44D& m) const{
     return (
             (_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) &&
             (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) &&
@@ -217,7 +217,7 @@ public:
 
   bool isIdentity() const {
     static const MutableMatrix44D identity = MutableMatrix44D::identity();
-    return isEqualsTo(identity);
+    return isEquals(identity);
   }
 
   static MutableMatrix44D invalid() {

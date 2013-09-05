@@ -22,6 +22,14 @@ private:
     return result;
   }
 
+
+protected:
+  std::string getLayerType() const {
+    return "OSM";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
 public:
   OSMLayer(const TimeInterval& timeToCache,
            bool readExpired = true,
@@ -43,6 +51,8 @@ public:
   }
 
   const std::string description() const;
+
+  OSMLayer* copy() const;
 
 };
 

@@ -89,7 +89,7 @@ public class GPUUniform extends GPUVariable
   {
     if (_type == v.getType()) //type checking
     {
-      if (_value == null || !_value.isEqualsTo(v))
+      if (_value == null || !_value.isEquals(v))
       {
         _dirty = true;
         v._retain();

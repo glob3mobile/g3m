@@ -76,6 +76,7 @@ public:
     return s;
   }
   
+  bool isEquals(const Vector2I& that) const;
 };
 
 #endif

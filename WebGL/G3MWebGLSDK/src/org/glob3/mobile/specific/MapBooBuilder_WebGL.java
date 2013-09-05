@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.MapBooApplicationChangeListener;
 import org.glob3.mobile.generated.MapBooBuilder;
+import org.glob3.mobile.generated.MapBoo_ViewType;
 import org.glob3.mobile.generated.URL;
 
 
@@ -23,10 +24,10 @@ public class MapBooBuilder_WebGL
 
    public MapBooBuilder_WebGL(final URL serverURL,
                               final URL tubesURL,
-                              final boolean useWebSockets,
                               final String sceneId,
+                              final MapBoo_ViewType viewType,
                               final MapBooApplicationChangeListener applicationListener) {
-      super(serverURL, tubesURL, useWebSockets, sceneId, applicationListener);
+      super(serverURL, tubesURL, sceneId, viewType, applicationListener);
       _nativeWidget = new G3MWidget_WebGL();
    }
 
@@ -84,21 +85,17 @@ public class MapBooBuilder_WebGL
                Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
                Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", 
-    		  Shaders_WebGL._flatColorMeshVertexShader,
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
                Shaders_WebGL._flatColorMeshFragmentShader));
-      
-      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", 
-    		  Shaders_WebGL._noColorMeshVertexShader,
+
+      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
                Shaders_WebGL._noColorMeshFragmentShader));
-      
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
-				Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
-				Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
-      
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", 
-				Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
-				Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+
+      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
+               Shaders_WebGL._TexturedMesh_DirectionLightVertexShader, Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
+               Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
 
       return new GPUProgramManager(gpuProgramFactory);
    }

@@ -157,7 +157,7 @@ void TexturesHandler::retainGLTextureId(const IGLTextureId* glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
 
-    if (holder->_glTextureId->isEqualsTo(glTextureId)) {
+    if (holder->_glTextureId->isEquals(glTextureId)) {
       holder->retain();
 
       //showHolders("retainGLTextureId(): retained holder " + holder->description());
@@ -177,7 +177,7 @@ void TexturesHandler::releaseGLTextureId(const IGLTextureId* glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
 
-    if (holder->_glTextureId->isEqualsTo(glTextureId)) {
+    if (holder->_glTextureId->isEquals(glTextureId)) {
       holder->release();
 
       //showHolders("releaseGLTextureId(  ): released holder " + holder->description());

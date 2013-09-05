@@ -369,9 +369,9 @@ public class Sector
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }
 
-  public final boolean isEqualsTo(Sector that)
+  public final boolean isEquals(Sector that)
   {
-    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
+    return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
   }
 
   public final boolean touchesNorthPole()

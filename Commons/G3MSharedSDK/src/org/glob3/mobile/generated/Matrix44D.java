@@ -184,7 +184,7 @@ public class Matrix44D extends RCObject
     return _columnMajorFloatBuffer;
   }
 
-  public final boolean isEqualsTo(Matrix44D m)
+  public final boolean isEquals(Matrix44D m)
   {
     return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
   }

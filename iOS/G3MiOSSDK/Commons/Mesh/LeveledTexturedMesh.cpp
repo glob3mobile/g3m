@@ -35,7 +35,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (_texCoords != NULL) {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
+    if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
 
       state.addGLFeature(new TextureGLFeature(_glTextureId,
                                               _texCoords, 2, 0, false, 0,

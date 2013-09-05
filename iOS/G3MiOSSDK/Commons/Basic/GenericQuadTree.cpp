@@ -307,7 +307,7 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
       }
     } else{ //Element is associated to geodetic
       GenericQuadTree_Geodetic2DElement* e = (GenericQuadTree_Geodetic2DElement*) element;
-      if (geo.isEqualsTo(e->_geodetic)) {
+      if (geo.isEquals(e->_geodetic)) {
         const bool abort = visitor.visitElement(e->_geodetic, element->_element);
         if (abort) {
           return true;

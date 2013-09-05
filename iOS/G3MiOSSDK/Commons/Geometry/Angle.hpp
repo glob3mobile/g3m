@@ -192,7 +192,7 @@ public:
     return (_degrees == 0);
   }
 
-  bool isEqualsTo(const Angle& that) const {
+  bool isEquals(const Angle& that) const {
     const IMathUtils* mu = IMathUtils::instance();
     return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
   }

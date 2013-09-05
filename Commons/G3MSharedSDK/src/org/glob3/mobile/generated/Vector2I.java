@@ -82,4 +82,9 @@ public class Vector2I
     return new MutableVector2I(_x, _y);
   }
 
+  public final boolean isEquals(Vector2I that)
+  {
+    return ((_x == that._x) && (_y == that._y));
+  }
+
 }

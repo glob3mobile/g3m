@@ -47,9 +47,9 @@ public abstract class TMSLayer extends Layer
      _isTransparent = isTransparent;
   }
 
-
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, Vector2I tileTextureResolution)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
+  
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile.getSector();
@@ -83,6 +83,11 @@ public abstract class TMSLayer extends Layer
   {
     return URL.nullURL();
   
+  }
+
+  public final String description()
+  {
+    return "[TMSLayer]";
   }
 
 }

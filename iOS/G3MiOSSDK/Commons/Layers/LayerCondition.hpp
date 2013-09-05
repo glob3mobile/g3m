@@ -25,6 +25,8 @@ public:
   virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const = 0;
 
+  virtual LayerCondition* copy() const = 0;
+
 };
 
 #endif

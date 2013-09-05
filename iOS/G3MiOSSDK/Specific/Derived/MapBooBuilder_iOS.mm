@@ -14,12 +14,12 @@
 #include "GPUProgramManager.hpp"
 
 MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
-                                 const URL& serverURL,
-                                 const URL& tubesURL,
-                                 bool useWebSockets,
-                                 const std::string& applicationId,
-                                 MapBooApplicationChangeListener* applicationListener) :
-MapBooBuilder(serverURL, tubesURL, useWebSockets, applicationId, applicationListener),
+                                     const URL& serverURL,
+                                     const URL& tubesURL,
+                                     const std::string& applicationId,
+                                     MapBoo_ViewType viewType,
+                                     MapBooApplicationChangeListener* applicationListener) :
+MapBooBuilder(serverURL, tubesURL, applicationId, viewType, applicationListener),
 _nativeWidget(nativeWidget)
 {
   [_nativeWidget initSingletons];

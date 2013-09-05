@@ -412,7 +412,7 @@ public:
           const Sector intersectionSector = tileSector.intersection(imageSector);
 
           RectangleF* sourceRect = NULL;
-          if (!intersectionSector.isEqualsTo(imageSector)) {
+          if (!intersectionSector.isEquals(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
                                            imageSector,
                                            intersectionSector);
@@ -435,6 +435,9 @@ public:
           textureId += petition->getURL().getPath();
           textureId += "_";
         }
+        else{
+          return false;
+        }
       }
 
       if (images.size() > 0) {
@@ -456,11 +459,10 @@ public:
                                                  destRects,
                                                  textureId),
                              true);
-
         return true;
-      } else{
-        return false;
       }
+
+      return false;
 
 #ifdef JAVA_CODE
     }
@@ -510,12 +512,10 @@ public:
       _finalized = true;
 
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-
         if (composeAndUploadTexture()){
            //If the image could be properly turn into texture
           _tile->setTextureSolved(true);   
         }
-        
       }
       
     }

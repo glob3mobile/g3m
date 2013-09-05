@@ -24,3 +24,8 @@ bool LevelTileCondition::isAvailable(const G3MEventContext* ec,
   return ((level >= _minLevel) &&
           (level <= _maxLevel));
 }
+
+LayerCondition* LevelTileCondition::copy() const {
+  return new LevelTileCondition(_minLevel,
+                                _maxLevel);
+}

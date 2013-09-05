@@ -330,7 +330,7 @@ public class GenericQuadTree_Node
       else
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
-        if (geo.isEqualsTo(e._geodetic))
+        if (geo.isEquals(e._geodetic))
         {
           final boolean abort = visitor.visitElement(e._geodetic, element._element);
           if (abort)

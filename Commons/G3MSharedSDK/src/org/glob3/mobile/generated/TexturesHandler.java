@@ -99,7 +99,7 @@ public class TexturesHandler
     {
       TextureHolder holder = _textureHolders.get(i);
   
-      if (holder._glTextureId.isEqualsTo(glTextureId))
+      if (holder._glTextureId.isEquals(glTextureId))
       {
         holder.release();
   
@@ -131,7 +131,7 @@ public class TexturesHandler
     {
       TextureHolder holder = _textureHolders.get(i);
   
-      if (holder._glTextureId.isEqualsTo(glTextureId))
+      if (holder._glTextureId.isEquals(glTextureId))
       {
         holder.retain();
   

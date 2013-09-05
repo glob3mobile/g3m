@@ -26,7 +26,7 @@ class Vector2I;
 class LayerTilesRenderParameters;
 
 class Layer {
-private:
+protected:
   LayerCondition*                         _condition;
   std::vector<TerrainTouchEventListener*> _listeners;
 
@@ -36,7 +36,6 @@ private:
 
   const std::string _name;
 
-protected:
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
 #endif
@@ -66,6 +65,10 @@ protected:
   }
 
   void setParameters(const LayerTilesRenderParameters* parameters);
+
+  virtual std::string getLayerType() const = 0;
+
+  virtual bool rawIsEquals(const Layer* that) const = 0;
 
 public:
 
@@ -140,6 +143,10 @@ public:
   }
 
   virtual const std::string description() const = 0;
+
+  bool isEquals(const Layer* that) const;
+
+  virtual Layer* copy() const = 0;
   
 };
 

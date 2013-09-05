@@ -57,7 +57,7 @@ public class MutableVector2D
     return new MutableVector2D(mu.NanD(), mu.NanD());
   }
 
-  public final boolean isEqualsTo(double x, double y)
+  public final boolean isEquals(double x, double y)
   {
     return _x == x && _y == y;
   }

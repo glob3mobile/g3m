@@ -284,7 +284,7 @@ public class Color
     return (_alpha < 0.01);
   }
 
-  public final boolean isEqualsTo(Color that)
+  public final boolean isEquals(Color that)
   {
     return ((_red == that._red) && (_green == that._green) && (_blue == that._blue) && (_alpha == that._alpha));
   }

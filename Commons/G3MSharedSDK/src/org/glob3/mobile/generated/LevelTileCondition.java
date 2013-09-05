@@ -46,4 +46,9 @@ public class LevelTileCondition extends LayerCondition
     return ((level >= _minLevel) && (level <= _maxLevel));
   }
 
+  public final LayerCondition copy()
+  {
+    return new LevelTileCondition(_minLevel, _maxLevel);
+  }
+
 }

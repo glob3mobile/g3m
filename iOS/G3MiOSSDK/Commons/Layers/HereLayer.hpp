@@ -16,9 +16,16 @@
 
 class HereLayer : public Layer {
 private:
-  const Sector      _sector;
   const std::string _appId;
   const std::string _appCode;
+  const int         _initialLevel;
+
+protected:
+  std::string getLayerType() const{
+    return "Here";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 
@@ -36,6 +43,8 @@ public:
                         const Sector& sector) const;
 
   const std::string description() const;
+
+  HereLayer* copy() const;
 
 };
 

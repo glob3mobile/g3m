@@ -51,6 +51,14 @@ private:
   }
 
 
+protected:
+  std::string getLayerType() const {
+    return "MapQuest";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
+
+
 public:
 
   static MapQuestLayer* newOSM(const TimeInterval& timeToCache,
@@ -83,7 +91,9 @@ public:
   }
 
   const std::string description() const;
-  
+
+  MapQuestLayer* copy() const;
+
 };
 
 

@@ -77,7 +77,7 @@ public class LayerSet
         }
         else
         {
-          if (!topSector.isEqualsTo(layerParam._topSector))
+          if (!topSector.isEquals(layerParam._topSector))
           {
             ILogger.instance().logError("Inconsistency in Layer's Parameters: topSector");
             return null;
@@ -320,7 +320,7 @@ public class LayerSet
     _listener = listener;
   }
 
-  public final Layer get(int index)
+  public final Layer getLayer(int index)
   {
     if (index < _layers.size())
     {
@@ -354,5 +354,56 @@ public class LayerSet
   }
 
   //  const Angle calculateSplitLatitude(const Tile* tile) const;
+
+  public final boolean isEquals(LayerSet that)
+  {
+    if (that == null)
+    {
+      return false;
+    }
+  
+    final int thisSize = size();
+    final int thatSize = that.size();
+  
+    if (thisSize != thatSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisSize; i++)
+    {
+      Layer thisLayer = getLayer(i);
+      Layer thatLayer = that.getLayer(i);
+  
+      if (!thisLayer.isEquals(thatLayer))
+      {
+        return false;
+      }
+    }
+  
+    return true;
+  }
+
+  public final void takeLayersFrom(LayerSet that)
+  {
+    if (that == null)
+    {
+      return;
+    }
+  
+    java.util.ArrayList<Layer> thatLayers = new java.util.ArrayList<Layer>();
+    final int thatSize = that.size();
+    for (int i = 0; i < thatSize; i++)
+    {
+      thatLayers.add(that.getLayer(i));
+    }
+  
+    that.removeAllLayers(false);
+  
+    for (int i = 0; i < thatSize; i++)
+    {
+      addLayer(thatLayers.get(i));
+    }
+  }
 
 }
