@@ -111,7 +111,31 @@ private:
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
-  
+  void createWestSkirt(const Planet* planet,
+                        const Sector& tileSector,
+                        const Sector& meshSector,
+                        const Vector2I& meshResolution,
+                        const ElevationData* elevationData,
+                        float verticalExaggeration,
+                        bool mercator,
+                        const std::vector<Vector2D*>& uvSurfaceTextureCoords,
+                        FloatBufferBuilderFromGeodetic& vertices,
+                        ShortBufferBuilder& indices,
+                        FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  void createSouthSkirt(const Planet* planet,
+                       const Sector& tileSector,
+                       const Sector& meshSector,
+                       const Vector2I& meshResolution,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
+                       bool mercator,
+                       const std::vector<Vector2D*>& uvSurfaceTextureCoords,
+                       FloatBufferBuilderFromGeodetic& vertices,
+                       ShortBufferBuilder& indices,
+                       FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+
 
 public:
 
