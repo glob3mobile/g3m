@@ -134,6 +134,8 @@ private:
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
+  mutable std::map<const Tile*, FloatBufferBuilderFromCartesian2D*> _texCoordsMap;
+
 
 
 public:

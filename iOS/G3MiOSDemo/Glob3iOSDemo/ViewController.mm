@@ -627,7 +627,8 @@ public:
 
   if (true){ //Incomplete world
 
-    Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+//    Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
     builder.setShownSector(spain );
 
     builder.getPlanetRendererBuilder()->setRenderDebug(true);
