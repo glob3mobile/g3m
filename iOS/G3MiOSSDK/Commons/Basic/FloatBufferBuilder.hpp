@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__FloatBufferBuilder__
 
 #include <vector>
+#include "Vector2D.hpp"
+#include "Vector3D.hpp"
 
 class IFloatBuffer;
 
@@ -75,8 +77,19 @@ protected:
 
 public:
   IFloatBuffer* create() const;
+  
   int size() const{
     return _values.size();
+  }
+
+  Vector2D getVector2D(int i) const{
+    int pos = i * 2;
+    return Vector2D(_values[pos], _values[pos + 1]);
+  }
+
+  Vector3D getVector3D(int i) const{
+    int pos = i * 3;
+    return Vector3D(_values[pos], _values[pos + 1], _values[pos+2]);
   }
 };
 

@@ -632,7 +632,7 @@ public:
 
     geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
 
-    
+    builder.setBackgroundColor(new Color(Color::white()));
   }
 
 
