@@ -126,6 +126,8 @@
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
 
+#import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -633,6 +635,10 @@ public:
     geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
 
     builder.setBackgroundColor(new Color(Color::white()));
+
+    Sector spain2 = Sector::fromDegrees(27.3174927 -30, -18.5284423 -30, 45.0299024 + 30, 5.4084426 + 30);
+
+    builder.addCameraConstraint(new SectorAndHeightCameraConstrainer(spain2, 1e5) );
   }
 
 

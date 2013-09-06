@@ -332,6 +332,7 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D853ED1317DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */; };
+		D853ED1417DA104500580CE9 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D853ED1217DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -590,6 +591,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D853ED1417DA104500580CE9 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
 				D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */,
 				D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */,
 				D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */,
