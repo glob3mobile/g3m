@@ -75,6 +75,9 @@ protected:
 
 public:
   IFloatBuffer* create() const;
+  int size() const{
+    return _values.size();
+  }
 };
 
 #endif

@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ShortBufferBuilder__
 
 #include <vector>
+#include "IStringBuilder.hpp"
 
 class IShortBuffer;
 
@@ -76,6 +77,18 @@ public:
   }
 
   IShortBuffer* create() const;
+
+  std::string description() const{
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->addString("ShortBufferBuilder: ");
+    for (int i = 0; i < (int)_values.size(); i++) {
+      isb->addInt(_values[i]);
+      isb->addString(", ");
+    }
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
 
 };
 
