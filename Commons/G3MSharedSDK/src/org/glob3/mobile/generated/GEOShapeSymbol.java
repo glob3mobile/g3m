@@ -56,9 +56,4 @@ public class GEOShapeSymbol extends GEOSymbol
     return true;
   }
 
-  public final boolean deleteAfterSymbolize()
-  {
-    return true;
-  }
-
 }

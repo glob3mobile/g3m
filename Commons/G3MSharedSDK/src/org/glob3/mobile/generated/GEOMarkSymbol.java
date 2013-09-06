@@ -57,9 +57,4 @@ public class GEOMarkSymbol extends GEOSymbol
     return true;
   }
 
-  public final boolean deleteAfterSymbolize()
-  {
-    return true;
-  }
-
 }
