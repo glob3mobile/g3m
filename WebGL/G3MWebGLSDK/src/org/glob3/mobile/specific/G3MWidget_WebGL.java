@@ -191,6 +191,36 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
+   //   public class CameraData
+   //            extends
+   //               JavaScriptObject {
+   //      protected CameraData() {
+   //      }
+   //
+   //
+   //      //      public final native String FirstName() /*-{
+   //      //			return this.firstName;
+   //      //      }-*/;
+   //      //
+   //      //
+   //      //      public final native String LastName() /*-{
+   //      //			return this.lastName;
+   //      //      }-*/;
+   //   }
+   //
+   //
+   //   public void getCameraData() {
+   //      final Camera camera = _g3mWidget.getCurrentCamera();
+   //
+   //      final Geodetic3D position = camera.getGeodeticPosition();
+   //      final Angle heading = camera.getHeading();
+   //      final Angle pitch = camera.getPitch();
+   //
+   //      final CameraData result = (CameraData) JavaScriptObject.createObject().cast();
+   //
+   //   }
+
+
    public native String takeScreenshotAsBase64() /*-{
 		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
 		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();

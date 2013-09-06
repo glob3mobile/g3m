@@ -349,6 +349,8 @@ private:
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
 
+  bool _validLayerTilesRenderParameters;
+
 public:
   PlanetRenderer(const TileTessellator* tessellator,
                  ElevationDataProvider* elevationDataProvider,
