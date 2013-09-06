@@ -5,17 +5,18 @@ public class MapBoo_Scene
   private final String _description;
   private final MapBoo_MultiImage _screenshot;
   private final Color _backgroundColor ;
+  private final MapBoo_CameraPosition _cameraPosition;
   private Layer _baseLayer;
   private Layer _overlayLayer;
-
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
+  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
   {
      _name = name;
      _description = description;
      _screenshot = screenshot;
      _backgroundColor = new Color(backgroundColor);
+     _cameraPosition = cameraPosition;
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
      _hasWarnings = hasWarnings;
@@ -39,6 +40,11 @@ public class MapBoo_Scene
   public final Color getBackgroundColor()
   {
     return _backgroundColor;
+  }
+
+  public final MapBoo_CameraPosition getCameraPosition()
+  {
+    return _cameraPosition;
   }
 
   public final boolean hasWarnings()
@@ -68,10 +74,21 @@ public class MapBoo_Scene
        _baseLayer.dispose();
     if (_overlayLayer != null)
        _overlayLayer.dispose();
+    if (_cameraPosition != null)
+       _cameraPosition.dispose();
   }
 
   public final String description()
   {
+  
+  //  const std::string            _name;
+  //  const std::string            _description;
+  //  const MapBoo_MultiImage*     _screenshot;
+  //  const Color                  _backgroundColor;
+  //  Layer*                       _baseLayer;
+  //  Layer*                       _overlayLayer;
+  
+  
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("[Scene name=");
@@ -85,6 +102,16 @@ public class MapBoo_Scene
   
     isb.addString(", backgroundColor=");
     isb.addString(_backgroundColor.description());
+  
+    isb.addString(", cameraPosition=");
+    if (_cameraPosition == null)
+    {
+      isb.addString("NULL");
+    }
+    else
+    {
+      isb.addString(_cameraPosition.description());
+    }
   
     isb.addString(", baseLayer=");
     if (_baseLayer == null)
@@ -105,6 +132,9 @@ public class MapBoo_Scene
     {
       isb.addString(_overlayLayer.description());
     }
+  
+    isb.addString(", hasWarnings=");
+    isb.addBool(_hasWarnings);
   
     isb.addString("]");
   
