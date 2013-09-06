@@ -186,6 +186,10 @@ public:
   {
   }
 
+  ~MapBoo_CameraPosition() {
+
+  }
+
   const Geodetic3D getPosition() const {
     return _position;
   }
