@@ -188,37 +188,34 @@ public final class G3MWidget_WebGL
 		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
 		});
+		$wnd.G3M.getCameraData = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+		});
    }-*/;
 
 
-   //   public class CameraData
-   //            extends
-   //               JavaScriptObject {
-   //      protected CameraData() {
-   //      }
-   //
-   //
-   //      //      public final native String FirstName() /*-{
-   //      //			return this.firstName;
-   //      //      }-*/;
-   //      //
-   //      //
-   //      //      public final native String LastName() /*-{
-   //      //			return this.lastName;
-   //      //      }-*/;
-   //   }
-   //
-   //
-   //   public void getCameraData() {
-   //      final Camera camera = _g3mWidget.getCurrentCamera();
-   //
-   //      final Geodetic3D position = camera.getGeodeticPosition();
-   //      final Angle heading = camera.getHeading();
-   //      final Angle pitch = camera.getPitch();
-   //
-   //      final CameraData result = (CameraData) JavaScriptObject.createObject().cast();
-   //
-   //   }
+   public final native JavaScriptObject getCameraData() /*-{
+		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
+		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
+
+		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
+		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::latitude()();
+		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::longitude()();
+		var height = position.@org.glob3.mobile.generated.Geodetic3D::height()();
+
+		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
+		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
+
+		var result = new Object();
+		result.latitude = latitude.@org.glob3.mobile.generated.Angle::degrees()();
+		result.longitude = longitude.@org.glob3.mobile.generated.Angle::degrees()();
+		result.height = height;
+
+		result.heading = heading.@org.glob3.mobile.generated.Angle::degrees()();
+		result.pitch = pitch.@org.glob3.mobile.generated.Angle::degrees()();
+
+		return result;
+   }-*/;
 
 
    public native String takeScreenshotAsBase64() /*-{
