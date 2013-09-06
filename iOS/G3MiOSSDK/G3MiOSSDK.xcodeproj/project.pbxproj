@@ -331,6 +331,7 @@
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D853ED1317DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -1193,7 +1194,6 @@
 		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
 		CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PlanetTileTessellator.hpp; path = Commons/Basic/PlanetTileTessellator.hpp; sourceTree = "<group>"; };
 		CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetTileTessellator.cpp; path = Commons/Basic/PlanetTileTessellator.cpp; sourceTree = "<group>"; };
-		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; };
 		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
@@ -1373,6 +1373,8 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SectorAndHeightCameraConstrainer.cpp; sourceTree = "<group>"; };
+		D853ED1217DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SectorAndHeightCameraConstrainer.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
@@ -1963,6 +1965,8 @@
 				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
 				FBC23099179730FF009343FC /* CameraEffects.cpp */,
 				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
+				D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */,
+				D853ED1217DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -2652,6 +2656,7 @@
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
 				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
+				D853ED1317DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

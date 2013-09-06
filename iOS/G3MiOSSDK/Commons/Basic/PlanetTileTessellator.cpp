@@ -714,7 +714,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
 
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
-    textCoords.add((float)uv._x, (float)uv._y);
+    textCoords.add(uv);
 
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
@@ -722,6 +722,10 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
 
     skirtIndex++;
     surfaceIndex -= rx;
+  }
+
+  if (textCoords.size()/2 != vertices.size()/3){
+    printf("WRONG");
   }
 }
 
@@ -754,8 +758,6 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northEastCorner;
 
-  indices.add(surfaceIndex);
-
   for (int i = rx-1; i >= 0; i--) {
     const double x = (double)i/(rx-1);
     const double y = 0;
@@ -763,7 +765,7 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
     vertices.add(g, skirtHeight);
 
     //TEXTURE COORDS/////////////////////////////
-    Vector2D uv = textCoords.getVector2D(surfaceIndex);
+    Vector2D uv = textCoords.getVector2D(surfaceIndex + 10);
     textCoords.add((float)uv._x, (float)uv._y);
 
     if (textCoords.size()/2 != vertices.size()/3){
@@ -771,8 +773,8 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
     }
 
     //INDEX///////////////////////////////////////////////////////////////
-    indices.add(surfaceIndex); printf("%d ", indices.last());
-    indices.add(skirtIndex); printf("%d ", indices.last());
+    indices.add(surfaceIndex); //printf("%d ", indices.last());
+    indices.add(skirtIndex); //printf("%d ", indices.last());
 
     skirtIndex++;
     surfaceIndex -= 1;
