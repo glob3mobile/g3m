@@ -634,62 +634,33 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
   const Vector3D sw = planet->toCartesian(meshSector.getSW());
   const Vector3D nw = planet->toCartesian(meshSector.getNW());
 
-
   //const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
   const double skirtHeight = -1e5; //TODO: CHECK
 
   const short firstSkirtVertex = (short) (vertices.size() / 3);
 
-  // east side
-  for (int j = meshResolution._y-1; j >= 0; j--) {
-    const double x = 1;
-    const double y = (double)j/(meshResolution._y-1);
-    const Geodetic2D g = meshSector.getInnerPoint(x, y);
-    vertices.add(g, skirtHeight);
-  }
-
-  const short lastSkirtVertex = (vertices.size() / 3);
-
-
-  //INDEX///////////////////////////////////////////////////////////////
-
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
 
   const short southEastCorner = (rx * ry) - 1;
-  const short northEastCorner = rx - 1;
 
   short skirtIndex = firstSkirtVertex;
+  short surfaceIndex = southEastCorner;
 
-  for (short i = southEastCorner; i >= northEastCorner; i -= rx) {
-    indices.add(i);
+  // east side
+  for (int j = ry-1; j >= 0; j--) {
+    const double x = 1;
+    const double y = (double)j/(meshResolution._y-1);
+    const Geodetic2D g = meshSector.getInnerPoint(x, y);
+    vertices.add(g, skirtHeight);
+
+    //INDEX///////////////////////////////////////////////////////////////
+    indices.add(surfaceIndex);
+    surfaceIndex -= rx;
     indices.add((short) skirtIndex++);
-
-    printf("%d - %d\n", i, skirtIndex-1);
   }
 
-//  indices.add(northEastCorner);
-//  indices.add(lastSkirtVertex);
-
-  printf("%s\n",indices.description().c_str() );
-
-
-//  int skirtIndexCursor = meshResolution._x * meshResolution._y;
-//  indices.add((short) (skirtIndexCursor-1));
-//  printf("%d, ", (skirtIndexCursor-1));
-//
-//  // east side
-//  for (int j = meshResolution._y; j > 0; j--) {
-//    indices.add((short) (j*meshResolution._x + (meshResolution._x-1)));
-//    printf("%d, ", (j*meshResolution._x + (meshResolution._x-1)));
-//
-//    indices.add((short) skirtIndexCursor++);
-//    printf("%d, ", skirtIndexCursor-1);
-//  }
-
   
-
-
   //TEXTURE COORDS////////////////////////////////////////////////////////////////
   float* u = new float[meshResolution._x * meshResolution._y];
   float* v = new float[meshResolution._x * meshResolution._y];
