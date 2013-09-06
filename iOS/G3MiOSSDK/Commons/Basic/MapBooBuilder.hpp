@@ -46,6 +46,7 @@ class SceneLighting;
 
 #include <vector>
 #include <string>
+#include "Geodetic3D.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -166,29 +167,71 @@ public:
 };
 
 
-class MapBoo_Scene {
+class MapBoo_CameraPosition {
 private:
-  const std::string        _name;
-  const std::string        _description;
-  const MapBoo_MultiImage* _screenshot;
-  const Color              _backgroundColor;
-  Layer*                   _baseLayer;
-  Layer*                   _overlayLayer;
-
-  const bool               _hasWarnings;
+  const Geodetic3D _position;
+  const Angle      _heading;
+  const Angle      _pitch;
+  const bool       _animated;
 
 public:
-  MapBoo_Scene(const std::string& name,
-               const std::string& description,
-               MapBoo_MultiImage* screenshot,
-               const Color&       backgroundColor,
-               Layer*             baseLayer,
-               Layer*             overlayLayer,
-               const bool         hasWarnings) :
+  MapBoo_CameraPosition(const Geodetic3D& position,
+                        const Angle&      heading,
+                        const Angle&      pitch,
+                        const bool        animated) :
+  _position(position),
+  _heading(heading),
+  _pitch(pitch),
+  _animated(animated)
+  {
+  }
+
+  const Geodetic3D getPosition() const {
+    return _position;
+  }
+
+  const Angle getHeading() const {
+    return _heading;
+  }
+
+  const Angle getPitch() const {
+    return _pitch;
+  }
+
+  bool isAnimated() const {
+    return _animated;
+  }
+
+  const std::string description() const;
+
+};
+
+
+class MapBoo_Scene {
+private:
+  const std::string            _name;
+  const std::string            _description;
+  const MapBoo_MultiImage*     _screenshot;
+  const Color                  _backgroundColor;
+  const MapBoo_CameraPosition* _cameraPosition;
+  Layer*                       _baseLayer;
+  Layer*                       _overlayLayer;
+  const bool                   _hasWarnings;
+
+public:
+  MapBoo_Scene(const std::string&           name,
+               const std::string&           description,
+               MapBoo_MultiImage*           screenshot,
+               const Color&                 backgroundColor,
+               const MapBoo_CameraPosition* cameraPosition,
+               Layer*                       baseLayer,
+               Layer*                       overlayLayer,
+               const bool                   hasWarnings) :
   _name(name),
   _description(description),
   _screenshot(screenshot),
   _backgroundColor(backgroundColor),
+  _cameraPosition(cameraPosition),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer),
   _hasWarnings(hasWarnings)
@@ -209,6 +252,10 @@ public:
 
   Color getBackgroundColor() const {
     return _backgroundColor;
+  }
+
+  const MapBoo_CameraPosition* getCameraPosition() const {
+    return _cameraPosition;
   }
 
   bool hasWarnings() const {
@@ -319,6 +366,7 @@ private:
 
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
   MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
+  const MapBoo_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
 

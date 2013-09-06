@@ -43,10 +43,34 @@
 #include "IWebSocket.hpp"
 #include "SceneLighting.hpp"
 
+
+const std::string MapBoo_CameraPosition::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("[CameraPosition position=");
+  isb->addString(_position.description());
+
+  isb->addString(", heading=");
+  isb->addString(_heading.description());
+
+  isb->addString(", pitch=");
+  isb->addString(_pitch.description());
+
+  isb->addString(", animated=");
+  isb->addBool(_animated);
+
+  isb->addString("]");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
 MapBoo_Scene::~MapBoo_Scene() {
   delete _screenshot;
   delete _baseLayer;
   delete _overlayLayer;
+  delete _cameraPosition;
 }
 
 const std::string MapBoo_MultiImage_Level::description() const {
@@ -103,6 +127,15 @@ MapBoo_MultiImage_Level* MapBoo_MultiImage::getBestLevel(int width) const {
 }
 
 const std::string MapBoo_Scene::description() const {
+
+//  const std::string            _name;
+//  const std::string            _description;
+//  const MapBoo_MultiImage*     _screenshot;
+//  const Color                  _backgroundColor;
+//  Layer*                       _baseLayer;
+//  Layer*                       _overlayLayer;
+
+
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   isb->addString("[Scene name=");
@@ -116,6 +149,14 @@ const std::string MapBoo_Scene::description() const {
 
   isb->addString(", backgroundColor=");
   isb->addString(_backgroundColor.description());
+
+  isb->addString(", cameraPosition=");
+  if (_cameraPosition == NULL) {
+    isb->addString("NULL");
+  }
+  else {
+    isb->addString(_cameraPosition->description());
+  }
 
   isb->addString(", baseLayer=");
   if (_baseLayer == NULL) {
@@ -132,6 +173,9 @@ const std::string MapBoo_Scene::description() const {
   else {
     isb->addString(_overlayLayer->description());
   }
+
+  isb->addString(", hasWarnings=");
+  isb->addBool(_hasWarnings);
 
   isb->addString("]");
 
@@ -462,6 +506,26 @@ MapBoo_MultiImage* MapBooBuilder::parseMultiImage(const JSONObject* jsonObject) 
   return new MapBoo_MultiImage(averageColor, levels);
 }
 
+const MapBoo_CameraPosition* MapBooBuilder::parseCameraPosition(const JSONObject* jsonObject) const {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  const double latitudeInDegress  = jsonObject->getAsNumber("latitude", 0);
+  const double longitudeInDegress = jsonObject->getAsNumber("longitude", 0);
+  const double height             = jsonObject->getAsNumber("height", 0);
+
+  const double headingInDegrees = jsonObject->getAsNumber("heading", 0);
+  const double pitchInDegrees   = jsonObject->getAsNumber("pitch", 0);
+
+  const bool animated = jsonObject->getAsBoolean("animated", true);
+
+  return new MapBoo_CameraPosition(Geodetic3D::fromDegrees(latitudeInDegress, longitudeInDegress, height),
+                                   Angle::fromDegrees(headingInDegrees),
+                                   Angle::fromDegrees(pitchInDegrees),
+                                   animated);
+}
+
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -477,6 +541,7 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           jsonObject->getAsString("description", ""),
                           parseMultiImage( jsonObject->getAsObject("screenshot") ),
                           parseColor( jsonObject->getAsString("backgroundColor") ),
+                          parseCameraPosition( jsonObject->getAsObject("cameraPosition") ),
                           parseLayer( jsonObject->get("baseLayer") ),
                           parseLayer( jsonObject->get("overlayLayer") ),
                           hasWarnings);
@@ -894,15 +959,26 @@ void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
 void MapBooBuilder::changedCurrentScene() {
   recreateLayerSet();
 
+  const MapBoo_Scene* currentScene = getApplicationCurrentScene();
+
   if (_g3mWidget != NULL) {
     _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
 
     // force immediate execution of PeriodicalTasks
     _g3mWidget->resetPeriodicalTasksTimeouts();
+
+    if (currentScene != NULL) {
+      const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
+      if (cameraPosition != NULL) {
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                              cameraPosition->getPosition(),
+                                              cameraPosition->getHeading(),
+                                              cameraPosition->getPitch());
+      }
+    }
   }
 
   if (_applicationListener != NULL) {
-    const MapBoo_Scene* currentScene = getApplicationCurrentScene();
     _applicationListener->onSceneChanged(_context,
                                          getApplicationCurrentSceneIndex(),
                                          currentScene);
