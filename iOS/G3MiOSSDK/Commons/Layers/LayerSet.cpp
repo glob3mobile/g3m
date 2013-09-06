@@ -231,6 +231,11 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         mercator                   = layerParam->_mercator;
       }
       else {
+        if ( mercator != layerParam->_mercator ) {
+          ILogger::instance()->logError("Inconsistency in Layer's Parameters: mercator");
+          return NULL;
+        }
+
         if (!topSector->isEquals(layerParam->_topSector) ) {
           ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSector");
           return NULL;
@@ -269,11 +274,6 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
         if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
             ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
           ILogger::instance()->logError("Inconsistency in Layer's Parameters: tileMeshResolution");
-          return NULL;
-        }
-
-        if ( mercator != layerParam->_mercator ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: mercator");
           return NULL;
         }
 

@@ -277,11 +277,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
     return false;
   }
 
-  public final boolean deleteAfterSymbolize()
-  {
-    return false;
-  }
-
   public final Sector getSector()
   {
     return _sector;

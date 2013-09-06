@@ -46,9 +46,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
-//import org.glob3.mobile.generated.IGLProgramId;
-
-
 public final class G3MWidget_WebGL
          extends
             Composite {
@@ -192,6 +189,36 @@ public final class G3MWidget_WebGL
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
 		});
    }-*/;
+
+
+   //   public class CameraData
+   //            extends
+   //               JavaScriptObject {
+   //      protected CameraData() {
+   //      }
+   //
+   //
+   //      //      public final native String FirstName() /*-{
+   //      //			return this.firstName;
+   //      //      }-*/;
+   //      //
+   //      //
+   //      //      public final native String LastName() /*-{
+   //      //			return this.lastName;
+   //      //      }-*/;
+   //   }
+   //
+   //
+   //   public void getCameraData() {
+   //      final Camera camera = _g3mWidget.getCurrentCamera();
+   //
+   //      final Geodetic3D position = camera.getGeodeticPosition();
+   //      final Angle heading = camera.getHeading();
+   //      final Angle pitch = camera.getPitch();
+   //
+   //      final CameraData result = (CameraData) JavaScriptObject.createObject().cast();
+   //
+   //   }
 
 
    public native String takeScreenshotAsBase64() /*-{
