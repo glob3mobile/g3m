@@ -76,29 +76,7 @@ private:
 
   double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
 
-  void createSurface(const Sector& tileSector,
-                     const Sector& meshSector,
-                     const Vector2I& meshResolution,
-                     const ElevationData* elevationData,
-                     float verticalExaggeration,
-                     bool mercator,
-                     FloatBufferBuilderFromGeodetic& vertices,
-                     ShortBufferBuilder& indices,
-                     FloatBufferBuilderFromCartesian2D& textCoords) const;
-
-  void createEastSkirt(const Planet* planet,
-                       const Sector& tileSector,
-                     const Sector& meshSector,
-                     const Vector2I& meshResolution,
-                     const ElevationData* elevationData,
-                     float verticalExaggeration,
-                     bool mercator,
-                     FloatBufferBuilderFromGeodetic& vertices,
-                     ShortBufferBuilder& indices,
-                     FloatBufferBuilderFromCartesian2D& textCoords) const;
-
-  void createNorthSkirt(const Planet* planet,
-                       const Sector& tileSector,
+  double createSurface(const Sector& tileSector,
                        const Sector& meshSector,
                        const Vector2I& meshResolution,
                        const ElevationData* elevationData,
@@ -108,27 +86,53 @@ private:
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
-  void createWestSkirt(const Planet* planet,
+  void createEastSkirt(const Planet* planet,
+                       const Sector& tileSector,
+                       const Sector& meshSector,
+                       const Vector2I& meshResolution,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
+                       bool mercator,
+                       double skirtHeight,
+                       FloatBufferBuilderFromGeodetic& vertices,
+                       ShortBufferBuilder& indices,
+                       FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  void createNorthSkirt(const Planet* planet,
                         const Sector& tileSector,
                         const Sector& meshSector,
                         const Vector2I& meshResolution,
                         const ElevationData* elevationData,
                         float verticalExaggeration,
                         bool mercator,
+                        double skirtHeight,
                         FloatBufferBuilderFromGeodetic& vertices,
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
-  void createSouthSkirt(const Planet* planet,
+  void createWestSkirt(const Planet* planet,
                        const Sector& tileSector,
                        const Sector& meshSector,
                        const Vector2I& meshResolution,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool mercator,
+                       double skirtHeight,
                        FloatBufferBuilderFromGeodetic& vertices,
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  void createSouthSkirt(const Planet* planet,
+                        const Sector& tileSector,
+                        const Sector& meshSector,
+                        const Vector2I& meshResolution,
+                        const ElevationData* elevationData,
+                        float verticalExaggeration,
+                        bool mercator,
+                        double skirtHeight,
+                        FloatBufferBuilderFromGeodetic& vertices,
+                        ShortBufferBuilder& indices,
+                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
 
 
@@ -168,7 +172,7 @@ public:
                               const Angle& latitude,
                               const Angle& longitude,
                               bool mercator) const;
-
+  
 };
 
 #endif
