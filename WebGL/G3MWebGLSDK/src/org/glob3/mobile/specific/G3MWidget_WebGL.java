@@ -46,9 +46,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
-//import org.glob3.mobile.generated.IGLProgramId;
-
-
 public final class G3MWidget_WebGL
          extends
             Composite {

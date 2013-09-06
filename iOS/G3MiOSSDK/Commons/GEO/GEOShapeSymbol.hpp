@@ -32,10 +32,6 @@ public:
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
 
-  bool deleteAfterSymbolize() const {
-    return true;
-  }
-
 };
 
 #endif

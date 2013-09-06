@@ -67,10 +67,6 @@ public:
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
 
-  bool deleteAfterSymbolize() const {
-    return false;
-  }
-
   const Sector* getSector() const {
     return _sector;
   }
