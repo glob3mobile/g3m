@@ -77,6 +77,12 @@ public class LayerSet
         }
         else
         {
+          if (mercator != layerParam._mercator)
+          {
+            ILogger.instance().logError("Inconsistency in Layer's Parameters: mercator");
+            return null;
+          }
+  
           if (!topSector.isEquals(layerParam._topSector))
           {
             ILogger.instance().logError("Inconsistency in Layer's Parameters: topSector");
@@ -116,12 +122,6 @@ public class LayerSet
           if ((tileMeshWidth != layerParam._tileMeshResolution._x) || (tileMeshHeight != layerParam._tileMeshResolution._y))
           {
             ILogger.instance().logError("Inconsistency in Layer's Parameters: tileMeshResolution");
-            return null;
-          }
-  
-          if (mercator != layerParam._mercator)
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: mercator");
             return null;
           }
   
