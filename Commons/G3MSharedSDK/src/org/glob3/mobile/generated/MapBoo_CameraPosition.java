@@ -14,6 +14,11 @@ public class MapBoo_CameraPosition
      _animated = animated;
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final Geodetic3D getPosition()
   {
     return _position;
