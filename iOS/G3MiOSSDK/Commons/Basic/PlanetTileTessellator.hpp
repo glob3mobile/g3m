@@ -82,6 +82,7 @@ private:
                      const ElevationData* elevationData,
                      float verticalExaggeration,
                      bool mercator,
+                     std::vector<Vector2D*>& uvSurfaceTextureCoords,
                      FloatBufferBuilderFromGeodetic& vertices,
                      ShortBufferBuilder& indices,
                      FloatBufferBuilderFromCartesian2D& textCoords) const;
@@ -93,9 +94,22 @@ private:
                      const ElevationData* elevationData,
                      float verticalExaggeration,
                      bool mercator,
+                     const std::vector<Vector2D*>& uvSurfaceTextureCoords,
                      FloatBufferBuilderFromGeodetic& vertices,
                      ShortBufferBuilder& indices,
                      FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  void createNorthSkirt(const Planet* planet,
+                       const Sector& tileSector,
+                       const Sector& meshSector,
+                       const Vector2I& meshResolution,
+                       const ElevationData* elevationData,
+                       float verticalExaggeration,
+                       bool mercator,
+                       const std::vector<Vector2D*>& uvSurfaceTextureCoords,
+                       FloatBufferBuilderFromGeodetic& vertices,
+                       ShortBufferBuilder& indices,
+                       FloatBufferBuilderFromCartesian2D& textCoords) const;
 
   
 
