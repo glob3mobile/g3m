@@ -80,15 +80,6 @@ public class MapBoo_Scene
 
   public final String description()
   {
-  
-  //  const std::string            _name;
-  //  const std::string            _description;
-  //  const MapBoo_MultiImage*     _screenshot;
-  //  const Color                  _backgroundColor;
-  //  Layer*                       _baseLayer;
-  //  Layer*                       _overlayLayer;
-  
-  
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("[Scene name=");
