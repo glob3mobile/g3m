@@ -127,15 +127,6 @@ MapBoo_MultiImage_Level* MapBoo_MultiImage::getBestLevel(int width) const {
 }
 
 const std::string MapBoo_Scene::description() const {
-
-//  const std::string            _name;
-//  const std::string            _description;
-//  const MapBoo_MultiImage*     _screenshot;
-//  const Color                  _backgroundColor;
-//  Layer*                       _baseLayer;
-//  Layer*                       _overlayLayer;
-
-
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   isb->addString("[Scene name=");
@@ -788,6 +779,8 @@ MapBooBuilder::~MapBooBuilder() {
 }
 
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
+  delete _webSocket;
+
   const IFactory* factory = context->getFactory();
   _webSocket = factory->createWebSocket(createApplicationTubeURL(),
                                         new MapBooBuilder_ApplicationTubeListener(this),
@@ -1016,7 +1009,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   }
 
   _applicationScenes.clear();
-  
+
   _applicationScenes = applicationScenes;
 
   if (_applicationListener != NULL) {
@@ -1036,7 +1029,7 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
     if (!_isApplicationTubeOpen) {
       _webSocket = NULL;
     }
-
+    
     if (_isApplicationTubeOpen) {
       if (_applicationListener != NULL) {
         _applicationListener->onWebSocketOpen(_context);
