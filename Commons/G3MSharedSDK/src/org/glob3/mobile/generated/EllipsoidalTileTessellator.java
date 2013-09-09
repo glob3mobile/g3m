@@ -129,11 +129,15 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   public void dispose()
   {
-    java.util.Iterator it = _indicesMap.entrySet().iterator();
-    while (it.hasNext()) {
-      java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-      IShortBuffer b = (IShortBuffer) pairs.getValue();
-      b.dispose();
+  //  java.util.Iterator it = _indicesMap.entrySet().iterator();
+  //  while (it.hasNext()) {
+  //    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+  //    IShortBuffer b = (IShortBuffer) pairs.getValue();
+  //    b.dispose();
+  //  }
+    for (final java.util.Map.Entry<Vector2I, IShortBuffer> entry : _indicesMap.entrySet()) {
+      final IShortBuffer buffer = entry.getValue();
+      buffer.dispose();
     }
   
     super.dispose();
