@@ -645,10 +645,13 @@ public:
   }
 
   if (true){ //HUD
-  Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
-
     HUDRenderer* hudRenderer = new   HUDRenderer();
-    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100));
+    
+    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
+
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"horizontal-gears" ofType:@"png"]], NULL);
+    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
 
     builder.addRenderer(hudRenderer);
   }
@@ -1055,7 +1058,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -1088,7 +1091,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),

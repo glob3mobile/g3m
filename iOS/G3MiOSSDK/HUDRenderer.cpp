@@ -50,9 +50,6 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
                                                    _name,
                                                    false);
 
-
-  _image = NULL;
-
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
@@ -61,15 +58,18 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
   const int viewportWidth = rc->getCurrentCamera()->getWidth();
   const int viewportHeight = rc->getCurrentCamera()->getHeight();
 
-  Vector3D halfViewport(viewportWidth / 2, viewportHeight / 2, 0);
+  Vector3D halfViewportAndPosition(viewportWidth / 2 - _pos._x , viewportHeight / 2 - _pos._y, 0);
 
-  const double halfWidth = _size._x / 2;
-  const double halfHeight = _size._y / 2;
+  const double w = _size._x;
+  const double h = _size._y;
+
+//  const double halfWidth = _size._x / 2;
+//  const double halfHeight = _size._y / 2;
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices.add(Vector3D(-halfWidth, +halfHeight, 0).sub(halfViewport));
-  vertices.add(Vector3D(-halfWidth, -halfHeight, 0).sub(halfViewport));
-  vertices.add(Vector3D(+halfWidth, +halfHeight, 0).sub(halfViewport));
-  vertices.add(Vector3D(+halfWidth, -halfHeight, 0).sub(halfViewport));
+  vertices.add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
+  vertices.add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
+  vertices.add(Vector3D(w, h, 0).sub(halfViewportAndPosition));
+  vertices.add(Vector3D(w, 0, 0).sub(halfViewportAndPosition));
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);

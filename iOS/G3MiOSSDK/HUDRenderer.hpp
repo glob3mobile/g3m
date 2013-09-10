@@ -27,9 +27,11 @@ private:
     mutable Mesh* _mesh;
     mutable const IFactory* _factory;
 
+    const Vector2D _pos;
+
   public:
-    ShownImage(const std::string& name, IImage* image, const Vector2D size):
-    _image(image), _size(size), _mesh(NULL), _name(name), _factory(NULL){}
+    ShownImage(const std::string& name, IImage* image, const Vector2D size, const Vector2D pos):
+    _image(image), _size(size), _mesh(NULL), _name(name), _factory(NULL), _pos(pos){}
 
     Mesh* getMesh(const G3MRenderContext* rc) const{
       if (_mesh == NULL){
@@ -60,8 +62,9 @@ public:
 
   void addImage(const std::string name,
                 IImage* image,
-                const Vector2D& size){
-    _images.push_back(new ShownImage(name, image, size) );
+                const Vector2D& size,
+                const Vector2D position){
+    _images.push_back(new ShownImage(name, image, size, position) );
   }
 
   void initialize(const G3MContext* context) {}
