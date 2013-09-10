@@ -64,12 +64,12 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
   Vector3D halfViewport(viewportWidth / 2, viewportHeight / 2, 0);
 
   const double halfWidth = _size._x / 2;
-  const double hadfHeight = _size._y / 2;
+  const double halfHeight = _size._y / 2;
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices.add(Vector3D(-halfWidth, +hadfHeight, 0).add(halfViewport));
-  vertices.add(Vector3D(-halfWidth, -hadfHeight, 0).add(halfViewport));
-  vertices.add(Vector3D(+halfWidth, +hadfHeight, 0).add(halfViewport));
-  vertices.add(Vector3D(+halfWidth, -hadfHeight, 0).add(halfViewport));
+  vertices.add(Vector3D(-halfWidth, +halfHeight, 0).sub(halfViewport));
+  vertices.add(Vector3D(-halfWidth, -halfHeight, 0).sub(halfViewport));
+  vertices.add(Vector3D(+halfWidth, +halfHeight, 0).sub(halfViewport));
+  vertices.add(Vector3D(+halfWidth, -halfHeight, 0).sub(halfViewport));
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
