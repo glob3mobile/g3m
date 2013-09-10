@@ -19,13 +19,16 @@ package org.glob3.mobile.generated;
 
 public class SGMaterialNode extends SGNode
 {
-  private final Color _baseColor;
+  private Color _baseColor;
   private final Color _specularColor;
 
 //  const double _specular;
 //  const double _shine;
 //  const double _alpha;
 //  const double _emit;
+
+
+  private GLState _glState;
 
 
   public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
@@ -37,30 +40,39 @@ public class SGMaterialNode extends SGNode
      super(id, sId);
      _baseColor = baseColor;
      _specularColor = specularColor;
-
-  }
-
-  public void dispose()
-  {
-    if (_baseColor != null)
-       _baseColor.dispose();
-    if (_specularColor != null)
-       _specularColor.dispose();
+     _glState = new GLState();
+    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    if (_baseColor == null)
+    _glState.setParent(parentState);
+    return _glState;
+  }
+
+  public final void setBaseColor(Color baseColor)
+  {
+    if (baseColor != _baseColor)
     {
-      return null;
+      _baseColor = null;
+      _baseColor = baseColor;
     }
-  
-    GLState state = new GLState(parentState);
-    final float colorsIntensity = 1F;
-    //state->enableFlatColor(*_specularColor, colorsIntensity);
-    state.enableFlatColor(_baseColor, colorsIntensity);
-  
-    return state;
+  }
+
+  public void dispose()
+  {
+    _baseColor = null;
+    if (_specularColor != null)
+       _specularColor.dispose();
+
+    _glState._release();
+  super.dispose();
+
+  }
+
+  public final String description()
+  {
+    return "SGMaterialNode";
   }
 
 }

@@ -19,35 +19,46 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
-  protected final void rawRender(G3MRenderContext rc, GLState parentState)
+  protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
   
     final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount);
+    gl.drawArrays(_primitive, 0, verticesCount, _glState, rc.getGPUProgramManager());
   }
 
 
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f);
-  }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
-  {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f);
-  }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
-  {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, null);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
-     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true, null);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true, null);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true, null);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true, null);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
+  {
+     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals);
   }
 
   public void dispose()
   {
+  super.dispose();
 
   }
+
+//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
 }

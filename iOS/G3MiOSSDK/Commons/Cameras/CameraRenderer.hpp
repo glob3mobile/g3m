@@ -2,7 +2,7 @@
 //  CameraRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 30/07/12.
+//  Created by Agustin Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -46,7 +46,9 @@ public:
   _nextCamera(nextCamera)
   {}
 
-  ~CameraContext(){}
+  ~CameraContext() {
+
+  }
 
   const Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
@@ -78,9 +80,8 @@ public:
     _processTouchEvents = processTouchEvents;
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
-
+  void render(const G3MRenderContext* rc, GLState* glState);
+  
   void initialize(const G3MContext* context);
 
   bool onTouchEvent(const G3MEventContext* ec,
@@ -93,11 +94,11 @@ public:
     return true;
   }
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
 
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
 
   }
 
@@ -112,7 +113,6 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
-  
 };
 
 

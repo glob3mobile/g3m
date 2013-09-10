@@ -22,7 +22,6 @@ public abstract class Extent
   {
   }
 
-  public abstract boolean touches(Frustum frustum);
 
 
   public double projectedArea(G3MRenderContext rc)
@@ -38,7 +37,13 @@ public abstract class Extent
 
   public abstract void render(G3MRenderContext rc, GLState parentState);
 
+  public abstract boolean touches(Frustum frustum);
+
   public abstract boolean touchesBox(Box box);
+
+  public abstract boolean fullContains(Extent that);
+
+  public abstract boolean fullContainedInBox(Box box);
 
   public abstract Extent mergedWith(Extent that);
 

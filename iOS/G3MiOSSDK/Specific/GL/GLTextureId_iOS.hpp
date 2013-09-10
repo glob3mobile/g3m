@@ -48,7 +48,7 @@ public:
     return s;
   }
   
-  bool isEqualsTo(const IGLTextureId* that) const {
+  bool isEquals(const IGLTextureId* that) const {
     return (_textureId == ((GLTextureId_iOS*) that)->_textureId);
   }
 };

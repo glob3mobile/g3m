@@ -52,7 +52,9 @@ public class Vector4D
 
   public static Vector4D nan()
   {
-    return new Vector4D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new Vector4D(mu.NanD(), mu.NanD(), mu.NanD(), mu.NanD());
   }
 
   public static Vector4D zero()
@@ -62,7 +64,9 @@ public class Vector4D
 
   public final boolean isNan()
   {
-    return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z) || IMathUtils.instance().isNan(_w));
+    final IMathUtils mu = IMathUtils.instance();
+
+    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z) || mu.isNan(_w));
   }
 
   public final boolean isZero()

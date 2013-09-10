@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__AbstractMeshShape__
 
 #include "Shape.hpp"
+
 class Mesh;
 
 class AbstractMeshShape : public Shape {
@@ -23,15 +24,15 @@ protected:
 
   void cleanMesh();
 
-  AbstractMeshShape(Geodetic3D* position) :
-  Shape(position),
+  AbstractMeshShape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  Shape(position, altitudeMode),
   _mesh(NULL) {
 
   }
 
-  AbstractMeshShape(Geodetic3D* position,
+  AbstractMeshShape(Geodetic3D* position, AltitudeMode altitudeMode,
                     Mesh* mesh) :
-  Shape(position),
+  Shape(position, altitudeMode),
   _mesh(mesh) {
 
   }
@@ -41,12 +42,12 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
+                 GLState* parentState,
+                 bool renderNotReadyShapes);
 
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
-  
 };
 
 #endif

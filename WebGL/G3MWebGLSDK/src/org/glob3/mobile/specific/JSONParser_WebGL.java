@@ -12,6 +12,7 @@ import org.glob3.mobile.generated.JSONDouble;
 import org.glob3.mobile.generated.JSONFloat;
 import org.glob3.mobile.generated.JSONInteger;
 import org.glob3.mobile.generated.JSONLong;
+import org.glob3.mobile.generated.JSONNull;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.JSONString;
 
@@ -21,24 +22,27 @@ public class JSONParser_WebGL
             IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final IByteBuffer buffer) {
+   public JSONBaseObject parse(final IByteBuffer buffer,
+                               final boolean nullAsObject) {
       return parse(buffer.getAsString());
    }
 
 
    @Override
-   public JSONBaseObject parse(final String string) {
+   public JSONBaseObject parse(final String string,
+                               final boolean nullAsObject) {
       final com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseLenient(string);
 
-      return convert(value);
+      return convert(value, nullAsObject);
    }
 
 
-   private static JSONBaseObject convert(final com.google.gwt.json.client.JSONValue value) {
+   private static JSONBaseObject convert(final com.google.gwt.json.client.JSONValue value,
+                                         final boolean nullAsObject) {
 
       final com.google.gwt.json.client.JSONNull jsonNull = value.isNull();
       if (jsonNull != null) {
-         return null;
+         return nullAsObject ? new JSONNull() : null;
       }
 
       final com.google.gwt.json.client.JSONBoolean jsonBoolean = value.isBoolean();
@@ -75,7 +79,7 @@ public class JSONParser_WebGL
          final int size = jsonArray.size();
          for (int i = 0; i < size; i++) {
             final com.google.gwt.json.client.JSONValue element = jsonArray.get(i);
-            array.add(convert(element));
+            array.add(convert(element, nullAsObject));
          }
          return array;
       }
@@ -84,7 +88,7 @@ public class JSONParser_WebGL
       if (jsonObject != null) {
          final JSONObject object = new JSONObject();
          for (final String key : jsonObject.keySet()) {
-            object.put(key, convert(jsonObject.get(key)));
+            object.put(key, convert(jsonObject.get(key), nullAsObject));
          }
          return object;
       }

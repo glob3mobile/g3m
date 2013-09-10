@@ -9,6 +9,8 @@
 #ifndef __G3MiOSSDK__RCObject__
 #define __G3MiOSSDK__RCObject__
 
+#include "ILogger.hpp"
+
 class RCObject {
 private:
   mutable long _referenceCounter;
@@ -29,10 +31,9 @@ protected:
 
   }
 
-public:
-  virtual ~RCObject() {
+  virtual ~RCObject();
 
-  }
+public:
 
   void _retain() const {
     _referenceCounter++;

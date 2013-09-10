@@ -7,8 +7,6 @@ package org.glob3.mobile.generated;
 //
 //
 
-///#include <math.h>
-
 //
 //  EllipsoidShape.hpp
 //  G3MiOSSDK
@@ -37,6 +35,8 @@ public class EllipsoidShape extends AbstractMeshShape
   private final short _resolution;
 
   private final float _borderWidth;
+
+  private final boolean _texturedInside;
 
   private final boolean _mercator;
 
@@ -85,7 +85,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords)
   {
@@ -93,21 +93,40 @@ public class EllipsoidShape extends AbstractMeshShape
     // create surface indices
     ShortBufferBuilder indices = new ShortBufferBuilder();
     short delta = (short)(2 *_resolution - 1);
-    for (short j = 0; j<_resolution-1; j++)
+  
+    // create indices for textupe mapping depending on the flag _texturedInside
+    if (!_texturedInside)
     {
-      if (j>0)
-         indices.add((short)(j *delta));
-      for (short i = 0; i<2 *_resolution-1; i++)
+      for (short j = 0; j<_resolution-1; j++)
       {
-        indices.add((short)(i+j *delta));
-        indices.add((short)(i+(j+1)*delta));
+        if (j>0)
+           indices.add((short)(j *delta));
+        for (short i = 0; i<2 *_resolution-1; i++)
+        {
+          indices.add((short)(i+j *delta));
+          indices.add((short)(i+(j+1)*delta));
+        }
+        indices.add((short)((2 *_resolution-2)+(j+1)*delta));
       }
-      indices.add((short)((j+2)*delta-1));
+    }
+    else
+    {
+      for (short j = 0; j<_resolution-1; j++)
+      {
+        if (j>0)
+           indices.add((short)((j+1)*delta));
+        for (short i = 0; i<2 *_resolution-1; i++)
+        {
+          indices.add((short)(i+(j+1)*delta));
+          indices.add((short)(i+j *delta));
+        }
+        indices.add((short)((2 *_resolution-2)+j *delta));
+      }
     }
   
+    // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-  
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor);
   
     final IGLTextureId texId = getTextureId(rc);
     if (texId == null)
@@ -150,18 +169,16 @@ public class EllipsoidShape extends AbstractMeshShape
       _textureRequested = true;
       if (_textureURL.getPath().length() != 0)
       {
-        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), new EllipsoidShape_IImageDownloadListener(this), true);
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new EllipsoidShape_IImageDownloadListener(this), true);
       }
     }
   
-    final Ellipsoid ellipsoid = new Ellipsoid(new Vector3D(_radiusX, _radiusY, _radiusZ));
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(_radiusX, _radiusY, _radiusZ)));
     final Sector sector = new Sector(Sector.fullSphere());
   
-    FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), ellipsoid, Vector3D.zero());
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-  
-  
-    final double pi4 = IMathUtils.instance().pi() * 4;
   
     final short resolution2Minus2 = (short)(2 *_resolution-2);
     final short resolutionMinus1 = (short)(_resolution-1);
@@ -177,27 +194,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
         vertices.add(innerPoint);
   
-  
-        double vv;
-        if (_mercator)
-        {
-          double latitudeInDegrees = innerPoint.latitude().degrees();
-          if (latitudeInDegrees > 85)
-          {
-            latitudeInDegrees = 85;
-          }
-          else if (latitudeInDegrees < -85)
-          {
-            latitudeInDegrees = -85;
-          }
-  
-          final double latSin = Angle.fromDegrees(latitudeInDegrees).sinus();
-          vv = 1.0 - ((IMathUtils.instance().log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
-        }
-        else
-        {
-          vv = v;
-        }
+        final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint._latitude) : v;
   
         texCoords.add((float) u, (float) vv);
       }
@@ -217,19 +214,20 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
   {
-     this(position, radius, resolution, borderWidth, mercator, surfaceColor, null);
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null);
   }
-  public EllipsoidShape(Geodetic3D position, Vector3D radius, short resolution, float borderWidth, boolean mercator, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
      _radiusX = radius.x();
      _radiusY = radius.y();
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
+     _texturedInside = texturedInside;
      _mercator = mercator;
      _surfaceColor = surfaceColor;
      _borderColor = borderColor;
@@ -238,15 +236,16 @@ public class EllipsoidShape extends AbstractMeshShape
 
   }
 
-  public EllipsoidShape(Geodetic3D position, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean mercator)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
   {
-     super(position);
+     super(position, altitudeMode);
      _textureURL = new URL(textureURL);
      _radiusX = radius.x();
      _radiusY = radius.y();
      _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
+     _texturedInside = texturedInside;
      _mercator = mercator;
      _surfaceColor = null;
      _borderColor = null;
@@ -262,6 +261,9 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    super.dispose();
+  
   }
 
   public final void imageDownloaded(IImage image)

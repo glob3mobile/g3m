@@ -9,19 +9,21 @@
 #ifndef __G3MiOSSDK__BilParser__
 #define __G3MiOSSDK__BilParser__
 
-class ElevationData;
+class ShortBufferElevationData;
 class IByteBuffer;
-#include "Vector2I.hpp"
+class Sector;
+class Vector2I;
+
 
 class BilParser {
 private:
   BilParser();
-  
+
 public:
 
-  static ElevationData* parseBil16(const IByteBuffer* buffer,
-                                   const Vector2I& extent);
-
+  static ShortBufferElevationData* parseBil16(const Sector& sector,
+                                              const Vector2I& extent,
+                                              const IByteBuffer* buffer);
 };
 
 #endif

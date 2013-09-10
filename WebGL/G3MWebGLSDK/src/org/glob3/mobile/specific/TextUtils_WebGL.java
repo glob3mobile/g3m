@@ -14,21 +14,34 @@ public class TextUtils_WebGL
          extends
             ITextUtils {
 
-   public native String toJSColor(final Color color) /*-{
-		if (color) {
-			var r = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
-			var g = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getGreen()());
-			var b = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getBlue()());
-			var a = Math
-					.round(255 * color.@org.glob3.mobile.generated.Color::getAlpha()());
-			return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-		} else {
-			return null;
-		}
-   }-*/;
+   //   public static native String toJSColor(final Color color) /*-{
+   //		if (color) {
+   //			var r = Math
+   //					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
+   //			var g = Math
+   //					.round(255 * color.@org.glob3.mobile.generated.Color::getGreen()());
+   //			var b = Math
+   //					.round(255 * color.@org.glob3.mobile.generated.Color::getBlue()());
+   //			var a = Math
+   //					.round(255 * color.@org.glob3.mobile.generated.Color::getAlpha()());
+   //			return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+   //		} else {
+   //			return null;
+   //		}
+   //   }-*/;
+
+   private static String toJSColor(final Color color) {
+      if (color == null) {
+         return null;
+      }
+
+      final int r = Math.round(255 * color.getRed());
+      final int g = Math.round(255 * color.getGreen());
+      final int b = Math.round(255 * color.getBlue());
+      final float a = color.getAlpha();
+
+      return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+   }
 
 
    @Override
@@ -61,10 +74,10 @@ public class TextUtils_WebGL
 		// context.fillStyle = "green"; // for debug
 		// context.fillRect(0, 0, width, height); // for debug
 
-		context.fillStyle = this.@org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
+		context.fillStyle = @org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
 
 		if (shadowColor) {
-			context.shadowColor = this.@org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(shadowColor);
+			context.shadowColor = @org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(shadowColor);
 			context.shadowBlur = 2;
 			context.shadowOffsetX = 2;
 			context.shadowOffsetY = 2;
@@ -170,10 +183,10 @@ public class TextUtils_WebGL
 			context.drawImage(htmlImage, 0, (resultHeight - imageHeight) / 2);
 		}
 
-		context.fillStyle = this.@org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
+		context.fillStyle = @org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
 
 		if (shadowColor) {
-			context.shadowColor = this.@org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(shadowColor);
+			context.shadowColor = @org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(shadowColor);
 			context.shadowBlur = 2;
 			context.shadowOffsetX = 2;
 			context.shadowOffsetY = 2;

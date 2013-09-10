@@ -27,11 +27,6 @@ package org.glob3.mobile.generated;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private TilesRenderParameters _parameters;
-
-//  mutable IFloatBuffer* _texCoordsCache;
-//  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
-
   private TexturesHandler _texturesHandler;
 
   private LeveledTexturedMesh getMesh(Tile tile)
@@ -41,22 +36,15 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   }
 
   public MultiLayerTileTexturizer()
-  //_texCoordsCache(NULL),
-  //_pendingTopTileRequests(0),
   {
-     _parameters = null;
      _texturesHandler = null;
   
   }
 
-//  void countTopTileRequest() {
-//    _pendingTopTileRequests--;
-//  }
-
   public void dispose()
   {
-  //  delete _texCoordsCache;
-  //  _texCoordsCache = NULL;
+    super.dispose();
+  
   }
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
@@ -70,11 +58,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
-    _parameters = parameters;
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, PlanetRendererContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
     _texturesHandler = rc.getTexturesHandler();
   
@@ -83,12 +70,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, trc.getTessellator()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, prc.getTileRasterizer(), rc, prc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, prc.getTessellator(), prc.getTexturePriority()));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (trc.isForcedFullRender())
+    if (prc.isForcedFullRender())
     {
       builder.start();
     }
@@ -113,13 +100,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cleanTile();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 4\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 4\n");
+  //    }
+  //  }
   }
 
   public final boolean tileMeetsRenderCriteria(Tile tile)
@@ -127,16 +112,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return false;
   }
 
-
-  //IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-  ////  if (_texCoordsCache == NULL) {
-  ////    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
-  ////  }
-  ////  return _texCoordsCache;
-  //  int _____XXXXXXX;
-  //  return trc->getTessellator()->createUnitTextCoords();
-  //}
-  
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
   }
@@ -171,7 +146,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
+    final int level = tile.getLevel() - ancestorTile.getLevel();
     _texturesHandler.retainGLTextureId(glTextureId);
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
     {
@@ -186,12 +161,14 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
+  public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
-    if (layerSet != null)
+    if (layerSet == null)
     {
-      layerSet.onTerrainTouchEvent(ec, position, tile);
+      return false;
     }
+  
+    return layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
   public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)
@@ -203,13 +180,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cancel();
       builder.cleanMesh();
     }
-    else
-    {
-      if (mesh != null)
-      {
-        ILogger.instance().logInfo("break (point) on me 5\n");
-      }
-    }
+  //  else {
+  //    if (mesh != NULL) {
+  //      ILogger::instance()->logInfo("break (point) on me 5\n");
+  //    }
+  //  }
   }
 
 }

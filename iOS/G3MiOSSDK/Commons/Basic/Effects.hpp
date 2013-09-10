@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Effects_hpp
 #define G3MiOSSDK_Effects_hpp
 
-#include "Renderer.hpp"
+
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
@@ -18,13 +18,15 @@
 
 #include <vector>
 
+class G3MRenderContext;
+class G3MContext;
+
 class EffectTarget {
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
+#else
+  void dispose();
 #endif
 };
 
@@ -35,8 +37,7 @@ protected:
     if (f < 0) return 0;
     if (f > 1) return 1;
 
-    //    return sigmoid(f);
-    //    return gently(f, 0.6, 0.85);
+    //const double result = gently(f, 0.6, 0.85);
     const double result = gently(f, 0.25, 0.75);
     if (result < 0) return 0;
     if (result > 1) return 1;
@@ -86,7 +87,9 @@ public:
 
   virtual void cancel(const TimeInterval& when) = 0;
 
-  virtual ~Effect() { }
+  virtual ~Effect() {
+
+  }
 };
 
 
@@ -94,14 +97,17 @@ public:
 
 class EffectWithDuration : public Effect {
 private:
-  long long _started;
-  const long long _duration;
+  long long       _started;
+  const long long _durationMS;
+  const bool      _linearTiming;
 
 protected:
 
-  EffectWithDuration(const TimeInterval& duration) :
-  _started(0),
-  _duration(duration.milliseconds())
+  EffectWithDuration(const TimeInterval& duration,
+                     const bool linearTiming) :
+  _durationMS(duration.milliseconds()),
+  _linearTiming(linearTiming),
+  _started(0)
   {
 
   }
@@ -109,10 +115,15 @@ protected:
   double percentDone(const TimeInterval& when) const {
     const long long elapsed = when.milliseconds() - _started;
 
-    const double percent = (double) elapsed / _duration;
+    const double percent = (double) elapsed / _durationMS;
     if (percent > 1) return 1;
     if (percent < 0) return 0;
     return percent;
+  }
+  
+  double getAlpha(const TimeInterval& when) const {
+    const double percent = percentDone(when);
+    return _linearTiming ? percent : pace(percent);
   }
 
 
@@ -130,9 +141,8 @@ public:
   virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& when) {
     const double percent = percentDone(when);
-    return percent >= 1;
+    return (percent >= 1);
   }
-
 };
 
 
@@ -218,12 +228,12 @@ public:
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }
-  };
+  }
 
   void startEffect(Effect* effect,
                    EffectTarget* target);
 
-  void cancellAllEffectsFor(EffectTarget* target);
+  void cancelAllEffectsFor(EffectTarget* target);
 
   void onResume(const G3MContext* context) {
 

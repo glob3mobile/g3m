@@ -12,10 +12,9 @@
 
 void ShapePositionEffect::doStep(const G3MRenderContext *rc,
                                  const TimeInterval& when) {
-  const double percent = percentDone(when);
-  const double alpha = _linearInterpolation ? percent : pace( percent );
+  const double alpha = getAlpha(when);
 
-  const Geodetic3D pos = Geodetic3D::interpolation(_fromPosition, _toPosition, alpha);
+  const Geodetic3D pos = Geodetic3D::linearInterpolation(_fromPosition, _toPosition, alpha);
   _shape->setPosition(new Geodetic3D(pos));
 }
 

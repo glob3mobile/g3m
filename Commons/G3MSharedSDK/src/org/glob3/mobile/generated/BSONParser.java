@@ -35,42 +35,28 @@ public class BSONParser
 
   }
 
-  private static JSONBaseObject parseValue(byte type, ByteBufferIterator iterator)
+  private static JSONBaseObject parseValue(byte type, ByteBufferIterator iterator, boolean nullAsObject)
   {
     switch (type)
     {
       case 0x02:
-      {
         return parseString(iterator);
-      }
       case 0x04:
-      {
-        return parseArray(iterator);
-      }
+        return parseArray(iterator, nullAsObject);
       case 0x01:
-      {
         return parseDouble(iterator);
-      }
       case 0x10:
-      {
         return parseInt32(iterator);
-      }
       case 0x12:
-      {
         return parseInt64(iterator);
-      }
       case 0x08:
-      {
         return parseBool(iterator);
-      }
       case 0x03:
-      {
-        return parseObject(iterator);
-      }
+        return parseObject(iterator, nullAsObject);
       case 0x44:
-      {
-        return parseCustomizedArray(iterator);
-      }
+        return parseCustomizedArray(iterator, nullAsObject);
+      case 0x0A:
+        return nullAsObject ? new JSONNull() : null;
       default:
       {
         ILogger.instance().logError("Unknown type %d", type);
@@ -93,7 +79,7 @@ public class BSONParser
     ILogger.instance().logError("Invalid stringSize, expected %d but got %d", stringSize, str.length());
     return null;
   }
-  private static JSONArray parseArray(ByteBufferIterator iterator)
+  private static JSONArray parseArray(ByteBufferIterator iterator, boolean nullAsObject)
   {
     //const int arraySize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
@@ -109,7 +95,7 @@ public class BSONParser
   
       // const std::string key = iterator->nextZeroTerminatedString();
       iterator.nextZeroTerminatedString(); // consumes the key
-      JSONBaseObject value = parseValue(type, iterator);
+      JSONBaseObject value = parseValue(type, iterator, nullAsObject);
       if (value != null)
       {
         result.add(value);
@@ -118,7 +104,7 @@ public class BSONParser
   
     return result;
   }
-  private static JSONArray parseCustomizedArray(ByteBufferIterator iterator)
+  private static JSONArray parseCustomizedArray(ByteBufferIterator iterator, boolean nullAsObject)
   {
     //const int arraySize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
@@ -133,7 +119,7 @@ public class BSONParser
       }
   
       //const std::string key = iterator->nextZeroTerminatedString();
-      JSONBaseObject value = parseValue(type, iterator);
+      JSONBaseObject value = parseValue(type, iterator, nullAsObject);
       if (value != null)
       {
         result.add(value);
@@ -169,7 +155,7 @@ public class BSONParser
     }
     return new JSONBoolean(false);
   }
-  private static JSONObject parseObject(ByteBufferIterator iterator)
+  private static JSONObject parseObject(ByteBufferIterator iterator, boolean nullAsObject)
   {
     //const int objectSize = iterator->nextInt32();
     iterator.nextInt32(); // consumes the size
@@ -184,7 +170,7 @@ public class BSONParser
       }
   
       final String key = iterator.nextZeroTerminatedString();
-      JSONBaseObject value = parseValue(type, iterator);
+      JSONBaseObject value = parseValue(type, iterator, nullAsObject);
       if (value != null)
       {
         result.put(key, value);
@@ -196,6 +182,10 @@ public class BSONParser
 
 
   public static JSONBaseObject parse(IByteBuffer buffer)
+  {
+     return parse(buffer, false);
+  }
+  public static JSONBaseObject parse(IByteBuffer buffer, boolean nullAsObject)
   {
   
     ByteBufferIterator iterator = new ByteBufferIterator(buffer);
@@ -217,7 +207,7 @@ public class BSONParser
       }
   
       final String key = iterator.nextZeroTerminatedString();
-      JSONBaseObject value = parseValue(type, iterator);
+      JSONBaseObject value = parseValue(type, iterator, nullAsObject);
       if (value != null)
       {
         result.put(key, value);

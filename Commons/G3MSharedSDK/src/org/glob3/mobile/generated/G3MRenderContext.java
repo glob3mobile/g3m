@@ -12,22 +12,22 @@ public class G3MRenderContext extends G3MContext
   private final Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
-  private TextureBuilder _textureBuilder;
   private ITimer _frameStartTimer;
+  private GPUProgramManager _gpuProgramManager;
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider)
   {
-     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage);
+     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider);
      _frameTasksExecutor = frameTasksExecutor;
      _gl = gl;
      _currentCamera = currentCamera;
      _nextCamera = nextCamera;
      _texturesHandler = texturesHandler;
-     _textureBuilder = textureBuilder;
      _frameStartTimer = frameStartTimer;
      _orderedRenderables = null;
+     _gpuProgramManager = gpuProgramManager;
 
   }
 
@@ -51,11 +51,6 @@ public class G3MRenderContext extends G3MContext
     return _texturesHandler;
   }
 
-  public final TextureBuilder getTextureBuilder()
-  {
-    return _textureBuilder;
-  }
-
   public final ITimer getFrameStartTimer()
   {
     return _frameStartTimer;
@@ -66,11 +61,19 @@ public class G3MRenderContext extends G3MContext
     return _frameTasksExecutor;
   }
 
+  public final GPUProgramManager getGPUProgramManager()
+  {
+    return _gpuProgramManager;
+  }
+
   public void dispose()
   {
     //  delete _frameStartTimer;
     IFactory.instance().deleteTimer(_frameStartTimer);
     _orderedRenderables = null;
+  
+    super.dispose();
+  
   }
 
   /*

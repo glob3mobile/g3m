@@ -9,9 +9,6 @@
 #ifndef G3MiOSSDK_Storage_h
 #define G3MiOSSDK_Storage_h
 
-//#include "URL.hpp"
-//#include "IByteBuffer.hpp"
-//#include "IImage.hpp"
 class URL;
 class IByteBuffer;
 class IImage;
@@ -19,6 +16,59 @@ class G3MContext;
 class TimeInterval;
 
 #include <stddef.h>
+
+
+class IImageResult {
+private:
+  IImage*    _image;
+  const bool _expired;
+
+public:
+  IImageResult(IImage* image,
+               bool expired) :
+  _image(image),
+  _expired(expired)
+  {
+  }
+
+  ~IImageResult() {
+  }
+
+  IImage* getImage() const {
+    return _image;
+  }
+
+  bool isExpired() const {
+    return _expired;
+  }
+};
+
+
+class IByteBufferResult {
+private:
+  IByteBuffer* _buffer;
+  const bool   _expired;
+
+public:
+  IByteBufferResult(IByteBuffer* buffer,
+                    bool expired) :
+  _buffer(buffer),
+  _expired(expired)
+  {
+  }
+
+  ~IByteBufferResult() {
+  }
+
+  IByteBuffer* getBuffer() const {
+    return _buffer;
+  }
+
+  bool isExpired() const {
+    return _expired;
+  }
+};
+
 
 class IStorage {
 protected:
@@ -33,36 +83,29 @@ public:
   IStorage() :
   _context(NULL)
   {
-
   }
 
   virtual ~IStorage() {
-
   }
 
   virtual void initialize(const G3MContext* context);
 
 
-//  virtual bool containsBuffer(const URL& url) = 0;
+  virtual IByteBufferResult readBuffer(const URL& url,
+                                       bool readExpired) = 0;
+
+  virtual IImageResult readImage(const URL& url,
+                                 bool readExpired) = 0;
 
   virtual void saveBuffer(const URL& url,
                           const IByteBuffer* buffer,
                           const TimeInterval& timeToExpires,
                           bool saveInBackground) = 0;
 
-  virtual IByteBuffer* readBuffer(const URL& url) = 0;
-
-
-
-//  virtual bool containsImage(const URL& url) = 0;
-
   virtual void saveImage(const URL& url,
                          const IImage* image,
                          const TimeInterval& timeToExpires,
                          bool saveInBackground) = 0;
-
-  virtual IImage* readImage(const URL& url) = 0;
-
 
 
   virtual void onResume(const G3MContext* context) = 0;

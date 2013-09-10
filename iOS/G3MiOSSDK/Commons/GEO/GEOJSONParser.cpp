@@ -16,12 +16,14 @@
 #include "GEOFeatureCollection.hpp"
 #include "GEOFeature.hpp"
 #include "GEOGeometry.hpp"
-#include "GEOLineStringGeometry.hpp"
 #include "GEO2DLineStringGeometry.hpp"
-#include "GEOMultiLineStringGeometry.hpp"
 #include "GEO2DMultiLineStringGeometry.hpp"
-
+#include "GEO2DPointGeometry.hpp"
+#include "GEO2DPolygonGeometry.hpp"
 #include "Geodetic2D.hpp"
+#include "GEO2DPolygonData.hpp"
+#include "GEO2DMultiPolygonGeometry.hpp"
+
 
 GEOObject* GEOJSONParser::parse(const IByteBuffer* json) {
   return parse(json->getAsString());
@@ -33,17 +35,25 @@ GEOObject* GEOJSONParser::parse(const std::string& json) {
 }
 
 void GEOJSONParser::showStatistics() const {
-  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), features=%d, featuresCollection=%d",
+
+//  mutable int _polygon2DCount;
+//  mutable int _holesLineStringsInPolygon2DCount;
+
+  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d",
                                _coordinates2DCount,
+                               _points2DCount,
                                _lineStrings2DCount,
                                _multiLineStrings2DCount,
                                _lineStringsInMultiLineString2DCount,
+                               _polygon2DCount,
+                               _holesLineStringsInPolygon2DCount,
+                               _multiPolygon2DCount,
                                _featuresCount,
                                _featuresCollectionCount);
 }
 
 GEOObject* GEOJSONParser::pvtParse() const {
-  JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
+  const JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
 
   GEOObject* result = NULL;
 
@@ -90,7 +100,37 @@ std::vector<Geodetic2D*>* GEOJSONParser::create2DCoordinates(const JSONArray* js
   return coordinates;
 }
 
-GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) const {
+  const JSONArray* jsCoordinates = jsonObject->getAsArray("coordinates");
+  if (jsCoordinates == NULL) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
+    return NULL;
+  }
+
+  GEOGeometry* geo = NULL;
+  
+  const int dimensions = jsCoordinates->size();
+  if (dimensions == 2) {
+    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
+    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
+
+    _points2DCount++;
+
+    geo = new GEO2DPointGeometry( Geodetic2D::fromDegrees(latitudeDegrees, longitudeDegrees) );
+  }
+//  else if (dimensions == 3) {
+//    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
+//    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
+//    const double height           = jsCoordinates->getAsNumber(2, 0.0);
+//  }
+  else {
+    ILogger::instance()->logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
+  }
+
+  return geo;
+}
+
+GEOGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
 
   const JSONArray* jsCoordinates = jsonObject->getAsArray("coordinates");
   if (jsCoordinates == NULL) {
@@ -104,7 +144,7 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
     return NULL;
   }
 
-  GEOLineStringGeometry* geo = NULL;
+  GEOGeometry* geo = NULL;
 
   const int dimensions = jsCoordinates->getAsArray(0)->size();
   if (dimensions == 2) {
@@ -114,11 +154,6 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
       _lineStrings2DCount++;
     }
   }
-  /*
-   else if (dimensions >= 3) {
-   geo = new GEO3DLineStringGeometry(coordinates);
-   }
-   */
   else {
     ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
     return NULL;
@@ -127,7 +162,7 @@ GEOLineStringGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject*
   return geo;
 }
 
-GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* jsonObject) const {
 
   const JSONArray* jsCoordinatesArray = jsonObject->getAsArray("coordinates");
   if (jsCoordinatesArray == NULL) {
@@ -152,7 +187,7 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
     return NULL;
   }
 
-  GEOMultiLineStringGeometry* geo = NULL;
+  GEOGeometry* geo = NULL;
 
   const int dimensions = jsFirstCoordinates->getAsArray(0)->size();
   if (dimensions == 2) {
@@ -170,17 +205,103 @@ GEOMultiLineStringGeometry* GEOJSONParser::createMultiLineStringGeometry(const J
     geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
     _multiLineStrings2DCount++;
   }
-  /*
-   else if (dimensions >= 3) {
-   geo = new GEO3DLineStringGeometry(coordinates);
-   }
-   */
   else {
     ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
     return NULL;
   }
 
   return geo;
+}
+
+
+GEO2DPolygonData* GEOJSONParser::parsePolygon2DData(const JSONArray* jsCoordinatesArray) const {
+  const int coordinatesArrayCount = jsCoordinatesArray->size();
+  if (coordinatesArrayCount == 0) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
+    return NULL;
+  }
+
+  const JSONArray* jsFirstCoordinates = jsCoordinatesArray->getAsArray(0);
+  if (jsFirstCoordinates == NULL) {
+    ILogger::instance()->logError("Invalid format for first \"coordinates\" element");
+    return NULL;
+  }
+  const int firstCoordinatesCount = jsFirstCoordinates->size();
+  if (firstCoordinatesCount == 0) {
+    ILogger::instance()->logError("Invalid format for first \"coordinates\" element");
+    return NULL;
+  }
+
+  const int dimensions = jsFirstCoordinates->getAsArray(0)->size();
+  if (dimensions == 2) {
+    const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
+    std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
+
+    std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
+    for (int i = 1; i < coordinatesArrayCount; i++) {
+      const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
+      std::vector<Geodetic2D*>* holeCoordinates = create2DCoordinates(jsHoleCoordinates);
+      if (holeCoordinates != NULL) {
+        holesCoordinatesArray->push_back( holeCoordinates );
+        _holesLineStringsInPolygon2DCount++;
+      }
+    }
+
+    if (holesCoordinatesArray->size() == 0) {
+      delete holesCoordinatesArray;
+      holesCoordinatesArray = NULL;
+    }
+
+    _polygon2DCount++;
+    return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+  }
+
+  ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
+  return NULL;
+}
+
+
+GEO2DPolygonData* GEOJSONParser::parsePolygon2DData(const JSONObject* jsonObject) const {
+  const JSONArray* jsCoordinatesArray = jsonObject->getAsArray("coordinates");
+  if (jsCoordinatesArray == NULL) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
+    return NULL;
+  }
+
+  return parsePolygon2DData(jsCoordinatesArray);
+}
+
+
+
+GEOGeometry* GEOJSONParser::createPolygonGeometry(const JSONObject* jsonObject) const {
+  GEO2DPolygonData* polygonData = parsePolygon2DData(jsonObject);
+
+  return (polygonData == NULL) ? NULL : new GEO2DPolygonGeometry(polygonData);
+}
+
+GEOGeometry* GEOJSONParser::createMultiPolygonGeometry(const JSONObject* jsonObject) const {
+  const JSONArray* jsPolygonsCoordinatesArray = jsonObject->getAsArray("coordinates");
+  if (jsPolygonsCoordinatesArray == NULL) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
+    return NULL;
+  }
+
+  const int polygonsCoordinatesArrayCount = jsPolygonsCoordinatesArray->size();
+  if (polygonsCoordinatesArrayCount == 0) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
+    return NULL;
+  }
+
+  std::vector<GEO2DPolygonData*>* polygonsData = new std::vector<GEO2DPolygonData*>();
+  for (int i = 0; i < polygonsCoordinatesArrayCount; i++) {
+    const JSONArray* jsCoordinatesArray = jsPolygonsCoordinatesArray->getAsArray(i);
+
+    polygonsData->push_back( parsePolygon2DData(jsCoordinatesArray) );
+  }
+
+  _multiPolygon2DCount++;
+
+  return new GEO2DMultiPolygonGeometry(polygonsData);
 }
 
 GEOGeometry* GEOJSONParser::createGeometry(const JSONObject* jsonObject) const {
@@ -195,11 +316,12 @@ GEOGeometry* GEOJSONParser::createGeometry(const JSONObject* jsonObject) const {
   /*
    "LineString"
    "MultiLineString"
-
    "Point"
-   "MultiPoint"
    "Polygon"
+
    "MultiPolygon"
+
+   "MultiPoint"
    "GeometryCollection"
    */
 
@@ -208,6 +330,15 @@ GEOGeometry* GEOJSONParser::createGeometry(const JSONObject* jsonObject) const {
   }
   else if (type.compare("MultiLineString") == 0) {
     geo = createMultiLineStringGeometry(jsonObject);
+  }
+  else if (type.compare("Point") == 0) {
+    geo = createPointGeometry(jsonObject);
+  }
+  else if (type.compare("Polygon") == 0) {
+    geo = createPolygonGeometry(jsonObject);
+  }
+  else if (type.compare("MultiPolygon") == 0) {
+    geo = createMultiPolygonGeometry(jsonObject);
   }
   else {
     ILogger::instance()->logError("Unknown geometry type \"%s\"", type.c_str());
@@ -238,7 +369,7 @@ GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
 }
 
 GEOFeatureCollection* GEOJSONParser::createFeaturesCollection(const JSONObject* jsonObject) const {
-  GEOFeatureCollection* geo = new GEOFeatureCollection();
+  std::vector<GEOFeature*> features;
 
   const JSONArray* jsFeatures = jsonObject->getAsArray("features");
   if (jsFeatures != NULL) {
@@ -247,13 +378,13 @@ GEOFeatureCollection* GEOJSONParser::createFeaturesCollection(const JSONObject* 
       const JSONObject* jsFeature = jsFeatures->getAsObject(i);
       if (jsFeature != NULL) {
         GEOFeature* feature = createFeature(jsFeature);
-        geo->addFeature(feature);
+        features.push_back(feature);
       }
     }
   }
 
   _featuresCollectionCount++;
-  return geo;
+  return new GEOFeatureCollection(features);
 }
 
 GEOObject* GEOJSONParser::toGEO(const JSONObject* jsonObject) const {

@@ -4,16 +4,24 @@ public class IconDownloadListener extends IImageDownloadListener
   private Mark _mark;
   private final String _label;
   private final boolean _labelBottom;
+  private final float _labelFontSize;
+  private final Color _labelFontColor;
+  private final Color _labelShadowColor;
+  private final int _labelGapSize;
 
-  public IconDownloadListener(Mark mark, String label, boolean labelBottom)
+  public IconDownloadListener(Mark mark, String label, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
   {
      _mark = mark;
      _label = label;
      _labelBottom = labelBottom;
+     _labelFontSize = labelFontSize;
+     _labelFontColor = labelFontColor;
+     _labelShadowColor = labelShadowColor;
+     _labelGapSize = labelGapSize;
 
   }
 
-  public final void onDownload(URL url, IImage image)
+  public final void onDownload(URL url, IImage image, boolean expired)
   {
     final boolean hasLabel = (_label.length() != 0);
 
@@ -21,7 +29,7 @@ public class IconDownloadListener extends IImageDownloadListener
     {
       LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
 
-      ITextUtils.instance().labelImage(image, _label, labelPosition, new MarkLabelImageListener(image, _mark), true);
+      ITextUtils.instance().labelImage(image, _label, labelPosition, _labelGapSize, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(image, _mark), true);
     }
     else
     {
@@ -41,7 +49,7 @@ public class IconDownloadListener extends IImageDownloadListener
     _mark.onTextureDownloadError();
   }
 
-  public final void onCanceledDownload(URL url, IImage image)
+  public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
     // do nothing
   }

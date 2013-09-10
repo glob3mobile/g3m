@@ -9,22 +9,6 @@ public final class MathUtils_Android
          extends
             IMathUtils {
 
-   private static final double PI      = Math.PI;
-   private static final double HALF_PI = PI / 2;
-
-
-   @Override
-   public double pi() {
-      return PI;
-   }
-
-
-   @Override
-   public double halfPi() {
-      return HALF_PI;
-   }
-
-
    @Override
    public boolean isNan(final double v) {
       return (v != v);
@@ -140,13 +124,13 @@ public final class MathUtils_Android
 
 
    @Override
-   public double round(final double v) {
+   public long round(final double v) {
       return Math.round(v);
    }
 
 
    @Override
-   public float round(final float v) {
+   public int round(final float v) {
       return Math.round(v);
    }
 
@@ -315,6 +299,96 @@ public final class MathUtils_Android
    @Override
    public double rawLongBitsToDouble(final long value) {
       return Double.longBitsToDouble(value);
+   }
+
+
+   @Override
+   public double sinh(final double v) {
+      return Math.sinh(v);
+   }
+
+
+   @Override
+   public float sinh(final float v) {
+      return (float) Math.sinh(v);
+   }
+
+
+   @Override
+   public double floor(final double d) {
+      return Math.floor(d);
+   }
+
+
+   @Override
+   public float floor(final float f) {
+      return (float) Math.floor(f);
+   }
+
+
+   @Override
+   public float min(final float f1,
+                    final float f2) {
+      return Math.min(f1, f2);
+   }
+
+
+   @Override
+   public float max(final float f1,
+                    final float f2) {
+      return Math.max(f1, f2);
+   }
+
+
+   @Override
+   public int max(final int i1,
+                  final int i2) {
+      return Math.max(i1, i2);
+   }
+
+
+   @Override
+   public long max(final long l1,
+                   final long l2) {
+      return Math.max(l1, l2);
+   }
+
+
+   @Override
+   public short maxInt16() {
+      return Short.MAX_VALUE;
+   }
+
+
+   @Override
+   public short minInt16() {
+      return Short.MIN_VALUE;
+   }
+
+
+   @Override
+   public double ceil(final double d) {
+      return Math.ceil(d);
+   }
+
+
+   @Override
+   public float ceil(final float f) {
+      return (float) Math.ceil(f);
+   }
+
+
+   @Override
+   public double fmod(final double d1,
+                      final double d2) {
+      return d1 % d2;
+   }
+
+
+   @Override
+   public float fmod(final float f1,
+                     final float f2) {
+      return f1 % f2;
    }
 
 }

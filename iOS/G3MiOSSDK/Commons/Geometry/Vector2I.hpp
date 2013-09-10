@@ -17,13 +17,6 @@ public:
   const int _x;
   const int _y;
   
-  Vector2I() :
-  _x(0),
-  _y(0)
-  {
-    
-  }
-
   Vector2I(int x, int y) :
   _x(x),
   _y(y)
@@ -69,7 +62,9 @@ public:
   MutableVector2I asMutableVector2I() const {
     return MutableVector2I(_x, _y);
   }
-  
+
+  bool isEquals(const Vector2I& that) const;
+
 };
 
 #endif

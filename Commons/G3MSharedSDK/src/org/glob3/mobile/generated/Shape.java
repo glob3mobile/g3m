@@ -20,11 +20,16 @@ package org.glob3.mobile.generated;
 //class MutableMatrix44D;
 
 
-//class ShapePendingEffect;
 
-public abstract class Shape implements EffectTarget
+
+
+//class ShapePendingEffect;
+//class GPUProgramState;
+
+public abstract class Shape implements SurfaceElevationListener, EffectTarget
 {
   private Geodetic3D _position;
+  private AltitudeMode _altitudeMode;
 
   private Angle _heading;
   private Angle _pitch;
@@ -33,10 +38,21 @@ public abstract class Shape implements EffectTarget
   private double _scaleY;
   private double _scaleZ;
 
+//  const Planet* _planet;
+
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
+  
+    double altitude = _position._height;
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      altitude += _surfaceElevation;
+    }
+  
+    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
+  
+    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
@@ -50,11 +66,20 @@ public abstract class Shape implements EffectTarget
     if (_transformMatrix == null)
     {
       _transformMatrix = createTransformMatrix(planet);
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
     }
     return _transformMatrix;
   }
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
+
+  private boolean _enable;
+
+  private GLState _glState;
+
+  private SurfaceElevationProvider _surfaceElevationProvider;
+  private double _surfaceElevation;
 
   protected void cleanTransformMatrix()
   {
@@ -63,15 +88,19 @@ public abstract class Shape implements EffectTarget
     _transformMatrix = null;
   }
 
-  public Shape(Geodetic3D position)
+  public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {
      _position = position;
+     _altitudeMode = altitudeMode;
      _heading = new Angle(Angle.zero());
      _pitch = new Angle(Angle.zero());
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;
      _transformMatrix = null;
+     _enable = true;
+     _surfaceElevation = 0;
+     _glState = new GLState();
 
   }
 
@@ -95,6 +124,8 @@ public abstract class Shape implements EffectTarget
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();
+  
+    _glState._release();
   }
 
   public final Geodetic3D getPosition()
@@ -120,6 +151,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void addShapeEffect(Effect effect)
+  {
+    _pendingEffects.add(new ShapePendingEffect(effect, false));
+  }
+
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
   {
      setAnimatedPosition(duration, position, false);
@@ -127,7 +163,17 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, boolean linearInterpolation)
   {
     Effect effect = new ShapePositionEffect(duration, this, _position, position, linearInterpolation);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
+  }
+
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
+  {
+     setAnimatedPosition(duration, position, pitch, heading, false);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
+  {
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedPosition(Geodetic3D position)
@@ -155,6 +201,11 @@ public abstract class Shape implements EffectTarget
     cleanTransformMatrix();
   }
 
+  public final void setScale(double scale)
+  {
+    setScale(scale, scale, scale);
+  }
+
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
     _scaleX = scaleX;
@@ -176,7 +227,7 @@ public abstract class Shape implements EffectTarget
   public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
     Effect effect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
-    _pendingEffects.add(new ShapePendingEffect(effect, false));
+    addShapeEffect(effect);
   }
 
   public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
@@ -200,11 +251,20 @@ public abstract class Shape implements EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, true));
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final boolean isEnable()
   {
-    if (isReadyToRender(rc))
+    return _enable;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _enable = enable;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
+  {
+    if (renderNotReadyShapes || isReadyToRender(rc))
     {
-  
       final int pendingEffectsCount = _pendingEffects.size();
       if (pendingEffectsCount > 0)
       {
@@ -215,7 +275,7 @@ public abstract class Shape implements EffectTarget
           if (pendingEffect != null)
           {
             EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
-            effectsScheduler.cancellAllEffectsFor(target);
+            effectsScheduler.cancelAllEffectsFor(target);
             effectsScheduler.startEffect(pendingEffect._effect, target);
   
             if (pendingEffect != null)
@@ -225,28 +285,40 @@ public abstract class Shape implements EffectTarget
         _pendingEffects.clear();
       }
   
-  
-      GL gl = rc.getGL();
-  
-      gl.pushMatrix();
-  
-      gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
-  
-      rawRender(rc, parentState);
-  
-      gl.popMatrix();
+      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+      _glState.setParent(parentGLState);
+      rawRender(rc, _glState, renderNotReadyShapes);
     }
   }
 
   public void initialize(G3MContext context)
   {
 
+    _surfaceElevationProvider = context.getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != null)
+    {
+      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+    }
+
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(G3MRenderContext rc, GLState parentState);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
+
+  public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
+  {
+    _surfaceElevation = rawElevation * verticalExaggeration;
+  
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
+  }
+
+  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
+  {
+  }
 
 }

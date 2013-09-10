@@ -10,51 +10,77 @@
 #define G3MiOSSDK_EllipsoidalTileTessellator_hpp
 
 #include "TileTessellator.hpp"
-class Sector;
+#include <map>
 
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
+class Sector;
+class IShortBuffer;
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
+  const bool _skirted;
 
-  const unsigned int _resolution;
-  const bool         _skirted;
+#ifdef C_CODE
+  class OrderableVector2I: public Vector2I{
+  public:
+    OrderableVector2I(const Vector2I v): Vector2I(v){}
+    bool operator<(const Vector2I& that) const{
+      return _x < that._x;
+    }
+  };
+  mutable std::map<OrderableVector2I, IShortBuffer*> _indicesMap; //Resolution vs Indices
+#endif
+#ifdef JAVA_CODE
+  private java.util.HashMap<Vector2I, IShortBuffer> _indicesMap = new java.util.HashMap<Vector2I, IShortBuffer>();
+#endif
 
-  short calculateResolution(const Sector& sector) const;
+  Vector2I calculateResolution(const Vector2I& resolution,
+                               const Sector& sector) const;
+
+  IShortBuffer* createTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
+
+  IShortBuffer* getTileIndices(const Planet* planet, const Sector& sector, const Vector2I& tileResolution) const;
 
 public:
 
-  EllipsoidalTileTessellator(const unsigned int resolution,
-                             const bool skirted) :
-  _resolution(resolution),
+  EllipsoidalTileTessellator(const bool skirted) :
   _skirted(skirted)
   {
-    //    int __TODO_width_and_height_resolutions;
+
   }
 
-  virtual ~EllipsoidalTileTessellator() { }
+  ~EllipsoidalTileTessellator();
 
   Vector2I getTileMeshResolution(const Planet* planet,
+                                 const Vector2I& resolution,
                                  const Tile* tile,
                                  bool debug) const;
 
 
   Mesh* createTileMesh(const Planet* planet,
+                       const Vector2I& resolution,
                        const Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
+                       bool mercator,
                        bool debug) const;
 
   Mesh* createTileDebugMesh(const Planet* planet,
+                            const Vector2I& resolution,
                             const Tile* tile) const;
 
   bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
 
-  IFloatBuffer* createUnitTextCoords(const Tile* tile) const;
-  
+  IFloatBuffer* createTextCoords(const Vector2I& resolution,
+                                 const Tile* tile,
+                                 bool mercator) const;
+
+  const Vector2D getTextCoord(const Tile* tile,
+                              const Angle& latitude,
+                              const Angle& longitude,
+                              bool mercator) const;
+
 };
 
 #endif

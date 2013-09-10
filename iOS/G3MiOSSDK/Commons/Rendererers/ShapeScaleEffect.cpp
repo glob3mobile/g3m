@@ -13,11 +13,12 @@
 
 void ShapeScaleEffect::doStep(const G3MRenderContext *rc,
                               const TimeInterval& when) {
-  const double alpha = pace( percentDone(when) );
+  const double alpha = getAlpha(when);
 
-  const double scaleX = IMathUtils::instance()->lerp(_fromScaleX, _toScaleX, alpha);
-  const double scaleY = IMathUtils::instance()->lerp(_fromScaleY, _toScaleY, alpha);
-  const double scaleZ = IMathUtils::instance()->lerp(_fromScaleZ, _toScaleZ, alpha);
+  IMathUtils* mu = IMathUtils::instance();
+  const double scaleX = mu->linearInterpolation(_fromScaleX, _toScaleX, alpha);
+  const double scaleY = mu->linearInterpolation(_fromScaleY, _toScaleY, alpha);
+  const double scaleZ = mu->linearInterpolation(_fromScaleZ, _toScaleZ, alpha);
 
   _shape->setScale(scaleX, scaleY, scaleZ);
 }

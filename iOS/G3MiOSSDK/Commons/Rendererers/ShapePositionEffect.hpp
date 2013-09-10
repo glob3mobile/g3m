@@ -21,19 +21,16 @@ private:
   const Geodetic3D _fromPosition;
   const Geodetic3D _toPosition;
 
-  const bool _linearInterpolation;
-
 public:
   ShapePositionEffect(const TimeInterval& duration,
                       Shape* shape,
                       const Geodetic3D& fromPosition,
                       const Geodetic3D& toPosition,
-                      bool linearInterpolation) :
-  EffectWithDuration(duration),
+                      const bool linearTiming=false) :
+  EffectWithDuration(duration, linearTiming),
   _shape(shape),
   _fromPosition(fromPosition),
-  _toPosition(toPosition),
-  _linearInterpolation(linearInterpolation)
+  _toPosition(toPosition)
   {
 
   }

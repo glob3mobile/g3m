@@ -1,31 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  IStorage.cpp
-//  G3MiOSSDK
-//
-//  Created by Mari Luz Mateo on 05/11/12.
-//
-//
-
-//
-//  Storage.h
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 26/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-///#include "URL.hpp"
-///#include "IByteBuffer.hpp"
-///#include "IImage.hpp"
-//class URL;
-//class IByteBuffer;
-//class IImage;
-//class G3MContext;
-//class TimeInterval;
-
-
 public abstract class IStorage
 {
   protected G3MContext _context;
@@ -33,12 +6,10 @@ public abstract class IStorage
   public IStorage()
   {
      _context = null;
-
   }
 
   public void dispose()
   {
-
   }
 
   public void initialize(G3MContext context)
@@ -47,20 +18,13 @@ public abstract class IStorage
   }
 
 
-//  virtual bool containsBuffer(const URL& url) = 0;
+  public abstract IByteBufferResult readBuffer(URL url, boolean readExpired);
+
+  public abstract IImageResult readImage(URL url, boolean readExpired);
 
   public abstract void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground);
 
-  public abstract IByteBuffer readBuffer(URL url);
-
-
-
-//  virtual bool containsImage(const URL& url) = 0;
-
   public abstract void saveImage(URL url, IImage image, TimeInterval timeToExpires, boolean saveInBackground);
-
-  public abstract IImage readImage(URL url);
-
 
 
   public abstract void onResume(G3MContext context);

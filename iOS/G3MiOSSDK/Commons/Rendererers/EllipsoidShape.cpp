@@ -6,8 +6,6 @@
 //
 //
 
-//#include <math.h>
-
 #include "EllipsoidShape.hpp"
 
 #include "ShortBufferBuilder.hpp"
@@ -22,10 +20,16 @@
 #include "TexturesHandler.hpp"
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
+#include "MercatorUtils.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
   delete _borderColor;
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
@@ -88,7 +92,7 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
                          vertices->getCenter(),
                          vertices->create(),
                          indices.create(),
-                         _borderWidth,
+                         (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
 }
@@ -100,23 +104,36 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create surface indices
   ShortBufferBuilder indices;
   short delta = (short) (2*_resolution - 1);
-  for (short j=0; j<_resolution-1; j++) {
-    if (j>0) indices.add((short) (j*delta));
-    for (short i=0; i<2*_resolution-1; i++) {
-      indices.add((short) (i+j*delta));
-      indices.add((short) (i+(j+1)*delta));
+  
+  // create indices for textupe mapping depending on the flag _texturedInside
+  if (!_texturedInside) {
+    for (short j=0; j<_resolution-1; j++) {
+      if (j>0) indices.add((short) (j*delta));
+      for (short i=0; i<2*_resolution-1; i++) {
+        indices.add((short) (i+j*delta));
+        indices.add((short) (i+(j+1)*delta));
+      }
+      indices.add((short) ((2*_resolution-2)+(j+1)*delta));
     }
-    indices.add((short) ((j+2)*delta-1));
+  } else {
+    for (short j=0; j<_resolution-1; j++) {
+      if (j>0) indices.add((short) ((j+1)*delta));
+      for (short i=0; i<2*_resolution-1; i++) {
+        indices.add((short) (i+(j+1)*delta));
+        indices.add((short) (i+j*delta));
+      }
+      indices.add((short) ((2*_resolution-2)+j*delta));
+    }
   }
 
+  // create mesh
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
-
   Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
                              true,
                              vertices->getCenter(),
                              vertices->create(),
                              indices.create(),
-                             _borderWidth,
+                             (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor);
 
@@ -147,7 +164,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image)  {
+                  IImage* image,
+                  bool expired)  {
     _ellipsoidShape->imageDownloaded(image);
   }
 
@@ -160,7 +178,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image)  {
+                          IImage* image,
+                          bool expired)  {
 
   }
 };
@@ -179,19 +198,20 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new EllipsoidShape_IImageDownloadListener(this),
                                         true);
     }
   }
 
-  const Ellipsoid ellipsoid( Vector3D(_radiusX, _radiusY, _radiusZ) );
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
+                                              Vector3D(_radiusX, _radiusY, _radiusZ)
+                                              ));
   const Sector sector(Sector::fullSphere());
 
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
-
-
-  const double pi4 = IMathUtils::instance()->pi() * 4;
 
   const short resolution2Minus2 = (short) (2*_resolution-2);
   const short resolutionMinus1  = (short) (_resolution-1);
@@ -204,24 +224,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
       vertices.add(innerPoint);
-
-
-      double vv;
-      if (_mercator) {
-        double latitudeInDegrees = innerPoint.latitude().degrees();
-        if (latitudeInDegrees > 85) {
-          latitudeInDegrees = 85;
-        }
-        else if (latitudeInDegrees < -85) {
-          latitudeInDegrees = -85;
-        }
-
-        const double latSin = Angle::fromDegrees(latitudeInDegrees).sinus();
-        vv = 1.0 - ( ( IMathUtils::instance()->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
-      }
-      else {
-        vv = v;
-      }
+      
+      const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
     }

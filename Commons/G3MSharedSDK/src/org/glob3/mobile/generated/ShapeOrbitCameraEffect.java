@@ -35,27 +35,31 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
   {
-     super(duration);
+     this(duration, shape, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, false);
+  }
+  public ShapeOrbitCameraEffect(TimeInterval duration, Shape shape, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming)
+  {
+     super(duration, linearTiming);
      _shape = shape;
      _fromDistance = fromDistance;
      _toDistance = toDistance;
-     _fromAzimuthInRadians = fromAzimuth.radians();
-     _toAzimuthInRadians = toAzimuth.radians();
-     _fromAltitudeInRadians = fromAltitude.radians();
-     _toAltitudeInRadians = toAltitude.radians();
+     _fromAzimuthInRadians = fromAzimuth._radians;
+     _toAzimuthInRadians = toAzimuth._radians;
+     _fromAltitudeInRadians = fromAltitude._radians;
+     _toAltitudeInRadians = toAltitude._radians;
 
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    final double alpha = pace(percentDone(when));
-    //  const double alpha = percentDone(when);
+    final double alpha = getAlpha(when);
   
     final Geodetic3D center = _shape.getPosition();
   
-    final double distance = IMathUtils.instance().lerp(_fromDistance, _toDistance, alpha);
-    final double azimuthInRadians = IMathUtils.instance().lerp(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
-    final double altitudeInRadians = IMathUtils.instance().lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+    IMathUtils mu = IMathUtils.instance();
+    final double distance = mu.linearInterpolation(_fromDistance, _toDistance, alpha);
+    final double azimuthInRadians = mu.linearInterpolation(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
+    final double altitudeInRadians = mu.linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
   
     rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
   }

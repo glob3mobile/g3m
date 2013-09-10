@@ -30,6 +30,10 @@ public class Vector2D
   public final double _x;
   public final double _y;
 
+  public static Vector2D zero()
+  {
+    return new Vector2D(0, 0);
+  }
 
   public Vector2D(double x, double y)
   {
@@ -111,7 +115,9 @@ public class Vector2D
 
   public static Vector2D nan()
   {
-    return new Vector2D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new Vector2D(mu.NanD(), mu.NanD());
   }
 
   public final double maxAxis()

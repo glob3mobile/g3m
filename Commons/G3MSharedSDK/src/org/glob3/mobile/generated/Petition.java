@@ -33,6 +33,9 @@ public class Petition
   final private URL _url; //Conversor creates class "Url"
 
   private final long _timeToCacheInMS;
+  private final boolean _readExpired;
+
+  private final boolean _isTransparent;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Petition(Petition that);
@@ -41,12 +44,15 @@ public class Petition
 //  void operator =(Petition that);
 
 
-  public Petition(Sector sector, URL url, TimeInterval timeToCache)
+  public Petition(Sector sector, URL url, TimeInterval timeToCache, boolean readExpired, boolean isTransparent)
   {
      _sector = new Sector(sector);
      _url = url;
      _timeToCacheInMS = timeToCache.milliseconds();
+     _readExpired = readExpired;
+     _isTransparent = isTransparent;
      _image = null;
+
   }
 
   public void dispose()
@@ -91,6 +97,16 @@ public class Petition
   public final TimeInterval getTimeToCache()
   {
     return TimeInterval.fromMilliseconds(_timeToCacheInMS);
+  }
+
+  public final boolean getReadExpired()
+  {
+    return _readExpired;
+  }
+
+  public final boolean isTransparent()
+  {
+    return _isTransparent;
   }
 
   public final String description()

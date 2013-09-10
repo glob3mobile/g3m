@@ -9,18 +9,18 @@
 #ifndef __G3MiOSSDK__GEO2DLineStringGeometry__
 #define __G3MiOSSDK__GEO2DLineStringGeometry__
 
-#include "GEOLineStringGeometry.hpp"
-
+#include "GEOGeometry2D.hpp"
+class Geodetic2D;
 #include <vector>
 
-class Geodetic2D;
 
-class GEO2DLineStringGeometry : public GEOLineStringGeometry {
+class GEO2DLineStringGeometry : public GEOGeometry2D {
 private:
   std::vector<Geodetic2D*>* _coordinates;
 
 protected:
-  Mesh* createMesh(const G3MRenderContext* rc);
+  std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
+
 
 public:
 
@@ -31,6 +31,11 @@ public:
   }
 
   ~GEO2DLineStringGeometry();
+
+  const std::vector<Geodetic2D*>* getCoordinates() const {
+    return _coordinates;
+  }
+
 
 };
 

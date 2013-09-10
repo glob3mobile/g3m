@@ -4,26 +4,26 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   private final Sector _sector ;
   private final int _width;
   private final int _height;
+
   private IElevationDataListener _listener;
   private final boolean _autodeleteListener;
 
 
 
-
-  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener)
+  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
      _sector = new Sector(sector);
-     _width = resolution._x;
-     _height = resolution._y;
+     _width = extent._x;
+     _height = extent._y;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
 
   }
 
-  public final void onDownload(URL url, IByteBuffer buffer)
+  public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
-    ElevationData elevationData = BilParser.parseBil16(buffer, resolution);
+    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer);
     if (buffer != null)
        buffer.dispose();
 
@@ -62,10 +62,19 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
 
   }
 
-  public final void onCanceledDownload(URL url, IByteBuffer data)
+  public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
   {
 
   }
 
 
 }
+//ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
+//                                                                          const Sector& sector,
+//                                                                          const Vector2I& extent) const{
+//  return new SubviewElevationData(elevationData,
+//                                  false,
+//                                  sector,
+//                                  extent,
+//                                  false);
+//}

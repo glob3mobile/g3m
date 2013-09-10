@@ -22,6 +22,9 @@ public class CameraRenderer extends LeafRenderer
       if (handler != null)
          handler.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addHandler(CameraEventHandler handler)
@@ -34,8 +37,9 @@ public class CameraRenderer extends LeafRenderer
     _processTouchEvents = processTouchEvents;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
+  
     // create the CameraContext
     if (_cameraContext == null)
     {
@@ -43,7 +47,7 @@ public class CameraRenderer extends LeafRenderer
     }
   
     // render camera object
-    rc.getCurrentCamera().render(rc, parentState);
+  //  rc->getCurrentCamera()->render(rc, parentState);
   
     final int handlersSize = _handlers.size();
     for (int i = 0; i < handlersSize; i++)
@@ -66,7 +70,7 @@ public class CameraRenderer extends LeafRenderer
       if (touchEvent.getType() == TouchEventType.Down)
       {
         EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
-        ec.getEffectsScheduler().cancellAllEffectsFor(target);
+        ec.getEffectsScheduler().cancelAllEffectsFor(target);
       }
   
       // pass the event to all the handlers
@@ -97,12 +101,12 @@ public class CameraRenderer extends LeafRenderer
     return true;
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
 
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
 
   }
@@ -121,5 +125,4 @@ public class CameraRenderer extends LeafRenderer
   {
 
   }
-
 }

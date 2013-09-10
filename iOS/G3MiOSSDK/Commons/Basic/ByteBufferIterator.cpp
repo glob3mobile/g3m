@@ -21,20 +21,26 @@ _timestamp(buffer->timestamp())
 
 }
 
-void ByteBufferIterator::checkTimestamp() const {
+//void ByteBufferIterator::checkTimestamp() const {
+//  if (_timestamp != _buffer->timestamp()) {
+//    ILogger::instance()->logError("The buffer was changed after the iteration started");
+//  }
+//}
+
+bool ByteBufferIterator::hasNext() const {
+  //checkTimestamp();
   if (_timestamp != _buffer->timestamp()) {
     ILogger::instance()->logError("The buffer was changed after the iteration started");
   }
-}
-
-bool ByteBufferIterator::hasNext() const {
-  checkTimestamp();
 
   return ( _cursor < _buffer->size() );
 }
 
 unsigned char ByteBufferIterator::nextUInt8() {
-  checkTimestamp();
+  //checkTimestamp();
+  if (_timestamp != _buffer->timestamp()) {
+    ILogger::instance()->logError("The buffer was changed after the iteration started");
+  }
 
   if (_cursor >= _buffer->size()) {
     ILogger::instance()->logError("Iteration overflow");
@@ -55,8 +61,16 @@ short ByteBufferIterator::nextInt16() {
   final short b2 = (short) (nextUInt8() & 0xFF);
 #endif
 
-  const int iResult = ((int) b1) | ((int) (b2 << 8));
+  const int iResult = (((int) b1) |
+                       ((int) (b2 << 8)));
   const short result = (short) iResult;
+//  if (result != -9999) {
+//    printf("break point on me\n");
+//  }
+
+//  if (result > 0) {
+//    printf("break point on me\n");
+//  }
   return result;
 }
 
@@ -74,12 +88,11 @@ int ByteBufferIterator::nextInt32() {
   final int b3 = nextUInt8() & 0xFF;
   final int b4 = nextUInt8() & 0xFF;
 #endif
-  
-  return
-  ((int) b1) |
-  ((int) b2 << 8) |
-  ((int) b3 << 16) |
-  ((int) b4 << 24);
+
+  return (((int) b1      ) |
+          ((int) b2 <<  8) |
+          ((int) b3 << 16) |
+          ((int) b4 << 24));
 }
 
 long long ByteBufferIterator::nextInt64() {
@@ -105,15 +118,14 @@ long long ByteBufferIterator::nextInt64() {
   final int b8 = nextUInt8() & 0xFF;
 #endif
 
-  return
-  ((long long) b1) |
-  ((long long) b2 << 8) |
-  ((long long) b3 << 16) |
-  ((long long) b4 << 24) |
-  ((long long) b5 << 32) |
-  ((long long) b6 << 40) |
-  ((long long) b7 << 48) |
-  ((long long) b8 << 56);
+  return (((long long) b1      ) |
+          ((long long) b2 <<  8) |
+          ((long long) b3 << 16) |
+          ((long long) b4 << 24) |
+          ((long long) b5 << 32) |
+          ((long long) b6 << 40) |
+          ((long long) b7 << 48) |
+          ((long long) b8 << 56));
 }
 
 

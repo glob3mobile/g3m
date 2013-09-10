@@ -33,7 +33,7 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
   }
   _values.push_back((unsigned char) 0);
 #endif
-#if JAVA_CODE
+#ifdef JAVA_CODE
   try {
     byte[] bytesArray = str.getBytes("UTF-8");
 

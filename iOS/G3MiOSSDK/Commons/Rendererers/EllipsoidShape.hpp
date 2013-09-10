@@ -30,6 +30,8 @@ private:
   const short _resolution;
 
   const float _borderWidth;
+  
+  const bool _texturedInside;
 
   const bool _mercator;
 
@@ -51,19 +53,22 @@ protected:
 
 public:
   EllipsoidShape(Geodetic3D* position,
+                 AltitudeMode altitudeMode,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
+                 bool texturedInside,
                  bool mercator,
                  Color* surfaceColor,
                  Color* borderColor = NULL) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _radiusX(radius.x()),
   _radiusY(radius.y()),
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(surfaceColor),
   _borderColor(borderColor),
@@ -74,18 +79,21 @@ public:
   }
 
   EllipsoidShape(Geodetic3D* position,
+                 AltitudeMode altitudeMode,
                  const URL& textureURL,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
+                 bool texturedInside,
                  bool mercator) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _radiusX(radius.x()),
   _radiusY(radius.y()),
   _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(NULL),
   _borderColor(NULL),

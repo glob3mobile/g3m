@@ -9,6 +9,7 @@
 #ifndef __G3MiOSSDK__RectangleI__
 #define __G3MiOSSDK__RectangleI__
 
+
 class RectangleI {
 public:
   const int _x;
@@ -34,7 +35,6 @@ public:
   }
 
   ~RectangleI() {
-
   }
 
   bool equalTo(const RectangleI& that) const{

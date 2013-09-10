@@ -16,21 +16,18 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEOLineStringGeometry
+
+public class GEO2DLineStringGeometry extends GEOGeometry2D
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
 
-  protected final Mesh createMesh(G3MRenderContext rc)
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
-    Color color = Color.newFromRGBA(1, 1, 0, 1);
-    final float lineWidth = 2F;
-  
-    return create2DBoundaryMesh(_coordinates, color, lineWidth, rc);
+    return symbolizer.createSymbols(this);
   }
+
 
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
@@ -49,6 +46,15 @@ public class GEO2DLineStringGeometry extends GEOLineStringGeometry
          coordinate.dispose();
     }
     _coordinates = null;
+  
+    super.dispose();
+  
   }
+
+  public final java.util.ArrayList<Geodetic2D> getCoordinates()
+  {
+    return _coordinates;
+  }
+
 
 }

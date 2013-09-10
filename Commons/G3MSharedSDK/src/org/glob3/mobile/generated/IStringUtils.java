@@ -40,7 +40,6 @@ public abstract class IStringUtils
 
   public void dispose()
   {
-
   }
 
   public abstract String createString(byte[] data, int length);
@@ -48,6 +47,11 @@ public abstract class IStringUtils
   public abstract java.util.ArrayList<String> splitLines(String String);
 
   public abstract boolean beginsWith(String String, String prefix);
+
+  public abstract boolean endsWith(String String, String suffix);
+
+  public abstract String toUpperCase(String String);
+
 
   public abstract int indexOf(String String, String search);
 
@@ -72,17 +76,16 @@ public abstract class IStringUtils
     {
       return originalString;
     }
-    final int endIndex = startIndex+toReplace.length();
+    final int endIndex = startIndex + toReplace.length();
     final String left = substring(originalString, 0, startIndex);
     final String right = substring(originalString, endIndex);
-    final String result = left+replaceWith+right;
+    final String result = left + replaceWith + right;
     startIndex = indexOf(result, toReplace);
     if (startIndex != -1)
     {
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }
-
     return result;
   }
 
@@ -99,5 +102,7 @@ public abstract class IStringUtils
   {
     return rtrim(ltrim(String));
   }
+
+  public abstract long parseHexInt(String str);
 
 }

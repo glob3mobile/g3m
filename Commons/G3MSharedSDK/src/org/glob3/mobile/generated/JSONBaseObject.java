@@ -21,9 +21,10 @@ package org.glob3.mobile.generated;
 //class JSONBoolean;
 //class JSONNumber;
 //class JSONString;
-
-
+//class JSONNull;
 //class JSONVisitor;
+
+
 
 public abstract class JSONBaseObject
 {
@@ -38,31 +39,41 @@ public abstract class JSONBaseObject
   {
   }
 
+
+  ///#include "ILogger.hpp"
+  
   public JSONObject asObject()
   {
-    ILogger.instance().logError("The requested Object is not of type JSONObject!");
+    //ILogger::instance()->logError("The requested Object is not of type JSONObject!");
     return null;
   }
   public JSONArray asArray()
   {
-    ILogger.instance().logError("The requested Object is not of type JSONArray!");
+    //ILogger::instance()->logError("The requested Object is not of type JSONArray!");
     return null;
   }
   public JSONBoolean asBoolean()
   {
-    ILogger.instance().logError("The requested Object is not of type JSONBoolean!");
+    //ILogger::instance()->logError("The requested Object is not of type JSONBoolean!");
     return null;
   }
   public JSONNumber asNumber()
   {
-    ILogger.instance().logError("The requested Object is not of type JSONNumber!");
+    //ILogger::instance()->logError("The requested Object is not of type JSONNumber!");
     return null;
   }
   public JSONString asString()
   {
-    ILogger.instance().logError("The requested Object is not of type JSONString!");
+    //ILogger::instance()->logError("The requested Object is not of type JSONString!");
     return null;
   }
+
+  public JSONNull asNull()
+  {
+    //ILogger::instance()->logError("The requested Object is not of type JSONNull!");
+    return null;
+  }
+
 
   public abstract JSONBaseObject deepCopy();
 

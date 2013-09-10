@@ -4,10 +4,10 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.CenterStrategy;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -89,6 +89,7 @@ public class G3MNetCDFActivity
    }
 
 
+   @SuppressWarnings("unused")
    private PeriodicalTask PaintMeshesTask() {
       final PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(0.2), new GTask() {
 
@@ -158,7 +159,7 @@ public class G3MNetCDFActivity
                         final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(meridWinds.get(i), -10, 10, 1, 0));
                         final Geodetic3D position3D = new Geodetic3D(position, levels.get(i) * 10000);
 
-                        _boxShapes.add(new BoxShape(position3D, extent, borderWidth, interpolatedColor, interpolatedColor));
+                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth, interpolatedColor, interpolatedColor));
 
                      }
                   }
@@ -219,7 +220,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
                   //                  final String response = buffer.getAsString();
                   //                  final IJSONParser parser = new JSONParser_Android();
@@ -241,8 +243,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
-                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                    		 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
                      for (int i = 0; i < features.size(); i++) {
@@ -285,28 +287,28 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
-            downloader.requestBuffer(new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("file:///ACCESS-A.2011020104.nc3.slice10.bson", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -346,7 +348,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -393,7 +396,8 @@ public class G3MNetCDFActivity
 
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
-                           _shapesRenderer.addShape(new BoxShape(position3D, extent, borderWidth, interpolatedColor,
+                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND,
+                        		   extent, borderWidth, interpolatedColor,
                                     interpolatedColor));
                         }
 
@@ -416,23 +420,25 @@ public class G3MNetCDFActivity
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
             };
 
             //            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/yassiDebug.json", false), 0, TimeInterval.forever(),
             //                     listener, false);
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/ACCESS-A.2011020104.nc13slice10.json", false), 0,
-                     TimeInterval.forever(), listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/ACCESS-A.2011020104.nc13slice10.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -452,6 +458,7 @@ public class G3MNetCDFActivity
    }
 
 
+   @SuppressWarnings("unused")
    private GInitializationTask getInitializationTaskCreateMeshes(final Planet planet) {
 
       final GInitializationTask initializationTask = new GInitializationTask() {
@@ -464,7 +471,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -482,8 +490,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(
-                              CenterStrategy.firstVertex(), planet, Geodetic3D.zero());
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                    		 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
 
@@ -529,29 +537,29 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
 
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/21.periods.json", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/21.periods.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 
@@ -584,7 +592,8 @@ public class G3MNetCDFActivity
 
                @Override
                public void onDownload(final URL url,
-                                      final IByteBuffer buffer) {
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
 
 
                   final String response = buffer.getAsString();
@@ -636,29 +645,29 @@ public class G3MNetCDFActivity
 
                @Override
                public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-
                }
 
 
                @Override
                public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data) {
-                  // TODO Auto-generated method stub
-
+                                              final IByteBuffer data,
+                                              final boolean expired) {
                }
 
             };
 
-            downloader.requestBuffer(new URL("http://csiro.glob3mobile.com/21.periods.json", false), 0, TimeInterval.forever(),
-                     listener, false);
+            downloader.requestBuffer( //
+                     new URL("http://csiro.glob3mobile.com/21.periods.json", false), //
+                     0, //
+                     TimeInterval.forever(), //
+                     true, //
+                     listener, //
+                     false);
          }
 
 

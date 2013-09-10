@@ -16,7 +16,12 @@ private:
   const std::string _value;
 
 public:
-  ~JSONString() { }
+  ~JSONString() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   JSONString(const std::string& value) :
   _value(value)

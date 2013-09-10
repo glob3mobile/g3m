@@ -10,6 +10,7 @@
 #define G3MiOSSDK_ByteBuffer_iOS_hpp
 
 #include "IByteBuffer.hpp"
+#include "ILogger.hpp"
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
@@ -21,14 +22,16 @@ public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
-  _timestamp(0) {
-
+  _timestamp(-1) {
+    if (_values == NULL) {
+      ILogger::instance()->logError("Allocating error.");
+    }
   }
 
   ByteBuffer_iOS(unsigned char* values, int size) :
   _values(values),
   _size(size),
-  _timestamp(0) {
+  _timestamp(-1) {
 
   }
 
@@ -45,10 +48,20 @@ public:
   }
 
   unsigned char get(int i) const {
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Get error.");
+    }
+    
     return _values[i];
   }
 
   void put(int i, unsigned char value) {
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
@@ -56,6 +69,11 @@ public:
   }
 
   void rawPut(int i, unsigned char value) {
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     _values[i] = value;
   }
 

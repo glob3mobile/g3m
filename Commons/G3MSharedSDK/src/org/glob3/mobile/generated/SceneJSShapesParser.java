@@ -30,17 +30,23 @@ package org.glob3.mobile.generated;
 //class SGTranslateNode;
 //class SGLayerNode;
 //class Color;
+//class SceneJSParserStatistics;
 
 public class SceneJSShapesParser
 {
   private Shape _rootShape;
   private final String _uriPrefix;
 
-  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix)
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent)
   {
      _uriPrefix = uriPrefix;
      _rootShape = null;
-    pvtParse(jsonObject);
+    _statistics = new SceneJSParserStatistics();
+    pvtParse(jsonObject, isTransparent);
+  
+    _statistics.log();
+    if (_statistics != null)
+       _statistics.dispose();
   }
 
   private Shape getRootShape()
@@ -48,7 +54,7 @@ public class SceneJSShapesParser
     return _rootShape;
   }
 
-  private void pvtParse(JSONBaseObject json)
+  private void pvtParse(JSONBaseObject json, boolean isTransparent)
   {
     //  _rootShape = toShape(jsonRootObject);
   
@@ -56,7 +62,7 @@ public class SceneJSShapesParser
   
     if (node != null)
     {
-      _rootShape = new SGShape(node, _uriPrefix);
+      _rootShape = new SGShape(node, _uriPrefix, isTransparent);
     }
   
     if (json != null)
@@ -84,6 +90,7 @@ public class SceneJSShapesParser
         if (type.compareTo("node") == 0)
         {
           result = createNode(jsonObject);
+          _statistics.computeNode();
         }
         else if (type.compareTo("rotate") == 0)
         {
@@ -96,6 +103,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("material") == 0)
         {
           result = createMaterialNode(jsonObject);
+          _statistics.computeMaterial();
         }
         else if (type.compareTo("texture") == 0)
         {
@@ -104,6 +112,7 @@ public class SceneJSShapesParser
         else if (type.compareTo("geometry") == 0)
         {
           result = createGeometryNode(jsonObject);
+          _statistics.computeGeometry();
         }
         else
         {
@@ -146,9 +155,9 @@ public class SceneJSShapesParser
     java.util.ArrayList<String> keys = jsonObject.keys();
     if (processedKeys != keys.size())
     {
-  //    for (int i = 0; i < keys.size(); i++) {
-  //      printf("%s\n", keys.at(i).c_str());
-  //    }
+      //    for (int i = 0; i < keys.size(); i++) {
+      //      printf("%s\n", keys.at(i).c_str());
+      //    }
   
       ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
     }
@@ -469,6 +478,7 @@ public class SceneJSShapesParser
     for (int i = 0; i < verticesCount; i++)
     {
       vertices.put(i, (float) jsPositions.getAsNumber(i).value());
+      _statistics.computeVertex();
     }
   
     final JSONArray jsColors = jsonObject.getAsArray("colors");
@@ -479,7 +489,8 @@ public class SceneJSShapesParser
       colors = IFactory.instance().createFloatBuffer(colorsCount);
       for (int i = 0; i < colorsCount; i++)
       {
-        colors.put(i, (float) jsColors.getAsNumber(i).value());
+        final float value = (float) jsColors.getAsNumber(i).value();
+        colors.put(i, value);
       }
       processedKeys++;
     }
@@ -506,8 +517,16 @@ public class SceneJSShapesParser
   
     final JSONArray jsNormals = jsonObject.getAsArray("normals");
     IFloatBuffer normals = null;
+    //TODO: WORKING JM
     if (jsNormals != null)
     {
+      final int normalsCount = jsNormals.size();
+      normals = IFactory.instance().createFloatBuffer(normalsCount);
+      for (int i = 0; i < normalsCount; i++)
+      {
+        float value = (float) jsNormals.getAsNumber(i).value();
+        normals.put(i, value);
+      }
       processedKeys++;
     }
   
@@ -517,13 +536,24 @@ public class SceneJSShapesParser
       ILogger.instance().logError("Non indexed geometries not supported");
       return null;
     }
+    int indicesOutOfRange = 0;
     int indicesCount = jsIndices.size();
     IShortBuffer indices = IFactory.instance().createShortBuffer(indicesCount);
     for (int i = 0; i < indicesCount; i++)
     {
-      indices.rawPut(i, (short) jsIndices.getAsNumber(i).value());
+      final long indice = (long) jsIndices.getAsNumber(i).value();
+      if (indice > 32767)
+      {
+        indicesOutOfRange++;
+      }
+      indices.rawPut(i, (short) indice);
     }
     processedKeys++;
+  
+    if (indicesOutOfRange > 0)
+    {
+      ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
+    }
   
     SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
   
@@ -619,28 +649,33 @@ public class SceneJSShapesParser
     return Color.newFromRGBA(r, g, b, a);
   }
 
+  private SceneJSParserStatistics _statistics;
 
-  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix)
+
+  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent)
   {
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromJSON(String json, String uriPrefix)
+
+  public static Shape parseFromJSON(String json, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix)
+
+  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
-  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix)
+
+  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
   }
 
 }

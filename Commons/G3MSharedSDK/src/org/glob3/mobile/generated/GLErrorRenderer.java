@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLErrorRenderer extends LeafRenderer
+public abstract class GLErrorRenderer extends LeafRenderer
 {
 
   public final void initialize(G3MContext context)
@@ -25,7 +25,7 @@ public class GLErrorRenderer extends LeafRenderer
   
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
     final ILogger logger = rc.getLogger();
@@ -46,23 +46,25 @@ public class GLErrorRenderer extends LeafRenderer
 
   public void dispose()
   {
+    super.dispose();
+  
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc, GLState glState)
   {
     return true;
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
 
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
 
   }

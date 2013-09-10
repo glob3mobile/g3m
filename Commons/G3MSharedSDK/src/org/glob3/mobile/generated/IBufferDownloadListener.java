@@ -9,6 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class IBufferDownloadListener
 {
   public void dispose()
@@ -18,7 +19,7 @@ public abstract class IBufferDownloadListener
   /**
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
    */
-  public abstract void onDownload(URL url, IByteBuffer buffer);
+  public abstract void onDownload(URL url, IByteBuffer buffer, boolean expired);
 
   /**
    Callback method invoke after an error trying to download url
@@ -35,6 +36,6 @@ public abstract class IBufferDownloadListener
 
    The buffer WILL be deleted/disposed after the method finishs.  If you need to keep the buffer, use shallowCopy() to store a copy of the buffer.
    */
-  public abstract void onCanceledDownload(URL url, IByteBuffer data);
+  public abstract void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired);
 
 }

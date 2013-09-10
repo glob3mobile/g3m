@@ -17,9 +17,10 @@ private:
   G3MWidget_iOS* _nativeWidget;
 
 protected:
-  IThreadUtils* createThreadUtils();
-  IStorage*     createStorage();
-  IDownloader*  createDownloader();
+  IThreadUtils* createDefaultThreadUtils();
+  IStorage*     createDefaultStorage();
+  IDownloader*  createDefaultDownloader();
+
 
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);

@@ -11,7 +11,7 @@
 
 #include <string>
 
-class IStringBuilder{
+class IStringBuilder {
   
   static IStringBuilder* _instance;
   
@@ -37,7 +37,8 @@ public:
   virtual const std::string getString() const = 0;
   
   // a virtual destructor is needed for conversion to Java
-  virtual ~IStringBuilder() {}
+  virtual ~IStringBuilder() {
+  }
   
 };
 

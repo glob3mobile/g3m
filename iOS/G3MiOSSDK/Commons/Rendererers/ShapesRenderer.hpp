@@ -15,6 +15,8 @@
 
 class ShapesRenderer : public LeafRenderer {
 private:
+  const bool _renderNotReadyShapes;
+  
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
@@ -23,13 +25,24 @@ private:
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
+  
+  GLState* _glState;
+  GLState* _glStateTransparent;
+
+  ProjectionGLFeature* _projection;
+  ModelGLFeature*      _model;
+  void updateGLState(const G3MRenderContext* rc);
 
 public:
 
-  ShapesRenderer() :
-  _context(NULL)
+  ShapesRenderer(bool renderNotReadyShapes=true) :
+  _renderNotReadyShapes(renderNotReadyShapes),
+  _context(NULL),
+  _projection(NULL),
+  _model(NULL),
+  _glState(new GLState()),
+  _glStateTransparent(new GLState())
   {
-
   }
 
   ~ShapesRenderer() {
@@ -38,6 +51,14 @@ public:
       Shape* shape = _shapes[i];
       delete shape;
     }
+
+    _glState->_release();
+    _glStateTransparent->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void addShape(Shape* shape) {
@@ -46,6 +67,8 @@ public:
       shape->initialize(_context);
     }
   }
+
+  void removeAllShapes(bool deleteShapes=true);
 
   void onResume(const G3MContext* context) {
     _context = context;
@@ -69,10 +92,8 @@ public:
     }
   }
   
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
-  }
-
+  bool isReadyToRender(const G3MRenderContext* rc);
+  
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
@@ -82,14 +103,13 @@ public:
                              int width, int height) {
   }
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
   }
   
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
   }
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc, GLState* glState);
 
 };
 

@@ -11,11 +11,17 @@
 
 #include "SGNode.hpp"
 
+#include "MutableMatrix44D.hpp"
+
 class SGTranslateNode : public SGNode {
 private:
   const double _x;
   const double _y;
   const double _z;
+  
+  MutableMatrix44D _translationMatrix;
+  
+  GLState* _glState;
 
 public:
 
@@ -27,18 +33,21 @@ public:
   SGNode(id, sId),
   _x(x),
   _y(y),
-  _z(z)
+  _z(z),
+  _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z)),
+  _glState(new GLState())
   {
-
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+  }
+  
+  const GLState* createState(const G3MRenderContext* rc,
+                             const GLState* parentState) {
+    _glState->setParent(parentState);
+    return _glState;
   }
 
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
-  const GLState* createState(const G3MRenderContext* rc,
-                             const GLState& parentState) {
-    return NULL;
+  std::string description() {
+    return "SGTranslateNode";
   }
 
 };

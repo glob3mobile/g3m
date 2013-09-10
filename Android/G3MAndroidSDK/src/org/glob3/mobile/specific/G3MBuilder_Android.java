@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.CachedDownloader;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
@@ -27,6 +28,33 @@ public class G3MBuilder_Android
 
 
    public G3MWidget_Android createWidget() {
+      //Adding Default Program Sources
+      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
+               GL2Shaders._billboardFragmentShader));
+      addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+
+      addGPUProgramSources(new GPUProgramSources("ColorMesh", 
+    		  				GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("TexturedMesh", 
+				GL2Shaders._texturedMeshVertexShader, GL2Shaders._texturedMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh", 
+				GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("FlatColorMesh", 
+				GL2Shaders._flatColorMeshVertexShader, GL2Shaders._flatColorMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("NoColorMesh", 
+				GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("FlatColorMesh+DirectionLight", 
+				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+
       setGL(_nativeWidget.getGL());
 
       _nativeWidget.setWidget(create());
@@ -36,26 +64,27 @@ public class G3MBuilder_Android
 
 
    @Override
-   protected IThreadUtils createThreadUtils() {
+   protected IThreadUtils createDefaultThreadUtils() {
       return new ThreadUtils_Android(_nativeWidget);
    }
 
 
    @Override
-   protected IStorage createStorage() {
+   protected IStorage createDefaultStorage() {
       return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
    }
 
 
    @Override
-   protected IDownloader createDownloader() {
+   protected IDownloader createDefaultDownloader() {
       final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
       final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
       final boolean saveInBackground = true;
       return new CachedDownloader( //
                new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
-               (_storage != null) ? _storage : createStorage(), //
+               getStorage(), //
                saveInBackground);
    }
+
 
 }

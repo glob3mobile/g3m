@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public class RCObject
 {
   private int _referenceCounter;
@@ -33,8 +34,12 @@ public class RCObject
 
   public void dispose()
   {
-
+    if (_referenceCounter != 0)
+    {
+      ILogger.instance().logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
+    }
   }
+
 
   public final void _retain()
   {

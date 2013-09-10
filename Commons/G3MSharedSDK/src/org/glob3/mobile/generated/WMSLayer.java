@@ -19,11 +19,101 @@ public class WMSLayer extends Layer
 
   private String _extraParameter;
 
-
-
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  private double toBBOXLongitude(Angle longitude)
   {
-     super(condition, mapLayer, timeToCache);
+    return (_parameters._mercator) ? MercatorUtils.longitudeToMeters(longitude) : longitude._degrees;
+  }
+  private double toBBOXLatitude(Angle latitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.latitudeToMeters(latitude) : latitude._degrees;
+  }
+
+  protected final String getLayerType()
+  {
+    return "WMS";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    WMSLayer t = (WMSLayer) that;
+  
+    if (!(_mapServerURL.isEquals(t._mapServerURL)))
+    {
+      return false;
+    }
+  
+    if (!(_queryServerURL.isEquals(t._queryServerURL)))
+    {
+      return false;
+    }
+  
+    if (!_mapLayer.equals(t._mapLayer))
+    {
+      return false;
+    }
+  
+    if (_mapServerVersion != t._mapServerVersion)
+    {
+      return false;
+    }
+  
+    if (!_queryLayer.equals(t._queryLayer))
+    {
+      return false;
+    }
+  
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
+  
+    if (!(_sector.isEquals(t._sector)))
+    {
+      return false;
+    }
+  
+    if (!_format.equals(t._format))
+    {
+      return false;
+    }
+  
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
+  
+    if (!_srs.equals(t._srs))
+    {
+      return false;
+    }
+  
+    if (!_style.equals(t._style))
+    {
+      return false;
+    }
+  
+    if (_isTransparent != t._isTransparent)
+    {
+      return false;
+    }
+  
+    if (!_extraParameter.equals(t._extraParameter))
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+
+
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -36,12 +126,16 @@ public class WMSLayer extends Layer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
-
+  
   }
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     super(condition, mapLayer, timeToCache);
+     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -54,10 +148,11 @@ public class WMSLayer extends Layer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
-
+  
   }
 
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -68,29 +163,32 @@ public class WMSLayer extends Layer
     }
   
     final Sector sector = tileSector.intersection(_sector);
-    if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
     }
   
+    //TODO: MUST SCALE WIDTH,HEIGHT
+  
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
+  
      //Server name
     String req = _mapServerURL.getPath();
-     if (req.charAt(req.length()-1) != '?')
+     if (req.charAt(req.length() - 1) != '?')
      {
         req += '?';
      }
   
-    //If the server refer to itself as localhost...
-    int pos = req.indexOf("localhost");
-    if (pos != -1)
-    {
-      req = req.substring(pos+9);
-  
-      int pos2 = req.indexOf("/", 8);
-      String newHost = req.substring(0, pos2);
-  
-      req = newHost + req;
-    }
+    //  //If the server refer to itself as localhost...
+    //  const int localhostPos = req.find("localhost");
+    //  if (localhostPos != -1) {
+    //    req = req.substr(localhostPos+9);
+    //
+    //    const int slashPos = req.find("/", 8);
+    //    std::string newHost = req.substr(0, slashPos);
+    //
+    //    req = newHost + req;
+    //  }
   
     req += "REQUEST=GetMap&SERVICE=WMS";
   
@@ -104,18 +202,18 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
   
         req += isb.getString();
         if (isb != null)
@@ -134,18 +232,18 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
   
         req += isb.getString();
         if (isb != null)
@@ -193,17 +291,15 @@ public class WMSLayer extends Layer
       req += _extraParameter;
     }
   
-    Petition petition = new Petition(sector, new URL(req, false), _timeToCache);
+    //  printf("Request: %s\n", req.c_str());
+  
+    Petition petition = new Petition(sector, new URL(req, false), getTimeToCache(), getReadExpired(), _isTransparent);
     petitions.add(petition);
   
      return petitions;
   }
 
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
-
-  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+  public final URL getFeatureInfoURL(Geodetic2D position, Sector tileSector)
   {
     if (!_sector.touchesWith(tileSector))
     {
@@ -252,18 +348,18 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(_parameters._tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
   
         req += isb.getString();
   
@@ -283,18 +379,18 @@ public class WMSLayer extends Layer
         IStringBuilder isb = IStringBuilder.newStringBuilder();
   
         isb.addString("&WIDTH=");
-        isb.addInt(width);
+        isb.addInt(_parameters._tileTextureResolution._x);
         isb.addString("&HEIGHT=");
-        isb.addInt(height);
+        isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(sector.lower().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(sector.lower().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().longitude()._degrees);
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
         isb.addString(",");
-        isb.addDouble(sector.upper().latitude()._degrees);
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
   
         req += isb.getString();
   
@@ -304,22 +400,36 @@ public class WMSLayer extends Layer
       }
     }
     req += "&LAYERS=" + _queryLayer;
-  
-    //req += "&LAYERS=" + _queryLayers;
     req += "&QUERY_LAYERS=" + _queryLayer;
   
     req += "&INFO_FORMAT=text/plain";
   
+    final IMathUtils mu = IMathUtils.instance();
+  
+    double u;
+    double v;
+    if (_parameters._mercator)
+    {
+      u = sector.getUCoordinate(position._longitude);
+      v = MercatorUtils.getMercatorV(position._latitude);
+    }
+    else
+    {
+      final Vector2D uv = sector.getUVCoordinates(position);
+      u = uv._x;
+      v = uv._y;
+    }
+  
     //X and Y
-    Vector2D pixel = tileSector.getUVCoordinates(g);
-    int x = (int) IMathUtils.instance().round((pixel._x * width));
-    int y = (int) IMathUtils.instance().round(((1.0 - pixel._y) * height));
+    //const Vector2D uv = sector.getUVCoordinates(position);
+    final long x = mu.round((u * _parameters._tileTextureResolution._x));
+    final long y = mu.round((v * _parameters._tileTextureResolution._y));
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("&X=");
-    isb.addInt(x);
+    isb.addLong(x);
     isb.addString("&Y=");
-    isb.addInt(y);
+    isb.addLong(y);
     req += isb.getString();
     if (isb != null)
        isb.dispose();
@@ -332,6 +442,16 @@ public class WMSLayer extends Layer
   {
     _extraParameter = extraParameter;
     notifyChanges();
+  }
+
+  public final String description()
+  {
+    return "[WMSLayer]";
+  }
+
+  public final WMSLayer copy()
+  {
+    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
   }
 
 }

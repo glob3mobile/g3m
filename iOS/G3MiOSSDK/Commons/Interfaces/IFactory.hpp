@@ -2,7 +2,7 @@
 //  IFactory.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -19,6 +19,10 @@ class IShortBuffer;
 class IByteBuffer;
 class ILogger;
 class IImageListener;
+class ICanvas;
+class IWebSocket;
+class IWebSocketListener;
+class URL;
 
 class IFactory {
 private:
@@ -38,7 +42,6 @@ public:
   }
 
   virtual ~IFactory() {
-
   }
 
   virtual void createImageFromFileName(const std::string& filename,
@@ -49,9 +52,9 @@ public:
                                      IImageListener* listener,
                                      bool autodelete) const = 0;
 
-  virtual void createImageFromSize(int width, int height,
-                                   IImageListener* listener,
-                                   bool autodelete) const = 0;
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
 
@@ -87,6 +90,19 @@ public:
 
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
 
+  virtual ICanvas* createCanvas() const = 0;
+
+  virtual IWebSocket* createWebSocket(const URL& url,
+                                      IWebSocketListener* listener,
+                                      bool autodeleteListener,
+                                      bool autodeleteWebSocket) const = 0;
+#ifdef JAVA_CODE
+
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+#endif
+  
 };
 
 #endif

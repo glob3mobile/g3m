@@ -25,6 +25,9 @@ public:
   const double _x;
   const double _y;
 
+  static Vector2D zero() {
+    return Vector2D(0, 0);
+  }
   
   Vector2D(const double x,
            const double y): _x(x), _y(y) {
@@ -91,7 +94,10 @@ public:
   }
 
   static Vector2D nan() {
-    return Vector2D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return Vector2D(mu->NanD(),
+                    mu->NanD());
   }
   
   double maxAxis() const {

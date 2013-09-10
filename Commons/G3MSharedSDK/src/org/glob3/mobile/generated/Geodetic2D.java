@@ -23,8 +23,8 @@ package org.glob3.mobile.generated;
  */
 public class Geodetic2D
 {
-  private final Angle _latitude ;
-  private final Angle _longitude ;
+  public final Angle _latitude ;
+  public final Angle _longitude ;
 
 
   public static Geodetic2D zero()
@@ -37,11 +37,31 @@ public class Geodetic2D
     return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
   }
 
+  public static Geodetic2D fromRadians(double lat, double lon)
+  {
+    return new Geodetic2D(Angle.fromRadians(lat), Angle.fromRadians(lon));
+  }
+
+  public static Geodetic2D linearInterpolation(Geodetic2D from, Geodetic2D to, double alpha)
+  {
+    return new Geodetic2D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha));
+  }
+
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http: //williams.best.vwh.net/avform.htm#Crs
    */
   public static Angle bearing(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
+    return Angle.fromRadians(bearingInRadians(fromLatitude, fromLongitude, toLatitude, toLongitude));
+  }
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+  public static double bearingInRadians(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
   {
     final Angle dLon = toLongitude.sub(fromLongitude);
 
@@ -51,7 +71,7 @@ public class Geodetic2D
     final double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos *dLon.cosinus();
     final double radians = IMathUtils.instance().atan2(y, x);
 
-    return Angle.fromRadians(radians);
+    return radians;
   }
 
   /**
@@ -60,8 +80,9 @@ public class Geodetic2D
    */
   public static Angle bearing(Geodetic2D from, Geodetic2D to)
   {
-    return bearing(from.latitude(), from.longitude(), to.latitude(), to.longitude());
+    return bearing(from._latitude, from._longitude, to._latitude, to._longitude);
   }
+
 
   public Geodetic2D(Angle latitude, Angle longitude)
   {
@@ -73,6 +94,11 @@ public class Geodetic2D
   {
      _latitude = new Angle(g._latitude);
      _longitude = new Angle(g._longitude);
+  }
+
+  public void dispose()
+  {
+
   }
 
   public final Angle latitude()
@@ -105,11 +131,6 @@ public class Geodetic2D
     return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
   }
 
-  public void dispose()
-  {
-
-  }
-
   public final boolean closeTo(Geodetic2D other)
   {
     if (!_latitude.closeTo(other._latitude))
@@ -122,8 +143,19 @@ public class Geodetic2D
 
   public final boolean isBetween(Geodetic2D min, Geodetic2D max)
   {
-    return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
+    return _latitude.isBetween(min._latitude, max._latitude) && _longitude.isBetween(min._longitude, max._longitude);
   }
+
+  public final Angle angleTo(Geodetic2D other)
+  {
+    final double cos1 = _latitude.cosinus();
+    final Vector3D normal1 = new Vector3D(cos1 * _longitude.cosinus(), cos1 * _longitude.sinus(), _latitude.sinus());
+    final double cos2 = other._latitude.cosinus();
+    final Vector3D normal2 = new Vector3D(cos2 * other._longitude.cosinus(), cos2 * other._longitude.sinus(), other._latitude.sinus());
+    return Angle.fromRadians(Math.asin(normal1.cross(normal2).squaredLength()));
+  
+  }
+
 
   /**
    * Returns the (initial) bearing from this point to the supplied point
@@ -131,17 +163,8 @@ public class Geodetic2D
    */
   public final Angle bearingTo(Geodetic2D that)
   {
-//    const Angle dLon = that.longitude().sub(longitude());
-//    const Angle lat1 = latitude();
-//    const Angle lat2 = that.latitude();
-//
-//    const double y = dLon.sinus() * lat2.cosinus();
-//    const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
-//    const double radians = IMathUtils::instance()->atan2(y, x);
-//
-//    return Angle::fromRadians(radians);
-
     return bearing(_latitude, _longitude, that._latitude, that._longitude);
+
   }
 
 
@@ -172,41 +195,50 @@ public class Geodetic2D
     return s;
   }
 
-  public final boolean isEqualsTo(Geodetic2D that)
+  public final boolean isEquals(Geodetic2D that)
   {
-    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+    return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }
 
   @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-    + ((_latitude == null) ? 0 : _latitude.hashCode());
-		result = prime * result
-    + ((_longitude == null) ? 0 : _longitude.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Geodetic2D other = (Geodetic2D) obj;
-		if (_latitude == null) {
-			if (other._latitude != null)
-				return false;
-		} else if (!_latitude.equals(other._latitude))
-			return false;
-		if (_longitude == null) {
-			if (other._longitude != null)
-				return false;
-		} else if (!_longitude.equals(other._longitude))
-			return false;
-		return true;
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + ((_latitude == null) ? 0 : _latitude.hashCode());
+    result = (prime * result) + ((_longitude == null) ? 0 : _longitude.hashCode());
+    return result;
+  }
+
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Geodetic2D other = (Geodetic2D) obj;
+    if (_latitude == null) {
+      if (other._latitude != null) {
+        return false;
+      }
+    }
+    else if (!_latitude.equals(other._latitude)) {
+      return false;
+    }
+    if (_longitude == null) {
+      if (other._longitude != null) {
+        return false;
+      }
+    }
+    else if (!_longitude.equals(other._longitude)) {
+      return false;
+    }
+    return true;
+  }
 
 }

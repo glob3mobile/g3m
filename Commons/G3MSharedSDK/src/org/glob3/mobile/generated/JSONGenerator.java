@@ -37,6 +37,9 @@ public class JSONGenerator extends JSONVisitor
   {
     if (_isb != null)
        _isb.dispose();
+  
+    super.dispose();
+  
   }
 
 
@@ -106,6 +109,11 @@ public class JSONGenerator extends JSONVisitor
     _isb.addString("\"");
     _isb.addString(value.value());
     _isb.addString("\"");
+  }
+
+  public final void visitNull()
+  {
+    _isb.addString("null");
   }
 
   public final void visitArrayBeforeChildren(JSONArray value)

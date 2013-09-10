@@ -5,7 +5,7 @@ public class TilesStatistics
   private int _tilesVisible;
   private int _tilesRendered;
 
-  private static final int _maxLOD = 30;
+  private static final int _maxLOD = 128;
 
   private int[] _tilesProcessedByLevel = new int[_maxLOD];
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
@@ -97,7 +97,7 @@ public class TilesStatistics
     }
   }
 
-  public final void computeTileRendered(Tile tile)
+  public final void computePlanetRenderered(Tile tile)
   {
     _tilesRendered++;
 

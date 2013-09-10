@@ -15,61 +15,59 @@
 
 #include <string>
 
+
 class SQLiteStorage_iOS : public IStorage {
 private:
   const std::string _databaseName;
-  
+
   SQDatabase* _readDB;
   SQDatabase* _writeDB;
-  
+
   NSLock* _lock;
-  
-  NSString* toNSString(const std::string& cppStr) const {
-    return [ NSString stringWithCString: cppStr.c_str()
-                               encoding: NSUTF8StringEncoding ];
-  }
-  
+
   NSString* getDBPath() const;
-  
+
   void showStatistics() const;
-  
+
 public:
   void rawSave(NSString* table,
                NSString* name,
                NSData* contents,
                const TimeInterval& timeToExpires);
-  
+
   SQLiteStorage_iOS(const std::string &databaseName);
-  
+
   virtual ~SQLiteStorage_iOS() {
   }
-  
+
+
+  IByteBufferResult readBuffer(const URL& url,
+                               bool readExpired);
+
+  IImageResult readImage(const URL& url,
+                         bool readExpired);
+
+
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer,
                   const TimeInterval& timeToExpires,
                   bool saveInBackground);
 
-  IByteBuffer* readBuffer(const URL& url);
-
   void saveImage(const URL& url,
                  const IImage* buffer,
                  const TimeInterval& timeToExpires,
                  bool saveInBackground);
-  
-  IImage* readImage(const URL& url);
-  
+
+
   void onResume(const G3MContext* context) {
-    
   }
-  
+
   void onPause(const G3MContext* context) {
-    
   }
 
   void onDestroy(const G3MContext* context) {
-
   }
-  
+
   bool isAvailable() {
     return (_readDB != NULL) && (_writeDB != NULL);
   }

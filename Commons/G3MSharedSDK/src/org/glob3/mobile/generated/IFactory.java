@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  IFactory.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -25,6 +25,10 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class ILogger;
 //class IImageListener;
+//class ICanvas;
+//class IWebSocket;
+//class IWebSocketListener;
+//class URL;
 
 public abstract class IFactory
 {
@@ -48,14 +52,15 @@ public abstract class IFactory
 
   public void dispose()
   {
-
   }
 
   public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);
 
   public abstract void createImageFromBuffer(IByteBuffer buffer, IImageListener listener, boolean autodelete);
 
-  public abstract void createImageFromSize(int width, int height, IImageListener listener, boolean autodelete);
+//  virtual void createImageFromSize(int width, int height,
+//                                   IImageListener* listener,
+//                                   bool autodelete) const = 0;
 
   public abstract void deleteImage(IImage image);
 
@@ -75,5 +80,13 @@ public abstract class IFactory
   public abstract IByteBuffer createByteBuffer(int length);
 
   public abstract IByteBuffer createByteBuffer(byte[] data, int length);
+
+  public abstract ICanvas createCanvas();
+
+  public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
+
+  public abstract IShortBuffer createShortBuffer(final short[] array);
+
+  public abstract IFloatBuffer createFloatBuffer(final float[] array);
 
 }

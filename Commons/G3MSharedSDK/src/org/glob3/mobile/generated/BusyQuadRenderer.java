@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  BusyQuadRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -13,24 +13,30 @@ package org.glob3.mobile.generated;
 //  BusyQuadRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 
+///#include "GPUProgramState.hpp"
+
+
 
 //***************************************************************
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
+public class BusyQuadRenderer extends LeafRenderer
 {
   private double _degrees;
-//  const std::string _textureFilename;
+  //  const std::string _textureFilename;
   private IImage _image;
   private Mesh _quadMesh;
+
+  private final boolean _animated;
+  private final Vector2D _size ;
+  private Color _backgroundColor;
 
   private boolean initMesh(G3MRenderContext rc)
   {
@@ -49,18 +55,14 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
       return false;
     }
   
-    final float halfSize = 16F;
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-    vertices.add(-halfSize, +halfSize, 0);
-    vertices.add(-halfSize, -halfSize, 0);
-    vertices.add(+halfSize, +halfSize, 0);
-    vertices.add(+halfSize, -halfSize, 0);
-  
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    indices.add((short) 0);
-    indices.add((short) 1);
-    indices.add((short) 2);
-    indices.add((short) 3);
+    final double halfWidth = _size._x / 2;
+    final double hadfHeight = _size._y / 2;
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    vertices.add(-halfWidth, +hadfHeight, 0);
+    vertices.add(-halfWidth, -hadfHeight, 0);
+    vertices.add(+halfWidth, +hadfHeight, 0);
+    vertices.add(+halfWidth, -hadfHeight, 0);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     texCoords.add(0, 0);
@@ -68,22 +70,41 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
+    DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
     TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
-    _quadMesh = new TexturedMesh(im, true, texMap, true, false);
+    _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   
     return true;
   }
 
+  private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+
+  private GLState _glState;
+  private void createGLState()
+  {
+  
+    //Modelview and projection
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+  }
 
 
-  public BusyQuadRenderer(IImage image)
+  public BusyQuadRenderer(IImage image, Color backgroundColor, Vector2D size, boolean animated)
   {
      _degrees = 0;
      _quadMesh = null;
      _image = image;
+     _backgroundColor = backgroundColor;
+     _animated = animated;
+     _size = new Vector2D(size);
+     _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
+     _glState = new GLState();
+    createGLState();
   }
 
   public final void initialize(G3MContext context)
@@ -95,13 +116,11 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     return true;
   }
 
-  private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc, GLState parentState)
+
+  //TODO: REMOVE???
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-  
-    GLState state = new GLState(parentState);
-    state.enableBlend();
   
     if (_quadMesh == null)
     {
@@ -111,42 +130,15 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
       }
     }
   
-  
-    // init effect in the first render
-//    static boolean firstTime = true;
-    if (render_firstTime)
-    {
-      render_firstTime = false;
-      Effect effect = new BusyEffect(this);
-      rc.getEffectsScheduler().startEffect(effect, this);
-    }
-  
-    // init modelview matrix
-    int[] currentViewport = new int[4];
-    gl.getViewport(currentViewport);
-    final int halfWidth = currentViewport[2] / 2;
-    final int halfHeight = currentViewport[3] / 2;
-    MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-    gl.setProjection(M);
-    gl.loadMatrixf(MutableMatrix44D.identity());
+    createGLState();
   
     // clear screen
-    gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-    gl.setState(state);
-  
-    gl.setBlendFuncSrcAlpha();
-  
-    gl.pushMatrix();
-    MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.zero(), new Vector3D(-1, 0, 0));
-    MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
-    gl.multMatrixf(R1.multiply(R2));
+    gl.clearScreen(_backgroundColor);
   
     // draw mesh
-    _quadMesh.render(rc, parentState);
-  
-    gl.popMatrix();
+    _quadMesh.render(rc, _glState);
   }
+
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
@@ -155,11 +147,22 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
+    final int halfWidth = width / 2;
+    final int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   }
 
   public void dispose()
   {
+    if (_quadMesh != null)
+       _quadMesh.dispose();
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
+
+    _glState._release();
+
+  super.dispose();
+
   }
 
   public final void incDegrees(double value)
@@ -167,16 +170,24 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     _degrees += value;
     if (_degrees>360)
        _degrees -= 360;
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1));
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
-    //int _TODO_start_effects;
+    if (_animated)
+    {
+      Effect effect = new BusyEffect(this);
+      rc.getEffectsScheduler().startEffect(effect, this);
+    }
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
-    //int _TODO_stop_effects;
+    if (_animated)
+    {
+      rc.getEffectsScheduler().cancelAllEffectsFor(this);
+    }
   }
 
   public final void onResume(G3MContext context)

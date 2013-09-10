@@ -55,6 +55,9 @@ public class BSONGenerator extends JSONVisitor
   {
     if (_builder != null)
        _builder.dispose();
+  
+    super.dispose();
+  
   }
 
   public static IByteBuffer generate(JSONBaseObject value)
@@ -140,6 +143,13 @@ public class BSONGenerator extends JSONVisitor
     final String str = value.value();
     _builder.addInt32(str.length() + 1); // 1 for \0 termination
     _builder.addStringZeroTerminated(str);
+  }
+
+  public final void visitNull()
+  {
+    _builder.add((byte) 0x0A); // null string
+  
+    addCurrentKey();
   }
 
   public final void visitArrayBeforeChildren(JSONArray value)

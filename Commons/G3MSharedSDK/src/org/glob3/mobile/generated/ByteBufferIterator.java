@@ -25,13 +25,7 @@ public class ByteBufferIterator
   private int _cursor;
   private int _timestamp;
 
-  private void checkTimestamp()
-  {
-    if (_timestamp != _buffer.timestamp())
-    {
-      ILogger.instance().logError("The buffer was changed after the iteration started");
-    }
-  }
+//  void checkTimestamp() const;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  ByteBufferIterator(ByteBufferIterator that);
@@ -44,16 +38,31 @@ public class ByteBufferIterator
   
   }
 
+
+  //void ByteBufferIterator::checkTimestamp() const {
+  //  if (_timestamp != _buffer->timestamp()) {
+  //    ILogger::instance()->logError("The buffer was changed after the iteration started");
+  //  }
+  //}
+  
   public final boolean hasNext()
   {
-    checkTimestamp();
+    //checkTimestamp();
+    if (_timestamp != _buffer.timestamp())
+    {
+      ILogger.instance().logError("The buffer was changed after the iteration started");
+    }
   
     return (_cursor < _buffer.size());
   }
 
   public final byte nextUInt8()
   {
-    checkTimestamp();
+    //checkTimestamp();
+    if (_timestamp != _buffer.timestamp())
+    {
+      ILogger.instance().logError("The buffer was changed after the iteration started");
+    }
   
     if (_cursor >= _buffer.size())
     {
@@ -69,8 +78,15 @@ public class ByteBufferIterator
     final short b1 = (short) (nextUInt8() & 0xFF);
     final short b2 = (short) (nextUInt8() & 0xFF);
   
-    final int iResult = ((int) b1) | ((int)(b2 << 8));
+    final int iResult = (((int) b1) | ((int)(b2 << 8)));
     final short result = (short) iResult;
+  //  if (result != -9999) {
+  //    printf("break point on me\n");
+  //  }
+  
+  //  if (result > 0) {
+  //    printf("break point on me\n");
+  //  }
     return result;
   }
   public final int nextInt32()
@@ -81,7 +97,7 @@ public class ByteBufferIterator
     final int b3 = nextUInt8() & 0xFF;
     final int b4 = nextUInt8() & 0xFF;
   
-    return ((int) b1) | ((int) b2 << 8) | ((int) b3 << 16) | ((int) b4 << 24);
+    return (((int) b1) | ((int) b2 << 8) | ((int) b3 << 16) | ((int) b4 << 24));
   }
   public final long nextInt64()
   {
@@ -95,7 +111,7 @@ public class ByteBufferIterator
     final int b7 = nextUInt8() & 0xFF;
     final int b8 = nextUInt8() & 0xFF;
   
-    return ((long) b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40) | ((long) b7 << 48) | ((long) b8 << 56);
+    return (((long) b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40) | ((long) b7 << 48) | ((long) b8 << 56));
   }
 
   public final IByteBuffer nextBufferUpTo(byte sentinel)

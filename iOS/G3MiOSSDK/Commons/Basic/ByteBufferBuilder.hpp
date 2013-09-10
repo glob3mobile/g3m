@@ -20,7 +20,7 @@ private:
 public:
 
   ~ByteBufferBuilder() {
-    
+
   }
 
   void addInt64(long long value) {

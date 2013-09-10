@@ -22,40 +22,68 @@ package org.glob3.mobile.generated;
 //class Tile;
 //class LayerCondition;
 //class LayerSet;
+//class Vector2I;
+//class LayerTilesRenderParameters;
 
 public abstract class Layer
 {
-  private LayerCondition _condition;
-  private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
+  protected LayerCondition _condition;
+  protected java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
 
-  private LayerSet _layerSet;
+  protected LayerSet _layerSet;
 
-  private boolean _enable;
+  protected boolean _enable;
 
-  private final String _name;
+  protected final String _name;
 
-  protected final TimeInterval _timeToCache;
+  protected LayerTilesRenderParameters _parameters;
+
+  protected final long _timeToCacheMS;
+  protected final boolean _readExpired;
 
   protected final void notifyChanges()
   {
-    if (_layerSet == null)
-    {
-  //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
-    }
-    else
+    if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
     }
   }
 
-  public Layer(LayerCondition condition, String name, TimeInterval timeToCache)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
      _layerSet = null;
-     _timeToCache = new TimeInterval(timeToCache);
+     _timeToCacheMS = timeToCache.milliseconds();
+     _readExpired = readExpired;
      _enable = true;
+     _parameters = parameters;
 
+  }
+
+  protected final void setParameters(LayerTilesRenderParameters parameters)
+  {
+    if (parameters != _parameters)
+    {
+      _parameters = null;
+      _parameters = parameters;
+      notifyChanges();
+    }
+  }
+
+  protected abstract String getLayerType();
+
+  protected abstract boolean rawIsEquals(Layer that);
+
+
+  public final TimeInterval getTimeToCache()
+  {
+    return TimeInterval.fromMilliseconds(_timeToCacheMS);
+  }
+
+  public final boolean getReadExpired()
+  {
+    return _readExpired;
   }
 
   public void setEnable(boolean enable)
@@ -74,9 +102,12 @@ public abstract class Layer
 
   public void dispose()
   {
+    if (_condition != null)
+       _condition.dispose();
+    _parameters = null;
   }
 
-  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height);
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
@@ -104,9 +135,9 @@ public abstract class Layer
     return _condition.isAvailable(ec, tile);
   }
 
-//  virtual bool isTransparent() const = 0;
+  //  virtual bool isTransparent() const = 0;
 
-  public abstract URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height);
+  public abstract URL getFeatureInfoURL(Geodetic2D position, Sector sector);
 
   public boolean isReady()
   {
@@ -122,16 +153,21 @@ public abstract class Layer
     _listeners.add(listener);
   }
 
-  public final void onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
+  public final boolean onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
   {
-    for (int i = 0; i < _listeners.size(); i++)
+    final int listenersSize = _listeners.size();
+    for (int i = 0; i < listenersSize; i++)
     {
       TerrainTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
-        listener.onTerrainTouchEvent(ec, tte);
+        if (listener.onTerrainTouch(ec, tte))
+        {
+          return true;
+        }
       }
     }
+    return false;
   }
 
   public final void setLayerSet(LayerSet layerSet)
@@ -143,9 +179,92 @@ public abstract class Layer
     _layerSet = layerSet;
   }
 
+  public final void removeLayerSet(LayerSet layerSet)
+  {
+    if (_layerSet != layerSet)
+    {
+      ILogger.instance().logError("_layerSet doesn't match.");
+    }
+    _layerSet = null;
+  }
+
   public final String getName()
   {
     return _name;
   }
+
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    return _parameters;
+  }
+
+  public abstract String description();
+
+  public final boolean isEquals(Layer that)
+  {
+    if (this == that)
+    {
+      return true;
+    }
+  
+    if (that == null)
+    {
+      return false;
+    }
+  
+    if (!getLayerType().equals(that.getLayerType()))
+    {
+      return false;
+    }
+  
+    if (_condition != that._condition)
+    {
+      return false;
+    }
+  
+    final int thisListenersSize = _listeners.size();
+    final int thatListenersSize = that._listeners.size();
+    if (thisListenersSize != thatListenersSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisListenersSize; i++)
+    {
+      if (_listeners.get(i) != that._listeners.get(i))
+      {
+        return false;
+      }
+    }
+  
+    if (_enable != that._enable)
+    {
+      return false;
+    }
+  
+    if (!(_name.equals(that._name)))
+    {
+      return false;
+    }
+  
+    if (!_parameters.isEquals(that._parameters))
+    {
+      return false;
+    }
+  
+    if (_timeToCacheMS != that._timeToCacheMS)
+    {
+      return false;
+    }
+  
+    if (_readExpired != that._readExpired)
+    {
+      return false;
+    }
+  
+    return rawIsEquals(that);
+  }
+
+  public abstract Layer copy();
 
 }

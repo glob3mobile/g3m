@@ -17,17 +17,22 @@
 
 JSONObject::~JSONObject() {
 #ifdef C_CODE
-  for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++){
+  for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++) {
     delete it->second;
   }
 #endif
   _entries.clear();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 const JSONBaseObject* JSONObject::get(const std::string& key) const {
 #ifdef C_CODE
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.find(key);
-  if (it != _entries.end()){
+  if (it != _entries.end()) {
     return _entries.at(key);
   }
   //ILogger::instance()->logError("The JSONObject does not contain the key \"" + key + "\"");
@@ -75,19 +80,37 @@ const JSONString* JSONObject::getAsString(const std::string& key) const {
 
 bool JSONObject::getAsBoolean(const std::string& key,
                               bool defaultValue) const {
-  const JSONBoolean* jsBool = getAsBoolean(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONBoolean* jsBool = jsValue->asBoolean();
   return (jsBool == NULL) ? defaultValue : jsBool->value();
 }
 
 double JSONObject::getAsNumber(const std::string& key,
                                double defaultValue) const {
-  const JSONNumber* jsNumber = getAsNumber(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONNumber* jsNumber = jsValue->asNumber();
   return (jsNumber == NULL) ? defaultValue : jsNumber->value();
 }
 
 const std::string JSONObject::getAsString(const std::string& key,
                                           const std::string& defaultValue) const {
-  const JSONString* jsString = getAsString(key);
+  const JSONBaseObject* jsValue = get(key);
+  if ((jsValue == NULL) ||
+      (jsValue->asNull() != NULL)) {
+    return defaultValue;
+  }
+
+  const JSONString* jsString = jsValue->asString();
   return (jsString == NULL) ? defaultValue : jsString->value();
 }
 
@@ -104,7 +127,7 @@ std::vector<std::string> JSONObject::keys() const {
 
   return result;
 #endif
-#if JAVA_CODE
+#ifdef JAVA_CODE
   return new java.util.ArrayList<String>(_entries.keySet());
 #endif
 }

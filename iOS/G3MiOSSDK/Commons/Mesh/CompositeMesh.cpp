@@ -17,7 +17,12 @@ CompositeMesh::~CompositeMesh() {
     delete child;
   }
 
-  delete _extent;
+  delete _boundingVolume;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 int CompositeMesh::getVertexCount() const {
@@ -41,15 +46,6 @@ bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
   return false;
 }
 
-void CompositeMesh::render(const G3MRenderContext* rc,
-                           const GLState& parentState) const {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
-    Mesh* child = _children[i];
-    child->render(rc, parentState);
-  }
-}
-
 const Vector3D CompositeMesh::getVertex(int index) const {
   int acumIndex = 0;
   const int childrenCount = _children.size();
@@ -65,31 +61,39 @@ const Vector3D CompositeMesh::getVertex(int index) const {
   return Vector3D::nan();
 }
 
-Extent* CompositeMesh::calculateExtent() const {
+BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   const int childrenCount = _children.size();
   if (childrenCount == 0) {
     return NULL;
   }
 
-  Extent* result = _children[0]->getExtent();
+  BoundingVolume* result = _children[0]->getBoundingVolume();
   for (int i = 1; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result = result->mergedWith( child->getExtent() );
+    result = result->mergedWith( child->getBoundingVolume() );
   }
 
   return result;
 }
 
-Extent* CompositeMesh::getExtent() const {
-  if (_extent == NULL) {
-    _extent = calculateExtent();
+BoundingVolume* CompositeMesh::getBoundingVolume() const {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = calculateBoundingVolume();
   }
-  return _extent;
+  return _boundingVolume;
 }
 
 void CompositeMesh::addMesh(Mesh* mesh) {
-  delete _extent;
-  _extent = NULL;
+  delete _boundingVolume;
+  _boundingVolume = NULL;
 
   _children.push_back(mesh);
+}
+
+void CompositeMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+  const int childrenCount = _children.size();
+  for (int i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    child->render(rc, parentGLState);
+  }
 }

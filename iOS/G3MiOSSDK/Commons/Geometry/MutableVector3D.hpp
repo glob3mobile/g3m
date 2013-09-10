@@ -40,7 +40,11 @@ public:
   MutableVector3D normalized() const;
   
   static MutableVector3D nan() {
-    return MutableVector3D(IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD(), IMathUtils::instance()->NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return MutableVector3D(mu->NanD(),
+                           mu->NanD(),
+                           mu->NanD());
   }
   
   bool equalTo(const MutableVector3D& v) const{
@@ -48,7 +52,11 @@ public:
   }
   
   bool isNan() const {
-    return (IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y) || IMathUtils::instance()->isNan(_z));
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return (mu->isNan(_x) ||
+            mu->isNan(_y) ||
+            mu->isNan(_z));
   }
   
   bool isZero() const {
@@ -134,9 +142,9 @@ public:
   
   MutableVector3D transformedBy(const MutableMatrix44D &m,
                                 const double homogeneus) const {
-    return MutableVector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12),
-                           _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13),
-                           _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));    
+    return MutableVector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(),
+                           _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
+                           _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
   }
   
   Vector3D asVector3D() const {

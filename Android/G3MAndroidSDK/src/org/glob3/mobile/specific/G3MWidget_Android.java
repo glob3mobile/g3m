@@ -12,7 +12,11 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -27,6 +31,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
@@ -94,7 +99,7 @@ public final class G3MWidget_Android
 
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
-         _gestureDetector = new GestureDetector(this);
+         _gestureDetector = new GestureDetector(context, this);
          _doubleTapListener = new OnDoubleTapListener() {
 
             @Override
@@ -288,7 +293,7 @@ public final class G3MWidget_Android
          if (_layerSet != null) {
             final boolean showStatistics = false;
 
-            final TileRenderer tr = new TileRenderer( //
+            final PlanetRenderer tr = new PlanetRenderer( //
                      new EllipsoidalTileTessellator(parameters._tileResolution, true), //
                      new MultiLayerTileTexturizer(), //
                      _layerSet, //
@@ -369,10 +374,40 @@ public final class G3MWidget_Android
       }
    */
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+
+      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
+               GL2Shaders._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
+               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
+               GL2Shaders._flatColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+              GL2Shaders._noColorMeshFragmentShader));
+      
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
+				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+      
+      factory.add(new GPUProgramSources("FlatColor+DirectionLight", 
+				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      
+      return new GPUProgramManager(factory);
+   }
+
 
    public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
+                          final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
                           final ArrayList<ICameraConstrainer> cameraConstraints,
                           final CameraRenderer cameraRenderer,
@@ -384,13 +419,15 @@ public final class G3MWidget_Android
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
                storage, //
                downloader, //
                threadUtils, //
+               cameraActivityListener,//
                planet, //
                cameraConstraints, //
                cameraRenderer, //
@@ -401,7 +438,9 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, 
+               createGPUProgramManager(), 
+               sceneLighting);
 
       _g3mWidget.setUserData(userData);
    }
@@ -453,7 +492,7 @@ public final class G3MWidget_Android
 
    public void setAnimatedCameraPosition(final Geodetic3D position,
                                          final TimeInterval interval) {
-      getG3MWidget().setAnimatedCameraPosition(position, interval);
+      getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
 
 
@@ -479,11 +518,6 @@ public final class G3MWidget_Android
 
    public void stopCameraAnimation() {
       getG3MWidget().stopCameraAnimation();
-   }
-
-
-   public void resetCameraPosition() {
-      getG3MWidget().resetCameraPosition();
    }
 
 

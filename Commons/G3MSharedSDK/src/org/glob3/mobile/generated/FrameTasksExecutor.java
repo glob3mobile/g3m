@@ -12,13 +12,16 @@ public class FrameTasksExecutor
   private boolean canExecutePreRenderStep(G3MRenderContext rc, int executedCounter)
   {
     final int tasksCount = _preRenderTasks.size();
+    if (tasksCount <= _minimumExecutionsPerFrame)
+    {
+      //if (_stressed) {
+      //  rc->getLogger()->logWarning("Abandon STRESSED mode");
+      //}
+      _stressed = false;
+    }
+  
     if (tasksCount == 0)
     {
-      if (_stressed)
-      {
-        //      rc->getLogger()->logWarning("Abandon STRESSED mode");
-        _stressed = false;
-      }
       return false;
     }
   
@@ -29,11 +32,11 @@ public class FrameTasksExecutor
   
     if (tasksCount > _maximumQueuedTasks)
     {
-      //    if (!_stressed) {
-      //      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-      //                                  _preRenderTasks.size());
-      //    }
-  
+      if (!_stressed)
+      {
+        //rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
+        //                            _preRenderTasks.size());
+      }
       _stressed = true;
     }
   
@@ -47,22 +50,6 @@ public class FrameTasksExecutor
       return false;
     }
     return rc.getFrameStartTimer().elapsedTime().lowerThan(_maxTimePerFrame);
-  
-  
-    //  if (tasksCount > _maximumQueuedTasks) {
-    //    rc->getLogger()->logWarning("Too many queued tasks (%d).",
-    //                                _preRenderTasks.size());
-    //
-    ////    return true;
-    //
-    //    return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrameStressed);
-    //  }
-    //
-    //  if (executedCounter > _maximumExecutionsPerFrame) {
-    //    return false;
-    //  }
-    //
-    //  return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrame);
   }
 
   private boolean _stressed;
@@ -72,7 +59,7 @@ public class FrameTasksExecutor
      _minimumExecutionsPerFrame = 1;
      _maximumExecutionsPerFrame = 8;
      _maximumQueuedTasks = 64;
-     _maxTimePerFrame = TimeInterval.fromMilliseconds(7);
+     _maxTimePerFrame = TimeInterval.fromMilliseconds(5);
      _maxTimePerFrameStressed = TimeInterval.fromMilliseconds(25);
      _stressed = false;
 
@@ -150,6 +137,7 @@ public class FrameTasksExecutor
 
   public void dispose()
   {
+
   }
 
 }

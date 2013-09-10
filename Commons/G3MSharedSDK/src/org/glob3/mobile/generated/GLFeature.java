@@ -1,36 +1,31 @@
 package org.glob3.mobile.generated; 
-public class GLFeature
+public abstract class GLFeature extends RCObject
 {
-  private static int _polygonOffsetFill = 0;
-  private static int _depthTest = 0;
-  private static int _blend = 0;
-  private static int _cullFace = 0;
 
-  public static int polygonOffsetFill()
+  public GLFeature(GLFeatureGroupName group, GLFeatureID id)
   {
-    return _polygonOffsetFill;
+     _group = group;
+     _id = id;
   }
 
-  public static int depthTest()
+  public final GPUVariableValueSet getGPUVariableValueSet()
   {
-    return _depthTest;
+    return _values;
   }
 
-  public static int blend()
+  public final GLFeatureGroupName getGroup()
   {
-    return _blend;
+    return _group;
   }
 
-  public static int cullFace()
+  public final GLFeatureID getID()
   {
-    return _cullFace;
+    return _id;
   }
 
-  public static void init(INativeGL ngl)
-  {
-    _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
-    _depthTest = ngl.Feature_DepthTest();
-    _blend = ngl.Feature_Blend();
-    _cullFace = ngl.Feature_CullFace();
-  }
+  public abstract void applyOnGlobalGLState(GLGlobalState state);
+
+  protected final GLFeatureGroupName _group;
+  protected GPUVariableValueSet _values = new GPUVariableValueSet();
+  protected final GLFeatureID _id;
 }

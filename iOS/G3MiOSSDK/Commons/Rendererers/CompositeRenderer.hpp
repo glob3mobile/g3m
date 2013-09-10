@@ -16,6 +16,7 @@ class CompositeRenderer: public Renderer
 {
 private:
   std::vector<Renderer*> _renderers;
+  int                    _renderersSize;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -29,12 +30,17 @@ private:
 public:
   CompositeRenderer():
   _context(NULL),
-  _enable(true)
+  _enable(true),
+  _renderersSize(0)
   {
-    _renderers = std::vector<Renderer*>();
+//    _renderers = std::vector<Renderer*>();
   }
   
   virtual ~CompositeRenderer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
   
   bool isEnable() const;
@@ -45,8 +51,7 @@ public:
   
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+  void render(const G3MRenderContext* rc, GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
@@ -56,16 +61,18 @@ public:
   
   void addRenderer(Renderer* renderer);
   
-  void start();
+  void start(const G3MRenderContext* rc);
   
-  void stop();
+  void stop(const G3MRenderContext* rc);
 
   void onResume(const G3MContext* context);
   
   void onPause(const G3MContext* context);
 
   void onDestroy(const G3MContext* context);
-  
+
+  SurfaceElevationProvider* getSurfaceElevationProvider();
+
 };
 
 #endif

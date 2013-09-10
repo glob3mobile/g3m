@@ -52,12 +52,21 @@ public class MutableVector2D
 
   public static MutableVector2D nan()
   {
-    return new MutableVector2D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new MutableVector2D(mu.NanD(), mu.NanD());
+  }
+
+  public final boolean isEquals(double x, double y)
+  {
+    return _x == x && _y == y;
   }
 
   public final boolean isNan()
   {
-    return IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y);
+    final IMathUtils mu = IMathUtils.instance();
+
+    return mu.isNan(_x) || mu.isNan(_y);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

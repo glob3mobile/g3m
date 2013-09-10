@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class GPUProgramState;
+
 public abstract class LeafRenderer extends Renderer
 {
   private boolean _enable;
@@ -35,6 +37,7 @@ public abstract class LeafRenderer extends Renderer
 
   public void dispose()
   {
+  super.dispose();
 
   }
 
@@ -43,7 +46,8 @@ public abstract class LeafRenderer extends Renderer
     return _enable;
   }
 
-  public void setEnable(final boolean enable) {
+  public void setEnable(boolean enable)
+  {
     _enable = enable;
   }
 
@@ -57,14 +61,19 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc, GLState glState);
 
   public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
   public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void start();
+  public abstract void start(G3MRenderContext rc);
 
-  public abstract void stop();
+  public abstract void stop(G3MRenderContext rc);
+
+  public SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    return null;
+  }
 
 }

@@ -2,7 +2,7 @@
 //  Tile.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -19,14 +19,21 @@ class TileTexturizer;
 class TilesRenderParameters;
 class ITimer;
 class TilesStatistics;
-class TileRenderContext;
+class PlanetRendererContext;
 class TileKey;
 class Vector3D;
 class GLState;
-class Extent;
+class BoundingVolume;
 class ElevationDataProvider;
 class ElevationData;
 class MeshHolder;
+class Vector2I;
+class GPUProgramState;
+class TileElevationDataRequest;
+class Frustum;
+class Box;
+class PlanetRenderer;
+class GLState;
 
 #include "ITexturizerData.hpp"
 
@@ -40,43 +47,60 @@ private:
   const int       _column;
 
   Mesh* _tessellatorMesh;
-  ElevationData* _elevationData;
-  long long      _elevationRequestId;
+
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
+  TileElevationDataRequest* _elevationDataRequest;
+  
+  Mesh* _flatColorMesh;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;
+  bool _texturizerDirty;    //Texturizer needs to be called
+
+  float _verticalExaggeration;
+  double _minHeight;
+  double _maxHeight;
+
+  BoundingVolume* _boundingVolume;
 
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
+                                  const PlanetRendererContext* prc);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
-                     const TileRenderContext* trc);
+                     const PlanetRendererContext* prc);
 
   inline bool isVisible(const G3MRenderContext* rc,
-                        const TileRenderContext* trc);
+                        const PlanetRendererContext* prc,
+                        const Planet* planet,
+                        const Vector3D& cameraNormalizedPosition,
+                        double cameraAngle2HorizonInRadians,
+                        const Frustum* cameraFrustumInModelCoordinates);
 
+  ITimer* _lodTimer;
+  bool _lastLodTest;
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
-                                  const TileRenderContext* trc);
-
-  inline std::vector<Tile*>* createSubTiles();
+                                  const PlanetRendererContext* prc);
 
   inline void rawRender(const G3MRenderContext* rc,
-                        const TileRenderContext* trc,
-                        const GLState& parentState);
+                        const PlanetRendererContext* prc,
+                        const GLState* glState);
 
   void debugRender(const G3MRenderContext* rc,
-                   const TileRenderContext* trc,
-                   const GLState& parentState);
+                   const PlanetRendererContext* prc, const GLState* glState);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
-                             const int row, const int column);
+                             const int row, const int column,
+                             bool setParent);
+
+
+  inline std::vector<Tile*>* getSubTiles(const Angle& splitLatitude,
+                                         const Angle& splitLongitude);
+
   Tile(const Tile& that);
 
   void ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -90,10 +114,20 @@ private:
 
   ITexturizerData* _texturizerData;
 
-  Extent* _tileExtent;
-  Extent* getTileExtent(const G3MRenderContext *rc);
+  Box* _tileBoundingVolume;
+  Box* getTileBoundingVolume(const G3MRenderContext *rc);
 
-  void cancelElevationDataRequest(ElevationDataProvider* elevationDataProvider);
+  int                    _elevationDataLevel;
+  ElevationData*         _elevationData;
+  bool                   _mustActualizeMeshDueToNewElevationData;
+  ElevationDataProvider* _lastElevationDataProvider;
+  int _lastTileMeshResolutionX;
+  int _lastTileMeshResolutionY;
+
+  const PlanetRenderer* _planetRenderer;
+
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+                                          const PlanetRendererContext* prc);
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -101,12 +135,13 @@ public:
        const Sector& sector,
        int level,
        int row,
-       int column);
+       int column,
+       const PlanetRenderer* planetRenderer);
 
   ~Tile();
   
   //Change to public for TileCache
-  inline std::vector<Tile*>* getSubTiles();
+  std::vector<Tile*>* getSubTiles(const bool mercator);
 
   const Sector getSector() const {
     return _sector;
@@ -133,12 +168,16 @@ public:
   }
 
   void prepareForFullRendering(const G3MRenderContext* rc,
-                               const TileRenderContext* trc);
+                               const PlanetRendererContext* prc);
 
   void render(const G3MRenderContext* rc,
-              const TileRenderContext* trc,
+              const PlanetRendererContext* prc,
               const GLState& parentState,
-              std::list<Tile*>* toVisitInNextIteration);
+              std::list<Tile*>* toVisitInNextIteration,
+              const Planet* planet,
+              const Vector3D& cameraNormalizedPosition,
+              double cameraAngle2HorizonInRadians,
+              const Frustum* cameraFrustumInModelCoordinates);
 
   const TileKey getKey() const;
 
@@ -176,13 +215,41 @@ public:
   inline void prune(TileTexturizer*        texturizer,
                     ElevationDataProvider* elevationDataProvider);
 
-  void onElevationData(ElevationData* elevationData,
-                       float verticalExaggeration,
-                       MeshHolder* meshHolder,
-                       const TileTessellator* tessellator,
-                       const Planet* planet,
-                       bool renderDebug);
+  void toBeDeleted(TileTexturizer*        texturizer,
+                   ElevationDataProvider* elevationDataProvider);
+
   
+  double getMinHeight() const;
+  double getMaxHeight() const;
+
+  const std::string description() const;
+
+  inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
+                                            const Angle& splitLongitude,
+                                            bool setParent);
+  
+  bool isElevationDataSolved() const {
+    return (_elevationDataLevel == _level);
+  }
+  
+  ElevationData* getElevationData() const {
+    return _elevationData;
+  }
+  
+  void setElevationData(ElevationData* ed, int level);
+  
+  void getElevationDataFromAncestor(const Vector2I& extent);
+  
+  void initializeElevationData(ElevationDataProvider* elevationDataProvider,
+                               const TileTessellator* tesselator,
+                               const Vector2I& tileMeshResolution,
+                               const Planet* planet,
+                               bool renderDebug);
+  
+  void ancestorChangedElevationData(Tile* ancestor);
+  
+  ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
+
 };
 
 #endif

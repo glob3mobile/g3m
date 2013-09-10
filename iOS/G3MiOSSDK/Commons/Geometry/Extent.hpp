@@ -24,7 +24,6 @@ class Extent {
 public:
   virtual ~Extent() { }
   
-  virtual bool touches(const Frustum *frustum) const = 0;
   
   
   virtual double projectedArea(const G3MRenderContext* rc) const {
@@ -37,10 +36,15 @@ public:
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) = 0;
+  virtual void render(const G3MRenderContext* rc, const GLState* parentState) = 0;
 
-  virtual bool touchesBox(const Box *box) const = 0;
+  virtual bool touches(const Frustum *frustum) const = 0;
+
+  virtual bool touchesBox(const Box* box) const = 0;
+
+  virtual bool fullContains(const Extent* that) const = 0;
+
+  virtual bool fullContainedInBox(const Box* box) const = 0;
 
   virtual Extent* mergedWith(const Extent* that) const = 0;
 

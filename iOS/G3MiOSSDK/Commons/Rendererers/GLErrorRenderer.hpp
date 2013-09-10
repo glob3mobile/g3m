@@ -17,7 +17,7 @@ public:
   void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState);
+              GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent);
@@ -27,15 +27,15 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
   
-  bool isReadyToRender(const G3MRenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc, GLState* glState) {
     return true;
   }
   
-  void start() {
+  void start(const G3MRenderContext* rc) {
     
   }
   
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
     
   }
   

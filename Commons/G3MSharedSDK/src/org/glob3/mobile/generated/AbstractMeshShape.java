@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class Mesh;
 
 public abstract class AbstractMeshShape extends Shape
@@ -40,16 +41,16 @@ public abstract class AbstractMeshShape extends Shape
     _mesh = null;
   }
 
-  protected AbstractMeshShape(Geodetic3D position)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(position);
+     super(position, altitudeMode);
      _mesh = null;
 
   }
 
-  protected AbstractMeshShape(Geodetic3D position, Mesh mesh)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
-     super(position);
+     super(position, altitudeMode);
      _mesh = mesh;
 
   }
@@ -61,22 +62,22 @@ public abstract class AbstractMeshShape extends Shape
     return (mesh != null);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    final Mesh mesh = getMesh(rc);
+    Mesh mesh = getMesh(rc);
     if (mesh != null)
     {
       mesh.render(rc, parentState);
     }
   }
 
-
-  ///#include "GL.hpp"
-  
   public void dispose()
   {
     if (_mesh != null)
        _mesh.dispose();
+  
+    super.dispose();
+  
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
@@ -88,5 +89,4 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
-
 }

@@ -25,6 +25,11 @@ BSONGenerator::BSONGenerator() {
 
 BSONGenerator::~BSONGenerator() {
   delete _builder;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 IByteBuffer* BSONGenerator::createBuffer() {
@@ -112,6 +117,12 @@ void BSONGenerator::visitString(const JSONString* value) {
   const std::string str = value->value();
   _builder->addInt32(str.size() + 1 /* 1 for \0 termination */);
   _builder->addStringZeroTerminated(str);
+}
+
+void BSONGenerator::visitNull() {
+  _builder->add((unsigned char) 0x0A); // null string
+
+  addCurrentKey();
 }
 
 void BSONGenerator::visitArrayBeforeChildren(const JSONArray* value) {

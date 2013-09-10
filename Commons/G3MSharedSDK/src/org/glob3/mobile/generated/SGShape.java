@@ -25,13 +25,21 @@ public class SGShape extends Shape
   private SGNode _node;
   private final String _uriPrefix;
 
+  private final boolean _isTransparent;
 
-  public SGShape(SGNode node, String uriPrefix)
+
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
   {
-     super(null);
+     super(null, AltitudeMode.ABSOLUTE);
      _node = node;
      _uriPrefix = uriPrefix;
+     _isTransparent = isTransparent;
 
+  }
+
+  public final SGNode getNode()
+  {
+    return _node;
   }
 
   public final String getURIPrefix()
@@ -49,15 +57,14 @@ public class SGShape extends Shape
     return _node.isReadyToRender(rc);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    _node.render(rc, parentState);
+    _node.render(rc, parentState, renderNotReadyShapes);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-  //  return _node->isTransparent(rc);
-    return false;
+    return _isTransparent;
   }
 
 }

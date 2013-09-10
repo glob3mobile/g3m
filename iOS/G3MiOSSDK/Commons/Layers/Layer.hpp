@@ -22,34 +22,62 @@ class Petition;
 class Tile;
 class LayerCondition;
 class LayerSet;
+class Vector2I;
+class LayerTilesRenderParameters;
 
 class Layer {
-private:
+protected:
   LayerCondition*                         _condition;
   std::vector<TerrainTouchEventListener*> _listeners;
 
   LayerSet* _layerSet;
 
   bool _enable;
-  
+
   const std::string _name;
-  
-protected:
-  const TimeInterval& _timeToCache;
+
+#ifdef C_CODE
+  const LayerTilesRenderParameters* _parameters;
+#endif
+#ifdef JAVA_CODE
+  protected LayerTilesRenderParameters _parameters;
+#endif
+
+  const long long _timeToCacheMS;
+  const bool      _readExpired;
 
   void notifyChanges() const;
-  
-public:
+
   Layer(LayerCondition* condition,
-          const std::string& name,
-          const TimeInterval& timeToCache) :
+        const std::string& name,
+        const TimeInterval& timeToCache,
+        bool readExpired,
+        const LayerTilesRenderParameters* parameters) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
-  _timeToCache(timeToCache),
-  _enable(true)
+  _timeToCacheMS(timeToCache.milliseconds()),
+  _readExpired(readExpired),
+  _enable(true),
+  _parameters(parameters)
   {
-    
+
+  }
+
+  void setParameters(const LayerTilesRenderParameters* parameters);
+
+  virtual std::string getLayerType() const = 0;
+
+  virtual bool rawIsEquals(const Layer* that) const = 0;
+
+public:
+
+  const TimeInterval getTimeToCache() const {
+    return TimeInterval::fromMilliseconds(_timeToCacheMS);
+  }
+
+  bool getReadExpired() const {
+    return _readExpired;
   }
 
   virtual void setEnable(bool enable) {
@@ -63,49 +91,62 @@ public:
     return _enable;
   }
 
-  virtual ~Layer() {
-  }
-  
-  virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile,
-                                                 int width, int height) const = 0;
-  
+  virtual ~Layer();
+
+  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const Tile* tile) const = 0;
+
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
-  
+
   virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const;
-  
-//  virtual bool isTransparent() const = 0;
-  
-  virtual URL getFeatureInfoURL(const Geodetic2D& g,
-                                const IFactory* factory,
-                                const Sector& sector,
-                                int width, int height) const = 0;
-  
-  virtual bool isReady() const { 
+
+  //  virtual bool isTransparent() const = 0;
+
+  virtual URL getFeatureInfoURL(const Geodetic2D& position,
+                                const Sector& sector) const = 0;
+
+  virtual bool isReady() const {
     return true;
   }
-  
-  virtual void initialize(const G3MContext* context) {}
-  
+
+  virtual void initialize(const G3MContext* context) {
+  }
+
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
-  
-  void onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   TerrainTouchEvent& tte) const {
-    for (unsigned int i = 0; i < _listeners.size(); i++) {
+
+  bool onTerrainTouchEventListener(const G3MEventContext* ec,
+                                   const TerrainTouchEvent& tte) const {
+    const int listenersSize = _listeners.size();
+    for (int i = 0; i < listenersSize; i++) {
       TerrainTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
-        listener->onTerrainTouchEvent(ec, tte);
+        if (listener->onTerrainTouch(ec, tte)) {
+          return true;
+        }
       }
     }
+    return false;
   }
 
   void setLayerSet(LayerSet* layerSet);
-  
+
+  void removeLayerSet(LayerSet* layerSet);
+
   const std::string getName();
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
+    return _parameters;
+  }
+
+  virtual const std::string description() const = 0;
+
+  bool isEquals(const Layer* that) const;
+
+  virtual Layer* copy() const = 0;
   
 };
 

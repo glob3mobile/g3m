@@ -13,8 +13,7 @@
 
 class DirectMesh : public AbstractMesh {
 protected:
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState) const;
+  void rawRender(const G3MRenderContext* rc) const;
 
 
 public:
@@ -26,11 +25,18 @@ public:
              float pointSize,
              Color* flatColor = NULL,
              IFloatBuffer* colors = NULL,
-             const float colorsIntensity = 0.0f);
+             const float colorsIntensity = 0.0f,
+             bool depthTest = true,
+             IFloatBuffer* normals = NULL);
 
   ~DirectMesh() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 
   }
+  
+//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
 };
 

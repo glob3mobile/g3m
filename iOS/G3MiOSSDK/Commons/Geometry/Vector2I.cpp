@@ -10,9 +10,9 @@
 #include "IMathUtils.hpp"
 
 Vector2I Vector2I::div(double v) const {
-  IMathUtils* math = IMathUtils::instance();
-  return Vector2I(math->toInt(_x / v),
-                  math->toInt(_y / v) );
+  IMathUtils* mu = IMathUtils::instance();
+  return Vector2I(mu->toInt(_x / v),
+                  mu->toInt(_y / v) );
 }
 
 double Vector2I::length() const {
@@ -21,4 +21,8 @@ double Vector2I::length() const {
 
 Angle Vector2I::orientation() const {
   return Angle::fromRadians(IMathUtils::instance()->atan2((double) _y, (double) _x));
+}
+
+bool Vector2I::isEquals(const Vector2I& that) const {
+  return ((_x == that._x) && (_y == that._y));
 }

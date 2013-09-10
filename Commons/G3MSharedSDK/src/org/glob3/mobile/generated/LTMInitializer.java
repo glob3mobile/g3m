@@ -7,23 +7,26 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _scale = new MutableVector2D();
   private MutableVector2D _translation = new MutableVector2D();
 
-//  IFloatBuffer* _texCoords;
   private final TileTessellator _tessellator;
+  private final Vector2I _resolution;
 
-  public LTMInitializer(Tile tile, Tile ancestor, TileTessellator tessellator)
-                 /*IFloatBuffer* texCoords*/
-//  _texCoords(texCoords),
+  private final boolean _mercator;
+
+  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator, boolean mercator)
   {
+     _resolution = resolution;
      _tile = tile;
      _ancestor = ancestor;
      _tessellator = tessellator;
      _scale = new MutableVector2D(1,1);
      _translation = new MutableVector2D(0,0);
+     _mercator = mercator;
 
   }
 
   public void dispose()
   {
+  super.dispose();
 
   }
 
@@ -33,10 +36,14 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     if (_tile != _ancestor)
     {
       final Sector tileSector = _tile.getSector();
-      final Sector ancestorSector = _ancestor.getSector();
 
-      _scale = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
-      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower, _mercator);
+
+      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper, _mercator);
+
+      _scale = new MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x, lowerTextCoordUV._y - upperTextCoordUV._y);
+
+      _translation = new MutableVector2D(lowerTextCoordUV._x, upperTextCoordUV._y);
     }
   }
 
@@ -50,10 +57,9 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     return _translation;
   }
 
-  public final IFloatBuffer getTexCoords()
+  public final IFloatBuffer createTextCoords()
   {
-    //return _texCoords;
-    return _tessellator.createUnitTextCoords(_tile);
+    return _tessellator.createTextCoords(_resolution, _tile, _mercator);
   }
 
 }

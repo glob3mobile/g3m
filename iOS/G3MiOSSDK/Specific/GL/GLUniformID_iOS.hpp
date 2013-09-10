@@ -15,9 +15,9 @@ class GLUniformID_iOS: public IGLUniformID{
 private:
   const int _id;
 public:
-  GLUniformID_iOS(int id):_id(id){}
+  GLUniformID_iOS(int id):_id(id) {}
   
-  int getID(){ return _id;}
+  int getID() { return _id;}
   
   bool isValid() const { 
     return _id > -1;

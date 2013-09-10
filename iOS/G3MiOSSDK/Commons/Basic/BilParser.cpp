@@ -10,13 +10,15 @@
 
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
-#include "IFloatBuffer.hpp"
+#include "IShortBuffer.hpp"
 #include "IFactory.hpp"
-#include "ElevationData.hpp"
+#include "ShortBufferElevationData.hpp"
+#include "Vector2I.hpp"
 
 
-ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
-                                     const Vector2I& extent) {
+ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
+                                                const Vector2I& extent,
+                                                const IByteBuffer* buffer) {
 
   const int size = extent._x * extent._y;
 
@@ -30,18 +32,28 @@ ElevationData* BilParser::parseBil16(const IByteBuffer* buffer,
 
   ByteBufferIterator iterator(buffer);
 
-  IFloatBuffer* floatBuffer = IFactory::instance()->createFloatBuffer(size);
+  const short minValue = IMathUtils::instance()->minInt16();
+
+//  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
+  short* shortBuffer = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
+
     if (height == -9999) {
-      height = 0;
+      height = ShortBufferElevationData::NO_DATA_VALUE;
     }
-    //    if (height < 0) {
-    //      height = 0;
-    //    }
-    floatBuffer->rawPut(i, (float) height);
+    else if (height == minValue) {
+      height = ShortBufferElevationData::NO_DATA_VALUE;
+    }
+
+    //shortBuffer->rawPut(i, height);
+    shortBuffer[i] = height;
   }
 
-  return new ElevationData(extent,
-                           floatBuffer);
+  return new ShortBufferElevationData(sector,
+                                      extent,
+                                      sector,
+                                      extent,
+                                      shortBuffer,
+                                      size);
 }

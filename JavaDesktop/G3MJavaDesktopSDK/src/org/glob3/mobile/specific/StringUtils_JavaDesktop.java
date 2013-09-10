@@ -4,6 +4,10 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.Locale;
+>>>>>>> webgl-port
 
 import org.glob3.mobile.generated.IStringUtils;
 
@@ -77,4 +81,26 @@ public final class StringUtils_JavaDesktop
       return String.substring(index, String.length());
    }
 
+<<<<<<< HEAD
+=======
+
+   @Override
+   public boolean endsWith(final String string,
+                           final String suffix) {
+      return string.endsWith(suffix);
+   }
+
+
+   @Override
+   public String toUpperCase(final String string) {
+      return string.toUpperCase(Locale.ENGLISH);
+   }
+
+
+   @Override
+   public long parseHexInt(final String str) {
+      return Long.parseLong(str, 16);
+   }
+
+>>>>>>> webgl-port
 }

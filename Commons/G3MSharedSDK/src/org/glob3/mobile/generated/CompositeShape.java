@@ -18,19 +18,21 @@ package org.glob3.mobile.generated;
 
 
 
+//class GPUProgramState;
+
 public abstract class CompositeShape extends Shape
 {
   private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
 
   public CompositeShape()
   {
-     super(null);
+     super(null, AltitudeMode.ABSOLUTE);
 
   }
 
-  public CompositeShape(Geodetic3D position)
+  public CompositeShape(Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(position);
+     super(position, altitudeMode);
 
   }
 
@@ -44,6 +46,9 @@ public abstract class CompositeShape extends Shape
       if (child != null)
          child.dispose();
     }
+  
+    super.dispose();
+  
   }
 
   public final void addShape(Shape shape)
@@ -66,14 +71,13 @@ public abstract class CompositeShape extends Shape
     return false;
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Shape child = _children.get(i);
-      child.render(rc, parentState);
+      child.render(rc, parentState, renderNotReadyShapes);
     }
   }
-
 }

@@ -55,7 +55,8 @@ public:
   }
 
   void onDownload(const URL& url,
-                  IImage* image)  {
+                  IImage* image,
+                  bool expired)  {
     _quadShape->imageDownloaded(image);
   }
 
@@ -68,7 +69,8 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          IImage* image)  {
+                          IImage* image,
+                          bool expired)  {
 
   }
 };
@@ -81,6 +83,11 @@ void QuadShape::imageDownloaded(IImage* image) {
 
 QuadShape::~QuadShape() {
   delete _color;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
@@ -90,6 +97,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
+                                        true,
                                         new QuadShape_IImageDownloadListener(this),
                                         true);
     }
@@ -103,23 +111,41 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   const float bottom = -halfHeight;
   const float top    = +halfHeight;
 
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices.add(left,  bottom, 0);
   vertices.add(right, bottom, 0);
   vertices.add(left,  top,    0);
   vertices.add(right, top,    0);
 
-  const Vector3D center = Vector3D::zero();
-
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
+  Mesh* im = NULL;
+  if (_withNormals){
+    FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    normals.add((double)0.0, (double)0.0, (double)1.0);
+    normals.add((double)0.0, (double)0.0, (double)1.0);
+    normals.add((double)0.0, (double)0.0, (double)1.0);
+    normals.add((double)0.0, (double)0.0, (double)1.0);
 
-  Mesh* im = new DirectMesh(GLPrimitive::triangleStrip(),
-                            true,
-                            center,
-                            vertices.create(),
-                            1,
-                            1,
-                            color);
+    im = new DirectMesh(GLPrimitive::triangleStrip(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        1,
+                        1,
+                        color,
+                        NULL,
+                        (float)1.0,
+                        true,
+                        normals.create());
+  } else{
+    im = new DirectMesh(GLPrimitive::triangleStrip(),
+                        true,
+                        vertices.getCenter(),
+                        vertices.create(),
+                        1,
+                        1,
+                        color);
+  }
 
   const IGLTextureId* texId = getTextureId(rc);
   if (texId == NULL) {

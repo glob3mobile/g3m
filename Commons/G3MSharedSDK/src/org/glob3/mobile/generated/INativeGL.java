@@ -14,10 +14,14 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLUniformID;
 //class IGLTextureId;
+//class Matrix44D;
 
 
 
-//class MutableMatrix44D;
+//class GPUProgram;
+
+//class GPUUniform;
+//class GPUAttribute;
 
 public abstract class INativeGL
 {
@@ -26,11 +30,7 @@ public abstract class INativeGL
   {
   }
 
-  public abstract void useProgram(ShaderProgram program);
-
-  public abstract int getAttribLocation(ShaderProgram program, String name);
-
-  public abstract IGLUniformID getUniformLocation(ShaderProgram program, String name);
+  public abstract void useProgram(GPUProgram program);
 
   public abstract void uniform2f(IGLUniformID loc, float x, float y);
 
@@ -38,13 +38,15 @@ public abstract class INativeGL
 
   public abstract void uniform1i(IGLUniformID loc, int v);
 
-  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix);
+  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, Matrix44D matrix);
 
   public abstract void clearColor(float red, float green, float blue, float alpha);
 
   public abstract void clear(int buffers);
 
   public abstract void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3);
+
+  public abstract void uniform3f(IGLUniformID location, float v0, float v1, float v2);
 
   public abstract void enable(int feature);
 
@@ -104,6 +106,11 @@ public abstract class INativeGL
   public abstract int Type_UnsignedByte();
   public abstract int Type_UnsignedInt();
   public abstract int Type_Int();
+  public abstract int Type_Vec2Float();
+  public abstract int Type_Vec3Float();
+  public abstract int Type_Vec4Float();
+  public abstract int Type_Bool();
+  public abstract int Type_Matrix4Float();
 
   public abstract int Primitive_Triangles();
   public abstract int Primitive_TriangleStrip();
@@ -113,6 +120,8 @@ public abstract class INativeGL
   public abstract int Primitive_LineLoop();
   public abstract int Primitive_Points();
 
+  public abstract int BlendFactor_One();
+  public abstract int BlendFactor_Zero();
   public abstract int BlendFactor_SrcAlpha();
   public abstract int BlendFactor_OneMinusSrcAlpha();
 
@@ -132,17 +141,26 @@ public abstract class INativeGL
   public abstract int Format_RGBA();
 
   public abstract int Variable_Viewport();
+  public abstract int Variable_ActiveAttributes();
+  public abstract int Variable_ActiveUniforms();
 
   public abstract int Error_NoError();
 
   public abstract int createProgram();
-  public abstract void deleteProgram(int program);
+  public abstract boolean deleteProgram(int program);
   public abstract void attachShader(int program, int shader);
   public abstract int createShader(ShaderType type);
   public abstract boolean compileShader (int shader, String source);
-  public abstract void deleteShader(int shader);
+  public abstract boolean deleteShader(int shader);
   public abstract void printShaderInfoLog(int shader);
   public abstract boolean linkProgram(int program);
   public abstract void printProgramInfoLog(int program);
+
+  public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
+
+  public abstract int getProgramiv(GPUProgram program, int param);
+
+  public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
+  public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
 
 }

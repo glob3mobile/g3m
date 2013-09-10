@@ -24,7 +24,6 @@ public final class Downloader_Android
          extends
             IDownloader {
 
-   public final static String                               ASSET_URL       = "file:///";
    final static String                                      TAG             = "Downloader_Android";
 
    private final int                                        _maxConcurrentOperationCount;
@@ -124,13 +123,49 @@ public final class Downloader_Android
    }
 
 
+   //   @Override
+   //   public long requestBuffer(final URL url,
+   //                             final long priority,
+   //                             final TimeInterval timeToCache,
+   //                             final IBufferDownloadListener listener,
+   //                             final boolean deleteListener) {
+   //
+   //      Downloader_Android_Handler handler = null;
+   //      long requestId;
+   //
+   //      synchronized (this) {
+   //         _requestsCounter++;
+   //         requestId = _requestIdCounter++;
+   //         handler = _downloadingHandlers.get(url.getPath());
+   //
+   //         if (handler == null) {
+   //            handler = _queuedHandlers.get(url.getPath());
+   //            if (handler == null) {
+   //               // new handler, queue it
+   //               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+   //               _queuedHandlers.put(url.getPath(), handler);
+   //            }
+   //            else {
+   //               // the URL is queued for future download, just add the new listener
+   //               handler.addListener(listener, priority, requestId);
+   //            }
+   //         }
+   //         else {
+   //            // the URL is being downloaded, just add the new listener
+   //            handler.addListener(listener, priority, requestId);
+   //         }
+   //      }
+   //
+   //      return requestId;
+   //   }
+
    @Override
    public long requestBuffer(final URL url,
                              final long priority,
                              final TimeInterval timeToCache,
+                             final boolean readExpired,
                              final IBufferDownloadListener listener,
                              final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 
@@ -165,23 +200,23 @@ public final class Downloader_Android
    public long requestImage(final URL url,
                             final long priority,
                             final TimeInterval timeToCache,
+                            final boolean readExpired,
                             final IImageDownloadListener listener,
                             final boolean deleteListener) {
-
       Downloader_Android_Handler handler = null;
       long requestId;
 
       synchronized (this) {
          _requestsCounter++;
          requestId = _requestIdCounter++;
-         handler = _downloadingHandlers.get(url.getPath());
-
+         final String path = url.getPath();
+         handler = _downloadingHandlers.get(path);
          if (handler == null) {
-            handler = _queuedHandlers.get(url.getPath());
+            handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
                handler = new Downloader_Android_Handler(url, listener, priority, requestId);
-               _queuedHandlers.put(url.getPath(), handler);
+               _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
@@ -341,5 +376,6 @@ public final class Downloader_Android
    public void onDestroy(final G3MContext context) {
       stop();
    }
+
 
 }

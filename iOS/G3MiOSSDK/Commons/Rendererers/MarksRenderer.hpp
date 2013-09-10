@@ -12,9 +12,14 @@
 #include <vector>
 #include "LeafRenderer.hpp"
 
+//#include "GPUProgramState.hpp"
+
+#include "GLState.hpp"
+
 class Mark;
 class Camera;
 class MarkTouchListener;
+class IFloatBuffer;
 
 class MarksRenderer : public LeafRenderer {
 private:
@@ -33,7 +38,13 @@ private:
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
 
-  long long _downloadPriority = 1000000;
+  long long _downloadPriority;
+  
+  IFloatBuffer* _billboardTexCoord;
+  
+  GLState* _glState;
+  
+  void updateGLState(const G3MRenderContext* rc);
 
 public:
 
@@ -46,8 +57,7 @@ public:
 
   virtual void initialize(const G3MContext* context);
 
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void addMark(Mark* mark);
 
@@ -59,15 +69,14 @@ public:
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-  }
+                             int width, int height);
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
   }
 
   void onResume(const G3MContext* context) {
@@ -93,6 +102,15 @@ public:
     return _downloadPriority;
   }
   
+  bool isVisible(const G3MRenderContext* rc) {
+    return true;
+  }
+  
+  void modifiyGLState(GLState* state) {
+    
+  }
+  
+  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

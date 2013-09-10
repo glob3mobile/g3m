@@ -19,7 +19,7 @@ class G3MRenderContext;
 class FrameTask {
 public:
   virtual ~FrameTask() {
-    
+
   }
   
   virtual bool isCanceled(const G3MRenderContext *rc) = 0;
@@ -56,7 +56,7 @@ public:
   _minimumExecutionsPerFrame(1),
   _maximumExecutionsPerFrame(8),
   _maximumQueuedTasks(64),
-  _maxTimePerFrame(TimeInterval::fromMilliseconds(7)),
+  _maxTimePerFrame(TimeInterval::fromMilliseconds(5)),
   _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
   _stressed(false)
   {
@@ -69,7 +69,9 @@ public:
   
   void doPreRenderCycle(const G3MRenderContext* rc);
   
-  ~FrameTasksExecutor(){}
+  ~FrameTasksExecutor() {
+
+  }
   
 };
 

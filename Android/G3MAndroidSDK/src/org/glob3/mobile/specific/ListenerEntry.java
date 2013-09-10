@@ -92,17 +92,17 @@ public final class ListenerEntry {
                    final byte[] data) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
-         _bufferListener.onDownload(url, buffer);
+         _bufferListener.onDownload(url, buffer, false);
       }
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
          if (bitmap == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
             _imageListener.onError(url);
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
             //IFactory.instance().deleteImage(image);
          }
       }
@@ -113,16 +113,16 @@ public final class ListenerEntry {
                            final byte[] data) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
-         _bufferListener.onCanceledDownload(url, buffer);
+         _bufferListener.onCanceledDownload(url, buffer, false);
       }
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
          if (bitmap == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
             IFactory.instance().deleteImage(image);
          }
       }

@@ -2,7 +2,7 @@
 //  BusyQuadRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Created by Agustin Trujillo Pino on 13/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -17,20 +17,26 @@
 #include "TexturesHandler.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
+#include "GPUProgram.hpp"
+#include "Camera.hpp"
 
-void BusyQuadRenderer::start() {
-  //int _TODO_start_effects;
+void BusyQuadRenderer::start(const G3MRenderContext* rc) {
+  if (_animated) {
+    Effect *effect = new BusyEffect(this);
+    rc->getEffectsScheduler()->startEffect(effect, this);
+  }
 }
 
-void BusyQuadRenderer::stop() {
-  //int _TODO_stop_effects;
+void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
+  if (_animated) {
+    rc->getEffectsScheduler()->cancelAllEffectsFor(this);
+  }
 }
 
 
@@ -57,18 +63,14 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
     return false;
   }
 
-  const float halfSize = 16;
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
-  vertices.add(-halfSize, +halfSize, 0);
-  vertices.add(-halfSize, -halfSize, 0);
-  vertices.add(+halfSize, +halfSize, 0);
-  vertices.add(+halfSize, -halfSize, 0);
-
-  ShortBufferBuilder indices;
-  indices.add((short) 0);
-  indices.add((short) 1);
-  indices.add((short) 2);
-  indices.add((short) 3);
+  const double halfWidth = _size._x / 2;
+  const double hadfHeight = _size._y / 2;
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices.add(-halfWidth, +hadfHeight, 0);
+  vertices.add(-halfWidth, -hadfHeight, 0);
+  vertices.add(+halfWidth, +hadfHeight, 0);
+  vertices.add(+halfWidth, -hadfHeight, 0);
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
@@ -76,71 +78,48 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
 
-  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                    true,
-                                    Vector3D::zero(),
-                                    vertices.create(),
-                                    indices.create(),
-                                    1);
+  DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
+                                  true,
+                                  vertices.getCenter(),
+                                  vertices.create(),
+                                  1,
+                                  1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,
                                                     false);
 
-  _quadMesh = new TexturedMesh(im, true, texMap, true, false);
+  _quadMesh = new TexturedMesh(im, true, texMap, true, true);
 
   return true;
 }
 
-
+//TODO: REMOVE???
 void BusyQuadRenderer::render(const G3MRenderContext* rc,
-                              const GLState& parentState) {
+                              GLState* glState) {
   GL* gl = rc->getGL();
 
-  GLState state(parentState);
-  state.enableBlend();
-
-  if (_quadMesh == NULL){
+  if (_quadMesh == NULL) {
     if (!initMesh(rc)) {
       return;
     }
   }
 
-
-  // init effect in the first render
-  static bool firstTime = true;
-  if (firstTime) {
-    firstTime = false;
-    Effect *effect = new BusyEffect(this);
-    rc->getEffectsScheduler()->startEffect(effect, this);
-  }
-
-  // init modelview matrix
-  int currentViewport[4];
-  gl->getViewport(currentViewport);
-  const int halfWidth = currentViewport[2] / 2;
-  const int halfHeight = currentViewport[3] / 2;
-  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                            -halfHeight, halfHeight,
-                                                                            -halfWidth, halfWidth);
-  gl->setProjection(M);
-  gl->loadMatrixf(MutableMatrix44D::identity());
-
+  createGLState();
+  
   // clear screen
-  gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-
-  gl->setState(state);
-
-  gl->setBlendFuncSrcAlpha();
-
-  gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::zero(), Vector3D(-1, 0, 0));
-  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
-  gl->multMatrixf(R1.multiply(R2));
+  gl->clearScreen(*_backgroundColor);
 
   // draw mesh
-  _quadMesh->render(rc, parentState);
+  _quadMesh->render(rc, _glState);
+}
 
-  gl->popMatrix();
+void BusyQuadRenderer::createGLState() {
+  
+  //Modelview and projection
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+  _glState->clearGLFeatureGroup(CAMERA_GROUP);
+  _glState->addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+  _glState->addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
 }

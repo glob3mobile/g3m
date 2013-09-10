@@ -25,23 +25,17 @@ void G3MBuilder_iOS::initializeWidget() {
   [_nativeWidget setWidget: create()];
 }
 
-IThreadUtils* G3MBuilder_iOS::createThreadUtils() {
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-
-  return threadUtils;
+IThreadUtils* G3MBuilder_iOS::createDefaultThreadUtils() {
+  return new ThreadUtils_iOS();
 }
 
-IStorage* G3MBuilder_iOS::createStorage() {
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-
-  return storage;
+IStorage* G3MBuilder_iOS::createDefaultStorage() {
+  return new SQLiteStorage_iOS("g3m.cache");
 }
 
-IDownloader* G3MBuilder_iOS::createDownloader() {
+IDownloader* G3MBuilder_iOS::createDefaultDownloader() {
   const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 (_storage) ? _storage : createStorage(),
-                                                 saveInBackground);
-
-  return downloader;
+  return new CachedDownloader(new Downloader_iOS(8),
+                              getStorage(),
+                              saveInBackground);
 }

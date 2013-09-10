@@ -27,11 +27,11 @@ package org.glob3.mobile.generated;
 //class JSONLong;
 
 
+
 public abstract class JSONVisitor
 {
   public void dispose()
   {
-
   }
 
 //  virtual void visitNumber (const JSONNumber*  value) = 0;
@@ -42,6 +42,8 @@ public abstract class JSONVisitor
 
   public abstract void visitBoolean(JSONBoolean value);
   public abstract void visitString(JSONString value);
+
+  public abstract void visitNull();
 
   public abstract void visitArrayBeforeChildren(JSONArray value);
   public abstract void visitArrayInBetweenChildren(JSONArray value);

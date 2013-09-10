@@ -33,15 +33,16 @@ public:
                          Shape* shape,
                          double fromDistance,       double toDistance,
                          const Angle& fromAzimuth,  const Angle& toAzimuth,
-                         const Angle& fromAltitude, const Angle& toAltitude) :
-  EffectWithDuration(duration),
+                         const Angle& fromAltitude, const Angle& toAltitude,
+                         const bool linearTiming=false) :
+  EffectWithDuration(duration, linearTiming),
   _shape(shape),
   _fromDistance(fromDistance),
   _toDistance(toDistance),
-  _fromAzimuthInRadians(fromAzimuth.radians()),
-  _toAzimuthInRadians(toAzimuth.radians()),
-  _fromAltitudeInRadians(fromAltitude.radians()),
-  _toAltitudeInRadians(toAltitude.radians())
+  _fromAzimuthInRadians(fromAzimuth._radians),
+  _toAzimuthInRadians(toAzimuth._radians),
+  _fromAltitudeInRadians(fromAltitude._radians),
+  _toAltitudeInRadians(toAltitude._radians)
   {
 
   }

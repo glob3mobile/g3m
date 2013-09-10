@@ -16,8 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
-//class ElevationData;
+//class ShortBufferElevationData;
 //class IByteBuffer;
+//class Sector;
+//class Vector2I;
+
 
 public class BilParser
 {
@@ -25,7 +28,7 @@ public class BilParser
 //  BilParser();
 
 
-  public static ElevationData parseBil16(IByteBuffer buffer, Vector2I extent)
+  public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
   {
   
     final int size = extent._x * extent._y;
@@ -39,21 +42,27 @@ public class BilParser
   
     ByteBufferIterator iterator = new ByteBufferIterator(buffer);
   
-    IFloatBuffer floatBuffer = IFactory.instance().createFloatBuffer(size);
+    final short minValue = IMathUtils.instance().minInt16();
+  
+  //  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
+    short[] shortBuffer = new short[size];
     for (int i = 0; i < size; i++)
     {
       short height = iterator.nextInt16();
+  
       if (height == -9999)
       {
-        height = 0;
+        height = ShortBufferElevationData.NO_DATA_VALUE;
       }
-      //    if (height < 0) {
-      //      height = 0;
-      //    }
-      floatBuffer.rawPut(i, (float) height);
+      else if (height == minValue)
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+  
+      //shortBuffer->rawPut(i, height);
+      shortBuffer[i] = height;
     }
   
-    return new ElevationData(extent, floatBuffer);
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size);
   }
-
 }

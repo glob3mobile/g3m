@@ -22,13 +22,6 @@ public class Vector2I
   public final int _x;
   public final int _y;
 
-  public Vector2I()
-  {
-     _x = 0;
-     _y = 0;
-
-  }
-
   public Vector2I(int x, int y)
   {
      _x = x;
@@ -65,8 +58,8 @@ public class Vector2I
 
   public final Vector2I div(double v)
   {
-    IMathUtils math = IMathUtils.instance();
-    return new Vector2I(math.toInt(_x / v), math.toInt(_y / v));
+    IMathUtils mu = IMathUtils.instance();
+    return new Vector2I(mu.toInt(_x / v), mu.toInt(_y / v));
   }
 
   public final double length()
@@ -87,6 +80,11 @@ public class Vector2I
   public final MutableVector2I asMutableVector2I()
   {
     return new MutableVector2I(_x, _y);
+  }
+
+  public final boolean isEquals(Vector2I that)
+  {
+    return ((_x == that._x) && (_y == that._y));
   }
 
 }

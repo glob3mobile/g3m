@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+///#include "GPUProgramState.hpp"
+
+
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;
@@ -31,16 +34,14 @@ public class VisibleSectorListenerEntry
 
   public final void notifyListener(Sector visibleSector, G3MRenderContext rc)
   {
-    final Geodetic3D cameraPosition = rc.getPlanet().toGeodetic3D(rc.getCurrentCamera().getCartesianPosition());
-
-    _listener.onVisibleSectorChange(_lastSector, cameraPosition);
+    _listener.onVisibleSectorChange(_lastSector, rc.getCurrentCamera().getGeodeticPosition());
   }
 
   public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc)
   {
     if (_stabilizationIntervalInMS == 0)
     {
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();
@@ -53,7 +54,7 @@ public class VisibleSectorListenerEntry
     {
       final long now = getTimer().now().milliseconds();
 
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();

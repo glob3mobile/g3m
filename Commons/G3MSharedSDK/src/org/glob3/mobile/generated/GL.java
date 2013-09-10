@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  GL.cpp
 //  Glob3 Mobile
 //
-//  Created by Agustín Trujillo Pino on 02/05/11.
+//  Created by Agustin Trujillo Pino on 02/05/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -12,7 +12,7 @@ package org.glob3.mobile.generated;
 //  GL.hpp
 //  Glob3 Mobile
 //
-//  Created by Agustín Trujillo Pino on 14/06/11.
+//  Created by Agustin Trujillo Pino on 14/06/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -24,77 +24,36 @@ package org.glob3.mobile.generated;
 //class IGLUniformID;
 
 
+//class GPUProgramManager;
+//class GPUProgramState;
+//class GLState;
+
+
 public class GL
 {
   private final INativeGL _nativeGL;
 
-  private MutableMatrix44D _modelView = new MutableMatrix44D();
 
-  // stack of ModelView matrices
-  private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
+  /////////////////////////////////////////////////
+  //CURRENT GL STATUS
+  private GLGlobalState _currentGLGlobalState = new GLGlobalState();
+  private GPUProgram _currentGPUProgram;
+  /////////////////////////////////////////////////
 
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
-  //  long                        _texturesIdGetCounter;
-  //  long                        _texturesIdTakeCounter;
 
-  // state handling
-  private boolean _enableDepthTest;
-  private boolean _enableBlend;
-  private boolean _enableTextures;
-  private boolean _enableTexture2D;
-  private boolean _enableVertexColor;
-  private boolean _enableVerticesPosition;
-  private boolean _enableFlatColor;
-  private boolean _enableCullFace;
+  //  GLGlobalState *_currentState;
+  //  GPUProgram* _currentGPUProgram;
 
-  private int _cullFace_face;
-
-  private float _scaleX;
-  private float _scaleY;
-  private float _translationX;
-  private float _translationY;
-
-  private IFloatBuffer _vertices;
-  private int _verticesTimestamp;
-  private IFloatBuffer _textureCoordinates;
-  private int _textureCoordinatesTimestamp;
-  private IFloatBuffer _colors;
-  private int _colorsTimestamp;
-
-  private float _flatColorR;
-  private float _flatColorG;
-  private float _flatColorB;
-  private float _flatColorA;
-  private float _flatColorIntensity;
-  private float _lineWidth;
-  private float _pointSize;
-
-  private ShaderProgram _program;
-
-///#ifdef C_CODE
-//  const IGLTextureId* _boundTextureId;
-///#endif
-///#ifdef JAVA_CODE
-//  private IGLTextureId _boundTextureId;
-///#endif
-
-  private void loadModelView()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::loadModelView()");
-    }
-  
-    _nativeGL.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void loadModelView();
 
   private IGLTextureId getGLTextureId()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getGLTextureId()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+  //  }
   
     if (_texturesIdBag.size() == 0)
     {
@@ -137,101 +96,29 @@ public class GL
   }
 
   //Get Locations warning of errors
-  private boolean _errorGettingLocationOcurred;
-  private int checkedGetAttribLocation(ShaderProgram program, String name)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::checkedGetAttribLocation()");
-    }
-    int l = _nativeGL.getAttribLocation(program, name);
-    if (l == -1)
-    {
-      ILogger.instance().logError("Error fetching Attribute, Program=%s, Variable=\"%s\"", program.description(), name);
-      _errorGettingLocationOcurred = true;
-    }
-    return l;
-  }
-  private IGLUniformID checkedGetUniformLocation(ShaderProgram program, String name)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::checkedGetUniformLocation()");
-    }
-    IGLUniformID uID = _nativeGL.getUniformLocation(program, name);
-    if (!uID.isValid())
-    {
-      ILogger.instance().logError("Error fetching Uniform, Program=%s, Variable=\"%s\"", program.description(), name);
-      _errorGettingLocationOcurred = true;
-    }
-    return uID;
-  }
+//  bool _errorGettingLocationOcurred;
+//  int checkedGetAttribLocation(GPUProgram* program,
+//                               const std::string& name);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
 
-  private IFloatBuffer _billboardTexCoord;
-  private IFloatBuffer getBillboardTexCoord()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getBillboardTexCoord()");
-    }
-  
-    if (_billboardTexCoord == null)
-    {
-      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-      texCoor.add(1,1);
-      texCoor.add(1,0);
-      texCoor.add(0,1);
-      texCoor.add(0,0);
-      _billboardTexCoord = texCoor.create();
-    }
-  
-    return _billboardTexCoord;
-  }
+//  IFloatBuffer* _billboardTexCoord;
+//  IFloatBuffer* getBillboardTexCoord();
 
-  private final boolean _verbose;
+//  const bool _verbose;
 
 
 
   public GL(INativeGL nativeGL, boolean verbose)
-  //  _enableFlatColor(false),
-  //  _texturesIdGetCounter(0),
-  //  _texturesIdTakeCounter(0),
-  //_boundTextureId(NULL)
+//  _verbose(verbose),
   {
      _nativeGL = nativeGL;
-     _verbose = verbose;
-     _enableTextures = false;
-     _enableTexture2D = false;
-     _enableVertexColor = false;
-     _enableVerticesPosition = false;
-     _enableBlend = false;
-     _enableDepthTest = false;
-     _enableCullFace = false;
-     _cullFace_face = GLCullFace.back();
      _texturesIdAllocationCounter = 0;
-     _scaleX = 1F;
-     _scaleY = 1F;
-     _translationX = 0F;
-     _translationY = 0F;
-     _vertices = null;
-     _verticesTimestamp = 0;
-     _textureCoordinates = null;
-     _textureCoordinatesTimestamp = 0;
-     _colors = null;
-     _colorsTimestamp = 0;
-     _flatColorR = 0F;
-     _flatColorG = 0F;
-     _flatColorB = 0F;
-     _flatColorA = 0F;
-     _flatColorIntensity = 0F;
-     _billboardTexCoord = null;
-     _lineWidth = 1F;
-     _pointSize = 1F;
-     _program = null;
+     _currentGPUProgram = null;
     //Init Constants
     GLCullFace.init(_nativeGL);
     GLBufferType.init(_nativeGL);
-    GLFeature.init(_nativeGL);
+    GLStage.init(_nativeGL);
     GLType.init(_nativeGL);
     GLPrimitive.init(_nativeGL);
     GLBlendFactor.init(_nativeGL);
@@ -242,265 +129,102 @@ public class GL
     GLFormat.init(_nativeGL);
     GLVariable.init(_nativeGL);
     GLError.init(_nativeGL);
+
+    //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void verticesColors(boolean v);
 
-  public final void clearScreen(float r, float g, float b, float a)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::clearScreen()");
-    }
+  ///#include "GPUProgramState.hpp"
   
-    _nativeGL.clearColor(r, g, b, a);
+  
+  public final void clearScreen(Color color)
+  {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::clearScreen()");
+  //  }
+  
+    GLGlobalState state = new GLGlobalState();
+    state.setClearColor(color);
+    state.applyChanges(this, _currentGLGlobalState);
+  
+    //setGLGlobalState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-  public final void color(float r, float g, float b, float a)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::color()");
-    }
-  
-    if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
-    {
-      _nativeGL.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
-  
-      _flatColorR = r;
-      _flatColorG = g;
-      _flatColorB = b;
-      _flatColorA = a;
-    }
-  }
-
-  public final void pushMatrix()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::pushMatrix()");
-    }
-  
-    _matrixStack.addLast(_modelView);
-  }
-
-  public final void popMatrix()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::popMatrix()");
-    }
-  
-    _modelView = _matrixStack.getLast();
-    _matrixStack.removeLast();
-  
-    loadModelView();
-  }
-
-  public final void loadMatrixf(MutableMatrix44D modelView)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::loadMatrixf()");
-    }
-  
-    _modelView = modelView;
-  
-    loadModelView();
-  }
-
-  public final void multMatrixf(MutableMatrix44D m)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::multMatrixf()");
-    }
-  
-    _modelView = _modelView.multiply(m);
-  
-    loadModelView();
-  }
-
-  public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)", size, stride, vertices.description());
-    }
-  
-    if ((_vertices != vertices) || (_verticesTimestamp != vertices.timestamp()))
-    {
-      _nativeGL.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, false, stride, vertices);
-      _vertices = vertices;
-      _verticesTimestamp = _vertices.timestamp();
-    }
-  }
-
 //  void drawElements(int mode,
-//                    IIntBuffer* indices);
+//                    IShortBuffer* indices, const GLGlobalState& state,
+//                    GPUProgramManager& progManager,
+//                    const GPUProgramState* gpuState);
 
-  //void GL::drawElements(int mode,
-  //                      IIntBuffer* indices) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawElements(%d, %s)",
-  //                                 mode,
-  //                                 indices->description().c_str());
-  //  }
-  //
-  //  _nativeGL->drawElements(mode,
-  //                          indices->size(),
-  //                          indices);
-  //}
-  public final void drawElements(int mode, IShortBuffer indices)
+  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawElements(%d, %s)", mode, indices.description());
-    }
+  
+    state.applyOnGPU(this, progManager);
   
     _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
-  public final void drawArrays(int mode, int first, int count)
+//  void drawArrays(int mode,
+//                  int first,
+//                  int count, const GLGlobalState& state,
+//                  GPUProgramManager& progManager,
+//                  const GPUProgramState* gpuState);
+
+  public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawArrays(%d, %d, %d)", mode, first, count);
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+  //                                 mode,
+  //                                 first,
+  //                                 count);
+  //  }
+  
+    state.applyOnGPU(this, progManager);
   
     _nativeGL.drawArrays(mode, first, count);
   }
 
-  public final void setProjection(MutableMatrix44D projection)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setProjection()");
-    }
-  
-    _nativeGL.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection);
-  }
-
-  public final boolean useProgram(ShaderProgram program)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::useProgram()");
-    }
-  
-    if (_program == program)
-    {
-      return true;
-    }
-    _program = program;
-  
-    // set shaders
-    _nativeGL.useProgram(program);
-  
-    //Methods checkedGetAttribLocation and checkedGetUniformLocation
-    //will turn _errorGettingLocationOcurred to true is that happens
-    _errorGettingLocationOcurred = false;
-  
-    // Extract the handles to attributes
-    GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
-    GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
-    GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
-  
-    GlobalMembersGL.Uniforms.deleteUniformsIDs(); //DELETING
-  
-    // Extract the handles to uniforms
-    GlobalMembersGL.Uniforms.Projection = checkedGetUniformLocation(program, "Projection");
-    GlobalMembersGL.Uniforms.Modelview = checkedGetUniformLocation(program, "Modelview");
-    GlobalMembersGL.Uniforms.Sampler = checkedGetUniformLocation(program, "Sampler");
-    GlobalMembersGL.Uniforms.EnableTexture = checkedGetUniformLocation(program, "EnableTexture");
-    GlobalMembersGL.Uniforms.FlatColor = checkedGetUniformLocation(program, "FlatColor");
-    GlobalMembersGL.Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
-    GlobalMembersGL.Uniforms.ScaleTexCoord = checkedGetUniformLocation(program, "ScaleTexCoord");
-    GlobalMembersGL.Uniforms.PointSize = checkedGetUniformLocation(program, "PointSize");
-  
-    // default values
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, _scaleX, _scaleY);
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, _translationX, _translationY);
-    _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, 1);
-  
-    //BILLBOARDS
-    GlobalMembersGL.Uniforms.BillBoard = checkedGetUniformLocation(program, "BillBoard");
-    GlobalMembersGL.Uniforms.ViewPortExtent = checkedGetUniformLocation(program, "ViewPortExtent");
-    GlobalMembersGL.Uniforms.TextureExtent = checkedGetUniformLocation(program, "TextureExtent");
-  
-    _nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
-  
-    //FOR FLAT COLOR MIXING
-    GlobalMembersGL.Uniforms.FlatColorIntensity = checkedGetUniformLocation(program, "FlatColorIntensity");
-    GlobalMembersGL.Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
-    GlobalMembersGL.Uniforms.EnableColorPerVertex = checkedGetUniformLocation(program, "EnableColorPerVertex");
-    GlobalMembersGL.Uniforms.EnableFlatColor = checkedGetUniformLocation(program, "EnableFlatColor");
-  
-    //Return
-    return !_errorGettingLocationOcurred;
-  }
-
-  public final void enablePolygonOffset(float factor, float units)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::enablePolygonOffset()");
-    }
-  
-    _nativeGL.enable(GLFeature.polygonOffsetFill());
-    _nativeGL.polygonOffset(factor, units);
-  }
-
-  public final void disablePolygonOffset()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::disablePolygonOffset()");
-    }
-  
-    _nativeGL.disable(GLFeature.polygonOffsetFill());
-  }
-
-  //  void lineWidth(float width);
-  //
-  //  void pointSize(float size);
-
   public final int getError()
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::getError()");
-    }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getError()");
+  //  }
   
     return _nativeGL.getError();
   }
 
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::uploadTexture()");
-    }
+  
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::uploadTexture()");
+  //  }
   
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
     {
-      //_nativeGL->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-      _nativeGL.pixelStorei(GLAlignment.unpack(), 1);
+      int texture2D = GLTextureType.texture2D();
   
-      _nativeGL.bindTexture(GLTextureType.texture2D(), texId);
-      _nativeGL.texParameteri(GLTextureType.texture2D(), GLTextureParameter.minFilter(), GLTextureParameterValue.linear());
-      _nativeGL.texParameteri(GLTextureType.texture2D(), GLTextureParameter.magFilter(), GLTextureParameterValue.linear());
-      _nativeGL.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapS(), GLTextureParameterValue.clampToEdge());
-      _nativeGL.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapT(), GLTextureParameterValue.clampToEdge());
+      GLGlobalState newState = new GLGlobalState();
+  
+      newState.setPixelStoreIAlignmentUnpack(1);
+      newState.bindTexture(texId);
+  
+      newState.applyChanges(this, _currentGLGlobalState);
+  
+      int linear = GLTextureParameterValue.linear();
+      int clampToEdge = GLTextureParameterValue.clampToEdge();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),linear);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),clampToEdge);
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)
       {
-        _nativeGL.generateMipmap(GLTextureType.texture2D());
+        _nativeGL.generateMipmap(texture2D);
       }
+  
     }
     else
     {
@@ -511,82 +235,12 @@ public class GL
     return texId;
   }
 
-  public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)", size, stride, textureCoordinates.description());
-    }
-  
-    if ((_textureCoordinates != textureCoordinates) || (_textureCoordinatesTimestamp != textureCoordinates.timestamp()))
-    {
-      _nativeGL.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, false, stride, textureCoordinates);
-      _textureCoordinates = textureCoordinates;
-      _textureCoordinatesTimestamp = _textureCoordinates.timestamp();
-    }
-  }
-
-  public final void bindTexture(IGLTextureId textureId)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::bindTexture()");
-    }
-  
-    if (textureId == null)
-    {
-      ILogger.instance().logError("Can't bind a NULL texture");
-    }
-    else
-    {
-      //    if ((_boundTextureId == NULL) || !_boundTextureId->isEqualsTo(textureId)) {
-      _nativeGL.bindTexture(GLTextureType.texture2D(), textureId);
-      //      _boundTextureId = textureId;
-      //    }
-      //    else {
-      //      ILogger::instance()->logInfo("TextureId %s already bound", textureId->description().c_str());
-      //    }
-    }
-  }
-
-  public final void startBillBoardDrawing(int viewPortWidth, int viewPortHeight)
-  {
-    _nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ViewPortExtent, viewPortWidth, viewPortHeight);
-  
-    color(1, 1, 1, 1);
-  
-    setTextureCoordinates(2, 0, getBillboardTexCoord());
-  }
-  public final void stopBillBoardDrawing()
-  {
-    _nativeGL.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
-  }
-
-  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, int textureWidth, int textureHeight)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::drawBillBoard()");
-    }
-  
-    int TODO_refactor_billboard;
-  
-    _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TextureExtent, textureWidth, textureHeight);
-  
-    bindTexture(textureId);
-  
-    vertexPointer(3, 0, vertices);
-  
-    _nativeGL.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
-  }
-
   public final void deleteTexture(IGLTextureId textureId)
   {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::deleteTexture()");
-    }
+  
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::deleteTexture()");
+  //  }
   
     if (textureId != null)
     {
@@ -600,116 +254,29 @@ public class GL
            textureId.dispose();
       }
   
-  //    if (_boundTextureId != NULL) {
-  //      if (_boundTextureId->isEqualsTo(textureId)) {
-  //        _boundTextureId = NULL;
-  //      }
+      if (_currentGLGlobalState.getBoundTexture() == textureId)
+      {
+         _currentGLGlobalState.bindTexture(null);
+      }
+  
+  //    GLState::textureHasBeenDeleted(textureId);
+  
+  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
+  //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
   //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
-  
-  //    //_nativeGL->deleteTexture(texture);
-  //    _texturesIdBag.push_back(texture);
-  //
-  
-      //_texturesIdTakeCounter++;
     }
   }
 
-  public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::transformTexCoords()");
-    }
-  
-    if ((_scaleX != scaleX) || (_scaleY != scaleY))
-    {
-      _nativeGL.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, scaleX, scaleY);
-      _scaleX = scaleX;
-      _scaleY = scaleY;
-    }
-  
-    if ((_translationX != translationX) || (_translationY != translationY))
-    {
-      _nativeGL.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, translationX, translationY);
-      _translationX = translationX;
-      _translationY = translationY;
-    }
-  }
-
-  public final void transformTexCoords(double scaleX, double scaleY, double translationX, double translationY)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scaleX, (float) scaleY, (float) translationX, (float) translationY);
-  }
-
-  public final void transformTexCoords(Vector2D scale, Vector2D translation)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scale._x, (float) scale._y, (float) translation._x, (float) translation._y);
-  }
-
-  public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::transformTexCoords()");
-
-    transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
-  }
-
-
-  public final void color(Color col)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::color()");
-
-    color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
-  }
-
-  public final void clearScreen(Color col)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::clearScreen()");
-
-    clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
-  }
-
-  /*void enableVertexFlatColor(const Color& c, float intensity) {
-   if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
-   enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-   }*/
-
-  public final void setBlendFuncSrcAlpha()
-  {
-    if (_verbose)
-    {
-      ILogger.instance().logInfo("GL::setBlendFuncSrcAlpha()");
-    }
-  
-    _nativeGL.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
-  }
-
-  public final void getViewport(int[] v)
-  {
-    if (_verbose)
-       ILogger.instance().logInfo("GL::getViewport()");
-
-    _nativeGL.getIntegerv(GLVariable.viewport(), v);
-  }
+//  void getViewport(int v[]) {
+////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
+//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+//  }
 
   public void dispose()
   {
     _nativeGL.dispose();
-
-    // GL is not owner of those buffers, it keep a reference only for state-change-testing. NO DELETE THEM.
-    // delete _vertices;
-    // delete _textureCoordinates;
-    // delete _colors;
   }
 
   public final int createProgram()
@@ -732,9 +299,9 @@ public class GL
     return _nativeGL.compileShader(shader, source);
   }
 
-  public final void deleteShader(int shader)
+  public final boolean deleteShader(int shader)
   {
-    _nativeGL.deleteShader(shader);
+    return _nativeGL.deleteShader(shader);
   }
 
   public final void printShaderInfoLog(int shader)
@@ -752,165 +319,107 @@ public class GL
     _nativeGL.linkProgram(program);
   }
 
-  public final void deleteProgram(int program)
+  public final boolean deleteProgram(int program)
   {
-    _nativeGL.deleteProgram(program);
+    return _nativeGL.deleteProgram(program);
   }
 
-  public final void setState(GLState state)
+  public final INativeGL getNative()
   {
-  
-    // Depth Testh
-    if (_enableDepthTest != state.isEnabledDepthTest())
-    {
-      _enableDepthTest = state.isEnabledDepthTest();
-      if (_enableDepthTest)
-      {
-        _nativeGL.enable(GLFeature.depthTest());
-      }
-      else
-      {
-        _nativeGL.disable(GLFeature.depthTest());
-      }
-    }
-  
-    // Blending
-    if (_enableBlend != state.isEnabledBlend())
-    {
-      _enableBlend = state.isEnabledBlend();
-      if (_enableBlend)
-      {
-        _nativeGL.enable(GLFeature.blend());
-      }
-      else
-      {
-        _nativeGL.disable(GLFeature.blend());
-      }
-    }
-  
-    // Textures
-    if (_enableTextures != state.isEnabledTextures())
-    {
-      _enableTextures = state.isEnabledTextures();
-      if (_enableTextures)
-      {
-        _nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
-      }
-      else
-      {
-        _nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
-      }
-    }
-  
-    // Texture2D
-    if (_enableTexture2D != state.isEnabledTexture2D())
-    {
-      _enableTexture2D = state.isEnabledTexture2D();
-      if (_enableTexture2D)
-      {
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 1);
-      }
-      else
-      {
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 0);
-      }
-    }
-  
-    // VertexColor
-    if (_enableVertexColor != state.isEnabledVertexColor())
-    {
-      _enableVertexColor = state.isEnabledVertexColor();
-      if (_enableVertexColor)
-      {
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
-        _nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-        IFloatBuffer colors = state.getColors();
-        if ((_colors != colors) || (_colorsTimestamp != colors.timestamp()))
-        {
-          _nativeGL.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
-          _colors = colors;
-          _colorsTimestamp = _colors.timestamp();
-        }
-      }
-      else
-      {
-        _nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
-      }
-    }
-  
-    // Vertices Position
-    if (_enableVerticesPosition != state.isEnabledVerticesPosition())
-    {
-      _enableVerticesPosition = state.isEnabledVerticesPosition();
-      if (_enableVerticesPosition)
-      {
-        _nativeGL.enableVertexAttribArray(GlobalMembersGL.Attributes.Position);
-      }
-      else
-      {
-        _nativeGL.disableVertexAttribArray(GlobalMembersGL.Attributes.Position);
-      }
-    }
-  
-    // Flat Color
-    if (_enableFlatColor != state.isEnabledFlatColor())
-    {
-      _enableFlatColor = state.isEnabledFlatColor();
-      if (_enableFlatColor)
-      {
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
-      }
-      else
-      {
-        _nativeGL.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 0);
-      }
-    }
-  
-    if (_enableFlatColor)
-    {
-      color(state.getFlatColor());
-      final float intensity = state.getIntensity();
-      if (_flatColorIntensity != intensity)
-      {
-        _nativeGL.uniform1f(GlobalMembersGL.Uniforms.FlatColorIntensity, intensity);
-        _flatColorIntensity = intensity;
-      }
-    }
-  
-    // Cull Face
-    if (_enableCullFace != state.isEnabledCullFace())
-    {
-      _enableCullFace = state.isEnabledCullFace();
-      if (_enableCullFace)
-      {
-        _nativeGL.enable(GLFeature.cullFace());
-        final int face = state.getCulledFace();
-        if (_cullFace_face != face)
-        {
-          _nativeGL.cullFace(face);
-          _cullFace_face = face;
-        }
-      }
-      else
-      {
-        _nativeGL.disable(GLFeature.cullFace());
-      }
-    }
-  
-    final float lineWidth = state.lineWidth();
-    if (_lineWidth != lineWidth)
-    {
-      _nativeGL.lineWidth(lineWidth);
-      _lineWidth = lineWidth;
-    }
-  
-    final float pointSize = state.pointSize();
-    if (_pointSize != pointSize)
-    {
-      _nativeGL.uniform1f(GlobalMembersGL.Uniforms.PointSize, pointSize);
-      _pointSize = pointSize;
-    }
+    return _nativeGL;
   }
+
+  public final void uniform2f(IGLUniformID loc, float x, float y)
+  {
+     _nativeGL.uniform2f(loc, x, y);
+  }
+
+  public final void uniform1f(IGLUniformID loc, float x)
+  {
+     _nativeGL.uniform1f(loc, x);
+  }
+  public final void uniform1i(IGLUniformID loc, int v)
+  {
+     _nativeGL.uniform1i(loc, v);
+  }
+
+  public final void uniformMatrix4fv(IGLUniformID location, boolean transpose, Matrix44D matrix)
+  {
+    _nativeGL.uniformMatrix4fv(location, transpose, matrix);
+  }
+
+  public final void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3)
+  {
+     _nativeGL.uniform4f(location, v0, v1, v2, v3);
+  }
+
+  public final void uniform3f(IGLUniformID location, float v0, float v1, float v2)
+  {
+     _nativeGL.uniform3f(location, v0, v1, v2);
+  }
+
+  public final void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer)
+  {
+    _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);
+  }
+
+  public final void bindAttribLocation(GPUProgram program, int loc, String name)
+  {
+    _nativeGL.bindAttribLocation(program, loc, name);
+  }
+
+  public final int getProgramiv(GPUProgram program, int pname)
+  {
+    return _nativeGL.getProgramiv(program, pname);
+  }
+
+  public final GPUUniform getActiveUniform(GPUProgram program, int i)
+  {
+    return _nativeGL.getActiveUniform(program, i);
+  }
+
+  public final GPUAttribute getActiveAttribute(GPUProgram program, int i)
+  {
+    return _nativeGL.getActiveAttribute(program, i);
+  }
+
+  //  GLGlobalState* getCurrentState() const{ return _currentState;}
+
+  public final void useProgram(GPUProgram program)
+  {
+    if (program != null && _currentGPUProgram != program)
+    {
+  
+      if (_currentGPUProgram != null)
+      {
+        _currentGPUProgram.onUnused(this);
+      }
+  
+      _nativeGL.useProgram(program);
+      program.onUsed();
+      _currentGPUProgram = program;
+    }
+  
+  }
+
+  public final void enableVertexAttribArray(int location)
+  {
+    _nativeGL.enableVertexAttribArray(location);
+  }
+
+  public final void disableVertexAttribArray(int location)
+  {
+    _nativeGL.disableVertexAttribArray(location);
+  }
+
+  public final GLGlobalState getCurrentGLGlobalState()
+  {
+    return _currentGLGlobalState;
+  }
+
 
 }
+//void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {
+//  state.applyChanges(this, *_currentState);
+//  setProgramState(progManager, progState);
+//}

@@ -9,7 +9,7 @@
 #include "GEO2DLineStringGeometry.hpp"
 
 #include "Geodetic2D.hpp"
-#include "Color.hpp"
+#include "GEOSymbolizer.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   const int coordinatesCount = _coordinates->size();
@@ -18,11 +18,13 @@ GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
     delete coordinate;
   }
   delete _coordinates;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-Mesh* GEO2DLineStringGeometry::createMesh(const G3MRenderContext* rc) {
-  Color* color = Color::newFromRGBA(1, 1, 0, 1);
-  const float lineWidth = 2;
-
-  return create2DBoundaryMesh(_coordinates, color, lineWidth, rc);
+std::vector<GEOSymbol*>* GEO2DLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
 }

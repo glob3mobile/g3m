@@ -8,41 +8,61 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Sector.h
+//  Sector.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/06/12.
+//  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
 
+//class ICanvas;
+//class GEORasterProjection;
+
 
 public class Sector
 {
 
-  private final Geodetic2D _lower ;
-  private final Geodetic2D _upper ;
-  private final Geodetic2D _center ;
 
-  private final Angle _deltaLatitude ;
-  private final Angle _deltaLongitude ;
+  // this lazy value represent the half diagonal of the sector, measured in radians
+  // it's stored in double instead of Angle class to optimize performance in android
+  // this value is only used in the method Sector::isBackOriented
+  private double _deltaRadiusInRadians;
 
+  private Vector3D _normalizedCartesianCenter;
 
+  public final Geodetic2D _lower ;
+  public final Geodetic2D _upper ;
+
+  public final Geodetic2D _center ;
+
+  public final Angle _deltaLatitude ;
+  public final Angle _deltaLongitude ;
 
 
   public void dispose()
   {
+    if (_normalizedCartesianCenter != null)
+       _normalizedCartesianCenter.dispose();
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)
   {
      _lower = new Geodetic2D(lower);
      _upper = new Geodetic2D(upper);
-     _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
-     _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
-     _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
+     _deltaLatitude = new Angle(upper._latitude.sub(lower._latitude));
+     _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
+     _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
+     _deltaRadiusInRadians = -1.0;
+     _normalizedCartesianCenter = null;
+//    if (_deltaLatitude._degrees < 0) {
+//      printf("break point\n");
+//    }
+//    if (_deltaLongitude._degrees < 0) {
+//      printf("break point\n");
+//    }
   }
 
 
@@ -53,6 +73,16 @@ public class Sector
      _deltaLatitude = new Angle(sector._deltaLatitude);
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
+     _deltaRadiusInRadians = sector._deltaRadiusInRadians;
+    if (sector._normalizedCartesianCenter == null)
+    {
+      _normalizedCartesianCenter = null;
+    }
+    else
+    {
+      final Vector3D normalizedCartesianCenter = sector._normalizedCartesianCenter;
+      _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
+    }
   }
 
   public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
@@ -63,34 +93,27 @@ public class Sector
     return new Sector(lower, upper);
   }
 
-  public final Vector2D getScaleFactor(Sector that)
+  public final Vector2D div(Sector that)
   {
-    final double u = _deltaLatitude.div(that._deltaLatitude);
-    final double v = _deltaLongitude.div(that._deltaLongitude);
-    return new Vector2D(u, v);
+    final double scaleX = _deltaLongitude.div(that._deltaLongitude);
+    final double scaleY = _deltaLatitude.div(that._deltaLatitude);
+    return new Vector2D(scaleX, scaleY);
   }
 
-  public final Vector2D getTranslationFactor(Sector that)
+  public final boolean fullContains(Sector that)
   {
-    final double diff = _deltaLongitude.div(that._deltaLongitude);
-    final Vector2D uv = that.getUVCoordinates(_lower);
-
-    return new Vector2D(uv._x, uv._y - diff);
-  }
-
-  public final boolean fullContains(Sector s)
-  {
-    return contains(s.upper()) && contains(s.lower());
+    //return contains(that._upper) && contains(that._lower);
+    return (contains(that._upper._latitude, that._upper._longitude) && contains(that._lower._latitude, that._lower._longitude));
   }
 
   public final Sector intersection(Sector that)
   {
-    final Angle lowLat = Angle.max(lower().latitude(), that.lower().latitude());
-    final Angle lowLon = Angle.max(lower().longitude(), that.lower().longitude());
+    final Angle lowLat = Angle.max(_lower._latitude, that._lower._latitude);
+    final Angle lowLon = Angle.max(_lower._longitude, that._lower._longitude);
     final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-    final Angle upLat = Angle.min(upper().latitude(), that.upper().latitude());
-    final Angle upLon = Angle.min(upper().longitude(), that.upper().longitude());
+    final Angle upLat = Angle.min(_upper._latitude, that._upper._latitude);
+    final Angle upLon = Angle.min(_upper._longitude, that._upper._longitude);
     final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
     return new Sector(low, up);
@@ -98,12 +121,12 @@ public class Sector
 
   public final Sector mergedWith(Sector that)
   {
-    final Angle lowLat = Angle.min(lower().latitude(), that.lower().latitude());
-    final Angle lowLon = Angle.min(lower().longitude(), that.lower().longitude());
+    final Angle lowLat = Angle.min(_lower._latitude, that._lower._latitude);
+    final Angle lowLon = Angle.min(_lower._longitude, that._lower._longitude);
     final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-    final Angle upLat = Angle.max(upper().latitude(), that.upper().latitude());
-    final Angle upLon = Angle.max(upper().longitude(), that.upper().longitude());
+    final Angle upLat = Angle.max(_upper._latitude, that._upper._latitude);
+    final Angle upLon = Angle.max(_upper._longitude, that._upper._longitude);
     final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
     return new Sector(low, up);
@@ -121,12 +144,12 @@ public class Sector
 
   public final Angle lowerLatitude()
   {
-    return _lower.latitude();
+    return _lower._latitude;
   }
 
   public final Angle lowerLongitude()
   {
-    return _lower.longitude();
+    return _lower._longitude;
   }
 
   public final Geodetic2D upper()
@@ -136,22 +159,27 @@ public class Sector
 
   public final Angle upperLatitude()
   {
-    return _upper.latitude();
+    return _upper._latitude;
   }
 
   public final Angle upperLongitude()
   {
-    return _upper.longitude();
+    return _upper._longitude;
+  }
+
+  public final boolean contains(Angle latitude, Angle longitude)
+  {
+    return (latitude.isBetween(_lower._latitude, _upper._latitude) && longitude.isBetween(_lower._longitude, _upper._longitude));
   }
 
   public final boolean contains(Geodetic2D position)
   {
-    return position.isBetween(_lower, _upper);
+    return contains(position._latitude, position._longitude);
   }
 
   public final boolean contains(Geodetic3D position)
   {
-    return contains(position.asGeodetic2D());
+    return contains(position._latitude, position._longitude);
   }
 
   public final boolean touchesWith(Sector that)
@@ -160,11 +188,11 @@ public class Sector
     //   page 79
   
     // Exit with no intersection if separated along an axis
-    if (_upper.latitude().lowerThan(that._lower.latitude()) || _lower.latitude().greaterThan(that._upper.latitude()))
+    if (_upper._latitude.lowerThan(that._lower._latitude) || _lower._latitude.greaterThan(that._upper._latitude))
     {
       return false;
     }
-    if (_upper.longitude().lowerThan(that._lower.longitude()) || _lower.longitude().greaterThan(that._upper.longitude()))
+    if (_upper._longitude.lowerThan(that._lower._longitude) || _lower._longitude.greaterThan(that._upper._longitude))
     {
       return false;
     }
@@ -195,12 +223,12 @@ public class Sector
 
   public final Geodetic2D getNW()
   {
-    return new Geodetic2D(_upper.latitude(), _lower.longitude());
+    return new Geodetic2D(_upper._latitude, _lower._longitude);
   }
 
   public final Geodetic2D getSE()
   {
-    return new Geodetic2D(_lower.latitude(), _upper.longitude());
+    return new Geodetic2D(_lower._latitude, _upper._longitude);
   }
 
   public final Geodetic2D getCenter()
@@ -215,100 +243,97 @@ public class Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-    return new Geodetic2D(Angle.lerp(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.lerp(_lower.longitude(), _upper.longitude(), (float) u));
+    return new Geodetic2D(Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v), Angle.linearInterpolation(_lower._longitude, _upper._longitude, u));
   }
+
+  public final Angle getInnerPointLongitude(double u)
+  {
+    return Angle.linearInterpolation(_lower._longitude, _upper._longitude, u);
+  }
+  public final Angle getInnerPointLatitude(double v)
+  {
+    return Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v);
+  }
+
 
   public final Vector2D getUVCoordinates(Geodetic2D point)
   {
-    return getUVCoordinates(point.latitude(), point.longitude());
+    return getUVCoordinates(point._latitude, point._longitude);
   }
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-    final double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
-    final double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
-    return new Vector2D(u, v);
+//    return Vector2D(getUCoordinate(longitude),
+//                    getVCoordinate(latitude));
+    return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
   }
 
-  public final boolean isBackOriented(G3MRenderContext rc)
+  public final double getUCoordinate(Angle longitude)
   {
-    final Camera camera = rc.getCurrentCamera();
-    final Planet planet = rc.getPlanet();
-  
-    // compute sector point nearest to centerPoint
-    final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
-    final Geodetic2D point = getClosestPoint(center);
-  
-    // compute angle between normals
-    final Vector3D normal = planet.geodeticSurfaceNormal(point);
-    final Vector3D view = camera.getViewDirection().times(-1);
-    final double dot = normal.dot(view);
-  
-    return (dot < 0) ? true : false;
+    return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
   }
 
-  public final Geodetic2D getClosestPoint(Geodetic2D pos)
+  public final double getVCoordinate(Angle latitude)
   {
-    // if pos is included, return pos
-    if (contains(pos))
-       return pos;
-  
-    // test longitude
-    Geodetic2D center = getCenter();
-    double lon = pos.longitude()._degrees;
-    double centerLon = center.longitude()._degrees;
-    double oppLon1 = centerLon - 180;
-    double oppLon2 = centerLon + 180;
-    if (lon<oppLon1)
-      lon+=360;
-    if (lon>oppLon2)
-      lon-=360;
-    double minLon = _lower.longitude()._degrees;
-    double maxLon = _upper.longitude()._degrees;
-    //bool insideLon    = true;
-    if (lon < minLon)
-    {
-      lon = minLon;
-      //insideLon = false;
-    }
-    if (lon > maxLon)
-    {
-      lon = maxLon;
-      //insideLon = false;
-    }
-  
-    // test latitude
-    double lat = pos.latitude()._degrees;
-    double minLat = _lower.latitude()._degrees;
-    double maxLat = _upper.latitude()._degrees;
-    //bool insideLat    = true;
-    if (lat < minLat)
-    {
-      lat = minLat;
-      //insideLat = false;
-    }
-    if (lat > maxLat)
-    {
-      lat = maxLat;
-      //insideLat = false;
-    }
-  
-    // here we have to handle the case where sectos is close to the pole,
-    // and the latitude of the other point must be seen from the other side
-  
-  
-    return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
-  
-  
-  
-  /*
-    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-    const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-    return Geodetic2D(lat, lon);*/
+    return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Geodetic2D getApproximatedClosestPoint(Geodetic2D pos);
+
+  public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
+  {
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+  //
+  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+  
+    if (planet.isFlat())
+       return false;
+  
+    final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+    final double angleInRadians = java.lang.Math.acos(dot);
+  
+    return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
+  }
+
+  public final Geodetic2D clamp(Geodetic2D position)
+  {
+    if (contains(position))
+    {
+      return position;
+    }
+  
+    double latitudeInDegrees = position._latitude._degrees;
+    double longitudeInDegrees = position._longitude._degrees;
+  
+    final double upperLatitudeInDegrees = _upper._latitude._degrees;
+    if (latitudeInDegrees > upperLatitudeInDegrees)
+    {
+      latitudeInDegrees = upperLatitudeInDegrees;
+    }
+  
+    final double upperLongitudeInDegrees = _upper._longitude._degrees;
+    if (longitudeInDegrees > upperLongitudeInDegrees)
+    {
+      longitudeInDegrees = upperLongitudeInDegrees;
+    }
+  
+    final double lowerLatitudeInDegrees = _lower._latitude._degrees;
+    if (latitudeInDegrees < lowerLatitudeInDegrees)
+    {
+      latitudeInDegrees = lowerLatitudeInDegrees;
+    }
+  
+    final double lowerLongitudeInDegrees = _lower._longitude._degrees;
+    if (longitudeInDegrees < lowerLongitudeInDegrees)
+    {
+      longitudeInDegrees = lowerLongitudeInDegrees;
+    }
+  
+    return Geodetic2D.fromDegrees(latitudeInDegrees, longitudeInDegrees);
+  }
 
   public final String description()
   {
@@ -326,17 +351,121 @@ public class Sector
 
   public final Sector shrinkedByPercentP(float percent)
   {
-    Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
-    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    final Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+    final Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
 
-    Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+    final Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
 
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }
 
-  public final boolean isEqualsTo(Sector that)
+  public final Sector shrinkedByPercent(float percent)
   {
-    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
+    final Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+    final Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+
+    final Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+
+    return new Sector(_lower.add(delta), _upper.sub(delta));
+  }
+
+  public final boolean isEquals(Sector that)
+  {
+    return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
+  }
+
+  public final boolean touchesNorthPole()
+  {
+    return (_upper._latitude._degrees >= 89.9);
+  }
+
+  public final boolean touchesSouthPole()
+  {
+    return (_lower._latitude._degrees <= -89.9);
+  }
+
+  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
+  {
+  
+    final Vector2F l = projection.project(_lower);
+    final Vector2F u = projection.project(_upper);
+  
+    final float left = l._x;
+    final float top = l._y;
+    final float width = u._x - left;
+    final float height = u._y - top;
+  
+    canvas.strokeRectangle(left, top, width, height);
+  }
+
+  public final boolean touchesPoles()
+  {
+    return ((_upper._latitude._degrees >= 89.9) || (_lower._latitude._degrees <= -89.9));
+  }
+
+  public final double getDeltaRadiusInRadians()
+  {
+    if (_deltaRadiusInRadians < 0)
+    {
+      _deltaRadiusInRadians = IMathUtils.instance().sqrt((_deltaLatitude._radians * _deltaLatitude._radians) + (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
+    }
+    return _deltaRadiusInRadians;
+  }
+
+  public final Vector3D getNormalizedCartesianCenter(Planet planet)
+  {
+    if (_normalizedCartesianCenter == null)
+    {
+      _normalizedCartesianCenter = new Vector3D(planet.toCartesian(_center).normalized());
+    }
+    return _normalizedCartesianCenter;
+  }
+
+  public final double getAngularAreaInSquaredDegrees()
+  {
+    return _deltaLatitude._degrees * _deltaLongitude._degrees;
+  }
+
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + ((_lower == null) ? 0 : _lower.hashCode());
+    result = (prime * result) + ((_upper == null) ? 0 : _upper.hashCode());
+    return result;
+  }
+
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Sector other = (Sector) obj;
+    if (_lower == null) {
+      if (other._lower != null) {
+        return false;
+      }
+    }
+    else if (!_lower.equals(other._lower)) {
+      return false;
+    }
+    if (_upper == null) {
+      if (other._upper != null) {
+        return false;
+      }
+    }
+    else if (!_upper.equals(other._upper)) {
+      return false;
+    }
+    return true;
   }
 
 }

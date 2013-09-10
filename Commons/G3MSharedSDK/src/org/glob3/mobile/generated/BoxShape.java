@@ -42,7 +42,8 @@ public class BoxShape extends AbstractMeshShape
     final int numIndices = 48;
     short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;
@@ -74,7 +75,8 @@ public class BoxShape extends AbstractMeshShape
     final int numIndices = 23;
     short[] i = { 3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0, 2, 2, 3, 6, 7, 7, 5, 5, 4, 1, 0, 0 };
   
-    FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     final int numVertices = 8;
@@ -106,17 +108,17 @@ public class BoxShape extends AbstractMeshShape
     return createSurfaceMesh(rc);
   }
 
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, extent, borderWidth, surfaceColor, null);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, null);
   }
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth)
   {
-     this(position, extent, borderWidth, null, null);
+     this(position, altitudeMode, extent, borderWidth, null, null);
   }
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-     super(position);
+     super(position, altitudeMode);
      _extentX = extent._x;
      _extentY = extent._y;
      _extentZ = extent._z;
@@ -132,6 +134,9 @@ public class BoxShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+
+  super.dispose();
+
   }
 
   public final void setExtent(Vector3D extent)

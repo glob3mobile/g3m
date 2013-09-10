@@ -82,29 +82,22 @@ public class ByteBufferBuilder
 
   public final void addStringZeroTerminated(String str)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-    try
-    {
+    try {
       byte[] bytesArray = str.getBytes("UTF-8");
   
       final int size = bytesArray.length;
-      for (int i = 0; i < size; i++)
-      {
+      for (int i = 0; i < size; i++) {
         final byte c = bytesArray[i];
         _values.add(c);
       }
       _values.add((byte) 0);
     }
-    catch (final java.io.UnsupportedEncodingException e)
-    {
-      if (ILogger.instance() != null)
-      {
+    catch (final java.io.UnsupportedEncodingException e) {
+      if (ILogger.instance() != null) {
         ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
       }
       e.printStackTrace();
     }
-//#endif
   }
 
   public final void add(byte value)
