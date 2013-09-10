@@ -97,7 +97,7 @@ public final class ListenerEntry {
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
          if (bitmap == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
             _imageListener.onError(url);
          }
          else {
@@ -118,7 +118,7 @@ public final class ListenerEntry {
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
          if (bitmap == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
