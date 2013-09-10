@@ -176,7 +176,7 @@ class ExportSceneJS(bpy.types.Operator, ExportHelper):
                          axis_conversion(to_forward=self.axis_forward,
                                          to_up=self.axis_up,
                                          ).to_4x4())
-
+        print("= Global Matrix =" + str(global_matrix))
         keywords["global_matrix"] = global_matrix
         return export_scenejs.save(self, context, **keywords)
 
