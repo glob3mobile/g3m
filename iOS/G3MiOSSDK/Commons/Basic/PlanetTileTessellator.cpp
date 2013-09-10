@@ -39,21 +39,21 @@ _renderedSector(sector)
 }
 
 PlanetTileTessellator::~PlanetTileTessellator() {
-//#ifdef C_CODE
-//  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
-//       it != _indicesMap.end();
-//       it++){
-//    delete it->second;
-//  }
-//#endif
-//#ifdef JAVA_CODE
-//  java.util.Iterator it = _indicesMap.entrySet().iterator();
-//  while (it.hasNext()) {
-//    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-//    IShortBuffer b = (IShortBuffer) pairs.getValue();
-//    b.dispose();
-//  }
-//#endif
+  //#ifdef C_CODE
+  //  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
+  //       it != _indicesMap.end();
+  //       it++){
+  //    delete it->second;
+  //  }
+  //#endif
+  //#ifdef JAVA_CODE
+  //  java.util.Iterator it = _indicesMap.entrySet().iterator();
+  //  while (it.hasNext()) {
+  //    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+  //    IShortBuffer b = (IShortBuffer) pairs.getValue();
+  //    b.dispose();
+  //  }
+  //#endif
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -112,91 +112,91 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
 }
 
 /*
-IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
-                                                       const Sector& sector,
-                                                       const Vector2I& tileResolution) const{
+ IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
+ const Sector& sector,
+ const Vector2I& tileResolution) const{
 
-  ShortBufferBuilder indices;
-  for (short j = 0; j < (tileResolution._y-1); j++) {
-    const short jTimesResolution = (short) (j*tileResolution._x);
-    if (j > 0) {
-      indices.add(jTimesResolution);
-    }
-    for (short i = 0; i < tileResolution._x; i++) {
-      indices.add((short) (jTimesResolution + i));
-      indices.add((short) (jTimesResolution + i + tileResolution._x));
-    }
-    indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
-  }
+ ShortBufferBuilder indices;
+ for (short j = 0; j < (tileResolution._y-1); j++) {
+ const short jTimesResolution = (short) (j*tileResolution._x);
+ if (j > 0) {
+ indices.add(jTimesResolution);
+ }
+ for (short i = 0; i < tileResolution._x; i++) {
+ indices.add((short) (jTimesResolution + i));
+ indices.add((short) (jTimesResolution + i + tileResolution._x));
+ }
+ indices.add((short) (jTimesResolution + 2*tileResolution._x - 1));
+ }
 
-  // create skirts
-  if (_skirted) {
+ // create skirts
+ if (_skirted) {
 
-    int skirtIndexCursor = tileResolution._x * tileResolution._y;
-    indices.add((short) (skirtIndexCursor-1));
+ int skirtIndexCursor = tileResolution._x * tileResolution._y;
+ indices.add((short) (skirtIndexCursor-1));
 
-    // east side
-    for (int j = tileResolution._y-1; j > 0; j--) {
-      indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
-      indices.add((short) skirtIndexCursor++);
-    }
+ // east side
+ for (int j = tileResolution._y-1; j > 0; j--) {
+ indices.add((short) (j*tileResolution._x + (tileResolution._x-1)));
+ indices.add((short) skirtIndexCursor++);
+ }
 
-    // north side
-    for (int i = tileResolution._x-1; i > 0; i--) {
-      indices.add((short) i);
-      indices.add((short) skirtIndexCursor++);
-    }
+ // north side
+ for (int i = tileResolution._x-1; i > 0; i--) {
+ indices.add((short) i);
+ indices.add((short) skirtIndexCursor++);
+ }
 
-    // west side
-    for (int j = 0; j < tileResolution._y-1; j++) {
-      indices.add((short) (j*tileResolution._x));
-      indices.add((short) skirtIndexCursor++);
-    }
+ // west side
+ for (int j = 0; j < tileResolution._y-1; j++) {
+ indices.add((short) (j*tileResolution._x));
+ indices.add((short) skirtIndexCursor++);
+ }
 
-    // south side
-    for (int i = 0; i < tileResolution._x-1; i++) {
-      indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
-      indices.add((short) skirtIndexCursor++);
-    }
+ // south side
+ for (int i = 0; i < tileResolution._x-1; i++) {
+ indices.add((short) ((tileResolution._y-1)*tileResolution._x + i));
+ indices.add((short) skirtIndexCursor++);
+ }
 
-    // last triangle
-    indices.add((short) ((tileResolution._x*tileResolution._y)-1));
-    indices.add((short) (tileResolution._x*tileResolution._y));
-  }
+ // last triangle
+ indices.add((short) ((tileResolution._x*tileResolution._y)-1));
+ indices.add((short) (tileResolution._x*tileResolution._y));
+ }
 
-  return indices.create();
-}
-*/
+ return indices.create();
+ }
+ */
 /*
-IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
-                                                    const Sector& sector,
-                                                    const Vector2I& tileResolution,
-                                                    bool reusableIndices) const{
-  if (reusableIndices){
-    return createTileIndices(planet, sector, tileResolution);
-  }
+ IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
+ const Sector& sector,
+ const Vector2I& tileResolution,
+ bool reusableIndices) const{
+ if (reusableIndices){
+ return createTileIndices(planet, sector, tileResolution);
+ }
 
-#ifdef C_CODE
-  std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
-  if (it != _indicesMap.end()){
-    return it->second;
-  }
+ #ifdef C_CODE
+ std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.find(OrderableVector2I(tileResolution));
+ if (it != _indicesMap.end()){
+ return it->second;
+ }
 
-  IShortBuffer* indices = createTileIndices(planet, sector, tileResolution);
-  _indicesMap[tileResolution] = indices;
+ IShortBuffer* indices = createTileIndices(planet, sector, tileResolution);
+ _indicesMap[tileResolution] = indices;
 
-  return indices;
-#endif
-#ifdef JAVA_CODE
-  IShortBuffer indices = _indicesMap.get(tileResolution);
-  if (indices == null){
-    indices = createTileIndices(planet, sector, tileResolution);
-    _indicesMap.put(tileResolution, indices);
-  }
-  return indices;
-#endif
+ return indices;
+ #endif
+ #ifdef JAVA_CODE
+ IShortBuffer indices = _indicesMap.get(tileResolution);
+ if (indices == null){
+ indices = createTileIndices(planet, sector, tileResolution);
+ _indicesMap.put(tileResolution, indices);
+ }
+ return indices;
+ #endif
 
-}
+ }
  */
 
 Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
@@ -230,52 +230,44 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D sw = planet->toCartesian(tileSector.getSW());
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     //    const double offset = nw.sub(sw).length() * 1e-3;
-    const double skirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
-    //    const double skirtHeight = -1e5; //TODO: CHECK
+    const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
+    const double absoluteSkirtHeight = -1e5; //TODO: CHECK
 
-    if (needsEastSkirt(tileSector)){
-      createEastSkirt(planet,
-                      tileSector,
-                      meshSector,
-                      meshResolution,
-                      skirtHeight,
-                      vertices,
-                      indices,
-                      *textCoords);
-    }
+    createEastSkirt(planet,
+                    tileSector,
+                    meshSector,
+                    meshResolution,
+                    needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    vertices,
+                    indices,
+                    *textCoords);
 
-    if (needsNorthSkirt(tileSector)){
-      createNorthSkirt(planet,
-                       tileSector,
-                       meshSector,
-                       meshResolution,
-                       skirtHeight,
-                       vertices,
-                       indices,
-                       *textCoords);
-    }
+    createNorthSkirt(planet,
+                     tileSector,
+                     meshSector,
+                     meshResolution,
+                     needsNorthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     vertices,
+                     indices,
+                     *textCoords);
 
-    if (needsWestSkirt(tileSector)){
-      createWestSkirt(planet,
-                      tileSector,
-                      meshSector,
-                      meshResolution,
-                      skirtHeight,
-                      vertices,
-                      indices,
-                      *textCoords);
-    }
+    createWestSkirt(planet,
+                    tileSector,
+                    meshSector,
+                    meshResolution,
+                    needsWestSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    vertices,
+                    indices,
+                    *textCoords);
 
-    if (needsSouthSkirt(tileSector)){
-      createSouthSkirt(planet,
-                       tileSector,
-                       meshSector,
-                       meshResolution,
-                       skirtHeight,
-                       vertices,
-                       indices,
-                       *textCoords);
-    }
+    createSouthSkirt(planet,
+                     tileSector,
+                     meshSector,
+                     meshResolution,
+                     needsSouthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     vertices,
+                     indices,
+                     *textCoords);
   }
 
   //Storing textCoords in Tile
@@ -433,84 +425,84 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   return data->_textCoords->create();
 
   ////////////////////////////////////////////////////////////
-/*
-  const Sector tileSector = tile->getSector();
-  const Sector meshSector = getRenderedSectorForTile(tile);
-  const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
+  /*
+   const Sector tileSector = tile->getSector();
+   const Sector meshSector = getRenderedSectorForTile(tile);
+   const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
 
-  float* u = new float[tileResolution._x * tileResolution._y];
-  float* v = new float[tileResolution._x * tileResolution._y];
+   float* u = new float[tileResolution._x * tileResolution._y];
+   float* v = new float[tileResolution._x * tileResolution._y];
 
-  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
-  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
-  const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
+   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
+   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
-  for (int j = 0; j < tileResolution._y; j++) {
+   for (int j = 0; j < tileResolution._y; j++) {
 
-    double linearV = (float) j / (tileResolution._y-1);
+   double linearV = (float) j / (tileResolution._y-1);
 
-    if (mercator){
-      const Angle latitude = meshSector.getInnerPointLatitude(linearV);
-      const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-      const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-      linearV = mercatorLocalV;
-    }
+   if (mercator){
+   const Angle latitude = meshSector.getInnerPointLatitude(linearV);
+   const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
+   const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+   linearV = mercatorLocalV;
+   }
 
-    for (int i = 0; i < tileResolution._x; i++) {
-      const int pos = j*tileResolution._x + i;
+   for (int i = 0; i < tileResolution._x; i++) {
+   const int pos = j*tileResolution._x + i;
 
-      const double linearU = (float) i / (tileResolution._x-1);
-      Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
+   const double linearU = (float) i / (tileResolution._x-1);
+   Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
 
-      Vector2D uv = tileSector.getUVCoordinates(g);
-      u[pos] = (float)uv._x;
-      v[pos] = (float)uv._y;
-    }
-  }
+   Vector2D uv = tileSector.getUVCoordinates(g);
+   u[pos] = (float)uv._x;
+   v[pos] = (float)uv._y;
+   }
+   }
 
-  FloatBufferBuilderFromCartesian2D textCoords;
+   FloatBufferBuilderFromCartesian2D textCoords;
 
-  for (int j = 0; j < tileResolution._y; j++) {
-    for (int i = 0; i < tileResolution._x; i++) {
-      const int pos = j*tileResolution._x + i;
-      textCoords.add(u[pos], v[pos]);
-    }
-  }
+   for (int j = 0; j < tileResolution._y; j++) {
+   for (int i = 0; i < tileResolution._x; i++) {
+   const int pos = j*tileResolution._x + i;
+   textCoords.add(u[pos], v[pos]);
+   }
+   }
 
-  // create skirts
-  if (_skirted) {
-    // east side
-    for (int j = tileResolution._y-1; j > 0; j--) {
-      const int pos = j*tileResolution._x + tileResolution._x-1;
-      textCoords.add(u[pos], v[pos]);
-    }
+   // create skirts
+   if (_skirted) {
+   // east side
+   for (int j = tileResolution._y-1; j > 0; j--) {
+   const int pos = j*tileResolution._x + tileResolution._x-1;
+   textCoords.add(u[pos], v[pos]);
+   }
 
-    // north side
-    for (int i = tileResolution._x-1; i > 0; i--) {
-      const int pos = i;
-      textCoords.add(u[pos], v[pos]);
-    }
+   // north side
+   for (int i = tileResolution._x-1; i > 0; i--) {
+   const int pos = i;
+   textCoords.add(u[pos], v[pos]);
+   }
 
-    // west side
-    for (int j = 0; j < tileResolution._y-1; j++) {
-      const int pos = j*tileResolution._x;
-      textCoords.add(u[pos], v[pos]);
-    }
+   // west side
+   for (int j = 0; j < tileResolution._y-1; j++) {
+   const int pos = j*tileResolution._x;
+   textCoords.add(u[pos], v[pos]);
+   }
 
-    // south side
-    for (int i = 0; i < tileResolution._x-1; i++) {
-      const int pos = (tileResolution._y-1) * tileResolution._x + i;
-      textCoords.add(u[pos], v[pos]);
-    }
-  }
+   // south side
+   for (int i = 0; i < tileResolution._x-1; i++) {
+   const int pos = (tileResolution._y-1) * tileResolution._x + i;
+   textCoords.add(u[pos], v[pos]);
+   }
+   }
 
-  // free temp memory
-  delete[] u;
-  delete[] v;
+   // free temp memory
+   delete[] u;
+   delete[] v;
 
-  return textCoords.create();
+   return textCoords.create();
 
- */
+   */
 }
 
 Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
@@ -822,17 +814,17 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
     const double y = 1;
     const Geodetic2D g = meshSector.getInnerPoint(x, y);
     vertices.add(g, skirtHeight);
-    
+
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add((float)uv._x, (float)uv._y);
-    
+
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add((short) skirtIndex++);
     surfaceIndex += 1;
   }
-  
+
   indices.add(surfaceIndex - 1);
   indices.add(surfaceIndex - 1);
 }
