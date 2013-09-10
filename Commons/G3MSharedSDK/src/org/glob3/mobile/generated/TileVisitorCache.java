@@ -1,40 +1,30 @@
+package org.glob3.mobile.generated; 
+public class TileVisitorCache implements ITileVisitor
+{
 
+    private MultiLayerTileTexturizer _texturizer;
+    private final G3MRenderContext _rc;
+    private final PlanetRendererContext _prc;
+    private final LayerSet _layerSet;
 
-package org.glob3.mobile.generated;
+    public TileVisitorCache(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, PlanetRendererContext prc, LayerSet layerSet)
+    {
+       _texturizer = texturizer;
+       _rc = rc;
+       _prc = prc;
+       _layerSet = layerSet;
+    }
 
-public class TileVisitorCache
-         implements
-            ITileVisitor {
+    public void dispose()
+    {
 
-   private final MultiLayerTileTexturizer _texturizer;
-   private final PlanetRendererContext    _prc;
-   private final G3MRenderContext         _rc;
-   private final LayerSet                 _layerSet;
+    }
 
+    public final void visitTile(Tile tile)
+    {
 
-   public TileVisitorCache(final MultiLayerTileTexturizer texturizer,
-                           final PlanetRendererContext prc,
-                           final G3MRenderContext rc,
-                           final LayerSet layerSet) {
-      _texturizer = texturizer;
-      _prc = prc;
-      _rc = rc;
-      _layerSet = layerSet;
-   }
+        TileTextureBuilder ttb = new TileTextureBuilder(_texturizer, _prc.getTileRasterizer(), _rc, _layerSet, _rc.getDownloader(), tile, null, null, 0);
 
-
-   @Override
-   public void dispose() {
-
-   }
-
-
-   @Override
-   public final void visitTile(final Tile tile) {
-
-      final TileTextureBuilder ttb = new TileTextureBuilder(_texturizer, _prc.getTileRasterizer(), _rc, _layerSet,
-               _rc.getDownloader(), tile, null, null, 0);
-
-      ttb.start();
-   }
+        ttb.start();
+    }
 }

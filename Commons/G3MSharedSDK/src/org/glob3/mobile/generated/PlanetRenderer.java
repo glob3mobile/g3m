@@ -8,6 +8,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
+  private boolean _topTilesJustCreated;
+  private ITileVisitor _tileVisitor = null;
 
   private Camera     _lastCamera;
   private G3MContext _context;
@@ -178,6 +180,29 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private Sector _lastVisibleSector;
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
+
+  private void visitSubTilesTouchesWith(Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  {
+    if (tile.getLevel() < maxLevel)
+    {
+      java.util.ArrayList<Tile> subTiles = tile.getSubTiles(_layerSet.getLayerTilesRenderParameters()._mercator);
+  
+  
+      final int subTilesCount = subTiles.size();
+      for (int i = 0; i < subTilesCount; i++)
+      {
+        Tile tl = subTiles.get(i);
+        if (tl.getSector().touchesWith(sectorToVisit))
+        {
+          if ((tile.getLevel() >= topLevel))
+          {
+            _tileVisitor.visitTile(tl);
+          }
+          visitSubTilesTouchesWith(tl, sectorToVisit, topLevel, maxLevel);
+        }
+      }
+    }
+  }
 
   private long _texturePriority;
 
@@ -525,6 +550,34 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return isReadyToRenderTiles(rc);
   }
 
+  public final void acceptTileVisitor(ITileVisitor tileVisitor)
+  {
+    _tileVisitor = tileVisitor;
+  }
+
+  public final void visitTilesTouchesWith(Sector sector, int firstLevel, int maxLevel)
+  {
+    if (_tileVisitor != null)
+    {
+      final LayerTilesRenderParameters parameters = _layerSet.getLayerTilesRenderParameters();
+  
+      final int firstLevelCache = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+  
+      final int maxLevelCache = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+      // Get Tiles to Cache
+  
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (tile.getSector().touchesWith(sector))
+        {
+          _tileVisitor.visitTile(tile);
+          visitSubTilesTouchesWith(tile, sector, firstLevelCache, maxLevelCache);
+        }
+      }
+    }
+  }
 
   public final void start(G3MRenderContext rc)
   {
