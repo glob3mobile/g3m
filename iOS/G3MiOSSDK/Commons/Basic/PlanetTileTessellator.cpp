@@ -610,8 +610,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             FloatBufferBuilderFromCartesian2D& textCoords) const{
 
   //CREATING TEXTURE COORDS////////////////////////////////////////////////////////////////
-  std::vector<Vector2D*> uvSurfaceTextureCoords;
-
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
@@ -630,19 +628,14 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     for (int i = 0; i < meshResolution._x; i++) {
       const double linearU = (float) i / (meshResolution._x-1);
       Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
-
       Vector2D uv = tileSector.getUVCoordinates(g);
-
-      uvSurfaceTextureCoords.push_back(new Vector2D(uv));
+      textCoords.add(uv);
     }
   }
 
   //VERTICES///////////////////////////////////////////////////////////////
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = 0;
-
-  int surfaceIndex = 0;
-
   for (int j = 0; j < meshResolution._y; j++) {
     const double v = (double) j / (meshResolution._y - 1);
 
@@ -662,10 +655,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         }
       }
       vertices.add( position, elevation );
-
-      //TEXTURE COORD
-      Vector2D* uv = uvSurfaceTextureCoords[surfaceIndex++];
-      textCoords.add(*uv);
     }
   }
 
@@ -680,13 +669,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       indices.add((short) (jTimesResolution + i + meshResolution._x));
     }
     indices.add((short) (jTimesResolution + 2*meshResolution._x - 1));
-  }
-
-  //printf("%s\n", indices.description().c_str());
-
-  const int size = uvSurfaceTextureCoords.size();
-  for (int i = 0; i < size; i++) {
-    delete uvSurfaceTextureCoords[i];
   }
 
   return minElevation;
