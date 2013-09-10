@@ -318,13 +318,13 @@ bool Tile::isVisible(const G3MRenderContext *rc,
 
   /* //AGUSTIN:now that zfar is located in the horizon, this test is not needed anymore
    // test if sector is back oriented with respect to the camera
-  if (_sector.isBackOriented(rc,
-                             getMinHeight(),
-                             planet,
-                             cameraNormalizedPosition,
-                             cameraAngle2HorizonInRadians)) {
-    return false;
-  }*/
+   if (_sector.isBackOriented(rc,
+   getMinHeight(),
+   planet,
+   cameraNormalizedPosition,
+   cameraAngle2HorizonInRadians)) {
+   return false;
+   }*/
 
   if (!prc->getRenderedSector().touchesWith(_sector)){ //Incomplete world
     return false;
@@ -662,33 +662,47 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
 
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
 
-  subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
-                                     splitLatitude, splitLongitude,
-                                     nextLevel,
-                                     row2,
-                                     column2,
-                                     setParent) );
+  Sector renderedSector = _planetRenderer->getRenderedSector();
 
-  subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
-                                     splitLatitude, upper._longitude,
-                                     nextLevel,
-                                     row2,
-                                     column2 + 1,
-                                     setParent) );
+  Sector s1(Geodetic2D(lower._latitude, lower._longitude), Geodetic2D(splitLatitude, splitLongitude));
+  if (renderedSector.touchesWith(s1)){
+    subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
+                                       splitLatitude, splitLongitude,
+                                       nextLevel,
+                                       row2,
+                                       column2,
+                                       setParent) );
+  }
 
-  subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
-                                     upper._latitude, splitLongitude,
-                                     nextLevel,
-                                     row2 + 1,
-                                     column2,
-                                     setParent) );
+  Sector s2(Geodetic2D(lower._latitude, splitLongitude), Geodetic2D(splitLatitude, upper._longitude));
+  if (renderedSector.touchesWith(s2)){
+    subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
+                                       splitLatitude, upper._longitude,
+                                       nextLevel,
+                                       row2,
+                                       column2 + 1,
+                                       setParent) );
+  }
 
-  subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
-                                     upper._latitude, upper._longitude,
-                                     nextLevel,
-                                     row2 + 1,
-                                     column2 + 1,
-                                     setParent) );
+  Sector s3(Geodetic2D(splitLatitude, lower._longitude), Geodetic2D(upper._latitude, splitLongitude));
+  if (renderedSector.touchesWith(s3)){
+    subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
+                                       upper._latitude, splitLongitude,
+                                       nextLevel,
+                                       row2 + 1,
+                                       column2,
+                                       setParent) );
+  }
+
+  Sector s4(Geodetic2D(splitLatitude, splitLongitude), Geodetic2D(upper._latitude, upper._longitude));
+  if (renderedSector.touchesWith(s4)){
+    subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
+                                       upper._latitude, upper._longitude,
+                                       nextLevel,
+                                       row2 + 1,
+                                       column2 + 1,
+                                       setParent) );
+  }
 
   return subTiles;
 }

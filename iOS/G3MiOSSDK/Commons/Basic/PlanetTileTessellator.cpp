@@ -591,14 +591,22 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             ShortBufferBuilder& indices,
                                             FloatBufferBuilderFromCartesian2D& textCoords) const{
 
+  const int rx = meshResolution._x;
+  const int ry = meshResolution._y;
+
+  if (!needsNorthSkirt(tileSector)  ){
+    printf("ok");
+  }
+
+
   //CREATING TEXTURE COORDS////////////////////////////////////////////////////////////////
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(meshSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(meshSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
-  for (int j = 0; j < meshResolution._y; j++) {
+  for (int j = 0; j < ry; j++) {
 
-    double linearV = (float) j / (meshResolution._y-1);
+    double linearV = (float) j / (ry-1);
 
     if (mercator){
       const Angle latitude = meshSector.getInnerPointLatitude(linearV);
@@ -607,8 +615,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       linearV = mercatorLocalV;
     }
 
-    for (int i = 0; i < meshResolution._x; i++) {
-      const double linearU = (float) i / (meshResolution._x-1);
+    for (int i = 0; i < rx; i++) {
+      const double linearU = (float) i / (rx-1);
       Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
       Vector2D uv = tileSector.getUVCoordinates(g);
       textCoords.add(uv);
