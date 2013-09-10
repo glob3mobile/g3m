@@ -26,11 +26,9 @@
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
-
 #include "IndexedGeometryMesh.hpp"
-
 #include "IShortBuffer.hpp"
+
 
 EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
 #ifdef C_CODE
