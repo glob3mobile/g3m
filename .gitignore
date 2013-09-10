@@ -37,8 +37,15 @@ WebGL/G3MWebGLDemo/war/WEB-INF/deploy/
 
 Android/G3MAndroidSDK/bin/
 Android/G3MAndroidSDK/gen/
+Android/G3MAndroidSDK/build.xml
+Android/G3MAndroidSDK/local.properties
+Android/G3MAndroidSDK/libs/g3msharedsdk.jar
+Android/G3MAndroidSDK/libs/java_websocket.jar
+
 Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
+
+
 
 JavaDesktop/G3MJavaDesktopSDK/bin/
 
