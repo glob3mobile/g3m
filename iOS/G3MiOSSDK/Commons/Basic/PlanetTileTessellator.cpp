@@ -445,7 +445,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   return data->_textCoords->create();
 
   ////////////////////////////////////////////////////////////
-
+/*
   const Sector tileSector = tile->getSector();
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2I tileResolution = calculateResolution(rawResolution, tile, meshSector);
@@ -521,6 +521,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   delete[] v;
 
   return textCoords.create();
+ */
 }
 
 
@@ -757,8 +758,8 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
     textCoords.add(uv);
 
     //INDEX///////////////////////////////////////////////////////////////
-    indices.add(surfaceIndex); //printf("%d ", indices.last());
-    indices.add(skirtIndex); //printf("%d ", indices.last());
+    indices.add(surfaceIndex);
+    indices.add(skirtIndex);
 
     skirtIndex++;
     surfaceIndex -= 1;
