@@ -45,20 +45,17 @@
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
-    
-    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
-    
-    _cppBufferListener->onDownload(url, buffer);
-    
-    delete buffer;
+
+    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
+
+    _cppBufferListener->onDownload(url, buffer, false);
   }
-  
+
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
       IImage* image = new Image_iOS(uiImage, data);
-      _cppImageListener->onDownload(url, image);
-      IFactory::instance()->deleteImage(image);
+      _cppImageListener->onDownload(url, image, false);
     }
     else {
       _cppImageListener->onError(url);
@@ -97,10 +94,8 @@
     [data getBytes: bytes
             length: length];
     
-    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
-    
-    _cppBufferListener->onCanceledDownload(url, buffer);
-    
+    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
+    _cppBufferListener->onCanceledDownload(url, buffer, false);
     delete buffer;
   }
   
@@ -108,7 +103,7 @@
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
       IImage* image = new Image_iOS(uiImage, data);
-      _cppImageListener->onCanceledDownload(url, image);
+      _cppImageListener->onCanceledDownload(url, image, false);
       IFactory::instance()->deleteImage(image);
     }
   }

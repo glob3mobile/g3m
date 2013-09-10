@@ -11,15 +11,13 @@
 
 class G3MContext;
 
+
 class GTask {
 public:
   virtual ~GTask() {
-    
   }
-  
-  virtual void run(const G3MContext* context) = 0;
-  
-};
 
+  virtual void run(const G3MContext* context) = 0;
+};
 
 #endif

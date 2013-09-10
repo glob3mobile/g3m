@@ -17,102 +17,154 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
+//class Color;
+
 
 public class QuadShape extends AbstractMeshShape
 {
-  private final String _textureFilename;
-  private IImage _textureImage;
-  private final boolean _autoDeleteTextureImage;
-
+  private URL _textureURL = new URL();
   private final float _width;
   private final float _height;
+  private final Color _color;
 
+  private boolean _textureRequested;
+  private IImage _textureImage;
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
-	if (_textureImage == null)
-	{
-	  return null;
-	}
+    if (_textureImage == null)
+    {
+      return null;
+    }
   
-	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
-	if (_autoDeleteTextureImage)
-	{
-	  rc.getFactory().deleteImage(_textureImage);
-	  _textureImage = null;
-	}
+    rc.getFactory().deleteImage(_textureImage);
+    _textureImage = null;
   
-	if (texId == null)
-	{
-	  rc.getLogger().logError("Can't load file %s", _textureFilename);
-	}
+    if (texId == null)
+    {
+      rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
+    }
   
-	return texId;
+    return texId;
   }
+
+  private final boolean _withNormals;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
+    if (!_textureRequested)
+    {
+      _textureRequested = true;
+      if (_textureURL.getPath().length() != 0)
+      {
+        rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new QuadShape_IImageDownloadListener(this), true);
+      }
+    }
   
-	final float halfWidth = _width / 2.0f;
-	final float halfHeight = _height / 2.0f;
+    final float halfWidth = _width / 2.0f;
+    final float halfHeight = _height / 2.0f;
   
-	final float left = -halfWidth;
-	final float right = +halfWidth;
-	final float bottom = -halfHeight;
-	final float top = +halfHeight;
+    final float left = -halfWidth;
+    final float right = +halfWidth;
+    final float bottom = -halfHeight;
+    final float top = +halfHeight;
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	vertices.add(left, bottom, 0);
-	vertices.add(right, bottom, 0);
-	vertices.add(left, top, 0);
-	vertices.add(right, top, 0);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    vertices.add(left, bottom, 0);
+    vertices.add(right, bottom, 0);
+    vertices.add(left, top, 0);
+    vertices.add(right, top, 0);
   
-	ShortBufferBuilder indices = new ShortBufferBuilder();
-	indices.add((short) 0);
-	indices.add((short) 1);
-	indices.add((short) 2);
-	indices.add((short) 3);
+    Color color = (_color == null) ? null : new Color(_color);
+    Mesh im = null;
+    if (_withNormals)
+    {
+      FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add((double)0.0, (double)0.0, (double)1.0);
   
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, (float)1.0, true, normals.create());
+    }
+    else
+    {
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
+    }
   
-	final Vector3D center = Vector3D.zero();
+    final IGLTextureId texId = getTextureId(rc);
+    if (texId == null)
+    {
+      return im;
+    }
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
+    FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+    texCoords.add(0, 1);
+    texCoords.add(1, 1);
+    texCoords.add(0, 0);
+    texCoords.add(1, 0);
   
-	final IGLTextureId texId = getTextureId(rc);
-	if (texId == null)
-	{
-	  return im;
-	}
+    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
-	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-	texCoords.add(0, 1);
-	texCoords.add(1, 1);
-	texCoords.add(0, 0);
-	texCoords.add(1, 0);
-  
-	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
-  
-	return new TexturedMesh(im, true, texMap, true, true);
+    return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height, boolean withNormals)
   {
-	  super(position);
-	  _textureFilename = textureFilename;
-	  _textureImage = textureImage;
-	  _autoDeleteTextureImage = autoDeleteTextureImage;
-	  _width = width;
-	  _height = height;
+     super(position, altitudeMode);
+     _textureURL = new URL(textureURL);
+     _width = width;
+     _height = height;
+     _textureRequested = false;
+     _textureImage = null;
+     _color = null;
+     _withNormals = withNormals;
 
   }
 
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height, boolean withNormals)
+  {
+     super(position, altitudeMode);
+     _textureURL = new URL(new URL("", false));
+     _width = width;
+     _height = height;
+     _textureRequested = true;
+     _textureImage = textureImage;
+     _color = null;
+     _withNormals = withNormals;
+
+  }
+
+
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, float width, float height, Color color, boolean withNormals)
+  {
+     super(position, altitudeMode);
+     _textureURL = new URL(new URL("", false));
+     _width = width;
+     _height = height;
+     _textureRequested = false;
+     _textureImage = null;
+     _color = color;
+     _withNormals = withNormals;
+
+  }
   public void dispose()
   {
+    if (_color != null)
+       _color.dispose();
+  
+    super.dispose();
+  
+  }
 
+  public final void imageDownloaded(IImage image)
+  {
+    _textureImage = image;
+  
+    cleanMesh();
   }
 
 }

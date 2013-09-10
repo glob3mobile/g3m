@@ -29,177 +29,199 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-  private IImage getCachedImage(URL url)
+  private IImageResult getCachedImageResult(URL url, boolean readExpired)
   {
-	if ((_lastImage != null) && (_lastImageURL != null))
-	{
-	  if (_lastImageURL.isEqualsTo(url))
-	  {
-		// ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-		return _lastImage.shallowCopy();
-	  }
-	}
+    if ((_lastImageResult != null) && (_lastImageURL != null))
+    {
+      if (_lastImageURL.isEquals(url))
+      {
+        // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
+        return new IImageResult(_lastImageResult.getImage().shallowCopy(), _lastImageResult.isExpired());
+      }
+    }
   
-	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
+    if (!_storage.isAvailable())
+    {
+      return new IImageResult(null, false);
+    }
   
-	if (cachedImage != null)
-	{
-	  if (_lastImage != null)
-	  {
-		IFactory.instance().deleteImage(_lastImage);
-	  }
-	  _lastImage = cachedImage.shallowCopy();
+    IImageResult cachedImageResult = _storage.readImage(url, readExpired);
+    IImage cachedImage = cachedImageResult.getImage();
   
-	  _lastImageURL = new URL(url);
-	}
+    if (cachedImage != null)
+    {
+      if (_lastImageResult != null)
+      {
+        IFactory.instance().deleteImage(_lastImageResult.getImage());
+        if (_lastImageResult != null)
+           _lastImageResult.dispose();
+      }
+      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult.isExpired());
   
-	return cachedImage;
+      if (_lastImageURL != null)
+         _lastImageURL.dispose();
+      _lastImageURL = new URL(url);
+    }
+  
+    return new IImageResult(cachedImage, cachedImageResult.isExpired());
   }
 
-  private IImage _lastImage;
-
+  private IImageResult _lastImageResult;
   private URL _lastImageURL;
 
   public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
   {
-	  _downloader = downloader;
-	  _storage = storage;
-	  _requestsCounter = 0;
-	  _cacheHitsCounter = 0;
-	  _savesCounter = 0;
-	  _saveInBackground = saveInBackground;
-	  _lastImage = null;
-	  _lastImageURL = null;
+     _downloader = downloader;
+     _storage = storage;
+     _requestsCounter = 0;
+     _cacheHitsCounter = 0;
+     _savesCounter = 0;
+     _saveInBackground = saveInBackground;
+     _lastImageResult = null;
+     _lastImageURL = null;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean saveInBackground() const
   public final boolean saveInBackground()
   {
-	return _saveInBackground;
+    return _saveInBackground;
   }
 
   public final void start()
   {
-	_downloader.start();
+    _downloader.start();
   }
 
   public final void stop()
   {
-	_downloader.stop();
+    _downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, IBufferDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
   {
-	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
-	if (cachedBuffer == null)
-	{
-	  // cache miss
-	  return _downloader.requestBuffer(url, priority, TimeInterval.zero(), new BufferSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
-	}
+    _requestsCounter++;
   
-	// cache hit
-	_cacheHitsCounter++;
+    IByteBufferResult cachedBufferResult = _storage.isAvailable() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
+    /*                                         */
+    /*                                         */
   
-	listener.onDownload(url, cachedBuffer);
+    IByteBuffer cachedBuffer = cachedBufferResult.getBuffer();
   
-	if (deleteListener)
-	{
-	  listener = null;
-	}
+    if (cachedBuffer != null && !cachedBufferResult.isExpired())
+    {
+      // cache hit
+      _cacheHitsCounter++;
   
-	if (cachedBuffer != null)
-		cachedBuffer.dispose();
-	return -1;
+      listener.onDownload(url, cachedBuffer, false);
+  
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+  
+      return -1;
+    }
+  
+    // cache miss
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
   }
 
-  public final long requestImage(URL url, long priority, TimeInterval timeToCache, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
   {
-	_requestsCounter++;
+    _requestsCounter++;
   
-  //  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
-	final IImage cachedImage = getCachedImage(url);
-	if (cachedImage != null)
-	{
-	  // cache hit
-	  _cacheHitsCounter++;
+    IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
+    IImage cachedImage = cachedImageResult.getImage();
   
-	  listener.onDownload(url, cachedImage);
+    if (cachedImage != null && !cachedImageResult.isExpired())
+    {
+      // cache hit
+      _cacheHitsCounter++;
   
-	  if (deleteListener)
-	  {
-	  }
+      listener.onDownload(url, cachedImage, false);
   
-	  IFactory.instance().deleteImage(cachedImage);
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
   
-	  return -1;
-	}
+      return -1;
+    }
   
+    // cache miss
+    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
   
-	// cache miss
-	return _downloader.requestImage(url, priority, TimeInterval.zero(), new ImageSaverDownloadListener(this, listener, deleteListener, _storage, timeToCache), true);
   }
 
   public final void cancelRequest(long requestId)
   {
-	_downloader.cancelRequest(requestId);
+    _downloader.cancelRequest(requestId);
   }
 
   public void dispose()
   {
-	if (_downloader != null)
-		_downloader.dispose();
+    if (_downloader != null)
+       _downloader.dispose();
   
-	if (_lastImage != null)
-	{
-	  IFactory.instance().deleteImage(_lastImage);
-	}
+    //  if (_lastImage != NULL) {
+    //    IFactory::instance()->deleteImage(_lastImage);
+    //  }
+    if (_lastImageResult != null)
+    {
+      IFactory.instance().deleteImage(_lastImageResult.getImage());
+      if (_lastImageResult != null)
+         _lastImageResult.dispose();
+    }
+    if (_lastImageURL != null)
+       _lastImageURL.dispose();
+  
+    super.dispose();
+  
   }
 
   public final String statistics()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("CachedDownloader(cache hits=");
-	isb.addInt(_cacheHitsCounter);
-	isb.addString("/");
-	isb.addInt(_requestsCounter);
-	isb.addString(", saves=");
-	isb.addInt(_savesCounter);
-	isb.addString(", downloader=");
-	//isb->addString(IDownloader::instance()->statistics());
-	isb.addString(_downloader.statistics());
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("CachedDownloader(cache hits=");
+    isb.addInt(_cacheHitsCounter);
+    isb.addString("/");
+    isb.addInt(_requestsCounter);
+    isb.addString(", saves=");
+    isb.addInt(_savesCounter);
+    isb.addString(", downloader=");
+    isb.addString(_downloader.statistics());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   public final void countSave()
   {
-	_savesCounter++;
+    _savesCounter++;
   }
 
   public final void onResume(G3MContext context)
   {
-	_downloader.onResume(context);
+    _downloader.onResume(context);
   }
 
   public final void onPause(G3MContext context)
   {
-	_downloader.onPause(context);
+    _downloader.onPause(context);
   }
 
   public final void onDestroy(G3MContext context)
   {
-	_downloader.onDestroy(context);
+    _downloader.onDestroy(context);
   }
 
-  public final void initialize(G3MContext context)
+  public final void initialize(G3MContext context, FrameTasksExecutor frameTasksExecutor)
   {
-	_downloader.initialize(context);
+    _downloader.initialize(context, frameTasksExecutor);
   }
 
 }

@@ -36,7 +36,6 @@ public:
   }
 
   virtual ~IStringUtils() {
-
   }
 
   virtual std::string createString(unsigned char data[],
@@ -46,6 +45,12 @@ public:
 
   virtual bool beginsWith(const std::string& string,
                           const std::string& prefix) const = 0;
+  
+  virtual bool endsWith(const std::string& string,
+                        const std::string& suffix) const = 0;
+
+  virtual std::string toUpperCase(const std::string& string) const = 0;
+
 
   virtual int indexOf(const std::string& string,
                       const std::string& search) const = 0;
@@ -70,19 +75,18 @@ public:
                                        const std::string& replaceWith) const {
     int startIndex = indexOf(originalString, toReplace);
     //The part to replace was not found. Return original String
-    if (startIndex==-1) {
+    if (startIndex == -1) {
       return originalString;
     }
-    const int endIndex = startIndex+toReplace.size();
+    const int endIndex = startIndex + toReplace.size();
     const std::string left = substring(originalString, 0, startIndex);
     const std::string right = substring(originalString, endIndex);
-    const std::string result = left+replaceWith+right;
+    const std::string result = left + replaceWith + right;
     startIndex = indexOf(result, toReplace);
-    if (startIndex != -1){
+    if (startIndex != -1) {
       //recursive call to replace other ocurrences
       return replaceSubstring(result, toReplace, replaceWith);
     }
-
     return result;
   }
 
@@ -98,6 +102,8 @@ public:
   virtual std::string trim(const std::string& string) const {
     return rtrim(ltrim(string));
   }
+
+  virtual long long parseHexInt(const std::string& str) const = 0;
 
 };
 

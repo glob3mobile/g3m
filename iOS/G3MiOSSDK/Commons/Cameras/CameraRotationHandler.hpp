@@ -2,7 +2,7 @@
 //  CameraRotationHandler.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 28/07/12.
+//  Created by Agustin Trujillo Pino on 28/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -15,8 +15,8 @@
 
 class CameraRotationHandler: public CameraEventHandler {
 private:
-  MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector2I _initialPixel;  //Initial pixel at start of gesture
+  MutableVector3D _pivotPoint;    //Initial point at dragging
+  MutableVector2I _pivotPixel;  //Initial pixel at start of gesture
 
 //  int _lastYValid;
   Camera _camera0;         //Initial Camera saved on Down event
@@ -24,11 +24,16 @@ private:
 public:
   CameraRotationHandler():
   _camera0(Camera(0, 0)),
-  _initialPoint(0, 0, 0),
-  _initialPixel(0, 0)
+  _pivotPoint(0, 0, 0),
+  _pivotPixel(0, 0)
   {}
   
-  ~CameraRotationHandler() {}
+  ~CameraRotationHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+  }
 
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent, 

@@ -13,14 +13,14 @@
 
 void ShapeOrbitCameraEffect::doStep(const G3MRenderContext *rc,
                                     const TimeInterval& when) {
-  const double alpha = pace( percentDone(when) );
-  //  const double alpha = percentDone(when);
+  const double alpha = getAlpha(when);
 
   const Geodetic3D center = _shape->getPosition();
 
-  const double distance          = GMath.lerp(_fromDistance,          _toDistance,          alpha);
-  const double azimuthInRadians  = GMath.lerp(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
-  const double altitudeInRadians = GMath.lerp(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
+  IMathUtils* mu = IMathUtils::instance();
+  const double distance          = mu->linearInterpolation(_fromDistance,          _toDistance,          alpha);
+  const double azimuthInRadians  = mu->linearInterpolation(_fromAzimuthInRadians,  _toAzimuthInRadians,  alpha);
+  const double altitudeInRadians = mu->linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
 
   rc->getNextCamera()->setPointOfView(center,
                                       distance,

@@ -18,11 +18,14 @@
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 
+#import "NSString_CppAdditions.h"
+
+
 NSString* SQLiteStorage_iOS::getDBPath() const {
 
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *dbPath = [documentsDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
+  NSString *dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: _databaseName] ];
 
   //NSLog(@"dbPath=%@", dbPath);
 
@@ -103,7 +106,7 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger usedSpace = [rs1 integerColumnByIndex: 1];
 
     NSLog(@"Initialized Storage on DB \"%@\", buffers=%d, usedSpace=%fMb",
-          toNSString(_databaseName), //getDBPath(),
+          [NSString stringWithCppString: _databaseName], //getDBPath(),
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
@@ -117,26 +120,13 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger usedSpace = [rs2 integerColumnByIndex: 1];
 
     NSLog(@"Initialized Storage on DB \"%@\", images=%d, usedSpace=%fMb",
-          toNSString(_databaseName), //getDBPath(),
+          [NSString stringWithCppString: _databaseName], //getDBPath(),
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
 
   [rs2 close];
 }
-
-
-//bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
-//  NSString* name = toNSString(url.getPath());
-//
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM buffer2 WHERE (name = ?)", name];
-//
-//  BOOL hasAny = [rs next];
-//
-//  [rs close];
-//
-//  return hasAny;
-//}
 
 void SQLiteStorage_iOS::rawSave(NSString* table,
                                 NSString* name,
@@ -189,19 +179,9 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                    const IByteBuffer* buffer,
                                    const TimeInterval& timeToExpires,
                                    bool saveInBackground) {
-  //  const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
-  //
-  //  NSString* name = toNSString(url.getPath());
-  //  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
-  //                                    length: buffer_iOS->size()];
-  //
-  //  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
-  //    printf("Can't save \"%s\"\n", url.getPath().c_str());
-  //  }
-
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
 
-  NSString* name = toNSString(url.getPath());
+  NSString* name = [NSString stringWithCppString: url.getPath()];
   NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
                                     length: buffer_iOS->size()];
 
@@ -214,43 +194,6 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
   }
 }
 
-const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
-  IByteBuffer* result = NULL;
-
-  NSString* name = toNSString(url.getPath());
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
-  if ([rs next]) {
-    NSData* nsData = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
-
-    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
-      NSUInteger length = [nsData length];
-      unsigned char* bytes = new unsigned char[length];
-      [nsData getBytes: bytes
-                length: length];
-
-      result = GFactory.createByteBuffer(bytes, length);
-    }
-  }
-
-  [rs close];
-
-  return result;
-}
-
-//bool SQLiteStorage_iOS::containsImage(const URL& url) {
-//  NSString* name = toNSString(url.getPath());
-//
-//  SQResultSet* rs = [_readDB executeQuery:@"SELECT 1 FROM image2 WHERE (name = ?)", name];
-//
-//  BOOL hasAny = [rs next];
-//
-//  [rs close];
-//
-//  return hasAny;
-//}
-
 void SQLiteStorage_iOS::saveImage(const URL& url,
                                   const IImage* image,
                                   const TimeInterval& timeToExpires,
@@ -258,7 +201,7 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   const Image_iOS* image_iOS = (const Image_iOS*) image;
   UIImage* uiImage = image_iOS->getUIImage();
 
-  NSString* name = toNSString(url.getPath());
+  NSString* name = [NSString stringWithCppString: url.getPath()];
 
   NSData* contents = image_iOS->getSourceBuffer();
   if (contents == NULL) {
@@ -281,29 +224,63 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   }
 }
 
-const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
-  IImage* result = NULL;
+IImageResult SQLiteStorage_iOS::readImage(const URL& url,
+                                          bool readExpired) {
+  IImage* image = NULL;
+  bool expired = false;
 
-  NSString* name = toNSString(url.getPath());
+  NSString* name = [NSString stringWithCppString: url.getPath()];
   SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
   if ([rs next]) {
     NSData* data = [rs dataColumnByIndex: 0];
     const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
     NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    if ([expiration compare:[NSDate date]] == NSOrderedDescending) {
+    expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
+
+    if (readExpired || !expired) {
       UIImage* uiImage = [UIImage imageWithData:data];
       if (uiImage) {
-        result = new Image_iOS(uiImage,
-                               NULL/* data is not needed */);
+        image = new Image_iOS(uiImage,
+                              NULL /* data is not needed */);
       }
       else {
         ILogger::instance()->logError("Can't create image with contents of storage.");
       }
     }
   }
-  
+
   [rs close];
-  
-  return result;
+
+  return IImageResult(image, expired);
+}
+
+
+IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
+                                                bool readExpired) {
+  IByteBuffer* buffer = NULL;
+  bool expired = false;
+
+  NSString* name = [NSString stringWithCppString: url.getPath()];
+  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
+  if ([rs next]) {
+    NSData* nsData = [rs dataColumnByIndex: 0];
+    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+
+    expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
+
+    if (readExpired || !expired) {
+      NSUInteger length = [nsData length];
+      unsigned char* bytes = new unsigned char[length];
+      [nsData getBytes: bytes
+                length: length];
+
+      buffer = IFactory::instance()->createByteBuffer(bytes, length);
+    }
+  }
+
+  [rs close];
+
+  return IByteBufferResult(buffer, expired);
 }

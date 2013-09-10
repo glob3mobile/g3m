@@ -9,49 +9,64 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
+#define THRESHOLD               1e-5
+
 #include "IMathUtils.hpp"
 
-#define THRESHOLD               1e-5
-#define ISBETWEEN_THRESHOLD     1e-2
-
 #include <string>
+
+#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
 
 
 class Angle {
 private:
-  Angle(const double degrees) :
+  Angle(const double degrees,
+        const double radians) :
   _degrees( degrees ),
-  _radians( degrees / 180.0 * /*GMath.pi()*/ 3.14159265358979323846264338327950288 )
+  _radians( radians ),
+  _sin(2),
+  _cos(2)
   {
   }
+
+  mutable double _sin;
+  mutable double _cos;
 
 public:
   const double _degrees;
   const double _radians;
 
-  static Angle lerp(const Angle& start,
-                    const Angle& end,
-                    float percent) {
-    return start.add(end.sub(start).times(percent));
+
+  Angle(const Angle& angle):
+  _degrees(angle._degrees),
+  _radians(angle._radians),
+  _sin(angle._sin),
+  _cos(angle._cos)
+  {
+
   }
 
   static Angle fromDegrees(double degrees) {
-    return Angle(degrees);
+    return Angle(degrees,
+                 TO_RADIANS(degrees));
   }
 
   static Angle fromDegreesMinutes(double degrees,
                                   double minutes) {
-    return Angle( degrees + ( minutes / 60.0) );
+    const double d = degrees + ( minutes / 60.0);
+    return Angle( d, TO_RADIANS(d) );
   }
 
   static Angle fromDegreesMinutesSeconds(double degrees,
                                          double minutes,
                                          double seconds) {
-    return Angle( degrees + ( minutes / 60.0) + ( seconds / 3600.0 ) );
+    const double d = degrees + ( minutes / 60.0) + ( seconds / 3600.0 );
+    return Angle( d, TO_RADIANS(d) );
   }
 
   static Angle fromRadians(double radians) {
-    return Angle::fromDegrees(radians / GMath.pi() * 180.0);
+    return Angle(TO_DEGREES(radians), radians);
   }
 
   static Angle min(const Angle& a1,
@@ -68,37 +83,44 @@ public:
     return Angle::fromDegrees(0);
   }
 
+  static Angle pi() {
+    return Angle::fromDegrees(180);
+  }
+  
   static Angle nan() {
-    return Angle::fromDegrees(GMath.NanD());
+    return Angle::fromDegrees(IMathUtils::instance()->NanD());
   }
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
-    return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
+    return Angle::fromRadians((angle1._radians + angle2._radians) / 2);
   }
 
-  static Angle interpolation(const Angle& from,
-                             const Angle& to,
-                             double alpha) {
-    return Angle::fromDegrees( (1.0-alpha) * from._degrees + alpha * to._degrees );
+  static Angle linearInterpolation(const Angle& from,
+                                   const Angle& to,
+                                   double alpha) {
+    return Angle::fromRadians( (1.0-alpha) * from._radians + alpha * to._radians );
   }
 
   bool isNan() const {
     return IMathUtils::instance()->isNan(_degrees);
   }
 
-  Angle(const Angle& angle):
-  _degrees(angle._degrees),
-  _radians(angle._radians)
-  {
-
-  }
-
   double sinus() const {
-    return GMath.sin( _radians );
+    if (_sin > 1) {
+      _sin = SIN(_radians);
+    }
+    return _sin;
   }
 
   double cosinus() const {
-    return GMath.cos( _radians );
+    if (_cos > 1) {
+      _cos = COS(_radians);
+    }
+    return _cos;
+  }
+  
+  double tangent() const {
+    return TAN(_radians);
   }
 
   double degrees() const {
@@ -110,35 +132,39 @@ public:
   }
 
   bool closeTo(const Angle& other) const {
-    return (GMath.abs(_degrees - other._degrees) < THRESHOLD);
+    return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
   }
 
   Angle add(const Angle& a) const {
-    return Angle(_degrees + a._degrees);
+    const double r = _radians + a._radians;
+    return Angle(TO_DEGREES(r), r);
   }
 
   Angle sub(const Angle& a) const {
-    return Angle(_degrees - a._degrees);
+    const double r = _radians - a._radians;
+    return Angle(TO_DEGREES(r), r);
   }
 
   Angle times(double k) const {
-    return Angle(k * _degrees);
+    const double r = k * _radians;
+    return Angle(TO_DEGREES(r), r);
   }
 
   Angle div(double k) const {
-    return Angle(_degrees / k);
+    const double r = _radians / k;
+    return Angle(TO_DEGREES(r), r);
   }
 
   double div(const Angle& k) const {
-    return _degrees / k._degrees;
+    return _radians / k._radians;
   }
 
   bool greaterThan(const Angle& a) const {
-    return (_degrees > a._degrees);
+    return (_radians > a._radians);
   }
 
   bool lowerThan(const Angle& a) const {
-    return (_degrees < a._degrees);
+    return (_radians < a._radians);
   }
 
   Angle clampedTo(const Angle& min,
@@ -159,26 +185,33 @@ public:
     while (degrees >= 360) {
       degrees -= 360;
     }
-    return Angle(degrees);
+    return Angle(degrees, TO_RADIANS(degrees));
   }
 
   bool isZero() const {
     return (_degrees == 0);
   }
 
-  bool isEqualsTo(const Angle& that) const {
-    return (_degrees == that._degrees) || (_radians == that._radians);
+  bool isEquals(const Angle& that) const {
+    const IMathUtils* mu = IMathUtils::instance();
+    return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
   }
 
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		return Double.toString(_degrees).hashCode();
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(_radians);
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
     }
     if (obj == null) {
@@ -188,11 +221,11 @@ public:
       return false;
     }
     final Angle other = (Angle) obj;
-    if (_degrees != other._degrees) {
+    if (Double.doubleToLongBits(_radians) != Double.doubleToLongBits(other._radians)) {
       return false;
     }
     return true;
-	}
+  }
 #endif
 
   ~Angle() {

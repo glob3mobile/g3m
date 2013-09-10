@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
 
 
@@ -25,32 +24,73 @@ public class MeshRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
+  private GLState _glState;
+
+  private ProjectionGLFeature _projection;
+  private ModelGLFeature _model;
+  private void updateGLState(G3MRenderContext rc)
+  {
+  
+    final Camera cam = rc.getCurrentCamera();
+    if (_projection == null)
+    {
+      _projection = new ProjectionGLFeature(cam);
+      _glState.addGLFeature(_projection, true);
+    }
+    else
+    {
+      _projection.setMatrix(cam.getProjectionMatrix44D());
+    }
+  
+    if (_model == null)
+    {
+      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _glState.addGLFeature(_model, true);
+    }
+    else
+    {
+      _model.setMatrix(cam.getModelMatrix44D());
+    }
+  }
+
+  public MeshRenderer()
+  {
+     _projection = null;
+     _model = null;
+     _glState = new GLState();
+  }
+
   public void dispose()
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  if (mesh != null)
-		  mesh.dispose();
-	}
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      if (mesh != null)
+         mesh.dispose();
+    }
+  
+    _glState._release();
+  
+    super.dispose();
+  
   }
 
   public final void addMesh(Mesh mesh)
   {
-	_meshes.add(mesh);
+    _meshes.add(mesh);
   }
 
   public final void clearMeshes()
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  if (mesh != null)
-		  mesh.dispose();
-	}
-	_meshes.clear();
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      if (mesh != null)
+         mesh.dispose();
+    }
+    _meshes.clear();
   }
 
   public final void onResume(G3MContext context)
@@ -75,27 +115,32 @@ public class MeshRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return true;
+    return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
-	final int meshesCount = _meshes.size();
-	for (int i = 0; i < meshesCount; i++)
-	{
-	  Mesh mesh = _meshes.get(i);
-	  final Extent extent = mesh.getExtent();
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+    updateGLState(rc);
   
-	  if (extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates()))
-	  {
-		mesh.render(rc, parentState);
-	  }
-	}
+    _glState.setParent(glState);
+  
+  
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+      if (boundingVolume.touchesFrustum(frustum))
+      {
+        mesh.render(rc, _glState);
+      }
+    }
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -103,12 +148,12 @@ public class MeshRenderer extends LeafRenderer
 
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
 
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
 
   }

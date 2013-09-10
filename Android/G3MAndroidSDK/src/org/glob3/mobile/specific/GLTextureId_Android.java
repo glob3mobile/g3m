@@ -28,7 +28,7 @@ public final class GLTextureId_Android
 
 
    @Override
-   public boolean isEqualsTo(final IGLTextureId that) {
+   public boolean isEquals(final IGLTextureId that) {
       return (_glTextureId == ((GLTextureId_Android) that).getGLTextureId());
    }
 
@@ -41,6 +41,12 @@ public final class GLTextureId_Android
 
    public int getGLTextureId() {
       return _glTextureId;
+   }
+
+
+   @Override
+   public void dispose() {
+
    }
 
 }

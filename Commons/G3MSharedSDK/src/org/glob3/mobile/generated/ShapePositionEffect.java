@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Shape;
 
 public class ShapePositionEffect extends EffectWithDuration
@@ -27,35 +26,35 @@ public class ShapePositionEffect extends EffectWithDuration
   private final Geodetic3D _fromPosition ;
   private final Geodetic3D _toPosition ;
 
-  private final boolean _linearInterpolation;
-
-  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearInterpolation)
+  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition)
   {
-	  super(duration);
-	  _shape = shape;
-	  _fromPosition = new Geodetic3D(fromPosition);
-	  _toPosition = new Geodetic3D(toPosition);
-	  _linearInterpolation = linearInterpolation;
+     this(duration, shape, fromPosition, toPosition, false);
+  }
+  public ShapePositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, boolean linearTiming)
+  {
+     super(duration, linearTiming);
+     _shape = shape;
+     _fromPosition = new Geodetic3D(fromPosition);
+     _toPosition = new Geodetic3D(toPosition);
 
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	final double percent = percentDone(when);
-	final double alpha = _linearInterpolation ? percent : pace(percent);
+    final double alpha = getAlpha(when);
   
-	Geodetic3D pos = Geodetic3D.interpolation(_fromPosition, _toPosition, alpha);
-	_shape.setPosition(new Geodetic3D(pos));
+    final Geodetic3D pos = Geodetic3D.linearInterpolation(_fromPosition, _toPosition, alpha);
+    _shape.setPosition(new Geodetic3D(pos));
   }
 
   public final void cancel(TimeInterval when)
   {
-	_shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(new Geodetic3D(_toPosition));
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-	_shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(new Geodetic3D(_toPosition));
   }
 
 }

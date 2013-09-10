@@ -16,7 +16,7 @@ class TimeInterval {
 private:
   const long long _milliseconds;
 
-  TimeInterval(const long long milliseconds) :
+  explicit TimeInterval(const long long milliseconds) :
   _milliseconds(milliseconds)
   {
 
@@ -28,11 +28,6 @@ public:
   {
 
   }
-
-  //  TimeInterval() :
-  //  _milliseconds(0)
-  //  {
-  //  }
 
   static TimeInterval fromMilliseconds(const long long milliseconds) {
     return TimeInterval(milliseconds);
@@ -55,7 +50,7 @@ public:
   }
 
   static TimeInterval forever() {
-    return TimeInterval(GMath.maxInt64());
+    return TimeInterval(IMathUtils::instance()->maxInt64());
   }
 
   static TimeInterval zero() {
@@ -77,7 +72,37 @@ public:
   bool isZero() const {
     return _milliseconds == 0;
   }
+
   
+#ifdef JAVA_CODE
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + (int) (_milliseconds ^ (_milliseconds >>> 32));
+    return result;
+  }
+
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TimeInterval other = (TimeInterval) obj;
+    if (_milliseconds != other._milliseconds) {
+      return false;
+    }
+    return true;
+  }
+#endif
+
 };
 
 

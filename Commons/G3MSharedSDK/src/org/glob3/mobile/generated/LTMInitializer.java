@@ -7,55 +7,59 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _scale = new MutableVector2D();
   private MutableVector2D _translation = new MutableVector2D();
 
-  private IFloatBuffer _texCoords;
+  private final TileTessellator _tessellator;
+  private final Vector2I _resolution;
 
-  public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords)
+  private final boolean _mercator;
+
+  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator, boolean mercator)
   {
-	  _tile = tile;
-	  _ancestor = ancestor;
-	  _texCoords = texCoords;
-	  _scale = new MutableVector2D(1,1);
-	  _translation = new MutableVector2D(0,0);
+     _resolution = resolution;
+     _tile = tile;
+     _ancestor = ancestor;
+     _tessellator = tessellator;
+     _scale = new MutableVector2D(1,1);
+     _translation = new MutableVector2D(0,0);
+     _mercator = mercator;
 
   }
 
   public void dispose()
   {
+  super.dispose();
 
   }
 
   public final void initialize()
   {
-	// The default scale and translation are ok when (tile == _ancestor)
-	if (_tile != _ancestor)
-	{
-	  final Sector tileSector = _tile.getSector();
-	  final Sector ancestorSector = _ancestor.getSector();
+    // The default scale and translation are ok when (tile == _ancestor)
+    if (_tile != _ancestor)
+    {
+      final Sector tileSector = _tile.getSector();
 
-	  _scale = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
-	  _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
-	}
+      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower, _mercator);
+
+      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper, _mercator);
+
+      _scale = new MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x, lowerTextCoordUV._y - upperTextCoordUV._y);
+
+      _translation = new MutableVector2D(lowerTextCoordUV._x, upperTextCoordUV._y);
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableVector2D getScale() const
   public final MutableVector2D getScale()
   {
-	return _scale;
+    return _scale;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableVector2D getTranslation() const
   public final MutableVector2D getTranslation()
   {
-	return _translation;
+    return _translation;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IFloatBuffer* getTexCoords() const
-  public final IFloatBuffer getTexCoords()
+  public final IFloatBuffer createTextCoords()
   {
-	return _texCoords;
+    return _tessellator.createTextCoords(_resolution, _tile, _mercator);
   }
 
 }

@@ -17,64 +17,79 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class LayerBuilder
 {
+  public static LayerSet createDefaultSatelliteImagery()
+  {
+    LayerSet layerSet = new LayerSet();
+  
+    WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 6), TimeInterval.fromDays(30), true);
+    layerSet.addLayer(blueMarble);
+  
+    WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(7, 10), TimeInterval.fromDays(30), true);
+    layerSet.addLayer(i3Landsat);
+  
+    WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(11, 1000), TimeInterval.fromDays(30), true);
+    layerSet.addLayer(bing);
+  
+    return layerSet;
+  }
+
+  /**
+   * Returns an array with the names of the layers that make up the default layerSet
+   *
+   * @return layersNames: std::vector<std::string>
+   */
+  public static java.util.ArrayList<String> getDefaultLayersNames()
+  {
+    java.util.ArrayList<String> layersNames = new java.util.ArrayList<String>();
+    layersNames.add("bmng200405");
+    layersNames.add("esat");
+    layersNames.add("ve");
+  
+    return layersNames;
+  }
   public static WMSLayer createBingLayer(boolean enabled)
   {
-	WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
-	bing.setEnable(enabled);
+    WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30), true);
+    bing.setEnable(enabled);
   
-	return bing;
+    return bing;
   }
   public static WMSLayer createOSMLayer(boolean enabled)
   {
-	WMSLayer osm = new WMSLayer("osm_auto:all", new URL("http://129.206.228.72/cached/osm", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30));
-								 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
-	osm.setEnable(enabled);
+    WMSLayer osm = new WMSLayer("osm_auto:all", new URL("http://129.206.228.72/cached/osm", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, null, TimeInterval.fromDays(30), true);
+                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+    osm.setEnable(enabled);
   
-	return osm;
+    return osm;
   }
   public static WMSLayer createPNOALayer(boolean enabled)
   {
-	WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(30));
-	pnoa.setEnable(enabled);
+    WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(30), true);
+    pnoa.setEnable(enabled);
   
-	return pnoa;
+    return pnoa;
   }
   public static WMSLayer createBlueMarbleLayer(boolean enabled)
   {
-	WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 6), TimeInterval.fromDays(30));
-	blueMarble.setEnable(enabled);
+    WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 6), TimeInterval.fromDays(30), true);
+    blueMarble.setEnable(enabled);
   
-	return blueMarble;
+    return blueMarble;
   }
   public static WMSLayer createI3LandSatLayer(boolean enabled)
   {
-	WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(7, 100), TimeInterval.fromDays(30));
-	i3Landsat.setEnable(enabled);
+    WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(7, 100), TimeInterval.fromDays(30), true);
+    i3Landsat.setEnable(enabled);
   
-	return i3Landsat;
+    return i3Landsat;
   }
   public static WMSLayer createPoliticalLayer(boolean enabled)
   {
-	WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30));
-	political.setEnable(enabled);
+    WMSLayer political = new WMSLayer("topp:cia", new URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "countryboundaries", true, null, TimeInterval.fromDays(30), true);
+    political.setEnable(enabled);
   
-	return political;
-  }
-  public static WMSLayer createCaceresStreetMapLayer(boolean enabled)
-  {
-	WMSLayer ccStreetMap = new WMSLayer(URL.escape("Ejes de via"), new URL("http://sig.caceres.es/wms_callejero.mapdef?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(30));
-	ccStreetMap.setEnable(enabled);
-  
-	return ccStreetMap;
-  }
-  public static WMSLayer createCanaryIslandStreetMapLayer(boolean enabled)
-  {
-	WMSLayer canaryStreetMap = new WMSLayer("VIAS", new URL("http://idecan2.grafcan.es/ServicioWMS/Callejero", false), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(22.5, -22.5, 33.75, -11.25), "image/gif", "EPSG:4326", "", true, null, TimeInterval.fromDays(30));
-	canaryStreetMap.setEnable(enabled);
-  
-	return canaryStreetMap;
+    return political;
   }
 }

@@ -9,9 +9,13 @@
 #ifndef __G3MiOSSDK__GEOObject__
 #define __G3MiOSSDK__GEOObject__
 
-class G3MContext;
 class G3MRenderContext;
-class GLState;
+class GEOSymbolizer;
+class MeshRenderer;
+class ShapesRenderer;
+class MarksRenderer;
+class GEOTileRasterizer;
+
 
 class GEOObject {
 public:
@@ -19,17 +23,12 @@ public:
 
   }
 
-  virtual void initialize(const G3MContext* context) {
-
-  }
-
-  virtual bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
-  }
-
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) = 0;
-
+  virtual void symbolize(const G3MRenderContext* rc,
+                         const GEOSymbolizer*    symbolizer,
+                         MeshRenderer*           meshRenderer,
+                         ShapesRenderer*         shapesRenderer,
+                         MarksRenderer*          marksRenderer,
+                         GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
 };
 
 #endif

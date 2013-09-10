@@ -34,6 +34,11 @@ JSONGenerator::JSONGenerator() {
 
 JSONGenerator::~JSONGenerator() {
   delete _isb;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 std::string JSONGenerator::getString() {
@@ -86,6 +91,10 @@ void JSONGenerator::visitString(const JSONString* value) {
   _isb->addString("\"");
   _isb->addString(value->value());
   _isb->addString("\"");
+}
+
+void JSONGenerator::visitNull() {
+  _isb->addString("null");
 }
 
 void JSONGenerator::visitArrayBeforeChildren(const JSONArray* value) {

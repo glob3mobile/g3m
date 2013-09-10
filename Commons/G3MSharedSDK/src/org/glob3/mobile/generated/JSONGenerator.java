@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONBaseObject;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStringBuilder;
 
 public class JSONGenerator extends JSONVisitor
@@ -27,18 +25,21 @@ public class JSONGenerator extends JSONVisitor
 
   private JSONGenerator()
   {
-	_isb = IStringBuilder.newStringBuilder();
+    _isb = IStringBuilder.newStringBuilder();
   }
 
   private String getString()
   {
-	return _isb.getString();
+    return _isb.getString();
   }
 
   public void dispose()
   {
-	if (_isb != null)
-		_isb.dispose();
+    if (_isb != null)
+       _isb.dispose();
+  
+    super.dispose();
+  
   }
 
 
@@ -46,14 +47,14 @@ public class JSONGenerator extends JSONVisitor
   
   public static String generate(JSONBaseObject value)
   {
-	JSONGenerator generator = new JSONGenerator();
-	value.acceptVisitor(generator);
+    JSONGenerator generator = new JSONGenerator();
+    value.acceptVisitor(generator);
   
-	String result = generator.getString();
+    String result = generator.getString();
   
-	if (generator != null)
-		generator.dispose();
-	return result;
+    if (generator != null)
+       generator.dispose();
+    return result;
   }
 
   //  void visitNumber(const JSONNumber* value);
@@ -77,46 +78,51 @@ public class JSONGenerator extends JSONVisitor
   
   public final void visitDouble(JSONDouble value)
   {
-	_isb.addDouble(value.doubleValue());
+    _isb.addDouble(value.doubleValue());
   }
   public final void visitFloat(JSONFloat value)
   {
-	_isb.addFloat(value.floatValue());
+    _isb.addFloat(value.floatValue());
   }
   public final void visitInteger(JSONInteger value)
   {
-	_isb.addInt(value.intValue());
+    _isb.addInt(value.intValue());
   }
   public final void visitLong(JSONLong value)
   {
-	_isb.addLong(value.longValue());
+    _isb.addLong(value.longValue());
   }
 
   public final void visitBoolean(JSONBoolean value)
   {
-	if (value.value())
-	{
-	  _isb.addString("true");
-	}
-	else
-	{
-	  _isb.addString("false");
-	}
+    if (value.value())
+    {
+      _isb.addString("true");
+    }
+    else
+    {
+      _isb.addString("false");
+    }
   }
   public final void visitString(JSONString value)
   {
-	_isb.addString("\"");
-	_isb.addString(value.value());
-	_isb.addString("\"");
+    _isb.addString("\"");
+    _isb.addString(value.value());
+    _isb.addString("\"");
+  }
+
+  public final void visitNull()
+  {
+    _isb.addString("null");
   }
 
   public final void visitArrayBeforeChildren(JSONArray value)
   {
-	_isb.addString("[");
+    _isb.addString("[");
   }
   public final void visitArrayInBetweenChildren(JSONArray value)
   {
-	_isb.addString(",");
+    _isb.addString(",");
   }
   public final void visitArrayBeforeChild(JSONArray value, int i)
   {
@@ -124,26 +130,26 @@ public class JSONGenerator extends JSONVisitor
   }
   public final void visitArrayAfterChildren(JSONArray value)
   {
-	_isb.addString("]");
+    _isb.addString("]");
   }
 
   public final void visitObjectBeforeChildren(JSONObject value)
   {
-	_isb.addString("{");
+    _isb.addString("{");
   }
   public final void visitObjectInBetweenChildren(JSONObject value)
   {
-	_isb.addString(",");
+    _isb.addString(",");
   }
   public final void visitObjectBeforeChild(JSONObject value, String key)
   {
-	_isb.addString("\"");
-	_isb.addString(key);
-	_isb.addString("\":");
+    _isb.addString("\"");
+    _isb.addString(key);
+    _isb.addString("\":");
   }
   public final void visitObjectAfterChildren(JSONObject value)
   {
-	_isb.addString("}");
+    _isb.addString("}");
   }
 
 }

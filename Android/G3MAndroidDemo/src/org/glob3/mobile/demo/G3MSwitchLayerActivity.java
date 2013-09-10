@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.demo;
 
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -22,8 +23,8 @@ public class G3MSwitchLayerActivity
             Activity {
 
    private G3MWidget_Android _widgetAndroid;
-   WMSLayer                  _OSMLayer  = G3MGlob3Constants.OSM_LAYER;
-   WMSLayer                  _BingLayer = G3MGlob3Constants.BING_LAYER;
+   final WMSLayer            _OSMLayer  = LayerBuilder.createBingLayer(true);
+   final WMSLayer            _BingLayer = LayerBuilder.createOSMLayer(false);
 
 
    @Override
@@ -38,11 +39,9 @@ public class G3MSwitchLayerActivity
       final G3MBuilder_Android g3mBuilder = new G3MBuilder_Android(this);
 
       final LayerSet layers = new LayerSet();
-      _BingLayer.setEnable(true);
-      _OSMLayer.setEnable(false);
       layers.addLayer(_BingLayer);
       layers.addLayer(_OSMLayer);
-      g3mBuilder.getTileRendererBuilder().setLayerSet(layers);
+      g3mBuilder.getPlanetRendererBuilder().setLayerSet(layers);
 
       _widgetAndroid = g3mBuilder.createWidget();
       final LinearLayout layout = (LinearLayout) findViewById(R.id.glob3);

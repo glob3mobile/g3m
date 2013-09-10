@@ -15,50 +15,39 @@ class IShortBuffer;
 class IImage;
 class IGLUniformID;
 class IGLTextureId;
+class Matrix44D;
 
 #include <vector>
 #include <string>
 
-#include "ShaderProgram.hpp"
+#include "GPUProgram.hpp"
 
-class MutableMatrix44D;
+class GPUProgram;
+
+class GPUUniform;
+class GPUAttribute;
 
 class INativeGL {
 public:
 
-  virtual ~INativeGL() { };
+  virtual ~INativeGL() {
+  }
 
-  virtual void useProgram(ShaderProgram* program) const = 0;
+  virtual void useProgram(GPUProgram* program) const = 0;
 
-  virtual int getAttribLocation(ShaderProgram* program,
-                                const std::string& name) const = 0;
-
-  virtual IGLUniformID* getUniformLocation(ShaderProgram* program,
-                                           const std::string& name) const = 0;
-
-  virtual void uniform2f(IGLUniformID* loc,
+  virtual void uniform2f(const IGLUniformID* loc,
                          float x,
                          float y) const = 0;
 
-  virtual void uniform1f(IGLUniformID* loc,
+  virtual void uniform1f(const IGLUniformID* loc,
                          float x) const = 0;
 
-  virtual void uniform1i(IGLUniformID* loc,
+  virtual void uniform1i(const IGLUniformID* loc,
                          int v) const = 0;
 
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                bool transpose,
-  //                                const IFloatBuffer* buffer) const = 0;
-
-  virtual void uniformMatrix4fv(IGLUniformID* location,
+  virtual void uniformMatrix4fv(const IGLUniformID* location,
                                 bool transpose,
-                                const MutableMatrix44D* matrix) const = 0;
-
-
-  //  virtual void uniformMatrix4fv(IGLUniformID* location,
-  //                                int count,
-  //                                bool transpose,
-  //                                const float value[]) const = 0;
+                                const Matrix44D* matrix) const = 0;
 
   virtual void clearColor(float red,
                           float green,
@@ -67,11 +56,16 @@ public:
 
   virtual void clear(int buffers) const = 0;
 
-  virtual void uniform4f(IGLUniformID* location,
+  virtual void uniform4f(const IGLUniformID* location,
                          float v0,
                          float v1,
                          float v2,
                          float v3) const = 0;
+
+  virtual void uniform3f(const IGLUniformID* location,
+                         float v0,
+                         float v1,
+                         float v2) const = 0;
 
   virtual void enable(int feature) const = 0;
 
@@ -84,11 +78,8 @@ public:
                                    int size,
                                    bool normalized,
                                    int stride,
-                                   IFloatBuffer* buffer) const = 0;
+                                   const IFloatBuffer* buffer) const = 0;
 
-//  virtual void drawElements(int mode,
-//                            int count,
-//                            IIntBuffer* indices) const = 0;
   virtual void drawElements(int mode,
                             int count,
                             IShortBuffer* indices) const = 0;
@@ -148,6 +139,11 @@ public:
   virtual int Type_UnsignedByte() const = 0;
   virtual int Type_UnsignedInt() const = 0;
   virtual int Type_Int() const = 0;
+  virtual int Type_Vec2Float() const = 0;
+  virtual int Type_Vec3Float() const = 0;
+  virtual int Type_Vec4Float() const = 0;
+  virtual int Type_Bool() const = 0;
+  virtual int Type_Matrix4Float() const = 0;
 
   virtual int Primitive_Triangles() const = 0;
   virtual int Primitive_TriangleStrip() const = 0;
@@ -157,6 +153,8 @@ public:
   virtual int Primitive_LineLoop() const = 0;
   virtual int Primitive_Points() const = 0;
 
+  virtual int BlendFactor_One() const = 0;
+  virtual int BlendFactor_Zero() const = 0;
   virtual int BlendFactor_SrcAlpha() const = 0;
   virtual int BlendFactor_OneMinusSrcAlpha() const = 0;
 
@@ -176,18 +174,27 @@ public:
   virtual int Format_RGBA() const = 0;
 
   virtual int Variable_Viewport() const = 0;
+  virtual int Variable_ActiveAttributes() const = 0;
+  virtual int Variable_ActiveUniforms() const = 0;
 
   virtual int Error_NoError() const = 0;
 
   virtual int createProgram() const = 0;
-  virtual void deleteProgram(int program) const = 0;
+  virtual bool deleteProgram(int program) const = 0;
   virtual void attachShader(int program, int shader) const = 0;
   virtual int createShader(ShaderType type) const = 0;
   virtual bool compileShader (int shader, const std::string& source) const = 0;
-  virtual void deleteShader(int shader) const = 0;
+  virtual bool deleteShader(int shader) const = 0;
   virtual void printShaderInfoLog(int shader) const = 0;
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
+  
+  virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
+  
+  virtual int getProgramiv(const GPUProgram* program, int param) const = 0;
+  
+  virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
+  virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
   
 };
 

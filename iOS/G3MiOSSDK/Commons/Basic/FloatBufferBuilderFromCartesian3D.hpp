@@ -12,72 +12,129 @@
 #include "Vector3D.hpp"
 #include "FloatBufferBuilder.hpp"
 
-class CenterStrategy {
-  static const int _noCenter = 0;
-  static const int _firstVertex = 1;
-  static const int _givenCenter = 2;
-  
-  CenterStrategy(){};
-  
-public:
-  
-  static int noCenter(){ return _noCenter;}
-  static int firstVertex(){ return _firstVertex;}
-  static int givenCenter(){ return _givenCenter;}
-};
 
 class FloatBufferBuilderFromCartesian3D: public FloatBufferBuilder {
 private:
-  
-  const int _centerStrategy;
+  const CenterStrategy _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
-  
-  void setCenter(const Vector3D& center){
-    _cx = (float)center._x;
-    _cy = (float)center._y;
-    _cz = (float)center._z;
+
+  void setCenter(double x, double y, double z) {
+    _cx = (float) x;
+    _cy = (float) y;
+    _cz = (float) z;
   }
-  
-public:
-  
-  FloatBufferBuilderFromCartesian3D(int centerStrategy,
+
+  FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy,
                                     const Vector3D& center):
   _centerStrategy(centerStrategy)
   {
-    setCenter(center);
+    setCenter(center._x, center._y, center._z);
   }
-  
+
+public:
+
+
+  static FloatBufferBuilderFromCartesian3D builderWithoutCenter(){
+#ifdef C_CODE
+    return FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
+#endif
+#ifdef JAVA_CODE
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
+#endif
+  }
+
+  static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter(){
+#ifdef C_CODE
+    return FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
+#endif
+#ifdef JAVA_CODE
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
+#endif
+  }
+
+  static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(const Vector3D& center){
+#ifdef C_CODE
+    return FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
+#endif
+#ifdef JAVA_CODE
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);
+#endif
+  }
+
   void add(const Vector3D& vector) {
-    add((float) vector._x,
-        (float) vector._y,
-        (float) vector._z);
+    add(vector._x,
+        vector._y,
+        vector._z);
   }
-  
+
   void add(double x, double y, double z) {
-    add((float) x, (float) y, (float) z);
+    if (_centerStrategy ==
+#ifdef C_CODE
+        FIRST_VERTEX
+#else
+        CenterStrategy.FIRST_VERTEX
+#endif
+        ) {
+      if (_values.size() == 0) {
+        setCenter(x, y, z);
+      }
+    }
+
+    if (_centerStrategy ==
+#ifdef C_CODE
+        NO_CENTER
+#else
+        CenterStrategy.NO_CENTER
+#endif
+        ) {
+      _values.push_back( (float) x );
+      _values.push_back( (float) y );
+      _values.push_back( (float) z );
+    }
+    else {
+      _values.push_back( (float) (x - _cx) );
+      _values.push_back( (float) (y - _cy) );
+      _values.push_back( (float) (z - _cz) );
+    }
   }
-  
+
   void add(float x, float y, float z) {
-    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0){
-      setCenter(Vector3D(x,y,z));
+    if (_centerStrategy ==
+#ifdef C_CODE
+        FIRST_VERTEX
+#else
+        CenterStrategy.FIRST_VERTEX
+#endif
+        ) {
+      if (_values.size() == 0) {
+        setCenter(x, y, z);
+      }
     }
-    
-    if (_centerStrategy != CenterStrategy::noCenter()){
-      x -= _cx;
-      y -= _cy;
-      z -= _cz;
+
+    if (_centerStrategy ==
+#ifdef C_CODE
+        NO_CENTER
+#else
+        CenterStrategy.NO_CENTER
+#endif
+        ) {
+      _values.push_back( x );
+      _values.push_back( y );
+      _values.push_back( z );
     }
-    
-    _values.push_back(x);
-    _values.push_back(y);
-    _values.push_back(z);
+    else {
+      _values.push_back( x - _cx );
+      _values.push_back( y - _cy );
+      _values.push_back( z - _cz );
+    }
   }
-  
-  Vector3D getCenter(){
+
+  Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }
+  
 };
 
 #endif

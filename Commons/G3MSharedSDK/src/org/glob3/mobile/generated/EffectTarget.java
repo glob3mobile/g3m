@@ -7,6 +7,7 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
+
 //
 //  Effects.hpp
 //  G3MiOSSDK
@@ -19,13 +20,12 @@ package org.glob3.mobile.generated;
 
 
 
+
+//class G3MRenderContext;
+//class G3MContext;
+
 public interface EffectTarget
 {
-
-  // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void unusedMethod() const = 0;
-  void unusedMethod();
-
-
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
 }

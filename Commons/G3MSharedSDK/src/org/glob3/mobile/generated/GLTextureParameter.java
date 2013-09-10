@@ -8,26 +8,26 @@ public class GLTextureParameter
 
   public static int minFilter()
   {
-	  return _minFilter;
+     return _minFilter;
   }
   public static int magFilter()
   {
-	  return _magFilter;
+     return _magFilter;
   }
   public static int wrapS()
   {
-	  return _wrapS;
+     return _wrapS;
   }
   public static int wrapT()
   {
-	  return _wrapT;
+     return _wrapT;
   }
 
   public static void init(INativeGL ngl)
   {
-	_minFilter = ngl.TextureParameter_MinFilter();
-	_magFilter = ngl.TextureParameter_MagFilter();
-	_wrapS = ngl.TextureParameter_WrapS();
-	_wrapT = ngl.TextureParameter_WrapT();
+    _minFilter = ngl.TextureParameter_MinFilter();
+    _magFilter = ngl.TextureParameter_MagFilter();
+    _wrapS = ngl.TextureParameter_WrapS();
+    _wrapT = ngl.TextureParameter_WrapT();
   }
 }

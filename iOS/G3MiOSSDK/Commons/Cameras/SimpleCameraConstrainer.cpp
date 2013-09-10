@@ -15,12 +15,23 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                              Camera* nextCamera) const {
 
   const double radii = planet->getRadii().maxAxis();
+  const double maxHeight = radii*9;
+  const double minHeight = 10;
 
-  const Geodetic3D cameraPosition3D = planet->toGeodetic3D(nextCamera->getCartesianPosition());
-  const double cameraHeight = cameraPosition3D.height();
+  const Geodetic3D cameraPosition = nextCamera->getGeodeticPosition();
+  const double cameraHeight = cameraPosition._height;
 
-  if (cameraHeight > radii*9) {
-    nextCamera->resetPosition();
-    nextCamera->setPosition(  planet->toGeodetic3D(previousCamera->getCartesianPosition())  );
+  if (cameraHeight > maxHeight) {
+    nextCamera->copyFrom(*previousCamera);
+    /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                    cameraPosition._longitude,
+                                    maxHeight);*/
   }
+  else if (cameraHeight < minHeight) {
+    nextCamera->copyFrom(*previousCamera);
+    /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                    cameraPosition._longitude,
+                                    minHeight);*/
+  }
+  
 }

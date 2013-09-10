@@ -15,6 +15,9 @@
 class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
 
+  ~SimpleCameraConstrainer() {
+  }
+
   virtual void onCameraChange(const Planet* planet,
                               const Camera* previousCamera,
                               Camera* nextCamera) const;

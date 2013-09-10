@@ -18,21 +18,18 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarkTouchListener;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class GLState;
+//class GLGlobalState;
+//class GPUProgramState;
+
+
 
 public class MarkUserData
 {
   public void dispose()
   {
-
   }
 }

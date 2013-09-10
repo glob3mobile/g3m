@@ -5,12 +5,8 @@
 
 package org.glob3.mobile.demo;
 
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -47,20 +43,9 @@ public class G3MDoubleGlob3Activity
 
       final G3MBuilder_Android g3mBuilderDown = new G3MBuilder_Android(this);
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer osm = new WMSLayer( //
-               "osm_auto:all", //
-               new URL("http://129.206.228.72/cached/osm", false), //
-               WMSServerVersion.WMS_1_1_0, //
-               Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
-               "image/jpeg", //
-               "EPSG:4326", //
-               "", //
-               false, //
-               null, //
-               TimeInterval.fromDays(30));
-      layerSet.addLayer(osm);
+      layerSet.addLayer(LayerBuilder.createOSMLayer(true));
 
-      g3mBuilderDown.getTileRendererBuilder().setLayerSet(layerSet);
+      g3mBuilderDown.getPlanetRendererBuilder().setLayerSet(layerSet);
       _widgetAndroidDown = g3mBuilderDown.createWidget();
 
       final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);

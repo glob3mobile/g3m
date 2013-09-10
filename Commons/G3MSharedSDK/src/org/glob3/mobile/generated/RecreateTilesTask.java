@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated; 
 public class RecreateTilesTask extends GTask
 {
-  private TileRenderer _tileRenderer;
-  public RecreateTilesTask(TileRenderer tileRenderer)
+  private PlanetRenderer _planetRenderer;
+  public RecreateTilesTask(PlanetRenderer planetRenderer)
   {
-	  _tileRenderer = tileRenderer;
+     _planetRenderer = planetRenderer;
   }
 
   public final void run(G3MContext context)
   {
-	_tileRenderer.recreateTiles();
+    _planetRenderer.recreateTiles();
   }
 }

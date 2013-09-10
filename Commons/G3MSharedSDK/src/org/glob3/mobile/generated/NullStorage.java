@@ -3,40 +3,53 @@ package org.glob3.mobile.generated;
 //  NullStorage.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 29/06/12.
+//  Created by Agustin Trujillo Pino on 29/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
-public abstract class NullStorage extends IStorage
+public class NullStorage extends IStorage
 {
-//  bool containsBuffer(const URL& url) {
-//    return false;
-//  }
+  public final IByteBufferResult readBuffer(URL url, boolean readExpired)
+  {
+    return new IByteBufferResult(null, false);
+  }
 
-  public final void saveBuffer(URL url, IByteBuffer buffer)
+  public final IImageResult readImage(URL url, boolean readExpired)
+  {
+    return new IImageResult(null, false);
+  }
+
+
+  public final void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground)
   {
 
   }
 
-  public final IByteBuffer readBuffer(URL url)
-  {
-	return null;
-  }
-
-//  bool containsImage(const URL& url) {
-//    return false;
-//  }
-
-  public final void saveImage(URL url, IImage buffer)
+  public final void saveImage(URL url, IImage image, TimeInterval timeToExpires, boolean saveInBackground)
   {
 
   }
 
-  public final IImage readImage(URL url)
+
+  public final void onResume(G3MContext context)
   {
-	return null;
   }
+
+  public final void onPause(G3MContext context)
+  {
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+  }
+
+
+  public final boolean isAvailable()
+  {
+    return false;
+  }
+
 
 }

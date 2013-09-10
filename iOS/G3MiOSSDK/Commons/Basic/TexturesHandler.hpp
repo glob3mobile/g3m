@@ -14,7 +14,6 @@
 
 #include "INativeGL.hpp"
 
-class TextureBuilder;
 class IImage;
 class G3MRenderContext;
 class TextureHolder;
@@ -46,7 +45,7 @@ public:
 
   }
 
-  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false){}
+  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false) {}
 
   TextureSpec(const TextureSpec& that):
   _id(that._id),
@@ -71,7 +70,7 @@ public:
 
   bool equalsTo(const TextureSpec& that) const {
     return ((_id.compare(that._id) == 0) &&
-            (_width == that._width) &&
+            (_width  == that._width) &&
             (_height == that._height));
   }
 

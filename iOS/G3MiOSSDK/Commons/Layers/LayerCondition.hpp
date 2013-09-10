@@ -13,6 +13,7 @@ class Tile;
 class G3MRenderContext;
 class G3MEventContext;
 
+
 class LayerCondition {
 public:
   virtual ~LayerCondition() {
@@ -23,6 +24,8 @@ public:
   
   virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const = 0;
+
+  virtual LayerCondition* copy() const = 0;
 
 };
 

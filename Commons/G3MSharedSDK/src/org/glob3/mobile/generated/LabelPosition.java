@@ -13,13 +13,13 @@ public enum LabelPosition
   Bottom,
   Right;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static LabelPosition forValue(int value)
-	{
-		return values()[value];
-	}
+   public static LabelPosition forValue(int value)
+   {
+      return values()[value];
+   }
 }

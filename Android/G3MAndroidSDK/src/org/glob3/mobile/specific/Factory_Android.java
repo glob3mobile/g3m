@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -14,6 +15,9 @@ import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -91,22 +95,22 @@ public final class Factory_Android
    }
 
 
-   @Override
-   public void createImageFromSize(final int width,
-                                   final int height,
-                                   final IImageListener listener,
-                                   final boolean autodelete) {
-      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("FACTORY: Can't create empty image");
-         result = null;
-      }
-      else {
-         result = new Image_Android(bitmap, null);
-      }
-      listener.imageCreated(result);
-   }
+   //   @Override
+   //   public void createImageFromSize(final int width,
+   //                                   final int height,
+   //                                   final IImageListener listener,
+   //                                   final boolean autodelete) {
+   //      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+   //      final Image_Android result;
+   //      if (bitmap == null) {
+   //         ILogger.instance().logError("FACTORY: Can't create empty image");
+   //         result = null;
+   //      }
+   //      else {
+   //         result = new Image_Android(bitmap, null);
+   //      }
+   //      listener.imageCreated(result);
+   //   }
 
 
    @Override
@@ -126,7 +130,8 @@ public final class Factory_Android
    public void createImageFromBuffer(final IByteBuffer buffer,
                                      final IImageListener listener,
                                      final boolean autodelete) {
-      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      //      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer();
       final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
       final Image_Android result;
       if (bitmap == null) {
@@ -176,6 +181,33 @@ public final class Factory_Android
    @Override
    public IShortBuffer createShortBuffer(final int size) {
       return new ShortBuffer_Android(size);
+   }
+
+
+   @Override
+   public ICanvas createCanvas() {
+      return new Canvas_Android();
+   }
+
+
+   @Override
+   public IWebSocket createWebSocket(final URL url,
+                                     final IWebSocketListener listener,
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
+      return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket);
+   }
+
+
+   @Override
+   public IShortBuffer createShortBuffer(final short[] array) {
+      return new ShortBuffer_Android(array);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float[] array) {
+      return new FloatBuffer_Android(array);
    }
 
 }

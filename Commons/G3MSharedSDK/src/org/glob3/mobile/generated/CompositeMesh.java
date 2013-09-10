@@ -21,121 +21,114 @@ public class CompositeMesh extends Mesh
 {
   private java.util.ArrayList<Mesh> _children = new java.util.ArrayList<Mesh>();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Extent* calculateExtent() const
-  private Extent calculateExtent()
+  private BoundingVolume calculateBoundingVolume()
   {
-	final int childrenCount = _children.size();
-	if (childrenCount == 0)
-	{
-	  return null;
-	}
+    final int childrenCount = _children.size();
+    if (childrenCount == 0)
+    {
+      return null;
+    }
   
-	Extent result = _children.get(0).getExtent();
-	for (int i = 1; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  result = result.mergedWith(child.getExtent());
-	}
+    BoundingVolume result = _children.get(0).getBoundingVolume();
+    for (int i = 1; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      result = result.mergedWith(child.getBoundingVolume());
+    }
   
-	return result;
+    return result;
   }
 
-  private Extent _extent;
+  private BoundingVolume _boundingVolume;
 
 
   public void dispose()
   {
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  if (child != null)
-		  child.dispose();
-	}
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      if (child != null)
+         child.dispose();
+    }
   
-	_extent = null;
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
+  
+    super.dispose();
+  
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getVertexCount() const
   public final int getVertexCount()
   {
-	int result = 0;
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  result += child.getVertexCount();
-	}
-	return result;
+    int result = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      result += child.getVertexCount();
+    }
+    return result;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getVertex(int index) const
   public final Vector3D getVertex(int index)
   {
-	int acumIndex = 0;
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  final int childIndex = index - acumIndex;
-	  final int childSize = child.getVertexCount();
-	  if (childIndex < childSize)
-	  {
-		return child.getVertex(childIndex);
-	  }
-	  acumIndex += childSize;
-	}
-	return Vector3D.nan();
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVertexCount();
+      if (childIndex < childSize)
+      {
+        return child.getVertex(childIndex);
+      }
+      acumIndex += childSize;
+    }
+    return Vector3D.nan();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  child.render(rc, parentState);
-	}
+    if (_boundingVolume == null)
+    {
+      _boundingVolume = calculateBoundingVolume();
+    }
+    return _boundingVolume;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Extent* getExtent() const
-  public final Extent getExtent()
-  {
-	if (_extent == null)
-	{
-	  _extent = calculateExtent();
-	}
-	return _extent;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	final int childrenCount = _children.size();
-	for (int i = 0; i < childrenCount; i++)
-	{
-	  Mesh child = _children.get(i);
-	  if (child.isTransparent(rc))
-	  {
-		return true;
-	  }
-	}
-	return false;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      if (child.isTransparent(rc))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public final void addMesh(Mesh mesh)
   {
-	_extent = null;
-	_extent = null;
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
+    _boundingVolume = null;
   
-	_children.add(mesh);
+    _children.add(mesh);
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      child.render(rc, parentGLState);
+    }
   }
 
 }

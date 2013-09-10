@@ -12,13 +12,6 @@
 #include "IStringUtils.hpp"
 
 class StringUtils_iOS : public IStringUtils {
-private:
-  
-  static NSString* toNSString(const std::string& cppStr) {
-    return [ NSString stringWithCString: cppStr.c_str()
-                               encoding: NSUTF8StringEncoding ];
-  }
-
 public:
   std::string createString(unsigned char data[],
                            int            length) const;
@@ -38,7 +31,15 @@ public:
   std::string rtrim(const std::string& string) const;
   
   std::string ltrim(const std::string& string) const;
-  
+
+
+  bool endsWith(const std::string& string,
+                const std::string& suffix) const;
+
+  std::string toUpperCase(const std::string& string) const;
+
+  long long parseHexInt(const std::string& str) const;
+
 };
 
 #endif

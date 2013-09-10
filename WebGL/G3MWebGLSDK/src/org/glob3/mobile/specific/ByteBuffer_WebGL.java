@@ -110,12 +110,12 @@ public final class ByteBuffer_WebGL
 
 
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
-		return new Uint8Array(data);
+		return new Int8Array(data);
    }-*/;
 
 
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
-		return new Uint8Array(size);
+		return new Int8Array(size);
    }-*/;
 
 }

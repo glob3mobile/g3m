@@ -20,7 +20,7 @@ public final class GLTextureId_WebGL
 
 
    @Override
-   public boolean isEqualsTo(final IGLTextureId that) {
+   public boolean isEquals(final IGLTextureId that) {
       return (_webGLTexture.equals(((GLTextureId_WebGL) that).getWebGLTexture()));
    }
 
@@ -33,6 +33,12 @@ public final class GLTextureId_WebGL
    @Override
    public String description() {
       return "GLTextureId_WebGL " + _webGLTexture.hashCode();
+   }
+
+
+   @Override
+   public void dispose() {
+
    }
 
 }

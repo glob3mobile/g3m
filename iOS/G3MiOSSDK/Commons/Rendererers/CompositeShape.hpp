@@ -13,19 +13,21 @@
 
 #include <vector>
 
+class GPUProgramState;
+
 class CompositeShape : public Shape {
 private:
   std::vector<Shape*> _children;
 
 public:
   CompositeShape() :
-  Shape(NULL)
+  Shape(NULL, ABSOLUTE)
   {
 
   }
 
-  CompositeShape(Geodetic3D* position) :
-  Shape(position)
+  CompositeShape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  Shape(position, altitudeMode)
   {
 
   }
@@ -38,8 +40,8 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void rawRender(const G3MRenderContext* rc,
-                 const GLState& parentState);
-
+                 GLState* parentState,
+                 bool renderNotReadyShapes);
 };
 
 #endif

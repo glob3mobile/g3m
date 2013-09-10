@@ -10,19 +10,34 @@
 #define __G3MiOSSDK__FloatBuffer_iOS__
 
 #include "IFloatBuffer.hpp"
+#include "ILogger.hpp"
+#include <OpenGLES/ES2/gl.h>
+
+#include "GL.hpp"
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
   const int _size;
   float*    _values;
   int       _timestamp;
-  
+
+  static GLuint     _boundVertexBuffer;
+  mutable bool      _vertexBufferCreated;
+  mutable GLuint    _vertexBuffer; //VBO
+  mutable int       _vertexBufferTimeStamp;
+
 public:
   FloatBuffer_iOS(int size) :
   _size(size),
-  _timestamp(0)
+  _timestamp(0),
+  _values(new float[size]),
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
-    _values = new float[size];
+    if (_values == NULL) {
+      ILogger::instance()->logError("Allocating error.");
+    }
   }
   
   FloatBuffer_iOS(float f0,
@@ -42,7 +57,10 @@ public:
                   float f14,
                   float f15) :
   _size(16),
-  _timestamp(0)
+  _timestamp(0),
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-1),
+  _vertexBufferCreated(false)
   {
     _values = new float[16];
     _values[ 0] = f0;
@@ -63,9 +81,7 @@ public:
     _values[15] = f15;
   }
   
-  virtual ~FloatBuffer_iOS() {
-    delete [] _values;
-  }
+  virtual ~FloatBuffer_iOS();
   
   int size() const {
     return _size;
@@ -76,11 +92,21 @@ public:
   }
   
   float get(int i) const {
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Get error.");
+    }
+    
     return _values[i];
   }
   
   void put(int i,
            float value) {
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
@@ -89,6 +115,12 @@ public:
   
   void rawPut(int i,
               float value) {
+    
+    
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+    
     _values[i] = value;
   }
   
@@ -97,7 +129,36 @@ public:
   }
 
   const std::string description() const;
-  
+
+  void bindAsVBOToGPU() const {
+
+    if (!_vertexBufferCreated) {
+      glGenBuffers(1, &_vertexBuffer);
+      _vertexBufferCreated = true;
+    }
+
+    if (_vertexBuffer != _boundVertexBuffer) {
+      glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+      _boundVertexBuffer = _vertexBuffer;
+    }
+//    else {
+//      printf("REUSING");
+//    }
+
+    if (_vertexBufferTimeStamp != _timestamp) {
+      _vertexBufferTimeStamp = _timestamp;
+
+      float* vertices = getPointer();
+      int vboSize = sizeof(float) * size();
+
+      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+    }
+
+//    if (GL_NO_ERROR != glGetError()) {
+//      ILogger::instance()->logError("Problem using VBO");
+//    }
+  }
+
 };
 
 #endif

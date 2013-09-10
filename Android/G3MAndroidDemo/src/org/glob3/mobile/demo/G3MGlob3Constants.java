@@ -23,7 +23,7 @@ public class G3MGlob3Constants {
                                                                                "http://worldwind27.arc.nasa.gov/wms/virtualearth?",
                                                                                false), WMSServerVersion.WMS_1_1_0,
                                                                       Sector.fullSphere(), "image/png", "EPSG:4326", "", false,
-                                                                      null, TimeInterval.fromDays(30));
+                                                                      null, TimeInterval.fromDays(30), true);
 
 
    public static WMSLayer         OSM_LAYER                  = new WMSLayer( //
@@ -36,7 +36,7 @@ public class G3MGlob3Constants {
                                                                       "", //
                                                                       false, //
                                                                       null, //
-                                                                      TimeInterval.fromDays(30));
+                                                                      TimeInterval.fromDays(30), true);
 
 
    public static final Geodetic2D FRANKFURT_POSITION         = new Geodetic2D( //

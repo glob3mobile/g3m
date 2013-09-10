@@ -2,7 +2,7 @@
 //  EAGLView.h
 //  Prueba Opengl iPad
 //
-//  Created by Agustín Trujillo Pino on 12/01/11.
+//  Created by Agustin Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
@@ -19,6 +19,7 @@
 class IStorage;
 class IDownloader;
 class IThreadUtils;
+class ICameraActivityListener;
 class Planet;
 class Color;
 class CameraRenderer;
@@ -26,7 +27,7 @@ class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class WidgetUserData;
-class TileRenderer;
+class PlanetRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
@@ -48,7 +49,7 @@ enum GL_version {
   
   enum GL_version glver;
   
-  TouchEvent *lastTouchEvent;
+  TouchEvent* _lastTouchEvent;
   
   void* _widgetVP;
 }
@@ -66,21 +67,22 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidget: (IStorage*) storage
-        downloader: (IDownloader*) downloader
-       threadUtils: (IThreadUtils*) threadUtils
-            planet: (const Planet*) planet
- cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
-    cameraRenderer: (CameraRenderer*) cameraRenderer
-      mainRenderer: (Renderer*) mainRenderer
-      busyRenderer: (Renderer*) busyRenderer
-   backgroundColor: (Color) backgroundColor
-            logFPS: (bool) logFPS
-logDownloaderStatistics: (bool) logDownloaderStatistics
-initializationTask: (GInitializationTask*) initializationTask
+- (void)          initWidget: (IStorage*) storage
+                  downloader: (IDownloader*) downloader
+                 threadUtils: (IThreadUtils*) threadUtils
+      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
+                      planet: (const Planet*) planet
+           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
+              cameraRenderer: (CameraRenderer*) cameraRenderer
+                mainRenderer: (Renderer*) mainRenderer
+                busyRenderer: (Renderer*) busyRenderer
+             backgroundColor: (Color) backgroundColor
+                      logFPS: (bool) logFPS
+     logDownloaderStatistics: (bool) logDownloaderStatistics
+          initializationTask: (GInitializationTask*) initializationTask
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
-   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-          userData: (WidgetUserData*) userData;
+             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+                    userData: (WidgetUserData*) userData;
 
 - (GL*)getGL;
 
@@ -105,6 +107,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
 - (void)stopCameraAnimation;
 
-- (void)resetCameraPosition;
+//- (void)resetCameraPosition;
+
+- (WidgetUserData*) userData;
 
 @end

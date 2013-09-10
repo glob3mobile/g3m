@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__RCObject__
 #define __G3MiOSSDK__RCObject__
 
-//#include <string>
+#include "ILogger.hpp"
 
 class RCObject {
 private:
@@ -19,31 +19,31 @@ private:
 #ifdef C_CODE
     delete this;
 #endif
+#ifdef JAVA_CODE
+    this.dispose();
+#endif
   }
-  
+
 protected:
   RCObject():
   _referenceCounter(1) // the object starts retained
   {
-    
+
   }
-  
+
+  virtual ~RCObject();
+
 public:
-  virtual ~RCObject() {
-    
-  }
-  
+
   void _retain() const {
     _referenceCounter++;
   }
-  
+
   void _release() const {
     if (--_referenceCounter == 0) {
       _suicide();
     }
   }
-  
-//  virtual const std::string description() const = 0;
   
 };
 

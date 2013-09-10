@@ -17,15 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
+
 public interface IBuffer
 {
-
+  public void dispose();
 
   /**
    Answer the size (the count of elements) of the buffer
    **/
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int size() const = 0;
   int size();
 
   /**
@@ -34,12 +33,8 @@ public interface IBuffer
    This number will be different each time the buffer changes its contents.
    It provides a fast method to check if the Buffer has changed.
    **/
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int timestamp() const = 0;
   int timestamp();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const String description() const = 0;
   String description();
 
 }

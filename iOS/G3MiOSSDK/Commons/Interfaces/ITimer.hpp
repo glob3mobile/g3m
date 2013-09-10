@@ -18,8 +18,11 @@ public:
   virtual void start() = 0;
   
   virtual TimeInterval elapsedTime() const = 0;
-  
-  virtual ~ITimer() { }
+
+  virtual long long elapsedTimeInMilliseconds() const = 0;
+
+  virtual ~ITimer() {
+  }
   
 };
 

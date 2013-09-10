@@ -23,15 +23,28 @@ public class URL
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  URL operator =(URL that);
 
+  private static String concatenatePath(URL parent, String path)
+  {
+    final IStringUtils iu = IStringUtils.instance();
+
+    String result = iu.replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    if (iu.beginsWith(result, "http:/"))
+    {
+      result = "http://" + iu.substring(result, 6);
+    }
+
+    return result;
+  }
+
 
   public URL(URL that)
   {
-	  _path = that._path;
+     _path = that._path;
   }
 
   public URL()
   {
-	  _path = "";
+     _path = "";
   }
 
   /**
@@ -41,74 +54,76 @@ public class URL
    */
   public URL(String path, boolean escapePath)
   {
-	  _path = escapePath ? escape(path) : path;
+     _path = escapePath ? escape(path) : path;
   }
 
   public URL(URL parent, String path)
   {
-	  _path = parent.getPath() + "/" + path;
+     _path = concatenatePath(parent, path);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: String getPath() const
+  public void dispose()
+  {
+  }
+
   public final String getPath()
   {
-	return _path;
+    return _path;
   }
 
   public static URL nullURL()
   {
-	return new URL("__NULL__", false);
+    return new URL("__NULL__", false);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isNull() const
   public final boolean isNull()
   {
-	return (_path.equals("__NULL__"));
+    return (_path.equals("__NULL__"));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEqualsTo(const URL& that) const
-  public final boolean isEqualsTo(URL that)
+  public final boolean isEquals(URL that)
   {
-	return (_path.equals(that._path));
+    return (_path.equals(that._path));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
+  public static final String FILE_PROTOCOL = "file:///";
+
+  public final boolean isFileProtocol()
+  {
+    return (IStringUtils.instance().beginsWith(_path, FILE_PROTOCOL));
+  }
+
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("URL(");
-	isb.addString(getPath());
-	isb.addString(")");
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("URL(");
+    isb.addString(getPath());
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   public static String escape(String path)
   {
-  //    std::string escapedURL = IStringUtils::instance()->replaceSubstring(path, "%", "%25");
-	  String escapedURL = IStringUtils.instance().replaceSubstring(path, "\n", "%0A");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, " ", "%20");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "\"", "%22");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "-", "%2D");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, ".", "%2E");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "<", "%3C");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, ">", "%3E");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "\\", "%5C");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "^", "%5E");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "_", "%5F");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "`", "%60");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "{", "%7B");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "|", "%7C");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "}", "%7D");
-	  escapedURL = IStringUtils.instance().replaceSubstring(escapedURL, "~", "%7E");
-  
-	  return escapedURL;
+    final IStringUtils su = IStringUtils.instance();
+    String result = su.replaceSubstring(path, "\n", "%0A");
+    result = su.replaceSubstring(result, " ", "%20");
+    result = su.replaceSubstring(result, "\"", "%22");
+    result = su.replaceSubstring(result, "-", "%2D");
+    result = su.replaceSubstring(result, ".", "%2E");
+    result = su.replaceSubstring(result, "<", "%3C");
+    result = su.replaceSubstring(result, ">", "%3E");
+    result = su.replaceSubstring(result, "\\", "%5C");
+    result = su.replaceSubstring(result, "^", "%5E");
+    result = su.replaceSubstring(result, "_", "%5F");
+    result = su.replaceSubstring(result, "`", "%60");
+    result = su.replaceSubstring(result, "{", "%7B");
+    result = su.replaceSubstring(result, "|", "%7C");
+    result = su.replaceSubstring(result, "}", "%7D");
+    result = su.replaceSubstring(result, "~", "%7E");
+    return result;
   }
 
 
@@ -120,19 +135,19 @@ public class URL
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
-	  return true;
-	}
-	if (obj == null) {
-	  return false;
-	}
-	if (getClass() != obj.getClass()) {
-	  return false;
-	}
-	final URL other = (URL) obj;
-	if (_path.equals(other._path)) {
-	  return true;
-	}
-	return false;
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final URL other = (URL) obj;
+    if (_path.equals(other._path)) {
+      return true;
+    }
+    return false;
 	}
 
 }

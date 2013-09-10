@@ -9,16 +9,32 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IImageDownloadListener
+public abstract class IImageDownloadListener
 {
+  public void dispose()
+  {
+  }
 
-  void onDownload(URL url, IImage image);
+  /**
+   Callback method invoked on a successful download.  The image has to be deleted in C++ / .disposed() in Java
+   */
+  public abstract void onDownload(URL url, IImage image, boolean expired);
 
-  void onError(URL url);
+  /**
+   Callback method invoke after an error trying to download url
+   */
+  public abstract void onError(URL url);
 
-  void onCancel(URL url);
+  /**
+   Callback method invoke after canceled request
+   */
+  public abstract void onCancel(URL url);
 
-  /* this method will be call, before onCancel, when the data arrived before the cancelation */
-  void onCanceledDownload(URL url, IImage image);
+  /**
+   This method will be call, before onCancel, when the data arrived before the cancelation.
+
+   The image WILL be deleted/disposed after the method finishs.  If you need to keep the image, use shallowCopy() to store a copy of the image.
+   */
+  public abstract void onCanceledDownload(URL url, IImage image, boolean expired);
 
 }

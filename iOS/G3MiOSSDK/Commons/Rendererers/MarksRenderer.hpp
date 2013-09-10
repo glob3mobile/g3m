@@ -12,9 +12,14 @@
 #include <vector>
 #include "LeafRenderer.hpp"
 
+//#include "GPUProgramState.hpp"
+
+#include "GLState.hpp"
+
 class Mark;
 class Camera;
 class MarkTouchListener;
+class IFloatBuffer;
 
 class MarksRenderer : public LeafRenderer {
 private:
@@ -33,6 +38,14 @@ private:
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
 
+  long long _downloadPriority;
+  
+  IFloatBuffer* _billboardTexCoord;
+  
+  GLState* _glState;
+  
+  void updateGLState(const G3MRenderContext* rc);
+
 public:
 
   MarksRenderer(bool readyWhenMarksReady);
@@ -44,8 +57,7 @@ public:
 
   virtual void initialize(const G3MContext* context);
 
-  virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState);
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void addMark(Mark* mark);
 
@@ -57,15 +69,14 @@ public:
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-  }
+                             int width, int height);
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void start() {
+  void start(const G3MRenderContext* rc) {
   }
 
-  void stop() {
+  void stop(const G3MRenderContext* rc) {
   }
 
   void onResume(const G3MContext* context) {
@@ -78,6 +89,28 @@ public:
   void onDestroy(const G3MContext* context) {
   }
 
+  /**
+   Change the download-priority used by Marks (for downloading textures).
+
+   Default value is 1000000
+   */
+  void setDownloadPriority(long long downloadPriority) {
+    _downloadPriority = downloadPriority;
+  }
+
+  long long getDownloadPriority() const {
+    return _downloadPriority;
+  }
+  
+  bool isVisible(const G3MRenderContext* rc) {
+    return true;
+  }
+  
+  void modifiyGLState(GLState* state) {
+    
+  }
+  
+  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

@@ -11,14 +11,16 @@
 
 #include <string>
 
+
 class IBuffer {
 public:
-  
 #ifdef C_CODE
-  virtual ~IBuffer() {
-  }
+  virtual ~IBuffer() { }
 #endif
-  
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
+
   /**
    Answer the size (the count of elements) of the buffer
    **/

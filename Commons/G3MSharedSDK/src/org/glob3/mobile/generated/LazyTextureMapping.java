@@ -21,106 +21,115 @@ public class LazyTextureMapping extends TextureMapping
 //  LazyTextureMapping(LazyTextureMapping that);
   private void releaseGLTextureId()
   {
-	if (_texturesHandler != null)
-	{
-	  if (_glTextureId != null)
-	  {
-		_texturesHandler.releaseGLTextureId(_glTextureId);
-		_glTextureId = null;
-	  }
-	}
+    if (_texturesHandler != null)
+    {
+      if (_glTextureId != null)
+      {
+        _texturesHandler.releaseGLTextureId(_glTextureId);
+        _glTextureId = null;
+      }
+    }
   }
 
   private final boolean _transparent;
 
+
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
   {
-	  _initializer = initializer;
-	  _glTextureId = null;
-	  _initialized = false;
-	  _texCoords = null;
-	  _translation = new MutableVector2D(0,0);
-	  _scale = new MutableVector2D(1,1);
-	  _texturesHandler = texturesHandler;
-	  _ownedTexCoords = ownedTexCoords;
-	  _transparent = transparent;
+     _initializer = initializer;
+     _glTextureId = null;
+     _initialized = false;
+     _texCoords = null;
+     _translation = new MutableVector2D(0,0);
+     _scale = new MutableVector2D(1,1);
+     _texturesHandler = texturesHandler;
+     _ownedTexCoords = ownedTexCoords;
+     _transparent = transparent;
   }
 
   public void dispose()
   {
-	if (_initializer != null)
-		_initializer.dispose();
-	_initializer = null;
+    if (_initializer != null)
+       _initializer.dispose();
+    _initializer = null;
 
-	if (_ownedTexCoords)
-	{
-		if (_texCoords != null)
-			_texCoords.dispose();
-	}
-	_texCoords = null;
+    if (_ownedTexCoords)
+    {
+      if (_texCoords != null)
+         _texCoords.dispose();
+    }
+    _texCoords = null;
 
-	releaseGLTextureId();
+    releaseGLTextureId();
+  super.dispose();
+
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void bind(const G3MRenderContext* rc) const
-  public final void bind(G3MRenderContext rc)
-  {
-	if (!_initialized)
-	{
-	  _initializer.initialize();
-  
-	  _scale = _initializer.getScale();
-	  _translation = _initializer.getTranslation();
-	  _texCoords = _initializer.getTexCoords();
-  
-	  if (_initializer != null)
-		  _initializer.dispose();
-	  _initializer = null;
-  
-	  _initialized = true;
-	}
-  
-	if (_texCoords != null)
-	{
-	  GL gl = rc.getGL();
-  
-	  gl.transformTexCoords(_scale, _translation);
-	  gl.bindTexture(_glTextureId);
-	  gl.setTextureCoordinates(2, 0, _texCoords);
-	}
-	else
-	{
-	  ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
-	}
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isValid() const
   public final boolean isValid()
   {
-	return _glTextureId != null;
+    return _glTextureId != null;
   }
 
   public final void setGLTextureId(IGLTextureId glTextureId)
   {
-	releaseGLTextureId();
-	_glTextureId = glTextureId;
+    releaseGLTextureId();
+    _glTextureId = glTextureId;
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const IGLTextureId* getGLTextureId() const
+
   public final IGLTextureId getGLTextureId()
   {
-	return _glTextureId;
+    return _glTextureId;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
-  public final boolean isTransparent(G3MRenderContext rc)
+  public final boolean isTransparent()
   {
-	return _transparent;
+    return _transparent;
+  }
+
+
+  ///#include "GPUProgramState.hpp"
+  
+  public final void modifyGLState(GLState state)
+  {
+    if (!_initialized)
+    {
+      _initializer.initialize();
+  
+      _scale = _initializer.getScale();
+      _translation = _initializer.getTranslation();
+      _texCoords = _initializer.createTextCoords();
+  
+      if (_initializer != null)
+         _initializer.dispose();
+      _initializer = null;
+  
+      _initialized = true;
+    }
+  
+    if (_texCoords != null)
+    {
+      state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
+  
+      if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
+      {
+  
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+      }
+      else
+      {
+        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+      }
+  
+    }
+    else
+    {
+      ILogger.instance().logError("LazyTextureMapping::bind() with _texCoords == NULL");
+    }
+  
   }
 
 }

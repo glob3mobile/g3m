@@ -13,46 +13,49 @@
 #include "Layer.hpp"
 
 class Petition;
+class Vector2I;
+class LayerTilesRenderParameters;
 
-
-class LayerSetChangedListener {
-public:
-#ifdef C_CODE
-  virtual ~LayerSetChangedListener() {
-
-  }
-#endif
-
-  virtual void changed(const LayerSet* layerSet) = 0;
-};
-
+class ChangedListener;
 
 class LayerSet {
 private:
   std::vector<Layer*> _layers;
-
-  LayerSetChangedListener* _listener;
   
+  ChangedListener* _listener;
+  
+  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+  
+  
+  LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
+  void layersChanged() const;
+
+#ifdef C_CODE
+  mutable const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
 public:
   LayerSet() :
-  _listener(NULL)
+  _listener(NULL),
+  _layerTilesRenderParameters(NULL),
+  _context(NULL)
   {
-
+    
   }
-
-  ~LayerSet() {
-    for (unsigned int i = 0; i < _layers.size(); i++) {
-      delete _layers[i];
-    }
-  }
+  
+  ~LayerSet();
+  
+  void removeAllLayers(const bool deleteLayers);
   
   void addLayer(Layer* layer);
   
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const Tile* tile,
-                                                int width, int height) const;
+                                                const Tile* tile) const;
   
-  void onTerrainTouchEvent(const G3MEventContext* ec,
+  bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
@@ -63,19 +66,28 @@ public:
   int size() const {
     return _layers.size();
   }
-
+  
   void layerChanged(const Layer* layer) const;
-
-  void setChangeListener(LayerSetChangedListener* listener) {
+  
+  void setChangeListener(ChangedListener* listener) {
     if (_listener != NULL) {
       ILogger::instance()->logError("Listener already set");
     }
     _listener = listener;
   }
   
-  Layer* get(int index);
+  Layer* getLayer(int index) const;
   
-  Layer* getLayer(const std::string& name);
+  Layer* getLayer(const std::string& name) const;
+  
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
+  
+  //  const Angle calculateSplitLatitude(const Tile* tile) const;
+
+  bool isEquals(const LayerSet* that) const;
+
+  void takeLayersFrom(LayerSet* that);
+  
 };
 
 #endif

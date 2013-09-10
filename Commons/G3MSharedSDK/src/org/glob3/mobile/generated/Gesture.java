@@ -3,7 +3,7 @@ package org.glob3.mobile.generated;
 //  CameraRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 30/07/12.
+//  Created by Agustin Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //  CameraRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 30/07/12.
+//  Created by Agustin Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -20,17 +20,12 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class CameraEventHandler;
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector3D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
 
 
@@ -42,13 +37,13 @@ public enum Gesture
   Rotate,
   DoubleDrag;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static Gesture forValue(int value)
-	{
-		return values()[value];
-	}
+   public static Gesture forValue(int value)
+   {
+      return values()[value];
+   }
 }

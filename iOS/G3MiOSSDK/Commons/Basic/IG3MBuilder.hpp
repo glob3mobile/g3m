@@ -10,74 +10,125 @@
 #define __G3MiOSSDK__IG3MBuilder__
 
 #include <vector>
-#include "GL.hpp"
-#include "IStorage.hpp"
-#include "IDownloader.hpp"
-#include "IThreadUtils.hpp"
-#include "CameraRenderer.hpp"
-#include "ICameraConstrainer.hpp"
-#include "Color.hpp"
-#include "GInitializationTask.hpp"
-#include "PeriodicalTask.hpp"
-#include "G3MWidget.hpp"
-#include "TileRendererBuilder.hpp"
-
+class GL;
+class IStorage;
+class IDownloader;
+class IThreadUtils;
+class ICameraActivityListener;
+class CameraRenderer;
+class ICameraConstrainer;
+class Color;
+class GInitializationTask;
+class PeriodicalTask;
+class G3MWidget;
+class PlanetRendererBuilder;
+class Planet;
+class Renderer;
+class WidgetUserData;
+class GPUProgramSources;
+class GPUProgramManager;
+class SceneLighting;
 
 
 class IG3MBuilder {
-
 private:
-  GL* _gl;
-  IDownloader* _downloader;
-  IThreadUtils* _threadUtils;
-  const Planet* _planet;
-  std::vector<ICameraConstrainer*> _cameraConstraints;
-  CameraRenderer* _cameraRenderer;
-  Color* _backgroundColor;
-  TileRendererBuilder* _tileRendererBuilder;
-  Renderer* _busyRenderer;
-  std::vector<Renderer*> _renderers;
-  GInitializationTask* _initializationTask;
-  bool _autoDeleteInitializationTask;
-  std::vector<PeriodicalTask*> _periodicalTasks;
-  bool _logFPS;
-  bool _logDownloaderStatistics;
-  WidgetUserData* _userData;
+  GL*                               _gl;
+  IDownloader*                      _downloader;
+  IThreadUtils*                     _threadUtils;
+  ICameraActivityListener*          _cameraActivityListener;
+  const Planet*                     _planet;
+  std::vector<ICameraConstrainer*>* _cameraConstraints;
+  CameraRenderer*                   _cameraRenderer;
+  Color*                            _backgroundColor;
+  PlanetRendererBuilder*            _planetRendererBuilder;
+  Renderer*                         _busyRenderer;
+  std::vector<Renderer*>*           _renderers;
+  GInitializationTask*              _initializationTask;
+  bool                              _autoDeleteInitializationTask;
+  std::vector<PeriodicalTask*>*     _periodicalTasks;
+  bool                              _logFPS;
+  bool                              _logDownloaderStatistics;
+  WidgetUserData*                   _userData;
+  std::vector<GPUProgramSources>    _sources;
+  SceneLighting*                    _sceneLighting;
 
-  std::vector<ICameraConstrainer*> createCameraConstraints();
-  CameraRenderer* createCameraRenderer();
+  GL*                               getGL();
+  IDownloader*                      getDownloader();
+  IThreadUtils*                     getThreadUtils();
+  ICameraActivityListener*          getCameraActivityListener();
+  std::vector<ICameraConstrainer*>* getCameraConstraints();
+  CameraRenderer*                   getCameraRenderer();
+  Renderer*                         getBusyRenderer();
+  Color*                            getBackgroundColor();
+  std::vector<Renderer*>*           getRenderers();
+  bool                              getLogFPS();
+  bool                              getLogDownloaderStatistics();
+  GInitializationTask*              getInitializationTask();
+  bool                              getAutoDeleteInitializationTask();
+  std::vector<PeriodicalTask*>*     getPeriodicalTasks();
+  WidgetUserData*                   getUserData();
+  GPUProgramManager*                getGPUProgramManager();
+  std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
+  CameraRenderer*                   createDefaultCameraRenderer();
+  std::vector<Renderer*>*           createDefaultRenderers();
+  std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
 
+  bool containsPlanetRenderer(std::vector<Renderer*> renderers);
 
 protected:
   IStorage* _storage;
 
+  IStorage* getStorage();
+
   G3MWidget* create();
 
-  virtual IThreadUtils* createThreadUtils() = 0;
-  virtual IStorage*     createStorage()     = 0;
-  virtual IDownloader*  createDownloader()  = 0;
+  virtual IThreadUtils* createDefaultThreadUtils() = 0;
+  virtual IStorage*     createDefaultStorage()     = 0;
+  virtual IDownloader*  createDefaultDownloader()  = 0;
+
 
 public:
   IG3MBuilder();
+
   virtual ~IG3MBuilder();
+
   void setGL(GL* gl);
+
   void setStorage(IStorage* storage);
+
   void setDownloader(IDownloader* downloader);
+
   void setThreadUtils(IThreadUtils* threadUtils);
+
+  void setCameraActivityListener(ICameraActivityListener* cameraActivityListener);
+
   void setPlanet(const Planet* planet);
-  const Planet* getPlanet();
+
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
+
+  void setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints);
+
   void setCameraRenderer(CameraRenderer* cameraRenderer);
+
   void setBackgroundColor(Color* backgroundColor);
-  TileRendererBuilder* getTileRendererBuilder();
+
   void setBusyRenderer(Renderer* busyRenderer);
+
   void addRenderer(Renderer* renderer);
+
+  void setRenderers(std::vector<Renderer*> renderers);
+
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
+
+  void setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks);
+
   void setLogFPS(const bool logFPS);
+
   void setLogDownloaderStatistics(const bool logDownloaderStatistics);
+
   void setUserData(WidgetUserData* userData);
 
 #ifdef C_CODE
@@ -87,6 +138,7 @@ public:
                              autoDeleteInitializationTask);
   }
 #endif
+
 #ifdef JAVA_CODE
   public final void setInitializationTask(GInitializationTask initializationTask) {
     pvtSetInitializationTask(initializationTask,
@@ -94,6 +146,13 @@ public:
   }
 #endif
 
+  const Planet* getPlanet();
+  PlanetRendererBuilder* getPlanetRendererBuilder();
+
+  void addGPUProgramSources(GPUProgramSources& s);
+
+  void setSceneLighting(SceneLighting* sceneLighting);
+  SceneLighting* getSceneLighting();
 };
 
-#endif /* defined(__G3MiOSSDK__IG3MBuilder__) */
+#endif

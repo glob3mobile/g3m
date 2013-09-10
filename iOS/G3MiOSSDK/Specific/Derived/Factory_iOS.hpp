@@ -2,7 +2,7 @@
 //  Factory_iOS.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -18,6 +18,10 @@
 #include "IntBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "IImageListener.hpp"
+#include "Canvas_iOS.hpp"
+#include "WebSocket_iOS.hpp"
+#import "NSString_CppAdditions.h"
+
 
 class Factory_iOS: public IFactory {
 public:
@@ -30,20 +34,19 @@ public:
     delete timer;
   }
 
-  void createImageFromSize(int width, int height,
-                           IImageListener* listener,
-                           bool autodelete) const {
-    listener->imageCreated( new Image_iOS(width, height) );
-    if (autodelete) {
-      delete listener;
-    }
-  }
+//  void createImageFromSize(int width, int height,
+//                           IImageListener* listener,
+//                           bool autodelete) const {
+//    listener->imageCreated( new Image_iOS(width, height) );
+//    if (autodelete) {
+//      delete listener;
+//    }
+//  }
 
   void createImageFromFileName(const std::string& filename,
                                IImageListener* listener,
                                bool autodelete) const {
-    NSString* fn = [NSString stringWithCString: filename.c_str()
-                                      encoding: [NSString defaultCStringEncoding]];
+    NSString* fn = [NSString stringWithCppString: filename];
 
     UIImage* image = [UIImage imageNamed:fn];
     if (image) {
@@ -138,6 +141,20 @@ public:
 
   IShortBuffer* createShortBuffer(int size) const {
     return new ShortBuffer_iOS(size);
+  }
+
+  ICanvas* createCanvas() const {
+    return new Canvas_iOS();
+  }
+
+  IWebSocket* createWebSocket(const URL& url,
+                              IWebSocketListener* listener,
+                              bool autodeleteListener,
+                              bool autodeleteWebSocket) const {
+    return new WebSocket_iOS(url,
+                             listener,
+                             autodeleteListener,
+                             autodeleteWebSocket);
   }
 
 };

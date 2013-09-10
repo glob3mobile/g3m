@@ -1,79 +1,111 @@
 package org.glob3.mobile.generated; 
-public class BufferSaverDownloadListener implements IBufferDownloadListener
+public class BufferSaverDownloadListener extends IBufferDownloadListener
 {
   private CachedDownloader _downloader;
+
+  private IByteBuffer _expiredBuffer;
+
   private IBufferDownloadListener _listener;
   private final boolean _deleteListener;
+
   private IStorage _storage;
+
   private final TimeInterval _timeToCache;
 
-  public BufferSaverDownloadListener(CachedDownloader downloader, IBufferDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
+  public BufferSaverDownloadListener(CachedDownloader downloader, IByteBuffer expiredBuffer, IBufferDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
   {
-	  _downloader = downloader;
-	  _listener = listener;
-	  _deleteListener = deleteListener;
-	  _storage = storage;
-	  _timeToCache = timeToCache;
+     _downloader = downloader;
+     _expiredBuffer = expiredBuffer;
+     _listener = listener;
+     _deleteListener = deleteListener;
+     _storage = storage;
+     _timeToCache = timeToCache;
+
+  }
+
+  public void dispose()
+  {
+    if (_expiredBuffer != null)
+       _expiredBuffer.dispose();
+
+  super.dispose();
 
   }
 
   public final void deleteListener()
   {
-	if (_deleteListener)
-	{
-	  _listener = null;
-	}
+    if (_deleteListener)
+    {
+      if (_listener != null)
+         _listener.dispose();
+      _listener = null;
+    }
   }
 
   public final void saveBuffer(URL url, IByteBuffer buffer)
   {
-	if (buffer != null)
-	{
-	  if (_storage.isAvailable())
-	  {
-		//if (!_cacheStorage->containsBuffer(url)) {
-		_downloader.countSave();
+    if (!url.isFileProtocol())
+    {
+      if (buffer != null)
+      {
+        if (_storage.isAvailable())
+        {
+          _downloader.countSave();
 
-		_storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
-		//}
-	  }
-	  else
-	  {
-		ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
-	  }
-	}
+          _storage.saveBuffer(url, buffer, _timeToCache, _downloader.saveInBackground());
+        }
+        else
+        {
+          ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
+        }
+      }
+    }
   }
 
-  public final void onDownload(URL url, IByteBuffer data)
+  public final void onDownload(URL url, IByteBuffer data, boolean expired)
   {
-	saveBuffer(url, data);
+    if (!expired)
+    {
+      saveBuffer(url, data);
+    }
 
-	_listener.onDownload(url, data);
+    _listener.onDownload(url, data, expired);
 
-	deleteListener();
+    deleteListener();
   }
 
   public final void onError(URL url)
   {
-	_listener.onError(url);
+    if (_expiredBuffer == null)
+    {
+      _listener.onError(url);
+    }
+    else
+    {
+      _listener.onDownload(url, _expiredBuffer, true);
+      _expiredBuffer = null;
+    }
 
-	deleteListener();
+    deleteListener();
   }
 
-  public final void onCanceledDownload(URL url, IByteBuffer buffer)
+  public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-	saveBuffer(url, buffer);
+    if (!expired)
+    {
+      saveBuffer(url, buffer);
+    }
 
-	_listener.onCanceledDownload(url, buffer);
+    _listener.onCanceledDownload(url, buffer, expired);
 
-	// no deleteListener() call, onCanceledDownload() is always called before onCancel().
+    // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
 
   public final void onCancel(URL url)
   {
-	_listener.onCancel(url);
+    _listener.onCancel(url);
 
-	deleteListener();
+    deleteListener();
   }
 
 }

@@ -2,7 +2,7 @@
 //  ILogger.h
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 31/05/12.
+//  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -11,6 +11,7 @@
 
 
 #include <string>
+
 
 enum LogLevel {
   SilenceLevel,
@@ -42,12 +43,13 @@ public:
   }
   
   
-  virtual void logInfo(const std::string x, ...) const = 0;
-  virtual void logWarning(const std::string x, ...) const = 0;
-  virtual void logError(const std::string x, ...) const = 0;
+  virtual void logInfo   (const std::string& x, ...) const = 0;
+  virtual void logWarning(const std::string& x, ...) const = 0;
+  virtual void logError  (const std::string& x, ...) const = 0;
   
-  // a virtual destructor is needed for conversion to Java
-  virtual ~ILogger() {}
+  virtual ~ILogger() {
+  }
+  
 };
 
 

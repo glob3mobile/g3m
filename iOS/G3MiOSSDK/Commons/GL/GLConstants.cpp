@@ -15,15 +15,20 @@ int GLCullFace::_frontAndBack = 0;
 int GLBufferType::_colorBuffer = 0;
 int GLBufferType::_depthBuffer = 0;
 
-int GLFeature::_polygonOffsetFill = 0;
-int GLFeature::_depthTest = 0;
-int GLFeature::_blend = 0;
-int GLFeature::_cullFace = 0;
+int GLStage::_polygonOffsetFill = 0;
+int GLStage::_depthTest = 0;
+int GLStage::_blend = 0;
+int GLStage::_cullFace = 0;
 
 int GLType::_float = 0;
 int GLType::_unsignedByte = 0;
 int GLType::_unsignedInt = 0;
 int GLType::_int = 0;
+int GLType::_vec2Float = 0;
+int GLType::_vec3Float = 0;
+int GLType::_vec4Float = 0;
+int GLType::_bool = 0;
+int GLType::_matrix4Float = 0;
 
 
 int GLPrimitive::_triangles     = 0;
@@ -39,6 +44,8 @@ int GLPrimitive::_points = 0;
 
 int GLBlendFactor::_srcAlpha = 0;
 int GLBlendFactor::_oneMinusSrcAlpha = 0;
+int GLBlendFactor::_one = 0;
+int GLBlendFactor::_zero = 0;
 
 int GLTextureType::_texture2D = 0;
 
@@ -56,5 +63,7 @@ int GLAlignment::_unpack = 0;
 int GLFormat::_rgba = 0;
 
 int GLVariable::_viewport = 0;
+int GLVariable::_activeUniforms = 0;
+int GLVariable::_activeAttributes = 0;
 
 int GLError::_noError = 0;

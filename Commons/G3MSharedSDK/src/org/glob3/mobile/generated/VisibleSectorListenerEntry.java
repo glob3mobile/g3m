@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+///#include "GPUProgramState.hpp"
+
+
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;
@@ -11,82 +14,78 @@ public class VisibleSectorListenerEntry
 
   private ITimer getTimer()
   {
-	if (_timer == null)
-	{
-	  _timer = IFactory.instance().createTimer();
-	}
-	return _timer;
+    if (_timer == null)
+    {
+      _timer = IFactory.instance().createTimer();
+    }
+    return _timer;
   }
 
 
   public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
-	  _listener = listener;
-	  _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
-	  _lastSector = null;
-	  _timer = null;
-	  _whenNotifyInMS = 0;
+     _listener = listener;
+     _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
+     _lastSector = null;
+     _timer = null;
+     _whenNotifyInMS = 0;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void notifyListener(const Sector* visibleSector, const G3MRenderContext* rc) const
   public final void notifyListener(Sector visibleSector, G3MRenderContext rc)
   {
-	final Geodetic3D cameraPosition = rc.getPlanet().toGeodetic3D(rc.getCurrentCamera().getCartesianPosition());
-
-	_listener.onVisibleSectorChange(_lastSector, cameraPosition);
+    _listener.onVisibleSectorChange(_lastSector, rc.getCurrentCamera().getGeodeticPosition());
   }
 
   public final void tryToNotifyListener(Sector visibleSector, G3MRenderContext rc)
   {
-	if (_stabilizationIntervalInMS == 0)
-	{
-	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
-	  {
-		if (_lastSector != null)
-			_lastSector.dispose();
-		_lastSector = new Sector(visibleSector);
+    if (_stabilizationIntervalInMS == 0)
+    {
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
+      {
+        if (_lastSector != null)
+           _lastSector.dispose();
+        _lastSector = new Sector(visibleSector);
 
-		notifyListener(visibleSector, rc);
-	  }
-	}
-	else
-	{
-	  final long now = getTimer().now().milliseconds();
+        notifyListener(visibleSector, rc);
+      }
+    }
+    else
+    {
+      final long now = getTimer().now().milliseconds();
 
-	  if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
-	  {
-		if (_lastSector != null)
-			_lastSector.dispose();
-		_lastSector = new Sector(visibleSector);
-		_whenNotifyInMS = now + _stabilizationIntervalInMS;
-	  }
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
+      {
+        if (_lastSector != null)
+           _lastSector.dispose();
+        _lastSector = new Sector(visibleSector);
+        _whenNotifyInMS = now + _stabilizationIntervalInMS;
+      }
 
-	  if (_whenNotifyInMS != 0)
-	  {
-		if (now >= _whenNotifyInMS)
-		{
-		  notifyListener(visibleSector, rc);
+      if (_whenNotifyInMS != 0)
+      {
+        if (now >= _whenNotifyInMS)
+        {
+          notifyListener(visibleSector, rc);
 
-		  _whenNotifyInMS = 0;
-		}
-	  }
-	}
+          _whenNotifyInMS = 0;
+        }
+      }
+    }
 
   }
 
   public void dispose()
   {
-	if (_listener != null)
-		_listener.dispose();
+    if (_listener != null)
+       _listener.dispose();
 
-	if (_timer != null)
-	{
-	  IFactory.instance().deleteTimer(_timer);
-	}
+    if (_timer != null)
+    {
+      IFactory.instance().deleteTimer(_timer);
+    }
 
-	if (_lastSector != null)
-		_lastSector.dispose();
+    if (_lastSector != null)
+       _lastSector.dispose();
   }
 }

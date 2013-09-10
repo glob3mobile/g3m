@@ -16,19 +16,17 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLGlobalState;
+//class GPUProgramState;
 //class GLState;
 
 public abstract class OrderedRenderable
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual double squaredDistanceFromEye() const = 0;
   public abstract double squaredDistanceFromEye();
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc);
 
   public void dispose()
   {
-
   }
 }

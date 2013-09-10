@@ -11,26 +11,30 @@
 
 #include "Mesh.hpp"
 
+#include "Vector3D.hpp"
+#include "GLState.hpp"
+
 class MutableMatrix44D;
 class IFloatBuffer;
 class Color;
-#include "Vector3D.hpp"
 
 class AbstractMesh : public Mesh {
 protected:
-  const int                _primitive;
-  const bool               _owner;
-  Vector3D                 _center;
-  const MutableMatrix44D*  _translationMatrix;
-  IFloatBuffer*            _vertices;
-  Color*                   _flatColor;
-  IFloatBuffer*            _colors;
-  const float              _colorsIntensity;
-  const float              _lineWidth;
-  const float              _pointSize;
+  const int               _primitive;
+  const bool              _owner;
+  Vector3D                _center;
+  const MutableMatrix44D* _translationMatrix;
+  IFloatBuffer*           _vertices;
+  Color*                  _flatColor;
+  IFloatBuffer*           _colors;
+  const float             _colorsIntensity;
+  const float             _lineWidth;
+  const float             _pointSize;
+  const bool              _depthTest;
+  IFloatBuffer*           _normals;
 
-  mutable Extent* _extent;
-  Extent* computeExtent() const;
+  mutable BoundingVolume* _boundingVolume;
+  BoundingVolume* computeBoundingVolume() const;
 
   AbstractMesh(const int primitive,
                bool owner,
@@ -40,24 +44,29 @@ protected:
                float pointSize,
                Color* flatColor,
                IFloatBuffer* colors,
-               const float colorsIntensity);
+               const float colorsIntensity,
+               bool depthTest,
+               IFloatBuffer* normals);
 
-  virtual void rawRender(const G3MRenderContext* rc,
-                         const GLState& parentState) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+  
+  GLState* _glState;
+  
+  void createGLState();
 
 public:
   ~AbstractMesh();
-
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) const;
-
-  Extent* getExtent() const;
+  
+  BoundingVolume* getBoundingVolume() const;
 
   int getVertexCount() const;
 
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
+  
+  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

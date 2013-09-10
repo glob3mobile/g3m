@@ -16,295 +16,290 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //#define THRESHOLD 1e-5
-//#define ISBETWEEN_THRESHOLD 1e-2
 
+
+
+//#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+//#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
 
 
 public class Angle
 {
-  private Angle(double degrees) //GMath.pi()
+  private Angle(double degrees, double radians)
   {
-	  _degrees = degrees;
-	  _radians = degrees / 180.0 * 3.14159265358979323846264338327950288;
+     _degrees = degrees;
+     _radians = radians;
+     _sin = 2;
+     _cos = 2;
   }
+
+  private double _sin;
+  private double _cos;
 
   public final double _degrees;
   public final double _radians;
 
-  public static Angle lerp(Angle start, Angle end, float percent)
+
+  public Angle(Angle angle)
   {
-	return start.add(end.sub(start).times(percent));
+     _degrees = angle._degrees;
+     _radians = angle._radians;
+     _sin = angle._sin;
+     _cos = angle._cos;
+
   }
 
   public static Angle fromDegrees(double degrees)
   {
-	return new Angle(degrees);
+    return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutes(double degrees, double minutes)
   {
-	return new Angle(degrees + (minutes / 60.0));
+    final double d = degrees + (minutes / 60.0);
+    return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
   {
-	return new Angle(degrees + (minutes / 60.0) + (seconds / 3600.0));
+    final double d = degrees + (minutes / 60.0) + (seconds / 3600.0);
+    return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromRadians(double radians)
   {
-	return Angle.fromDegrees(radians / IMathUtils.instance().pi() * 180.0);
+    return new Angle(((radians) * (180.0 / 3.14159265358979323846264338327950288)), radians);
   }
 
   public static Angle min(Angle a1, Angle a2)
   {
-	return (a1._degrees < a2._degrees) ? a1 : a2;
+    return (a1._degrees < a2._degrees) ? a1 : a2;
   }
 
   public static Angle max(Angle a1, Angle a2)
   {
-	return (a1._degrees > a2._degrees) ? a1 : a2;
+    return (a1._degrees > a2._degrees) ? a1 : a2;
   }
 
   public static Angle zero()
   {
-	return Angle.fromDegrees(0);
+    return Angle.fromDegrees(0);
+  }
+
+  public static Angle pi()
+  {
+    return Angle.fromDegrees(180);
   }
 
   public static Angle nan()
   {
-	return Angle.fromDegrees(IMathUtils.instance().NanD());
+    return Angle.fromDegrees(IMathUtils.instance().NanD());
   }
 
   public static Angle midAngle(Angle angle1, Angle angle2)
   {
-	return Angle.fromDegrees((angle1._degrees + angle2._degrees) / 2);
+    return Angle.fromRadians((angle1._radians + angle2._radians) / 2);
   }
 
-  public static Angle interpolation(Angle from, Angle to, double alpha)
+  public static Angle linearInterpolation(Angle from, Angle to, double alpha)
   {
-	return Angle.fromDegrees((1.0-alpha) * from._degrees + alpha * to._degrees);
+    return Angle.fromRadians((1.0-alpha) * from._radians + alpha * to._radians);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return IMathUtils.instance().isNan(_degrees);
+    return IMathUtils.instance().isNan(_degrees);
   }
 
-  public Angle(Angle angle)
-  {
-	  _degrees = angle._degrees;
-	  _radians = angle._radians;
-
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double sinus() const
   public final double sinus()
   {
-	return IMathUtils.instance().sin(_radians);
+    if (_sin > 1)
+    {
+      _sin = java.lang.Math.sin(_radians);
+    }
+    return _sin;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double cosinus() const
   public final double cosinus()
   {
-	return IMathUtils.instance().cos(_radians);
+    if (_cos > 1)
+    {
+      _cos = java.lang.Math.cos(_radians);
+    }
+    return _cos;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double degrees() const
+  public final double tangent()
+  {
+    return java.lang.Math.tan(_radians);
+  }
+
   public final double degrees()
   {
-	return _degrees;
+    return _degrees;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double radians() const
   public final double radians()
   {
-	return _radians;
+    return _radians;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean closeTo(const Angle& other) const
   public final boolean closeTo(Angle other)
   {
-	return (IMathUtils.instance().abs(_degrees - other._degrees) < DefineConstants.THRESHOLD);
+    return (IMathUtils.instance().abs(_degrees - other._degrees) < DefineConstants.THRESHOLD);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle add(const Angle& a) const
   public final Angle add(Angle a)
   {
-	return new Angle(_degrees + a._degrees);
+    final double r = _radians + a._radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle sub(const Angle& a) const
   public final Angle sub(Angle a)
   {
-	return new Angle(_degrees - a._degrees);
+    final double r = _radians - a._radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle times(double k) const
   public final Angle times(double k)
   {
-	return new Angle(k * _degrees);
+    final double r = k * _radians;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle div(double k) const
   public final Angle div(double k)
   {
-	return new Angle(_degrees / k);
+    final double r = _radians / k;
+    return new Angle(((r) * (180.0 / 3.14159265358979323846264338327950288)), r);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double div(const Angle& k) const
   public final double div(Angle k)
   {
-	return _degrees / k._degrees;
+    return _radians / k._radians;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean greaterThan(const Angle& a) const
   public final boolean greaterThan(Angle a)
   {
-	return (_degrees > a._degrees);
+    return (_radians > a._radians);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean lowerThan(const Angle& a) const
   public final boolean lowerThan(Angle a)
   {
-	return (_degrees < a._degrees);
+    return (_radians < a._radians);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle clampedTo(const Angle& min, const Angle& max) const
   public final Angle clampedTo(Angle min, Angle max)
   {
-	if (_degrees < min._degrees)
-	{
-	  return min;
-	}
+    if (_radians < min._radians)
+    {
+      return min;
+    }
   
-	if (_degrees > max._degrees)
-	{
-	  return max;
-	}
+    if (_radians > max._radians)
+    {
+      return max;
+    }
   
-	return this;
+    return this;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isBetween(const Angle& min, const Angle& max) const
   public final boolean isBetween(Angle min, Angle max)
   {
-	return (_degrees + DefineConstants.ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - DefineConstants.ISBETWEEN_THRESHOLD <= max._degrees);
+    return (_radians >= min._radians) && (_radians <= max._radians);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle nearestAngleInInterval(const Angle& min, const Angle& max) const
   public final Angle nearestAngleInInterval(Angle min, Angle max)
   {
-	// it the interval contains the angle, return this value
-	if (greaterThan(min) && lowerThan(max))
-	{
-	  return (this);
-	}
+    // it the interval contains the angle, return this value
+    if (greaterThan(min) && lowerThan(max))
+    {
+      return (this);
+    }
   
-	// look for the extreme closest to the angle
-	final Angle dif0 = distanceTo(min);
-	final Angle dif1 = distanceTo(max);
-	return (dif0.lowerThan(dif1))? min : max;
+    // look for the extreme closest to the angle
+    final Angle dif0 = distanceTo(min);
+    final Angle dif1 = distanceTo(max);
+    return (dif0.lowerThan(dif1))? min : max;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle distanceTo(const Angle& other) const
   public final Angle distanceTo(Angle other)
   {
-	double dif = IMathUtils.instance().abs(_degrees - other._degrees);
-	if (dif > 180)
-		dif = 360 - dif;
-	return Angle.fromDegrees(dif);
+    double dif = IMathUtils.instance().abs(_degrees - other._degrees);
+    if (dif > 180)
+       dif = 360 - dif;
+    return Angle.fromDegrees(dif);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle normalized() const
   public final Angle normalized()
   {
-	double degrees = _degrees;
-	while (degrees < 0)
-	{
-	  degrees += 360;
-	}
-	while (degrees >= 360)
-	{
-	  degrees -= 360;
-	}
-	return new Angle(degrees);
+    double degrees = _degrees;
+    while (degrees < 0)
+    {
+      degrees += 360;
+    }
+    while (degrees >= 360)
+    {
+      degrees -= 360;
+    }
+    return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isZero() const
   public final boolean isZero()
   {
-	return (_degrees == 0);
+    return (_degrees == 0);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEqualsTo(const Angle& that) const
-  public final boolean isEqualsTo(Angle that)
+  public final boolean isEquals(Angle that)
   {
-	return (_degrees == that._degrees) || (_radians == that._radians);
+    final IMathUtils mu = IMathUtils.instance();
+    return mu.isEquals(_degrees, that._degrees) || mu.isEquals(_radians, that._radians);
   }
 
   @Override
-	public int hashCode() {
-		return Double.toString(_degrees).hashCode();
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(_radians);
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-	  return true;
-	}
-	if (obj == null) {
-	  return false;
-	}
-	if (getClass() != obj.getClass()) {
-	  return false;
-	}
-	final Angle other = (Angle) obj;
-	if (_degrees != other._degrees) {
-	  return false;
-	}
-	return true;
-	}
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Angle other = (Angle) obj;
+    if (Double.doubleToLongBits(_radians) != Double.doubleToLongBits(other._radians)) {
+      return false;
+    }
+    return true;
+  }
 
   public void dispose()
   {
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addDouble(_degrees);
-	isb.addString("°");
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addDouble(_degrees);
+  //  isb->addString("°");
+    isb.addString("d");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

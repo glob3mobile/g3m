@@ -1,0 +1,29 @@
+package org.glob3.mobile.generated; 
+public abstract class GLColorGroupFeature extends PriorityGLFeature
+{
+
+  private final boolean _blend;
+  private final int _sFactor;
+  private final int _dFactor;
+
+  public GLColorGroupFeature(GLFeatureID id, int p, boolean blend, int sFactor, int dFactor)
+  {
+     super(GLFeatureGroupName.COLOR_GROUP, id, p);
+     _blend = blend;
+     _sFactor = sFactor;
+     _dFactor = dFactor;
+  }
+
+  public final void blendingOnGlobalGLState(GLGlobalState state)
+  {
+    if (_blend)
+    {
+      state.enableBlend();
+      state.setBlendFactors(_sFactor, _dFactor);
+    }
+    else
+    {
+      state.disableBlend();
+    }
+  }
+}

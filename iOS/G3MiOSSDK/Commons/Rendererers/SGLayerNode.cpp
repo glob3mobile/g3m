@@ -17,22 +17,26 @@
 #include "TexturesHandler.hpp"
 #include "IStringBuilder.hpp"
 
+#include "GPUProgramManager.hpp"
+#include "GPUProgram.hpp"
+
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
-class ImageDownloadListener : public IImageDownloadListener {
+class SGLayerNode_ImageDownloadListener : public IImageDownloadListener {
 private:
   SGLayerNode* _layerNode;
 
 public:
-  ImageDownloadListener(SGLayerNode* layerNode) :
+  SGLayerNode_ImageDownloadListener(SGLayerNode* layerNode) :
   _layerNode(layerNode)
   {
 
   }
 
   void onDownload(const URL& url,
-                  const IImage* image) {
+                  IImage* image,
+                  bool expired) {
     _layerNode->onImageDownload(image);
   }
 
@@ -46,17 +50,27 @@ public:
   }
 
   void onCanceledDownload(const URL& url,
-                          const IImage* image) {
+                          IImage* image,
+                          bool expired) {
 
   }
 };
 
+bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
+  if (!_initialized) {
+    _initialized = true;
+    requestImage(rc);
+  }
 
-void SGLayerNode::onImageDownload(const IImage* image) {
+  const IGLTextureId* textureId = getTextureId(rc);
+  return (textureId != NULL);
+}
+
+void SGLayerNode::onImageDownload(IImage* image) {
   if (_downloadedImage != NULL) {
     IFactory::instance()->deleteImage(_downloadedImage);
   }
-  _downloadedImage = image->shallowCopy();
+  _downloadedImage = image;
 }
 
 URL SGLayerNode::getURL() const {
@@ -77,7 +91,8 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
   rc->getDownloader()->requestImage(getURL(),
                                     TEXTURES_DOWNLOAD_PRIORITY,
                                     TimeInterval::fromDays(30),
-                                    new ImageDownloadListener(this),
+                                    true,
+                                    new SGLayerNode_ImageDownloadListener(this),
                                     true);
 }
 
@@ -97,24 +112,42 @@ const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   return _textureId;
 }
 
-const GLState* SGLayerNode::createState(const G3MRenderContext* rc,
-                                        const GLState& parentState) {
+//const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
+//  if (!_initialized) {
+//    _initialized = true;
+//    requestImage(rc);
+//  }
+//
+//  const IGLTextureId* textureId = getTextureId(rc);
+//  if (textureId == NULL) {
+//    return NULL;
+//  }
+//  _glState.setParent(parentGLState);
+//  _glState.clearGLFeatureGroup(COLOR_GROUP);
+//
+//  _glState.addGLFeature(new TextureIDGLFeature(textureId,
+//                                               false, 0,0), false);
+//
+//  return &_glState;
+//}
+
+bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
+
   if (!_initialized) {
     _initialized = true;
     requestImage(rc);
   }
 
-  const IGLTextureId* texId = getTextureId(rc);
-  if (texId == NULL) {
-    return NULL;
+  const IGLTextureId* textureId = getTextureId(rc);
+  if (textureId == NULL) {
+    return false;
   }
+  state->clearGLFeatureGroup(COLOR_GROUP);
 
-  GLState* state = new GLState(parentState);
-  state->enableTextures();
-  state->enableTexture2D();
+  state->addGLFeature(new TextureIDGLFeature(textureId,
+                                               false, 0,0), false);
 
-  GL* gl = rc->getGL();
-  gl->bindTexture(texId);
 
-  return state;
+  return true;
+  
 }

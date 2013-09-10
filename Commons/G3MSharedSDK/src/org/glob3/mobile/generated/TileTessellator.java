@@ -16,16 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Planet;
 //class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector2D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
+//class ElevationData;
+//class Geodetic2D;
+
+
 
 public abstract class TileTessellator
 {
@@ -33,20 +33,21 @@ public abstract class TileTessellator
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isReady(const G3MRenderContext *rc) const = 0;
   public abstract boolean isReady(G3MRenderContext rc);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Mesh* createMesh(const G3MRenderContext* rc, const Tile* tile) const = 0;
-  public abstract Mesh createMesh(G3MRenderContext rc, Tile tile);
+  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean debug);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Mesh* createDebugMesh(const G3MRenderContext* rc, const Tile* tile) const = 0;
-  public abstract Mesh createDebugMesh(G3MRenderContext rc, Tile tile);
+  public abstract Vector2I getTileMeshResolution(Planet planet, Vector2I resolution, Tile tile, boolean debug);
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IFloatBuffer* createUnitTextCoords() const = 0;
-  public abstract IFloatBuffer createUnitTextCoords();
+  public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile);
+
+  public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile, boolean mercator);
+
+  public Vector2D getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
+  {
+    return getTextCoord(tile, position._latitude, position._longitude, mercator);
+  }
+
+  public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
 
 }

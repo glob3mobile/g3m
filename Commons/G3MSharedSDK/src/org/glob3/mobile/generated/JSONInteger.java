@@ -23,50 +23,40 @@ public class JSONInteger extends JSONNumber
 
   public JSONInteger(int value)
   {
-	  _value = value;
+     _value = value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONInteger* deepCopy() const
   public final JSONInteger deepCopy()
   {
-	return new JSONInteger(_value);
+    return new JSONInteger(_value);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double value() const
   public final double value()
   {
-	return _value;
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int intValue() const
   public final int intValue()
   {
-	return _value;
+    return _value;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
   public final void acceptVisitor(JSONVisitor visitor)
   {
-	visitor.visitInteger(this);
+    visitor.visitInteger(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-	isb.addString("int/");
-	isb.addInt(_value);
+    isb.addString("int/");
+    isb.addInt(_value);
   
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

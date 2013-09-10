@@ -2,8 +2,6 @@ package org.glob3.mobile.generated;
 public class WMSLayer extends Layer
 {
 
-
-
   private final URL _mapServerURL;
   private final URL _queryServerURL;
 
@@ -21,323 +19,439 @@ public class WMSLayer extends Layer
 
   private String _extraParameter;
 
-
-
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  private double toBBOXLongitude(Angle longitude)
   {
-	  super(condition, mapLayer, timeToCache);
-	  _mapLayer = mapLayer;
-	  _mapServerURL = mapServerURL;
-	  _mapServerVersion = mapServerVersion;
-	  _queryLayer = queryLayer;
-	  _queryServerURL = queryServerURL;
-	  _queryServerVersion = queryServerVersion;
-	  _sector = new Sector(sector);
-	  _format = format;
-	  _srs = srs;
-	  _style = style;
-	  _isTransparent = isTransparent;
-	  _extraParameter = "";
-
+    return (_parameters._mercator) ? MercatorUtils.longitudeToMeters(longitude) : longitude._degrees;
+  }
+  private double toBBOXLatitude(Angle latitude)
+  {
+    return (_parameters._mercator) ? MercatorUtils.latitudeToMeters(latitude) : latitude._degrees;
   }
 
-  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache)
+  protected final String getLayerType()
   {
-	  super(condition, mapLayer, timeToCache);
-	  _mapLayer = mapLayer;
-	  _mapServerURL = mapServerURL;
-	  _mapServerVersion = mapServerVersion;
-	  _queryLayer = mapLayer;
-	  _queryServerURL = mapServerURL;
-	  _queryServerVersion = mapServerVersion;
-	  _sector = new Sector(sector);
-	  _format = format;
-	  _srs = srs;
-	  _style = style;
-	  _isTransparent = isTransparent;
-	  _extraParameter = "";
-
+    return "WMS";
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const G3MRenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
+  protected final boolean rawIsEquals(Layer that)
   {
-	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
+    WMSLayer t = (WMSLayer) that;
   
-	final Sector tileSector = tile.getSector();
-	if (!_sector.touchesWith(tileSector))
-	{
-	  return petitions;
-	}
+    if (!(_mapServerURL.isEquals(t._mapServerURL)))
+    {
+      return false;
+    }
   
-	final Sector sector = tileSector.intersection(_sector);
-	if (sector.getDeltaLatitude().isZero() || sector.getDeltaLongitude().isZero())
-	{
-	  return petitions;
-	}
+    if (!(_queryServerURL.isEquals(t._queryServerURL)))
+    {
+      return false;
+    }
   
-	  //Server name
-	String req = _mapServerURL.getPath();
-	  if (req.charAt(req.length()-1) != '?')
-	  {
-		  req += '?';
-	  }
+    if (!_mapLayer.equals(t._mapLayer))
+    {
+      return false;
+    }
   
-	//If the server refer to itself as localhost...
-	int pos = req.indexOf("localhost");
-	if (pos != -1)
-	{
-	  req = req.substring(pos+9);
+    if (_mapServerVersion != t._mapServerVersion)
+    {
+      return false;
+    }
   
-	  int pos2 = req.indexOf("/", 8);
-	  String newHost = req.substring(0, pos2);
+    if (!_queryLayer.equals(t._queryLayer))
+    {
+      return false;
+    }
   
-	  req = newHost + req;
-	}
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
   
-	req += "REQUEST=GetMap&SERVICE=WMS";
+    if (!(_sector.isEquals(t._sector)))
+    {
+      return false;
+    }
   
+    if (!_format.equals(t._format))
+    {
+      return false;
+    }
   
-	switch (_mapServerVersion)
-	{
-	  case WMS_1_3_0:
-	  {
-		req += "&VERSION=1.3.0";
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
   
-		IStringBuilder isb = IStringBuilder.newStringBuilder();
+    if (!_srs.equals(t._srs))
+    {
+      return false;
+    }
   
-		isb.addString("&WIDTH=");
-		isb.addInt(width);
-		isb.addString("&HEIGHT=");
-		isb.addInt(height);
+    if (!_style.equals(t._style))
+    {
+      return false;
+    }
   
-		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.lower().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().longitude()._degrees);
+    if (_isTransparent != t._isTransparent)
+    {
+      return false;
+    }
   
-		req += isb.getString();
-		if (isb != null)
-			isb.dispose();
+    if (!_extraParameter.equals(t._extraParameter))
+    {
+      return false;
+    }
   
-		req += "&CRS=EPSG:4326";
-  
-		break;
-	  }
-	  case WMS_1_1_0:
-	  default:
-	  {
-		// default is 1.1.1
-		req += "&VERSION=1.1.1";
-  
-		IStringBuilder isb = IStringBuilder.newStringBuilder();
-  
-		isb.addString("&WIDTH=");
-		isb.addInt(width);
-		isb.addString("&HEIGHT=");
-		isb.addInt(height);
-  
-		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.lower().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().latitude()._degrees);
-  
-		req += isb.getString();
-		if (isb != null)
-			isb.dispose();
-		break;
-	  }
-	}
-  
-	req += "&LAYERS=" + _mapLayer;
-  
-	  req += "&FORMAT=" + _format;
-  
-	if (!_srs.equals(""))
-	{
-	  req += "&SRS=" + _srs;
-	}
-	  else
-	  {
-	  req += "&SRS=EPSG:4326";
-	}
-  
-	//Style
-	if (!_style.equals(""))
-	{
-	  req += "&STYLES=" + _style;
-	}
-	  else
-	  {
-	  req += "&STYLES=";
-	}
-  
-	//ASKING TRANSPARENCY
-	if (_isTransparent)
-	{
-	  req += "&TRANSPARENT=TRUE";
-	}
-	else
-	{
-	  req += "&TRANSPARENT=FALSE";
-	}
-  
-	if (_extraParameter.compareTo("") != 0)
-	{
-	  req += "&";
-	  req += _extraParameter;
-	}
-  
-	Petition petition = new Petition(sector, new URL(req, false), _timeToCache);
-	petitions.add(petition);
-  
-	  return petitions;
+    return true;
   }
 
-//  bool isTransparent() const{
-//    return _isTransparent;
-//  }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& tileSector, int width, int height) const
-  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-	if (!_sector.touchesWith(tileSector))
-	{
-	  return URL.nullURL();
-	}
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     _mapLayer = mapLayer;
+     _mapServerURL = mapServerURL;
+     _mapServerVersion = mapServerVersion;
+     _queryLayer = queryLayer;
+     _queryServerURL = queryServerURL;
+     _queryServerVersion = queryServerVersion;
+     _sector = new Sector(sector);
+     _format = format;
+     _srs = srs;
+     _style = style;
+     _isTransparent = isTransparent;
+     _extraParameter = "";
   
-	final Sector sector = tileSector.intersection(_sector);
+  }
+
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null);
+  }
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  {
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     _mapLayer = mapLayer;
+     _mapServerURL = mapServerURL;
+     _mapServerVersion = mapServerVersion;
+     _queryLayer = mapLayer;
+     _queryServerURL = mapServerURL;
+     _queryServerVersion = mapServerVersion;
+     _sector = new Sector(sector);
+     _format = format;
+     _srs = srs;
+     _style = style;
+     _isTransparent = isTransparent;
+     _extraParameter = "";
   
-	  //Server name
-	String req = _queryServerURL.getPath();
-	  if (req.charAt(req.length()-1) != '?')
-	  {
-		  req += '?';
-	  }
+  }
+
+
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  {
+    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-	//If the server refer to itself as localhost...
-	int pos = req.indexOf("localhost");
-	if (pos != -1)
-	{
-	  req = req.substring(pos+9);
+    final Sector tileSector = tile.getSector();
+    if (!_sector.touchesWith(tileSector))
+    {
+      return petitions;
+    }
   
-	  int pos2 = req.indexOf("/", 8);
-	  String newHost = req.substring(0, pos2);
+    final Sector sector = tileSector.intersection(_sector);
+    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
+    {
+      return petitions;
+    }
   
-	  req = newHost + req;
-	}
+    //TODO: MUST SCALE WIDTH,HEIGHT
   
-	req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
-	//SRS
-	if (!_srs.equals(""))
-	{
-	  req += "&SRS=" + _srs;
-	}
-	  else
-	  {
-	  req += "&SRS=EPSG:4326";
-	}
+     //Server name
+    String req = _mapServerURL.getPath();
+     if (req.charAt(req.length() - 1) != '?')
+     {
+        req += '?';
+     }
   
-	switch (_queryServerVersion)
-	{
-	  case WMS_1_3_0:
-	  {
-		req += "&VERSION=1.3.0";
+    //  //If the server refer to itself as localhost...
+    //  const int localhostPos = req.find("localhost");
+    //  if (localhostPos != -1) {
+    //    req = req.substr(localhostPos+9);
+    //
+    //    const int slashPos = req.find("/", 8);
+    //    std::string newHost = req.substr(0, slashPos);
+    //
+    //    req = newHost + req;
+    //  }
   
-		IStringBuilder isb = IStringBuilder.newStringBuilder();
+    req += "REQUEST=GetMap&SERVICE=WMS";
   
-		isb.addString("&WIDTH=");
-		isb.addInt(width);
-		isb.addString("&HEIGHT=");
-		isb.addInt(height);
   
-		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.lower().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().longitude()._degrees);
+    switch (_mapServerVersion)
+    {
+      case WMS_1_3_0:
+      {
+        req += "&VERSION=1.3.0";
   
-		req += isb.getString();
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		if (isb != null)
-			isb.dispose();
+        isb.addString("&WIDTH=");
+        isb.addInt(tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(tileTextureResolution._y);
   
-		req += "&CRS=EPSG:4326";
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
   
-		break;
-	  }
-	  case WMS_1_1_0:
-	  default:
-	  {
-		// default is 1.1.1
-		req += "&VERSION=1.1.1";
+        req += isb.getString();
+        if (isb != null)
+           isb.dispose();
   
-		IStringBuilder isb = IStringBuilder.newStringBuilder();
+        req += "&CRS=EPSG:4326";
   
-		isb.addString("&WIDTH=");
-		isb.addInt(width);
-		isb.addString("&HEIGHT=");
-		isb.addInt(height);
+        break;
+      }
+      case WMS_1_1_0:
+      default:
+      {
+        // default is 1.1.1
+        req += "&VERSION=1.1.1";
   
-		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.lower().latitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().longitude()._degrees);
-		isb.addString(",");
-		isb.addDouble(sector.upper().latitude()._degrees);
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		req += isb.getString();
+        isb.addString("&WIDTH=");
+        isb.addInt(tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(tileTextureResolution._y);
   
-		if (isb != null)
-			isb.dispose();
-		break;
-	  }
-	}
-	req += "&LAYERS=" + _queryLayer;
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
   
-	//req += "&LAYERS=" + _queryLayers;
-	req += "&QUERY_LAYERS=" + _queryLayer;
+        req += isb.getString();
+        if (isb != null)
+           isb.dispose();
+        break;
+      }
+    }
   
-	req += "&INFO_FORMAT=text/plain";
+    req += "&LAYERS=" + _mapLayer;
   
-	//X and Y
-	Vector2D pixel = tileSector.getUVCoordinates(g);
-	int x = (int) IMathUtils.instance().round((pixel._x * width));
-	int y = (int) IMathUtils.instance().round(((1.0 - pixel._y) * height));
+     req += "&FORMAT=" + _format;
   
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("&X=");
-	isb.addInt(x);
-	isb.addString("&Y=");
-	isb.addInt(y);
-	req += isb.getString();
-	if (isb != null)
-		isb.dispose();
+    if (!_srs.equals(""))
+    {
+      req += "&SRS=" + _srs;
+    }
+     else
+     {
+      req += "&SRS=EPSG:4326";
+    }
   
-	  return new URL(req, false);
+    //Style
+    if (!_style.equals(""))
+    {
+      req += "&STYLES=" + _style;
+    }
+     else
+     {
+      req += "&STYLES=";
+    }
+  
+    //ASKING TRANSPARENCY
+    if (_isTransparent)
+    {
+      req += "&TRANSPARENT=TRUE";
+    }
+    else
+    {
+      req += "&TRANSPARENT=FALSE";
+    }
+  
+    if (_extraParameter.compareTo("") != 0)
+    {
+      req += "&";
+      req += _extraParameter;
+    }
+  
+    //  printf("Request: %s\n", req.c_str());
+  
+    Petition petition = new Petition(sector, new URL(req, false), getTimeToCache(), getReadExpired(), _isTransparent);
+    petitions.add(petition);
+  
+     return petitions;
+  }
+
+  public final URL getFeatureInfoURL(Geodetic2D position, Sector tileSector)
+  {
+    if (!_sector.touchesWith(tileSector))
+    {
+      return URL.nullURL();
+    }
+  
+    final Sector sector = tileSector.intersection(_sector);
+  
+     //Server name
+    String req = _queryServerURL.getPath();
+     if (req.charAt(req.length()-1) != '?')
+     {
+        req += '?';
+     }
+  
+    //If the server refer to itself as localhost...
+    int pos = req.indexOf("localhost");
+    if (pos != -1)
+    {
+      req = req.substring(pos+9);
+  
+      int pos2 = req.indexOf("/", 8);
+      String newHost = req.substring(0, pos2);
+  
+      req = newHost + req;
+    }
+  
+    req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
+  
+    //SRS
+    if (!_srs.equals(""))
+    {
+      req += "&SRS=" + _srs;
+    }
+     else
+     {
+      req += "&SRS=EPSG:4326";
+    }
+  
+    switch (_queryServerVersion)
+    {
+      case WMS_1_3_0:
+      {
+        req += "&VERSION=1.3.0";
+  
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+        isb.addString("&WIDTH=");
+        isb.addInt(_parameters._tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(_parameters._tileTextureResolution._y);
+  
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+  
+        req += isb.getString();
+  
+        if (isb != null)
+           isb.dispose();
+  
+        req += "&CRS=EPSG:4326";
+  
+        break;
+      }
+      case WMS_1_1_0:
+      default:
+      {
+        // default is 1.1.1
+        req += "&VERSION=1.1.1";
+  
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+        isb.addString("&WIDTH=");
+        isb.addInt(_parameters._tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(_parameters._tileTextureResolution._y);
+  
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+  
+        req += isb.getString();
+  
+        if (isb != null)
+           isb.dispose();
+        break;
+      }
+    }
+    req += "&LAYERS=" + _queryLayer;
+    req += "&QUERY_LAYERS=" + _queryLayer;
+  
+    req += "&INFO_FORMAT=text/plain";
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    double u;
+    double v;
+    if (_parameters._mercator)
+    {
+      u = sector.getUCoordinate(position._longitude);
+      v = MercatorUtils.getMercatorV(position._latitude);
+    }
+    else
+    {
+      final Vector2D uv = sector.getUVCoordinates(position);
+      u = uv._x;
+      v = uv._y;
+    }
+  
+    //X and Y
+    //const Vector2D uv = sector.getUVCoordinates(position);
+    final long x = mu.round((u * _parameters._tileTextureResolution._x));
+    final long y = mu.round((v * _parameters._tileTextureResolution._y));
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("&X=");
+    isb.addLong(x);
+    isb.addString("&Y=");
+    isb.addLong(y);
+    req += isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+     return new URL(req, false);
   }
 
 
   public final void setExtraParameter(String extraParameter)
   {
-	_extraParameter = extraParameter;
-	notifyChanges();
+    _extraParameter = extraParameter;
+    notifyChanges();
+  }
+
+  public final String description()
+  {
+    return "[WMSLayer]";
+  }
+
+  public final WMSLayer copy()
+  {
+    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
   }
 
 }

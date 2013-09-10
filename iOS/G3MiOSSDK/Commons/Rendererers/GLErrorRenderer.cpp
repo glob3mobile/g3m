@@ -22,14 +22,17 @@ bool GLErrorRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 GLErrorRenderer::~GLErrorRenderer() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 void GLErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                             int width, int height) {
 }
 
-void GLErrorRenderer::render(const G3MRenderContext *rc,
-                             const GLState& parentState) {
+void GLErrorRenderer::render(const G3MRenderContext *rc, GLState* glState) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   

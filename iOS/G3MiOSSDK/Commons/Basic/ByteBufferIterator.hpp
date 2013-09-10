@@ -15,20 +15,21 @@ class IByteBuffer;
 
 class ByteBufferIterator {
 private:
-  IByteBuffer* _buffer;
-  int          _cursor;
-  int          _timestamp;
+  const IByteBuffer* _buffer;
+  int                _cursor;
+  int                _timestamp;
 
-  void checkTimestamp() const;
+//  void checkTimestamp() const;
 
   ByteBufferIterator(const ByteBufferIterator& that);
   
 public:
-  ByteBufferIterator(IByteBuffer* buffer);
+  ByteBufferIterator(const IByteBuffer* buffer);
 
   bool hasNext() const;
 
   unsigned char nextUInt8();
+  short         nextInt16();
   int           nextInt32();
   long long     nextInt64();
 

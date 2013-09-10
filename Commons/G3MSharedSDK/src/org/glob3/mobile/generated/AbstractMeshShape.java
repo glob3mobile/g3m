@@ -16,7 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+
 //class Mesh;
 
 public abstract class AbstractMeshShape extends Shape
@@ -27,66 +27,66 @@ public abstract class AbstractMeshShape extends Shape
 
   protected final Mesh getMesh(G3MRenderContext rc)
   {
-	if (_mesh == null)
-	{
-	  _mesh = createMesh(rc);
-	}
-	return _mesh;
+    if (_mesh == null)
+    {
+      _mesh = createMesh(rc);
+    }
+    return _mesh;
   }
 
   protected final void cleanMesh()
   {
-	if (_mesh != null)
-		_mesh.dispose();
-	_mesh = null;
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
-  public AbstractMeshShape(Geodetic3D position)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode)
   {
-	  super(position);
-	  _mesh = null;
+     super(position, altitudeMode);
+     _mesh = null;
 
   }
 
-  public AbstractMeshShape(Geodetic3D position, Mesh mesh)
+  protected AbstractMeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
-	  super(position);
-	  _mesh = mesh;
+     super(position, altitudeMode);
+     _mesh = mesh;
 
   }
+
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	final Mesh mesh = getMesh(rc);
-	return (mesh != null);
+    final Mesh mesh = getMesh(rc);
+    return (mesh != null);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-	final Mesh mesh = getMesh(rc);
-	if (mesh != null)
-	{
-	  mesh.render(rc, parentState);
-	}
+    Mesh mesh = getMesh(rc);
+    if (mesh != null)
+    {
+      mesh.render(rc, parentState);
+    }
   }
 
-
-  ///#include "GL.hpp"
-  
   public void dispose()
   {
-	if (_mesh != null)
-		_mesh.dispose();
+    if (_mesh != null)
+       _mesh.dispose();
+  
+    super.dispose();
+  
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	final Mesh mesh = getMesh(rc);
-	if (mesh == null)
-	{
-	  return false;
-	}
-	return mesh.isTransparent(rc);
+    final Mesh mesh = getMesh(rc);
+    if (mesh == null)
+    {
+      return false;
+    }
+    return mesh.isTransparent(rc);
   }
-
 }

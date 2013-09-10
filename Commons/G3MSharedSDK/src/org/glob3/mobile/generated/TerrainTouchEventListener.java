@@ -1,11 +1,12 @@
 package org.glob3.mobile.generated; 
-public abstract class TerrainTouchEventListener
+public interface TerrainTouchEventListener
 {
 
-  public abstract void onTerrainTouchEvent(G3MEventContext ec, TerrainTouchEvent ev);
+  /**
+   Process terrain touch event, return true if the event was processed.
+   */
+  boolean onTerrainTouch(G3MEventContext context, TerrainTouchEvent ev);
 
-  public void dispose()
-  {
-  }
+  public void dispose();
 
 }

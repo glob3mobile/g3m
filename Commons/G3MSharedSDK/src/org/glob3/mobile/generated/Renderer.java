@@ -8,21 +8,17 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLGlobalState;
 //class GLState;
+//class SurfaceElevationProvider;
 
-public abstract class Renderer
+
+public abstract class Renderer implements EffectTarget
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isEnable() const = 0;
   public abstract boolean isEnable();
 
   public abstract void setEnable(boolean enable);
@@ -32,7 +28,7 @@ public abstract class Renderer
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc, GLState glState);
 
   /*
    Gives to Renderer the opportunity to process touch, events.
@@ -43,9 +39,9 @@ public abstract class Renderer
 
   public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void start();
+  public abstract void start(G3MRenderContext rc);
 
-  public abstract void stop();
+  public abstract void stop(G3MRenderContext rc);
 
   public void dispose()
   {
@@ -57,5 +53,17 @@ public abstract class Renderer
   public abstract void onPause(G3MContext context);
 
   public abstract void onDestroy(G3MContext context);
+
+  /**
+   * Allows us to know if the renderer is a PlanetRenderer.
+   * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
+   * Default value: FALSE
+   */
+  public boolean isPlanetRenderer()
+  {
+    return false;
+  }
+
+  public abstract SurfaceElevationProvider getSurfaceElevationProvider();
 
 }

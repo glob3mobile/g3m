@@ -21,11 +21,12 @@ class EffectsScheduler;
 class ITimer;
 class IStringUtils;
 class IThreadUtils;
-class TextureBuilder;
 class IMathUtils;
 class IJSONParser;
 class IStorage;
 class OrderedRenderable;
+class GPUProgramManager;
+class SurfaceElevationProvider;
 
 #include <vector>
 
@@ -42,17 +43,20 @@ protected:
   EffectsScheduler*   _effectsScheduler;
   IStorage*           _storage;
 
+  SurfaceElevationProvider* _surfaceElevationProvider;
+
 public:
-  G3MContext(const IFactory*     factory,
-             const IStringUtils* stringUtils,
-             const IThreadUtils* threadUtils,
-             const ILogger*      logger,
-             const IMathUtils*   mathUtils,
-             const IJSONParser*  jsonParser,
-             const Planet*       planet,
-             IDownloader*        downloader,
-             EffectsScheduler*   effectsScheduler,
-             IStorage*           storage) :
+  G3MContext(const IFactory*           factory,
+             const IStringUtils*       stringUtils,
+             const IThreadUtils*       threadUtils,
+             const ILogger*            logger,
+             const IMathUtils*         mathUtils,
+             const IJSONParser*        jsonParser,
+             const Planet*             planet,
+             IDownloader*              downloader,
+             EffectsScheduler*         effectsScheduler,
+             IStorage*                 storage,
+             SurfaceElevationProvider* surfaceElevationProvider) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -62,7 +66,8 @@ public:
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
-  _storage(storage)
+  _storage(storage),
+  _surfaceElevationProvider(surfaceElevationProvider)
   {
   }
 
@@ -109,6 +114,11 @@ public:
   const IThreadUtils* getThreadUtils() const {
     return _threadUtils;
   }
+
+  SurfaceElevationProvider* getSurfaceElevationProvider() const {
+    return _surfaceElevationProvider;
+  }
+
 };
 
 //************************************************************
@@ -117,16 +127,17 @@ public:
 
 class G3MEventContext: public G3MContext {
 public:
-  G3MEventContext(const IFactory*     factory,
-                  const IStringUtils* stringUtils,
-                  const IThreadUtils* threadUtils,
-                  const ILogger*      logger,
-                  const IMathUtils*   mathUtils,
-                  const IJSONParser*  jsonParser,
-                  const Planet*       planet,
-                  IDownloader*        downloader,
-                  EffectsScheduler*   scheduler,
-                  IStorage*           storage) :
+  G3MEventContext(const IFactory*           factory,
+                  const IStringUtils*       stringUtils,
+                  const IThreadUtils*       threadUtils,
+                  const ILogger*            logger,
+                  const IMathUtils*         mathUtils,
+                  const IJSONParser*        jsonParser,
+                  const Planet*             planet,
+                  IDownloader*              downloader,
+                  EffectsScheduler*         scheduler,
+                  IStorage*                 storage,
+                  SurfaceElevationProvider* surfaceElevationProvider) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -136,7 +147,8 @@ public:
              planet,
              downloader,
              scheduler,
-             storage) {
+             storage,
+             surfaceElevationProvider) {
   }
 };
 
@@ -157,29 +169,30 @@ private:
   const Camera*       _currentCamera;
   Camera*             _nextCamera;
   TexturesHandler*    _texturesHandler;
-  TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
+  GPUProgramManager*  _gpuProgramManager;
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
-  G3MRenderContext(FrameTasksExecutor* frameTasksExecutor,
-                   const IFactory*     factory,
-                   const IStringUtils* stringUtils,
-                   const IThreadUtils* threadUtils,
-                   const ILogger*      logger,
-                   const IMathUtils*   mathUtils,
-                   const IJSONParser*  jsonParser,
-                   const Planet*       planet,
-                   GL*                 gl,
-                   const Camera*       currentCamera,
-                   Camera*             nextCamera,
-                   TexturesHandler*    texturesHandler,
-                   TextureBuilder*     textureBuilder,
-                   IDownloader*        downloader,
-                   EffectsScheduler*   scheduler,
-                   ITimer*             frameStartTimer,
-                   IStorage*           storage) :
+  G3MRenderContext(FrameTasksExecutor*       frameTasksExecutor,
+                   const IFactory*           factory,
+                   const IStringUtils*       stringUtils,
+                   const IThreadUtils*       threadUtils,
+                   const ILogger*            logger,
+                   const IMathUtils*         mathUtils,
+                   const IJSONParser*        jsonParser,
+                   const Planet*             planet,
+                   GL*                       gl,
+                   const Camera*             currentCamera,
+                   Camera*                   nextCamera,
+                   TexturesHandler*          texturesHandler,
+                   IDownloader*              downloader,
+                   EffectsScheduler*         scheduler,
+                   ITimer*                   frameStartTimer,
+                   IStorage*                 storage,
+                   GPUProgramManager*        gpuProgramManager,
+                   SurfaceElevationProvider* surfaceElevationProvider) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -189,15 +202,16 @@ public:
              planet,
              downloader,
              scheduler,
-             storage),
+             storage,
+             surfaceElevationProvider),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),
   _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
-  _textureBuilder(textureBuilder),
   _frameStartTimer(frameStartTimer),
-  _orderedRenderables(NULL)
+  _orderedRenderables(NULL),
+  _gpuProgramManager(gpuProgramManager)
   {
 
   }
@@ -218,16 +232,16 @@ public:
     return _texturesHandler;
   }
 
-  TextureBuilder* getTextureBuilder() const {
-    return _textureBuilder;
-  }
-
   const ITimer* getFrameStartTimer() const {
     return _frameStartTimer;
   }
 
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
+  }
+  
+  GPUProgramManager* getGPUProgramManager() const{
+    return _gpuProgramManager;
   }
 
   virtual ~G3MRenderContext();

@@ -19,7 +19,7 @@ private:
   double _extentZ;
 
   float _borderWidth;
-  
+
   Color* _surfaceColor;
   Color* _borderColor;
 
@@ -31,11 +31,12 @@ protected:
 
 public:
   BoxShape(Geodetic3D* position,
+           AltitudeMode altitudeMode,
            const Vector3D& extent,
            float borderWidth,
            Color* surfaceColor = NULL,
            Color* borderColor = NULL) :
-  AbstractMeshShape(position),
+  AbstractMeshShape(position, altitudeMode),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
@@ -49,6 +50,11 @@ public:
   ~BoxShape() {
     delete _surfaceColor;
     delete _borderColor;
+    
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
   }
 
   void setExtent(const Vector3D& extent) {
@@ -84,7 +90,7 @@ public:
       cleanMesh();
     }
   }
-
+  
 };
 
 #endif

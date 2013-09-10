@@ -30,151 +30,154 @@ public class BoxShape extends AbstractMeshShape
 
   private Mesh createBorderMesh(G3MRenderContext rc)
   {
-	final float lowerX = (float) -(_extentX / 2);
-	final float upperX = (float) +(_extentX / 2);
-	final float lowerY = (float) -(_extentY / 2);
-	final float upperY = (float) +(_extentY / 2);
-	final float lowerZ = (float) -(_extentZ / 2);
-	final float upperZ = (float) +(_extentZ / 2);
+    final float lowerX = (float) -(_extentX / 2);
+    final float upperX = (float) +(_extentX / 2);
+    final float lowerY = (float) -(_extentY / 2);
+    final float upperY = (float) +(_extentY / 2);
+    final float lowerZ = (float) -(_extentZ / 2);
+    final float upperZ = (float) +(_extentZ / 2);
   
-	float[] v = { lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, lowerX, upperY, upperZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, upperY, lowerZ, upperX, upperY, upperZ, upperX, lowerY, upperZ };
+    float[] v = { lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, lowerX, upperY, upperZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, upperY, lowerZ, upperX, upperY, upperZ, upperX, lowerY, upperZ };
   
-	final int numIndices = 48;
-	short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
+    final int numIndices = 48;
+    short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	ShortBufferBuilder indices = new ShortBufferBuilder();
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    ShortBufferBuilder indices = new ShortBufferBuilder();
   
-	final int numVertices = 8;
-	for (int n = 0; n<numVertices; n++)
-	{
-	  vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
-	}
+    final int numVertices = 8;
+    for (int n = 0; n<numVertices; n++)
+    {
+      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+    }
   
-	for (int n = 0; n<numIndices; n++)
-	{
-	  indices.add(i[n]);
-	}
+    for (int n = 0; n<numIndices; n++)
+    {
+      indices.add(i[n]);
+    }
   
-	Color borderColor = (_borderColor != null) ? _borderColor : _surfaceColor;
+    Color borderColor = (_borderColor != null) ? new Color(_borderColor) : new Color(_surfaceColor);
   
-	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc)
   {
-	final float lowerX = (float) -(_extentX / 2);
-	final float upperX = (float) +(_extentX / 2);
-	final float lowerY = (float) -(_extentY / 2);
-	final float upperY = (float) +(_extentY / 2);
-	final float lowerZ = (float) -(_extentZ / 2);
-	final float upperZ = (float) +(_extentZ / 2);
+    final float lowerX = (float) -(_extentX / 2);
+    final float upperX = (float) +(_extentX / 2);
+    final float lowerY = (float) -(_extentY / 2);
+    final float upperY = (float) +(_extentY / 2);
+    final float lowerZ = (float) -(_extentZ / 2);
+    final float upperZ = (float) +(_extentZ / 2);
   
-	float[] v = { lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, lowerX, upperY, upperZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, upperY, lowerZ, upperX, upperY, upperZ, upperX, lowerY, upperZ };
+    float[] v = { lowerX, lowerY, lowerZ, lowerX, upperY, lowerZ, lowerX, upperY, upperZ, lowerX, lowerY, upperZ, upperX, lowerY, lowerZ, upperX, upperY, lowerZ, upperX, upperY, upperZ, upperX, lowerY, upperZ };
   
-	final int numIndices = 23;
-	short[] i = { 3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0, 2, 2, 3, 6, 7, 7, 5, 5, 4, 1, 0, 0 };
+    final int numIndices = 23;
+    short[] i = { 3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0, 2, 2, 3, 6, 7, 7, 5, 5, 4, 1, 0, 0 };
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	ShortBufferBuilder indices = new ShortBufferBuilder();
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    ShortBufferBuilder indices = new ShortBufferBuilder();
   
-	final int numVertices = 8;
-	for (int n = 0; n<numVertices; n++)
-	{
-	  vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
-	}
+    final int numVertices = 8;
+    for (int n = 0; n<numVertices; n++)
+    {
+      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+    }
   
-	for (int n = 0; n<numIndices; n++)
-	{
-	  indices.add(i[n]);
-	}
+    for (int n = 0; n<numIndices; n++)
+    {
+      indices.add(i[n]);
+    }
   
-	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, _surfaceColor);
+    Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
+  
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
   }
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-	if (_borderWidth > 0)
-	{
-	  CompositeMesh compositeMesh = new CompositeMesh();
-	  compositeMesh.addMesh(createSurfaceMesh(rc));
-	  compositeMesh.addMesh(createBorderMesh(rc));
-	  return compositeMesh;
-	}
+    if (_borderWidth > 0)
+    {
+      CompositeMesh compositeMesh = new CompositeMesh();
+      compositeMesh.addMesh(createSurfaceMesh(rc));
+      compositeMesh.addMesh(createBorderMesh(rc));
+      return compositeMesh;
+    }
   
-	return createSurfaceMesh(rc);
+    return createSurfaceMesh(rc);
   }
 
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-	  this(position, extent, borderWidth, surfaceColor, null);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, null);
   }
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth)
   {
-	  this(position, extent, borderWidth, null, null);
+     this(position, altitudeMode, extent, borderWidth, null, null);
   }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: BoxShape(Geodetic3D* position, const Vector3D& extent, float borderWidth, Color* surfaceColor = null, Color* borderColor = null) : AbstractMeshShape(position), _extentX(extent._x), _extentY(extent._y), _extentZ(extent._z), _borderWidth(borderWidth), _surfaceColor(surfaceColor), _borderColor(borderColor)
-  public BoxShape(Geodetic3D position, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-	  super(position);
-	  _extentX = extent._x;
-	  _extentY = extent._y;
-	  _extentZ = extent._z;
-	  _borderWidth = borderWidth;
-	  _surfaceColor = surfaceColor;
-	  _borderColor = borderColor;
+     super(position, altitudeMode);
+     _extentX = extent._x;
+     _extentY = extent._y;
+     _extentZ = extent._z;
+     _borderWidth = borderWidth;
+     _surfaceColor = surfaceColor;
+     _borderColor = borderColor;
 
   }
 
   public void dispose()
   {
-	if (_surfaceColor != null)
-		_surfaceColor.dispose();
-	if (_borderColor != null)
-		_borderColor.dispose();
+    if (_surfaceColor != null)
+       _surfaceColor.dispose();
+    if (_borderColor != null)
+       _borderColor.dispose();
+
+  super.dispose();
+
   }
 
   public final void setExtent(Vector3D extent)
   {
-	if ((_extentX != extent._x) || (_extentY != extent._y) || (_extentZ != extent._z))
-	{
-	  _extentX = extent._x;
-	  _extentY = extent._y;
-	  _extentZ = extent._z;
-	  cleanMesh();
-	}
+    if ((_extentX != extent._x) || (_extentY != extent._y) || (_extentZ != extent._z))
+    {
+      _extentX = extent._x;
+      _extentY = extent._y;
+      _extentZ = extent._z;
+      cleanMesh();
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getExtent() const
   public final Vector3D getExtent()
   {
-	return new Vector3D(_extentX, _extentY, _extentZ);
+    return new Vector3D(_extentX, _extentY, _extentZ);
   }
 
   public final void setSurfaceColor(Color color)
   {
-	if (_surfaceColor != null)
-		_surfaceColor.dispose();
-	_surfaceColor = color;
-	cleanMesh();
+    if (_surfaceColor != null)
+       _surfaceColor.dispose();
+    _surfaceColor = color;
+    cleanMesh();
   }
 
   public final void setBorderColor(Color color)
   {
-	if (_borderColor != null)
-		_borderColor.dispose();
-	_borderColor = color;
-	cleanMesh();
+    if (_borderColor != null)
+       _borderColor.dispose();
+    _borderColor = color;
+    cleanMesh();
   }
 
   public final void setBorderWidth(float borderWidth)
   {
-	if (_borderWidth != borderWidth)
-	{
-	  _borderWidth = borderWidth;
-	  cleanMesh();
-	}
+    if (_borderWidth != borderWidth)
+    {
+      _borderWidth = borderWidth;
+      cleanMesh();
+    }
   }
 
 }

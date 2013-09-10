@@ -29,51 +29,62 @@
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
 #include "BSONParser.hpp"
+#include "SceneJSParserStatistics.hpp"
 
 Shape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
-                                                const std::string &uriPrefix) {
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+                                                    const std::string &uriPrefix,
+                                                    bool isTransparent) {
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromJSON(const std::string &json,
-                                          const std::string &uriPrefix) {
+                                          const std::string &uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
-  
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromJSON(const IByteBuffer* json,
-                                          const std::string& uriPrefix) {
+                                          const std::string& uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json->getAsString());
-  
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
 Shape* SceneJSShapesParser::parseFromBSON(IByteBuffer *bson,
-                                          const std::string &uriPrefix) {
+                                          const std::string &uriPrefix,
+                                          bool isTransparent) {
   const JSONBaseObject* jsonObject = BSONParser::parse(bson);
-  
-  return SceneJSShapesParser(jsonObject, uriPrefix).getRootShape();
+
+  return SceneJSShapesParser(jsonObject, uriPrefix, isTransparent).getRootShape();
 }
 
-void SceneJSShapesParser::pvtParse(const JSONBaseObject* json) {
+void SceneJSShapesParser::pvtParse(const JSONBaseObject* json,
+                                   bool isTransparent) {
   //  _rootShape = toShape(jsonRootObject);
-  
+
   SGNode* node = toNode(json);
-  
+
   if (node != NULL) {
-    _rootShape = new SGShape(node, _uriPrefix);
+    _rootShape = new SGShape(node, _uriPrefix, isTransparent);
   }
-  
+
   delete json;
 }
 
 SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                    const std::string& uriPrefix) :
+                                         const std::string& uriPrefix,
+                                         bool isTransparent) :
 _uriPrefix(uriPrefix),
 _rootShape(NULL)
 {
-  pvtParse(jsonObject);
+  _statistics = new SceneJSParserStatistics();
+  pvtParse(jsonObject, isTransparent);
+
+  _statistics->log();
+  delete _statistics;
 }
 
 int SceneJSShapesParser::parseChildren(const JSONObject* jsonObject,
@@ -102,9 +113,9 @@ void SceneJSShapesParser::checkProcessedKeys(const JSONObject* jsonObject,
                                              int processedKeys) const {
   std::vector<std::string> keys = jsonObject->keys();
   if (processedKeys != keys.size()) {
-//    for (int i = 0; i < keys.size(); i++) {
-//      printf("%s\n", keys.at(i).c_str());
-//    }
+    //    for (int i = 0; i < keys.size(); i++) {
+    //      printf("%s\n", keys.at(i).c_str());
+    //    }
 
     ILogger::instance()->logWarning("Not all keys processed in node, processed %i of %i",
                                     processedKeys,
@@ -478,6 +489,7 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
   for (int i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
+    _statistics->computeVertex();
   }
 
   const JSONArray* jsColors = jsonObject->getAsArray("colors");
@@ -486,7 +498,8 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     const int colorsCount = jsColors->size();
     colors = IFactory::instance()->createFloatBuffer(colorsCount);
     for (int i = 0; i < colorsCount; i++) {
-      colors->put(i, (float) jsColors->getAsNumber(i)->value());
+      const float value = (float) jsColors->getAsNumber(i)->value();
+      colors->put(i, value);
     }
     processedKeys++;
   }
@@ -504,15 +517,20 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
       }
       isY = !isY;
       uv->put(i, value);
-
-      int __TEXTURES_AT_WORK;
     }
     processedKeys++;
   }
 
   const JSONArray* jsNormals = jsonObject->getAsArray("normals");
   IFloatBuffer* normals = NULL;
+  //TODO: WORKING JM
   if (jsNormals != NULL) {
+    const int normalsCount = jsNormals->size();
+    normals = IFactory::instance()->createFloatBuffer(normalsCount);
+    for (int i = 0; i < normalsCount; i++) {
+      float value = (float) jsNormals->getAsNumber(i)->value();
+      normals->put(i, value);
+    }
     processedKeys++;
   }
 
@@ -521,12 +539,23 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     ILogger::instance()->logError("Non indexed geometries not supported");
     return NULL;
   }
+  int indicesOutOfRange = 0;
   int indicesCount = jsIndices->size();
   IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesCount);
   for (int i = 0; i < indicesCount; i++) {
-    indices->rawPut(i, (short) jsIndices->getAsNumber(i)->value());
+    const long long indice = (long long) jsIndices->getAsNumber(i)->value();
+    if (indice > 32767) {
+      indicesOutOfRange++;
+    }
+    indices->rawPut(i, (short) indice);
   }
   processedKeys++;
+
+  if (indicesOutOfRange > 0) {
+    ILogger::instance()->logError("SceneJSShapesParser: There are %d (of %d) indices out of range.",
+                                  indicesOutOfRange,
+                                  indicesCount);
+  }
 
   SGGeometryNode* node = new SGGeometryNode(id, sId,
                                             primitive,
@@ -549,7 +578,6 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
     return NULL;
   }
 
-  int ____DIEGO_AT_WORK;
   const JSONObject* jsonObject = jsonBaseObject->asObject();
 
   SGNode* result = NULL;
@@ -560,6 +588,7 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
       const std::string type = jsType->value();
       if (type.compare("node") == 0) {
         result = createNode(jsonObject);
+        _statistics->computeNode();
       }
       else if (type.compare("rotate") == 0) {
         result = createRotateNode(jsonObject);
@@ -569,12 +598,14 @@ SGNode* SceneJSShapesParser::toNode(const JSONBaseObject* jsonBaseObject) const 
       }
       else if (type.compare("material") == 0) {
         result = createMaterialNode(jsonObject);
+        _statistics->computeMaterial();
       }
       else if (type.compare("texture") == 0) {
         result = createTextureNode(jsonObject);
       }
       else if (type.compare("geometry") == 0) {
         result = createGeometryNode(jsonObject);
+        _statistics->computeGeometry();
       }
       else {
         ILogger::instance()->logWarning("SceneJS: Unknown type \"%s\"", type.c_str());

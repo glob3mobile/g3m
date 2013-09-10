@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
@@ -91,7 +92,7 @@ public final class ListenerEntry {
                    final byte[] data) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
-         _bufferListener.onDownload(url, buffer);
+         _bufferListener.onDownload(url, buffer, false);
       }
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -101,7 +102,8 @@ public final class ListenerEntry {
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onDownload(url, image);
+            _imageListener.onDownload(url, image, false);
+            //IFactory.instance().deleteImage(image);
          }
       }
    }
@@ -111,7 +113,7 @@ public final class ListenerEntry {
                            final byte[] data) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
-         _bufferListener.onCanceledDownload(url, buffer);
+         _bufferListener.onCanceledDownload(url, buffer, false);
       }
       if (_imageListener != null) {
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -120,7 +122,8 @@ public final class ListenerEntry {
          }
          else {
             final IImage image = new Image_Android(bitmap, data);
-            _imageListener.onCanceledDownload(url, image);
+            _imageListener.onCanceledDownload(url, image, false);
+            IFactory.instance().deleteImage(image);
          }
       }
    }

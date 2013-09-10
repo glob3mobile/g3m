@@ -21,21 +21,35 @@ package org.glob3.mobile.generated;
 public class SimpleCameraConstrainer implements ICameraConstrainer
 {
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void onCameraChange(const Planet *planet, const Camera* previousCamera, Camera* nextCamera) const
+  public void dispose()
+  {
+  }
+
   public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-	final double radii = planet.getRadii().maxAxis();
+    final double radii = planet.getRadii().maxAxis();
+    final double maxHeight = radii *9;
+    final double minHeight = 10;
   
-	final Geodetic3D cameraPosition3D = planet.toGeodetic3D(nextCamera.getCartesianPosition());
-	final double cameraHeight = cameraPosition3D.height();
+    final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+    final double cameraHeight = cameraPosition._height;
   
-	if (cameraHeight > radii *9)
-	{
-	  nextCamera.resetPosition();
-	  nextCamera.setPosition(planet.toGeodetic3D(previousCamera.getCartesianPosition()));
-	}
+    if (cameraHeight > maxHeight)
+    {
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      maxHeight);*/
+    }
+    else if (cameraHeight < minHeight)
+    {
+      nextCamera.copyFrom(previousCamera);
+      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                      cameraPosition._longitude,
+                                      minHeight);*/
+    }
+  
   }
 
 }

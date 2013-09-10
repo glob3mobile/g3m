@@ -30,10 +30,10 @@ public class Vector4D
 
   public Vector4D(double x, double y, double z, double w)
   {
-	  _x = x;
-	  _y = y;
-	  _z = z;
-	  _w = w;
+     _x = x;
+     _y = y;
+     _z = z;
+     _w = w;
 
   }
 
@@ -43,35 +43,35 @@ public class Vector4D
 
   public Vector4D(Vector4D v)
   {
-	  _x = v._x;
-	  _y = v._y;
-	  _z = v._z;
-	  _w = v._w;
+     _x = v._x;
+     _y = v._y;
+     _z = v._z;
+     _w = v._w;
 
   }
 
   public static Vector4D nan()
   {
-	return new Vector4D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+    final IMathUtils mu = IMathUtils.instance();
+
+    return new Vector4D(mu.NanD(), mu.NanD(), mu.NanD(), mu.NanD());
   }
 
   public static Vector4D zero()
   {
-	return new Vector4D(0.0, 0.0, 0.0, 0.0);
+    return new Vector4D(0.0, 0.0, 0.0, 0.0);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z) || IMathUtils.instance().isNan(_w));
+    final IMathUtils mu = IMathUtils.instance();
+
+    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z) || mu.isNan(_w));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isZero() const
   public final boolean isZero()
   {
-	return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
+    return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
 
 //  double x() const {
@@ -90,28 +90,24 @@ public class Vector4D
 //    return _w;
 //  }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.addString("(V4D ");
-	isb.addDouble(_x);
-	isb.addString(", ");
-	isb.addDouble(_y);
-	isb.addString(", ");
-	isb.addDouble(_z);
-	isb.addString(", ");
-	isb.addDouble(_w);
-	isb.addString(")");
-	final String s = isb.getString();
-	if (isb != null)
-		isb.dispose();
-	return s;
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(V4D ");
+    isb.addDouble(_x);
+    isb.addString(", ");
+    isb.addDouble(_y);
+    isb.addString(", ");
+    isb.addDouble(_z);
+    isb.addString(", ");
+    isb.addDouble(_w);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector4D transformedBy(const MutableMatrix44D &m) const;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector4D transformedBy(MutableMatrix44D m);
 

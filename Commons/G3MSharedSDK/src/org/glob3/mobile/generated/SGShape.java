@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SGNode;
 
 public class SGShape extends Shape
@@ -26,42 +25,46 @@ public class SGShape extends Shape
   private SGNode _node;
   private final String _uriPrefix;
 
+  private final boolean _isTransparent;
 
-  public SGShape(SGNode node, String uriPrefix)
+
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
   {
-	  super(null);
-	  _node = node;
-	  _uriPrefix = uriPrefix;
+     super(null, AltitudeMode.ABSOLUTE);
+     _node = node;
+     _uriPrefix = uriPrefix;
+     _isTransparent = isTransparent;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String getURIPrefix() const
+  public final SGNode getNode()
+  {
+    return _node;
+  }
+
   public final String getURIPrefix()
   {
-	return _uriPrefix;
+    return _uriPrefix;
   }
 
   public final void initialize(G3MContext context)
   {
-	_node.initialize(context, this);
+    _node.initialize(context, this);
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return _node.isReadyToRender(rc);
+    return _node.isReadyToRender(rc);
   }
 
-  public final void rawRender(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-	_node.render(rc, parentState);
+    _node.render(rc, parentState, renderNotReadyShapes);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	int ____DIEGO_AT_WORK;
-  //  return _node->isTransparent(rc);
-	return false;
+    return _isTransparent;
   }
 
 }

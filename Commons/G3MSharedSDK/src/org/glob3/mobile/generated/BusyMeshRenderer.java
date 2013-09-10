@@ -20,143 +20,178 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "GPUProgramState.hpp"
+
+
 
 //***************************************************************
 
 
-public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
+public class BusyMeshRenderer extends LeafRenderer
 {
   private Mesh _mesh;
   private double _degrees;
+  private Color _backgroundColor;
 
-  public BusyMeshRenderer()
+  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
+
+
+  private ProjectionGLFeature _projectionFeature;
+  private ModelGLFeature _modelFeature;
+
+  private GLState _glState;
+
+  private void createGLState()
   {
-	  _degrees = 0;
+  
+    if (_projectionFeature == null)
+    {
+      _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
+      _glState.addGLFeature(_projectionFeature, false);
+    }
+    else
+    {
+      _projectionFeature.setMatrix(_projectionMatrix.asMatrix44D());
+    }
+  
+    if (_modelFeature == null)
+    {
+      _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
+      _glState.addGLFeature(_modelFeature, false);
+    }
+    else
+    {
+      _modelFeature.setMatrix(_modelviewMatrix.asMatrix44D());
+    }
+  }
+
+  public BusyMeshRenderer(Color backgroundColor)
+  {
+     _degrees = 0;
+     _backgroundColor = backgroundColor;
+     _projectionFeature = null;
+     _modelFeature = null;
+     _glState = new GLState();
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    _projectionMatrix = MutableMatrix44D.invalid();
   }
 
   public final void initialize(G3MContext context)
   {
-	int numStrides = 60;
+    int numStrides = 60;
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-	ShortBufferBuilder indices = new ShortBufferBuilder();
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
-	int indicesCounter = 0;
-	final float r1 = 12F;
-	final float r2 = 18F;
-	for (int step = 0; step<=numStrides; step++)
-	{
-	  final double angle = (double) step * 2 * IMathUtils.instance().pi() / numStrides;
-	  final double c = IMathUtils.instance().cos(angle);
-	  final double s = IMathUtils.instance().sin(angle);
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+    ShortBufferBuilder indices = new ShortBufferBuilder();
   
-	  vertices.add((r1 * c), (r1 * s), 0);
-	  vertices.add((r2 * c), (r2 * s), 0);
+    int indicesCounter = 0;
+    final float r1 = 12F;
+    final float r2 = 18F;
+    for (int step = 0; step<=numStrides; step++)
+    {
+      final double angle = (double) step * 2 * DefineConstants.PI / numStrides;
+      final double c = IMathUtils.instance().cos(angle);
+      final double s = IMathUtils.instance().sin(angle);
   
-	  indices.add((short)(indicesCounter++));
-	  indices.add((short)(indicesCounter++));
+      vertices.add((r1 * c), (r1 * s), 0);
+      vertices.add((r2 * c), (r2 * s), 0);
   
-	  float col = (float)(1.1 * step / numStrides);
-	  if (col>1)
-	  {
-		colors.add(255, 255, 255, 0);
-		colors.add(255, 255, 255, 0);
-	  }
-	  else
-	  {
-		colors.add(255, 255, 255, 1 - col);
-		colors.add(255, 255, 255, 1 - col);
-	  }
-	}
+      indices.add((short)(indicesCounter++));
+      indices.add((short)(indicesCounter++));
   
-	// the two last indices
-	indices.add((short) 0);
-	indices.add((short) 1);
+      float col = (float)(1.1 * step / numStrides);
+      if (col>1)
+      {
+        colors.add(255, 255, 255, 0);
+        colors.add(255, 255, 255, 0);
+      }
+      else
+      {
+        colors.add(255, 255, 255, 1 - col);
+        colors.add(255, 255, 255, 1 - col);
+      }
+    }
   
-	// create mesh
-	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    // the two last indices
+    indices.add((short) 0);
+    indices.add((short) 1);
   
+    // create mesh
+    _mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	return true;
+    return true;
   }
 
-//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private boolean render_firstTime = true;
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
-	GL gl = rc.getGL();
+    GL gl = rc.getGL();
   
-	// set mesh glstate
-	GLState state = new GLState(parentState);
-	state.enableBlend();
-	gl.setBlendFuncSrcAlpha();
+    createGLState();
   
-	// init effect in the first render
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//	static boolean firstTime = true;
-	if (render_firstTime)
-	{
-	  render_firstTime = false;
-	  Effect effect = new BusyMeshEffect(this);
-	  rc.getEffectsScheduler().startEffect(effect, this);
-	}
+    gl.clearScreen(_backgroundColor);
   
-	// init modelview matrix
-	int[] currentViewport = new int[4];
-	gl.getViewport(currentViewport);
-	final int halfWidth = currentViewport[2] / 2;
-	final int halfHeight = currentViewport[3] / 2;
-	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-	gl.setProjection(M);
-	gl.loadMatrixf(MutableMatrix44D.identity());
-  
-	// clear screen
-	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-	gl.pushMatrix();
-	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.zero(), new Vector3D(-1, 0, 0));
-	MutableMatrix44D R2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-	gl.multMatrixf(R1.multiply(R2));
-  
-	// draw mesh
-	_mesh.render(rc, state);
-  
-	gl.popMatrix();
+    _mesh.render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
+    final int halfWidth = width / 2;
+    final int halfHeight = height / 2;
+    _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
 
+    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
+//    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
+
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public void dispose()
   {
+    if (_mesh != null)
+       _mesh.dispose();
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
+
+    _glState._release();
+
+  super.dispose();
+
   }
 
   public final void incDegrees(double value)
   {
-	_degrees += value;
-	if (_degrees>360)
-		_degrees -= 360;
+    _degrees += value;
+    if (_degrees>360)
+       _degrees -= 360;
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+
+//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
+//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
+//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
-	//int _TODO_start_effects;
+    Effect effect = new BusyMeshEffect(this);
+    rc.getEffectsScheduler().startEffect(effect, this);
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
-	//int _TODO_stop_effects;
+    rc.getEffectsScheduler().cancelAllEffectsFor(this);
   }
 
   public final void onResume(G3MContext context)
@@ -173,12 +208,4 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   {
 
   }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void unusedMethod() const
-  public final void unusedMethod()
-  {
-
-  }
-
 }

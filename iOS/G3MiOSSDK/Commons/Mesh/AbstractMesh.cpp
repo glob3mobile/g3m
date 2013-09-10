@@ -13,15 +13,28 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
+//#include "GPUProgramState.hpp"
+#include "Camera.hpp"
+
+#include "GLFeature.hpp"
+
 AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
     delete _colors;
     delete _flatColor;
+    delete _normals;
   }
 
-  delete _extent;
+  delete _boundingVolume;
   delete _translationMatrix;
+
+  _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
 AbstractMesh::AbstractMesh(const int primitive,
@@ -32,59 +45,70 @@ AbstractMesh::AbstractMesh(const int primitive,
                            float pointSize,
                            Color* flatColor,
                            IFloatBuffer* colors,
-                           const float colorsIntensity) :
+                           const float colorsIntensity,
+                           bool depthTest,
+                           IFloatBuffer* normals) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
-_extent(NULL),
+_boundingVolume(NULL),
 _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
                    ? NULL
                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
-_pointSize(pointSize)
+_pointSize(pointSize),
+_depthTest(depthTest),
+_glState(new GLState()),
+_normals(normals)
 {
+  createGLState();
 }
 
-Extent* AbstractMesh::computeExtent() const {
-
+BoundingVolume* AbstractMesh::computeBoundingVolume() const {
   const int vertexCount = getVertexCount();
 
   if (vertexCount <= 0) {
     return NULL;
   }
 
-  double minx=1e10, miny=1e10, minz=1e10;
-  double maxx=-1e10, maxy=-1e10, maxz=-1e10;
+  double minX = 1e12;
+  double minY = 1e12;
+  double minZ = 1e12;
+
+  double maxX = -1e12;
+  double maxY = -1e12;
+  double maxZ = -1e12;
 
   for (int i=0; i < vertexCount; i++) {
-    const int p = i * 3;
+    const int i3 = i * 3;
 
-    const double x = _vertices->get(p  ) + _center._x;
-    const double y = _vertices->get(p+1) + _center._y;
-    const double z = _vertices->get(p+2) + _center._z;
+    const double x = _vertices->get(i3    ) + _center._x;
+    const double y = _vertices->get(i3 + 1) + _center._y;
+    const double z = _vertices->get(i3 + 2) + _center._z;
 
-    if (x < minx) minx = x;
-    if (x > maxx) maxx = x;
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
 
-    if (y < miny) miny = y;
-    if (y > maxy) maxy = y;
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
 
-    if (z < minz) minz = z;
-    if (z > maxz) maxz = z;
+    if (z < minZ) minZ = z;
+    if (z > maxZ) maxZ = z;
   }
 
-  return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
 }
 
-Extent* AbstractMesh::getExtent() const {
-  if (_extent == NULL) {
-    _extent = computeExtent();
+BoundingVolume* AbstractMesh::getBoundingVolume() const {
+  if (_boundingVolume == NULL) {
+    _boundingVolume = computeBoundingVolume();
   }
-  return _extent;
+  return _boundingVolume;
 }
 
 const Vector3D AbstractMesh::getVertex(int i) const {
@@ -105,38 +129,56 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
   return _flatColor->isTransparent();
 }
 
+void AbstractMesh::createGLState() {
 
-void AbstractMesh::render(const G3MRenderContext *rc,
-                          const GLState& parentState) const {
-  GL* gl = rc->getGL();
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                              3,            //Our buffer contains elements of 3
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true,         //Depth test
+                                              false, 0,
+                                              false, (float)0.0, (float)0.0,
+                                              _lineWidth,
+                                              true, _pointSize),
+                        false);   //POINT SIZE
 
-  GLState state(parentState);
-  state.enableVerticesPosition();
-  state.setLineWidth(_lineWidth);
-  state.setPointSize(_pointSize);
-  if (_colors) {
-    state.enableVertexColor(_colors, _colorsIntensity);
+  if (_normals != NULL){
+    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                           false);
   }
-  if (_flatColor) {
-    state.enableFlatColor(*_flatColor, _colorsIntensity);
-    if (_flatColor->isTransparent()) {
-      state.enableBlend();
-      gl->setBlendFuncSrcAlpha();
-    }
-  }
-
-  gl->vertexPointer(3, 0, _vertices);
-
-  if (_translationMatrix != NULL){
-    gl->pushMatrix();
-    gl->multMatrixf(*_translationMatrix);
-  }
-
-  gl->setState(state);
-  rawRender(rc, state);
 
   if (_translationMatrix != NULL) {
-    gl->popMatrix();
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
-  
+
+  if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
+
+    _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
+                                                 _flatColor->isTransparent(),
+                                                 GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
+
+
+
+
+    return;
+  }
+
+  if (_colors != NULL) {
+    _glState->addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
+                                             4,            //Our buffer contains elements of 4
+                                             0,            //Index 0
+                                             false,        //Not normalized
+                                             0,            //Stride 0
+                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+
+  }
+
+}
+
+void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+
+  _glState->setParent(parentGLState);
+  rawRender(rc);
 }

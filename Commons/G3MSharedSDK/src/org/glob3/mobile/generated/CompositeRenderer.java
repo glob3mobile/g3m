@@ -20,171 +20,188 @@ package org.glob3.mobile.generated;
 public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
+  private int _renderersSize;
 
-  protected G3MContext _context;
+  private G3MContext _context;
 
   private boolean _enable;
 
   public CompositeRenderer()
   {
-	  _context = null;
-	  _enable = true;
-	_renderers = new java.util.ArrayList<Renderer>();
+     _context = null;
+     _enable = true;
+     _renderersSize = 0;
+//    _renderers = std::vector<Renderer*>();
   }
 
   public void dispose()
   {
+  super.dispose();
+
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEnable() const
   public final boolean isEnable()
   {
-	if (!_enable)
-	{
-	  return false;
-	}
+    if (!_enable)
+    {
+      return false;
+    }
   
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  if (_renderers.get(i).isEnable())
-	  {
-		return true;
-	  }
-	}
-	return false;
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      if (_renderers.get(i).isEnable())
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public final void setEnable(boolean enable)
   {
-	_enable = enable;
+    _enable = enable;
   }
 
   public final void initialize(G3MContext context)
   {
-	_context = context;
+    _context = context;
   
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).initialize(context);
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).initialize(context);
+    }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  Renderer renderer = _renderers.get(i);
-	  if (renderer.isEnable())
-	  {
-		if (!renderer.isReadyToRender(rc))
-		{
-		  return false;
-		}
-	  }
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      if (renderer.isEnable())
+      {
+        if (!renderer.isReadyToRender(rc))
+        {
+          return false;
+        }
+      }
+    }
   
-	return true;
+    return true;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
-	//rc->getLogger()->logInfo("CompositeRenderer::render()");
+    //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  Renderer renderer = _renderers.get(i);
-	  if (renderer.isEnable())
-	  {
-		renderer.render(rc, parentState);
-	  }
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      if (renderer.isEnable())
+      {
+        renderer.render(rc, glState);
+      }
+    }
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	// the events are processed bottom to top
-	final int rendersSize = _renderers.size();
-	for (int i = rendersSize - 1; i >= 0; i--)
-	{
-	  Renderer renderer = _renderers.get(i);
-	  if (renderer.isEnable())
-	  {
-		if (renderer.onTouchEvent(ec, touchEvent))
-		{
-		  return true;
-		}
-	  }
-	}
-	return false;
+    // the events are processed bottom to top
+    for (int i = _renderersSize - 1; i >= 0; i--)
+    {
+      Renderer renderer = _renderers.get(i);
+      if (renderer.isEnable())
+      {
+        if (renderer.onTouchEvent(ec, touchEvent))
+        {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-	// the events are processed bottom to top
-	final int rendersSize = _renderers.size();
-	for (int i = rendersSize - 1; i >= 0; i--)
-	{
-	  _renderers.get(i).onResizeViewportEvent(ec, width, height);
-	}
+    // the events are processed bottom to top
+    for (int i = _renderersSize - 1; i >= 0; i--)
+    {
+      _renderers.get(i).onResizeViewportEvent(ec, width, height);
+    }
   }
 
   public final void addRenderer(Renderer renderer)
   {
-	_renderers.add(renderer);
-	if (_context != null)
-	{
-	  renderer.initialize(_context);
-	}
+    _renderers.add(renderer);
+    _renderersSize = _renderers.size();
+  
+    if (_context != null)
+    {
+      renderer.initialize(_context);
+    }
   }
 
-  public final void start()
+  public final void start(G3MRenderContext rc)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).start();
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).start(rc);
+    }
   }
 
-  public final void stop()
+  public final void stop(G3MRenderContext rc)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).stop();
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).stop(rc);
+    }
   }
 
   public final void onResume(G3MContext context)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).onResume(context);
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).onResume(context);
+    }
   }
 
   public final void onPause(G3MContext context)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).onPause(context);
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).onPause(context);
+    }
   }
 
   public final void onDestroy(G3MContext context)
   {
-	final int rendersSize = _renderers.size();
-	for (int i = 0; i < rendersSize; i++)
-	{
-	  _renderers.get(i).onDestroy(context);
-	}
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      _renderers.get(i).onDestroy(context);
+    }
+  }
+
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    SurfaceElevationProvider result = null;
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      SurfaceElevationProvider childSurfaceElevationProvider = renderer.getSurfaceElevationProvider();
+      if (childSurfaceElevationProvider != null)
+      {
+        if (result == null)
+        {
+          result = childSurfaceElevationProvider;
+        }
+        else
+        {
+          ILogger.instance().logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+        }
+      }
+    }
+  
+    return result;
   }
 
 }

@@ -12,7 +12,11 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramManager;
+import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -29,19 +33,17 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.ShaderProgram;
+import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.TouchEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-
-//import org.glob3.mobile.generated.IGLProgramId;
 
 
 public final class G3MWidget_WebGL
@@ -133,8 +135,6 @@ public final class G3MWidget_WebGL
    private int                  _height;
    private MotionEventProcessor _motionEventProcessor;
    private GL                   _gl;
-   private ShaderProgram        _shaderProgram;
-   //   private ShaderProgram                 _shaderProgram2;
    private G3MWidget            _g3mWidget;
 
 
@@ -143,6 +143,7 @@ public final class G3MWidget_WebGL
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
+      _canvas.getCanvasElement().setId("_g3m_canvas");
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
          return;
@@ -164,8 +165,76 @@ public final class G3MWidget_WebGL
       jsDefineG3MBrowserObjects();
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+
+      if (TouchEvent.isSupported()) {
+         sinkEvents(Event.TOUCHEVENTS);
+      }
+      else {
+         sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+      }
+
+      exportJSFunctions();
    }
+
+
+   private native void exportJSFunctions() /*-{
+		var that = this;
+		if (!$wnd.G3M) {
+			$wnd.G3M = {};
+		}
+		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+		});
+		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+		});
+		$wnd.G3M.getCameraData = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+		});
+   }-*/;
+
+
+   public final native JavaScriptObject getCameraData() /*-{
+		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
+		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
+
+		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
+		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::latitude()();
+		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::longitude()();
+		var height = position.@org.glob3.mobile.generated.Geodetic3D::height()();
+
+		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
+		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
+
+		var result = new Object();
+		result.latitude = latitude.@org.glob3.mobile.generated.Angle::degrees()();
+		result.longitude = longitude.@org.glob3.mobile.generated.Angle::degrees()();
+		result.height = height;
+
+		result.heading = heading.@org.glob3.mobile.generated.Angle::degrees()();
+		result.pitch = pitch.@org.glob3.mobile.generated.Angle::degrees()();
+
+		return result;
+   }-*/;
+
+
+   public native String takeScreenshotAsBase64() /*-{
+		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+		var dataURL = canvas.toDataURL("image/jpeg");
+		return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+   }-*/;
+
+
+   public native JavaScriptObject takeScreenshotAsImage() /*-{
+		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+		var image = new Image();
+		image.width = canvas.width;
+		image.height = canvas.height;
+		image.src = canvas.toDataURL("image/jpeg");
+		return image;
+   }-*/;
 
 
    private VerticalPanel createUnsupportedMessage(final String message) {
@@ -244,8 +313,7 @@ public final class G3MWidget_WebGL
 		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
 
 		webGLContext.viewport(0, 0, width, height);
-		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
-				| webGLContext.DEPTH_BUFFER_BIT);
+		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT | webGLContext.DEPTH_BUFFER_BIT);
    }-*/;
 
 
@@ -267,12 +335,9 @@ public final class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
+			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -280,8 +345,7 @@ public final class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -293,23 +357,23 @@ public final class G3MWidget_WebGL
 
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
-		//		debugger;
 		var context = null;
-		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
-				"moz-webgl" ];
+		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d", "moz-webgl" ];
 
 		if (jsCanvas != null) {
 			for ( var cn in contextNames) {
 				try {
-					context = jsCanvas.getContext(contextNames[cn]);
+					context = jsCanvas.getContext(contextNames[cn], {
+						preserveDrawingBuffer : true
+					});
 					//STORING SIZE FOR GLVIEWPORT
 					context.viewportWidth = jsCanvas.width;
 					context.viewportHeight = jsCanvas.height;
-				} catch (e) {
+				}
+				catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
+					jsCanvas.addEventListener("webglcontextlost", function(event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);
@@ -319,7 +383,8 @@ public final class G3MWidget_WebGL
 			if (context == null) {
 				alert("No WebGL context available");
 			}
-		} else {
+		}
+		else {
 			alert("No canvas available");
 		}
 
@@ -327,10 +392,41 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
+   private GPUProgramManager createGPUProgramManager() {
+      final GPUProgramFactory factory = new GPUProgramFactory();
+      factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
+      factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
+
+      factory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader, Shaders_WebGL._colorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
+               Shaders_WebGL._texturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
+               Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
+               Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
+               Shaders_WebGL._flatColorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
+               Shaders_WebGL._noColorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
+               Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
+               Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+
+      return new GPUProgramManager(factory);
+   }
+
+
    public void initWidget(/*final INativeGL nativeGL,*/
                           final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
+                          final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
                           final ArrayList<ICameraConstrainer> cameraConstraints,
                           final CameraRenderer cameraRenderer,
@@ -342,13 +438,16 @@ public final class G3MWidget_WebGL
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final SceneLighting sceneLighting) {
+
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
                storage, //
                downloader, //
                threadUtils, //
+               cameraActivityListener, //
                planet, //
                cameraConstraints, //
                cameraRenderer, //
@@ -359,7 +458,7 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks);
+               periodicalTasks, createGPUProgramManager(), sceneLighting);
 
       _g3mWidget.setUserData(userData);
 
@@ -369,10 +468,10 @@ public final class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
-         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
-            ILogger.instance().logInfo("Failed to load shaders");
-         }
+         //         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
+         //         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
+         //            ILogger.instance().logInfo("Failed to load shaders");
+         //         }
 
          _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
          jsAddResizeHandler(_canvas.getCanvasElement());
@@ -400,7 +499,7 @@ public final class G3MWidget_WebGL
       //USING PROGRAM
       //      if (_program != null) {
       //jsGLInit();
-      _g3mWidget.getGL().useProgram(_shaderProgram);
+      //      _g3mWidget.getGL().useProgram(_shaderProgram);
       _g3mWidget.render(_width, _height);
 
       //      }
@@ -437,7 +536,7 @@ public final class G3MWidget_WebGL
 
    public void setAnimatedCameraPosition(final Geodetic3D position,
                                          final TimeInterval interval) {
-      getG3MWidget().setAnimatedCameraPosition(position, interval);
+      getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
 
 
@@ -468,11 +567,6 @@ public final class G3MWidget_WebGL
 
    public void stopCameraAnimation() {
       getG3MWidget().stopCameraAnimation();
-   }
-
-
-   public void resetCameraPosition() {
-      getG3MWidget().resetCameraPosition();
    }
 
 

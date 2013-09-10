@@ -16,8 +16,10 @@
 #import "JSONBoolean.hpp"
 #import "JSONString.hpp"
 #import "ByteBuffer_iOS.hpp"
+#import "JSONNull.hpp"
 
-JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData) {
+JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData,
+                                      bool nullAsObject) {
   NSError *e = nil;
   id nsJsonObject = [NSJSONSerialization JSONObjectWithData: jsonData
                                                     options: NSJSONReadingAllowFragments
@@ -29,31 +31,34 @@ JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData) {
     return NULL;
   }
 
-  return convert(nsJsonObject);
+  return convert(nsJsonObject, nullAsObject);
 }
 
-JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer) {
+JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer,
+                                      bool nullAsObject) {
   ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
 
   NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
                                 length: buffer_iOS->size()];
 
-  return parse(data);
+  return parse(data, nullAsObject);
 }
 
-JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
+JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString,
+                                      bool nullAsObject) {
   NSString *string = [[NSString alloc] initWithUTF8String: inputString.c_str()];
   NSData* data = [string dataUsingEncoding: NSUTF8StringEncoding];
 
-  return parse(data);
+  return parse(data, nullAsObject);
 }
 
-JSONBaseObject* JSONParser_iOS::convert(NSObject* object) {
+JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
+                                        bool nullAsObject) {
   if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
     JSONArray* array = new JSONArray();
     for (NSObject *element in jsonArray) {
-      array->add(convert(element));
+      array->add(convert(element, nullAsObject));
     }
     return array;
   }
@@ -66,7 +71,7 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object) {
       NSUInteger objI = i;
       const std::string key = std::string( [[keys objectAtIndex:objI] UTF8String] );
       dictionary->put(key,
-                      convert([jsonDict objectForKey:[keys objectAtIndex:objI]]));
+                      convert( [jsonDict objectForKey:[keys objectAtIndex:objI]], nullAsObject) );
     }
     return dictionary;
   }
@@ -110,6 +115,9 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object) {
   }
   else if ([object isKindOfClass:[NSString class]]) {
     return new JSONString([(NSString *) object UTF8String]);
+  }
+  else if ( [object isKindOfClass:[NSNull class]] ) {
+    return nullAsObject ? new JSONNull() : NULL;
   }
 
   return NULL;

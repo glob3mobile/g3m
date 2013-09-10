@@ -24,8 +24,6 @@ public abstract class IShortBuffer implements IBuffer
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual short get(int i) const = 0;
   public abstract short get(int i);
 
   public abstract void put(int i, short value);

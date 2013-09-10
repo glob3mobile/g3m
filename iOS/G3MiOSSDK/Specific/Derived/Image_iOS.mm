@@ -13,294 +13,48 @@
 #include "IImageListener.hpp"
 #include "RectangleI.hpp"
 
-Image_iOS::Image_iOS(int width, int height) {
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char* imageData = new unsigned char[height * width * 4];
-
-  CGContextRef context = CGBitmapContextCreate(imageData,
-                                               width, height,
-                                               8, 4 * width,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
-
-  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-  _image = [UIImage imageWithCGImage:imgRef];
-  CGImageRelease(imgRef);
-  CGContextRelease(context);
-
-  delete[] imageData;
-}
-
-//void Image_iOS::combineWith(const IImage& other,
-//                            int width, int height,
-//                            IImageListener* listener,
-//                            bool autodelete) const {
-//  UIImage* transIm = ((Image_iOS&)other).getUIImage();
-//
+//Image_iOS::Image_iOS(int width, int height) {
 //  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 //  unsigned char* imageData = new unsigned char[height * width * 4];
-//
+//  
 //  CGContextRef context = CGBitmapContextCreate(imageData,
 //                                               width, height,
 //                                               8, 4 * width,
 //                                               colorSpace,
 //                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
 //  CGColorSpaceRelease( colorSpace );
-//  CGRect bounds = CGRectMake( 0, 0, width, height );
-//  CGContextClearRect( context, bounds );
-//
-//  //We draw the images one over the other
-//  CGContextDrawImage( context, bounds, _image.CGImage );
-//  CGContextDrawImage( context, bounds, transIm.CGImage );
-//
+//  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
+//  
 //  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-//  UIImage* img = [UIImage imageWithCGImage:imgRef];
+//  _image = [UIImage imageWithCGImage:imgRef];
 //  CGImageRelease(imgRef);
 //  CGContextRelease(context);
-//
+//  
 //  delete[] imageData;
-//
-//  //  return new Image_iOS(img, NULL);
-//  listener->imageCreated( new Image_iOS(img, NULL) );
-//  if (autodelete) {
-//    delete listener;
-//  }
 //}
-
-void Image_iOS::combineWith(const IImage& other,
-                            const RectangleI& rect,
-                            int width, int height,
-                            IImageListener* listener,
-                            bool autodelete) const {
-  UIImage* otherIm = ((Image_iOS&)other).getUIImage();
-
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char* imageData = new unsigned char[height * width * 4];
-
-  CGContextRef context = CGBitmapContextCreate(imageData,
-                                               width, height,
-                                               8, 4 * width,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-
-  CGRect bounds = CGRectMake( 0, 0, width, height );
-
-  CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, bounds );
-
-  //We draw the images one over the other
-  CGContextDrawImage(context,
-                     bounds,
-                     _image.CGImage);
-  CGContextDrawImage(context,
-                     CGRectMake(rect._x,
-                                rect._y,
-                                rect._width,
-                                rect._height ),
-                     otherIm.CGImage);
-
-  //SAVING IMAGE
-  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-  UIImage* img = [UIImage imageWithCGImage:imgRef];
-  CGImageRelease(imgRef);
-  CGContextRelease(context);
-
-  delete[] imageData;
-
-  //return new Image_iOS(img, NULL);
-  listener->imageCreated( new Image_iOS(img, NULL) );
-  if (autodelete) {
-    delete listener;
-  }
-}
-
-void Image_iOS::combineWith(const std::vector<const IImage*>& images,
-                            const std::vector<RectangleI*>& rectangles,
-                            int width, int height,
-                            IImageListener* listener,
-                            bool autodelete) const {
-
-  const int imagesSize = images.size();
-  if (imagesSize == 0 || imagesSize != rectangles.size()) {
-    if (getWidth() == width && getHeight() == height) {
-      listener->imageCreated( shallowCopy() );
-      if (autodelete) {
-        delete listener;
-      }
-    }
-    else {
-      scale(width, height, listener, autodelete);
-    }
-  }
-  else {
-
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    unsigned char* imageData = new unsigned char[height * width * 4];
-
-    CGContextRef context = CGBitmapContextCreate(imageData,
-                                                 width, height,
-                                                 8, 4 * width,
-                                                 colorSpace,
-                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-
-    CGRect bounds = CGRectMake( 0, 0, width, height );
-
-    CGColorSpaceRelease( colorSpace );
-    CGContextClearRect( context, bounds );
-
-    // draw the receiver image
-    CGContextDrawImage(context,
-                       bounds,
-                       _image.CGImage);
-
-    // draw the images one over the other
-    for (int i = 0; i < imagesSize; i++) {
-      UIImage* image = ((Image_iOS*) images[i])->getUIImage();
-      const RectangleI* rect = rectangles[i];
-
-      CGContextDrawImage(context,
-                         CGRectMake(rect->_x,
-                                    rect->_y,
-                                    rect->_width,
-                                    rect->_height ),
-                         image.CGImage);
-    }
-
-    //SAVING IMAGE
-    CGImageRef imgRef = CGBitmapContextCreateImage(context);
-    UIImage* img = [UIImage imageWithCGImage:imgRef];
-    CGImageRelease(imgRef);
-    CGContextRelease(context);
-
-    delete[] imageData;
-
-    //return new Image_iOS(img, NULL);
-    listener->imageCreated( new Image_iOS(img, NULL) );
-    if (autodelete) {
-      delete listener;
-    }
-  }
-
-}
-
-
-void Image_iOS::subImage(const RectangleI& rect,
-                         IImageListener* listener,
-                         bool autodelete) const {
-  IImage* image;
-  if (rect._x == 0 && rect._y == 0 && rect._width == getWidth() && rect._height == getHeight() ) {
-    image = shallowCopy();
-  }
-  else {
-    CGRect cropRect = CGRectMake(rect._x,
-                                 rect._y,
-                                 rect._width,
-                                 rect._height);
-
-    //Cropping image
-    CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);
-
-    image = new Image_iOS([UIImage imageWithCGImage:imageRef], NULL);
-
-    CGImageRelease(imageRef);
-  }
-
-  //  return image;
-  listener->imageCreated( image );
-  if (autodelete) {
-    delete listener;
-  }
-}
-
-//unsigned char* Image_iOS::rgba8888_to_rgba4444(unsigned char* src,
-//                                               int sizeInBytes) const {
-//  // compute the actual number of pixel elements in the buffer.
-//  int pixelsCount = sizeInBytes / 4;
-//  unsigned int* pixelsSrc = (unsigned int*) src;
-//  // create the RGBA4444 buffer
-//  unsigned short* pixelDst = (unsigned short*) new unsigned char[pixelsCount * 2]; // malloc(pixelsCount * 2);
-//  // convert every pixel
-//  for(int i = 0; i < pixelsCount; i++) {
-//    // read a source pixel
-//    unsigned int pixel = pixelsSrc[i];
-//    // unpack the source data as 8 bit values
-//    unsigned int r = pixel & 0xFF;
-//    unsigned int g = (pixel >> 8) & 0xFF;
-//    unsigned int b = (pixel >> 16) & 0xFF;
-//    unsigned int a = (pixel >> 24) & 0xFF;
-//    //convert to 4 bit vales
-//    r >>= 4;
-//    g >>= 4;
-//    b >>= 4;
-//    a >>= 4;
-//    // and store
-//    pixelDst[i] = (ushort) (r | g << 4  | b << 8 | a << 12);
-//  }
-//  return (unsigned char*) pixelDst;
-//}
-
-//unsigned char* Image_iOS::createByteArrayRGBA4444() const {
-//  const int width  = getWidth();
-//  const int height = getHeight();
-//
-//  unsigned char* rgba8888 = createByteArrayRGBA8888();
-//
-//  unsigned char* result = rgba8888_to_rgba4444(rgba8888, 4 * width * height);
-//
-//  delete [] rgba8888;
-//
-//  return result;
-//}
-
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();
   const int height = getHeight();
-
+  
   unsigned char* result = new unsigned char[4 * width * height];
-
+  
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(result,
                                                width, height,
                                                8, 4 * width,
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-
+  
   CGColorSpaceRelease( colorSpace );
   CGRect bounds = CGRectMake( 0, 0, width, height );
   CGContextClearRect( context, bounds );
-
+  
   CGContextDrawImage( context, bounds, _image.CGImage );
-
+  
   CGContextRelease(context);
-
+  
   return result;
-}
-
-void Image_iOS::scale(int width, int height,
-                      IImageListener* listener,
-                      bool autodelete) const {
-  IImage* result;
-  if ( width == getWidth() && height == getHeight() ) {
-    result = shallowCopy();
-  }
-  else {
-    CGSize newSize = CGSizeMake(width, height);
-
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-    [_image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    result = new Image_iOS(newImage, NULL);
-  }
-
-  //  return new Image_iOS(newImage, NULL);
-  listener->imageCreated( result );
-  if (autodelete) {
-    delete listener;
-  }
 }
 
 const std::string Image_iOS::description() const {

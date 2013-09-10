@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+///#include "GPUProgramState.hpp"
+
 public class ShapePendingEffect
 {
   public Effect _effect;
@@ -6,8 +8,8 @@ public class ShapePendingEffect
 
   public ShapePendingEffect(Effect effect, boolean targetIsCamera)
   {
-	  _effect = effect;
-	  _targetIsCamera = targetIsCamera;
+     _effect = effect;
+     _targetIsCamera = targetIsCamera;
 
   }
 

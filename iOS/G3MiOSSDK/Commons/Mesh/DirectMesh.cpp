@@ -17,7 +17,9 @@ DirectMesh::DirectMesh(const int primitive,
                        float pointSize,
                        Color* flatColor,
                        IFloatBuffer* colors,
-                       const float colorsIntensity) :
+                       const float colorsIntensity,
+                       bool depthTest,
+                       IFloatBuffer* normals) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -26,14 +28,16 @@ AbstractMesh(primitive,
              pointSize,
              flatColor,
              colors,
-             colorsIntensity)
+             colorsIntensity,
+             depthTest,
+             normals)
 {
 }
 
-void DirectMesh::rawRender(const G3MRenderContext* rc,
-                           const GLState& parentState) const {
+void DirectMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
-
+  
   const int verticesCount = getVertexCount();
-  gl->drawArrays(_primitive, 0, verticesCount);
+  gl->drawArrays(_primitive, 0, verticesCount, _glState, *rc->getGPUProgramManager());
 }
+

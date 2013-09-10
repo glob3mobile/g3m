@@ -10,9 +10,8 @@
 #define G3MiOSSDK_FloatBufferBuilderFromGeodetic_hpp
 
 #include "FloatBufferBuilder.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "Planet.hpp"
 
+#include "EllipsoidalPlanet.hpp"
 #include "Geodetic3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Vector3D.hpp"
@@ -20,7 +19,7 @@
 class FloatBufferBuilderFromGeodetic: public FloatBufferBuilder {
 private:
 
-  const int _centerStrategy;
+  const CenterStrategy _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
@@ -31,77 +30,108 @@ private:
     _cz = (float) center._z;
   }
 
-  const Planet * _planet;
+  const Planet * _ellipsoid;
+
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
+                                 const Planet* ellipsoid,
+                                 const Vector3D& center):
+  _ellipsoid(ellipsoid),
+  _centerStrategy(centerStrategy)
+  {
+    setCenter( center );
+  }
+
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
+                                 const Planet* ellipsoid,
+                                 const Geodetic2D& center):
+  _ellipsoid(ellipsoid),
+  _centerStrategy(centerStrategy)
+  {
+    setCenter( _ellipsoid->toCartesian(center) );
+  }
+
+  FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
+                                 const Planet* ellipsoid,
+                                 const Geodetic3D& center):
+  _ellipsoid(ellipsoid),
+  _centerStrategy(centerStrategy)
+  {
+    setCenter( _ellipsoid->toCartesian(center) );
+  }
 
 public:
 
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Planet* planet,
-                                 const Vector3D& center):
-  _planet(planet),
-  _centerStrategy(centerStrategy)
-  {
-    setCenter(center);
+  static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          NO_CENTER,
+#else
+                                          CenterStrategy.NO_CENTER,
+#endif
+                                          planet, Vector3D::zero);
   }
 
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Planet* planet,
-                                 const Geodetic2D& center):
-  _planet(planet),
-  _centerStrategy(centerStrategy)
-  {
-    setCenter( _planet->toCartesian(center) );
+  static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          FIRST_VERTEX,
+#else
+                                          CenterStrategy.FIRST_VERTEX,
+#endif
+                                          planet, Vector3D::zero);
   }
 
-  FloatBufferBuilderFromGeodetic(int centerStrategy,
-                                 const Planet* planet,
-                                 const Geodetic3D& center):
-  _planet(planet),
-  _centerStrategy(centerStrategy)
-  {
-    setCenter( _planet->toCartesian(center) );
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
   }
+
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
+  }
+
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center){
+    return FloatBufferBuilderFromGeodetic(
+#ifdef C_CODE
+                                          GIVEN_CENTER,
+#else
+                                          CenterStrategy.GIVEN_CENTER,
+#endif
+                                          planet, center);
+  }
+
+  void add(const Angle& latitude,
+           const Angle& longitude,
+           const double height);
 
   void add(const Geodetic3D& position) {
-    const Vector3D vector = _planet->toCartesian(position);
-
-    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
-      setCenter(vector);
-    }
-
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
-    if (_centerStrategy != CenterStrategy::noCenter()) {
-      x -= _cx;
-      y -= _cy;
-      z -= _cz;
-    }
-
-    _values.push_back(x);
-    _values.push_back(y);
-    _values.push_back(z);
+    add(position._latitude,
+        position._longitude,
+        position._height);
   }
 
   void add(const Geodetic2D& position) {
-    const Vector3D vector = _planet->toCartesian(position);
+    add(position._latitude,
+        position._longitude,
+        0.0);
+  }
 
-    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
-      setCenter(vector);
-    }
-
-    float x = (float) vector._x;
-    float y = (float) vector._y;
-    float z = (float) vector._z;
-    if (_centerStrategy != CenterStrategy::noCenter()) {
-      x -= _cx;
-      y -= _cy;
-      z -= _cz;
-    }
-
-    _values.push_back(x);
-    _values.push_back(y);
-    _values.push_back(z);
+  void add(const Geodetic2D& position,
+           const double height) {
+    add(position._latitude,
+        position._longitude,
+        height);
   }
 
   Vector3D getCenter() {

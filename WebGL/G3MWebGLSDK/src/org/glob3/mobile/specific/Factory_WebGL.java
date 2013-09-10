@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import java.util.HashMap;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -12,6 +13,9 @@ import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.IWebSocket;
+import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -65,27 +69,27 @@ public final class Factory_WebGL
    }
 
 
-   @Override
-   public native void createImageFromSize(final int width,
-                                          final int height,
-                                          final IImageListener listener,
-                                          final boolean autodelete) /*-{
-		//      return new Image_WebGL(width, height);
-
-		var canvas = $doc.createElement("canvas");
-		canvas.width = width;
-		canvas.height = height;
-
-		var context = canvas.getContext("2d");
-		context.clearRect(0, 0, width, height);
-
-		var jsResult = new Image();
-		jsResult.onload = function() {
-			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-		};
-		jsResult.src = canvas.toDataURL();
-   }-*/;
+   //   @Override
+   //   public native void createImageFromSize(final int width,
+   //                                          final int height,
+   //                                          final IImageListener listener,
+   //                                          final boolean autodelete) /*-{
+   //		//      return new Image_WebGL(width, height);
+   //
+   //		var canvas = $doc.createElement("canvas");
+   //		canvas.width = width;
+   //		canvas.height = height;
+   //
+   //		var context = canvas.getContext("2d");
+   //		context.clearRect(0, 0, width, height);
+   //
+   //		var jsResult = new Image();
+   //		jsResult.onload = function() {
+   //			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
+   //			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+   //		};
+   //		jsResult.src = canvas.toDataURL();
+   //   }-*/;
 
 
    @Override
@@ -145,6 +149,33 @@ public final class Factory_WebGL
    @Override
    public IShortBuffer createShortBuffer(final int size) {
       return new ShortBuffer_WebGL(size);
+   }
+
+
+   @Override
+   public ICanvas createCanvas() {
+      return new Canvas_WebGL();
+   }
+
+
+   @Override
+   public IWebSocket createWebSocket(final URL url,
+                                     final IWebSocketListener listener,
+                                     final boolean autodeleteListener,
+                                     final boolean autodeleteWebSocket) {
+      return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket);
+   }
+
+
+   @Override
+   public IShortBuffer createShortBuffer(final short[] array) {
+      return new ShortBuffer_WebGL(array);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float[] array) {
+      return new FloatBuffer_WebGL(array);
    }
 
 }

@@ -26,17 +26,46 @@ MeshRenderer::~MeshRenderer() {
     Mesh* mesh = _meshes[i];
     delete mesh;
   }
+
+  _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
 }
 
-void MeshRenderer::render(const G3MRenderContext* rc,
-                          const GLState& parentState) {
+void MeshRenderer::updateGLState(const G3MRenderContext* rc) {
+
+  const Camera* cam = rc->getCurrentCamera();
+  if (_projection == NULL) {
+    _projection = new ProjectionGLFeature(cam);
+    _glState->addGLFeature(_projection, true);
+  } else{
+    _projection->setMatrix(cam->getProjectionMatrix44D());
+  }
+
+  if (_model == NULL) {
+    _model = new ModelGLFeature(cam->getModelMatrix44D());
+    _glState->addGLFeature(_model, true);
+  } else{
+    _model->setMatrix(cam->getModelMatrix44D());
+  }
+}
+
+void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  updateGLState(rc);
+
+  _glState->setParent(glState);
+
+
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
-    const Extent* extent = mesh->getExtent();
-
-    if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-      mesh->render(rc, parentState);
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume->touchesFrustum(frustum) ) {
+      mesh->render(rc, _glState);
     }
   }
 }

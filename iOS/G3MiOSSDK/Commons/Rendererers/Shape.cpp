@@ -13,7 +13,10 @@
 #include "ShapeScaleEffect.hpp"
 #include "ShapeOrbitCameraEffect.hpp"
 #include "ShapePositionEffect.hpp"
+#include "ShapeFullPositionEffect.hpp"
+
 #include "Camera.hpp"
+//#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:
@@ -21,11 +24,11 @@ public:
   bool    _targetIsCamera;
 
   ShapePendingEffect(Effect* effect,
-                bool    targetIsCamera) :
+                     bool    targetIsCamera) :
   _effect(effect),
   _targetIsCamera(targetIsCamera)
   {
-    
+
   }
 
   ~ShapePendingEffect() {
@@ -40,13 +43,15 @@ Shape::~Shape() {
     ShapePendingEffect* pendingEffect = _pendingEffects[i];
     delete pendingEffect;
   }
-
+  
   delete _position;
-
+  
   delete _heading;
   delete _pitch;
-
+  
   delete _transformMatrix;
+
+  _glState->_release();
 }
 
 void Shape::cleanTransformMatrix() {
@@ -54,28 +59,40 @@ void Shape::cleanTransformMatrix() {
   _transformMatrix = NULL;
 }
 
-MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
-  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(*_position);
+MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 
+  double altitude = _position->_height;
+  if (_altitudeMode == RELATIVE_TO_GROUND){
+    altitude += _surfaceElevation;
+  }
+
+  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
+                                          _position->_longitude,
+                                          altitude);
+
+  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
+  
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
-
+  
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
 
-MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
     _transformMatrix = createTransformMatrix(planet);
+    _glState->clearGLFeatureGroup(CAMERA_GROUP);
+    _glState->addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
   }
   return _transformMatrix;
 }
 
 void Shape::render(const G3MRenderContext* rc,
-                   const GLState& parentState) {
-  if (isReadyToRender(rc)) {
-
+                   GLState* parentGLState,
+                   bool renderNotReadyShapes) {
+  if (renderNotReadyShapes || isReadyToRender(rc)) {
     const int pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
@@ -83,7 +100,7 @@ void Shape::render(const G3MRenderContext* rc,
         ShapePendingEffect* pendingEffect = _pendingEffects[i];
         if (pendingEffect != NULL) {
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
-          effectsScheduler->cancellAllEffectsFor(target);
+          effectsScheduler->cancelAllEffectsFor(target);
           effectsScheduler->startEffect(pendingEffect->_effect, target);
 
           delete pendingEffect;
@@ -91,25 +108,10 @@ void Shape::render(const G3MRenderContext* rc,
       }
       _pendingEffects.clear();
     }
-
-//    if (_pendingEffect != NULL) {
-//
-//      EffectTarget* target = _pendingEffectTargetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
-//      effectsScheduler->cancellAllEffectsFor(target);
-//      effectsScheduler->startEffect(_pendingEffect, target);
-//
-//      _pendingEffect = NULL;
-//    }
-
-    GL* gl = rc->getGL();
-
-    gl->pushMatrix();
-
-    gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
-
-    rawRender(rc, parentState);
-
-    gl->popMatrix();
+    
+    getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
+    _glState->setParent(parentGLState);
+    rawRender(rc, _glState, renderNotReadyShapes);
   }
 }
 
@@ -121,16 +123,7 @@ void Shape::setAnimatedScale(const TimeInterval& duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
-
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapeScaleEffect(duration,
-//                                        this,
-//                                        _scaleX, _scaleY, _scaleZ,
-//                                        scaleX, scaleY, scaleZ);
-//
-//  _pendingEffectTargetIsCamera = false;
+  addShapeEffect(effect);
 }
 
 void Shape::orbitCamera(const TimeInterval& duration,
@@ -143,16 +136,10 @@ void Shape::orbitCamera(const TimeInterval& duration,
                                               fromAzimuth,  toAzimuth,
                                               fromAltitude, toAltitude);
   _pendingEffects.push_back( new ShapePendingEffect(effect, true) );
+}
 
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapeOrbitCameraEffect(duration,
-//                                              this,
-//                                              fromDistance, toDistance,
-//                                              fromAzimuth,  toAzimuth,
-//                                              fromAltitude, toAltitude);
-//
-//  _pendingEffectTargetIsCamera = true;
+void Shape::addShapeEffect(Effect* effect) {
+  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
 }
 
 void Shape::setAnimatedPosition(const TimeInterval& duration,
@@ -163,15 +150,28 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                            *_position,
                                            position,
                                            linearInterpolation);
-  _pendingEffects.push_back( new ShapePendingEffect(effect, false) );
+  addShapeEffect(effect);
+}
 
-//  delete _pendingEffect;
-//
-//  _pendingEffect = new ShapePositionEffect(duration,
-//                                           this,
-//                                           *_position,
-//                                           position,
-//                                           linearInterpolation);
-//
-//  _pendingEffectTargetIsCamera = false;
+void Shape::setAnimatedPosition(const TimeInterval& duration,
+                                const Geodetic3D& position,
+                                const Angle& pitch,
+                                const Angle& heading,
+                                bool linearInterpolation) {
+  Effect* effect = new ShapeFullPositionEffect(duration,
+                                               this,
+                                               *_position,
+                                               position,
+                                               *_pitch, pitch,*_heading,heading,
+                                               linearInterpolation);
+  addShapeEffect(effect);
+}
+
+void Shape::elevationChanged(const Geodetic2D& position,
+                      double rawElevation,
+                      double verticalExaggeration){
+  _surfaceElevation = rawElevation * verticalExaggeration;
+
+  delete _transformMatrix;
+  _transformMatrix = NULL;
 }

@@ -18,98 +18,82 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TexturedMesh extends Mesh
 {
-  private final Mesh _mesh;
+  private Mesh _mesh;
   private final TextureMapping _textureMapping;
   private final boolean _ownedMesh;
   private final boolean _ownedTexMapping;
   private final boolean _transparent;
 
+  private GLState _glState;
+
+  private void createGLState()
+  {
+    _textureMapping.modifyGLState(_glState);
+  }
+
 
 
   public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
-
   {
-	  _mesh = mesh;
-	  _ownedMesh = ownedMesh;
-	  _textureMapping = textureMapping;
-	  _ownedTexMapping = ownedTexMapping;
-	  _transparent = transparent;
-//    GLState* state = _mesh->getGLState();
-//    state->enableTextures();
-//    state->enableTexture2D();
-//    if (_transparent) {
-//      state->enableBlend();
-//    }
+     _mesh = mesh;
+     _ownedMesh = ownedMesh;
+     _textureMapping = textureMapping;
+     _ownedTexMapping = ownedTexMapping;
+     _transparent = transparent;
+     _glState = new GLState();
+    createGLState();
   }
 
   public void dispose()
   {
-	if (_ownedMesh)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	}
-	if (_ownedTexMapping)
-	{
-	  if (_textureMapping != null)
-		  _textureMapping.dispose();
-	}
+    if (_ownedMesh)
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+    }
+    if (_ownedTexMapping)
+    {
+      if (_textureMapping != null)
+         _textureMapping.dispose();
+    }
+
+    _glState._release();
+
+  super.dispose();
+
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState& parentState) const
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final BoundingVolume getBoundingVolume()
   {
-	GL gl = rc.getGL();
-  
-	GLState state = new GLState(parentState);
-	state.enableTextures();
-	state.enableTexture2D();
-	if (_transparent)
-	{
-	  state.enableBlend();
-	  gl.setBlendFuncSrcAlpha();
-	}
-  
-	_textureMapping.bind(rc);
-  
-	_mesh.render(rc, state);
+    return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Extent* getExtent() const
-  public final Extent getExtent()
-  {
-	return (_mesh == null) ? null : _mesh.getExtent();
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getVertexCount() const
   public final int getVertexCount()
   {
-	return _mesh.getVertexCount();
+    return _mesh.getVertexCount();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getVertex(int i) const
   public final Vector3D getVertex(int i)
   {
-	return _mesh.getVertex(i);
+    return _mesh.getVertex(i);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const TextureMapping* const getTextureMapping() const
   public final TextureMapping getTextureMapping()
   {
-	return _textureMapping;
+    return _textureMapping;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	return _transparent;
+    return _transparent;
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState)
+  {
+    _glState.setParent(parentState);
+    _mesh.render(rc, _glState);
   }
 }

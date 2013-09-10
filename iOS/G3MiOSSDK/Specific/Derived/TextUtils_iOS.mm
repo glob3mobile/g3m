@@ -15,6 +15,8 @@
 
 #include <math.h>
 #include "IFactory.hpp"
+#import "NSString_CppAdditions.h"
+
 
 CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
   if (color == NULL) {
@@ -34,9 +36,9 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
                                      const Color* shadowColor,
                                      IImageListener* listener,
                                      bool autodelete) {
-  NSString* text = [NSString stringWithCString: label.c_str()
-                                      encoding: NSUTF8StringEncoding];
+  NSString* text = [NSString stringWithCppString: label];
 
+  
   UIFont *font = [UIFont systemFontOfSize: fontSize];
   CGSize textSize = [text sizeWithFont: font];
 
@@ -46,6 +48,10 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
 
   CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+//  int __REMOVE;
+//  CGContextSetRGBFillColor(ctx, 0, 0, 0, 0.5f);
+//  CGContextFillRect(ctx, CGRectMake(0, 0, imageSize.width, imageSize.height));
 
   CGContextSetFillColorWithColor(ctx, toCGColor(color));
 
@@ -65,7 +71,6 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   if (autodelete) {
     delete listener;
   }
-  IFactory::instance()->deleteImage(result);
 }
 
 
@@ -88,8 +93,7 @@ void TextUtils_iOS::labelImage(const IImage* image,
                      autodelete);
   }
   else {
-    NSString* text = [NSString stringWithCString: label.c_str()
-                                        encoding: NSUTF8StringEncoding];
+    NSString* text = [NSString stringWithCppString: label];
 
     UIFont *font = [UIFont systemFontOfSize: fontSize];
     CGSize textSize = [text sizeWithFont: font];
@@ -156,6 +160,5 @@ void TextUtils_iOS::labelImage(const IImage* image,
     if (autodelete) {
       delete listener;
     }
-    IFactory::instance()->deleteImage(result);
   }
 }

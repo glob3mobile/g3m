@@ -38,17 +38,26 @@ public:
   }
   
   static MutableVector2D nan() {
-    return MutableVector2D(GMath.NanD(), GMath.NanD());
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return MutableVector2D(mu->NanD(),
+                           mu->NanD());
+  }
+  
+  bool isEquals(double x, double y) const{
+    return _x == x && _y == y;
   }
   
   bool isNan() const {
-    return GMath.isNan(_x) ||  GMath.isNan(_y);
+    const IMathUtils* mu = IMathUtils::instance();
+
+    return mu->isNan(_x) || mu->isNan(_y);
   }
 
   MutableVector2D normalized() const;
   
   double length() const {
-    return GMath.sqrt(squaredLength());
+    return IMathUtils::instance()->sqrt(squaredLength());
   }
   
   double squaredLength() const {
@@ -86,7 +95,7 @@ public:
   }
   
   Angle angle() const { 
-    double a = GMath.atan2(_y, _x);
+    double a = IMathUtils::instance()->atan2(_y, _x);
     return Angle::fromRadians(a);
   }
   

@@ -7,60 +7,42 @@
 //
 
 #include "GEOGeometry.hpp"
+#include "GEOSymbol.hpp"
+#include "GEOFeature.hpp"
 
-#include "Mesh.hpp"
 
-#include "FloatBufferBuilderFromGeodetic.hpp"
-#include "DirectMesh.hpp"
-#include "GLConstants.hpp"
-#include "Camera.hpp"
-#include "GL.hpp"
-
-GEOGeometry::~GEOGeometry() {
-  delete _mesh;
-}
-
-Mesh* GEOGeometry::create2DBoundaryMesh(std::vector<Geodetic2D*>* coordinates,
-                                        Color* color,
-                                        float lineWidth,
-                                        const G3MRenderContext* rc) {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          rc->getPlanet(),
-                                          Geodetic2D::zero());
-
-  const int coordinatesCount = coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(*coordinate);
-    // vertices.add( Geodetic3D(*coordinate, 50) );
+void GEOGeometry::setFeature(GEOFeature* feature) {
+  if (_feature != feature) {
+    delete _feature;
+    _feature = feature;
   }
-
-  return new DirectMesh(GLPrimitive::lineStrip(),
-                        true,
-                        vertices.getCenter(),
-                        vertices.create(),
-                        lineWidth,
-                        1,
-                        color);
 }
 
-Mesh* GEOGeometry::getMesh(const G3MRenderContext* rc) {
-  if (_mesh == NULL) {
-    _mesh = createMesh(rc);
-  }
-  return _mesh;
-}
+void GEOGeometry::symbolize(const G3MRenderContext* rc,
+                            const GEOSymbolizer*    symbolizer,
+                            MeshRenderer*           meshRenderer,
+                            ShapesRenderer*         shapesRenderer,
+                            MarksRenderer*          marksRenderer,
+                            GEOTileRasterizer*      geoTileRasterizer) const {
+  std::vector<GEOSymbol*>* symbols = createSymbols(symbolizer);
+  if (symbols != NULL) {
 
-void GEOGeometry::render(const G3MRenderContext* rc,
-                         const GLState& parentState) {
-  Mesh* mesh = getMesh(rc);
-  if (mesh != NULL) {
-    const Extent* extent = mesh->getExtent();
-
-    if ( extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() ) ) {
-      GLState state(parentState);
-      state.disableDepthTest();
-      mesh->render(rc, state);
+    const int symbolsSize = symbols->size();
+    for (int i = 0; i < symbolsSize; i++) {
+      const GEOSymbol* symbol = symbols->at(i);
+      if (symbol != NULL) {
+        const bool deleteSymbol = symbol->symbolize(rc,
+                                                    symbolizer,
+                                                    meshRenderer,
+                                                    shapesRenderer,
+                                                    marksRenderer,
+                                                    geoTileRasterizer);
+        if (deleteSymbol) {
+          delete symbol;
+        }
+      }
     }
+
+    delete symbols;
   }
 }

@@ -5,22 +5,24 @@ public class BuilderStartTask extends FrameTask
 
   public BuilderStartTask(TileTextureBuilder builder)
   {
-	  _builder = builder;
-	_builder._retain();
+     _builder = builder;
+    _builder._retain();
   }
 
   public void dispose()
   {
-	_builder._release();
+    _builder._release();
+  super.dispose();
+
   }
 
   public final void execute(G3MRenderContext rc)
   {
-	_builder.start();
+    _builder.start();
   }
 
   public final boolean isCanceled(G3MRenderContext rc)
   {
-	return false;
+    return _builder.isCanceled();
   }
 }

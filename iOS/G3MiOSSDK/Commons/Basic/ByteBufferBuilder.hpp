@@ -19,6 +19,10 @@ private:
 
 public:
 
+  ~ByteBufferBuilder() {
+
+  }
+
   void addInt64(long long value) {
     const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
     const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
