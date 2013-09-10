@@ -45,3 +45,9 @@ JavaDesktop/G3MJavaDesktopSDK/bin/
 Commons/G3MSharedSDK/bin
 
 iOS/G3MiOSSDK/Commons/Debug
+
+WebGL/G3MWebGLTemplate/.gwt/
+WebGL/G3MWebGLTemplate/gwt-unitCache/
+WebGL/G3MWebGLTemplate/war/org.glob3.mobile.G3MWebGLTemplate/
+WebGL/G3MWebGLTemplate/war/WEB-INF/classes/
+WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/

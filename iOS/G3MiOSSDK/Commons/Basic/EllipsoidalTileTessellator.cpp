@@ -41,18 +41,15 @@ EllipsoidalTileTessellator::~EllipsoidalTileTessellator() {
   }
 #endif
 #ifdef JAVA_CODE
-  java.util.Iterator it = _indicesMap.entrySet().iterator();
-  while (it.hasNext()) {
-    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    IShortBuffer b = (IShortBuffer) pairs.getValue();
-    b.dispose();
+  for (final java.util.Map.Entry<Vector2I, IShortBuffer> entry : _indicesMap.entrySet()) {
+    final IShortBuffer buffer = entry.getValue();
+    buffer.dispose();
   }
 #endif
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 Vector2I EllipsoidalTileTessellator::getTileMeshResolution(const Planet* planet,

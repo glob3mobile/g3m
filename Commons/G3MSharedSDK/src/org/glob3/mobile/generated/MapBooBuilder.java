@@ -313,7 +313,7 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
   private Color parseColor(JSONString jsonColor)
   {
@@ -384,10 +384,30 @@ public abstract class MapBooBuilder
   
     return new MapBoo_MultiImage_Level(new URL(_serverURL, "/images/" + jsURL.value()), (int) jsWidth.value(), (int) jsHeight.value());
   }
+  private MapBoo_CameraPosition parseCameraPosition(JSONObject jsonObject)
+  {
+    if (jsonObject == null)
+    {
+      return null;
+    }
+  
+    final double latitudeInDegress = jsonObject.getAsNumber("latitude", 0);
+    final double longitudeInDegress = jsonObject.getAsNumber("longitude", 0);
+    final double height = jsonObject.getAsNumber("height", 0);
+  
+    final double headingInDegrees = jsonObject.getAsNumber("heading", 0);
+    final double pitchInDegrees = jsonObject.getAsNumber("pitch", 0);
+  
+    final boolean animated = jsonObject.getAsBoolean("animated", true);
+  
+    return new MapBoo_CameraPosition(Geodetic3D.fromDegrees(latitudeInDegress, longitudeInDegress, height), Angle.fromDegrees(headingInDegrees), Angle.fromDegrees(pitchInDegrees), animated);
+  }
 
   private void changedCurrentScene()
   {
     recreateLayerSet();
+  
+    final MapBoo_Scene currentScene = getApplicationCurrentScene();
   
     if (_g3mWidget != null)
     {
@@ -395,11 +415,19 @@ public abstract class MapBooBuilder
   
       // force immediate execution of PeriodicalTasks
       _g3mWidget.resetPeriodicalTasksTimeouts();
+  
+      if (currentScene != null)
+      {
+        final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
+        if (cameraPosition != null)
+        {
+          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+        }
+      }
     }
   
     if (_applicationListener != null)
     {
-      final MapBoo_Scene currentScene = getApplicationCurrentScene();
       _applicationListener.onSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
     }
   
@@ -750,6 +778,9 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void openApplicationTube(G3MContext context)
   {
+    if (_webSocket != null)
+       _webSocket.dispose();
+  
     final IFactory factory = context.getFactory();
     _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener
   }
