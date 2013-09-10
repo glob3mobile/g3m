@@ -128,6 +128,8 @@
 
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
 
+#import <G3MiOSSDK/HUDRenderer.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -640,6 +642,15 @@ public:
     Sector spain2 = Sector::fromDegrees(27.3174927 -30, -18.5284423 -30, 45.0299024 + 30, 5.4084426 + 30);
 
     builder.addCameraConstraint(new SectorAndHeightCameraConstrainer(spain2, 1e5) );
+  }
+
+  if (true){ //HUD
+  Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+
+    HUDRenderer* hudRenderer = new   HUDRenderer();
+    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100));
+
+    builder.addRenderer(hudRenderer);
   }
 
 

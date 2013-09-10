@@ -334,6 +334,8 @@
 		D853ED1317DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */; };
 		D853ED1417DA104500580CE9 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D853ED1217DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.hpp */; };
 		D8556D2F17DF2D0800A9D7B9 /* ITessellatorData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8556D2E17DF2AD500A9D7B9 /* ITessellatorData.hpp */; };
+		D8556D3217DF32D300A9D7B9 /* HUDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8556D3017DF32D300A9D7B9 /* HUDRenderer.cpp */; };
+		D8556D3317DF363E00A9D7B9 /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8556D3117DF32D300A9D7B9 /* HUDRenderer.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -592,6 +594,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8556D3317DF363E00A9D7B9 /* HUDRenderer.hpp in CopyFiles */,
 				D8556D2F17DF2D0800A9D7B9 /* ITessellatorData.hpp in CopyFiles */,
 				D853ED1417DA104500580CE9 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
 				D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */,
@@ -1380,6 +1383,8 @@
 		D853ED1117DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SectorAndHeightCameraConstrainer.cpp; sourceTree = "<group>"; };
 		D853ED1217DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SectorAndHeightCameraConstrainer.hpp; sourceTree = "<group>"; };
 		D8556D2E17DF2AD500A9D7B9 /* ITessellatorData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ITessellatorData.hpp; sourceTree = "<group>"; };
+		D8556D3017DF32D300A9D7B9 /* HUDRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDRenderer.cpp; sourceTree = "<group>"; };
+		D8556D3117DF32D300A9D7B9 /* HUDRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDRenderer.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
@@ -2006,6 +2011,8 @@
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
 				CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */,
 				CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */,
+				D8556D3017DF32D300A9D7B9 /* HUDRenderer.cpp */,
+				D8556D3117DF32D300A9D7B9 /* HUDRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2663,6 +2670,7 @@
 				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
 				D853ED1317DA0EBB00580CE9 /* SectorAndHeightCameraConstrainer.cpp in Sources */,
+				D8556D3217DF32D300A9D7B9 /* HUDRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
