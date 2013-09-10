@@ -374,9 +374,10 @@ public class G3MWidget
     return _gl;
   }
 
-  //  const Camera* getCurrentCamera() const {
-  //    return _currentCamera;
-  //  }
+  public final Camera getCurrentCamera()
+  {
+    return _currentCamera;
+  }
 
   public final Camera getNextCamera()
   {

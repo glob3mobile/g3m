@@ -124,19 +124,19 @@ public:
   void onResume();
   
   void onDestroy();
-  
+
   GL* getGL() const {
     return _gl;
   }
-  
-  //  const Camera* getCurrentCamera() const {
-  //    return _currentCamera;
-  //  }
-  
+
+  const Camera* getCurrentCamera() const {
+    return _currentCamera;
+  }
+
   Camera* getNextCamera() const {
     return _nextCamera;
   }
-  
+
   void setUserData(WidgetUserData* userData) {
     delete _userData;
     

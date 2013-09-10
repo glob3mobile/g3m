@@ -201,15 +201,12 @@ public class PlanetTileTessellator extends TileTessellator
 
   public void dispose()
   {
-    java.util.Iterator it = _indicesMap.entrySet().iterator();
-    while (it.hasNext()) {
-      java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-      IShortBuffer b = (IShortBuffer) pairs.getValue();
-      b.dispose();
+    for (final java.util.Map.Entry<Vector2I, IShortBuffer> entry : _indicesMap.entrySet()) {
+      final IShortBuffer buffer = entry.getValue();
+      buffer.dispose();
     }
   
     super.dispose();
-  
   }
 
   public final Vector2I getTileMeshResolution(Planet planet, Vector2I rawResolution, Tile tile, boolean debug)

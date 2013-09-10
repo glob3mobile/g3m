@@ -135,10 +135,9 @@ _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
-//_projection(NULL),
-//_model(NULL),
 _glState(new GLState()),
-_renderedSector(renderedSector)
+_renderedSector(renderedSector),
+_validLayerTilesRenderParameters(false)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -310,7 +309,8 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
 void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
-  if (parameters == NULL) {
+  _validLayerTilesRenderParameters = (parameters != NULL);
+  if (!_validLayerTilesRenderParameters) {
     ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
@@ -385,6 +385,10 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
+  if (!_validLayerTilesRenderParameters) {
+    return false;
+  }
+  
   if (!_layerSet->isReady()) {
     return false;
   }

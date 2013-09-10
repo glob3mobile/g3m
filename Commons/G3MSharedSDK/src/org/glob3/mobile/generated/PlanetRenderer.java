@@ -37,7 +37,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
   
     final LayerTilesRenderParameters parameters = _layerSet.getLayerTilesRenderParameters();
-    if (parameters == null)
+    _validLayerTilesRenderParameters = (parameters != null);
+    if (!_validLayerTilesRenderParameters)
     {
       ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
@@ -188,6 +189,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private boolean isReadyToRenderTiles(G3MRenderContext rc)
   {
+    if (!_validLayerTilesRenderParameters)
+    {
+      return false;
+    }
+  
     if (!_layerSet.isReady())
     {
       return false;
@@ -308,11 +314,17 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
+<<<<<<< HEAD
   private Sector _renderedSector ;
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   //_projection(NULL),
   //_model(NULL),
+=======
+  private boolean _validLayerTilesRenderParameters;
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
+>>>>>>> webgl-port
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -332,7 +344,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
+<<<<<<< HEAD
      _renderedSector = new Sector(renderedSector);
+=======
+     _validLayerTilesRenderParameters = false;
+>>>>>>> webgl-port
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {

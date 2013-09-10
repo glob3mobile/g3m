@@ -351,13 +351,12 @@ private:
   bool _recreateTilesPending;
 
   GLState* _glState;
-//  ProjectionGLFeature* _projection;
-//  ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
-
+  
   Sector _renderedSector;
+  bool _validLayerTilesRenderParameters;
 
 public:
   PlanetRenderer(const TileTessellator* tessellator,
