@@ -535,7 +535,7 @@ public abstract class MapBooBuilder
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
-    GInitializationTask initializationTask = new MapBooBuilder_SceneTubeConnector(this);
+    GInitializationTask initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   

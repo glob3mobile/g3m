@@ -24,6 +24,7 @@ public class BuilderDownloadStepDownloadListener extends IImageDownloadListener
   {
     //  _onError++;
     _builder.stepCanceled(_position);
+    ILogger.instance().logError("Error downloading tile texture from %s", url.getPath());
   }
 
   public final void onCanceledDownload(URL url, IImage image, boolean expired)

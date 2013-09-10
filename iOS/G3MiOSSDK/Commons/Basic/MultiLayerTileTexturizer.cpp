@@ -719,6 +719,7 @@ void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
 void BuilderDownloadStepDownloadListener::onError(const URL& url) {
   //  _onError++;
   _builder->stepCanceled(_position);
+  ILogger::instance()->logError("Error downloading tile texture from %s", url.getPath().c_str());
 }
 
 void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {

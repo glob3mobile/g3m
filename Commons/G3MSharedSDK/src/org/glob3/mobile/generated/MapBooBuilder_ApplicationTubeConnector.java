@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_SceneTubeConnector extends GInitializationTask
+public class MapBooBuilder_ApplicationTubeConnector extends GInitializationTask
 {
   private MapBooBuilder _builder;
 
-  public MapBooBuilder_SceneTubeConnector(MapBooBuilder builder)
+  public MapBooBuilder_ApplicationTubeConnector(MapBooBuilder builder)
   {
      _builder = builder;
   }
