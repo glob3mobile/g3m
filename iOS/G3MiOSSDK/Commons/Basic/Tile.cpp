@@ -66,7 +66,8 @@ _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
 _lodTimer(NULL),
-_planetRenderer(planetRenderer)
+_planetRenderer(planetRenderer),
+_tessellatorData(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -109,6 +110,8 @@ Tile::~Tile() {
   }
 
   delete _lodTimer;
+
+  delete _tessellatorData;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,

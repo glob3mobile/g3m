@@ -17,38 +17,38 @@ class IShortBuffer;
 class Sector;
 class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;
-class FloatBufferBuilderFromCartesian2D;
-
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "ITessellatorData.hpp"
 
 class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
   const Sector _renderedSector;
 
-#ifdef C_CODE
-  class OrderableVector2I: public Vector2I{
-  public:
-    OrderableVector2I(const Vector2I v): Vector2I(v){}
-    bool operator<(const Vector2I& that) const{
-      return _x < that._x;
-    }
-  };
-  mutable std::map<OrderableVector2I, IShortBuffer*> _indicesMap; //Resolution vs Indices
-#endif
-#ifdef JAVA_CODE
-  private java.util.HashMap<Vector2I, IShortBuffer> _indicesMap = new java.util.HashMap<Vector2I, IShortBuffer>();
-#endif
+//#ifdef C_CODE
+//  class OrderableVector2I: public Vector2I{
+//  public:
+//    OrderableVector2I(const Vector2I v): Vector2I(v){}
+//    bool operator<(const Vector2I& that) const{
+//      return _x < that._x;
+//    }
+//  };
+//  mutable std::map<OrderableVector2I, IShortBuffer*> _indicesMap; //Resolution vs Indices
+//#endif
+//#ifdef JAVA_CODE
+//  private java.util.HashMap<Vector2I, IShortBuffer> _indicesMap = new java.util.HashMap<Vector2I, IShortBuffer>();
+//#endif
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Tile* tile,
                                const Sector& renderedSector) const;
 
-  IShortBuffer* createTileIndices(const Planet* planet,
-                                  const Sector& sector,
-                                  const Vector2I& tileResolution) const;
+//  IShortBuffer* createTileIndices(const Planet* planet,
+//                                  const Sector& sector,
+//                                  const Vector2I& tileResolution) const;
 
-  IShortBuffer* getTileIndices(const Planet* planet, const Sector& sector,
-                               const Vector2I& tileResolution, bool reusableIndices) const;
+//  IShortBuffer* getTileIndices(const Planet* planet, const Sector& sector,
+//                               const Vector2I& tileResolution, bool reusableIndices) const;
 
   Geodetic3D getGeodeticOnPlanetSurface(const IMathUtils* mu,
                                         const Planet* planet,
@@ -134,9 +134,16 @@ private:
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
-  mutable std::map<const Tile*, FloatBufferBuilderFromCartesian2D*> _texCoordsMap;
+  class PlanetTileTessellatorData: public ITessellatorData{
+  public:
+    FloatBufferBuilderFromCartesian2D* _textCoords;
+    PlanetTileTessellatorData(FloatBufferBuilderFromCartesian2D* textCoords):
+    _textCoords(textCoords){}
 
-
+    ~PlanetTileTessellatorData(){
+      delete _textCoords;
+    }
+  };
 
 public:
 
@@ -152,7 +159,7 @@ public:
 
   Mesh* createTileMesh(const Planet* planet,
                        const Vector2I& resolution,
-                       const Tile* tile,
+                       Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool mercator,

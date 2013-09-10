@@ -39,21 +39,21 @@ _renderedSector(sector)
 }
 
 PlanetTileTessellator::~PlanetTileTessellator() {
-#ifdef C_CODE
-  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
-       it != _indicesMap.end();
-       it++){
-    delete it->second;
-  }
-#endif
-#ifdef JAVA_CODE
-  java.util.Iterator it = _indicesMap.entrySet().iterator();
-  while (it.hasNext()) {
-    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    IShortBuffer b = (IShortBuffer) pairs.getValue();
-    b.dispose();
-  }
-#endif
+//#ifdef C_CODE
+//  for (std::map<OrderableVector2I, IShortBuffer*>::iterator it = _indicesMap.begin();
+//       it != _indicesMap.end();
+//       it++){
+//    delete it->second;
+//  }
+//#endif
+//#ifdef JAVA_CODE
+//  java.util.Iterator it = _indicesMap.entrySet().iterator();
+//  while (it.hasNext()) {
+//    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+//    IShortBuffer b = (IShortBuffer) pairs.getValue();
+//    b.dispose();
+//  }
+//#endif
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -111,6 +111,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   //  return Vector2I(resolutionX, resolutionY);
 }
 
+/*
 IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
                                                        const Sector& sector,
                                                        const Vector2I& tileResolution) const{
@@ -165,7 +166,8 @@ IShortBuffer* PlanetTileTessellator::createTileIndices(const Planet* planet,
 
   return indices.create();
 }
-
+*/
+/*
 IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
                                                     const Sector& sector,
                                                     const Vector2I& tileResolution,
@@ -195,10 +197,11 @@ IShortBuffer* PlanetTileTessellator::getTileIndices(const Planet* planet,
 #endif
 
 }
+ */
 
 Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             const Vector2I& rawResolution,
-                                            const Tile* tile,
+                                            Tile* tile,
                                             const ElevationData* elevationData,
                                             float verticalExaggeration,
                                             bool mercator,
@@ -287,10 +290,8 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     }
   }
 
-  if (_texCoordsMap.find(tile) != _texCoordsMap.end()){
-    delete _texCoordsMap[tile];
-  }
-  _texCoordsMap[tile] = textCoords;
+  //Storing textCoords in Tile
+  tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
   return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                  vertices.getCenter(),
@@ -436,12 +437,12 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
                                                       const Tile* tile,
                                                       bool mercator) const {
 
-
-  if (_texCoordsMap.find(tile) != _texCoordsMap.end() ){
-    return _texCoordsMap[tile]->create();
-  } else{
-    printf("not ok");
+  PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
+  if (data == NULL || data->_textCoords == NULL){
+    ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
+    return NULL;
   }
+  return data->_textCoords->create();
 
   ////////////////////////////////////////////////////////////
 

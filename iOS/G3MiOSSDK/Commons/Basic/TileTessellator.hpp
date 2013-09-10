@@ -31,7 +31,7 @@ public:
 
   virtual Mesh* createTileMesh(const Planet* planet,
                                const Vector2I& resolution,
-                               const Tile* tile,
+                               Tile* tile,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
                                bool mercator,
