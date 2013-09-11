@@ -594,58 +594,19 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
 
-
-  bool debug = !needsNorthSkirt(tileSector);
-  if (debug  ){
-    printf("---------------------\n");
-  }
-
   //CREATING TEXTURE COORDS////////////////////////////////////////////////////////////////
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-/*
-  if (debug  ){
-    printf("MERCATOR: %f - %f \n", mercatorLowerGlobalV, mercatorUpperGlobalV );
-  }
-  
 
-  for (int j = 0; j < ry; j++) {
-
-    double linearV = (float) j / (ry-1);
-
-    if (mercator){
-      const Angle latitude = meshSector.getInnerPointLatitude(linearV);
-      const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-      const double mercatorLocalV  = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-
-      if (debug){
-        printf("LAT %d, %f -> %f\n", j, linearV, mercatorLocalV);
-      } 
-
-      linearV = mercatorLocalV;
-    }
-
-    for (int i = 0; i < rx; i++) {
-      const double linearU = (float) i / (rx-1);
-      Geodetic2D g = meshSector.getInnerPoint(linearU,linearV);
-      Vector2D uv = tileSector.getUVCoordinates(g);
-      //textCoords.add(uv);
-    }
-  }
-
-  if (debug){
-    printf("---------------------\n");
-  }
-*/
   //VERTICES///////////////////////////////////////////////////////////////
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = 0;
-  for (int j = 0; j < meshResolution._y; j++) {
-    const double v = (double) j / (meshResolution._y - 1);
+  for (int j = 0; j < ry; j++) {
+    const double v = (double) j / (ry - 1);
 
-    for (int i = 0; i < meshResolution._x; i++) {
-      const double u = (double) i / (meshResolution._x - 1);
+    for (int i = 0; i < rx; i++) {
+      const double u = (double) i / (rx - 1);
       const Geodetic2D position = meshSector.getInnerPoint(u, v);
       double elevation = 0;
 
@@ -661,20 +622,16 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       }
       vertices.add( position, elevation );
 
-
       //TEXT COORDS
       if (mercator){
-
         //U
-        double u = tileSector.getUCoordinate(position._longitude);
+        const double u = tileSector.getUCoordinate(position._longitude);
 
         //V
         const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
         const double v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
 
-        textCoords.add(Vector2D(u,v));
-      
-
+        textCoords.add((float)u, (float)v);
       } else{
 
         Vector2D uv = tileSector.getUVCoordinates(position);

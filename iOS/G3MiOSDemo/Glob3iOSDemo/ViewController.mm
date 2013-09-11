@@ -629,8 +629,8 @@ public:
 
   if (true){ //Incomplete world
 
-//    Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
+    Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+//    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
     builder.setShownSector(spain );
 
     builder.getPlanetRendererBuilder()->setRenderDebug(true);
@@ -638,10 +638,6 @@ public:
     geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
 
     builder.setBackgroundColor(new Color(Color::white()));
-
-    Sector spain2 = Sector::fromDegrees(27.3174927 -30, -18.5284423 -30, 45.0299024 + 30, 5.4084426 + 30);
-
-    builder.addCameraConstraint(new SectorAndHeightCameraConstrainer(spain2, 1e5) );
 
     builder.getPlanetRendererBuilder()->setRenderDebug(true);
   }
