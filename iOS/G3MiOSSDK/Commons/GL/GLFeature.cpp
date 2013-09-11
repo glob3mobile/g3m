@@ -37,7 +37,7 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
                                      int stride,
                                      bool depthTestEnabled,
                                      bool cullFace, int culledFace,
-                                     bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
+                                     bool polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
                                      float lineWidth,
                                      bool needsPointSize, float pointSize):
 GLFeature(NO_GROUP, GLF_GEOMETRY),
