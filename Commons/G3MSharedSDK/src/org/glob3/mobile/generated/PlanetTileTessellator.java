@@ -75,21 +75,21 @@ public class PlanetTileTessellator extends TileTessellator
     return tile.getSector().intersection(_renderedSector);
   }
 
-  private double getHeight(Geodetic2D g, ElevationData elevationData, double verticalExaggeration)
-  {
-    if (elevationData == null)
-    {
-      return 0;
-    }
-    final double h = elevationData.getElevationAt(g);
-    if (IMathUtils.instance().isNan(h))
-    {
-      return 0;
-    }
-  
-    return h;
-  }
+//  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
 
+
+  //double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const{
+  //  if (elevationData == NULL){
+  //    return 0;
+  //  }
+  //  const double h = elevationData->getElevationAt(g);
+  //  if (IMathUtils::instance()->isNan(h)){
+  //    return 0;
+  //  }
+  //
+  //  return h;
+  //}
+  
   private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   

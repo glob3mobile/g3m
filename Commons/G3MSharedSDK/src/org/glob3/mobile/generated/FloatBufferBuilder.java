@@ -38,11 +38,11 @@ public class FloatBufferBuilder
      }
   }
 
-  
+
   public final class FloatArrayList {
     private float[] _array;
     private int     _size;
-    
+
     public FloatArrayList() {
       this(256);
     }
@@ -76,7 +76,7 @@ public class FloatBufferBuilder
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
-    
+
     public float[] toArray() {
       final float[] result = new float[_size];
       System.arraycopy(_array, 0, result, 0, _size);
@@ -90,6 +90,10 @@ public class FloatBufferBuilder
   public final IFloatBuffer create()
   {
     return IFactory.instance().createFloatBuffer( _values.toArray() );
+  }
+
+  public void dispose()
+  {
   }
 
   public final int size()

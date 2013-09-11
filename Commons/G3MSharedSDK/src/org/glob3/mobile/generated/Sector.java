@@ -117,8 +117,6 @@ public class Sector
   
     if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon))
     {
-       ;
-  
       final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
       final Geodetic2D up = new Geodetic2D(upLat, upLon);
   

@@ -33,9 +33,7 @@ public class PlanetTileTessellatorData
 
   public void dispose()
   {
-///#ifdef C_CODE
     if (_textCoords != null)
        _textCoords.dispose();
-///#endif
   }
 }
