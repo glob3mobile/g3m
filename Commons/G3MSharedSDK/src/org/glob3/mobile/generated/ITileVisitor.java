@@ -13,5 +13,5 @@ public interface ITileVisitor
 {
   public void dispose();
 
-  void visitTile(Tile tile);
+  void visitTile(java.util.ArrayList<Layer> layers, Tile tile);
 }
