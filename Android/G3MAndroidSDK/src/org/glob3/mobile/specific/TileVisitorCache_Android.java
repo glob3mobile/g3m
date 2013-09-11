@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MRenderContext;
 import org.glob3.mobile.generated.ITileVisitor;
 import org.glob3.mobile.generated.Layer;
 import org.glob3.mobile.generated.LayerSet;
@@ -16,22 +17,17 @@ public class TileVisitorCache_Android
          implements
             ITileVisitor {
 
-   private long           _debugCounter = 0;
-   final G3MContext       _context;
-   private final LayerSet _layerSet;
+   private long             _debugCounter = 0;
+   final G3MContext         _context;
+   private final LayerSet   _layerSet;
 
-   private final int      _tileWidth;
-   private final int      _tileHeight;
+   private G3MRenderContext _g3mrc;
 
 
    public TileVisitorCache_Android(final G3MContext context,
-                                   final LayerSet layerSet,
-                                   final int width,
-                                   final int height) {
+                                   final LayerSet layerSet) {
       _context = context;
       _layerSet = layerSet;
-      _tileWidth = width;
-      _tileHeight = height;
    }
 
 
