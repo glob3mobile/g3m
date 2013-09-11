@@ -401,7 +401,7 @@ public abstract class IG3MBuilder
     }
   
     int TODO_VIEWPORT;
-    Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1,1), shownSector);
+    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
   
     //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
     if (!shownSector.isEquals(Sector.fullSphere()))

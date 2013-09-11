@@ -41,8 +41,11 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   //  const double height = nextCamera->getHeight();
     final double height = position._height;
   
+    final Geodetic3D center = nextCamera.getGeodeticCenterOfView();
+  
     final boolean invalidHeight = (height > _maxHeight);
-    final boolean invalidPosition = !_sector.contains(position._latitude, position._longitude);
+  //  const bool invalidPosition = !_sector.contains(position._latitude, position._longitude);
+    final boolean invalidPosition = !_sector.contains(center._latitude, center._longitude);
   
     if (invalidHeight || invalidPosition)
     {

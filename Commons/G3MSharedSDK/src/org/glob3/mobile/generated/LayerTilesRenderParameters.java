@@ -53,15 +53,22 @@ public class LayerTilesRenderParameters
     return new Vector2I(256, 256);
   }
 
-  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
+
+  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector, int firstLevel, int maxLevel)
   {
     final int topSectorSplitsByLatitude = 2;
     final int topSectorSplitsByLongitude = 4;
-    final int firstLevel = 0;
-    final int maxLevel = 17;
     final boolean mercator = false;
 
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+  }
+
+  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
+  {
+    final int firstLevel = 0;
+    final int maxLevel = 17;
+
+    return createDefaultNonMercator(topSector, firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
