@@ -73,7 +73,8 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     if (!_elevationDataResolved)
     {
-      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight), true);
+      IDownloader downloader = context.getDownloader();
+      downloader.requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight), true);
     }
   }
 

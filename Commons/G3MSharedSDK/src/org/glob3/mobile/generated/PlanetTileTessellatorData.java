@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromGeodetic;
 //class ShortBufferBuilder;
 
+
 public class PlanetTileTessellatorData
 {
   public FloatBufferBuilderFromCartesian2D _textCoords;
@@ -32,5 +33,9 @@ public class PlanetTileTessellatorData
 
   public void dispose()
   {
+///#ifdef C_CODE
+    if (_textCoords != null)
+       _textCoords.dispose();
+///#endif
   }
 }
