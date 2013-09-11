@@ -22,8 +22,7 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromGeodetic;
 //class ShortBufferBuilder;
 
-
-public class PlanetTileTessellatorData implements ITessellatorData
+public class PlanetTileTessellatorData
 {
   public FloatBufferBuilderFromCartesian2D _textCoords;
   public PlanetTileTessellatorData(FloatBufferBuilderFromCartesian2D textCoords)

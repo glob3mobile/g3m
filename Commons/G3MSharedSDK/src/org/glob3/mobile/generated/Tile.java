@@ -39,6 +39,7 @@ package org.glob3.mobile.generated;
 //class Box;
 //class PlanetRenderer;
 //class GLState;
+//class PlanetTileTessellatorData;
 
 
 public class Tile
@@ -391,7 +392,7 @@ public class Tile
   }
 
   private ITexturizerData _texturizerData;
-  private ITessellatorData _tessellatorData;
+  private PlanetTileTessellatorData _tessellatorData;
 
   private Box _tileBoundingVolume;
   private Box getTileBoundingVolume(G3MRenderContext rc)
@@ -821,12 +822,12 @@ public class Tile
     }
   }
 
-  public final ITessellatorData getTessellatorData()
+  public final PlanetTileTessellatorData getTessellatorData()
   {
     return _tessellatorData;
   }
 
-  public final void setTessellatorData(ITessellatorData tessellatorData)
+  public final void setTessellatorData(PlanetTileTessellatorData tessellatorData)
   {
     if (tessellatorData != _tessellatorData)
     {
