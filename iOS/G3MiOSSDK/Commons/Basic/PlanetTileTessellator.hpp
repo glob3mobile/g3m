@@ -27,9 +27,7 @@ public:
   _textCoords(textCoords){}
 
   ~PlanetTileTessellatorData(){
-//#ifdef C_CODE
     delete _textCoords;
-//#endif
   }
 };
 

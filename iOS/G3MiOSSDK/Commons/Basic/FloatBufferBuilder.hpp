@@ -25,11 +25,11 @@ protected:
   std::vector<float> _values;
 #endif
 #ifdef JAVA_CODE
-  
+
   public final class FloatArrayList {
     private float[] _array;
     private int     _size;
-    
+
     public FloatArrayList() {
       this(256);
     }
@@ -63,7 +63,7 @@ protected:
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
-    
+
     public float[] toArray() {
       final float[] result = new float[_size];
       System.arraycopy(_array, 0, result, 0, _size);
@@ -77,7 +77,10 @@ protected:
 
 public:
   IFloatBuffer* create() const;
-  
+
+  virtual ~FloatBufferBuilder() {
+  }
+
   int size() const{
     return _values.size();
   }
