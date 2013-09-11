@@ -24,12 +24,10 @@
 #include "MercatorUtils.hpp"
 #include "DecimatedSubviewElevationData.hpp"
 #include "TileElevationDataRequest.hpp"
-//#include "Sphere.hpp"
 #include "Vector2F.hpp"
-
 #include "FlatColorMesh.hpp"
-
 #include "PlanetRenderer.hpp"
+#include "PlanetTileTessellator.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,

@@ -19,18 +19,20 @@ class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
-class PlanetTileTessellatorData{
+
+class PlanetTileTessellatorData {
 public:
   FloatBufferBuilderFromCartesian2D* _textCoords;
   PlanetTileTessellatorData(FloatBufferBuilderFromCartesian2D* textCoords):
   _textCoords(textCoords){}
 
   ~PlanetTileTessellatorData(){
-#ifdef C_CODE
+//#ifdef C_CODE
     delete _textCoords;
-#endif
+//#endif
   }
 };
+
 
 class PlanetTileTessellator : public TileTessellator {
 private:
