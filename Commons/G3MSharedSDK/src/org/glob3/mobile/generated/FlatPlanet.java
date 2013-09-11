@@ -369,12 +369,8 @@ public class FlatPlanet extends Planet
   
     if (pos.distanceTo(origin) > maxDist)
     {
-      System.out.printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-  
-  //     Vector3D prevPos = previousCamera->getCartesianPosition();
-  //    if (prevPos.distanceTo(origin) <= maxDist){
+  //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
         nextCamera.copyFrom(previousCamera);
-  //    }
     }
   
   
