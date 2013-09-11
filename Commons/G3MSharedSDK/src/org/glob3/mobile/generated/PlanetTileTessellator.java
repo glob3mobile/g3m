@@ -177,13 +177,13 @@ public class PlanetTileTessellator extends TileTessellator
         if (mercator)
         {
           //U
-          final double u = tileSector.getUCoordinate(position._longitude);
+          final double mu = tileSector.getUCoordinate(position._longitude);
   
           //V
           final double mercatorGlobalV = MercatorUtils.getMercatorV(position._latitude);
-          final double v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          final double mv = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
   
-          textCoords.add((float)u, (float)v);
+          textCoords.add((float)mu, (float)mv);
         }
         else
         {
@@ -222,7 +222,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     final short ry = (short) meshResolution._y;
   
-    final short southEastCorner = (rx * ry) - 1;
+    final short southEastCorner = (short)(rx * ry) - 1;
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = southEastCorner;
@@ -247,8 +247,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex -= rx;
     }
   
-    indices.add(surfaceIndex + rx);
-    indices.add(surfaceIndex + rx);
+    indices.add((short)(surfaceIndex + rx));
+    indices.add((short)(surfaceIndex + rx));
   }
 
   private void createNorthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2I meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -260,7 +260,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     //  const short ry = (short) meshResolution._y;
   
-    final short northEastCorner = rx - 1;
+    final short northEastCorner = (short) rx - 1;
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = northEastCorner;
@@ -286,8 +286,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex -= 1;
     }
   
-    indices.add(surfaceIndex + 1);
-    indices.add(surfaceIndex + 1);
+    indices.add((short)(surfaceIndex + 1));
+    indices.add((short)(surfaceIndex + 1));
   }
 
   private void createWestSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2I meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -299,7 +299,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     final short ry = (short) meshResolution._y;
   
-    final short northWestCorner = 0;
+    final short northWestCorner = (short)0;
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = northWestCorner;
@@ -325,8 +325,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex += rx;
     }
   
-    indices.add(surfaceIndex - rx);
-    indices.add(surfaceIndex - rx);
+    indices.add((short)(surfaceIndex - rx));
+    indices.add((short)(surfaceIndex - rx));
   }
 
   private void createSouthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2I meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -338,7 +338,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     final short ry = (short) meshResolution._y;
   
-    final short southWestCorner = rx * (ry-1);
+    final short southWestCorner = (short)(rx * (ry-1));
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = southWestCorner;
@@ -362,8 +362,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex += 1;
     }
   
-    indices.add(surfaceIndex - 1);
-    indices.add(surfaceIndex - 1);
+    indices.add((short)(surfaceIndex - 1));
+    indices.add((short)(surfaceIndex - 1));
   }
 
   private static class PlanetTileTessellatorData implements ITessellatorData
@@ -376,8 +376,6 @@ public class PlanetTileTessellator extends TileTessellator
 
     public void dispose()
     {
-      if (_textCoords != null)
-         _textCoords.dispose();
     }
   }
 

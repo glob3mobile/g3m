@@ -100,12 +100,12 @@ public class FloatBufferBuilder
   public final Vector2D getVector2D(int i)
   {
     int pos = i * 2;
-    return new Vector2D(_values[pos], _values[pos + 1]);
+    return new Vector2D(_values.get(pos), _values.get(pos + 1));
   }
 
   public final Vector3D getVector3D(int i)
   {
     int pos = i * 3;
-    return new Vector3D(_values[pos], _values[pos + 1], _values[pos+2]);
+    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
   }
 }

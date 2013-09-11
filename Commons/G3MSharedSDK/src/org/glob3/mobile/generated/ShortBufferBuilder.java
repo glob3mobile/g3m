@@ -96,9 +96,4 @@ public class ShortBufferBuilder
     return s;
   }
 
-  public final short last()
-  {
-    return _values[_values.size()-1];
-  }
-
 }
