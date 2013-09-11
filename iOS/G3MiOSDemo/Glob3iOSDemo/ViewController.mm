@@ -642,6 +642,8 @@ public:
     Sector spain2 = Sector::fromDegrees(27.3174927 -30, -18.5284423 -30, 45.0299024 + 30, 5.4084426 + 30);
 
     builder.addCameraConstraint(new SectorAndHeightCameraConstrainer(spain2, 1e5) );
+
+    builder.getPlanetRendererBuilder()->setRenderDebug(true);
   }
 
   if (true){ //HUD
