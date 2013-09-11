@@ -258,9 +258,9 @@ public:
   }
 
   void run(const G3MContext* context) {
-    Geodetic3D position(Geodetic3D(_sector.getCenter(), 10000));
-    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(3), position);
-//    [_iosWidget widget]->setCameraPosition(position);
+    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
+    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(8), position);
+////    [_iosWidget widget]->setCameraPosition(position);
   }
 
   bool isDone(const G3MContext* context) {
@@ -283,7 +283,10 @@ public:
                                             -17.2423142646939311, 145.4950606689779420);
 
 //  builder.setShownSector(sector);
-  builder.setShownSector( sector.shrinkedByPercent(-0.5) );
+  builder.setShownSector( sector.shrinkedByPercent(-50) );
+
+  int _DIEGO_AT_WORK;
+  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer(meshRenderer);

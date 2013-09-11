@@ -291,10 +291,16 @@ public:
   }
 
   void log(const ILogger* logger) const {
-    logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                    _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
-                    _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
-                    _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
+//    logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
+//                    _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
+//                    _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
+//                    _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
+
+    int _DIEGO_AT_WORK;
+    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
+                    _tilesProcessed,
+                    _tilesVisible,
+                    _tilesRendered);
   }
 
 };
