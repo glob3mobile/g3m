@@ -459,11 +459,11 @@ public class G3MSimplestGlob3Activity
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
       final WidgetUserData userData = null;
-      
-      SceneLighting lighting = new DefaultSceneLighting();
-     
-      Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
-      
+
+      final SceneLighting lighting = new DefaultSceneLighting();
+
+      final Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
+
       _widgetAndroid.initWidget(//
                storage, // 
                downloader, //
@@ -480,8 +480,8 @@ public class G3MSimplestGlob3Activity
                initializationTask, //
                autoDeleteInitializationTask, //
                periodicalTasks, //
-               userData,
-               lighting,
+               userData, //
+               lighting, //
                initialCameraPosition);
 
       setContentView(_widgetAndroid);

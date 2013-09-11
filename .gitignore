@@ -23,6 +23,7 @@ target
 .xcodeproj/ !*.xcodeproj/project.pbxproj
 *.xcactivitylog
 *.d
+*/bin/
 
 converter/compile_errors.txt
 
@@ -36,8 +37,18 @@ WebGL/G3MWebGLDemo/war/WEB-INF/deploy/
 
 Android/G3MAndroidSDK/bin/
 Android/G3MAndroidSDK/gen/
+Android/G3MAndroidSDK/build.xml
+Android/G3MAndroidSDK/local.properties
+Android/G3MAndroidSDK/libs/g3msharedsdk.jar
+Android/G3MAndroidSDK/libs/java_websocket.jar
+
 Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
+
+JavaDesktop/G3MJavaDesktopDemo/bin/
+JavaDesktop/G3MJavaDesktopSDK/bin/
+
+Commons/G3MSharedSDK/bin
 
 iOS/G3MiOSSDK/Commons/Debug
 

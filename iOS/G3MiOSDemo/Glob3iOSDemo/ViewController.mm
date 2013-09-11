@@ -130,8 +130,6 @@
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
 
-
-
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,

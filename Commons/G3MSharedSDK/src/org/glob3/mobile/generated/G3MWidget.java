@@ -549,6 +549,11 @@ public class G3MWidget
     _backgroundColor = new Color(backgroundColor);
   }
 
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return _mainRenderer.getPlanetRenderer();
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;

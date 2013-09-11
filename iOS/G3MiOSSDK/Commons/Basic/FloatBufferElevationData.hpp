@@ -28,7 +28,8 @@ public:
                            const Vector2I& extent,
                            const Sector& realSector,
                            const Vector2I& realExtent,
-                           IFloatBuffer* buffer);
+                           IFloatBuffer* buffer,
+                           double deltaHeight);
 
   virtual ~FloatBufferElevationData();
 

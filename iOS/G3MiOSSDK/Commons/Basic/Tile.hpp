@@ -141,7 +141,9 @@ public:
        const PlanetRenderer* planetRenderer);
 
   ~Tile();
-
+  
+  //Change to public for TileCache
+  std::vector<Tile*>* getSubTiles(const bool mercator);
 
   const Sector getSector() const {
     return _sector;

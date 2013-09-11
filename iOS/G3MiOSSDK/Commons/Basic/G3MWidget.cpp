@@ -657,3 +657,7 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   
   _backgroundColor = new Color(backgroundColor);
 }
+
+PlanetRenderer* G3MWidget::getPlanetRenderer() {
+  return _mainRenderer->getPlanetRenderer();
+}

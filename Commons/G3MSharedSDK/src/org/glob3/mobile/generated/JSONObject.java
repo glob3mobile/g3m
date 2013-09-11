@@ -29,7 +29,7 @@ public class JSONObject extends JSONBaseObject
     isb.addString("\"");
     isb.addString(key);
     isb.addString("\":");
-    isb.addString(get(key).description());
+      isb.addString((get(key) == null) ? "null" : get(key).description());
   }
 
   public void dispose()
@@ -187,7 +187,10 @@ public class JSONObject extends JSONBaseObject
       String key = keys.get(i);
       visitor.visitObjectBeforeChild(this, key);
       final JSONBaseObject child = get(key);
-      child.acceptVisitor(visitor);
+      if(child != null)
+      {
+          child.acceptVisitor(visitor);
+      }
     }
   
     visitor.visitObjectAfterChildren(this);

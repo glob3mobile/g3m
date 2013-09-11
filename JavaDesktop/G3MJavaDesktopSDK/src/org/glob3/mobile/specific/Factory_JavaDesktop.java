@@ -131,6 +131,4 @@ public class Factory_JavaDesktop
    public IFloatBuffer createFloatBuffer(final float[] array) {
       return new FloatBuffer_JavaDesktop(array);
    }
-
-
 }

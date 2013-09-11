@@ -29,6 +29,9 @@
 #include "RectangleF.hpp"
 #include "IImageUtils.hpp"
 #include "TileRasterizer.hpp"
+#include "ITileVisitor.hpp"
+
+#define TILE_DOWNLOAD_PRIORITY 1000000000
 
 enum TileTextureBuilder_PetitionStatus {
   STATUS_PENDING,
@@ -160,6 +163,9 @@ public:
   virtual ~TileTextureBuilderHolder();
 
 };
+
+
+
 
 
 class TextureUploader : public IImageListener {
@@ -721,6 +727,7 @@ void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
 void BuilderDownloadStepDownloadListener::onError(const URL& url) {
   //  _onError++;
   _builder->stepCanceled(_position);
+  ILogger::instance()->logError("Error downloading tile texture from \"%s\"", url.getPath().c_str());
 }
 
 void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {

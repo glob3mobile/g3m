@@ -347,7 +347,7 @@ def write_file(filepath,
 
             if me is None:
                 continue
-
+          
             me.transform(EXPORT_GLOBAL_MATRIX * ob_mat)
 
             if EXPORT_UV:

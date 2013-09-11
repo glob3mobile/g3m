@@ -194,6 +194,9 @@
 		CF8AE011170204C600FE9F56 /* GEOSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */; };
 		CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */; };
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
+		CF8BE68D17E0B1C70072273A /* ITileVisitor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */; };
+		CF8BE69017E0C68A0072273A /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */; };
+		CF8BE69117E0C68A0072273A /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125817E09EF900AD743A /* HUDRenderer.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */; };
@@ -591,6 +594,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8BE69017E0C68A0072273A /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
+				CF8BE69117E0C68A0072273A /* HUDRenderer.hpp in CopyFiles */,
+				CF8BE68D17E0B1C70072273A /* ITileVisitor.hpp in CopyFiles */,
 				D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */,
 				D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */,
 				D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */,
@@ -930,6 +936,7 @@
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
 		441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeFullPositionEffect.cpp; path = Commons/Rendererers/ShapeFullPositionEffect.cpp; sourceTree = "<group>"; };
 		441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeFullPositionEffect.hpp; path = Commons/Rendererers/ShapeFullPositionEffect.hpp; sourceTree = "<group>"; };
+		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; };
 		44A00491175500B900C6686D /* ICameraActivityListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICameraActivityListener.cpp; path = Commons/Interfaces/ICameraActivityListener.cpp; sourceTree = "<group>"; };
 		44A00492175500B900C6686D /* ICameraActivityListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraActivityListener.hpp; path = Commons/Interfaces/ICameraActivityListener.hpp; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1889,6 +1896,7 @@
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
 				CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */,
 				CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */,
+				44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";

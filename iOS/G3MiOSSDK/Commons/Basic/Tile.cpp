@@ -473,6 +473,25 @@ void Tile::debugRender(const G3MRenderContext* rc,
   }
 }
 
+
+std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
+  const Geodetic2D lower = _sector._lower;
+  const Geodetic2D upper = _sector._upper;
+
+  const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                             upper._longitude);
+
+  
+  const Angle splitLatitude = mercator
+  /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                            upper._latitude)
+  /*                               */ : Angle::midAngle(lower._latitude,
+                                                      upper._latitude);
+
+  return getSubTiles(splitLatitude, splitLongitude);
+}
+
+
 std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
                                       const Angle& splitLongitude) {
   if (_subtiles == NULL) {

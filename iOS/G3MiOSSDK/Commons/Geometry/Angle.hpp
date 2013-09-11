@@ -54,14 +54,18 @@ public:
 
   static Angle fromDegreesMinutes(double degrees,
                                   double minutes) {
-    const double d = degrees + ( minutes / 60.0);
+    const IMathUtils* mu = IMathUtils::instance();
+    const double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
+    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) );
     return Angle( d, TO_RADIANS(d) );
   }
 
   static Angle fromDegreesMinutesSeconds(double degrees,
                                          double minutes,
                                          double seconds) {
-    const double d = degrees + ( minutes / 60.0) + ( seconds / 3600.0 );
+    const IMathUtils* mu = IMathUtils::instance();
+    const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
     return Angle( d, TO_RADIANS(d) );
   }
 

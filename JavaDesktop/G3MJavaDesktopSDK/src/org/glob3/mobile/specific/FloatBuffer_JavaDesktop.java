@@ -109,5 +109,4 @@ public class FloatBuffer_JavaDesktop
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
-
 }

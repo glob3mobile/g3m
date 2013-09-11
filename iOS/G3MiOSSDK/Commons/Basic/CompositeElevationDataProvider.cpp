@@ -163,16 +163,6 @@ void CompositeElevationDataProvider::requestFinished(CompositeElevationDataProvi
 }
 
 
-//ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-//                                                                            const Sector& sector,
-//                                                                            const Vector2I& extent) const{
-//  return new SubviewElevationData(elevationData,
-//                                  false,
-//                                  sector,
-//                                  extent,
-//                                  false);
-//}
-
 #pragma mark Request
 
 CompositeElevationDataProvider::CompositeElevationDataProvider_Request::
@@ -230,32 +220,6 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
   }
   
   return provider;
-
-
-//  std::vector<ElevationDataProvider*>::iterator edp = (std::vector<ElevationDataProvider*>::iterator) ps.end();
-//  double bestRes = extent.squaredLength();
-//  double selectedRes = IMathUtils::instance()->maxDouble();
-//  double selectedResDistance = IMathUtils::instance()->maxDouble();
-//  IMathUtils *mu = IMathUtils::instance();
-//  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it) {
-//    double res = (*it)->getMinResolution().squaredLength();
-//    double newResDistance = mu->abs(bestRes - res);
-//
-//    if (newResDistance < selectedResDistance || //Closer Resolution
-//        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-//      selectedResDistance = newResDistance;
-//      selectedRes = res;
-//      edp = it;
-//    }
-//  }
-//
-//  ElevationDataProvider* provider = NULL;
-//  if (edp != ps.end()) {
-//    provider = *edp;
-//    ps.erase(edp);
-//  }
-//
-//  return provider;
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep() {
@@ -355,13 +319,6 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepL
     _request->onError(sector, extent);
   }
 }
-
-//void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
-//                                                                                                  const Vector2I& extent) {
-//  if (_request != NULL) {
-//    _request->onCancel(sector, extent);
-//  }
-//}
 
 void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
                                                                                                   const Vector2I& extent) {

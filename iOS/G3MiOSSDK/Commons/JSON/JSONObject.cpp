@@ -137,7 +137,7 @@ void JSONObject::putKeyAndValueDescription(const std::string& key,
   isb->addString("\"");
   isb->addString(key);
   isb->addString("\":");
-  isb->addString(get(key)->description());
+    isb->addString((get(key) == NULL) ? "null" : get(key)->description());
 }
 
 const std::string JSONObject::description() const {
@@ -190,7 +190,9 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
     std::string key = keys[i];
     visitor->visitObjectBeforeChild(this, key);
     const JSONBaseObject* child = get(key);
-    child->acceptVisitor(visitor);
+    if(child != NULL){
+        child->acceptVisitor(visitor);
+    }
   }
 
   visitor->visitObjectAfterChildren(this);

@@ -16,6 +16,8 @@ class G3MEventContext;
 class GLGlobalState;
 class GLState;
 class SurfaceElevationProvider;
+class PlanetRenderer;
+
 
 #include "Effects.hpp"
 
@@ -67,6 +69,8 @@ public:
   }
   
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
+
+  virtual PlanetRenderer* getPlanetRenderer() = 0;
 
 };
 

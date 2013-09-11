@@ -643,6 +643,21 @@ public class Tile
        _tessellatorData.dispose();
   }
 
+  //Change to public for TileCache
+  public final java.util.ArrayList<Tile> getSubTiles(boolean mercator)
+  {
+    final Geodetic2D lower = _sector._lower;
+    final Geodetic2D upper = _sector._upper;
+  
+    final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+  
+  
+    final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+    /*                               */
+    /*                               */
+  
+    return getSubTiles(splitLatitude, splitLongitude);
+  }
 
   public final Sector getSector()
   {

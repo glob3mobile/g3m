@@ -25,6 +25,7 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "ITileVisitor.hpp"
 #include "ChangedListener.hpp"
 #include "SurfaceElevationProvider.hpp"
 
@@ -308,6 +309,8 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
+  bool                         _topTilesJustCreated;
+  ITileVisitor*                _tileVisitor = NULL;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -340,6 +343,15 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
+  
+  void visitTilesTouchesWith(const Sector sector,
+                             const int topLevel,
+                             const int maxLevel);
+  
+  void visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* tile,
+                                const Sector sectorToVisit,
+                                const int topLevel,
+                                const int maxLevel);
 
   long long _texturePriority;
 
@@ -386,6 +398,12 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
+  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
+                         const int topLevel,
+                         const int maxLevel) {
+    _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
+  }
 
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
@@ -475,6 +493,10 @@ public:
 
   SurfaceElevationProvider* getSurfaceElevationProvider() {
     return (_elevationDataProvider == NULL) ? NULL : this;
+  }
+
+  PlanetRenderer* getPlanetRenderer() {
+    return this;
   }
 
   void addListener(const Angle& latitude,

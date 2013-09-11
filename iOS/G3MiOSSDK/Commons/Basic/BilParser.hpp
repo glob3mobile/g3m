@@ -23,7 +23,8 @@ public:
 
   static ShortBufferElevationData* parseBil16(const Sector& sector,
                                               const Vector2I& extent,
-                                              const IByteBuffer* buffer);
+                                              const IByteBuffer* buffer,
+                                              double deltaHeight = 0);
 };
 
 #endif

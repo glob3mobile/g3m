@@ -8,6 +8,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
+  private boolean _topTilesJustCreated;
+  private ITileVisitor _tileVisitor = null;
 
   private Camera     _lastCamera;
   private G3MContext _context;
@@ -181,6 +183,85 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private Sector _lastVisibleSector;
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
+
+  private void visitTilesTouchesWith(Sector sector, int firstLevel, int maxLevel)
+  {
+    if (_tileVisitor != null)
+    {
+      final LayerTilesRenderParameters parameters = _layerSet.getLayerTilesRenderParameters();
+      _validLayerTilesRenderParameters = (parameters != null);
+      if (!_validLayerTilesRenderParameters)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        return;
+      }
+  
+      final int firstLevelCache = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+      if(firstLevel < firstLevelCache)
+      {
+        ILogger.instance().logInfo("Can only precache from level %", firstLevelCache);
+      }
+  
+      final int maxLevelCache = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+      if(maxLevel > maxLevelCache)
+      {
+        ILogger.instance().logInfo("Can only precache to level %", maxLevelCache);
+      }
+  
+      if(firstLevelCache > maxLevelCache)
+      {
+        ILogger.instance().logInfo("Can't precache, first level is more than max level");
+      }
+      // Get Layers to Cache
+      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
+      final int layersCount = _layerSet.size();
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layerSet.getLayer(i);
+        if (layer.isEnable() && layer.isReady())
+        {
+          layers.add(layer);
+        }
+      }
+      // Get Tiles to Cache
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (tile.getSector().touchesWith(sector))
+        {
+          _tileVisitor.visitTile(layers, tile);
+          visitSubTilesTouchesWith(layers, tile, sector, firstLevelCache, maxLevelCache);
+        }
+      }
+    }
+    else
+    {
+      ILogger.instance().logError("TileVisitor is NULL");
+    }
+  }
+
+  private void visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  {
+    if (tile.getLevel() < maxLevel)
+    {
+      java.util.ArrayList<Tile> subTiles = tile.getSubTiles(_layerSet.getLayerTilesRenderParameters()._mercator);
+  
+      final int subTilesCount = subTiles.size();
+      for (int i = 0; i < subTilesCount; i++)
+      {
+        Tile tl = subTiles.get(i);
+        if (tl.getSector().touchesWith(sectorToVisit))
+        {
+          if ((tile.getLevel() >= topLevel))
+          {
+            _tileVisitor.visitTile(layers, tl);
+          }
+          visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
+        }
+      }
+    }
+  }
 
   private long _texturePriority;
 
@@ -535,6 +616,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return isReadyToRenderTiles(rc);
   }
 
+  public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int topLevel, int maxLevel)
+  {
+    _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
+  }
 
   public final void start(G3MRenderContext rc)
   {
@@ -652,6 +738,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return (_elevationDataProvider == null) ? null : this;
+  }
+
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return this;
   }
 
   public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener)

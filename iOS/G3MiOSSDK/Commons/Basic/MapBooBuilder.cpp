@@ -11,7 +11,6 @@
 #include "ILogger.hpp"
 #include "CompositeRenderer.hpp"
 #include "PlanetRenderer.hpp"
-
 #include "PlanetTileTessellator.hpp"
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
@@ -753,12 +752,12 @@ public:
   }
 };
 
-class MapBooBuilder_SceneTubeConnector : public GInitializationTask {
+class MapBooBuilder_ApplicationTubeConnector : public GInitializationTask {
 private:
   MapBooBuilder* _builder;
 
 public:
-  MapBooBuilder_SceneTubeConnector(MapBooBuilder* builder) :
+  MapBooBuilder_ApplicationTubeConnector(MapBooBuilder* builder) :
   _builder(builder)
   {
   }
@@ -826,7 +825,7 @@ G3MWidget* MapBooBuilder::create() {
 
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
 
-  GInitializationTask* initializationTask = new MapBooBuilder_SceneTubeConnector(this);
+  GInitializationTask* initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
 
   std::vector<PeriodicalTask*>* periodicalTasks = createPeriodicalTasks();
 
