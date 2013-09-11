@@ -66,7 +66,6 @@ public class G3MSimpleTileCacheExampleActivity
       builder.addRenderer(pr);
       // builder.setInitializationTask(getTileVisitorTask(pr));
 
-
       //Always after setting params
       _widgetAndroid = builder.createWidget();
 
