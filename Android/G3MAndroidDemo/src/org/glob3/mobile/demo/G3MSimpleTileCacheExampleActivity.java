@@ -2,54 +2,29 @@
 
 package org.glob3.mobile.demo;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CachedDownloader;
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DefaultSceneLighting;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GEOTileRasterizer;
-import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.ICameraActivityListener;
-import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
-import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
-import org.glob3.mobile.generated.WidgetUserData;
-import org.glob3.mobile.specific.Downloader_Android;
-import org.glob3.mobile.specific.G3MBaseActivity;
+import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.specific.SQLiteStorage_Android;
-import org.glob3.mobile.specific.ThreadUtils_Android;
 import org.glob3.mobile.specific.TileVisitorCache_Android;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 
 public class G3MSimpleTileCacheExampleActivity
          extends
-            G3MBaseActivity {
+            Activity {
 
    private G3MWidget_Android _widgetAndroid = null;
 
@@ -57,36 +32,15 @@ public class G3MSimpleTileCacheExampleActivity
    @Override
    public void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      _widgetAndroid = new G3MWidget_Android(this);
-      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this);
 
-      final TimeInterval connectTimeout = TimeInterval.fromSeconds(20);
-      final TimeInterval readTimeout = TimeInterval.fromSeconds(30);
-      final boolean saveInBackground = true;
-
-      final IDownloader downloader = new CachedDownloader( //
-               new Downloader_Android(8, connectTimeout, readTimeout, this), //
-               storage, //
-               saveInBackground);
-
-      final IThreadUtils threadUtils = new ThreadUtils_Android(_widgetAndroid);
-      final ICameraActivityListener cameraActivityListener = null;
+      setContentView(R.layout.bar_glob3_template);
+      final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
+      builder.setLogFPS(true);
 
       final Planet planet = Planet.createSphericalEarth();
+      builder.setPlanet(planet);
 
-      final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
-      cameraConstraints.add(new SimpleCameraConstrainer());
-
-      final CameraRenderer cameraRenderer = new CameraRenderer();
-      final boolean useInertia = true;
-      cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-      cameraRenderer.addHandler(new CameraDoubleDragHandler());
-      cameraRenderer.addHandler(new CameraRotationHandler());
-      cameraRenderer.addHandler(new CameraDoubleTapHandler());
-
-      final CompositeRenderer mainRenderer = new CompositeRenderer();
-
-      // Añadir todas las capas que se quieren cachear
+      final PlanetRendererBuilder planetRendererBuilder = builder.getPlanetRendererBuilder();
       final LayerSet layerSet = new LayerSet();
 
       final WMSLayer osm = new WMSLayer( //
@@ -104,86 +58,63 @@ public class G3MSimpleTileCacheExampleActivity
                true);
       layerSet.addLayer(osm);
 
-      //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
-      final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
-
-
-      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
-
-      final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
-
-      final boolean logFPS = true;
-
-      final boolean logDownloaderStatistics = false;
-
-
-      final PlanetRendererBuilder planetRendererBuilder = new PlanetRendererBuilder();
-
       planetRendererBuilder.setLayerSet(layerSet);
       planetRendererBuilder.setRenderDebug(false);
-      planetRendererBuilder.setTileRasterizer(geoTileRasterizer);
 
 
       final PlanetRenderer pr = planetRendererBuilder.create();
-      mainRenderer.addRenderer(pr);
+      builder.addRenderer(pr);
+      // builder.setInitializationTask(getTileVisitorTask(pr));
 
 
-      // PRECACHING
-      final GInitializationTask initializationTask = new GInitializationTask() {
-         @Override
-         public void run(final G3MContext ctx) {
-            pr.acceptTileVisitor(new TileVisitorCache_Android(ctx, layerSet, 256, 256));
-
-            // Are cached the first two levels of the world
-            pr.visitTilesTouchesWith(Sector.fullSphere(), 0, 2);
-
-            // Sector specified cached at the indicated levels
-            pr.visitTilesTouchesWith(new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
-                     new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
-
-            ctx.getLogger().logInfo("Precaching has been completed");
-         }
+      //Always after setting params
+      _widgetAndroid = builder.createWidget();
 
 
-         @Override
-         public boolean isDone(final G3MContext context1) {
-            return true;
-         }
-      };
+      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext());
+      // Are cached the first two levels of the world
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+      // Sector specified cached at the indicated levels
 
-      final boolean autoDeleteInitializationTask = true;
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(
+               tvc,
+               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)), new Geodetic2D(
+                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
-      final WidgetUserData userData = null;
+      _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");
 
-      final SceneLighting lighting = new DefaultSceneLighting();
+      final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
+      g3mLayout.addView(_widgetAndroid);
 
-      _widgetAndroid.initWidget(//
-               storage, // 
-               downloader, //
-               threadUtils, //
-               cameraActivityListener,//
-               planet, //
-               cameraConstraints, //
-               cameraRenderer, //
-               mainRenderer, //
-               busyRenderer, //
-               backgroundColor, //
-               logFPS, //
-               logDownloaderStatistics, //
-               initializationTask, //
-               autoDeleteInitializationTask, //
-               periodicalTasks, //
-               userData, lighting);
-
-      setContentView(_widgetAndroid);
    }
 
 
-   @Override
-   protected G3MWidget_Android getWidgetAndroid() {
-      return _widgetAndroid;
-   }
+   //   private GInitializationTask getTileVisitorTask(final PlanetRenderer pr) {
+   //
+   //      // PRECACHING
+   //      final GInitializationTask initializationTask = new GInitializationTask() {
+   //         @Override
+   //         public void run(final G3MContext ctx) {
+   //            final TileVisitorCache_Android tvc = new TileVisitorCache_Android(ctx);
+   //            // Are cached the first two levels of the world
+   //            pr.acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+   //            // Sector specified cached at the indicated levels
+   //
+   //            pr.acceptTileVisitor(tvc, new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
+   //                     new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
+   //
+   //
+   //            ctx.getLogger().logInfo("Precaching has been completed");
+   //         }
+   //
+   //
+   //         @Override
+   //         public boolean isDone(final G3MContext context1) {
+   //            return true;
+   //         }
+   //      };
+   //
+   //      return initializationTask;
+   //   }
 }

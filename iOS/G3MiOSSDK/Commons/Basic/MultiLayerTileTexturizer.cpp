@@ -662,37 +662,6 @@ public:
 
 };
 
-
-class TileVisitorCache : public ITileVisitor{
-    
-private:
-    MultiLayerTileTexturizer* _texturizer;
-    const G3MRenderContext* _rc;
-    const PlanetRendererContext* _prc;
-    const LayerSet* _layerSet;
-public:
-    
-    TileVisitorCache(MultiLayerTileTexturizer* texturizer,
-                     const G3MRenderContext*         rc,
-                     const PlanetRendererContext* prc,
-                     const LayerSet* layerSet) :
-    _texturizer(texturizer),
-    _rc(rc),
-    _prc(prc),
-    _layerSet(layerSet){}
-    
-    virtual ~TileVisitorCache() {
-        
-    }
-    
-    void visitTile(Tile* tile) const{
-        
-        TileTextureBuilder* ttb = new TileTextureBuilder(_texturizer, _prc->getTileRasterizer(), _rc, _layerSet, _rc->getDownloader(), tile, NULL, NULL, 0);
-        
-        ttb->start();
-    }
-};
-
 void TextureUploader::imageCreated(IImage* image) {
   if (_tileRasterizer == NULL) {
     _builder->imageCreated(image,

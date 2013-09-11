@@ -335,8 +335,12 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-    
-  void visitSubTilesTouchesWith(Tile* tile,
+  
+  void visitTilesTouchesWith(const Sector sector,
+                             const int topLevel,
+                             const int maxLevel);
+  
+  void visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* tile,
                                 const Sector sectorToVisit,
                                 const int topLevel,
                                 const int maxLevel);
@@ -386,13 +390,12 @@ public:
 
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void acceptTileVisitor(ITileVisitor* tileVisitor) {
+  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
+                         const int topLevel,
+                         const int maxLevel) {
     _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
   }
-    
-  void visitTilesTouchesWith(const Sector sector,
-                             const int topLevel,
-                             const int maxLevel);
 
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
