@@ -1,5 +1,5 @@
 //
-//  SectorAndHeightCameraConstrainer.h
+//  SectorAndHeightCameraConstrainer.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 06/09/13.
@@ -15,13 +15,18 @@
 #include "Sector.hpp"
 
 class SectorAndHeightCameraConstrainer: public ICameraConstrainer {
-
+private:
   const Sector _sector;
-  const double _height;
+  const double _maxHeight;
 
 public:
 
-  SectorAndHeightCameraConstrainer(const Sector& sector, double height): _sector(sector), _height(height){}
+  SectorAndHeightCameraConstrainer(const Sector& sector,
+                                   double maxHeight) :
+  _sector(sector),
+  _maxHeight(maxHeight)
+  {
+  }
 
   ~SectorAndHeightCameraConstrainer() {
   }
@@ -29,7 +34,7 @@ public:
   virtual void onCameraChange(const Planet* planet,
                               const Camera* previousCamera,
                               Camera* nextCamera) const;
-  
+
 };
 
-#endif /* defined(__G3MiOSSDK__SectorAndHeightCameraConstrainer__) */
+#endif

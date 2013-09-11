@@ -729,7 +729,7 @@ const TileKey Tile::getKey() const {
 }
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
-  if (_sector.contains(position)) {
+  if (_sector.contains(position._latitude, position._longitude)) {
     if (_subtiles == NULL) {
       return this;
     }

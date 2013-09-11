@@ -9,14 +9,26 @@
 #include "SectorAndHeightCameraConstrainer.hpp"
 
 void SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
-                            const Camera* previousCamera,
-                    Camera* nextCamera) const{
+                                                      const Camera* previousCamera,
+                                                      Camera* nextCamera) const{
 
-  Geodetic3D g = nextCamera->getGeodeticPosition();
-  double h = nextCamera->getHeight();
+  const Geodetic3D position = nextCamera->getGeodeticPosition();
+//  const double height = nextCamera->getHeight();
+  const double height = position._height;
 
-  if (h > _height || !_sector.contains(g)){
+  const bool invalidHeight   = (height > _maxHeight);
+  const bool invalidPosition = !_sector.contains(position._latitude, position._longitude);
+
+  if (invalidHeight || invalidPosition) {
     nextCamera->copyFrom(*previousCamera);
+
+//    const double newHeight = invalidHeight ? _maxHeight : height;
+//    if (invalidPosition) {
+//      nextCamera->setGeodeticPosition(_sector.clamp(g2), newHeight);
+//    }
+//    else {
+//      nextCamera->setGeodeticPosition(g2, newHeight);
+//    }
   }
   
 }

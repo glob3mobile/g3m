@@ -30,12 +30,16 @@ void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disPolygonOffsetFill();
 }
 
-GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
-                  bool depthTestEnabled,
-                  bool cullFace, int culledFace,
-                  bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
-                  float lineWidth,
-                  bool needsPointSize, float pointSize):
+GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
+                                     int arrayElementSize,
+                                     int index,
+                                     bool normalized,
+                                     int stride,
+                                     bool depthTestEnabled,
+                                     bool cullFace, int culledFace,
+                                     bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
+                                     float lineWidth,
+                                     bool needsPointSize, float pointSize):
 GLFeature(NO_GROUP, GLF_GEOMETRY),
 _depthTestEnabled(depthTestEnabled),
 _cullFace(cullFace),

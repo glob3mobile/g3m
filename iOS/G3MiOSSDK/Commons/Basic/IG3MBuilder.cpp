@@ -652,7 +652,7 @@ G3MWidget* IG3MBuilder::create() {
   Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1,1), shownSector);
 
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
-  if (!shownSector.isEquals(Sector::fullSphere())){
+  if (!shownSector.isEquals(Sector::fullSphere())) {
     const double margin = 0.2;
     const double height = 1e5;
     

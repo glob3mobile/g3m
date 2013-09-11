@@ -232,16 +232,108 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  // initizalize a default widget by using a builder
-  //  [self initDefaultWithBuilder];
 
-  // initialize a customized widget by using a buider
-
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
+  [self initWithBuilderAndSegmentedWorld];
+
   [[self G3MWidget] startAnimation];
+}
+
+
+class MoveCameraInitializationTask : public GInitializationTask {
+private:
+  G3MWidget_iOS* _iosWidget;
+  const Sector   _sector;
+
+public:
+
+  MoveCameraInitializationTask(G3MWidget_iOS* iosWidget,
+                               const Sector   sector) :
+  _iosWidget(iosWidget),
+  _sector(sector)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
+    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(6), position);
+//    [_iosWidget widget]->setCameraPosition(position);
+  }
+
+  bool isDone(const G3MContext* context) {
+    return true;
+  }
+};
+
+
+- (void) initWithBuilderAndSegmentedWorld
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+//  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+
+
+  const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
+                                            -17.2423142646939311, 145.4950606689779420);
+
+//  builder.setShownSector(sector);
+  builder.setShownSector( sector.shrinkedByPercent(-100) );
+
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  builder.addRenderer(meshRenderer);
+  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
+
+  builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
+                                true);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///aus4326.bil", false),
+                                                                                     sector,
+                                                                                     Vector2I(2083, 2001),
+                                                                                     -758.905);
+
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
+
+
+  int __ASK_JM;
+  GPUProgramSources sources = [self loadDefaultGPUProgramSourcesFromDisk];
+  builder.addGPUProgramSources(sources);
+
+  GPUProgramSources sourcesDefault = [self loadDefaultGPUProgramSourcesWithName:@"Default"];
+  builder.addGPUProgramSources(sourcesDefault);
+
+  GPUProgramSources sourcesBillboard = [self loadDefaultGPUProgramSourcesWithName:@"Billboard"];
+  builder.addGPUProgramSources(sourcesBillboard);
+
+  GPUProgramSources sourcesFlatColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh"];
+  builder.addGPUProgramSources(sourcesFlatColorMesh);
+
+  GPUProgramSources sourcesTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh"];
+  builder.addGPUProgramSources(sourcesTexturedMesh);
+
+  GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
+  builder.addGPUProgramSources(sourcesColorMesh);
+
+  GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
+  builder.addGPUProgramSources(sourcesTCTexturedMesh);
+
+  GPUProgramSources sourcesTexturedMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
+  builder.addGPUProgramSources(sourcesTexturedMeshDirectionLight);
+
+  GPUProgramSources sourcesFlatColorMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh+DirectionLight"];
+  builder.addGPUProgramSources(sourcesFlatColorMeshDirectionLight);
+
+  GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
+  builder.addGPUProgramSources(sourcesNoColorMesh);
+  
+  
+  builder.initializeWidget();
 }
 
 

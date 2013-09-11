@@ -137,11 +137,6 @@ public:
                     position._longitude);
   }
 
-  bool contains(const Geodetic3D& position) const {
-    return contains(position._latitude,
-                    position._longitude);
-  }
-
   bool touchesWith(const Sector& that) const;
 
   const Angle getDeltaLatitude() const {

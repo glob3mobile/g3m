@@ -131,12 +131,12 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
-                                              3,            //Our buffer contains elements of 3
-                                              0,            //Index 0
-                                              false,        //Not normalized
-                                              0,            //Stride 0
-                                              true,         //Depth test
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,   // The attribute is a float vector of 4 elements
+                                              3,            // Our buffer contains elements of 3
+                                              0,            // Index 0
+                                              false,        // Not normalized
+                                              0,            // Stride 0
+                                              _depthTest,   // Depth test
                                               false, 0,
                                               false, (float)0.0, (float)0.0,
                                               _lineWidth,
