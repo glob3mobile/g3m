@@ -51,8 +51,9 @@ public abstract class MapBooBuilder
     long texturePriority = DownloadPriority.HIGHER;
   
     int TODO_CHECK_MAPBOO_FULLSPHERE;
+    final Sector renderedSector = Sector.fullSphere();
   
-    return new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, Sector.fullSphere());
+    return new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
   }
 
   private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
