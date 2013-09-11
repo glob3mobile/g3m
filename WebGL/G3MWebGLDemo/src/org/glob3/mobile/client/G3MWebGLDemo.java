@@ -150,6 +150,11 @@ public class G3MWebGLDemo
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
+      
+      if (true){
+    	  Sector spain = Sector.fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+    	  builder.setShownSector(spain);
+      }
 
       final boolean useMarkers = true;
       if (useMarkers) {
