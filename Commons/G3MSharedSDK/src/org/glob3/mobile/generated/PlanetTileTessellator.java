@@ -177,13 +177,13 @@ public class PlanetTileTessellator extends TileTessellator
         if (mercator)
         {
           //U
-          final double mu = tileSector.getUCoordinate(position._longitude);
+          final double m_u = tileSector.getUCoordinate(position._longitude);
   
           //V
           final double mercatorGlobalV = MercatorUtils.getMercatorV(position._latitude);
-          final double mv = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          final double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
   
-          textCoords.add((float)mu, (float)mv);
+          textCoords.add((float)m_u, (float)m_v);
         }
         else
         {
@@ -222,7 +222,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     final short ry = (short) meshResolution._y;
   
-    final short southEastCorner = (short)(rx * ry) - 1;
+    final short southEastCorner = (short)((rx * ry) - 1);
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = southEastCorner;
@@ -260,7 +260,7 @@ public class PlanetTileTessellator extends TileTessellator
     final short rx = (short) meshResolution._x;
     //  const short ry = (short) meshResolution._y;
   
-    final short northEastCorner = (short) rx - 1;
+    final short northEastCorner = (short)(rx - 1);
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = northEastCorner;

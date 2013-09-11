@@ -87,7 +87,9 @@ public class ShortBufferBuilder
     isb.addString("ShortBufferBuilder: ");
     for (int i = 0; i < (int)_values.size(); i++)
     {
-      isb.addInt(_values[i]);
+
+      short v = _values.get(i);
+      isb.addInt(v);
       isb.addString(", ");
     }
     final String s = isb.getString();

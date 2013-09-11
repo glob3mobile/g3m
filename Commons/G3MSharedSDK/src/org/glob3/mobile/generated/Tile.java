@@ -638,8 +638,7 @@ public class Tile
     if (_lodTimer != null)
        _lodTimer.dispose();
   
-    if (_tessellatorData != null)
-       _tessellatorData.dispose();
+    _tessellatorData = null;
   }
 
 
@@ -830,8 +829,7 @@ public class Tile
   {
     if (tessellatorData != _tessellatorData)
     {
-      if (_tessellatorData != null)
-         _tessellatorData.dispose();
+      _tessellatorData = null;
       _tessellatorData = tessellatorData;
     }
   }
