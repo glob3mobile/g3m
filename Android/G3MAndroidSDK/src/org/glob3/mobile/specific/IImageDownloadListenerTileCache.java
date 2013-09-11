@@ -22,7 +22,7 @@ public class IImageDownloadListenerTileCache
 
    @Override
    public void onError(final URL pUrl) {
-      ILogger.instance().logError("Fail Downloaded id: " + _requestId);
+      ILogger.instance().logError("FAIL Downloaded id: " + _requestId);
    }
 
 
@@ -37,7 +37,7 @@ public class IImageDownloadListenerTileCache
    public void onCanceledDownload(final URL arg0,
                                   final IImage arg1,
                                   final boolean arg2) {
-      // TODO Auto-generated method stub
+      ILogger.instance().logError("CANCELED Downloaded id: " + _requestId);
 
    }
 

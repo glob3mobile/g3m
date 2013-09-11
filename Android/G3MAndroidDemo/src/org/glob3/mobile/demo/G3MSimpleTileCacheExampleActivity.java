@@ -3,8 +3,6 @@
 package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Planet;
@@ -21,6 +19,7 @@ import org.glob3.mobile.specific.TileVisitorCache_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 
 public class G3MSimpleTileCacheExampleActivity
@@ -59,7 +58,6 @@ public class G3MSimpleTileCacheExampleActivity
                true);
       layerSet.addLayer(osm);
 
-
       planetRendererBuilder.setLayerSet(layerSet);
       planetRendererBuilder.setRenderDebug(false);
 
@@ -86,34 +84,37 @@ public class G3MSimpleTileCacheExampleActivity
 
       _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");
 
+      final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
+      g3mLayout.addView(_widgetAndroid);
+
    }
 
 
-   private GInitializationTask getTileVisitorTask(final PlanetRenderer pr) {
-
-      // PRECACHING
-      final GInitializationTask initializationTask = new GInitializationTask() {
-         @Override
-         public void run(final G3MContext ctx) {
-            final TileVisitorCache_Android tvc = new TileVisitorCache_Android(ctx);
-            // Are cached the first two levels of the world
-            pr.acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
-            // Sector specified cached at the indicated levels
-
-            pr.acceptTileVisitor(tvc, new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
-                     new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
-
-
-            ctx.getLogger().logInfo("Precaching has been completed");
-         }
-
-
-         @Override
-         public boolean isDone(final G3MContext context1) {
-            return true;
-         }
-      };
-
-      return initializationTask;
-   }
+   //   private GInitializationTask getTileVisitorTask(final PlanetRenderer pr) {
+   //
+   //      // PRECACHING
+   //      final GInitializationTask initializationTask = new GInitializationTask() {
+   //         @Override
+   //         public void run(final G3MContext ctx) {
+   //            final TileVisitorCache_Android tvc = new TileVisitorCache_Android(ctx);
+   //            // Are cached the first two levels of the world
+   //            pr.acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+   //            // Sector specified cached at the indicated levels
+   //
+   //            pr.acceptTileVisitor(tvc, new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
+   //                     new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
+   //
+   //
+   //            ctx.getLogger().logInfo("Precaching has been completed");
+   //         }
+   //
+   //
+   //         @Override
+   //         public boolean isDone(final G3MContext context1) {
+   //            return true;
+   //         }
+   //      };
+   //
+   //      return initializationTask;
+   //   }
 }
