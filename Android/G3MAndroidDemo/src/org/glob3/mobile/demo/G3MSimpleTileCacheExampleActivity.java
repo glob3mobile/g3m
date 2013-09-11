@@ -133,19 +133,16 @@ public class G3MSimpleTileCacheExampleActivity
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext ctx) {
-            // Especificamos el tipo de cacheo que se quiere hacer, indicando el
-            // ancho y alto de los tiles
             pr.acceptTileVisitor(new TileVisitorCache_Android(ctx, layerSet, 256, 256));
 
-            // Cacheamos los 2 primeros niveles de todas las capas
+            // Are cached the first two levels of the world
             pr.visitTilesTouchesWith(Sector.fullSphere(), 0, 2);
 
-            // Cacheamos el sector que nos interese de todas las capas
+            // Sector specified cached at the indicated levels
             pr.visitTilesTouchesWith(new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
                      new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
 
-
-            ctx.getLogger().logInfo("Caching finished");
+            ctx.getLogger().logInfo("Precaching has been completed");
          }
 
 
