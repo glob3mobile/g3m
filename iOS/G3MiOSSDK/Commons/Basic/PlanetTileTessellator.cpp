@@ -275,17 +275,17 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
   return tile->getSector().intersection(_renderedSector);
 }
 
-double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const{
-  if (elevationData == NULL){
-    return 0;
-  }
-  const double h = elevationData->getElevationAt(g);
-  if (IMathUtils::instance()->isNan(h)){
-    return 0;
-  }
-
-  return h;
-}
+//double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const{
+//  if (elevationData == NULL){
+//    return 0;
+//  }
+//  const double h = elevationData->getElevationAt(g);
+//  if (IMathUtils::instance()->isNan(h)){
+//    return 0;
+//  }
+//
+//  return h;
+//}
 
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,

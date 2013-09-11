@@ -53,10 +53,10 @@ public class G3MShowMarkersActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
       builder.setInitializationTask(getWeatherMarkerLayersTask());
-      
-      if (true){
-    	  Sector spain = Sector.fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-    	  builder.setShownSector(spain);
+
+      if (true) {
+         final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
+         builder.setShownSector(spain);
       }
 
       builder.addRenderer(_weatherMarkers);
@@ -174,18 +174,16 @@ public class G3MShowMarkersActivity
                      Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
 
                      final Shape plane = SceneJSShapesParser.parseFromJSON(buffer, URL.FILE_PROTOCOL, false);
-
-                     plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
-
-                     final double scale = 1000;
-                     plane.setScale(scale, scale, scale);
-                     plane.setPitch(Angle.fromDegrees(90));
-                     plane.setHeading(Angle.fromDegrees(0));
-                     plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000),
-                              Angle.fromDegrees(90), Angle.fromDegrees(720));
-
                      if (plane != null) {
+                        plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
+
+                        final double scale = 1000;
+                        plane.setScale(scale, scale, scale);
+                        plane.setPitch(Angle.fromDegrees(90));
+                        plane.setHeading(Angle.fromDegrees(0));
+                        plane.setAnimatedPosition(TimeInterval.fromSeconds(60), new Geodetic3D(Angle.fromDegrees(28.127222),
+                                 Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90), Angle.fromDegrees(720));
+
                         _shapeRenderer.addShape(plane);
                         ILogger.instance().logInfo("PLANE SHOWN");
                      }

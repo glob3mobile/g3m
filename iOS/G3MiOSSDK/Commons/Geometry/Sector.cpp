@@ -102,8 +102,7 @@ Sector Sector::intersection(const Sector& that) const {
   const Angle upLat = Angle::min(_upper._latitude,  that._upper._latitude);
   const Angle upLon = Angle::min(_upper._longitude, that._upper._longitude);
 
-  if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon)){;
-
+  if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon)) {
     const Geodetic2D low(lowLat, lowLon);
     const Geodetic2D up(upLat, upLon);
 

@@ -67,7 +67,7 @@ private:
 
   Sector getRenderedSectorForTile(const Tile* tile) const;
 
-  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
+//  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
 
   double createSurface(const Sector& tileSector,
                        const Sector& meshSector,
