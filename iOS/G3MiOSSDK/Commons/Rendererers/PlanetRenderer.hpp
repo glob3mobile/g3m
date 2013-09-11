@@ -394,6 +394,7 @@ public:
                          const int topLevel,
                          const int maxLevel) {
     _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
   }
 
   void start(const G3MRenderContext* rc) {

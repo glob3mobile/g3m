@@ -3,11 +3,11 @@
 package org.glob3.mobile.specific;
 
 
+import java.util.ArrayList;
+
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MRenderContext;
 import org.glob3.mobile.generated.ITileVisitor;
 import org.glob3.mobile.generated.Layer;
-import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Petition;
 import org.glob3.mobile.generated.Tile;
 import org.glob3.mobile.generated.URL;
@@ -17,17 +17,12 @@ public class TileVisitorCache_Android
          implements
             ITileVisitor {
 
-   private long             _debugCounter = 0;
-   final G3MContext         _context;
-   private final LayerSet   _layerSet;
-
-   private G3MRenderContext _g3mrc;
+   private long     _debugCounter = 0;
+   final G3MContext _context;
 
 
-   public TileVisitorCache_Android(final G3MContext context,
-                                   final LayerSet layerSet) {
+   public TileVisitorCache_Android(final G3MContext context) {
       _context = context;
-      _layerSet = layerSet;
    }
 
 
@@ -41,9 +36,10 @@ public class TileVisitorCache_Android
    // Java:
    // ORIGINAL LINE: void visitTile(Tile* tile) const
    @Override
-   public final void visitTile(final Tile tile) {
-      for (int i = 0; i < _layerSet.size(); i++) {
-         final Layer layer = _layerSet.getLayer(i);
+   public final void visitTile(final ArrayList<Layer> layers,
+                               final Tile tile) {
+      for (int i = 0; i < layers.size(); i++) {
+         final Layer layer = layers.get(i);
          final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, tile);
          // Storing petitions
          for (int j = 0; j < pet.size(); j++) {
