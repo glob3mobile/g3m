@@ -30,6 +30,10 @@ public class BilParser
 
   public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
   {
+     return parseBil16(sector, extent, buffer, 0);
+  }
+  public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
+  {
   
     final int size = extent._x * extent._y;
   
@@ -44,7 +48,6 @@ public class BilParser
   
     final short minValue = IMathUtils.instance().minInt16();
   
-  //  IShortBuffer* shortBuffer = IFactory::instance()->createShortBuffer(size);
     short[] shortBuffer = new short[size];
     for (int i = 0; i < size; i++)
     {
@@ -59,10 +62,9 @@ public class BilParser
         height = ShortBufferElevationData.NO_DATA_VALUE;
       }
   
-      //shortBuffer->rawPut(i, height);
       shortBuffer[i] = height;
     }
   
-    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size);
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight);
   }
 }
