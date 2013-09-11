@@ -549,11 +549,6 @@ public class Tile
     return _boundingVolume;
   }
 
-
-  ///#include "Sphere.hpp"
-  
-  
-  
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column, PlanetRenderer planetRenderer)
   {
      _texturizer = texturizer;

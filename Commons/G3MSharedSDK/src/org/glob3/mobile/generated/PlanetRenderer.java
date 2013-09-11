@@ -73,6 +73,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileLower = new Geodetic2D(tileLatFrom, tileLonFrom);
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
+  //<<<<<<< HEAD
   
         if (sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
@@ -85,6 +86,15 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           {
             topLevelTiles.add(tile);
           }
+  //=======
+  //
+  //      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
+  //      if (parameters->_firstLevel == 0) {
+  //        _firstLevelTiles.push_back(tile);
+  //      }
+  //      else {
+  //        topLevelTiles.push_back(tile);
+  //>>>>>>> webgl-port
         }
       }
     }
@@ -386,9 +396,19 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       f.setMatrix(cam.getModelViewMatrix44D());
     }
-  
-  
-  
+  //<<<<<<< HEAD
+  //
+  //
+  //
+  //=======
+  //
+  //  if (_model == NULL) {
+  //    _model = new ModelGLFeature(cam->getModelMatrix44D());
+  //    _glState->addGLFeature(_model, true);
+  //  } else{
+  //    _model->setMatrix(cam->getModelMatrix44D());
+  //  }
+  //>>>>>>> webgl-port
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
