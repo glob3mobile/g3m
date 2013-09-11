@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SceneJSShapesParser;
+import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -52,6 +53,11 @@ public class G3MShowMarkersActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
       builder.setInitializationTask(getWeatherMarkerLayersTask());
+      
+      if (true){
+    	  Sector spain = Sector.fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+    	  builder.setShownSector(spain);
+      }
 
       builder.addRenderer(_weatherMarkers);
       builder.addRenderer(_shapeRenderer);
