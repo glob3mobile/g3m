@@ -363,6 +363,7 @@
 		D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */; };
 		D8B0125717E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */; };
 		D8B0125A17E09EF900AD743A /* HUDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B0125917E09EF900AD743A /* HUDRenderer.cpp */; };
+		D8B0125C17E0B80600AD743A /* ITessellatorData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B0125B17E0B80600AD743A /* ITessellatorData.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
@@ -1430,6 +1431,7 @@
 		D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SectorAndHeightCameraConstrainer.cpp; path = Commons/Cameras/SectorAndHeightCameraConstrainer.cpp; sourceTree = "<group>"; };
 		D8B0125817E09EF900AD743A /* HUDRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDRenderer.hpp; path = Commons/Rendererers/HUDRenderer.hpp; sourceTree = "<group>"; };
 		D8B0125917E09EF900AD743A /* HUDRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDRenderer.cpp; path = Commons/Rendererers/HUDRenderer.cpp; sourceTree = "<group>"; };
+		D8B0125B17E0B80600AD743A /* ITessellatorData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ITessellatorData.cpp; sourceTree = "<group>"; };
 		D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGlobalState.cpp; sourceTree = "<group>"; };
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
@@ -1787,6 +1789,7 @@
 				CFAA530417AAFE3C002A9204 /* InterpolatedSubviewElevationData.hpp */,
 				CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */,
 				CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */,
+				D8B0125B17E0B80600AD743A /* ITessellatorData.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2665,6 +2668,7 @@
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
 				D8B0125717E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp in Sources */,
 				D8B0125A17E09EF900AD743A /* HUDRenderer.cpp in Sources */,
+				D8B0125C17E0B80600AD743A /* ITessellatorData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
