@@ -66,6 +66,8 @@ private:
   const int _extentWidth;
   const int _extentHeight;
 
+  const double _deltaHeight;
+
   void drainQueue();
 
   const long long queueRequest(const Sector& sector,
@@ -79,7 +81,8 @@ private:
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
-                                  const Vector2I& extent);
+                                  const Vector2I& extent,
+                                  double deltaHeight = 0);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
@@ -106,10 +109,6 @@ public:
   const Vector2I getMinResolution() const{
     return Vector2I(_extentWidth, _extentHeight);
   }
-
-  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                              const Sector& sector,
-  //                                              const Vector2I& extent};
   
 };
 

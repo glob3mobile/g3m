@@ -13,7 +13,8 @@
 
 class BufferElevationData : public ElevationData {
 protected:
-  const int _bufferSize;
+  const int    _bufferSize;
+  const double _deltaHeight;
 
   virtual double getValueInBufferAt(int index) const = 0;
 
@@ -22,18 +23,18 @@ public:
                       const Vector2I& extent,
                       const Sector& realSector,
                       const Vector2I& realExtent,
-                      int bufferSize);
+                      int bufferSize,
+                      double deltaHeight);
 
   virtual ~BufferElevationData() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
 
   double getElevationAt(int x,
                         int y) const;
-
+  
 };
 
 #endif
