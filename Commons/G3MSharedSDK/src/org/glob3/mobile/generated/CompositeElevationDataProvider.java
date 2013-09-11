@@ -81,14 +81,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       }
     }
 
-
-    //void CompositeElevationDataProvider::CompositeElevationDataProvider_RequestStepListener::onCancel(const Sector& sector,
-    //                                                                                                  const Vector2I& extent) {
-    //  if (_request != NULL) {
-    //    _request->onCancel(sector, extent);
-    //  }
-    //}
-    
     public final void onCancel(Sector sector, Vector2I extent)
     {
       if (_request != null)
@@ -158,32 +150,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       }
     
       return provider;
-    
-    
-    //  std::vector<ElevationDataProvider*>::iterator edp = (std::vector<ElevationDataProvider*>::iterator) ps.end();
-    //  double bestRes = extent.squaredLength();
-    //  double selectedRes = IMathUtils::instance()->maxDouble();
-    //  double selectedResDistance = IMathUtils::instance()->maxDouble();
-    //  IMathUtils *mu = IMathUtils::instance();
-    //  for (std::vector<ElevationDataProvider*>::iterator it = ps.begin() ; it != ps.end(); ++it) {
-    //    double res = (*it)->getMinResolution().squaredLength();
-    //    double newResDistance = mu->abs(bestRes - res);
-    //
-    //    if (newResDistance < selectedResDistance || //Closer Resolution
-    //        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-    //      selectedResDistance = newResDistance;
-    //      selectedRes = res;
-    //      edp = it;
-    //    }
-    //  }
-    //
-    //  ElevationDataProvider* provider = NULL;
-    //  if (edp != ps.end()) {
-    //    provider = *edp;
-    //    ps.erase(edp);
-    //  }
-    //
-    //  return provider;
     }
 
     public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodelete)
@@ -434,21 +400,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     return new Vector2I(x,y);
   }
 
-  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                              const Sector& sector,
-  //                                              const Vector2I& extent) const;
-
 }
-//ElevationData* CompositeElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-//                                                                            const Sector& sector,
-//                                                                            const Vector2I& extent) const{
-//  return new SubviewElevationData(elevationData,
-//                                  false,
-//                                  sector,
-//                                  extent,
-//                                  false);
-//}
-
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark Request
 

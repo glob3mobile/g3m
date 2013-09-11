@@ -73,6 +73,8 @@ public:
 
   SurfaceElevationProvider* getSurfaceElevationProvider();
 
+  PlanetRenderer* getPlanetRenderer();
+
 };
 
 #endif

@@ -76,4 +76,9 @@ public abstract class LeafRenderer extends Renderer
     return null;
   }
 
+  public PlanetRenderer getPlanetRenderer()
+  {
+    return null;
+  }
+
 }

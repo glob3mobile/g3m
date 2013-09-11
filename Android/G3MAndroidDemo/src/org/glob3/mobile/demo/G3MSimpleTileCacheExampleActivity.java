@@ -21,7 +21,6 @@ import org.glob3.mobile.specific.TileVisitorCache_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 
 public class G3MSimpleTileCacheExampleActivity
@@ -37,8 +36,12 @@ public class G3MSimpleTileCacheExampleActivity
 
       setContentView(R.layout.bar_glob3_template);
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
+      builder.setLogFPS(true);
 
-      final PlanetRendererBuilder planetRendererBuilder = new PlanetRendererBuilder();
+      final Planet planet = Planet.createSphericalEarth();
+      builder.setPlanet(planet);
+
+      final PlanetRendererBuilder planetRendererBuilder = builder.getPlanetRendererBuilder();
       final LayerSet layerSet = new LayerSet();
 
       final WMSLayer osm = new WMSLayer( //
@@ -62,26 +65,37 @@ public class G3MSimpleTileCacheExampleActivity
 
 
       final PlanetRenderer pr = planetRendererBuilder.create();
-      builder.setInitializationTask(getTileVisitorTask(pr));
+      builder.addRenderer(pr);
+      // builder.setInitializationTask(getTileVisitorTask(pr));
 
-      builder.setLogFPS(true);
-      final Planet planet = Planet.createSphericalEarth();
-      builder.setPlanet(planet);
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();
-      final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
-      g3mLayout.addView(_widgetAndroid);
+
+
+      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext());
+      // Are cached the first two levels of the world
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+      // Sector specified cached at the indicated levels
+
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(
+               tvc,
+               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)), new Geodetic2D(
+                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
+
+
+      _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");
+
    }
 
 
    private GInitializationTask getTileVisitorTask(final PlanetRenderer pr) {
+
       // PRECACHING
       final GInitializationTask initializationTask = new GInitializationTask() {
          @Override
          public void run(final G3MContext ctx) {
             final TileVisitorCache_Android tvc = new TileVisitorCache_Android(ctx);
-
             // Are cached the first two levels of the world
             pr.acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
             // Sector specified cached at the indicated levels

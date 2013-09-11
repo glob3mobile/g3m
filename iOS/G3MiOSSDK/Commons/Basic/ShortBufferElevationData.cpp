@@ -12,7 +12,6 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
-//const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
 const short ShortBufferElevationData::NO_DATA_VALUE = -32768;
 
 
@@ -21,14 +20,15 @@ ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Sector& realSector,
                                                    const Vector2I& realExtent,
                                                    short* buffer,
-                                                   int bufferSize) :
-BufferElevationData(sector, extent, realSector, realExtent, bufferSize),
+                                                   int bufferSize,
+                                                   double deltaHeight) :
+BufferElevationData(sector, extent, realSector, realExtent, bufferSize, deltaHeight),
 _buffer(buffer)
 {
   if (_bufferSize != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
-  
+
   const int size = _bufferSize;
   _hasNoData = false;
   for (int i = 0; i < size; i++) {
@@ -45,7 +45,6 @@ ShortBufferElevationData::~ShortBufferElevationData() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
@@ -86,7 +85,7 @@ Vector3D ShortBufferElevationData::getMinMaxAverageElevations() const {
   short minHeight = mu->maxInt16();
   short maxHeight = mu->minInt16();
   double sumHeight = 0.0;
-  
+
   const int bufferSize = _bufferSize;
   for (int i = 0; i < bufferSize; i++) {
     const short height = _buffer[i];
@@ -100,14 +99,14 @@ Vector3D ShortBufferElevationData::getMinMaxAverageElevations() const {
       sumHeight += height;
     }
   }
-  
+
   if (minHeight == mu->maxInt16()) {
     minHeight = 0;
   }
   if (maxHeight == mu->minInt16()) {
     maxHeight = 0;
   }
-  
+
   return Vector3D(minHeight,
                   maxHeight,
                   sumHeight / (_width * _height));

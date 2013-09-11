@@ -19,11 +19,13 @@
 
 SingleBillElevationDataProvider::SingleBillElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
-                                                                 const Vector2I& extent) :
+                                                                 const Vector2I& extent,
+                                                                 double deltaHeight) :
 _bilUrl(bilUrl),
 _sector(sector),
 _extentWidth(extent._x),
 _extentHeight(extent._y),
+_deltaHeight(deltaHeight),
 _elevationData(NULL),
 _elevationDataResolved(false),
 _currentRequestID(0)
@@ -38,15 +40,19 @@ private:
   const int _resolutionWidth;
   const int _resolutionHeight;
 
+  const double _deltaHeight;
+
 public:
   SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider* singleBillElevationDataProvider,
                                                          const Sector& sector,
                                                          int resolutionWidth,
-                                                         int resolutionHeight) :
+                                                         int resolutionHeight,
+                                                         double deltaHeight) :
   _singleBillElevationDataProvider(singleBillElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
-  _resolutionHeight(resolutionHeight)
+  _resolutionHeight(resolutionHeight),
+  _deltaHeight(deltaHeight)
   {
 
   }
@@ -56,7 +62,7 @@ public:
                   bool expired) {
     const Vector2I resolution(_resolutionWidth, _resolutionHeight);
 
-    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer);
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer, _deltaHeight);
 
     delete buffer;
 
@@ -97,7 +103,8 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                             new SingleBillElevationDataProvider_BufferDownloadListener(this,
                                                                                                        _sector,
                                                                                                        _extentWidth,
-                                                                                                       _extentHeight),
+                                                                                                       _extentHeight,
+                                                                                                       _deltaHeight),
                                             true);
   }
 }
@@ -186,13 +193,3 @@ void SingleBillElevationDataProvider::removeQueueRequest(const long long request
   _requestsQueue.remove(requestId);
 #endif
 }
-
-//ElevationData* SingleBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-//                                                                             const Sector& sector,
-//                                                                             const Vector2I& extent) const{
-//  return new SubviewElevationData(elevationData,
-//                                  false,
-//                                  sector,
-//                                  extent,
-//                                  false);
-//}

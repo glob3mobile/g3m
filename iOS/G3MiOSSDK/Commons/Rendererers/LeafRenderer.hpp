@@ -71,6 +71,10 @@ public:
     return NULL;
   }
 
+  virtual PlanetRenderer* getPlanetRenderer() {
+    return NULL;
+  }
+
 };
 
 #endif

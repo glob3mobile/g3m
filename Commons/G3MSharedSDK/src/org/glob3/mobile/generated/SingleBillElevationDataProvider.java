@@ -14,6 +14,8 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   private final int _extentWidth;
   private final int _extentHeight;
 
+  private final double _deltaHeight;
+
   private void drainQueue()
   {
     if (!_elevationDataResolved)
@@ -47,10 +49,15 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
+     this(bilUrl, sector, extent, 0);
+  }
+  public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent, double deltaHeight)
+  {
      _bilUrl = bilUrl;
      _sector = new Sector(sector);
      _extentWidth = extent._x;
      _extentHeight = extent._y;
+     _deltaHeight = deltaHeight;
      _elevationData = null;
      _elevationDataResolved = false;
      _currentRequestID = 0;
@@ -66,7 +73,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     if (!_elevationDataResolved)
     {
-      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight), true);
+      context.getDownloader().requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight), true);
     }
   }
 
@@ -129,9 +136,5 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   {
     return new Vector2I(_extentWidth, _extentHeight);
   }
-
-  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                              const Sector& sector,
-  //                                              const Vector2I& extent};
 
 }
