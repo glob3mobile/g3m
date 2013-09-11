@@ -631,7 +631,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
         const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
 
-        textCoords.add((float)m_u, (float)m_v);
+        textCoords.add((float)m_u, (float)m_v); 
       } else{
 
         Vector2D uv = tileSector.getUVCoordinates(position);
