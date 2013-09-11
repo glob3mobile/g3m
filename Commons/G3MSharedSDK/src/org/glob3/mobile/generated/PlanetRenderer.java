@@ -276,8 +276,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private boolean _recreateTilesPending;
 
   private GLState _glState;
-//  ProjectionGLFeature* _projection;
-//  ModelGLFeature*      _model;
   private void updateGLState(G3MRenderContext rc)
   {
   
@@ -314,17 +312,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
-<<<<<<< HEAD
   private Sector _renderedSector ;
-
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority, Sector renderedSector)
-  //_projection(NULL),
-  //_model(NULL),
-=======
   private boolean _validLayerTilesRenderParameters;
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority)
->>>>>>> webgl-port
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -344,11 +335,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
-<<<<<<< HEAD
      _renderedSector = new Sector(renderedSector);
-=======
      _validLayerTilesRenderParameters = false;
->>>>>>> webgl-port
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -687,6 +675,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
     }
+  }
+
+  public final Sector getRenderedSector()
+  {
+    return _renderedSector;
   }
 
 }

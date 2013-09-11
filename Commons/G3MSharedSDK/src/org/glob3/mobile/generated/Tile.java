@@ -158,13 +158,13 @@ public class Tile
   
     /* //AGUSTIN:now that zfar is located in the horizon, this test is not needed anymore
      // test if sector is back oriented with respect to the camera
-    if (_sector.isBackOriented(rc,
-                               getMinHeight(),
-                               planet,
-                               cameraNormalizedPosition,
-                               cameraAngle2HorizonInRadians)) {
-      return false;
-    }*/
+     if (_sector.isBackOriented(rc,
+     getMinHeight(),
+     planet,
+     cameraNormalizedPosition,
+     cameraAngle2HorizonInRadians)) {
+     return false;
+     }*/
   
     if (!prc.getRenderedSector().touchesWith(_sector)) //Incomplete world
     {
@@ -391,6 +391,7 @@ public class Tile
   }
 
   private ITexturizerData _texturizerData;
+  private ITessellatorData _tessellatorData;
 
   private Box _tileBoundingVolume;
   private Box getTileBoundingVolume(G3MRenderContext rc)
@@ -583,6 +584,7 @@ public class Tile
      _boundingVolume = null;
      _lodTimer = null;
      _planetRenderer = planetRenderer;
+     _tessellatorData = null;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -635,6 +637,8 @@ public class Tile
   
     if (_lodTimer != null)
        _lodTimer.dispose();
+  
+    _tessellatorData = null;
   }
 
 
@@ -816,6 +820,20 @@ public class Tile
     }
   }
 
+  public final ITessellatorData getTessellatorData()
+  {
+    return _tessellatorData;
+  }
+
+  public final void setTessellatorData(ITessellatorData tessellatorData)
+  {
+    if (tessellatorData != _tessellatorData)
+    {
+      _tessellatorData = null;
+      _tessellatorData = tessellatorData;
+    }
+  }
+
   public final Tile getDeepestTileContaining(Geodetic3D position)
   {
     if (_sector.contains(position))
@@ -928,13 +946,31 @@ public class Tile
   
     java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
   
-    subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+    Sector renderedSector = _planetRenderer.getRenderedSector();
   
-    subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
+    Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
+    if (renderedSector.touchesWith(s1))
+    {
+      subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+    }
   
-    subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
+    Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
+    if (renderedSector.touchesWith(s2))
+    {
+      subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
+    }
   
-    subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
+    Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
+    if (renderedSector.touchesWith(s3))
+    {
+      subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
+    }
+  
+    Sector s4 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
+    if (renderedSector.touchesWith(s4))
+    {
+      subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
+    }
   
     return subTiles;
   }

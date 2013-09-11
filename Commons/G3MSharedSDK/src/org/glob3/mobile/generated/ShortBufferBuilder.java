@@ -81,4 +81,24 @@ public class ShortBufferBuilder
     return IFactory.instance().createShortBuffer( _values.toArray() );
   }
 
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("ShortBufferBuilder: ");
+    for (int i = 0; i < (int)_values.size(); i++)
+    {
+      isb.addInt(_values[i]);
+      isb.addString(", ");
+    }
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final short last()
+  {
+    return _values[_values.size()-1];
+  }
+
 }
