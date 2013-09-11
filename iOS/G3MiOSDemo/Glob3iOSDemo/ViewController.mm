@@ -553,8 +553,8 @@ public:
   //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
 
-  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  builder.addCameraConstraint(scc);
+//  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+//  builder.addCameraConstraint(scc);
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
@@ -625,22 +625,20 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (true){ //Incomplete world
+  if (true) { //Incomplete world
 
     Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
 //    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
-    builder.setShownSector(spain );
+    builder.setShownSector( spain );
 
-    builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    //    builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
-    geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
+    //geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
 
     builder.setBackgroundColor(new Color(Color::white()));
-
-    builder.getPlanetRendererBuilder()->setRenderDebug(true);
   }
 
-  if (true){ //HUD
+  if (false) { //HUD
     HUDRenderer* hudRenderer = new   HUDRenderer();
     
     Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
@@ -659,7 +657,7 @@ public:
   //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   //Draw light direction
-  if (true){
+  if (true) {
 
     Vector3D lightDir = Vector3D(100000, 0,0);
     //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
