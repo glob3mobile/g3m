@@ -16,8 +16,11 @@ void SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 //  const double height = nextCamera->getHeight();
   const double height = position._height;
 
+  const Geodetic3D center = nextCamera->getGeodeticCenterOfView();
+
   const bool invalidHeight   = (height > _maxHeight);
-  const bool invalidPosition = !_sector.contains(position._latitude, position._longitude);
+//  const bool invalidPosition = !_sector.contains(position._latitude, position._longitude);
+  const bool invalidPosition = !_sector.contains(center._latitude, center._longitude);
 
   if (invalidHeight || invalidPosition) {
     nextCamera->copyFrom(*previousCamera);

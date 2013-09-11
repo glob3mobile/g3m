@@ -649,7 +649,7 @@ G3MWidget* IG3MBuilder::create() {
   }
 
   int TODO_VIEWPORT;
-  Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1,1), shownSector);
+  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1024,1024), shownSector);
 
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
   if (!shownSector.isEquals(Sector::fullSphere())) {
@@ -668,21 +668,21 @@ G3MWidget* IG3MBuilder::create() {
   }
   
   
-  G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
-                                            getStorage(), //
-                                            getDownloader(), //
-                                            getThreadUtils(), //
-                                            getCameraActivityListener(),//
-                                            getPlanet(), //
-                                            *getCameraConstraints(), //
-                                            getCameraRenderer(), //
-                                            mainRenderer, //
-                                            getBusyRenderer(), //
-                                            *getBackgroundColor(), //
-                                            getLogFPS(), //
-                                            getLogDownloaderStatistics(), //
-                                            getInitializationTask(), //
-                                            getAutoDeleteInitializationTask(), //
+  G3MWidget * g3mWidget = G3MWidget::create(getGL(),
+                                            getStorage(),
+                                            getDownloader(),
+                                            getThreadUtils(),
+                                            getCameraActivityListener(),
+                                            getPlanet(),
+                                            *getCameraConstraints(),
+                                            getCameraRenderer(),
+                                            mainRenderer,
+                                            getBusyRenderer(),
+                                            *getBackgroundColor(),
+                                            getLogFPS(),
+                                            getLogDownloaderStatistics(),
+                                            getInitializationTask(),
+                                            getAutoDeleteInitializationTask(),
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),

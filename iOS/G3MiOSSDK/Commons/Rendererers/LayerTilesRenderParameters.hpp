@@ -59,11 +59,12 @@ public:
     return Vector2I(256, 256);
   }
 
-  static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
+
+  static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector,
+                                                              const int firstLevel,
+                                                              const int maxLevel) {
     const int  topSectorSplitsByLatitude  = 2;
     const int  topSectorSplitsByLongitude = 4;
-    const int  firstLevel = 0;
-    const int  maxLevel = 17;
     const bool mercator = false;
 
     return new LayerTilesRenderParameters(topSector,
@@ -74,6 +75,13 @@ public:
                                           LayerTilesRenderParameters::defaultTileTextureResolution(),
                                           LayerTilesRenderParameters::defaultTileMeshResolution(),
                                           mercator);
+  }
+
+  static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
+    const int  firstLevel = 0;
+    const int  maxLevel = 17;
+
+    return createDefaultNonMercator(topSector, firstLevel, maxLevel);
   }
 
   static LayerTilesRenderParameters* createDefaultMercator(const int firstLevel,
