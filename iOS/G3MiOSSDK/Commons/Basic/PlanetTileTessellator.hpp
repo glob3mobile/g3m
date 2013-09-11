@@ -18,10 +18,8 @@ class Sector;
 class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "ITessellatorData.hpp"
 
-
-class PlanetTileTessellatorData: public ITessellatorData{
+class PlanetTileTessellatorData{
 public:
   FloatBufferBuilderFromCartesian2D* _textCoords;
   PlanetTileTessellatorData(FloatBufferBuilderFromCartesian2D* textCoords):

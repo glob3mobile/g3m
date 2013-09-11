@@ -34,9 +34,9 @@ class Frustum;
 class Box;
 class PlanetRenderer;
 class GLState;
+class PlanetTileTessellatorData;
 
 #include "ITexturizerData.hpp"
-#include "ITessellatorData.hpp"
 
 class Tile {
 private:
@@ -114,7 +114,7 @@ private:
   void deleteTexturizedMesh(TileTexturizer* texturizer);
 
   ITexturizerData* _texturizerData;
-  ITessellatorData* _tessellatorData;
+  PlanetTileTessellatorData* _tessellatorData;
 
   Box* _tileBoundingVolume;
   Box* getTileBoundingVolume(const G3MRenderContext *rc);
@@ -210,16 +210,11 @@ public:
     }
   }
 
-  ITessellatorData* getTessellatorData() const {
+  PlanetTileTessellatorData* getTessellatorData() const {
     return _tessellatorData;
   }
 
-  void setTessellatorData(ITessellatorData* tessellatorData) {
-    if (tessellatorData != _tessellatorData) {
-      delete _tessellatorData;
-      _tessellatorData = tessellatorData;
-    }
-  }
+  void setTessellatorData(PlanetTileTessellatorData* tessellatorData);
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 

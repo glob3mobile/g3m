@@ -876,3 +876,10 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   return NULL;
   
 }
+
+void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
+  if (tessellatorData != _tessellatorData) {
+    delete _tessellatorData;
+    _tessellatorData = tessellatorData;
+  }
+}
