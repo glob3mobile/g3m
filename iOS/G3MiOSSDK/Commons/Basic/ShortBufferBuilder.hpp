@@ -82,7 +82,14 @@ public:
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
     isb->addString("ShortBufferBuilder: ");
     for (int i = 0; i < (int)_values.size(); i++) {
-      isb->addInt(_values[i]);
+
+#ifdef C_CODE
+      short v = _values[i];
+#endif
+#ifdef JAVA_CODE
+      short v = _values.get(i);
+#endif
+      isb->addInt(v);
       isb->addString(", ");
     }
     const std::string s = isb->getString();

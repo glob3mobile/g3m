@@ -625,13 +625,13 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       //TEXT COORDS
       if (mercator){
         //U
-        const double mu = tileSector.getUCoordinate(position._longitude);
+        const double m_u = tileSector.getUCoordinate(position._longitude);
 
         //V
         const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
-        const double mv = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+        const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
 
-        textCoords.add((float)mu, (float)mv);
+        textCoords.add((float)m_u, (float)m_v);
       } else{
 
         Vector2D uv = tileSector.getUVCoordinates(position);
@@ -671,7 +671,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
 
-  const short southEastCorner = (short)(rx * ry) - 1;
+  const short southEastCorner = (short)((rx * ry) - 1);
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = southEastCorner;
@@ -714,7 +714,7 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   //  const short ry = (short) meshResolution._y;
 
-  const short northEastCorner = (short) rx - 1;
+  const short northEastCorner = (short) (rx - 1);
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northEastCorner;
