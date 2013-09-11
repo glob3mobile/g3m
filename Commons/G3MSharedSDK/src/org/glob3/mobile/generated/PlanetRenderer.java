@@ -701,6 +701,12 @@ public class PlanetRenderer
 
 
    @Override
+   public final PlanetRenderer getPlanetRenderer() {
+      return this;
+   }
+
+
+   @Override
    public final void addListener(final Angle latitude,
                                  final Angle longitude,
                                  final SurfaceElevationListener listener) {
@@ -726,5 +732,4 @@ public class PlanetRenderer
          _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
       }
    }
-
 }

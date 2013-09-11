@@ -19,8 +19,9 @@ FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
                                                    const Sector& realSector,
                                                    const Vector2I& realExtent,
-                                                   IFloatBuffer* buffer) :
-BufferElevationData(sector, extent, realSector, realExtent, buffer->size()),
+                                                   IFloatBuffer* buffer,
+                                                   double deltaHeight) :
+BufferElevationData(sector, extent, realSector, realExtent, buffer->size(), deltaHeight),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {

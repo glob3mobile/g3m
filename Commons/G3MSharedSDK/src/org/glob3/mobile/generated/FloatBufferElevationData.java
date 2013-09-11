@@ -36,9 +36,9 @@ public class FloatBufferElevationData extends BufferElevationData
 
   public static final float NO_DATA_VALUE = IMathUtils.instance().NanF();
 
-  public FloatBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IFloatBuffer buffer)
+  public FloatBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IFloatBuffer buffer, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, buffer.size());
+     super(sector, extent, realSector, realExtent, buffer.size(), deltaHeight);
      _buffer = buffer;
     if (_buffer.size() != (_width * _height))
     {

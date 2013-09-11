@@ -8,22 +8,24 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   private IElevationDataListener _listener;
   private final boolean _autodeleteListener;
 
+  private final double _deltaHeight;
 
 
-  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight)
   {
      _sector = new Sector(sector);
      _width = extent._x;
      _height = extent._y;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
+     _deltaHeight = deltaHeight;
 
   }
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
-    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer);
+    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer, _deltaHeight);
     if (buffer != null)
        buffer.dispose();
 
@@ -69,12 +71,3 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
 
 
 }
-//ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-//                                                                          const Sector& sector,
-//                                                                          const Vector2I& extent) const{
-//  return new SubviewElevationData(elevationData,
-//                                  false,
-//                                  sector,
-//                                  extent,
-//                                  false);
-//}

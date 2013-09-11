@@ -44,6 +44,7 @@ class GPUProgram;
 class GPUProgramManager;
 class ICameraActivityListener;
 class GLState;
+class PlanetRenderer;
 
 #include <vector>
 #include <string>
@@ -196,6 +197,8 @@ public:
   }
 
   void setBackgroundColor(const Color& backgroundColor);
+
+  PlanetRenderer* getPlanetRenderer();
   
 private:
   IStorage*           _storage;
