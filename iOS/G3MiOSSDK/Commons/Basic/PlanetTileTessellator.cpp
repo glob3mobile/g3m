@@ -625,13 +625,13 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       //TEXT COORDS
       if (mercator){
         //U
-        const double u = tileSector.getUCoordinate(position._longitude);
+        const double mu = tileSector.getUCoordinate(position._longitude);
 
         //V
         const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
-        const double v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+        const double mv = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
 
-        textCoords.add((float)u, (float)v);
+        textCoords.add((float)mu, (float)mv);
       } else{
 
         Vector2D uv = tileSector.getUVCoordinates(position);
@@ -671,7 +671,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
 
-  const short southEastCorner = (rx * ry) - 1;
+  const short southEastCorner = (short)(rx * ry) - 1;
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = southEastCorner;
@@ -695,8 +695,8 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
     surfaceIndex -= rx;
   }
 
-  indices.add(surfaceIndex + rx);
-  indices.add(surfaceIndex + rx);
+  indices.add((short)(surfaceIndex + rx));
+  indices.add((short)(surfaceIndex + rx));
 }
 
 void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
@@ -714,7 +714,7 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   //  const short ry = (short) meshResolution._y;
 
-  const short northEastCorner = rx - 1;
+  const short northEastCorner = (short) rx - 1;
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northEastCorner;
@@ -739,8 +739,8 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
     surfaceIndex -= 1;
   }
 
-  indices.add(surfaceIndex + 1);
-  indices.add(surfaceIndex + 1);
+  indices.add((short)(surfaceIndex + 1));
+  indices.add((short)(surfaceIndex + 1));
 }
 
 void PlanetTileTessellator::createWestSkirt(const Planet* planet,
@@ -758,7 +758,7 @@ void PlanetTileTessellator::createWestSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
 
-  const short northWestCorner = 0;
+  const short northWestCorner = (short)0;
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northWestCorner;
@@ -783,8 +783,8 @@ void PlanetTileTessellator::createWestSkirt(const Planet* planet,
     surfaceIndex += rx;
   }
 
-  indices.add(surfaceIndex - rx);
-  indices.add(surfaceIndex - rx);
+  indices.add((short)(surfaceIndex - rx));
+  indices.add((short)(surfaceIndex - rx));
 }
 
 void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
@@ -802,7 +802,7 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
 
-  const short southWestCorner = rx * (ry-1);
+  const short southWestCorner = (short) (rx * (ry-1));
 
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = southWestCorner;
@@ -825,6 +825,6 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
     surfaceIndex += 1;
   }
 
-  indices.add(surfaceIndex - 1);
-  indices.add(surfaceIndex - 1);
+  indices.add((short)(surfaceIndex - 1));
+  indices.add((short)(surfaceIndex - 1));
 }

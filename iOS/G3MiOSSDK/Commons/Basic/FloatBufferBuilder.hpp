@@ -84,12 +84,22 @@ public:
 
   Vector2D getVector2D(int i) const{
     int pos = i * 2;
+#ifdef C_CODE
     return Vector2D(_values[pos], _values[pos + 1]);
+#endif
+#ifdef JAVA_CODE
+    return new Vector2D(_values.get(pos), _values.get(pos + 1));
+#endif
   }
 
   Vector3D getVector3D(int i) const{
     int pos = i * 3;
+#ifdef C_CODE
     return Vector3D(_values[pos], _values[pos + 1], _values[pos+2]);
+#endif
+#ifdef JAVA_CODE
+    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
+#endif
   }
 };
 

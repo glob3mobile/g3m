@@ -90,10 +90,6 @@ public:
     return s;
   }
 
-  short last() const{
-    return _values[_values.size()-1];
-  }
-
 };
 
 #endif
