@@ -204,4 +204,28 @@ public class CompositeRenderer extends Renderer
     return result;
   }
 
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    PlanetRenderer result = null;
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      PlanetRenderer planetRenderer = renderer.getPlanetRenderer();
+      if (planetRenderer != null)
+      {
+        if (result == null)
+        {
+          result = planetRenderer;
+        }
+        else
+        {
+          ILogger.instance().logError("Inconsistency in Renderers: more than one PlanetRenderer");
+        }
+      }
+    }
+  
+    return result;
+  }
+
 }

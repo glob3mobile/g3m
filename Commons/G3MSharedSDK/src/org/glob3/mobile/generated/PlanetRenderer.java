@@ -697,6 +697,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return (_elevationDataProvider == null) ? null : this;
   }
 
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return this;
+  }
+
   public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener)
   {
     _elevationListenersTree.add(new Geodetic2D(latitude, longitude), listener);
