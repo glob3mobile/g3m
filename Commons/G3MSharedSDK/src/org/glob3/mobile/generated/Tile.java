@@ -849,7 +849,7 @@ public class Tile
 
   public final Tile getDeepestTileContaining(Geodetic3D position)
   {
-    if (_sector.contains(position))
+    if (_sector.contains(position._latitude, position._longitude))
     {
       if (_subtiles == null)
       {

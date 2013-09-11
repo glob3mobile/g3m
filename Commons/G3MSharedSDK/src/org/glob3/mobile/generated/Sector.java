@@ -184,11 +184,6 @@ public class Sector
     return contains(position._latitude, position._longitude);
   }
 
-  public final boolean contains(Geodetic3D position)
-  {
-    return contains(position._latitude, position._longitude);
-  }
-
   public final boolean touchesWith(Sector that)
   {
     // from Real-Time Collision Detection - Christer Ericson

@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  SectorAndHeightCameraConstrainer.h
+//  SectorAndHeightCameraConstrainer.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 06/09/13.
@@ -20,15 +20,14 @@ package org.glob3.mobile.generated;
 
 public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
 {
-
   private final Sector _sector ;
-  private final double _height;
+  private final double _maxHeight;
 
 
-  public SectorAndHeightCameraConstrainer(Sector sector, double height)
+  public SectorAndHeightCameraConstrainer(Sector sector, double maxHeight)
   {
      _sector = new Sector(sector);
-     _height = height;
+     _maxHeight = maxHeight;
   }
 
   public void dispose()
@@ -38,12 +37,24 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-    Geodetic3D g = nextCamera.getGeodeticPosition();
-    double h = nextCamera.getHeight();
+    final Geodetic3D position = nextCamera.getGeodeticPosition();
+  //  const double height = nextCamera->getHeight();
+    final double height = position._height;
   
-    if (h > _height || !_sector.contains(g))
+    final boolean invalidHeight = (height > _maxHeight);
+    final boolean invalidPosition = !_sector.contains(position._latitude, position._longitude);
+  
+    if (invalidHeight || invalidPosition)
     {
       nextCamera.copyFrom(previousCamera);
+  
+  //    const double newHeight = invalidHeight ? _maxHeight : height;
+  //    if (invalidPosition) {
+  //      nextCamera->setGeodeticPosition(_sector.clamp(g2), newHeight);
+  //    }
+  //    else {
+  //      nextCamera->setGeodeticPosition(g2, newHeight);
+  //    }
     }
   
   }
