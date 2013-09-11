@@ -57,13 +57,17 @@ public class Angle
 
   public static Angle fromDegreesMinutes(double degrees, double minutes)
   {
-    final double d = degrees + (minutes / 60.0);
+    final IMathUtils mu = IMathUtils.instance();
+    final double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
+    final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0));
     return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
   {
-    final double d = degrees + (minutes / 60.0) + (seconds / 3600.0);
+    final IMathUtils mu = IMathUtils.instance();
+    final double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0) + (mu.abs(seconds) / 3600.0));
     return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
