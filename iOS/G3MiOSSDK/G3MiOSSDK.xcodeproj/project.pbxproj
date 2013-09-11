@@ -194,6 +194,7 @@
 		CF8AE011170204C600FE9F56 /* GEOSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */; };
 		CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */; };
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
+		CF8BE68D17E0B1C70072273A /* ITileVisitor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */; };
@@ -589,6 +590,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8BE68D17E0B1C70072273A /* ITileVisitor.hpp in CopyFiles */,
 				D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */,
 				D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */,
 				D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */,

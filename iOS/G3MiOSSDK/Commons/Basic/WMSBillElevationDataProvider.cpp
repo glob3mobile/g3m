@@ -162,13 +162,3 @@ int TODO_WMS_1_1_1;
 void WMSBillElevationDataProvider::cancelRequest(const long long requestId) {
   _downloader->cancelRequest(requestId);
 }
-
-//ElevationData* WMSBillElevationDataProvider::createSubviewOfElevationData(ElevationData* elevationData,
-//                                                                          const Sector& sector,
-//                                                                          const Vector2I& extent) const{
-//  return new SubviewElevationData(elevationData,
-//                                  false,
-//                                  sector,
-//                                  extent,
-//                                  false);
-//}
