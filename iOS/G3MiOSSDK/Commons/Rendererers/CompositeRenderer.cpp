@@ -137,3 +137,22 @@ SurfaceElevationProvider* CompositeRenderer::getSurfaceElevationProvider() {
 
   return result;
 }
+
+PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
+  PlanetRenderer* result = NULL;
+
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* renderer = _renderers[i];
+    PlanetRenderer* planetRenderer = renderer->getPlanetRenderer();
+    if (planetRenderer != NULL) {
+      if (result == NULL) {
+        result = planetRenderer;
+      }
+      else {
+        ILogger::instance()->logError("Inconsistency in Renderers: more than one PlanetRenderer");
+      }
+    }
+  }
+
+  return result;
+}

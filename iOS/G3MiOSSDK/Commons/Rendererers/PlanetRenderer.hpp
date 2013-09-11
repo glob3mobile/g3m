@@ -484,6 +484,10 @@ public:
     return (_elevationDataProvider == NULL) ? NULL : this;
   }
 
+  PlanetRenderer* getPlanetRenderer() {
+    return this;
+  }
+
   void addListener(const Angle& latitude,
                    const Angle& longitude,
                    SurfaceElevationListener* listener);
