@@ -9,20 +9,16 @@
 #ifndef G3MiOSSDK_ITessellatorData_hpp
 #define G3MiOSSDK_ITessellatorData_hpp
 
-#ifdef C_CODE
-
 class ITessellatorData {
 public:
+
+#ifdef C_CODE
   virtual ~ITessellatorData() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 };
 
 #endif
-#ifdef JAVA_CODE
 
-public interface ITessellatorData
-{
-  public void dispose();
-}
-#endif
-
-#endif
