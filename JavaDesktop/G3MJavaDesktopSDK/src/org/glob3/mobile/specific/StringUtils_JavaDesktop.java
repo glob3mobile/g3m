@@ -4,10 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
 import java.util.Locale;
->>>>>>> webgl-port
 
 import org.glob3.mobile.generated.IStringUtils;
 
@@ -81,8 +78,6 @@ public final class StringUtils_JavaDesktop
       return String.substring(index, String.length());
    }
 
-<<<<<<< HEAD
-=======
 
    @Override
    public boolean endsWith(final String string,
@@ -102,5 +97,4 @@ public final class StringUtils_JavaDesktop
       return Long.parseLong(str, 16);
    }
 
->>>>>>> webgl-port
 }

@@ -7,12 +7,15 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_g3_mdemo">G3MDemo</string>
     <string name="simplest_glob3">Simplest glob3</string>
+    <string name="tileCaching_glob3">Tile Cache Glob3</string>
     <string name="switch_layers">Switch Layers</string>
     <string name="title_activity_g3_msimplest">G3MSimplestActivity</string>
-     <string name="doubleGlob3">Double Glob3</string>
-     <string name="threedshapes">3d shapes</string>
-     <string name="markersLbl">Markers</string>
-      <string name="netCDF">NetCDF</string>
-      <string name="switchText">  Press button to switch base layer</string>
-       <string name="animation">  Press button to move or stop the shapes</string>
+    <string name="title_activity_g3m_tileCaching">G3MSimplestTileCachingActivity</string>
+    <string name="doubleGlob3">Double Glob3</string>
+    <string name="threedshapes">3d shapes</string>
+    <string name="markersLbl">Markers</string>
+    <string name="netCDF">NetCDF</string>
+    <string name="switchText">  Press button to switch base layer</string>
+    <string name="animation">  Press button to move or stop the shapes</string>
+
 </resources>

@@ -99,6 +99,19 @@ public class G3MDemoActivity
          }
       });
 
+      final Button tileCachingG3MButton = (Button) findViewById(R.id.tileCachingG3MButton);
+
+      System.out.println(tileCachingG3MButton);
+
+
+      tileCachingG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MSimpleTileCacheExampleActivity.class);
+            startActivity(intent);
+         }
+      });
+
 
    }
 }

@@ -11,46 +11,49 @@ import org.glob3.mobile.generated.Tile;
 
 
 public class TileVisitorCache_JavaDesktop
-    implements
-      ITileVisitor {
+         implements
+            ITileVisitor {
 
-  private final LayerSet _layerSet;
+   private final LayerSet _layerSet;
 
-  private final int _tileWidth;
-  private final int _tileHeight;
-
-
-  public TileVisitorCache_JavaDesktop(final LayerSet layerSet,
-                                      final int width,
-                                      final int height) {
-    _layerSet = layerSet;
-    _tileWidth = width;
-    _tileHeight = height;
-  }
+   private final int      _tileWidth;
+   private final int      _tileHeight;
 
 
-  @Override
-  public void dispose() {
-
-  }
+   //private final G3MRenderContext _g3mrc;
 
 
-  // C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in
-  // Java:
-  // ORIGINAL LINE: void visitTile(Tile* tile) const
-  @Override
-  public final void visitTile(final Tile tile) {
-    for (int i = 0; i < _layerSet.size(); i++) {
-      final Layer layer = _layerSet.get(i);
-      final java.util.ArrayList<Petition> pet = layer.getMapPetitions(null,
-          tile, _tileWidth, _tileHeight);
+   public TileVisitorCache_JavaDesktop(final LayerSet layerSet,
+                                       final int width,
+                                       final int height) {
+      _layerSet = layerSet;
+      _tileWidth = width;
+      _tileHeight = height;
+   }
 
-      // Storing petitions
-      for (int j = 0; j < pet.size(); j++) {
-        System.out.println(pet.get(j).getURL().description());
+
+   @Override
+   public void dispose() {
+
+   }
+
+
+   // C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in
+   // Java:
+   // ORIGINAL LINE: void visitTile(Tile* tile) const
+   @Override
+   public final void visitTile(final Tile tile) {
+      for (int i = 0; i < _layerSet.size(); i++) {
+         final Layer layer = _layerSet.getLayer(i);
+         //TODO: OJO WITH THIS NULL
+         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, tile);
+
+         // Storing petitions
+         for (int j = 0; j < pet.size(); j++) {
+            System.out.println(pet.get(j).getURL().description());
+         }
       }
-    }
 
 
-  }
+   }
 }

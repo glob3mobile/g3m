@@ -25,8 +25,6 @@ import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
@@ -108,8 +106,6 @@ public class G3MSimpleTileCacheExampleActivity
 
       //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      final MeshRenderer meshRenderer = null;
-      final MarksRenderer marksRenderer = null;
       final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 
 
@@ -149,7 +145,7 @@ public class G3MSimpleTileCacheExampleActivity
                      new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
 
 
-            ctx.getLogger().logInfo("SE HA TERMINADO DE CACHEAR LOS SECTORES ESPECIFICADOS.");
+            ctx.getLogger().logInfo("Caching finished");
          }
 
 
