@@ -35,6 +35,12 @@ package org.glob3.mobile.generated;
 //class GPUProgramManager;
 //class SceneLighting;
 //class Sector;
+//class GEORenderer;
+//class GEOSymbolizer;
+//class MeshRenderer;
+//class ShapesRenderer;
+//class MarksRenderer;
+
 
 
 public abstract class IG3MBuilder
@@ -343,6 +349,10 @@ public abstract class IG3MBuilder
     return false;
   }
 
+  private GEORenderer _geoRenderer;
+  private MeshRenderer _meshRenderer;
+  private ShapesRenderer _shapesRenderer;
+  private MarksRenderer _marksRenderer;
 
 
   protected IStorage _storage;
@@ -447,6 +457,11 @@ public abstract class IG3MBuilder
        _shownSector.dispose();
     _shownSector = null;
   
+    _geoRenderer = null;
+    _meshRenderer = null;
+    _shapesRenderer = null;
+    _marksRenderer = null;
+  
     return g3mWidget;
   }
 
@@ -477,6 +492,10 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
+     _geoRenderer = null;
+     _meshRenderer = null;
+     _shapesRenderer = null;
+     _marksRenderer = null;
   }
 
   public void dispose()
@@ -977,4 +996,55 @@ public abstract class IG3MBuilder
     }
     _shownSector = new Sector(sector);
   }
+
+
+  public final GEORenderer createGEORenderer(GEOSymbolizer defaultSymbolizer)
+  {
+    if (_geoRenderer != null)
+    {
+      ILogger.instance().logError("GEORenderer already created");
+      return null;
+    }
+  
+    _geoRenderer = new GEORenderer(defaultSymbolizer, getMeshRenderer(), getShapesRenderer(), getMarksRenderer(), getPlanetRendererBuilder().getGEOTileRasterizer());
+    addRenderer(_geoRenderer);
+  
+    return _geoRenderer;
+  }
+
+  public final MeshRenderer getMeshRenderer()
+  {
+    if (_meshRenderer == null)
+    {
+      _meshRenderer = new MeshRenderer();
+      addRenderer(_meshRenderer);
+    }
+    return _meshRenderer;
+  }
+
+  public final ShapesRenderer getShapesRenderer()
+  {
+    if (_shapesRenderer == null)
+    {
+      _shapesRenderer = new ShapesRenderer();
+      addRenderer(_shapesRenderer);
+    }
+    return _shapesRenderer;
+  }
+
+  public final MarksRenderer getMarksRenderer()
+  {
+    if (_marksRenderer == null)
+    {
+      _marksRenderer = new MarksRenderer(false);
+      addRenderer(_marksRenderer);
+    }
+    return _marksRenderer;
+  }
+
+  public final GEORenderer getGEORenderer()
+  {
+    return _geoRenderer;
+  }
+
 }

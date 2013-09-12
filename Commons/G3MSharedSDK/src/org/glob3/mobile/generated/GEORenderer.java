@@ -47,7 +47,7 @@ public class GEORenderer extends LeafRenderer
    shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
 
-   */
+ */
   public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
      _defaultSymbolizer = defaultSymbolizer;
