@@ -251,4 +251,27 @@ public class GEORenderer extends LeafRenderer
     }
   }
 
+  public final void setEnable(boolean enable)
+  {
+    super.setEnable(enable);
+  
+    if (_meshRenderer != null)
+    {
+      _meshRenderer.setEnable(enable);
+    }
+    if (_shapesRenderer != null)
+    {
+      _shapesRenderer.setEnable(enable);
+    }
+    if (_marksRenderer != null)
+    {
+      _marksRenderer.setEnable(enable);
+    }
+    if (_geoTileRasterizer != null)
+    {
+      int __TODO_disable_geoTileRasterizer;
+      //_geoTileRasterizer->setEnable(enable);
+    }
+  }
+
 }

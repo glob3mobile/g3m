@@ -17,22 +17,22 @@ public class GEORenderer_GEOObjectBufferDownloadListener extends IBufferDownload
 
     _threadUtils.invokeAsyncTask(new GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer), true);
 
-//    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
-//                                                             buffer,
-//                                                             _geoRenderer,
-//                                                             _symbolizer),
-//                                     true);
+    //    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
+    //                                                             buffer,
+    //                                                             _geoRenderer,
+    //                                                             _symbolizer),
+    //                                     true);
 
-//    GEOObject* geoObject = GEOJSONParser::parse(buffer);
-//
-//    if (geoObject == NULL) {
-//      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
-//    }
-//    else {
-//      _geoRenderer->addGEOObject(geoObject, _symbolizer);
-//    }
-//
-//    delete buffer;
+    //    GEOObject* geoObject = GEOJSONParser::parse(buffer);
+    //
+    //    if (geoObject == NULL) {
+    //      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
+    //    }
+    //    else {
+    //      _geoRenderer->addGEOObject(geoObject, _symbolizer);
+    //    }
+    //
+    //    delete buffer;
   }
 
   public final void onError(URL url)

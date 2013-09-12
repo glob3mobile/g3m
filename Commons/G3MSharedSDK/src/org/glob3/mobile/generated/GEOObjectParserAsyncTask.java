@@ -15,7 +15,7 @@ package org.glob3.mobile.generated;
 //  {
 //
 //  }
-//  
+//
 //  void run(const G3MContext* context) {
 //    _geoRenderer->addGEOObject(_geoObject, _symbolizer);
 //  }
@@ -39,7 +39,7 @@ package org.glob3.mobile.generated;
 //  _symbolizer(symbolizer)
 //  {
 //  }
-//  
+//
 //  void run(const G3MContext* context) {
 //    GEOObject* geoObject = GEOJSONParser::parse(_buffer);
 //
