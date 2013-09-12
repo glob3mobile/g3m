@@ -154,16 +154,33 @@ public:
   ShapesRenderer* getShapesRenderer(){
     return _shapesRenderer;
   }
-  
+
   GEOTileRasterizer* getGeoTileRasterizer(){
     return _geoTileRasterizer;
   }
 
+  void load(const URL& url) {
+    load(url,
+         NULL,
+         DownloadPriority::MEDIUM,
+         TimeInterval::fromDays(30),
+         true);
+  }
+
   void load(const URL& url,
-            GEOSymbolizer* symbolizer = NULL,
-            long long priority = DownloadPriority::MEDIUM,
-            const TimeInterval timeToCache = TimeInterval::fromDays(30),
-            bool readExpired = true);
+            GEOSymbolizer* symbolizer) {
+    load(url,
+         symbolizer,
+         DownloadPriority::MEDIUM,
+         TimeInterval::fromDays(30),
+         true);
+  }
+
+  void load(const URL& url,
+            GEOSymbolizer* symbolizer,
+            long long priority,
+            const TimeInterval timeToCache,
+            bool readExpired);
 
 };
 
