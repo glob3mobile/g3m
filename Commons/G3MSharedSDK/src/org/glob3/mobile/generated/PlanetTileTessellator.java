@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class PlanetTileTessellator extends TileTessellator
 {
   private final boolean _skirted;
-  private final Sector _renderedSector;
+  private Sector _renderedSector;
 
   private Vector2I calculateResolution(Vector2I resolution, Tile tile, Sector renderedSector)
   {
@@ -92,7 +92,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       return tile.getSector();
     }
-    return tile.getSector().intersection(_renderedSector);
+    return tile.getSector().intersection(*_renderedSector);
   }
 
 //  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
@@ -337,8 +337,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   public void dispose()
   {
-    if (_renderedSector != null)
-       _renderedSector.dispose();
+    _renderedSector = null;
     super.dispose();
   
   }
@@ -483,8 +482,7 @@ public class PlanetTileTessellator extends TileTessellator
   {
     if (_renderedSector == null || !_renderedSector.isEquals(sector))
     {
-      if (_renderedSector != null)
-         _renderedSector.dispose();
+      _renderedSector = null;
 
       if (sector.isEquals(Sector.fullSphere()))
       {
