@@ -126,9 +126,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
     const Vector3D sw = planet->toCartesian(tileSector.getSW());
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
-    //    const double offset = nw.sub(sw).length() * 1e-3;
     const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
-    const double absoluteSkirtHeight = -1e5; //TODO: CHECK
+
+    const Vector3D asw = planet->toCartesian(_renderedSector.getSW());
+    const Vector3D anw = planet->toCartesian(_renderedSector.getNW());
+    const double absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
 
     createEastSkirt(planet,
                     tileSector,

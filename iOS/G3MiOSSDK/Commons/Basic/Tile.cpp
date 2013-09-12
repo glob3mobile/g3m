@@ -392,9 +392,23 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
   //    return true;
   //  }
+
+  int texWidth = parameters->_tileTextureResolution._x;
+  int texHeight = parameters->_tileTextureResolution._y;
+
+  //Adjusting shown texture size in case of incomplete mesh
+  Sector renderedSector = _planetRenderer->getRenderedSector();
+  if (!renderedSector.fullContains(_sector)){
+    Sector meshSector = renderedSector.intersection(_sector);
+    const double rx = meshSector.getDeltaLongitude()._degrees / _sector.getDeltaLongitude()._degrees;
+    const double ry = meshSector.getDeltaLatitude()._degrees / _sector.getDeltaLatitude()._degrees;
+    texWidth *= rx;
+    texHeight *= ry;
+  }
+
   const Vector2F ex = boundingVolume->projectedExtent(rc);
   const float t = (ex._x + ex._y);
-  _lastLodTest = ( t <= ((parameters->_tileTextureResolution._x + parameters->_tileTextureResolution._y) * 1.75f) );
+  _lastLodTest = ( t <= ((texWidth + texHeight) * 1.75f) );
   return _lastLodTest;
 }
 
@@ -580,6 +594,10 @@ void Tile::render(const G3MRenderContext* rc,
                   const Vector3D& cameraNormalizedPosition,
                   double cameraAngle2HorizonInRadians,
                   const Frustum* cameraFrustumInModelCoordinates) {
+
+  if (!_planetRenderer->getRenderedSector().touchesWith(_sector)){
+    printf("error");
+  }
 
   TilesStatistics* statistics = prc->getStatistics();
   statistics->computeTileProcessed(this);
