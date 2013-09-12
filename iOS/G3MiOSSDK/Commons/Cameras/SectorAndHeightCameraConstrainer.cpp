@@ -36,9 +36,10 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 //      nextCamera->setGeodeticPosition(g2, newHeight);
 //    }
 
-    return true;
   }
-  
+
+  int __ASK_JM;
+  return true;
 }
 
 bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,

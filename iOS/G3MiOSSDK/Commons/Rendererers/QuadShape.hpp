@@ -31,6 +31,7 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
+
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
   const bool _withNormals;
