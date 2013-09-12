@@ -649,13 +649,13 @@ G3MWidget* IG3MBuilder::create() {
   }
 
   int TODO_VIEWPORT;
-  const Geodetic3D initialCameraPosition2 = getPlanet()->getDefaultCameraPosition(Vector2I(1024,1024), shownSector);
-  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
+  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1024,1024), shownSector);
+//  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
 
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
-  if (!shownSector.isEquals(Sector::fullSphere())) {
-//    const double margin = 0.2;
-//    const double height = 1e5;
+//  if (!shownSector.isEquals(Sector::fullSphere())) {
+    const double margin = 0.2;
+    const double height = 1e5;
 //    
 //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
 //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
@@ -665,9 +665,12 @@ G3MWidget* IG3MBuilder::create() {
 //                                        shownSector._upper._latitude._degrees + latMargin,
 //                                        shownSector._upper._longitude._degrees + lonMargin);
 //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
-    addCameraConstraint(new SectorAndHeightCameraConstrainer(shownSector, initialCameraPosition2.height() * 1.2));
-  }
-  
+    
+    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
+                                                            initialCameraPosition.height() * 1.2,
+                                                            margin));
+//  }
+
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),

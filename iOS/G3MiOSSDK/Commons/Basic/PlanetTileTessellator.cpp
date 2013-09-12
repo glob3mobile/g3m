@@ -34,7 +34,7 @@
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
-_renderedSector(new Sector(sector))
+_renderedSector(sector.isEquals(Sector::fullSphere())? NULL : new Sector(sector))
 {
 }
 
@@ -129,9 +129,12 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
-    const Vector3D asw = planet->toCartesian(_renderedSector->getSW());
-    const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
-    const double absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
+    double absoluteSkirtHeight = 0;
+    if (_renderedSector != NULL){
+      const Vector3D asw = planet->toCartesian(_renderedSector->getSW());
+      const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
+      absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
+    }
 
     createEastSkirt(planet,
                     tileSector,
@@ -275,6 +278,9 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
+  if (_renderedSector == NULL){
+    return tile->getSector();
+  }
   return tile->getSector().intersection(*_renderedSector);
 }
 

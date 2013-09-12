@@ -237,7 +237,7 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithMapBooBuilder];
 
-  //  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -282,8 +282,8 @@ public:
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
                                             -17.2423142646939311, 145.4950606689779420);
 
-  //  builder.setShownSector(sector);
-  builder.setShownSector( sector.shrinkedByPercent(-50) );
+  builder.setShownSector(sector);
+//  builder.setShownSector( sector.shrinkedByPercent(-50) );
 
   int _DIEGO_AT_WORK;
   builder.getPlanetRendererBuilder()->setShowStatistics(true);
@@ -2639,16 +2639,13 @@ public:
 
           void run(const G3MContext* context){
 
-            double minLat = randomInt(180) -90;// rand()%180 -90;
-            double minLon = randomInt(360) - 180;//rand()%360 -180;
+            double minLat = randomInt(180) -90;
+            double minLon = randomInt(360) - 180;
 
-            double maxLat = minLat + randomInt(90 - (int)minLat); //rand()%(90 - (int)minLat);
-            double maxLon = minLon + randomInt(90 - (int)minLat);//rand()%(180 - (int)minLon);
+            double maxLat = minLat + randomInt(90 - (int)minLat);
+            double maxLon = minLon + randomInt(90 - (int)minLat);
 
             Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
-
-            //            Sector sector = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-
             Geodetic2D center = sector.getCenter();
 
             [_iosWidget widget]->setCameraPosition(Geodetic3D(center, 1e7)  );
@@ -2656,16 +2653,6 @@ public:
           }
         };
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
-
-        //        Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-        //        //    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
-        //        builder.setShownSector( spain );
-        //
-        //        //    builder.getPlanetRendererBuilder()->setRenderDebug(true);
-        //
-        //        //geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
-        //
-        //        builder.setBackgroundColor(new Color(Color::white()));
       }
 
       if (false) {

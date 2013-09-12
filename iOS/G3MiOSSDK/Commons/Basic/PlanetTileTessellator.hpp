@@ -48,18 +48,30 @@ private:
                                         const Geodetic2D& g) const;
 
   bool needsEastSkirt(const Sector& tileSector) const{
+    if (_renderedSector == NULL){
+      return true;
+    }
     return _renderedSector->upperLongitude().greaterThan(tileSector.upperLongitude());
   }
 
   bool needsNorthSkirt(const Sector& tileSector) const{
+    if (_renderedSector == NULL){
+      return true;
+    }
     return _renderedSector->upperLatitude().greaterThan(tileSector.upperLatitude());
   }
 
   bool needsWestSkirt(const Sector& tileSector) const{
+    if (_renderedSector == NULL){
+      return true;
+    }
     return _renderedSector->lowerLongitude().lowerThan(tileSector.lowerLongitude());
   }
 
   bool needsSouthSkirt(const Sector& tileSector) const{
+    if (_renderedSector == NULL){
+      return true;
+    }
     return _renderedSector->lowerLatitude().lowerThan(tileSector.lowerLatitude());
   }
 
@@ -151,9 +163,14 @@ public:
                               bool mercator) const;
 
   void setRenderedSector(const Sector& sector){
-    if (!_renderedSector->isEquals(sector)){
+    if (_renderedSector == NULL || !_renderedSector->isEquals(sector)){
       delete _renderedSector;
-      _renderedSector = new Sector(sector);
+
+      if (sector.isEquals(Sector::fullSphere())){
+        _renderedSector = NULL;
+      } else{
+        _renderedSector = new Sector(sector);
+      }
     }
   }
   

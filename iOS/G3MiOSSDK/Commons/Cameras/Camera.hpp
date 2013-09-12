@@ -331,6 +331,9 @@ public:
   
   void applyTransform(const MutableMatrix44D& mat);
 
+  bool isPositionWithin(const Sector& sector, double height) const;
+  bool isCenterOfViewWithin(const Sector& sector, double height) const;
+
 private:
   const Angle getHeading(const Vector3D& normal) const;
 

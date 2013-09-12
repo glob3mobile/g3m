@@ -16,6 +16,7 @@
 #include "GL.hpp"
 #include "Vector2F.hpp"
 #include "Sphere.hpp"
+#include "Sector.hpp"
 
 //#include "GPUProgramState.hpp"
 
@@ -457,4 +458,14 @@ double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   const double rWorld = sphere._radius * _frustumData._znear / z;
   const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
   return PI * rScreen * rScreen;
+}
+
+bool Camera::isPositionWithin(const Sector& sector, double height) const{
+  const Geodetic3D position = getGeodeticPosition();
+  return sector.contains(position._latitude, position._longitude) && height >= position._height;
+}
+
+bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
+  const Geodetic3D position = getGeodeticCenterOfView();
+  return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }

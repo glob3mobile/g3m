@@ -22,7 +22,8 @@ public:
   public void dispose();
 #endif
 
-  virtual void onCameraChange(const Planet* planet,
+  //Returns false if it could not create a valid nextCamera
+  virtual bool onCameraChange(const Planet* planet,
                               const Camera* previousCamera,
                               Camera* nextCamera) const = 0;
 };

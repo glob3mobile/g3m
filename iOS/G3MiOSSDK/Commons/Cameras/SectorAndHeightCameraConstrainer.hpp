@@ -14,6 +14,8 @@
 #include "ICameraConstrainer.hpp"
 #include "Sector.hpp"
 
+class PlanetRenderer;
+
 class SectorAndHeightCameraConstrainer: public ICameraConstrainer {
 private:
   const Sector _sector;
@@ -31,10 +33,36 @@ public:
   ~SectorAndHeightCameraConstrainer() {
   }
 
-  virtual void onCameraChange(const Planet* planet,
+  virtual bool onCameraChange(const Planet* planet,
                               const Camera* previousCamera,
                               Camera* nextCamera) const;
 
+};
+
+class RenderedSectorCameraConstrainer: public ICameraConstrainer {
+private:
+  const double _maxHeight;
+  const double _margin;
+  const PlanetRenderer* _planetRenderer;
+
+public:
+
+  RenderedSectorCameraConstrainer(PlanetRenderer* planetRenderer,
+                                  double maxHeight,
+                                  double margin) :
+  _planetRenderer(planetRenderer),
+  _maxHeight(maxHeight),
+  _margin(margin)
+  {
+  }
+
+  ~RenderedSectorCameraConstrainer() {
+  }
+
+  virtual bool onCameraChange(const Planet* planet,
+                              const Camera* previousCamera,
+                              Camera* nextCamera) const;
+  
 };
 
 #endif
