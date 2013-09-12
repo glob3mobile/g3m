@@ -233,11 +233,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  //[self initWithBuilderAndSegmentedWorld];
+  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -259,8 +259,8 @@ public:
 
   void run(const G3MContext* context) {
     Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
-    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(8), position);
-    ////    [_iosWidget widget]->setCameraPosition(position);
+    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
+    //[_iosWidget widget]->setCameraPosition(position);
   }
 
   bool isDone(const G3MContext* context) {
@@ -285,12 +285,12 @@ public:
   builder.setShownSector(sector);
 //  builder.setShownSector( sector.shrinkedByPercent(-50) );
 
-  int _DIEGO_AT_WORK;
-  builder.getPlanetRendererBuilder()->setShowStatistics(true);
+//  int _DIEGO_AT_WORK;
+//  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
-  MeshRenderer* meshRenderer = new MeshRenderer();
-  builder.addRenderer(meshRenderer);
-  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
+//  MeshRenderer* meshRenderer = new MeshRenderer();
+//  builder.addRenderer(meshRenderer);
+//  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
 
   builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
                                 true);
