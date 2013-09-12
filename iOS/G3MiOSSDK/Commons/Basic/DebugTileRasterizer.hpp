@@ -27,6 +27,8 @@ private:
 #endif
   const Color _color;
 
+  const bool _showLabels;
+  const bool _showTileBounds;
 
   std::string getTileKeyLabel(const Tile* tile) const;
 
@@ -38,13 +40,19 @@ private:
 public:
   DebugTileRasterizer();
 
+  DebugTileRasterizer(const GFont& font,
+                      const Color& color,
+                      bool showLabels,
+                      bool showTileBounds);
+
   ~DebugTileRasterizer();
 
   std::string getId() const {
     return "DebugTileRasterizer";
   }
 
-  void rasterize(const TileRasterizerContext& trc,
+  void rasterize(const IImage* image,
+                 const TileRasterizerContext& trc,
                  IImageListener* listener,
                  bool autodelete) const;
   

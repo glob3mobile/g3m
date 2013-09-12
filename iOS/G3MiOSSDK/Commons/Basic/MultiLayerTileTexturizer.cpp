@@ -206,7 +206,7 @@ public:
 
   }
 
-  void imageCreated(IImage* image);
+  void imageCreated(const IImage* image);
 };
 
 
@@ -475,7 +475,7 @@ public:
 #endif
   }
 
-  void imageCreated(IImage* image,
+  void imageCreated(const IImage* image,
                     std::vector<RectangleF*> srcRects,
                     std::vector<RectangleF*> dstRects,
                     const std::string& textureId) {
@@ -664,7 +664,7 @@ public:
 
 };
 
-void TextureUploader::imageCreated(IImage* image) {
+void TextureUploader::imageCreated(const IImage* image) {
   if (_tileRasterizer == NULL) {
     _builder->imageCreated(image,
                            _srcRects,
@@ -672,8 +672,9 @@ void TextureUploader::imageCreated(IImage* image) {
                            _textureId);
   }
   else {
-    const TileRasterizerContext trc(image, _tile, _mercator);
-    _tileRasterizer->rasterize(trc,
+    const TileRasterizerContext trc(_tile, _mercator);
+    _tileRasterizer->rasterize(image,
+                               trc,
                                new TextureUploader(_builder,
                                                    _tile,
                                                    _mercator,

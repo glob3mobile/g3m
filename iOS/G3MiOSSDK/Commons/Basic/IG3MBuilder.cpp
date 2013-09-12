@@ -53,11 +53,7 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL),
-_geoRenderer(NULL),
-_meshRenderer(NULL),
-_shapesRenderer(NULL),
-_marksRenderer(NULL)
+_shownSector(NULL)
 {
 }
 
@@ -721,11 +717,6 @@ G3MWidget* IG3MBuilder::create() {
 
   delete _shownSector;
   _shownSector = NULL;
-
-  _geoRenderer    = NULL;
-  _meshRenderer   = NULL;
-  _shapesRenderer = NULL;
-  _marksRenderer  = NULL;
   
   return g3mWidget;
 }
@@ -816,46 +807,41 @@ Sector IG3MBuilder::getShownSector() const{
   return *_shownSector;
 }
 
-MeshRenderer* IG3MBuilder::getMeshRenderer() {
-  if (_meshRenderer == NULL) {
-    _meshRenderer = new MeshRenderer();
-    addRenderer(_meshRenderer);
-  }
-  return _meshRenderer;
+MeshRenderer* IG3MBuilder::createMeshRenderer() {
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  addRenderer(meshRenderer);
+  return meshRenderer;
 }
 
-ShapesRenderer* IG3MBuilder::getShapesRenderer() {
-  if (_shapesRenderer == NULL) {
-    _shapesRenderer = new ShapesRenderer();
-    addRenderer(_shapesRenderer);
-  }
-  return _shapesRenderer;
+ShapesRenderer* IG3MBuilder::createShapesRenderer() {
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  addRenderer(shapesRenderer);
+  return shapesRenderer;
 }
 
-MarksRenderer* IG3MBuilder::getMarksRenderer() {
-  if (_marksRenderer == NULL) {
-    _marksRenderer = new MarksRenderer(false);
-    addRenderer(_marksRenderer);
-  }
-  return _marksRenderer;
+MarksRenderer* IG3MBuilder::createMarksRenderer() {
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  addRenderer(marksRenderer);
+  return marksRenderer;
 }
 
-GEORenderer* IG3MBuilder::getGEORenderer() {
-  return _geoRenderer;
-}
+GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
+                                            bool createMeshRenderer,
+                                            bool createShapesRenderer,
+                                            bool createMarksRenderer,
+                                            bool createGEOTileRasterizer) {
 
-GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* defaultSymbolizer) {
-  if (_geoRenderer != NULL) {
-    ILogger::instance()->logError("GEORenderer already created");
-    return NULL;
-  }
+  MeshRenderer*      meshRenderer      = createMeshRenderer      ? this->createMeshRenderer() : NULL;
+  ShapesRenderer*    shapesRenderer    = createShapesRenderer    ? this->createShapesRenderer() : NULL;
+  MarksRenderer*     marksRenderer     = createMarksRenderer     ? this->createMarksRenderer() : NULL;
+  GEOTileRasterizer* geoTileRasterizer = createGEOTileRasterizer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
 
-  _geoRenderer = new GEORenderer(defaultSymbolizer,
-                                 getMeshRenderer(),
-                                 getShapesRenderer(),
-                                 getMarksRenderer(),
-                                 getPlanetRendererBuilder()->getGEOTileRasterizer());
-  addRenderer(_geoRenderer);
+  GEORenderer* geoRenderer = new GEORenderer(symbolizer,
+                                             meshRenderer,
+                                             shapesRenderer,
+                                             marksRenderer,
+                                             geoTileRasterizer);
+  addRenderer(geoRenderer);
 
-  return _geoRenderer;
+  return geoRenderer;
 }

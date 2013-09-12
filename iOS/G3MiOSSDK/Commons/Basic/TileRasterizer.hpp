@@ -23,20 +23,20 @@ private:
 
 public:
 #ifdef C_CODE
-  const IImage* const _image;
+//  const IImage* const _image;
   const Tile*   const _tile;
   const bool          _mercator;
 #endif
 #ifdef JAVA_CODE
-  public final IImage  _image;
+//  public final IImage  _image;
   public final Tile    _tile;
   public final boolean _mercator;
 #endif
 
-  TileRasterizerContext(IImage* image,
+  TileRasterizerContext(//const IImage* image,
                         const Tile* tile,
                         bool mercator) :
-  _image(image),
+//  _image(image),
   _tile(tile),
   _mercator(mercator)
   {
@@ -59,7 +59,8 @@ public:
 
   virtual std::string getId() const = 0;
 
-  virtual void rasterize(const TileRasterizerContext& trc,
+  virtual void rasterize(const IImage* image,
+                         const TileRasterizerContext& trc,
                          IImageListener* listener,
                          bool autodelete) const = 0;
 

@@ -15,6 +15,7 @@
 #include "ElevationDataProvider.hpp"
 #include "TileRasterizer.hpp"
 
+#include "CompositeTileRasterizer.hpp"
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
@@ -25,47 +26,31 @@ _incrementalTileQuality(false),
 _parameters(NULL),
 _layerSet(NULL),
 _texturizer(NULL),
-_tileRasterizer(NULL),
 _tileTessellator(NULL),
 _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
 _texturePriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
-_renderedSector(NULL),
-_geoTileRasterizer(NULL)
+_renderedSector(NULL)
 {
-//  _showStatistics = false;
-//  _renderDebug = false;
-//  _useTilesSplitBudget = true;
-//  _forceFirstLevelTilesRenderOnStart = true;
-//  _incrementalTileQuality = false;
-//
-//  _parameters = NULL;
-//  _layerSet = NULL;
-//  _texturizer = NULL;
-//  _tileRasterizer = NULL;
-//  _tileTessellator = NULL;
-//  _visibleSectorListeners = NULL;
-//  _stabilizationMilliSeconds = NULL;
-//  _texturePriority = DownloadPriority::HIGHER;
-//
-//  _elevationDataProvider = NULL;
-//  _verticalExaggeration = 0.0f;
-//
-//  _renderedSector = NULL;
-//  
-//  _geoTileRasterizer = NULL;
 }
 
 PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _parameters;
   delete _layerSet;
   delete _texturizer;
-  delete _tileRasterizer;
-  delete _geoTileRasterizer;
+
+  const int tileRasterizersSize = _tileRasterizers.size();
+  for (int i = 0 ; i < tileRasterizersSize; i++) {
+    TileRasterizer* tileRasterizer = _tileRasterizers[i];
+    delete tileRasterizer;
+  }
+
   delete _tileTessellator;
   delete _elevationDataProvider;
+
+  delete _renderedSector;
 }
 
 /**
@@ -82,10 +67,21 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
 }
 
 TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
-  if (_geoTileRasterizer != NULL) {
-    return _geoTileRasterizer;
+  const int tileRasterizersSize = _tileRasterizers.size();
+
+  if (tileRasterizersSize == 0) {
+    return NULL;
   }
-  return _tileRasterizer;
+
+  if (tileRasterizersSize == 1) {
+    return _tileRasterizers[0];
+  }
+
+  CompositeTileRasterizer* result = new CompositeTileRasterizer();
+  for (int i = 0; i < tileRasterizersSize; i++) {
+    result->addTileRasterizer(_tileRasterizers[i]);
+  }
+  return result;
 }
 
 /**
@@ -211,13 +207,8 @@ void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator)
   _tileTessellator = tileTessellator;
 }
 
-void PlanetRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
-  if ((_tileRasterizer != NULL) ||
-      (_geoTileRasterizer != NULL)) {
-    ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer or _geoTileRasterizer already initialized");
-    return;
-  }
-  _tileRasterizer = tileRasterizer;
+void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
+  _tileRasterizers.push_back(tileRasterizer);
 }
 
 void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
@@ -322,7 +313,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
-  _tileRasterizer = NULL;
   _tileTessellator = NULL;
   delete _visibleSectorListeners;
   _visibleSectorListeners = NULL;
@@ -331,7 +321,10 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   _elevationDataProvider = NULL;
 
-  _geoTileRasterizer = NULL;
+  delete _renderedSector;
+  _renderedSector = NULL;
+
+  _tileRasterizers.clear();
 
   return planetRenderer;
 }
@@ -366,9 +359,8 @@ Sector PlanetRendererBuilder::getRenderedSector(){
   return *_renderedSector;
 }
 
-GEOTileRasterizer* PlanetRendererBuilder::getGEOTileRasterizer() {
-  if (_geoTileRasterizer == NULL) {
-    _geoTileRasterizer = new GEOTileRasterizer();
-  }
-  return _geoTileRasterizer;
+GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  addTileRasterizer(geoTileRasterizer);
+  return geoTileRasterizer;
 }

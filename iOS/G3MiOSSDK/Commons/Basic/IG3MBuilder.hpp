@@ -87,11 +87,6 @@ private:
 
   bool containsPlanetRenderer(std::vector<Renderer*> renderers);
 
-  GEORenderer*    _geoRenderer;
-  MeshRenderer*   _meshRenderer;
-  ShapesRenderer* _shapesRenderer;
-  MarksRenderer*  _marksRenderer;
-
 
 protected:
   IStorage* _storage;
@@ -171,16 +166,30 @@ public:
 
   void setShownSector(const Sector& sector);
 
+  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer) {
+    const bool createMeshRenderer      = true;
+    const bool createShapesRenderer    = true;
+    const bool createMarksRenderer     = true;
+    const bool createGEOTileRasterizer = true;
 
-  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer);
+    return createGEORenderer(symbolizer,
+                             createMeshRenderer,
+                             createShapesRenderer,
+                             createMarksRenderer,
+                             createGEOTileRasterizer);
+  }
 
-  MeshRenderer* getMeshRenderer();
+  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer,
+                                 bool createMeshRenderer,
+                                 bool createShapesRenderer,
+                                 bool createMarksRenderer,
+                                 bool createGEOTileRasterizer);
 
-  ShapesRenderer* getShapesRenderer();
+  MeshRenderer* createMeshRenderer();
 
-  MarksRenderer* getMarksRenderer();
+  ShapesRenderer* createShapesRenderer();
 
-  GEORenderer* getGEORenderer();
+  MarksRenderer* createMarksRenderer();
   
 };
 

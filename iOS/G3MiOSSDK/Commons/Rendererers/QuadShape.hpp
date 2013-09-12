@@ -25,7 +25,7 @@ private:
   const Color* _color;
 
   bool _textureRequested;
-  IImage* _textureImage;
+  const IImage* _textureImage;
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
   const bool _withNormals;
@@ -54,7 +54,7 @@ public:
 
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
-            IImage* textureImage,
+            const IImage* textureImage,
             float width,
             float height,
             bool withNormals) :

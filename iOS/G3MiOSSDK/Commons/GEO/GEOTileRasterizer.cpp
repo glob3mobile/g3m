@@ -68,10 +68,10 @@ public:
 
 };
 
-void GEOTileRasterizer::rasterize(const TileRasterizerContext& trc,
+void GEOTileRasterizer::rasterize(const IImage* image,
+                                  const TileRasterizerContext& trc,
                                   IImageListener* listener,
                                   bool autodelete) const {
-  const IImage* image    = trc._image;
   const Tile*   tile     = trc._tile;
   const bool    mercator = trc._mercator;
 

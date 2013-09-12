@@ -35,7 +35,7 @@ public:
 
   }
 
-  void imageCreated(IImage* image) {
+  void imageCreated(const IImage* image) {
     if (_iconImage != NULL) {
       IFactory::instance()->deleteImage(_iconImage);
       _iconImage = NULL;
@@ -345,7 +345,7 @@ void Mark::onTextureDownloadError() {
                                 _label.c_str());
 }
 
-void Mark::onTextureDownload(IImage* image) {
+void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
 
   delete _labelFontColor;

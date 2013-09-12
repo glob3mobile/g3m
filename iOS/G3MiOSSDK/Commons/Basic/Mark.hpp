@@ -116,10 +116,10 @@ private:
 
   Vector3D* _cartesianPosition;
 
-  bool    _textureSolved;
-  IImage* _textureImage;
-  int     _textureWidth;
-  int     _textureHeight;
+  bool              _textureSolved;
+  const IImage*     _textureImage;
+  int               _textureWidth;
+  int               _textureHeight;
   const std::string _imageID;
 
   bool    _renderedMark;
@@ -218,7 +218,7 @@ public:
 
   void onTextureDownloadError();
 
-  void onTextureDownload(IImage* image);
+  void onTextureDownload(const IImage* image);
 
   int getTextureWidth() const {
     return _textureWidth;

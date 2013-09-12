@@ -280,6 +280,15 @@ public:
 
 //  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
 
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+                                                                                Color::red(),
+                                                                                false,
+                                                                                true));
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+                                                                                Color::yellow(),
+                                                                                true,
+                                                                                false));
+
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
                                             -17.2423142646939311, 145.4950606689779420);
 
@@ -612,8 +621,8 @@ public:
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
-  //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
-  builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
@@ -1680,7 +1689,7 @@ public:
 
     }
 
-    void imageCreated(IImage* image) {
+    void imageCreated(const IImage* image) {
 
       Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
                                                        Angle::fromDegrees(-16.339417),
@@ -2295,7 +2304,7 @@ public:
 
         }
 
-        void imageCreated(IImage* image) {
+        void imageCreated(const IImage* image) {
           //printf("Created image=%s\n", image->description().c_str());
           //delete image;
 
