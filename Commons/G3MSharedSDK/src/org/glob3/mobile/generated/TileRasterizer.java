@@ -10,7 +10,7 @@ public abstract class TileRasterizer
 
   public abstract String getId();
 
-  public abstract void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete);
+  public abstract void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete);
 
   public final void setChangeListener(ChangedListener listener)
   {

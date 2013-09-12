@@ -682,9 +682,13 @@ public class EllipsoidalPlanet extends Planet
 
   public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
   {
-    Vector3D v = new Vector3D(_ellipsoid.getRadii().maxAxis() * 5, 0, 0);
+
+    final Vector3D asw = toCartesian(shownSector.getSW());
+    final Vector3D anw = toCartesian(shownSector.getNW());
+    final double h = anw.sub(asw).length() * 5;
+
     Geodetic2D center = shownSector._center;
-    return new Geodetic3D(center._latitude, center._longitude, toGeodetic3D(v)._height);
+    return new Geodetic3D(center._latitude, center._longitude, h + getRadii().maxAxis());
   }
 
 

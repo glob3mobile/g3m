@@ -29,9 +29,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     return "GEOTileRasterizer";
   }
 
-  public final void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  public final void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
-    IImage image = trc._image;
     final Tile tile = trc._tile;
     final boolean mercator = trc._mercator;
   

@@ -108,5 +108,4 @@ public abstract class Planet
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
   public abstract Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector);
-
 }

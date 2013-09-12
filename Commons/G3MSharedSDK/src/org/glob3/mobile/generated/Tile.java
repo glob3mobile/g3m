@@ -722,11 +722,6 @@ public class Tile
   public final void render(G3MRenderContext rc, PlanetRendererContext prc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
   
-    if (!_planetRenderer.getRenderedSector().touchesWith(_sector))
-    {
-      System.out.print("error");
-    }
-  
     TilesStatistics statistics = prc.getStatistics();
     statistics.computeTileProcessed(this);
   

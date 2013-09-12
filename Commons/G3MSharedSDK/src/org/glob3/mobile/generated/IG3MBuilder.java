@@ -349,11 +349,6 @@ public abstract class IG3MBuilder
     return false;
   }
 
-  private GEORenderer _geoRenderer;
-  private MeshRenderer _meshRenderer;
-  private ShapesRenderer _shapesRenderer;
-  private MarksRenderer _marksRenderer;
-
 
   protected IStorage _storage;
 
@@ -411,14 +406,13 @@ public abstract class IG3MBuilder
     }
   
     int TODO_VIEWPORT;
-    final Geodetic3D initialCameraPosition2 = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
-    final Geodetic3D initialCameraPosition = new Geodetic3D(shownSector.getCenter(), initialCameraPosition2.height());
+    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
+  //  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
   
     //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
-    if (!shownSector.isEquals(Sector.fullSphere()))
-    {
-  //    const double margin = 0.2;
-  //    const double height = 1e5;
+  //  if (!shownSector.isEquals(Sector::fullSphere())) {
+      final double margin = 0.2;
+      final double height = 1e5;
   //
   //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
   //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
@@ -428,11 +422,13 @@ public abstract class IG3MBuilder
   //                                        shownSector._upper._latitude._degrees + latMargin,
   //                                        shownSector._upper._longitude._degrees + lonMargin);
   //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
-      addCameraConstraint(new SectorAndHeightCameraConstrainer(shownSector, initialCameraPosition2.height() * 1.2));
-    }
   
+      addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition.height() * 1.2, margin));
+  //  }
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), initialCameraPosition);
+    InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
   
     g3mWidget.setUserData(getUserData());
   
@@ -456,11 +452,6 @@ public abstract class IG3MBuilder
     if (_shownSector != null)
        _shownSector.dispose();
     _shownSector = null;
-  
-    _geoRenderer = null;
-    _meshRenderer = null;
-    _shapesRenderer = null;
-    _marksRenderer = null;
   
     return g3mWidget;
   }
@@ -492,10 +483,6 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
-     _geoRenderer = null;
-     _meshRenderer = null;
-     _shapesRenderer = null;
-     _marksRenderer = null;
   }
 
   public void dispose()
@@ -997,54 +984,49 @@ public abstract class IG3MBuilder
     _shownSector = new Sector(sector);
   }
 
-
-  public final GEORenderer createGEORenderer(GEOSymbolizer defaultSymbolizer)
+  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer)
   {
-    if (_geoRenderer != null)
-    {
-      ILogger.instance().logError("GEORenderer already created");
-      return null;
-    }
+    final boolean createMeshRenderer = true;
+    final boolean createShapesRenderer = true;
+    final boolean createMarksRenderer = true;
+    final boolean createGEOTileRasterizer = true;
+
+    return createGEORenderer(symbolizer, createMeshRenderer, createShapesRenderer, createMarksRenderer, createGEOTileRasterizer);
+  }
+
+  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer, boolean createMeshRenderer, boolean createShapesRenderer, boolean createMarksRenderer, boolean createGEOTileRasterizer)
+  {
   
-    _geoRenderer = new GEORenderer(defaultSymbolizer, getMeshRenderer(), getShapesRenderer(), getMarksRenderer(), getPlanetRendererBuilder().getGEOTileRasterizer());
-    addRenderer(_geoRenderer);
+    MeshRenderer meshRenderer = createMeshRenderer ? this.createMeshRenderer() : null;
+    ShapesRenderer shapesRenderer = createShapesRenderer ? this.createShapesRenderer() : null;
+    MarksRenderer marksRenderer = createMarksRenderer ? this.createMarksRenderer() : null;
+    GEOTileRasterizer geoTileRasterizer = createGEOTileRasterizer ? getPlanetRendererBuilder().createGEOTileRasterizer() : null;
   
-    return _geoRenderer;
+    GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+    addRenderer(geoRenderer);
+  
+    return geoRenderer;
   }
 
-  public final MeshRenderer getMeshRenderer()
+  public final MeshRenderer createMeshRenderer()
   {
-    if (_meshRenderer == null)
-    {
-      _meshRenderer = new MeshRenderer();
-      addRenderer(_meshRenderer);
-    }
-    return _meshRenderer;
+    MeshRenderer meshRenderer = new MeshRenderer();
+    addRenderer(meshRenderer);
+    return meshRenderer;
   }
 
-  public final ShapesRenderer getShapesRenderer()
+  public final ShapesRenderer createShapesRenderer()
   {
-    if (_shapesRenderer == null)
-    {
-      _shapesRenderer = new ShapesRenderer();
-      addRenderer(_shapesRenderer);
-    }
-    return _shapesRenderer;
+    ShapesRenderer shapesRenderer = new ShapesRenderer();
+    addRenderer(shapesRenderer);
+    return shapesRenderer;
   }
 
-  public final MarksRenderer getMarksRenderer()
+  public final MarksRenderer createMarksRenderer()
   {
-    if (_marksRenderer == null)
-    {
-      _marksRenderer = new MarksRenderer(false);
-      addRenderer(_marksRenderer);
-    }
-    return _marksRenderer;
-  }
-
-  public final GEORenderer getGEORenderer()
-  {
-    return _geoRenderer;
+    MarksRenderer marksRenderer = new MarksRenderer(false);
+    addRenderer(marksRenderer);
+    return marksRenderer;
   }
 
 }

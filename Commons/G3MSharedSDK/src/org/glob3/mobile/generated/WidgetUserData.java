@@ -59,6 +59,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class SceneLighting;
 
+//class Sector;
+
 public class WidgetUserData
 {
   private G3MWidget _widget;

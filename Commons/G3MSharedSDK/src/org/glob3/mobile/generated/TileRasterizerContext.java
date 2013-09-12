@@ -28,13 +28,13 @@ public class TileRasterizerContext
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileRasterizerContext(TileRasterizerContext that);
 
-  public final IImage  _image;
+//  public final IImage  _image;
   public final Tile    _tile;
   public final boolean _mercator;
 
-  public TileRasterizerContext(IImage image, Tile tile, boolean mercator)
+  public TileRasterizerContext(Tile tile, boolean mercator) //const IImage* image,
+//  _image(image),
   {
-     _image = image;
      _tile = tile;
      _mercator = mercator;
   }

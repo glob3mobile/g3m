@@ -23,9 +23,7 @@ public class PlanetRendererBuilder
 
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
-  private TileRasterizer _tileRasterizer;
-
-  private GEOTileRasterizer _geoTileRasterizer;
+  private java.util.ArrayList<TileRasterizer> _tileRasterizers = new java.util.ArrayList<TileRasterizer>();
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
@@ -73,11 +71,24 @@ public class PlanetRendererBuilder
   }
   private TileRasterizer getTileRasterizer()
   {
-    if (_geoTileRasterizer != null)
+    final int tileRasterizersSize = _tileRasterizers.size();
+  
+    if (tileRasterizersSize == 0)
     {
-      return _geoTileRasterizer;
+      return null;
     }
-    return _tileRasterizer;
+  
+    if (tileRasterizersSize == 1)
+    {
+      return _tileRasterizers.get(0);
+    }
+  
+    CompositeTileRasterizer result = new CompositeTileRasterizer();
+    for (int i = 0; i < tileRasterizersSize; i++)
+    {
+      result.addTileRasterizer(_tileRasterizers.get(i));
+    }
+    return result;
   }
 
 
@@ -243,7 +254,6 @@ public class PlanetRendererBuilder
      _parameters = null;
      _layerSet = null;
      _texturizer = null;
-     _tileRasterizer = null;
      _tileTessellator = null;
      _visibleSectorListeners = null;
      _stabilizationMilliSeconds = null;
@@ -251,28 +261,6 @@ public class PlanetRendererBuilder
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
-     _geoTileRasterizer = null;
-  //  _showStatistics = false;
-  //  _renderDebug = false;
-  //  _useTilesSplitBudget = true;
-  //  _forceFirstLevelTilesRenderOnStart = true;
-  //  _incrementalTileQuality = false;
-  //
-  //  _parameters = NULL;
-  //  _layerSet = NULL;
-  //  _texturizer = NULL;
-  //  _tileRasterizer = NULL;
-  //  _tileTessellator = NULL;
-  //  _visibleSectorListeners = NULL;
-  //  _stabilizationMilliSeconds = NULL;
-  //  _texturePriority = DownloadPriority::HIGHER;
-  //
-  //  _elevationDataProvider = NULL;
-  //  _verticalExaggeration = 0.0f;
-  //
-  //  _renderedSector = NULL;
-  //
-  //  _geoTileRasterizer = NULL;
   }
   public void dispose()
   {
@@ -282,14 +270,22 @@ public class PlanetRendererBuilder
        _layerSet.dispose();
     if (_texturizer != null)
        _texturizer.dispose();
-    if (_tileRasterizer != null)
-       _tileRasterizer.dispose();
-    if (_geoTileRasterizer != null)
-       _geoTileRasterizer.dispose();
+  
+    final int tileRasterizersSize = _tileRasterizers.size();
+    for (int i = 0 ; i < tileRasterizersSize; i++)
+    {
+      TileRasterizer tileRasterizer = _tileRasterizers.get(i);
+      if (tileRasterizer != null)
+         tileRasterizer.dispose();
+    }
+  
     if (_tileTessellator != null)
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
+  
+    if (_renderedSector != null)
+       _renderedSector.dispose();
   }
   public final PlanetRenderer create()
   {
@@ -303,7 +299,6 @@ public class PlanetRendererBuilder
     _parameters = null;
     _layerSet = null;
     _texturizer = null;
-    _tileRasterizer = null;
     _tileTessellator = null;
     _visibleSectorListeners = null;
     _visibleSectorListeners = null;
@@ -312,7 +307,11 @@ public class PlanetRendererBuilder
   
     _elevationDataProvider = null;
   
-    _geoTileRasterizer = null;
+    if (_renderedSector != null)
+       _renderedSector.dispose();
+    _renderedSector = null;
+  
+    _tileRasterizers.clear();
   
     return planetRenderer;
   }
@@ -334,14 +333,9 @@ public class PlanetRendererBuilder
     }
     _texturizer = tileTexturizer;
   }
-  public final void setTileRasterizer(TileRasterizer tileRasterizer)
+  public final void addTileRasterizer(TileRasterizer tileRasterizer)
   {
-    if ((_tileRasterizer != null) || (_geoTileRasterizer != null))
-    {
-      ILogger.instance().logError("LOGIC ERROR: _tileRasterizer or _geoTileRasterizer already initialized");
-      return;
-    }
-    _tileRasterizer = tileRasterizer;
+    _tileRasterizers.add(tileRasterizer);
   }
   public final void setLayerSet(LayerSet layerSet)
   {
@@ -425,13 +419,11 @@ public class PlanetRendererBuilder
     _renderedSector = new Sector(sector);
   }
 
-  public final GEOTileRasterizer getGEOTileRasterizer()
+  public final GEOTileRasterizer createGEOTileRasterizer()
   {
-    if (_geoTileRasterizer == null)
-    {
-      _geoTileRasterizer = new GEOTileRasterizer();
-    }
-    return _geoTileRasterizer;
+    GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+    addTileRasterizer(geoTileRasterizer);
+    return geoTileRasterizer;
   }
 
 }

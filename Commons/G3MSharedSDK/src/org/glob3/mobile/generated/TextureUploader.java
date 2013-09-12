@@ -32,8 +32,8 @@ public class TextureUploader extends IImageListener
     }
     else
     {
-      final TileRasterizerContext trc = new TileRasterizerContext(image, _tile, _mercator);
-      _tileRasterizer.rasterize(trc, new TextureUploader(_builder, _tile, _mercator, null, _srcRects, _dstRects, _textureId), true);
+      final TileRasterizerContext trc = new TileRasterizerContext(_tile, _mercator);
+      _tileRasterizer.rasterize(image, trc, new TextureUploader(_builder, _tile, _mercator, null, _srcRects, _dstRects, _textureId), true);
     }
   }
 }

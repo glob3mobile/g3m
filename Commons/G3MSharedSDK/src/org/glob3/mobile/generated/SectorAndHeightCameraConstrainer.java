@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class PlanetRenderer;
+
 public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
 {
   private final Sector _sector ;
@@ -34,7 +36,7 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   {
   }
 
-  public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
     final Geodetic3D position = nextCamera.getGeodeticPosition();
@@ -58,6 +60,8 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   //    else {
   //      nextCamera->setGeodeticPosition(g2, newHeight);
   //    }
+  
+      return true;
     }
   
   }

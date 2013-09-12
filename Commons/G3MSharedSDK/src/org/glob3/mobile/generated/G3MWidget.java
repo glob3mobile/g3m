@@ -20,10 +20,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, Geodetic3D initialCameraPosition)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPosition);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider);
   }
 
   public void dispose()
@@ -86,6 +86,8 @@ public class G3MWidget
   
     if (_rootState != null)
        _rootState.dispose();
+    if (_initialCameraPositionProvider != null)
+       _initialCameraPositionProvider.dispose();
   }
 
   public final void render(int width, int height)
@@ -101,6 +103,21 @@ public class G3MWidget
       _height = height;
   
       onResizeViewportEvent(_width, _height);
+    }
+  
+    if (!_initialCameraPositionHasBeenSet)
+    {
+      _initialCameraPositionHasBeenSet = true;
+  
+      Geodetic3D g = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer(), new Vector2I(_width,_height));
+  
+      _currentCamera.setGeodeticPosition(g);
+      _currentCamera.setHeading(Angle.zero());
+      _currentCamera.setPitch(Angle.zero());
+  
+      _nextCamera.setGeodeticPosition(g);
+      _nextCamera.setHeading(Angle.zero());
+      _nextCamera.setPitch(Angle.zero());
     }
   
     _timer.start();
@@ -424,6 +441,7 @@ public class G3MWidget
   public final void setCameraPosition(Geodetic3D position)
   {
     getNextCamera().setGeodeticPosition(position);
+    _initialCameraPositionHasBeenSet = true;
   }
 
   public final void setCameraHeading(Angle angle)
@@ -554,6 +572,12 @@ public class G3MWidget
     return _mainRenderer.getPlanetRenderer();
   }
 
+  public final void setShownSector(Sector sector)
+  {
+    getPlanetRenderer().setRenderedSector(sector);
+    _initialCameraPositionHasBeenSet = false;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -613,7 +637,10 @@ public class G3MWidget
   private SceneLighting _sceneLighting;
   private GLState _rootState;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, Geodetic3D initialCameraPosition)
+  private final InitialCameraPositionProvider _initialCameraPositionProvider;
+  private boolean _initialCameraPositionHasBeenSet;
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -653,6 +680,8 @@ public class G3MWidget
      _gpuProgramManager = gpuProgramManager;
      _sceneLighting = sceneLighting;
      _rootState = null;
+     _initialCameraPositionProvider = initialCameraPositionProvider;
+     _initialCameraPositionHasBeenSet = false;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -680,9 +709,6 @@ public class G3MWidget
     {
       addPeriodicalTask(periodicalTasks.get(i));
     }
-  
-    _currentCamera.setGeodeticPosition(initialCameraPosition);
-    _nextCamera.setGeodeticPosition(initialCameraPosition);
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

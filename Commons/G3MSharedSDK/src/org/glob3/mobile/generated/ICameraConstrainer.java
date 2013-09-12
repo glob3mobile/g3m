@@ -23,5 +23,6 @@ public interface ICameraConstrainer
 {
   public void dispose();
 
-  void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);
+  //Returns false if it could not create a valid nextCamera
+  boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);
 }

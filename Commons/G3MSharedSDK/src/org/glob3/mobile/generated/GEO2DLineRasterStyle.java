@@ -25,7 +25,7 @@ public class GEO2DLineRasterStyle
   private final StrokeJoin _join;
   private final float _miterLimit;
 
-  final float[]    _dashLengths;
+  private final float[]    _dashLengths;
   private final int _dashCount;
   private final int _dashPhase;
 
@@ -41,6 +41,16 @@ public class GEO2DLineRasterStyle
     //_dashLengths = java.util.Arrays.copyOf(dashLengths, _dashCount);
     _dashLengths = new float[_dashCount];
     System.arraycopy(dashLengths, 0, _dashLengths, 0, _dashCount);
+  }
+
+  public GEO2DLineRasterStyle(final Color color,
+                              final float width,
+                              final StrokeCap cap,
+                              final StrokeJoin join,
+                              final float miterLimit,
+                              final float[] dashLengths,
+                              final int dashPhase) {
+    this(color, width, cap, join, miterLimit, dashLengths, dashLengths.length, dashPhase);
   }
 
   public GEO2DLineRasterStyle(GEO2DLineRasterStyle that)

@@ -581,6 +581,17 @@ public class Camera
     //_dirtyFlags.setAll(true);
   }
 
+  public final boolean isPositionWithin(Sector sector, double height)
+  {
+    final Geodetic3D position = getGeodeticPosition();
+    return sector.contains(position._latitude, position._longitude) && height >= position._height;
+  }
+  public final boolean isCenterOfViewWithin(Sector sector, double height)
+  {
+    final Geodetic3D position = getGeodeticCenterOfView();
+    return sector.contains(position._latitude, position._longitude) && height >= position._height;
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
 {
-  private final TileTessellator _tessellator;
+  private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
   private TileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
@@ -371,22 +371,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
   
     final Camera cam = rc.getCurrentCamera();
-    /*
-     if (_projection == NULL) {
-     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-     _glState->addGLFeature(_projection, true);
-     } else{
-     _projection->setMatrix(cam->getProjectionMatrix44D());
-     }
-  
-     if (_model == NULL) {
-     _model = new ModelGLFeature(cam->getModelMatrix44D());
-     _glState->addGLFeature(_model, true);
-     } else{
-     _model->setMatrix(cam->getModelMatrix44D());
-     }
-     */
-  
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
@@ -396,24 +380,12 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       f.setMatrix(cam.getModelViewMatrix44D());
     }
-  //<<<<<<< HEAD
-  //
-  //
-  //
-  //=======
-  //
-  //  if (_model == NULL) {
-  //    _model = new ModelGLFeature(cam->getModelMatrix44D());
-  //    _glState->addGLFeature(_model, true);
-  //  } else{
-  //    _model->setMatrix(cam->getModelMatrix44D());
-  //  }
-  //>>>>>>> webgl-port
+  
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
-  private Sector _renderedSector ;
+  private Sector _renderedSector;
   private boolean _validLayerTilesRenderParameters;
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics, long texturePriority, Sector renderedSector)
@@ -471,6 +443,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       if (entry != null)
          entry.dispose();
     }
+  
+    if (_renderedSector != null)
+       _renderedSector.dispose();
   
     super.dispose();
   
@@ -791,6 +766,20 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final Sector getRenderedSector()
   {
     return _renderedSector;
+  }
+
+  public final void setRenderedSector(Sector sector)
+  {
+    if (!_renderedSector.isEquals(sector))
+    {
+      if (_renderedSector != null)
+         _renderedSector.dispose();
+      _renderedSector = new Sector(sector);
+    }
+  
+    _tessellator.setRenderedSector(sector);
+  
+    changed();
   }
 
 }
