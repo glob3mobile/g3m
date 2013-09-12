@@ -29,6 +29,12 @@ class GPUProgramSources;
 class GPUProgramManager;
 class SceneLighting;
 class Sector;
+class GEORenderer;
+class GEOSymbolizer;
+class MeshRenderer;
+class ShapesRenderer;
+class MarksRenderer;
+
 
 
 class IG3MBuilder {
@@ -81,7 +87,11 @@ private:
 
   bool containsPlanetRenderer(std::vector<Renderer*> renderers);
 
-  
+  GEORenderer*    _geoRenderer;
+  MeshRenderer*   _meshRenderer;
+  ShapesRenderer* _shapesRenderer;
+  MarksRenderer*  _marksRenderer;
+
 
 protected:
   IStorage* _storage;
@@ -160,6 +170,18 @@ public:
   SceneLighting* getSceneLighting();
 
   void setShownSector(const Sector& sector);
+
+
+  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer);
+
+  MeshRenderer* getMeshRenderer();
+
+  ShapesRenderer* getShapesRenderer();
+
+  MarksRenderer* getMarksRenderer();
+
+  GEORenderer* getGEORenderer();
+  
 };
 
 #endif

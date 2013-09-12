@@ -27,8 +27,11 @@
 #include "GPUProgramFactory.hpp"
 #include "SceneLighting.hpp"
 #include "Sector.hpp"
-
 #include "SectorAndHeightCameraConstrainer.hpp"
+#include "GEORenderer.hpp"
+#include "MeshRenderer.hpp"
+#include "ShapesRenderer.hpp"
+#include "MarksRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -50,7 +53,11 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_geoRenderer(NULL),
+_meshRenderer(NULL),
+_shapesRenderer(NULL),
+_marksRenderer(NULL)
 {
 }
 
@@ -710,6 +717,11 @@ G3MWidget* IG3MBuilder::create() {
 
   delete _shownSector;
   _shownSector = NULL;
+
+  _geoRenderer    = NULL;
+  _meshRenderer   = NULL;
+  _shapesRenderer = NULL;
+  _marksRenderer  = NULL;
   
   return g3mWidget;
 }
@@ -798,4 +810,48 @@ Sector IG3MBuilder::getShownSector() const{
     return Sector::fullSphere();
   }
   return *_shownSector;
+}
+
+MeshRenderer* IG3MBuilder::getMeshRenderer() {
+  if (_meshRenderer == NULL) {
+    _meshRenderer = new MeshRenderer();
+    addRenderer(_meshRenderer);
+  }
+  return _meshRenderer;
+}
+
+ShapesRenderer* IG3MBuilder::getShapesRenderer() {
+  if (_shapesRenderer == NULL) {
+    _shapesRenderer = new ShapesRenderer();
+    addRenderer(_shapesRenderer);
+  }
+  return _shapesRenderer;
+}
+
+MarksRenderer* IG3MBuilder::getMarksRenderer() {
+  if (_marksRenderer == NULL) {
+    _marksRenderer = new MarksRenderer(false);
+    addRenderer(_marksRenderer);
+  }
+  return _marksRenderer;
+}
+
+GEORenderer* IG3MBuilder::getGEORenderer() {
+  return _geoRenderer;
+}
+
+GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* defaultSymbolizer) {
+  if (_geoRenderer != NULL) {
+    ILogger::instance()->logError("GEORenderer already created");
+    return NULL;
+  }
+
+  _geoRenderer = new GEORenderer(defaultSymbolizer,
+                                 getMeshRenderer(),
+                                 getShapesRenderer(),
+                                 getMarksRenderer(),
+                                 getPlanetRendererBuilder()->getGEOTileRasterizer());
+  addRenderer(_geoRenderer);
+
+  return _geoRenderer;
 }
