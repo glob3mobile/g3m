@@ -274,11 +274,17 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
   LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
+//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
 //  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
-//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+
+  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+
+  geoRenderer->load(URL("file:///geojson/countries-50m.geojson", false),
+                    new SampleSymbolizer());
+
 
   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
                                                                                 Color::red(),
@@ -288,6 +294,7 @@ public:
                                                                                 Color::yellow(),
                                                                                 true,
                                                                                 false));
+
 
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
                                             -17.2423142646939311, 145.4950606689779420);

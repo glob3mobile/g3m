@@ -13,6 +13,10 @@
 #include "ILogger.hpp"
 #include "Context.hpp"
 #include "Camera.hpp"
+#include "IDownloader.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "GEOJSONParser.hpp"
+#include "IThreadUtils.hpp"
 
 class GEORenderer_ObjectSymbolizerPair {
 public:
@@ -46,7 +50,6 @@ GEORenderer::~GEORenderer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void GEORenderer::addGEOObject(GEOObject* geoObject,
@@ -84,3 +87,218 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 }
 
 
+//class GEOObjectAdderTask : public GTask {
+//private:
+//  GEOObject*     _geoObject;
+//  GEORenderer*   _geoRenderer;
+//  GEOSymbolizer* _symbolizer;
+//
+//public:
+//  GEOObjectAdderTask(GEOObject* geoObject,
+//                     GEORenderer* geoRenderer,
+//                     GEOSymbolizer* symbolizer) :
+//  _geoObject(geoObject),
+//  _geoRenderer(geoRenderer),
+//  _symbolizer(symbolizer)
+//  {
+//
+//  }
+//  
+//  void run(const G3MContext* context) {
+//    _geoRenderer->addGEOObject(_geoObject, _symbolizer);
+//  }
+//};
+//
+//class GEOObjectParserTask : public GTask {
+//private:
+//  const URL      _url;
+//  IByteBuffer*   _buffer;
+//  GEORenderer*   _geoRenderer;
+//  GEOSymbolizer* _symbolizer;
+//
+//public:
+//  GEOObjectParserTask(const URL& url,
+//                      IByteBuffer* buffer,
+//                      GEORenderer* geoRenderer,
+//                      GEOSymbolizer* symbolizer) :
+//  _url(url),
+//  _buffer(buffer),
+//  _geoRenderer(geoRenderer),
+//  _symbolizer(symbolizer)
+//  {
+//  }
+//  
+//  void run(const G3MContext* context) {
+//    GEOObject* geoObject = GEOJSONParser::parse(_buffer);
+//
+//    if (geoObject == NULL) {
+//      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
+//    }
+//    else {
+//      context->getThreadUtils()->invokeInRendererThread(new GEOObjectAdderTask(geoObject,
+//                                                                               _geoRenderer,
+//                                                                               _symbolizer),
+//                                                        true);
+//    }
+//
+//    delete _buffer;
+//    _buffer = NULL;
+//  }
+//};
+
+
+class GEOObjectParserAsyncTask : public GAsyncTask {
+private:
+  const URL      _url;
+  IByteBuffer*   _buffer;
+  GEORenderer*   _geoRenderer;
+  GEOSymbolizer* _symbolizer;
+
+  GEOObject* _geoObject;
+
+public:
+  GEOObjectParserAsyncTask(const URL& url,
+                           IByteBuffer* buffer,
+                           GEORenderer* geoRenderer,
+                           GEOSymbolizer* symbolizer) :
+  _url(url),
+  _buffer(buffer),
+  _geoRenderer(geoRenderer),
+  _symbolizer(symbolizer),
+  _geoObject(NULL)
+  {
+  }
+
+  ~GEOObjectParserAsyncTask() {
+    delete _buffer;
+    delete _geoObject;
+  }
+
+  void runInBackground(const G3MContext* context) {
+    _geoObject = GEOJSONParser::parse(_buffer);
+
+    delete _buffer;
+    _buffer = NULL;
+  }
+
+  void onPostExecute(const G3MContext* context) {
+    if (_geoObject == NULL) {
+      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
+    }
+    else {
+      _geoRenderer->addGEOObject(_geoObject, _symbolizer);
+      _geoObject = NULL;
+    }
+  }
+};
+
+class GEORenderer_GEOObjectBufferDownloadListener : public IBufferDownloadListener {
+private:
+  GEORenderer*        _geoRenderer;
+  GEOSymbolizer*      _symbolizer;
+  const IThreadUtils* _threadUtils;
+
+public:
+  GEORenderer_GEOObjectBufferDownloadListener(GEORenderer* geoRenderer,
+                                              GEOSymbolizer* symbolizer,
+                                              const IThreadUtils* threadUtils) :
+  _geoRenderer(geoRenderer),
+  _symbolizer(symbolizer),
+  _threadUtils(threadUtils)
+  {
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    _threadUtils->invokeAsyncTask(new GEOObjectParserAsyncTask(url,
+                                                               buffer,
+                                                               _geoRenderer,
+                                                               _symbolizer),
+                                  true);
+
+//    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
+//                                                             buffer,
+//                                                             _geoRenderer,
+//                                                             _symbolizer),
+//                                     true);
+
+//    GEOObject* geoObject = GEOJSONParser::parse(buffer);
+//
+//    if (geoObject == NULL) {
+//      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
+//    }
+//    else {
+//      _geoRenderer->addGEOObject(geoObject, _symbolizer);
+//    }
+//
+//    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+  }
+
+  void onCancel(const URL& url) {
+    ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+};
+
+void GEORenderer::drainLoadQueue() {
+  IDownloader* downloader = _context->getDownloader();
+
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    downloader->requestBuffer(item->_url,
+                              item->_priority,
+                              item->_timeToCache,
+                              item->_readExpired,
+                              new GEORenderer_GEOObjectBufferDownloadListener(this,
+                                                                              item->_symbolizer,
+                                                                              _context->getThreadUtils()),
+                              true);
+  }
+
+  _loadQueue.clear();
+}
+
+void GEORenderer::initialize(const G3MContext* context) {
+  _context = context;
+
+  if (_context != NULL) {
+    drainLoadQueue();
+  }
+}
+
+void GEORenderer::load(const URL& url,
+                       GEOSymbolizer* symbolizer,
+                       long long priority,
+                       const TimeInterval timeToCache,
+                       bool readExpired) {
+  if (_context == NULL) {
+    _loadQueue.push_back(new LoadQueueItem(url,
+                                           symbolizer,
+                                           priority,
+                                           timeToCache,
+                                           readExpired));
+  }
+  else {
+    IDownloader* downloader = _context->getDownloader();
+    downloader->requestBuffer(url,
+                              priority,
+                              timeToCache,
+                              readExpired,
+                              new GEORenderer_GEOObjectBufferDownloadListener(this,
+                                                                              symbolizer,
+                                                                              _context->getThreadUtils()),
+                              true);
+  }
+}

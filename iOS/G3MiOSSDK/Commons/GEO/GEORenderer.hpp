@@ -10,9 +10,11 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
-//#include "GPUProgramState.hpp"
+#include "DownloadPriority.hpp"
+#include "URL.hpp"
 
 #include <vector>
+
 class GEOObject;
 class GEOSymbolizer;
 class MeshRenderer;
@@ -23,6 +25,32 @@ class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public LeafRenderer {
 private:
+
+  class LoadQueueItem {
+  public:
+    const URL          _url;
+    GEOSymbolizer*     _symbolizer;
+    const long long    _priority;
+    const TimeInterval _timeToCache;
+    const bool         _readExpired;
+
+    LoadQueueItem(const URL& url,
+                  GEOSymbolizer* symbolizer,
+                  long long priority,
+                  const TimeInterval timeToCache,
+                  bool readExpired) :
+    _url(url),
+    _symbolizer(symbolizer),
+    _priority(priority),
+    _timeToCache(timeToCache),
+    _readExpired(readExpired)
+    {
+
+    }
+  };
+
+  void drainLoadQueue();
+
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
   const GEOSymbolizer* _defaultSymbolizer;
@@ -31,7 +59,16 @@ private:
   ShapesRenderer*    _shapesRenderer;
   MarksRenderer*     _marksRenderer;
   GEOTileRasterizer* _geoTileRasterizer;
-  
+
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
+  std::vector<LoadQueueItem*> _loadQueue;
+
 public:
 
   /**
@@ -53,7 +90,8 @@ public:
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
-  _geoTileRasterizer(geoTileRasterizer)
+  _geoTileRasterizer(geoTileRasterizer),
+  _context(NULL)
   {
   }
 
@@ -79,9 +117,7 @@ public:
 
   }
 
-  void initialize(const G3MContext* context) {
-
-  }
+  void initialize(const G3MContext* context);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
@@ -122,7 +158,13 @@ public:
   GEOTileRasterizer* getGeoTileRasterizer(){
     return _geoTileRasterizer;
   }
-  
+
+  void load(const URL& url,
+            GEOSymbolizer* symbolizer = NULL,
+            long long priority = DownloadPriority::MEDIUM,
+            const TimeInterval timeToCache = TimeInterval::fromDays(30),
+            bool readExpired = true);
+
 };
 
 #endif

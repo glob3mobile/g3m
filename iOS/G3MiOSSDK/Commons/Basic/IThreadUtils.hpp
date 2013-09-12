@@ -13,6 +13,18 @@
 #include <stdlib.h>
 
 
+class GAsyncTask {
+public:
+  virtual ~GAsyncTask() {
+  }
+
+  virtual void runInBackground(const G3MContext* context) = 0;
+
+  virtual void onPostExecute(const G3MContext* context) = 0;
+
+};
+
+
 class G3MContext;
 
 class IThreadUtils {
@@ -48,6 +60,9 @@ public:
   
   virtual void invokeInBackground(GTask* task,
                                   bool autoDelete) const = 0;
+
+  void invokeAsyncTask(GAsyncTask* task,
+                       bool autodelete) const;
   
 };
 
