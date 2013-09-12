@@ -274,7 +274,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
   LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
 //  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
