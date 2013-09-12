@@ -281,7 +281,12 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
   if (_renderedSector == NULL){
     return tile->getSector();
   }
+#ifdef C_CODE
   return tile->getSector().intersection(*_renderedSector);
+#endif
+#ifdef JAVA_CODE
+  return tile.getSector().intersection(_renderedSector);
+#endif
 }
 
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
