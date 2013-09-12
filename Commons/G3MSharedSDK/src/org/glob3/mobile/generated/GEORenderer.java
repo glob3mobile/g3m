@@ -31,18 +31,18 @@ public class GEORenderer extends LeafRenderer
 
   private static class LoadQueueItem
   {
-    public Url _url = new URL();
+    public final URL _url;
+    public final TimeInterval _timeToCache;
     public GEOSymbolizer _symbolizer;
     public final long _priority;
-    public final TimeInterval _timeToCache = new TimeInterval();
     public final boolean _readExpired;
 
     public LoadQueueItem(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
     {
-       _url = new URL(url);
+       _url = url;
        _symbolizer = symbolizer;
        _priority = priority;
-       _timeToCache = new TimeInterval(timeToCache);
+       _timeToCache = timeToCache;
        _readExpired = readExpired;
 
     }

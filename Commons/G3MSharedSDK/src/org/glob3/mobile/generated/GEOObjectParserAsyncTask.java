@@ -61,7 +61,8 @@ package org.glob3.mobile.generated;
 
 public class GEOObjectParserAsyncTask extends GAsyncTask
 {
-  private Url _url = new URL();
+  public final URL _url;
+
   private IByteBuffer _buffer;
   private GEORenderer _geoRenderer;
   private GEOSymbolizer _symbolizer;
@@ -70,7 +71,7 @@ public class GEOObjectParserAsyncTask extends GAsyncTask
 
   public GEOObjectParserAsyncTask(URL url, IByteBuffer buffer, GEORenderer geoRenderer, GEOSymbolizer symbolizer)
   {
-     _url = new URL(url);
+     _url = url;
      _buffer = buffer;
      _geoRenderer = geoRenderer;
      _symbolizer = symbolizer;
