@@ -136,7 +136,7 @@ _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
-_renderedSector(renderedSector),
+_renderedSector(new Sector(renderedSector)),
 _validLayerTilesRenderParameters(false)
 {
   _layerSet->setChangeListener(this);
@@ -195,6 +195,8 @@ PlanetRenderer::~PlanetRenderer() {
     VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
     delete entry;
   }
+
+  delete _renderedSector;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -342,7 +344,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Sector sector(tileLower, tileUpper);
 //<<<<<<< HEAD
 
-      if (sector.touchesWith(_renderedSector)) { //Do not create innecesary tiles
+      if (sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
         Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
         if (parameters->_firstLevel == 0) {
           _firstLevelTiles.push_back(tile);
@@ -428,7 +430,7 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
                                 true,
                                 _texturePriority,
                                 _verticalExaggeration,
-                                _renderedSector);
+                                *_renderedSector);
 
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -614,7 +616,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                             _firstRender /* if first render, force full render */,
                             _texturePriority,
                             _verticalExaggeration,
-                            _renderedSector);
+                            *_renderedSector);
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
   

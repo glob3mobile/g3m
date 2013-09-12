@@ -373,7 +373,7 @@ private:
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
   
-  Sector _renderedSector;
+  Sector* _renderedSector;
   bool _validLayerTilesRenderParameters;
 
 public:
@@ -517,7 +517,7 @@ public:
   void sectorElevationChanged(ElevationData* elevationData) const;
 
   Sector getRenderedSector() const{
-    return _renderedSector;
+    return *_renderedSector;
   }
 
 };
