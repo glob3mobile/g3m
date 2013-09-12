@@ -360,9 +360,11 @@ public class PlanetTileTessellator extends TileTessellator
   
       final Vector3D sw = planet.toCartesian(tileSector.getSW());
       final Vector3D nw = planet.toCartesian(tileSector.getNW());
-      //    const double offset = nw.sub(sw).length() * 1e-3;
       final double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
-      final double absoluteSkirtHeight = -1e5; //TODO: CHECK
+  
+      final Vector3D asw = planet.toCartesian(_renderedSector.getSW());
+      final Vector3D anw = planet.toCartesian(_renderedSector.getNW());
+      final double absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
   

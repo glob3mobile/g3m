@@ -247,9 +247,24 @@ public class Tile
     //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
     //    return true;
     //  }
+  
+    int texWidth = parameters._tileTextureResolution._x;
+    int texHeight = parameters._tileTextureResolution._y;
+  
+    //Adjusting shown texture size in case of incomplete mesh
+    Sector renderedSector = _planetRenderer.getRenderedSector();
+    if (!renderedSector.fullContains(_sector))
+    {
+      Sector meshSector = renderedSector.intersection(_sector);
+      final double rx = meshSector.getDeltaLongitude()._degrees / _sector.getDeltaLongitude()._degrees;
+      final double ry = meshSector.getDeltaLatitude()._degrees / _sector.getDeltaLatitude()._degrees;
+      texWidth *= rx;
+      texHeight *= ry;
+    }
+  
     final Vector2F ex = boundingVolume.projectedExtent(rc);
     final float t = (ex._x + ex._y);
-    _lastLodTest = (t <= ((parameters._tileTextureResolution._x + parameters._tileTextureResolution._y) * 1.75f));
+    _lastLodTest = (t <= ((texWidth + texHeight) * 1.75f));
     return _lastLodTest;
   }
 
@@ -706,6 +721,11 @@ public class Tile
 
   public final void render(G3MRenderContext rc, PlanetRendererContext prc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates)
   {
+  
+    if (!_planetRenderer.getRenderedSector().touchesWith(_sector))
+    {
+      System.out.print("error");
+    }
   
     TilesStatistics statistics = prc.getStatistics();
     statistics.computeTileProcessed(this);

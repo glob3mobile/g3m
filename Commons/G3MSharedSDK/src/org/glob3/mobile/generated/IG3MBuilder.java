@@ -401,19 +401,24 @@ public abstract class IG3MBuilder
     }
   
     int TODO_VIEWPORT;
-    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
+    final Geodetic3D initialCameraPosition2 = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
+    final Geodetic3D initialCameraPosition = new Geodetic3D(shownSector.getCenter(), initialCameraPosition2.height());
   
     //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
     if (!shownSector.isEquals(Sector.fullSphere()))
     {
-      final double margin = 0.2;
-      final double height = 1e5;
-  
-      final double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
-      final double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
-  
-      Sector sector = Sector.fromDegrees(shownSector._lower._latitude._degrees - latMargin, shownSector._lower._longitude._degrees - lonMargin, shownSector._upper._latitude._degrees + latMargin, shownSector._upper._longitude._degrees + lonMargin);
-      addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height));
+  //    const double margin = 0.2;
+  //    const double height = 1e5;
+  //
+  //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
+  //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
+  //
+  //    Sector sector = Sector::fromDegrees(shownSector._lower._latitude._degrees - latMargin,
+  //                                        shownSector._lower._longitude._degrees - lonMargin,
+  //                                        shownSector._upper._latitude._degrees + latMargin,
+  //                                        shownSector._upper._longitude._degrees + lonMargin);
+  //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
+      addCameraConstraint(new SectorAndHeightCameraConstrainer(shownSector, initialCameraPosition2.height() * 1.2));
     }
   
   
