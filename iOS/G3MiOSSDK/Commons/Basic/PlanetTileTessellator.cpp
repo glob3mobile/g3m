@@ -34,11 +34,12 @@
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
-_renderedSector(sector)
+_renderedSector(new Sector(sector))
 {
 }
 
 PlanetTileTessellator::~PlanetTileTessellator() {
+  delete _renderedSector;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -128,8 +129,8 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
-    const Vector3D asw = planet->toCartesian(_renderedSector.getSW());
-    const Vector3D anw = planet->toCartesian(_renderedSector.getNW());
+    const Vector3D asw = planet->toCartesian(_renderedSector->getSW());
+    const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
     const double absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
 
     createEastSkirt(planet,
@@ -274,20 +275,8 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
-  return tile->getSector().intersection(_renderedSector);
+  return tile->getSector().intersection(*_renderedSector);
 }
-
-//double PlanetTileTessellator::getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const{
-//  if (elevationData == NULL){
-//    return 0;
-//  }
-//  const double h = elevationData->getElevationAt(g);
-//  if (IMathUtils::instance()->isNan(h)){
-//    return 0;
-//  }
-//
-//  return h;
-//}
 
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,
@@ -302,7 +291,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
 
-  //CREATING TEXTURE COORDS////////////////////////////////////////////////////////////////
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
@@ -349,16 +337,16 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   }
 
   //INDEX///////////////////////////////////////////////////////////////
-  for (short j = 0; j < (meshResolution._y-1); j++) {
-    const short jTimesResolution = (short) (j*meshResolution._x);
+  for (short j = 0; j < (ry-1); j++) {
+    const short jTimesResolution = (short) (j*rx);
     if (j > 0) {
       indices.add(jTimesResolution);
     }
-    for (short i = 0; i < meshResolution._x; i++) {
+    for (short i = 0; i < rx; i++) {
       indices.add((short) (jTimesResolution + i));
-      indices.add((short) (jTimesResolution + i + meshResolution._x));
+      indices.add((short) (jTimesResolution + i + rx));
     }
-    indices.add((short) (jTimesResolution + 2*meshResolution._x - 1));
+    indices.add((short) (jTimesResolution + 2* rx - 1));
   }
 
   return minElevation;

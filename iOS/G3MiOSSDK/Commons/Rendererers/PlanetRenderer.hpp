@@ -35,7 +35,7 @@ class TileRasterizer;
 
 class PlanetRendererContext {
 private:
-  const TileTessellator*       _tessellator;
+  const TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
@@ -55,7 +55,7 @@ private:
 
   Sector _renderedSector;
 public:
-  PlanetRendererContext(const TileTessellator*       tessellator,
+  PlanetRendererContext(const TileTessellator*             tessellator,
                         ElevationDataProvider*       elevationDataProvider,
                         TileTexturizer*              texturizer,
                         TileRasterizer*              tileRasterizer,
@@ -308,7 +308,7 @@ public:
 
 class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
 private:
-  const TileTessellator*       _tessellator;
+  TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
@@ -377,7 +377,7 @@ private:
   bool _validLayerTilesRenderParameters;
 
 public:
-  PlanetRenderer(const TileTessellator* tessellator,
+  PlanetRenderer(TileTessellator* tessellator,
                  ElevationDataProvider* elevationDataProvider,
                  float verticalExaggeration,
                  TileTexturizer*  texturizer,
@@ -519,6 +519,8 @@ public:
   Sector getRenderedSector() const{
     return *_renderedSector;
   }
+
+  void setRenderedSector(const Sector& sector);
 
 };
 

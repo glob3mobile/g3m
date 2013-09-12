@@ -595,10 +595,6 @@ void Tile::render(const G3MRenderContext* rc,
                   double cameraAngle2HorizonInRadians,
                   const Frustum* cameraFrustumInModelCoordinates) {
 
-  if (!_planetRenderer->getRenderedSector().touchesWith(_sector)){
-    printf("error");
-  }
-
   TilesStatistics* statistics = prc->getStatistics();
   statistics->computeTileProcessed(this);
 

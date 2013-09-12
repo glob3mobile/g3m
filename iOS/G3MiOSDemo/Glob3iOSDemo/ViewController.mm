@@ -233,11 +233,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-//  [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  [self initWithBuilderAndSegmentedWorld];
+  //  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -260,7 +260,7 @@ public:
   void run(const G3MContext* context) {
     Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
     [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(8), position);
-////    [_iosWidget widget]->setCameraPosition(position);
+    ////    [_iosWidget widget]->setCameraPosition(position);
   }
 
   bool isDone(const G3MContext* context) {
@@ -275,14 +275,14 @@ public:
 
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
-//  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
+  //  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
                                             -17.2423142646939311, 145.4950606689779420);
 
-//  builder.setShownSector(sector);
+  //  builder.setShownSector(sector);
   builder.setShownSector( sector.shrinkedByPercent(-50) );
 
   int _DIEGO_AT_WORK;
@@ -334,8 +334,8 @@ public:
 
   GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
   builder.addGPUProgramSources(sourcesNoColorMesh);
-  
-  
+
+
   builder.initializeWidget();
 }
 
@@ -648,8 +648,8 @@ public:
   //builder.getPlanetRendererBuilder()->setTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->setTileRasterizer(geoTileRasterizer);
 
-//  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-//  builder.addCameraConstraint(scc);
+  //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  //  builder.addCameraConstraint(scc);
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
@@ -720,22 +720,9 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (true) { //Incomplete world
-
-    Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-//    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
-    builder.setShownSector( spain );
-
-    //    builder.getPlanetRendererBuilder()->setRenderDebug(true);
-
-    //geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
-
-    builder.setBackgroundColor(new Color(Color::white()));
-  }
-
   if (false) { //HUD
     HUDRenderer* hudRenderer = new   HUDRenderer();
-    
+
     Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
     hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
 
@@ -1935,7 +1922,7 @@ private:
     const int wheelSize = 7;
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
-    
+
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
@@ -2634,6 +2621,53 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new FlightTask(_iosWidget, time));
       }
 
+
+
+      if (true) { //Incomplete world
+
+        int time = 5; //SECS
+
+        class RenderedSectorTask: public GTask{
+          G3MWidget_iOS* _iosWidget;
+        public:
+          RenderedSectorTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+
+          static int randomInt(int max){
+            int i = rand();
+            return i % max;
+          }
+
+          void run(const G3MContext* context){
+
+            double minLat = randomInt(180) -90;// rand()%180 -90;
+            double minLon = randomInt(360) - 180;//rand()%360 -180;
+
+            double maxLat = minLat + randomInt(90 - (int)minLat); //rand()%(90 - (int)minLat);
+            double maxLon = minLon + randomInt(90 - (int)minLat);//rand()%(180 - (int)minLon);
+
+            Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
+
+            //            Sector sector = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+
+            Geodetic2D center = sector.getCenter();
+
+            [_iosWidget widget]->setCameraPosition(Geodetic3D(center, 1e7)  );
+            [_iosWidget widget]->setShownSector(sector);
+          }
+        };
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
+
+        //        Sector spain = Sector::fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
+        //        //    Sector spain = Sector::fromDegrees(39.0313941, -7.0016516,  45.0299024, 5.4084426);
+        //        builder.setShownSector( spain );
+        //
+        //        //    builder.getPlanetRendererBuilder()->setRenderDebug(true);
+        //
+        //        //geoTileRasterizer->addSymbol(spain.createGEOSymbol(Color::red()));
+        //
+        //        builder.setBackgroundColor(new Color(Color::white()));
+      }
+
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
@@ -2833,20 +2867,20 @@ public:
 
   Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
                            5000);
-
+  
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
                       25000);
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   builder->addRenderer(trailsRenderer);
-
+  
   //  renderers.push_back(new GLErrorRenderer());
-
+  
   class TestTrailTask : public GTask {
   private:
     Trail* _trail;
-
+    
     double _lastLatitudeDegrees;
     double _lastLongitudeDegrees;
     double _lastHeight;

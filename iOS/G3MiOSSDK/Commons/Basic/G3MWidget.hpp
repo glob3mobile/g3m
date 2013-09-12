@@ -56,6 +56,8 @@ class G3MContext;
 class GLGlobalState;
 class SceneLighting;
 
+class Sector;
+
 class WidgetUserData {
 private:
   G3MWidget* _widget;
@@ -200,6 +202,8 @@ public:
   void setBackgroundColor(const Color& backgroundColor);
 
   PlanetRenderer* getPlanetRenderer();
+
+  void setShownSector(const Sector& sector);
   
 private:
   IStorage*           _storage;

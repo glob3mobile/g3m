@@ -35,7 +35,7 @@ public:
 class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
-  const Sector _renderedSector;
+  const Sector* _renderedSector;
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Tile* tile,
@@ -48,19 +48,19 @@ private:
                                         const Geodetic2D& g) const;
 
   bool needsEastSkirt(const Sector& tileSector) const{
-    return _renderedSector.upperLongitude().greaterThan(tileSector.upperLongitude());
+    return _renderedSector->upperLongitude().greaterThan(tileSector.upperLongitude());
   }
 
   bool needsNorthSkirt(const Sector& tileSector) const{
-    return _renderedSector.upperLatitude().greaterThan(tileSector.upperLatitude());
+    return _renderedSector->upperLatitude().greaterThan(tileSector.upperLatitude());
   }
 
   bool needsWestSkirt(const Sector& tileSector) const{
-    return _renderedSector.lowerLongitude().lowerThan(tileSector.lowerLongitude());
+    return _renderedSector->lowerLongitude().lowerThan(tileSector.lowerLongitude());
   }
 
   bool needsSouthSkirt(const Sector& tileSector) const{
-    return _renderedSector.lowerLatitude().lowerThan(tileSector.lowerLatitude());
+    return _renderedSector->lowerLatitude().lowerThan(tileSector.lowerLatitude());
   }
 
   Sector getRenderedSectorForTile(const Tile* tile) const;
@@ -149,6 +149,13 @@ public:
                               const Angle& latitude,
                               const Angle& longitude,
                               bool mercator) const;
+
+  void setRenderedSector(const Sector& sector){
+    if (!_renderedSector->isEquals(sector)){
+      delete _renderedSector;
+      _renderedSector = new Sector(sector);
+    }
+  }
   
 };
 

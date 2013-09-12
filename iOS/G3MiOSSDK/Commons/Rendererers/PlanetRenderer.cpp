@@ -108,7 +108,7 @@ public:
 };
 
 
-PlanetRenderer::PlanetRenderer(const TileTessellator* tessellator,
+PlanetRenderer::PlanetRenderer(TileTessellator* tessellator,
                                ElevationDataProvider* elevationDataProvider,
                                float verticalExaggeration,
                                TileTexturizer*  texturizer,
@@ -554,41 +554,13 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* 
 void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   
   const Camera* cam = rc->getCurrentCamera();
-  /*
-   if (_projection == NULL) {
-   _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-   _glState->addGLFeature(_projection, true);
-   } else{
-   _projection->setMatrix(cam->getProjectionMatrix44D());
-   }
-
-   if (_model == NULL) {
-   _model = new ModelGLFeature(cam->getModelMatrix44D());
-   _glState->addGLFeature(_model, true);
-   } else{
-   _model->setMatrix(cam->getModelMatrix44D());
-   }
-   */
-
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL){
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());
   }
-//<<<<<<< HEAD
-//
-//
-//
-//=======
-//  
-//  if (_model == NULL) {
-//    _model = new ModelGLFeature(cam->getModelMatrix44D());
-//    _glState->addGLFeature(_model, true);
-//  } else{
-//    _model->setMatrix(cam->getModelMatrix44D());
-//  }
-//>>>>>>> webgl-port
+
 }
 
 void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
@@ -767,4 +739,15 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
   if (elevationData != NULL){
     _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
   }
+}
+
+void PlanetRenderer::setRenderedSector(const Sector& sector){
+  if (!_renderedSector->isEquals(sector)){
+    delete _renderedSector;
+    _renderedSector = new Sector(sector);
+  }
+
+  _tessellator->setRenderedSector(sector);
+
+  changed();
 }

@@ -246,7 +246,7 @@ GL* MapBooBuilder::getGL() {
 }
 
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
-  const TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
+  TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;

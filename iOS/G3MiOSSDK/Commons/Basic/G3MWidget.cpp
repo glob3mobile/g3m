@@ -38,6 +38,7 @@
 #include "ICameraActivityListener.hpp"
 
 #include "SceneLighting.hpp"
+#include "PlanetRenderer.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -660,4 +661,8 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
 
 PlanetRenderer* G3MWidget::getPlanetRenderer() {
   return _mainRenderer->getPlanetRenderer();
+}
+
+void G3MWidget::setShownSector(const Sector& sector){
+  getPlanetRenderer()->setRenderedSector(sector);
 }

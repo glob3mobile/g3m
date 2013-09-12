@@ -17,6 +17,7 @@ class MutableVector2D;
 class IFloatBuffer;
 class ElevationData;
 class Geodetic2D;
+class Sector;
 
 #include "Vector2I.hpp"
 #include "Vector2D.hpp"
@@ -58,6 +59,8 @@ public:
                                       const Angle& latitude,
                                       const Angle& longitude,
                                       bool mercator) const = 0;
+
+  virtual void setRenderedSector(const Sector& sector) = 0;
 
 };
 
