@@ -149,7 +149,13 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
 class GEOObjectParserAsyncTask : public GAsyncTask {
 private:
-  const URL      _url;
+#ifdef C_CODE
+  const URL          _url;
+#endif
+#ifdef JAVA_CODE
+  public final URL _url;
+#endif
+
   IByteBuffer*   _buffer;
   GEORenderer*   _geoRenderer;
   GEOSymbolizer* _symbolizer;

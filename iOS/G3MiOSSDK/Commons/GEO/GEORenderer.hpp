@@ -28,10 +28,16 @@ private:
 
   class LoadQueueItem {
   public:
+#ifdef C_CODE
     const URL          _url;
+    const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    public final URL _url;
+    public final TimeInterval _timeToCache;
+#endif
     GEOSymbolizer*     _symbolizer;
     const long long    _priority;
-    const TimeInterval _timeToCache;
     const bool         _readExpired;
 
     LoadQueueItem(const URL& url,
