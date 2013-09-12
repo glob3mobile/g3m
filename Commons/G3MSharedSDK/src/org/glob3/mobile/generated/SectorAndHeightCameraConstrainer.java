@@ -61,9 +61,10 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   //      nextCamera->setGeodeticPosition(g2, newHeight);
   //    }
   
-      return true;
     }
   
+    int __ASK_JM;
+    return true;
   }
 
 }

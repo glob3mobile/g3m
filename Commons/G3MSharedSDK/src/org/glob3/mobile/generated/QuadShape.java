@@ -31,6 +31,7 @@ public class QuadShape extends AbstractMeshShape
 
   private boolean _textureRequested;
   private IImage _textureImage;
+
   private IGLTextureId getTextureId(G3MRenderContext rc)
   {
     if (_textureImage == null)
