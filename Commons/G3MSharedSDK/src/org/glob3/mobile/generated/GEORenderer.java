@@ -16,7 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "GPUProgramState.hpp"
+
 
 //class GEOObject;
 //class GEOSymbolizer;
@@ -28,6 +28,40 @@ package org.glob3.mobile.generated;
 
 public class GEORenderer extends LeafRenderer
 {
+
+  private static class LoadQueueItem
+  {
+    public Url _url = new URL();
+    public GEOSymbolizer _symbolizer;
+    public final long _priority;
+    public final TimeInterval _timeToCache = new TimeInterval();
+    public final boolean _readExpired;
+
+    public LoadQueueItem(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
+    {
+       _url = new URL(url);
+       _symbolizer = symbolizer;
+       _priority = priority;
+       _timeToCache = new TimeInterval(timeToCache);
+       _readExpired = readExpired;
+
+    }
+  }
+
+  private void drainLoadQueue()
+  {
+    IDownloader downloader = _context.getDownloader();
+  
+    final int loadQueueSize = _loadQueue.size();
+    for (int i = 0; i < loadQueueSize; i++)
+    {
+      LoadQueueItem item = _loadQueue.get(i);
+      downloader.requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, item._symbolizer, _context.getThreadUtils()), true);
+    }
+  
+    _loadQueue.clear();
+  }
+
   private java.util.ArrayList<GEORenderer_ObjectSymbolizerPair> _children = new java.util.ArrayList<GEORenderer_ObjectSymbolizerPair>();
 
   private final GEOSymbolizer _defaultSymbolizer;
@@ -36,6 +70,10 @@ public class GEORenderer extends LeafRenderer
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
   private GEOTileRasterizer _geoTileRasterizer;
+
+  private G3MContext _context;
+
+  private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
 
   /**
@@ -55,6 +93,7 @@ public class GEORenderer extends LeafRenderer
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
      _geoTileRasterizer = geoTileRasterizer;
+     _context = null;
   }
 
   public void dispose()
@@ -71,7 +110,6 @@ public class GEORenderer extends LeafRenderer
     }
   
     super.dispose();
-  
   }
 
   /**
@@ -114,7 +152,12 @@ public class GEORenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-
+    _context = context;
+  
+    if (_context != null)
+    {
+      drainLoadQueue();
+    }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -184,5 +227,8 @@ public class GEORenderer extends LeafRenderer
   {
     return _geoTileRasterizer;
   }
+
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  void load(const URL& url, GEOSymbolizer* symbolizer = null, long priority = DownloadPriority.MEDIUM, const TimeInterval timeToCache = TimeInterval.fromDays(30), boolean readExpired = true);
 
 }
