@@ -228,7 +228,27 @@ public class GEORenderer extends LeafRenderer
     return _geoTileRasterizer;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  void load(const URL& url, GEOSymbolizer* symbolizer = null, long priority = DownloadPriority.MEDIUM, const TimeInterval timeToCache = TimeInterval.fromDays(30), boolean readExpired = true);
+  public final void load(URL url)
+  {
+    load(url, null, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+  }
+
+  public final void load(URL url, GEOSymbolizer symbolizer)
+  {
+    load(url, symbolizer, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+  }
+
+  public final void load(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, symbolizer, priority, timeToCache, readExpired));
+    }
+    else
+    {
+      IDownloader downloader = _context.getDownloader();
+      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils()), true);
+    }
+  }
 
 }
