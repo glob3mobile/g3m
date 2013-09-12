@@ -29,6 +29,7 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
@@ -440,7 +441,7 @@ public final class G3MWidget_WebGL
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
-                          final Geodetic3D initialCameraPosition) {
+                          final InitialCameraPositionProvider initialCameraPositionProvider) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -459,10 +460,10 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, 
-               createGPUProgramManager(),
-               sceneLighting,
-               initialCameraPosition);
+               periodicalTasks, //
+               createGPUProgramManager(), //
+               sceneLighting, //
+               initialCameraPositionProvider);
 
       _g3mWidget.setUserData(userData);
 

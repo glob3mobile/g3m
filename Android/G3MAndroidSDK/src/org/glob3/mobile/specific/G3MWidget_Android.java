@@ -28,6 +28,7 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
@@ -389,17 +390,16 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
                GL2Shaders._flatColorMeshFragmentShader));
-      
-      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
-              GL2Shaders._noColorMeshFragmentShader));
-      
-      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", 
-				GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-      
-      factory.add(new GPUProgramSources("FlatColor+DirectionLight", 
-				GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      
-      
+
+      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
+
+      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", GL2Shaders._TexturedMesh_DirectionLightVertexShader,
+               GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+
+      factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
+               GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+
+
       return new GPUProgramManager(factory);
    }
 
@@ -421,7 +421,7 @@ public final class G3MWidget_Android
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
-                          final Geodetic3D initialCameraPosition) {
+                          final InitialCameraPositionProvider initialCameraPositionProvider) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -439,10 +439,10 @@ public final class G3MWidget_Android
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, 
-               createGPUProgramManager(), 
-               sceneLighting,
-               initialCameraPosition);
+               periodicalTasks, //
+               createGPUProgramManager(), //
+               sceneLighting, //
+               initialCameraPositionProvider);
 
       _g3mWidget.setUserData(userData);
    }

@@ -60,6 +60,7 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
@@ -84,6 +85,7 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TerrainTouchEvent;
@@ -872,7 +874,7 @@ public class G3MWebGLDemo
 
          final ICameraActivityListener cameraActivityListener = null;
 
-         final Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
+         final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
          _widget.initWidget(//
                   storage, //
@@ -890,7 +892,9 @@ public class G3MWebGLDemo
                   initializationTask, //
                   autoDeleteInitializationTask, //
                   periodicalTasks, //
-                  userData, lighting, initialCameraPosition);
+                  userData, //
+                  lighting, //
+                  initialCameraPositionProvider);
       }
    }
 
