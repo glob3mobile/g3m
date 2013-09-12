@@ -154,7 +154,7 @@ public:
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();
 
-  void addGPUProgramSources(GPUProgramSources& s);
+  void addGPUProgramSources(const GPUProgramSources& s);
 
   void setSceneLighting(SceneLighting* sceneLighting);
   SceneLighting* getSceneLighting();

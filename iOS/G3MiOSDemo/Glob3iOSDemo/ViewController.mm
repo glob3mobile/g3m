@@ -237,7 +237,7 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithMapBooBuilder];
 
-//  [self initWithBuilderAndSegmentedWorld];
+  //[self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -302,39 +302,6 @@ public:
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
-
-
-  int __ASK_JM;
-  GPUProgramSources sources = [self loadDefaultGPUProgramSourcesFromDisk];
-  builder.addGPUProgramSources(sources);
-
-  GPUProgramSources sourcesDefault = [self loadDefaultGPUProgramSourcesWithName:@"Default"];
-  builder.addGPUProgramSources(sourcesDefault);
-
-  GPUProgramSources sourcesBillboard = [self loadDefaultGPUProgramSourcesWithName:@"Billboard"];
-  builder.addGPUProgramSources(sourcesBillboard);
-
-  GPUProgramSources sourcesFlatColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh"];
-  builder.addGPUProgramSources(sourcesFlatColorMesh);
-
-  GPUProgramSources sourcesTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh"];
-  builder.addGPUProgramSources(sourcesTexturedMesh);
-
-  GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
-  builder.addGPUProgramSources(sourcesColorMesh);
-
-  GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
-  builder.addGPUProgramSources(sourcesTCTexturedMesh);
-
-  GPUProgramSources sourcesTexturedMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
-  builder.addGPUProgramSources(sourcesTexturedMeshDirectionLight);
-
-  GPUProgramSources sourcesFlatColorMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh+DirectionLight"];
-  builder.addGPUProgramSources(sourcesFlatColorMeshDirectionLight);
-
-  GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
-  builder.addGPUProgramSources(sourcesNoColorMesh);
-
 
   builder.initializeWidget();
 }
@@ -777,36 +744,6 @@ public:
 
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
-
-  GPUProgramSources sources = [self loadDefaultGPUProgramSourcesFromDisk];
-  builder.addGPUProgramSources(sources);
-
-  GPUProgramSources sourcesDefault = [self loadDefaultGPUProgramSourcesWithName:@"Default"];
-  builder.addGPUProgramSources(sourcesDefault);
-
-  GPUProgramSources sourcesBillboard = [self loadDefaultGPUProgramSourcesWithName:@"Billboard"];
-  builder.addGPUProgramSources(sourcesBillboard);
-
-  GPUProgramSources sourcesFlatColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh"];
-  builder.addGPUProgramSources(sourcesFlatColorMesh);
-
-  GPUProgramSources sourcesTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh"];
-  builder.addGPUProgramSources(sourcesTexturedMesh);
-
-  GPUProgramSources sourcesColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"ColorMesh"];
-  builder.addGPUProgramSources(sourcesColorMesh);
-
-  GPUProgramSources sourcesTCTexturedMesh = [self loadDefaultGPUProgramSourcesWithName:@"TransformedTexCoorTexturedMesh"];
-  builder.addGPUProgramSources(sourcesTCTexturedMesh);
-
-  GPUProgramSources sourcesTexturedMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"TexturedMesh+DirectionLight"];
-  builder.addGPUProgramSources(sourcesTexturedMeshDirectionLight);
-
-  GPUProgramSources sourcesFlatColorMeshDirectionLight = [self loadDefaultGPUProgramSourcesWithName:@"FlatColorMesh+DirectionLight"];
-  builder.addGPUProgramSources(sourcesFlatColorMeshDirectionLight);
-
-  GPUProgramSources sourcesNoColorMesh = [self loadDefaultGPUProgramSourcesWithName:@"NoColorMesh"];
-  builder.addGPUProgramSources(sourcesNoColorMesh);
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);

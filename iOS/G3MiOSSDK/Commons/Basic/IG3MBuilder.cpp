@@ -763,7 +763,7 @@ bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
   return false;
 }
 
-void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s) {
+void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
   _sources.push_back(s);
 }
 
