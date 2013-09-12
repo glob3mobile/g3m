@@ -25,7 +25,12 @@ private:
   const Color* _color;
 
   bool _textureRequested;
+#ifdef C_CODE
   const IImage* _textureImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _textureImage;
+#endif
   const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
   const bool _withNormals;

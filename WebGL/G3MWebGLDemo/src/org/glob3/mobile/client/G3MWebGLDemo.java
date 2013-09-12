@@ -150,10 +150,10 @@ public class G3MWebGLDemo
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
-      
-      if (true){
-    	  Sector spain = Sector.fromDegrees(27.3174927, -18.5284423,  45.0299024, 5.4084426);
-    	  builder.setShownSector(spain);
+
+      if (true) {
+         final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
+         builder.setShownSector(spain);
       }
 
       final boolean useMarkers = true;
@@ -355,10 +355,10 @@ public class G3MWebGLDemo
 
       builder.addRenderer(geoRenderer);
 
-      builder.getPlanetRendererBuilder().setTileRasterizer(geoTileRasterizer);
+      builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
 
-    		  
-    		  GInitializationTask initializationTask = 		  new GInitializationTask() {
+
+      final GInitializationTask initializationTask = new GInitializationTask() {
 
          private boolean done = false;
 
@@ -518,7 +518,7 @@ public class G3MWebGLDemo
             return done;
          }
       };
-      
+
 
       //builder.setInitializationTask(initializationTask);
 
@@ -871,9 +871,9 @@ public class G3MWebGLDemo
          final SceneLighting lighting = new DefaultSceneLighting();
 
          final ICameraActivityListener cameraActivityListener = null;
-         
-         Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
-         
+
+         final Geodetic3D initialCameraPosition = Geodetic3D.fromDegrees(0, 0, 5 * planet.getRadii().maxAxis());
+
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -890,9 +890,7 @@ public class G3MWebGLDemo
                   initializationTask, //
                   autoDeleteInitializationTask, //
                   periodicalTasks, //
-                  userData, 
-                  lighting,
-                  initialCameraPosition);
+                  userData, lighting, initialCameraPosition);
       }
    }
 

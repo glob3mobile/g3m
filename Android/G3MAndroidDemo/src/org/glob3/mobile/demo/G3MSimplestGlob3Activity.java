@@ -321,7 +321,7 @@ public class G3MSimplestGlob3Activity
 
       planetRendererBuilder.setLayerSet(layerSet);
       planetRendererBuilder.setRenderDebug(false);
-      planetRendererBuilder.setTileRasterizer(geoTileRasterizer);
+      planetRendererBuilder.addTileRasterizer(geoTileRasterizer);
 
 
       mainRenderer.addRenderer(planetRendererBuilder.create());

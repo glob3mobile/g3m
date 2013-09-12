@@ -35,7 +35,12 @@ public:
 class PlanetTileTessellator : public TileTessellator {
 private:
   const bool _skirted;
+#ifdef C_CODE
   const Sector* _renderedSector;
+#endif
+#ifdef JAVA_CODE
+  private Sector _renderedSector;
+#endif
 
   Vector2I calculateResolution(const Vector2I& resolution,
                                const Tile* tile,

@@ -117,7 +117,12 @@ private:
   Vector3D* _cartesianPosition;
 
   bool              _textureSolved;
+#ifdef C_CODE
   const IImage*     _textureImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _textureImage;
+#endif
   int               _textureWidth;
   int               _textureHeight;
   const std::string _imageID;
