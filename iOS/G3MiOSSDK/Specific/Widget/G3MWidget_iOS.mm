@@ -24,6 +24,8 @@
 #include "Planet.hpp"
 #include "Sector.hpp"
 
+#include "InitialCameraPositionProvider.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -67,6 +69,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
   SceneLighting* sceneLighting = new DefaultSceneLighting();
+
+  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -86,7 +90,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   periodicalTasks,
                                   gpuProgramManager,//GPUProgramManager
                                   sceneLighting,    //Scene Lighting
-                                  initialCameraPosition);   
+                                  icpp);
+  
     [self widget]->setUserData(userData);
 }
 

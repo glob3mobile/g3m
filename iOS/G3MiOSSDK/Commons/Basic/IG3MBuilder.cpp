@@ -671,7 +671,8 @@ G3MWidget* IG3MBuilder::create() {
                                                             margin));
 //  }
 
-  
+  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
+
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -690,7 +691,7 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),
-                                            initialCameraPosition);
+                                            icpp);
   
   g3mWidget->setUserData(getUserData());
 

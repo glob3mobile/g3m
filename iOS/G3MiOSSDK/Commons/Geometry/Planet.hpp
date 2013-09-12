@@ -111,7 +111,6 @@ public:
                                        Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const = 0;
-
 };
 
 #endif

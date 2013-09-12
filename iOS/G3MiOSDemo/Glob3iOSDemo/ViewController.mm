@@ -2585,7 +2585,7 @@ public:
             Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
             Geodetic2D center = sector.getCenter();
 
-            [_iosWidget widget]->setCameraPosition(Geodetic3D(center, 1e7)  );
+//            [_iosWidget widget]->setCameraPosition(Geodetic3D(center, 1e7)  );
             [_iosWidget widget]->setShownSector(sector);
           }
         };

@@ -51,6 +51,7 @@ class PlanetRenderer;
 
 #include "Color.hpp"
 #include "Angle.hpp"
+#include "InitialCameraPositionProvider.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -112,7 +113,7 @@ public:
                            std::vector<PeriodicalTask*>     periodicalTasks,
                            GPUProgramManager*               gpuProgramManager,
                            SceneLighting*                   sceneLighting,
-                           const Geodetic3D&                initialCameraPosition);
+                           const InitialCameraPositionProvider* initialCameraPositionProvider);
   
   ~G3MWidget();
   
@@ -264,6 +265,9 @@ private:
 
   SceneLighting*            _sceneLighting;
   GLState*                  _rootState;
+
+  const InitialCameraPositionProvider* _initialCameraPositionProvider;
+  bool _initialCameraPositionHasBeenSet;
   
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -283,7 +287,7 @@ private:
             std::vector<PeriodicalTask*>     periodicalTasks,
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
-            const Geodetic3D&                initialCameraPosition);
+            const InitialCameraPositionProvider* initialCameraPositionProvider);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

@@ -836,6 +836,8 @@ G3MWidget* MapBooBuilder::create() {
   const Planet* planet = createPlanet();
   Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
+  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
+
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
@@ -854,7 +856,7 @@ G3MWidget* MapBooBuilder::create() {
                                  *periodicalTasks,
                                  getGPUProgramManager(),
                                  createSceneLighting(),
-                                 initialCameraPosition);
+                                 icpp);
   delete cameraConstraints;
   delete periodicalTasks;
 

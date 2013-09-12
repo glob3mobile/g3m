@@ -79,7 +79,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      std::vector<PeriodicalTask*>     periodicalTasks,
                      GPUProgramManager*               gpuProgramManager,
                      SceneLighting*                   sceneLighting,
-                     const Geodetic3D&                initialCameraPosition):
+                     const InitialCameraPositionProvider* initialCameraPositionProvider):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -128,7 +128,9 @@ _initializationTaskReady(true),
 _clickOnProcess(false),
 _gpuProgramManager(gpuProgramManager),
 _sceneLighting(sceneLighting),
-_rootState(NULL)
+_rootState(NULL),
+_initialCameraPositionProvider(initialCameraPositionProvider),
+_initialCameraPositionHasBeenSet(false)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -153,9 +155,6 @@ _rootState(NULL)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
-
-  _currentCamera->setGeodeticPosition(initialCameraPosition);
-  _nextCamera->setGeodeticPosition(initialCameraPosition);
 }
 
 
@@ -177,7 +176,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              std::vector<PeriodicalTask*>     periodicalTasks,
                              GPUProgramManager*               gpuProgramManager,
                              SceneLighting*                   sceneLighting,
-                             const Geodetic3D&                initialCameraPosition) {
+                             const InitialCameraPositionProvider* initialCameraPositionProvider) {
 
   return new G3MWidget(gl,
                        storage,
@@ -197,7 +196,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        periodicalTasks,
                        gpuProgramManager,
                        sceneLighting,
-                       initialCameraPosition);
+                       initialCameraPositionProvider);
 }
 
 G3MWidget::~G3MWidget() {
@@ -236,6 +235,7 @@ G3MWidget::~G3MWidget() {
   delete _context;
 
   delete _rootState;
+  delete _initialCameraPositionProvider;
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
@@ -346,6 +346,22 @@ void G3MWidget::render(int width, int height) {
     _height = height;
 
     onResizeViewportEvent(_width, _height);
+  }
+
+  if (!_initialCameraPositionHasBeenSet){
+    _initialCameraPositionHasBeenSet = true;
+
+    Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
+                                                                     _mainRenderer->getPlanetRenderer(),
+                                                                     Vector2I(_width,_height));
+
+    _currentCamera->setGeodeticPosition(g);
+    _currentCamera->setHeading(Angle::zero());
+    _currentCamera->setPitch(Angle::zero());
+    
+    _nextCamera->setGeodeticPosition(g);
+    _nextCamera->setHeading(Angle::zero());
+    _nextCamera->setPitch(Angle::zero());
   }
 
   _timer->start();
@@ -572,6 +588,7 @@ void G3MWidget::setCameraPitch(const Angle& angle) {
 
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {
   getNextCamera()->setGeodeticPosition(position);
+  _initialCameraPositionHasBeenSet = true;
 }
 
 void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
@@ -665,4 +682,5 @@ PlanetRenderer* G3MWidget::getPlanetRenderer() {
 
 void G3MWidget::setShownSector(const Sector& sector){
   getPlanetRenderer()->setRenderedSector(sector);
+  _initialCameraPositionHasBeenSet = false;
 }

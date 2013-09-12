@@ -169,9 +169,13 @@ public:
                                Camera* nextCamera) const;
 
   Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
-    Vector3D v(_ellipsoid.getRadii().maxAxis() * 5, 0, 0);
+
+    const Vector3D asw = toCartesian(shownSector.getSW());
+    const Vector3D anw = toCartesian(shownSector.getNW());
+    const double h = anw.sub(asw).length() * 5;
+
     Geodetic2D center = shownSector._center;
-    return Geodetic3D(center._latitude, center._longitude, toGeodetic3D(v)._height);
+    return Geodetic3D(center._latitude, center._longitude, h + getRadii().maxAxis());
   }
 
 
