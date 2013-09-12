@@ -285,9 +285,6 @@ public:
 //  builder.setShownSector(sector);
   builder.setShownSector( sector.shrinkedByPercent(-50) );
 
-  int _DIEGO_AT_WORK;
-  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer(meshRenderer);
   meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
