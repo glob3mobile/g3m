@@ -17,6 +17,9 @@
 #include "IBufferDownloadListener.hpp"
 #include "GEOJSONParser.hpp"
 #include "IThreadUtils.hpp"
+#include "MeshRenderer.hpp"
+#include "ShapesRenderer.hpp"
+#include "MarksRenderer.hpp"
 
 class GEORenderer_ObjectSymbolizerPair {
 public:
@@ -103,7 +106,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 //  {
 //
 //  }
-//  
+//
 //  void run(const G3MContext* context) {
 //    _geoRenderer->addGEOObject(_geoObject, _symbolizer);
 //  }
@@ -127,7 +130,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 //  _symbolizer(symbolizer)
 //  {
 //  }
-//  
+//
 //  void run(const G3MContext* context) {
 //    GEOObject* geoObject = GEOJSONParser::parse(_buffer);
 //
@@ -224,22 +227,22 @@ public:
                                                                _symbolizer),
                                   true);
 
-//    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
-//                                                             buffer,
-//                                                             _geoRenderer,
-//                                                             _symbolizer),
-//                                     true);
+    //    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
+    //                                                             buffer,
+    //                                                             _geoRenderer,
+    //                                                             _symbolizer),
+    //                                     true);
 
-//    GEOObject* geoObject = GEOJSONParser::parse(buffer);
-//
-//    if (geoObject == NULL) {
-//      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
-//    }
-//    else {
-//      _geoRenderer->addGEOObject(geoObject, _symbolizer);
-//    }
-//
-//    delete buffer;
+    //    GEOObject* geoObject = GEOJSONParser::parse(buffer);
+    //
+    //    if (geoObject == NULL) {
+    //      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
+    //    }
+    //    else {
+    //      _geoRenderer->addGEOObject(geoObject, _symbolizer);
+    //    }
+    //
+    //    delete buffer;
   }
 
   void onError(const URL& url) {
@@ -306,5 +309,23 @@ void GEORenderer::load(const URL& url,
                                                                               symbolizer,
                                                                               _context->getThreadUtils()),
                               true);
+  }
+}
+
+void GEORenderer::setEnable(bool enable) {
+  LeafRenderer::setEnable(enable);
+
+  if (_meshRenderer) {
+    _meshRenderer->setEnable(enable);
+  }
+  if (_shapesRenderer) {
+    _shapesRenderer->setEnable(enable);
+  }
+  if (_marksRenderer) {
+    _marksRenderer->setEnable(enable);
+  }
+  if (_geoTileRasterizer) {
+    int __TODO_disable_geoTileRasterizer;
+    //_geoTileRasterizer->setEnable(enable);
   }
 }

@@ -188,6 +188,8 @@ public:
             const TimeInterval timeToCache,
             bool readExpired);
 
+  void setEnable(bool enable);
+
 };
 
 #endif
