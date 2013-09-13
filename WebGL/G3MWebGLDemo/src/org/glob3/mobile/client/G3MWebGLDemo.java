@@ -424,7 +424,7 @@ public class G3MWebGLDemo
                public void onDownload(final URL url,
                                       final IByteBuffer buffer,
                                       final boolean expired) {
-                  final GEOObject geoObject = GEOJSONParser.parse(buffer);
+                  final GEOObject geoObject = GEOJSONParser.parseJSON(buffer);
                   if (geoObject != null) {
                      geoRenderer.addGEOObject(geoObject);
                   }
