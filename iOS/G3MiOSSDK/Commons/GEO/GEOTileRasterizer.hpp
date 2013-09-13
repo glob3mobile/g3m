@@ -17,12 +17,20 @@ class GEORasterSymbol;
 
 class GEOTileRasterizer : public CanvasTileRasterizer {
 private:
-  QuadTree _quadTree;
+  QuadTree          _quadTree;
+  const G3MContext* _context;
 
 public:
+  GEOTileRasterizer() :
+  _context(NULL)
+  {
+  }
+
   std::string getId() const {
     return "GEOTileRasterizer";
   }
+
+  void initialize(const G3MContext* context);
 
   void rawRasterize(const IImage* image,
                     const TileRasterizerContext& trc,

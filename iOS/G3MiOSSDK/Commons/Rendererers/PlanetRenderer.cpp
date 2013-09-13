@@ -108,16 +108,16 @@ public:
 };
 
 
-PlanetRenderer::PlanetRenderer(TileTessellator* tessellator,
-                               ElevationDataProvider* elevationDataProvider,
-                               float verticalExaggeration,
-                               TileTexturizer*  texturizer,
-                               TileRasterizer*  tileRasterizer,
-                               LayerSet* layerSet,
+PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
+                               ElevationDataProvider*       elevationDataProvider,
+                               float                        verticalExaggeration,
+                               TileTexturizer*              texturizer,
+                               TileRasterizer*              tileRasterizer,
+                               LayerSet*                    layerSet,
                                const TilesRenderParameters* parameters,
-                               bool showStatistics,
-                               long long texturePriority,
-                               const Sector& renderedSector) :
+                               bool                         showStatistics,
+                               long long                    texturePriority,
+                               const Sector&                renderedSector) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
@@ -393,6 +393,9 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   _texturizer->initialize(context, _parameters);
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
+  }
+  if (_tileRasterizer != NULL) {
+    _tileRasterizer->initialize(context);
   }
 }
 

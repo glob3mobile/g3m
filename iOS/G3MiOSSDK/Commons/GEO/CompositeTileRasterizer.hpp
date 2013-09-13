@@ -18,8 +18,18 @@ class CompositeTileRasterizer : public CanvasTileRasterizer, ChangedListener {
 private:
   std::vector<TileRasterizer*> _children;
 
+  const G3MContext* _context;
+
 public:
+  CompositeTileRasterizer() :
+  _context(NULL)
+  {
+
+  }
+
   ~CompositeTileRasterizer();
+
+  void initialize(const G3MContext* context);
 
   std::string getId() const;
 

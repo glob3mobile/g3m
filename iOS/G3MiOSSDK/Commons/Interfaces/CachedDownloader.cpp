@@ -14,7 +14,6 @@
 #include "IStorage.hpp"
 #include "TimeInterval.hpp"
 #include "IFactory.hpp"
-//#include "ITimer.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
@@ -241,9 +240,6 @@ public:
 CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
-  //  if (_lastImage != NULL) {
-  //    IFactory::instance()->deleteImage(_lastImage);
-  //  }
   if (_lastImageResult != NULL) {
     IFactory::instance()->deleteImage(_lastImageResult->getImage());
     delete _lastImageResult;
@@ -342,17 +338,10 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-//  ITimer* timer = IFactory::instance()->createTimer();
-
   IImageResult cached = getCachedImageResult(url, readExpired);
   IImage* cachedImage = cached.getImage();
 
   if (cachedImage != NULL && !cached.isExpired()) {
-//    ILogger::instance()->logInfo("Read image \"%s\" from cache in %dms",
-//                                 url.getPath().c_str(),
-//                                 timer->elapsedTimeInMilliseconds());
-//    delete timer;
-
     // cache hit
     _cacheHitsCounter++;
 
@@ -364,7 +353,6 @@ long long CachedDownloader::requestImage(const URL& url,
 
     return -1;
   }
-//  delete timer;
 
   // cache miss
   return _downloader->requestImage(url,
@@ -390,8 +378,6 @@ long long CachedDownloader::requestBuffer(const URL& url,
 
   _requestsCounter++;
 
-//  ITimer* timer = IFactory::instance()->createTimer();
-
   IByteBufferResult cached = _storage->isAvailable() && !url.isFileProtocol()
   /*                                         */ ? _storage->readBuffer(url, readExpired)
   /*                                         */ : IByteBufferResult(NULL, false);
@@ -399,11 +385,6 @@ long long CachedDownloader::requestBuffer(const URL& url,
   IByteBuffer* cachedBuffer = cached.getBuffer();
 
   if (cachedBuffer != NULL && !cached.isExpired()) {
-//    ILogger::instance()->logInfo("Read buffer \"%s\" from cache in %dms",
-//                                 url.getPath().c_str(),
-//                                 timer->elapsedTimeInMilliseconds());
-//    delete timer;
-
     // cache hit
     _cacheHitsCounter++;
 
@@ -415,7 +396,6 @@ long long CachedDownloader::requestBuffer(const URL& url,
 
     return -1;
   }
-//  delete timer;
 
   // cache miss
   return _downloader->requestBuffer(url,

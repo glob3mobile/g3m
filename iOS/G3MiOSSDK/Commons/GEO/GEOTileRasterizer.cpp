@@ -15,9 +15,15 @@
 #include "ICanvas.hpp"
 #include "Color.hpp"
 #include "GFont.hpp"
-
 #include "IStringBuilder.hpp"
 #include "GEORasterProjection.hpp"
+
+//#include "IThreadUtils.hpp"
+//#include "IFactory.hpp"
+
+void GEOTileRasterizer::initialize(const G3MContext* context) {
+  _context = context;
+}
 
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const Sector* sector = symbol->getSector();
@@ -68,10 +74,76 @@ public:
 
 };
 
+
+//class GEOTileRasterizer_ASync : public GAsyncTask {
+//private:
+//  const IImage*   _image;
+//  const Tile*     _tile;
+//  const bool      _mercator;
+//  IImageListener* _listener;
+//  bool            _autodelete;
+//  const QuadTree* _quadTree;
+//  
+//public:
+//  GEOTileRasterizer_ASync(const IImage*   image,
+//                          const Tile*     tile,
+//                          const bool      mercator,
+//                          IImageListener* listener,
+//                          bool            autodelete,
+//                          const QuadTree* quadTree) :
+//  _image(image),
+//  _tile(tile),
+//  _mercator(mercator),
+//  _listener(listener),
+//  _quadTree(quadTree)
+//  {
+//
+//  }
+//
+//  void runInBackground(const G3MContext* context) {
+//    const int width  = _image->getWidth();
+//    const int height = _image->getHeight();
+//
+//    GEORasterProjection* projection = new GEORasterProjection(_tile->getSector(), _mercator,
+//                                                              width, height);
+//
+//    ICanvas* canvas = IFactory::instance()->createCanvas();
+//    canvas->initialize(width, height);
+//
+//    canvas->drawImage(_image, 0, 0);
+//
+//    _quadTree->acceptVisitor(_tile->getSector(),
+//                             GEOTileRasterizer_QuadTreeVisitor(canvas, projection, _tile->getLevel()));
+//
+//    canvas->createImage(_listener, _autodelete);
+//
+//    delete _image;
+//    _image = NULL;
+//    
+//    delete projection;
+//
+//    delete canvas;
+//  }
+//
+//  void onPostExecute(const G3MContext* context) {
+//
+//  }
+//
+//};
+
 void GEOTileRasterizer::rawRasterize(const IImage* image,
                                      const TileRasterizerContext& trc,
                                      IImageListener* listener,
                                      bool autodelete) const {
+
+//  _context->getThreadUtils()->invokeAsyncTask(new GEOTileRasterizer_ASync(image,
+//                                                                          trc._tile,
+//                                                                          trc._mercator,
+//                                                                          listener,
+//                                                                          autodelete,
+//                                                                          &_quadTree),
+//                                              true);
+
   const Tile*   tile     = trc._tile;
   const bool    mercator = trc._mercator;
 

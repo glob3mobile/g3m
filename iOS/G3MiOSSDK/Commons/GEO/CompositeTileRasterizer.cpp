@@ -13,6 +13,14 @@
 #include "ICanvas.hpp"
 #include "IImageListener.hpp"
 
+void CompositeTileRasterizer::initialize(const G3MContext* context) {
+  _context = context;
+  const int childrenSize = _children.size();
+  for (int i = 0; i < childrenSize; i++) {
+    TileRasterizer* child = _children[i];
+    child->initialize(context);
+  }
+}
 
 CompositeTileRasterizer::~CompositeTileRasterizer() {
   const int childrenSize = _children.size();
@@ -42,8 +50,11 @@ void CompositeTileRasterizer::addTileRasterizer(TileRasterizer* tileRasterizer) 
   if (tileRasterizer != NULL) {
     _children.push_back(tileRasterizer);
     tileRasterizer->setChangeListener(this);
+    if (_context != NULL) {
+      tileRasterizer->initialize(_context);
+    }
+    notifyChanges();
   }
-  notifyChanges();
 }
 
 void CompositeTileRasterizer::changed() {

@@ -47,6 +47,10 @@ public:
 
   ~DebugTileRasterizer();
 
+  void initialize(const G3MContext* context) {
+
+  }
+
   std::string getId() const {
     return "DebugTileRasterizer";
   }

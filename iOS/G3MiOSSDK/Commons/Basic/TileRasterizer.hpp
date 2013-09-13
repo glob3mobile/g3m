@@ -15,6 +15,7 @@ class IImage;
 class Tile;
 class IImageListener;
 class ChangedListener;
+class G3MContext;
 
 
 class TileRasterizerContext {
@@ -60,6 +61,8 @@ public:
 
   virtual ~TileRasterizer() {
   }
+
+  virtual void initialize(const G3MContext* context) = 0;
 
   virtual std::string getId() const = 0;
 
