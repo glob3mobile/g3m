@@ -27,7 +27,8 @@ class GEO2DPolygonData;
 
 class GEOJSONParser {
 private:
-  const std::string _json;
+  const std::string  _json;
+  const IByteBuffer* _bson;
 
   // statistics
   mutable int _points2DCount;
@@ -41,8 +42,10 @@ private:
   mutable int _holesLineStringsInPolygon2DCount;
   mutable int _multiPolygon2DCount;
 
-  GEOJSONParser(const std::string& json) :
+  GEOJSONParser(const std::string& json,
+                const IByteBuffer* bson) :
   _json(json),
+  _bson(bson),
   _points2DCount(0),
   _coordinates2DCount(0),
   _lineStrings2DCount(0),
@@ -80,10 +83,11 @@ private:
 
 public:
 
-  static GEOObject* parse(const std::string& json);
-
-  static GEOObject* parse(const IByteBuffer* json);
+  static GEOObject* parseJSON(const std::string& json);
+  static GEOObject* parseJSON(const IByteBuffer* json);
   
+  static GEOObject* parseBSON(const IByteBuffer* bson);
+
 };
 
 #endif

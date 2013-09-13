@@ -23,14 +23,19 @@
 #include "Geodetic2D.hpp"
 #include "GEO2DPolygonData.hpp"
 #include "GEO2DMultiPolygonGeometry.hpp"
+#include "BSONParser.hpp"
 
-
-GEOObject* GEOJSONParser::parse(const IByteBuffer* json) {
-  return parse(json->getAsString());
+GEOObject* GEOJSONParser::parseJSON(const IByteBuffer* json) {
+  return parseJSON(json->getAsString());
 }
 
-GEOObject* GEOJSONParser::parse(const std::string& json) {
-  GEOJSONParser parser(json);
+GEOObject* GEOJSONParser::parseJSON(const std::string& json) {
+  GEOJSONParser parser(json, NULL);
+  return parser.pvtParse();
+}
+
+GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson) {
+  GEOJSONParser parser("", bson);
   return parser.pvtParse();
 }
 
@@ -53,7 +58,7 @@ void GEOJSONParser::showStatistics() const {
 }
 
 GEOObject* GEOJSONParser::pvtParse() const {
-  const JSONBaseObject* jsonBaseObject =  IJSONParser::instance()->parse(_json);
+  const JSONBaseObject* jsonBaseObject = (_bson == NULL) ? IJSONParser::instance()->parse(_json) : BSONParser::parse(_bson);
 
   GEOObject* result = NULL;
 

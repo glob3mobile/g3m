@@ -78,6 +78,13 @@ private:
 
   std::vector<LoadQueueItem*> _loadQueue;
 
+  void requestBuffer(const URL& url,
+                     GEOSymbolizer* symbolizer,
+                     long long priority,
+                     const TimeInterval timeToCache,
+                     bool readExpired,
+                     bool isBSON);
+
 public:
 
   /**

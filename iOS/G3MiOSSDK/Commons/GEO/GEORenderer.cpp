@@ -128,7 +128,12 @@ public:
   }
 
   void runInBackground(const G3MContext* context) {
-    _geoObject = GEOJSONParser::parse(_buffer);
+    if (_isBSON) {
+      _geoObject = GEOJSONParser::parseBSON(_buffer);
+    }
+    else {
+      _geoObject = GEOJSONParser::parseJSON(_buffer);
+    }
 
     delete _buffer;
     _buffer = NULL;
@@ -191,22 +196,34 @@ public:
   }
 };
 
+void GEORenderer::requestBuffer(const URL& url,
+                                GEOSymbolizer* symbolizer,
+                                long long priority,
+                                const TimeInterval timeToCache,
+                                bool readExpired,
+                                bool isBSON) {
+  IDownloader* downloader = _context->getDownloader();
+  downloader->requestBuffer(url,
+                            priority,
+                            timeToCache,
+                            readExpired,
+                            new GEORenderer_GEOObjectBufferDownloadListener(this,
+                                                                            symbolizer,
+                                                                            _context->getThreadUtils(),
+                                                                            isBSON),
+                            true);
+}
 
 void GEORenderer::drainLoadQueue() {
-  IDownloader* downloader = _context->getDownloader();
-
   const int loadQueueSize = _loadQueue.size();
   for (int i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
-    downloader->requestBuffer(item->_url,
-                              item->_priority,
-                              item->_timeToCache,
-                              item->_readExpired,
-                              new GEORenderer_GEOObjectBufferDownloadListener(this,
-                                                                              item->_symbolizer,
-                                                                              _context->getThreadUtils(),
-                                                                              item->_isBSON),
-                              true);
+    requestBuffer(item->_url,
+                  item->_symbolizer,
+                  item->_priority,
+                  item->_timeToCache,
+                  item->_readExpired,
+                  item->_isBSON);
   }
 
   _loadQueue.clear();
@@ -234,16 +251,12 @@ void GEORenderer::loadJSON(const URL& url,
                                            false /* isBson */));
   }
   else {
-    IDownloader* downloader = _context->getDownloader();
-    downloader->requestBuffer(url,
-                              priority,
-                              timeToCache,
-                              readExpired,
-                              new GEORenderer_GEOObjectBufferDownloadListener(this,
-                                                                              symbolizer,
-                                                                              _context->getThreadUtils(),
-                                                                              false /* isBson */),
-                              true);
+    requestBuffer(url,
+                  symbolizer,
+                  priority,
+                  timeToCache,
+                  readExpired,
+                  false /* isBson */);
   }
 }
 
@@ -261,16 +274,12 @@ void GEORenderer::loadBSON(const URL& url,
                                            true /* isBson */));
   }
   else {
-    IDownloader* downloader = _context->getDownloader();
-    downloader->requestBuffer(url,
-                              priority,
-                              timeToCache,
-                              readExpired,
-                              new GEORenderer_GEOObjectBufferDownloadListener(this,
-                                                                              symbolizer,
-                                                                              _context->getThreadUtils(),
-                                                                              true /* isBson */),
-                              true);
+    requestBuffer(url,
+                  symbolizer,
+                  priority,
+                  timeToCache,
+                  readExpired,
+                  true /* isBson */);
   }
 }
 

@@ -21,7 +21,7 @@
 #include "JSONBoolean.hpp"
 #include "JSONNull.hpp"
 
-JSONBaseObject* BSONParser::parse(IByteBuffer* buffer,
+JSONBaseObject* BSONParser::parse(const IByteBuffer* buffer,
                                   bool nullAsObject) {
 
   ByteBufferIterator iterator(buffer);

@@ -297,18 +297,15 @@ public:
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
-//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
-//
-//  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-//                        new SampleSymbolizer());
-//
+  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+
+  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
+                        new SampleSymbolizer());
+
 //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
 //                                               new ToggleGEORendererTask(geoRenderer)));
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-                                                                                Color::red(),
-                                                                                false,
-                                                                                true));
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
 //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
 //                                                                                Color::red(),
@@ -808,7 +805,7 @@ public:
     if (nsGEOJSON) {
       std::string geoJSON = [nsGEOJSON UTF8String];
 
-      GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+      GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
 
       GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
 
@@ -2709,7 +2706,7 @@ public:
           if (nsGEOJSON) {
             std::string geoJSON = [nsGEOJSON UTF8String];
 
-            GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
+            GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
 
             _geoRenderer->addGEOObject(geoObject);
           }
