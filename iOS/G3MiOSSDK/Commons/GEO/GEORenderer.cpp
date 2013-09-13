@@ -145,6 +145,7 @@ public:
   }
 };
 
+
 class GEORenderer_GEOObjectBufferDownloadListener : public IBufferDownloadListener {
 private:
   GEORenderer*        _geoRenderer;
@@ -190,6 +191,7 @@ public:
   }
 };
 
+
 void GEORenderer::drainLoadQueue() {
   IDownloader* downloader = _context->getDownloader();
 
@@ -229,7 +231,7 @@ void GEORenderer::loadJSON(const URL& url,
                                            priority,
                                            timeToCache,
                                            readExpired,
-                                           false /* bson */));
+                                           false /* isBson */));
   }
   else {
     IDownloader* downloader = _context->getDownloader();
@@ -240,7 +242,7 @@ void GEORenderer::loadJSON(const URL& url,
                               new GEORenderer_GEOObjectBufferDownloadListener(this,
                                                                               symbolizer,
                                                                               _context->getThreadUtils(),
-                                                                              false /* bson */),
+                                                                              false /* isBson */),
                               true);
   }
 }
@@ -256,7 +258,7 @@ void GEORenderer::loadBSON(const URL& url,
                                            priority,
                                            timeToCache,
                                            readExpired,
-                                           true /* bson */));
+                                           true /* isBson */));
   }
   else {
     IDownloader* downloader = _context->getDownloader();
@@ -267,7 +269,7 @@ void GEORenderer::loadBSON(const URL& url,
                               new GEORenderer_GEOObjectBufferDownloadListener(this,
                                                                               symbolizer,
                                                                               _context->getThreadUtils(),
-                                                                              true /* bson */),
+                                                                              true /* isBson */),
                               true);
   }
 }
