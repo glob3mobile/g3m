@@ -233,11 +233,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-//  [self initWithBuilderAndSegmentedWorld];
+  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
