@@ -128,6 +128,10 @@ public:
   }
 
   void runInBackground(const G3MContext* context) {
+//    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
+//                                 _url.getPath().c_str(),
+//                                 _buffer->size());
+
     if (_isBSON) {
       _geoObject = GEOJSONParser::parseBSON(_buffer);
     }
@@ -144,6 +148,7 @@ public:
       ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
     }
     else {
+//      ILogger::instance()->logInfo("Adding GEOObject to _geoRenderer");
       _geoRenderer->addGEOObject(_geoObject, _symbolizer);
       _geoObject = NULL;
     }
@@ -173,6 +178,10 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
+//    ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
+//                                 url.getPath().c_str(),
+//                                 buffer->size());
+
     _threadUtils->invokeAsyncTask(new GEOObjectParserAsyncTask(url,
                                                                buffer,
                                                                _geoRenderer,
@@ -202,6 +211,7 @@ void GEORenderer::requestBuffer(const URL& url,
                                 const TimeInterval timeToCache,
                                 bool readExpired,
                                 bool isBSON) {
+//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
                             priority,
