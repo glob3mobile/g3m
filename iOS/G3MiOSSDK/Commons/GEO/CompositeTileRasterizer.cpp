@@ -41,9 +41,14 @@ std::string CompositeTileRasterizer::getId() const {
 void CompositeTileRasterizer::addTileRasterizer(TileRasterizer* tileRasterizer) {
   if (tileRasterizer != NULL) {
     _children.push_back(tileRasterizer);
+    tileRasterizer->setChangeListener(this);
   }
+  notifyChanges();
 }
 
+void CompositeTileRasterizer::changed() {
+  notifyChanges();
+}
 
 class CompositeTileRasterizer_ChildImageListener : public IImageListener {
 private:
@@ -93,10 +98,10 @@ public:
 };
 
 
-void CompositeTileRasterizer::rasterize(const IImage* image,
-                                        const TileRasterizerContext& trc,
-                                        IImageListener* listener,
-                                        bool autodeleteListener) const {
+void CompositeTileRasterizer::rawRasterize(const IImage* image,
+                                           const TileRasterizerContext& trc,
+                                           IImageListener* listener,
+                                           bool autodeleteListener) const {
   if (_children.size() == 0) {
     listener->imageCreated(image);
     if (autodeleteListener) {
@@ -118,6 +123,6 @@ void CompositeTileRasterizer::rasterize(const IImage* image,
                                                                        autodeleteListener),
                         true);
   }
-
+  
   delete image;
 }

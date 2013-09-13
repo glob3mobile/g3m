@@ -287,7 +287,6 @@ void GEORenderer::setEnable(bool enable) {
     _marksRenderer->setEnable(enable);
   }
   if (_geoTileRasterizer) {
-    int __DGD_At_Work;
-    //_geoTileRasterizer->setEnable(enable);
+    _geoTileRasterizer->setEnable(enable);
   }
 }

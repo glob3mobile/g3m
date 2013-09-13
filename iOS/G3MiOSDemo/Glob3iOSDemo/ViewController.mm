@@ -269,31 +269,50 @@ public:
 };
 
 
+//class ToggleGEORendererTask: public GTask {
+//private:
+//  GEORenderer* _geoRenderer;
+//  
+//public:
+//  ToggleGEORendererTask(GEORenderer* geoRenderer) :
+//  _geoRenderer(geoRenderer)
+//  {
+//    
+//  }
+//
+//  void run(const G3MContext* context) {
+//    _geoRenderer->setEnable( !_geoRenderer->isEnable() );
+//  }
+//
+//};
+
+
 - (void) initWithBuilderAndSegmentedWorld
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
   LayerSet* layerSet = new LayerSet();
-//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
-//  layerSet->addLayer(MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
+//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
-  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+//
+//  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
+//                        new SampleSymbolizer());
+//
+//  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
+//                                               new ToggleGEORendererTask(geoRenderer)));
 
-  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-                        new SampleSymbolizer());
-
-
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-                                                                                Color::red(),
-                                                                                false,
-                                                                                true));
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-                                                                                Color::yellow(),
-                                                                                true,
-                                                                                false));
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+//                                                                                Color::red(),
+//                                                                                false,
+//                                                                                true));
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+//                                                                                Color::yellow(),
+//                                                                                true,
+//                                                                                false));
 
 
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,

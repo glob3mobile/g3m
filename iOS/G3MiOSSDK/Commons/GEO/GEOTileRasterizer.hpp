@@ -24,13 +24,13 @@ public:
     return "GEOTileRasterizer";
   }
 
-  void rasterize(const IImage* image,
-                 const TileRasterizerContext& trc,
-                 IImageListener* listener,
-                 bool autodelete) const;
+  void rawRasterize(const IImage* image,
+                    const TileRasterizerContext& trc,
+                    IImageListener* listener,
+                    bool autodelete) const;
 
   void addSymbol(const GEORasterSymbol* symbol);
-
+  
 };
 
 #endif
