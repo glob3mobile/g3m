@@ -305,6 +305,11 @@ public:
 //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
 //                                               new ToggleGEORendererTask(geoRenderer)));
 
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+                                                                                Color::red(),
+                                                                                false,
+                                                                                true));
+
 //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
 //                                                                                Color::red(),
 //                                                                                false,
