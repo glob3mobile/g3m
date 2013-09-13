@@ -40,7 +40,7 @@ public class CachedDownloader extends IDownloader
       }
     }
   
-    if (!_storage.isAvailable())
+    if (!_storage.isAvailable() || url.isFileProtocol())
     {
       return new IImageResult(null, false);
     }
@@ -102,14 +102,21 @@ public class CachedDownloader extends IDownloader
   
     _requestsCounter++;
   
-    IByteBufferResult cachedBufferResult = _storage.isAvailable() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
+  //  ITimer* timer = IFactory::instance()->createTimer();
+  
+    IByteBufferResult cached = _storage.isAvailable() && !url.isFileProtocol() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
     /*                                         */
     /*                                         */
   
-    IByteBuffer cachedBuffer = cachedBufferResult.getBuffer();
+    IByteBuffer cachedBuffer = cached.getBuffer();
   
-    if (cachedBuffer != null && !cachedBufferResult.isExpired())
+    if (cachedBuffer != null && !cached.isExpired())
     {
+  //    ILogger::instance()->logInfo("Read buffer \"%s\" from cache in %dms",
+  //                                 url.getPath().c_str(),
+  //                                 timer->elapsedTimeInMilliseconds());
+  //    delete timer;
+  
       // cache hit
       _cacheHitsCounter++;
   
@@ -123,6 +130,7 @@ public class CachedDownloader extends IDownloader
   
       return -1;
     }
+  //  delete timer;
   
     // cache miss
     return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
@@ -132,11 +140,18 @@ public class CachedDownloader extends IDownloader
   {
     _requestsCounter++;
   
-    IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
-    IImage cachedImage = cachedImageResult.getImage();
+  //  ITimer* timer = IFactory::instance()->createTimer();
   
-    if (cachedImage != null && !cachedImageResult.isExpired())
+    IImageResult cached = getCachedImageResult(url, readExpired);
+    IImage cachedImage = cached.getImage();
+  
+    if (cachedImage != null && !cached.isExpired())
     {
+  //    ILogger::instance()->logInfo("Read image \"%s\" from cache in %dms",
+  //                                 url.getPath().c_str(),
+  //                                 timer->elapsedTimeInMilliseconds());
+  //    delete timer;
+  
       // cache hit
       _cacheHitsCounter++;
   
@@ -150,6 +165,7 @@ public class CachedDownloader extends IDownloader
   
       return -1;
     }
+  //  delete timer;
   
     // cache miss
     return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
