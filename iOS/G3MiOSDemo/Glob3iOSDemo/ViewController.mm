@@ -1549,7 +1549,7 @@ public:
                                                  8000),
                                   ABSOLUTE,
                                   50000,
-                                  Color::newFromRGBA(1, 1, 0, 0.5));
+                                  Color::fromRGBA(1, 1, 0, 0.5));
   //  circle->setHeading( Angle::fromDegrees(45) );
   //  circle->setPitch( Angle::fromDegrees(45) );
   //  circle->setScale(2.0, 0.5, 1);
@@ -1832,7 +1832,7 @@ private:
 
     const double area = population * 1200;
     const float radius = (float) mu->sqrt( area / PI );
-    Color* color = Color::newFromRGBA(1, 1, 0, 1);
+    Color color = Color::fromRGBA(1, 1, 0, 1);
 
     return new CircleShape(new Geodetic3D(geometry->getPosition(), 200),
                            RELATIVE_TO_GROUND,

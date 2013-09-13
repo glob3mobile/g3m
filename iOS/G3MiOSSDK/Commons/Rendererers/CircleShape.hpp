@@ -27,12 +27,12 @@ public:
   CircleShape(Geodetic3D* position,
               AltitudeMode altitudeMode,
               float radius,
-              Color* color = NULL,
+              const Color& color,
               int steps = 64,
               bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _radius(radius),
-  _color(color),
+  _color(new Color(color)),
   _steps(steps),
   _useNormals(useNormals)
   {

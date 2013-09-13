@@ -4,6 +4,8 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.CircleShape;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -57,6 +59,12 @@ public class G3MShowMarkersActivity
       if (true) {
          final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
          builder.setShownSector(spain);
+         
+         CircleShape circle = new CircleShape(new Geodetic3D(spain.getCenter(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 1000000,
+        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+         _shapeRenderer.addShape(circle);
       }
 
       builder.addRenderer(_weatherMarkers);
