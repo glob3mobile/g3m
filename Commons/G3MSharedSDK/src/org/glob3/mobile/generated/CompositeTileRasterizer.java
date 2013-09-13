@@ -22,7 +22,7 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer implements Cha
 {
   private java.util.ArrayList<TileRasterizer> _children = new java.util.ArrayList<TileRasterizer>();
 
-  private final G3MContext _context;
+  private G3MContext _context;
 
   public CompositeTileRasterizer()
   {

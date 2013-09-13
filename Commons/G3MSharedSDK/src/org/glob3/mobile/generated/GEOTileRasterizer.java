@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 public class GEOTileRasterizer extends CanvasTileRasterizer
 {
   private QuadTree _quadTree = new QuadTree();
-  private final G3MContext _context;
+  private G3MContext _context;
 
   public GEOTileRasterizer()
   {
