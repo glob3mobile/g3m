@@ -72,15 +72,11 @@ public class CircleShape extends AbstractMeshShape
   {
      this(position, altitudeMode, radius, color, 64, true);
   }
-  public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius)
-  {
-     this(position, altitudeMode, radius, null, 64, true);
-  }
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps, boolean useNormals)
   {
      super(position, altitudeMode);
      _radius = radius;
-     _color = color;
+     _color = new Color(color);
      _steps = steps;
      _useNormals = useNormals;
 
