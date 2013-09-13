@@ -25,6 +25,8 @@ public class PlanetRendererBuilder
   private TileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
 
+  private GEOTileRasterizer _geoTileRasterizer;
+
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
   private boolean _showStatistics;
@@ -71,6 +73,10 @@ public class PlanetRendererBuilder
   }
   private TileRasterizer getTileRasterizer()
   {
+    if (_geoTileRasterizer != null)
+    {
+      return _geoTileRasterizer;
+    }
     return _tileRasterizer;
   }
 
@@ -229,25 +235,44 @@ public class PlanetRendererBuilder
 
   public PlanetRendererBuilder()
   {
-    _showStatistics = false;
-    _renderDebug = false;
-    _useTilesSplitBudget = true;
-    _forceFirstLevelTilesRenderOnStart = true;
-    _incrementalTileQuality = false;
-  
-    _parameters = null;
-    _layerSet = null;
-    _texturizer = null;
-    _tileRasterizer = null;
-    _tileTessellator = null;
-    _visibleSectorListeners = null;
-    _stabilizationMilliSeconds = null;
-    _texturePriority = DownloadPriority.HIGHER;
-  
-    _elevationDataProvider = null;
-    _verticalExaggeration = 0.0f;
-  
-    _renderedSector = null;
+     _showStatistics = false;
+     _renderDebug = false;
+     _useTilesSplitBudget = true;
+     _forceFirstLevelTilesRenderOnStart = true;
+     _incrementalTileQuality = false;
+     _parameters = null;
+     _layerSet = null;
+     _texturizer = null;
+     _tileRasterizer = null;
+     _tileTessellator = null;
+     _visibleSectorListeners = null;
+     _stabilizationMilliSeconds = null;
+     _texturePriority = DownloadPriority.HIGHER;
+     _elevationDataProvider = null;
+     _verticalExaggeration = 0F;
+     _renderedSector = null;
+     _geoTileRasterizer = null;
+  //  _showStatistics = false;
+  //  _renderDebug = false;
+  //  _useTilesSplitBudget = true;
+  //  _forceFirstLevelTilesRenderOnStart = true;
+  //  _incrementalTileQuality = false;
+  //
+  //  _parameters = NULL;
+  //  _layerSet = NULL;
+  //  _texturizer = NULL;
+  //  _tileRasterizer = NULL;
+  //  _tileTessellator = NULL;
+  //  _visibleSectorListeners = NULL;
+  //  _stabilizationMilliSeconds = NULL;
+  //  _texturePriority = DownloadPriority::HIGHER;
+  //
+  //  _elevationDataProvider = NULL;
+  //  _verticalExaggeration = 0.0f;
+  //
+  //  _renderedSector = NULL;
+  //
+  //  _geoTileRasterizer = NULL;
   }
   public void dispose()
   {
@@ -259,6 +284,8 @@ public class PlanetRendererBuilder
        _texturizer.dispose();
     if (_tileRasterizer != null)
        _tileRasterizer.dispose();
+    if (_geoTileRasterizer != null)
+       _geoTileRasterizer.dispose();
     if (_tileTessellator != null)
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
@@ -285,6 +312,8 @@ public class PlanetRendererBuilder
   
     _elevationDataProvider = null;
   
+    _geoTileRasterizer = null;
+  
     return planetRenderer;
   }
   public final void setTileTessellator(TileTessellator tileTessellator)
@@ -307,9 +336,9 @@ public class PlanetRendererBuilder
   }
   public final void setTileRasterizer(TileRasterizer tileRasterizer)
   {
-    if (_tileRasterizer != null)
+    if ((_tileRasterizer != null) || (_geoTileRasterizer != null))
     {
-      ILogger.instance().logError("LOGIC ERROR: _tileRasterizer already initialized");
+      ILogger.instance().logError("LOGIC ERROR: _tileRasterizer or _geoTileRasterizer already initialized");
       return;
     }
     _tileRasterizer = tileRasterizer;
@@ -394,6 +423,15 @@ public class PlanetRendererBuilder
       return;
     }
     _renderedSector = new Sector(sector);
+  }
+
+  public final GEOTileRasterizer getGEOTileRasterizer()
+  {
+    if (_geoTileRasterizer == null)
+    {
+      _geoTileRasterizer = new GEOTileRasterizer();
+    }
+    return _geoTileRasterizer;
   }
 
 }

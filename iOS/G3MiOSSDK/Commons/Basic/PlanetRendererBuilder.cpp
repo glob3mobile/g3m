@@ -16,26 +16,46 @@
 #include "TileRasterizer.hpp"
 
 
-PlanetRendererBuilder::PlanetRendererBuilder() {
-  _showStatistics = false;
-  _renderDebug = false;
-  _useTilesSplitBudget = true;
-  _forceFirstLevelTilesRenderOnStart = true;
-  _incrementalTileQuality = false;
-
-  _parameters = NULL;
-  _layerSet = NULL;
-  _texturizer = NULL;
-  _tileRasterizer = NULL;
-  _tileTessellator = NULL;
-  _visibleSectorListeners = NULL;
-  _stabilizationMilliSeconds = NULL;
-  _texturePriority = DownloadPriority::HIGHER;
-
-  _elevationDataProvider = NULL;
-  _verticalExaggeration = 0.0f;
-
-  _renderedSector = NULL;
+PlanetRendererBuilder::PlanetRendererBuilder() :
+_showStatistics(false),
+_renderDebug(false),
+_useTilesSplitBudget(true),
+_forceFirstLevelTilesRenderOnStart(true),
+_incrementalTileQuality(false),
+_parameters(NULL),
+_layerSet(NULL),
+_texturizer(NULL),
+_tileRasterizer(NULL),
+_tileTessellator(NULL),
+_visibleSectorListeners(NULL),
+_stabilizationMilliSeconds(NULL),
+_texturePriority(DownloadPriority::HIGHER),
+_elevationDataProvider(NULL),
+_verticalExaggeration(0),
+_renderedSector(NULL),
+_geoTileRasterizer(NULL)
+{
+//  _showStatistics = false;
+//  _renderDebug = false;
+//  _useTilesSplitBudget = true;
+//  _forceFirstLevelTilesRenderOnStart = true;
+//  _incrementalTileQuality = false;
+//
+//  _parameters = NULL;
+//  _layerSet = NULL;
+//  _texturizer = NULL;
+//  _tileRasterizer = NULL;
+//  _tileTessellator = NULL;
+//  _visibleSectorListeners = NULL;
+//  _stabilizationMilliSeconds = NULL;
+//  _texturePriority = DownloadPriority::HIGHER;
+//
+//  _elevationDataProvider = NULL;
+//  _verticalExaggeration = 0.0f;
+//
+//  _renderedSector = NULL;
+//  
+//  _geoTileRasterizer = NULL;
 }
 
 PlanetRendererBuilder::~PlanetRendererBuilder() {
@@ -43,6 +63,7 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
   delete _tileRasterizer;
+  delete _geoTileRasterizer;
   delete _tileTessellator;
   delete _elevationDataProvider;
 }
@@ -61,6 +82,9 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
 }
 
 TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
+  if (_geoTileRasterizer != NULL) {
+    return _geoTileRasterizer;
+  }
   return _tileRasterizer;
 }
 
@@ -188,8 +212,9 @@ void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator)
 }
 
 void PlanetRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
-  if (_tileRasterizer) {
-    ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer already initialized");
+  if ((_tileRasterizer != NULL) ||
+      (_geoTileRasterizer != NULL)) {
+    ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer or _geoTileRasterizer already initialized");
     return;
   }
   _tileRasterizer = tileRasterizer;
@@ -306,6 +331,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   _elevationDataProvider = NULL;
 
+  _geoTileRasterizer = NULL;
+
   return planetRenderer;
 }
 
@@ -337,4 +364,11 @@ Sector PlanetRendererBuilder::getRenderedSector(){
     return Sector::fullSphere();
   }
   return *_renderedSector;
+}
+
+GEOTileRasterizer* PlanetRendererBuilder::getGEOTileRasterizer() {
+  if (_geoTileRasterizer == NULL) {
+    _geoTileRasterizer = new GEOTileRasterizer();
+  }
+  return _geoTileRasterizer;
 }

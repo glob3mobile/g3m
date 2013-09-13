@@ -413,6 +413,8 @@ void G3MWidget::render(int width, int height) {
     _nextCamera->setGeodeticPosition(g);
     _nextCamera->setHeading(Angle::zero());
     _nextCamera->setPitch(Angle::zero());
+
+    ILogger::instance()->logInfo("Camera setted to initial position : %s\n", g.description().c_str());
   }
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);

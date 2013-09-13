@@ -73,6 +73,9 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
         nextCamera->copyFrom(*previousCamera);
         return true;
       } else{
+
+        ILogger::instance()->logError("Unable to get a good camera position: \nRendered Sector: %s \nCOV: %s\n",
+                                      sector.description().c_str(), center.description().c_str());
         return false;
       }
     }

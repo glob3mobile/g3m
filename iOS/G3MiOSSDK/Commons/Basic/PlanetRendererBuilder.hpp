@@ -21,6 +21,8 @@ private:
   TileTexturizer* _texturizer;
   TileRasterizer* _tileRasterizer;
 
+  GEOTileRasterizer* _geoTileRasterizer;
+
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
   bool _showStatistics;
@@ -86,6 +88,8 @@ public:
   void setVerticalExaggeration(float verticalExaggeration);
 
   void setRenderedSector(const Sector& sector);
+
+  GEOTileRasterizer* getGEOTileRasterizer();
 
 };
 
