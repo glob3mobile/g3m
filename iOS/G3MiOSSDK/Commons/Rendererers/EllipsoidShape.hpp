@@ -64,7 +64,7 @@ public:
                  float borderWidth,
                  bool texturedInside,
                  bool mercator,
-                 Color* surfaceColor,
+                 const Color& surfaceColor,
                  Color* borderColor = NULL,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
@@ -76,7 +76,7 @@ public:
   _borderWidth(borderWidth),
   _texturedInside(texturedInside),
   _mercator(mercator),
-  _surfaceColor(surfaceColor),
+  _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
   _textureRequested(false),
   _textureImage(NULL),

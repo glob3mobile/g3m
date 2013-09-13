@@ -7,6 +7,8 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GEORenderer;
+import org.glob3.mobile.generated.GEOShapeSymbol;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -60,11 +62,38 @@ public class G3MShowMarkersActivity
          final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
          builder.setShownSector(spain);
          
-         CircleShape circle = new CircleShape(new Geodetic3D(spain.getCenter(),0), 
+         CircleShape circle = new CircleShape(new Geodetic3D(spain.getNE(),0), 
         		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 1000000,
-        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+        		 100000,
+        		 Color.fromRGBA(1, 0, 0, 1), 64, true);
          _shapeRenderer.addShape(circle);
+         
+         
+         CircleShape circle2 = new CircleShape(new Geodetic3D(spain.getNW(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 100000,
+        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+         _shapeRenderer.addShape(circle2);
+         
+         //public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
+         
+//         BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(),0), 
+//        		 AltitudeMode.RELATIVE_TO_GROUND, 
+//        		 10000, 1.0, 
+//        		 Color.fromRGBA(1, 0, 0, 1),
+//        		 )
+//         _shapeRenderer.addShape(circle);
+         
+         GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
+         
+         geo.getShapesRenderer().addShape(
+        		 new CircleShape(new Geodetic3D(spain.getCenter(), 10), 
+        				 AltitudeMode.ABSOLUTE, 
+        				 5, 
+        				 Color.red(),
+                  32, false));
+         
+         builder.addRenderer(geo);
       }
 
       builder.addRenderer(_weatherMarkers);

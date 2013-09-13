@@ -38,7 +38,7 @@ public:
            AltitudeMode altitudeMode,
            const Vector3D& extent,
            float borderWidth,
-           Color* surfaceColor = NULL,
+           const Color& surfaceColor,
            Color* borderColor = NULL,
            bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
@@ -46,7 +46,7 @@ public:
   _extentY(extent._y),
   _extentZ(extent._z),
   _borderWidth(borderWidth),
-  _surfaceColor(surfaceColor),
+  _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
   _useNormals(useNormals)
   {
