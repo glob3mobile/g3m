@@ -7,6 +7,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -100,12 +101,23 @@ public class G3MShowMarkersActivity
          
          GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
          
+//         (Geodetic3D position, AltitudeMode altitudeMode, 
+//        		 Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+         
          geo.getShapesRenderer().addShape(
-        		 new CircleShape(new Geodetic3D(spain.getCenter(), 100000), 
+        		 new EllipsoidShape(new Geodetic3D(spain.getCenter(), 100000), 
         				 AltitudeMode.RELATIVE_TO_GROUND, 
-        				 500000, 
-        				 Color.red(),
-                  32, false));
+        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
+        				 false, Color.red(), Color.blue(), true)
+        		 );
+         
+         geo.getShapesRenderer().addShape(
+        		 new EllipsoidShape(new Geodetic3D(spain.getCenter().add(Geodetic2D.fromDegrees(20, 20)), 100000), 
+        				 AltitudeMode.RELATIVE_TO_GROUND, 
+        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
+        				 false, Color.red(), Color.blue(), false)
+        		 );
+         
          
          builder.addRenderer(geo);
       }
