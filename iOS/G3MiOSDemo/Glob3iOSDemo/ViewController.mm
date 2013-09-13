@@ -620,7 +620,7 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createSphericalEarth();
   builder.setPlanet(planet);
   //builder.setPlanet(Planet::createSphericalEarth());
   //  builder.setPlanet(Planet::createFlatEarth());
@@ -2578,18 +2578,21 @@ public:
 
             if (randomInt(5) != 4){
 
-              double minLat = randomInt(180) -90;
+              double minLat = randomInt(180) - 90;
               double minLon = randomInt(360) - 180;
 
               double maxLat = minLat + randomInt(90 - (int)minLat);
-              double maxLon = minLon + randomInt(90 - (int)minLat);
+              double maxLon = minLon + randomInt(180 - (int)minLon);
 
               Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
               Geodetic2D center = sector.getCenter();
 
               [_iosWidget widget]->setShownSector(sector);
+              printf("SHOWN SECTOR: %s\n", sector.description().c_str());
             } else{
-              [_iosWidget widget]->setShownSector(Sector::fullSphere());
+              Sector sector = Sector::fullSphere();
+              [_iosWidget widget]->setShownSector(sector);
+              printf("SHOWN SECTOR: %s\n", sector.description().c_str());
             }
 
           }
