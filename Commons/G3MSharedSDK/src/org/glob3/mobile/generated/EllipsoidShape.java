@@ -245,7 +245,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;
      _mercator = mercator;
-     _surfaceColor = surfaceColor;
+     _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _textureRequested = false;
      _textureImage = null;
