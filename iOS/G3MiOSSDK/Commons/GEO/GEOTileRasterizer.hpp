@@ -18,7 +18,12 @@ class GEORasterSymbol;
 class GEOTileRasterizer : public CanvasTileRasterizer {
 private:
   QuadTree          _quadTree;
+#ifdef C_CODE
   const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
 
 public:
   GEOTileRasterizer() :

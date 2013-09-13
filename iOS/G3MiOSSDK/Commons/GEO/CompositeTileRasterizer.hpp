@@ -18,7 +18,12 @@ class CompositeTileRasterizer : public CanvasTileRasterizer, ChangedListener {
 private:
   std::vector<TileRasterizer*> _children;
 
+#ifdef C_CODE
   const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
 
 public:
   CompositeTileRasterizer() :
