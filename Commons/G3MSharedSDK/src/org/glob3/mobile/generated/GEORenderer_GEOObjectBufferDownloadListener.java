@@ -4,35 +4,19 @@ public class GEORenderer_GEOObjectBufferDownloadListener extends IBufferDownload
   private GEORenderer _geoRenderer;
   private GEOSymbolizer _symbolizer;
   private final IThreadUtils _threadUtils;
+  private final boolean _isBSON;
 
-  public GEORenderer_GEOObjectBufferDownloadListener(GEORenderer geoRenderer, GEOSymbolizer symbolizer, IThreadUtils threadUtils)
+  public GEORenderer_GEOObjectBufferDownloadListener(GEORenderer geoRenderer, GEOSymbolizer symbolizer, IThreadUtils threadUtils, boolean isBSON)
   {
      _geoRenderer = geoRenderer;
      _symbolizer = symbolizer;
      _threadUtils = threadUtils;
+     _isBSON = isBSON;
   }
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-
-    _threadUtils.invokeAsyncTask(new GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer), true);
-
-    //    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
-    //                                                             buffer,
-    //                                                             _geoRenderer,
-    //                                                             _symbolizer),
-    //                                     true);
-
-    //    GEOObject* geoObject = GEOJSONParser::parse(buffer);
-    //
-    //    if (geoObject == NULL) {
-    //      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
-    //    }
-    //    else {
-    //      _geoRenderer->addGEOObject(geoObject, _symbolizer);
-    //    }
-    //
-    //    delete buffer;
+    _threadUtils.invokeAsyncTask(new GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer, _isBSON), true);
   }
 
   public final void onError(URL url)

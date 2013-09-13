@@ -28,12 +28,10 @@ public class TileRasterizerContext
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileRasterizerContext(TileRasterizerContext that);
 
-//  public final IImage  _image;
   public final Tile    _tile;
   public final boolean _mercator;
 
-  public TileRasterizerContext(Tile tile, boolean mercator) //const IImage* image,
-//  _image(image),
+  public TileRasterizerContext(Tile tile, boolean mercator)
   {
      _tile = tile;
      _mercator = mercator;
@@ -42,5 +40,4 @@ public class TileRasterizerContext
   public void dispose()
   {
   }
-
 }

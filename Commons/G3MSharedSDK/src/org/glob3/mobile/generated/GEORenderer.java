@@ -36,14 +36,16 @@ public class GEORenderer extends LeafRenderer
     public GEOSymbolizer _symbolizer;
     public final long _priority;
     public final boolean _readExpired;
+    public final boolean _isBSON;
 
-    public LoadQueueItem(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
+    public LoadQueueItem(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired, boolean isBSON)
     {
        _url = url;
        _symbolizer = symbolizer;
        _priority = priority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
+       _isBSON = isBSON;
 
     }
   }
@@ -56,7 +58,7 @@ public class GEORenderer extends LeafRenderer
     for (int i = 0; i < loadQueueSize; i++)
     {
       LoadQueueItem item = _loadQueue.get(i);
-      downloader.requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, item._symbolizer, _context.getThreadUtils()), true);
+      downloader.requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, item._symbolizer, _context.getThreadUtils(), item._isBSON), true);
     }
   
     _loadQueue.clear();
@@ -85,7 +87,7 @@ public class GEORenderer extends LeafRenderer
    shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
 
- */
+   */
   public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
      _defaultSymbolizer = defaultSymbolizer;
@@ -228,26 +230,49 @@ public class GEORenderer extends LeafRenderer
     return _geoTileRasterizer;
   }
 
-  public final void load(URL url)
+  public final void loadJSON(URL url)
   {
-    load(url, null, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+    loadJSON(url, null, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
   }
 
-  public final void load(URL url, GEOSymbolizer symbolizer)
+  public final void loadJSON(URL url, GEOSymbolizer symbolizer)
   {
-    load(url, symbolizer, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+    loadJSON(url, symbolizer, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
   }
 
-  public final void load(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
+  public final void loadJSON(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
   {
     if (_context == null)
     {
-      _loadQueue.add(new LoadQueueItem(url, symbolizer, priority, timeToCache, readExpired));
+      _loadQueue.add(new LoadQueueItem(url, symbolizer, priority, timeToCache, readExpired, false)); // isBson
     }
     else
     {
       IDownloader downloader = _context.getDownloader();
-      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils()), true);
+      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), false), true); // isBson
+    }
+  }
+
+  public final void loadBSON(URL url)
+  {
+    loadBSON(url, null, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+  }
+
+  public final void loadBSON(URL url, GEOSymbolizer symbolizer)
+  {
+    loadBSON(url, symbolizer, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
+  }
+
+  public final void loadBSON(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, symbolizer, priority, timeToCache, readExpired, true)); // isBson
+    }
+    else
+    {
+      IDownloader downloader = _context.getDownloader();
+      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), true), true); // isBson
     }
   }
 
@@ -269,8 +294,7 @@ public class GEORenderer extends LeafRenderer
     }
     if (_geoTileRasterizer != null)
     {
-      int __DGD_At_Work;
-      //_geoTileRasterizer->setEnable(enable);
+      _geoTileRasterizer.setEnable(enable);
     }
   }
 

@@ -29,7 +29,7 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     return "GEOTileRasterizer";
   }
 
-  public final void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
     final Tile tile = trc._tile;
     final boolean mercator = trc._mercator;
@@ -60,8 +60,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
     if (sector == null)
     {
-  //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-  //                                  symbol->description().c_str());
+      //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+      //                                  symbol->description().c_str());
       if (symbol != null)
          symbol.dispose();
     }
