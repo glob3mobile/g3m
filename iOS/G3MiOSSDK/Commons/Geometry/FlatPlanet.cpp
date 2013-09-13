@@ -283,7 +283,7 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
   return MutableMatrix44D::createTranslationMatrix(P1.sub(P0));
 }
 
-void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
+bool FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
                              Camera* nextCamera) const{
 
   Vector3D pos = nextCamera->getCartesianPosition();
@@ -291,9 +291,13 @@ void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
   double maxDist = _size.length() * 1.5;
 
   if (pos.distanceTo(origin) > maxDist){
-//    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-      nextCamera->copyFrom(*previousCamera);
+    if (previousCamera->getGeodeticPosition()._height <= maxDist){
+      nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    } else{
+      return false;
+    }
   }
+  return true;
 
 
 }

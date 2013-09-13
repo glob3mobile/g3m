@@ -29,6 +29,7 @@ class GPUProgramSources;
 class GPUProgramManager;
 class SceneLighting;
 class Sector;
+class InitialCameraPositionProvider;
 
 
 class IG3MBuilder {
@@ -53,6 +54,7 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  InitialCameraPositionProvider*    _initialCameraPositionProvider;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -75,6 +77,7 @@ private:
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
+  InitialCameraPositionProvider* getInitialCameraPositionProvider() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);

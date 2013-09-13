@@ -584,7 +584,7 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
   return MutableMatrix44D::createRotationMatrix(angle, axis);
 }
 
-void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
+bool EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                              Camera* nextCamera) const{
 
   Vector3D pos = nextCamera->getCartesianPosition();
@@ -592,10 +592,13 @@ void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
   double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
 
   if (pos.distanceTo(origin) > maxDist){
-    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-//    Vector3D pos2 = nextCamera->getCartesianPosition();
-//    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+    if (previousCamera->getGeodeticPosition()._height <= maxDist){
+      nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    } else{
+      return false;
+    }
   }
+  return true;
 
 }
 

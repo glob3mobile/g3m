@@ -107,7 +107,7 @@ public:
   
   virtual Vector3D getNorth() const = 0;
 
-  virtual void applyCameraConstrainers(const Camera* previousCamera,
+  virtual bool applyCameraConstrainers(const Camera* previousCamera,
                                        Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const = 0;

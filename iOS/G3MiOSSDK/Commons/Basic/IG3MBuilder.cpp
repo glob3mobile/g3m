@@ -50,7 +50,8 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_initialCameraPositionProvider(NULL)
 {
 }
 
@@ -671,8 +672,6 @@ G3MWidget* IG3MBuilder::create() {
                                                             margin));
 //  }
 
-  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -691,7 +690,7 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),
-                                            icpp);
+                                            getInitialCameraPositionProvider());
   
   g3mWidget->setUserData(getUserData());
 
@@ -802,4 +801,11 @@ Sector IG3MBuilder::getShownSector() const{
     return Sector::fullSphere();
   }
   return *_shownSector;
+}
+
+InitialCameraPositionProvider* IG3MBuilder::getInitialCameraPositionProvider() const{
+  if (_initialCameraPositionProvider == NULL){
+    return new SimpleInitialCameraPositionProvider();
+  }
+  return _initialCameraPositionProvider;
 }

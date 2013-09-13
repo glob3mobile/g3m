@@ -283,7 +283,7 @@ public:
                                             -17.2423142646939311, 145.4950606689779420);
 
   builder.setShownSector(sector);
-//  builder.setShownSector( sector.shrinkedByPercent(-50) );
+  //  builder.setShownSector( sector.shrinkedByPercent(-50) );
 
   int _DIEGO_AT_WORK;
   builder.getPlanetRendererBuilder()->setShowStatistics(true);
@@ -2576,17 +2576,22 @@ public:
 
           void run(const G3MContext* context){
 
-            double minLat = randomInt(180) -90;
-            double minLon = randomInt(360) - 180;
+            if (randomInt(5) != 4){
 
-            double maxLat = minLat + randomInt(90 - (int)minLat);
-            double maxLon = minLon + randomInt(90 - (int)minLat);
+              double minLat = randomInt(180) -90;
+              double minLon = randomInt(360) - 180;
 
-            Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
-            Geodetic2D center = sector.getCenter();
+              double maxLat = minLat + randomInt(90 - (int)minLat);
+              double maxLon = minLon + randomInt(90 - (int)minLat);
 
-//            [_iosWidget widget]->setCameraPosition(Geodetic3D(center, 1e7)  );
-            [_iosWidget widget]->setShownSector(sector);
+              Sector sector = Sector::fromDegrees(minLat, minLon, maxLat, maxLon);
+              Geodetic2D center = sector.getCenter();
+
+              [_iosWidget widget]->setShownSector(sector);
+            } else{
+              [_iosWidget widget]->setShownSector(Sector::fullSphere());
+            }
+
           }
         };
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
@@ -2791,7 +2796,7 @@ public:
 
   Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
                            5000);
-  
+
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
                       25000);

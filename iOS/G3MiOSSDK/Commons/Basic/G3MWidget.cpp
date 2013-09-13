@@ -348,22 +348,6 @@ void G3MWidget::render(int width, int height) {
     onResizeViewportEvent(_width, _height);
   }
 
-  if (!_initialCameraPositionHasBeenSet){
-    _initialCameraPositionHasBeenSet = true;
-
-    Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
-                                                                     _mainRenderer->getPlanetRenderer(),
-                                                                     Vector2I(_width,_height));
-
-    _currentCamera->setGeodeticPosition(g);
-    _currentCamera->setHeading(Angle::zero());
-    _currentCamera->setPitch(Angle::zero());
-    
-    _nextCamera->setGeodeticPosition(g);
-    _nextCamera->setHeading(Angle::zero());
-    _nextCamera->setPitch(Angle::zero());
-  }
-
   _timer->start();
   _renderCounter++;
 
@@ -392,14 +376,42 @@ void G3MWidget::render(int width, int height) {
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
+
+  bool cameraConstrainersSuccess = true;
   const int cameraConstrainersCount = _cameraConstrainers.size();
   for (int i = 0; i< cameraConstrainersCount; i++) {
     ICameraConstrainer* constrainer = _cameraConstrainers[i];
-    constrainer->onCameraChange(_planet,
-                                _currentCamera,
-                                _nextCamera);
+    cameraConstrainersSuccess = constrainer->onCameraChange(_planet,
+                                                            _currentCamera,
+                                                            _nextCamera);
+    if (!cameraConstrainersSuccess){
+      break;
+    }
+
   }
-  _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
+
+  if (cameraConstrainersSuccess){
+    _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
+  }
+
+  //We restore the camera to a valid initial position either
+  //it has not been setted before or
+  //camera constrainers failed at fixing it
+  if (!_initialCameraPositionHasBeenSet || !cameraConstrainersSuccess){
+    _initialCameraPositionHasBeenSet = true;
+
+    Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
+                                                                     _mainRenderer->getPlanetRenderer(),
+                                                                     Vector2I(_width,_height));
+
+    _currentCamera->setGeodeticPosition(g);
+    _currentCamera->setHeading(Angle::zero());
+    _currentCamera->setPitch(Angle::zero());
+
+    _nextCamera->setGeodeticPosition(g);
+    _nextCamera->setHeading(Angle::zero());
+    _nextCamera->setPitch(Angle::zero());
+  }
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
@@ -672,7 +684,7 @@ void G3MWidget::stopCameraAnimation() {
 
 void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   delete _backgroundColor;
-  
+
   _backgroundColor = new Color(backgroundColor);
 }
 

@@ -33,6 +33,7 @@ class G3MWidget;
 class PeriodicalTask;
 class GInitializationTask;
 class TimeInterval;
+class InitialCameraPositionProvider;
 
 // opengl versions value
 enum GL_version {
@@ -46,11 +47,11 @@ enum GL_version {
 @interface G3MWidget_iOS : UIView {
 @private
   BOOL _displayLinkSupported;
-  
+
   enum GL_version glver;
-  
+
   TouchEvent* _lastTouchEvent;
-  
+
   void* _widgetVP;
 }
 
@@ -83,7 +84,7 @@ enum GL_version {
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+initialCameraPositionProvider: (InitialCameraPositionProvider*) initialCameraPositionProvider;
 
 - (GL*)getGL;
 

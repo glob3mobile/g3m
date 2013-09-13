@@ -165,7 +165,7 @@ public:
     return Vector3D::upZ();
   }
 
-  void applyCameraConstrainers(const Camera* previousCamera,
+  bool applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
   Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
