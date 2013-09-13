@@ -95,8 +95,6 @@ public class PlanetTileTessellator extends TileTessellator
     return tile.getSector().intersection(_renderedSector);
   }
 
-//  double getHeight(const Geodetic2D& g, const ElevationData* elevationData, double verticalExaggeration) const;
-
   private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   
@@ -374,7 +372,7 @@ public class PlanetTileTessellator extends TileTessellator
       {
         final Vector3D asw = planet.toCartesian(_renderedSector.getSW());
         final Vector3D anw = planet.toCartesian(_renderedSector.getNW());
-        absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1) + minElevation;
+        absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1);
       }
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);

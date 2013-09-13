@@ -91,7 +91,7 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
     return "DebugTileRasterizer";
   }
 
-  public final void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
   
     final Tile tile = trc._tile;
