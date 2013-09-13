@@ -400,6 +400,8 @@ void G3MWidget::render(int width, int height) {
   if (!_initialCameraPositionHasBeenSet || !cameraConstrainersSuccess){
     _initialCameraPositionHasBeenSet = true;
 
+    _effectsScheduler->cancelAllEffectsFor(_nextCamera->getEffectTarget());
+
     Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
                                                                      _mainRenderer->getPlanetRenderer(),
                                                                      Vector2I(_width,_height));
