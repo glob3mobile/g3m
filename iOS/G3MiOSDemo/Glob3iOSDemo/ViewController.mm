@@ -282,8 +282,8 @@ public:
 
   GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
 
-  geoRenderer->load(URL("file:///geojson/countries-50m.geojson", false),
-                    new SampleSymbolizer());
+  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
+                        new SampleSymbolizer());
 
 
   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),

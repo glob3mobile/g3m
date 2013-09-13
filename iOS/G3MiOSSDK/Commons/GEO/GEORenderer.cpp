@@ -90,66 +90,6 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 }
 
 
-//class GEOObjectAdderTask : public GTask {
-//private:
-//  GEOObject*     _geoObject;
-//  GEORenderer*   _geoRenderer;
-//  GEOSymbolizer* _symbolizer;
-//
-//public:
-//  GEOObjectAdderTask(GEOObject* geoObject,
-//                     GEORenderer* geoRenderer,
-//                     GEOSymbolizer* symbolizer) :
-//  _geoObject(geoObject),
-//  _geoRenderer(geoRenderer),
-//  _symbolizer(symbolizer)
-//  {
-//
-//  }
-//
-//  void run(const G3MContext* context) {
-//    _geoRenderer->addGEOObject(_geoObject, _symbolizer);
-//  }
-//};
-//
-//class GEOObjectParserTask : public GTask {
-//private:
-//  const URL      _url;
-//  IByteBuffer*   _buffer;
-//  GEORenderer*   _geoRenderer;
-//  GEOSymbolizer* _symbolizer;
-//
-//public:
-//  GEOObjectParserTask(const URL& url,
-//                      IByteBuffer* buffer,
-//                      GEORenderer* geoRenderer,
-//                      GEOSymbolizer* symbolizer) :
-//  _url(url),
-//  _buffer(buffer),
-//  _geoRenderer(geoRenderer),
-//  _symbolizer(symbolizer)
-//  {
-//  }
-//
-//  void run(const G3MContext* context) {
-//    GEOObject* geoObject = GEOJSONParser::parse(_buffer);
-//
-//    if (geoObject == NULL) {
-//      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
-//    }
-//    else {
-//      context->getThreadUtils()->invokeInRendererThread(new GEOObjectAdderTask(geoObject,
-//                                                                               _geoRenderer,
-//                                                                               _symbolizer),
-//                                                        true);
-//    }
-//
-//    delete _buffer;
-//    _buffer = NULL;
-//  }
-//};
-
-
 class GEOObjectParserAsyncTask : public GAsyncTask {
 private:
 #ifdef C_CODE
@@ -163,17 +103,21 @@ private:
   GEORenderer*   _geoRenderer;
   GEOSymbolizer* _symbolizer;
 
+  const bool _isBSON;
+
   GEOObject* _geoObject;
 
 public:
   GEOObjectParserAsyncTask(const URL& url,
                            IByteBuffer* buffer,
                            GEORenderer* geoRenderer,
-                           GEOSymbolizer* symbolizer) :
+                           GEOSymbolizer* symbolizer,
+                           bool isBSON) :
   _url(url),
   _buffer(buffer),
   _geoRenderer(geoRenderer),
   _symbolizer(symbolizer),
+  _isBSON(isBSON),
   _geoObject(NULL)
   {
   }
@@ -206,43 +150,29 @@ private:
   GEORenderer*        _geoRenderer;
   GEOSymbolizer*      _symbolizer;
   const IThreadUtils* _threadUtils;
+  const bool          _isBSON;
 
 public:
   GEORenderer_GEOObjectBufferDownloadListener(GEORenderer* geoRenderer,
                                               GEOSymbolizer* symbolizer,
-                                              const IThreadUtils* threadUtils) :
+                                              const IThreadUtils* threadUtils,
+                                              bool isBSON) :
   _geoRenderer(geoRenderer),
   _symbolizer(symbolizer),
-  _threadUtils(threadUtils)
+  _threadUtils(threadUtils),
+  _isBSON(isBSON)
   {
   }
 
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-
     _threadUtils->invokeAsyncTask(new GEOObjectParserAsyncTask(url,
                                                                buffer,
                                                                _geoRenderer,
-                                                               _symbolizer),
+                                                               _symbolizer,
+                                                               _isBSON),
                                   true);
-
-    //    _threadUtils->invokeInBackground(new GEOObjectParserTask(url,
-    //                                                             buffer,
-    //                                                             _geoRenderer,
-    //                                                             _symbolizer),
-    //                                     true);
-
-    //    GEOObject* geoObject = GEOJSONParser::parse(buffer);
-    //
-    //    if (geoObject == NULL) {
-    //      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", url.getPath().c_str());
-    //    }
-    //    else {
-    //      _geoRenderer->addGEOObject(geoObject, _symbolizer);
-    //    }
-    //
-    //    delete buffer;
   }
 
   void onError(const URL& url) {
@@ -272,7 +202,8 @@ void GEORenderer::drainLoadQueue() {
                               item->_readExpired,
                               new GEORenderer_GEOObjectBufferDownloadListener(this,
                                                                               item->_symbolizer,
-                                                                              _context->getThreadUtils()),
+                                                                              _context->getThreadUtils(),
+                                                                              item->_isBSON),
                               true);
   }
 
@@ -287,17 +218,18 @@ void GEORenderer::initialize(const G3MContext* context) {
   }
 }
 
-void GEORenderer::load(const URL& url,
-                       GEOSymbolizer* symbolizer,
-                       long long priority,
-                       const TimeInterval timeToCache,
-                       bool readExpired) {
+void GEORenderer::loadJSON(const URL& url,
+                           GEOSymbolizer* symbolizer,
+                           long long priority,
+                           const TimeInterval timeToCache,
+                           bool readExpired) {
   if (_context == NULL) {
     _loadQueue.push_back(new LoadQueueItem(url,
                                            symbolizer,
                                            priority,
                                            timeToCache,
-                                           readExpired));
+                                           readExpired,
+                                           false /* bson */));
   }
   else {
     IDownloader* downloader = _context->getDownloader();
@@ -307,7 +239,35 @@ void GEORenderer::load(const URL& url,
                               readExpired,
                               new GEORenderer_GEOObjectBufferDownloadListener(this,
                                                                               symbolizer,
-                                                                              _context->getThreadUtils()),
+                                                                              _context->getThreadUtils(),
+                                                                              false /* bson */),
+                              true);
+  }
+}
+
+void GEORenderer::loadBSON(const URL& url,
+                           GEOSymbolizer* symbolizer,
+                           long long priority,
+                           const TimeInterval timeToCache,
+                           bool readExpired) {
+  if (_context == NULL) {
+    _loadQueue.push_back(new LoadQueueItem(url,
+                                           symbolizer,
+                                           priority,
+                                           timeToCache,
+                                           readExpired,
+                                           true /* bson */));
+  }
+  else {
+    IDownloader* downloader = _context->getDownloader();
+    downloader->requestBuffer(url,
+                              priority,
+                              timeToCache,
+                              readExpired,
+                              new GEORenderer_GEOObjectBufferDownloadListener(this,
+                                                                              symbolizer,
+                                                                              _context->getThreadUtils(),
+                                                                              true /* bson */),
                               true);
   }
 }
