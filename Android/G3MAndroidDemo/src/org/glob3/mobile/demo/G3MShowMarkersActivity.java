@@ -4,11 +4,11 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOShapeSymbol;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -29,6 +29,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.JSONParser_Android;
@@ -77,19 +78,32 @@ public class G3MShowMarkersActivity
          
          //public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
          
-//         BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(),0), 
-//        		 AltitudeMode.RELATIVE_TO_GROUND, 
-//        		 10000, 1.0, 
-//        		 Color.fromRGBA(1, 0, 0, 1),
-//        		 )
-//         _shapeRenderer.addShape(circle);
+         BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 new Vector3D(100000,100000,100000), 
+        		 1, 
+        		 Color.fromRGBA(1, 0, 0, 1),
+        		 Color.fromRGBA(0, 0, 1, 1),
+        		 true
+        		 );
+         _shapeRenderer.addShape(box);
+         
+         BoxShape box2 = new BoxShape(new Geodetic3D(spain.getSE(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 new Vector3D(100000,100000,100000), 
+        		 1, 
+        		 Color.fromRGBA(1, 0, 0, 1),
+        		 Color.fromRGBA(0, 0, 1, 1),
+        		 false
+        		 );
+         _shapeRenderer.addShape(box2);
          
          GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
          
          geo.getShapesRenderer().addShape(
-        		 new CircleShape(new Geodetic3D(spain.getCenter(), 10), 
-        				 AltitudeMode.ABSOLUTE, 
-        				 5, 
+        		 new CircleShape(new Geodetic3D(spain.getCenter(), 100000), 
+        				 AltitudeMode.RELATIVE_TO_GROUND, 
+        				 500000, 
         				 Color.red(),
                   32, false));
          
