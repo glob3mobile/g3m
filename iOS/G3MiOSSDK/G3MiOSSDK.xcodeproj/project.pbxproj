@@ -314,6 +314,7 @@
 		CFF1A662177B57BC00775E3E /* IndexedGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */; };
 		CFF1A663177B57BC00775E3E /* LeveledMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */; };
 		CFF1A664177B57BC00775E3E /* FlatColorMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */; };
+		CFF6D2A417E345D000DB341C /* CompositeTileRasterizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF86B90717E2426C00E5659C /* CompositeTileRasterizer.hpp */; };
 		CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */; };
 		CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */; };
 		CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */; };
@@ -597,6 +598,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFF6D2A417E345D000DB341C /* CompositeTileRasterizer.hpp in CopyFiles */,
 				D8C486D117E20A2E000EAFC9 /* InitialCameraPositionProvider.hpp in CopyFiles */,
 				CF8BE69017E0C68A0072273A /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
 				CF8BE69117E0C68A0072273A /* HUDRenderer.hpp in CopyFiles */,

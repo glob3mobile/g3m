@@ -10,7 +10,7 @@
 
 #include "ILogger.hpp"
 #include "ChangedListener.hpp"
-
+#include "IImageListener.hpp"
 
 void TileRasterizer::setChangeListener(ChangedListener* listener) {
   if (_listener != NULL) {
@@ -22,5 +22,30 @@ void TileRasterizer::setChangeListener(ChangedListener* listener) {
 void TileRasterizer::notifyChanges() const {
   if (_listener != NULL) {
     _listener->changed();
+  }
+}
+
+void TileRasterizer::rasterize(const IImage* image,
+                               const TileRasterizerContext& trc,
+                               IImageListener* listener,
+                               bool autodelete) const {
+  if (_enable) {
+    rawRasterize(image,
+                 trc,
+                 listener,
+                 autodelete);
+  }
+  else {
+    listener->imageCreated(image);
+    if (autodelete) {
+      delete listener;
+    }
+  }
+}
+
+void TileRasterizer::setEnable(bool enable) {
+  if (enable != _enable) {
+    _enable = enable;
+    notifyChanges();
   }
 }

@@ -77,10 +77,10 @@ std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
   return "Upper lon: " + sector._upper._longitude.description();
 }
 
-void DebugTileRasterizer::rasterize(const IImage* image,
-                                    const TileRasterizerContext& trc,
-                                    IImageListener* listener,
-                                    bool autodelete) const {
+void DebugTileRasterizer::rawRasterize(const IImage* image,
+                                       const TileRasterizerContext& trc,
+                                       IImageListener* listener,
+                                       bool autodelete) const {
 
   const Tile*   tile  = trc._tile;
 

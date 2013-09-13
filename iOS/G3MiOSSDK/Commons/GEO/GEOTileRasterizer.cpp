@@ -23,8 +23,8 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const Sector* sector = symbol->getSector();
 
   if (sector == NULL) {
-//    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-//                                  symbol->description().c_str());
+    //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+    //                                  symbol->description().c_str());
     delete symbol;
   }
   else {
@@ -43,7 +43,7 @@ private:
   ICanvas*                   _canvas;
   const GEORasterProjection* _projection;
   const int                  _tileLevel;
-  
+
 public:
   GEOTileRasterizer_QuadTreeVisitor(ICanvas* canvas,
                                     const GEORasterProjection* projection,
@@ -68,10 +68,10 @@ public:
 
 };
 
-void GEOTileRasterizer::rasterize(const IImage* image,
-                                  const TileRasterizerContext& trc,
-                                  IImageListener* listener,
-                                  bool autodelete) const {
+void GEOTileRasterizer::rawRasterize(const IImage* image,
+                                     const TileRasterizerContext& trc,
+                                     IImageListener* listener,
+                                     bool autodelete) const {
   const Tile*   tile     = trc._tile;
   const bool    mercator = trc._mercator;
 
@@ -89,8 +89,8 @@ void GEOTileRasterizer::rasterize(const IImage* image,
                           GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile->getLevel()));
 
   canvas->createImage(listener, autodelete);
-
+  
   delete image;
-
+  
   delete projection;
 }

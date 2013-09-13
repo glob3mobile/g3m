@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeTileRasterizer extends CanvasTileRasterizer
+
+public class CompositeTileRasterizer extends CanvasTileRasterizer implements ChangedListener
 {
   private java.util.ArrayList<TileRasterizer> _children = new java.util.ArrayList<TileRasterizer>();
 
@@ -51,7 +52,7 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer
     return s;
   }
 
-  public final void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodeleteListener)
+  public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodeleteListener)
   {
     if (_children.size() == 0)
     {
@@ -83,7 +84,14 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer
     if (tileRasterizer != null)
     {
       _children.add(tileRasterizer);
+      tileRasterizer.setChangeListener(this);
     }
+    notifyChanges();
+  }
+
+  public final void changed()
+  {
+    notifyChanges();
   }
 
 }
