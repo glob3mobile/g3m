@@ -52,13 +52,11 @@ public class GEORenderer extends LeafRenderer
 
   private void drainLoadQueue()
   {
-    IDownloader downloader = _context.getDownloader();
-  
     final int loadQueueSize = _loadQueue.size();
     for (int i = 0; i < loadQueueSize; i++)
     {
       LoadQueueItem item = _loadQueue.get(i);
-      downloader.requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, item._symbolizer, _context.getThreadUtils(), item._isBSON), true);
+      requestBuffer(item._url, item._symbolizer, item._priority, item._timeToCache, item._readExpired, item._isBSON);
     }
   
     _loadQueue.clear();
@@ -76,6 +74,13 @@ public class GEORenderer extends LeafRenderer
   private G3MContext _context;
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
+
+  private void requestBuffer(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired, boolean isBSON)
+  {
+  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
+    IDownloader downloader = _context.getDownloader();
+    downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), isBSON), true);
+  }
 
 
   /**
@@ -248,8 +253,7 @@ public class GEORenderer extends LeafRenderer
     }
     else
     {
-      IDownloader downloader = _context.getDownloader();
-      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), false), true); // isBson
+      requestBuffer(url, symbolizer, priority, timeToCache, readExpired, false); // isBson
     }
   }
 
@@ -271,8 +275,7 @@ public class GEORenderer extends LeafRenderer
     }
     else
     {
-      IDownloader downloader = _context.getDownloader();
-      downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), true), true); // isBson
+      requestBuffer(url, symbolizer, priority, timeToCache, readExpired, true); // isBson
     }
   }
 

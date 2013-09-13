@@ -16,6 +16,10 @@ public class GEORenderer_GEOObjectBufferDownloadListener extends IBufferDownload
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
+//    ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
+//                                 url.getPath().c_str(),
+//                                 buffer->size());
+
     _threadUtils.invokeAsyncTask(new GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer, _isBSON), true);
   }
 
