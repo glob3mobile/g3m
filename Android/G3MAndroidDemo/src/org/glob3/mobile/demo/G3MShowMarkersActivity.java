@@ -4,9 +4,12 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -27,6 +30,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.JSONParser_Android;
@@ -60,11 +64,62 @@ public class G3MShowMarkersActivity
          final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
          builder.setShownSector(spain);
          
-         CircleShape circle = new CircleShape(new Geodetic3D(spain.getCenter(),0), 
+         CircleShape circle = new CircleShape(new Geodetic3D(spain.getNE(),0), 
         		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 1000000,
-        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+        		 100000,
+        		 Color.fromRGBA(1, 0, 0, 1), 64, true);
          _shapeRenderer.addShape(circle);
+         
+         
+         CircleShape circle2 = new CircleShape(new Geodetic3D(spain.getNW(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 100000,
+        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+         _shapeRenderer.addShape(circle2);
+         
+         //public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
+         
+         BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 new Vector3D(100000,100000,100000), 
+        		 1, 
+        		 Color.fromRGBA(1, 0, 0, 1),
+        		 Color.fromRGBA(0, 0, 1, 1),
+        		 true
+        		 );
+         _shapeRenderer.addShape(box);
+         
+         BoxShape box2 = new BoxShape(new Geodetic3D(spain.getSE(),0), 
+        		 AltitudeMode.RELATIVE_TO_GROUND, 
+        		 new Vector3D(100000,100000,100000), 
+        		 1, 
+        		 Color.fromRGBA(1, 0, 0, 1),
+        		 Color.fromRGBA(0, 0, 1, 1),
+        		 false
+        		 );
+         _shapeRenderer.addShape(box2);
+         
+         GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
+         
+//         (Geodetic3D position, AltitudeMode altitudeMode, 
+//        		 Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+         
+         geo.getShapesRenderer().addShape(
+        		 new EllipsoidShape(new Geodetic3D(spain.getCenter(), 100000), 
+        				 AltitudeMode.RELATIVE_TO_GROUND, 
+        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
+        				 false, Color.red(), Color.blue(), true)
+        		 );
+         
+         geo.getShapesRenderer().addShape(
+        		 new EllipsoidShape(new Geodetic3D(spain.getCenter().add(Geodetic2D.fromDegrees(20, 20)), 100000), 
+        				 AltitudeMode.RELATIVE_TO_GROUND, 
+        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
+        				 false, Color.red(), Color.blue(), false)
+        		 );
+         
+         
+         builder.addRenderer(geo);
       }
 
       builder.addRenderer(_weatherMarkers);

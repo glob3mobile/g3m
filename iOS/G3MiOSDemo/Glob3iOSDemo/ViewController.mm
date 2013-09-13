@@ -1582,7 +1582,7 @@ public:
                             ABSOLUTE,
                             Vector3D(20000, 30000, 50000),
                             2,
-                            Color::newFromRGBA(0,    1, 0, 0.5),
+                            Color::fromRGBA(0,    1, 0, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
@@ -1878,7 +1878,7 @@ private:
                               0.0,
                               false,
                               false,
-                              new Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                              Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                               Color::newFromRGBA(0.2, 0.2, 0, 1),
                               true);
   }
@@ -1902,7 +1902,7 @@ private:
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
-                        new Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                        Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
 
   }
@@ -2770,7 +2770,7 @@ public:
                                     RELATIVE_TO_GROUND,
                                     Vector3D(100, 100, 100),
                                     1.0,
-                                    Color::newFromRGBA(1.0, 0.0, 0.0, 1.0),
+                                    Color::fromRGBA(1.0, 0.0, 0.0, 1.0),
                                     Color::newFromRGBA(0.0, 1.0, 0.0, 1.0),
                                     true);
         const double scale = 1000;

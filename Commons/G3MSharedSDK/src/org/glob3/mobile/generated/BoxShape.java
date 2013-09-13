@@ -182,10 +182,6 @@ public class BoxShape extends AbstractMeshShape
   {
      this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth)
-  {
-     this(position, altitudeMode, extent, borderWidth, null, null, true);
-  }
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
@@ -193,7 +189,7 @@ public class BoxShape extends AbstractMeshShape
      _extentY = extent._y;
      _extentZ = extent._z;
      _borderWidth = borderWidth;
-     _surfaceColor = surfaceColor;
+     _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _useNormals = useNormals;
 
