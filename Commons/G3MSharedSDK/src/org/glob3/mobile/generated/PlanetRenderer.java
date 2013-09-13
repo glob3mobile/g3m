@@ -468,6 +468,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _elevationDataProvider.initialize(context);
     }
+    if (_tileRasterizer != null)
+    {
+      _tileRasterizer.initialize(context);
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

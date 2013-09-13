@@ -16,6 +16,8 @@ public abstract class TileRasterizer
   {
   }
 
+  public abstract void initialize(G3MContext context);
+
   public abstract String getId();
 
   public final void rasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)

@@ -86,6 +86,11 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
     super.dispose();
   }
 
+  public final void initialize(G3MContext context)
+  {
+
+  }
+
   public final String getId()
   {
     return "DebugTileRasterizer";

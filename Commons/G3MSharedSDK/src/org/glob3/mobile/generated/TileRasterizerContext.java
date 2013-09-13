@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class Tile;
 //class IImageListener;
 //class ChangedListener;
+//class G3MContext;
 
 
 public class TileRasterizerContext

@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-///#include "ITimer.hpp"
-
 public class BufferSaverDownloadListener extends IBufferDownloadListener
 {
   private CachedDownloader _downloader;

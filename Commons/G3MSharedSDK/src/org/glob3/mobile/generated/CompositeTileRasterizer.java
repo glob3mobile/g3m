@@ -22,6 +22,14 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer implements Cha
 {
   private java.util.ArrayList<TileRasterizer> _children = new java.util.ArrayList<TileRasterizer>();
 
+  private final G3MContext _context;
+
+  public CompositeTileRasterizer()
+  {
+     _context = null;
+
+  }
+
   public void dispose()
   {
     final int childrenSize = _children.size();
@@ -30,6 +38,17 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer implements Cha
       TileRasterizer child = _children.get(i);
       if (child != null)
          child.dispose();
+    }
+  }
+
+  public final void initialize(G3MContext context)
+  {
+    _context = context;
+    final int childrenSize = _children.size();
+    for (int i = 0; i < childrenSize; i++)
+    {
+      TileRasterizer child = _children.get(i);
+      child.initialize(context);
     }
   }
 
@@ -85,8 +104,12 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer implements Cha
     {
       _children.add(tileRasterizer);
       tileRasterizer.setChangeListener(this);
+      if (_context != null)
+      {
+        tileRasterizer.initialize(_context);
+      }
+      notifyChanges();
     }
-    notifyChanges();
   }
 
   public final void changed()
