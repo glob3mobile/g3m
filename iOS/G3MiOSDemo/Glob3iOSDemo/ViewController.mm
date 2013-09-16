@@ -297,15 +297,15 @@ public:
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
-  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
-
-  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-                        new SampleSymbolizer());
+//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+//
+//  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
+//                        new SampleSymbolizer());
 
 //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
 //                                               new ToggleGEORendererTask(geoRenderer)));
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
 //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
 //                                                                                Color::red(),
@@ -320,7 +320,7 @@ public:
   const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
                                             -17.2423142646939311, 145.4950606689779420);
 
-//  builder.setShownSector(sector);
+  builder.setShownSector(sector);
 
 //  int _DIEGO_AT_WORK;
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);

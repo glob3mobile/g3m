@@ -42,17 +42,14 @@ public:
 class RenderedSectorCameraConstrainer: public ICameraConstrainer {
 private:
   const double _maxHeight;
-  const double _margin;
   const PlanetRenderer* _planetRenderer;
 
 public:
 
   RenderedSectorCameraConstrainer(PlanetRenderer* planetRenderer,
-                                  double maxHeight,
-                                  double margin) :
+                                  double maxHeight) :
   _planetRenderer(planetRenderer),
-  _maxHeight(maxHeight),
-  _margin(margin)
+  _maxHeight(maxHeight)
   {
   }
 

@@ -657,7 +657,7 @@ G3MWidget* IG3MBuilder::create() {
 
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
 //  if (!shownSector.isEquals(Sector::fullSphere())) {
-    const double margin = 0.2;
+//    const double margin = 0.2;
     const double height = 1e5;
 //    
 //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
@@ -670,8 +670,7 @@ G3MWidget* IG3MBuilder::create() {
 //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
     
     addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
-                                                            initialCameraPosition.height() * 1.2,
-                                                            margin));
+                                                            initialCameraPosition.height() * 1.2));
 //  }
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
