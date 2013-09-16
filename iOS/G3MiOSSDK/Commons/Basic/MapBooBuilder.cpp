@@ -661,9 +661,9 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
     case VIEW_PRESENTATION:
       view = "presentation";
       break;
-//    case VIEW_RUNTIME:
-//      view = "runtime";
-//      break;
+      //    case VIEW_RUNTIME:
+      //      view = "runtime";
+      //      break;
     default:
       view = "runtime";
   }
@@ -834,7 +834,7 @@ G3MWidget* MapBooBuilder::create() {
 
   int TODO_VIEWPORT;
   const Planet* planet = createPlanet();
-//  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
+  //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
