@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 
 public class RotateWithAxisEffect extends EffectWithForce
 {
+  private final Vector3D _axis ;
 
   public RotateWithAxisEffect(Vector3D axis, Angle angle)
   {
@@ -35,24 +36,22 @@ public class RotateWithAxisEffect extends EffectWithForce
   {
   }
 
-  public void start(G3MRenderContext rc, TimeInterval when)
+  public final void start(G3MRenderContext rc, TimeInterval when)
   {
   }
 
-  public void doStep(G3MRenderContext rc, TimeInterval when)
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     super.doStep(rc, when);
     rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
   }
 
-  public void stop(G3MRenderContext rc, TimeInterval when)
+  public final void stop(G3MRenderContext rc, TimeInterval when)
   {
     rc.getNextCamera().rotateWithAxis(_axis, Angle.fromDegrees(getForce()));
   }
 
-  public void cancel(TimeInterval when)
+  public final void cancel(TimeInterval when)
   {
   }
-
-  private Vector3D _axis ;
 }

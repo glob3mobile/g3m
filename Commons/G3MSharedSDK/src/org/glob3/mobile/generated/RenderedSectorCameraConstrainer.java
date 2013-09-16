@@ -2,15 +2,13 @@ package org.glob3.mobile.generated;
 public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 {
   private final double _maxHeight;
-  private final double _margin;
   private final PlanetRenderer _planetRenderer;
 
 
-  public RenderedSectorCameraConstrainer(PlanetRenderer planetRenderer, double maxHeight, double margin)
+  public RenderedSectorCameraConstrainer(PlanetRenderer planetRenderer, double maxHeight)
   {
      _planetRenderer = planetRenderer;
      _maxHeight = maxHeight;
-     _margin = margin;
   }
 
   public void dispose()
@@ -21,14 +19,6 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
   {
   
     Sector sector = _planetRenderer.getRenderedSector();
-  //  if (!nextCamera->isCenterOfViewWithin(sector, _maxHeight)){
-  //    if (previousCamera->isCenterOfViewWithin(sector, _maxHeight)){
-  //      nextCamera->copyFrom(*previousCamera);
-  //      return true;
-  //    }
-  //  } else{
-  //    return false;
-  //  }
   
     final Geodetic3D position = nextCamera.getGeodeticPosition();
     final double height = position._height;
@@ -44,22 +34,18 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
       nextCamera.setGeodeticPosition(newPos);
       return true;
     }
-    else
+  
+    if (invalidPosition)
     {
-      if (invalidPosition)
+      if (previousCamera.isCenterOfViewWithin(sector, _maxHeight))
       {
-        if (previousCamera.isCenterOfViewWithin(sector, _maxHeight))
-        {
-          nextCamera.copyFrom(previousCamera);
-          return true;
-        }
-        else
-        {
-          return false;
-        }
+        nextCamera.copyFrom(previousCamera);
+        return true;
       }
-      return true;
+      return false;
     }
+  
+    return true;
   
   }
 

@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  SceneLighting.h
+//  SceneLighting.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/08/13.
 //
 //
-
 
 
 //class GLState;

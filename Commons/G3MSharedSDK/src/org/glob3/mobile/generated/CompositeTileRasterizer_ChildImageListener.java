@@ -21,7 +21,6 @@ public class CompositeTileRasterizer_ChildImageListener extends IImageListener
     TileRasterizer child = _children.get(_childIndex);
 
     final int nextChildIndex = _childIndex + 1;
-
     if (nextChildIndex > _children.size()-1)
     {
       child.rasterize(image, _trc, _listener, _autodeleteListener);
