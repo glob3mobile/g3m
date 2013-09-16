@@ -313,7 +313,6 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
-  bool                         _topTilesJustCreated;
   ITileVisitor*                _tileVisitor = NULL;
 
 #ifdef C_CODE

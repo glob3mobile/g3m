@@ -834,7 +834,7 @@ G3MWidget* MapBooBuilder::create() {
 
   int TODO_VIEWPORT;
   const Planet* planet = createPlanet();
-  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
+//  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
