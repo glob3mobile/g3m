@@ -87,7 +87,6 @@ public:
     TileRasterizer* child = _children->at(_childIndex);
 
     const int nextChildIndex = _childIndex + 1;
-
     if (nextChildIndex > _children->size()-1) {
       child->rasterize(image,
                        *_trc,
