@@ -546,7 +546,7 @@ public abstract class MapBooBuilder
   
     int TODO_VIEWPORT;
     final Planet planet = createPlanet();
-  //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
+    //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
@@ -686,9 +686,9 @@ public abstract class MapBooBuilder
       case VIEW_PRESENTATION:
         view = "presentation";
         break;
-  //    case VIEW_RUNTIME:
-  //      view = "runtime";
-  //      break;
+        //    case VIEW_RUNTIME:
+        //      view = "runtime";
+        //      break;
       default:
         view = "runtime";
     }
