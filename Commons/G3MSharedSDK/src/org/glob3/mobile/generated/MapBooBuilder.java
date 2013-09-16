@@ -546,7 +546,7 @@ public abstract class MapBooBuilder
   
     int TODO_VIEWPORT;
     final Planet planet = createPlanet();
-    Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(new Vector2I(1,1), Sector.fullSphere());
+  //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   

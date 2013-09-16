@@ -8,7 +8,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
-  private boolean _topTilesJustCreated;
   private ITileVisitor _tileVisitor = null;
 
   private Camera     _lastCamera;
