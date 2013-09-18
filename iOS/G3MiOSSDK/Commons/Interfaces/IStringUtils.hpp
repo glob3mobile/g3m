@@ -45,7 +45,7 @@ public:
 
   virtual bool beginsWith(const std::string& string,
                           const std::string& prefix) const = 0;
-  
+
   virtual bool endsWith(const std::string& string,
                         const std::string& suffix) const = 0;
 
@@ -54,6 +54,25 @@ public:
 
   virtual int indexOf(const std::string& string,
                       const std::string& search) const = 0;
+
+  virtual int indexOf(const std::string& string,
+                      const std::string& search,
+                      int fromIndex) const = 0;
+  
+  virtual int indexOf(const std::string& string,
+                      const std::string& search,
+                      int fromIndex,
+                      int endIndex) const = 0;
+
+  virtual int indexOfFirstNonBlank(const std::string& string,
+                                   int fromIndex) const = 0;
+  
+  virtual int indexOfFirstBlank(const std::string& string,
+                                int fromIndex) const = 0;
+
+  virtual int indexOfFirstNonChar(const std::string& string,
+                                  const std::string& chars,
+                                  int fromIndex) const = 0;
 
   /*
    Returns a new string that is a substring of this string. The substring begins at the

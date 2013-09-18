@@ -218,8 +218,8 @@
 			children = (
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
-				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
 				D8EEF3871577920B003FEB5E /* Products */,
+				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};

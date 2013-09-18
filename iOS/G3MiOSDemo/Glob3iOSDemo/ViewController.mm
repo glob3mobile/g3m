@@ -130,6 +130,8 @@
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
 
+#import <G3MiOSSDK/CartoCSSParser.hpp>
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -258,6 +260,28 @@ public:
   }
 
   void run(const G3MContext* context) {
+//    const std::string cartoCSS = "  #layer1 { line-color: #C00; }\n#layer2 { line-width: 1;\nline-color: #C00; }  ";
+
+//    const std::string cartoCSS = "#earthquakes { [Magnitude >= 2.5] { marker-width:6; } [Magnitude >= 3] { marker-width:8; } }  #layer1 { line-color: #C00; }\n#layer1[Magnitude >= 2.5] { line-width: 1;\nline-color: #C00; }  ";
+//    const std::string cartoCSS = "@water: #C0E0F8; [zoom > 1] { [zoom == 3] { } }";
+    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; [zoom == 3] { line-width:2; } }";
+
+    CartoCSSResult* result1 = CartoCSSParser::parse(cartoCSS);
+
+    if (result1->hasError()) {
+      std::vector<CartoCSSError*> errors = result1->getErrors();
+      const int errorsSize = errors.size();
+      for (int i = 0; i < errorsSize; i++) {
+        CartoCSSError* error = errors[i];
+        ILogger::instance()->logError("\"%s\" at %d-%d",
+                                      error->getDescription().c_str(),
+                                      error->getFromIndex(),
+                                      error->getEndIndex());
+      }
+    }
+
+    delete result1;
+
     Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
     [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     //[_iosWidget widget]->setCameraPosition(position);

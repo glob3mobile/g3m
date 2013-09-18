@@ -17,22 +17,22 @@ std::string StringUtils_iOS::createString(unsigned char* data,
   unsigned char* cStr = new unsigned char[length + 1];
   memcpy(cStr, data, length * sizeof(unsigned char));
   cStr[length] = 0;
-  
+
   return (char*) cStr;
 }
 
 std::vector<std::string> StringUtils_iOS::splitLines(const std::string& string) const {
   NSString* nsString = [NSString stringWithCppString: string];
-  
+
   NSArray* nsLines = [nsString componentsSeparatedByString:@"\n"];
-  
-  
+
+
   std::vector<std::string> lines;
-  
+
   for (NSString* line in nsLines) {
     lines.push_back( [line cStringUsingEncoding:NSUTF8StringEncoding]  );
   }
-  
+
   return lines;
 }
 
@@ -43,9 +43,30 @@ bool StringUtils_iOS::beginsWith(const std::string& string,
 
 int StringUtils_iOS::indexOf(const std::string& string,
                              const std::string& search) const {
-  
   const int pos = string.find(search);
   if (pos == std::string::npos) {
+    return -1;
+  }
+  return pos;
+}
+
+int StringUtils_iOS::indexOf(const std::string& string,
+                             const std::string& search,
+                             int fromIndex) const {
+  const int pos = string.find(search, fromIndex);
+  if (pos == std::string::npos) {
+    return -1;
+  }
+  return pos;
+}
+
+int StringUtils_iOS::indexOf(const std::string& string,
+                             const std::string& search,
+                             int fromIndex,
+                             int endIndex) const {
+  const int pos = string.find(search, fromIndex);
+  if ((pos == std::string::npos) ||
+      (pos > endIndex)) {
     return -1;
   }
   return pos;
@@ -59,13 +80,22 @@ std::string StringUtils_iOS::substring(const std::string& string,
 
 std::string StringUtils_iOS::ltrim(const std::string& string) const {
   std::string s = string;
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+  s.erase(s.begin(),
+          std::find_if(s.begin(),
+                       s.end(),
+                       std::not1(std::ptr_fun<int, int>(std::isspace))
+                       )
+          );
   return s;
 }
 
 std::string StringUtils_iOS::rtrim(const std::string& string) const {
   std::string s = string;
-  s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+  s.erase(std::find_if(s.rbegin(),
+                       s.rend(),
+                       std::not1(std::ptr_fun<int, int>(std::isspace))
+                       ).base(),
+          s.end());
   return s;
 }
 
@@ -95,4 +125,38 @@ long long StringUtils_iOS::parseHexInt(const std::string& str) const {
   ss >> result;
 
   return result;
+}
+
+int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
+                                          int fromIndex) const {
+  const int stringLen = string.length();
+  for (int i = fromIndex ; i < stringLen; i++) {
+    if (!std::isspace( string[i] )) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int StringUtils_iOS::indexOfFirstBlank(const std::string& string,
+                                       int fromIndex) const {
+  const int stringLen = string.length();
+  for (int i = fromIndex ; i < stringLen; i++) {
+    if (std::isspace( string[i] )) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
+                                         const std::string& chars,
+                                         int fromIndex) const {
+  const int stringLen = string.length();
+  for (int i = fromIndex ; i < stringLen; i++) {
+    if (chars.find(string[i]) != std::string::npos) {
+      return i;
+    }
+  }
+  return -1;
 }
