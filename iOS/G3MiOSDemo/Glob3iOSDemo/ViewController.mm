@@ -266,21 +266,20 @@ public:
 //    const std::string cartoCSS = "@water: #C0E0F8; [zoom > 1] { [zoom == 3] { } }";
     const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; [zoom == 3] { line-width:2; } }";
 
-    CartoCSSResult* result1 = CartoCSSParser::parse(cartoCSS);
+    CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
 
-    if (result1->hasError()) {
-      std::vector<CartoCSSError*> errors = result1->getErrors();
+    if (result->hasError()) {
+      std::vector<CartoCSSError*> errors = result->getErrors();
       const int errorsSize = errors.size();
       for (int i = 0; i < errorsSize; i++) {
-        CartoCSSError* error = errors[i];
-        ILogger::instance()->logError("\"%s\" at %d-%d",
-                                      error->getDescription().c_str(),
-                                      error->getFromIndex(),
-                                      error->getEndIndex());
+        const CartoCSSError* error = errors[i];
+        ILogger::instance()->logError("\"%s\" at %d",
+                                      error->_message.c_str(),
+                                      error->_position);
       }
     }
 
-    delete result1;
+    delete result;
 
     Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
     [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);

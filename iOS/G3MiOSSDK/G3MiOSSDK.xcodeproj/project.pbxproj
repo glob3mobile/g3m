@@ -223,6 +223,7 @@
 		CFA1FDA117A196A300DAEAB2 /* GEO2DPolygonData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA1FD9F17A1966D00DAEAB2 /* GEO2DPolygonData.hpp */; };
 		CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */; };
 		CFA1FDA517A1AB4400DAEAB2 /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */; };
+		CFA2EEEE17EA0B1100EB4526 /* CartoCSSLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA2EEEC17EA0B1100EB4526 /* CartoCSSLexer.cpp */; };
 		CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA59EC9171467890095E2EF /* ICanvas.cpp */; };
 		CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFA59ECC171482560095E2EF /* Canvas_iOS.mm */; };
 		CFA59ECF1714856A0095E2EF /* ICanvas.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECA171467890095E2EF /* ICanvas.hpp */; };
@@ -1238,6 +1239,8 @@
 		CFA1FD9F17A1966D00DAEAB2 /* GEO2DPolygonData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPolygonData.hpp; path = Commons/GEO/GEO2DPolygonData.hpp; sourceTree = "<group>"; };
 		CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiPolygonGeometry.cpp; path = Commons/GEO/GEO2DMultiPolygonGeometry.cpp; sourceTree = "<group>"; };
 		CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiPolygonGeometry.hpp; path = Commons/GEO/GEO2DMultiPolygonGeometry.hpp; sourceTree = "<group>"; };
+		CFA2EEEC17EA0B1100EB4526 /* CartoCSSLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CartoCSSLexer.cpp; path = Commons/Basic/CartoCSSLexer.cpp; sourceTree = "<group>"; };
+		CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CartoCSSLexer.hpp; path = Commons/Basic/CartoCSSLexer.hpp; sourceTree = "<group>"; };
 		CFA59EC9171467890095E2EF /* ICanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICanvas.cpp; path = Commons/Basic/ICanvas.cpp; sourceTree = "<group>"; };
 		CFA59ECA171467890095E2EF /* ICanvas.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvas.hpp; path = Commons/Basic/ICanvas.hpp; sourceTree = "<group>"; };
 		CFA59ECC171482560095E2EF /* Canvas_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Canvas_iOS.mm; path = Specific/Derived/Canvas_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1821,6 +1824,8 @@
 				CF1E85BA17E799F8005BDE80 /* CartoCSSSymbolizer.hpp */,
 				CF22263A17E8F46F00280C66 /* CartoCSSTokens.cpp */,
 				CF22263B17E8F47000280C66 /* CartoCSSTokens.hpp */,
+				CFA2EEEC17EA0B1100EB4526 /* CartoCSSLexer.cpp */,
+				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2709,6 +2714,7 @@
 				CF1E85B817E797BC005BDE80 /* CartoCSSParser.cpp in Sources */,
 				CF1E85BB17E799F8005BDE80 /* CartoCSSSymbolizer.cpp in Sources */,
 				CF22263C17E8F47000280C66 /* CartoCSSTokens.cpp in Sources */,
+				CFA2EEEE17EA0B1100EB4526 /* CartoCSSLexer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

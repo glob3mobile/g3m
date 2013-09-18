@@ -18,35 +18,18 @@ class IStringUtils;
 class CartoCSSLexer;
 
 class CartoCSSError {
-private:
-  const std::string _description;
-  const int         _fromIndex;
-  const int         _endIndex;
-
 public:
-  CartoCSSError(const std::string& description,
-                int fromIndex,
-                int endIndex) :
-  _description(description),
-  _fromIndex(fromIndex),
-  _endIndex(endIndex)
-  {
+  const std::string _message;
+  const int         _position;
 
+  CartoCSSError(const std::string& message,
+                int position) :
+  _message(message),
+  _position(position)
+  {
   }
 
   ~CartoCSSError() {
-  }
-
-  std::string getDescription() const {
-    return _description;
-  }
-
-  int getFromIndex() const {
-    return _fromIndex;
-  }
-
-  int getEndIndex() const {
-    return _endIndex;
   }
 };
 
