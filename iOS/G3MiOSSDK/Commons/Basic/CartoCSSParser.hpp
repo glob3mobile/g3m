@@ -16,6 +16,7 @@ class CartoCSSSymbolizer;
 class IByteBuffer;
 class IStringUtils;
 class CartoCSSLexer;
+class CartoCSSToken;
 
 class CartoCSSError {
 public:
@@ -83,11 +84,14 @@ private:
 //  const IStringUtils* _su;
 //  int _cursor;
 
-  CartoCSSLexer* _lexer;
+//  CartoCSSLexer* _lexer;
+
+  const std::vector<const CartoCSSToken*> _tokens;
+  const int                               _tokensSize;
 
   CartoCSSResult* _result;
 
-  CartoCSSParser(const std::string& css);
+  CartoCSSParser(const std::string& source);
 
   CartoCSSResult* pvtParse();
 
@@ -95,7 +99,9 @@ private:
 
 //  int findClosingBrace(int openBracePosition);
 
-  ~CartoCSSParser();
+  ~CartoCSSParser() {
+    
+  }
 
 public:
 

@@ -10,9 +10,10 @@
 #define __G3MiOSSDK__CartoCSSLexer__
 
 #include <string>
-
+#include <vector>
 class IStringUtils;
 class CartoCSSToken;
+
 
 class CartoCSSLexer {
 private:
@@ -31,7 +32,6 @@ private:
 
   void skipCommentsAndBlanks();
 
-public:
   CartoCSSLexer(const std::string& source);
 
   //  void revert() {
@@ -40,6 +40,9 @@ public:
 
   const CartoCSSToken* getNextToken();
 
+public:
+  static std::vector<const CartoCSSToken*> tokenize(const std::string& source);
+  
 };
 
 #endif

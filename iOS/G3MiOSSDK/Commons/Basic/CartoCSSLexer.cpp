@@ -182,3 +182,28 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
 
   return token;
 }
+
+std::vector<const CartoCSSToken*> CartoCSSLexer::tokenize(const std::string& source) {
+  CartoCSSLexer lexer(source);
+
+  std::vector<const CartoCSSToken*> result;
+
+  bool finish = false;
+  while (!finish) {
+    const CartoCSSToken* token = lexer.getNextToken();
+
+    if (token == NULL) {
+      finish = true;
+    }
+    else {
+      if (token->_kind == ERROR) {
+        finish = true;
+      }
+
+      result.push_back(token);
+    }
+  }
+
+  return result;
+}
+

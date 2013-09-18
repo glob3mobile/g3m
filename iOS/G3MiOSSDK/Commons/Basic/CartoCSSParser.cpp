@@ -15,19 +15,21 @@
 #include <map>
 
 
-CartoCSSParser::CartoCSSParser(const std::string& css) :
+CartoCSSParser::CartoCSSParser(const std::string& source) :
 //_css(css),
 //_cssSize(css.size()),
 //_cursor(0),
-_lexer(new CartoCSSLexer(css)),
+//_lexer(new CartoCSSLexer(css)),
+_tokens(CartoCSSLexer::tokenize(source)),
+_tokensSize(_tokens.size()),
 _result(new CartoCSSResult())
 //_su(IStringUtils::instance())
 {
 }
 
-CartoCSSParser::~CartoCSSParser() {
-  delete _lexer;
-}
+//CartoCSSParser::~CartoCSSParser() {
+//  delete _lexer;
+//}
 
 CartoCSSResult* CartoCSSParser::parse(const IByteBuffer* css) {
   return parse(css->getAsString());
@@ -136,34 +138,55 @@ CartoCSSResult* CartoCSSParser::pvtParse() {
   //  while (continueParsing && (_cursor < _cssSize)) {
   //    continueParsing = parseSymbolizer();
   //  }
-
-
+  
   std::map<std::string, std::string> variables;
 
-  bool finish = false;
-  while (!finish) {
-    const CartoCSSToken* token = _lexer->getNextToken();
+  for (int i = 0; i < _tokensSize; i++) {
+    const CartoCSSToken* token = _tokens[i];
 
-    if (token == NULL) {
-      finish = true;
+    ILogger::instance()->logInfo("%s", token->description().c_str());
+    if (token->_kind == VARIABLE) {
+      const VariableCartoCSSToken* variableToken = (VariableCartoCSSToken*) token;
+      variables[variableToken->_name] = variableToken->_value;
     }
-    else {
-      ILogger::instance()->logInfo("%s", token->description().c_str());
-
-      if (token->_kind == VARIABLE) {
-        const VariableCartoCSSToken* variableToken = (VariableCartoCSSToken*) token;
-        variables[variableToken->_name] = variableToken->_value;
-      }
-      else if (token->_kind == ERROR) {
-        finish = true;
-        const ErrorCartoCSSToken* errorToken = (ErrorCartoCSSToken*) token;
-        _result->addError(new CartoCSSError(errorToken->_message,
-                                            errorToken->_position));
-      }
-
-      delete token;
+    else if (token->_kind == ERROR) {
+      const ErrorCartoCSSToken* errorToken = (ErrorCartoCSSToken*) token;
+      _result->addError(new CartoCSSError(errorToken->_message,
+                                          errorToken->_position));
+      break;
     }
   }
-  
+
+  for (int i = 0; i < _tokensSize; i++) {
+    const CartoCSSToken* token = _tokens[i];
+    delete token;
+  }
+
+
+//  bool finish = false;
+//  while (!finish) {
+//    const CartoCSSToken* token = _lexer->getNextToken();
+//
+//    if (token == NULL) {
+//      finish = true;
+//    }
+//    else {
+//      ILogger::instance()->logInfo("%s", token->description().c_str());
+//
+//      if (token->_kind == VARIABLE) {
+//        const VariableCartoCSSToken* variableToken = (VariableCartoCSSToken*) token;
+//        variables[variableToken->_name] = variableToken->_value;
+//      }
+//      else if (token->_kind == ERROR) {
+//        finish = true;
+//        const ErrorCartoCSSToken* errorToken = (ErrorCartoCSSToken*) token;
+//        _result->addError(new CartoCSSError(errorToken->_message,
+//                                            errorToken->_position));
+//      }
+//
+//      delete token;
+//    }
+//  }
+
   return _result;
 }
