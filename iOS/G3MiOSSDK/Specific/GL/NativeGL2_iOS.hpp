@@ -426,7 +426,7 @@ public:
   bool deleteProgram(int program) const {
     glDeleteProgram(program);
     return true;
-    int NOT_WORKING_APPARENTLY;
+//    int NOT_WORKING_APPARENTLY;
 //    int ps;
 //    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
 //    return (ps == GL_TRUE);
@@ -571,9 +571,9 @@ public:
         return new GPUUniformVec3Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
         return new GPUUniformBool(name, new GLUniformID_iOS(id));
-      case GL_SAMPLER_2D:
-        int NOT_IMPLEMENTED_YET;
-        return NULL;
+//      case GL_SAMPLER_2D:
+//        int NOT_IMPLEMENTED_YET;
+//        return NULL;
       default:
         return NULL;
         break;

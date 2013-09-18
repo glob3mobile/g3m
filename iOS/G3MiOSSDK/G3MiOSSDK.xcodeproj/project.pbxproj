@@ -169,6 +169,8 @@
 		CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */; };
 		CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */; };
 		CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */; };
+		CF76461817EA414B00302F01 /* CartoCSSTokens.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF22263B17E8F47000280C66 /* CartoCSSTokens.hpp */; };
+		CF76461917EA414B00302F01 /* CartoCSSLexer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
@@ -604,6 +606,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF76461817EA414B00302F01 /* CartoCSSTokens.hpp in CopyFiles */,
+				CF76461917EA414B00302F01 /* CartoCSSLexer.hpp in CopyFiles */,
 				CF1E85BC17E7A0A0005BDE80 /* CartoCSSParser.hpp in CopyFiles */,
 				CF1E85BD17E7A0A0005BDE80 /* CartoCSSSymbolizer.hpp in CopyFiles */,
 				CFF6D2A417E345D000DB341C /* CompositeTileRasterizer.hpp in CopyFiles */,
