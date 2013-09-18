@@ -60,7 +60,7 @@ public:
   }
   
   const Vector2I getMinResolution() const{
-    int WORKING_JM;
+//    int WORKING_JM;
     return Vector2I::zero();
   }
   

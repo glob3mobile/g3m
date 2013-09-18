@@ -259,9 +259,9 @@ const std::string Downloader_iOS::statistics() {
   isb->addString(", queued=");
   isb->addInt([_queuedHandlers count]);
   isb->addString(", totalRequests=");
-  isb->addInt(_requestsCounter);
+  isb->addLong(_requestsCounter);
   isb->addString(", totalCancels=");
-  isb->addInt(_cancelsCounter);
+  isb->addLong(_cancelsCounter);
   const std::string s = isb->getString();
   delete isb;
   return s;

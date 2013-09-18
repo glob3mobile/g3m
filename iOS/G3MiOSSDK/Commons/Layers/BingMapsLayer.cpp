@@ -236,7 +236,7 @@ const std::string BingMapsLayer::getQuadkey(const int zoom,
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   for (int i = 1; i <= zoom; i++) {
-    const int t = (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1);
+    const int t = ((((row >> zoom) - i) & 1) << 1) | (((column >> zoom) - i) & 1);
     isb->addInt(t);
   }
 

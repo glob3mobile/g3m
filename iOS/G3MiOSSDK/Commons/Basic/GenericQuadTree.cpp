@@ -482,22 +482,28 @@ bool GenericQuadTree::acceptVisitor(const Sector& sector,
 }
 
 bool GenericQuadTree::acceptVisitor(const Geodetic2D& geo,
-                                    const GenericQuadTreeVisitor& visitor) const{
-
-  const bool aborted = _root->acceptVisitor(geo, visitor);
-  visitor.endVisit(aborted);
-  return aborted;
-
+                                    const GenericQuadTreeVisitor& visitor) const {
+  if (_root != NULL) {
+    const bool aborted = _root->acceptVisitor(geo, visitor);
+    visitor.endVisit(aborted);
+    return aborted;
+  }
+  return false;
 }
 
-bool GenericQuadTree::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const{
-  const bool aborted = _root->acceptNodeVisitor(visitor);
-  visitor.endVisit(aborted);
-  return aborted;
+bool GenericQuadTree::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const {
+  if (_root != NULL) {
+    const bool aborted = _root->acceptNodeVisitor(visitor);
+    visitor.endVisit(aborted);
+    return aborted;
+  }
+  return false;
 }
 
-void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
-  _root->symbolize(geoTileRasterizer);
+void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
+  if (_root != NULL) {
+    _root->symbolize(geoTileRasterizer);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////

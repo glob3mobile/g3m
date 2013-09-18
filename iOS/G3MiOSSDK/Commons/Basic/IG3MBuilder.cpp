@@ -658,8 +658,8 @@ G3MWidget* IG3MBuilder::create() {
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
 //  if (!shownSector.isEquals(Sector::fullSphere())) {
 //    const double margin = 0.2;
-    const double height = 1e5;
-//    
+//    const double height = 1e5;
+//
 //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
 //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
 //
