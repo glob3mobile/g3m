@@ -114,7 +114,14 @@ private:
   }
 
   bool lookAhead(const std::vector<CartoCSSTokenKind>& expectedTokensKind) const;
-  int lookAheadWithBalancedBraces(const CartoCSSTokenKind expectedTokenKind) const;
+//  int lookAheadWithBalancedBraces(const CartoCSSTokenKind expectedTokenKind) const;
+
+  int lookAheadManyOf(const CartoCSSTokenKind alternative1,
+                      const CartoCSSTokenKind alternative2) const;
+  int lookAheadBalancedBraces(int cursor) const;
+
+  bool parseVariableDeclaration();
+  bool parseSymbolizerBlock();
 
   CartoCSSResult* document();
 
