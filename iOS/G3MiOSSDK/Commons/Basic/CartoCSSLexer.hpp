@@ -21,7 +21,7 @@ private:
   const int         _sourceSize;
   int               _cursor;
 
-  //  CartoCSSToken* _previousToken;
+  CartoCSSToken* _lastToken;
   //  bool           _returnPreviousToken;
 
   const IStringUtils* _su;

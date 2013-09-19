@@ -18,7 +18,8 @@ _sourceSize(source.size()),
 _cursor(0),
 //  _previousToken(NULL),
 //  _returnPreviousToken(false),
-_su(IStringUtils::instance())
+_su(IStringUtils::instance()),
+_lastToken(NULL)
 {
 }
 
@@ -104,7 +105,8 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
     case ':': {
       if ((_cursor + 1 < _sourceSize) &&
           (_source[_cursor + 1] == ':')) {
-        token = new DoubleColonCartoCSSToken(_cursor);
+        //token = new DoubleColonCartoCSSToken(_cursor);
+        token = new StringCartoCSSToken("::", _cursor);
         _cursor += 2;
       }
       else {
@@ -133,21 +135,21 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
       break;
     }
 
-//    case ',': {
-//      token = new StringCartoCSSToken(",", _cursor);
-//      _cursor++;
-//      break;
-//    }
-
     default: {
-//      const int cursor = _su->indexOfFirstNonChar(_source, "{}@:;[] \n\r", _cursor);
-      const int cursor = _su->indexOfFirstNonChar(_source, "{}:;[] \n\r", _cursor);
+      const int cursor = _su->indexOfFirstNonChar(_source, "{}:;[]\n\r", _cursor);
       if (cursor < 0) {
         token = new ErrorCartoCSSToken("Unknown token", _cursor);
       }
       else {
         const std::string str = _su->substring(_source, _cursor, cursor);
-        token = new StringCartoCSSToken(str, _cursor);
+        if ((_lastToken != NULL) &&
+            (_lastToken->_type == STRING)) {
+          ((StringCartoCSSToken*) _lastToken)->appendString(str);
+          token = new SkipCartoCSSToken(_cursor);
+        }
+        else {
+          token = new StringCartoCSSToken(str, _cursor);
+        }
         _cursor = cursor;
       }
 
@@ -167,6 +169,7 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
 
   //    _previousToken = token;
 
+  _lastToken = token;
   return token;
 }
 
@@ -187,7 +190,12 @@ std::vector<const CartoCSSToken*> CartoCSSLexer::tokenize(const std::string& sou
         finish = true;
       }
 
-      result.push_back(token);
+      if (token->_type == SKIP) {
+        delete token;
+      }
+      else {
+        result.push_back(token);
+      }
     }
   }
 

@@ -19,7 +19,6 @@ _tokens(CartoCSSLexer::tokenize(source)),
 _tokensSize(_tokens.size()),
 _tokensCursor(0)
 {
-//  _variableDefinitionTokensType.push_back(AT);
   _variableDefinitionTokensType.push_back(STRING);
   _variableDefinitionTokensType.push_back(COLON);
   _variableDefinitionTokensType.push_back(STRING);
@@ -50,16 +49,18 @@ CartoCSSResult* CartoCSSParser::pvtParse() {
   return result;
 }
 
-bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const {
+bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType,
+                               int from,
+                               int to) const {
   const int expectedTokensTypeSize = expectedTokensType.size();
-  const int lastCursor = _tokensCursor + expectedTokensTypeSize;
-  if (lastCursor > _tokensSize) {
+  const int lastCursor = from + expectedTokensTypeSize;
+  if (lastCursor > to) {
     return false;
   }
 
   for (int i = 0; i < expectedTokensTypeSize; i++) {
     const CartoCSSTokenType expectedTokenType = expectedTokensType[i];
-    const CartoCSSToken* token = _tokens[_tokensCursor + i];
+    const CartoCSSToken* token = _tokens[from + i];
     if (token->_type != expectedTokenType) {
       return false;
     }
@@ -68,28 +69,36 @@ bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTok
   return true;
 }
 
+//bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const {
+//  const int expectedTokensTypeSize = expectedTokensType.size();
+//  const int lastCursor = _tokensCursor + expectedTokensTypeSize;
+//  if (lastCursor > _tokensSize) {
+//    return false;
+//  }
+//
+//  for (int i = 0; i < expectedTokensTypeSize; i++) {
+//    const CartoCSSTokenType expectedTokenType = expectedTokensType[i];
+//    const CartoCSSToken* token = _tokens[_tokensCursor + i];
+//    if (token->_type != expectedTokenType) {
+//      return false;
+//    }
+//  }
+//
+//  return true;
+//}
+
 bool CartoCSSParser::parseVariableDeclaration() {
   if ( !lookAhead(_variableDefinitionTokensType) ) {
     return false;
   }
 
-//  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 1])->_str;
-//  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 3])->_str;
-
-  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor])->_str;
+  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor])->str();
 
   if (variableName[0] != '@') {
     return false;
   }
 
-  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 2])->_str;
-
-//  //  _variableDefinitionTokensType.push_back(AT);
-//  _variableDefinitionTokensType.push_back(STRING);
-//  _variableDefinitionTokensType.push_back(COLON);
-//  _variableDefinitionTokensType.push_back(STRING);
-//  _variableDefinitionTokensType.push_back(SEMICOLON);
-
+  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 2])->str();
 
   //    result->addVariableDefinition(variableName, variableValue);
   ILogger::instance()->logInfo("Found variable \"%s\"=\"%s\"",
@@ -160,7 +169,7 @@ bool CartoCSSParser::parseSymbolizerBlock() {
     switch (type) {
       case STRING: {
         const StringCartoCSSToken* stringToken = (const StringCartoCSSToken*) token;
-        ILogger::instance()->logInfo("\"%s\"", stringToken->_str.c_str());
+        ILogger::instance()->logInfo("\"%s\"", stringToken->str().c_str());
         break;
       }
 
@@ -176,8 +185,24 @@ bool CartoCSSParser::parseSymbolizerBlock() {
     }
   }
 
-  for (int i = lasSelectorCursor+2; i < lastCloseBracePosition; i++) {
-    ILogger::instance()->logInfo("    %s", _tokens[i]->description().c_str());
+//  for (int i = lasSelectorCursor+2; i < lastCloseBracePosition; i++) {
+//    ILogger::instance()->logInfo("    %s", _tokens[i]->description().c_str());
+//  }
+
+  int cursor = lasSelectorCursor+2;
+  while (cursor < lastCloseBracePosition) {
+    if (lookAhead(_variableDefinitionTokensType, cursor, lastCloseBracePosition)) {
+      const std::string variableName  = ((const StringCartoCSSToken*) _tokens[cursor])->str();
+      const std::string variableValue = ((const StringCartoCSSToken*) _tokens[cursor + 2])->str();
+
+      ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
+
+      cursor += _variableDefinitionTokensType.size();
+    }
+    else {
+      ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
+      cursor++;
+    }
   }
 
   _tokensCursor = lastCloseBracePosition+1;

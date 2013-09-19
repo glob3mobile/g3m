@@ -18,10 +18,10 @@ enum CartoCSSTokenType {
   OPEN_BRACE,    //  {
   CLOSE_BRACE,   //  }
   EXPRESION,     //  [ source ]
-//  AT,            //  @
   COLON,         //  :
-  DOUBLE_COLON,  //  ::
+//  DOUBLE_COLON,  //  ::
   SEMICOLON,     //  ;
+  SKIP,
 };
 
 
@@ -92,12 +92,12 @@ public:
   const std::string description() const { return "[Colon]"; }
 };
 
-class DoubleColonCartoCSSToken : public CartoCSSToken {
-public:
-  DoubleColonCartoCSSToken(const int position) : CartoCSSToken(DOUBLE_COLON, position) { }
-
-  const std::string description() const { return "[DoubleColon]"; }
-};
+//class DoubleColonCartoCSSToken : public CartoCSSToken {
+//public:
+//  DoubleColonCartoCSSToken(const int position) : CartoCSSToken(DOUBLE_COLON, position) { }
+//
+//  const std::string description() const { return "[DoubleColon]"; }
+//};
 
 
 
@@ -126,8 +126,10 @@ public:
 
 
 class StringCartoCSSToken : public CartoCSSToken {
+private:
+  std::string _str;
+
 public:
-  const std::string _str;
 
   StringCartoCSSToken(const std::string& str,
                       const int position) :
@@ -136,7 +138,21 @@ public:
   {
   }
 
+  void appendString(const std::string& str);
+
+  const std::string str() const {
+    return _str;
+  }
+
   const std::string description() const;
+};
+
+
+class SkipCartoCSSToken : public CartoCSSToken {
+public:
+  SkipCartoCSSToken(const int position) : CartoCSSToken(SKIP, position) { }
+
+  const std::string description() const { return "[Skip]"; }
 };
 
 

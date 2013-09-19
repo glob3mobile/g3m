@@ -111,7 +111,13 @@ private:
   ~CartoCSSParser() {
   }
 
-  bool lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const;
+  bool lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType,
+                 int from,
+                 int to) const;
+
+  bool lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const {
+    return lookAhead(expectedTokensType, _tokensCursor, _tokensSize);
+  }
 
   int lookAheadManyOf(const CartoCSSTokenType alternative1,
                       const CartoCSSTokenType alternative2) const;

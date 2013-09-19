@@ -44,3 +44,7 @@ const std::string StringCartoCSSToken::description() const {
   delete isb;
   return s;
 }
+
+void StringCartoCSSToken::appendString(const std::string& str) {
+  _str = _str + str;
+}
