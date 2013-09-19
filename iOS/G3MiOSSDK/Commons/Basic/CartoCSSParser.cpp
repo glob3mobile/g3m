@@ -17,14 +17,13 @@
 CartoCSSParser::CartoCSSParser(const std::string& source) :
 _tokens(CartoCSSLexer::tokenize(source)),
 _tokensSize(_tokens.size()),
-//_result(new CartoCSSResult()),
 _tokensCursor(0)
 {
-  _variableDefinitionTokensKind.push_back(AT);
-  _variableDefinitionTokensKind.push_back(STRING);
-  _variableDefinitionTokensKind.push_back(COLON);
-  _variableDefinitionTokensKind.push_back(STRING);
-  _variableDefinitionTokensKind.push_back(SEMICOLON);
+//  _variableDefinitionTokensType.push_back(AT);
+  _variableDefinitionTokensType.push_back(STRING);
+  _variableDefinitionTokensType.push_back(COLON);
+  _variableDefinitionTokensType.push_back(STRING);
+  _variableDefinitionTokensType.push_back(SEMICOLON);
 }
 
 CartoCSSResult* CartoCSSParser::parse(const IByteBuffer* css) {
@@ -51,17 +50,17 @@ CartoCSSResult* CartoCSSParser::pvtParse() {
   return result;
 }
 
-bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenKind>& expectedTokensKind) const {
-  const int expectedTokensKindSize = expectedTokensKind.size();
-  const int lastCursor = _tokensCursor + expectedTokensKindSize;
+bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const {
+  const int expectedTokensTypeSize = expectedTokensType.size();
+  const int lastCursor = _tokensCursor + expectedTokensTypeSize;
   if (lastCursor > _tokensSize) {
     return false;
   }
 
-  for (int i = 0; i < expectedTokensKindSize; i++) {
-    const CartoCSSTokenKind expectedTokenKind = expectedTokensKind[i];
+  for (int i = 0; i < expectedTokensTypeSize; i++) {
+    const CartoCSSTokenType expectedTokenType = expectedTokensType[i];
     const CartoCSSToken* token = _tokens[_tokensCursor + i];
-    if (token->_kind != expectedTokenKind) {
+    if (token->_type != expectedTokenType) {
       return false;
     }
   }
@@ -69,60 +68,52 @@ bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenKind>& expectedTok
   return true;
 }
 
-//int CartoCSSParser::lookAheadWithBalancedBraces(const CartoCSSTokenKind expectedTokenKind) const {
-//  if ((_tokensCursor < _tokensSize-1) &&
-//      (_tokens[_tokensCursor]->_kind == expectedTokenKind)) {
-//
-//    if (_tokens[_tokensCursor + 1]->_kind == OPEN_BRACE) {
-//      int openedCount = 1;
-//      for (int i = _tokensCursor+2; i < _tokensSize; i++) {
-//        const CartoCSSTokenKind kind = _tokens[i]->_kind;
-//        if (kind == OPEN_BRACE) {
-//          openedCount++;
-//        }
-//        else if (kind == CLOSE_BRACE) {
-//          openedCount--;
-//          if (openedCount <= 0) {
-//            return i;
-//          }
-//        }
-//      }
-//    }
-//  }
-//  return -1;
-//}
-
 bool CartoCSSParser::parseVariableDeclaration() {
-  if ( !lookAhead(_variableDefinitionTokensKind) ) {
+  if ( !lookAhead(_variableDefinitionTokensType) ) {
     return false;
   }
 
-  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 1])->_str;
-  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 3])->_str;
+//  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 1])->_str;
+//  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 3])->_str;
+
+  const std::string variableName  = ((const StringCartoCSSToken*) _tokens[_tokensCursor])->_str;
+
+  if (variableName[0] != '@') {
+    return false;
+  }
+
+  const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 2])->_str;
+
+//  //  _variableDefinitionTokensType.push_back(AT);
+//  _variableDefinitionTokensType.push_back(STRING);
+//  _variableDefinitionTokensType.push_back(COLON);
+//  _variableDefinitionTokensType.push_back(STRING);
+//  _variableDefinitionTokensType.push_back(SEMICOLON);
+
 
   //    result->addVariableDefinition(variableName, variableValue);
   ILogger::instance()->logInfo("Found variable \"%s\"=\"%s\"",
                                variableName.c_str(),
                                variableValue.c_str());
 
-  _tokensCursor += _variableDefinitionTokensKind.size();
+  _tokensCursor += _variableDefinitionTokensType.size();
   return true;
 }
 
-int CartoCSSParser::lookAheadManyOf(const CartoCSSTokenKind alternative1,
-                                    const CartoCSSTokenKind alternative2) const {
+int CartoCSSParser::lookAheadManyOf(const CartoCSSTokenType alternative1,
+                                    const CartoCSSTokenType alternative2) const {
   if (_tokensCursor < _tokensSize-1) {
 
-    const CartoCSSTokenKind firstKind = _tokens[_tokensCursor]->_kind;
-    if ((firstKind != alternative1) &&
-        (firstKind != alternative2)) {
+    const CartoCSSTokenType firstType = _tokens[_tokensCursor]->_type;
+    if ((firstType != alternative1) &&
+        (firstType != alternative2)) {
       return -1;
     }
 
     for (int i = _tokensCursor+1; i < _tokensSize; i++) {
-      const CartoCSSTokenKind kind = _tokens[i]->_kind;
-      if ((kind != alternative1) &&
-          (kind != alternative2)) {
+      const CartoCSSTokenType type = _tokens[i]->_type;
+      if ((type != alternative1) &&
+          (type != alternative2)) {
         return i-1;
       }
     }
@@ -133,14 +124,14 @@ int CartoCSSParser::lookAheadManyOf(const CartoCSSTokenKind alternative1,
 
 int CartoCSSParser::lookAheadBalancedBraces(int cursor) const {
   if (cursor < _tokensSize) {
-    if (_tokens[cursor]->_kind == OPEN_BRACE) {
+    if (_tokens[cursor]->_type == OPEN_BRACE) {
       int openedCount = 1;
       for (int i = cursor+1; i < _tokensSize; i++) {
-        const CartoCSSTokenKind kind = _tokens[i]->_kind;
-        if (kind == OPEN_BRACE) {
+        const CartoCSSTokenType type = _tokens[i]->_type;
+        if (type == OPEN_BRACE) {
           openedCount++;
         }
-        else if (kind == CLOSE_BRACE) {
+        else if (type == CLOSE_BRACE) {
           openedCount--;
           if (openedCount <= 0) {
             return i;
@@ -165,8 +156,8 @@ bool CartoCSSParser::parseSymbolizerBlock() {
 
   for (int i = _tokensCursor; i <= lasSelectorCursor; i++) {
     const CartoCSSToken* token = _tokens[i];
-    const CartoCSSTokenKind kind = token->_kind;
-    switch (kind) {
+    const CartoCSSTokenType type = token->_type;
+    switch (type) {
       case STRING: {
         const StringCartoCSSToken* stringToken = (const StringCartoCSSToken*) token;
         ILogger::instance()->logInfo("\"%s\"", stringToken->_str.c_str());
@@ -238,17 +229,6 @@ CartoCSSResult* CartoCSSParser::document() {
       result->addError(CartoCSSError("Sintax error", _tokens[_tokensCursor]->_position));
       break;
     }
-
-//    if (parseVariableDeclaration()) {
-//      continue;
-//    }
-//
-//    if (parseSymbolizerBlock()) {
-//      continue;
-//    }
-//
-//    result->addError(CartoCSSError("Sintax error", _tokens[_tokensCursor]->_position));
-//    break;
   }
   
   return result;

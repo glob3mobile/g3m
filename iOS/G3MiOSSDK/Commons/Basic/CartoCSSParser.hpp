@@ -96,15 +96,13 @@ public:
 
 class CartoCSSParser {
 private:
-  std::vector<CartoCSSTokenKind> _variableDefinitionTokensKind;
+  std::vector<CartoCSSTokenType> _variableDefinitionTokensType;
 
 
   const std::vector<const CartoCSSToken*> _tokens;
   const int                               _tokensSize;
 
   int _tokensCursor;
-
-//  CartoCSSResult* _result;
 
   CartoCSSParser(const std::string& source);
 
@@ -113,11 +111,10 @@ private:
   ~CartoCSSParser() {
   }
 
-  bool lookAhead(const std::vector<CartoCSSTokenKind>& expectedTokensKind) const;
-//  int lookAheadWithBalancedBraces(const CartoCSSTokenKind expectedTokenKind) const;
+  bool lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const;
 
-  int lookAheadManyOf(const CartoCSSTokenKind alternative1,
-                      const CartoCSSTokenKind alternative2) const;
+  int lookAheadManyOf(const CartoCSSTokenType alternative1,
+                      const CartoCSSTokenType alternative2) const;
   int lookAheadBalancedBraces(int cursor) const;
 
   bool parseVariableDeclaration();

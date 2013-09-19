@@ -11,31 +11,32 @@
 
 #include <string>
 
-enum CartoCSSTokenKind {
+
+enum CartoCSSTokenType {
   ERROR,
-  OPEN_BRACE,           // {
-  CLOSE_BRACE,          // }
-  EXPRESION,            // [ source ]
-//  VARIABLE,
-  AT,                   // @
-  COLON,                // :
-  SEMICOLON,            // ;
   STRING,
+  OPEN_BRACE,    //  {
+  CLOSE_BRACE,   //  }
+  EXPRESION,     //  [ source ]
+//  AT,            //  @
+  COLON,         //  :
+  DOUBLE_COLON,  //  ::
+  SEMICOLON,     //  ;
 };
 
 
 class CartoCSSToken {
 protected:
 
-  CartoCSSToken(CartoCSSTokenKind kind,
+  CartoCSSToken(CartoCSSTokenType type,
                 const int position) :
-  _kind(kind),
+  _type(type),
   _position(position)
   {
   }
 
 public:
-  const CartoCSSTokenKind _kind;
+  const CartoCSSTokenType _type;
   const int _position;
 
   virtual ~CartoCSSToken() {
@@ -76,12 +77,12 @@ public:
 };
 
 
-class AtCartoCSSToken : public CartoCSSToken {
-public:
-  AtCartoCSSToken(const int position) : CartoCSSToken(AT, position) { }
-
-  const std::string description() const { return "[At]"; }
-};
+//class AtCartoCSSToken : public CartoCSSToken {
+//public:
+//  AtCartoCSSToken(const int position) : CartoCSSToken(AT, position) { }
+//
+//  const std::string description() const { return "[At]"; }
+//};
 
 
 class ColonCartoCSSToken : public CartoCSSToken {
@@ -90,6 +91,14 @@ public:
 
   const std::string description() const { return "[Colon]"; }
 };
+
+class DoubleColonCartoCSSToken : public CartoCSSToken {
+public:
+  DoubleColonCartoCSSToken(const int position) : CartoCSSToken(DOUBLE_COLON, position) { }
+
+  const std::string description() const { return "[DoubleColon]"; }
+};
+
 
 
 class SemicolonCartoCSSToken : public CartoCSSToken {

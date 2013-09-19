@@ -95,15 +95,22 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
       break;
     }
 
-    case '@': {
-      token = new AtCartoCSSToken(_cursor);
-      _cursor++;
-      break;
-    }
+//    case '@': {
+//      token = new AtCartoCSSToken(_cursor);
+//      _cursor++;
+//      break;
+//    }
 
     case ':': {
-      token = new ColonCartoCSSToken(_cursor);
-      _cursor++;
+      if ((_cursor + 1 < _sourceSize) &&
+          (_source[_cursor + 1] == ':')) {
+        token = new DoubleColonCartoCSSToken(_cursor);
+        _cursor += 2;
+      }
+      else {
+        token = new ColonCartoCSSToken(_cursor);
+        _cursor++;
+      }
       break;
     }
 
@@ -126,8 +133,15 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
       break;
     }
 
+//    case ',': {
+//      token = new StringCartoCSSToken(",", _cursor);
+//      _cursor++;
+//      break;
+//    }
+
     default: {
-      const int cursor = _su->indexOfFirstNonChar(_source, "{}@:; \n\r", _cursor);
+//      const int cursor = _su->indexOfFirstNonChar(_source, "{}@:;[] \n\r", _cursor);
+      const int cursor = _su->indexOfFirstNonChar(_source, "{}:;[] \n\r", _cursor);
       if (cursor < 0) {
         token = new ErrorCartoCSSToken("Unknown token", _cursor);
       }
@@ -169,7 +183,7 @@ std::vector<const CartoCSSToken*> CartoCSSLexer::tokenize(const std::string& sou
       finish = true;
     }
     else {
-      if (token->_kind == ERROR) {
+      if (token->_type == ERROR) {
         finish = true;
       }
 

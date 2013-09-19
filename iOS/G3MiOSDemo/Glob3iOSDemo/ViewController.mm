@@ -264,7 +264,9 @@ public:
 
 //    const std::string cartoCSS = "#earthquakes { [Magnitude >= 2.5] { marker-width:6; } [Magnitude >= 3] { marker-width:8; } }  #layer1 { line-color: #C00; }\n#layer1[Magnitude >= 2.5] { line-width: 1;\nline-color: #C00; }  ";
 //    const std::string cartoCSS = "@water: #C0E0F8; [zoom > 1] { [zoom == 3] { } }";
-    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; [zoom == 3] { line-width:2; } } #world .class [level == 5] { background-color: black; } ";
+    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } ";
+
+//    const std::string cartoCSS = "@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n";
 
     CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
 
