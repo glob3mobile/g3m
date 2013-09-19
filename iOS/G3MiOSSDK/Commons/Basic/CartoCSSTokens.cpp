@@ -13,8 +13,8 @@
 
 const std::string ErrorCartoCSSToken::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->addString("[Error message=\"");
-  isb->addString(_message);
+  isb->addString("[Error description=\"");
+  isb->addString(_description);
   isb->addString("\" at ");
   isb->addInt(_position);
   isb->addString("]");
@@ -28,19 +28,6 @@ const std::string ExpressionCartoCSSToken::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->addString("[Expression source=\"");
   isb->addString(_source);
-  isb->addString("\"]");
-  const std::string s = isb->getString();
-  delete isb;
-  return s;
-}
-
-
-const std::string VariableCartoCSSToken::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->addString("[Variable name=\"");
-  isb->addString(_name);
-  isb->addString("\" value=\"");
-  isb->addString(_value);
   isb->addString("\"]");
   const std::string s = isb->getString();
   delete isb;

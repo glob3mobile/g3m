@@ -11,66 +11,83 @@
 
 #include <vector>
 #include <string>
-
-class CartoCSSSymbolizer;
+#include "CartoCSSTokens.hpp"
+#include "CartoCSSSymbolizer.hpp"
 class IByteBuffer;
 class IStringUtils;
 class CartoCSSLexer;
-class CartoCSSToken;
 
 
 class CartoCSSError {
-public:
-  const std::string _message;
-  const int         _position;
+private:
+  std::string _description;
+  int         _position;
 
-  CartoCSSError(const std::string& message,
+public:
+  CartoCSSError(const std::string& description,
                 int position) :
-  _message(message),
+  _description(description),
   _position(position)
   {
   }
 
   ~CartoCSSError() {
   }
+
+  std::string getDescription() const {
+    return _description;
+  }
+
+  int getPosition() const {
+    return _position;
+  }
 };
 
 
 class CartoCSSResult {
 private:
-  std::vector<CartoCSSSymbolizer*> _symbolizers;
-  std::vector<CartoCSSError*>      _errors;
+//  std::vector<CartoCSSSymbolizer> _symbolizers;
+  CartoCSSSymbolizer         _symbolizer;
+  std::vector<CartoCSSError> _errors;
 
 public:
   CartoCSSResult() {
   }
 
   ~CartoCSSResult() {
-    const int errorsSize = _errors.size();
-    for (int i = 0; i < errorsSize; i++) {
-      delete _errors[i];
-    }
-
-    int __delete__symbolizers;
+//    const int errorsSize = _errors.size();
+//    for (int i = 0; i < errorsSize; i++) {
+//      delete _errors[i];
+//    }
+//
+//    int __delete__symbolizers;
   }
 
-  void addSymbolizer(CartoCSSSymbolizer* symbolizer) {
-    _symbolizers.push_back(symbolizer);
+//  void addSymbolizer(const CartoCSSSymbolizer& symbolizer) {
+//    _symbolizers.push_back(symbolizer);
+//  }
+//
+//  std::vector<CartoCSSSymbolizer> getSymbolizers() const {
+//    return _symbolizers;
+//  }
+
+  void setSymbolizer(const CartoCSSSymbolizer& symbolizer) {
+    _symbolizer = symbolizer;
   }
 
-  void addError(CartoCSSError* error) {
+  CartoCSSSymbolizer getSymbolizer() const {
+    return _symbolizer;
+  }
+
+  void addError(const CartoCSSError& error) {
     _errors.push_back(error);
-  }
-
-  std::vector<CartoCSSSymbolizer*> getSymbolizers() const {
-    return _symbolizers;
   }
 
   bool hasError() const {
     return !_errors.empty();
   }
 
-  std::vector<CartoCSSError*> getErrors() const {
+  std::vector<CartoCSSError> getErrors() const {
     return _errors;
   }
 
@@ -79,10 +96,15 @@ public:
 
 class CartoCSSParser {
 private:
+  std::vector<CartoCSSTokenKind> _variableDefinitionTokensKind;
+
+
   const std::vector<const CartoCSSToken*> _tokens;
   const int                               _tokensSize;
 
-  CartoCSSResult* _result;
+  int _tokensCursor;
+
+//  CartoCSSResult* _result;
 
   CartoCSSParser(const std::string& source);
 
@@ -90,6 +112,11 @@ private:
 
   ~CartoCSSParser() {
   }
+
+  bool lookAhead(const std::vector<CartoCSSTokenKind>& expectedTokensKind) const;
+  int lookAheadWithBalancedBraces(const CartoCSSTokenKind expectedTokenKind) const;
+
+  CartoCSSResult* document();
 
 public:
   static CartoCSSResult* parse(const std::string& css);

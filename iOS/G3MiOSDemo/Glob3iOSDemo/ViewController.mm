@@ -264,18 +264,18 @@ public:
 
 //    const std::string cartoCSS = "#earthquakes { [Magnitude >= 2.5] { marker-width:6; } [Magnitude >= 3] { marker-width:8; } }  #layer1 { line-color: #C00; }\n#layer1[Magnitude >= 2.5] { line-width: 1;\nline-color: #C00; }  ";
 //    const std::string cartoCSS = "@water: #C0E0F8; [zoom > 1] { [zoom == 3] { } }";
-    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; [zoom == 3] { line-width:2; } }";
+    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; [zoom == 3] { line-width:2; } } #world { background-color: black; } ";
 
     CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
 
     if (result->hasError()) {
-      std::vector<CartoCSSError*> errors = result->getErrors();
+      std::vector<CartoCSSError> errors = result->getErrors();
       const int errorsSize = errors.size();
       for (int i = 0; i < errorsSize; i++) {
-        const CartoCSSError* error = errors[i];
+        const CartoCSSError error = errors[i];
         ILogger::instance()->logError("\"%s\" at %d",
-                                      error->_message.c_str(),
-                                      error->_position);
+                                      error.getDescription().c_str(),
+                                      error.getPosition());
       }
     }
 

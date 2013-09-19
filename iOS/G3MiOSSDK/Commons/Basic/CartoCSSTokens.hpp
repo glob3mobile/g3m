@@ -15,8 +15,8 @@ enum CartoCSSTokenKind {
   ERROR,
   OPEN_BRACE,           // {
   CLOSE_BRACE,          // }
-  CONDITION_SELECTOR,
-  VARIABLE,
+  EXPRESION,            // [ source ]
+//  VARIABLE,
   AT,                   // @
   COLON,                // :
   SEMICOLON,            // ;
@@ -27,13 +27,16 @@ enum CartoCSSTokenKind {
 class CartoCSSToken {
 protected:
 
-  CartoCSSToken(CartoCSSTokenKind kind) :
-  _kind(kind)
+  CartoCSSToken(CartoCSSTokenKind kind,
+                const int position) :
+  _kind(kind),
+  _position(position)
   {
   }
 
 public:
   const CartoCSSTokenKind _kind;
+  const int _position;
 
   virtual ~CartoCSSToken() {
   }
@@ -44,14 +47,12 @@ public:
 
 class ErrorCartoCSSToken : public CartoCSSToken {
 public:
-  const std::string _message;
-  const int         _position;
+  const std::string _description;
 
-  ErrorCartoCSSToken(const std::string& message,
+  ErrorCartoCSSToken(const std::string& description,
                      int position) :
-  CartoCSSToken(ERROR),
-  _message(message),
-  _position(position)
+  CartoCSSToken(ERROR, position),
+  _description(description)
   {
   }
 
@@ -61,7 +62,7 @@ public:
 
 class OpenBraceCartoCSSToken : public CartoCSSToken {
 public:
-  OpenBraceCartoCSSToken() : CartoCSSToken(OPEN_BRACE) { }
+  OpenBraceCartoCSSToken(const int position) : CartoCSSToken(OPEN_BRACE, position) { }
 
   const std::string description() const { return "[OpenBrace]"; }
 };
@@ -69,7 +70,7 @@ public:
 
 class CloseBraceCartoCSSToken : public CartoCSSToken {
 public:
-  CloseBraceCartoCSSToken() : CartoCSSToken(CLOSE_BRACE) { }
+  CloseBraceCartoCSSToken(const int position) : CartoCSSToken(CLOSE_BRACE, position) { }
 
   const std::string description() const { return "[CloseBrace]"; }
 };
@@ -77,7 +78,7 @@ public:
 
 class AtCartoCSSToken : public CartoCSSToken {
 public:
-  AtCartoCSSToken() : CartoCSSToken(AT) { }
+  AtCartoCSSToken(const int position) : CartoCSSToken(AT, position) { }
 
   const std::string description() const { return "[At]"; }
 };
@@ -85,7 +86,7 @@ public:
 
 class ColonCartoCSSToken : public CartoCSSToken {
 public:
-  ColonCartoCSSToken() : CartoCSSToken(COLON) { }
+  ColonCartoCSSToken(const int position) : CartoCSSToken(COLON, position) { }
 
   const std::string description() const { return "[Colon]"; }
 };
@@ -93,7 +94,7 @@ public:
 
 class SemicolonCartoCSSToken : public CartoCSSToken {
 public:
-  SemicolonCartoCSSToken() : CartoCSSToken(SEMICOLON) { }
+  SemicolonCartoCSSToken(const int position) : CartoCSSToken(SEMICOLON, position) { }
 
   const std::string description() const { return "[Semicolon]"; }
 };
@@ -103,8 +104,9 @@ class ExpressionCartoCSSToken : public CartoCSSToken {
 public:
   const std::string _source;
 
-  ExpressionCartoCSSToken(const std::string& source) :
-  CartoCSSToken(CONDITION_SELECTOR),
+  ExpressionCartoCSSToken(const std::string& source,
+                          const int position) :
+  CartoCSSToken(EXPRESION, position),
   _source(source)
   {
   }
@@ -114,32 +116,15 @@ public:
 };
 
 
-class VariableCartoCSSToken : public CartoCSSToken {
-public:
-  const std::string _name;
-  const std::string _value;
-
-  VariableCartoCSSToken(const std::string& name,
-                        const std::string& value) :
-  CartoCSSToken(VARIABLE),
-  _name(name),
-  _value(value)
-  {
-
-  }
-
-  const std::string description() const;
-};
-
 class StringCartoCSSToken : public CartoCSSToken {
 public:
   const std::string _str;
 
-  StringCartoCSSToken(const std::string& str) :
-  CartoCSSToken(STRING),
+  StringCartoCSSToken(const std::string& str,
+                      const int position) :
+  CartoCSSToken(STRING, position),
   _str(str)
   {
-
   }
 
   const std::string description() const;

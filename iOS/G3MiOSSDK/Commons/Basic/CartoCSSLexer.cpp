@@ -84,31 +84,31 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
   switch (c) {
 
     case '{': {
-      token = new OpenBraceCartoCSSToken();
+      token = new OpenBraceCartoCSSToken(_cursor);
       _cursor++;
       break;
     }
 
     case '}': {
-      token = new CloseBraceCartoCSSToken();
+      token = new CloseBraceCartoCSSToken(_cursor);
       _cursor++;
       break;
     }
 
     case '@': {
-      token = new AtCartoCSSToken();
+      token = new AtCartoCSSToken(_cursor);
       _cursor++;
       break;
     }
 
     case ':': {
-      token = new ColonCartoCSSToken();
+      token = new ColonCartoCSSToken(_cursor);
       _cursor++;
       break;
     }
 
     case ';': {
-      token = new SemicolonCartoCSSToken();
+      token = new SemicolonCartoCSSToken(_cursor);
       _cursor++;
       break;
     }
@@ -119,48 +119,21 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
         token = new ErrorCartoCSSToken("Unbalanced braquet", _cursor);
       }
       else {
-        token = new ExpressionCartoCSSToken(_su->substring(_source, _cursor+1, closeBraquetPosition));
+        token = new ExpressionCartoCSSToken(_su->substring(_source, _cursor+1, closeBraquetPosition),
+                                            _cursor);
         _cursor = closeBraquetPosition+1;
       }
       break;
     }
 
-      //      case '@': {
-      //        const int semicolonPosition = _su->indexOf(_source, ";", _cursor+1);
-      //        if (semicolonPosition < 0) {
-      //          token = new ErrorCartoCSSToken("Can't find semicolon (;)", _cursor);
-      //        }
-      //        else {
-      //          const int colonPosition = _su->indexOf(_source, ":", _cursor+1, semicolonPosition);
-      //          if (colonPosition < 0) {
-      //            token = new ErrorCartoCSSToken("Can't find colon (:)", _cursor);
-      //          }
-      //          else {
-      //            const std::string name  = _su->trim( _su->substring(_source, _cursor+1, colonPosition) );
-      //            const std::string value = _su->trim( _su->substring(_source, colonPosition+1, semicolonPosition) );
-      //            token = new VariableCSSToken(name, value);
-      //            _cursor = semicolonPosition+1;
-      //          }
-      //        }
-      //        break;
-      //      }
-
-      //        OPEN_BRACE,           // {
-      //        CLOSE_BRACE,          // }
-      //        CONDITION_SELECTOR,
-      //        VARIABLE,
-      //        AT,                   // @
-      //        COLON,                // :
-      //        SEMICOLON,            // ;
-
     default: {
-      const int cursor = _su->indexOfFirstNonChar(_source, "{}@:;", _cursor);
+      const int cursor = _su->indexOfFirstNonChar(_source, "{}@:; \n\r", _cursor);
       if (cursor < 0) {
         token = new ErrorCartoCSSToken("Unknown token", _cursor);
       }
       else {
         const std::string str = _su->substring(_source, _cursor, cursor);
-        token = new StringCartoCSSToken( str );
+        token = new StringCartoCSSToken(str, _cursor);
         _cursor = cursor;
       }
 
