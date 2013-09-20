@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string Geodetic3D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(lat=");
   isb->addString(_latitude.description());
   isb->addString(", lon=");

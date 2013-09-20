@@ -229,7 +229,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("MUTABLE MATRIX 44D: ");
     float* f = asMatrix44D()->getColumnMajorFloatArray();
     for (int i = 0; i < 16; i++) {

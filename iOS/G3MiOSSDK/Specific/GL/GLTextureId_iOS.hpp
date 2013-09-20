@@ -39,7 +39,7 @@ public:
   }
   
   const std::string description() const {
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("(GLTextureId_iOS #");
     isb->addInt(_textureId);
     isb->addString(")");

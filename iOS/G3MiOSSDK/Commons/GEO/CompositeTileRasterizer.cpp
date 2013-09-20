@@ -31,7 +31,7 @@ CompositeTileRasterizer::~CompositeTileRasterizer() {
 }
 
 std::string CompositeTileRasterizer::getId() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("CompositeTileRasterizer");
 
   const int childrenSize = _children.size();

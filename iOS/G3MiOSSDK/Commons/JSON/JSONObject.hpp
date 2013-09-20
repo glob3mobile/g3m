@@ -21,7 +21,7 @@ private:
 
 
   void putKeyAndValueDescription(const std::string& key,
-                                 IStringBuilder *isb) const;
+                                 IStringBuilder* isb) const;
 
 public:
   ~JSONObject();

@@ -57,7 +57,7 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
 }
 
 const std::string CompositeElevationData::description(bool detailed) const{
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(CompositeElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");

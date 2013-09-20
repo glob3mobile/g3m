@@ -206,7 +206,7 @@ Color Color::wheelStep(int wheelSize,
 }
 
 const std::string Color::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("[Color red=");
   isb->addFloat(_red);
   isb->addString(", green=");

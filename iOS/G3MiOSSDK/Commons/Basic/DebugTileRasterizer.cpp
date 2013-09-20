@@ -46,7 +46,7 @@ DebugTileRasterizer::~DebugTileRasterizer() {
 }
 
 std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
   isb->addInt( tile->getLevel() );
 

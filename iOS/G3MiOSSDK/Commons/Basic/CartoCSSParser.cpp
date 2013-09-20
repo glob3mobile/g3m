@@ -69,7 +69,7 @@ bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTok
   return true;
 }
 
-bool CartoCSSParser::parseVariableDeclaration() {
+bool CartoCSSParser::parseVariableDeclaration(CartoCSSSymbolizer* currentSymbolizer) {
   if ( !lookAhead(_variableDefinitionTokensType) ) {
     return false;
   }
@@ -81,6 +81,8 @@ bool CartoCSSParser::parseVariableDeclaration() {
   }
 
   const std::string variableValue = ((const StringCartoCSSToken*) _tokens[_tokensCursor + 2])->str();
+
+  currentSymbolizer->setVariableDeclaration(variableName, variableValue);
 
   //    result->addVariableDefinition(variableName, variableValue);
   ILogger::instance()->logInfo("Found variable \"%s\"=\"%s\"",
@@ -136,7 +138,8 @@ int CartoCSSParser::lookAheadBalancedBraces(int from,
   return -1;
 }
 
-int CartoCSSParser::parseSymbolizerBlock(int from,
+int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
+                                         int from,
                                          int to) const {
   const int lasSelectorCursor = lookAheadManyOf(STRING, EXPRESION, from, to);
   if (lasSelectorCursor < 0) {
@@ -178,11 +181,12 @@ int CartoCSSParser::parseSymbolizerBlock(int from,
       const std::string variableName  = ((const StringCartoCSSToken*) _tokens[cursor])->str();
       const std::string variableValue = ((const StringCartoCSSToken*) _tokens[cursor + 2])->str();
 
+      currentSymbolizer->setProperty(variableName, variableValue);
       ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
 
       cursor += _variableDefinitionTokensType.size();
     }
-    else if ( (newCursor = parseSymbolizerBlock(cursor, lastCloseBracePosition)) >= 0 ) {
+    else if ( (newCursor = parseSymbolizerBlock(currentSymbolizer, cursor, lastCloseBracePosition)) >= 0 ) {
 
       cursor = newCursor;
     }
@@ -192,11 +196,13 @@ int CartoCSSParser::parseSymbolizerBlock(int from,
     }
   }
 
+  currentSymbolizer->addSymbolizer( new CartoCSSSymbolizer() );
+
   return lastCloseBracePosition+1;
 }
 
-bool CartoCSSParser::parseSymbolizerBlock() {
-  const int cursor = parseSymbolizerBlock(_tokensCursor, _tokensSize);
+bool CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer) {
+  const int cursor = parseSymbolizerBlock(currentSymbolizer, _tokensCursor, _tokensSize);
   if (cursor < 0) {
     return false;
   }
@@ -238,11 +244,12 @@ CartoCSSResult* CartoCSSParser::document() {
   //   [Magnitude >= 6]   { marker-width:20; }
   // }
 
-  CartoCSSResult* result = new CartoCSSResult();
+  CartoCSSSymbolizer* rootSymbolizer = new CartoCSSSymbolizer();
+  CartoCSSResult* result = new CartoCSSResult(rootSymbolizer);
 
   while (_tokensCursor < _tokensSize) {
-    if (!parseVariableDeclaration() &&
-        !parseSymbolizerBlock()) {
+    if (!parseVariableDeclaration(rootSymbolizer) &&
+        !parseSymbolizerBlock(rootSymbolizer)) {
       result->addError(CartoCSSError("Sintax error", _tokens[_tokensCursor]->_position));
       break;
     }

@@ -279,6 +279,11 @@ public:
       }
     }
 
+    const CartoCSSSymbolizer* symbolizer = result->getSymbolizer();
+    if (symbolizer != NULL) {
+      ILogger::instance()->logInfo("%s", symbolizer->description(true).c_str());
+    }
+
     delete result;
 
     Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));

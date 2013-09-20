@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string MutableVector2D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(MV2D ");
   isb->addDouble(_x);
   isb->addString(", ");

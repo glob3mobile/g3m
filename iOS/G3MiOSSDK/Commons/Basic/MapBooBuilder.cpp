@@ -44,7 +44,7 @@
 
 
 const std::string MapBoo_CameraPosition::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("[CameraPosition position=");
   isb->addString(_position.description());
@@ -73,7 +73,7 @@ MapBoo_Scene::~MapBoo_Scene() {
 }
 
 const std::string MapBoo_MultiImage_Level::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("[Level size=");
   isb->addInt(_width);
   isb->addString("x");
@@ -87,7 +87,7 @@ const std::string MapBoo_MultiImage_Level::description() const {
 }
 
 const std::string MapBoo_MultiImage::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("[MultiImage averageColor=");
   isb->addString(_averageColor.description());
   isb->addString(", _levels=[");
@@ -126,7 +126,7 @@ MapBoo_MultiImage_Level* MapBoo_MultiImage::getBestLevel(int width) const {
 }
 
 const std::string MapBoo_Scene::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("[Scene name=");
   isb->addString(_name);
@@ -1003,7 +1003,7 @@ void MapBooBuilder::changedCurrentScene() {
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("currentSceneIndex=");
   isb->addInt(_applicationCurrentSceneIndex);
   const std::string s = isb->getString();

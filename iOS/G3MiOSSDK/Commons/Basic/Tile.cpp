@@ -761,7 +761,7 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
 }
 
 const std::string Tile::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(Tile");
   isb->addString(" level=");
   isb->addInt(_level);

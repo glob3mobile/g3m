@@ -156,7 +156,7 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
 }
 
 const std::string Sector::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(Sector ");
   isb->addString(_lower.description());
   isb->addString(" - ");

@@ -56,7 +56,7 @@ double ShortBufferElevationData::getValueInBufferAt(int index) const {
 }
 
 const std::string ShortBufferElevationData::description(bool detailed) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(ShortBufferElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");

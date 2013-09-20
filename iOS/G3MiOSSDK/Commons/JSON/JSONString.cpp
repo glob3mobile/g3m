@@ -12,7 +12,7 @@
 #include "JSONVisitor.hpp"
 
 const std::string JSONString::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("\"");
   isb->addString(_value);

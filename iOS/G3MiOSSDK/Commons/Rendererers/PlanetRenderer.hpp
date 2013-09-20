@@ -267,7 +267,7 @@ public:
   static std::string asLogString(const int m[], const int nMax) {
 
     bool first = true;
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     for(int i = 0; i < nMax; i++) {
       const int level   = i;
       const int counter = m[i];

@@ -143,7 +143,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
     isb->addBool(_value);
     std::string s = isb->getString();
@@ -174,7 +174,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec2Float: x:");
     isb->addDouble(_x);
     isb->addString("y:");
@@ -214,7 +214,7 @@ public:
   //  }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
     isb->addString("y:");
@@ -253,7 +253,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
     isb->addString("y:");
@@ -346,7 +346,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
     std::string s = isb->getString();
     delete isb;
@@ -378,7 +378,7 @@ public:
   }
 
   std::string description() const{
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
     isb->addDouble(_value);
     std::string s = isb->getString();

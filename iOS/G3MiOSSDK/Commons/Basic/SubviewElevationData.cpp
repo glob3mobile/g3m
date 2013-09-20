@@ -53,7 +53,7 @@ double SubviewElevationData::getElevationAt(int x, int y) const {
 }
 
 const std::string SubviewElevationData::description(bool detailed) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(SubviewElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");

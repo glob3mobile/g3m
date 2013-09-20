@@ -261,7 +261,7 @@ public:
 
   std::string description() const{
 
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Attribute Value Float.");
     isb->addString(" ArrayElementSize:");
     isb->addInt(_arrayElementSize);

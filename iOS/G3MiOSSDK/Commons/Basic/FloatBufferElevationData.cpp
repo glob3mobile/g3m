@@ -56,7 +56,7 @@ double FloatBufferElevationData::getValueInBufferAt(int index) const {
 }
 
 const std::string FloatBufferElevationData::description(bool detailed) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(FloatBufferElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");

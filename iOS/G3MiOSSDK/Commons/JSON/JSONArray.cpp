@@ -64,7 +64,7 @@ const JSONString* JSONArray::getAsString(const int index) const {
 }
 
 const std::string JSONArray::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   int size = this->size();
 

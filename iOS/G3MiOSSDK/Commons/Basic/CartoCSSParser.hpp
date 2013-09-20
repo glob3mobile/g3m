@@ -47,11 +47,13 @@ public:
 class CartoCSSResult {
 private:
 //  std::vector<CartoCSSSymbolizer> _symbolizers;
-  CartoCSSSymbolizer         _symbolizer;
+  CartoCSSSymbolizer*        _symbolizer;
   std::vector<CartoCSSError> _errors;
 
 public:
-  CartoCSSResult() {
+  CartoCSSResult(CartoCSSSymbolizer* symbolizer) :
+  _symbolizer(symbolizer)
+  {
   }
 
   ~CartoCSSResult() {
@@ -71,11 +73,11 @@ public:
 //    return _symbolizers;
 //  }
 
-  void setSymbolizer(const CartoCSSSymbolizer& symbolizer) {
-    _symbolizer = symbolizer;
-  }
+//  void setSymbolizer(const CartoCSSSymbolizer& symbolizer) {
+//    _symbolizer = symbolizer;
+//  }
 
-  CartoCSSSymbolizer getSymbolizer() const {
+  const CartoCSSSymbolizer* getSymbolizer() const {
     return _symbolizer;
   }
 
@@ -126,9 +128,10 @@ private:
   int lookAheadBalancedBraces(int from,
                               int to) const;
 
-  bool parseVariableDeclaration();
-  bool parseSymbolizerBlock();
-  int parseSymbolizerBlock(int from,
+  bool parseVariableDeclaration(CartoCSSSymbolizer* currentSymbolizer);
+  bool parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer);
+  int parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
+                           int from,
                            int to) const;
 
   CartoCSSResult* document();

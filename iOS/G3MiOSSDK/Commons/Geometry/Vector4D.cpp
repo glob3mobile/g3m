@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string Vector4D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V4D ");
   isb->addDouble(_x);
   isb->addString(", ");

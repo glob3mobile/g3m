@@ -122,7 +122,7 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 
 
 const std::string Vector3D::description() const {  
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V3D ");
   isb->addDouble(_x);
   isb->addString(", ");

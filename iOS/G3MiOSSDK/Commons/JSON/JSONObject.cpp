@@ -133,7 +133,7 @@ std::vector<std::string> JSONObject::keys() const {
 }
 
 void JSONObject::putKeyAndValueDescription(const std::string& key,
-                                           IStringBuilder *isb) const {
+                                           IStringBuilder* isb) const {
   isb->addString("\"");
   isb->addString(key);
   isb->addString("\":");
@@ -141,7 +141,7 @@ void JSONObject::putKeyAndValueDescription(const std::string& key,
 }
 
 const std::string JSONObject::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("{");
 

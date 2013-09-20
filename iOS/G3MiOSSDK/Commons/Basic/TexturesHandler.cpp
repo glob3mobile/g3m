@@ -16,7 +16,7 @@
 #include "GL.hpp"
 
 const std::string TextureSpec::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(");
   isb->addString(_id);
   isb->addString(" ");
@@ -71,7 +71,7 @@ public:
   }
 
   const std::string description() const {
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("(#");
     isb->addString(_glTextureId->description());
     isb->addString(", counter=");

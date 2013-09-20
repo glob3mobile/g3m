@@ -265,7 +265,7 @@ void CachedDownloader::cancelRequest(long long requestId) {
 }
 
 const std::string CachedDownloader::statistics() {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("CachedDownloader(cache hits=");
   isb->addInt(_cacheHitsCounter);
   isb->addString("/");

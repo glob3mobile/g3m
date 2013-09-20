@@ -30,7 +30,7 @@ bool Geodetic2D::closeTo(const Geodetic2D &other) const {
 
 
 const std::string Geodetic2D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(lat=");
   isb->addString(_latitude.description());
   isb->addString(", lon=");

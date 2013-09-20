@@ -16,7 +16,7 @@ void JSONLong::acceptVisitor(JSONVisitor* visitor) const {
 }
 
 const std::string JSONLong::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("long/");
   isb->addLong(_value);

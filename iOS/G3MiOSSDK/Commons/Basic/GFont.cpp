@@ -28,7 +28,7 @@ bool GFont::isMonospaced() const {
 }
 
 const std::string GFont::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(GFont name=\"");
   isb->addString(_name);
   isb->addString("\", size=");
