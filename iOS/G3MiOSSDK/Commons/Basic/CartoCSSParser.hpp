@@ -120,11 +120,16 @@ private:
   }
 
   int lookAheadManyOf(const CartoCSSTokenType alternative1,
-                      const CartoCSSTokenType alternative2) const;
-  int lookAheadBalancedBraces(int cursor) const;
+                      const CartoCSSTokenType alternative2,
+                      int from,
+                      int to) const;
+  int lookAheadBalancedBraces(int from,
+                              int to) const;
 
   bool parseVariableDeclaration();
   bool parseSymbolizerBlock();
+  int parseSymbolizerBlock(int from,
+                           int to) const;
 
   CartoCSSResult* document();
 

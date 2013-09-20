@@ -105,7 +105,6 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
     case ':': {
       if ((_cursor + 1 < _sourceSize) &&
           (_source[_cursor + 1] == ':')) {
-        //token = new DoubleColonCartoCSSToken(_cursor);
         token = new StringCartoCSSToken("::", _cursor);
         _cursor += 2;
       }

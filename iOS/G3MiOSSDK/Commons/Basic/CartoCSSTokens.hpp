@@ -19,7 +19,6 @@ enum CartoCSSTokenType {
   CLOSE_BRACE,   //  }
   EXPRESION,     //  [ source ]
   COLON,         //  :
-//  DOUBLE_COLON,  //  ::
   SEMICOLON,     //  ;
   SKIP,
 };
@@ -77,28 +76,12 @@ public:
 };
 
 
-//class AtCartoCSSToken : public CartoCSSToken {
-//public:
-//  AtCartoCSSToken(const int position) : CartoCSSToken(AT, position) { }
-//
-//  const std::string description() const { return "[At]"; }
-//};
-
-
 class ColonCartoCSSToken : public CartoCSSToken {
 public:
   ColonCartoCSSToken(const int position) : CartoCSSToken(COLON, position) { }
 
   const std::string description() const { return "[Colon]"; }
 };
-
-//class DoubleColonCartoCSSToken : public CartoCSSToken {
-//public:
-//  DoubleColonCartoCSSToken(const int position) : CartoCSSToken(DOUBLE_COLON, position) { }
-//
-//  const std::string description() const { return "[DoubleColon]"; }
-//};
-
 
 
 class SemicolonCartoCSSToken : public CartoCSSToken {
@@ -121,7 +104,6 @@ public:
   }
 
   const std::string description() const;
-  
 };
 
 

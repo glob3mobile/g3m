@@ -69,24 +69,6 @@ bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTok
   return true;
 }
 
-//bool CartoCSSParser::lookAhead(const std::vector<CartoCSSTokenType>& expectedTokensType) const {
-//  const int expectedTokensTypeSize = expectedTokensType.size();
-//  const int lastCursor = _tokensCursor + expectedTokensTypeSize;
-//  if (lastCursor > _tokensSize) {
-//    return false;
-//  }
-//
-//  for (int i = 0; i < expectedTokensTypeSize; i++) {
-//    const CartoCSSTokenType expectedTokenType = expectedTokensType[i];
-//    const CartoCSSToken* token = _tokens[_tokensCursor + i];
-//    if (token->_type != expectedTokenType) {
-//      return false;
-//    }
-//  }
-//
-//  return true;
-//}
-
 bool CartoCSSParser::parseVariableDeclaration() {
   if ( !lookAhead(_variableDefinitionTokensType) ) {
     return false;
@@ -110,16 +92,17 @@ bool CartoCSSParser::parseVariableDeclaration() {
 }
 
 int CartoCSSParser::lookAheadManyOf(const CartoCSSTokenType alternative1,
-                                    const CartoCSSTokenType alternative2) const {
-  if (_tokensCursor < _tokensSize-1) {
-
-    const CartoCSSTokenType firstType = _tokens[_tokensCursor]->_type;
+                                    const CartoCSSTokenType alternative2,
+                                    int from,
+                                    int to) const {
+  if (from < to-1) {
+    const CartoCSSTokenType firstType = _tokens[from]->_type;
     if ((firstType != alternative1) &&
         (firstType != alternative2)) {
       return -1;
     }
 
-    for (int i = _tokensCursor+1; i < _tokensSize; i++) {
+    for (int i = from+1; i < to; i++) {
       const CartoCSSTokenType type = _tokens[i]->_type;
       if ((type != alternative1) &&
           (type != alternative2)) {
@@ -131,11 +114,12 @@ int CartoCSSParser::lookAheadManyOf(const CartoCSSTokenType alternative1,
   return -1;
 }
 
-int CartoCSSParser::lookAheadBalancedBraces(int cursor) const {
-  if (cursor < _tokensSize) {
-    if (_tokens[cursor]->_type == OPEN_BRACE) {
+int CartoCSSParser::lookAheadBalancedBraces(int from,
+                                            int to) const {
+  if (from < to) {
+    if (_tokens[from]->_type == OPEN_BRACE) {
       int openedCount = 1;
-      for (int i = cursor+1; i < _tokensSize; i++) {
+      for (int i = from+1; i < _tokensSize; i++) {
         const CartoCSSTokenType type = _tokens[i]->_type;
         if (type == OPEN_BRACE) {
           openedCount++;
@@ -152,18 +136,19 @@ int CartoCSSParser::lookAheadBalancedBraces(int cursor) const {
   return -1;
 }
 
-bool CartoCSSParser::parseSymbolizerBlock() {
-  const int lasSelectorCursor = lookAheadManyOf(STRING, EXPRESION);
+int CartoCSSParser::parseSymbolizerBlock(int from,
+                                         int to) const {
+  const int lasSelectorCursor = lookAheadManyOf(STRING, EXPRESION, from, to);
   if (lasSelectorCursor < 0) {
-    return false;
+    return -1;
   }
 
-  const int lastCloseBracePosition = lookAheadBalancedBraces(lasSelectorCursor + 1);
+  const int lastCloseBracePosition = lookAheadBalancedBraces(lasSelectorCursor + 1, to);
   if (lastCloseBracePosition <= 0) {
-    return false;
+    return -1;
   }
 
-  for (int i = _tokensCursor; i <= lasSelectorCursor; i++) {
+  for (int i = from; i <= lasSelectorCursor; i++) {
     const CartoCSSToken* token = _tokens[i];
     const CartoCSSTokenType type = token->_type;
     switch (type) {
@@ -179,15 +164,12 @@ bool CartoCSSParser::parseSymbolizerBlock() {
         break;
       }
 
-      default:
+      default: {
         ILogger::instance()->logError("CartoCSSParser: Logic error (1)");
-        return false;
+        return -1;
+      }
     }
   }
-
-//  for (int i = lasSelectorCursor+2; i < lastCloseBracePosition; i++) {
-//    ILogger::instance()->logInfo("    %s", _tokens[i]->description().c_str());
-//  }
 
   int cursor = lasSelectorCursor+2;
   while (cursor < lastCloseBracePosition) {
@@ -205,8 +187,15 @@ bool CartoCSSParser::parseSymbolizerBlock() {
     }
   }
 
-  _tokensCursor = lastCloseBracePosition+1;
+  return lastCloseBracePosition+1;
+}
 
+bool CartoCSSParser::parseSymbolizerBlock() {
+  const int cursor = parseSymbolizerBlock(_tokensCursor, _tokensSize);
+  if (cursor < 0) {
+    return false;
+  }
+  _tokensCursor = cursor;
   return true;
 }
 
@@ -244,11 +233,9 @@ CartoCSSResult* CartoCSSParser::document() {
   //   [Magnitude >= 6]   { marker-width:20; }
   // }
 
-
   CartoCSSResult* result = new CartoCSSResult();
 
   while (_tokensCursor < _tokensSize) {
-
     if (!parseVariableDeclaration() &&
         !parseSymbolizerBlock()) {
       result->addError(CartoCSSError("Sintax error", _tokens[_tokensCursor]->_position));
