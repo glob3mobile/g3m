@@ -151,18 +151,21 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
     return -1;
   }
 
+  std::vector<std::string> selectors;
   for (int i = from; i <= lasSelectorCursor; i++) {
     const CartoCSSToken* token = _tokens[i];
     const CartoCSSTokenType type = token->_type;
     switch (type) {
       case STRING: {
         const StringCartoCSSToken* stringToken = (const StringCartoCSSToken*) token;
+        selectors.push_back( stringToken->str() );
         ILogger::instance()->logInfo("\"%s\"", stringToken->str().c_str());
         break;
       }
 
       case EXPRESION: {
         const ExpressionCartoCSSToken* expressionToken = (const ExpressionCartoCSSToken*) token;
+        selectors.push_back( "[" + expressionToken->_source + "]");
         ILogger::instance()->logInfo("[%s]", expressionToken->_source.c_str());
         break;
       }
@@ -174,6 +177,9 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
     }
   }
 
+  CartoCSSSymbolizer* newSymbolizer = new CartoCSSSymbolizer(selectors);
+  currentSymbolizer->addSymbolizer(newSymbolizer);
+
   int newCursor;
   int cursor = lasSelectorCursor+2;
   while (cursor < lastCloseBracePosition) {
@@ -181,22 +187,22 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
       const std::string variableName  = ((const StringCartoCSSToken*) _tokens[cursor])->str();
       const std::string variableValue = ((const StringCartoCSSToken*) _tokens[cursor + 2])->str();
 
-      currentSymbolizer->setProperty(variableName, variableValue);
+      newSymbolizer->setProperty(variableName, variableValue);
       ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
 
       cursor += _variableDefinitionTokensType.size();
+      continue;
     }
-    else if ( (newCursor = parseSymbolizerBlock(currentSymbolizer, cursor, lastCloseBracePosition)) >= 0 ) {
 
+    if ( (newCursor = parseSymbolizerBlock(newSymbolizer, cursor, lastCloseBracePosition)) >= 0 ) {
       cursor = newCursor;
+      continue;
     }
-    else {
-      ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
-      cursor++;
-    }
+
+    ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
+    cursor++;
   }
 
-  currentSymbolizer->addSymbolizer( new CartoCSSSymbolizer() );
 
   return lastCloseBracePosition+1;
 }

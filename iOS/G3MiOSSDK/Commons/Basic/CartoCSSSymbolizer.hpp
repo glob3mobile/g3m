@@ -17,9 +17,10 @@ class IStringBuilder;
 
 class CartoCSSSymbolizer {
 private:
+  const std::vector<std::string>             _selectors;
   mutable std::map<std::string, std::string> _variables;
   mutable std::map<std::string, std::string> _properties;
-  std::vector<CartoCSSSymbolizer*>   _children;
+  std::vector<CartoCSSSymbolizer*>           _children;
 
   CartoCSSSymbolizer* _parent;
   void setParent(CartoCSSSymbolizer* parent);
@@ -31,6 +32,8 @@ private:
   void indent(IStringBuilder* isb,
               int delta) const;
 
+  void buildSelectorsDescription(IStringBuilder* isb,
+                                 int delta) const;
   void buildVariablesDescription(IStringBuilder* isb,
                                  int delta) const;
   void buildPropertiesDescription(IStringBuilder* isb,
@@ -40,6 +43,12 @@ private:
 
 public:
   CartoCSSSymbolizer() :
+  _parent(NULL)
+  {
+  }
+
+  CartoCSSSymbolizer(const std::vector<std::string>& selectors) :
+  _selectors(selectors),
   _parent(NULL)
   {
   }

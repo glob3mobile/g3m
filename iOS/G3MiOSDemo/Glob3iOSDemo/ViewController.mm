@@ -264,7 +264,8 @@ public:
 
 //    const std::string cartoCSS = "@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n";
 
-    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } \n@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n.class1.class2{} ::anotherSymbolizer {background-color: black;} * {line-color:white;} ";
+//    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } \n@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n.class1.class2{} ::anotherSymbolizer {background-color: black;} * {line-color:white;} ";
+    const std::string cartoCSS = "@water: #C0E0F8; #id { a:1; b:2; .class {a:2;} [level > 2] {b:3; [COUNTRY=AS] { d:33;} } }";
 
     CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
 

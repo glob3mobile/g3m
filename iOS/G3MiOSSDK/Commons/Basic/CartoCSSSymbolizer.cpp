@@ -61,15 +61,35 @@ void CartoCSSSymbolizer::indent(IStringBuilder* isb,
                                 int delta) const {
   const int depth = getDepth() + delta;
   for (int i = 0; i < depth; i++) {
-    isb->addString("  ");
+    isb->addString("   ");
   }
+}
+
+void CartoCSSSymbolizer::buildSelectorsDescription(IStringBuilder* isb,
+                                                   int delta) const {
+  if (!_selectors.empty()) {
+    isb->addString("\n");
+    indent(isb, 1 + delta);
+    isb->addString("selectors=");
+    const int childrenSize = _selectors.size();
+    for (int i = 0; i < childrenSize; i++) {
+      isb->addString("\n");
+      indent(isb, 2 + delta);
+      isb->addString(_selectors[i]);
+    }
+//    isb->addString("\n");
+//    indent(isb, 1 + delta);
+//    isb->addString("}");
+  }
+
 }
 
 void CartoCSSSymbolizer::buildVariablesDescription(IStringBuilder* isb,
                                                    int delta) const {
-  indent(isb, 1 + delta);
-  isb->addString("variables={");
   if (!_variables.empty()) {
+    isb->addString("\n");
+    indent(isb, 1 + delta);
+    isb->addString("variables=");
     for (std::map<std::string, std::string>::iterator iter = _variables.begin();
          iter != _variables.end();
          iter++) {
@@ -79,17 +99,18 @@ void CartoCSSSymbolizer::buildVariablesDescription(IStringBuilder* isb,
       isb->addString(":");
       isb->addString(iter->second);
     }
-    isb->addString("\n");
-    indent(isb, 1 + delta);
+//    isb->addString("\n");
+//    indent(isb, 1 + delta);
+//    isb->addString("}");
   }
-  isb->addString("}");
 }
 
 void CartoCSSSymbolizer::buildPropertiesDescription(IStringBuilder* isb,
                                                     int delta) const {
-  indent(isb, 1 + delta);
-  isb->addString("properties={");
   if (!_properties.empty()) {
+    isb->addString("\n");
+    indent(isb, 1 + delta);
+    isb->addString("properties=");
     for (std::map<std::string, std::string>::iterator iter = _properties.begin();
          iter != _properties.end();
          iter++) {
@@ -99,25 +120,26 @@ void CartoCSSSymbolizer::buildPropertiesDescription(IStringBuilder* isb,
       isb->addString(":");
       isb->addString(iter->second);
     }
-    isb->addString("\n");
-    indent(isb, 1 + delta);
+//    isb->addString("\n");
+//    indent(isb, 1 + delta);
+//    isb->addString("}");
   }
-  isb->addString("}");
 }
 
 void CartoCSSSymbolizer::buildChildrenDescription(IStringBuilder* isb,
                                                   int delta) const {
-  indent(isb, 1 + delta);
-  isb->addString("children={");
   if (!_children.empty()) {
+    isb->addString("\n");
+    indent(isb, 1 + delta);
+    isb->addString("children=");
     const int childrenSize = _children.size();
     for (int i = 0; i < childrenSize; i++) {
       isb->addString(_children[i]->description(true, 1 + delta));
     }
-    isb->addString("\n");
-    indent(isb, 1 + delta);
+//    isb->addString("\n");
+//    indent(isb, 1 + delta);
+//    isb->addString("}");
   }
-  isb->addString("}");
 }
 
 const std::string CartoCSSSymbolizer::description(bool detailed,
@@ -129,13 +151,9 @@ const std::string CartoCSSSymbolizer::description(bool detailed,
     indent(isb, delta);
     isb->addString("[CartoCSSSymbolizer");
 
-    isb->addString("\n");
+    buildSelectorsDescription(isb, delta);
     buildVariablesDescription(isb, delta);
-
-    isb->addString("\n");
     buildPropertiesDescription(isb, delta);
-
-    isb->addString("\n");
     buildChildrenDescription(isb, delta);
 
     isb->addString("\n");
