@@ -171,6 +171,7 @@ int CartoCSSParser::parseSymbolizerBlock(int from,
     }
   }
 
+  int newCursor;
   int cursor = lasSelectorCursor+2;
   while (cursor < lastCloseBracePosition) {
     if (lookAhead(_variableDefinitionTokensType, cursor, lastCloseBracePosition)) {
@@ -180,6 +181,10 @@ int CartoCSSParser::parseSymbolizerBlock(int from,
       ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
 
       cursor += _variableDefinitionTokensType.size();
+    }
+    else if ( (newCursor = parseSymbolizerBlock(cursor, lastCloseBracePosition)) >= 0 ) {
+
+      cursor = newCursor;
     }
     else {
       ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
