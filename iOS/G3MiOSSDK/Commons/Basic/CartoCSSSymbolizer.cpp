@@ -77,11 +77,7 @@ void CartoCSSSymbolizer::buildSelectorsDescription(IStringBuilder* isb,
       indent(isb, 2 + delta);
       isb->addString(_selectors[i]);
     }
-//    isb->addString("\n");
-//    indent(isb, 1 + delta);
-//    isb->addString("}");
   }
-
 }
 
 void CartoCSSSymbolizer::buildVariablesDescription(IStringBuilder* isb,
@@ -99,9 +95,6 @@ void CartoCSSSymbolizer::buildVariablesDescription(IStringBuilder* isb,
       isb->addString(":");
       isb->addString(iter->second);
     }
-//    isb->addString("\n");
-//    indent(isb, 1 + delta);
-//    isb->addString("}");
   }
 }
 
@@ -120,9 +113,6 @@ void CartoCSSSymbolizer::buildPropertiesDescription(IStringBuilder* isb,
       isb->addString(":");
       isb->addString(iter->second);
     }
-//    isb->addString("\n");
-//    indent(isb, 1 + delta);
-//    isb->addString("}");
   }
 }
 
@@ -136,9 +126,6 @@ void CartoCSSSymbolizer::buildChildrenDescription(IStringBuilder* isb,
     for (int i = 0; i < childrenSize; i++) {
       isb->addString(_children[i]->description(true, 1 + delta));
     }
-//    isb->addString("\n");
-//    indent(isb, 1 + delta);
-//    isb->addString("}");
   }
 }
 
