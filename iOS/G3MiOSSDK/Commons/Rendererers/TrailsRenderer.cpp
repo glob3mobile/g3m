@@ -100,8 +100,6 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-  //                                             Vector3D::zero);
 
 
   const Vector3D rotationAxis = Vector3D::downZ();
@@ -146,16 +144,19 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
 
 void Trail::addPosition(const Geodetic3D& position) {
 
+  const Geodetic3D pos = (_heightDelta == 0)
+  /*             */ ? position
+  /*             */ : Geodetic3D(position._latitude, position._longitude, position._height + _heightDelta);
+
   const int lastSegmentIndex = _segments.size() - 1;
 
   TrailSegment* currentSegment;
   if ((lastSegmentIndex < 0) ||
       (_segments[lastSegmentIndex]->getSize() > MAX_POSITIONS_PER_SEGMENT)) {
-
     TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
     if (lastSegmentIndex >= 0) {
       TrailSegment* previousSegment = _segments[lastSegmentIndex];
-      previousSegment->setNextSegmentFirstPosition( position );
+      previousSegment->setNextSegmentFirstPosition( pos );
       newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
       newSegment->addPosition( previousSegment->getLastPosition() );
     }
@@ -166,17 +167,10 @@ void Trail::addPosition(const Geodetic3D& position) {
     currentSegment = _segments[lastSegmentIndex];
   }
 
-  currentSegment->addPosition(position);
+  currentSegment->addPosition( pos );
 }
 
 Trail::~Trail() {
-  //  delete _mesh;
-  //
-  //  const int positionsSize = _positions.size();
-  //  for (int i = 0; i < positionsSize; i++) {
-  //    const Geodetic3D* position = _positions[i];
-  //    delete position;
-  //  }
   const int segmentsSize = _segments.size();
   for (int i = 0; i < segmentsSize; i++) {
     TrailSegment* segment = _segments[i];
@@ -218,7 +212,8 @@ void TrailSegment::render(const G3MRenderContext* rc,
 
 
 void Trail::render(const G3MRenderContext* rc,
-                   const Frustum* frustum, const GLState* state) {
+                   const Frustum* frustum,
+                   const GLState* state) {
   if (_visible) {
     const int segmentsSize = _segments.size();
     for (int i = 0; i < segmentsSize; i++) {

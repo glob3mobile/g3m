@@ -2856,7 +2856,8 @@ public:
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
 
   Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
-                           5000);
+                           5000,
+                           0);
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),

@@ -100,23 +100,27 @@ private:
 
   Color _color;
   const float _ribbonWidth;
+  const float _heightDelta;
 
   std::vector<TrailSegment*> _segments;
 
 
 public:
   Trail(Color color,
-        float ribbonWidth):
+        float ribbonWidth,
+        float heightDelta):
   _visible(true),
   _color(color),
-  _ribbonWidth(ribbonWidth)
+  _ribbonWidth(ribbonWidth),
+  _heightDelta(heightDelta)
   {
   }
 
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const Frustum* frustum, const GLState* state);
+              const Frustum* frustum,
+              const GLState* state);
 
   void setVisible(bool visible) {
     _visible = visible;
