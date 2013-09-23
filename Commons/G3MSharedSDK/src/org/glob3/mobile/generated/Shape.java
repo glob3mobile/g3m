@@ -38,6 +38,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private double _scaleY;
   private double _scaleZ;
 
+  private double _translationX;
+  private double _translationY;
+  private double _translationZ;
+
 //  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
@@ -57,7 +61,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(scale);
+  
+  //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
+    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -97,6 +104,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;
+     _translationX = 0;
+     _translationY = 0;
+     _translationZ = 0;
      _transformMatrix = null;
      _enable = true;
      _surfaceElevation = 0;
@@ -213,6 +223,19 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final void setScale(double scale)
   {
     setScale(scale, scale, scale);
+  }
+
+  public final void setTranslation(Vector3D translation)
+  {
+    setTranslation(translation._x, translation._y, translation._z);
+  }
+
+  public final void setTranslation(double translationX, double translationY, double translationZ)
+  {
+    _translationX = translationX;
+    _translationY = translationY;
+    _translationZ = translationZ;
+    cleanTransformMatrix();
   }
 
   public final void setScale(double scaleX, double scaleY, double scaleZ)
