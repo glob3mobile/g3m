@@ -3,7 +3,7 @@ public class CartoCSSParser
 {
   private java.util.ArrayList<CartoCSSTokenType> _variableDefinitionTokensType = new java.util.ArrayList<CartoCSSTokenType>();
 
-  private final java.util.ArrayList<CartoCSSToken> _tokens;
+  private java.util.ArrayList<CartoCSSToken> _tokens = new java.util.ArrayList<CartoCSSToken>();
   private final int _tokensSize;
 
   private int _tokensCursor;
@@ -25,12 +25,12 @@ public class CartoCSSParser
   
     if (_tokensCursor < _tokensSize)
     {
-      result.addError(new CartoCSSError("End of CartoCSS expected", _tokens[_tokensCursor]._position));
+      result.addError(new CartoCSSError("End of CartoCSS expected", _tokens.get(_tokensCursor)._position));
     }
   
     for (int i = 0; i < _tokensSize; i++)
     {
-      final CartoCSSToken token = _tokens[i];
+      final CartoCSSToken token = _tokens.get(i);
       if (token != null)
          token.dispose();
     }
@@ -54,7 +54,7 @@ public class CartoCSSParser
     for (int i = 0; i < expectedTokensTypeSize; i++)
     {
       final CartoCSSTokenType expectedTokenType = expectedTokensType.get(i);
-      final CartoCSSToken token = _tokens[from + i];
+      final CartoCSSToken token = _tokens.get(from + i);
       if (token._type != expectedTokenType)
       {
         return false;
@@ -73,7 +73,7 @@ public class CartoCSSParser
   {
     if (from < to-1)
     {
-      final CartoCSSTokenType firstType = _tokens[from]._type;
+      final CartoCSSTokenType firstType = _tokens.get(from)._type;
       if ((firstType != alternative1) && (firstType != alternative2))
       {
         return -1;
@@ -81,7 +81,7 @@ public class CartoCSSParser
   
       for (int i = from+1; i < to; i++)
       {
-        final CartoCSSTokenType type = _tokens[i]._type;
+        final CartoCSSTokenType type = _tokens.get(i)._type;
         if ((type != alternative1) && (type != alternative2))
         {
           return i-1;
@@ -95,12 +95,12 @@ public class CartoCSSParser
   {
     if (from < to)
     {
-      if (_tokens[from]._type == CartoCSSTokenType.OPEN_BRACE)
+      if (_tokens.get(from)._type == CartoCSSTokenType.OPEN_BRACE)
       {
         int openedCount = 1;
         for (int i = from+1; i < _tokensSize; i++)
         {
-          final CartoCSSTokenType type = _tokens[i]._type;
+          final CartoCSSTokenType type = _tokens.get(i)._type;
           if (type == CartoCSSTokenType.OPEN_BRACE)
           {
             openedCount++;
@@ -126,14 +126,14 @@ public class CartoCSSParser
       return false;
     }
   
-    final String variableName = ((StringCartoCSSToken) _tokens[_tokensCursor]).str();
+    final String variableName = ((StringCartoCSSToken) _tokens.get(_tokensCursor)).str();
   
     if (variableName.charAt(0) != '@')
     {
       return false;
     }
   
-    final String variableValue = ((StringCartoCSSToken) _tokens[_tokensCursor + 2]).str();
+    final String variableValue = ((StringCartoCSSToken) _tokens.get(_tokensCursor + 2)).str();
   
     currentSymbolizer.setVariableDeclaration(variableName, variableValue);
   
@@ -172,7 +172,7 @@ public class CartoCSSParser
     java.util.ArrayList<String> selectors = new java.util.ArrayList<String>();
     for (int i = from; i <= lasSelectorCursor; i++)
     {
-      final CartoCSSToken token = _tokens[i];
+      final CartoCSSToken token = _tokens.get(i);
       final CartoCSSTokenType type = token._type;
       switch (type)
       {
@@ -211,8 +211,8 @@ public class CartoCSSParser
     {
       if (lookAhead(_variableDefinitionTokensType, cursor, lastCloseBracePosition))
       {
-        final String variableName = ((StringCartoCSSToken) _tokens[cursor]).str();
-        final String variableValue = ((StringCartoCSSToken) _tokens[cursor + 2]).str();
+        final String variableName = ((StringCartoCSSToken) _tokens.get(cursor)).str();
+        final String variableValue = ((StringCartoCSSToken) _tokens.get(cursor + 2)).str();
   
         newSymbolizer.setProperty(variableName, variableValue);
         //ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
@@ -228,7 +228,7 @@ public class CartoCSSParser
         continue;
       }
   
-      ILogger.instance().logInfo("****%s", _tokens[cursor].description());
+      ILogger.instance().logInfo("****%s", _tokens.get(cursor).description());
       int _DGD_At_Work;
       cursor++;
     }
@@ -277,7 +277,7 @@ public class CartoCSSParser
     {
       if (!parseVariableDeclaration(rootSymbolizer) && !parseSymbolizerBlock(rootSymbolizer))
       {
-        result.addError(new CartoCSSError("Sintax error", _tokens[_tokensCursor]._position));
+        result.addError(new CartoCSSError("Sintax error", _tokens.get(_tokensCursor)._position));
         break;
       }
     }

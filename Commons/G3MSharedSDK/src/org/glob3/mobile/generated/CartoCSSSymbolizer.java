@@ -151,19 +151,17 @@ public class CartoCSSSymbolizer
   public final void setVariableDeclaration(String name, String value)
   {
     final IStringUtils su = IStringUtils.instance();
-    final String k = su.trim(name);
+    final String n = su.trim(name);
     final String v = su.trim(value);
-  //  _variables[k] = v;
-    _variables.add(new CartoCSSVariable(name, value));
+    _variables.add(new CartoCSSVariable(n, v));
   }
 
   public final void setProperty(String name, String value)
   {
     final IStringUtils su = IStringUtils.instance();
-    final String k = su.trim(name);
+    final String n = su.trim(name);
     final String v = su.trim(value);
-  //  _properties[k] = v;
-    _properties.add(new CartoCSSVariable(name, value));
+    _properties.add(new CartoCSSVariable(n, v));
   }
 
   public final void addSymbolizer(CartoCSSSymbolizer symbolizer)
