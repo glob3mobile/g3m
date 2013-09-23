@@ -67,8 +67,8 @@ public:
   virtual int indexOfFirstNonBlank(const std::string& string,
                                    int fromIndex) const = 0;
   
-  virtual int indexOfFirstBlank(const std::string& string,
-                                int fromIndex) const = 0;
+//  virtual int indexOfFirstBlank(const std::string& string,
+//                                int fromIndex) const = 0;
 
   virtual int indexOfFirstNonChar(const std::string& string,
                                   const std::string& chars,

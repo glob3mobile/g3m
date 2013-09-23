@@ -99,4 +99,49 @@ public final class StringUtils_Android
    }
 
 
+   @Override
+   public int indexOf(final String String,
+                      final String search,
+                      final int fromIndex) {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+
+   @Override
+   public int indexOf(final String string,
+                      final String search,
+                      final int fromIndex,
+                      final int endIndex) {
+      final int pos = string.indexOf(string, fromIndex);
+      return ((pos < 0) || (pos > endIndex)) ? -1 : pos;
+   }
+
+
+   @Override
+   public int indexOfFirstNonBlank(final String string,
+                                   final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (!Character.isWhitespace(string.charAt(i))) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+
+   @Override
+   public int indexOfFirstNonChar(final String string,
+                                  final String chars,
+                                  final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (chars.indexOf(string.charAt(i)) > 0) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
 }

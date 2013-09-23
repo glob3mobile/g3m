@@ -138,16 +138,16 @@ int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
   return -1;
 }
 
-int StringUtils_iOS::indexOfFirstBlank(const std::string& string,
-                                       int fromIndex) const {
-  const int stringLen = string.length();
-  for (int i = fromIndex ; i < stringLen; i++) {
-    if (std::isspace( string[i] )) {
-      return i;
-    }
-  }
-  return -1;
-}
+//int StringUtils_iOS::indexOfFirstBlank(const std::string& string,
+//                                       int fromIndex) const {
+//  const int stringLen = string.length();
+//  for (int i = fromIndex ; i < stringLen; i++) {
+//    if (std::isspace( string[i] )) {
+//      return i;
+//    }
+//  }
+//  return -1;
+//}
 
 int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
                                          const std::string& chars,

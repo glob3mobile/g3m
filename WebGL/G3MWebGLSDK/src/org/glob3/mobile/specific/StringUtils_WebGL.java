@@ -98,4 +98,31 @@ public final class StringUtils_WebGL
    }
 
 
+   @Override
+   public int indexOfFirstNonBlank(final String string,
+                                   final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (!Character.isWhitespace(string.charAt(i))) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+
+   @Override
+   public int indexOfFirstNonChar(final String string,
+                                  final String chars,
+                                  final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (chars.indexOf(string.charAt(i)) > 0) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+
 }
