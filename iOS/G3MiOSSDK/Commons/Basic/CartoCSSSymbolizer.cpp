@@ -36,19 +36,17 @@ CartoCSSSymbolizer::~CartoCSSSymbolizer() {
 void CartoCSSSymbolizer::setVariableDeclaration(const std::string& name,
                                                 const std::string& value) {
   const IStringUtils* su = IStringUtils::instance();
-  const std::string k = su->trim(name);
+  const std::string n = su->trim(name);
   const std::string v = su->trim(value);
-//  _variables[k] = v;
-  _variables.push_back(new CartoCSSVariable(name, value));
+  _variables.push_back(new CartoCSSVariable(n, v));
 }
 
 void CartoCSSSymbolizer::setProperty(const std::string& name,
                                      const std::string& value) {
   const IStringUtils* su = IStringUtils::instance();
-  const std::string k = su->trim(name);
+  const std::string n = su->trim(name);
   const std::string v = su->trim(value);
-//  _properties[k] = v;
-  _properties.push_back(new CartoCSSVariable(name, value));
+  _properties.push_back(new CartoCSSVariable(n, v));
 }
 
 void CartoCSSSymbolizer::setParent(CartoCSSSymbolizer* parent) {
