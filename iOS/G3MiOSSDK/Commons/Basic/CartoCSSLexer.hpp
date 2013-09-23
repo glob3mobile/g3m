@@ -38,10 +38,10 @@ private:
   //    _returnPreviousToken = true;
   //  }
 
-  const CartoCSSToken* getNextToken();
+  CartoCSSToken* getNextToken();
 
 public:
-  static std::vector<const CartoCSSToken*> tokenize(const std::string& source);
+  static std::vector<CartoCSSToken*> tokenize(const std::string& source);
   
 };
 

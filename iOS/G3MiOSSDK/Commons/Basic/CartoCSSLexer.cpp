@@ -73,7 +73,7 @@ void CartoCSSLexer::skipCommentsAndBlanks() {
 }
 
 
-const CartoCSSToken* CartoCSSLexer::getNextToken() {
+CartoCSSToken* CartoCSSLexer::getNextToken() {
   //    if (_returnPreviousToken) {
   //      _returnPreviousToken = false;
   //      return _previousToken;
@@ -177,14 +177,14 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
   return token;
 }
 
-std::vector<const CartoCSSToken*> CartoCSSLexer::tokenize(const std::string& source) {
+std::vector<CartoCSSToken*> CartoCSSLexer::tokenize(const std::string& source) {
   CartoCSSLexer lexer(source);
 
-  std::vector<const CartoCSSToken*> result;
+  std::vector<CartoCSSToken*> result;
 
   bool finish = false;
   while (!finish) {
-    const CartoCSSToken* token = lexer.getNextToken();
+    CartoCSSToken* token = lexer.getNextToken();
 
     if (token == NULL) {
       finish = true;

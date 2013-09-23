@@ -81,9 +81,8 @@ class CartoCSSParser {
 private:
   std::vector<CartoCSSTokenType> _variableDefinitionTokensType;
 
-
-  const std::vector<const CartoCSSToken*> _tokens;
-  const int                               _tokensSize;
+  const std::vector<CartoCSSToken*> _tokens;
+  const int                         _tokensSize;
 
   int _tokensCursor;
 
