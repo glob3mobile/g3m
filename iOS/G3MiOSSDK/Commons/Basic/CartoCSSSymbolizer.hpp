@@ -10,17 +10,34 @@
 #define __G3MiOSSDK__CartoCSSSymbolizer__
 
 #include <string>
-#include <map>
+//#include <map>
 #include <vector>
 class IStringBuilder;
+
+class CartoCSSVariable {
+public:
+  const std::string _name;
+  const std::string _value;
+
+  CartoCSSVariable(const std::string& name,
+                   const std::string& value) :
+  _name(name),
+  _value(value)
+  {
+  }
+
+  ~CartoCSSVariable() {
+
+  }
+};
 
 
 class CartoCSSSymbolizer {
 private:
-  const std::vector<std::string>             _selectors;
-  mutable std::map<std::string, std::string> _variables;
-  mutable std::map<std::string, std::string> _properties;
-  std::vector<CartoCSSSymbolizer*>           _children;
+  const std::vector<std::string>   _selectors;
+  std::vector<CartoCSSVariable*>   _variables;
+  std::vector<CartoCSSVariable*>   _properties;
+  std::vector<CartoCSSSymbolizer*> _children;
 
   CartoCSSSymbolizer* _parent;
   void setParent(CartoCSSSymbolizer* parent);

@@ -13,6 +13,19 @@
 
 
 CartoCSSSymbolizer::~CartoCSSSymbolizer() {
+
+  const int variablesSize = _variables.size();
+  for (int i = 0; i < variablesSize; i++) {
+    CartoCSSVariable* variable = _variables[i];
+    delete variable;
+  }
+
+  const int propertiesSize = _properties.size();
+  for (int i = 0; i < propertiesSize; i++) {
+    CartoCSSVariable* property = _properties[i];
+    delete property;
+  }
+
   const int childrenSize = _children.size();
   for (int i = 0; i < childrenSize; i++) {
     CartoCSSSymbolizer* child = _children[i];
@@ -25,7 +38,8 @@ void CartoCSSSymbolizer::setVariableDeclaration(const std::string& name,
   const IStringUtils* su = IStringUtils::instance();
   const std::string k = su->trim(name);
   const std::string v = su->trim(value);
-  _variables[k] = v;
+//  _variables[k] = v;
+  _variables.push_back(new CartoCSSVariable(name, value));
 }
 
 void CartoCSSSymbolizer::setProperty(const std::string& name,
@@ -33,7 +47,8 @@ void CartoCSSSymbolizer::setProperty(const std::string& name,
   const IStringUtils* su = IStringUtils::instance();
   const std::string k = su->trim(name);
   const std::string v = su->trim(value);
-  _properties[k] = v;
+//  _properties[k] = v;
+  _properties.push_back(new CartoCSSVariable(name, value));
 }
 
 void CartoCSSSymbolizer::setParent(CartoCSSSymbolizer* parent) {
@@ -86,14 +101,14 @@ void CartoCSSSymbolizer::buildVariablesDescription(IStringBuilder* isb,
     isb->addString("\n");
     indent(isb, 1 + delta);
     isb->addString("variables=");
-    for (std::map<std::string, std::string>::iterator iter = _variables.begin();
-         iter != _variables.end();
-         iter++) {
+    const int variablesSize = _variables.size();
+    for (int i = 0; i < variablesSize; i++) {
+      CartoCSSVariable* variable = _variables[i];
       isb->addString("\n");
       indent(isb, 2 + delta);
-      isb->addString(iter->first);
+      isb->addString(variable->_name);
       isb->addString(":");
-      isb->addString(iter->second);
+      isb->addString(variable->_value);
     }
   }
 }
@@ -104,14 +119,14 @@ void CartoCSSSymbolizer::buildPropertiesDescription(IStringBuilder* isb,
     isb->addString("\n");
     indent(isb, 1 + delta);
     isb->addString("properties=");
-    for (std::map<std::string, std::string>::iterator iter = _properties.begin();
-         iter != _properties.end();
-         iter++) {
+    const int propertiesSize = _properties.size();
+    for (int i = 0; i < propertiesSize; i++) {
+      CartoCSSVariable* property = _properties[i];
       isb->addString("\n");
       indent(isb, 2 + delta);
-      isb->addString(iter->first);
+      isb->addString(property->_name);
       isb->addString(":");
-      isb->addString(iter->second);
+      isb->addString(property->_value);
     }
   }
 }

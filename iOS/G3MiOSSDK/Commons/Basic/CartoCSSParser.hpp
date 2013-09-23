@@ -46,7 +46,6 @@ public:
 
 class CartoCSSResult {
 private:
-//  std::vector<CartoCSSSymbolizer> _symbolizers;
   CartoCSSSymbolizer*        _symbolizer;
   std::vector<CartoCSSError> _errors;
 
@@ -57,25 +56,7 @@ public:
   }
 
   ~CartoCSSResult() {
-//    const int errorsSize = _errors.size();
-//    for (int i = 0; i < errorsSize; i++) {
-//      delete _errors[i];
-//    }
-//
-//    int __delete__symbolizers;
   }
-
-//  void addSymbolizer(const CartoCSSSymbolizer& symbolizer) {
-//    _symbolizers.push_back(symbolizer);
-//  }
-//
-//  std::vector<CartoCSSSymbolizer> getSymbolizers() const {
-//    return _symbolizers;
-//  }
-
-//  void setSymbolizer(const CartoCSSSymbolizer& symbolizer) {
-//    _symbolizer = symbolizer;
-//  }
 
   const CartoCSSSymbolizer* getSymbolizer() const {
     return _symbolizer;
