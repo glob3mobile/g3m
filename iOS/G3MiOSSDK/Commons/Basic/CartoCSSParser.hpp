@@ -83,9 +83,8 @@ private:
 
 #ifdef C_CODE
   const std::vector<CartoCSSToken*> _tokens;
-#endif
-#ifdef JAVA_CODE
-  private final java.util.ArrayList<CartoCSSToken> _tokens;
+#else
+  std::vector<CartoCSSToken*> _tokens;
 #endif
   const int                         _tokensSize;
 
