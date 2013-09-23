@@ -35,8 +35,8 @@ public class CartoCSSLexer
   {
     if (_cursor < _sourceSize-1)
     {
-      final byte c = _source.charAt(_cursor);
-      final byte nextC = _source.charAt(_cursor+1);
+      final char c = _source.charAt(_cursor);
+      final char nextC = _source.charAt(_cursor+1);
       if (c == '/')
       {
         if (nextC == '/')
