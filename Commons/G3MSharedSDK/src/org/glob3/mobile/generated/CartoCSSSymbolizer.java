@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class CartoCSSSymbolizer
 {
-  private final java.util.ArrayList<String> _selectors = new java.util.ArrayList<String>();
+  private java.util.ArrayList<String> _selectors = new java.util.ArrayList<String>();
   private java.util.ArrayList<CartoCSSVariable> _variables = new java.util.ArrayList<CartoCSSVariable>();
   private java.util.ArrayList<CartoCSSVariable> _properties = new java.util.ArrayList<CartoCSSVariable>();
   private java.util.ArrayList<CartoCSSSymbolizer> _children = new java.util.ArrayList<CartoCSSSymbolizer>();

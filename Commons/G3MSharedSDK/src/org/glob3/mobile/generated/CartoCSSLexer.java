@@ -114,7 +114,7 @@ public class CartoCSSLexer
   
     CartoCSSToken token;
   
-    final byte c = _source.charAt(_cursor);
+    final char c = _source.charAt(_cursor);
   
     switch (c)
     {
@@ -132,12 +132,6 @@ public class CartoCSSLexer
         _cursor++;
         break;
       }
-  
-  //    case '@': {
-  //      token = new AtCartoCSSToken(_cursor);
-  //      _cursor++;
-  //      break;
-  //    }
   
       case ':':
       {
