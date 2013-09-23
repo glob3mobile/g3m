@@ -387,14 +387,17 @@ public class G3MWebGLDemo
                         public void onDownload(final URL url,
                                                final IByteBuffer buffer,
                                                final boolean expired) {
-                           final Shape aircraft = SceneJSShapesParser.parseFromBSON(buffer,
-                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", false);
+                           final Shape aircraft = SceneJSShapesParser.parseFromBSON( //
+                                    buffer, //
+                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", //
+                                    false, //
+                                    new Geodetic3D( //
+                                             Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
+                                             Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
+                                             10000), // Washington, DC
+                                    AltitudeMode.ABSOLUTE);
 
                            if (aircraft != null) {
-                              // Washington, DC
-                              aircraft.setPosition(new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
-                                       Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
-                                       10000));
                               final double scale = 200;
                               aircraft.setScale(scale, scale, scale);
                               aircraft.setPitch(Angle.fromDegrees(90));
@@ -473,9 +476,12 @@ public class G3MWebGLDemo
                                          final IByteBuffer buffer,
                                          final boolean expired) {
 
-                     final Shape plane = SceneJSShapesParser.parseFromJSON(buffer, "http://serdis.dis.ulpgc.es/~a044526/", false);
-
-                     plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
+                     final Shape plane = SceneJSShapesParser.parseFromJSON( //
+                              buffer, //
+                              "http://serdis.dis.ulpgc.es/~a044526/", //
+                              false, //
+                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+                              AltitudeMode.ABSOLUTE);
 
                      final double scale = 1000;
                      plane.setScale(scale, scale, scale);

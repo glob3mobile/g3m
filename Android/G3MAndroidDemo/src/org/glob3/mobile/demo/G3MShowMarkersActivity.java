@@ -63,62 +63,41 @@ public class G3MShowMarkersActivity
       if (true) {
          final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
          builder.setShownSector(spain);
-         
-         CircleShape circle = new CircleShape(new Geodetic3D(spain.getNE(),0), 
-        		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 100000,
-        		 Color.fromRGBA(1, 0, 0, 1), 64, true);
+
+         final CircleShape circle = new CircleShape(new Geodetic3D(spain.getNE(), 0), AltitudeMode.RELATIVE_TO_GROUND, 100000,
+                  Color.fromRGBA(1, 0, 0, 1), 64, true);
          _shapeRenderer.addShape(circle);
-         
-         
-         CircleShape circle2 = new CircleShape(new Geodetic3D(spain.getNW(),0), 
-        		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 100000,
-        		 Color.fromRGBA(1, 0, 0, 1), 64, false);
+
+
+         final CircleShape circle2 = new CircleShape(new Geodetic3D(spain.getNW(), 0), AltitudeMode.RELATIVE_TO_GROUND, 100000,
+                  Color.fromRGBA(1, 0, 0, 1), 64, false);
          _shapeRenderer.addShape(circle2);
-         
+
          //public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
-         
-         BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(),0), 
-        		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 new Vector3D(100000,100000,100000), 
-        		 1, 
-        		 Color.fromRGBA(1, 0, 0, 1),
-        		 Color.fromRGBA(0, 0, 1, 1),
-        		 true
-        		 );
+
+         final BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(), 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+                  100000, 100000, 100000), 1, Color.fromRGBA(1, 0, 0, 1), Color.fromRGBA(0, 0, 1, 1), true);
          _shapeRenderer.addShape(box);
-         
-         BoxShape box2 = new BoxShape(new Geodetic3D(spain.getSE(),0), 
-        		 AltitudeMode.RELATIVE_TO_GROUND, 
-        		 new Vector3D(100000,100000,100000), 
-        		 1, 
-        		 Color.fromRGBA(1, 0, 0, 1),
-        		 Color.fromRGBA(0, 0, 1, 1),
-        		 false
-        		 );
+
+         final BoxShape box2 = new BoxShape(new Geodetic3D(spain.getSE(), 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+                  100000, 100000, 100000), 1, Color.fromRGBA(1, 0, 0, 1), Color.fromRGBA(0, 0, 1, 1), false);
          _shapeRenderer.addShape(box2);
-         
-         GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
-         
-//         (Geodetic3D position, AltitudeMode altitudeMode, 
-//        		 Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
-         
+
+         final GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
+
+         //         (Geodetic3D position, AltitudeMode altitudeMode, 
+         //        		 Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+
          geo.getShapesRenderer().addShape(
-        		 new EllipsoidShape(new Geodetic3D(spain.getCenter(), 100000), 
-        				 AltitudeMode.RELATIVE_TO_GROUND, 
-        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
-        				 false, Color.red(), Color.blue(), true)
-        		 );
-         
+                  new EllipsoidShape(new Geodetic3D(spain.getCenter(), 100000), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+                           100000, 100000, 100000), (short) 20, 1, false, false, Color.red(), Color.blue(), true));
+
          geo.getShapesRenderer().addShape(
-        		 new EllipsoidShape(new Geodetic3D(spain.getCenter().add(Geodetic2D.fromDegrees(20, 20)), 100000), 
-        				 AltitudeMode.RELATIVE_TO_GROUND, 
-        				 new Vector3D(100000,100000,100000), (short) 20, 1, false, 
-        				 false, Color.red(), Color.blue(), false)
-        		 );
-         
-         
+                  new EllipsoidShape(new Geodetic3D(spain.getCenter().add(Geodetic2D.fromDegrees(20, 20)), 100000),
+                           AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(100000, 100000, 100000), (short) 20, 1, false, false,
+                           Color.red(), Color.blue(), false));
+
+
          builder.addRenderer(geo);
       }
 
@@ -236,10 +215,13 @@ public class G3MShowMarkersActivity
                                          final boolean expired) {
                      Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
 
-                     final Shape plane = SceneJSShapesParser.parseFromJSON(buffer, URL.FILE_PROTOCOL, false);
+                     final Shape plane = SceneJSShapesParser.parseFromJSON( //
+                              buffer, //
+                              URL.FILE_PROTOCOL, //
+                              false, //
+                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+                              AltitudeMode.ABSOLUTE);
                      if (plane != null) {
-                        plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
-
                         final double scale = 1000;
                         plane.setScale(scale, scale, scale);
                         plane.setPitch(Angle.fromDegrees(90));

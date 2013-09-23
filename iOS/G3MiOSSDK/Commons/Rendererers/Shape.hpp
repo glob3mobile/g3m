@@ -38,7 +38,11 @@ private:
   double      _scaleX;
   double      _scaleY;
   double      _scaleZ;
-  
+
+  double      _translationX;
+  double      _translationY;
+  double      _translationZ;
+
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
@@ -67,6 +71,9 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
+  _translationX(0),
+  _translationY(0),
+  _translationZ(0),
   _transformMatrix(NULL),
   _enable(true),
   _surfaceElevation(0),
@@ -136,6 +143,21 @@ public:
   
   void setScale(double scale) {
     setScale(scale, scale, scale);
+  }
+
+  void setTranslation(const Vector3D& translation) {
+    setTranslation(translation._x,
+                   translation._y,
+                   translation._z);
+  }
+
+  void setTranslation(double translationX,
+                      double translationY,
+                      double translationZ) {
+    _translationX = translationX;
+    _translationY = translationY;
+    _translationZ = translationZ;
+    cleanTransformMatrix();
   }
   
   void setScale(double scaleX,
