@@ -58,7 +58,8 @@ protected:
   virtual void cleanTransformMatrix();
   
 public:
-  Shape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  Shape(Geodetic3D* position,
+        AltitudeMode altitudeMode) :
   _position( position ),
   _altitudeMode(altitudeMode),
   _heading( new Angle(Angle::zero()) ),
@@ -88,12 +89,20 @@ public:
     return *_pitch;
   }
   
+  void setPosition(Geodetic3D* position,
+                   AltitudeMode altitudeMode) {
+    delete _position;
+    _position = position;
+    _altitudeMode = altitudeMode;
+    cleanTransformMatrix();
+  }
+
   void setPosition(Geodetic3D* position) {
     delete _position;
     _position = position;
     cleanTransformMatrix();
   }
-  
+
   void addShapeEffect(Effect* effect);
   
   void setAnimatedPosition(const TimeInterval& duration,
