@@ -28,9 +28,9 @@ public class SGShape extends Shape
   private final boolean _isTransparent;
 
 
-  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(null, AltitudeMode.ABSOLUTE);
+     super(position, altitudeMode);
      _node = node;
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;
