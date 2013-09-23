@@ -143,6 +143,15 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _pitch;
   }
 
+  public final void setPosition(Geodetic3D position, AltitudeMode altitudeMode)
+  {
+    if (_position != null)
+       _position.dispose();
+    _position = position;
+    _altitudeMode = altitudeMode;
+    cleanTransformMatrix();
+  }
+
   public final void setPosition(Geodetic3D position)
   {
     if (_position != null)
