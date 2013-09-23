@@ -55,6 +55,16 @@ public abstract class IStringUtils
 
   public abstract int indexOf(String String, String search);
 
+  public abstract int indexOf(String String, String search, int fromIndex);
+
+  public abstract int indexOf(String String, String search, int fromIndex, int endIndex);
+
+  public abstract int indexOfFirstNonBlank(String String, int fromIndex);
+
+  public abstract int indexOfFirstBlank(String String, int fromIndex);
+
+  public abstract int indexOfFirstNonChar(String String, String chars, int fromIndex);
+
   /*
    Returns a new string that is a substring of this string. The substring begins at the
    specified beginIndex and extends to the character at index endIndex - 1. Thus the length

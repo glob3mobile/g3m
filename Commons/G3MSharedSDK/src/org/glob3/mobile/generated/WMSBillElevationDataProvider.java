@@ -121,7 +121,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
 
   public final Vector2I getMinResolution()
   {
-    int WORKING_JM;
+//    int WORKING_JM;
     return Vector2I.zero();
   }
 
