@@ -34,7 +34,7 @@ public:
 
 class CartoCSSSymbolizer {
 private:
-  const std::vector<std::string>   _selectors;
+  std::vector<std::string>         _selectors;
   std::vector<CartoCSSVariable*>   _variables;
   std::vector<CartoCSSVariable*>   _properties;
   std::vector<CartoCSSSymbolizer*> _children;

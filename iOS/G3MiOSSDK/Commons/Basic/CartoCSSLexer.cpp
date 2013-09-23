@@ -80,7 +80,12 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
 
   CartoCSSToken* token;
 
+#ifdef C_CODE
   const char c = _source[_cursor];
+#endif
+#ifdef JAVA_CODE
+  final char c = _source.charAt(_cursor);
+#endif
 
   switch (c) {
 
@@ -95,12 +100,6 @@ const CartoCSSToken* CartoCSSLexer::getNextToken() {
       _cursor++;
       break;
     }
-
-//    case '@': {
-//      token = new AtCartoCSSToken(_cursor);
-//      _cursor++;
-//      break;
-//    }
 
     case ':': {
       if ((_cursor + 1 < _sourceSize) &&
