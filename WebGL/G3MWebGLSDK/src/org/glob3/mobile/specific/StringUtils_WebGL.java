@@ -98,12 +98,13 @@ public final class StringUtils_WebGL
    }
 
 
+   @SuppressWarnings("deprecation")
    @Override
    public int indexOfFirstNonBlank(final String string,
                                    final int fromIndex) {
       final int stringLen = string.length();
       for (int i = fromIndex; i < stringLen; i++) {
-         if (!Character.isWhitespace(string.charAt(i))) {
+         if (!Character.isSpace(string.charAt(i))) {
             return i;
          }
       }
