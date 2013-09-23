@@ -216,12 +216,12 @@ public class CartoCSSLexer
   {
     CartoCSSLexer lexer = new CartoCSSLexer(source);
   
-    final java.util.ArrayList<CartoCSSToken> result = new java.util.ArrayList<CartoCSSToken>();
+    java.util.ArrayList<CartoCSSToken> result = new java.util.ArrayList<CartoCSSToken>();
   
     boolean finish = false;
     while (!finish)
     {
-      final CartoCSSToken token = lexer.getNextToken();
+      CartoCSSToken token = lexer.getNextToken();
   
       if (token == null)
       {

@@ -3,8 +3,7 @@ public class CartoCSSParser
 {
   private java.util.ArrayList<CartoCSSTokenType> _variableDefinitionTokensType = new java.util.ArrayList<CartoCSSTokenType>();
 
-
-  private final java.util.ArrayList<const CartoCSSToken> _tokens = new java.util.ArrayList<const CartoCSSToken>();
+  private final java.util.ArrayList<CartoCSSToken> _tokens = new java.util.ArrayList<CartoCSSToken>();
   private final int _tokensSize;
 
   private int _tokensCursor;
