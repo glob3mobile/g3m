@@ -5,26 +5,21 @@ public class Trail
 
   private Color _color ;
   private final float _ribbonWidth;
+  private final float _heightDelta;
 
   private java.util.ArrayList<TrailSegment> _segments = new java.util.ArrayList<TrailSegment>();
 
 
-  public Trail(Color color, float ribbonWidth)
+  public Trail(Color color, float ribbonWidth, float heightDelta)
   {
      _visible = true;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
+     _heightDelta = heightDelta;
   }
 
   public void dispose()
   {
-    //  delete _mesh;
-    //
-    //  const int positionsSize = _positions.size();
-    //  for (int i = 0; i < positionsSize; i++) {
-    //    const Geodetic3D* position = _positions[i];
-    //    delete position;
-    //  }
     final int segmentsSize = _segments.size();
     for (int i = 0; i < segmentsSize; i++)
     {
@@ -60,17 +55,20 @@ public class Trail
   public final void addPosition(Geodetic3D position)
   {
   
+    final Geodetic3D pos = (_heightDelta == 0) ? position : new Geodetic3D(position._latitude, position._longitude, position._height + _heightDelta);
+    /*             */
+    /*             */
+  
     final int lastSegmentIndex = _segments.size() - 1;
   
     TrailSegment currentSegment;
     if ((lastSegmentIndex < 0) || (_segments.get(lastSegmentIndex).getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT))
     {
-  
       TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
       if (lastSegmentIndex >= 0)
       {
         TrailSegment previousSegment = _segments.get(lastSegmentIndex);
-        previousSegment.setNextSegmentFirstPosition(position);
+        previousSegment.setNextSegmentFirstPosition(pos);
         newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
         newSegment.addPosition(previousSegment.getLastPosition());
       }
@@ -82,7 +80,7 @@ public class Trail
       currentSegment = _segments.get(lastSegmentIndex);
     }
   
-    currentSegment.addPosition(position);
+    currentSegment.addPosition(pos);
   }
 
 }

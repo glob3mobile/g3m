@@ -87,8 +87,6 @@ public class TrailSegment
     final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-    //                                             Vector3D::zero);
   
   
     final Vector3D rotationAxis = Vector3D.downZ();
