@@ -2219,7 +2219,9 @@ public:
 
     SGShape* radarModel = (SGShape*) SceneJSShapesParser::parseFromBSON(buffer,
                                                                         "http://radar3d.glob3mobile.com/models/",
-                                                                        true);
+                                                                        true,
+                                                                        new Geodetic3D(Angle::zero(), Angle::zero(), 10000),
+                                                                        ABSOLUTE);
 
     if (radarModel != NULL) {
       SGNode* node  = radarModel->getNode();
@@ -2232,7 +2234,7 @@ public:
       }
 
       //    radarModel->setPosition(Geodetic3D::fromDegrees(0, 0, 0));
-      radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
+//      radarModel->setPosition(new Geodetic3D(Angle::zero(), Angle::zero(), 10000));
       //    radarModel->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(25, 47, 16),
       //                                           Angle::fromDegreesMinutesSeconds(-80, 13, 27),
       //                                           10000));
@@ -2581,11 +2583,12 @@ public:
             std::string cc3dJSON = [nsCC3dJSON UTF8String];
             Shape* cc3d = SceneJSShapesParser::parseFromJSON(cc3dJSON,
                                                              "file:///",
-                                                             false);
+                                                             false,
+                                                             new Geodetic3D(Angle::fromDegrees(39.473641),
+                                                                            Angle::fromDegrees(-6.370732),
+                                                                            500),
+                                                             ABSOLUTE);
             if (cc3d) {
-              cc3d->setPosition(new Geodetic3D(Angle::fromDegrees(39.473641),
-                                               Angle::fromDegrees(-6.370732),
-                                               500) );
               cc3d->setPitch(Angle::fromDegrees(-90));
 
               _shapesRenderer->addShape(cc3d);
@@ -2671,13 +2674,13 @@ public:
           if (buffer) {
             Shape* plane = SceneJSShapesParser::parseFromBSON(buffer,
                                                               URL::FILE_PROTOCOL + "textures-A320/",
-                                                              false);
+                                                              false,
+                                                              new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                                             Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                                             10000),
+                                                              ABSOLUTE);
 
             if (plane) {
-              // Washington, DC
-              plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                10000) );
               const double scale = 200;
               plane->setScale(scale, scale, scale);
               plane->setPitch(Angle::fromDegrees(90));
@@ -2753,12 +2756,15 @@ public:
           if (nsPlaneJSON) {
             std::string planeJSON = [nsPlaneJSON UTF8String];
 
-            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON, URL::FILE_PROTOCOL + "/" , false);
+            Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                              URL::FILE_PROTOCOL + "/" ,
+                                                              false,
+                                                              new Geodetic3D(Angle::fromDegrees(28.127222),
+                                                                             Angle::fromDegrees(-15.431389),
+                                                                             10000),
+                                                              ABSOLUTE);
 
             // Washington, DC
-            plane->setPosition(new Geodetic3D(Angle::fromDegrees(28.127222),
-                                              Angle::fromDegrees(-15.431389),
-                                              10000) );
             const double scale = 1000;
             plane->setScale(scale, scale, scale);
             plane->setPitch(Angle::fromDegrees(90));

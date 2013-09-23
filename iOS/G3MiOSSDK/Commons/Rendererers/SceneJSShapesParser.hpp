@@ -25,6 +25,7 @@ class SGTranslateNode;
 class SGLayerNode;
 class Color;
 class SceneJSParserStatistics;
+#include "Geodetic3D.hpp"
 
 class SceneJSShapesParser {
 private:
@@ -33,14 +34,18 @@ private:
 
   SceneJSShapesParser(const JSONBaseObject* jsonObject,
                       const std::string& uriPrefix,
-                      bool isTransparent);
+                      bool isTransparent,
+                      Geodetic3D* position,
+                      AltitudeMode altitudeMode);
 
   Shape* getRootShape() const {
     return _rootShape;
   }
 
   void pvtParse(const JSONBaseObject* json,
-                bool isTransparent);
+                bool isTransparent,
+                Geodetic3D* position,
+                AltitudeMode altitudeMode);
 
   SGNode* toNode(const JSONBaseObject* jsonBaseObject) const;
 
@@ -66,20 +71,28 @@ public:
 
   static Shape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
                                         const std::string& uriPrefix,
-                                        bool isTransparent);
+                                        bool isTransparent,
+                                        Geodetic3D* position,
+                                        AltitudeMode altitudeMode);
 
   static Shape* parseFromJSON(const std::string& json,
                               const std::string& uriPrefix,
-                              bool isTransparent);
+                              bool isTransparent,
+                              Geodetic3D* position,
+                              AltitudeMode altitudeMode);
 
   static Shape* parseFromJSON(const IByteBuffer* json,
                               const std::string& uriPrefix,
-                              bool isTransparent);
+                              bool isTransparent,
+                              Geodetic3D* position,
+                              AltitudeMode altitudeMode);
 
   static Shape* parseFromBSON(IByteBuffer* bson,
                               const std::string& uriPrefix,
-                              bool isTransparent);
-  
+                              bool isTransparent,
+                              Geodetic3D* position,
+                              AltitudeMode altitudeMode);
+
 };
 
 #endif

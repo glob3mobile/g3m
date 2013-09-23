@@ -26,8 +26,10 @@ public:
 
   SGShape(SGNode* node,
           const std::string& uriPrefix,
-          bool isTransparent) :
-  Shape(NULL, ABSOLUTE),
+          bool isTransparent,
+          Geodetic3D* position,
+          AltitudeMode altitudeMode) :
+  Shape(position, altitudeMode),
   _node(node),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent)
