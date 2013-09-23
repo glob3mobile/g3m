@@ -25,8 +25,14 @@ _lastToken(NULL)
 
 bool CartoCSSLexer::skipComments() {
   if (_cursor < _sourceSize-1) {
+#ifdef C_CODE
     const char c     = _source[_cursor];
     const char nextC = _source[_cursor+1];
+#endif
+#ifdef JAVA_CODE
+    final char c = _source.charAt(_cursor);
+    final char nextC = _source.charAt(_cursor+1);
+#endif
     if (c == '/') {
       if (nextC == '/') {
         const int eolPosition = _su->indexOf(_source, "\n", _cursor+2);
