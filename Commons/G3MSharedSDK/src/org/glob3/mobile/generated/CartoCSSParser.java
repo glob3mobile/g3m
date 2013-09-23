@@ -140,7 +140,6 @@ public class CartoCSSParser
   //  ILogger::instance()->logInfo("Found variable \"%s\"=\"%s\"",
   //                               variableName.c_str(),
   //                               variableValue.c_str());
-    int _DGD_At_Work;
   
     _tokensCursor += _variableDefinitionTokensType.size();
     return true;
@@ -181,7 +180,7 @@ public class CartoCSSParser
           final StringCartoCSSToken stringToken = (StringCartoCSSToken) token;
           selectors.add(stringToken.str());
           //ILogger::instance()->logInfo("\"%s\"", stringToken->str().c_str());
-          int _DGD_At_Work;
+          int _DGD_At_Work1;
           break;
         }
   
@@ -190,7 +189,7 @@ public class CartoCSSParser
           final ExpressionCartoCSSToken expressionToken = (ExpressionCartoCSSToken) token;
           selectors.add("[" + expressionToken._source + "]");
           //ILogger::instance()->logInfo("[%s]", expressionToken->_source.c_str());
-          int _DGD_At_Work;
+          int _DGD_At_Work2;
           break;
         }
   
@@ -216,7 +215,6 @@ public class CartoCSSParser
   
         newSymbolizer.setProperty(variableName, variableValue);
         //ILogger::instance()->logInfo("    %s=%s", variableName.c_str(), variableValue.c_str());
-        int _DGD_At_Work;
   
         cursor += _variableDefinitionTokensType.size();
         continue;
@@ -229,7 +227,7 @@ public class CartoCSSParser
       }
   
       ILogger.instance().logInfo("****%s", _tokens.get(cursor).description());
-      int _DGD_At_Work;
+      int _DGD_At_Work4;
       cursor++;
     }
   
