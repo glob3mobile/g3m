@@ -100,11 +100,10 @@ public final class StringUtils_Android
 
 
    @Override
-   public int indexOf(final String String,
+   public int indexOf(final String string,
                       final String search,
                       final int fromIndex) {
-      // TODO Auto-generated method stub
-      return 0;
+      return string.indexOf(string, fromIndex);
    }
 
 
