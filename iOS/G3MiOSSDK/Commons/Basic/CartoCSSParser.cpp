@@ -162,7 +162,7 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
         int _DGD_At_Work1;
         break;
       }
-
+        
       case EXPRESION: {
         const ExpressionCartoCSSToken* expressionToken = (const ExpressionCartoCSSToken*) token;
         selectors.push_back( "[" + expressionToken->_source + "]");
@@ -201,7 +201,7 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
     }
 
     ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
-    int _DGD_At_Work4;
+    int _DGD_At_Work3;
     cursor++;
   }
 
@@ -261,6 +261,6 @@ CartoCSSResult* CartoCSSParser::document() {
       break;
     }
   }
-  
+
   return result;
 }

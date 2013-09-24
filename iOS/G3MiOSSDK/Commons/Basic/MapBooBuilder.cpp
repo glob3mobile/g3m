@@ -782,8 +782,6 @@ MapBooBuilder::~MapBooBuilder() {
 }
 
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
-  delete _webSocket;
-
   const IFactory* factory = context->getFactory();
   _webSocket = factory->createWebSocket(createApplicationTubeURL(),
                                         new MapBooBuilder_ApplicationTubeListener(this),

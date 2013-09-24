@@ -283,6 +283,7 @@ public:
     const CartoCSSSymbolizer* symbolizer = result->getSymbolizer();
     if (symbolizer != NULL) {
       ILogger::instance()->logInfo("%s", symbolizer->description(true).c_str());
+      delete symbolizer;
     }
 
     delete result;
