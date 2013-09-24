@@ -19,6 +19,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.DownloadPriority;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -86,6 +87,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TerrainTouchEvent;
@@ -131,10 +133,10 @@ public class G3MWebGLDemo
          // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         //         initDefaultWithBuilder();
+                  initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
-         initCustomizedWithBuilder();
+         //initCustomizedWithBuilder();
 
          final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
          g3mWidgetHolder.add(_widget);
@@ -1005,6 +1007,7 @@ public class G3MWebGLDemo
    }
 
 
+
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
@@ -1048,56 +1051,13 @@ public class G3MWebGLDemo
          builder.addRenderer(marksRenderer);
       }
 
+      /*
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
+      */
 
       // builder.setInitializationTask(createMarkersInitializationTask());
 
-      final GInitializationTask initializationTask = new GInitializationTask() {
-         @Override
-         public void run(final G3MContext context) {
-            final URL url = new URL("ws://192.168.0.103:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
-            final IWebSocketListener listener = new IWebSocketListener() {
-               @Override
-               public void onOpen(final IWebSocket ws) {
-                  ILogger.instance().logError(ws + " opened!");
-               }
-
-
-               @Override
-               public void onMesssage(final IWebSocket ws,
-                                      final String message) {
-                  ILogger.instance().logError(ws + " message \"" + message + "\"");
-               }
-
-
-               @Override
-               public void onError(final IWebSocket ws,
-                                   final String error) {
-                  ILogger.instance().logError(ws + " error \"" + error + "\"");
-               }
-
-
-               @Override
-               public void onClose(final IWebSocket ws) {
-                  ILogger.instance().logError(ws + " closed!");
-               }
-
-
-               @Override
-               public void dispose() {
-               }
-            };
-            context.getFactory().createWebSocket(url, listener, true, true);
-
-         }
-
-
-         @Override
-         public boolean isDone(final G3MContext context) {
-            return true;
-         }
-      };
 
       final LayerSet layerSet = new LayerSet();
 
@@ -1237,8 +1197,10 @@ public class G3MWebGLDemo
        * @Override public void dispose() {} });
        */
 
+      /*
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
-      layerSet.addLayer(blueMarble);
+      layerSet.addLayer(blueMarble);*/
+      
 
       //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
 
@@ -1247,6 +1209,7 @@ public class G3MWebGLDemo
        * layerSet.addLayer(pnoa);
        */
 
+      /*
       // testing visible sector listener
       final VisibleSectorListener myListener = new VisibleSectorListener() {
          @Override
@@ -1259,7 +1222,9 @@ public class G3MWebGLDemo
       };
 
       builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-
+*/
+      
+      
       /*
        * // testing getfeatureinfo final IBufferDownloadListener myListener =
        * new IBufferDownloadListener() {
@@ -1297,10 +1262,77 @@ public class G3MWebGLDemo
        * @Override public void dispose() { } });
        */
 
+      /*
+      final GInitializationTask initializationTask = new GInitializationTask() {
+          @Override
+          public void run(final G3MContext context) {
+             final URL url = new URL("ws://192.168.0.103:8888/tube/scene/2g59wh610g6c1kmkt0l", false);
+             final IWebSocketListener listener = new IWebSocketListener() {
+                @Override
+                public void onOpen(final IWebSocket ws) {
+                   ILogger.instance().logError(ws + " opened!");
+                }
+
+
+                @Override
+                public void onMesssage(final IWebSocket ws,
+                                       final String message) {
+                   ILogger.instance().logError(ws + " message \"" + message + "\"");
+                }
+
+
+                @Override
+                public void onError(final IWebSocket ws,
+                                    final String error) {
+                   ILogger.instance().logError(ws + " error \"" + error + "\"");
+                }
+
+
+                @Override
+                public void onClose(final IWebSocket ws) {
+                   ILogger.instance().logError(ws + " closed!");
+                }
+
+
+                @Override
+                public void dispose() {
+                }
+             };
+             context.getFactory().createWebSocket(url, listener, true, true);
+
+          }
+
+
+          @Override
+          public boolean isDone(final G3MContext context) {
+             return true;
+          }
+       };
+
       builder.setInitializationTask(initializationTask);
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+*/
+      
+      
+      
+      //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+      // set elevations
+      Sector sector = Sector.fromDegrees(27.967811065876,-17.0232177085356,28.6103464294992,-16.0019401695656);
+      Vector2I extent = new Vector2I(256, 256);
+      URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+      ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);      
+      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);  
+
+
+
 
       _widget = builder.createWidget();
+      
+      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
+      _widget.setCameraPosition(position);
+      _widget.setCameraPitch(Angle.fromDegrees(75));
+ 
 
       /*
        * // testing downloading from url final IBufferDownloadListener
