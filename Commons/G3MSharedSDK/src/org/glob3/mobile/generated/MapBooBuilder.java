@@ -436,11 +436,7 @@ public abstract class MapBooBuilder
   
     if (_viewType == MapBoo_ViewType.VIEW_PRESENTATION)
     {
-      if (_webSocket == null)
-      {
-        ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
-      }
-      else
+      if ((_webSocket != null) && _isApplicationTubeOpen)
       {
         if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex)
         {
@@ -450,6 +446,10 @@ public abstract class MapBooBuilder
           }
           _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
         }
+      }
+      else
+      {
+        ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
       }
     }
   }
