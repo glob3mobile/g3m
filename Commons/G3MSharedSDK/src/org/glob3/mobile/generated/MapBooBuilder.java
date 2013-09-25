@@ -787,9 +787,6 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void openApplicationTube(G3MContext context)
   {
-    if (_webSocket != null)
-       _webSocket.dispose();
-  
     final IFactory factory = context.getFactory();
     _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener
   }
