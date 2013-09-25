@@ -1,5 +1,5 @@
 //
-//  Geodetic3DProvider.h
+//  Geodetic3DProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 12/09/13.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__InitialCameraPositionProvider__
 #define __G3MiOSSDK__InitialCameraPositionProvider__
-
-#include <iostream>
 
 #include "Geodetic3D.hpp"
 
@@ -35,4 +33,4 @@ public:
                                const Vector2I& viewportExtent) const;
 };
 
-#endif /* defined(__G3MiOSSDK__InitialCameraPositionProvider__) */
+#endif

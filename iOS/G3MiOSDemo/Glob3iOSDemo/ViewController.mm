@@ -288,8 +288,8 @@ public:
 
     delete result;
 
-    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
-    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
+//    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
+//    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     //[_iosWidget widget]->setCameraPosition(position);
   }
 
