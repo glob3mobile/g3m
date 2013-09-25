@@ -986,16 +986,17 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_PRESENTATION) {
-    if (_webSocket == NULL) {
-      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
-    }
-    else {
+    if ((_webSocket != NULL) &&
+        _isApplicationTubeOpen) {
       if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
         if (_lastApplicationCurrentSceneIndex >= 0) {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
         _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
       }
+    }
+    else {
+      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
     }
   }
 }
