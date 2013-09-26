@@ -291,13 +291,12 @@ private:
 
   MapBooApplicationChangeListener* _applicationListener;
 
-  std::string _applicationId;
-  std::string _applicationName;
-  std::string _applicationWebsite;
-  std::string _applicationEMail;
-  std::string _applicationAbout;
-  int         _applicationTimestamp;
-
+  std::string                _applicationId;
+  std::string                _applicationName;
+  std::string                _applicationWebsite;
+  std::string                _applicationEMail;
+  std::string                _applicationAbout;
+  int                        _applicationTimestamp;
   std::vector<MapBoo_Scene*> _applicationScenes;
   int                        _applicationCurrentSceneIndex;
   int                        _lastApplicationCurrentSceneIndex;
@@ -406,6 +405,8 @@ protected:
 
   SceneLighting* createSceneLighting();
 
+  const URL createApplicationRestURL() const;
+
 public:
   /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
@@ -427,6 +428,9 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
+
+  /** Private to MapbooBuilder, don't call it */
+  void saveApplicationData() const;
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;

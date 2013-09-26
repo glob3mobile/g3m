@@ -235,11 +235,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-//  [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -710,8 +710,9 @@ public:
   //                     );
 
   bool useElevations = true;
-  if (useElevations)
+  if (useElevations) {
     [self initializeElevationDataProvider: builder];
+  }
 
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
@@ -2630,7 +2631,7 @@ public:
 
 
 
-      if (true) { //Incomplete world
+      if (false) { //Incomplete world
 
         int time = 5; //SECS
 
