@@ -1102,7 +1102,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -1139,7 +1139,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -1933,7 +1933,7 @@ private:
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
-                        Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                        Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
 
   }
@@ -2036,26 +2036,27 @@ public:
 
     //symbols->push_back( new GEOShapeSymbol( createCircleShape(geometry) ) );
 
-    //    const JSONObject* properties = geometry->getFeature()->getProperties();
-    //
-    //    const double population = properties->getAsNumber("population", 0);
-    //
-    //    if (population > 2000000) {
-    if (rand()%2 == 0){
-      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-    } else{
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
-    }
+    const JSONObject* properties = geometry->getFeature()->getProperties();
 
-    Mark* mark = createMark(geometry);
-    if (mark != NULL) {
-      symbols->push_back( new GEOMarkSymbol(mark) );
+    const double population = properties->getAsNumber("population", 0);
+
+    if (population > 2000000) {
+      //    if (rand()%2 == 0){
+      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
+      //    }
+      //    else {
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+      //    }
+
+      Mark* mark = createMark(geometry);
+      if (mark != NULL) {
+        symbols->push_back( new GEOMarkSymbol(mark) );
+      }
     }
-    //    }
 
     return symbols;
   }
-
+  
 };
 
 
@@ -2549,31 +2550,6 @@ public:
       //                                                     );
 
 
-      /*
-       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
-       ofType: @"bson"];
-       if (bsonFilePath) {
-
-       NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
-
-       const int length = [data length];
-       unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-       [data getBytes: bytes
-       length: length];
-
-
-       IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
-
-       JSONBaseObject* bson = BSONParser::parse(buffer);
-
-       printf("%s\n", bson->description().c_str());
-
-       delete bson;
-
-       delete buffer;
-       }
-       */
-
       if (false) {
         NSString *cc3dFilePath = [[NSBundle mainBundle] pathForResource: @"cc3d4326"
                                                                  ofType: @"json"];
@@ -2748,7 +2724,7 @@ public:
       }
 
 
-      if (false){
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
@@ -2799,7 +2775,7 @@ public:
         }
       }
 
-      if (true){
+      if (true) {
 
         Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
                                                    Angle::fromDegrees(-15.431389),
@@ -2825,25 +2801,6 @@ public:
       }
 
 
-      /*
-       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
-       //      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
-       JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 20000000000}}");
-       printf("%s\n", jsonObject->description().c_str());
-
-       std::string jsonString = JSONGenerator::generate(jsonObject);
-       printf("%s (lenght=%lu)\n", jsonString.c_str(), jsonString.size());
-
-       IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-       printf("%s\n", bson->description().c_str());
-
-       JSONBaseObject* bsonObject = BSONParser::parse(bson);
-       printf("%s\n", bsonObject->description().c_str());
-
-       delete bson;
-
-       delete jsonObject;
-       */
     }
 
     bool isDone(const G3MContext* context) {
