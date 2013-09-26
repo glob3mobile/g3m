@@ -33,7 +33,7 @@ public class BingMapsLayer extends Layer
   
     for (int i = 1; i <= zoom; i++)
     {
-      final int t = ((((row >> zoom) - i) & 1) << 1) | (((column >> zoom) - i) & 1);
+      final int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
       isb.addInt(t);
     }
   
