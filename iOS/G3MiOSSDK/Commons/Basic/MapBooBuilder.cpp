@@ -1094,7 +1094,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 
   _applicationScenes.clear();
 
-#if C_CODE
+#ifdef C_CODE
   _applicationScenes = applicationScenes;
 #endif
 #ifdef JAVA_CODE
