@@ -18,10 +18,12 @@ public final class FloatBuffer_Android
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   static int     	_boundVertexBuffer = -1;
-   boolean      	_vertexBufferCreated = false;
-   int    			_vertexBuffer = -1;
-   int       		_vertexBufferTimeStamp = -1;
+   private static int        _boundVertexBuffer     = -1;
+   private boolean           _vertexBufferCreated   = false;
+   //   private boolean           _disposed              = false;
+   private int               _vertexBuffer          = -1;
+   private int               _vertexBufferTimeStamp = -1;
+
 
    public FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -115,51 +117,64 @@ public final class FloatBuffer_Android
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
-   
+
+
    void bindAsVBOToGPU() {
+      if (!_vertexBufferCreated) {
+         final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+         GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+         _vertexBuffer = ib.get(0);
+         _vertexBufferCreated = true;
+      }
 
-	    if (!_vertexBufferCreated){
-	    	java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
-	    	GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
-	    	_vertexBuffer = ib.get(0);
-	    	_vertexBufferCreated = true;
-	    }
+      if (_vertexBuffer != _boundVertexBuffer) {
+         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
+         _boundVertexBuffer = _vertexBuffer;
+      }
 
-	    if (_vertexBuffer != _boundVertexBuffer){
-	    	GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
-	    	_boundVertexBuffer = _vertexBuffer;
-	    } else{
-	      //....
-	    }
+      if (_vertexBufferTimeStamp != _timestamp) {
+         _vertexBufferTimeStamp = _timestamp;
 
-	    if (_vertexBufferTimeStamp != _timestamp){
-	      _vertexBufferTimeStamp = _timestamp;
+         final FloatBuffer buffer = getBuffer();
+         final int vboSize = 4 * size();
 
-	      FloatBuffer buffer = getBuffer();
-	      int vboSize = 4 * size();
+         //	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+      }
 
-//	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
-	      GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
-	    }
-
-//	    if (GL_NO_ERROR != glGetError()){
-//	      ILogger::instance()->logError("Problem using VBO");
-//	    }
-	  }
+      //	    if (GL_NO_ERROR != glGetError()){
+      //	      ILogger::instance()->logError("Problem using VBO");
+      //	    }
+   }
 
 
-      @Override
-      public void dispose() {
-         super.dispose();
-   
-         if (_vertexBufferCreated) {
-            final int[] buffers = new int[] { _vertexBuffer };
-            GLES20.glDeleteBuffers(1, buffers, 0);
-            _vertexBufferCreated = false;
+   @Override
+   public void dispose() {
+      super.dispose();
+
+      //      _disposed = true;
+
+      if (_vertexBufferCreated) {
+         final int[] buffers = new int[] { _vertexBuffer };
+         GLES20.glDeleteBuffers(1, buffers, 0);
+         _vertexBufferCreated = false;
+
+         if (_vertexBuffer == _boundVertexBuffer) {
+            _boundVertexBuffer = -1;
          }
       }
+   }
+
+
+   //   @Override
+   //   protected void finalize() throws Throwable {
+   //      if (!_disposed) {
+   //         ILogger.instance().logError(this + " not disposed (_vertexBufferCreated=" + _vertexBufferCreated + ")");
+   //      }
    //
-   //
+   //      super.finalize();
+   //   }
+
    //   public int getGLBuffer() {
    //      if (!_hasGLBuffer) {
    //         final int[] buffers = new int[1];
