@@ -681,10 +681,6 @@ public abstract class MapBooBuilder
   
     _applicationScenes.clear();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-    _applicationScenes = applicationScenes;
-//#endif
     _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
   
     if (_applicationListener != null)
