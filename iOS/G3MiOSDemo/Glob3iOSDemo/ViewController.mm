@@ -755,18 +755,22 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (false) { //HUD
+  if (true) { //HUD
     HUDRenderer* hudRenderer = new   HUDRenderer();
 
-    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+    NSBundle* mainBundle = [NSBundle mainBundle];
+    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
+                                                                                                   ofType: @"png"]],
+                                     NULL);
     hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
 
-    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"horizontal-gears" ofType:@"png"]], NULL);
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
+                                                                                                    ofType: @"png"]],
+                                      NULL);
     hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
 
     builder.addRenderer(hudRenderer);
   }
-
 
 
   //  [self createInterpolationTest: meshRenderer];
