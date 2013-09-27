@@ -780,25 +780,39 @@ public:
                   int width,
                   int height) {
 
-        canvas->setFillColor(Color::fromRGBA(0.8f, 0, 0, 0.2f));
-        canvas->fillRectangle(0, 0,
-                              width, height);
+//        canvas->setFillColor(Color::fromRGBA(0.8f, 0, 0, 0.2f));
+//        canvas->fillRectangle(0, 0,
+//                              width, height);
 
-        canvas->setLineColor(Color::yellow());
-        canvas->setLineWidth(5);
-        canvas->strokeRectangle(0, 0,
-                                width, height);
+//        canvas->setLineColor(Color::yellow());
+//        canvas->setLineWidth(5);
+//        canvas->strokeRectangle(0, 0,
+//                                width, height);
 
-        const std::string text = "Hello World from HUD!";
-        canvas->setFont(GFont::sansSerif(30));
+//        canvas->setFont(GFont::sansSerif(30));
+
+//        const std::string text = "Hello World from HUD!";
+//        canvas->setFont(GFont::sansSerif(30));
+//        const Vector2F extent = canvas->textExtent(text);
+//
+//        canvas->setFillColor(Color::white());
+//        canvas->setShadow(Color::black(), 10, 2, -2);
+//
+//        canvas->fillText(text,
+//                         (width  - extent._x) / 2,
+//                         (height - extent._y) / 2);
+
+        const std::string text = "glob3mobile.com";
+        canvas->setFont(GFont::sansSerif(25));
         const Vector2F extent = canvas->textExtent(text);
 
         canvas->setFillColor(Color::white());
-        canvas->setShadow(Color::black(), 10, 2, -2);
+        canvas->setShadow(Color::black(), 10, 0, 0);
 
         canvas->fillText(text,
                          (width  - extent._x) / 2,
-                         (height - extent._y) / 2);
+                         (height - extent._y) - extent._y/2);
+
       }
     };
 
