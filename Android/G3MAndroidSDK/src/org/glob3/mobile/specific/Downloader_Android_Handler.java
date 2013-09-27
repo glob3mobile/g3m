@@ -283,7 +283,7 @@ public final class Downloader_Android_Handler {
                final ILogger logger = ILogger.instance();
                final String msg = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath();
                if (logger != null) {
-                  logger.logError(TAG + msg);
+                  logger.logError(TAG + " " + msg);
                }
                else {
                   Log.e(TAG, msg);
