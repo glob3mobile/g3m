@@ -7,10 +7,8 @@ package org.glob3.mobile.generated;
 //
 //
 
-
-
 //
-//  HUDRendererer.h
+//  HUDRendererer.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 10/09/13.
@@ -18,13 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Mesh;
 
 public class HUDRenderer extends LeafRenderer
 {
-  private GLState _glState;
+
   private static class ShownImage
   {
+    private final String _name;
+    private IImage _image;
+    private final Vector2D _size ;
+    private final Vector2D _position ;
 
+    private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
+    private Mesh _mesh;
     private Mesh createMesh(G3MRenderContext rc)
     {
       //TEXTURED
@@ -43,13 +48,11 @@ public class HUDRenderer extends LeafRenderer
       final int viewportWidth = rc.getCurrentCamera().getWidth();
       final int viewportHeight = rc.getCurrentCamera().getHeight();
     
-      Vector3D halfViewportAndPosition = new Vector3D(viewportWidth / 2 - _pos._x, viewportHeight / 2 - _pos._y, 0);
+      final Vector3D halfViewportAndPosition = new Vector3D(viewportWidth / 2 - _position._x, viewportHeight / 2 - _position._y, 0);
     
       final double w = _size._x;
       final double h = _size._y;
     
-    //  const double halfWidth = _size._x / 2;
-    //  const double halfHeight = _size._y / 2;
       FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
       vertices.add(new Vector3D(0, h, 0).sub(halfViewportAndPosition));
       vertices.add(new Vector3D(0, 0, 0).sub(halfViewportAndPosition));
@@ -69,22 +72,14 @@ public class HUDRenderer extends LeafRenderer
       return new TexturedMesh(im, true, texMap, true, true);
     }
 
-    private final String _name;
-    private IImage _image;
-    private final Vector2D _size ;
-    private Mesh _mesh;
-    private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
-
-    private final Vector2D _pos ;
-
-    public ShownImage(String name, IImage image, Vector2D size, Vector2D pos)
+    public ShownImage(String name, IImage image, Vector2D size, Vector2D position)
     {
+       _name = name;
        _image = image;
        _size = new Vector2D(size);
+       _position = new Vector2D(position);
        _mesh = null;
-       _name = name;
        _factory = null;
-       _pos = new Vector2D(pos);
     }
 
     public final Mesh getMesh(G3MRenderContext rc)
@@ -99,6 +94,7 @@ public class HUDRenderer extends LeafRenderer
     public void dispose()
     {
       _factory.deleteImage(_image);
+    //  delete _image;
       if (_mesh != null)
          _mesh.dispose();
     }
@@ -112,6 +108,8 @@ public class HUDRenderer extends LeafRenderer
 
   }
 
+
+  private GLState _glState;
   private java.util.ArrayList<ShownImage> _images = new java.util.ArrayList<ShownImage>();
 
   public HUDRenderer()
@@ -135,12 +133,15 @@ public class HUDRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-  
     final int size = _images.size();
     for (int i = 0; i < size; i++)
     {
       ShownImage image = _images.get(i);
-      image.getMesh(rc).render(rc, _glState);
+      Mesh mesh = image.getMesh(rc);
+      if (mesh != null)
+      {
+        mesh.render(rc, _glState);
+      }
     }
   }
 
@@ -155,17 +156,17 @@ public class HUDRenderer extends LeafRenderer
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
     MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-
+  
     ProjectionGLFeature pr = (ProjectionGLFeature) _glState.getGLFeature(GLFeatureID.GLF_PROJECTION);
-    if (pr != null)
-    {
-      pr.setMatrix(projectionMatrix.asMatrix44D());
-    }
-    else
+    if (pr == null)
     {
       _glState.addGLFeature(new ProjectionGLFeature(projectionMatrix.asMatrix44D()), false);
     }
-
+    else
+    {
+      pr.setMatrix(projectionMatrix.asMatrix44D());
+    }
+  
     final int size = _images.size();
     for (int i = 0; i < size; i++)
     {
@@ -176,16 +177,15 @@ public class HUDRenderer extends LeafRenderer
   public void dispose()
   {
     _glState._release();
-
+  
     final int size = _images.size();
     for (int i = 0; i < size; i++)
     {
       if (_images.get(i) != null)
          _images.get(i).dispose();
     }
-
+  
     super.dispose();
-
   }
 
   public final void start(G3MRenderContext rc)
@@ -198,17 +198,14 @@ public class HUDRenderer extends LeafRenderer
 
   public final void onResume(G3MContext context)
   {
-
   }
 
   public final void onPause(G3MContext context)
   {
-
   }
 
   public final void onDestroy(G3MContext context)
   {
-
   }
 
 }
