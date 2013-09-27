@@ -29,6 +29,7 @@ public final class ES2Renderer
 
    private final NativeGL2_Android _nativeGL;
 
+
    public ES2Renderer(final G3MWidget_Android widget) {
       _widgetAndroid = widget;
       _width = 1;

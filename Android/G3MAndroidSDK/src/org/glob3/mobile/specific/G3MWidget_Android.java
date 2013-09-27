@@ -81,6 +81,8 @@ public final class G3MWidget_Android
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
       // ALLOCATION
 
+      setDebugFlags(DEBUG_CHECK_GL_ERROR);
+
       _es2renderer = new ES2Renderer(this);
       setRenderer(_es2renderer);
 

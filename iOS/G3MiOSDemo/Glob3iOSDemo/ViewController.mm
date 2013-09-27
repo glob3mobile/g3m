@@ -129,6 +129,8 @@
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/HUDImageRenderer.hpp>
+#import <G3MiOSSDK/CanvasImageFactory.hpp>
 
 #import <G3MiOSSDK/CartoCSSParser.hpp>
 
@@ -756,18 +758,51 @@ public:
 
 
   if (true) { //HUD
-    HUDRenderer* hudRenderer = new   HUDRenderer();
+//    HUDRenderer* hudRenderer = new HUDRenderer();
+//
+//    NSBundle* mainBundle = [NSBundle mainBundle];
+//    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
+//                                                                                                   ofType: @"png"]],
+//                                     NULL);
+//    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
+//
+//    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
+//                                                                                                    ofType: @"png"]],
+//                                      NULL);
+//    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
+//
+//    builder.addRenderer(hudRenderer);
 
-    NSBundle* mainBundle = [NSBundle mainBundle];
-    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
-                                                                                                   ofType: @"png"]],
-                                     NULL);
-    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
 
-    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
-                                                                                                    ofType: @"png"]],
-                                      NULL);
-    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
+    class TestImageFactory : public CanvasImageFactory {
+    protected:
+      void drawOn(ICanvas* canvas,
+                  int width,
+                  int height) {
+
+        canvas->setFillColor(Color::fromRGBA(0.8f, 0, 0, 0.2f));
+        canvas->fillRectangle(0, 0,
+                              width, height);
+
+        canvas->setLineColor(Color::yellow());
+        canvas->setLineWidth(5);
+        canvas->strokeRectangle(0, 0,
+                                width, height);
+
+        const std::string text = "Hello World from HUD!";
+        canvas->setFont(GFont::sansSerif(30));
+        const Vector2F extent = canvas->textExtent(text);
+
+        canvas->setFillColor(Color::white());
+        canvas->setShadow(Color::black(), 10, 2, -2);
+
+        canvas->fillText(text,
+                         (width  - extent._x) / 2,
+                         (height - extent._y) / 2);
+      }
+    };
+
+    HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
 
     builder.addRenderer(hudRenderer);
   }
