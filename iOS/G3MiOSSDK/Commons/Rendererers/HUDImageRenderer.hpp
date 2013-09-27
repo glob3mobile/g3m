@@ -40,7 +40,12 @@ private:
   Mesh* getMesh(const G3MRenderContext* rc);
   Mesh* createMesh(const G3MRenderContext* rc);
 
+#ifdef C_CODE
   const IImage* _image;
+#endif
+#ifdef JAVA_CODE
+  private IImage _image;
+#endif
   void setImage(const IImage* image);
 
 public:
