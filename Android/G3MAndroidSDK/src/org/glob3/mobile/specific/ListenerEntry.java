@@ -95,6 +95,7 @@ public final class ListenerEntry {
          _bufferListener.onDownload(url, buffer, false);
       }
       if (_imageListener != null) {
+         final int __DGD_parse_bitmap_in_background;
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");

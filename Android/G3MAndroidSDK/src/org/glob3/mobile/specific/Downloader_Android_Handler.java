@@ -270,25 +270,23 @@ public final class Downloader_Android_Handler {
             if (dataIsValid) {
                for (final ListenerEntry entry : _listeners) {
                   if (entry.isCanceled()) {
-                     // Log.w(TAG, "triggering onCanceledDownload");
                      entry.onCanceledDownload(_g3mURL, _data);
 
-                     // Log.w(TAG, "triggering onCancel");
                      entry.onCancel(_g3mURL);
                   }
                   else {
-                     // Log.i(TAG, "triggering onDownload");
                      entry.onDownload(_g3mURL, _data);
                   }
                }
             }
             else {
-               if (ILogger.instance() != null) {
-                  ILogger.instance().logError(
-                           TAG + " Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath());
+               final ILogger logger = ILogger.instance();
+               final String msg = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath();
+               if (logger != null) {
+                  logger.logError(TAG + msg);
                }
                else {
-                  Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath());
+                  Log.e(TAG, msg);
                }
 
                for (final ListenerEntry entry : _listeners) {
