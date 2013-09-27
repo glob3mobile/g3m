@@ -86,8 +86,7 @@ public class HUDImageRenderer extends LeafRenderer
     int __TODO_create_unique_name;
     final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "HUDImageRenderer", false);
   
-    if (_image != null)
-       _image.dispose();
+    _image = null;
     _image = null;
   
     if (texId == null)
@@ -127,7 +126,7 @@ public class HUDImageRenderer extends LeafRenderer
     return new TexturedMesh(mesh, true, textureMapping, true, true);
   }
 
-  private final IImage _image;
+  private IImage _image;
   private void setImage(IImage image)
   {
     _image = image;
@@ -188,8 +187,7 @@ public class HUDImageRenderer extends LeafRenderer
        _mesh.dispose();
     _mesh = null;
   
-    if (_image != null)
-       _image.dispose();
+    _image = null;
     _image = null;
   }
 
@@ -199,8 +197,7 @@ public class HUDImageRenderer extends LeafRenderer
   
     if (_mesh != null)
        _mesh.dispose();
-    if (_image != null)
-       _image.dispose();
+    _image = null;
   
     if (_imageFactory != null)
        _imageFactory.dispose();

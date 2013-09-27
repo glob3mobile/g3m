@@ -19,11 +19,10 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class IImageListener;
 
-public abstract class ImageFactory
+public interface ImageFactory
 {
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
+  public void dispose();
 
-  public abstract void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
+  void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
 
 }
