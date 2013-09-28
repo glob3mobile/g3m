@@ -40,7 +40,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class ShapesRenderer;
 //class MarksRenderer;
-
+//class ErrorRenderer;
 
 
 public abstract class IG3MBuilder
@@ -55,6 +55,7 @@ public abstract class IG3MBuilder
   private Color _backgroundColor;
   private PlanetRendererBuilder _planetRendererBuilder;
   private Renderer _busyRenderer;
+  private ErrorRenderer _errorRenderer;
   private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
@@ -167,6 +168,15 @@ public abstract class IG3MBuilder
     }
   
     return _busyRenderer;
+  }
+  private ErrorRenderer getErrorRenderer()
+  {
+    if (_errorRenderer == null)
+    {
+      _errorRenderer = new HUDErrorRenderer();
+    }
+  
+    return _errorRenderer;
   }
 
   /**
@@ -428,7 +438,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
   
     g3mWidget.setUserData(getUserData());
   
@@ -444,6 +454,7 @@ public abstract class IG3MBuilder
     _renderers = null;
     _renderers = null;
     _busyRenderer = null;
+    _errorRenderer = null;
     _initializationTask = null;
     _periodicalTasks = null;
     _periodicalTasks = null;
@@ -474,6 +485,7 @@ public abstract class IG3MBuilder
      _backgroundColor = null;
      _planetRendererBuilder = null;
      _busyRenderer = null;
+     _errorRenderer = null;
      _renderers = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
@@ -521,6 +533,8 @@ public abstract class IG3MBuilder
     }
     if (_busyRenderer != null)
        _busyRenderer.dispose();
+    if (_errorRenderer != null)
+       _errorRenderer.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
     if (_initializationTask != null)
@@ -771,6 +785,21 @@ public abstract class IG3MBuilder
       return;
     }
     _busyRenderer = busyRenderer;
+  }
+
+  public final void setErrorRenderer(ErrorRenderer errorRenderer)
+  {
+    if (_errorRenderer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _errorRenderer already initialized");
+      return;
+    }
+    if (errorRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+      return;
+    }
+    _errorRenderer = errorRenderer;
   }
 
 

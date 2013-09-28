@@ -81,6 +81,11 @@ public abstract class MapBooBuilder
     return new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
   }
 
+  private ErrorRenderer createErrorRenderer()
+  {
+    return new HUDErrorRenderer();
+  }
+
   private java.util.ArrayList<PeriodicalTask> createPeriodicalTasks()
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
@@ -547,7 +552,7 @@ public abstract class MapBooBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   

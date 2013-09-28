@@ -20,10 +20,10 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider);
   }
 
   public void dispose()
@@ -39,6 +39,8 @@ public class G3MWidget
        _mainRenderer.dispose();
     if (_busyRenderer != null)
        _busyRenderer.dispose();
+    if (_errorRenderer != null)
+       _errorRenderer.dispose();
     if (_gl != null)
        _gl.dispose();
     if (_effectsScheduler != null)
@@ -316,6 +318,7 @@ public class G3MWidget
     _cameraRenderer.onResizeViewportEvent(ec, width, height);
     _mainRenderer.onResizeViewportEvent(ec, width, height);
     _busyRenderer.onResizeViewportEvent(ec, width, height);
+    _errorRenderer.onResizeViewportEvent(ec, width, height);
   }
 
   public final void onPause()
@@ -328,6 +331,7 @@ public class G3MWidget
   
     _mainRenderer.onPause(_context);
     _busyRenderer.onPause(_context);
+    _errorRenderer.onPause(_context);
   
     _downloader.onPause(_context);
     _storage.onPause(_context);
@@ -343,6 +347,7 @@ public class G3MWidget
   
     _mainRenderer.onResume(_context);
     _busyRenderer.onResume(_context);
+    _errorRenderer.onResume(_context);
   
     _effectsScheduler.onResume(_context);
   
@@ -357,6 +362,7 @@ public class G3MWidget
   
     _mainRenderer.onDestroy(_context);
     _busyRenderer.onDestroy(_context);
+    _errorRenderer.onDestroy(_context);
   
     _downloader.onDestroy(_context);
     _storage.onDestroy(_context);
@@ -566,6 +572,7 @@ public class G3MWidget
   private CameraRenderer _cameraRenderer;
   private Renderer _mainRenderer;
   private Renderer _busyRenderer;
+  private ErrorRenderer _errorRenderer;
   private boolean _mainRendererReady;
   private Renderer _selectedRenderer;
 
@@ -616,7 +623,7 @@ public class G3MWidget
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -631,6 +638,7 @@ public class G3MWidget
      _cameraRenderer = cameraRenderer;
      _mainRenderer = mainRenderer;
      _busyRenderer = busyRenderer;
+     _errorRenderer = errorRenderer;
      _width = 1;
      _height = 1;
      _currentCamera = new Camera(_width, _height);
@@ -662,6 +670,7 @@ public class G3MWidget
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
     _busyRenderer.initialize(_context);
+    _errorRenderer.initialize(_context);
     _currentCamera.initialize(_context);
     _nextCamera.initialize(_context);
   
