@@ -31,17 +31,10 @@ Vector2F* ColumnCanvasElement::calculateExtent(ICanvas* canvas) {
   return new Vector2F(width, height);
 }
 
-
-void ColumnCanvasElement::drawAt(float left,
-                                 float top,
-                                 ICanvas* canvas) {
-  const Vector2F extent = getExtent(canvas);
-
-  canvas->setFillColor(_color);
-  canvas->fillRectangle(left, top,
-                        extent._x,
-                        extent._y);
-
+void ColumnCanvasElement::rawDrawAt(float left,
+                                    float top,
+                                    const Vector2F& extent,
+                                    ICanvas* canvas) {
   const float halfWidth = extent._x / 2;
 
   float cursorTop = top;
@@ -55,7 +48,7 @@ void ColumnCanvasElement::drawAt(float left,
     const float cursorLeft = left + halfWidth - (childExtent._x / 2);
 
     child->drawAt(cursorLeft, cursorTop, canvas);
-
+    
     cursorTop += childExtent._y;
   }
 }

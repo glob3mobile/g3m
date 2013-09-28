@@ -134,6 +134,11 @@
 
 #import <G3MiOSSDK/CartoCSSParser.hpp>
 
+#import <G3MiOSSDK/ColumnCanvasElement.hpp>
+#import <G3MiOSSDK/TextCanvasElement.hpp>
+
+
+
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
   void onVisibleSectorChange(const Sector& visibleSector,
@@ -779,10 +784,10 @@ public:
       void drawOn(ICanvas* canvas,
                   int width,
                   int height) {
-
-//        canvas->setFillColor(Color::fromRGBA(0.8f, 0, 0, 0.2f));
-//        canvas->fillRectangle(0, 0,
-//                              width, height);
+//        canvas->setFillColor(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f));
+        canvas->setFillColor(Color::black());
+        canvas->fillRectangle(0, 0,
+                              width, height);
 
 //        canvas->setLineColor(Color::yellow());
 //        canvas->setLineWidth(5);
@@ -802,17 +807,37 @@ public:
 //                         (width  - extent._x) / 2,
 //                         (height - extent._y) / 2);
 
-        const std::string text = "glob3mobile.com";
-        canvas->setFont(GFont::sansSerif(25));
-        const Vector2F extent = canvas->textExtent(text);
+//        const std::string text = "glob3mobile.com";
+//        canvas->setFont(GFont::sansSerif(25));
+//        const Vector2F extent = canvas->textExtent(text);
+//
+//        canvas->setFillColor(Color::white());
+////        canvas->setShadow(Color::black(), 10, 0, 0);
+//
+//        canvas->fillText(text,
+//                         (width  - extent._x) / 2,
+//                         (height - extent._y) - extent._y/2);
 
-        canvas->setFillColor(Color::white());
-        canvas->setShadow(Color::black(), 10, 0, 0);
 
-        canvas->fillText(text,
-                         (width  - extent._x) / 2,
-                         (height - extent._y) - extent._y/2);
+//        ColumnCanvasElement column(Color::yellow());
 
+//        const Color& color = Color::transparent(),
+//        float margin = 0,
+//        float padding = 0,
+//        float cornerRadius = 0
+
+        ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
+                                   0,  /* margin */
+                                   16,  /* padding */
+                                   8   /* cornerRadius */);
+        const GFont labelFont  = GFont::sansSerif(22);
+        const Color labelColor = Color::white();
+        column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
+        column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
+        column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
+        column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
+
+        column.drawCentered(canvas);
       }
     };
 
