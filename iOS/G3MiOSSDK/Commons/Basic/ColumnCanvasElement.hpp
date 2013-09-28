@@ -28,7 +28,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   void rawDrawAt(float left,
