@@ -223,8 +223,6 @@ public abstract class MapBooBuilder
     return new CartoDBLayer(userName, table, timeToCache);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  BingMapsLayer parseBingMapsLayer(JSONObject jsonLayer, TimeInterval timeToCache);
 
   private MapBoxLayer parseMapBoxLayer(JSONObject jsonLayer, TimeInterval timeToCache)
   {
@@ -543,8 +541,8 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    int TODO_VIEWPORT;
     final Planet planet = createPlanet();
+    //  int TODO_VIEWPORT;
     //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
