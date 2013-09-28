@@ -345,13 +345,11 @@ private:
                                     const TimeInterval& timeToCache) const;
 
   BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
-                                    const TimeInterval& timeToCache);
+                                    const TimeInterval& timeToCache) const;
 
   CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
                                   const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
-                                    const TimeInterval& timeToCache) const;
 
   MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
