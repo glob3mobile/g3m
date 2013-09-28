@@ -37,7 +37,7 @@ public abstract class LeafRenderer extends Renderer
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -79,6 +79,11 @@ public abstract class LeafRenderer extends Renderer
   public PlanetRenderer getPlanetRenderer()
   {
     return null;
+  }
+
+  public boolean isPlanetRenderer()
+  {
+    return false;
   }
 
 }

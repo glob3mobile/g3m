@@ -31,12 +31,12 @@ public class CompositeRenderer extends Renderer
      _context = null;
      _enable = true;
      _renderersSize = 0;
-//    _renderers = std::vector<Renderer*>();
+    //    _renderers = std::vector<Renderer*>();
   }
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final boolean isEnable()
@@ -225,6 +225,11 @@ public class CompositeRenderer extends Renderer
     }
   
     return result;
+  }
+
+  public boolean isPlanetRenderer()
+  {
+    return false;
   }
 
 }
