@@ -65,9 +65,15 @@ public:
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  virtual bool isPlanetRenderer() {
-    return false;
-  }
+//  virtual bool isPlanetRenderer() {
+//    return false;
+//  }
+#ifdef C_CODE
+  virtual bool isPlanetRenderer() = 0;
+#endif
+#ifdef JAVA_CODE
+  public boolean isPlanetRenderer();
+#endif
 
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
 
