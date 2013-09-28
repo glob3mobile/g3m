@@ -34,7 +34,7 @@ class GEOSymbolizer;
 class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
-
+class ErrorRenderer;
 
 
 class IG3MBuilder {
@@ -49,6 +49,7 @@ private:
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
   Renderer*                         _busyRenderer;
+  ErrorRenderer*                    _errorRenderer;
   std::vector<Renderer*>*           _renderers;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
@@ -67,6 +68,7 @@ private:
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
   Renderer*                         getBusyRenderer();
+  ErrorRenderer*                    getErrorRenderer();
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
   bool                              getLogFPS();
@@ -126,6 +128,8 @@ public:
   void setBackgroundColor(Color* backgroundColor);
 
   void setBusyRenderer(Renderer* busyRenderer);
+
+  void setErrorRenderer(ErrorRenderer* errorRenderer);
 
   void addRenderer(Renderer* renderer);
 

@@ -12,7 +12,7 @@
 #include "LeafRenderer.hpp"
 #include "DownloadPriority.hpp"
 #include "URL.hpp"
-
+#include "TimeInterval.hpp"
 #include <vector>
 
 class GEOObject;

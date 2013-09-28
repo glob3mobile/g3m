@@ -33,6 +33,7 @@ class G3MWidget;
 class PeriodicalTask;
 class GInitializationTask;
 class TimeInterval;
+class ErrorRenderer;
 
 // opengl versions value
 enum GL_version {
@@ -76,6 +77,7 @@ enum GL_version {
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
                 busyRenderer: (Renderer*) busyRenderer
+               errorRenderer: (ErrorRenderer*) errorRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics

@@ -8,6 +8,8 @@
 
 #include "CompositeRenderer.hpp"
 
+#include "ILogger.hpp"
+
 void CompositeRenderer::initialize(const G3MContext* context) {
   _context = context;
 

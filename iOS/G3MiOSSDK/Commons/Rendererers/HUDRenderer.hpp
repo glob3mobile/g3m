@@ -11,7 +11,11 @@
 
 #include "LeafRenderer.hpp"
 #include "Vector2D.hpp"
+#include <vector>
+
+class IImage;
 class Mesh;
+class IFactory;
 
 class HUDRenderer : public LeafRenderer {
 private:

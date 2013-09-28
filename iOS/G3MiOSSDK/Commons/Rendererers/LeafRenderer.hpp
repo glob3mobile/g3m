@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__LeafRenderer__
 
 #include "Renderer.hpp"
+#include <stddef.h>
 
 class GPUProgramState;
 

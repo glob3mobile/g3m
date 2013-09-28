@@ -43,6 +43,8 @@
 #include "SceneLighting.hpp"
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"
+#include "HUDErrorRenderer.hpp"
+
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -307,6 +309,10 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
 
 Renderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
+}
+
+ErrorRenderer* MapBooBuilder::createErrorRenderer() {
+  return new HUDErrorRenderer();
 }
 
 MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonLayer,
@@ -908,6 +914,7 @@ G3MWidget* MapBooBuilder::create() {
                                  createCameraRenderer(),
                                  mainRenderer,
                                  createBusyRenderer(),
+                                 createErrorRenderer(),
                                  Color::black(),
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics

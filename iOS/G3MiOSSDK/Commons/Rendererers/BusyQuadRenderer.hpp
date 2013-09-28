@@ -15,16 +15,13 @@
 #include "Vector2D.hpp"
 #include "Color.hpp"
 #include "DirectMesh.hpp"
-
-//#include "GPUProgramState.hpp"
-
 #include "MutableMatrix44D.hpp"
 
 
 //***************************************************************
 
 
-class BusyQuadRenderer : public LeafRenderer{
+class BusyQuadRenderer : public LeafRenderer, EffectTarget {
 private:
   double      _degrees;
   //  const std::string _textureFilename;

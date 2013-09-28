@@ -32,6 +32,7 @@
 #include "MeshRenderer.hpp"
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "HUDErrorRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -45,6 +46,7 @@ _cameraRenderer(NULL),
 _backgroundColor(NULL),
 _planetRendererBuilder(NULL),
 _busyRenderer(NULL),
+_errorRenderer(NULL),
 _renderers(NULL),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
@@ -78,6 +80,7 @@ IG3MBuilder::~IG3MBuilder() {
     delete _renderers;
   }
   delete _busyRenderer;
+  delete _errorRenderer;
   delete _backgroundColor;
   delete _initializationTask;
   if (_periodicalTasks) {
@@ -204,6 +207,14 @@ Renderer* IG3MBuilder::getBusyRenderer() {
   }
   
   return _busyRenderer;
+}
+
+ErrorRenderer* IG3MBuilder::getErrorRenderer() {
+  if (!_errorRenderer) {
+    _errorRenderer = new HUDErrorRenderer();
+  }
+
+  return _errorRenderer;
 }
 
 /**
@@ -478,7 +489,7 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
  *
  * @param busyRenderer - cannot be NULL.
  */
-void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
+void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
   if (_busyRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: _busyRenderer already initialized");
     return;
@@ -488,6 +499,18 @@ void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
     return;
   }
   _busyRenderer = busyRenderer;
+}
+
+void IG3MBuilder::setErrorRenderer(ErrorRenderer* errorRenderer) {
+  if (_errorRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer already initialized");
+    return;
+  }
+  if (!errorRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+    return;
+  }
+  _errorRenderer = errorRenderer;
 }
 
 /**
@@ -685,6 +708,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getCameraRenderer(),
                                             mainRenderer,
                                             getBusyRenderer(),
+                                            getErrorRenderer(),
                                             *getBackgroundColor(),
                                             getLogFPS(),
                                             getLogDownloaderStatistics(),
@@ -709,6 +733,7 @@ G3MWidget* IG3MBuilder::create() {
   delete _renderers;
   _renderers = NULL;
   _busyRenderer = NULL;
+  _errorRenderer = NULL;
   _initializationTask = NULL;
   delete _periodicalTasks;
   _periodicalTasks = NULL;

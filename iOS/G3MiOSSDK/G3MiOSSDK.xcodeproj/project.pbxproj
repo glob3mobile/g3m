@@ -112,6 +112,10 @@
 		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; };
 		CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */; };
 		CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7A172543D100FFA541 /* RectangleF.hpp */; };
+		CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2317F799DD00F50525 /* ErrorRenderer.cpp */; };
+		CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */; };
+		CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */; };
+		CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
@@ -612,6 +616,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */,
+				CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */,
 				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
 				CF7B07B517F5DBDC00FE363D /* ImageFactory.hpp in CopyFiles */,
 				CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */,
@@ -1098,6 +1104,10 @@
 		CF4027E01770E84700D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		CF4027E21770E84E00D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CF4027E41770E85500D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF423A2317F799DD00F50525 /* ErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorRenderer.cpp; path = Commons/Rendererers/ErrorRenderer.cpp; sourceTree = "<group>"; };
+		CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ErrorRenderer.hpp; path = Commons/Rendererers/ErrorRenderer.hpp; sourceTree = "<group>"; };
+		CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDErrorRenderer.cpp; path = Commons/Rendererers/HUDErrorRenderer.cpp; sourceTree = "<group>"; };
+		CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDErrorRenderer.hpp; path = Commons/Rendererers/HUDErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
@@ -2074,6 +2084,10 @@
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
+				CF423A2317F799DD00F50525 /* ErrorRenderer.cpp */,
+				CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */,
+				CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */,
+				CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2493,6 +2507,7 @@
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
+				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
@@ -2660,6 +2675,7 @@
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
+				CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,

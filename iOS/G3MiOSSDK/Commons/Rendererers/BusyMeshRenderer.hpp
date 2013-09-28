@@ -22,7 +22,7 @@
 //***************************************************************
 
 
-class BusyMeshRenderer : public LeafRenderer {
+class BusyMeshRenderer : public LeafRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;

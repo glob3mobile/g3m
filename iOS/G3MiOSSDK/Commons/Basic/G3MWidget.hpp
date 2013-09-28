@@ -39,12 +39,12 @@ class IStorage;
 class ITextUtils;
 class G3MEventContext;
 class SurfaceElevationProvider;
-
 class GPUProgram;
 class GPUProgramManager;
 class ICameraActivityListener;
 class GLState;
 class PlanetRenderer;
+class ErrorRenderer;
 
 #include <vector>
 #include <string>
@@ -105,6 +105,7 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
+                           ErrorRenderer*                   errorRenderer,
                            const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -219,6 +220,7 @@ private:
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
+  ErrorRenderer*      _errorRenderer;
   bool                _mainRendererReady;
   Renderer*           _selectedRenderer;
   
@@ -279,6 +281,7 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
+            ErrorRenderer*                   errorRenderer,
             const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,

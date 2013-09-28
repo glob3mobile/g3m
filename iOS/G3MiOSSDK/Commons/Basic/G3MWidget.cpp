@@ -32,13 +32,11 @@
 #include "ITextUtils.hpp"
 #include "TouchEvent.hpp"
 #include "GPUProgramManager.hpp"
-
 #include "GLGlobalState.hpp"
-
 #include "ICameraActivityListener.hpp"
-
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
+#include "ErrorRenderer.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -71,6 +69,7 @@ G3MWidget::G3MWidget(GL*                              gl,
                      CameraRenderer*                  cameraRenderer,
                      Renderer*                        mainRenderer,
                      Renderer*                        busyRenderer,
+                     ErrorRenderer*                   errorRenderer,
                      const Color&                     backgroundColor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
@@ -93,6 +92,7 @@ _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
+_errorRenderer(errorRenderer),
 _width(1),
 _height(1),
 _currentCamera(new Camera(_width, _height)),
@@ -136,6 +136,7 @@ _initialCameraPositionHasBeenSet(false)
   _cameraRenderer->initialize(_context);
   _mainRenderer->initialize(_context);
   _busyRenderer->initialize(_context);
+  _errorRenderer->initialize(_context);
   _currentCamera->initialize(_context);
   _nextCamera->initialize(_context);
 
@@ -168,6 +169,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              CameraRenderer*                  cameraRenderer,
                              Renderer*                        mainRenderer,
                              Renderer*                        busyRenderer,
+                             ErrorRenderer*                   errorRenderer,
                              const Color&                     backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
@@ -188,6 +190,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        cameraRenderer,
                        mainRenderer,
                        busyRenderer,
+                       errorRenderer,
                        backgroundColor,
                        logFPS,
                        logDownloaderStatistics,
@@ -206,6 +209,7 @@ G3MWidget::~G3MWidget() {
   delete _cameraRenderer;
   delete _mainRenderer;
   delete _busyRenderer;
+  delete _errorRenderer;
   delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
@@ -325,6 +329,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   _cameraRenderer->onResizeViewportEvent(&ec, width, height);
   _mainRenderer->onResizeViewportEvent(&ec, width, height);
   _busyRenderer->onResizeViewportEvent(&ec, width, height);
+  _errorRenderer->onResizeViewportEvent(&ec, width, height);
 }
 
 
@@ -514,6 +519,7 @@ void G3MWidget::onPause() {
 
   _mainRenderer->onPause(_context);
   _busyRenderer->onPause(_context);
+  _errorRenderer->onPause(_context);
 
   _downloader->onPause(_context);
   _storage->onPause(_context);
@@ -528,6 +534,7 @@ void G3MWidget::onResume() {
 
   _mainRenderer->onResume(_context);
   _busyRenderer->onResume(_context);
+  _errorRenderer->onResume(_context);
 
   _effectsScheduler->onResume(_context);
 
@@ -541,6 +548,7 @@ void G3MWidget::onDestroy() {
 
   _mainRenderer->onDestroy(_context);
   _busyRenderer->onDestroy(_context);
+  _errorRenderer->onDestroy(_context);
 
   _downloader->onDestroy(_context);
   _storage->onDestroy(_context);

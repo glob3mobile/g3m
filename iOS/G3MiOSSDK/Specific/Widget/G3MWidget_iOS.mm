@@ -56,6 +56,7 @@
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
                 busyRenderer: (Renderer*) busyRenderer
+               errorRenderer: (ErrorRenderer*) errorRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -82,6 +83,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   cameraRenderer,
                                   mainRenderer,
                                   busyRenderer,
+                                  errorRenderer,
                                   backgroundColor,
                                   logFPS,
                                   logDownloaderStatistics,

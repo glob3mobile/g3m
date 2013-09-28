@@ -38,6 +38,7 @@ class WMSLayer;
 class G3MContext;
 class IWebSocket;
 class MapBoo_Scene;
+class ErrorRenderer;
 
 class SceneLighting;
 
@@ -324,6 +325,8 @@ private:
   CameraRenderer* createCameraRenderer();
 
   Renderer* createBusyRenderer();
+
+  ErrorRenderer* createErrorRenderer();
 
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
