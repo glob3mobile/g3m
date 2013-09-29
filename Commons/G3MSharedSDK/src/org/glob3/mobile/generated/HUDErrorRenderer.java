@@ -18,8 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class HUDErrorRenderer extends HUDImageRenderer, ErrorRenderer implements ImageFactory
+public class HUDErrorRenderer extends HUDImageRenderer implements ErrorRenderer, ImageFactory
 {
   public HUDErrorRenderer()
   {

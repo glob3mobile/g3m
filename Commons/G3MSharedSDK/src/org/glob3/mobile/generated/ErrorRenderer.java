@@ -17,29 +17,27 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class ErrorRenderer
+public interface ErrorRenderer
 {
 
-  public abstract void initialize(G3MContext context);
+  void initialize(G3MContext context);
 
-  public abstract void render(G3MRenderContext rc, GLState glState);
+  void render(G3MRenderContext rc, GLState glState);
 
-  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
+  boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
-  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
+  void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void start(G3MRenderContext rc);
+  void start(G3MRenderContext rc);
 
-  public abstract void stop(G3MRenderContext rc);
+  void stop(G3MRenderContext rc);
 
-  public void dispose()
-  {
-  }
+  public void dispose();
 
-  public abstract void onResume(G3MContext context);
+  void onResume(G3MContext context);
 
-  public abstract void onPause(G3MContext context);
+  void onPause(G3MContext context);
 
-  public abstract void onDestroy(G3MContext context);
+  void onDestroy(G3MContext context);
 
 }
