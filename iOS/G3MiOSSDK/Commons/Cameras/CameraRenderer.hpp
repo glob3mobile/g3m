@@ -91,6 +91,7 @@ public:
                              int width, int height);
 
   bool isReadyToRender(const G3MRenderContext* rc) {
+    int __rendererState;
     return true;
   }
 

@@ -11,8 +11,32 @@
 
 #include "Renderer.hpp"
 
-class ErrorRenderer : public Renderer {
+class ErrorRenderer {
+public:
 
+  virtual void initialize(const G3MContext* context) = 0;
+
+  virtual void render(const G3MRenderContext* rc,
+                      GLState* glState) = 0;
+
+  virtual bool onTouchEvent(const G3MEventContext* ec,
+                            const TouchEvent* touchEvent) = 0;
+
+  virtual void onResizeViewportEvent(const G3MEventContext* ec,
+                                     int width, int height) = 0;
+
+  virtual void start(const G3MRenderContext* rc) = 0;
+
+  virtual void stop(const G3MRenderContext* rc) = 0;
+
+  virtual ~ErrorRenderer() { }
+
+  virtual void onResume(const G3MContext* context) = 0;
+
+  virtual void onPause(const G3MContext* context) = 0;
+
+  virtual void onDestroy(const G3MContext* context) = 0;
+  
 };
 
 #endif

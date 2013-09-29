@@ -59,6 +59,7 @@ public:
   }
 
   bool isReadyToRender(const G3MRenderContext* rc) {
+    int __rendererState;
     return true;
   }
 

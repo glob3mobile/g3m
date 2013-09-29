@@ -39,6 +39,8 @@ public:
 };
 
 bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
+  int __rendererState;
+
   if (_renderNotReadyShapes) {
     return true;
   }

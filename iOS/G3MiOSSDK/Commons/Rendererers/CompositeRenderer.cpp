@@ -62,6 +62,8 @@ void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 }
 
 bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  int __rendererState;
+
   for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i];
     if (renderer->isEnable()) {

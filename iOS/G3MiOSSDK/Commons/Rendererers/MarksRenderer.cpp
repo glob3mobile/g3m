@@ -175,6 +175,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
+  int __rendererState;
+
   if (_readyWhenMarksReady) {
     int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++) {

@@ -427,6 +427,7 @@ void G3MWidget::render(int width, int height) {
                       _gpuProgramManager,
                       _surfaceElevationProvider);
 
+  int __rendererState;
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
   _effectsScheduler->doOneCyle(&rc);

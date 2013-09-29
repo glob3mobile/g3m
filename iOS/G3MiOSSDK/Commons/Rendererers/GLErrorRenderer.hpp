@@ -28,6 +28,7 @@ public:
                              int width, int height);
   
   bool isReadyToRender(const G3MRenderContext* rc, GLState* glState) {
+    int __rendererState;
     return true;
   }
   

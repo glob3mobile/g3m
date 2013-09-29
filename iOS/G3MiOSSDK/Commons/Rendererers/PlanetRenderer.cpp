@@ -400,6 +400,8 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
+  int __rendererState;
+
   if (!_validLayerTilesRenderParameters) {
     return false;
   }
@@ -479,6 +481,7 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
 }
 
 bool PlanetRenderer::isReadyToRender(const G3MRenderContext *rc) {
+  int __rendererState;
   return isReadyToRenderTiles(rc);
 }
 

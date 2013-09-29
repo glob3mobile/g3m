@@ -20,6 +20,8 @@ void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvi
 }
 
 bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc) {
+  int __rendererState;
+
   int size = _providers.size();
   for (int i = 0; i < size; i++) {
     if (!_providers[i]->isReadyToRender(rc)) {
