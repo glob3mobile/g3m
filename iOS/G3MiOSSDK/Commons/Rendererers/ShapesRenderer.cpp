@@ -140,8 +140,9 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
                   const TouchEvent* touchEvent) {
   if (touchEvent->getTouchCount() ==1 &&
       touchEvent->getTapCount()==1 &&
-      touchEvent->getType()==Down)
-    printf ("Ahora siempre parece que toca el shape\n");
+      touchEvent->getType()==Down) {
+    printf ("Computing intersections with %d shapes\n", _shapes.size());
+  }
   return false;
 }
 
