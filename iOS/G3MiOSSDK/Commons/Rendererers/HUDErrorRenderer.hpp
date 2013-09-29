@@ -10,9 +10,17 @@
 #define __G3MiOSSDK__HUDErrorRenderer__
 
 #include "ErrorRenderer.hpp"
+#include "HUDImageRenderer.hpp"
+#include "ImageFactory.hpp"
 
-class HUDErrorRenderer : public ErrorRenderer {
 
+class HUDErrorRenderer : public HUDImageRenderer, ErrorRenderer, ImageFactory {
+public:
+  HUDErrorRenderer() :
+  HUDImageRenderer(this)
+  {
+
+  }
 };
 
 #endif
