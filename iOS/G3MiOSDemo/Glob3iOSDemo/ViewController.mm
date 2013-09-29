@@ -1701,15 +1701,17 @@ public:
     const URL textureURL("file:///world.jpg", false);
 
   const double factor = 2e5;
-    const Vector3D radius(factor, factor, factor);
+  const Vector3D radius1(factor, factor, factor);
+  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
+  
   
     Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                           Angle::fromDegrees(0),
-                                                          radius._x),
+                                                          radius1._x),
                                            ABSOLUTE,
                                            planet,
                                            URL("file:///world.jpg", false),
-                                           radius,
+                                           radius1,
                                            32,
                                            0,
                                            false,
@@ -1721,11 +1723,11 @@ public:
   
   Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                        Angle::fromDegrees(5),
-                                                       radius._x),
+                                                       radius2._x),
                                           ABSOLUTE,
                                           planet,
                                           URL("file:///mercator_debug.png", false),
-                                          radius,
+                                          radius2,
                                           32,
                                           0,
                                           false,

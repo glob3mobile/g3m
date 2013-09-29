@@ -148,11 +148,13 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+      int total = 0;
       for (int n=0; n<_shapes.size(); n++) {
         Shape* shape = _shapes[n];
-        shape->intersectionsDistances(origin, direction);
+        std::vector<double> distances = shape->intersectionsDistances(origin, direction);
+        if (!distances.empty()) total++;
       }
-      printf (".....Computing intersections with %d shapes)\n", _shapes.size());
+      printf (".....Computing intersections with %d shapes: %d intersections\n", _shapes.size(), total);
 
     }
   }
