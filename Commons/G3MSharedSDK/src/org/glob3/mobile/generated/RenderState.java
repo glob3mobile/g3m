@@ -22,7 +22,7 @@ public class RenderState
     return _errors;
   }
 
-  private final java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private final java.util.ArrayList<String> _errors;
 
   private RenderState(RenderState_Type type)
   {
