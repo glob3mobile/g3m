@@ -29,7 +29,12 @@ public:
 
   virtual void stop(const G3MRenderContext* rc) = 0;
 
+#ifdef C_CODE
   virtual ~ErrorRenderer() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
   virtual void onResume(const G3MContext* context) = 0;
 
