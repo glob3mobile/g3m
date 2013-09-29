@@ -84,7 +84,9 @@ public:
   }
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+                                             const Vector3D& direction) const {
+    return _ellipsoid.intersectionsDistances(origin, direction);
+  }
   
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
