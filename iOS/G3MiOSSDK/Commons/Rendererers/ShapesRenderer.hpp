@@ -95,10 +95,8 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
   
   bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
-
+                    const TouchEvent* touchEvent);
+  
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
   }

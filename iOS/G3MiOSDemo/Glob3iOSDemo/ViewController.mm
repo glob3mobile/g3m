@@ -747,6 +747,7 @@ public:
 
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
+  
   builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
@@ -841,9 +842,10 @@ public:
       }
     };
 
+    /*
     HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
-
     builder.addRenderer(hudRenderer);
+     */
   }
 
 
@@ -1696,40 +1698,41 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
-  //  const URL textureURL("file:///world.jpg", false);
+    const URL textureURL("file:///world.jpg", false);
 
-  //const Vector3D radius(50000, 50000, 50000);
-  //  const double factor = 80;
-  //  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
-  //
-  //  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                        Angle::fromDegrees(-121),
-  //                                                        radius._x * 1.1),
-  //                                         URL("file:///world.jpg", false),
-  //                                         radius,
-  //                                         32,
-  //                                         0,
-  //                                         false,
-  //                                         false
-  //                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-  //                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                         );
-  //  shapesRenderer->addShape(ellipsoid1);
-  //
-  //  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                       Angle::fromDegrees(-119),
-  //                                                       radius._x * 1.1),
-  //                                        URL("file:///mercator_debug.png", false),
-  //                                        radius,
-  //                                        32,
-  //                                        0,
-  //                                        false,
-  //                                        true
-  //                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-  //                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                        );
-  //  shapesRenderer->addShape(mercator1);
-  //
+  const double factor = 2e5;
+    const Vector3D radius(factor, factor, factor);
+  
+    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          radius._x),
+                                           ABSOLUTE,
+                                           URL("file:///world.jpg", false),
+                                           radius,
+                                           32,
+                                           0,
+                                           false,
+                                           false
+                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                           );
+    shapesRenderer->addShape(ellipsoid1);
+  
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                       Angle::fromDegrees(5),
+                                                       radius._x),
+                                          ABSOLUTE,
+                                          URL("file:///mercator_debug.png", false),
+                                          radius,
+                                          32,
+                                          0,
+                                          false,
+                                          true
+                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                          );
+    shapesRenderer->addShape(mercator1);
+  
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
   //                                                       radius._x * 1.1),

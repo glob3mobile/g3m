@@ -10,6 +10,7 @@
 
 #include "OrderedRenderable.hpp"
 #include "Camera.hpp"
+#include "TouchEvent.hpp"
 
 class TransparentShapeWrapper : public OrderedRenderable {
 private:
@@ -134,3 +135,13 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 
   _shapes.clear();
 }
+
+bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
+                  const TouchEvent* touchEvent) {
+  if (touchEvent->getTouchCount() ==1 &&
+      touchEvent->getTapCount()==1 &&
+      touchEvent->getType()==Down)
+    printf ("Ahora siempre parece que toca el shape\n");
+  return false;
+}
+
