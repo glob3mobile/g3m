@@ -1546,10 +1546,9 @@ public:
     layerSet->addLayer(temp);
   }
 
-  if (true) {
-    layerSet->addLayer( new URLTemplateLayer() );
-  }
-
+//  if (true) {
+//    layerSet->addLayer( new URLTemplateLayer() );
+//  }
 
   return layerSet;
 }
