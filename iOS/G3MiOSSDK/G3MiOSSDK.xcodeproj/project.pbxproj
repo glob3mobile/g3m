@@ -313,6 +313,8 @@
 		CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AA16684929006F6A00 /* GEOFeature.cpp */; };
 		CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */; };
 		CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */; };
+		CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDDDF9A17F8C9E100DD3499 /* URLTemplateLayer.cpp */; };
+		CFDDDF9D17F8CA5C00DD3499 /* URLTemplateLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDDDF9B17F8C9E100DD3499 /* URLTemplateLayer.hpp */; };
 		CFDFC05D166AB22A0065BC1F /* AbstractMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFE248EF175F769D000A6764 /* MeshShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7C1725444800FFA541 /* MeshShape.hpp */; };
@@ -612,6 +614,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFDDDF9D17F8CA5C00DD3499 /* URLTemplateLayer.hpp in CopyFiles */,
 				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
 				CF7B07B517F5DBDC00FE363D /* ImageFactory.hpp in CopyFiles */,
 				CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */,
@@ -1362,6 +1365,8 @@
 		CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry.hpp; path = Commons/GEO/GEOGeometry.hpp; sourceTree = "<group>"; };
 		CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DirectMesh.cpp; path = Commons/Mesh/DirectMesh.cpp; sourceTree = "<group>"; };
 		CFDB7B72166AB99B00756DE8 /* DirectMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DirectMesh.hpp; path = Commons/Mesh/DirectMesh.hpp; sourceTree = "<group>"; };
+		CFDDDF9A17F8C9E100DD3499 /* URLTemplateLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = URLTemplateLayer.cpp; sourceTree = "<group>"; };
+		CFDDDF9B17F8C9E100DD3499 /* URLTemplateLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = URLTemplateLayer.hpp; sourceTree = "<group>"; };
 		CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMesh.cpp; path = Commons/Mesh/AbstractMesh.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = AbstractMesh.hpp; path = Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
@@ -2242,6 +2247,8 @@
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
 				CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */,
 				CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */,
+				CFDDDF9A17F8C9E100DD3499 /* URLTemplateLayer.cpp */,
+				CFDDDF9B17F8C9E100DD3499 /* URLTemplateLayer.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -2728,6 +2735,7 @@
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
 				CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */,
+				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,

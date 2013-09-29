@@ -136,7 +136,7 @@
 
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
 #import <G3MiOSSDK/TextCanvasElement.hpp>
-
+#import <G3MiOSSDK/URLTemplateLayer.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1544,6 +1544,10 @@ public:
                                   TimeInterval::zero(),
                                   true);
     layerSet->addLayer(temp);
+  }
+
+  if (true) {
+    layerSet->addLayer( new URLTemplateLayer() );
   }
 
 

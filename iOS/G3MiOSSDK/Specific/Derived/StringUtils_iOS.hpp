@@ -60,7 +60,11 @@ public:
   int indexOfFirstNonChar(const std::string& string,
                           const std::string& chars,
                           int fromIndex) const;
-  
+
+  std::string toString(int value) const;
+
+  std::string toString(double value) const;
+
 };
 
 #endif
