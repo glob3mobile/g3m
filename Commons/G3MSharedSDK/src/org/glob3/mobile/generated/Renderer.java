@@ -17,52 +17,54 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 
 
-public interface Renderer
+public abstract class Renderer
 {
-  boolean isEnable();
+  public abstract boolean isEnable();
 
-  void setEnable(boolean enable);
+  public abstract void setEnable(boolean enable);
 
-  void initialize(G3MContext context);
+  public abstract void initialize(G3MContext context);
 
-  boolean isReadyToRender(G3MRenderContext rc);
+  public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  void render(G3MRenderContext rc, GLState glState);
+  public abstract void render(G3MRenderContext rc, GLState glState);
 
   /**
    Gives to Renderer the opportunity to process touch, events.
 
    The Renderer answer true if the event was processed.
    */
-  boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
+  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
-  void onResizeViewportEvent(G3MEventContext ec, int width, int height);
+  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  void start(G3MRenderContext rc);
+  public abstract void start(G3MRenderContext rc);
 
-  void stop(G3MRenderContext rc);
+  public abstract void stop(G3MRenderContext rc);
 
-  public void dispose();
+  public void dispose()
+  {
+  }
 
   // Android activity lifecyle
-  void onResume(G3MContext context);
+  public abstract void onResume(G3MContext context);
 
-  void onPause(G3MContext context);
+  public abstract void onPause(G3MContext context);
 
-  void onDestroy(G3MContext context);
+  public abstract void onDestroy(G3MContext context);
 
   /**
    * Allows us to know if the renderer is a PlanetRenderer.
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-//  virtual bool isPlanetRenderer() {
-//    return false;
-//  }
-  public boolean isPlanetRenderer();
+  public boolean isPlanetRenderer()
+  {
+    return false;
+  }
 
-  SurfaceElevationProvider getSurfaceElevationProvider();
+  public abstract SurfaceElevationProvider getSurfaceElevationProvider();
 
-  PlanetRenderer getPlanetRenderer();
+  public abstract PlanetRenderer getPlanetRenderer();
 
 }
