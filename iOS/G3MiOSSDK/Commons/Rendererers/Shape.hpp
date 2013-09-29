@@ -46,7 +46,6 @@ private:
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
@@ -60,8 +59,12 @@ private:
   
 protected:
   virtual void cleanTransformMatrix();
+
   
 public:
+  
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+
   Shape(Geodetic3D* position,
         AltitudeMode altitudeMode) :
   _position( position ),

@@ -12,6 +12,7 @@
 #include "AbstractMeshShape.hpp"
 #include "Ellipsoid.hpp"
 #include "Planet.hpp"
+#include "Quadric.hpp"
 
 
 class Color;
@@ -33,6 +34,8 @@ private:
 #ifdef JAVA_CODE
   private final Ellipsoid _ellipsoid;
 #endif
+  
+  const Planet* _planet;
 
   URL _textureURL;
 
@@ -90,7 +93,8 @@ public:
   _borderColor(borderColor),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _planet(planet)
   {
 
   }
@@ -116,7 +120,8 @@ public:
   _borderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _planet(planet)
   {
     
   }
@@ -126,8 +131,14 @@ public:
 
   void imageDownloaded(IImage* image);
   
+  
+  
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const {
+    MutableMatrix44D* M = createTransformMatrix(_planet);
+    Quadric quadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
+    delete M;
+    
     return _ellipsoid.intersectionsDistances(origin, direction);
   }
 

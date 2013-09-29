@@ -598,6 +598,8 @@
 		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
 		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
 		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
+		FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2B1B2517F880B5006307EC /* Quadric.cpp */; };
+		FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2B1B2617F880B5006307EC /* Quadric.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
@@ -612,6 +614,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */,
 				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
 				CF7B07B517F5DBDC00FE363D /* ImageFactory.hpp in CopyFiles */,
 				CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */,
@@ -1542,6 +1545,8 @@
 		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
 		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
 		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
+		FB2B1B2517F880B5006307EC /* Quadric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quadric.cpp; path = Commons/Geometry/Quadric.cpp; sourceTree = "<group>"; };
+		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
@@ -1917,6 +1922,8 @@
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF5C1193178C76F2000ED715 /* BoundingArea.cpp */,
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
+				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
+				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2509,6 +2516,7 @@
 				CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */,
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
+				FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
