@@ -19,7 +19,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.DownloadPriority;
-import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -46,6 +46,7 @@ import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.HUDErrorRenderer;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraActivityListener;
@@ -59,13 +60,10 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -87,7 +85,6 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TerrainTouchEvent;
@@ -96,7 +93,6 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.VisibleSectorListener;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
@@ -133,7 +129,7 @@ public class G3MWebGLDemo
          // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-                  initDefaultWithBuilder();
+         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -884,6 +880,30 @@ public class G3MWebGLDemo
 
          final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
+
+         //            public static final G3MWidget create(final GL gl,
+         //                                                 final IStorage storage,
+         //                                                 final IDownloader downloader,
+         //                                                 final IThreadUtils threadUtils,
+         //                                                 final ICameraActivityListener cameraActivityListener,
+         //                                                 final Planet planet,
+         //                                                 final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
+         //                                                 final CameraRenderer cameraRenderer,
+         //                                                 final Renderer mainRenderer,
+         //                                                 final Renderer busyRenderer,
+         //                                                 final ErrorRenderer errorRenderer,
+         //                                                 final Color backgroundColor,
+         //                                                 final boolean logFPS,
+         //                                                 final boolean logDownloaderStatistics,
+         //                                                 final GInitializationTask initializationTask,
+         //                                                 final boolean autoDeleteInitializationTask,
+         //                                                 final java.util.ArrayList<PeriodicalTask> periodicalTasks,
+         //                                                 final GPUProgramManager gpuProgramManager,
+         //                                                 final SceneLighting sceneLighting,
+         //                                                 final InitialCameraPositionProvider initialCameraPositionProvider);
+
+
+         final ErrorRenderer errorRenderer = new HUDErrorRenderer();
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -894,6 +914,7 @@ public class G3MWebGLDemo
                   cameraRenderer, //
                   mainRenderer, //
                   busyRenderer, //
+                  errorRenderer, //
                   backgroundColor, //
                   logFPS, //
                   logDownloaderStatistics, //
@@ -1005,7 +1026,6 @@ public class G3MWebGLDemo
       };
       return initializationTask;
    }
-
 
 
    public void initDefaultWithBuilder() {
@@ -1200,7 +1220,7 @@ public class G3MWebGLDemo
       /*
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);*/
-      
+
 
       //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
 
@@ -1222,9 +1242,9 @@ public class G3MWebGLDemo
       };
 
       builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-*/
-      
-      
+      */
+
+
       /*
        * // testing getfeatureinfo final IBufferDownloadListener myListener =
        * new IBufferDownloadListener() {
@@ -1310,29 +1330,26 @@ public class G3MWebGLDemo
        };
 
       builder.setInitializationTask(initializationTask);
-*/
-      
-      
-      
+      */
+
+
       //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       // set elevations
-      Sector sector = Sector.fromDegrees(27.967811065876,-17.0232177085356,28.6103464294992,-16.0019401695656);
-      Vector2I extent = new Vector2I(256, 256);
-      URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
-      ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);      
-      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
-      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);  
-
-
+      //      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
+      //      final Vector2I extent = new Vector2I(256, 256);
+      //      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+      //      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+      //      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+      //      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
 
       _widget = builder.createWidget();
-      
-      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
+
+      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
       _widget.setCameraPosition(position);
       _widget.setCameraPitch(Angle.fromDegrees(75));
- 
+
 
       /*
        * // testing downloading from url final IBufferDownloadListener

@@ -414,7 +414,6 @@ public final class G3MWidget_Android
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
-                          final ErrorRenderer errorRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -425,6 +424,7 @@ public final class G3MWidget_Android
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider) {
 
+      final ErrorRenderer errorRenderer;
       _g3mWidget = G3MWidget.create(//
                getGL(), //
                storage, //

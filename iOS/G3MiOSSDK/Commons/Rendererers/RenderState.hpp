@@ -13,9 +13,9 @@
 #include <string>
 
 enum RenderState_Type {
-  READY,
-  BUSY,
-  ERROR
+  RENDER_READY,
+  RENDER_BUSY,
+  RENDER_ERROR
 };
 
 class RenderState {
@@ -40,7 +40,7 @@ private:
   }
 
   RenderState(const std::vector<std::string>& errors) :
-  _type(ERROR),
+  _type(RENDER_ERROR),
   _errors(errors)
   {
   }
