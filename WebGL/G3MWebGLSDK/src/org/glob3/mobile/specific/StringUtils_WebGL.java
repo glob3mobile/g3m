@@ -144,4 +144,15 @@ public final class StringUtils_WebGL
    }
 
 
+   @Override
+   public String toString(final int value) {
+      return Integer.toString(value);
+   }
+
+
+   @Override
+   public String toString(final double value) {
+      return Double.toString(value);
+   }
+
 }
