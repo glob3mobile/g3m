@@ -279,6 +279,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private boolean isReadyToRenderTiles(G3MRenderContext rc)
   {
+    int __rendererState;
+  
     if (!_validLayerTilesRenderParameters)
     {
       return false;
@@ -611,6 +613,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
     return isReadyToRenderTiles(rc);
   }
 

@@ -56,6 +56,7 @@ public abstract class GLErrorRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc, GLState glState)
   {
+    int __rendererState;
     return true;
   }
 

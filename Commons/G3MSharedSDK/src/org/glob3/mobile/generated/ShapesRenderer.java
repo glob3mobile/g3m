@@ -164,6 +164,8 @@ public class ShapesRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
+  
     if (_renderNotReadyShapes)
     {
       return true;

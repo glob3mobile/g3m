@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class HUDErrorRenderer extends ErrorRenderer
+public abstract class HUDErrorRenderer extends ErrorRenderer
 {
 
 }

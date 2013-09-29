@@ -73,6 +73,8 @@ public class CompositeRenderer extends Renderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
+  
     for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i);

@@ -287,6 +287,8 @@ public class MarksRenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
+  
     if (_readyWhenMarksReady)
     {
       int marksSize = _marks.size();

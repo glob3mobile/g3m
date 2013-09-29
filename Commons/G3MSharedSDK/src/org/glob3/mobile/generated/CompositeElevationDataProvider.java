@@ -320,6 +320,8 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
+  
     int size = _providers.size();
     for (int i = 0; i < size; i++)
     {

@@ -168,6 +168,7 @@ public class G3MWidget
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
+    int __rendererState;
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
     _effectsScheduler.doOneCyle(rc);

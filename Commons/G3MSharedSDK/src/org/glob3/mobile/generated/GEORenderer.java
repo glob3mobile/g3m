@@ -168,6 +168,7 @@ public class GEORenderer extends LeafRenderer
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
+    int __rendererState;
     return true;
   }
 
