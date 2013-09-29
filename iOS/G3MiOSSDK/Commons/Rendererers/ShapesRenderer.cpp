@@ -94,6 +94,9 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 }
 
 void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+  // Saving camera for use in onTouchEvent
+  _lastCamera = rc->getCurrentCamera();
+
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
@@ -138,10 +141,20 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 
 bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
                   const TouchEvent* touchEvent) {
-  if (touchEvent->getTouchCount() ==1 &&
-      touchEvent->getTapCount()==1 &&
-      touchEvent->getType()==Down) {
-    printf ("Computing intersections with %d shapes\n", _shapes.size());
+  if (_lastCamera != NULL) {
+    if (touchEvent->getTouchCount() ==1 &&
+        touchEvent->getTapCount()==1 &&
+        touchEvent->getType()==Down) {
+      const Vector3D origin = _lastCamera->getCartesianPosition();
+      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+      for (int n=0; n<_shapes.size(); n++) {
+        Shape* shape = _shapes[n];
+        shape->intersectionsDistances(origin, direction);
+      }
+      printf (".....Computing intersections with %d shapes)\n", _shapes.size());
+
+    }
   }
   return false;
 }
