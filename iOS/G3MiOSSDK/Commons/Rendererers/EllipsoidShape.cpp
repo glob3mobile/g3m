@@ -211,7 +211,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              Vector3D(_radiusX, _radiusY, _radiusZ)
+                                              _ellipsoid.getRadii()
                                               ));
   const Sector sector(Sector::fullSphere());
 

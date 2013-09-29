@@ -10,6 +10,9 @@
 #define __G3MiOSSDK__EllipsoidShape__
 
 #include "AbstractMeshShape.hpp"
+#include "Ellipsoid.hpp"
+#include "Planet.hpp"
+
 
 class Color;
 class FloatBufferBuilderFromGeodetic;
@@ -23,11 +26,19 @@ class IGLTextureId;
 
 class EllipsoidShape : public AbstractMeshShape {
 private:
+  
+#ifdef C_CODE
+  const Ellipsoid _ellipsoid;
+#endif
+#ifdef JAVA_CODE
+  private final Ellipsoid _ellipsoid;
+#endif
+
   URL _textureURL;
 
-  const double _radiusX;
+  /*const double _radiusX;
   const double _radiusY;
-  const double _radiusZ;
+  const double _radiusZ;*/
 
   const short _resolution;
 
@@ -59,6 +70,7 @@ protected:
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
+                 const Planet* planet,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
@@ -67,11 +79,9 @@ public:
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
                  bool withNormals = true) :
+  _ellipsoid(planet->toCartesian(*position), radius),
   AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
-  _radiusX(radius.x()),
-  _radiusY(radius.y()),
-  _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
   _texturedInside(texturedInside),
@@ -87,6 +97,7 @@ public:
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
+                 const Planet* planet,
                  const URL& textureURL,
                  const Vector3D& radius,
                  short resolution,
@@ -94,11 +105,9 @@ public:
                  bool texturedInside,
                  bool mercator,
                  bool withNormals = true) :
+  _ellipsoid(planet->toCartesian(*position), radius),
   AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
-  _radiusX(radius.x()),
-  _radiusY(radius.y()),
-  _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
   _texturedInside(texturedInside),
@@ -109,7 +118,7 @@ public:
   _textureImage(NULL),
   _withNormals(withNormals)
   {
-
+    
   }
 
 

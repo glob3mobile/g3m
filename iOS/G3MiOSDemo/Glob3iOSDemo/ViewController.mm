@@ -1707,6 +1707,7 @@ public:
                                                           Angle::fromDegrees(0),
                                                           radius._x),
                                            ABSOLUTE,
+                                           planet,
                                            URL("file:///world.jpg", false),
                                            radius,
                                            32,
@@ -1722,6 +1723,7 @@ public:
                                                        Angle::fromDegrees(5),
                                                        radius._x),
                                           ABSOLUTE,
+                                          planet,
                                           URL("file:///mercator_debug.png", false),
                                           radius,
                                           32,
@@ -1973,7 +1975,8 @@ private:
                            color);
   }
 
-  EllipsoidShape* createEllipsoidShape(const GEO2DPointGeometry* geometry) const {
+  EllipsoidShape* createEllipsoidShape(const GEO2DPointGeometry* geometry,
+                                       const Planet* planet) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -1985,6 +1988,7 @@ private:
 
     return new EllipsoidShape(new Geodetic3D(geometry->getPosition(), 0),
                               RELATIVE_TO_GROUND,
+                              planet,
                               Vector3D(radius, radius, radius),
                               10,
                               0.0,
