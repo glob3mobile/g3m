@@ -129,8 +129,15 @@
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/HUDImageRenderer.hpp>
+#import <G3MiOSSDK/CanvasImageFactory.hpp>
 
 #import <G3MiOSSDK/CartoCSSParser.hpp>
+
+#import <G3MiOSSDK/ColumnCanvasElement.hpp>
+#import <G3MiOSSDK/TextCanvasElement.hpp>
+
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -235,11 +242,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-//  [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -283,12 +290,13 @@ public:
     const CartoCSSSymbolizer* symbolizer = result->getSymbolizer();
     if (symbolizer != NULL) {
       ILogger::instance()->logInfo("%s", symbolizer->description(true).c_str());
+      delete symbolizer;
     }
 
     delete result;
 
-    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
-    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
+//    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
+//    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     //[_iosWidget widget]->setCameraPosition(position);
   }
 
@@ -709,8 +717,9 @@ public:
   //                     );
 
   bool useElevations = true;
-  if (useElevations)
+  if (useElevations) {
     [self initializeElevationDataProvider: builder];
+  }
 
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
@@ -753,18 +762,89 @@ public:
   builder.addRenderer(geoRenderer);
 
 
-  if (false) { //HUD
-    HUDRenderer* hudRenderer = new   HUDRenderer();
+  if (true) { //HUD
+//    HUDRenderer* hudRenderer = new HUDRenderer();
+//
+//    NSBundle* mainBundle = [NSBundle mainBundle];
+//    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
+//                                                                                                   ofType: @"png"]],
+//                                     NULL);
+//    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
+//
+//    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
+//                                                                                                    ofType: @"png"]],
+//                                      NULL);
+//    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
+//
+//    builder.addRenderer(hudRenderer);
 
-    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
-    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
 
-    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"horizontal-gears" ofType:@"png"]], NULL);
-    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
+    class TestImageFactory : public CanvasImageFactory {
+    protected:
+      void drawOn(ICanvas* canvas,
+                  int width,
+                  int height) {
+//        canvas->setFillColor(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f));
+        canvas->setFillColor(Color::black());
+        canvas->fillRectangle(0, 0,
+                              width, height);
+
+//        canvas->setLineColor(Color::yellow());
+//        canvas->setLineWidth(5);
+//        canvas->strokeRectangle(0, 0,
+//                                width, height);
+
+//        canvas->setFont(GFont::sansSerif(30));
+
+//        const std::string text = "Hello World from HUD!";
+//        canvas->setFont(GFont::sansSerif(30));
+//        const Vector2F extent = canvas->textExtent(text);
+//
+//        canvas->setFillColor(Color::white());
+//        canvas->setShadow(Color::black(), 10, 2, -2);
+//
+//        canvas->fillText(text,
+//                         (width  - extent._x) / 2,
+//                         (height - extent._y) / 2);
+
+//        const std::string text = "glob3mobile.com";
+//        canvas->setFont(GFont::sansSerif(25));
+//        const Vector2F extent = canvas->textExtent(text);
+//
+//        canvas->setFillColor(Color::white());
+////        canvas->setShadow(Color::black(), 10, 0, 0);
+//
+//        canvas->fillText(text,
+//                         (width  - extent._x) / 2,
+//                         (height - extent._y) - extent._y/2);
+
+
+//        ColumnCanvasElement column(Color::yellow());
+
+//        const Color& color = Color::transparent(),
+//        float margin = 0,
+//        float padding = 0,
+//        float cornerRadius = 0
+
+        ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
+                                   0,  /* margin */
+                                   16,  /* padding */
+                                   8   /* cornerRadius */);
+        const GFont labelFont  = GFont::sansSerif(22);
+        const Color labelColor = Color::white();
+        column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
+        column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
+        column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
+        column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
+
+        column.drawCentered(canvas);
+      }
+    };
+
+    HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
 
     builder.addRenderer(hudRenderer);
   }
-
 
 
   //  [self createInterpolationTest: meshRenderer];
@@ -1100,7 +1180,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   }
@@ -1137,7 +1217,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -1931,7 +2011,7 @@ private:
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
-                        Color( Color::fromRGBA(1, 1, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                        Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
 
   }
@@ -2034,26 +2114,27 @@ public:
 
     //symbols->push_back( new GEOShapeSymbol( createCircleShape(geometry) ) );
 
-    //    const JSONObject* properties = geometry->getFeature()->getProperties();
-    //
-    //    const double population = properties->getAsNumber("population", 0);
-    //
-    //    if (population > 2000000) {
-    if (rand()%2 == 0){
-      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-    } else{
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
-    }
+    const JSONObject* properties = geometry->getFeature()->getProperties();
 
-    Mark* mark = createMark(geometry);
-    if (mark != NULL) {
-      symbols->push_back( new GEOMarkSymbol(mark) );
+    const double population = properties->getAsNumber("population", 0);
+
+    if (population > 2000000) {
+      //    if (rand()%2 == 0){
+      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
+      //    }
+      //    else {
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+      //    }
+
+      Mark* mark = createMark(geometry);
+      if (mark != NULL) {
+        symbols->push_back( new GEOMarkSymbol(mark) );
+      }
     }
-    //    }
 
     return symbols;
   }
-
+  
 };
 
 
@@ -2547,31 +2628,6 @@ public:
       //                                                     );
 
 
-      /*
-       NSString *bsonFilePath = [[NSBundle mainBundle] pathForResource: @"test"
-       ofType: @"bson"];
-       if (bsonFilePath) {
-
-       NSData* data = [NSData dataWithContentsOfFile: bsonFilePath];
-
-       const int length = [data length];
-       unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-       [data getBytes: bytes
-       length: length];
-
-
-       IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
-
-       JSONBaseObject* bson = BSONParser::parse(buffer);
-
-       printf("%s\n", bson->description().c_str());
-
-       delete bson;
-
-       delete buffer;
-       }
-       */
-
       if (false) {
         NSString *cc3dFilePath = [[NSBundle mainBundle] pathForResource: @"cc3d4326"
                                                                  ofType: @"json"];
@@ -2629,7 +2685,7 @@ public:
 
 
 
-      if (true) { //Incomplete world
+      if (false) { //Incomplete world
 
         int time = 5; //SECS
 
@@ -2746,7 +2802,7 @@ public:
       }
 
 
-      if (false){
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
@@ -2797,7 +2853,7 @@ public:
         }
       }
 
-      if (true){
+      if (true) {
 
         Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
                                                    Angle::fromDegrees(-15.431389),
@@ -2823,25 +2879,6 @@ public:
       }
 
 
-      /*
-       // JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"key1\":\"string\", \"key2\": 100, \"key3\": false, \"key4\":123.5}");
-       //      JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"hello\":\"world\"}");
-       JSONBaseObject* jsonObject = IJSONParser::instance()->parse("{\"BSON\": [\"awesome\", 5.05, 1986, true, false], \"X\": {\"foo\": 20000000000}}");
-       printf("%s\n", jsonObject->description().c_str());
-
-       std::string jsonString = JSONGenerator::generate(jsonObject);
-       printf("%s (lenght=%lu)\n", jsonString.c_str(), jsonString.size());
-
-       IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-       printf("%s\n", bson->description().c_str());
-
-       JSONBaseObject* bsonObject = BSONParser::parse(bson);
-       printf("%s\n", bsonObject->description().c_str());
-
-       delete bson;
-
-       delete jsonObject;
-       */
     }
 
     bool isDone(const G3MContext* context) {

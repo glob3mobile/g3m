@@ -41,7 +41,8 @@
 #include "IWebSocketListener.hpp"
 #include "IWebSocket.hpp"
 #include "SceneLighting.hpp"
-
+#include "IDownloader.hpp"
+#include "IBufferDownloadListener.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -556,6 +557,10 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
     }
     else {
       const JSONString* jsonError = jsonObject->getAsString("error");
+//      if (jsonError != NULL) {
+//        ILogger::instance()->logError("Server Error: %s",
+//                                      jsonError->value().c_str());
+//      }
       if (jsonError == NULL) {
         const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
 
@@ -596,6 +601,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
           }
 
           setApplicationTimestamp(timestamp);
+          saveApplicationData();
         }
 
         const JSONNumber* jsonCurrentSceneIndex = jsonObject->getAsNumber("currentSceneIndex");
@@ -608,10 +614,10 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                       jsonError->value().c_str());
       }
     }
-
+    
     delete jsonBaseObject;
   }
-
+  
 }
 
 void MapBooBuilder::setApplicationCurrentSceneIndex(int sceneIndex) {
@@ -781,8 +787,62 @@ MapBooBuilder::~MapBooBuilder() {
 
 }
 
+class MapBooBuilder_RestJSON : public IBufferDownloadListener {
+private:
+  MapBooBuilder* _builder;
+
+public:
+  MapBooBuilder_RestJSON(MapBooBuilder* builder) :
+  _builder(builder)
+  {
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    _builder->parseApplicationJSON(buffer->getAsString(), url);
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+  }
+
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+};
+
+const URL MapBooBuilder::createApplicationRestURL() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_serverURL.getPath());
+  isb->addString("/applications/");
+  isb->addString(_applicationId);
+  isb->addString("?view=runtime&lastTs=");
+  isb->addInt(_applicationTimestamp);
+  const std::string path = isb->getString();
+  delete isb;
+
+//  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
+
+  return URL(path, false);
+}
+
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
-  delete _webSocket;
+
+  IDownloader* downloader = context->getDownloader();
+  downloader->requestBuffer(createApplicationRestURL(),
+                            DownloadPriority::HIGHEST,
+                            TimeInterval::zero(),
+                            false, // readExpired
+                            new MapBooBuilder_RestJSON(this),
+                            true);
 
   const IFactory* factory = context->getFactory();
   _webSocket = factory->createWebSocket(createApplicationTubeURL(),
@@ -832,8 +892,8 @@ G3MWidget* MapBooBuilder::create() {
 
   ICameraActivityListener* cameraActivityListener = NULL;
 
-  int TODO_VIEWPORT;
   const Planet* planet = createPlanet();
+  //  int TODO_VIEWPORT;
   //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
@@ -865,6 +925,19 @@ G3MWidget* MapBooBuilder::create() {
 
 int MapBooBuilder::getApplicationTimestamp() const {
   return _applicationTimestamp;
+}
+
+void MapBooBuilder::saveApplicationData() const {
+//  std::string                _applicationId;
+//  std::string                _applicationName;
+//  std::string                _applicationWebsite;
+//  std::string                _applicationEMail;
+//  std::string                _applicationAbout;
+//  int                        _applicationTimestamp;
+//  std::vector<MapBoo_Scene*> _applicationScenes;
+//  int                        _applicationCurrentSceneIndex;
+//  int                        _lastApplicationCurrentSceneIndex;
+  int __DGD_at_work;
 }
 
 void MapBooBuilder::setApplicationTimestamp(const int timestamp) {
@@ -988,16 +1061,17 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_PRESENTATION) {
-    if (_webSocket == NULL) {
-      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
-    }
-    else {
+    if ((_webSocket != NULL) &&
+        _isApplicationTubeOpen) {
       if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
         if (_lastApplicationCurrentSceneIndex >= 0) {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
         _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
       }
+    }
+    else {
+      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
     }
   }
 }
@@ -1020,7 +1094,12 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 
   _applicationScenes.clear();
 
+#ifdef C_CODE
   _applicationScenes = applicationScenes;
+#endif
+#ifdef JAVA_CODE
+  _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
+#endif
 
   if (_applicationListener != NULL) {
     _applicationListener->onScenesChanged(_context, _applicationScenes);

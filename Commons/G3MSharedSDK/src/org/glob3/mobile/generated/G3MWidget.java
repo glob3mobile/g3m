@@ -168,29 +168,6 @@ public class G3MWidget
   
     _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
   
-    //  int _TESTING_initializationTask;
-    //  if (_mainRendererReady) {
-    //    if (_initializationTask != NULL) {
-    //      if (!_initializationTaskWasRun) {
-    //        _initializationTask->run(_context);
-    //        _initializationTaskWasRun = true;
-    //      }
-    //
-    //      if (_initializationTask->isDone(_context)) {
-    //        if (_autoDeleteInitializationTask) {
-    //          delete _initializationTask;
-    //        }
-    //        _initializationTask = NULL;
-    //      }
-    //      else {
-    //        _mainRendererReady = false;
-    //      }
-    //    }
-    //  }
-    //
-    //  if (_mainRendererReady) {
-    //    _effectsScheduler->doOneCyle(&rc);
-    //  }
     _effectsScheduler.doOneCyle(rc);
   
     _frameTasksExecutor.doPreRenderCycle(rc);
@@ -339,7 +316,6 @@ public class G3MWidget
     _cameraRenderer.onResizeViewportEvent(ec, width, height);
     _mainRenderer.onResizeViewportEvent(ec, width, height);
     _busyRenderer.onResizeViewportEvent(ec, width, height);
-  
   }
 
   public final void onPause()

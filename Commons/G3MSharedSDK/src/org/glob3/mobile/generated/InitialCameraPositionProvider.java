@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Geodetic3DProvider.h
+//  Geodetic3DProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 12/09/13.
 //
 //
-
 
 
 

@@ -6,9 +6,6 @@
 //
 //
 
-#include <OpenGLES/ES2/gl.h>
-
-
 #include "HUDRenderer.hpp"
 
 #include "Context.hpp"
@@ -17,22 +14,68 @@
 #include "TexturesHandler.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
-
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
-
 #include "DirectMesh.hpp"
 
-void HUDRenderer::start(const G3MRenderContext* rc) {
+
+HUDRenderer::HUDRenderer() :
+_glState(new GLState())
+{
 }
 
-void HUDRenderer::stop(const G3MRenderContext* rc) {
+HUDRenderer::ShownImage::~ShownImage() {
+  _factory->deleteImage(_image);
+//  delete _image;
+  delete _mesh;
 }
+
+void HUDRenderer::ShownImage::clearMesh() {
+  delete _mesh;
+  _mesh = NULL;
+}
+
+void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                        int width,
+                                        int height) {
+  const int halfWidth  = width  / 2;
+  const int halfHeight = height / 2;
+  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                           -halfHeight, halfHeight,
+                                                                                           -halfWidth,  halfWidth);
+
+  ProjectionGLFeature* pr = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+  if (pr == NULL) {
+    _glState->addGLFeature(new ProjectionGLFeature(projectionMatrix.asMatrix44D()),
+                           false);
+  }
+  else {
+    pr->setMatrix(projectionMatrix.asMatrix44D());
+  }
+
+  const int size = _images.size();
+  for (int i = 0; i < size; i++) {
+    _images[i]->clearMesh();
+  }
+}
+
+HUDRenderer::~HUDRenderer() {
+  _glState->_release();
+
+  const int size = _images.size();
+  for (int i = 0; i < size; i++) {
+    delete _images[i];
+  }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
 
 Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
   //TEXTURED
@@ -55,16 +98,16 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-  const int viewportWidth = rc->getCurrentCamera()->getWidth();
+  const int viewportWidth  = rc->getCurrentCamera()->getWidth();
   const int viewportHeight = rc->getCurrentCamera()->getHeight();
 
-  Vector3D halfViewportAndPosition(viewportWidth / 2 - _pos._x , viewportHeight / 2 - _pos._y, 0);
+  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _position._x,
+                                         viewportHeight / 2 - _position._y,
+                                         0);
 
   const double w = _size._x;
   const double h = _size._y;
 
-//  const double halfWidth = _size._x / 2;
-//  const double halfHeight = _size._y / 2;
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices.add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
   vertices.add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
@@ -93,12 +136,13 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
 }
 
 void HUDRenderer::render(const G3MRenderContext* rc,
-                              GLState* glState) {
-
+                         GLState* glState) {
   const int size = _images.size();
   for (int i = 0; i < size; i++) {
     ShownImage* image = _images[i];
-    image->getMesh(rc)->render(rc, _glState);
+    Mesh* mesh = image->getMesh(rc);
+    if (mesh != NULL) {
+      mesh->render(rc, _glState);
+    }
   }
 }
-

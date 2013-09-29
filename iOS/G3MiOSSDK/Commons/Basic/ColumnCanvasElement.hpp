@@ -16,22 +16,24 @@ protected:
   Vector2F* calculateExtent(ICanvas* canvas);
 
 public:
-  ColumnCanvasElement(const Color& color = Color::transparent()) :
-  GroupCanvasElement(color)
+  ColumnCanvasElement(const Color& color = Color::transparent(),
+                      float margin = 0,
+                      float padding = 0,
+                      float cornerRadius = 0) :
+  GroupCanvasElement(color, margin, padding, cornerRadius)
   {
-
   }
 
   virtual ~ColumnCanvasElement() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
-  void drawAt(float left,
-              float top,
-              ICanvas* canvas);
+  void rawDrawAt(float left,
+                 float top,
+                 const Vector2F& extent,
+                 ICanvas* canvas);
   
 };
 

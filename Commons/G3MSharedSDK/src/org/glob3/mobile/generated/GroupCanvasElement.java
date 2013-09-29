@@ -21,14 +21,23 @@ package org.glob3.mobile.generated;
 public abstract class GroupCanvasElement extends CanvasElement
 {
   private Vector2F _extent;
+  private Vector2F _rawExtent;
 
-  protected final Color _color ;
+  protected Color _color ;
+  protected float _margin;
+  protected float _padding;
+  protected float _cornerRadius;
+
   protected java.util.ArrayList<CanvasElement> _children = new java.util.ArrayList<CanvasElement>();
 
-  protected GroupCanvasElement(Color color)
+  protected GroupCanvasElement(Color color, float margin, float padding, float cornerRadius)
   {
      _color = new Color(color);
+     _margin = margin;
+     _padding = padding;
+     _cornerRadius = cornerRadius;
      _extent = null;
+     _rawExtent = null;
 
   }
 
@@ -37,6 +46,10 @@ public abstract class GroupCanvasElement extends CanvasElement
     if (_extent != null)
        _extent.dispose();
     _extent = null;
+  
+    if (_rawExtent != null)
+       _rawExtent.dispose();
+    _rawExtent = null;
   }
 
   protected abstract Vector2F calculateExtent(ICanvas canvas);
@@ -53,9 +66,10 @@ public abstract class GroupCanvasElement extends CanvasElement
   
     if (_extent != null)
        _extent.dispose();
+    if (_rawExtent != null)
+       _rawExtent.dispose();
   
     super.dispose();
-  
   }
 
   public final void add(CanvasElement child)
@@ -68,12 +82,32 @@ public abstract class GroupCanvasElement extends CanvasElement
   {
     if (_extent == null)
     {
-      _extent = calculateExtent(canvas);
+      _rawExtent = calculateExtent(canvas);
+  
+      final float extra = (_margin + _padding) * 2;
+      _extent = new Vector2F(_rawExtent._x + extra, _rawExtent._y + extra);
     }
   
     return _extent;
   }
 
-  public abstract void drawAt(float left, float top, ICanvas canvas);
+  public final void drawAt(float left, float top, ICanvas canvas)
+  {
+    final Vector2F extent = getExtent(canvas);
+  
+  //  canvas->setLineColor(Color::yellow());
+  //  canvas->strokeRectangle(left,
+  //                          top,
+  //                          extent._x,
+  //                          extent._y);
+  
+    canvas.setFillColor(_color);
+    canvas.fillRoundedRectangle(left + _margin, top + _margin, extent._x - _margin *2, extent._y - _margin *2, _cornerRadius);
+  
+    final float extra = _margin + _padding;
+    rawDrawAt(left + extra, top + extra, _rawExtent, canvas);
+  }
+
+  public abstract void rawDrawAt(float left, float top, Vector2F extent, ICanvas canvas);
 
 }

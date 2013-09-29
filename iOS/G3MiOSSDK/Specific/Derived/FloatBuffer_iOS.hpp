@@ -141,9 +141,6 @@ public:
       glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
       _boundVertexBuffer = _vertexBuffer;
     }
-//    else {
-//      printf("REUSING");
-//    }
 
     if (_vertexBufferTimeStamp != _timestamp) {
       _vertexBufferTimeStamp = _timestamp;

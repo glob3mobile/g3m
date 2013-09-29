@@ -254,7 +254,8 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
         }
       }
     }
-  } else{
+  }
+  else {
     _busyRenderer->onTouchEvent(&ec, touchEvent);
   }
 }
@@ -324,7 +325,6 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   _cameraRenderer->onResizeViewportEvent(&ec, width, height);
   _mainRenderer->onResizeViewportEvent(&ec, width, height);
   _busyRenderer->onResizeViewportEvent(&ec, width, height);
-
 }
 
 
@@ -424,29 +424,6 @@ void G3MWidget::render(int width, int height) {
 
   _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
 
-  //  int _TESTING_initializationTask;
-  //  if (_mainRendererReady) {
-  //    if (_initializationTask != NULL) {
-  //      if (!_initializationTaskWasRun) {
-  //        _initializationTask->run(_context);
-  //        _initializationTaskWasRun = true;
-  //      }
-  //
-  //      if (_initializationTask->isDone(_context)) {
-  //        if (_autoDeleteInitializationTask) {
-  //          delete _initializationTask;
-  //        }
-  //        _initializationTask = NULL;
-  //      }
-  //      else {
-  //        _mainRendererReady = false;
-  //      }
-  //    }
-  //  }
-  //
-  //  if (_mainRendererReady) {
-  //    _effectsScheduler->doOneCyle(&rc);
-  //  }
   _effectsScheduler->doOneCyle(&rc);
 
   _frameTasksExecutor->doPreRenderCycle(&rc);

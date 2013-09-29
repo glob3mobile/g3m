@@ -227,7 +227,7 @@ public class CartoCSSParser
       }
   
       ILogger.instance().logInfo("****%s", _tokens.get(cursor).description());
-      int _DGD_At_Work4;
+      int _DGD_At_Work3;
       cursor++;
     }
   

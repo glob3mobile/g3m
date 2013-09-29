@@ -151,7 +151,8 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Vector2I& viewport, const Sector& shownSector) const{
+  Geodetic3D getDefaultCameraPosition(const Vector2I& viewport,
+                                      const Sector& shownSector) const{
     Geodetic2D g = shownSector._center;
     return Geodetic3D::fromDegrees(g._latitude._degrees, g._longitude._degrees, _size.length());
   }
