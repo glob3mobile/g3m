@@ -150,13 +150,6 @@ public class FlatPlanet extends Planet
     return scaleToGeodeticSurface(position);
   }
 
-  public final java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity)
-  {
-    int TODO_compute_plane_curve;
-    java.util.LinkedList<Vector3D> positions = new java.util.LinkedList<Vector3D>();
-    return positions;
-  }
-
   public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
   {
     return new Geodetic2D(P0.latitude().add(P1.latitude()).times(0.5), P0.longitude().add(P1.longitude()).times(0.5));
@@ -175,12 +168,6 @@ public class FlatPlanet extends Planet
   public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
     return computePreciseLatLonDistance(g1, g2);
-  }
-
-  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
-  {
-    int TODO_agustin;
-    return Vector3D.zero;
   }
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
