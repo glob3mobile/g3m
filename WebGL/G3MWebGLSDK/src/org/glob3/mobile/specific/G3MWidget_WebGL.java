@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -433,6 +434,7 @@ public final class G3MWidget_WebGL
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
+                          final ErrorRenderer errorRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -455,6 +457,7 @@ public final class G3MWidget_WebGL
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
+               errorRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //

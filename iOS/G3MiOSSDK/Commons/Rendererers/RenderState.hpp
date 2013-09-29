@@ -12,19 +12,20 @@
 #include <vector>
 #include <string>
 
+enum RenderState_Type {
+  READY,
+  BUSY,
+  ERROR
+};
+
 class RenderState {
 public:
-  enum Type {
-    READY,
-    BUSY,
-    ERROR
-  };
 
   static RenderState ready();
   static RenderState busy();
   static RenderState error(const std::vector<std::string>& errors);
 
-  const Type _type;
+  const RenderState_Type _type;
 
   const std::vector<std::string> getErrors() const {
     return _errors;
@@ -33,7 +34,7 @@ public:
 private:
   const std::vector<std::string> _errors;
 
-  RenderState(Type type) :
+  RenderState(RenderState_Type type) :
   _type(type)
   {
   }
