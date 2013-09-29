@@ -14,13 +14,46 @@
 #include "ImageFactory.hpp"
 
 
-class HUDErrorRenderer : public HUDImageRenderer, ErrorRenderer, ImageFactory {
+class HUDErrorRenderer_ImageFactory : public ImageFactory {
+public:
+  void create(const G3MRenderContext* rc,
+              int width,
+              int height,
+              IImageListener* listener,
+              bool deleteListener);
+};
+
+class HUDErrorRenderer : public ErrorRenderer, HUDImageRenderer {
 public:
   HUDErrorRenderer() :
-  HUDImageRenderer(this)
+  HUDImageRenderer(new HUDErrorRenderer_ImageFactory())
   {
 
   }
+
+
+  void initialize(const G3MContext* context);
+
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
+
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
+
+  void start(const G3MRenderContext* rc);
+
+  void stop(const G3MRenderContext* rc);
+
+
+  void onResume(const G3MContext* context);
+
+  void onPause(const G3MContext* context);
+
+  void onDestroy(const G3MContext* context);
+  
 };
 
 #endif

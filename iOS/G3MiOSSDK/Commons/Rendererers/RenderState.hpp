@@ -42,6 +42,9 @@ private:
   RenderState(RenderState_Type type) :
   _type(type)
   {
+#ifdef JAVA_CODE
+    _errors = null;
+#endif
   }
 
   RenderState(const std::vector<std::string>& errors) :
