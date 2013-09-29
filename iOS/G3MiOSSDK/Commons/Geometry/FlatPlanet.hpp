@@ -105,11 +105,7 @@ public:
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
   
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
-  
-  std::list<Vector3D> computeCurve(const Vector3D& start,
-                                   const Vector3D& stop,
-                                   double granularity) const;
-  
+    
   Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const;
   
   
@@ -118,9 +114,7 @@ public:
   
   double computeFastLatLonDistance(const Geodetic2D& g1,
                                    const Geodetic2D& g2) const;
-  
-  Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
-  
+    
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
