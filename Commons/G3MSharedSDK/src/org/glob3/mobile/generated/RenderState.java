@@ -4,11 +4,11 @@ public class RenderState
 
   public static RenderState ready()
   {
-    return new RenderState(RenderState_Type.READY);
+    return new RenderState(RenderState_Type.RENDER_READY);
   }
   public static RenderState busy()
   {
-    return new RenderState(RenderState_Type.BUSY);
+    return new RenderState(RenderState_Type.RENDER_BUSY);
   }
   public static RenderState error(java.util.ArrayList<String> errors)
   {
@@ -31,7 +31,7 @@ public class RenderState
 
   private RenderState(java.util.ArrayList<String> errors)
   {
-     _type = CartoCSSTokenType.ERROR;
+     _type = RenderState_Type.RENDER_ERROR;
      _errors = errors;
   }
 

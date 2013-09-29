@@ -19,9 +19,9 @@ package org.glob3.mobile.generated;
 
 public enum RenderState_Type
 {
-  READY,
-  BUSY,
-  ERROR;
+  RENDER_READY,
+  RENDER_BUSY,
+  RENDER_ERROR;
 
    public int getValue()
    {
