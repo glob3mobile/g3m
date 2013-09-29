@@ -32,7 +32,12 @@ public:
   }
 
 private:
+#ifdef C_CODE
   const std::vector<std::string> _errors;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<String> _errors;
+#endif
 
   RenderState(RenderState_Type type) :
   _type(type)

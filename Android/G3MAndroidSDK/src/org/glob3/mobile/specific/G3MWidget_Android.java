@@ -106,7 +106,6 @@ public final class G3MWidget_Android
 
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e) {
-               // TODO Auto-generated method stub
                return false;
             }
 
@@ -251,131 +250,6 @@ public final class G3MWidget_Android
    }
 
 
-   // TODO Remove this stuff if lazy initizalization is not needed
-   /*
-   private ArrayList<ICameraConstrainer>                  _cameraConstraints;
-   private LayerSet                                       _layerSet;
-   private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
-   private UserData                                       _userData;
-   private GInitializationTask                            _initializationTask;
-   private ArrayList<PeriodicalTask>                      _periodicalTasks;
-   private boolean                                        _incrementalTileQuality;
-         
-         private void initWidget() {
-            // creates default camera-renderer and camera-handlers
-            final CameraRenderer cameraRenderer = new CameraRenderer();
-      
-            final boolean useInertia = true;
-            cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-      
-            final boolean processRotation = true;
-            final boolean processZoom = true;
-            cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
-            cameraRenderer.addHandler(new CameraRotationHandler());
-            cameraRenderer.addHandler(new CameraDoubleTapHandler());
-      
-            final boolean renderDebug = false;
-            final boolean useTilesSplitBudget = true;
-            final boolean forceTopLevelTilesRenderOnStart = true;
-      
-            final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-                     forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
-      
-            initWidget(cameraRenderer, parameters, _initializationTask);
-         }
-      
-
-      private void initWidget(final CameraRenderer cameraRenderer,
-                              final TilesRenderParameters parameters,
-                              final GInitializationTask initializationTask) {
-         // create GLOB3M WIDGET
-         final NativeGL2_Android nativeGL = new NativeGL2_Android();
-         final CompositeRenderer mainRenderer = new CompositeRenderer();
-
-         if (_layerSet != null) {
-            final boolean showStatistics = false;
-
-            final PlanetRenderer tr = new PlanetRenderer( //
-                     new EllipsoidalTileTessellator(parameters._tileResolution, true), //
-                     new MultiLayerTileTexturizer(), //
-                     _layerSet, //
-                     parameters, //
-                     showStatistics);
-
-            mainRenderer.addRenderer(tr);
-         }
-
-         for (final org.glob3.mobile.generated.Renderer renderer : _renderers) {
-            mainRenderer.addRenderer(renderer);
-         }
-
-
-         final Planet planet = Planet.createEarth();
-
-         final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
-
-
-         final IThreadUtils threadUtils = new ThreadUtils_Android(this);
-         final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
-         final int connectTimeout = 20000;
-         final int readTimeout = 30000;
-         final boolean saveInBackground = true;
-         final IDownloader downloader = new CachedDownloader( //
-                  new Downloader_Android(8, connectTimeout, readTimeout, getContext()), //
-                  storage, //
-                  saveInBackground);
-
-         _g3mWidget = G3MWidget.create( //
-                  nativeGL, //
-                  storage, //
-                  downloader, //
-                  threadUtils, //
-                  planet, //
-                  _cameraConstraints, //
-                  cameraRenderer, //
-                  mainRenderer, //
-                  busyRenderer, //
-
-                  Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //
-                  true, // 
-                  false, // 
-                  initializationTask, //
-                  true, //
-                  _periodicalTasks);
-
-         _g3mWidget.setUserData(_userData);
-
-         //      //Testing Periodical Tasks
-         //      if (true) {
-         //         class PeriodicTask
-         //                  extends
-         //                     GTask {
-         //            private long      _lastExec;
-         //            private final int _number;
-         //
-         //
-         //            public PeriodicTask(final int n) {
-         //               _number = n;
-         //            }
-         //
-         //
-         //            @Override
-         //            public void run() {
-         //               final ITimer t = IFactory.instance().createTimer();
-         //               final long now = t.now().milliseconds();
-         //               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
-         //               _lastExec = now;
-         //               IFactory.instance().deleteTimer(t);
-         //            }
-         //         }
-         //
-         //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
-         //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
-         //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
-         //      }
-      }
-   */
-
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new GPUProgramFactory();
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
@@ -405,26 +279,29 @@ public final class G3MWidget_Android
    }
 
 
-   public void initWidget(final IStorage storage,
+   public void initWidget(final GL gl,
+                          final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
-                          final ArrayList<ICameraConstrainer> cameraConstraints,
+                          final ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
+                          final ErrorRenderer errorRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
-                          final WidgetUserData userData,
+                          final GPUProgramManager gpuProgramManager,
                           final SceneLighting sceneLighting,
-                          final InitialCameraPositionProvider initialCameraPositionProvider) {
+                          final InitialCameraPositionProvider initialCameraPositionProvider,
+                          final WidgetUserData userData) {
 
-      final ErrorRenderer errorRenderer;
+
       _g3mWidget = G3MWidget.create(//
                getGL(), //
                storage, //
@@ -432,7 +309,7 @@ public final class G3MWidget_Android
                threadUtils, //
                cameraActivityListener,//
                planet, //
-               cameraConstraints, //
+               cameraConstrainers, //
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
