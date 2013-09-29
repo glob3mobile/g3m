@@ -116,6 +116,7 @@
 		CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */; };
 		CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */; };
 		CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */; };
+		CF423A2D17F8874E00F50525 /* RendererState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2B17F8874E00F50525 /* RendererState.cpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
@@ -1108,6 +1109,8 @@
 		CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ErrorRenderer.hpp; path = Commons/Rendererers/ErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDErrorRenderer.cpp; path = Commons/Rendererers/HUDErrorRenderer.cpp; sourceTree = "<group>"; };
 		CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDErrorRenderer.hpp; path = Commons/Rendererers/HUDErrorRenderer.hpp; sourceTree = "<group>"; };
+		CF423A2B17F8874E00F50525 /* RendererState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RendererState.cpp; path = Commons/Rendererers/RendererState.cpp; sourceTree = "<group>"; };
+		CF423A2C17F8874E00F50525 /* RendererState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RendererState.hpp; path = Commons/Rendererers/RendererState.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
@@ -1859,6 +1862,8 @@
 				CF7B07B317F5DA5B00FE363D /* ImageFactory.hpp */,
 				CF7B07B717F61AF000FE363D /* CanvasImageFactory.cpp */,
 				CF7B07B817F61AF000FE363D /* CanvasImageFactory.hpp */,
+				CF423A2B17F8874E00F50525 /* RendererState.cpp */,
+				CF423A2C17F8874E00F50525 /* RendererState.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2510,6 +2515,7 @@
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
+				CF423A2D17F8874E00F50525 /* RendererState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
 				CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */,
 				CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */,
