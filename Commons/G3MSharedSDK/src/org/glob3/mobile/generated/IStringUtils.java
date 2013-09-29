@@ -116,4 +116,8 @@ public abstract class IStringUtils
 
   public abstract long parseHexInt(String str);
 
+  public abstract String toString(int value);
+
+  public abstract String toString(double value);
+
 }
