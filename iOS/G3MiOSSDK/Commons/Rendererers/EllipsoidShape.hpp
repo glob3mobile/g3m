@@ -137,9 +137,10 @@ public:
                                              const Vector3D& direction) const {
     MutableMatrix44D* M = createTransformMatrix(_planet);
     Quadric quadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
+    
     delete M;
     
-    return _ellipsoid.intersectionsDistances(origin, direction);
+    return quadric.intersectionsDistances(origin, direction);
   }
 
 };

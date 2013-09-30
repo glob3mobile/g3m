@@ -1705,7 +1705,7 @@ public:
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   
   
-    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(90),
                                                           Angle::fromDegrees(0),
                                                           radius1._x),
                                            ABSOLUTE,
@@ -1719,6 +1719,7 @@ public:
                                            //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
                                            //Color::newFromRGBA(0, 0.75, 0, 0.75)
                                            );
+  //ellipsoid1->setScale(2);
     shapesRenderer->addShape(ellipsoid1);
   
   Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
