@@ -209,9 +209,9 @@ public:
   void setShownSector(const Sector& sector);
   
 private:
-  IStorage*           _storage;
-  IDownloader*        _downloader;
-  IThreadUtils*       _threadUtils;
+  IStorage*                _storage;
+  IDownloader*             _downloader;
+  IThreadUtils*            _threadUtils;
   ICameraActivityListener* _cameraActivityListener;
   
   FrameTasksExecutor* _frameTasksExecutor;
