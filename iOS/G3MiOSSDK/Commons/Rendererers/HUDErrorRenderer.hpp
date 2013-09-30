@@ -21,6 +21,10 @@ public:
               int height,
               IImageListener* listener,
               bool deleteListener);
+
+  ~HUDErrorRenderer_ImageFactory() {
+
+  }
 };
 
 class HUDErrorRenderer : public HUDImageRenderer, public ErrorRenderer {
