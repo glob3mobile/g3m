@@ -468,7 +468,8 @@ public class G3MSimplestGlob3Activity
       final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
       final ErrorRenderer errorRenderer = new HUDErrorRenderer();
-      _widgetAndroid.initWidget(//
+
+      _widgetAndroid.initWidget( //
                storage, // 
                downloader, //
                threadUtils, //
@@ -485,9 +486,9 @@ public class G3MSimplestGlob3Activity
                initializationTask, //
                autoDeleteInitializationTask, //
                periodicalTasks, //
-               userData, //
                lighting, //
-               initialCameraPositionProvider);
+               initialCameraPositionProvider, //
+               userData);
 
       setContentView(_widgetAndroid);
 

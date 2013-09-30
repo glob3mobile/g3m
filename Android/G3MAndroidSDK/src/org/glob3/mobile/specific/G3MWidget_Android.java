@@ -2,8 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -279,24 +277,22 @@ public final class G3MWidget_Android
    }
 
 
-   public void initWidget(final GL gl,
-                          final IStorage storage,
+   public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
-                          final ArrayList<ICameraConstrainer> cameraConstrainers,
+                          final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
-                          final Renderer mainRenderer,
-                          final Renderer busyRenderer,
+                          final org.glob3.mobile.generated.Renderer mainRenderer,
+                          final org.glob3.mobile.generated.Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks,
-                          final GPUProgramManager gpuProgramManager,
+                          final java.util.ArrayList<PeriodicalTask> periodicalTasks,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final WidgetUserData userData) {
@@ -421,5 +417,6 @@ public final class G3MWidget_Android
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
    }
+
 
 }
