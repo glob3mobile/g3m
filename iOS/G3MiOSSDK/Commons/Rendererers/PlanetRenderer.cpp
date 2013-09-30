@@ -137,7 +137,8 @@ _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
 _renderedSector(new Sector(renderedSector)),
-_validLayerTilesRenderParameters(false)
+_layerTilesRenderParameters(NULL),
+_layerTilesRenderParametersDirty(true)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -148,10 +149,15 @@ _validLayerTilesRenderParameters(false)
 void PlanetRenderer::recreateTiles() {
   pruneFirstLevelTiles();
   clearFirstLevelTiles();
+
+  delete _layerTilesRenderParameters;
+  _layerTilesRenderParameters = NULL;
+  _layerTilesRenderParametersDirty = true;
+
   _firstRender = true;
   _allFirstLevelTilesAreTextureSolved = false;
   createFirstLevelTiles(_context);
-  
+
   _recreateTilesPending = false;
 }
 
@@ -180,6 +186,8 @@ void PlanetRenderer::changed() {
 
 PlanetRenderer::~PlanetRenderer() {
   clearFirstLevelTiles();
+
+  delete _layerTilesRenderParameters;
   
   delete _tessellator;
   delete _elevationDataProvider;
@@ -308,12 +316,23 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
   }
 }
 
+
+const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters() {
+  if (_layerTilesRenderParametersDirty) {
+    _errors.clear();
+    delete _layerTilesRenderParameters;
+    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
+    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+    _layerTilesRenderParametersDirty = false;
+  }
+  return _layerTilesRenderParameters;
+}
+
 void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
-  
-  const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
-  _validLayerTilesRenderParameters = (parameters != NULL);
-  if (!_validLayerTilesRenderParameters) {
-    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+
+  const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
+  if (!parameters) {
+    //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
   
@@ -399,20 +418,23 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   }
 }
 
-bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
+RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   int __rendererState;
 
-  if (!_validLayerTilesRenderParameters) {
-    return false;
+  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
+
+  if (layerTilesRenderParameters == NULL) {
+    return RenderState::error(_errors);
   }
   
   if (!_layerSet->isReady()) {
-    return false;
+    int __TODO_Layer_error;
+    return RenderState::busy();
   }
   
   if (_elevationDataProvider != NULL) {
     if (!_elevationDataProvider->isReadyToRender(rc)) {
-      return false;
+      return RenderState::busy();
     }
   }
   
@@ -429,6 +451,7 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
                                 _texturizer,
                                 _tileRasterizer,
                                 _layerSet,
+                                layerTilesRenderParameters,
                                 _parameters,
                                 &statistics,
                                 _lastSplitTimer,
@@ -457,19 +480,19 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
         if (!tile->isTextureSolved()) {
-          return false;
+          return RenderState::busy();
         }
       }
       
       if (_tessellator != NULL) {
         if (!_tessellator->isReady(rc)) {
-          return false;
+          return RenderState::busy();
         }
       }
       
       if (_texturizer != NULL) {
         if (!_texturizer->isReady(rc, _layerSet)) {
-          return false;
+          return RenderState::busy();
         }
       }
       
@@ -477,22 +500,16 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
     }
   }
   
-  return true;
-}
-
-bool PlanetRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  int __rendererState;
-  return isReadyToRenderTiles(rc);
+  return RenderState::ready();
 }
 
 void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
                                            const int firstLevel,
                                            const int maxLevel){
   if (_tileVisitor != NULL) {
-    const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
-    _validLayerTilesRenderParameters = (parameters != NULL);
-    if (!_validLayerTilesRenderParameters) {
-      ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+    const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
+    if (parameters == NULL) {
+      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
     
@@ -542,7 +559,7 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* 
                                               const int topLevel,
                                               const int maxLevel) {
   if (tile->getLevel() < maxLevel) {
-    std::vector<Tile*>* subTiles = tile->getSubTiles(_layerSet->getLayerTilesRenderParameters()->_mercator);
+    std::vector<Tile*>* subTiles = tile->getSubTiles(getLayerTilesRenderParameters()->_mercator);
     
     const int subTilesCount = subTiles->size();
     for (int i = 0; i < subTilesCount; i++) {
@@ -569,15 +586,16 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 
 }
 
-void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  
+void PlanetRenderer::render(const G3MRenderContext* rc,
+                            GLState* glState) {
+
+  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
+  if (layerTilesRenderParameters == NULL) {
+    return;
+  }
+
   updateGLState(rc);
-  
-  //  if (_recreateTilesPending) {
-  //    recreateTiles();
-  //    _recreateTilesPending = false;
-  //  }
-  
+
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
@@ -588,6 +606,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                             _texturizer,
                             _tileRasterizer,
                             _layerSet,
+                            layerTilesRenderParameters,
                             _parameters,
                             &statistics,
                             _lastSplitTimer,

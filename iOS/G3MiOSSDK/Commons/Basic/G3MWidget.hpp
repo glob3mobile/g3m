@@ -52,6 +52,7 @@ class ErrorRenderer;
 #include "Color.hpp"
 #include "Angle.hpp"
 #include "InitialCameraPositionProvider.hpp"
+#include "RenderState.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -221,7 +222,8 @@ private:
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
   ErrorRenderer*      _errorRenderer;
-  bool                _mainRendererReady;
+//  bool                _mainRendererReady;
+  RenderState*        _mainRendererState;
   Renderer*           _selectedRenderer;
   
   EffectsScheduler*   _effectsScheduler;

@@ -35,7 +35,7 @@ class TileRasterizer;
 
 class PlanetRendererContext {
 private:
-  const TileTessellator*             _tessellator;
+  const TileTessellator*       _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
@@ -54,24 +54,29 @@ private:
   long long _texturePriority;
 
   Sector _renderedSector;
+
+  const LayerTilesRenderParameters* _layerTilesRenderParameters;
+
 public:
-  PlanetRendererContext(const TileTessellator*             tessellator,
-                        ElevationDataProvider*       elevationDataProvider,
-                        TileTexturizer*              texturizer,
-                        TileRasterizer*              tileRasterizer,
-                        const LayerSet*              layerSet,
-                        const TilesRenderParameters* parameters,
-                        TilesStatistics*             statistics,
-                        ITimer*                      lastSplitTimer,
-                        bool                         isForcedFullRender,
-                        long long                    texturePriority,
-                        const float                  verticalExaggeration,
-                        const Sector&                renderedSector) :
+  PlanetRendererContext(const TileTessellator*            tessellator,
+                        ElevationDataProvider*            elevationDataProvider,
+                        TileTexturizer*                   texturizer,
+                        TileRasterizer*                   tileRasterizer,
+                        const LayerSet*                   layerSet,
+                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                        const TilesRenderParameters*      parameters,
+                        TilesStatistics*                  statistics,
+                        ITimer*                           lastSplitTimer,
+                        bool                              isForcedFullRender,
+                        long long                         texturePriority,
+                        const float                       verticalExaggeration,
+                        const Sector&                     renderedSector) :
   _tessellator(tessellator),
   _elevationDataProvider(elevationDataProvider),
   _texturizer(texturizer),
   _tileRasterizer(tileRasterizer),
   _layerSet(layerSet),
+  _layerTilesRenderParameters(layerTilesRenderParameters),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
@@ -128,7 +133,7 @@ public:
   }
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _layerSet->getLayerTilesRenderParameters();
+    return _layerTilesRenderParameters;
   }
 
   const Sector getRenderedSector() const{
@@ -360,9 +365,6 @@ private:
 
   float _verticalExaggeration;
 
-
-  bool isReadyToRenderTiles(const G3MRenderContext* rc);
-
   bool _recreateTilesPending;
 
   GLState* _glState;
@@ -371,7 +373,12 @@ private:
   SurfaceElevationProvider_Tree _elevationListenersTree;
   
   Sector* _renderedSector;
-  bool _validLayerTilesRenderParameters;
+//  bool _validLayerTilesRenderParameters;
+  bool _layerTilesRenderParametersDirty;
+  const LayerTilesRenderParameters* _layerTilesRenderParameters;
+  std::vector<std::string> _errors;
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
 public:
   PlanetRenderer(TileTessellator* tessellator,
@@ -399,7 +406,7 @@ public:
 
   }
 
-  bool isReadyToRender(const G3MRenderContext* rc);
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
                          const int topLevel,

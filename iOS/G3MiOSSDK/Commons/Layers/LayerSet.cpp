@@ -13,7 +13,7 @@
 #include "ChangedListener.hpp"
 
 LayerSet::~LayerSet() {
-  delete _layerTilesRenderParameters;
+//  delete _layerTilesRenderParameters;
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
@@ -153,20 +153,20 @@ void LayerSet::layerChanged(const Layer* layer) const {
 }
 
 void LayerSet::layersChanged() const {
-  delete _layerTilesRenderParameters;
-  _layerTilesRenderParameters = NULL;
+//  delete _layerTilesRenderParameters;
+//  _layerTilesRenderParameters = NULL;
 
   if (_listener != NULL) {
     _listener->changed();
   }
 }
 
-const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters() const {
-  if (_layerTilesRenderParameters == NULL) {
-    _layerTilesRenderParameters = createLayerTilesRenderParameters();
-  }
-  return _layerTilesRenderParameters;
-}
+//const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters(std::vector<std::string>& errors) const {
+//  if (_layerTilesRenderParameters == NULL) {
+//    _layerTilesRenderParameters = createLayerTilesRenderParameters(errors);
+//  }
+//  return _layerTilesRenderParameters;
+//}
 
 bool LayerSet::isEquals(const LayerSet* that) const {
   if (that == NULL) {
@@ -192,7 +192,7 @@ bool LayerSet::isEquals(const LayerSet* that) const {
   return true;
 }
 
-LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vector<std::string>& errors) const {
   Sector* topSector                  = NULL;
   int     topSectorSplitsByLatitude  = 0;
   int     topSectorSplitsByLongitude = 0;
@@ -232,22 +232,34 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
       }
       else {
         if ( mercator != layerParam->_mercator ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: mercator");
+          errors.push_back("Inconsistency in Layer's Parameters: mercator");
           return NULL;
         }
 
         if (!topSector->isEquals(layerParam->_topSector) ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSector");
+          errors.push_back("Inconsistency in Layer's Parameters: topSector");
           return NULL;
         }
 
         if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+          errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
           return NULL;
         }
 
         if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+          errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+          return NULL;
+        }
+
+        if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
+            ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
+          errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
+          return NULL;
+        }
+
+        if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
+            ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
+          errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
           return NULL;
         }
 
@@ -265,24 +277,12 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters() const {
           firstLevel = layerParam->_firstLevel;
         }
 
-        if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
-            ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: tileTextureResolution");
-          return NULL;
-        }
-
-        if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
-            ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
-          ILogger::instance()->logError("Inconsistency in Layer's Parameters: tileMeshResolution");
-          return NULL;
-        }
-
       }
     }
   }
 
   if (first) {
-    ILogger::instance()->logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
+    errors.push_back("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
     return NULL;
   }
 

@@ -102,7 +102,7 @@ _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
-_mainRendererReady(false), // false until first call to G3MWidget::render()
+_mainRendererState(new RenderState(RenderState::busy())),
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
@@ -203,6 +203,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
 }
 
 G3MWidget::~G3MWidget() {
+  delete _mainRendererState;
   delete _userData;
 
   delete _planet;
@@ -244,23 +245,32 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  if (_mainRendererReady) {
-    bool handled = false;
-    if (_mainRenderer->isEnable()) {
-      handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
-    }
+  RenderState_Type renderStateType = _mainRendererState->_type;
+  switch (renderStateType) {
+    case RENDER_READY: {
+      bool handled = false;
+      if (_mainRenderer->isEnable()) {
+        handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
+      }
 
-    if (!handled) {
-      handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
-      if (handled) {
-        if (_cameraActivityListener != NULL) {
-          _cameraActivityListener->touchEventHandled();
+      if (!handled) {
+        handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
+        if (handled) {
+          if (_cameraActivityListener != NULL) {
+            _cameraActivityListener->touchEventHandled();
+          }
         }
       }
+      break;
     }
-  }
-  else {
-    _busyRenderer->onTouchEvent(&ec, touchEvent);
+    case RENDER_BUSY: {
+      _busyRenderer->onTouchEvent(&ec, touchEvent);
+      break;
+    }
+    case RENDER_ERROR: {
+      _errorRenderer->onTouchEvent(&ec, touchEvent);
+      break;
+    }
   }
 }
 
@@ -427,14 +437,31 @@ void G3MWidget::render(int width, int height) {
                       _gpuProgramManager,
                       _surfaceElevationProvider);
 
-  int __rendererState;
-  _mainRendererReady = _initializationTaskReady && _mainRenderer->isReadyToRender(&rc);
+  delete _mainRendererState;
+  _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(&rc) : RenderState::busy());
+  RenderState_Type renderStateType = _mainRendererState->_type;
 
   _effectsScheduler->doOneCyle(&rc);
 
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
-  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
+
+  Renderer* selectedRenderer;
+  switch (renderStateType) {
+    case RENDER_READY:
+      selectedRenderer = _mainRenderer;
+      break;
+
+    case RENDER_BUSY:
+      selectedRenderer = _busyRenderer;
+      break;
+
+    case RENDER_ERROR:
+      selectedRenderer = _errorRenderer;
+      break;
+  }
+
+//  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop(&rc);

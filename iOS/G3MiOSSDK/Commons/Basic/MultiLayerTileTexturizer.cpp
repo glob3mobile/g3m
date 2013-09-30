@@ -251,15 +251,12 @@ private:
 
   const TileTessellator* _tessellator;
 
-//  const int    _firstLevel;
-
   std::vector<TileTextureBuilder_PetitionStatus> _status;
   std::vector<long long>                         _requestsIds;
 
 
   bool _finalized;
   bool _canceled;
-//  bool _anyCanceled;
   bool _alreadyStarted;
 
   long long _texturePriority;
@@ -305,27 +302,27 @@ private:
 public:
   LeveledTexturedMesh* _mesh;
 
-  TileTextureBuilder(MultiLayerTileTexturizer* texturizer,
-                     TileRasterizer*           tileRasterizer,
-                     const G3MRenderContext*   rc,
-                     const LayerSet*           layerSet,
-                     IDownloader*              downloader,
-                     Tile*                     tile,
-                     const Mesh*               tessellatorMesh,
-                     const TileTessellator*    tessellator,
-                     long long                 texturePriority) :
+  TileTextureBuilder(MultiLayerTileTexturizer*         texturizer,
+                     TileRasterizer*                   tileRasterizer,
+                     const G3MRenderContext*           rc,
+//                     const LayerSet*                   layerSet,
+                     const LayerTilesRenderParameters* layerTilesRenderParameters,
+                     const std::vector<Petition*>&     petitions,
+                     IDownloader*                      downloader,
+                     Tile*                             tile,
+                     const Mesh*                       tessellatorMesh,
+                     const TileTessellator*            tessellator,
+                     long long                         texturePriority) :
   _texturizer(texturizer),
   _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
-  _tileTextureResolution( layerSet->getLayerTilesRenderParameters()->_tileTextureResolution ),
-  _tileMeshResolution( layerSet->getLayerTilesRenderParameters()->_tileMeshResolution ),
-  _mercator( layerSet->getLayerTilesRenderParameters()->_mercator ),
-//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
+  _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
+  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
+  _mercator( layerTilesRenderParameters->_mercator ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
-//  _anyCanceled(false),
   _mesh(NULL),
   _tessellator(tessellator),
   _finalized(false),
@@ -333,7 +330,7 @@ public:
   _alreadyStarted(false),
   _texturePriority(texturePriority)
   {
-    _petitions = cleanUpPetitions( layerSet->createTileMapPetitions(rc, tile) );
+    _petitions = cleanUpPetitions( petitions );
 
     _petitionsCount = _petitions.size();
 
@@ -795,10 +792,13 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
 
   if (builderHolder == NULL) {
+    const LayerSet* layerSet = prc->getLayerSet();
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         prc->getTileRasterizer(),
                                                                         rc,
-                                                                        prc->getLayerSet(),
+                                                                        //layerSet,
+                                                                        prc->getLayerTilesRenderParameters(),
+                                                                        layerSet->createTileMapPetitions(rc, tile),
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,

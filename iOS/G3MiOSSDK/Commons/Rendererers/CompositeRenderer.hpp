@@ -27,6 +27,8 @@ private:
 
   bool _enable;
 
+  std::vector<std::string> _errors;
+
 public:
   CompositeRenderer():
   _context(NULL),
@@ -48,7 +50,7 @@ public:
 
   void initialize(const G3MContext* context);
 
-  bool isReadyToRender(const G3MRenderContext* rc);
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc, GLState* glState);
 

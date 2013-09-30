@@ -61,19 +61,41 @@ void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   }
 }
 
-bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
-  int __rendererState;
+RenderState CompositeRenderer::getRenderState(const G3MRenderContext* rc) {
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
 
   for (int i = 0; i < _renderersSize; i++) {
-    Renderer* renderer = _renderers[i];
-    if (renderer->isEnable()) {
-      if (!renderer->isReadyToRender(rc)) {
-        return false;
+    Renderer* child = _renderers[i];
+    if (child->isEnable()) {
+      const RenderState childRenderState = child->getRenderState(rc);
+
+      const RenderState_Type childRenderStateType = childRenderState._type;
+
+      if (childRenderStateType == RENDER_ERROR) {
+        errorFlag = true;
+
+        const std::vector<std::string> childErrors = childRenderState.getErrors();
+        _errors.insert(_errors.end(),
+                       childErrors.begin(),
+                       childErrors.end());
+      }
+      else if (childRenderStateType == RENDER_BUSY) {
+        busyFlag = true;
       }
     }
   }
 
-  return true;
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
 }
 
 void CompositeRenderer::start(const G3MRenderContext* rc) {

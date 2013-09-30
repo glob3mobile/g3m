@@ -92,8 +92,8 @@ public:
     }
   }
   
-  bool isReadyToRender(const G3MRenderContext* rc);
-  
+  RenderState getRenderState(const G3MRenderContext* rc);
+
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;

@@ -42,6 +42,18 @@ public:
   }
 
 #ifdef C_CODE
+  bool isEnable() const;
+
+  void setEnable(bool enable);
+
+  RenderState getRenderState(const G3MRenderContext* rc);
+
+  bool isPlanetRenderer();
+
+  SurfaceElevationProvider* getSurfaceElevationProvider();
+
+  PlanetRenderer* getPlanetRenderer();
+
   void initialize(const G3MContext* context);
 
   void render(const G3MRenderContext* rc,

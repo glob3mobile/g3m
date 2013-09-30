@@ -174,19 +174,17 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
   return handled;
 }
 
-bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
-  int __rendererState;
-
+RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_readyWhenMarksReady) {
     int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++) {
       if (!_marks[i]->isReady()) {
-        return false;
+        return RenderState::busy();
       }
     }
   }
-  
-  return true;
+
+  return RenderState::ready();
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {

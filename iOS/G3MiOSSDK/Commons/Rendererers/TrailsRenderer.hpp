@@ -172,9 +172,8 @@ public:
 
   void initialize(const G3MContext* context);
 
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    int __rendererState;
-    return true;
+  RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
   }
 
   bool onTouchEvent(const G3MEventContext* ec,

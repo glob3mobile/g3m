@@ -17,6 +17,7 @@ class TouchEvent;
 class SurfaceElevationProvider;
 class PlanetRenderer;
 
+#include "RenderState.hpp"
 
 class Renderer {
 public:
@@ -26,13 +27,13 @@ public:
 
   virtual void initialize(const G3MContext* context) = 0;
 
-  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
+  virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
 
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState) = 0;
 
   /**
-   Gives to Renderer the opportunity to process touch, events.
+   Gives to Renderer the opportunity to process touch events.
 
    The Renderer answer true if the event was processed.
    */
@@ -46,7 +47,12 @@ public:
 
   virtual void stop(const G3MRenderContext* rc) = 0;
 
+#ifdef C_CODE
   virtual ~Renderer() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose();
+#endif
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;
@@ -60,9 +66,10 @@ public:
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  virtual bool isPlanetRenderer() {
-    return false;
-  }
+//  virtual bool isPlanetRenderer() {
+//    return false;
+//  }
+  virtual bool isPlanetRenderer() = 0;
 
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
 

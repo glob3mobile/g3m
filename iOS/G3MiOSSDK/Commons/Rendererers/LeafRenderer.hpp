@@ -54,7 +54,7 @@ public:
 
   virtual void initialize(const G3MContext* context) = 0;
 
-  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
+  virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
 
   virtual void render(const G3MRenderContext* rc, GLState* glState) = 0;
 

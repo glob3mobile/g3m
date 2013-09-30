@@ -38,24 +38,19 @@ public:
   }
 };
 
-bool ShapesRenderer::isReadyToRender(const G3MRenderContext* rc) {
-  int __rendererState;
-
-  if (_renderNotReadyShapes) {
-    return true;
-  }
-
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
-    Shape* shape = _shapes[i];
-    const bool shapeReady = shape->isReadyToRender(rc);
-    if (!shapeReady) {
-      return false;
+RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
+  if (!_renderNotReadyShapes) {
+    const int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++) {
+      Shape* shape = _shapes[i];
+      const bool shapeReady = shape->isReadyToRender(rc);
+      if (!shapeReady) {
+        return RenderState::busy();
+      }
     }
   }
-  return true;
+  return RenderState::ready();
 }
-
 
 void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 

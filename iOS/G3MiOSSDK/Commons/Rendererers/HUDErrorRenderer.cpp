@@ -17,6 +17,30 @@ void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
 }
 
 #ifdef C_CODE
+bool HUDErrorRenderer::isEnable() const {
+  return true;
+}
+
+void HUDErrorRenderer::setEnable(bool enable) {
+  // do nothing
+}
+
+RenderState HUDErrorRenderer::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
+
+bool HUDErrorRenderer::isPlanetRenderer() {
+  return false;
+}
+
+SurfaceElevationProvider* HUDErrorRenderer::getSurfaceElevationProvider() {
+  return NULL;
+}
+
+PlanetRenderer* HUDErrorRenderer::getPlanetRenderer() {
+  return NULL;
+}
+
 void HUDErrorRenderer::initialize(const G3MContext* context) {
   HUDImageRenderer::initialize(context);
 }
