@@ -34,15 +34,12 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
-//  const int    _firstLevel;
-
   private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
 
   private boolean _finalized;
   private boolean _canceled;
-//  bool _anyCanceled;
   private boolean _alreadyStarted;
 
   private long _texturePriority;
@@ -96,16 +93,15 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerSet layerSet, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
-//  _firstLevel( layerSet->getLayerTilesRenderParameters()->_firstLevel ),
-//  _anyCanceled(false),
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
+//                     const LayerSet*                   layerSet,
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
      _texturesHandler = rc.getTexturesHandler();
-     _tileTextureResolution = layerSet.getLayerTilesRenderParameters()._tileTextureResolution;
-     _tileMeshResolution = layerSet.getLayerTilesRenderParameters()._tileMeshResolution;
-     _mercator = layerSet.getLayerTilesRenderParameters()._mercator;
+     _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
+     _tileMeshResolution = layerTilesRenderParameters._tileMeshResolution;
+     _mercator = layerTilesRenderParameters._mercator;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
@@ -116,7 +112,7 @@ public class TileTextureBuilder extends RCObject
      _canceled = false;
      _alreadyStarted = false;
      _texturePriority = texturePriority;
-    _petitions = cleanUpPetitions(layerSet.createTileMapPetitions(rc, tile));
+    _petitions = cleanUpPetitions(petitions);
 
     _petitionsCount = _petitions.size();
 

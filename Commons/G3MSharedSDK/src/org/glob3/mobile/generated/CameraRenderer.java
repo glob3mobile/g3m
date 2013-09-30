@@ -96,10 +96,9 @@ public class CameraRenderer extends LeafRenderer
     //  }
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-    return true;
+    return RenderState.ready();
   }
 
   public final void start(G3MRenderContext rc)

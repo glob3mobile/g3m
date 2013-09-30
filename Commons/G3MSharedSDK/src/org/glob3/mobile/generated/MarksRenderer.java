@@ -285,10 +285,8 @@ public class MarksRenderer extends LeafRenderer
     _glState.addGLFeature(new ViewportExtentGLFeature(width, height), false);
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-  
     if (_readyWhenMarksReady)
     {
       int marksSize = _marks.size();
@@ -296,12 +294,12 @@ public class MarksRenderer extends LeafRenderer
       {
         if (!_marks.get(i).isReady())
         {
-          return false;
+          return RenderState.busy();
         }
       }
     }
   
-    return true;
+    return RenderState.ready();
   }
 
   public final void start(G3MRenderContext rc)

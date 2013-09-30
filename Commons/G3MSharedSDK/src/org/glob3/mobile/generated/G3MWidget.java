@@ -28,6 +28,8 @@ public class G3MWidget
 
   public void dispose()
   {
+    if (_mainRendererState != null)
+       _mainRendererState.dispose();
     if (_userData != null)
        _userData.dispose();
   
@@ -168,14 +170,33 @@ public class G3MWidget
   
     G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
-    int __rendererState;
-    _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(rc);
+    if (_mainRendererState != null)
+       _mainRendererState.dispose();
+    _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(rc) : RenderState.busy());
+    RenderState_Type renderStateType = _mainRendererState._type;
   
     _effectsScheduler.doOneCyle(rc);
   
     _frameTasksExecutor.doPreRenderCycle(rc);
   
-    Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
+  
+    Renderer selectedRenderer;
+    switch (renderStateType)
+    {
+      case RENDER_READY:
+        selectedRenderer = _mainRenderer;
+        break;
+  
+      case RENDER_BUSY:
+        selectedRenderer = _busyRenderer;
+        break;
+  
+      case RENDER_ERROR:
+        selectedRenderer = _errorRenderer;
+        break;
+    }
+  
+  //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
     if (selectedRenderer != _selectedRenderer)
     {
       if (_selectedRenderer != null)
@@ -574,7 +595,8 @@ public class G3MWidget
   private Renderer _mainRenderer;
   private Renderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
-  private boolean _mainRendererReady;
+//  bool                _mainRendererReady;
+  private RenderState _mainRendererState;
   private Renderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
@@ -649,7 +671,7 @@ public class G3MWidget
      _renderCounter = 0;
      _totalRenderTime = 0;
      _logFPS = logFPS;
-     _mainRendererReady = false;
+     _mainRendererState = new RenderState(RenderState.busy());
      _selectedRenderer = null;
      _renderStatisticsTimer = null;
      _logDownloaderStatistics = logDownloaderStatistics;
@@ -699,29 +721,40 @@ public class G3MWidget
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    if (_mainRendererReady)
+    RenderState_Type renderStateType = _mainRendererState._type;
+    switch (renderStateType)
     {
-      boolean handled = false;
-      if (_mainRenderer.isEnable())
+      case RENDER_READY:
       {
-        handled = _mainRenderer.onTouchEvent(ec, touchEvent);
-      }
-  
-      if (!handled)
-      {
-        handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
-        if (handled)
+        boolean handled = false;
+        if (_mainRenderer.isEnable())
         {
-          if (_cameraActivityListener != null)
+          handled = _mainRenderer.onTouchEvent(ec, touchEvent);
+        }
+  
+        if (!handled)
+        {
+          handled = _cameraRenderer.onTouchEvent(ec, touchEvent);
+          if (handled)
           {
-            _cameraActivityListener.touchEventHandled();
+            if (_cameraActivityListener != null)
+            {
+              _cameraActivityListener.touchEventHandled();
+            }
           }
         }
+        break;
       }
-    }
-    else
-    {
-      _busyRenderer.onTouchEvent(ec, touchEvent);
+      case RENDER_BUSY:
+      {
+        _busyRenderer.onTouchEvent(ec, touchEvent);
+        break;
+      }
+      case RENDER_ERROR:
+      {
+        _errorRenderer.onTouchEvent(ec, touchEvent);
+        break;
+      }
     }
   }
 

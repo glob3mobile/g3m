@@ -117,10 +117,9 @@ public class MeshRenderer extends LeafRenderer
 
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-    return true;
+    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

@@ -162,26 +162,22 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-  
-    if (_renderNotReadyShapes)
+    if (!_renderNotReadyShapes)
     {
-      return true;
-    }
-  
-    final int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++)
-    {
-      Shape shape = _shapes.get(i);
-      final boolean shapeReady = shape.isReadyToRender(rc);
-      if (!shapeReady)
+      final int shapesCount = _shapes.size();
+      for (int i = 0; i < shapesCount; i++)
       {
-        return false;
+        Shape shape = _shapes.get(i);
+        final boolean shapeReady = shape.isReadyToRender(rc);
+        if (!shapeReady)
+        {
+          return RenderState.busy();
+        }
       }
     }
-    return true;
+    return RenderState.ready();
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

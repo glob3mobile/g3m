@@ -26,6 +26,8 @@ public class CompositeRenderer extends Renderer
 
   private boolean _enable;
 
+  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+
   public CompositeRenderer()
   {
      _context = null;
@@ -71,23 +73,48 @@ public class CompositeRenderer extends Renderer
     }
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
+    _errors.clear();
+    boolean busyFlag = false;
+    boolean errorFlag = false;
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      Renderer renderer = _renderers.get(i);
-      if (renderer.isEnable())
+      Renderer child = _renderers.get(i);
+      if (child.isEnable())
       {
-        if (!renderer.isReadyToRender(rc))
+        final RenderState childRenderState = child.getRenderState(rc);
+  
+        final RenderState_Type childRenderStateType = childRenderState._type;
+  
+        if (childRenderStateType == RenderState_Type.RENDER_ERROR)
         {
-          return false;
+          errorFlag = true;
+  
+          final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'insert' method in Java:
+          _errors.insert(_errors.end(), childErrors.iterator(), childErrors.end());
+        }
+        else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
+        {
+          busyFlag = true;
         }
       }
     }
   
-    return true;
+    if (errorFlag)
+    {
+      return RenderState.error(_errors);
+    }
+    else if (busyFlag)
+    {
+      return RenderState.busy();
+    }
+    else
+    {
+      return RenderState.ready();
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

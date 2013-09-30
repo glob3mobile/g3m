@@ -124,10 +124,9 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     _mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-    return true;
+    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

@@ -51,13 +51,17 @@ public class PlanetRendererContext
   private long _texturePriority;
 
   private Sector _renderedSector ;
-  public PlanetRendererContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration, Sector renderedSector)
+
+  private final LayerTilesRenderParameters _layerTilesRenderParameters;
+
+  public PlanetRendererContext(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender, long texturePriority, float verticalExaggeration, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
      _layerSet = layerSet;
+     _layerTilesRenderParameters = layerTilesRenderParameters;
      _parameters = parameters;
      _statistics = statistics;
      _lastSplitTimer = lastSplitTimer;
@@ -125,7 +129,7 @@ public class PlanetRendererContext
 
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
-    return _layerSet.getLayerTilesRenderParameters();
+    return _layerTilesRenderParameters;
   }
 
   public final Sector getRenderedSector()

@@ -76,13 +76,6 @@ public class HUDImageRenderer extends LeafRenderer
   {
     _creatingMesh = false;
   
-  ///#ifdef C_CODE
-  //  const IGLTextureId* texId = NULL;
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  IGLTextureId texId = null;
-  ///#endif
-  
     int __TODO_create_unique_name;
     final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "HUDImageRenderer", false);
   
@@ -145,10 +138,9 @@ public class HUDImageRenderer extends LeafRenderer
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-    return true;
+    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

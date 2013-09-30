@@ -109,10 +109,9 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-    return true;
+    return RenderState.ready();
   }
 
 
