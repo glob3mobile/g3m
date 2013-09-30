@@ -230,9 +230,6 @@ public:
     delete [] data;
   }
 
-//  void texImage2D(const IImage* image,
-//                  int format) const;
-
   void generateMipmap(int target) const {
     glGenerateMipmap(target);
   }

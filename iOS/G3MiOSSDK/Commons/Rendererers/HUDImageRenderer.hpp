@@ -58,6 +58,7 @@ public:
 private:
   static long long INSTANCE_COUNTER;
   long long _instanceID;
+  long long _changeCounter;
 
   class ImageListener : public IImageListener {
   private:

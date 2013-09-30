@@ -27,10 +27,6 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                              8   /* cornerRadius */);
   const GFont labelFont  = GFont::sansSerif(22);
   const Color labelColor = Color::white();
-//  column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
-//  column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
-//  column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
-//  column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
 
   const int errorsSize = _errors.size();
   for (int i = 0; i < errorsSize; i++) {
@@ -40,7 +36,29 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
   column.drawCentered(canvas);
 }
 
-void HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& errors) {
+bool HUDErrorRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
+                                             const std::vector<std::string>& v2) const {
+  const int size1 = v1.size();
+  const int size2 = v2.size();
+  if (size1 != size2) {
+    return false;
+  }
+
+  for (int i = 0; i < size1; i++) {
+    const std::string str1 = v1[i];
+    const std::string str2 = v2[i];
+    if (str1 != str2) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& errors) {
+  if ( isEquals(_errors, errors) ) {
+    return false;
+  }
+
   _errors.clear();
 #ifdef C_CODE
   _errors.insert(_errors.end(),
@@ -50,12 +68,14 @@ void HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& er
 #ifdef JAVA_CODE
   _errors.addAll(errors);
 #endif
+  return true;
 }
 
 void HUDErrorRenderer::setErrors(const std::vector<std::string>& errors) {
-  ((HUDErrorRenderer_ImageFactory*) getImageFactory())->setErrors(errors);
-
-  recreateImage();
+  HUDErrorRenderer_ImageFactory* factory = (HUDErrorRenderer_ImageFactory*) getImageFactory();
+  if (factory->setErrors(errors)) {
+    recreateImage();
+  }
 }
 
 #ifdef C_CODE

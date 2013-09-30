@@ -23,11 +23,14 @@ protected:
               int width,
               int height);
 
+  bool isEquals(const std::vector<std::string>& v1,
+                const std::vector<std::string>& v2) const;
+
 public:
   ~HUDErrorRenderer_ImageFactory() {
   }
 
-  void setErrors(const std::vector<std::string>& errors);
+  bool setErrors(const std::vector<std::string>& errors);
 };
 
 

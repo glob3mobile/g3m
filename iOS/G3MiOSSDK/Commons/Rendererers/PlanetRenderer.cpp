@@ -322,7 +322,9 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     _errors.clear();
     delete _layerTilesRenderParameters;
     _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
-    ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+    if (_layerTilesRenderParameters == NULL) {
+      ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+    }
     _layerTilesRenderParametersDirty = false;
   }
   return _layerTilesRenderParameters;
@@ -419,8 +421,6 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
-  int __rendererState;
-
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
 
   if (layerTilesRenderParameters == NULL) {

@@ -457,6 +457,7 @@ void G3MWidget::render(int width, int height) {
       break;
 
     default:
+      _errorRenderer->setErrors( _mainRendererState->getErrors() );
       selectedRenderer = _errorRenderer;
       break;
   }

@@ -49,7 +49,8 @@ _glState(new GLState()),
 _creatingMesh(false),
 _image(NULL),
 _mesh(NULL),
-_instanceID(INSTANCE_COUNTER++)
+_instanceID(INSTANCE_COUNTER++),
+_changeCounter(0)
 {
 
 }
@@ -110,12 +111,19 @@ void HUDImageRenderer::ImageListener::imageCreated(const IImage* image) {
 Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   _creatingMesh = false;
 
-  int __TODO_create_unique_name;
+  if (_mesh != NULL) {
+    delete _mesh;
+    _mesh = NULL;
+  }
+
+  const IStringUtils* su = IStringUtils::instance();
+  const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
+
   const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                                        GLFormat::rgba(),
-                                                                       "HUDImageRenderer" + IStringUtils::instance()->toString(_instanceID),
+                                                                       textureName,
                                                                        false);
-
+  
   delete _image;
   _image = NULL;
 
@@ -124,10 +132,6 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  if (_mesh != NULL) {
-    delete _mesh;
-    _mesh = NULL;
-  }
 
   const Camera* camera = rc->getCurrentCamera();
 
@@ -178,8 +182,6 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
                               width, height,
                               new HUDImageRenderer::ImageListener(this),
                               true);
-
-        return NULL;
       }
     }
 
