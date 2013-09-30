@@ -21,10 +21,6 @@ public:
 
   class ImageFactory {
   public:
-    ImageFactory()
-    {
-    }
-
 #ifdef C_CODE
     virtual ~ImageFactory() { }
 #endif
