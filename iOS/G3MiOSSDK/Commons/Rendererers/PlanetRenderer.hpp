@@ -375,7 +375,12 @@ private:
   Sector* _renderedSector;
 //  bool _validLayerTilesRenderParameters;
   bool _layerTilesRenderParametersDirty;
+#ifdef C_CODE
   const LayerTilesRenderParameters* _layerTilesRenderParameters;
+#endif
+#ifdef JAVA_CODE
+  private LayerTilesRenderParameters _layerTilesRenderParameters;
+#endif
   std::vector<std::string> _errors;
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();

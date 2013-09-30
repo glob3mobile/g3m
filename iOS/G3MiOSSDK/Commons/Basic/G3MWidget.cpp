@@ -267,7 +267,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
       _busyRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
-    case RENDER_ERROR: {
+    default: {
       _errorRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
@@ -456,7 +456,7 @@ void G3MWidget::render(int width, int height) {
       selectedRenderer = _busyRenderer;
       break;
 
-    case RENDER_ERROR:
+    default:
       selectedRenderer = _errorRenderer;
       break;
   }
