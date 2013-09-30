@@ -23,7 +23,7 @@ public:
               bool deleteListener);
 };
 
-class HUDErrorRenderer : public ErrorRenderer, HUDImageRenderer {
+class HUDErrorRenderer : public HUDImageRenderer, ErrorRenderer {
 public:
   HUDErrorRenderer() :
   HUDImageRenderer(new HUDErrorRenderer_ImageFactory())
