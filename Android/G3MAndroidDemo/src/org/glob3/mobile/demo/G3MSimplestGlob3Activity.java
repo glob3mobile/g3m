@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
@@ -36,6 +37,7 @@ import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
 import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.HUDErrorRenderer;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICameraActivityListener;
@@ -465,6 +467,7 @@ public class G3MSimplestGlob3Activity
 
       final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
+      final ErrorRenderer errorRenderer = new HUDErrorRenderer();
       _widgetAndroid.initWidget(//
                storage, // 
                downloader, //
@@ -475,6 +478,7 @@ public class G3MSimplestGlob3Activity
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
+               errorRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //
