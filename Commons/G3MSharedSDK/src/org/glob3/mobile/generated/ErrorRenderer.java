@@ -37,7 +37,16 @@ public abstract class ErrorRenderer extends Renderer
 //
 //  virtual void stop(const G3MRenderContext* rc) = 0;
 
-  public void dispose();
+///#ifdef C_CODE
+//  virtual ~ErrorRenderer() { }
+///#endif
+///#ifdef JAVA_CODE
+//  public void dispose();
+///#endif
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+
 
 //  virtual void onResume(const G3MContext* context) = 0;
 //
