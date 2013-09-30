@@ -191,7 +191,7 @@ public class G3MWidget
         selectedRenderer = _busyRenderer;
         break;
   
-      case RENDER_ERROR:
+      default:
         selectedRenderer = _errorRenderer;
         break;
     }
@@ -750,7 +750,7 @@ public class G3MWidget
         _busyRenderer.onTouchEvent(ec, touchEvent);
         break;
       }
-      case RENDER_ERROR:
+      default:
       {
         _errorRenderer.onTouchEvent(ec, touchEvent);
         break;
