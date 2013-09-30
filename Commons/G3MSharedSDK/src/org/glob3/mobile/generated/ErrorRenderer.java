@@ -17,8 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-public class ErrorRenderer extends Renderer
+public abstract class ErrorRenderer extends Renderer
 {
+
+  public abstract void setErrors(java.util.ArrayList<String> errors);
+
 //  virtual void initialize(const G3MContext* context) = 0;
 //
 //  virtual void render(const G3MRenderContext* rc,
