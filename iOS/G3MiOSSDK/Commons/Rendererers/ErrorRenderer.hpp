@@ -13,6 +13,9 @@
 
 class ErrorRenderer : public Renderer {
 public:
+
+  virtual void setErrors(const std::vector<std::string> errors) = 0;
+
 //  virtual void initialize(const G3MContext* context) = 0;
 //
 //  virtual void render(const G3MRenderContext* rc,
