@@ -16,7 +16,6 @@ void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
   aa;
 }
 
-
 void HUDErrorRenderer::initialize(const G3MContext* context) {
   HUDImageRenderer::initialize(context);
 }
@@ -28,13 +27,13 @@ void HUDErrorRenderer::render(const G3MRenderContext* rc,
 
 bool HUDErrorRenderer::onTouchEvent(const G3MEventContext* ec,
                                     const TouchEvent* touchEvent) {
-  HUDImageRenderer::onTouchEvent(ec, touchEvent);
+  return HUDImageRenderer::onTouchEvent(ec, touchEvent);
 }
 
 void HUDErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                              int width, int height) {
-  HUDImageRenderer::Renderer::onResizeViewportEvent(ec,
-                                                    width, height);
+  HUDImageRenderer::onResizeViewportEvent(ec,
+                                          width, height);
 }
 
 void HUDErrorRenderer::start(const G3MRenderContext* rc) {
@@ -44,7 +43,6 @@ void HUDErrorRenderer::start(const G3MRenderContext* rc) {
 void HUDErrorRenderer::stop(const G3MRenderContext* rc) {
   HUDImageRenderer::stop(rc);
 }
-
 
 void HUDErrorRenderer::onResume(const G3MContext* context) {
   HUDImageRenderer::onResume(context);
