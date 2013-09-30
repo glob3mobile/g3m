@@ -298,7 +298,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private Sector _renderedSector;
 //  bool _validLayerTilesRenderParameters;
   private boolean _layerTilesRenderParametersDirty;
-  private final LayerTilesRenderParameters _layerTilesRenderParameters;
+  private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private LayerTilesRenderParameters getLayerTilesRenderParameters()
@@ -306,8 +306,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     if (_layerTilesRenderParametersDirty)
     {
       _errors.clear();
-      if (_layerTilesRenderParameters != null)
-         _layerTilesRenderParameters.dispose();
+      _layerTilesRenderParameters = null;
       _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
       ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
       _layerTilesRenderParametersDirty = false;
@@ -349,8 +348,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
     clearFirstLevelTiles();
   
-    if (_layerTilesRenderParameters != null)
-       _layerTilesRenderParameters.dispose();
+    _layerTilesRenderParameters = null;
   
     if (_tessellator != null)
        _tessellator.dispose();
@@ -690,8 +688,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     pruneFirstLevelTiles();
     clearFirstLevelTiles();
   
-    if (_layerTilesRenderParameters != null)
-       _layerTilesRenderParameters.dispose();
+    _layerTilesRenderParameters = null;
     _layerTilesRenderParameters = null;
     _layerTilesRenderParametersDirty = true;
   
