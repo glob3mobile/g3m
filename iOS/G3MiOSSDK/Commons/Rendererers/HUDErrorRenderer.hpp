@@ -11,10 +11,12 @@
 
 #include "ErrorRenderer.hpp"
 #include "HUDImageRenderer.hpp"
-#include "ImageFactory.hpp"
 
 
-class HUDErrorRenderer_ImageFactory : public ImageFactory {
+class HUDErrorRenderer_ImageFactory : public HUDImageRenderer::ImageFactory {
+private:
+  std::vector<std::string> _errors;
+
 public:
   void create(const G3MRenderContext* rc,
               int width,
@@ -25,9 +27,12 @@ public:
   ~HUDErrorRenderer_ImageFactory() {
 
   }
+
+  void setErrors(const std::vector<std::string>& errors);
 };
 
 class HUDErrorRenderer : public HUDImageRenderer, public ErrorRenderer {
+
 public:
   HUDErrorRenderer() :
   HUDImageRenderer(new HUDErrorRenderer_ImageFactory())
@@ -40,6 +45,8 @@ public:
     super.dispose();
 #endif
   }
+
+  void setErrors(const std::vector<std::string>& errors);
 
 #ifdef C_CODE
   bool isEnable() const;

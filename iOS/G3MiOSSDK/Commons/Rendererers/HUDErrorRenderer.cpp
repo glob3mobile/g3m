@@ -16,6 +16,19 @@ void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
   int _DGD_AtWork;
 }
 
+void HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& errors) {
+  _errors.clear();
+  _errors.insert(_errors.end(),
+                 errors.begin(),
+                 errors.end());
+}
+
+void HUDErrorRenderer::setErrors(const std::vector<std::string>& errors) {
+  ((HUDErrorRenderer_ImageFactory*) getImageFactory())->setErrors(errors);
+
+  recreateImage();
+}
+
 #ifdef C_CODE
 bool HUDErrorRenderer::isEnable() const {
   return true;

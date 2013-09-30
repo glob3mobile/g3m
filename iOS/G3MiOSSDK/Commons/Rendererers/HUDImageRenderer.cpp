@@ -21,15 +21,16 @@
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
 #include "DirectMesh.hpp"
-#include "ImageFactory.hpp"
 
-HUDImageRenderer::HUDImageRenderer(ImageFactory* imageFactory) :
+
+HUDImageRenderer::HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory) :
 _imageFactory(imageFactory),
 _glState(new GLState()),
 _creatingMesh(false),
 _image(NULL),
 _mesh(NULL)
 {
+//  _imageFactory->setListener(this);
 }
 
 void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
@@ -50,6 +51,10 @@ void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
     pr->setMatrix(projectionMatrix.asMatrix44D());
   }
 
+  recreateImage();
+}
+
+void HUDImageRenderer::recreateImage() {
   _creatingMesh = false;
 
   delete _mesh;

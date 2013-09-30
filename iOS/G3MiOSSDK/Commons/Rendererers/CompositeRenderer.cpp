@@ -77,9 +77,14 @@ RenderState CompositeRenderer::getRenderState(const G3MRenderContext* rc) {
         errorFlag = true;
 
         const std::vector<std::string> childErrors = childRenderState.getErrors();
+#ifdef C_CODE
         _errors.insert(_errors.end(),
                        childErrors.begin(),
                        childErrors.end());
+#endif
+#ifdef JAVA_CODE
+        _errors.addAll(childErrors);
+#endif
       }
       else if (childRenderStateType == RENDER_BUSY) {
         busyFlag = true;

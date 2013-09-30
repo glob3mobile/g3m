@@ -11,11 +11,50 @@
 
 #include "LeafRenderer.hpp"
 #include "Vector2D.hpp"
-class Mesh;
-class ImageFactory;
 #include "IImageListener.hpp"
+class Mesh;
+
+
 
 class HUDImageRenderer : public LeafRenderer {
+public:
+
+  class ImageFactory {
+//  private:
+//    HUDImageRenderer* _hudImageRenderer;
+//
+//  protected:
+//    HUDImageRenderer* getListener() const {
+//      return _hudImageRenderer;
+//    }
+
+  public:
+    ImageFactory()
+//    _hudImageRenderer(NULL)
+    {
+    }
+
+#ifdef C_CODE
+    virtual ~ImageFactory() { }
+#endif
+#ifdef JAVA_CODE
+    public void dispose();
+#endif
+
+//    void setListener(HUDImageRenderer* hudImageRenderer) {
+//      if (_hudImageRenderer != NULL) {
+//        ILogger::instance()->logError("Listener already set");
+//      }
+//      _hudImageRenderer = hudImageRenderer;
+//    }
+
+    virtual void create(const G3MRenderContext* rc,
+                        int width,
+                        int height,
+                        IImageListener* listener,
+                        bool deleteListener) = 0;
+  };
+
 private:
 
   class ImageListener : public IImageListener {
@@ -32,10 +71,10 @@ private:
 
   };
 
-  GLState*      _glState;
-  Mesh*         _mesh;
-  ImageFactory* _imageFactory;
-  bool          _creatingMesh;
+  GLState*                        _glState;
+  Mesh*                           _mesh;
+  HUDImageRenderer::ImageFactory* _imageFactory;
+  bool                            _creatingMesh;
 
   Mesh* getMesh(const G3MRenderContext* rc);
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -48,8 +87,15 @@ private:
 #endif
   void setImage(const IImage* image);
 
+protected:
+  void recreateImage();
+
+  HUDImageRenderer::ImageFactory* getImageFactory() const {
+    return _imageFactory;
+  }
+
 public:
-  HUDImageRenderer(ImageFactory* imageFactory);
+  HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory);
 
   void initialize(const G3MContext* context) {}
 

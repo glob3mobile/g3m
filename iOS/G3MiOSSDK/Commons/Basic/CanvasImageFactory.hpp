@@ -9,11 +9,11 @@
 #ifndef __G3MiOSSDK__CanvasImageFactory__
 #define __G3MiOSSDK__CanvasImageFactory__
 
-#include "ImageFactory.hpp"
+#include "HUDImageRenderer.hpp"
 
 class ICanvas;
 
-class CanvasImageFactory : public ImageFactory {
+class CanvasImageFactory : public HUDImageRenderer::ImageFactory {
 protected:
 
   virtual void drawOn(ICanvas* canvas,
