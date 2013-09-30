@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class HUDErrorRenderer implements ErrorRenderer, HUDImageRenderer
+public class HUDErrorRenderer extends HUDImageRenderer implements ErrorRenderer
 {
   public HUDErrorRenderer()
   {
