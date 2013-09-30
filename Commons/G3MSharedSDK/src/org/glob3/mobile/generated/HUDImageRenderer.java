@@ -25,10 +25,6 @@ public class HUDImageRenderer extends LeafRenderer
 
   public interface ImageFactory
   {
-    ImageFactory()
-    {
-    }
-
     public void dispose();
 
     void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
