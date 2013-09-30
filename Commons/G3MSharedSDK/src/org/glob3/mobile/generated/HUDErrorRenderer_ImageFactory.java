@@ -24,4 +24,9 @@ public class HUDErrorRenderer_ImageFactory implements ImageFactory
   {
     int _DGD_AtWork;
   }
+
+  public void dispose()
+  {
+
+  }
 }

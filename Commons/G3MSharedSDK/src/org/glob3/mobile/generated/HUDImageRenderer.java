@@ -141,7 +141,7 @@ public class HUDImageRenderer extends LeafRenderer
      _mesh = null;
   }
 
-  public void initialize(G3MContext context)
+  public final void initialize(G3MContext context)
   {
   }
 
@@ -151,7 +151,7 @@ public class HUDImageRenderer extends LeafRenderer
     return true;
   }
 
-  public void render(G3MRenderContext rc, GLState glState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
     Mesh mesh = getMesh(rc);
     if (mesh != null)
@@ -161,12 +161,12 @@ public class HUDImageRenderer extends LeafRenderer
   }
 
 
-  public boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     return false;
   }
 
-  public void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
@@ -206,23 +206,23 @@ public class HUDImageRenderer extends LeafRenderer
     super.dispose();
   }
 
-  public void start(G3MRenderContext rc)
+  public final void start(G3MRenderContext rc)
   {
   }
 
-  public void stop(G3MRenderContext rc)
+  public final void stop(G3MRenderContext rc)
   {
   }
 
-  public void onResume(G3MContext context)
+  public final void onResume(G3MContext context)
   {
   }
 
-  public void onPause(G3MContext context)
+  public final void onPause(G3MContext context)
   {
   }
 
-  public void onDestroy(G3MContext context)
+  public final void onDestroy(G3MContext context)
   {
   }
 

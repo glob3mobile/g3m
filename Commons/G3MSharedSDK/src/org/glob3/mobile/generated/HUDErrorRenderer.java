@@ -7,4 +7,9 @@ public class HUDErrorRenderer extends HUDImageRenderer implements ErrorRenderer
 
   }
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
 }
