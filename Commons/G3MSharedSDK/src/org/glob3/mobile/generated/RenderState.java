@@ -27,6 +27,7 @@ public class RenderState
   private RenderState(RenderState_Type type)
   {
      _type = type;
+    _errors = null;
   }
 
   private RenderState(java.util.ArrayList<String> errors)
