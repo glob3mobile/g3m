@@ -215,7 +215,7 @@ public class G3MWidget
     }
   
   
-    if (_mainRendererReady)
+    if (renderStateType == RenderState_Type.RENDER_READY)
     {
       _cameraRenderer.render(rc, _rootState);
   

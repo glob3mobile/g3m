@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class Mesh;
-
+//class ICanvas;
 
 
 public class HUDImageRenderer extends LeafRenderer
@@ -25,31 +25,43 @@ public class HUDImageRenderer extends LeafRenderer
 
   public interface ImageFactory
   {
-//  private:
-//    HUDImageRenderer* _hudImageRenderer;
-//
-//  protected:
-//    HUDImageRenderer* getListener() const {
-//      return _hudImageRenderer;
-//    }
-
     ImageFactory()
-//    _hudImageRenderer(NULL)
     {
     }
 
     public void dispose();
 
-//    void setListener(HUDImageRenderer* hudImageRenderer) {
-//      if (_hudImageRenderer != NULL) {
-//        ILogger::instance()->logError("Listener already set");
-//      }
-//      _hudImageRenderer = hudImageRenderer;
-//    }
-
     void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
   }
 
+  public abstract static class CanvasImageFactory implements HUDImageRenderer.ImageFactory
+  {
+
+    protected abstract void drawOn(ICanvas canvas, int width, int height);
+
+    public CanvasImageFactory()
+    {
+
+    }
+
+    public final void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener)
+    {
+    
+      ICanvas canvas = rc.getFactory().createCanvas();
+      canvas.initialize(width, height);
+    
+      drawOn(canvas, width, height);
+    
+      canvas.createImage(listener, deleteListener);
+    
+      if (canvas != null)
+         canvas.dispose();
+    }
+
+  }
+
+  private static long INSTANCE_COUNTER = 0;
+  private long _instanceID;
 
   private static class ImageListener extends IImageListener
   {
@@ -106,7 +118,7 @@ public class HUDImageRenderer extends LeafRenderer
     _creatingMesh = false;
   
     int __TODO_create_unique_name;
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "HUDImageRenderer", false);
+    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "HUDImageRenderer" + IStringUtils.instance().toString(_instanceID), false);
   
     _image = null;
     _image = null;
@@ -178,7 +190,8 @@ public class HUDImageRenderer extends LeafRenderer
      _creatingMesh = false;
      _image = null;
      _mesh = null;
-  //  _imageFactory->setListener(this);
+     _instanceID = INSTANCE_COUNTER++;
+  
   }
 
   public final void initialize(G3MContext context)
