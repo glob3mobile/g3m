@@ -35,6 +35,12 @@ public:
 
   }
 
+  ~HUDErrorRenderer() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 #ifdef C_CODE
   void initialize(const G3MContext* context);
 

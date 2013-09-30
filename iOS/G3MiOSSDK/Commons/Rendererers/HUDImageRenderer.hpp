@@ -51,43 +51,43 @@ private:
 public:
   HUDImageRenderer(ImageFactory* imageFactory);
 
-  virtual void initialize(const G3MContext* context) {}
+  void initialize(const G3MContext* context) {}
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     int __rendererState;
     return true;
   }
 
-  virtual void render(const G3MRenderContext* rc,
-                      GLState* glState);
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
 
 
-  virtual bool onTouchEvent(const G3MEventContext* ec,
-                            const TouchEvent* touchEvent) {
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent) {
     return false;
   }
 
-  virtual void onResizeViewportEvent(const G3MEventContext* ec,
-                                     int width,
-                                     int height);
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width,
+                             int height);
 
   virtual ~HUDImageRenderer();
 
-  virtual void start(const G3MRenderContext* rc) {
+  void start(const G3MRenderContext* rc) {
   }
 
-  virtual void stop(const G3MRenderContext* rc) {
+  void stop(const G3MRenderContext* rc) {
   }
 
-  virtual void onResume(const G3MContext* context) {
+  void onResume(const G3MContext* context) {
   }
 
-  virtual void onPause(const G3MContext* context) {
+  void onPause(const G3MContext* context) {
   }
-  
-  virtual void onDestroy(const G3MContext* context) {
+
+  void onDestroy(const G3MContext* context) {
   }
-  
+
 };
 
 #endif
