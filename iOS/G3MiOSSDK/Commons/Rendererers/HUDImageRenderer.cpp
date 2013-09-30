@@ -84,13 +84,6 @@ void HUDImageRenderer::ImageListener::imageCreated(const IImage* image) {
 Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   _creatingMesh = false;
 
-//#ifdef C_CODE
-//  const IGLTextureId* texId = NULL;
-//#endif
-//#ifdef JAVA_CODE
-//  IGLTextureId texId = null;
-//#endif
-
   int __TODO_create_unique_name;
   const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                                        GLFormat::rgba(),
