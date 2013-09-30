@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class ICanvas;
 
-public abstract class CanvasImageFactory implements ImageFactory
+public abstract class CanvasImageFactory extends HUDImageRenderer.ImageFactory
 {
 
   protected abstract void drawOn(ICanvas canvas, int width, int height);

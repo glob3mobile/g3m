@@ -93,8 +93,7 @@ public class CompositeRenderer extends Renderer
           errorFlag = true;
   
           final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'insert' method in Java:
-          _errors.insert(_errors.end(), childErrors.iterator(), childErrors.end());
+          _errors.addAll(childErrors);
         }
         else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
         {

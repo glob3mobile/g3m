@@ -17,10 +17,39 @@ package org.glob3.mobile.generated;
 
 
 //class Mesh;
-//class ImageFactory;
+
+
 
 public class HUDImageRenderer extends LeafRenderer
 {
+
+  public interface ImageFactory
+  {
+//  private:
+//    HUDImageRenderer* _hudImageRenderer;
+//
+//  protected:
+//    HUDImageRenderer* getListener() const {
+//      return _hudImageRenderer;
+//    }
+
+    ImageFactory()
+//    _hudImageRenderer(NULL)
+    {
+    }
+
+    public void dispose();
+
+//    void setListener(HUDImageRenderer* hudImageRenderer) {
+//      if (_hudImageRenderer != NULL) {
+//        ILogger::instance()->logError("Listener already set");
+//      }
+//      _hudImageRenderer = hudImageRenderer;
+//    }
+
+    void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
+  }
+
 
   private static class ImageListener extends IImageListener
   {
@@ -40,7 +69,7 @@ public class HUDImageRenderer extends LeafRenderer
 
   private GLState _glState;
   private Mesh _mesh;
-  private ImageFactory _imageFactory;
+  private HUDImageRenderer.ImageFactory _imageFactory;
   private boolean _creatingMesh;
 
   private Mesh getMesh(G3MRenderContext rc)
@@ -125,13 +154,31 @@ public class HUDImageRenderer extends LeafRenderer
     _image = image;
   }
 
-  public HUDImageRenderer(ImageFactory imageFactory)
+  protected final void recreateImage()
+  {
+    _creatingMesh = false;
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  
+    _image = null;
+    _image = null;
+  }
+
+  protected final HUDImageRenderer.ImageFactory getImageFactory()
+  {
+    return _imageFactory;
+  }
+
+  public HUDImageRenderer(HUDImageRenderer.ImageFactory imageFactory)
   {
      _imageFactory = imageFactory;
      _glState = new GLState();
      _creatingMesh = false;
      _image = null;
      _mesh = null;
+  //  _imageFactory->setListener(this);
   }
 
   public final void initialize(G3MContext context)
@@ -174,14 +221,7 @@ public class HUDImageRenderer extends LeafRenderer
       pr.setMatrix(projectionMatrix.asMatrix44D());
     }
   
-    _creatingMesh = false;
-  
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
-  
-    _image = null;
-    _image = null;
+    recreateImage();
   }
 
   public void dispose()
