@@ -31,6 +31,7 @@ public:
 
   }
 
+#ifdef C_CODE
   void initialize(const G3MContext* context);
 
   void render(const G3MRenderContext* rc,
@@ -52,7 +53,7 @@ public:
   void onPause(const G3MContext* context);
 
   void onDestroy(const G3MContext* context);
-  
+#endif
 };
 
 #endif

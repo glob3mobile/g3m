@@ -13,9 +13,10 @@ void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
                                            int height,
                                            IImageListener* listener,
                                            bool deleteListener) {
-  aa;
+  int _DGD_AtWork;
 }
 
+#ifdef C_CODE
 void HUDErrorRenderer::initialize(const G3MContext* context) {
   HUDImageRenderer::initialize(context);
 }
@@ -55,3 +56,4 @@ void HUDErrorRenderer::onPause(const G3MContext* context) {
 void HUDErrorRenderer::onDestroy(const G3MContext* context) {
   HUDImageRenderer::onDestroy(context);
 }
+#endif
