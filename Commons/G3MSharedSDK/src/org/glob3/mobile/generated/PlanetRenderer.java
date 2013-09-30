@@ -308,7 +308,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       _errors.clear();
       _layerTilesRenderParameters = null;
       _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
-      ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      if (_layerTilesRenderParameters == null)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      }
       _layerTilesRenderParametersDirty = false;
     }
     return _layerTilesRenderParameters;
@@ -542,8 +545,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    int __rendererState;
-  
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
   
     if (layerTilesRenderParameters == null)

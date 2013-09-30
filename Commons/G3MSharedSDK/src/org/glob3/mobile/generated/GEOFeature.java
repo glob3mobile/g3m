@@ -53,7 +53,6 @@ public class GEOFeature extends GEOObject
        _properties.dispose();
   
     super.dispose();
-  
   }
 
   public final JSONObject getProperties()
