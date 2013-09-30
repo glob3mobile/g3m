@@ -23,14 +23,13 @@ public:
               bool deleteListener);
 };
 
-class HUDErrorRenderer : public HUDImageRenderer, ErrorRenderer {
+class HUDErrorRenderer : public HUDImageRenderer, public ErrorRenderer {
 public:
   HUDErrorRenderer() :
   HUDImageRenderer(new HUDErrorRenderer_ImageFactory())
   {
 
   }
-
 
   void initialize(const G3MContext* context);
 
