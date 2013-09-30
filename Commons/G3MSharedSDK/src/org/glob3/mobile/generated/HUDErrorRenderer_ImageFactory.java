@@ -35,7 +35,6 @@ public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.ImageFactory
   public final void setErrors(java.util.ArrayList<String> errors)
   {
     _errors.clear();
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'insert' method in Java:
-    _errors.insert(_errors.end(), errors.iterator(), errors.end());
+    _errors.addAll(errors);
   }
 }

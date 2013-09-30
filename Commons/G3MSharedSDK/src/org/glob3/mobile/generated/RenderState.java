@@ -22,6 +22,18 @@ public class RenderState
     return _errors;
   }
 
+  public RenderState(RenderState that)
+  {
+     _type = that._type;
+     _errors = that._errors;
+
+  }
+
+  public void dispose()
+  {
+
+  }
+
   private final java.util.ArrayList<String> _errors;
 
   private RenderState(RenderState_Type type)
@@ -35,5 +47,7 @@ public class RenderState
      _type = RenderState_Type.RENDER_ERROR;
      _errors = errors;
   }
+
+
 
 }
