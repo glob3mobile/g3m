@@ -31,6 +31,17 @@ public:
     return _errors;
   }
 
+  RenderState(const RenderState& that) :
+  _type(that._type),
+  _errors(that._errors)
+  {
+
+  }
+
+  ~RenderState() {
+
+  }
+
 private:
 #ifdef C_CODE
   const std::vector<std::string> _errors;
@@ -52,6 +63,8 @@ private:
   _errors(errors)
   {
   }
+
+
 
 };
 

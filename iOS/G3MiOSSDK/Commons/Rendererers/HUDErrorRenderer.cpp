@@ -18,9 +18,14 @@ void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
 
 void HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& errors) {
   _errors.clear();
+#ifdef C_CODE
   _errors.insert(_errors.end(),
                  errors.begin(),
                  errors.end());
+#endif
+#ifdef JAVA_CODE
+  _errors.addAll(errors);
+#endif
 }
 
 void HUDErrorRenderer::setErrors(const std::vector<std::string>& errors) {
