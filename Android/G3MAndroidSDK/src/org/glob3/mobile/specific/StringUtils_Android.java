@@ -143,4 +143,16 @@ public final class StringUtils_Android
       return -1;
    }
 
+
+   @Override
+   public String toString(final int value) {
+      return Integer.toString(value);
+   }
+
+
+   @Override
+   public String toString(final double value) {
+      return Double.toString(value);
+   }
+
 }

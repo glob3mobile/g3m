@@ -160,3 +160,21 @@ int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
   }
   return -1;
 }
+
+std::string StringUtils_iOS::toString(int value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
+std::string StringUtils_iOS::toString(long long value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
+std::string StringUtils_iOS::toString(double value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}

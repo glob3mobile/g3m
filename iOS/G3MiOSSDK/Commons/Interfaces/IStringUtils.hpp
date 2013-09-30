@@ -124,6 +124,12 @@ public:
 
   virtual long long parseHexInt(const std::string& str) const = 0;
 
+  virtual std::string toString(int value) const = 0;
+
+  virtual std::string toString(long long value) const = 0;
+
+  virtual std::string toString(double value) const = 0;
+
 };
 
 #endif
