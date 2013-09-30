@@ -7,7 +7,6 @@ public class HUDErrorRenderer extends HUDImageRenderer implements ErrorRenderer
 
   }
 
-
   public final void initialize(G3MContext context)
   {
     super.initialize(context);
