@@ -13,24 +13,15 @@
 #include "Vector2D.hpp"
 #include "IImageListener.hpp"
 class Mesh;
-
+class ICanvas;
 
 
 class HUDImageRenderer : public LeafRenderer {
 public:
 
   class ImageFactory {
-//  private:
-//    HUDImageRenderer* _hudImageRenderer;
-//
-//  protected:
-//    HUDImageRenderer* getListener() const {
-//      return _hudImageRenderer;
-//    }
-
   public:
     ImageFactory()
-//    _hudImageRenderer(NULL)
     {
     }
 
@@ -41,13 +32,6 @@ public:
     public void dispose();
 #endif
 
-//    void setListener(HUDImageRenderer* hudImageRenderer) {
-//      if (_hudImageRenderer != NULL) {
-//        ILogger::instance()->logError("Listener already set");
-//      }
-//      _hudImageRenderer = hudImageRenderer;
-//    }
-
     virtual void create(const G3MRenderContext* rc,
                         int width,
                         int height,
@@ -55,7 +39,29 @@ public:
                         bool deleteListener) = 0;
   };
 
+  class CanvasImageFactory : public HUDImageRenderer::ImageFactory {
+  protected:
+
+    virtual void drawOn(ICanvas* canvas,
+                        int width,
+                        int height) = 0;
+
+  public:
+    CanvasImageFactory() {
+
+    }
+
+    void create(const G3MRenderContext* rc,
+                int width,
+                int height,
+                IImageListener* listener,
+                bool deleteListener);
+    
+  };
+
 private:
+  static long long INSTANCE_COUNTER;
+  long long _instanceID;
 
   class ImageListener : public IImageListener {
   private:

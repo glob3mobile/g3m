@@ -21,16 +21,37 @@
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
 #include "DirectMesh.hpp"
+#include "ICanvas.hpp"
+#include "IStringUtils.hpp"
 
+
+long long HUDImageRenderer::INSTANCE_COUNTER = 0;
+
+void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
+                                                  int width,
+                                                  int height,
+                                                  IImageListener* listener,
+                                                  bool deleteListener) {
+
+  ICanvas* canvas = rc->getFactory()->createCanvas();
+  canvas->initialize(width, height);
+
+  drawOn(canvas, width, height);
+  
+  canvas->createImage(listener, deleteListener);
+
+  delete canvas;
+}
 
 HUDImageRenderer::HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory) :
 _imageFactory(imageFactory),
 _glState(new GLState()),
 _creatingMesh(false),
 _image(NULL),
-_mesh(NULL)
+_mesh(NULL),
+_instanceID(INSTANCE_COUNTER++)
 {
-//  _imageFactory->setListener(this);
+
 }
 
 void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
@@ -92,7 +113,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   int __TODO_create_unique_name;
   const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                                        GLFormat::rgba(),
-                                                                       "HUDImageRenderer",
+                                                                       "HUDImageRenderer" + IStringUtils::instance()->toString(_instanceID),
                                                                        false);
 
   delete _image;

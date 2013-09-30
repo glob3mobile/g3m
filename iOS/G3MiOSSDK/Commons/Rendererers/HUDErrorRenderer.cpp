@@ -8,12 +8,36 @@
 
 #include "HUDErrorRenderer.hpp"
 
-void HUDErrorRenderer_ImageFactory::create(const G3MRenderContext* rc,
+#include "ICanvas.hpp"
+#include "Color.hpp"
+#include "ColumnCanvasElement.hpp"
+#include "GFont.hpp"
+#include "TextCanvasElement.hpp"
+
+void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                            int width,
-                                           int height,
-                                           IImageListener* listener,
-                                           bool deleteListener) {
-  int _DGD_AtWork;
+                                           int height) {
+  canvas->setFillColor(Color::black());
+  canvas->fillRectangle(0, 0,
+                        width, height);
+
+  ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
+                             0,  /* margin */
+                             16, /* padding */
+                             8   /* cornerRadius */);
+  const GFont labelFont  = GFont::sansSerif(22);
+  const Color labelColor = Color::white();
+//  column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
+//  column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
+//  column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
+//  column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
+
+  const int errorsSize = _errors.size();
+  for (int i = 0; i < errorsSize; i++) {
+    column.add( new TextCanvasElement(_errors[i], labelFont, labelColor) );
+  }
+
+  column.drawCentered(canvas);
 }
 
 void HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& errors) {

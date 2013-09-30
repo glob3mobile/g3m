@@ -13,23 +13,23 @@
 #include "HUDImageRenderer.hpp"
 
 
-class HUDErrorRenderer_ImageFactory : public HUDImageRenderer::ImageFactory {
+class HUDErrorRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
 private:
   std::vector<std::string> _errors;
 
-public:
-  void create(const G3MRenderContext* rc,
+protected:
+
+  void drawOn(ICanvas* canvas,
               int width,
-              int height,
-              IImageListener* listener,
-              bool deleteListener);
+              int height);
 
+public:
   ~HUDErrorRenderer_ImageFactory() {
-
   }
 
   void setErrors(const std::vector<std::string>& errors);
 };
+
 
 class HUDErrorRenderer : public HUDImageRenderer, public ErrorRenderer {
 

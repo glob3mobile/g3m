@@ -477,7 +477,7 @@ void G3MWidget::render(int width, int height) {
   }
 
 
-  if (_mainRendererReady) {
+  if (renderStateType == RENDER_READY) {
     _cameraRenderer->render(&rc, _rootState);
 
     _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState

@@ -180,8 +180,6 @@
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */; };
 		CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7B07B017F5D8D400FE363D /* HUDImageRenderer.hpp */; };
-		CF7B07B917F61AF000FE363D /* CanvasImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7B07B717F61AF000FE363D /* CanvasImageFactory.cpp */; };
-		CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7B07B817F61AF000FE363D /* CanvasImageFactory.hpp */; };
 		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
@@ -619,7 +617,6 @@
 				CF26127517F9CBFD003C2006 /* RenderState.hpp in CopyFiles */,
 				CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */,
 				CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */,
-				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
 				CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */,
 				CF76461817EA414B00302F01 /* CartoCSSTokens.hpp in CopyFiles */,
 				CF76461917EA414B00302F01 /* CartoCSSLexer.hpp in CopyFiles */,
@@ -1191,8 +1188,6 @@
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = HUDImageRenderer.cpp; path = Commons/Rendererers/HUDImageRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7B07B017F5D8D400FE363D /* HUDImageRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = HUDImageRenderer.hpp; path = Commons/Rendererers/HUDImageRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF7B07B717F61AF000FE363D /* CanvasImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasImageFactory.cpp; path = Commons/Basic/CanvasImageFactory.cpp; sourceTree = "<group>"; };
-		CF7B07B817F61AF000FE363D /* CanvasImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CanvasImageFactory.hpp; path = Commons/Basic/CanvasImageFactory.hpp; sourceTree = "<group>"; };
 		CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FloatBufferBuilder.cpp; path = Commons/Basic/FloatBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = IntBufferBuilder.cpp; path = Commons/Basic/IntBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1855,8 +1850,6 @@
 				CF22263B17E8F47000280C66 /* CartoCSSTokens.hpp */,
 				CFA2EEEC17EA0B1100EB4526 /* CartoCSSLexer.cpp */,
 				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
-				CF7B07B717F61AF000FE363D /* CanvasImageFactory.cpp */,
-				CF7B07B817F61AF000FE363D /* CanvasImageFactory.hpp */,
 				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
 			);
@@ -2695,7 +2688,6 @@
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
-				CF7B07B917F61AF000FE363D /* CanvasImageFactory.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
 				D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */,

@@ -130,7 +130,6 @@
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
-#import <G3MiOSSDK/CanvasImageFactory.hpp>
 
 #import <G3MiOSSDK/CartoCSSParser.hpp>
 
@@ -779,7 +778,7 @@ public:
 //    builder.addRenderer(hudRenderer);
 
 
-    class TestImageFactory : public CanvasImageFactory {
+    class TestImageFactory : public HUDImageRenderer::CanvasImageFactory {
     protected:
       void drawOn(ICanvas* canvas,
                   int width,
