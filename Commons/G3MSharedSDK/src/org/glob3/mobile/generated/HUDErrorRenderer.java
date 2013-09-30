@@ -20,12 +20,12 @@ public class HUDErrorRenderer extends HUDImageRenderer implements ErrorRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    super.onTouchEvent(ec, touchEvent);
+    return super.onTouchEvent(ec, touchEvent);
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    HUDImageRenderer.Renderer.onResizeViewportEvent(ec, width, height);
+    super.onResizeViewportEvent(ec, width, height);
   }
 
   public final void start(G3MRenderContext rc)
