@@ -19,6 +19,8 @@
 #import "NSString_CppAdditions.h"
 
 Canvas_iOS::~Canvas_iOS() {
+  _currentUIFont = nil;
+
   if (_path != NULL) {
     CGPathRelease(_path);
     _path = NULL;

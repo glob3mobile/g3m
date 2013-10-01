@@ -154,4 +154,10 @@ public final class StringUtils_JavaDesktop
       return Double.toString(value);
    }
 
+
+   @Override
+   public String toString(final long value) {
+      return Long.toString(value);
+   }
+
 }

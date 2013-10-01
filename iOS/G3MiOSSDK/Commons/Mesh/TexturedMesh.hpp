@@ -19,7 +19,7 @@
 class TexturedMesh: public Mesh
 {
 private:
-  Mesh*           _mesh;
+  Mesh*                 _mesh;
   const TextureMapping* _textureMapping;
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
@@ -60,7 +60,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   BoundingVolume* getBoundingVolume()  const {
