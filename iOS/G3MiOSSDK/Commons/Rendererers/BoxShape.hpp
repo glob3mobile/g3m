@@ -12,6 +12,7 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
+#include "Quadric.hpp"
 
 
 class BoxShape : public AbstractMeshShape {
@@ -19,6 +20,10 @@ private:
   double _extentX;
   double _extentY;
   double _extentZ;
+  
+  const Quadric _frontQuadric, _backQuadric;
+  const Quadric _leftQuadric, _rightQuadric;
+  const Quadric _topQuadric, _bottomQuadric;
   
   const Planet* _planet;
 
@@ -50,6 +55,12 @@ public:
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
+  _frontQuadric(Quadric::fromPlane(1, 0, 0, -extent.x()/2)),
+  _backQuadric(Quadric::fromPlane(-1, 0, 0, -extent.x()/2)),
+  _leftQuadric(Quadric::fromPlane(0, -1, 0, -extent.y()/2)),
+  _rightQuadric(Quadric::fromPlane(0, 1, 0, -extent.y()/2)),
+  _topQuadric(Quadric::fromPlane(0, 0, 1, -extent.z()/2)),
+  _bottomQuadric(Quadric::fromPlane(0, 0, -1, -extent.z()/2)),
   _borderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),

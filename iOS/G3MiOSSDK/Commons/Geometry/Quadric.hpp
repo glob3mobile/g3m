@@ -11,6 +11,7 @@
 
 #include "MutableMatrix44D.hpp"
 #include "Ellipsoid.hpp"
+#include "Plane.hpp"
 
 
 class Quadric {
@@ -29,6 +30,14 @@ public:
                                     0,      R.y(),  0,      0,
                                     0,      0,      R.z(),  0,
                                     0,      0,      0,      -1));
+    
+  }
+  
+  static Quadric fromPlane(double a, double b, double c, double d) {
+    return Quadric(MutableMatrix44D(0,      0,      0,    a/2,
+                                    0,      0,      0,    b/2,
+                                    0,      0,      0,    c/2,
+                                    a/2,    b/2,    c/2,  d));
     
   }
   
