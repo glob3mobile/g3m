@@ -17,6 +17,8 @@ Capabilities
 
 ####Works on iOS, Android devices and HTML5 environments
 ![Screenshot with 3 platforms] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
+####Mutitouch support
+####Written from the scratch, no legacy systems
 ####2d 2,5d 3d maps.
 ####Scenario maps
 ####Works offline
@@ -45,7 +47,10 @@ Capabilities
 
 ####3D Objects
 + Scene JS (There is a Blender plugin to export to this format optimized)
- 
++ 
+
+Architecture
+============ 
 
 Roadpmap
 ========
