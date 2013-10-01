@@ -20,10 +20,23 @@ private:
   double _extentX;
   double _extentY;
   double _extentZ;
-  
-  const Quadric _frontQuadric, _backQuadric;
-  const Quadric _leftQuadric, _rightQuadric;
-  const Quadric _topQuadric, _bottomQuadric;
+
+#ifdef C_CODE
+  const Quadric _frontQuadric;
+  const Quadric _backQuadric;
+  const Quadric _leftQuadric;
+  const Quadric _rightQuadric;
+  const Quadric _topQuadric;
+  const Quadric _bottomQuadric;
+#endif
+#ifdef JAVA_CODE
+  private final Quadric _frontQuadric;
+  private final Quadric _backQuadric;
+  private final Quadric _leftQuadric;
+  private final Quadric _rightQuadric;
+  private final Quadric _topQuadric;
+  private final Quadric _bottomQuadric;
+#endif
   
   const Planet* _planet;
 
