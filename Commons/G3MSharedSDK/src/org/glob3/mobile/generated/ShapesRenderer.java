@@ -256,18 +256,23 @@ public class ShapesRenderer extends LeafRenderer
     }
   
     // sort vector
-      java.util.Collections.sort(shapeDistances,
-                                 new java.util.Comparator<ShapeDistance>() {
-                                   @Override
-                                   public int compare(final ShapeDistance sd1,
-                                                      final ShapeDistance sd2) {
-                                     if (sd1._distance < sd2._distance)
-                                       return -1;
-                                     else
-                                       return 1;
-  
-                                   }
-                                 });
+    java.util.Collections.sort(shapeDistances, new java.util.Comparator<ShapeDistance>() {
+      @Override
+      public int compare(final ShapeDistance sd1,
+                         final ShapeDistance sd2) {
+        final double distance1 = sd1._distance;
+        final double distance2 = sd2._distance;
+        if (distance1 == distance2) {
+          return 0;
+        }
+        else if (distance1 < distance2) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      }
+    });
   
     return shapeDistances;
   }
