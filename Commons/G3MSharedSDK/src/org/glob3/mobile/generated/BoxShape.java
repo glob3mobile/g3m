@@ -17,11 +17,21 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class BoxShape extends AbstractMeshShape
 {
   private double _extentX;
   private double _extentY;
   private double _extentZ;
+
+  private final Quadric _frontQuadric = new Quadric();
+  private final Quadric _backQuadric = new Quadric();
+  private final Quadric _leftQuadric = new Quadric();
+  private final Quadric _rightQuadric = new Quadric();
+  private final Quadric _topQuadric = new Quadric();
+  private final Quadric _bottomQuadric = new Quadric();
+
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
   private float _borderWidth;
 
@@ -174,24 +184,31 @@ public class BoxShape extends AbstractMeshShape
     return surface;
   }
 
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-     this(position, altitudeMode, extent, borderWidth, surfaceColor, borderColor, true);
+     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, borderColor, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
+     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
      _extentX = extent._x;
      _extentY = extent._y;
      _extentZ = extent._z;
+     _frontQuadric = new Quadric(Quadric.fromPlane(1, 0, 0, -extent.x()/2));
+     _backQuadric = new Quadric(Quadric.fromPlane(-1, 0, 0, -extent.x()/2));
+     _leftQuadric = new Quadric(Quadric.fromPlane(0, -1, 0, -extent.y()/2));
+     _rightQuadric = new Quadric(Quadric.fromPlane(0, 1, 0, -extent.y()/2));
+     _topQuadric = new Quadric(Quadric.fromPlane(0, 0, 1, -extent.z()/2));
+     _bottomQuadric = new Quadric(Quadric.fromPlane(0, 0, -1, -extent.z()/2));
      _borderWidth = borderWidth;
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _useNormals = useNormals;
+     _planet = planet;
 
   }
 
@@ -245,6 +262,97 @@ public class BoxShape extends AbstractMeshShape
       _borderWidth = borderWidth;
       cleanMesh();
     }
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    double tmin = -1e10;
+    double tmax = 1e10;
+    double t1;
+    double t2;
+    java.util.ArrayList<Double> distances = new java.util.ArrayList<Double>();
+  
+    // transform 6 planes
+    MutableMatrix44D M = createTransformMatrix(_planet);
+    final Quadric transformedFront = _frontQuadric.transformBy(M);
+    final Quadric transformedBack = _backQuadric.transformBy(M);
+    final Quadric transformedLeft = _leftQuadric.transformBy(M);
+    final Quadric transformedRight = _rightQuadric.transformBy(M);
+    final Quadric transformedTop = _topQuadric.transformBy(M);
+    final Quadric transformedBottom = _bottomQuadric.transformBy(M);
+    if (M != null)
+       M.dispose();
+  
+    // intersecction with X planes
+    java.util.ArrayList<Double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
+    java.util.ArrayList<Double> backDistance = transformedBack.intersectionsDistances(origin, direction);
+    if (frontDistance.size()==1 && backDistance.size()==1)
+    {
+      if (frontDistance.get(0) < backDistance.get(0))
+      {
+        t1 = frontDistance.get(0);
+        t2 = backDistance.get(0);
+      }
+      else
+      {
+        t2 = frontDistance.get(0);
+        t1 = backDistance.get(0);
+      }
+      if (t1 > tmin)
+        tmin = t1;
+      if (t2 < tmax)
+        tmax = t2;
+    }
+  
+    // intersections with Y planes
+    java.util.ArrayList<Double> leftDistance = transformedLeft.intersectionsDistances(origin, direction);
+    java.util.ArrayList<Double> rightDistance = transformedRight.intersectionsDistances(origin, direction);
+    if (leftDistance.size()==1 && rightDistance.size()==1)
+    {
+      if (leftDistance.get(0) < rightDistance.get(0))
+      {
+        t1 = leftDistance.get(0);
+        t2 = rightDistance.get(0);
+      }
+      else
+      {
+        t2 = leftDistance.get(0);
+        t1 = rightDistance.get(0);
+      }
+      if (t1 > tmin)
+        tmin = t1;
+      if (t2 < tmax)
+        tmax = t2;
+    }
+  
+    // intersections with Z planes
+    java.util.ArrayList<Double> topDistance = transformedTop.intersectionsDistances(origin, direction);
+    java.util.ArrayList<Double> bottomDistance = transformedBottom.intersectionsDistances(origin, direction);
+    if (topDistance.size()==1 && bottomDistance.size()==1)
+    {
+      if (topDistance.get(0) < bottomDistance.get(0))
+      {
+        t1 = topDistance.get(0);
+        t2 = bottomDistance.get(0);
+      }
+      else
+      {
+        t2 = topDistance.get(0);
+        t1 = bottomDistance.get(0);
+      }
+      if (t1 > tmin)
+        tmin = t1;
+      if (t2 < tmax)
+        tmax = t2;
+    }
+  
+    if (tmin < tmax)
+    {
+      distances.add(tmin);
+      distances.add(tmax);
+    }
+  
+    return distances;
   }
 
 }
