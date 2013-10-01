@@ -68,49 +68,22 @@ public class SimpleTextureMapping extends TextureMapping
 
   public final void modifyGLState(GLState state)
   {
-  
-  //  GLGlobalState* glGlobalState = state.getGLGlobalState();
-  //  GPUProgramState* progState = state.getGPUProgramState();
-  
-    if (_texCoords != null)
+    if (_texCoords == null)
     {
-  //    glGlobalState->bindTexture(_glTextureId);
-  //
-  //    progState->setAttributeValue(TEXTURE_COORDS,
-  //                                _texCoords, 2,
-  //                                2,
-  //                                0,
-  //                                false,
-  //                                0);
-  //
-  //    if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
-  //      progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
-  //      progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
-  //    } else{
-  //      //ILogger::instance()->logInfo("No transformed TC");
-  //      progState->removeGPUUniformValue(SCALE_TEXTURE_COORDS);
-  //      progState->removeGPUUniformValue(TRANSLATION_TEXTURE_COORDS);
-  //    }
-  
+      ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+    }
+    else
+    {
       state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
       if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
       {
-  
         state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
       }
       else
       {
         state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
       }
-  
-  //    progState->setUniformValue(SCALE_TEXTURE_COORDS, _scale.asVector2D());
-  //    progState->setUniformValue(TRANSLATION_TEXTURE_COORDS, _translation.asVector2D());
-  
-    }
-    else
-    {
-      ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
     }
   }
 

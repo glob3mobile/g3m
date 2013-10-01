@@ -63,7 +63,6 @@ public class TexturedMesh extends Mesh
     _glState._release();
 
   super.dispose();
-
   }
 
   public final BoundingVolume getBoundingVolume()

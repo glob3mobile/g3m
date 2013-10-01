@@ -145,13 +145,13 @@ public class HUDImageRenderer extends LeafRenderer
     vertices.add(halfWidth, halfHeight, 0);
     vertices.add(halfWidth, -halfHeight, 0);
   
+    DirectMesh mesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
+  
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     texCoords.add(0, 0);
     texCoords.add(0, 1);
     texCoords.add(1, 0);
     texCoords.add(1, 1);
-  
-    DirectMesh mesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
     TextureMapping textureMapping = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
