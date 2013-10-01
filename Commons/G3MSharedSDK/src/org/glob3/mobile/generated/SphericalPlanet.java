@@ -567,7 +567,7 @@ public class SphericalPlanet extends Planet
     final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = toGeodetic3D(origin).height();
+    final double height = toGeodetic3D(origin)._height;
     final double distance = height * 0.6;
   
     // create effect

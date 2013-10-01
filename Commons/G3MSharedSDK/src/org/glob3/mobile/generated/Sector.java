@@ -203,15 +203,13 @@ public class Sector
     return true;
   }
 
-  public final Angle getDeltaLatitude()
-  {
-    return _deltaLatitude;
-  }
-
-  public final Angle getDeltaLongitude()
-  {
-    return _deltaLongitude;
-  }
+//  const Angle getDeltaLatitude() const {
+//    return _deltaLatitude;
+//  }
+//
+//  const Angle getDeltaLongitude() const {
+//    return _deltaLongitude;
+//  }
 
   public final Geodetic2D getSW()
   {

@@ -62,21 +62,6 @@ public class Geodetic3D
 
   }
 
-  public final Angle latitude()
-  {
-    return _latitude;
-  }
-
-  public final Angle longitude()
-  {
-    return _longitude;
-  }
-
-  public final double height()
-  {
-    return _height;
-  }
-
   public final Geodetic2D asGeodetic2D()
   {
     return new Geodetic2D(_latitude, _longitude);
