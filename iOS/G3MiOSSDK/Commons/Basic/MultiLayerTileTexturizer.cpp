@@ -785,7 +785,11 @@ public:
 
 
 Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
-                                          const PlanetRendererContext* prc,
+                                          const TileTessellator* tessellator,
+                                          TileRasterizer* tileRasterizer,
+                                          const LayerSet* layerSet,
+                                          bool isForcedFullRender,
+                                          long long texturePriority,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
@@ -796,21 +800,21 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
 
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
-                                                                        prc->getTileRasterizer(),
+                                                                        tileRasterizer,
                                                                         rc,
-                                                                        prc->getLayerSet(),
+                                                                        layerSet,
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
-                                                                        prc->getTessellator(),
-                                                                        prc->getTexturePriority()
+                                                                        tessellator,
+                                                                        texturePriority
                                                                         )
                                                  );
     tile->setTexturizerData(builderHolder);
   }
 
   TileTextureBuilder* builder = builderHolder->get();
-  if (prc->isForcedFullRender()) {
+  if (isForcedFullRender) {
     builder->start();
   }
   else {

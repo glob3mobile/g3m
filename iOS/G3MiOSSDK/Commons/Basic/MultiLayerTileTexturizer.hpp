@@ -19,6 +19,7 @@ class LayerSet;
 class IDownloader;
 class LeveledTexturedMesh;
 class IFloatBuffer;
+class TileRasterizer;
 
 
 class MultiLayerTileTexturizer : public TileTexturizer {
@@ -39,7 +40,11 @@ public:
                   const TilesRenderParameters* parameters);
   
   Mesh* texturize(const G3MRenderContext* rc,
-                  const PlanetRendererContext* prc,
+                  const TileTessellator* tessellator,
+                  TileRasterizer* tileRasterizer,
+                  const LayerSet* layerSet,
+                  bool isForcedFullRender,
+                  long long texturePriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh);

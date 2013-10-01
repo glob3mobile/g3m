@@ -30,113 +30,7 @@ class LayerTilesRenderParameters;
 #include "SurfaceElevationProvider.hpp"
 
 class EllipsoidShape;
-
 class TileRasterizer;
-
-class PlanetRendererContext {
-private:
-  const TileTessellator*             _tessellator;
-  ElevationDataProvider*       _elevationDataProvider;
-  TileTexturizer*              _texturizer;
-  TileRasterizer*              _tileRasterizer;
-
-  const TilesRenderParameters* _parameters;
-  TilesStatistics*             _statistics;
-  const LayerSet*              _layerSet;
-
-  const bool _isForcedFullRender;
-
-  const float _verticalExaggeration;
-
-
-  ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-
-  long long _texturePriority;
-
-  Sector _renderedSector;
-public:
-  PlanetRendererContext(const TileTessellator*             tessellator,
-                        ElevationDataProvider*       elevationDataProvider,
-                        TileTexturizer*              texturizer,
-                        TileRasterizer*              tileRasterizer,
-                        const LayerSet*              layerSet,
-                        const TilesRenderParameters* parameters,
-                        TilesStatistics*             statistics,
-                        ITimer*                      lastSplitTimer,
-                        bool                         isForcedFullRender,
-                        long long                    texturePriority,
-                        const float                  verticalExaggeration,
-                        const Sector&                renderedSector) :
-  _tessellator(tessellator),
-  _elevationDataProvider(elevationDataProvider),
-  _texturizer(texturizer),
-  _tileRasterizer(tileRasterizer),
-  _layerSet(layerSet),
-  _parameters(parameters),
-  _statistics(statistics),
-  _lastSplitTimer(lastSplitTimer),
-  _isForcedFullRender(isForcedFullRender),
-  _texturePriority(texturePriority),
-  _verticalExaggeration(verticalExaggeration),
-  _renderedSector(renderedSector)
-  {
-
-  }
-
-  TileRasterizer* getTileRasterizer() const {
-    return _tileRasterizer;
-  }
-
-  const float getVerticalExaggeration() const {
-    return _verticalExaggeration;
-  }
-
-  const LayerSet* getLayerSet() const {
-    return _layerSet;
-  }
-
-  const TileTessellator* getTessellator() const {
-    return _tessellator;
-  }
-
-  ElevationDataProvider* getElevationDataProvider() const {
-    return _elevationDataProvider;
-  }
-
-  TileTexturizer* getTexturizer() const {
-    return _texturizer;
-  }
-
-  const TilesRenderParameters* getParameters() const {
-    return _parameters;
-  }
-
-  TilesStatistics* getStatistics() const {
-    return _statistics;
-  }
-
-  ITimer* getLastSplitTimer() const {
-    return _lastSplitTimer;
-  }
-
-  bool isForcedFullRender() const {
-    return _isForcedFullRender;
-  }
-
-  long long getTexturePriority() const {
-    return _texturePriority;
-  }
-
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _layerSet->getLayerTilesRenderParameters();
-  }
-
-  const Sector getRenderedSector() const{
-    return _renderedSector;
-  }
-
-};
-
 
 class TilesStatistics {
 private:
@@ -311,7 +205,7 @@ private:
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
-  const TilesRenderParameters* _parameters;
+  const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
   ITileVisitor*                _tileVisitor = NULL;
 
@@ -374,16 +268,16 @@ private:
   bool _validLayerTilesRenderParameters;
 
 public:
-  PlanetRenderer(TileTessellator* tessellator,
-                 ElevationDataProvider* elevationDataProvider,
-                 float verticalExaggeration,
-                 TileTexturizer*  texturizer,
-                 TileRasterizer*  tileRasterizer,
-                 LayerSet* layerSet,
-                 const TilesRenderParameters* parameters,
-                 bool showStatistics,
-                 long long texturePriority,
-                 const Sector& renderedSector);
+  PlanetRenderer(TileTessellator*             tessellator,
+                 ElevationDataProvider*       elevationDataProvider,
+                 float                        verticalExaggeration,
+                 TileTexturizer*              texturizer,
+                 TileRasterizer*              tileRasterizer,
+                 LayerSet*                    layerSet,
+                 const TilesRenderParameters* tilesRenderParameters,
+                 bool                         showStatistics,
+                 long long                    texturePriority,
+                 const Sector&                renderedSector);
 
   ~PlanetRenderer();
 

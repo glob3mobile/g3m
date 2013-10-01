@@ -114,7 +114,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                TileTexturizer*              texturizer,
                                TileRasterizer*              tileRasterizer,
                                LayerSet*                    layerSet,
-                               const TilesRenderParameters* parameters,
+                               const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
                                long long                    texturePriority,
                                const Sector&                renderedSector) :
@@ -124,7 +124,7 @@ _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _tileRasterizer(tileRasterizer),
 _layerSet(layerSet),
-_parameters(parameters),
+_tilesRenderParameters(tilesRenderParameters),
 _showStatistics(showStatistics),
 _firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
@@ -184,7 +184,7 @@ PlanetRenderer::~PlanetRenderer() {
   delete _tessellator;
   delete _elevationDataProvider;
   delete _texturizer;
-  delete _parameters;
+  delete _tilesRenderParameters;
   
   delete _lastSplitTimer;
   
@@ -393,7 +393,7 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   _lastSplitTimer = context->getFactory()->createTimer();
   
   _layerSet->initialize(context);
-  _texturizer->initialize(context, _parameters);
+  _texturizer->initialize(context, _tilesRenderParameters);
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
@@ -422,25 +422,23 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
     
     const int firstLevelTilesCount = _firstLevelTiles.size();
     
-    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
+    if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
       TilesStatistics statistics;
-      
-      PlanetRendererContext prc(_tessellator,
-                                _elevationDataProvider,
-                                _texturizer,
-                                _tileRasterizer,
-                                _layerSet,
-                                _parameters,
-                                &statistics,
-                                _lastSplitTimer,
-                                true,
-                                _texturePriority,
-                                _verticalExaggeration,
-                                *_renderedSector);
+
+      const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
 
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
-        tile->prepareForFullRendering(rc, &prc);
+        tile->prepareForFullRendering(rc,
+                                      _texturizer,
+                                      _elevationDataProvider,
+                                      _tessellator,
+                                      _tileRasterizer,
+                                      layerTilesRenderParameters,
+                                      _layerSet,
+                                      _tilesRenderParameters,
+                                      true,
+                                      _texturePriority);
       }
     }
     
@@ -452,7 +450,7 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
     }
   }
   
-  if (_parameters->_forceFirstLevelTilesRenderOnStart) {
+  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     if (!_allFirstLevelTilesAreTextureSolved) {
       const int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++) {
@@ -582,19 +580,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _lastCamera = rc->getCurrentCamera();
   
   TilesStatistics statistics;
-  
-  PlanetRendererContext prc(_tessellator,
-                            _elevationDataProvider,
-                            _texturizer,
-                            _tileRasterizer,
-                            _layerSet,
-                            _parameters,
-                            &statistics,
-                            _lastSplitTimer,
-                            _firstRender /* if first render, force full render */,
-                            _texturePriority,
-                            _verticalExaggeration,
-                            *_renderedSector);
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -602,8 +587,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
   double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
-  
-  if (_firstRender && _parameters->_forceFirstLevelTilesRenderOnStart) {
+
+  const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
+
+  if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
@@ -611,13 +598,26 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
-                   &prc,
                    *_glState,
                    NULL,
                    planet,
                    cameraNormalizedPosition,
                    cameraAngle2HorizonInRadians,
-                   cameraFrustumInModelCoordinates);
+                   cameraFrustumInModelCoordinates,
+                   &statistics,
+                   _verticalExaggeration,
+                   layerTilesRenderParameters,
+                   _texturizer,
+                   _tilesRenderParameters,
+                   _lastSplitTimer,
+                   _elevationDataProvider,
+                   _tessellator,
+                   _tileRasterizer,
+                   _layerSet,
+                   *_renderedSector,
+                   _firstRender, /* if first render, force full render */
+                   _texturePriority
+                   );
     }
   }
   else {
@@ -635,13 +635,26 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
         Tile* tile = *iter;
         
         tile->render(rc,
-                     &prc,
                      *_glState,
                      &toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,
                      cameraAngle2HorizonInRadians,
-                     cameraFrustumInModelCoordinates);
+                     cameraFrustumInModelCoordinates,
+                     &statistics,
+                     _verticalExaggeration,
+                     layerTilesRenderParameters,
+                     _texturizer,
+                     _tilesRenderParameters,
+                     _lastSplitTimer,
+                     _elevationDataProvider,
+                     _tessellator,
+                     _tileRasterizer,
+                     _layerSet,
+                     *_renderedSector,
+                     _firstRender, /* if first render, force full render */
+                     _texturePriority
+                     );
       }
       
       toVisit = toVisitInNextIteration;
