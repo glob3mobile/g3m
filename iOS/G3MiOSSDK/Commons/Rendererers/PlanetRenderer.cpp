@@ -318,7 +318,10 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
   }
   
   std::vector<Tile*> topLevelTiles;
-  
+
+#ifdef JAVA_CODE
+  @SuppressWarnings("null")
+#endif
   const Angle fromLatitude  = parameters->_topSector._lower._latitude;
   const Angle fromLongitude = parameters->_topSector._lower._longitude;
   
