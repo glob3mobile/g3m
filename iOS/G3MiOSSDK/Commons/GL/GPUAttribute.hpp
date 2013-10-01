@@ -163,21 +163,21 @@ public:
 
 
   virtual void applyChanges(GL* gl) {
-
     if (_value == NULL) {
       if (_enabled) {
         ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
       }
-    } else{
+    }
+    else {
       if (_dirty) {
-
         if (_value->getEnabled()) {
           if (!_enabled) {
             gl->enableVertexAttribArray(_id);
             _enabled = true;
           }
           _value->setAttribute(gl, _id);
-        } else{
+        }
+        else {
           if (_enabled) {
             gl->disableVertexAttribArray(_id);
             _enabled = false;

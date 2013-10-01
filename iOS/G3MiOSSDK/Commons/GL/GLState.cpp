@@ -92,7 +92,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
   if (_valuesSet == NULL && _globalState == NULL) {
 
-    _valuesSet = new GPUVariableValueSet();
+    _valuesSet   = new GPUVariableValueSet();
     _globalState = new GLGlobalState();
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
@@ -117,7 +117,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-    const int uniformsCode = _valuesSet->getUniformsCode();
+    const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
     _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);

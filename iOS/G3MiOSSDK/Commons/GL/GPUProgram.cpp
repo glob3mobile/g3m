@@ -318,14 +318,16 @@ void GPUProgram::onUnused(GL* gl) {
 void GPUProgram::applyChanges(GL* gl) {
 
   for (int i = 0; i < _nUniforms; i++) {
-    if (_createdUniforms[i] != NULL) { //Texture Samplers return null
-      _createdUniforms[i]->applyChanges(gl);
+    GPUUniform* uniform = _createdUniforms[i];
+    if (uniform != NULL) { //Texture Samplers return null
+      uniform->applyChanges(gl);
     }
   }
 
   for (int i = 0; i < _nAttributes; i++) {
-    if (_createdAttributes[i] != NULL){
-      _createdAttributes[i]->applyChanges(gl);
+    GPUAttribute* attribute = _createdAttributes[i];
+    if (attribute != NULL){
+      attribute->applyChanges(gl);
     }
   }
 
