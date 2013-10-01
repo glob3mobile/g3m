@@ -408,8 +408,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   Sector renderedSector = _planetRenderer->getRenderedSector();
   if (!renderedSector.fullContains(_sector)) {
     Sector meshSector = renderedSector.intersection(_sector);
-    const double rx = meshSector.getDeltaLongitude()._degrees / _sector.getDeltaLongitude()._degrees;
-    const double ry = meshSector.getDeltaLatitude()._degrees / _sector.getDeltaLatitude()._degrees;
+    const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+    const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
     texWidth *= rx;
     texHeight *= ry;
   }

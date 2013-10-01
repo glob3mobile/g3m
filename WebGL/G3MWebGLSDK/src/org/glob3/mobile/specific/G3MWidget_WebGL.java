@@ -208,12 +208,12 @@ public final class G3MWidget_WebGL
 		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
 
 		var result = new Object();
-		result.latitude = latitude.@org.glob3.mobile.generated.Angle::degrees()();
-		result.longitude = longitude.@org.glob3.mobile.generated.Angle::degrees()();
+		result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
+		result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
 		result.height = height;
 
-		result.heading = heading.@org.glob3.mobile.generated.Angle::degrees()();
-		result.pitch = pitch.@org.glob3.mobile.generated.Angle::degrees()();
+		result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
+		result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
 
 		return result;
    }-*/;

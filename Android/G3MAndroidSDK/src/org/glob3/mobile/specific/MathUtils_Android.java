@@ -9,19 +9,6 @@ public final class MathUtils_Android
          extends
             IMathUtils {
 
-   @Override
-   public boolean isNan(final double v) {
-      return (v != v);
-      //return Double.isNaN(v);
-   }
-
-
-   @Override
-   public boolean isNan(final float v) {
-      return (v != v);
-      //return Float.isNaN(v);
-   }
-
 
    @Override
    public double NanD() {

@@ -670,7 +670,7 @@ G3MWidget* IG3MBuilder::create() {
 //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
     
     addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
-                                                            initialCameraPosition.height() * 1.2));
+                                                            initialCameraPosition._height * 1.2));
 //  }
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();

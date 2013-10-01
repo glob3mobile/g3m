@@ -59,8 +59,8 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->getSector();
 
-  const double latRatio = sector.getDeltaLatitude()._degrees / renderedSector.getDeltaLatitude()._degrees;
-  const double lonRatio = sector.getDeltaLongitude()._degrees / renderedSector.getDeltaLongitude()._degrees;
+  const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
+  const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
 
   const IMathUtils* mu = IMathUtils::instance();
 

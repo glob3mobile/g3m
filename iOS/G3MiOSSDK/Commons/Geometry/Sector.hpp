@@ -139,13 +139,13 @@ public:
 
   bool touchesWith(const Sector& that) const;
 
-  const Angle getDeltaLatitude() const {
-    return _deltaLatitude;
-  }
-
-  const Angle getDeltaLongitude() const {
-    return _deltaLongitude;
-  }
+//  const Angle getDeltaLatitude() const {
+//    return _deltaLatitude;
+//  }
+//
+//  const Angle getDeltaLongitude() const {
+//    return _deltaLongitude;
+//  }
 
   const Geodetic2D getSW() const {
     return _lower;

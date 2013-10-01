@@ -75,7 +75,7 @@ Vector3D FlatPlanet::scaleToGeocentricSurface(const Vector3D& position) const {
 
 Geodetic2D FlatPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
 {
-  return Geodetic2D(P0.latitude().add(P1.latitude()).times(0.5), P0.longitude().add(P1.longitude()).times(0.5));
+  return Geodetic2D(P0._latitude.add(P1._latitude).times(0.5), P0._longitude.add(P1._longitude).times(0.5));
 }
 
 
@@ -246,7 +246,7 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
   // create effect
   return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
                                         initialPoint.sub(centerPoint),
-                                        toGeodetic3D(origin).height()*0.6);
+                                        toGeodetic3D(origin)._height*0.6);
 }
 
 

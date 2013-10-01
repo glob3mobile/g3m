@@ -193,7 +193,7 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d)
   const Angle pitch = getPitch();
   setPitch(Angle::zero());
 
-  const double dist = getGeodeticPosition().height() - g3d.height();
+  const double dist = getGeodeticPosition()._height - g3d._height;
   
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);

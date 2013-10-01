@@ -59,13 +59,10 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -96,7 +93,6 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.VisibleSectorListener;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.generated.WidgetUserData;
@@ -133,7 +129,7 @@ public class G3MWebGLDemo
          // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-                  initDefaultWithBuilder();
+         initDefaultWithBuilder();
 
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1007,7 +1003,6 @@ public class G3MWebGLDemo
    }
 
 
-
    public void initDefaultWithBuilder() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
@@ -1124,8 +1119,8 @@ public class G3MWebGLDemo
             public boolean onTerrainTouch(final G3MEventContext context,
                                           final TerrainTouchEvent ev) {
                final Geodetic3D position = ev.getPosition();
-               Window.alert("touching terrain on osm layer " + Double.toString(position.latitude().degrees()) + ","
-                            + Double.toString(position.longitude().degrees()));
+               Window.alert("touching terrain on osm layer " + Double.toString(position.latitude()._degrees) + ","
+                            + Double.toString(position.longitude()._degrees));
                return false;
             }
 
@@ -1200,7 +1195,7 @@ public class G3MWebGLDemo
       /*
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);*/
-      
+
 
       //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
 
@@ -1222,9 +1217,9 @@ public class G3MWebGLDemo
       };
 
       builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-*/
-      
-      
+      */
+
+
       /*
        * // testing getfeatureinfo final IBufferDownloadListener myListener =
        * new IBufferDownloadListener() {
@@ -1310,29 +1305,26 @@ public class G3MWebGLDemo
        };
 
       builder.setInitializationTask(initializationTask);
-*/
-      
-      
-      
+      */
+
+
       //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       // set elevations
-      Sector sector = Sector.fromDegrees(27.967811065876,-17.0232177085356,28.6103464294992,-16.0019401695656);
-      Vector2I extent = new Vector2I(256, 256);
-      URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
-      ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);      
+      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
+      final Vector2I extent = new Vector2I(256, 256);
+      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
       builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
-      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);  
-
-
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
 
       _widget = builder.createWidget();
-      
-      Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
+
+      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
       _widget.setCameraPosition(position);
       _widget.setCameraPitch(Angle.fromDegrees(75));
- 
+
 
       /*
        * // testing downloading from url final IBufferDownloadListener

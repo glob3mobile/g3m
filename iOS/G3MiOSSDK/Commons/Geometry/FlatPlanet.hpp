@@ -79,22 +79,22 @@ public:
                        const double height) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    const double x = geodetic.longitude()._degrees * _size._x / 360.0;
-    const double y = geodetic.latitude()._degrees * _size._y / 180.0;
-    return Vector3D(x, y, geodetic.height());
+    const double x = geodetic._longitude._degrees * _size._x / 360.0;
+    const double y = geodetic._latitude._degrees * _size._y / 180.0;
+    return Vector3D(x, y, geodetic._height);
   }
   
     
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        0.0);
   }
   
   Vector3D toCartesian(const Geodetic2D& geodetic,
                        const double height) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        height);
   }
   
