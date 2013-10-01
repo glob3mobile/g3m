@@ -81,9 +81,9 @@ public:
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
                  bool withNormals = true) :
+  AbstractMeshShape(position, altitudeMode),
   _ellipsoid(Vector3D::zero, radius),
   _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
@@ -108,9 +108,9 @@ public:
                  bool texturedInside,
                  bool mercator,
                  bool withNormals = true) :
+  AbstractMeshShape(position, altitudeMode),
   _ellipsoid(Vector3D::zero, radius),
   _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
