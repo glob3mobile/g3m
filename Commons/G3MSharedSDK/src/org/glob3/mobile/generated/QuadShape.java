@@ -108,7 +108,7 @@ public class QuadShape extends AbstractMeshShape
     texCoords.add(0, 0);
     texCoords.add(1, 0);
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   }

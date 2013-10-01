@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 //class GLState;
+//class TexturesHandler;
 
 public abstract class TextureMapping
 {

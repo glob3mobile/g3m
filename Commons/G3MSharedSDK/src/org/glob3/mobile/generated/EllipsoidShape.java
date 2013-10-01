@@ -138,7 +138,7 @@ public class EllipsoidShape extends AbstractMeshShape
       return im;
     }
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   

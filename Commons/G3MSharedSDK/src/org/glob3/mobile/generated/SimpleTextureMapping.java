@@ -11,8 +11,21 @@ public class SimpleTextureMapping extends TextureMapping
 
   private final boolean _isTransparent;
 
+  private void releaseGLTextureId()
+  {
+    if (_texturesHandler != null)
+    {
+      if (_glTextureId != null)
+      {
+        _texturesHandler.releaseGLTextureId(_glTextureId);
+        _glTextureId = null;
+      }
+    }
+  }
+  private TexturesHandler _texturesHandler;
 
-  public SimpleTextureMapping(IGLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
+
+  public SimpleTextureMapping(IGLTextureId glTextureId, TexturesHandler texturesHandler, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
@@ -20,6 +33,7 @@ public class SimpleTextureMapping extends TextureMapping
      _scale = new MutableVector2D(1, 1);
      _ownedTexCoords = ownedTexCoords;
      _isTransparent = isTransparent;
+     _texturesHandler = texturesHandler;
 
   }
 
@@ -29,10 +43,6 @@ public class SimpleTextureMapping extends TextureMapping
     _scale = scale.asMutableVector2D();
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
-  
   public void dispose()
   {
     if (_ownedTexCoords)
@@ -41,8 +51,9 @@ public class SimpleTextureMapping extends TextureMapping
          _texCoords.dispose();
     }
   
-    super.dispose();
+    releaseGLTextureId();
   
+    super.dispose();
   }
 
   public final IGLTextureId getGLTextureId()

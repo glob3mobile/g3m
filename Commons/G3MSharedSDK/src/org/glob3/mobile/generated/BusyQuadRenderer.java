@@ -70,7 +70,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
     DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
+    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, false);
   
     _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   

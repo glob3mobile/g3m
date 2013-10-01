@@ -153,7 +153,7 @@ public class HUDImageRenderer extends LeafRenderer
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    TextureMapping textureMapping = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping textureMapping = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, true);
   
     return new TexturedMesh(mesh, true, textureMapping, true, true);
   }

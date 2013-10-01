@@ -281,36 +281,48 @@ public class LayerSet
           if (mercator != layerParam._mercator)
           {
             errors.add("Inconsistency in Layer's Parameters: mercator");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
           if (!topSector.isEquals(layerParam._topSector))
           {
             errors.add("Inconsistency in Layer's Parameters: topSector");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
           if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
           {
             errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
           if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
           {
             errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
           if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
           {
             errors.add("Inconsistency in Layer's Parameters: tileTextureResolution");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
           if ((tileMeshWidth != layerParam._tileMeshResolution._x) || (tileMeshHeight != layerParam._tileMeshResolution._y))
           {
             errors.add("Inconsistency in Layer's Parameters: tileMeshResolution");
+            if (topSector != null)
+               topSector.dispose();
             return null;
           }
   
