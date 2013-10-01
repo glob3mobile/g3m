@@ -132,17 +132,9 @@ public:
   void imageDownloaded(IImage* image);
   
   
-  
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    MutableMatrix44D* M = createTransformMatrix(_planet);
-    Quadric quadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
-    
-    delete M;
-    
-    return quadric.intersectionsDistances(origin, direction);
-  }
-
+                                             const Vector3D& direction) const;
+  
 };
 
 #endif

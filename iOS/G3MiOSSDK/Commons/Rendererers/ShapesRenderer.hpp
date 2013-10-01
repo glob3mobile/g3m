@@ -13,6 +13,18 @@
 #include "Shape.hpp"
 #include <vector>
 
+
+struct ShapeDistances {
+  double _distance;
+  Shape* _shape;
+  
+  ShapeDistances(double distance, Shape* shape):
+  _distance(distance),
+  _shape(shape)
+  {}
+};
+
+
 class ShapesRenderer : public LeafRenderer {
 private:
   const bool _renderNotReadyShapes;
@@ -111,6 +123,10 @@ public:
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);
+  
+  std::vector<ShapeDistances> intersectionsDistances(const Vector3D& origin,
+                                                     const Vector3D& direction) const;
+
 
 };
 

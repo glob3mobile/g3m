@@ -1705,7 +1705,7 @@ public:
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   
   
-    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(90),
+    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                           Angle::fromDegrees(0),
                                                           radius1._x),
                                            ABSOLUTE,

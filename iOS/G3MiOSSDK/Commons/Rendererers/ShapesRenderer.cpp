@@ -139,8 +139,25 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   _shapes.clear();
 }
 
+
+std::vector<ShapeDistances> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
+                                                                   const Vector3D& direction) const
+{
+  std::vector<ShapeDistances> shapeDistances;
+  for (int n=0; n<_shapes.size(); n++) {
+    Shape* shape = _shapes[n];
+    std::vector<double> distances = shape->intersectionsDistances(origin, direction);
+    for (int i=0; i<distances.size(); i++) {
+      shapeDistances.push_back(ShapeDistances(distances[i], shape));
+    }
+  }
+  return shapeDistances;
+}
+
+
 bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
-                  const TouchEvent* touchEvent) {
+                                  const TouchEvent* touchEvent)
+{
   if (_lastCamera != NULL) {
     if (touchEvent->getTouchCount() ==1 &&
         touchEvent->getTapCount()==1 &&
@@ -148,14 +165,8 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      int total = 0;
-      for (int n=0; n<_shapes.size(); n++) {
-        Shape* shape = _shapes[n];
-        std::vector<double> distances = shape->intersectionsDistances(origin, direction);
-        if (!distances.empty()) total++;
-      }
-      printf (".....Computing intersections with %d shapes: %d intersections\n", _shapes.size(), total);
-
+      std::vector<ShapeDistances> shapeDistances = intersectionsDistances(origin, direction);
+      printf ("Found %d intersections with shapes\n", shapeDistances.size());
     }
   }
   return false;
