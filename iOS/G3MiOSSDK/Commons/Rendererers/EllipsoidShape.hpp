@@ -36,8 +36,6 @@ private:
   private final Ellipsoid _ellipsoid;
   private final Quadric _quadric;
 #endif
-  
-  const Planet* _planet;
 
   URL _textureURL;
 
@@ -75,7 +73,6 @@ protected:
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
-                 const Planet* planet,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
@@ -96,8 +93,7 @@ public:
   _borderColor(borderColor),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals),
-  _planet(planet)
+  _withNormals(withNormals)
   {
 
   }
@@ -124,8 +120,7 @@ public:
   _borderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals),
-  _planet(planet)
+  _withNormals(withNormals)
   {
     
   }

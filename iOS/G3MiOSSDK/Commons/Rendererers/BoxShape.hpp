@@ -37,8 +37,6 @@ private:
   private final Quadric _topQuadric;
   private final Quadric _bottomQuadric;
 #endif
-  
-  const Planet* _planet;
 
   float _borderWidth;
 
@@ -58,7 +56,6 @@ protected:
 public:
   BoxShape(Geodetic3D* position,
            AltitudeMode altitudeMode,
-           const Planet* planet,
            const Vector3D& extent,
            float borderWidth,
            const Color& surfaceColor,
@@ -77,8 +74,7 @@ public:
   _borderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
-  _useNormals(useNormals),
-  _planet(planet)
+  _useNormals(useNormals)
   {
 
   }
