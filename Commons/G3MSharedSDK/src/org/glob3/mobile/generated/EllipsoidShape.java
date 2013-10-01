@@ -30,7 +30,7 @@ package org.glob3.mobile.generated;
 public class EllipsoidShape extends AbstractMeshShape
 {
 
-  private final Ellipsoid _ellipsoid;
+  private Ellipsoid _ellipsoid;
   private final Quadric _quadric;
 
   private URL _textureURL = new URL();
@@ -243,7 +243,7 @@ public class EllipsoidShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
-     _quadric = Quadric.fromEllipsoid(*_ellipsoid);
+     _quadric = Quadric.fromEllipsoid(_ellipsoid);
      _textureURL = new URL(new URL("", false));
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
@@ -265,7 +265,7 @@ public class EllipsoidShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
-     _quadric = Quadric.fromEllipsoid(*_ellipsoid);
+     _quadric = Quadric.fromEllipsoid(_ellipsoid);
      _textureURL = new URL(textureURL);
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
