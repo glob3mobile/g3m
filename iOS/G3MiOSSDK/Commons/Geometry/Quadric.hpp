@@ -23,9 +23,9 @@ private:
   
   
 public:
-  static Quadric fromEllipsoid(const Ellipsoid& ellipsoid) {
+  static Quadric fromEllipsoid(const Ellipsoid* ellipsoid) {
     // assuming ellipsoid is centered on origin
-    const Vector3D R = ellipsoid.getOneOverRadiiSquared();
+    const Vector3D R = ellipsoid->getOneOverRadiiSquared();
     return Quadric(MutableMatrix44D(R.x(),  0,      0,      0,
                                     0,      R.y(),  0,      0,
                                     0,      0,      R.z(),  0,
