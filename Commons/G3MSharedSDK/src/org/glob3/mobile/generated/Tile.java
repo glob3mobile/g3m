@@ -243,8 +243,8 @@ public class Tile
     if (!renderedSector.fullContains(_sector))
     {
       Sector meshSector = renderedSector.intersection(_sector);
-      final double rx = meshSector.getDeltaLongitude()._degrees / _sector.getDeltaLongitude()._degrees;
-      final double ry = meshSector.getDeltaLatitude()._degrees / _sector.getDeltaLatitude()._degrees;
+      final double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+      final double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
       texWidth *= rx;
       texHeight *= ry;
     }

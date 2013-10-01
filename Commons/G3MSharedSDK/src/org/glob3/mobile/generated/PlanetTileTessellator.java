@@ -8,8 +8,8 @@ public class PlanetTileTessellator extends TileTessellator
   {
     Sector sector = tile.getSector();
   
-    final double latRatio = sector.getDeltaLatitude()._degrees / renderedSector.getDeltaLatitude()._degrees;
-    final double lonRatio = sector.getDeltaLongitude()._degrees / renderedSector.getDeltaLongitude()._degrees;
+    final double latRatio = sector._deltaLatitude._degrees / renderedSector._deltaLatitude._degrees;
+    final double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
   
     final IMathUtils mu = IMathUtils.instance();
   

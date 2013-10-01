@@ -101,16 +101,6 @@ public class Geodetic2D
 
   }
 
-  public final Angle latitude()
-  {
-    return _latitude;
-  }
-
-  public final Angle longitude()
-  {
-    return _longitude;
-  }
-
   public final Geodetic2D add(Geodetic2D that)
   {
     return new Geodetic2D(_latitude.add(that._latitude), _longitude.add(that._longitude));
