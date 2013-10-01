@@ -47,12 +47,12 @@ public:
 
   virtual void stop(const G3MRenderContext* rc) = 0;
 
-#ifdef C_CODE
+//#ifdef C_CODE
   virtual ~Renderer() { }
-#endif
-#ifdef JAVA_CODE
-  public void dispose();
-#endif
+//#endif
+//#ifdef JAVA_CODE
+//  public void dispose();
+//#endif
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;

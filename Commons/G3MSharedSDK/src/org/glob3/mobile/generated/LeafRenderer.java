@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  LeafRenderer.cpp
 //  G3MiOSSDK
@@ -16,74 +19,104 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class GPUProgramState;
 
-public abstract class LeafRenderer extends Renderer
-{
-  private boolean _enable;
+public abstract class LeafRenderer
+         implements
+            Renderer {
+   private boolean _enable;
 
-  public LeafRenderer()
-  {
-     _enable = true;
 
-  }
+   public LeafRenderer() {
+      _enable = true;
 
-  public LeafRenderer(boolean enable)
-  {
-     _enable = enable;
+   }
 
-  }
 
-  public void dispose()
-  {
-    super.dispose();
+   public LeafRenderer(final boolean enable) {
+      _enable = enable;
 
-  }
+   }
 
-  public final boolean isEnable()
-  {
-    return _enable;
-  }
 
-  public void setEnable(boolean enable)
-  {
-    _enable = enable;
-  }
+   @Override
+   public void dispose() {
+      super.dispose();
 
-  public abstract void onResume(G3MContext context);
+   }
 
-  public abstract void onPause(G3MContext context);
 
-  public abstract void onDestroy(G3MContext context);
+   @Override
+   public final boolean isEnable() {
+      return _enable;
+   }
 
-  public abstract void initialize(G3MContext context);
 
-  public abstract RenderState getRenderState(G3MRenderContext rc);
+   @Override
+   public void setEnable(final boolean enable) {
+      _enable = enable;
+   }
 
-  public abstract void render(G3MRenderContext rc, GLState glState);
 
-  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
+   @Override
+   public abstract void onResume(G3MContext context);
 
-  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  public abstract void start(G3MRenderContext rc);
+   @Override
+   public abstract void onPause(G3MContext context);
 
-  public abstract void stop(G3MRenderContext rc);
 
-  public SurfaceElevationProvider getSurfaceElevationProvider()
-  {
-    return null;
-  }
+   @Override
+   public abstract void onDestroy(G3MContext context);
 
-  public PlanetRenderer getPlanetRenderer()
-  {
-    return null;
-  }
 
-  public boolean isPlanetRenderer()
-  {
-    return false;
-  }
+   @Override
+   public abstract void initialize(G3MContext context);
+
+
+   @Override
+   public abstract RenderState getRenderState(G3MRenderContext rc);
+
+
+   @Override
+   public abstract void render(G3MRenderContext rc,
+                               GLState glState);
+
+
+   @Override
+   public abstract boolean onTouchEvent(G3MEventContext ec,
+                                        TouchEvent touchEvent);
+
+
+   @Override
+   public abstract void onResizeViewportEvent(G3MEventContext ec,
+                                              int width,
+                                              int height);
+
+
+   @Override
+   public abstract void start(G3MRenderContext rc);
+
+
+   @Override
+   public abstract void stop(G3MRenderContext rc);
+
+
+   @Override
+   public SurfaceElevationProvider getSurfaceElevationProvider() {
+      return null;
+   }
+
+
+   @Override
+   public PlanetRenderer getPlanetRenderer() {
+      return null;
+   }
+
+
+   @Override
+   public boolean isPlanetRenderer() {
+      return false;
+   }
 
 }
