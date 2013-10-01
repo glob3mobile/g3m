@@ -56,7 +56,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       return true;
     }
-    return _renderedSector.upperLongitude().greaterThan(tileSector.upperLongitude());
+    return _renderedSector._upper._longitude.greaterThan(tileSector._upper._longitude);
   }
 
   private boolean needsNorthSkirt(Sector tileSector)
@@ -65,7 +65,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       return true;
     }
-    return _renderedSector.upperLatitude().greaterThan(tileSector.upperLatitude());
+    return _renderedSector._upper._latitude.greaterThan(tileSector._upper._latitude);
   }
 
   private boolean needsWestSkirt(Sector tileSector)
@@ -74,7 +74,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       return true;
     }
-    return _renderedSector.lowerLongitude().lowerThan(tileSector.lowerLongitude());
+    return _renderedSector._lower._longitude.lowerThan(tileSector._lower._longitude);
   }
 
   private boolean needsSouthSkirt(Sector tileSector)
@@ -83,7 +83,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       return true;
     }
-    return _renderedSector.lowerLatitude().lowerThan(tileSector.lowerLatitude());
+    return _renderedSector._lower._latitude.lowerThan(tileSector._lower._latitude);
   }
 
   private Sector getRenderedSectorForTile(Tile tile)
