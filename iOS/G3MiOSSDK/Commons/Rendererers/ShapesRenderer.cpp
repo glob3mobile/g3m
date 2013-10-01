@@ -140,17 +140,50 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 }
 
 
-std::vector<ShapeDistances> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
+#ifdef C_CODE
+class SortShapeDistanceClass {
+public:
+  bool operator() (ShapeDistance sd1, ShapeDistance sd2) {
+    return (sd1._distance < sd2._distance);
+  }
+} sortShapeDistanceObject;
+#endif
+
+
+
+std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
                                                                    const Vector3D& direction) const
 {
-  std::vector<ShapeDistances> shapeDistances;
+  std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
     std::vector<double> distances = shape->intersectionsDistances(origin, direction);
     for (int i=0; i<distances.size(); i++) {
-      shapeDistances.push_back(ShapeDistances(distances[i], shape));
+      shapeDistances.push_back(ShapeDistance(distances[i], shape));
     }
   }
+  
+  // sort vector
+#ifdef C_CODE
+    std::sort(shapeDistances.begin(),
+              shapeDistances.end(),
+              sortShapeDistanceObject);
+#endif
+#ifdef JAVA_CODE
+    java.util.Collections.sort(shapeDistances, //
+                               new java.util.Comparator<ShapeDistance>() {
+                                 @Override
+                                 public int compare(final ShapeDistance sd1,
+                                                    final ShapeDistance sd2) {
+                                   if (sd1._distance < sd2._distance)
+                                     return -1;
+                                   else
+                                     return 1;
+                                   
+                                 }
+                               });
+#endif
+
   return shapeDistances;
 }
 
@@ -165,10 +198,22 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      std::vector<ShapeDistances> shapeDistances = intersectionsDistances(origin, direction);
-      printf ("Found %d intersections with shapes\n", shapeDistances.size());
+      std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+      
+      if (!shapeDistances.empty()) {
+        printf ("Found %d intersections with shapes:\n",
+                (int)shapeDistances.size());
+        for (int i=0; i<shapeDistances.size(); i++) {
+          printf ("   %d: shape %x to distance %f\n",
+                  i+1,
+                  (unsigned int)shapeDistances[i]._shape,
+                  shapeDistances[i]._distance);
+        }
+      }
     }
   }
   return false;
 }
+
+
 

@@ -14,11 +14,11 @@
 #include <vector>
 
 
-struct ShapeDistances {
+struct ShapeDistance {
   double _distance;
   Shape* _shape;
   
-  ShapeDistances(double distance, Shape* shape):
+  ShapeDistance(double distance, Shape* shape):
   _distance(distance),
   _shape(shape)
   {}
@@ -124,7 +124,7 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
   
-  std::vector<ShapeDistances> intersectionsDistances(const Vector3D& origin,
+  std::vector<ShapeDistance> intersectionsDistances(const Vector3D& origin,
                                                      const Vector3D& direction) const;
 
 
