@@ -47,12 +47,7 @@ public:
 
   virtual void stop(const G3MRenderContext* rc) = 0;
 
-//#ifdef C_CODE
   virtual ~Renderer() { }
-//#endif
-//#ifdef JAVA_CODE
-//  public void dispose();
-//#endif
 
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;
@@ -66,9 +61,6 @@ public:
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-//  virtual bool isPlanetRenderer() {
-//    return false;
-//  }
   virtual bool isPlanetRenderer() = 0;
 
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
