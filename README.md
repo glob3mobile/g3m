@@ -11,7 +11,48 @@ g3m
  + Be integrated on any legacy system
  + **High performance** mobile native development
  + Multi Touch screens
+
+Capabilities
+============
+
+####Works on iOS, Android devices and HTML5 environments
+![Screenshot with 3 platforms] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
+####2d 2,5d 3d maps.
+####Scenario maps
+####Works offline
+####Real Time Support
+####Raster Support
++ WMS
++ MapBox
++ CartoDB
++ Mapquest
++ Bing
++ ArcGIS Server
++ Any tiled WebMercator format
+
+####Vectorial Support.
++ geoJSON
++ Any other format throught OGR-GDAL conversion
+
+####Symbology
++ 2D Symbols
++ CartoCSS support
++ 3D Symbols
++ Temporal series support
+
+####Point Clouds
++ Any format through preprocess
+
+####3D Objects
++ Scene JS (There is a Blender plugin to export to this format optimized)
  
+
+Roadpmap
+========
+##Near (weeks)
++ GPS Support
+
+##After (months)
 
 License
 =======
