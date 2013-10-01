@@ -119,4 +119,5 @@ public class HUDErrorRenderer extends ErrorRenderer
   {
     _hudImageRenderer.onDestroy(context);
   }
+
 }

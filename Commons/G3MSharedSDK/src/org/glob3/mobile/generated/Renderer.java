@@ -42,14 +42,9 @@ public abstract class Renderer
 
   public abstract void stop(G3MRenderContext rc);
 
-///#ifdef C_CODE
   public void dispose()
   {
   }
-///#endif
-///#ifdef JAVA_CODE
-//  public void dispose();
-///#endif
 
   // Android activity lifecyle
   public abstract void onResume(G3MContext context);
@@ -63,9 +58,6 @@ public abstract class Renderer
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-//  virtual bool isPlanetRenderer() {
-//    return false;
-//  }
   public abstract boolean isPlanetRenderer();
 
   public abstract SurfaceElevationProvider getSurfaceElevationProvider();
