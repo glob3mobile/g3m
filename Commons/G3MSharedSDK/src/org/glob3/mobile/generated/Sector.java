@@ -144,35 +144,21 @@ public class Sector
     return new Sector(new Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(-180)), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(180)));
   }
 
-  public final Geodetic2D lower()
-  {
-    return _lower;
-  }
-
-  public final Angle lowerLatitude()
-  {
-    return _lower._latitude;
-  }
-
-  public final Angle lowerLongitude()
-  {
-    return _lower._longitude;
-  }
-
-  public final Geodetic2D upper()
-  {
-    return _upper;
-  }
-
-  public final Angle upperLatitude()
-  {
-    return _upper._latitude;
-  }
-
-  public final Angle upperLongitude()
-  {
-    return _upper._longitude;
-  }
+//  const Angle lowerLatitude() const {
+//    return _lower._latitude;
+//  }
+//
+//  const Angle lowerLongitude() const {
+//    return _lower._longitude;
+//  }
+//
+//  const Angle upperLatitude() const {
+//    return _upper._latitude;
+//  }
+//
+//  const Angle upperLongitude() const {
+//    return _upper._longitude;
+//  }
 
   public final boolean contains(Angle latitude, Angle longitude)
   {
@@ -202,14 +188,6 @@ public class Sector
     // Overlapping on all axes means Sectors are intersecting
     return true;
   }
-
-//  const Angle getDeltaLatitude() const {
-//    return _deltaLatitude;
-//  }
-//
-//  const Angle getDeltaLongitude() const {
-//    return _deltaLongitude;
-//  }
 
   public final Geodetic2D getSW()
   {
