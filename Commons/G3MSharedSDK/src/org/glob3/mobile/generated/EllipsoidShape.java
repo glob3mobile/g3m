@@ -242,8 +242,8 @@ public class EllipsoidShape extends AbstractMeshShape
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
   {
      super(position, altitudeMode);
-     _ellipsoid = new <type missing>(Vector3D.zero, radius);
-     _quadric = Quadric.fromEllipsoid(_ellipsoid);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _quadric = Quadric.fromEllipsoid(*_ellipsoid);
      _textureURL = new URL(new URL("", false));
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
@@ -264,8 +264,8 @@ public class EllipsoidShape extends AbstractMeshShape
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
   {
      super(position, altitudeMode);
-     _ellipsoid = new <type missing>(Vector3D.zero, radius);
-     _quadric = Quadric.fromEllipsoid(_ellipsoid);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _quadric = Quadric.fromEllipsoid(*_ellipsoid);
      _textureURL = new URL(textureURL);
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
@@ -282,6 +282,7 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public void dispose()
   {
+    _ellipsoid = null;
     if (_surfaceColor != null)
        _surfaceColor.dispose();
     if (_borderColor != null)
