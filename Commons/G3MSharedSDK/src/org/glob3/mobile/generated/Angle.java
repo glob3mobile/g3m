@@ -113,7 +113,7 @@ public class Angle
 
   public final boolean isNan()
   {
-    return IMathUtils.instance().isNan(_degrees);
+    return (_degrees != _degrees);
   }
 
   public final double sinus()
@@ -137,16 +137,6 @@ public class Angle
   public final double tangent()
   {
     return java.lang.Math.tan(_radians);
-  }
-
-  public final double degrees()
-  {
-    return _degrees;
-  }
-
-  public final double radians()
-  {
-    return _radians;
   }
 
   public final boolean closeTo(Angle other)

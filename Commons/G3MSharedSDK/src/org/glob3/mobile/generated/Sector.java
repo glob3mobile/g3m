@@ -456,27 +456,27 @@ public class Sector
     double lat = g._latitude._degrees;
     double lon = g._longitude._degrees;
   
-    if (lat > _upper._latitude.degrees())
+    if (lat > _upper._latitude._degrees)
     {
-      lat = _upper._latitude.degrees();
+      lat = _upper._latitude._degrees;
     }
     else
     {
-      if (lat < _lower._latitude.degrees())
+      if (lat < _lower._latitude._degrees)
       {
-        lat = _lower._latitude.degrees();
+        lat = _lower._latitude._degrees;
       }
     }
   
-    if (lon > _upper._longitude.degrees())
+    if (lon > _upper._longitude._degrees)
     {
-      lon = _upper._longitude.degrees();
+      lon = _upper._longitude._degrees;
     }
     else
     {
-      if (lon < _lower._longitude.degrees())
+      if (lon < _lower._longitude._degrees)
       {
-        lon = _lower._longitude.degrees();
+        lon = _lower._longitude._degrees;
       }
     }
   

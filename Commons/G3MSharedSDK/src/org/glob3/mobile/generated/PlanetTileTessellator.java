@@ -106,7 +106,6 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    final IMathUtils mu = IMathUtils.instance();
     double minElevation = 0;
     for (int j = 0; j < ry; j++)
     {
@@ -121,7 +120,7 @@ public class PlanetTileTessellator extends TileTessellator
         if (elevationData != null)
         {
           final double rawElevation = elevationData.getElevationAt(position);
-          if (!mu.isNan(rawElevation))
+          if (!(rawElevation != rawElevation))
           {
             elevation = rawElevation * verticalExaggeration;
   

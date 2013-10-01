@@ -104,7 +104,7 @@ public class SubviewElevationData extends ElevationData
       for (int y = 0; y < _height; y++)
       {
         final double height = getElevationAt(x, y);
-        if (!mu.isNan(height))
+        if (!(height != height))
         {
           if (height < minHeight)
           {

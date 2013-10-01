@@ -112,8 +112,8 @@ public class FlatPlanet extends Planet
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    final double x = geodetic.longitude().degrees() * _size._x / 360.0;
-    final double y = geodetic.latitude().degrees() * _size._y / 180.0;
+    final double x = geodetic.longitude()._degrees * _size._x / 360.0;
+    final double y = geodetic.latitude()._degrees * _size._y / 180.0;
     return new Vector3D(x, y, geodetic.height());
   }
 
