@@ -24,12 +24,12 @@ public class BoxShape extends AbstractMeshShape
   private double _extentY;
   private double _extentZ;
 
-  private final Quadric _frontQuadric = new Quadric();
-  private final Quadric _backQuadric = new Quadric();
-  private final Quadric _leftQuadric = new Quadric();
-  private final Quadric _rightQuadric = new Quadric();
-  private final Quadric _topQuadric = new Quadric();
-  private final Quadric _bottomQuadric = new Quadric();
+  private final Quadric _frontQuadric;
+  private final Quadric _backQuadric;
+  private final Quadric _leftQuadric;
+  private final Quadric _rightQuadric;
+  private final Quadric _topQuadric;
+  private final Quadric _bottomQuadric;
 
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
@@ -198,12 +198,12 @@ public class BoxShape extends AbstractMeshShape
      _extentX = extent._x;
      _extentY = extent._y;
      _extentZ = extent._z;
-     _frontQuadric = new Quadric(Quadric.fromPlane(1, 0, 0, -extent.x()/2));
-     _backQuadric = new Quadric(Quadric.fromPlane(-1, 0, 0, -extent.x()/2));
-     _leftQuadric = new Quadric(Quadric.fromPlane(0, -1, 0, -extent.y()/2));
-     _rightQuadric = new Quadric(Quadric.fromPlane(0, 1, 0, -extent.y()/2));
-     _topQuadric = new Quadric(Quadric.fromPlane(0, 0, 1, -extent.z()/2));
-     _bottomQuadric = new Quadric(Quadric.fromPlane(0, 0, -1, -extent.z()/2));
+     _frontQuadric = Quadric.fromPlane(1, 0, 0, -extent.x()/2);
+     _backQuadric = Quadric.fromPlane(-1, 0, 0, -extent.x()/2);
+     _leftQuadric = Quadric.fromPlane(0, -1, 0, -extent.y()/2);
+     _rightQuadric = Quadric.fromPlane(0, 1, 0, -extent.y()/2);
+     _topQuadric = Quadric.fromPlane(0, 0, 1, -extent.z()/2);
+     _bottomQuadric = Quadric.fromPlane(0, 0, -1, -extent.z()/2);
      _borderWidth = borderWidth;
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
