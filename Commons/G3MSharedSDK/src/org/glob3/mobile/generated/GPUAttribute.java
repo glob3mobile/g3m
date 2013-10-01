@@ -109,7 +109,6 @@ public class GPUAttribute extends GPUVariable
 
   public void applyChanges(GL gl)
   {
-
     if (_value == null)
     {
       if (_enabled)
@@ -121,7 +120,6 @@ public class GPUAttribute extends GPUVariable
     {
       if (_dirty)
       {
-
         if (_value.getEnabled())
         {
           if (!_enabled)
