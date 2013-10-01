@@ -33,8 +33,6 @@ public class EllipsoidShape extends AbstractMeshShape
   private final Ellipsoid _ellipsoid;
   private final Quadric _quadric;
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-
   private URL _textureURL = new URL();
 
   /*const double _radiusX;
@@ -233,15 +231,15 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
-     this(position, altitudeMode, planet, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, borderColor, true);
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, borderColor, true);
   }
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
   {
-     this(position, altitudeMode, planet, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null, true);
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null, true);
   }
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
   {
      _ellipsoid = new <type missing>(Vector3D.zero, radius);
      _quadric = Quadric.fromEllipsoid(_ellipsoid);
@@ -256,7 +254,6 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
-     _planet = planet;
 
   }
 
@@ -279,7 +276,6 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
-     _planet = planet;
 
   }
 
@@ -305,11 +301,11 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    MutableMatrix44D M = createTransformMatrix(_planet);
-    final Quadric transformedQuadric = _quadric.transformBy(M);
-    if (M != null)
-       M.dispose();
-    return transformedQuadric.intersectionsDistances(origin, direction);
+  //  MutableMatrix44D* M = createTransformMatrix(_planet);
+  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+  //  delete M;
+  //  return transformedQuadric.intersectionsDistances(origin, direction);
+    return new java.util.ArrayList<Double>();
   }
 
 }

@@ -31,8 +31,6 @@ public class BoxShape extends AbstractMeshShape
   private final Quadric _topQuadric;
   private final Quadric _bottomQuadric;
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-
   private float _borderWidth;
 
   private boolean _useNormals;
@@ -184,15 +182,15 @@ public class BoxShape extends AbstractMeshShape
     return surface;
   }
 
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, borderColor, true);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, borderColor, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, null, true);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
      _extentX = extent._x;
@@ -208,7 +206,6 @@ public class BoxShape extends AbstractMeshShape
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _useNormals = useNormals;
-     _planet = planet;
 
   }
 
@@ -266,91 +263,75 @@ public class BoxShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    double tmin = -1e10;
-    double tmax = 1e10;
-    double t1;
-    double t2;
     java.util.ArrayList<Double> distances = new java.util.ArrayList<Double>();
   
-    // transform 6 planes
-    MutableMatrix44D M = createTransformMatrix(_planet);
-    final Quadric transformedFront = _frontQuadric.transformBy(M);
-    final Quadric transformedBack = _backQuadric.transformBy(M);
-    final Quadric transformedLeft = _leftQuadric.transformBy(M);
-    final Quadric transformedRight = _rightQuadric.transformBy(M);
-    final Quadric transformedTop = _topQuadric.transformBy(M);
-    final Quadric transformedBottom = _bottomQuadric.transformBy(M);
-    if (M != null)
-       M.dispose();
-  
-    // intersecction with X planes
-    java.util.ArrayList<Double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
-    java.util.ArrayList<Double> backDistance = transformedBack.intersectionsDistances(origin, direction);
-    if (frontDistance.size()==1 && backDistance.size()==1)
-    {
-      if (frontDistance.get(0) < backDistance.get(0))
-      {
-        t1 = frontDistance.get(0);
-        t2 = backDistance.get(0);
-      }
-      else
-      {
-        t2 = frontDistance.get(0);
-        t1 = backDistance.get(0);
-      }
-      if (t1 > tmin)
-        tmin = t1;
-      if (t2 < tmax)
-        tmax = t2;
-    }
-  
-    // intersections with Y planes
-    java.util.ArrayList<Double> leftDistance = transformedLeft.intersectionsDistances(origin, direction);
-    java.util.ArrayList<Double> rightDistance = transformedRight.intersectionsDistances(origin, direction);
-    if (leftDistance.size()==1 && rightDistance.size()==1)
-    {
-      if (leftDistance.get(0) < rightDistance.get(0))
-      {
-        t1 = leftDistance.get(0);
-        t2 = rightDistance.get(0);
-      }
-      else
-      {
-        t2 = leftDistance.get(0);
-        t1 = rightDistance.get(0);
-      }
-      if (t1 > tmin)
-        tmin = t1;
-      if (t2 < tmax)
-        tmax = t2;
-    }
-  
-    // intersections with Z planes
-    java.util.ArrayList<Double> topDistance = transformedTop.intersectionsDistances(origin, direction);
-    java.util.ArrayList<Double> bottomDistance = transformedBottom.intersectionsDistances(origin, direction);
-    if (topDistance.size()==1 && bottomDistance.size()==1)
-    {
-      if (topDistance.get(0) < bottomDistance.get(0))
-      {
-        t1 = topDistance.get(0);
-        t2 = bottomDistance.get(0);
-      }
-      else
-      {
-        t2 = topDistance.get(0);
-        t1 = bottomDistance.get(0);
-      }
-      if (t1 > tmin)
-        tmin = t1;
-      if (t2 < tmax)
-        tmax = t2;
-    }
-  
-    if (tmin < tmax)
-    {
-      distances.add(tmin);
-      distances.add(tmax);
-    }
+  //  double tmin=-1e10, tmax=1e10;
+  //  double t1, t2;
+  //  // transform 6 planes
+  //  MutableMatrix44D* M = createTransformMatrix(_planet);
+  //  const Quadric transformedFront = _frontQuadric.transformBy(*M);
+  //  const Quadric transformedBack = _backQuadric.transformBy(*M);
+  //  const Quadric transformedLeft = _leftQuadric.transformBy(*M);
+  //  const Quadric transformedRight = _rightQuadric.transformBy(*M);
+  //  const Quadric transformedTop = _topQuadric.transformBy(*M);
+  //  const Quadric transformedBottom = _bottomQuadric.transformBy(*M);
+  //  delete M;
+  //
+  //  // intersecction with X planes
+  //  std::vector<double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
+  //  std::vector<double> backDistance = transformedBack.intersectionsDistances(origin, direction);
+  //  if (frontDistance.size()==1 && backDistance.size()==1) {
+  //    if (frontDistance[0] < backDistance[0]) {
+  //      t1 = frontDistance[0];
+  //      t2 = backDistance[0];
+  //    } else {
+  //      t2 = frontDistance[0];
+  //      t1 = backDistance[0];
+  //    }
+  //    if (t1 > tmin)
+  //      tmin = t1;
+  //    if (t2 < tmax)
+  //      tmax = t2;
+  //  }
+  //
+  //  // intersections with Y planes
+  //  std::vector<double> leftDistance = transformedLeft.intersectionsDistances(origin, direction);
+  //  std::vector<double> rightDistance = transformedRight.intersectionsDistances(origin, direction);
+  //  if (leftDistance.size()==1 && rightDistance.size()==1) {
+  //    if (leftDistance[0] < rightDistance[0]) {
+  //      t1 = leftDistance[0];
+  //      t2 = rightDistance[0];
+  //    } else {
+  //      t2 = leftDistance[0];
+  //      t1 = rightDistance[0];
+  //    }
+  //    if (t1 > tmin)
+  //      tmin = t1;
+  //    if (t2 < tmax)
+  //      tmax = t2;
+  //  }
+  //
+  //  // intersections with Z planes
+  //  std::vector<double> topDistance = transformedTop.intersectionsDistances(origin, direction);
+  //  std::vector<double> bottomDistance = transformedBottom.intersectionsDistances(origin, direction);
+  //  if (topDistance.size()==1 && bottomDistance.size()==1) {
+  //    if (topDistance[0] < bottomDistance[0]) {
+  //      t1 = topDistance[0];
+  //      t2 = bottomDistance[0];
+  //    } else {
+  //      t2 = topDistance[0];
+  //      t1 = bottomDistance[0];
+  //    }
+  //    if (t1 > tmin)
+  //      tmin = t1;
+  //    if (t2 < tmax)
+  //      tmax = t2;
+  //  }
+  //
+  //  if (tmin < tmax) {
+  //    distances.push_back(tmin);
+  //    distances.push_back(tmax);
+  //  }
   
     return distances;
   }
