@@ -11,12 +11,16 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
+#include "Planet.hpp"
+
 
 class BoxShape : public AbstractMeshShape {
 private:
   double _extentX;
   double _extentY;
   double _extentZ;
+  
+  const Planet* _planet;
 
   float _borderWidth;
 
@@ -36,6 +40,7 @@ protected:
 public:
   BoxShape(Geodetic3D* position,
            AltitudeMode altitudeMode,
+           const Planet* planet,
            const Vector3D& extent,
            float borderWidth,
            const Color& surfaceColor,
@@ -48,7 +53,8 @@ public:
   _borderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
-  _useNormals(useNormals)
+  _useNormals(useNormals),
+  _planet(planet)
   {
 
   }

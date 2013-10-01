@@ -759,7 +759,8 @@ public:
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer
-                                               geoTileRasterizer: geoTileRasterizer];
+                                               geoTileRasterizer: geoTileRasterizer
+                                                          planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
 
@@ -1690,6 +1691,7 @@ public:
                                            Angle::fromDegrees(-122),
                                            45000),
                             ABSOLUTE,
+                            planet,
                             Vector3D(20000, 30000, 50000),
                             2,
                             Color::fromRGBA(0,    1, 0, 0.5),
@@ -1702,7 +1704,21 @@ public:
   const double factor = 2e5;
   const Vector3D radius1(factor, factor, factor);
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
+  const Vector3D radiusBox(factor, factor*1.5, factor*2);
   
+  
+  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
+                                           Angle::fromDegrees(10),
+                                           radiusBox.z()/2),
+                            ABSOLUTE,
+                            planet,
+                            radiusBox,
+                            2,
+                            Color::fromRGBA(0,    1, 0, 1),
+                            Color::newFromRGBA(0, 0.75, 0, 1));
+  //box->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(box1);
+ 
   
     Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                           Angle::fromDegrees(0),
@@ -1867,6 +1883,8 @@ public:
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
+  
+  const Planet* _planet;
 
 private:
 
@@ -2001,7 +2019,8 @@ private:
                               true);
   }
 
-  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry) const {
+  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry,
+                           const Planet* planet) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -2017,6 +2036,7 @@ private:
 
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
+                        planet,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
@@ -2056,7 +2076,8 @@ private:
 
 
 public:
-  SampleSymbolizer() :
+  SampleSymbolizer(const Planet* planet) :
+  _planet(planet),
   _colorIndex(0) {
 
   }
@@ -2132,7 +2153,7 @@ public:
       //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
       //    }
       //    else {
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
       //    }
 
       Mark* mark = createMark(geometry);
@@ -2151,8 +2172,9 @@ public:
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
                              geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
+                                        planet: (const Planet*) planet
 {
-  GEOSymbolizer* symbolizer = new SampleSymbolizer();
+  GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
 
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
@@ -2868,6 +2890,7 @@ public:
                                                    Angle::fromDegrees(-15.431389),
                                                    1000000),
                                     RELATIVE_TO_GROUND,
+                                    context->getPlanet(),
                                     Vector3D(100, 100, 100),
                                     1.0,
                                     Color::fromRGBA(1.0, 0.0, 0.0, 1.0),
