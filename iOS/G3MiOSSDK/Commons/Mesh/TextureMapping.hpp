@@ -36,8 +36,13 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
+#ifdef C_CODE
   const IGLTextureId* _glTextureId;
-  
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _glTextureId;
+#endif
+
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
