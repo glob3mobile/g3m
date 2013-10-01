@@ -128,6 +128,7 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
                                   1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     false);

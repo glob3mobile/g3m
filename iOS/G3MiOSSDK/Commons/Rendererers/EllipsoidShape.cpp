@@ -149,6 +149,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   }
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    rc->getTexturesHandler(),
                                                     texCoords->create(),
                                                     true,
                                                     true);

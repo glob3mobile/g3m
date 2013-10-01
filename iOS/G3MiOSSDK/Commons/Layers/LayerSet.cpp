@@ -233,33 +233,39 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
       else {
         if ( mercator != layerParam->_mercator ) {
           errors.push_back("Inconsistency in Layer's Parameters: mercator");
+          delete topSector;
           return NULL;
         }
 
         if (!topSector->isEquals(layerParam->_topSector) ) {
           errors.push_back("Inconsistency in Layer's Parameters: topSector");
+          delete topSector;
           return NULL;
         }
 
         if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
           errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+          delete topSector;
           return NULL;
         }
 
         if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
           errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+          delete topSector;
           return NULL;
         }
 
         if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
             ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
           errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
+          delete topSector;
           return NULL;
         }
 
         if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
             ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
           errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
+          delete topSector;
           return NULL;
         }
 

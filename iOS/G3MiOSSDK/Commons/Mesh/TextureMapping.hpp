@@ -19,6 +19,7 @@ class IFloatBuffer;
 class GLGlobalState;
 class GPUProgramState;
 class GLState;
+class TexturesHandler;
 
 class TextureMapping {
 public:
@@ -44,10 +45,14 @@ private:
   MutableVector2D _scale;
 
   const bool _isTransparent;
-  
+
+  void releaseGLTextureId();
+  TexturesHandler* _texturesHandler;
+
 public:
   
   SimpleTextureMapping(const IGLTextureId* glTextureId,
+                       TexturesHandler* texturesHandler,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
                        bool isTransparent) :
@@ -56,7 +61,8 @@ public:
   _translation(0, 0),
   _scale(1, 1),
   _ownedTexCoords(ownedTexCoords),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _texturesHandler(texturesHandler)
   {
     
   }

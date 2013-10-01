@@ -158,6 +158,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 1);
 
   TextureMapping* textureMapping = new SimpleTextureMapping(texId,
+                                                            rc->getTexturesHandler(),
                                                             texCoords.create(),
                                                             true,
                                                             true);

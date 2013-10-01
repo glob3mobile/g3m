@@ -13,19 +13,28 @@
 
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
-//#include "GPUProgramState.hpp"
-
+#include "TexturesHandler.hpp"
 #include "GLState.hpp"
+
+void SimpleTextureMapping::releaseGLTextureId() {
+  if (_texturesHandler) {
+    if (_glTextureId != NULL) {
+      _texturesHandler->releaseGLTextureId(_glTextureId);
+      _glTextureId = NULL;
+    }
+  }
+}
 
 SimpleTextureMapping::~SimpleTextureMapping() {
   if (_ownedTexCoords) {
     delete _texCoords;
   }
 
+  releaseGLTextureId();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void SimpleTextureMapping::modifyGLState(GLState& state) const{

@@ -90,10 +90,10 @@ public:
     _texCoords = NULL;
 
     releaseGLTextureId();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   bool isValid() const {

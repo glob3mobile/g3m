@@ -86,6 +86,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
                                   1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     false);

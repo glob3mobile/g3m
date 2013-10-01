@@ -159,6 +159,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     true);

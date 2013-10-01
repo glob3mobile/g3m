@@ -33,7 +33,7 @@ Canvas_iOS::~Canvas_iOS() {
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
-  if ((_currentUIFont != NULL) &&
+  if ((_currentUIFont != nil) &&
       (_context != NULL)) {
     CGContextSelectFont(_context,
                         [[_currentUIFont fontName] UTF8String],
