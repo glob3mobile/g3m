@@ -1,19 +1,20 @@
 g3m
 ===
 
-The multiplatform advanced visualization framework
+##The multiplatform advanced visualization framework
 
-G3M is a framework developed and designed to: 
- + Show geospatial data in 3D
- + Run on mobile devices
- + Work with real time data
- + Integrate any kind of data (format,size)
+###G3M is a **framework** developed and designed to: 
+
+ + Develop **mobile maps** apps in 2D, 2,5D and 3D
+ + Work with **real time** data
+ + Integrate **any kind of data** (format,size)
  + Be integrated on any legacy system
- + High performance mobile native development
+ + **High performance** mobile native development
  + Multi Touch screens
- + 2d -3d SDK for mobile-desktop development
+ 
 
-
+License
+=======
 G3M is released under a 2 clauses BSD license:
 
 Copyright (c) 2013, Glob3 Mobile, INC
