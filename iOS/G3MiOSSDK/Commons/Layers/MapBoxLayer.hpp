@@ -35,6 +35,9 @@ public:
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/3/3/3.png
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/7/62/48.png?updated=f0e992c
 
+  // TODO: parse json of layer metadata
+  // http://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8.json
+
   MapBoxLayer(const std::string& mapKey,
               const TimeInterval& timeToCache,
               bool readExpired = true,
@@ -49,7 +52,7 @@ public:
                      readExpired,
                      Sector::fullSphere(),
                      1, //initialMapBoxLevel,
-                     17,
+                     19,
                      condition),
   _mapKey(mapKey)
   {

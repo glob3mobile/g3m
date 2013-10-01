@@ -69,7 +69,9 @@ public abstract class Planet
 
   public abstract Vector3D scaleToGeocentricSurface(Vector3D position);
 
-  public abstract java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity);
+  /*virtual std::list<Vector3D> computeCurve(const Vector3D& start,
+                                           const Vector3D& stop,
+                                           double granularity) const = 0;*/
 
   public abstract Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1);
 
@@ -78,7 +80,7 @@ public abstract class Planet
 
   public abstract double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2);
 
-  public abstract Vector3D closestPointToSphere(Vector3D pos, Vector3D ray);
+  //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
   public abstract Vector3D closestIntersection(Vector3D pos, Vector3D ray);
 
