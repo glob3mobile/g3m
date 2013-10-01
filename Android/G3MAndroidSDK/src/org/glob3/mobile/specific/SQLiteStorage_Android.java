@@ -359,7 +359,10 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
+            //            final long start = System.currentTimeMillis();
             final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            //            ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+
             if (bitmap == null) {
                ILogger.instance().logError("Can't create bitmap from content of storage");
             }

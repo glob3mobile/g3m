@@ -96,7 +96,10 @@ public final class ListenerEntry {
       }
       if (_imageListener != null) {
          final int __DGD_parse_bitmap_in_background;
+         //         final long start = System.currentTimeMillis();
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+         //         ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
             _imageListener.onError(url);
@@ -117,7 +120,10 @@ public final class ListenerEntry {
          _bufferListener.onCanceledDownload(url, buffer, false);
       }
       if (_imageListener != null) {
+         //         final long start = System.currentTimeMillis();
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+         //         ILogger.instance().logInfo(
+         //                  "DOWNLOADER - onCanceledDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
          }
