@@ -106,7 +106,7 @@ public:
   }
 
   bool isNan() const {
-    return IMathUtils::instance()->isNan(_degrees);
+    return ISNAN(_degrees);
   }
 
   double sinus() const {
@@ -125,14 +125,6 @@ public:
   
   double tangent() const {
     return TAN(_radians);
-  }
-
-  double degrees() const {
-    return _degrees;
-  }
-
-  double radians() const {
-    return _radians;
   }
 
   bool closeTo(const Angle& other) const {

@@ -49,9 +49,7 @@ public:
   }
   
   bool isNan() const {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return mu->isNan(_x) || mu->isNan(_y);
+    return ISNAN(_x) || ISNAN(_y);
   }
 
   MutableVector2D normalized() const;

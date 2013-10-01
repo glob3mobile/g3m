@@ -69,8 +69,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
   FloatBufferBuilderFromColor colors;
 
-  const IMathUtils* mu = IMathUtils::instance();
-
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
 
   const int width  = resolution._x;
@@ -84,7 +82,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
       const Geodetic2D position = sector.getInnerPoint(u, v);
 
       const double elevation = getElevationAt(position);
-      if ( mu->isNan(elevation) ) {
+      if ( ISNAN(elevation) ) {
         continue;
       }
 
@@ -166,13 +164,12 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
 
-  const IMathUtils* mu = IMathUtils::instance();
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
       const double elevation = getElevationAt(x, y);
-      if (mu->isNan(elevation)) {
+      if (ISNAN(elevation)) {
         continue;
       }
 
@@ -236,12 +233,9 @@ double ElevationData::getElevationAt(const Angle& latitude,
   const double v = mu->clamp(uv._y, 0, 1);
   const double dX = u * (_width - 1);
   const double dY = (1.0 - v) * (_height - 1);
-  //const double dY = v * (_height - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;
-  //  const int nextX = (int) (dX + 1.0);
-  //  const int nextY = (int) (dY + 1.0);
   const int nextX = x + 1;
   const int nextY = y + 1;
   const double alphaY = dY - y;
@@ -256,12 +250,12 @@ double ElevationData::getElevationAt(const Angle& latitude,
     else {
       // linear on Y
       const double heightY = getElevationAt(x, y);
-      if (mu->isNan(heightY)) {
+      if (ISNAN(heightY)) {
         return nanD;
       }
 
       const double heightNextY = getElevationAt(x, nextY);
-      if (mu->isNan(heightNextY)) {
+      if (ISNAN(heightNextY)) {
         return nanD;
       }
 
@@ -272,11 +266,11 @@ double ElevationData::getElevationAt(const Angle& latitude,
     if (y == dY) {
       // linear on X
       const double heightX = getElevationAt(x, y);
-      if (mu->isNan(heightX)) {
+      if (ISNAN(heightX)) {
         return nanD;
       }
       const double heightNextX = getElevationAt(nextX, y);
-      if (mu->isNan(heightNextX)) {
+      if (ISNAN(heightNextX)) {
         return nanD;
       }
 
@@ -285,19 +279,19 @@ double ElevationData::getElevationAt(const Angle& latitude,
     else {
       // bilinear
       const double valueNW = getElevationAt(x, y);
-      if (mu->isNan(valueNW)) {
+      if (ISNAN(valueNW)) {
         return nanD;
       }
       const double valueNE = getElevationAt(nextX, y);
-      if (mu->isNan(valueNE)) {
+      if (ISNAN(valueNE)) {
         return nanD;
       }
       const double valueSE = getElevationAt(nextX, nextY);
-      if (mu->isNan(valueSE)) {
+      if (ISNAN(valueSE)) {
         return nanD;
       }
       const double valueSW = getElevationAt(x, nextY);
-      if (mu->isNan(valueSW)) {
+      if (ISNAN(valueSW)) {
         return nanD;
       }
 

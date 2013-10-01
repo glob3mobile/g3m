@@ -61,12 +61,10 @@ public:
   }
   
   bool isNan() const {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return (mu->isNan(_x) ||
-            mu->isNan(_y) ||
-            mu->isNan(_z) ||
-            mu->isNan(_w));
+    return (ISNAN(_x) ||
+            ISNAN(_y) ||
+            ISNAN(_z) ||
+            ISNAN(_w));
   }
   
   bool isZero() const {

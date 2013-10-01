@@ -69,7 +69,7 @@ double DecimatedSubviewElevationData::getElevationBoxAt(const ElevationData* ele
       const double height = elevationData->getElevationAt((int) mu->min(x, maxX),
                                                           yy);
 
-      if (mu->isNan(height)) {
+      if (ISNAN(height)) {
         return mu->NanD();
       }
 

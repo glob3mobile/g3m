@@ -307,7 +307,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   //VERTICES///////////////////////////////////////////////////////////////
-  const IMathUtils* mu = IMathUtils::instance();
   double minElevation = 0;
   for (int j = 0; j < ry; j++) {
     const double v = (double) j / (ry - 1);
@@ -319,7 +318,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 
       if (elevationData != NULL) {
         const double rawElevation = elevationData->getElevationAt(position);
-        if ( !mu->isNan(rawElevation) ) {
+        if ( !ISNAN(rawElevation) ) {
           elevation = rawElevation * verticalExaggeration;
 
           if (elevation < minElevation) {

@@ -52,11 +52,9 @@ public:
   }
   
   bool isNan() const {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return (mu->isNan(_x) ||
-            mu->isNan(_y) ||
-            mu->isNan(_z));
+    return (ISNAN(_x) ||
+            ISNAN(_y) ||
+            ISNAN(_z));
   }
   
   bool isZero() const {

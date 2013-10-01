@@ -31,6 +31,8 @@
 #define PI       3.14159265358979323846264338327950288
 #define HALF_PI  1.57079632679489661923132169163975144
 
+#define ISNAN(x) (x != x)
+
 class IMathUtils {
 private:
   static IMathUtils* _instance;
@@ -50,9 +52,6 @@ public:
 
   virtual ~IMathUtils() {
   }
-
-  virtual bool isNan(double v) const = 0;
-  virtual bool isNan(float v)  const = 0;
 
   virtual double NanD() const = 0;
   virtual float  NanF() const = 0;

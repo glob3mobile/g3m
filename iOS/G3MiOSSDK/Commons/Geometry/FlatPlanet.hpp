@@ -79,8 +79,8 @@ public:
                        const double height) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    const double x = geodetic.longitude().degrees() * _size._x / 360.0;
-    const double y = geodetic.latitude().degrees() * _size._y / 180.0;
+    const double x = geodetic.longitude()._degrees * _size._x / 360.0;
+    const double y = geodetic.latitude()._degrees * _size._y / 180.0;
     return Vector3D(x, y, geodetic.height());
   }
   
