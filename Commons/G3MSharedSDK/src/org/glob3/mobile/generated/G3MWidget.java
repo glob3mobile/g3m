@@ -192,6 +192,7 @@ public class G3MWidget
         break;
   
       default:
+        _errorRenderer.setErrors(_mainRendererState.getErrors());
         selectedRenderer = _errorRenderer;
         break;
     }

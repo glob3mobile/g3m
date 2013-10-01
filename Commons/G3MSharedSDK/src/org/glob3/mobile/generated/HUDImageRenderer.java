@@ -58,6 +58,7 @@ public class HUDImageRenderer extends LeafRenderer
 
   private static long INSTANCE_COUNTER = 0;
   private long _instanceID;
+  private long _changeCounter;
 
   private static class ImageListener extends IImageListener
   {
@@ -96,8 +97,6 @@ public class HUDImageRenderer extends LeafRenderer
           final int height = camera.getHeight();
   
           _imageFactory.create(rc, width, height, new HUDImageRenderer.ImageListener(this), true);
-  
-          return null;
         }
       }
   
@@ -113,8 +112,17 @@ public class HUDImageRenderer extends LeafRenderer
   {
     _creatingMesh = false;
   
-    int __TODO_create_unique_name;
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "HUDImageRenderer" + IStringUtils.instance().toString(_instanceID), false);
+    if (_mesh != null)
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+      _mesh = null;
+    }
+  
+    final IStringUtils su = IStringUtils.instance();
+    final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
+  
+    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), textureName, false);
   
     _image = null;
     _image = null;
@@ -125,12 +133,6 @@ public class HUDImageRenderer extends LeafRenderer
       return null;
     }
   
-    if (_mesh != null)
-    {
-      if (_mesh != null)
-         _mesh.dispose();
-      _mesh = null;
-    }
   
     final Camera camera = rc.getCurrentCamera();
   
@@ -187,6 +189,7 @@ public class HUDImageRenderer extends LeafRenderer
      _image = null;
      _mesh = null;
      _instanceID = INSTANCE_COUNTER++;
+     _changeCounter = 0;
   
   }
 

@@ -16,9 +16,11 @@ public class HUDErrorRenderer extends HUDImageRenderer, ErrorRenderer
 
   public final void setErrors(java.util.ArrayList<String> errors)
   {
-    ((HUDErrorRenderer_ImageFactory) getImageFactory()).setErrors(errors);
-  
-    recreateImage();
+    HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory) getImageFactory();
+    if (factory.setErrors(errors))
+    {
+      recreateImage();
+    }
   }
 
 }
