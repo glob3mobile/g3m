@@ -17,12 +17,22 @@ Capabilities
 
 ####Works on iOS, Android devices and HTML5 environments
 ![Screenshot with 3 platforms] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
+####Written from the scratch, no legacy dependencies.
+G3M is a library thought to develop mobile apps from the scratch, since first line of code all the development goes towards 
+a productive environment for multiplatform mobile apps development.
 ####Mutitouch support
-####Written from the scratch, no legacy systems
+We support all possible events on mobile devices. The advantages of multi-touch navigation are exploited to visualize map.
+Our support allow increment productivity.
+
 ####2d 2,5d 3d maps.
 ####Scenario maps
-####Works offline
 ####Real Time Support
+####Works offline
+
+####Support terrain models.
++Bil
++ Any other format throught OGR-GDAL conversion
+
 ####Raster Support
 + WMS
 + MapBox
