@@ -29,8 +29,8 @@ class EllipsoidShape : public AbstractMeshShape {
 private:
   
 #ifdef C_CODE
-  const Ellipsoid _ellipsoid;
-  const Quadric _quadric;
+  const Ellipsoid* _ellipsoid;
+  const Quadric    _quadric;
 #endif
 #ifdef JAVA_CODE
   private final Ellipsoid _ellipsoid;
@@ -82,8 +82,8 @@ public:
                  Color* borderColor = NULL,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(Vector3D::zero, radius),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _quadric(Quadric::fromEllipsoid(*_ellipsoid)),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
@@ -109,8 +109,8 @@ public:
                  bool mercator,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(Vector3D::zero, radius),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _quadric(Quadric::fromEllipsoid(*_ellipsoid)),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),

@@ -24,6 +24,7 @@
 #include "MercatorUtils.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
+  delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
   
@@ -211,7 +212,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              _ellipsoid.getRadii()
+                                              _ellipsoid->getRadii()
                                               ));
   const Sector sector(Sector::fullSphere());
 
