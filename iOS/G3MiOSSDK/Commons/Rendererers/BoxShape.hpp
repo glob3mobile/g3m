@@ -104,11 +104,8 @@ public:
   }
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    std::vector<double> intersections;
-    return intersections;
-  }
-
+                                             const Vector3D& direction) const;
+  
 };
 
 #endif

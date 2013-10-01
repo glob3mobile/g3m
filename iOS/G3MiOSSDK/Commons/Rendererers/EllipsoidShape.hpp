@@ -30,9 +30,11 @@ private:
   
 #ifdef C_CODE
   const Ellipsoid _ellipsoid;
+  const Quadric _quadric;
 #endif
 #ifdef JAVA_CODE
   private final Ellipsoid _ellipsoid;
+  private final Quadric _quadric;
 #endif
   
   const Planet* _planet;
@@ -82,7 +84,8 @@ public:
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
                  bool withNormals = true) :
-  _ellipsoid(planet->toCartesian(*position), radius),
+  _ellipsoid(Vector3D::zero, radius),
+  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   AbstractMeshShape(position, altitudeMode),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
@@ -109,7 +112,8 @@ public:
                  bool texturedInside,
                  bool mercator,
                  bool withNormals = true) :
-  _ellipsoid(planet->toCartesian(*position), radius),
+  _ellipsoid(Vector3D::zero, radius),
+  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   AbstractMeshShape(position, altitudeMode),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
