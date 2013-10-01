@@ -23,11 +23,9 @@ package org.glob3.mobile.generated;
 public class GEOTileRasterizer extends CanvasTileRasterizer
 {
   private QuadTree _quadTree = new QuadTree();
-  private G3MContext _context;
 
   public GEOTileRasterizer()
   {
-     _context = null;
   }
 
   public final String getId()
@@ -35,13 +33,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     return "GEOTileRasterizer";
   }
 
-
-  ///#include "IThreadUtils.hpp"
-  ///#include "IFactory.hpp"
-  
   public final void initialize(G3MContext context)
   {
-    _context = context;
   }
 
 
