@@ -9,6 +9,9 @@
 #include "Quadric.hpp"
 
 
+// Algorithm from http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Cuadricas.pdf
+
+
 std::vector<double> Quadric::intersectionsDistances(const Vector3D& origin,
                                                     const Vector3D& direction) const {
   double x0 = origin.x();

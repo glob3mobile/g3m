@@ -12,8 +12,6 @@
 #include "MutableMatrix44D.hpp"
 #include "Ellipsoid.hpp"
 
-// Algorithm from http://serdis.dis......
-
 
 class Quadric {
   
