@@ -49,7 +49,7 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                              0,  /* margin */
                              16, /* padding */
                              8   /* cornerRadius */);
-  const GFont labelFont  = GFont::sansSerif(22);
+  const GFont labelFont  = GFont::sansSerif(18);
   const Color labelColor = Color::white();
 
   const int errorsSize = _errors.size();
