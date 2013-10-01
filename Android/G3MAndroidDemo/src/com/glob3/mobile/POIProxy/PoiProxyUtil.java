@@ -35,8 +35,8 @@ public class PoiProxyUtil {
                                                     final double radius) {
       return "http://poiproxy.mapps.es/browseByLonLat" + //
              "?service=" + service + //
-             "&lon=" + position.longitude()._degrees + //
-             "&lat=" + position.latitude()._degrees + //
+             "&lon=" + position._longitude._degrees + //
+             "&lat=" + position._latitude._degrees + //
              "&dist=" + radius;
    }
 

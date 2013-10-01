@@ -1119,8 +1119,8 @@ public class G3MWebGLDemo
             public boolean onTerrainTouch(final G3MEventContext context,
                                           final TerrainTouchEvent ev) {
                final Geodetic3D position = ev.getPosition();
-               Window.alert("touching terrain on osm layer " + Double.toString(position.latitude()._degrees) + ","
-                            + Double.toString(position.longitude()._degrees));
+               Window.alert("touching terrain on osm layer " + Double.toString(position._latitude._degrees) + ","
+                            + Double.toString(position._longitude._degrees));
                return false;
             }
 

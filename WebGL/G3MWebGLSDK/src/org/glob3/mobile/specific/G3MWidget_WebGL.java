@@ -200,9 +200,9 @@ public final class G3MWidget_WebGL
 		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
 
 		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
-		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::latitude()();
-		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::longitude()();
-		var height = position.@org.glob3.mobile.generated.Geodetic3D::height()();
+		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
+		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
+		var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
 
 		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
 		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
