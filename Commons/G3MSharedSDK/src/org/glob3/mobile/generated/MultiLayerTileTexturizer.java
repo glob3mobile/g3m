@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class LeveledTexturedMesh;
 //class IFloatBuffer;
+//class TileRasterizer;
 
 
 public class MultiLayerTileTexturizer extends TileTexturizer
@@ -61,7 +62,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, PlanetRendererContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
     _texturesHandler = rc.getTexturesHandler();
   
@@ -70,12 +71,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, prc.getTileRasterizer(), rc, prc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, prc.getTessellator(), prc.getTexturePriority()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerSet, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (prc.isForcedFullRender())
+    if (isForcedFullRender)
     {
       builder.start();
     }
