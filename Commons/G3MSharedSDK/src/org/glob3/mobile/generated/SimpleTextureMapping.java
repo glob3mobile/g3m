@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class SimpleTextureMapping extends TextureMapping
 {
-  private final IGLTextureId _glTextureId;
+  private IGLTextureId _glTextureId;
 
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
