@@ -10,38 +10,17 @@
 #define __G3MiOSSDK__HUDErrorRenderer__
 
 #include "ErrorRenderer.hpp"
-#include "HUDImageRenderer.hpp"
+
+class HUDImageRenderer;
 
 
-class HUDErrorRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
+class HUDErrorRenderer : public ErrorRenderer {
 private:
-  std::vector<std::string> _errors;
-
-protected:
-
-  void drawOn(ICanvas* canvas,
-              int width,
-              int height);
-
-  bool isEquals(const std::vector<std::string>& v1,
-                const std::vector<std::string>& v2) const;
+  HUDImageRenderer* _hudImageRenderer;
 
 public:
-  ~HUDErrorRenderer_ImageFactory() {
-  }
 
-  bool setErrors(const std::vector<std::string>& errors);
-};
-
-
-class HUDErrorRenderer : public HUDImageRenderer, public ErrorRenderer {
-
-public:
-  HUDErrorRenderer() :
-  HUDImageRenderer(new HUDErrorRenderer_ImageFactory())
-  {
-
-  }
+  HUDErrorRenderer();
 
   ~HUDErrorRenderer() {
 #ifdef JAVA_CODE
@@ -51,7 +30,6 @@ public:
 
   void setErrors(const std::vector<std::string>& errors);
 
-#ifdef C_CODE
   bool isEnable() const;
 
   void setEnable(bool enable);
@@ -85,7 +63,6 @@ public:
   void onPause(const G3MContext* context);
 
   void onDestroy(const G3MContext* context);
-#endif
 };
 
 #endif

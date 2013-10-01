@@ -90,13 +90,6 @@ private:
 #endif
   void setImage(const IImage* image);
 
-protected:
-  void recreateImage();
-
-  HUDImageRenderer::ImageFactory* getImageFactory() const {
-    return _imageFactory;
-  }
-
 public:
   HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory);
 
@@ -134,6 +127,12 @@ public:
   }
 
   void onDestroy(const G3MContext* context) {
+  }
+
+  void recreateImage();
+
+  HUDImageRenderer::ImageFactory* getImageFactory() const {
+    return _imageFactory;
   }
 
 };

@@ -8,11 +8,35 @@
 
 #include "HUDErrorRenderer.hpp"
 
+#include "HUDImageRenderer.hpp"
+
 #include "ICanvas.hpp"
 #include "Color.hpp"
 #include "ColumnCanvasElement.hpp"
 #include "GFont.hpp"
 #include "TextCanvasElement.hpp"
+
+
+
+class HUDErrorRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
+private:
+  std::vector<std::string> _errors;
+
+protected:
+
+  void drawOn(ICanvas* canvas,
+              int width,
+              int height);
+
+  bool isEquals(const std::vector<std::string>& v1,
+                const std::vector<std::string>& v2) const;
+
+public:
+  ~HUDErrorRenderer_ImageFactory() {
+  }
+
+  bool setErrors(const std::vector<std::string>& errors);
+};
 
 void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                            int width,
@@ -71,75 +95,77 @@ bool HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& er
   return true;
 }
 
+HUDErrorRenderer::HUDErrorRenderer() {
+  _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
+}
+
 void HUDErrorRenderer::setErrors(const std::vector<std::string>& errors) {
-  HUDErrorRenderer_ImageFactory* factory = (HUDErrorRenderer_ImageFactory*) getImageFactory();
+  HUDErrorRenderer_ImageFactory* factory = (HUDErrorRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
   if (factory->setErrors(errors)) {
-    recreateImage();
+    _hudImageRenderer->recreateImage();
   }
 }
 
-#ifdef C_CODE
 bool HUDErrorRenderer::isEnable() const {
-  return true;
+  return _hudImageRenderer->isEnable();
 }
 
 void HUDErrorRenderer::setEnable(bool enable) {
-  // do nothing
+  _hudImageRenderer->setEnable(enable);
 }
 
 RenderState HUDErrorRenderer::getRenderState(const G3MRenderContext* rc) {
-  return RenderState::ready();
+  return _hudImageRenderer->getRenderState(rc);
 }
 
 bool HUDErrorRenderer::isPlanetRenderer() {
-  return false;
+  return _hudImageRenderer->isPlanetRenderer();
 }
 
 SurfaceElevationProvider* HUDErrorRenderer::getSurfaceElevationProvider() {
-  return NULL;
+  return _hudImageRenderer->getSurfaceElevationProvider();
 }
 
 PlanetRenderer* HUDErrorRenderer::getPlanetRenderer() {
-  return NULL;
+  return _hudImageRenderer->getPlanetRenderer();
 }
 
 void HUDErrorRenderer::initialize(const G3MContext* context) {
-  HUDImageRenderer::initialize(context);
+  _hudImageRenderer->initialize(context);
 }
 
 void HUDErrorRenderer::render(const G3MRenderContext* rc,
                               GLState* glState) {
-  HUDImageRenderer::render(rc, glState);
+  _hudImageRenderer->render(rc, glState);
 }
 
 bool HUDErrorRenderer::onTouchEvent(const G3MEventContext* ec,
                                     const TouchEvent* touchEvent) {
-  return HUDImageRenderer::onTouchEvent(ec, touchEvent);
+  return _hudImageRenderer->onTouchEvent(ec, touchEvent);
 }
 
 void HUDErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                              int width, int height) {
-  HUDImageRenderer::onResizeViewportEvent(ec,
-                                          width, height);
+  _hudImageRenderer->onResizeViewportEvent(ec,
+                                           width, height);
 }
 
 void HUDErrorRenderer::start(const G3MRenderContext* rc) {
-  HUDImageRenderer::start(rc);
+  _hudImageRenderer->start(rc);
 }
 
 void HUDErrorRenderer::stop(const G3MRenderContext* rc) {
-  HUDImageRenderer::stop(rc);
+  _hudImageRenderer->stop(rc);
 }
 
 void HUDErrorRenderer::onResume(const G3MContext* context) {
-  HUDImageRenderer::onResume(context);
+  _hudImageRenderer->onResume(context);
 }
 
 void HUDErrorRenderer::onPause(const G3MContext* context) {
-  HUDImageRenderer::onPause(context);
+  _hudImageRenderer->onPause(context);
 }
 
 void HUDErrorRenderer::onDestroy(const G3MContext* context) {
-  HUDImageRenderer::onDestroy(context);
+  _hudImageRenderer->onDestroy(context);
 }
-#endif
