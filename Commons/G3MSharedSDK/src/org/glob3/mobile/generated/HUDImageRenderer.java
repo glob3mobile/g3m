@@ -164,23 +164,6 @@ public class HUDImageRenderer extends LeafRenderer
     _image = image;
   }
 
-  protected final void recreateImage()
-  {
-    _creatingMesh = false;
-  
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
-  
-    _image = null;
-    _image = null;
-  }
-
-  protected final HUDImageRenderer.ImageFactory getImageFactory()
-  {
-    return _imageFactory;
-  }
-
   public HUDImageRenderer(HUDImageRenderer.ImageFactory imageFactory)
   {
      _imageFactory = imageFactory;
@@ -268,6 +251,23 @@ public class HUDImageRenderer extends LeafRenderer
 
   public final void onDestroy(G3MContext context)
   {
+  }
+
+  public final void recreateImage()
+  {
+    _creatingMesh = false;
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  
+    _image = null;
+    _image = null;
+  }
+
+  public final HUDImageRenderer.ImageFactory getImageFactory()
+  {
+    return _imageFactory;
   }
 
 }

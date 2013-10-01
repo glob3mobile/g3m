@@ -1,12 +1,33 @@
 package org.glob3.mobile.generated; 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class HUDErrorRenderer extends HUDImageRenderer, ErrorRenderer
+//
+//  HUDErrorRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 9/28/13.
+//
+//
+
+//
+//  HUDErrorRenderer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 9/28/13.
+//
+//
+
+
+
+//class HUDImageRenderer;
+
+
+public class HUDErrorRenderer extends ErrorRenderer
 {
+  private HUDImageRenderer _hudImageRenderer;
+
 
   public HUDErrorRenderer()
   {
-     super(new HUDErrorRenderer_ImageFactory());
-
+    _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
   }
 
   public void dispose()
@@ -16,11 +37,86 @@ public class HUDErrorRenderer extends HUDImageRenderer, ErrorRenderer
 
   public final void setErrors(java.util.ArrayList<String> errors)
   {
-    HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory) getImageFactory();
+    HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
     if (factory.setErrors(errors))
     {
-      recreateImage();
+      _hudImageRenderer.recreateImage();
     }
   }
 
+  public final boolean isEnable()
+  {
+    return _hudImageRenderer.isEnable();
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _hudImageRenderer.setEnable(enable);
+  }
+
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return _hudImageRenderer.getRenderState(rc);
+  }
+
+  public final boolean isPlanetRenderer()
+  {
+    return _hudImageRenderer.isPlanetRenderer();
+  }
+
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    return _hudImageRenderer.getSurfaceElevationProvider();
+  }
+
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return _hudImageRenderer.getPlanetRenderer();
+  }
+
+  public final void initialize(G3MContext context)
+  {
+    _hudImageRenderer.initialize(context);
+  }
+
+  public final void render(G3MRenderContext rc, GLState glState)
+  {
+    _hudImageRenderer.render(rc, glState);
+  }
+
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
+    return _hudImageRenderer.onTouchEvent(ec, touchEvent);
+  }
+
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
+    _hudImageRenderer.onResizeViewportEvent(ec, width, height);
+  }
+
+  public final void start(G3MRenderContext rc)
+  {
+    _hudImageRenderer.start(rc);
+  }
+
+  public final void stop(G3MRenderContext rc)
+  {
+    _hudImageRenderer.stop(rc);
+  }
+
+
+  public final void onResume(G3MContext context)
+  {
+    _hudImageRenderer.onResume(context);
+  }
+
+  public final void onPause(G3MContext context)
+  {
+    _hudImageRenderer.onPause(context);
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+    _hudImageRenderer.onDestroy(context);
+  }
 }

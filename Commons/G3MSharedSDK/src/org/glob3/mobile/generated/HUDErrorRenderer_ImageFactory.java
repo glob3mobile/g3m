@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  HUDErrorRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-//
-//  HUDErrorRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-
-
-
 public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
