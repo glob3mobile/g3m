@@ -179,10 +179,14 @@ public class ShapesRenderer extends LeafRenderer
   
         if (!shapeDistances.isEmpty())
         {
-          System.out.printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
+  //        printf ("Found %d intersections with shapes:\n",
+  //                (int)shapeDistances.size());
           for (int i = 0; i<shapeDistances.size(); i++)
           {
-            System.out.printf ("   %d: shape %x to distance %f\n", i+1, (int)shapeDistances.get(i)._shape, shapeDistances.get(i)._distance);
+  //          printf ("   %d: shape %x to distance %f\n",
+  //                  i+1,
+  //                  (unsigned int)shapeDistances[i]._shape,
+  //                  shapeDistances[i]._distance);
           }
         }
       }
