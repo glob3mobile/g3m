@@ -18,11 +18,8 @@
 #include "IStringBuilder.hpp"
 #include "GEORasterProjection.hpp"
 
-//#include "IThreadUtils.hpp"
-//#include "IFactory.hpp"
 
 void GEOTileRasterizer::initialize(const G3MContext* context) {
-  _context = context;
 }
 
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
