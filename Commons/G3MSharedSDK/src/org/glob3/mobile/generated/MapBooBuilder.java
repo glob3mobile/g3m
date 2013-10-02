@@ -556,7 +556,8 @@ public abstract class MapBooBuilder
 
   protected final Planet createPlanet()
   {
-    return Planet.createEarth();
+    //return Planet::createEarth();
+    return Planet.createSphericalEarth();
   }
 
   protected final IStorage getStorage()
