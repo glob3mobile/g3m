@@ -19,11 +19,11 @@ class TimeInterval;
 
 
 class IImageResult {
-private:
+public:
   IImage*    _image;
   const bool _expired;
 
-public:
+
   IImageResult(IImage* image,
                bool expired) :
   _image(image),
@@ -34,13 +34,14 @@ public:
   ~IImageResult() {
   }
 
-  IImage* getImage() const {
-    return _image;
-  }
+//  IImage* getImage() const {
+//    return _image;
+//  }
 
-  bool isExpired() const {
-    return _expired;
-  }
+//  bool isExpired() const {
+//    return _expired;
+//  }
+  
 };
 
 
@@ -84,8 +85,8 @@ public:
 //   The image will be NULL if it doesn't exist
 //   The image has to be deleted in C++ / and disposed() en Java.
 //   */
-//  virtual void imageCreated(IImage* image,
-//                            bool expired) = 0;
+//  virtual void imageRead(IImage* image,
+//                         bool expired) = 0;
 //
 //};
 

@@ -241,7 +241,7 @@ CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
   if (_lastImageResult != NULL) {
-    IFactory::instance()->deleteImage(_lastImageResult->getImage());
+    IFactory::instance()->deleteImage(_lastImageResult->_image);
     delete _lastImageResult;
   }
   delete _lastImageURL;
@@ -302,8 +302,8 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
     if (_lastImageURL->isEquals(url)) {
       // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-      return IImageResult(_lastImageResult->getImage()->shallowCopy(),
-                          _lastImageResult->isExpired());
+      return IImageResult(_lastImageResult->_image->shallowCopy(),
+                          _lastImageResult->_expired);
     }
   }
 
@@ -312,22 +312,22 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
   }
 
   IImageResult cachedImageResult = _storage->readImage(url, readExpired);
-  IImage* cachedImage = cachedImageResult.getImage();
+  IImage* cachedImage = cachedImageResult._image;
 
   if (cachedImage != NULL) {
     if (_lastImageResult != NULL) {
-      IFactory::instance()->deleteImage(_lastImageResult->getImage());
+      IFactory::instance()->deleteImage(_lastImageResult->_image);
       delete _lastImageResult;
     }
     _lastImageResult = new IImageResult(cachedImage->shallowCopy(),
-                                        cachedImageResult.isExpired());
+                                        cachedImageResult._expired);
 
     delete _lastImageURL;
     _lastImageURL = new URL(url);
   }
 
   return IImageResult(cachedImage,
-                      cachedImageResult.isExpired());
+                      cachedImageResult._expired);
 }
 
 long long CachedDownloader::requestImage(const URL& url,
@@ -339,9 +339,9 @@ long long CachedDownloader::requestImage(const URL& url,
   _requestsCounter++;
 
   IImageResult cached = getCachedImageResult(url, readExpired);
-  IImage* cachedImage = cached.getImage();
+  IImage* cachedImage = cached._image;
 
-  if (cachedImage != NULL && !cached.isExpired()) {
+  if (cachedImage != NULL && !cached._expired) {
     // cache hit
     _cacheHitsCounter++;
 
