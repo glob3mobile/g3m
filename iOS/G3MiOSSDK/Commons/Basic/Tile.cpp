@@ -377,12 +377,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
-      if (tilesStatistics->getSplitsCountInFrame() > 1) {
+      if (tilesStatistics->getSplitsCountInFrame() > 0) {
         // there are not more splitsCount-budget to spend
         return true;
       }
 
-      if (lastSplitTimer->elapsedTimeInMilliseconds() < 15) {
+      if (lastSplitTimer->elapsedTimeInMilliseconds() < 25) {
         // there are not more time-budget to spend
         return true;
       }
@@ -414,9 +414,26 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     texHeight *= ry;
   }
 
+  double factor = 5;
+  switch (tilesRenderParameters->_quality) {
+    case QUALITY_LOW:
+      factor = 5;
+      break;
+    case QUALITY_MEDIUM:
+      factor = 3;
+      break;
+    case QUALITY_HIGH:
+      factor = 1.5;
+      break;
+  }
+
   const Vector2F ex = boundingVolume->projectedExtent(rc);
-  const float t = (ex._x + ex._y);
-  _lastLodTest = ( t <= ((texWidth + texHeight) * 1.75f) );
+//  const float t = (ex._x + ex._y);
+//  _lastLodTest = ( t <= ((texWidth + texHeight) * 1.75f) );
+  const float t = (ex._x * ex._y);
+//  _lastLodTest = ( t <= ((texWidth * texHeight) * 1.75f) );
+  _lastLodTest = t <= ((texWidth * texHeight) * factor);
+
   return _lastLodTest;
 }
 

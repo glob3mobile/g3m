@@ -14,17 +14,13 @@ import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.URL;
 
-import android.content.Context;
-
 
 public final class Factory_Android
          extends
             IFactory {
-   private final Context _context;
 
 
-   public Factory_Android(final Context c) {
-      _context = c;
+   public Factory_Android() {
    }
 
 

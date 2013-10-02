@@ -258,11 +258,13 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const Quality quality = QUALITY_LOW;
 
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
-                                                                      incrementalTileQuality);
+                                                                      incrementalTileQuality,
+                                                                      quality);
 
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;

@@ -23,6 +23,7 @@ _renderDebug(false),
 _useTilesSplitBudget(true),
 _forceFirstLevelTilesRenderOnStart(true),
 _incrementalTileQuality(false),
+_quality(QUALITY_LOW),
 _parameters(NULL),
 _layerSet(NULL),
 _texturizer(NULL),
@@ -166,6 +167,14 @@ bool PlanetRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
  */
 bool PlanetRendererBuilder::getIncrementalTileQuality() {
   return _incrementalTileQuality;
+}
+
+Quality PlanetRendererBuilder::getQuality() const {
+  return _quality;
+}
+
+void PlanetRendererBuilder::setQuality(Quality quality) {
+  _quality = quality;
 }
 
 /**
@@ -333,7 +342,8 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
-                                   getIncrementalTileQuality());
+                                   getIncrementalTileQuality(),
+                                   getQuality());
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {

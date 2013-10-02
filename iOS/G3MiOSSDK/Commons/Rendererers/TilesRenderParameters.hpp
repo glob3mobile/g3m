@@ -9,27 +9,33 @@
 #ifndef G3MiOSSDK_TilesRenderParameters_hpp
 #define G3MiOSSDK_TilesRenderParameters_hpp
 
-//#include "Sector.hpp"
-//#include "Vector2I.hpp"
-#include "URL.hpp"
+
+enum Quality {
+  QUALITY_LOW,
+  QUALITY_MEDIUM,
+  QUALITY_HIGH
+};
+
 
 class TilesRenderParameters {
 public:
-  const bool _renderDebug;
-  const bool _useTilesSplitBudget;
-  const bool _forceFirstLevelTilesRenderOnStart;
-  const bool _incrementalTileQuality;
+  const bool    _renderDebug;
+  const bool    _useTilesSplitBudget;
+  const bool    _forceFirstLevelTilesRenderOnStart;
+  const bool    _incrementalTileQuality;
+  const Quality _quality;
 
-  TilesRenderParameters(const bool renderDebug,
-                        const bool useTilesSplitBudget,
-                        const bool forceFirstLevelTilesRenderOnStart,
-                        const bool incrementalTileQuality) :
+  TilesRenderParameters(const bool    renderDebug,
+                        const bool    useTilesSplitBudget,
+                        const bool    forceFirstLevelTilesRenderOnStart,
+                        const bool    incrementalTileQuality,
+                        const Quality quality) :
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
-  _incrementalTileQuality(incrementalTileQuality)
+  _incrementalTileQuality(incrementalTileQuality),
+  _quality(quality)
   {
-
   }
 
   ~TilesRenderParameters() {
