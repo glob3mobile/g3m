@@ -31,7 +31,7 @@ protected:
     private int     _size;
 
     public FloatArrayList() {
-      this(256);
+      this(1024);
     }
 
     public FloatArrayList(final int initialCapacity) {
