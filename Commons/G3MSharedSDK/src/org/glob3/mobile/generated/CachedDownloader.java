@@ -36,7 +36,7 @@ public class CachedDownloader extends IDownloader
       if (_lastImageURL.isEquals(url))
       {
         // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-        return new IImageResult(_lastImageResult.getImage().shallowCopy(), _lastImageResult.isExpired());
+        return new IImageResult(_lastImageResult._image.shallowCopy(), _lastImageResult._expired);
       }
     }
   
@@ -46,24 +46,24 @@ public class CachedDownloader extends IDownloader
     }
   
     IImageResult cachedImageResult = _storage.readImage(url, readExpired);
-    IImage cachedImage = cachedImageResult.getImage();
+    IImage cachedImage = cachedImageResult._image;
   
     if (cachedImage != null)
     {
       if (_lastImageResult != null)
       {
-        IFactory.instance().deleteImage(_lastImageResult.getImage());
+        IFactory.instance().deleteImage(_lastImageResult._image);
         if (_lastImageResult != null)
            _lastImageResult.dispose();
       }
-      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult.isExpired());
+      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult._expired);
   
       if (_lastImageURL != null)
          _lastImageURL.dispose();
       _lastImageURL = new URL(url);
     }
   
-    return new IImageResult(cachedImage, cachedImageResult.isExpired());
+    return new IImageResult(cachedImage, cachedImageResult._expired);
   }
 
   private IImageResult _lastImageResult;
@@ -133,9 +133,9 @@ public class CachedDownloader extends IDownloader
     _requestsCounter++;
   
     IImageResult cached = getCachedImageResult(url, readExpired);
-    IImage cachedImage = cached.getImage();
+    IImage cachedImage = cached._image;
   
-    if (cachedImage != null && !cached.isExpired())
+    if (cachedImage != null && !cached._expired)
     {
       // cache hit
       _cacheHitsCounter++;
@@ -168,7 +168,7 @@ public class CachedDownloader extends IDownloader
   
     if (_lastImageResult != null)
     {
-      IFactory.instance().deleteImage(_lastImageResult.getImage());
+      IFactory.instance().deleteImage(_lastImageResult._image);
       if (_lastImageResult != null)
          _lastImageResult.dispose();
     }
