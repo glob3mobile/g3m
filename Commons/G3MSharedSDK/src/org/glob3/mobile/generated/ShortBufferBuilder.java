@@ -27,7 +27,7 @@ public class ShortBufferBuilder
     private int     _size;
 
     public ShortArrayList() {
-      this(256);
+      this(1024);
     }
 
     public ShortArrayList(final int initialCapacity) {
