@@ -182,7 +182,7 @@ public final class Downloader_Android_Handler {
 
       try {
          if (_g3mURL.isFileProtocol()) {
-            data = getData(downloader.getAppContext().getAssets().open(_g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "")));
+            data = getData(downloader.getAppContext().getAssets().open(_g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "")), -1);
             if (data != null) {
                statusCode = 200;
             }

@@ -96,14 +96,14 @@ void IImageUtils::combine(int width,
     const RectangleF* sourceRect = sourceRects[0];
     const RectangleF* destRect   = destRects[0];
 
-    if (sourceRect->_x == 0 &&
-        sourceRect->_y == 0 &&
-        sourceRect->_width == image->getWidth() &&
-        sourceRect->_height == image->getHeight() &&
-        destRect->_x == 0 &&
-        destRect->_y == 0 &&
-        destRect->_width == width &&
-        destRect->_height == height) {
+    if ((sourceRect->_x      == 0) &&
+        (sourceRect->_y      == 0) &&
+        (sourceRect->_width  == image->getWidth()) &&
+        (sourceRect->_height == image->getHeight()) &&
+        (destRect->_x        == 0) &&
+        (destRect->_y        == 0) &&
+        (destRect->_width    == width) &&
+        (destRect->_height   == height)) {
       scale(width,
             height,
             image,
