@@ -7,7 +7,6 @@ import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
@@ -19,21 +18,6 @@ import org.glob3.mobile.generated.URL;
 public class Factory_JavaDesktop
          extends
             IFactory {
-
-   @Override
-   public void createImageFromFileName(final String pFilename,
-                                       final IImageListener pListener,
-                                       final boolean pAutodelete) {
-      throw new RuntimeException("Not yet implemented");
-   }
-
-
-   @Override
-   public void createImageFromBuffer(final IByteBuffer pBuffer,
-                                     final IImageListener pListener,
-                                     final boolean pAutodelete) {
-      throw new RuntimeException("Not yet implemented");
-   }
 
 
    @Override
