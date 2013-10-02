@@ -283,7 +283,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 }
 
 const Planet* MapBooBuilder::createPlanet() {
-  return Planet::createEarth();
+  //return Planet::createEarth();
+  return Planet::createSphericalEarth();
 }
 
 std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
