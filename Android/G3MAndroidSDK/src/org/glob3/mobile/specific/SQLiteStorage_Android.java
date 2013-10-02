@@ -29,6 +29,9 @@ public final class SQLiteStorage_Android
          extends
             IStorage {
 
+   private static final String[]         COLUMNS   = new String[] { "contents", "expiration" };
+   private static final String           SELECTION = "name = ?";
+
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
 
@@ -218,8 +221,8 @@ public final class SQLiteStorage_Android
 
       final Cursor cursor = _readDB.query( // 
                "buffer2", //
-               new String[] { "contents", "expiration" }, //
-               "name = ?", //
+               COLUMNS, //
+               SELECTION, //
                new String[] { name }, //
                null, //
                null, //
@@ -346,8 +349,8 @@ public final class SQLiteStorage_Android
 
       final Cursor cursor = _readDB.query( //
                "image2", //
-               new String[] { "contents", "expiration" }, //
-               "name = ?", //
+               COLUMNS, //
+               SELECTION, //
                new String[] { name }, //
                null, //
                null, //
