@@ -10,6 +10,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private final boolean _showStatistics;
   private ITileVisitor _tileVisitor = null;
 
+  private TilesStatistics _statistics = new TilesStatistics();
+
   private Camera     _lastCamera;
   private G3MContext _context;
 
@@ -306,7 +308,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
       {
-        TilesStatistics statistics = new TilesStatistics();
+  //      TilesStatistics statistics;
+        _statistics.clear();
   
         final LayerTilesRenderParameters layerTilesRenderParameters = _layerSet.getLayerTilesRenderParameters();
   
@@ -487,7 +490,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    TilesStatistics statistics = new TilesStatistics();
+    //TilesStatistics statistics;
+    _statistics.clear();
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -507,7 +511,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority); // if first render, force full render
       }
     }
     else
@@ -526,7 +530,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority); // if first render, force full render
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority); // if first render, force full render
         }
   
         toVisit = toVisitInNextIteration;
@@ -535,11 +539,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (_showStatistics)
     {
-      statistics.log(rc.getLogger());
+      _statistics.log(rc.getLogger());
     }
   
   
-    final Sector renderedSector = statistics.getRenderedSector();
+    final Sector renderedSector = _statistics.getRenderedSector();
     if (renderedSector != null)
     {
       if ((_lastVisibleSector == null) || !renderedSector.isEquals(_lastVisibleSector))

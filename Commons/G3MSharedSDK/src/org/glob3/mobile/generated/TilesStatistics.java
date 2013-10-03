@@ -70,6 +70,22 @@ public class TilesStatistics
        _renderedSector.dispose();
   }
 
+  public final void clear()
+  {
+    _tilesProcessed = 0;
+    _tilesVisible = 0;
+    _tilesRendered = 0;
+    _splitsCountInFrame = 0;
+    _buildersStartsInFrame = 0;
+    if (_renderedSector != null)
+       _renderedSector.dispose();
+    _renderedSector = null;
+    for (int i = 0; i < _maxLOD; i++)
+    {
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
+  }
+
   public final int getSplitsCountInFrame()
   {
     return _splitsCountInFrame;
