@@ -213,12 +213,12 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
 
 IImageResult SQLiteStorage_iOS::readImage(const URL& url,
                                           bool readExpired) {
-  NSDate* startAll = [NSDate date];
+//  NSDate* startAll = [NSDate date];
 
   IImage* image = NULL;
   bool expired = false;
 
-  double parsedTime = 0;
+//  double parsedTime = 0;
 
   NSString* name = [NSString stringWithCppString: url.getPath()];
   SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
@@ -230,9 +230,9 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
     expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
 
     if (readExpired || !expired) {
-      NSDate* startParse = [NSDate date];
+//      NSDate* startParse = [NSDate date];
       UIImage* uiImage = [UIImage imageWithData:data];
-      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
+//      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
 
       if (uiImage) {
         image = new Image_iOS(uiImage,
@@ -246,9 +246,9 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
 
   [rs close];
 
-  NSLog(@"STORAGE: read image in %f (parse=%f)",
-        ([startAll timeIntervalSinceNow] * -1000.0),
-        parsedTime);
+//  NSLog(@"STORAGE: read image in %f (parse=%f)",
+//        ([startAll timeIntervalSinceNow] * -1000.0),
+//        parsedTime);
 
   return IImageResult(image, expired);
 }

@@ -71,6 +71,19 @@ public:
     delete _renderedSector;
   }
 
+  void clear() {
+    _tilesProcessed = 0;
+    _tilesVisible = 0;
+    _tilesRendered = 0;
+    _splitsCountInFrame = 0;
+    _buildersStartsInFrame = 0;
+    delete _renderedSector;
+    _renderedSector = NULL;
+    for (int i = 0; i < _maxLOD; i++) {
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
+  }
+
   int getSplitsCountInFrame() const {
     return _splitsCountInFrame;
   }
@@ -200,7 +213,7 @@ public:
 
 class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
 private:
-  TileTessellator*       _tessellator;
+  TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
@@ -208,6 +221,8 @@ private:
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
   ITileVisitor*                _tileVisitor = NULL;
+
+  TilesStatistics _statistics;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;

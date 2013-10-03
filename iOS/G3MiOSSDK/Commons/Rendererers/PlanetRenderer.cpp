@@ -423,7 +423,8 @@ bool PlanetRenderer::isReadyToRenderTiles(const G3MRenderContext *rc) {
     const int firstLevelTilesCount = _firstLevelTiles.size();
     
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-      TilesStatistics statistics;
+//      TilesStatistics statistics;
+      _statistics.clear();
 
       const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
 
@@ -579,7 +580,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-  TilesStatistics statistics;
+  //TilesStatistics statistics;
+  _statistics.clear();
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -604,7 +606,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                    cameraNormalizedPosition,
                    cameraAngle2HorizonInRadians,
                    cameraFrustumInModelCoordinates,
-                   &statistics,
+                   &_statistics,
                    _verticalExaggeration,
                    layerTilesRenderParameters,
                    _texturizer,
@@ -641,7 +643,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                      cameraNormalizedPosition,
                      cameraAngle2HorizonInRadians,
                      cameraFrustumInModelCoordinates,
-                     &statistics,
+                     &_statistics,
                      _verticalExaggeration,
                      layerTilesRenderParameters,
                      _texturizer,
@@ -662,11 +664,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
   
   if (_showStatistics) {
-    statistics.log( rc->getLogger() );
+    _statistics.log( rc->getLogger() );
   }
   
   
-  const Sector* renderedSector = statistics.getRenderedSector();
+  const Sector* renderedSector = _statistics.getRenderedSector();
   if (renderedSector != NULL) {
     if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {
       delete _lastVisibleSector;
