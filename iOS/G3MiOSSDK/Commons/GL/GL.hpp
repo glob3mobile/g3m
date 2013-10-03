@@ -65,6 +65,8 @@ private:
 
 //  const bool _verbose;
 
+  GLGlobalState _clearScreenState;
+
 public:
   
   

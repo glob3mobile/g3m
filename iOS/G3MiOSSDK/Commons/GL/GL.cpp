@@ -31,11 +31,9 @@ void GL::clearScreen(const Color& color) {
 //    ILogger::instance()->logInfo("GL::clearScreen()");
 //  }
 
-  GLGlobalState state;
-  state.setClearColor(color);
-  state.applyChanges(this, _currentGLGlobalState);
+  _clearScreenState.setClearColor(color);
+  _clearScreenState.applyChanges(this, _currentGLGlobalState);
 
-  //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
