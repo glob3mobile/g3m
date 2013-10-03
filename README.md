@@ -16,7 +16,9 @@ Capabilities
 ============
 
 ####Works on iOS, Android devices and HTML5 environments
-![Screenshot with 3 platforms] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
+![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
+![Screenshot iOS] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/ios.png)
+![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/webgl.png)
 ####Written from the scratch, no legacy dependencies.
 G3M is a library thought to develop mobile apps from the scratch, since first line of code all the development goes towards 
 a productive environment for multiplatform mobile apps development.
