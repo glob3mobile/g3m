@@ -35,10 +35,10 @@ public final class SQLiteStorage_Android
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
 
-
    private final MySQLiteOpenHelper      _dbHelper;
    private SQLiteDatabase                _writeDB;
    private SQLiteDatabase                _readDB;
+
    private final BitmapFactory.Options   _options;
    private final byte[]                  _temp_storage = new byte[128 * 1024];
 
@@ -117,7 +117,6 @@ public final class SQLiteStorage_Android
                           final boolean saveInBackground) {
       final String table = "buffer2";
 
-      //      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
       final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer();
       final String name = url.getPath();
 
@@ -252,10 +251,9 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
-
-            //            final long start = System.currentTimeMillis();
+            // final long start = System.currentTimeMillis();
             final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
-            //            ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+            // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
             if (bitmap == null) {
                ILogger.instance().logError("Can't create bitmap from content of storage");
@@ -310,6 +308,5 @@ public final class SQLiteStorage_Android
    public synchronized boolean isAvailable() {
       return (_readDB != null) && (_writeDB != null);
    }
-
 
 }
