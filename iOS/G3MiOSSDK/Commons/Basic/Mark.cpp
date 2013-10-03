@@ -250,7 +250,7 @@ _glState(new GLState())
 
 }
 
-Mark::Mark(IImage*            image,
+Mark::Mark(const IImage*      image,
            const std::string& imageID,
            const Geodetic3D&  position,
            AltitudeMode altitudeMode,
