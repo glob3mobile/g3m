@@ -693,21 +693,21 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
   if (_lastCamera == NULL) {
     return false;
   }
-  
+
   if (touchEvent->getType() == LongPress) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
-    
+
     const Planet* planet = ec->getPlanet();
-    
+
     const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
     if (positionCartesian.isNan()) {
       return false;
     }
-    
+
     const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
-    
+
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
@@ -716,11 +716,17 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
           return true;
         }
+
+        int _DGG_At_Work;
+//        if (_terrainTouchListener != NULL) {
+//          TODO;
+//        }
       }
     }
-    
+
+
   }
-  
+
   return false;
 }
 
