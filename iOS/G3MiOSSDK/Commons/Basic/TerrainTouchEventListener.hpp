@@ -60,7 +60,7 @@ public:
 #ifdef JAVA_CODE
   public void dispose();
 #endif
-
+  
 };
 
 #endif
