@@ -45,6 +45,7 @@ class GPUProgramManager;
 class ICameraActivityListener;
 class GLState;
 class PlanetRenderer;
+class G3MRenderContext;
 
 #include <vector>
 #include <string>
@@ -268,7 +269,9 @@ private:
 
   const InitialCameraPositionProvider* _initialCameraPositionProvider;
   bool _initialCameraPositionHasBeenSet;
-  
+
+  G3MRenderContext* _renderContext;
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,

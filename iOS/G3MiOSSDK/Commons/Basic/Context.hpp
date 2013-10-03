@@ -18,7 +18,7 @@ class IDownloader;
 class ILogger;
 class GL;
 class EffectsScheduler;
-class ITimer;
+//class ITimer;
 class IStringUtils;
 class IThreadUtils;
 class IMathUtils;
@@ -28,6 +28,7 @@ class OrderedRenderable;
 class GPUProgramManager;
 class SurfaceElevationProvider;
 
+#include "ITimer.hpp"
 #include <vector>
 
 class G3MContext {
@@ -214,6 +215,13 @@ public:
   _gpuProgramManager(gpuProgramManager)
   {
 
+  }
+
+  void clear() {
+    _frameStartTimer->start();
+
+    delete _orderedRenderables;
+    _orderedRenderables = NULL;
   }
 
   GL* getGL() const {
