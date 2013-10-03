@@ -22,7 +22,6 @@ G3M is a library thought to develop mobile apps from the scratch, since first li
 a productive environment for multiplatform mobile apps development.
 ####Mutitouch support
 We support all possible events on mobile devices. The advantages of multi-touch navigation are exploited to visualize map.
-Our support allow increment productivity.
 
 ####2d 2,5d 3d maps.
 ####Scenario maps
