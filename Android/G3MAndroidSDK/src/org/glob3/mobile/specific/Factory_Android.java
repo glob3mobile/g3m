@@ -20,7 +20,21 @@ public final class Factory_Android
             IFactory {
 
 
+   private static class FloatArrayThreadLocal
+            extends
+               ThreadLocal<float[]> {
+      @Override
+      protected float[] initialValue() {
+         return new float[1024];
+      }
+   }
+
+
+   private final FloatArrayThreadLocal _floatArrayThreadLocal;
+
+
    public Factory_Android() {
+      _floatArrayThreadLocal = new FloatArrayThreadLocal();
    }
 
 
@@ -133,5 +147,16 @@ public final class Factory_Android
       return new FloatBuffer_Android(array, length);
    }
 
+
+   @Override
+   public float[] getThreadLocalFloatArray() {
+      return _floatArrayThreadLocal.get();
+   }
+
+
+   @Override
+   public void setThreadLocalFloatArray(final float[] array) {
+      _floatArrayThreadLocal.set(array);
+   }
 
 }

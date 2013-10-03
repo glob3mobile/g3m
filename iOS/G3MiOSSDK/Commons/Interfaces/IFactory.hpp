@@ -89,8 +89,8 @@ public:
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
 
-  public abstract float[] getThreadLocalFloatArray();
-  public abstract void    setThreadLocalFloatArray(final float[] array);
+//  public abstract float[] getThreadLocalFloatArray();
+//  public abstract void    setThreadLocalFloatArray(final float[] array);
 #endif
   
 };
