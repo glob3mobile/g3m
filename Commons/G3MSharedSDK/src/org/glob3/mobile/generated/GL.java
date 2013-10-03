@@ -107,7 +107,6 @@ public class GL
 
 //  const bool _verbose;
 
-  private GLGlobalState _clearScreenState = new GLGlobalState();
 
 
 
@@ -145,8 +144,10 @@ public class GL
   //    ILogger::instance()->logInfo("GL::clearScreen()");
   //  }
   
-    _clearScreenState.setClearColor(color);
-    _clearScreenState.applyChanges(this, _currentGLGlobalState);
+    int TODO_move_to_instance;
+    GLGlobalState clearScreenState = new GLGlobalState();
+    clearScreenState.setClearColor(color);
+    clearScreenState.applyChanges(this, _currentGLGlobalState);
   
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
