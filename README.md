@@ -81,6 +81,10 @@ Other projections can be accesed by gdal with preprocess transformation on serve
 + Any tiled WebMercator format
 
 ####Vectorial Support.
+The vectorial stuff could be done with differents approach depending the data and the capabilities that
+developer wants for his application, layers could be rasterized and cached offline when are very big or complex, in 
+other cases the vectorial 
+
 + geoJSON -> bson
 + Any other format throught OGR-GDAL conversion
 
