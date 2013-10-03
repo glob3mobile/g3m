@@ -125,15 +125,25 @@ public final class Factory_WebGL
    }
 
 
+   //   @Override
+   //   public IShortBuffer createShortBuffer(final short[] array) {
+   //      return new ShortBuffer_WebGL(array);
+   //   }
+   //   @Override
+   //   public IFloatBuffer createFloatBuffer(final float[] array) {
+   //      return new FloatBuffer_WebGL(array);
+   //   }
+
+
    @Override
-   public IShortBuffer createShortBuffer(final short[] array) {
-      return new ShortBuffer_WebGL(array);
+   public IShortBuffer createShortBuffer(final IShortBuffer buffer) {
+      return new ShortBuffer_WebGL(buffer);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final float[] array) {
-      return new FloatBuffer_WebGL(array);
+   public IFloatBuffer createFloatBuffer(final IFloatBuffer buffer) {
+      return new FloatBuffer_WebGL(buffer);
    }
 
 }

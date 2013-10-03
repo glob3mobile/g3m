@@ -105,14 +105,24 @@ public class Factory_JavaDesktop
    }
 
 
+   //   @Override
+   //   public IShortBuffer createShortBuffer(final short[] array) {
+   //      throw new RuntimeException("Not yet implemented");
+   //   }
+   //   @Override
+   //   public IFloatBuffer createFloatBuffer(final float[] array) {
+   //      return new FloatBuffer_JavaDesktop(array);
+   //   }
+
+
    @Override
-   public IShortBuffer createShortBuffer(final short[] array) {
+   public IShortBuffer createShortBuffer(final IShortBuffer buffer) {
       throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final float[] array) {
-      return new FloatBuffer_JavaDesktop(array);
+   public IFloatBuffer createFloatBuffer(final IFloatBuffer buffer) {
+      return new FloatBuffer_JavaDesktop(buffer);
    }
 }

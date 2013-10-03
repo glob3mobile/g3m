@@ -111,14 +111,24 @@ public final class Factory_Android
 
 
    @Override
-   public IShortBuffer createShortBuffer(final short[] array) {
-      return new ShortBuffer_Android(array);
+   public IShortBuffer createShortBuffer(final IShortBuffer buffer) {
+      return new ShortBuffer_Android(buffer);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final float[] array) {
-      return new FloatBuffer_Android(array);
+   public IFloatBuffer createFloatBuffer(final IFloatBuffer buffer) {
+      return new FloatBuffer_Android(buffer);
    }
+
+
+   //   @Override
+   //   public IShortBuffer createShortBuffer(final short[] array) {
+   //      return new ShortBuffer_Android(array);
+   //   }
+   //   @Override
+   //   public IFloatBuffer createFloatBuffer(final float[] array) {
+   //      return new FloatBuffer_Android(array);
+   //   }
 
 }
