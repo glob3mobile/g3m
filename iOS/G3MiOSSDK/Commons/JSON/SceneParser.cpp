@@ -52,6 +52,7 @@ const std::string SceneParser::MAXY = "maxy";
 const std::string SceneParser::SPLITSLONGITUDE = "splitsLongitude";
 const std::string SceneParser::SPLITSLATITUDE = "splitsLatitude";
 const std::string SceneParser::ISTRANSPARENT = "isTransparent";
+const std::string SceneParser::ISENABLED = "isEnabled";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
@@ -139,7 +140,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
   const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
-  bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
+  bool transparent = getValueBooleanParam(jsonLayer->getAsString(ISTRANSPARENT));
   
   std::string format = getFormat(transparent);
   
@@ -188,7 +189,9 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
   const int jsonSplitsLon = atoi(jsonLayer->getAsString(SPLITSLONGITUDE)->value().c_str());
   
-  bool transparent = isTransparent(jsonLayer->getAsString(ISTRANSPARENT));
+  bool transparent = getValueBooleanParam(jsonLayer->getAsString(ISTRANSPARENT));
+  
+  bool enabled = getValueBooleanParam(jsonLayer->getAsString(ISENABLED));
   
   std::string format = getFormat(transparent);
   
@@ -222,6 +225,9 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     TimeInterval::fromDays(30),
                                     true,
                                     new LayerTilesRenderParameters(Sector::fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters::defaultTileTextureResolution(),LayerTilesRenderParameters::defaultTileMeshResolution(),false));
+  if (!enabled) {
+    tmsLayer->setEnable(enabled);
+  }
   
   layerSet->addLayer(tmsLayer);
 }
@@ -244,14 +250,14 @@ LevelTileCondition* SceneParser::getLevelCondition(const JSONString* jsonMinLeve
   return levelTileCondition;
 }
 
-bool SceneParser::isTransparent(const JSONString* jsonIsTransparent){
-  bool isTransparent = true;
-  if(jsonIsTransparent!=NULL){
-    if(jsonIsTransparent->value() == "false"){
-      isTransparent = false;
+bool SceneParser::getValueBooleanParam(const JSONString* param){
+  bool booleanParam = true;
+  if(param!=NULL){
+    if(param->value() == "false"){
+      booleanParam = false;
     }
   }
-  return isTransparent;
+  return booleanParam;
 }
 
 Sector SceneParser::getSector(const JSONObject* jsonBBOX){
