@@ -22,11 +22,11 @@ public class GenericQuadTree_Node
   }
 
 
-  //void GenericQuadTree_Node::computeElementsSector(){
+  //void GenericQuadTree_Node::computeElementsSector() {
   //
   //  delete _elementsSector;
   //  _elementsSector = new Sector(_sector);
-  //  if (_children == NULL){
+  //  if (_children == NULL) {
   //    const int size = _elements.size();
   //    for (int i = 0; i < size; i++) {
   //      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
@@ -83,9 +83,9 @@ public class GenericQuadTree_Node
     //  for (int i = 0; i < size; i++) {
     //    GenericQuadTree_Element* e = _elements[i];
     //
-    //    for (int j = 0; j < 4; j++){
+    //    for (int j = 0; j < 4; j++) {
     //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(e, maxElementsPerNode, maxDepth)){
+    //      if (child->add(e, maxElementsPerNode, maxDepth)) {
     //        break;
     //      }
     //    }

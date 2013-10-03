@@ -361,7 +361,7 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (_skirted)
     {
-  
+      int _ASK_JM; // sW and nW ? Why not NW and SE ??
       final Vector3D sw = planet.toCartesian(tileSector.getSW());
       final Vector3D nw = planet.toCartesian(tileSector.getNW());
       final double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
