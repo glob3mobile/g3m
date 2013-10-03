@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  TerrainTouchEventListener.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 10/3/13.
+//
+//
+
+//
 //  TerrainTouchEventListener.hpp
 //  G3MiOSSDK
 //

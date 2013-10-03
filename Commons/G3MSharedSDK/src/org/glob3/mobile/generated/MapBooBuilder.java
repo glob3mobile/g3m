@@ -422,7 +422,14 @@ public abstract class MapBooBuilder
         final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
         if (cameraPosition != null)
         {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          //if (cameraPosition->isAnimated()) {
+          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(4), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          //}
+          //else {
+          //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
+          //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
+          //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
+          //}
         }
       }
     }
@@ -746,10 +753,6 @@ public abstract class MapBooBuilder
       else
       {
         final JSONString jsonError = jsonObject.getAsString("error");
-  //      if (jsonError != NULL) {
-  //        ILogger::instance()->logError("Server Error: %s",
-  //                                      jsonError->value().c_str());
-  //      }
         if (jsonError == null)
         {
           final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
