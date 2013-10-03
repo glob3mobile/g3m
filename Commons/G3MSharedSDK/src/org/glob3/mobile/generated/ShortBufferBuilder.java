@@ -78,7 +78,8 @@ public class ShortBufferBuilder
 
   public final IShortBuffer create()
   {
-    return IFactory.instance().createShortBuffer( _values.toArray() );
+    //return IFactory.instance().createShortBuffer( _values.toArray() );
+    return IFactory.instance().createShortBuffer( this );
   }
 
   public final String description()
