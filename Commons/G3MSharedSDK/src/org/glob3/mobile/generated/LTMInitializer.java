@@ -35,7 +35,7 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor)
     {
-      final Sector tileSector = _tile.getSector();
+      final Sector tileSector = _tile._sector;
 
       final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower, _mercator);
 

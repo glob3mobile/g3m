@@ -147,7 +147,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final int level = tile.getLevel() - ancestorTile.getLevel();
+    final int level = tile._level - ancestorTile._level;
     _texturesHandler.retainGLTextureId(glTextureId);
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
     {

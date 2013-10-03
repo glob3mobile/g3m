@@ -111,10 +111,10 @@ public class BingMapsLayer extends Layer
   
     final IStringUtils su = IStringUtils.instance();
   
-    final int level = tile.getLevel();
-    final int column = tile.getColumn();
+    final int level = tile._level;
+    final int column = tile._column;
     final int numRows = (int) IMathUtils.instance().pow(2.0, level);
-    final int row = numRows - tile.getRow() - 1;
+    final int row = numRows - tile._row - 1;
   
     final int subdomainsSize = _imageUrlSubdomains.size();
     String subdomain = "";
@@ -132,7 +132,7 @@ public class BingMapsLayer extends Layer
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
   
-    petitions.add(new Petition(tile.getSector(), new URL(path, false), getTimeToCache(), getReadExpired(), true));
+    petitions.add(new Petition(tile._sector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }

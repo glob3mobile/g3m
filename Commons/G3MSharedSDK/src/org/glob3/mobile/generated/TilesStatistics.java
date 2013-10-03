@@ -94,7 +94,7 @@ public class TilesStatistics
   {
     _tilesProcessed++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
 
@@ -102,13 +102,13 @@ public class TilesStatistics
   {
     _tilesVisible++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
   public final void computeRenderedSector(Tile tile)
   {
-    final Sector sector = tile.getSector();
+    final Sector sector = tile._sector;
     if (_renderedSector == null)
     {
       _renderedSector = sector;
@@ -131,7 +131,7 @@ public class TilesStatistics
   {
     _tilesRendered++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
 

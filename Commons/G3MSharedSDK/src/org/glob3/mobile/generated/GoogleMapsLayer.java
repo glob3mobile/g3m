@@ -75,7 +75,7 @@ public class GoogleMapsLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -97,7 +97,7 @@ public class GoogleMapsLayer extends Layer
     isb.addString(",");
     isb.addDouble(tileSector._center._longitude._degrees);
   
-    final int level = tile.getLevel();
+    final int level = tile._level;
     isb.addString("&zoom=");
     isb.addInt(level);
   

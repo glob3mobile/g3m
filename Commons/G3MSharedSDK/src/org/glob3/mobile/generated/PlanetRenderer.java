@@ -117,13 +117,13 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   }
   private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel, boolean mercator)
   {
-    if (tile.getLevel() == firstLevel)
+    if (tile._level == firstLevel)
     {
       firstLevelTiles.add(tile);
     }
     else
     {
-      final Sector sector = tile.getSector();
+      final Sector sector = tile._sector;
       final Geodetic2D lower = sector._lower;
       final Geodetic2D upper = sector._upper;
   
@@ -238,7 +238,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        if (tile.getSector().touchesWith(sector))
+        if (tile._sector.touchesWith(sector))
         {
           _tileVisitor.visitTile(layers, tile);
           visitSubTilesTouchesWith(layers, tile, sector, firstLevelCache, maxLevelCache);
@@ -253,7 +253,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private void visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
   {
-    if (tile.getLevel() < maxLevel)
+    if (tile._level < maxLevel)
     {
       java.util.ArrayList<Tile> subTiles = tile.getSubTiles(_layerSet.getLayerTilesRenderParameters()._mercator);
   
@@ -261,9 +261,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < subTilesCount; i++)
       {
         Tile tl = subTiles.get(i);
-        if (tl.getSector().touchesWith(sectorToVisit))
+        if (tl._sector.touchesWith(sectorToVisit))
         {
-          if ((tile.getLevel() >= topLevel))
+          if ((tile._level >= topLevel))
           {
             _tileVisitor.visitTile(layers, tl);
           }

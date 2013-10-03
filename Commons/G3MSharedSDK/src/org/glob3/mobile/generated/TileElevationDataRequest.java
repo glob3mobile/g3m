@@ -28,7 +28,7 @@ public class TileElevationDataRequest
     _listener = null;
     if (_tile != null)
     {
-      _tile.setElevationData(elevationData, _tile.getLevel());
+      _tile.setElevationData(elevationData, _tile._level);
     }
   }
 
@@ -45,7 +45,7 @@ public class TileElevationDataRequest
   public final void sendRequest()
   {
     _listener = new TileElevationDataRequestListener(this);
-    _requestID = _provider.requestElevationData(_tile.getSector(), _resolution, _listener, true);
+    _requestID = _provider.requestElevationData(_tile._sector, _resolution, _listener, true);
   }
 
   public final void cancelRequest()

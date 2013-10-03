@@ -48,10 +48,6 @@ public class Tile
 {
   private TileTexturizer _texturizer;
   private Tile _parent;
-  private final Sector _sector ;
-  private final int _level;
-  private final int _row;
-  private final int _column;
 
   private Mesh _tessellatorMesh;
 
@@ -565,6 +561,11 @@ public class Tile
     return _boundingVolume;
   }
 
+  public final Sector _sector ;
+  public final int _level;
+  public final int _row;
+  public final int _column;
+
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column, PlanetRenderer planetRenderer)
   {
      _texturizer = texturizer;
@@ -670,25 +671,21 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-  public final Sector getSector()
-  {
-    return _sector;
-  }
-
-  public final int getLevel()
-  {
-    return _level;
-  }
-
-  public final int getRow()
-  {
-    return _row;
-  }
-
-  public final int getColumn()
-  {
-    return _column;
-  }
+//  const Sector getSector() const {
+//    return _sector;
+//  }
+//
+//  int getLevel() const {
+//    return _level;
+//  }
+//
+//  int getRow() const {
+//    return _row;
+//  }
+//
+//  int getColumn() const {
+//    return _column;
+//  }
 
   public final Mesh getTexturizedMesh()
   {
@@ -1058,7 +1055,7 @@ public class Tile
       if (ancestor != null)
       {
         ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
-        setElevationData(subView, ancestor.getLevel());
+        setElevationData(subView, ancestor._level);
       }
     }
     else
@@ -1100,12 +1097,12 @@ public class Tile
   public final void ancestorChangedElevationData(Tile ancestor)
   {
   
-    if (ancestor.getLevel() > _elevationDataLevel)
+    if (ancestor._level > _elevationDataLevel)
     {
       ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
       if (subView != null)
       {
-        setElevationData(subView, ancestor.getLevel());
+        setElevationData(subView, ancestor._level);
       }
     }
   
@@ -1138,7 +1135,7 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-      return new DecimatedSubviewElevationData(ed, getSector(), new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+      return new DecimatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
     ILogger.instance().logError("Can't create subview of elevation data from ancestor");

@@ -222,7 +222,7 @@ public class LayerSet
   
         Tile petitionTile = tile;
         final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
-        while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
+        while ((petitionTile._level > maxLevel) && (petitionTile != null))
         {
           petitionTile = petitionTile.getParent();
         }
@@ -260,7 +260,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(ec, tile))
       {
-        TerrainTouchEvent tte = new TerrainTouchEvent(position, tile.getSector(), layer);
+        TerrainTouchEvent tte = new TerrainTouchEvent(position, tile._sector, layer);
   
         if (layer.onTerrainTouchEventListener(ec, tte))
         {

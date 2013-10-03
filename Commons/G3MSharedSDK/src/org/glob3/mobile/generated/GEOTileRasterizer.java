@@ -83,7 +83,7 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   //    canvas->drawImage(_image, 0, 0);
   //
   //    _quadTree->acceptVisitor(_tile->getSector(),
-  //                             GEOTileRasterizer_QuadTreeVisitor(canvas, projection, _tile->getLevel()));
+  //                             GEOTileRasterizer_QuadTreeVisitor(canvas, projection, _tile->_level));
   //
   //    canvas->createImage(_listener, _autodelete);
   //
@@ -118,13 +118,13 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     final int width = image.getWidth();
     final int height = image.getHeight();
   
-    GEORasterProjection projection = new GEORasterProjection(tile.getSector(), mercator, width, height);
+    GEORasterProjection projection = new GEORasterProjection(tile._sector, mercator, width, height);
   
     ICanvas canvas = getCanvas(width, height);
   
     canvas.drawImage(image, 0, 0);
   
-    _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile.getLevel()));
+    _quadTree.acceptVisitor(tile._sector, new GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile._level));
   
     canvas.createImage(listener, autodelete);
   

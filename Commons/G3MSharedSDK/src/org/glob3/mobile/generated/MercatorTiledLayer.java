@@ -117,7 +117,7 @@ public class MercatorTiledLayer extends Layer
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;
@@ -132,10 +132,10 @@ public class MercatorTiledLayer extends Layer
     // http://[abc].tile.openstreetmap.org/zoom/x/y.png
     // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
   
-    final int level = tile.getLevel();
-    final int column = tile.getColumn();
+    final int level = tile._level;
+    final int column = tile._column;
     final int numRows = (int) mu.pow(2.0, level);
-    final int row = numRows - tile.getRow() - 1;
+    final int row = numRows - tile._row - 1;
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   

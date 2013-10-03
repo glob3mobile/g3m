@@ -6,7 +6,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   private Vector2I calculateResolution(Vector2I resolution, Tile tile, Sector renderedSector)
   {
-    Sector sector = tile.getSector();
+    Sector sector = tile._sector;
   
     final double latRatio = sector._deltaLatitude._degrees / renderedSector._deltaLatitude._degrees;
     final double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -90,9 +90,9 @@ public class PlanetTileTessellator extends TileTessellator
   {
     if (_renderedSector == null)
     {
-      return tile.getSector();
+      return tile._sector;
     }
-    return tile.getSector().intersection(_renderedSector);
+    return tile._sector.intersection(_renderedSector);
   }
 
   private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -349,7 +349,7 @@ public class PlanetTileTessellator extends TileTessellator
   public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
   {
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
     final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   
@@ -457,7 +457,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
   {
-    final Sector sector = tile.getSector();
+    final Sector sector = tile._sector;
   
     final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
     if (!mercator)
