@@ -21,6 +21,7 @@ protected:
     NO_CENTER,FIRST_VERTEX,GIVEN_CENTER
   };
 
+
 #ifdef C_CODE
   std::vector<float> _values;
 #endif
@@ -31,16 +32,18 @@ protected:
     private int     _size;
 
     public FloatArrayList() {
-      this(1024);
-    }
-
-    public FloatArrayList(final int initialCapacity) {
-      if (initialCapacity < 0) {
-        throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
-      }
-      _array = new float[initialCapacity];
+//      this(1024);
+      _array = IFactory.instance().getThreadLocalFloatArray();
       _size = 0;
     }
+
+//    public FloatArrayList(final int initialCapacity) {
+//      if (initialCapacity < 0) {
+//        throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
+//      }
+//      _array = new float[initialCapacity];
+//      _size = 0;
+//    }
 
     public int size() {
       return _size;
@@ -60,6 +63,7 @@ protected:
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
+        IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
