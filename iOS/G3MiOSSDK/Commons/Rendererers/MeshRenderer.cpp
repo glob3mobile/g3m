@@ -53,7 +53,7 @@ void MeshRenderer::updateGLState(const G3MRenderContext* rc) {
 //  }
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL){
+  if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());

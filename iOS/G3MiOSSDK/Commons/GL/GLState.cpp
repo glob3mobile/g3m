@@ -15,7 +15,7 @@ GLState::~GLState() {
   delete _valuesSet;
   delete _globalState;
 
-  if (_parentGLState != NULL){
+  if (_parentGLState != NULL) {
     _parentGLState->_release();
   }
 }
@@ -73,8 +73,8 @@ void GLState::setParent(const GLState* parent) const{
     if ((parent != _parentGLState) ||
         (_parentsTimeStamp != parentsTimeStamp)) {
 
-      if (_parentGLState != parent){
-        if (_parentGLState != NULL){
+      if (_parentGLState != parent) {
+        if (_parentGLState != NULL) {
           _parentGLState->_release();
         }
         _parentGLState    = parent;
@@ -149,7 +149,7 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
   hasChangedStructure();
 }
 
-void GLState::clearAllGLFeatures(){
+void GLState::clearAllGLFeatures() {
   _features.clearFeatures();
   hasChangedStructure();
 }
@@ -162,7 +162,7 @@ GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   const int size = _features.size();
   for (int i = 0; i < size; i++) {
     GLFeature* f = _features.get(i);
-    if (f->getID() == id){
+    if (f->getID() == id) {
       return f;
     }
   }

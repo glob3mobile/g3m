@@ -35,7 +35,7 @@ void DefaultSceneLighting::modifyGLState(GLState* glState) {
 
   //STATIC LIGHT
 
-  if (glState->getGLFeature(GLF_DIRECTION_LIGTH) == NULL){
+  if (glState->getGLFeature(GLF_DIRECTION_LIGTH) == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
                                                       Color::yellow(),

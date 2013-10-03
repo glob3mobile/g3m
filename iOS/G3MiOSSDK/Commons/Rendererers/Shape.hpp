@@ -252,7 +252,7 @@ public:
 
   void elevationChanged(const Sector& position,
                    const ElevationData* rawElevationData, //Without considering vertical exaggeration
-                        double verticalExaggeration){}
+                        double verticalExaggeration) {}
   
   virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const = 0;

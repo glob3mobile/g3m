@@ -370,7 +370,7 @@ void G3MWidget::render(int width, int height) {
     onResizeViewportEvent(_width, _height);
   }
 
-  if (!_initialCameraPositionHasBeenSet){
+  if (!_initialCameraPositionHasBeenSet) {
     _initialCameraPositionHasBeenSet = true;
 
     Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
@@ -462,7 +462,7 @@ void G3MWidget::render(int width, int height) {
 
   _gl->clearScreen(*_backgroundColor);
 
-  if (_rootState == NULL){
+  if (_rootState == NULL) {
     _rootState = new GLState();
   }
 
@@ -680,7 +680,7 @@ PlanetRenderer* G3MWidget::getPlanetRenderer() {
   return _mainRenderer->getPlanetRenderer();
 }
 
-void G3MWidget::setShownSector(const Sector& sector){
+void G3MWidget::setShownSector(const Sector& sector) {
   getPlanetRenderer()->setRenderedSector(sector);
   _initialCameraPositionHasBeenSet = false;
 }

@@ -120,7 +120,7 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
                          surfaceColor);
 }
 
-Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc){
+Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
   const float upperX = (float) +(_extentX / 2);
   const float lowerY = (float) -(_extentY / 2);
@@ -238,7 +238,7 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc){
 Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
 
   Mesh* surface = NULL;
-  if (_useNormals){
+  if (_useNormals) {
     surface = createSurfaceMeshWithNormals(rc);
 //    surface = createSurfaceMesh(rc);
   } else{

@@ -19,7 +19,7 @@
 
 class Matrix44DProvider: public RCObject{
 public:
-  virtual ~Matrix44DProvider(){}
+  virtual ~Matrix44DProvider() {}
   virtual const Matrix44D* getMatrix() const = 0;
 };
 
@@ -83,7 +83,7 @@ class Matrix44DMultiplicationHolderBuilder{
   std::vector<const Matrix44DProvider*> _providers;
 public:
 
-  ~Matrix44DMultiplicationHolderBuilder(){
+  ~Matrix44DMultiplicationHolderBuilder() {
     const int size = _providers.size();
     for (int i = 0; i < size; i++) {
       _providers[i]->_release();
@@ -94,7 +94,7 @@ public:
     return _providers.size();
   }
   
-  void add(const Matrix44DProvider* provider){
+  void add(const Matrix44DProvider* provider) {
     _providers.push_back(provider);
     provider->_retain();
   }

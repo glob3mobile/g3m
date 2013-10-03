@@ -85,17 +85,17 @@ class GLType {
   static int _matrix4Float;
   
 public:
-  static int glFloat(){ return _float;}
-  static int glUnsignedByte(){ return _unsignedByte;}
-  static int glUnsignedInt(){ return _unsignedInt;}
-  static int glInt(){ return _int;}
-  static int glVec2Float(){ return _vec2Float;}
-  static int glVec3Float(){ return _vec3Float;}
-  static int glVec4Float(){ return _vec4Float;}
-  static int glBool(){ return _bool;}
-  static int glMatrix4Float(){ return _matrix4Float;}
+  static int glFloat() { return _float;}
+  static int glUnsignedByte() { return _unsignedByte;}
+  static int glUnsignedInt() { return _unsignedInt;}
+  static int glInt() { return _int;}
+  static int glVec2Float() { return _vec2Float;}
+  static int glVec3Float() { return _vec3Float;}
+  static int glVec4Float() { return _vec4Float;}
+  static int glBool() { return _bool;}
+  static int glMatrix4Float() { return _matrix4Float;}
   
-  static void init(const INativeGL* ngl){
+  static void init(const INativeGL* ngl) {
     _float = ngl->Type_Float();
     _unsignedByte = ngl->Type_UnsignedByte();
     _unsignedInt = ngl->Type_UnsignedInt();

@@ -328,7 +328,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
    return false;
    }*/
 
-  if (!renderedSector.touchesWith(_sector)){ //Incomplete world
+  if (!renderedSector.touchesWith(_sector)) { //Incomplete world
     return false;
   }
 
@@ -777,7 +777,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   Sector renderedSector = _planetRenderer->getRenderedSector();
 
   Sector s1(Geodetic2D(lower._latitude, lower._longitude), Geodetic2D(splitLatitude, splitLongitude));
-  if (renderedSector.touchesWith(s1)){
+  if (renderedSector.touchesWith(s1)) {
     subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
                                        splitLatitude, splitLongitude,
                                        nextLevel,
@@ -787,7 +787,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s2(Geodetic2D(lower._latitude, splitLongitude), Geodetic2D(splitLatitude, upper._longitude));
-  if (renderedSector.touchesWith(s2)){
+  if (renderedSector.touchesWith(s2)) {
     subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
                                        splitLatitude, upper._longitude,
                                        nextLevel,
@@ -797,7 +797,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s3(Geodetic2D(splitLatitude, lower._longitude), Geodetic2D(upper._latitude, splitLongitude));
-  if (renderedSector.touchesWith(s3)){
+  if (renderedSector.touchesWith(s3)) {
     subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
                                        upper._latitude, splitLongitude,
                                        nextLevel,
@@ -807,7 +807,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s4(Geodetic2D(splitLatitude, splitLongitude), Geodetic2D(upper._latitude, upper._longitude));
-  if (renderedSector.touchesWith(s4)){
+  if (renderedSector.touchesWith(s4)) {
     subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
                                        upper._latitude, upper._longitude,
                                        nextLevel,

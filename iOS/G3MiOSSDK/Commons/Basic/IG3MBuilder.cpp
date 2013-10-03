@@ -770,7 +770,7 @@ void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
   _sources.push_back(s);
 }
 
-void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting){
+void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting) {
   _sceneLighting = sceneLighting;
 }
 
@@ -785,13 +785,13 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 }
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
-  if (_sceneLighting == NULL){
+  if (_sceneLighting == NULL) {
     _sceneLighting = new DefaultSceneLighting();
   }
   return _sceneLighting;
 }
 
-void IG3MBuilder::setShownSector(const Sector& sector){
+void IG3MBuilder::setShownSector(const Sector& sector) {
   if (_shownSector != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _shownSector already initialized");
     return;
@@ -800,7 +800,7 @@ void IG3MBuilder::setShownSector(const Sector& sector){
 }
 
 Sector IG3MBuilder::getShownSector() const{
-  if (_shownSector == NULL){
+  if (_shownSector == NULL) {
     return Sector::fullSphere();
   }
   return *_shownSector;

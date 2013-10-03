@@ -413,17 +413,17 @@ public:
   }
 
   void onWebsiteChanged(const G3MContext* context,
-                        const std::string& website){}
+                        const std::string& website) {}
 
   void onEMailChanged(const G3MContext* context,
-                      const std::string& eMail){}
+                      const std::string& eMail) {}
 
   void onAboutChanged(const G3MContext* context,
-                      const std::string& about){}
+                      const std::string& about) {}
 
-  virtual void onWebSocketOpen(const G3MContext* context){}
+  virtual void onWebSocketOpen(const G3MContext* context) {}
 
-  virtual void onWebSocketClose(const G3MContext* context){}
+  virtual void onWebSocketClose(const G3MContext* context) {}
 };
 
 
@@ -917,13 +917,13 @@ public:
 
       GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
 
-      for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1){
+      for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
 
         GenericQuadTree tree(1,12,areaProportion);
 
         std::string* x = new std::string("OK");
 
-        for (int i = 0; i < fc->size(); i++){
+        for (int i = 0; i < fc->size(); i++) {
           GEO2DPointGeometry* p = (GEO2DPointGeometry*) fc->get(i)->getGeometry();
           p->getPosition();
 
@@ -967,19 +967,19 @@ public:
 
    GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
 
-   for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1){
+   for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
 
    GenericQuadTree tree(1,12,areaProportion);
 
    std::string* x = new std::string("OK");
 
-   for (int i = 0; i < fc->size(); i++){
+   for (int i = 0; i < fc->size(); i++) {
    GEO2DPolygonGeometry* p = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
 
    const std::vector<Geodetic2D*>* ps = p->getCoordinates();
    Sector *s = new Sector(*ps->at(0), *ps->at(0));
-   for (unsigned int j = 0; j < ps->size(); j++){
-   if (ps->at(j) != NULL){
+   for (unsigned int j = 0; j < ps->size(); j++) {
+   if (ps->at(j) != NULL) {
    Geodetic2D g = *ps->at(j);
    Sector x(g,g);
    Sector *s2 = new Sector( s->mergedWith(x));
@@ -1617,9 +1617,9 @@ public:
   marksRenderer->addMark(m1);
 
 
-  if (true){
-    for (int i = 0; i < 10; i+=2){
-      for (int j = 0; j < 10; j+=2){
+  if (true) {
+    for (int i = 0; i < 10; i+=2) {
+      for (int j = 0; j < 10; j+=2) {
         Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
         Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
@@ -2147,7 +2147,7 @@ public:
     const double population = properties->getAsNumber("population", 0);
 
     if (population > 2000000) {
-      //    if (rand()%2 == 0){
+      //    if (rand()%2 == 0) {
       //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
       //    }
       //    else {
@@ -2683,7 +2683,7 @@ public:
       }
 
 
-      if (false){ //Infinite random flights
+      if (false) { //Infinite random flights
 
         int time = rand()%10; //SECS OF FLIGHT
 
@@ -2691,11 +2691,11 @@ public:
           G3MWidget_iOS* _iosWidget;
           int _time;
         public:
-          FlightTask(G3MWidget_iOS* iosWidget, int time): _iosWidget(iosWidget), _time(time){}
+          FlightTask(G3MWidget_iOS* iosWidget, int time): _iosWidget(iosWidget), _time(time) {}
 
-          void run(const G3MContext* context){
+          void run(const G3MContext* context) {
 
-            if (rand() % 2 == 0){
+            if (rand() % 2 == 0) {
               [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(_time),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
@@ -2721,14 +2721,14 @@ public:
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;
         public:
-          RenderedSectorTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+          RenderedSectorTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {}
 
-          static int randomInt(int max){
+          static int randomInt(int max) {
             int i = rand();
             return i % max;
           }
 
-          void run(const G3MContext* context){
+          void run(const G3MContext* context) {
 
             double minLat = randomInt(180) -90;
             double minLon = randomInt(360) - 180;

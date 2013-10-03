@@ -234,7 +234,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
       vertices.add(innerPoint);
 
-      if (_withNormals){
+      if (_withNormals) {
         Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
         normals.add(n);
       }

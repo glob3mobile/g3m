@@ -24,9 +24,9 @@ class PlanetTileTessellatorData {
 public:
   FloatBufferBuilderFromCartesian2D* _textCoords;
   PlanetTileTessellatorData(FloatBufferBuilderFromCartesian2D* textCoords):
-  _textCoords(textCoords){}
+  _textCoords(textCoords) {}
 
-  ~PlanetTileTessellatorData(){
+  ~PlanetTileTessellatorData() {
     delete _textCoords;
   }
 };
@@ -53,28 +53,28 @@ private:
                                         const Geodetic2D& g) const;
 
   bool needsEastSkirt(const Sector& tileSector) const{
-    if (_renderedSector == NULL){
+    if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._longitude.greaterThan(tileSector._upper._longitude);
   }
 
   bool needsNorthSkirt(const Sector& tileSector) const{
-    if (_renderedSector == NULL){
+    if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._latitude.greaterThan(tileSector._upper._latitude);
   }
 
   bool needsWestSkirt(const Sector& tileSector) const{
-    if (_renderedSector == NULL){
+    if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_lower._longitude.lowerThan(tileSector._lower._longitude);
   }
 
   bool needsSouthSkirt(const Sector& tileSector) const{
-    if (_renderedSector == NULL){
+    if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_lower._latitude.lowerThan(tileSector._lower._latitude);
@@ -165,11 +165,11 @@ public:
                               const Angle& longitude,
                               bool mercator) const;
 
-  void setRenderedSector(const Sector& sector){
-    if (_renderedSector == NULL || !_renderedSector->isEquals(sector)){
+  void setRenderedSector(const Sector& sector) {
+    if (_renderedSector == NULL || !_renderedSector->isEquals(sector)) {
       delete _renderedSector;
 
-      if (sector.isEquals(Sector::fullSphere())){
+      if (sector.isEquals(Sector::fullSphere())) {
         _renderedSector = NULL;
       } else{
         _renderedSector = new Sector(sector);

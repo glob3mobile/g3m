@@ -294,13 +294,13 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
 //  }
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL){
+  if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());
   }
 
-  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL){
+  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
     _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
   }

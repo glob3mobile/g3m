@@ -354,7 +354,7 @@ LayerSet* PlanetRendererBuilder::createLayerSet() {
   return LayerBuilder::createDefaultSatelliteImagery();
 }
 
-void PlanetRendererBuilder::setRenderedSector(const Sector& sector){
+void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {
   if (_renderedSector != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _renderedSector already initialized");
     return;
@@ -362,8 +362,8 @@ void PlanetRendererBuilder::setRenderedSector(const Sector& sector){
   _renderedSector = new Sector(sector);
 }
 
-Sector PlanetRendererBuilder::getRenderedSector(){
-  if (_renderedSector == NULL){
+Sector PlanetRendererBuilder::getRenderedSector() {
+  if (_renderedSector == NULL) {
     return Sector::fullSphere();
   }
   return *_renderedSector;

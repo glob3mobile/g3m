@@ -267,7 +267,7 @@ public:
 
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
-                        double verticalExaggeration){}
+                        double verticalExaggeration) {}
 };
 
 #endif

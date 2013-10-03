@@ -387,7 +387,7 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
 
     double altitude = _position->_height;
-    if (_altitudeMode == RELATIVE_TO_GROUND){
+    if (_altitudeMode == RELATIVE_TO_GROUND) {
       altitude += _currentSurfaceElevation;
     }
 
@@ -412,13 +412,13 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet){
+void Mark::createGLState(const Planet* planet) {
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
                                                _textureWidth, _textureHeight),
                         false);
 
-  if (_textureId != NULL){
+  if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId,
                                                getBillboardTexCoords(),
                                                2,
@@ -483,7 +483,7 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-        if (_glState->getNumberOfGLFeatures() == 0){
+        if (_glState->getNumberOfGLFeatures() == 0) {
           createGLState(planet);    //GLState was disposed due to elevation change
         }
 
@@ -504,7 +504,7 @@ void Mark::render(const G3MRenderContext* rc,
 
 void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,            //Without considering vertical exaggeration
-                            double verticalExaggeration){
+                            double verticalExaggeration) {
 
   _currentSurfaceElevation = rawElevation * verticalExaggeration;
   delete _cartesianPosition;

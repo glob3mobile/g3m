@@ -31,7 +31,7 @@ class GenericQuadTreeVisitor {
   mutable int _comparisonsDone;
 
 public:
-  GenericQuadTreeVisitor(): _comparisonsDone(0){}
+  GenericQuadTreeVisitor(): _comparisonsDone(0) {}
   virtual ~GenericQuadTreeVisitor() {
   }
 
@@ -72,7 +72,7 @@ public:
   GenericQuadTree_SectorElement(const Sector& sector,
                                 const void*   element) :
   GenericQuadTree_Element(element),
-  _sector(sector){ }
+  _sector(sector) { }
   bool isSectorElement() const { return true;}
   Geodetic2D getCenter() const { return _sector.getCenter();}
   Sector getSector() const { return _sector;}
@@ -92,7 +92,7 @@ public:
   GenericQuadTree_Geodetic2DElement(const Geodetic2D& geodetic,
                                     const void*   element) :
   GenericQuadTree_Element(element),
-  _geodetic(geodetic){}
+  _geodetic(geodetic) {}
   bool isSectorElement() const { return false;}
   Geodetic2D getCenter() const { return _geodetic;}
   Sector getSector() const { return Sector(_geodetic, _geodetic);}
@@ -174,8 +174,8 @@ public:
 
   int getSubtreeNElements() const{
     int n = _elements.size();
-    if (_children != NULL){
-      for (int i = 0; i<4;i++){
+    if (_children != NULL) {
+      for (int i = 0; i<4;i++) {
         n += _children[i]->getSubtreeNElements();
       }
     }
@@ -257,12 +257,12 @@ class GenericQuadTree_TESTER {
 
     Sector _sec;
 
-    GenericQuadTreeVisitorSector_TESTER(const Sector& s):_sec(s){}
+    GenericQuadTreeVisitorSector_TESTER(const Sector& s):_sec(s) {}
 
     bool visitElement(const Sector& sector,
                       const void*   element) const{
 
-      if (_sec.isEquals(sector)){
+      if (_sec.isEquals(sector)) {
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
@@ -276,7 +276,7 @@ class GenericQuadTree_TESTER {
     }
 
     void endVisit(bool aborted) const{
-      if (!aborted){
+      if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
@@ -292,7 +292,7 @@ class GenericQuadTree_TESTER {
   public:
     Geodetic2D _geo;
 
-    GenericQuadTreeVisitorGeodetic_TESTER(const Geodetic2D g):_geo(g){}
+    GenericQuadTreeVisitorGeodetic_TESTER(const Geodetic2D g):_geo(g) {}
 
     bool visitElement(const Sector& sector,
                       const void*   element) const{return false;}
@@ -300,7 +300,7 @@ class GenericQuadTree_TESTER {
     bool visitElement(const Geodetic2D& geodetic,
                       const void*   element) const{
 
-      if (geodetic.isEquals(_geo)){
+      if (geodetic.isEquals(_geo)) {
         //        std::string* s = (std::string*)element;
         //        printf("ELEMENT -> %s\n", s->c_str());
         return true;
@@ -309,7 +309,7 @@ class GenericQuadTree_TESTER {
     }
 
     void endVisit(bool aborted) const{
-      if (!aborted){
+      if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
       } else{
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
@@ -337,19 +337,19 @@ class GenericQuadTree_TESTER {
 
     NodeVisitor_TESTER():
     _maxDepth(0), _meanDepth(0), _maxNEle(0), _nNodes(0), _meanElemDepth(0), _nElem(0),
-    _leafMinDepth(999999), _leafMeanDepth(0), _nLeaf(0){}
+    _leafMinDepth(999999), _leafMeanDepth(0), _nLeaf(0) {}
 
 
-    bool visitNode(const GenericQuadTree_Node* node){
+    bool visitNode(const GenericQuadTree_Node* node) {
       //      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
 
       int depth = node->getDepth();
 
-      if (node->getNElements() > _maxNEle){
+      if (node->getNElements() > _maxNEle) {
         _maxNEle = node->getNElements();
       }
 
-      if (_maxDepth < depth){
+      if (_maxDepth < depth) {
         _maxDepth = depth;
       }
 
@@ -361,8 +361,8 @@ class GenericQuadTree_TESTER {
 
       _meanElemDepth += node->getNElements() * depth;
 
-      if (node->isLeaf()){
-        if (depth < _leafMinDepth){
+      if (node->isLeaf()) {
+        if (depth < _leafMinDepth) {
           _leafMinDepth = depth;
         }
         _leafMeanDepth += depth;
@@ -391,7 +391,7 @@ public:
   static int _nComparisons;
   static int _nElements;
   
-  static int randomInt(int max){
+  static int randomInt(int max) {
 #ifdef C_CODE
     int i = rand();
 #endif

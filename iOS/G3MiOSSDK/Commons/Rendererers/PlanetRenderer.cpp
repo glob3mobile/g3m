@@ -486,7 +486,7 @@ bool PlanetRenderer::isReadyToRender(const G3MRenderContext *rc) {
 
 void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
                                            const int firstLevel,
-                                           const int maxLevel){
+                                           const int maxLevel) {
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = _layerSet->getLayerTilesRenderParameters();
     _validLayerTilesRenderParameters = (parameters != NULL);
@@ -498,18 +498,18 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
     const int firstLevelCache = (firstLevel < parameters-> _firstLevel)
     ? parameters->_firstLevel
     : firstLevel;
-    if(firstLevel < firstLevelCache){
+    if(firstLevel < firstLevelCache) {
       ILogger::instance()->logInfo("Can only precache from level %", firstLevelCache);
     }
     
     const int maxLevelCache = (maxLevel > parameters->_maxLevel)
     ? parameters->_maxLevel
     : maxLevel;
-    if(maxLevel > maxLevelCache){
+    if(maxLevel > maxLevelCache) {
       ILogger::instance()->logInfo("Can only precache to level %", maxLevelCache);
     }
     
-    if(firstLevelCache > maxLevelCache){
+    if(firstLevelCache > maxLevelCache) {
       ILogger::instance()->logInfo("Can't precache, first level is more than max level");
     }
     // Get Layers to Cache
@@ -560,7 +560,7 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   
   const Camera* cam = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL){
+  if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());
@@ -757,13 +757,13 @@ void PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
 }
 
 void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
-  if (elevationData != NULL){
+  if (elevationData != NULL) {
     _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
   }
 }
 
-void PlanetRenderer::setRenderedSector(const Sector& sector){
-  if (!_renderedSector->isEquals(sector)){
+void PlanetRenderer::setRenderedSector(const Sector& sector) {
+  if (!_renderedSector->isEquals(sector)) {
     delete _renderedSector;
     _renderedSector = new Sector(sector);
   }

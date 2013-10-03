@@ -30,11 +30,11 @@ GenericQuadTree_Node::~GenericQuadTree_Node() {
   delete _sector;
 }
 
-//void GenericQuadTree_Node::computeElementsSector(){
+//void GenericQuadTree_Node::computeElementsSector() {
 //
 //  delete _elementsSector;
 //  _elementsSector = new Sector(_sector);
-//  if (_children == NULL){
+//  if (_children == NULL) {
 //    const int size = _elements.size();
 //    for (int i = 0; i < size; i++) {
 //      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
@@ -56,7 +56,7 @@ GenericQuadTree_Node::~GenericQuadTree_Node() {
 
 void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
                                      int maxDepth,
-                                     double childAreaProportion){
+                                     double childAreaProportion) {
   _children = new GenericQuadTree_Node*[4];
 
   const Geodetic2D lower = _sector->_lower;
@@ -95,9 +95,9 @@ void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
   //  for (int i = 0; i < size; i++) {
   //    GenericQuadTree_Element* e = _elements[i];
   //
-  //    for (int j = 0; j < 4; j++){
+  //    for (int j = 0; j < 4; j++) {
   //      GenericQuadTree_Node* child = _children[j];
-  //      if (child->add(e, maxElementsPerNode, maxDepth)){
+  //      if (child->add(e, maxElementsPerNode, maxDepth)) {
   //        break;
   //      }
   //    }
@@ -107,14 +107,14 @@ void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
 }
 
 GenericQuadTree_Node* GenericQuadTree_Node::getBestNodeForInsertion(GenericQuadTree_Element* element,
-                                                                    double childAreaProportion){
+                                                                    double childAreaProportion) {
 
 
   Sector sector = element->getSector();
   //  double myArea = _sector->getAngularAreaInSquaredDegrees();
   double myArea = getAreaInSquaredDegreesAfterInsertion(sector);
 
-  if (sector.getAngularAreaInSquaredDegrees() > (myArea * childAreaProportion)){
+  if (sector.getAngularAreaInSquaredDegrees() > (myArea * childAreaProportion)) {
     return this;
   }
 
@@ -123,18 +123,18 @@ GenericQuadTree_Node* GenericQuadTree_Node::getBestNodeForInsertion(GenericQuadT
   for (int i = 1; i < 4; i++) {
     GenericQuadTree_Node* child = _children[i];
     double cost = child->getInsertionCostInSquaredDegrees(sector);
-    if (cost < minChildInsertionCost){
+    if (cost < minChildInsertionCost) {
       minChildInsertionCost = cost;
       bestChildForInsertion = child;
     } else{
 
-      if (cost == minChildInsertionCost){
+      if (cost == minChildInsertionCost) {
         //        printf("BOTH CHILDREN WITH SAME COST");
 
         int n1 = bestChildForInsertion->getSubtreeNElements();
         int n2 = child->getSubtreeNElements();
 
-        if (n2 < n1){ //SAME COST BUT LESS CONFLICTS
+        if (n2 < n1) { //SAME COST BUT LESS CONFLICTS
           minChildInsertionCost = cost;
           bestChildForInsertion = child;
         }
@@ -143,11 +143,11 @@ GenericQuadTree_Node* GenericQuadTree_Node::getBestNodeForInsertion(GenericQuadT
     }
   }
 
-  if (minChildInsertionCost == 0){
+  if (minChildInsertionCost == 0) {
     return bestChildForInsertion;
   }
 
-  if (minChildInsertionCost > (myArea / 2)){ //We store in parent
+  if (minChildInsertionCost > (myArea / 2)) { //We store in parent
     return this;
   }
 
@@ -160,9 +160,9 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
                                int maxDepth,
                                double childAreaProportion) {
 
-  if (_children == NULL){ //LEAF NODE
+  if (_children == NULL) { //LEAF NODE
 
-    if (_elements.size() < maxElementsPerNode || _depth == maxDepth){ //Tipical insertion
+    if (_elements.size() < maxElementsPerNode || _depth == maxDepth) { //Tipical insertion
       _elements.push_back(element);
       increaseNodeSector(element);
       return true;
@@ -178,7 +178,7 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
   //Calculate best node for insertion
   GenericQuadTree_Node* bestInsertionNode = getBestNodeForInsertion(element, childAreaProportion);
 
-  if (bestInsertionNode == this){
+  if (bestInsertionNode == this) {
     _elements.push_back(element);
     increaseNodeSector(element);
     return true;
@@ -189,13 +189,13 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
   return bestInsertionNode->add(element, maxElementsPerNode, maxDepth, childAreaProportion);
 }
 
-void GenericQuadTree_Node::remove(const void* element){
+void GenericQuadTree_Node::remove(const void* element) {
 
 #ifdef C_CODE
   for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
        it != _elements.end();
        it++) {
-    if ((*it)->_element == element){
+    if ((*it)->_element == element) {
       _elements.erase(it);
       return;
     }
@@ -213,14 +213,14 @@ void GenericQuadTree_Node::remove(const void* element){
   }
 #endif
 
-  if (_children != NULL){
+  if (_children != NULL) {
 
     int nChild = 0;
     for (int i = 0; i < 4; i++) {
       nChild += _children[i]->getNElements();
     }
 
-    if (nChild == 0){
+    if (nChild == 0) {
       for (int i = 0; i < 4; i++) {
         delete _children[i];
       }
@@ -248,7 +248,7 @@ bool GenericQuadTree_Node::acceptVisitor(const Sector& sector,
   for (int i = 0; i < elementsSize; i++) {
     GenericQuadTree_Element* element = _elements[i];
 
-    if (element->isSectorElement()){ //Element is associated to sector
+    if (element->isSectorElement()) { //Element is associated to sector
       GenericQuadTree_SectorElement* e = (GenericQuadTree_SectorElement*) element;
       if (e->_sector.touchesWith(sector)) {
         const bool abort = visitor.visitElement(e->_sector, element->_element);
@@ -297,7 +297,7 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
   for (int i = 0; i < elementsSize; i++) {
     GenericQuadTree_Element* element = _elements[i];
 
-    if (element->isSectorElement()){ //Element is associated to sector
+    if (element->isSectorElement()) { //Element is associated to sector
       GenericQuadTree_SectorElement* e = (GenericQuadTree_SectorElement*) element;
       if (e->_sector.contains(geo)) {
         const bool abort = visitor.visitElement(e->_sector, element->_element);
@@ -331,13 +331,13 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
 }
 
 bool GenericQuadTree_Node::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const{
-  if (visitor.visitNode(this)){
+  if (visitor.visitNode(this)) {
     return true;
   }
-  if (_children != NULL){
+  if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       GenericQuadTree_Node* child = _children[i];
-      if (child->acceptNodeVisitor(visitor)){
+      if (child->acceptNodeVisitor(visitor)) {
         return true;
       }
     }
@@ -359,7 +359,7 @@ double GenericQuadTree_Node::getAreaInSquaredDegreesAfterInsertion(const Sector&
   return newSector.getAngularAreaInSquaredDegrees();
 }
 
-void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element){
+void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element) {
   Sector s = *_sector;
   delete _sector;
   _sector = new Sector(s.mergedWith(element->getSector()));
@@ -367,7 +367,7 @@ void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element){
 
 void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
 
-  if (_elements.size() > 0){
+  if (_elements.size() > 0) {
     std::vector<Geodetic2D*> line;
 
     line.push_back( new Geodetic2D( _sector->getSW() ) );
@@ -398,7 +398,7 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
     geoTileRasterizer->addSymbol(symbol);
   }
 
-  if (_children != NULL){
+  if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       _children[i]->symbolize(geoTileRasterizer);
     }
@@ -408,13 +408,13 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
 }
 
 void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const{
-  for (int i = 0; i < _elements.size(); i++){
-    if (!_elements[i]->isSectorElement()){
+  for (int i = 0; i < _elements.size(); i++) {
+    if (!_elements[i]->isSectorElement()) {
       geo.push_back( new Geodetic2D(_elements[i]->getCenter()) );
     }
   }
 
-  if (_children != NULL){
+  if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       _children[i]->getGeodetics(geo);
     }
@@ -423,13 +423,13 @@ void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const{
 }
 
 void GenericQuadTree_Node::getSectors(std::vector<Sector*>& sectors) const{
-  for (int i = 0; i < _elements.size(); i++){
-    if (_elements[i]->isSectorElement()){
+  for (int i = 0; i < _elements.size(); i++) {
+    if (_elements[i]->isSectorElement()) {
       sectors.push_back( new Sector(_elements[i]->getSector()) );
     }
   }
 
-  if (_children != NULL){
+  if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
       _children[i]->getSectors(sectors);
     }
@@ -444,17 +444,17 @@ GenericQuadTree::~GenericQuadTree() {
   delete _root;
 }
 
-bool GenericQuadTree::add(GenericQuadTree_Element* element){
+bool GenericQuadTree::add(GenericQuadTree_Element* element) {
 
-  if (_root == NULL){
+  if (_root == NULL) {
     _root = new GenericQuadTree_Node(element->getSector());
   }
 
   return _root->add(element, _maxElementsPerNode, _maxDepth, _childAreaProportion);
 }
 
-void GenericQuadTree::remove(const void* element){
-  if (_root != NULL){
+void GenericQuadTree::remove(const void* element) {
+  if (_root != NULL) {
     _root->remove(element);
   }
 }
@@ -474,7 +474,7 @@ bool GenericQuadTree::add(const Geodetic2D& geodetic,
 bool GenericQuadTree::acceptVisitor(const Sector& sector,
                                     const GenericQuadTreeVisitor& visitor) const {
   bool aborted = false;
-  if (_root != NULL){
+  if (_root != NULL) {
     aborted = _root->acceptVisitor(sector, visitor);
   }
   visitor.endVisit(aborted);
@@ -514,7 +514,7 @@ void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
 int GenericQuadTree_TESTER::_nComparisons = 0;
 int GenericQuadTree_TESTER::_nElements = 0;
 
-void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
+void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) {
 
   _nElements = 0;
   _nComparisons = 0;
@@ -529,7 +529,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
     double minLon = randomInt(360) - 180;//rand()%360 -180;
 
     int type = randomInt(2);
-    if (type == 0){
+    if (type == 0) {
 
       double maxLat = minLat + randomInt(90 - (int)minLat); //rand()%(90 - (int)minLat);
       double maxLon = minLon + randomInt(90 - (int)minLat);//rand()%(180 - (int)minLon);
@@ -540,7 +540,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
       std::string* element = new std::string();
       *element = desc;
 
-      if (!tree.add(s, element)){
+      if (!tree.add(s, element)) {
         ILogger::instance()->logInfo("ERROR");
       }
 
@@ -552,13 +552,13 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
       std::string* element = new std::string();
       *element = desc;
 
-      if (!tree.add(geo, element)){
+      if (!tree.add(geo, element)) {
         ILogger::instance()->logInfo("ERROR");
       }
     }
   }
 
-  for (int i = 0; i < sectors.size(); i++){
+  for (int i = 0; i < sectors.size(); i++) {
 #ifdef C_CODE
     Sector s = *(sectors[i]);
 #endif
@@ -569,7 +569,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
     tree.acceptVisitor(s, vis);
   }
 
-  for (int i = 0; i < geos.size(); i++){
+  for (int i = 0; i < geos.size(); i++) {
 #ifdef C_CODE
     Geodetic2D g = *(geos[i]);
 #endif
@@ -583,7 +583,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
 
-  if (rasterizer != NULL){
+  if (rasterizer != NULL) {
     tree.symbolize(rasterizer);
   }
 
@@ -592,7 +592,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer){
 
 }
 
-void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer){
+void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer) {
 
   _nElements = 0;
   _nComparisons = 0;
@@ -600,7 +600,7 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
   std::vector<Sector*> sectors = tree.getSectors();
   std::vector<Geodetic2D*> geos = tree.getGeodetics();
 
-  for (int i = 0; i < sectors.size(); i++){
+  for (int i = 0; i < sectors.size(); i++) {
 #ifdef C_CODE
     Sector s = *(sectors[i]);
 #endif
@@ -612,7 +612,7 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
     delete sectors[i];
   }
 
-  for (int i = 0; i < geos.size(); i++){
+  for (int i = 0; i < geos.size(); i++) {
 #ifdef C_CODE
     Geodetic2D g = *(geos[i]);
 #endif
@@ -628,7 +628,7 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
   
-  if (rasterizer != NULL){
+  if (rasterizer != NULL) {
     tree.symbolize(rasterizer);
   }
   

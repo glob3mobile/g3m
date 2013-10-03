@@ -13,11 +13,8 @@
 #include "IndexedMesh.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-#include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
@@ -65,12 +62,12 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   const IMathUtils* mu = IMathUtils::instance();
 
   int resX = (int) mu->ceil((resolution._x / lonRatio));
-  if (resX < 2){
+  if (resX < 2) {
     resX = 2;
   }
 
   int resY = (int) mu->ceil((resolution._y / latRatio) );
-  if (resY < 2){
+  if (resY < 2) {
     resY = 2;
   }
 
@@ -123,14 +120,14 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       indices,
                                       *textCoords);
 
-  if (_skirted){
-
+  if (_skirted) {
+    int _ASK_JM; // sW and nW ? Why not NW and SE ??
     const Vector3D sw = planet->toCartesian(tileSector.getSW());
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     double absoluteSkirtHeight = 0;
-    if (_renderedSector != NULL){
+    if (_renderedSector != NULL) {
       const Vector3D asw = planet->toCartesian(_renderedSector->getSW());
       const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
       absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1);
@@ -210,7 +207,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
                                                       bool mercator) const {
 
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
-  if (data == NULL || data->_textCoords == NULL){
+  if (data == NULL || data->_textCoords == NULL) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
     return NULL;
   }
@@ -278,7 +275,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
-  if (_renderedSector == NULL){
+  if (_renderedSector == NULL) {
     return tile->_sector;
   }
 #ifdef C_CODE
@@ -329,7 +326,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       vertices.add( position, elevation );
 
       //TEXT COORDS
-      if (mercator){
+      if (mercator) {
         //U
         const double m_u = tileSector.getUCoordinate(position._longitude);
 

@@ -61,7 +61,7 @@ private:
 
 public:
 
-  static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet){
+  static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet) {
     return FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
                                           NO_CENTER,
@@ -71,7 +71,7 @@ public:
                                           planet, Vector3D::zero);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet){
+  static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet) {
     return FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
                                           FIRST_VERTEX,
@@ -81,7 +81,7 @@ public:
                                           planet, Vector3D::zero);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center){
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center) {
     return FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
                                           GIVEN_CENTER,
@@ -91,7 +91,7 @@ public:
                                           planet, center);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center){
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center) {
     return FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
                                           GIVEN_CENTER,
@@ -101,7 +101,7 @@ public:
                                           planet, center);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center){
+  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center) {
     return FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
                                           GIVEN_CENTER,

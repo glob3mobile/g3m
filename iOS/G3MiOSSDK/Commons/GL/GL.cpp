@@ -16,12 +16,10 @@
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
-#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLTextureId.hpp"
 
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
-//#include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"

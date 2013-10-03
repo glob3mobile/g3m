@@ -518,7 +518,7 @@ public:
       _finalized = true;
 
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-        if (composeAndUploadTexture()){
+        if (composeAndUploadTexture()) {
            //If the image could be properly turn into texture
           _tile->setTextureSolved(true);   
         }

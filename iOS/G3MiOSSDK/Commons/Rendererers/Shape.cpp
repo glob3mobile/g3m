@@ -62,7 +62,7 @@ void Shape::cleanTransformMatrix() {
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 
   double altitude = _position->_height;
-  if (_altitudeMode == RELATIVE_TO_GROUND){
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
     altitude += _surfaceElevation;
   }
 
@@ -172,7 +172,7 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
 
 void Shape::elevationChanged(const Geodetic2D& position,
                       double rawElevation,
-                      double verticalExaggeration){
+                      double verticalExaggeration) {
   _surfaceElevation = rawElevation * verticalExaggeration;
 
   delete _transformMatrix;

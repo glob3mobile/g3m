@@ -13,7 +13,7 @@ class GLState;
 
 class SceneLighting{
 public:
-  virtual ~SceneLighting(){}
+  virtual ~SceneLighting() {}
   virtual void modifyGLState(GLState* glState) = 0;
 };
 
