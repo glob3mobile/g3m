@@ -134,10 +134,6 @@ public class GL
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
-  
   public final void clearScreen(Color color)
   {
   //  if (_verbose) {

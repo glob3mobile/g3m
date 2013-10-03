@@ -35,7 +35,7 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
 
   public void dispose()
   {
-//    if (_ownsProvider){
+//    if (_ownsProvider) {
       _provider._release();
 //    }
     if (_lastModelSet != null)
