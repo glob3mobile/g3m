@@ -30,11 +30,9 @@ public class ShortBuffer_Android
 
    public ShortBuffer_Android(final short[] array,
                               final int length) {
-
       final short[] result = new short[length];
       System.arraycopy(array, 0, result, 0, length);
       _buffer = ShortBuffer.wrap(result);
-
 
       //      //_buffer = ByteBuffer.allocate(length * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
       //      _buffer = ByteBuffer.allocate(length * 2).asShortBuffer();
