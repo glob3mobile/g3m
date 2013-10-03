@@ -560,10 +560,6 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
     }
     else {
       const JSONString* jsonError = jsonObject->getAsString("error");
-//      if (jsonError != NULL) {
-//        ILogger::instance()->logError("Server Error: %s",
-//                                      jsonError->value().c_str());
-//      }
       if (jsonError == NULL) {
         const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
 
@@ -1049,10 +1045,17 @@ void MapBooBuilder::changedCurrentScene() {
     if (currentScene != NULL) {
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
-        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+        //if (cameraPosition->isAnimated()) {
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(4),
                                               cameraPosition->getPosition(),
                                               cameraPosition->getHeading(),
                                               cameraPosition->getPitch());
+        //}
+        //else {
+        //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
+        //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
+        //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
+        //}
       }
     }
   }
@@ -1064,8 +1067,7 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_PRESENTATION) {
-    if ((_webSocket != NULL) &&
-        _isApplicationTubeOpen) {
+    if ((_webSocket != NULL) && _isApplicationTubeOpen) {
       if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
         if (_lastApplicationCurrentSceneIndex >= 0) {
           _webSocket->send( getApplicationCurrentSceneCommand() );

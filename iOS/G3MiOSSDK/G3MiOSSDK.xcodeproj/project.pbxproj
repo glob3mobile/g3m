@@ -212,6 +212,8 @@
 		CF8BE69017E0C68A0072273A /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */; };
 		CF8BE69117E0C68A0072273A /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125817E09EF900AD743A /* HUDRenderer.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
+		CF8E0C2817FE068D00317181 /* TerrainTouchEventListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8E0C2617FE068D00317181 /* TerrainTouchEventListener.cpp */; };
+		CF8E0C2917FE072000317181 /* TerrainTouchEventListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8E0C2717FE068D00317181 /* TerrainTouchEventListener.hpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF90F6C116C4069D00B309C2 /* ITexturizerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
@@ -616,6 +618,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF8E0C2917FE072000317181 /* TerrainTouchEventListener.hpp in CopyFiles */,
 				FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */,
 				CFDDDF9D17F8CA5C00DD3499 /* URLTemplateLayer.hpp in CopyFiles */,
 				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
@@ -1236,6 +1239,8 @@
 		CF8B21BE15DD345D0068601A /* SQDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQDatabase.m; path = Specific/SQDatabase.m; sourceTree = "<group>"; };
 		CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
+		CF8E0C2617FE068D00317181 /* TerrainTouchEventListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchEventListener.cpp; path = Commons/Rendererers/TerrainTouchEventListener.cpp; sourceTree = "<group>"; };
+		CF8E0C2717FE068D00317181 /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Rendererers/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
 		CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ITexturizerData.cpp; path = Commons/Basic/ITexturizerData.cpp; sourceTree = "<group>"; };
@@ -2086,6 +2091,8 @@
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
+				CF8E0C2617FE068D00317181 /* TerrainTouchEventListener.cpp */,
+				CF8E0C2717FE068D00317181 /* TerrainTouchEventListener.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2610,6 +2617,7 @@
 				CFDB7B73166AB99B00756DE8 /* DirectMesh.cpp in Sources */,
 				CF00E444166FD77E0098CABD /* IImageListener.cpp in Sources */,
 				CF2CDD991678292E002A78A9 /* GInitializationTask.cpp in Sources */,
+				CF8E0C2817FE068D00317181 /* TerrainTouchEventListener.cpp in Sources */,
 				CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */,
 				CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */,
 				CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */,
