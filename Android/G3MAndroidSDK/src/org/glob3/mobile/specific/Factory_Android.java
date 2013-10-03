@@ -2,7 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.FloatBufferBuilder;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
@@ -13,7 +12,6 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
-import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.URL;
 
 
@@ -123,14 +121,16 @@ public final class Factory_Android
 
 
    @Override
-   public IShortBuffer createShortBuffer(final ShortBufferBuilder builder) {
-      return new ShortBuffer_Android(builder);
+   public IShortBuffer createShortBuffer(final short[] array,
+                                         final int length) {
+      return new ShortBuffer_Android(array, length);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final FloatBufferBuilder builder) {
-      return new FloatBuffer_Android(builder);
+   public IFloatBuffer createFloatBuffer(final float[] array,
+                                         final int length) {
+      return new FloatBuffer_Android(array, length);
    }
 
 

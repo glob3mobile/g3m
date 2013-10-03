@@ -28,6 +28,24 @@ public class ShortBuffer_Android
    }
 
 
+   public ShortBuffer_Android(final short[] array,
+                              final int length) {
+
+      final short[] result = new short[length];
+      System.arraycopy(array, 0, result, 0, length);
+      _buffer = ShortBuffer.wrap(result);
+
+
+      //      //_buffer = ByteBuffer.allocate(length * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
+      //      _buffer = ByteBuffer.allocate(length * 2).asShortBuffer();
+      //      _buffer.put(array, 0, length);
+      //      _buffer.rewind();
+
+      //      _buffer = ShortBuffer.wrap(array, 0, length);
+      //      _buffer.rewind();
+   }
+
+
    @Override
    public int size() {
       return _buffer.capacity();
