@@ -52,6 +52,7 @@ package org.glob3.mobile.generated;
 //class ICameraActivityListener;
 //class GLState;
 //class PlanetRenderer;
+//class G3MRenderContext;
 
 
 

@@ -31,6 +31,14 @@ public class G3MRenderContext extends G3MContext
 
   }
 
+  public final void clear()
+  {
+    _frameStartTimer.start();
+
+    _orderedRenderables = null;
+    _orderedRenderables = null;
+  }
+
   public final GL getGL()
   {
     return _gl;
