@@ -428,10 +428,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   }
 
   const Vector2F ex = boundingVolume->projectedExtent(rc);
-//  const float t = (ex._x + ex._y);
-//  _lastLodTest = ( t <= ((texWidth + texHeight) * 1.75f) );
   const float t = (ex._x * ex._y);
-//  _lastLodTest = ( t <= ((texWidth * texHeight) * 1.75f) );
   _lastLodTest = t <= ((texWidth * texHeight) * factor);
 
   return _lastLodTest;

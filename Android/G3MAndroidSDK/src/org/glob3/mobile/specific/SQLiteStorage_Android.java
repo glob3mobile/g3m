@@ -29,8 +29,8 @@ public final class SQLiteStorage_Android
          extends
             IStorage {
 
-   private static final String[]         COLUMNS   = new String[] { "contents", "expiration" };
-   private static final String           SELECTION = "name = ?";
+   private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
+   private static final String           SELECTION     = "name = ?";
 
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
@@ -39,6 +39,8 @@ public final class SQLiteStorage_Android
    private final MySQLiteOpenHelper      _dbHelper;
    private SQLiteDatabase                _writeDB;
    private SQLiteDatabase                _readDB;
+   private final BitmapFactory.Options   _options;
+   private final byte[]                  _temp_storage = new byte[128 * 1024];
 
 
    private class MySQLiteOpenHelper
@@ -104,6 +106,10 @@ public final class SQLiteStorage_Android
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
       _writeDB = _dbHelper.getWritableDatabase();
       _readDB = _dbHelper.getReadableDatabase();
+
+      _options = new BitmapFactory.Options();
+      _options.inTempStorage = _temp_storage;
+
 
       //      _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
       //
@@ -306,40 +312,6 @@ public final class SQLiteStorage_Android
    }
 
 
-   //   @Override
-   //   public synchronized IImage readImage(final URL url) {
-   //      IImage result = null;
-   //      final String name = url.getPath();
-   //
-   //      final Cursor cursor = _readDB.query( //
-   //               "image2", //
-   //               new String[] { "contents", "expiration" }, //
-   //               "name = ?", //
-   //               new String[] { name }, //
-   //               null, //
-   //               null, //
-   //               null);
-   //      if (cursor.moveToFirst()) {
-   //         final byte[] data = cursor.getBlob(0);
-   //         final String expirationS = cursor.getString(1);
-   //         final long expirationInterval = Long.parseLong(expirationS);
-   //
-   //         if (expirationInterval > System.currentTimeMillis()) {
-   //            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-   //            if (bitmap == null) {
-   //               ILogger.instance().logError("Can't create bitmap from content of storage");
-   //            }
-   //            else {
-   //               result = new Image_Android(bitmap, null);
-   //            }
-   //         }
-   //      }
-   //      cursor.close();
-   //
-   //      return result;
-   //   }
-
-
    @Override
    public IImageResult readImage(final URL url,
                                  final boolean readExpired) {
@@ -362,8 +334,9 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
+
             //            final long start = System.currentTimeMillis();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
             //            ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
             if (bitmap == null) {
