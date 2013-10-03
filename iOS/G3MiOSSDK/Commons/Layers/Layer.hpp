@@ -15,7 +15,7 @@
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "URL.hpp"
-#include "TerrainTouchEventListener.hpp"
+#include "LayerTouchEventListener.hpp"
 #include "TimeInterval.hpp"
 
 class Petition;
@@ -27,8 +27,8 @@ class LayerTilesRenderParameters;
 
 class Layer {
 protected:
-  LayerCondition*                         _condition;
-  std::vector<TerrainTouchEventListener*> _listeners;
+  LayerCondition*                       _condition;
+  std::vector<LayerTouchEventListener*> _listeners;
 
   LayerSet* _layerSet;
 
@@ -114,15 +114,15 @@ public:
   virtual void initialize(const G3MContext* context) {
   }
 
-  void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
+  void addLayerTouchEventListener(LayerTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
 
   bool onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   const TerrainTouchEvent& tte) const {
+                                   const LayerTouchEvent& tte) const {
     const int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++) {
-      TerrainTouchEventListener* listener = _listeners[i];
+      LayerTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
         if (listener->onTerrainTouch(ec, tte)) {
           return true;

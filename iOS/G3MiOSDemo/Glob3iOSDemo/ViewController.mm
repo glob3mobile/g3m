@@ -1182,6 +1182,7 @@ public:
   const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+//    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
   const bool useCartoDB = false;
@@ -1410,10 +1411,10 @@ public:
                                   true);
     layerSet->addLayer(pnoa);
 
-    class PNOATerrainTouchEventListener : public TerrainTouchEventListener {
+    class PNOATerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1423,7 +1424,7 @@ public:
       }
     };
 
-    pnoa->addTerrainTouchEventListener(new PNOATerrainTouchEventListener());
+    pnoa->addLayerTouchEventListener(new PNOATerrainTouchEventListener());
   }
 
   const bool testURLescape = false;
@@ -1480,10 +1481,10 @@ public:
                                       TimeInterval::fromDays(30),
                                       true);
 
-    class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
+    class CatastroTerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1493,7 +1494,7 @@ public:
       }
     };
 
-    catastro->addTerrainTouchEventListener(new CatastroTerrainTouchEventListener());
+    catastro->addLayerTouchEventListener(new CatastroTerrainTouchEventListener());
 
     layerSet->addLayer(catastro);
   }
@@ -1517,10 +1518,10 @@ public:
                                   true);
     layerSet->addLayer(temp);
 
-    class TempTerrainTouchEventListener : public TerrainTouchEventListener {
+    class TempTerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1530,7 +1531,7 @@ public:
       }
     };
 
-    temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+    temp->addLayerTouchEventListener(new TempTerrainTouchEventListener());
   }
 
   //Worng TEMP Layer
@@ -1558,7 +1559,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -2807,9 +2808,9 @@ public:
 
       if (true) {
         //      NSString* geojsonName = @"geojson/countries";
-        //      NSString* geojsonName = @"geojson/countries-50m";
+        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
-        NSString* geojsonName = @"geojson/cities";
+//        NSString* geojsonName = @"geojson/cities";
         //      NSString* geojsonName = @"geojson/test";
 
         NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName

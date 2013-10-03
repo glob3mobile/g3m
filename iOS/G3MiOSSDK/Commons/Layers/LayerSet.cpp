@@ -68,7 +68,7 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
   for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(ec, tile)) {
-      TerrainTouchEvent tte(position, tile->_sector, layer);
+      LayerTouchEvent tte(position, tile->_sector, layer);
 
       if (layer->onTerrainTouchEventListener(ec, tte)) {
         return true;

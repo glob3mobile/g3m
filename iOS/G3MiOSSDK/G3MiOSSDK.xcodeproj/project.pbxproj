@@ -460,7 +460,7 @@
 		E780A53116D3AE37000F0395 /* RCObject.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */; };
 		E780A53216D3AE37000F0395 /* ShortBufferBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */; };
 		E780A53316D3AE37000F0395 /* SimpleFloatBufferBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */; };
-		E780A53416D3AE37000F0395 /* TerrainTouchEventListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */; };
+		E780A53416D3AE37000F0395 /* LayerTouchEventListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */; };
 		E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */; };
 		E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 38D786E41587B3DD003BBC75 /* Tile.hpp */; };
 		E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; };
@@ -902,7 +902,7 @@
 				E780A53116D3AE37000F0395 /* RCObject.hpp in CopyFiles */,
 				E780A53216D3AE37000F0395 /* ShortBufferBuilder.hpp in CopyFiles */,
 				E780A53316D3AE37000F0395 /* SimpleFloatBufferBuilder.hpp in CopyFiles */,
-				E780A53416D3AE37000F0395 /* TerrainTouchEventListener.hpp in CopyFiles */,
+				E780A53416D3AE37000F0395 /* LayerTouchEventListener.hpp in CopyFiles */,
 				E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */,
 				E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */,
 				E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */,
@@ -1373,7 +1373,7 @@
 		CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMesh.cpp; path = Commons/Mesh/AbstractMesh.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = AbstractMesh.hpp; path = Commons/Mesh/AbstractMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
-		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
+		CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerTouchEventListener.hpp; path = Commons/Basic/LayerTouchEventListener.hpp; sourceTree = "<group>"; };
 		CFE0844315E27B9A0004EC0E /* Petition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Petition.cpp; path = Commons/Basic/Petition.cpp; sourceTree = "<group>"; };
 		CFE0844415E27B9A0004EC0E /* Petition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Petition.hpp; path = Commons/Basic/Petition.hpp; sourceTree = "<group>"; };
 		CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSShapesParser.cpp; path = Commons/Rendererers/SceneJSShapesParser.cpp; sourceTree = "<group>"; };
@@ -1793,7 +1793,7 @@
 				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
 				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
-				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
+				CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */,
 				CF6D723E171854F50043C74B /* TextCanvasElement.cpp */,
 				CF6D723F171854F50043C74B /* TextCanvasElement.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,

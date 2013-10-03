@@ -20,7 +20,7 @@ class LayerSet;
 class TileRasterizer;
 
 
-#include "TerrainTouchEventListener.hpp"
+#include "LayerTouchEventListener.hpp"
 
 class TileTexturizer {
 public:
