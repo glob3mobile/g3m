@@ -90,19 +90,19 @@ public:
   void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
 
   void computeVisibleTile(Tile* tile) {
     _tilesVisible++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
   void computeRenderedSector(Tile* tile) {
-    const Sector sector = tile->getSector();
+    const Sector sector = tile->_sector;
     if (_renderedSector == NULL) {
 #ifdef C_CODE
       _renderedSector = new Sector( sector );
@@ -130,7 +130,7 @@ public:
   void computePlanetRenderered(Tile* tile) {
     _tilesRendered++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
 

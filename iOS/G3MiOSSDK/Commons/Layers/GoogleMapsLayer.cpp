@@ -50,7 +50,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
                                                                const Tile* tile) const {
   std::vector<Petition*> petitions;
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
@@ -72,7 +72,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   isb->addString(",");
   isb->addDouble(tileSector._center._longitude._degrees);
 
-  const int level = tile->getLevel();
+  const int level = tile->_level;
   isb->addString("&zoom=");
   isb->addInt(level);
 

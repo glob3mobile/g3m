@@ -112,7 +112,7 @@ public:
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
-      const Sector tileSector = _tile->getSector();
+      const Sector tileSector = _tile->_sector;
 
       const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector._lower,
@@ -360,7 +360,7 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
 
-      const long long priority = _texturePriority + _tile->getLevel();
+      const long long priority = _texturePriority + _tile->_level;
 
       //      printf("%s\n", petition->getURL().getPath().c_str());
 
@@ -406,7 +406,7 @@ public:
       std::vector<RectangleF*> destRects;
       std::string textureId = _tile->getKey().tinyDescription();
 
-      const Sector tileSector = _tile->getSector();
+      const Sector tileSector = _tile->_sector;
 
       for (int i = 0; i < _petitionsCount; i++) {
         const Petition* petition = _petitions[i];
@@ -899,7 +899,7 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
 
-  const int level = tile->getLevel() - ancestorTile->getLevel();
+  const int level = tile->_level - ancestorTile->_level;
   _texturesHandler->retainGLTextureId(glTextureId);
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
     _texturesHandler->releaseGLTextureId(glTextureId);

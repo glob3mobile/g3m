@@ -34,7 +34,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
       Tile* petitionTile = tile;
 #endif
       const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-      while ((petitionTile->getLevel() > maxLevel) && (petitionTile != NULL)) {
+      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
         petitionTile = petitionTile->getParent();
       }
 
@@ -68,7 +68,7 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
   for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(ec, tile)) {
-      TerrainTouchEvent tte(position, tile->getSector(), layer);
+      TerrainTouchEvent tte(position, tile->_sector, layer);
 
       if (layer->onTerrainTouchEventListener(ec, tte)) {
         return true;

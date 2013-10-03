@@ -27,7 +27,7 @@ void TileElevationDataRequest::onData(const Sector& sector,
                                       ElevationData* elevationData) {
   _listener = NULL;
   if (_tile != NULL) {
-    _tile->setElevationData(elevationData, _tile->getLevel());
+    _tile->setElevationData(elevationData, _tile->_level);
   }
 }
 
@@ -50,7 +50,7 @@ void TileElevationDataRequest::cancelRequest() {
 
 void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
-  _requestID = _provider->requestElevationData(_tile->getSector(),
+  _requestID = _provider->requestElevationData(_tile->_sector,
                                                _resolution,
                                                _listener, true);
 }

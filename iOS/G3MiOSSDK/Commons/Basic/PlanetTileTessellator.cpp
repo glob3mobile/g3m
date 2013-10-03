@@ -57,7 +57,7 @@ Vector2I PlanetTileTessellator::getTileMeshResolution(const Planet* planet,
 Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
-  Sector sector = tile->getSector();
+  Sector sector = tile->_sector;
 
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -105,7 +105,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             bool mercator,
                                             bool renderDebug) const {
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
 
@@ -188,7 +188,7 @@ const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
                                                    const Angle& longitude,
                                                    bool mercator) const {
-  const Sector sector = tile->getSector();
+  const Sector sector = tile->_sector;
 
   const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
   if (!mercator) {
@@ -279,13 +279,13 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
   if (_renderedSector == NULL){
-    return tile->getSector();
+    return tile->_sector;
   }
 #ifdef C_CODE
-  return tile->getSector().intersection(*_renderedSector);
+  return tile->_sector.intersection(*_renderedSector);
 #endif
 #ifdef JAVA_CODE
-  return tile.getSector().intersection(_renderedSector);
+  return tile._sector.intersection(_renderedSector);
 #endif
 }
 

@@ -221,8 +221,8 @@ void PlanetRenderer::clearFirstLevelTiles() {
 class SortTilesClass {
 public:
   bool operator() (Tile* i, Tile* j) {
-    const int rowI = i->getRow();
-    const int rowJ = j->getRow();
+    const int rowI = i->_row;
+    const int rowJ = j->_row;
     
     if (rowI < rowJ) {
       return true;
@@ -231,7 +231,7 @@ public:
       return false;
     }
     
-    return ( i->getColumn() < j->getColumn() );
+    return ( i->_column < j->_column );
   }
 } sortTilesObject;
 #endif
@@ -275,11 +275,11 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                            Tile* tile,
                                            int firstLevel,
                                            bool mercator) const {
-  if (tile->getLevel() == firstLevel) {
+  if (tile->_level == firstLevel) {
     firstLevelTiles.push_back(tile);
   }
   else {
-    const Sector sector = tile->getSector();
+    const Sector sector = tile->_sector;
     const Geodetic2D lower = sector._lower;
     const Geodetic2D upper = sector._upper;
     
@@ -524,7 +524,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
-      if (tile->getSector().touchesWith(sector)) {
+      if (tile->_sector.touchesWith(sector)) {
         _tileVisitor->visitTile(layers, tile);
         visitSubTilesTouchesWith(layers, tile, sector, firstLevelCache,
                                  maxLevelCache);
@@ -539,14 +539,14 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* 
                                               const Sector sectorToVisit,
                                               const int topLevel,
                                               const int maxLevel) {
-  if (tile->getLevel() < maxLevel) {
+  if (tile->_level < maxLevel) {
     std::vector<Tile*>* subTiles = tile->getSubTiles(_layerSet->getLayerTilesRenderParameters()->_mercator);
     
     const int subTilesCount = subTiles->size();
     for (int i = 0; i < subTilesCount; i++) {
       Tile* tl = subTiles->at(i);
-      if (tl->getSector().touchesWith(sectorToVisit)) {
-        if ((tile->getLevel() >= topLevel)) {
+      if (tl->_sector.touchesWith(sectorToVisit)) {
+        if ((tile->_level >= topLevel)) {
           _tileVisitor->visitTile(layers, tl);
         }
         visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);

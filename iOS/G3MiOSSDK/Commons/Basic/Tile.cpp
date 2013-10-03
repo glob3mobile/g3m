@@ -903,7 +903,7 @@ void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
 
     if (ancestor != NULL) {
       ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
-      setElevationData(subView, ancestor->getLevel());
+      setElevationData(subView, ancestor->_level);
     }
   }
   else {
@@ -947,10 +947,10 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
 
 void Tile::ancestorChangedElevationData(Tile* ancestor) {
 
-  if (ancestor->getLevel() > _elevationDataLevel) {
+  if (ancestor->_level > _elevationDataLevel) {
     ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
     if (subView != NULL) {
-      setElevationData(subView, ancestor->getLevel());
+      setElevationData(subView, ancestor->_level);
     }
   }
 
@@ -980,7 +980,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
     return new DecimatedSubviewElevationData(ed,
-                                             getSector(),
+                                             _sector,
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
   

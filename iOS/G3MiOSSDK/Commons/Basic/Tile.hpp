@@ -44,10 +44,6 @@ class Tile {
 private:
   TileTexturizer* _texturizer;
   Tile*           _parent;
-  const Sector    _sector;
-  const int       _level;
-  const int       _row;
-  const int       _column;
 
   Mesh* _tessellatorMesh;
 
@@ -159,6 +155,11 @@ private:
                                           const TilesRenderParameters* tilesRenderParameters);
 
 public:
+  const Sector    _sector;
+  const int       _level;
+  const int       _row;
+  const int       _column;
+
   Tile(TileTexturizer* texturizer,
        Tile* parent,
        const Sector& sector,
@@ -172,21 +173,21 @@ public:
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
 
-  const Sector getSector() const {
-    return _sector;
-  }
-
-  int getLevel() const {
-    return _level;
-  }
-
-  int getRow() const {
-    return _row;
-  }
-
-  int getColumn() const {
-    return _column;
-  }
+//  const Sector getSector() const {
+//    return _sector;
+//  }
+//
+//  int getLevel() const {
+//    return _level;
+//  }
+//
+//  int getRow() const {
+//    return _row;
+//  }
+//
+//  int getColumn() const {
+//    return _column;
+//  }
 
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;
