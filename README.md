@@ -31,7 +31,7 @@ G3m supports a flat world mode and a complete world , this is customizable by de
 ####Scenario maps
 You can create a scenario map, you only have to pass a bounding box (a Sector in g3m terminology) and you hill have a part of
 the world for your app.
-
+![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/scenario.png)
 
 
 ####Real Time Support
