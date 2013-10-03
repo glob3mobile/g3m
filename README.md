@@ -24,14 +24,21 @@ G3M is a library thought to develop mobile apps from the scratch, since first li
 a productive environment for multiplatform mobile apps development.
 ####Mutitouch support
 We support all possible events on mobile devices. The advantages of multi-touch navigation are exploited to visualize map.
-![Screenshot gestures] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/Tip-Controls.png)
-####2d 2,5d 3d maps.
+![Screenshot gestures] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/gesture.png)
+####2D-3D
+G3m supports a flat world mode and a complete world , this is customizable by developer
+
 ####Scenario maps
+You can create a scenario map, you only have to pass a bounding box (a Sector in g3m terminology) and you hill have a part of
+the world for your app.
+
+
+
 ####Real Time Support
 ####Works offline
 
 ####Support terrain models.
-+Bil
++ Bil
 + Any other format throught OGR-GDAL conversion
 
 ####Raster Support
@@ -59,6 +66,25 @@ We support all possible events on mobile devices. The advantages of multi-touch 
 ####3D Objects
 + Scene JS (There is a Blender plugin to export to this format optimized)
 + 
+
+####Camera animation
+
+####Very simple API 
+Using the Builder Pattern we allow to programmers the fast development of apps.
+
+
+
+Use Cases
+=========
+
+Videos
+======
+
+Deployed Apps
+=============
+
+Demos
+=====
 
 Architecture
 ============ 
