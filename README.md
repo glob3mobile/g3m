@@ -11,6 +11,7 @@ g3m
  + Be integrated on any legacy system
  + **High performance** mobile native development
  + Multi Touch screens
+ + Face the problem of the **mobile performance** as an **integrated** problem between server & client
 
 Capabilities
 ============
@@ -35,8 +36,37 @@ the world for your app.
 
 
 ####Real Time Support
+We have developed a real-time server called tubes using the [Netty library] (http://netty.io/) that allow full duplex conexion 
+between all devices connected to the server.
+
++ For example with this module you can face the realtime layer editing, any change on a individual mobile device is broadcasted
+to the server and to the other devices connected
+
+![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/broadcast.png)
+
++ Another example is push notification from server to devices
+
+![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/push.png)
+
+
 ####Works offline
 
+All things that you can see on the screen could be cached to be used offline.  G
+3M has a cache implemented with
+SQLite. We use the  [decorator pattern] (http://en.wikipedia.org/wiki/Decorator_pattern) , the native downloader does not cache, this function is done by a decorator
+"CachedDownloader".
+
+####Bitmap generation multiplatform API 
+This library is used for tasks like labeling, rasterization, HUD. This development is used for other libraries like 
+the simbolization library
+
+####Projection
+The g3m widget supports the next projections:
+ + [EPSG:4326] (http://spatialreference.org/ref/epsg/4326/)
+ + [EPSG:3857] (http://wiki.openstreetmap.org/wiki/EPSG:3857)
+ 
+Other projections can be accesed by gdal with preprocess transformation on server.
+ 
 ####Support terrain models.
 + Bil
 + Any other format throught OGR-GDAL conversion
@@ -51,7 +81,11 @@ the world for your app.
 + Any tiled WebMercator format
 
 ####Vectorial Support.
-+ geoJSON
+The vectorial stuff could be done with differents approach depending the data and the capabilities that
+developer wants for his application, layers could be rasterized and cached offline when are very big or complex, in 
+other cases the vectorial 
+
++ geoJSON -> bson
 + Any other format throught OGR-GDAL conversion
 
 ####Symbology
@@ -64,14 +98,12 @@ the world for your app.
 + Any format through preprocess
 
 ####3D Objects
-+ Scene JS (There is a Blender plugin to export to this format optimized)
-+ 
++ Scene JS (There is a Blender plugin to export to this format optimized) -> bson
 
 ####Camera animation
 
 ####Very simple API 
 Using the Builder Pattern we allow to programmers the fast development of apps.
-
 
 
 Use Cases
@@ -92,9 +124,15 @@ Architecture
 Roadpmap
 ========
 ##Near (weeks)
+
 + GPS Support
++ MBTiles
+
 
 ##After (months)
+
++ WebGL Cache
++ 
 
 License
 =======
