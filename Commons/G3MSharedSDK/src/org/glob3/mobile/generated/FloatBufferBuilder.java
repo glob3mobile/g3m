@@ -45,18 +45,18 @@ public class FloatBufferBuilder
     private int     _size;
 
     public FloatArrayList() {
-//      this(1024);
-      _array = IFactory.instance().getThreadLocalFloatArray();
-      _size = 0;
+      this(1024);
+//      _array = IFactory.instance().getThreadLocalFloatArray();
+//      _size = 0;
     }
 
-//    public FloatArrayList(final int initialCapacity) {
-//      if (initialCapacity < 0) {
-//        throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
-//      }
-//      _array = new float[initialCapacity];
-//      _size = 0;
-//    }
+    public FloatArrayList(final int initialCapacity) {
+      if (initialCapacity < 0) {
+        throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
+      }
+      _array = new float[initialCapacity];
+      _size = 0;
+    }
 
     public int size() {
       return _size;
