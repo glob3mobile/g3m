@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.HashMap;
 
+import org.glob3.mobile.generated.FloatBufferBuilder;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
@@ -14,6 +15,7 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -136,14 +138,14 @@ public final class Factory_WebGL
 
 
    @Override
-   public IShortBuffer createShortBuffer(final IShortBuffer buffer) {
-      return new ShortBuffer_WebGL(buffer);
+   public IShortBuffer createShortBuffer(final ShortBufferBuilder builder) {
+      return new ShortBuffer_WebGL(builder);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final IFloatBuffer buffer) {
-      return new FloatBuffer_WebGL(buffer);
+   public IFloatBuffer createFloatBuffer(final FloatBufferBuilder builder) {
+      return new FloatBuffer_WebGL(builder);
    }
 
 }

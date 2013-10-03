@@ -89,8 +89,8 @@ public:
   //public abstract IShortBuffer createShortBuffer(final short[] array);
   //public abstract IFloatBuffer createFloatBuffer(final float[] array);
 
-  public abstract IShortBuffer createShortBuffer(final ShortBufferBuilder builder);
-  public abstract IFloatBuffer createFloatBuffer(final FloatBufferBuilder builder);
+  public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
+  public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
 #endif
   
 };

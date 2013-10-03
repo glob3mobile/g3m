@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.FloatBufferBuilder;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
@@ -12,6 +13,7 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.URL;
 
 
@@ -116,13 +118,15 @@ public class Factory_JavaDesktop
 
 
    @Override
-   public IShortBuffer createShortBuffer(final IShortBuffer buffer) {
+   public IShortBuffer createShortBuffer(final ShortBufferBuilder builder) {
       throw new RuntimeException("Not yet implemented");
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final IFloatBuffer buffer) {
-      return new FloatBuffer_JavaDesktop(buffer);
+   public IFloatBuffer createFloatBuffer(final FloatBufferBuilder builder) {
+      return new FloatBuffer_JavaDesktop(builder);
    }
+
+
 }
