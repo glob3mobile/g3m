@@ -77,10 +77,10 @@ public abstract class IFactory
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
-  //public abstract IShortBuffer createShortBuffer(final short[] array);
-  //public abstract IFloatBuffer createFloatBuffer(final float[] array);
-
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
+
+  public abstract float[] getThreadLocalFloatArray();
+  public abstract void    setThreadLocalFloatArray(final float[] array);
 
 }
