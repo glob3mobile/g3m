@@ -24,6 +24,7 @@ IShortBuffer* ShortBufferBuilder::create() const {
   return result;
 #endif
 #ifdef JAVA_CODE
-  return IFactory.instance().createShortBuffer( _values.toArray() );
+  //return IFactory.instance().createShortBuffer( _values.toArray() );
+  return IFactory.instance().createShortBuffer( this );
 #endif
 }

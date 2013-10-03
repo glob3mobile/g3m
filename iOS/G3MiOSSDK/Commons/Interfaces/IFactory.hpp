@@ -86,9 +86,11 @@ public:
                                       bool autodeleteWebSocket) const = 0;
 #ifdef JAVA_CODE
 
-  public abstract IShortBuffer createShortBuffer(final short[] array);
+  //public abstract IShortBuffer createShortBuffer(final short[] array);
+  //public abstract IFloatBuffer createFloatBuffer(final float[] array);
 
-  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+  public abstract IShortBuffer createShortBuffer(final IShortBuffer buffer);
+  public abstract IFloatBuffer createFloatBuffer(final IFloatBuffer buffer);
 #endif
   
 };
