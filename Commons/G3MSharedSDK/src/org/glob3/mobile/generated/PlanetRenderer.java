@@ -156,8 +156,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
                                  @Override
                                  public int compare(final Tile i,
                                                     final Tile j) {
-                                   final int rowI = i.getRow();
-                                   final int rowJ = j.getRow();
+                                   final int rowI = i._row;
+                                   final int rowJ = j._row;
                                    if (rowI < rowJ) {
                                      return -1;
                                    }
@@ -165,8 +165,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
                                      return 1;
                                    }
   
-                                   final int columnI = i.getColumn();
-                                   final int columnJ = j.getColumn();
+                                   final int columnI = i._column;
+                                   final int columnJ = j._column;
                                    if (columnI < columnJ) {
                                      return -1;
                                    }
