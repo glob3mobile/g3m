@@ -264,10 +264,7 @@ public class Tile
     }
   
     final Vector2F ex = boundingVolume.projectedExtent(rc);
-  //  const float t = (ex._x + ex._y);
-  //  _lastLodTest = ( t <= ((texWidth + texHeight) * 1.75f) );
     final float t = (ex._x * ex._y);
-  //  _lastLodTest = ( t <= ((texWidth * texHeight) * 1.75f) );
     _lastLodTest = t <= ((texWidth * texHeight) * factor);
   
     return _lastLodTest;
