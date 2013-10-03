@@ -69,6 +69,10 @@ the world for your app.
 
 ####Camera animation
 
+####Very simple API 
+Using the Builder Pattern we allow to programmers the fast development of apps.
+
+
 
 Use Cases
 =========
