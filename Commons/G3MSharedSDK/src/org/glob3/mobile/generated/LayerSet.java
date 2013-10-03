@@ -260,7 +260,7 @@ public class LayerSet
       Layer layer = _layers.get(i);
       if (layer.isAvailable(ec, tile))
       {
-        TerrainTouchEvent tte = new TerrainTouchEvent(position, tile._sector, layer);
+        LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
         if (layer.onTerrainTouchEventListener(ec, tte))
         {
