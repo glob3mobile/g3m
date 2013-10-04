@@ -1331,8 +1331,6 @@ public class G3MWebGLDemo
 
       builder.setInitializationTask(initializationTask);
       */
-<<<<<<< HEAD
-
 
       //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
@@ -1343,19 +1341,6 @@ public class G3MWebGLDemo
       //      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
       //      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
       //      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
-=======
-
-
-      //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-
-      // set elevations
-      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
-      final Vector2I extent = new Vector2I(256, 256);
-      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
-      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
-      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
-      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
->>>>>>> purgatory
 
 
       _widget = builder.createWidget();

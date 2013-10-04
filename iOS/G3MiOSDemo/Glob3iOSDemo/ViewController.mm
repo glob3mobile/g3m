@@ -420,9 +420,16 @@ public:
   void onAboutChanged(const G3MContext* context,
                       const std::string& about) {}
 
-  virtual void onWebSocketOpen(const G3MContext* context) {}
+  void onWebSocketOpen(const G3MContext* context) {}
 
-  virtual void onWebSocketClose(const G3MContext* context) {}
+  void onWebSocketClose(const G3MContext* context) {}
+
+  void onTerrainTouch(MapBooBuilder*         builder,
+                      const G3MEventContext* ec,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile) { }
+
 };
 
 
@@ -432,12 +439,15 @@ public:
 
   const std::string applicationId = "2glgs5j2mq5i9nxx68q";
 
+  bool enableNotifications = false;
+
   _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
                                        URL("http://192.168.1.2:8080/web", false),
                                        URL("ws://192.168.1.2:8888/tube", false),
                                        "",
                                        VIEW_RUNTIME,
-                                       applicationListener);
+                                       applicationListener,
+                                       enableNotifications);
 
   //  MarksRenderer* marksRenderer = new MarksRenderer(false);
   //
