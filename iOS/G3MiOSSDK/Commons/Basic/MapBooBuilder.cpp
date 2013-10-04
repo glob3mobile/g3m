@@ -1046,7 +1046,7 @@ void MapBooBuilder::changedCurrentScene() {
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
         //if (cameraPosition->isAnimated()) {
-        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(4),
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
                                               cameraPosition->getPosition(),
                                               cameraPosition->getHeading(),
                                               cameraPosition->getPitch());
