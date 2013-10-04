@@ -153,7 +153,7 @@ public abstract class Layer
     _listeners.add(listener);
   }
 
-  public final boolean onTerrainTouchEventListener(G3MEventContext ec, LayerTouchEvent tte)
+  public final boolean onLayerTouchEventListener(G3MEventContext ec, LayerTouchEvent tte)
   {
     final int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++)

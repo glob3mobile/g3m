@@ -601,8 +601,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           {
             return true;
           }
+  
+          int _DGG_At_Work;
+  //        if (_terrainTouchListener != NULL) {
+  //          TODO;
+  //        }
         }
       }
+  
   
     }
   
