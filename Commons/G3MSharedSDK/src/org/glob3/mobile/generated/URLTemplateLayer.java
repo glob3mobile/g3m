@@ -24,7 +24,7 @@ public class URLTemplateLayer extends Layer
   private final boolean _isTransparent;
 
   private final IStringUtils _su;
-  private final IMathUtils _mu;
+  private IMathUtils _mu;
 
   private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
   {
