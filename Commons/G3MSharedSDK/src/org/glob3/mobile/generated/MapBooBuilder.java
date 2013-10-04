@@ -423,7 +423,7 @@ public abstract class MapBooBuilder
         if (cameraPosition != null)
         {
           //if (cameraPosition->isAnimated()) {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(4), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
           //}
           //else {
           //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
