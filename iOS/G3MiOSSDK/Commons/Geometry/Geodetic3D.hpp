@@ -114,6 +114,9 @@ public:
                       _longitude.div(magnitude),
                       _height / magnitude);
   }
+
+  bool isEquals(const Geodetic3D& that) const;
+
 };
 
 

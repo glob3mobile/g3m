@@ -23,3 +23,9 @@ const std::string Geodetic3D::description() const {
   delete isb;
   return s;
 }
+
+bool Geodetic3D::isEquals(const Geodetic3D& that) const {
+  return (_latitude.isEquals(that._latitude)   &&
+          _longitude.isEquals(that._longitude) &&
+          (_height == that._height));
+}
