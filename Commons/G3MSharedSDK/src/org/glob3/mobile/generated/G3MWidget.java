@@ -28,14 +28,11 @@ public class G3MWidget
 
   public void dispose()
   {
-<<<<<<< HEAD
     if (_mainRendererState != null)
        _mainRendererState.dispose();
-=======
     if (_renderContext != null)
        _renderContext.dispose();
   
->>>>>>> purgatory
     if (_userData != null)
        _userData.dispose();
   
@@ -174,44 +171,17 @@ public class G3MWidget
   
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-<<<<<<< HEAD
-    G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
     if (_mainRendererState != null)
        _mainRendererState.dispose();
-    _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(rc) : RenderState.busy());
+    _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
     RenderState_Type renderStateType = _mainRendererState._type;
   
-    _effectsScheduler.doOneCyle(rc);
-  
-    _frameTasksExecutor.doPreRenderCycle(rc);
-=======
-  //  G3MRenderContext rc(_frameTasksExecutor,
-  //                      IFactory::instance(),
-  //                      IStringUtils::instance(),
-  //                      _threadUtils,
-  //                      ILogger::instance(),
-  //                      IMathUtils::instance(),
-  //                      IJSONParser::instance(),
-  //                      _planet,
-  //                      _gl,
-  //                      _currentCamera,
-  //                      _nextCamera,
-  //                      _texturesHandler,
-  //                      _downloader,
-  //                      _effectsScheduler,
-  //                      IFactory::instance()->createTimer(),
-  //                      _storage,
-  //                      _gpuProgramManager,
-  //                      _surfaceElevationProvider);
     _renderContext.clear();
-  
-    _mainRendererReady = _initializationTaskReady && _mainRenderer.isReadyToRender(_renderContext);
   
     _effectsScheduler.doOneCyle(_renderContext);
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
->>>>>>> purgatory
   
   
     Renderer selectedRenderer;
@@ -687,13 +657,9 @@ public class G3MWidget
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
 
-<<<<<<< HEAD
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
-=======
   private G3MRenderContext _renderContext;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
->>>>>>> purgatory
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();

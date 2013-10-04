@@ -277,97 +277,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private float _verticalExaggeration;
 
-<<<<<<< HEAD
-=======
-
-  private boolean isReadyToRenderTiles(G3MRenderContext rc)
-  {
-    if (!_validLayerTilesRenderParameters)
-    {
-      return false;
-    }
-  
-    if (!_layerSet.isReady())
-    {
-      return false;
-    }
-  
-    if (_elevationDataProvider != null)
-    {
-      if (!_elevationDataProvider.isReadyToRender(rc))
-      {
-        return false;
-      }
-    }
-  
-    if (_firstLevelTilesJustCreated)
-    {
-      _firstLevelTilesJustCreated = false;
-  
-      final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-      if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-      {
-  //      TilesStatistics statistics;
-        _statistics.clear();
-  
-        final LayerTilesRenderParameters layerTilesRenderParameters = _layerSet.getLayerTilesRenderParameters();
-  
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _texturePriority);
-        }
-      }
-  
-      if (_texturizer != null)
-      {
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          _texturizer.justCreatedTopTile(rc, tile, _layerSet);
-        }
-      }
-    }
-  
-    if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-    {
-      if (!_allFirstLevelTilesAreTextureSolved)
-      {
-        final int firstLevelTilesCount = _firstLevelTiles.size();
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          if (!tile.isTextureSolved())
-          {
-            return false;
-          }
-        }
-  
-        if (_tessellator != null)
-        {
-          if (!_tessellator.isReady(rc))
-          {
-            return false;
-          }
-        }
-  
-        if (_texturizer != null)
-        {
-          if (!_texturizer.isReady(rc, _layerSet))
-          {
-            return false;
-          }
-        }
-  
-        _allFirstLevelTilesAreTextureSolved = true;
-      }
-    }
-  
-    return true;
-  }
-
->>>>>>> purgatory
   private boolean _recreateTilesPending;
 
   private GLState _glState;
@@ -516,14 +425,26 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-<<<<<<< HEAD
-    TilesStatistics statistics = new TilesStatistics();
-  
-    PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, layerTilesRenderParameters, _parameters, statistics, _lastSplitTimer, _firstRender, _texturePriority, _verticalExaggeration, _renderedSector); // if first render, force full render
-=======
+  //<<<<<<< HEAD
+  //  TilesStatistics statistics;
+  //
+  //  PlanetRendererContext prc(_tessellator,
+  //                            _elevationDataProvider,
+  //                            _texturizer,
+  //                            _tileRasterizer,
+  //                            _layerSet,
+  //                            layerTilesRenderParameters,
+  //                            _parameters,
+  //                            &statistics,
+  //                            _lastSplitTimer,
+  //                            _firstRender /* if first render, force full render */,
+  //                            _texturePriority,
+  //                            _verticalExaggeration,
+  //                            *_renderedSector);
+  //=======
     //TilesStatistics statistics;
     _statistics.clear();
->>>>>>> purgatory
+  //>>>>>>> purgatory
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -532,7 +453,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
   
-    final LayerTilesRenderParameters layerTilesRenderParameters = _layerSet.getLayerTilesRenderParameters();
+  //  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
@@ -687,16 +608,36 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
-      if (_parameters._forceFirstLevelTilesRenderOnStart)
+  //<<<<<<< HEAD
+  //    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
+  //      TilesStatistics statistics;
+  //
+  //      PlanetRendererContext prc(_tessellator,
+  //                                _elevationDataProvider,
+  //                                _texturizer,
+  //                                _tileRasterizer,
+  //                                _layerSet,
+  //                                layerTilesRenderParameters,
+  //                                _parameters,
+  //                                &statistics,
+  //                                _lastSplitTimer,
+  //                                true,
+  //                                _texturePriority,
+  //                                _verticalExaggeration,
+  //                                *_renderedSector);
+  //=======
+      if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
       {
-        TilesStatistics statistics = new TilesStatistics();
+  //      TilesStatistics statistics;
+        _statistics.clear();
   
-        PlanetRendererContext prc = new PlanetRendererContext(_tessellator, _elevationDataProvider, _texturizer, _tileRasterizer, _layerSet, layerTilesRenderParameters, _parameters, statistics, _lastSplitTimer, true, _texturePriority, _verticalExaggeration, _renderedSector);
+  //      const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
+  //>>>>>>> purgatory
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
           Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, prc);
+          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _texturePriority);
         }
       }
   
@@ -710,7 +651,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       }
     }
   
-    if (_parameters._forceFirstLevelTilesRenderOnStart)
+    if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       if (!_allFirstLevelTilesAreTextureSolved)
       {

@@ -10,7 +10,7 @@ public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.CanvasImageF
     canvas.fillRectangle(0, 0, width, height);
   
     ColumnCanvasElement column = new ColumnCanvasElement(Color.fromRGBA(0.9f, 0.4f, 0.4f, 1.0f), 0, 16, 8); // cornerRadius -  padding -  margin
-    final GFont labelFont = GFont.sansSerif(22);
+    final GFont labelFont = GFont.sansSerif(18);
     final Color labelColor = Color.white();
   
     final int errorsSize = _errors.size();

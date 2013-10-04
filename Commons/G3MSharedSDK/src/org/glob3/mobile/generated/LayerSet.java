@@ -241,7 +241,6 @@ public class LayerSet
     return null;
   }
 
-//  const LayerTilesRenderParameters* getLayerTilesRenderParameters(std::vector<std::string>& errors) const;
   public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
   {
     Sector topSector = null;

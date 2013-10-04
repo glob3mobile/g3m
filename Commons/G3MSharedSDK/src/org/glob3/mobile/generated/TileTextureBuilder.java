@@ -94,7 +94,6 @@ public class TileTextureBuilder extends RCObject
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
-//                     const LayerSet*                   layerSet,
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;

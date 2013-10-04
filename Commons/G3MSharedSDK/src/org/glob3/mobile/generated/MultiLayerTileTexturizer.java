@@ -62,7 +62,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
     _texturesHandler = rc.getTexturesHandler();
   
@@ -71,13 +71,21 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-<<<<<<< HEAD
-      final LayerSet layerSet = prc.getLayerSet();
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, prc.getTileRasterizer(), rc, prc.getLayerTilesRenderParameters(), layerSet.createTileMapPetitions(rc, tile), rc.getDownloader(), tile, tessellatorMesh, prc.getTessellator(), prc.getTexturePriority()));
-                                                                          //layerSet,
-=======
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerSet, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
->>>>>>> purgatory
+  
+  //    MultiLayerTileTexturizer*         texturizer,
+  //    TileRasterizer*                   tileRasterizer,
+  //    const G3MRenderContext*           rc,
+  //    const LayerTilesRenderParameters* layerTilesRenderParameters,
+  //    const std::vector<Petition*>&     petitions,
+  //    IDownloader*                      downloader,
+  //    Tile*                             tile,
+  //    const Mesh*                       tessellatorMesh,
+  //    const TileTessellator*            tessellator,
+  //    long long                         texturePriority
+  
+  //    const LayerSet* layerSet = prc->getLayerSet();
+  
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
       tile.setTexturizerData(builderHolder);
     }
   

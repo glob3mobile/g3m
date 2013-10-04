@@ -44,11 +44,7 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class IWebSocket;
 //class MapBoo_Scene;
-<<<<<<< HEAD
 //class ErrorRenderer;
-
-=======
->>>>>>> purgatory
 //class SceneLighting;
 //class G3MEventContext;
 //class Camera;
