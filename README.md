@@ -204,6 +204,8 @@ But you can develop more complex things only parameterizing the builder
 Use Cases Deployed Apps and Demos
 =================================
 
+###Projects deployed on stores
+
 + [Mapboo] (http://www.mapboo.com) is a platform for automatic deploying of mobile map apps. You have a dashboard where you 
 can define your differents applicatiosn with all the maps you want. You can publish you mobile map app simply with a click
 and mapboo publish to different stores. Try it!
@@ -240,6 +242,17 @@ wants.
     <td> <a href="https://play.google.com/store/apps/details?id=es.igosoftware.caceresviewandroid"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
   </tr>
 </table>
+
++ Cadastre of Spain. Proof of concept using OGC protocoles to consume Open Data from Spanish government. This app consume WMS layers and uses the getFeatureInfo Capabilitie
+
+<table>
+  <tr>
+   <td> <a href="https://play.google.com/store/apps/details?id=com.glob3mobile.g3mcatastro"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+  </tr>
+</table>
+
+###There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them.
+
 
 
 Videos
