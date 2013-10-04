@@ -103,4 +103,10 @@ public class Geodetic3D
   {
     return new Geodetic3D(_latitude.div(magnitude), _longitude.div(magnitude), _height / magnitude);
   }
+
+  public final boolean isEquals(Geodetic3D that)
+  {
+    return (_latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude) && (_height == that._height));
+  }
+
 }

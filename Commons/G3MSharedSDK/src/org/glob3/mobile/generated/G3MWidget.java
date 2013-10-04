@@ -499,6 +499,12 @@ public class G3MWidget
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromHeading, Angle toHeading, Angle fromPitch, Angle toPitch, boolean linearTiming, boolean linearHeight)
   {
+  
+    if (fromPosition.isEquals(toPosition) && fromHeading.isEquals(toHeading) && fromPitch.isEquals(toPitch))
+    {
+      return;
+    }
+  
     double finalLatInDegrees = toPosition._latitude._degrees;
     double finalLonInDegrees = toPosition._longitude._degrees;
   
