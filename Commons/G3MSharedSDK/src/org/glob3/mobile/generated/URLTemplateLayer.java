@@ -33,12 +33,18 @@ public class URLTemplateLayer extends Layer
      _sector = new Sector(sector);
      _isTransparent = isTransparent;
      _su = IStringUtils.instance();
-     _mu = IMathUtils.instance();
+     _mu = null;
   
   }
 
   private String getPath(Tile tile, Sector sector)
   {
+  
+    if (_mu == null)
+    {
+      _mu = IMathUtils.instance();
+    }
+  
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
     final int level = tile._level;
