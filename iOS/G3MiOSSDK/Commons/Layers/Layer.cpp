@@ -66,7 +66,7 @@ const std::string Layer::getTitle() const {
   return _title;
 }
 
-void Layer::getTitle(const std::string& title) {
+void Layer::setTitle(const std::string& title) {
   _title = title;
 }
 

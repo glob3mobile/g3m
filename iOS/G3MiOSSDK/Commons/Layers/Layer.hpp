@@ -154,7 +154,7 @@ public:
 
   const std::string getTitle() const;
 
-  void getTitle(const std::string& title);
+  void setTitle(const std::string& title);
   
 };
 
