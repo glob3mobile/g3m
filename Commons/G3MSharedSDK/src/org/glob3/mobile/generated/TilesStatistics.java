@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class VisibleSectorListener;
 //class ElevationDataProvider;
 //class LayerTilesRenderParameters;
+//class TerrainTouchListener;
 
 
 //class EllipsoidShape;

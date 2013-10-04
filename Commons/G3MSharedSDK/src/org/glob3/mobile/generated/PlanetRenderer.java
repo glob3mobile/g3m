@@ -391,6 +391,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private Sector _renderedSector;
   private boolean _validLayerTilesRenderParameters;
 
+  private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
@@ -603,12 +605,18 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           }
   
           int _DGG_At_Work;
-  //        if (_terrainTouchListener != NULL) {
-  //          TODO;
-  //        }
+          final int terrainTouchListenersSize = _terrainTouchListeners.size();
+          // for (int i = 0; i < terrainTouchListenersSize; i++) {
+          for (int i = terrainTouchListenersSize-1; i >= 0; i--)
+          {
+            TerrainTouchListener listener = _terrainTouchListeners.get(i);
+            if (listener.onTerrainTouch(ec, _lastCamera, position, tile))
+            {
+              return true;
+            }
+          }
         }
       }
-  
   
     }
   
@@ -794,6 +802,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _tessellator.setRenderedSector(sector);
   
     changed();
+  }
+
+  public final void addTerrainTouchListener(TerrainTouchListener listener)
+  {
+    if (listener != null)
+    {
+      _terrainTouchListeners.add(listener);
+    }
   }
 
 }
