@@ -122,7 +122,7 @@ public class TrailsRenderer extends LeafRenderer
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 64
+//#define MAX_POSITIONS_PER_SEGMENT 256
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer
