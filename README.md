@@ -253,13 +253,22 @@ wants.
 
 ###Other projects:
 
-There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them.
+There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them:
 
-
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
 
 Videos
 ======
 
+<iframe width="640" height="360" src="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="http://youtu.be/kEep7i0ZurE?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="http://www.youtube.com/embed/Nk_yc81sU44?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="http://www.youtube.com/embed/bbMo2iH8Tfs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
 
 
 
