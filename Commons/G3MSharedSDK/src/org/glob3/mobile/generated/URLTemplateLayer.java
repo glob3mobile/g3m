@@ -23,8 +23,8 @@ public class URLTemplateLayer extends Layer
   private final Sector _sector ;
   private final boolean _isTransparent;
 
-  private final IStringUtils _su;
-  private IMathUtils _mu;
+  private IMathUtils   _mu;
+  private IStringUtils _su;
 
   private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
   {
@@ -32,7 +32,7 @@ public class URLTemplateLayer extends Layer
      _urlTemplate = urlTemplate;
      _sector = new Sector(sector);
      _isTransparent = isTransparent;
-     _su = IStringUtils.instance();
+     _su = null;
      _mu = null;
   
   }
@@ -43,6 +43,11 @@ public class URLTemplateLayer extends Layer
     if (_mu == null)
     {
       _mu = IMathUtils.instance();
+    }
+  
+    if (_su == null)
+    {
+      _su = IStringUtils.instance();
     }
   
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
