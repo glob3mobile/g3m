@@ -58,7 +58,10 @@ SQLite. We use the  [decorator pattern] (http://en.wikipedia.org/wiki/Decorator_
 
 ####Bitmap generation multiplatform API 
 This library is used for tasks like labeling, rasterization, HUD. This development is used for other libraries like 
-the simbolization library
+the simbolization library or the vectorial rendering on the fly.
+On the next screenshot there are some labels rendered by this API
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/bitmaps.PNG)
 
 ####Projection
 The g3m widget supports the next projections:
@@ -80,43 +83,170 @@ Other projections can be accesed by gdal with preprocess transformation on serve
 + ArcGIS Server
 + Any tiled WebMercator format
 
+MapBox, Mapquest and CartoDB layers:
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/rasterlayers.PNG)
+
+ArcGIS Server - ArcGIS Online layers
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/esri.PNG)
+
 ####Vectorial Support.
 The vectorial stuff could be done with differents approach depending the data and the capabilities that
 developer wants for his application, layers could be rasterized and cached offline when are very big or complex, in 
-other cases the vectorial 
-
+other cases the vectorial coulb be rendered on the fly.
+In teh repositry are the libraries to transform the data to optimized formats 
 + geoJSON -> bson
-+ Any other format throught OGR-GDAL conversion
++ Any other format throught OGR-GDAL conversion (shp, kml , ogr)
+
+Vectorial file rendered on the fly:
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/rasterizing.PNG)
+
+
 
 ####Symbology
+
+G3M contains all elements needed for a complete symbolization of any kind of information. In order to access the symbolizers
+from web interfaces has been developed a CartoCSS parser.
+This library also have support for 3d animation of temporal series 
+
 + 2D Symbols
 + CartoCSS support
 + 3D Symbols
 + Temporal series support
 
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/shapes.PNG)
+
+
 ####Point Clouds
+Simple rendering of point clouds, next step will be online streaming rendering of huge clouds. Currently 
+the amount of points is limited by devices capabilities
+
 + Any format through preprocess
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
 
 ####3D Objects
 + Scene JS (There is a Blender plugin to export to this format optimized) -> bson
 
+####3D Info
++ NetCDF, Scientific Data. Preprocess on server.
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/netcdf.png)
+
 ####Camera animation
 
+Manage of camera animation with different options to change the point of view over the map depending 
+the app capabilities.
+
 ####Very simple API 
+
 Using the Builder Pattern we allow to programmers the fast development of apps.
 
+With 2 lines of code you have a 3d map working on a android device (In html5 and iOS is exactly the same API)
 
-Use Cases
-=========
+<pre>
+ <code>
+  final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+ _g3mWidget = builder.createWidget();
+ </code>
+</pre> 
+
+But you can develop more complex things only parameterizing the builder
+
+<pre>
+  <code>
+  builder.setPlanet(Planet.createSphericalEarth());
+
+      //Sector definition, a sector is a 3d bounding box
+      final Sector demSector = new Sector(lower, upper);
+
+      //Defining the terraing provider
+      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///dem4326.bil", false), demSector,
+               new Vector2I(2083, 2001), DELTA_HEIGHT);
+      
+      //We add the terrain and the vertical exaggeration of that
+      builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
+      
+      //The initilization task are done the firs time you create the app, tipically load data
+      builder.setInitializationTask(loadDataInitializationTask(builder.getPlanet()));
+      
+      //We add a mesh renderer to show a point cloud (loaded in the initialization task)
+      builder.addRenderer(_meshRenderer);
+
+      //Adding simbology to a vectorial renderer to paint a shapefile converted to geojson
+      _vectorialRenderer = builder.createGEORenderer(Symbology.Symbolizer);
+      //Making invisible the layer
+      _vectorialRenderer.setEnable(false);
+
+      //With this option you are defining a scene for your map
+      builder.setShownSector(demSector);
+
+      // With this code you define the layers you want in your map
+      _layerSet = MiningLayerBuilder.createMiningLayerSet();
+      builder.getPlanetRendererBuilder().setLayerSet(_layerSet);
+      
+      //Creating the widget through the builder parameterization
+      _g3mWidget = builder.createWidget();
+      
+      //Animated camera to a position
+      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(demSector.getCenter(), 1000), TimeInterval.fromSeconds(5));
+     
+       //Add my map widget to the android interface
+      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      _placeHolder.addView(_g3mWidget);
+  </code>
+</pre>
+
+
+Use Cases Deployed Apps and Demos
+=================================
+
++ [Mapboo] (http://www.mapboo.com) is a platform for automatic deploying of mobile map apps. You have a dashboard where you 
+can define your differents applicatiosn with all the maps you want. You can publish you mobile map app simply with a click
+and mapboo publish to different stores. Try it!
++ The G3M Demo application: This is a demo of the capabilities of the API, is based in the master branch and normally is not 
+the latest version of the API but is a good getting started to test G3M.
+
+<table>
+  <tr>
+    <td><a href="https://itunes.apple.com/es/app/g3m/id601442573?mt=8#" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.jpg"></a></td>
+    <td> <a href="https://play.google.com/store/apps/details?id=org.glob3.mobile.demo"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+    <td><a href="http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE"> <img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/amazon.png"></a></td>
+  </tr>
+</table>
+
++ [Open Weather Map App](http://owmgapp.glob3mobile.com). Proof of concept of app developed to consume open data from an interesting API.
+Open Weather Map (http://www.openweathermap.org) has realtime weather data that is changing all the time, in this app the cache is only used
+for the base layer, all the other layers are changing dinamically when ther servers change. G3M allows the cache managemente exactly developer
+wants.
+
+<table>
+  <tr>
+    <td><a href="https://itunes.apple.com/us/app/g3m-open-weather-map/id645956090?mt=8#" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.jpg"></a></td>
+    <td> <a href="https://play.google.com/store/apps/details?id=com.glob3.mobile.owm"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+    <td><a href="http://www.amazon.com/Open-Weather-Map-3d-globe/dp/B00BD5S012/"> <img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/amazon.png"></a></td>
+     <td><a href="http://owmg.glob3mobile.com"> <img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/html5.png"></a></td>
+  </tr>
+</table>
+
++ Caceres View is a project for the City of Cáceres Council. In this projec the GIS team of the city can show and update important info for they citizens and tourists. There are several layers of information, terrain model, Gigaphotos, Searches. The scenarios could be changed through a web application.
+
+<table>
+  <tr>
+    <td><a href="https://itunes.apple.com/us/app/caceres-view/id705950029?mt=8" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.jpg"></a></td>
+    <td> <a href="https://play.google.com/store/apps/details?id=es.igosoftware.caceresviewandroid"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+  </tr>
+</table>
+
 
 Videos
 ======
 
-Deployed Apps
-=============
 
-Demos
-=====
+
 
 Architecture
 ============ 
@@ -127,12 +257,13 @@ Roadpmap
 
 + GPS Support
 + MBTiles
++ CartoCSS extension for 3d symbolization
 
 
 ##After (months)
 
 + WebGL Cache
-+ 
++ Point Cloud Streaming
 
 License
 =======
