@@ -604,7 +604,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
             return true;
           }
   
-          int _DGG_At_Work;
           final int terrainTouchListenersSize = _terrainTouchListeners.size();
           for (int j = terrainTouchListenersSize-1; j >= 0; j--)
           {
