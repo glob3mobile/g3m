@@ -262,8 +262,8 @@ There are another different projects developed that are used for demo purpose an
 
 Videos
 ======
-
-<iframe width="640" height="360" src="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+![Rasterizing labels](http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage)
+<iframe width="640" height="360" src="<" frameborder="0" allowfullscreen></iframe>
 <iframe width="640" height="360" src="http://youtu.be/kEep7i0ZurE?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
 <iframe width="640" height="360" src="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
 <iframe width="640" height="360" src="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
