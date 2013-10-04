@@ -566,7 +566,7 @@ public abstract class MapBooBuilder
     if (_marksRenderer != null)
     {
       final String message = notification._message;
-      if (!message.length() == 0)
+      if (message.length() > 0)
       {
         final Geodetic2D position = notification._position;
         _marksRenderer.addMark(new Mark(message, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
