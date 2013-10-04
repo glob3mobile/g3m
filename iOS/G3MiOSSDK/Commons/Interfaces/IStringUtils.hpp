@@ -90,23 +90,54 @@ public:
   }
 
   virtual std::string replaceSubstring(const std::string& originalString,
-                                       const std::string& toReplace,
-                                       const std::string& replaceWith) const {
-    int startIndex = indexOf(originalString, toReplace);
+                                       const std::string& searchString,
+                                       const std::string& replaceString,
+                                       int beginIndex,
+                                       int endIndex2) const {
+    int startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
     //The part to replace was not found. Return original String
     if (startIndex == -1) {
       return originalString;
     }
-    const int endIndex = startIndex + toReplace.size();
+    const int endReplacedIndex = startIndex + searchString.size();
     const std::string left = substring(originalString, 0, startIndex);
-    const std::string right = substring(originalString, endIndex);
-    const std::string result = left + replaceWith + right;
-    startIndex = indexOf(result, toReplace);
+    const std::string right = substring(originalString, endReplacedIndex);
+    const std::string result = left + replaceString + right;
+    startIndex = indexOf(result, searchString, endReplacedIndex+1, endIndex2);
     if (startIndex != -1) {
       //recursive call to replace other ocurrences
-      return replaceSubstring(result, toReplace, replaceWith);
+      return replaceSubstring(result,
+                              searchString,
+                              replaceString,
+                              endReplacedIndex+1,
+                              endIndex2);
     }
     return result;
+  }
+
+  virtual std::string replaceSubstring(const std::string& originalString,
+                                       const std::string& searchString,
+                                       const std::string& replaceString) const {
+    return replaceSubstring(originalString,
+                            searchString,
+                            replaceString,
+                            0,
+                            originalString.size());
+//    int startIndex = indexOf(originalString, searchString);
+//    //The part to replace was not found. Return original String
+//    if (startIndex == -1) {
+//      return originalString;
+//    }
+//    const int endIndex = startIndex + searchString.size();
+//    const std::string left = substring(originalString, 0, startIndex);
+//    const std::string right = substring(originalString, endIndex);
+//    const std::string result = left + replaceString + right;
+//    startIndex = indexOf(result, searchString);
+//    if (startIndex != -1) {
+//      //recursive call to replace other ocurrences
+//      return replaceSubstring(result, searchString, replaceString);
+//    }
+//    return result;
   }
 
   virtual std::string left(const std::string& string,

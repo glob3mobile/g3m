@@ -18,7 +18,7 @@ public:
   virtual ~ImageFactory() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   virtual void create(const G3MRenderContext* rc,

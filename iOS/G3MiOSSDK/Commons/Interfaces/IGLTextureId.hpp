@@ -22,7 +22,7 @@ public:
   virtual ~IGLTextureId() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 };
 

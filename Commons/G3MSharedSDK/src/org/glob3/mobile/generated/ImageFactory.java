@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 public interface ImageFactory
 {
-  public void dispose();
+  void dispose();
 
   void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener);
 

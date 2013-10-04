@@ -21,12 +21,11 @@
 #include "ElevationDataProvider.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
-
-//#include "GPUProgramState.hpp"
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
 #include "TileRasterizer.hpp"
 #include "ElevationData.hpp"
+#include "TerrainTouchListener.hpp"
 
 #include <algorithm>
 
@@ -687,6 +686,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   
 }
 
+void PlanetRenderer::addTerrainTouchListener(TerrainTouchListener* listener) {
+  if (listener != NULL) {
+    _terrainTouchListeners.push_back(listener);
+  }
+}
 
 bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
@@ -718,12 +722,17 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
         }
 
         int _DGG_At_Work;
-//        if (_terrainTouchListener != NULL) {
-//          TODO;
-//        }
+        const int terrainTouchListenersSize = _terrainTouchListeners.size();
+        for (int j = terrainTouchListenersSize-1; j >= 0; j--) {
+          TerrainTouchListener* listener = _terrainTouchListeners[j];
+          if (listener->onTerrainTouch(ec, _lastCamera, position, tile)) {
+            return true;
+          }
+        }
+
+        return false;
       }
     }
-
 
   }
 

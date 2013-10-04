@@ -7,6 +7,6 @@ public interface LayerTouchEventListener
    */
   boolean onTerrainTouch(G3MEventContext context, LayerTouchEvent ev);
 
-  public void dispose();
+  void dispose();
 
 }

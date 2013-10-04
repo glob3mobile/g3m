@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 public interface IWebSocketListener
 {
-  public void dispose();
+  void dispose();
 
 
   void onOpen(IWebSocket ws);

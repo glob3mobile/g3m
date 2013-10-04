@@ -19,7 +19,7 @@ public:
   virtual ~ICameraConstrainer() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   //Returns false if it could not create a valid nextCamera

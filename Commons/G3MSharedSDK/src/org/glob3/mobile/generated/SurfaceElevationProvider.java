@@ -7,7 +7,7 @@ public interface SurfaceElevationProvider
 
 
 
-  public void dispose();
+  void dispose();
 
   void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener);
 
