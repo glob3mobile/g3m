@@ -13,6 +13,7 @@ public class SceneParser
   private static final String SPLITSLONGITUDE = "splitsLongitude";
   private static final String SPLITSLATITUDE = "splitsLatitude";
   private static final String ISTRANSPARENT = "isTransparent";
+  private static final String ISENABLED = "isEnabled";
   private static final String ITEMS = "items";
   private static final String MINLEVEL = "minlevel";
   private static final String MAXLEVEL = "maxlevel";
@@ -123,7 +124,7 @@ public class SceneParser
     final int jsonSplitsLat = Integer.parseInt(jsonLayer.getAsString(SPLITSLATITUDE).value());
     final int jsonSplitsLon = Integer.parseInt(jsonLayer.getAsString(SPLITSLONGITUDE).value());
   
-    boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
+    boolean transparent = getValueBooleanParam(jsonLayer.getAsString(ISTRANSPARENT));
   
     String format = getFormat(transparent);
   
@@ -172,7 +173,9 @@ public class SceneParser
     final int jsonSplitsLat = Integer.parseInt(jsonLayer.getAsString(SPLITSLATITUDE).value());
     final int jsonSplitsLon = Integer.parseInt(jsonLayer.getAsString(SPLITSLONGITUDE).value());
   
-    boolean transparent = isTransparent(jsonLayer.getAsString(ISTRANSPARENT));
+    boolean transparent = getValueBooleanParam(jsonLayer.getAsString(ISTRANSPARENT));
+  
+    boolean enabled = getValueBooleanParam(jsonLayer.getAsString(ISENABLED));
   
     String format = getFormat(transparent);
   
@@ -201,6 +204,10 @@ public class SceneParser
        layersName.dispose();
   
     TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, format, "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
+    if (!enabled)
+    {
+      tmsLayer.setEnable(enabled);
+    }
   
     layerSet.addLayer(tmsLayer);
   }
@@ -374,17 +381,17 @@ public class SceneParser
     }
     return Sector.fullSphere();
   }
-  private boolean isTransparent(JSONString jsonIsTransparent)
+  private boolean getValueBooleanParam(JSONString param)
   {
-    boolean isTransparent = true;
-    if(jsonIsTransparent!=null)
+    boolean booleanParam = true;
+    if(param!=null)
     {
-      if(jsonIsTransparent.value().equals("false"))
+      if(param.value().equals("false"))
       {
-        isTransparent = false;
+        booleanParam = false;
       }
     }
-    return isTransparent;
+    return booleanParam;
   }
   private String getFormat(boolean transparent)
   {
