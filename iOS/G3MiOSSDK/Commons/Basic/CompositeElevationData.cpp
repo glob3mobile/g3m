@@ -16,7 +16,7 @@ double CompositeElevationData::getElevationAt(int x,
   const int size = _data.size();
   for (int i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
-    if (!mu->isNan(h)) {
+    if (!ISNAN(h)) {
       return h;
     }
   }
@@ -40,15 +40,13 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
     ILogger::instance()->logError("Sectors don't match.");
   }
 
-
-  const IMathUtils* mu = IMathUtils::instance();
   _data.push_back(data);
   
   //Checking NoData
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       double height = getElevationAt(i, j);
-      if (mu->isNan(height)) {
+      if (ISNAN(height)) {
         _hasNoData = true;
         return;
       }
@@ -90,7 +88,7 @@ Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       const double height = getElevationAt(i, j);
-      if (!mu->isNan(height)) {
+      if (!ISNAN(height)) {
         if (height < minHeight) {
           minHeight = height;
         }

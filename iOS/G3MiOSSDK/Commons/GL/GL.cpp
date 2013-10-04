@@ -16,12 +16,10 @@
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
-#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLTextureId.hpp"
 
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
-//#include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"
@@ -31,11 +29,11 @@ void GL::clearScreen(const Color& color) {
 //    ILogger::instance()->logInfo("GL::clearScreen()");
 //  }
 
-  GLGlobalState state;
-  state.setClearColor(color);
-  state.applyChanges(this, _currentGLGlobalState);
+  int TODO_move_to_instance;
+  GLGlobalState clearScreenState;
+  clearScreenState.setClearColor(color);
+  clearScreenState.applyChanges(this, _currentGLGlobalState);
 
-  //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 

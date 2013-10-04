@@ -168,4 +168,10 @@ public class QuadShape extends AbstractMeshShape
     cleanMesh();
   }
 
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+    return intersections;
+  }
+
 }

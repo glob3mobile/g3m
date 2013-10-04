@@ -156,7 +156,7 @@ public class WMSLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;

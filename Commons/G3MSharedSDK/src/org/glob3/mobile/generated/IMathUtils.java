@@ -26,6 +26,8 @@ package org.glob3.mobile.generated;
 //#define PI 3.14159265358979323846264338327950288
 //#define HALF_PI 1.57079632679489661923132169163975144
 
+//#define ISNAN(x) (x != x)
+
 public abstract class IMathUtils
 {
   private static IMathUtils _instance = null;
@@ -49,9 +51,6 @@ public abstract class IMathUtils
   public void dispose()
   {
   }
-
-  public abstract boolean isNan(double v);
-  public abstract boolean isNan(float v);
 
   public abstract double NanD();
   public abstract float NanF();

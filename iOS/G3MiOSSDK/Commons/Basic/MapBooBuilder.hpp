@@ -39,14 +39,17 @@ class G3MContext;
 class IWebSocket;
 class MapBoo_Scene;
 class ErrorRenderer;
-
 class SceneLighting;
-
-#include "URL.hpp"
-#include "Color.hpp"
+class G3MEventContext;
+class Camera;
+class Tile;
+class MarksRenderer;
+class MapBooBuilder;
 
 #include <vector>
 #include <string>
+#include "URL.hpp"
+#include "Color.hpp"
 #include "Geodetic3D.hpp"
 
 
@@ -80,7 +83,13 @@ public:
   virtual void onWebSocketOpen(const G3MContext* context) = 0;
 
   virtual void onWebSocketClose(const G3MContext* context) = 0;
-  
+
+  virtual void onTerrainTouch(MapBooBuilder*         builder,
+                              const G3MEventContext* ec,
+                              const Camera*          camera,
+                              const Geodetic3D&      position,
+                              const Tile*            tile) = 0;
+
 };
 
 
@@ -275,6 +284,26 @@ public:
 
 };
 
+class MapBoo_Notification {
+public:
+  const Geodetic2D             _position;
+  const std::string            _message;
+  const MapBoo_CameraPosition* _cameraPosition;
+
+  MapBoo_Notification(const Geodetic2D&            position,
+                      const std::string&           message,
+                      const MapBoo_CameraPosition* cameraPosition) :
+  _position(position),
+  _message(message),
+  _cameraPosition(cameraPosition)
+  {
+  }
+
+  ~MapBoo_Notification() {
+    delete _cameraPosition;
+  }
+};
+
 
 class MapBooBuilder {
 private:
@@ -292,6 +321,8 @@ private:
 
   MapBooApplicationChangeListener* _applicationListener;
 
+  const bool _enableNotifications;
+
   std::string                _applicationId;
   std::string                _applicationName;
   std::string                _applicationWebsite;
@@ -301,7 +332,7 @@ private:
   std::vector<MapBoo_Scene*> _applicationScenes;
   int                        _applicationCurrentSceneIndex;
   int                        _lastApplicationCurrentSceneIndex;
-  
+
   GL* _gl;
   G3MWidget* _g3mWidget;
   IStorage*  _storage;
@@ -376,13 +407,29 @@ private:
 
   const std::string getApplicationCurrentSceneCommand() const;
 
+  const std::string getSendNotificationCommand(const Camera*      camera,
+                                               const Geodetic3D&  position,
+                                               const std::string& message) const;
+
+  const std::string escapeString(const std::string& str) const;
+
+  const std::string toCameraPositionJSON(const Camera* camera) const;
+
+  MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
+
+  void setApplicationNotification(MapBoo_Notification* notification);
+
+
+  MarksRenderer* _marksRenderer;
+  MarksRenderer* getMarksRenderer();
 
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
-                MapBooApplicationChangeListener* ApplicationListener);
+                MapBooApplicationChangeListener* applicationListener,
+                bool enableNotifications);
 
   virtual ~MapBooBuilder();
 
@@ -459,7 +506,18 @@ public:
   bool isApplicationTubeOpen() const {
     return _isApplicationTubeOpen;
   }
+
+  /** Private to MapbooBuilder, don't call it */
+  bool onTerrainTouch(const G3MEventContext* ec,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile);
   
+
+  void sendNotification(const Camera*      camera,
+                        const Geodetic3D&  position,
+                        const std::string& message) const;
+
   void changeScene(int sceneIndex);
   
   void changeScene(const MapBoo_Scene* scene);

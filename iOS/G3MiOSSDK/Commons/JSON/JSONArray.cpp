@@ -140,7 +140,7 @@ void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
       visitor->visitArrayInBetweenChildren(this);
     }
     visitor->visitArrayBeforeChild(this, i);
-    if(get(i)!= NULL){
+    if(get(i)!= NULL) {
         get(i)->acceptVisitor(visitor);
     }
   }

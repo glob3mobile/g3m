@@ -28,6 +28,7 @@ private:
   bool _useTilesSplitBudget;
   bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
+  Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
@@ -88,6 +89,9 @@ public:
   void setRenderedSector(const Sector& sector);
 
   GEOTileRasterizer* createGEOTileRasterizer();
+
+  Quality getQuality() const;
+  void setQuality(Quality quality);
 
 };
 

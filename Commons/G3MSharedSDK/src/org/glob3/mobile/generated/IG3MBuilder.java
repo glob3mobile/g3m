@@ -433,7 +433,7 @@ public abstract class IG3MBuilder
   //                                        shownSector._upper._longitude._degrees + lonMargin);
   //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
   
-      addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition.height() * 1.2));
+      addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
   //  }
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();

@@ -74,17 +74,19 @@ public:
     }
     _listener = listener;
   }
-  
+
   Layer* getLayer(int index) const;
-  
-  Layer* getLayer(const std::string& name) const;
-  
-//  const LayerTilesRenderParameters* getLayerTilesRenderParameters(std::vector<std::string>& errors) const;
+
+  Layer* getLayerByName(const std::string& name) const;
+  Layer* getLayerByTitle(const std::string& title) const;
+
   LayerTilesRenderParameters* createLayerTilesRenderParameters(std::vector<std::string>& errors) const;
 
   bool isEquals(const LayerSet* that) const;
 
   void takeLayersFrom(LayerSet* that);
+
+  void disableAllLayers();
   
 };
 

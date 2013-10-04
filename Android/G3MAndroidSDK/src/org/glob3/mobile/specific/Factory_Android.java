@@ -2,36 +2,39 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.URL;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 
 public final class Factory_Android
          extends
             IFactory {
-   private final Context _context;
 
 
-   public Factory_Android(final Context c) {
-      _context = c;
+   //   private static class FloatArrayThreadLocal
+   //            extends
+   //               ThreadLocal<float[]> {
+   //      @Override
+   //      protected float[] initialValue() {
+   //         return new float[1024];
+   //      }
+   //   }
+
+
+   //   private final FloatArrayThreadLocal _floatArrayThreadLocal;
+
+
+   public Factory_Android() {
+      //      _floatArrayThreadLocal = new FloatArrayThreadLocal();
    }
 
 
@@ -47,70 +50,11 @@ public final class Factory_Android
 
 
    @Override
-   public void createImageFromFileName(final String filename,
-                                       final IImageListener listener,
-                                       final boolean autodelete) {
-
-      Bitmap bitmap = null;
-      InputStream is = null;
-      try {
-         is = _context.getAssets().open(filename);
-
-         final int size = is.available();
-         final byte[] imageData = new byte[size];
-         is.read(imageData);
-         bitmap = BitmapFactory.decodeByteArray(imageData, 0, size);
-      }
-      catch (final IOException e) {
-         e.printStackTrace();
-      }
-      finally {
-         if (is != null) {
-            try {
-               is.close();
-            }
-            catch (final IOException e) {
-               // do nothing, just ignore the exception
-            }
-         }
-      }
-
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("FACTORY: Can't create image from fileName");
-         result = null;
-      }
-      else {
-         result = new Image_Android(bitmap, null);
-      }
-      listener.imageCreated(result);
-   }
-
-
-   @Override
    public void deleteImage(final IImage image) {
       if (image != null) {
          image.dispose();
       }
    }
-
-
-   //   @Override
-   //   public void createImageFromSize(final int width,
-   //                                   final int height,
-   //                                   final IImageListener listener,
-   //                                   final boolean autodelete) {
-   //      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-   //      final Image_Android result;
-   //      if (bitmap == null) {
-   //         ILogger.instance().logError("FACTORY: Can't create empty image");
-   //         result = null;
-   //      }
-   //      else {
-   //         result = new Image_Android(bitmap, null);
-   //      }
-   //      listener.imageCreated(result);
-   //   }
 
 
    @Override
@@ -123,25 +67,6 @@ public final class Factory_Android
    public IByteBuffer createByteBuffer(final byte[] data,
                                        final int length) {
       return new ByteBuffer_Android(data);
-   }
-
-
-   @Override
-   public void createImageFromBuffer(final IByteBuffer buffer,
-                                     final IImageListener listener,
-                                     final boolean autodelete) {
-      //      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
-      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer();
-      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-      final Image_Android result;
-      if (bitmap == null) {
-         ILogger.instance().logError("FACTORY", "Can't create image from data");
-         result = null;
-      }
-      else {
-         result = new Image_Android(bitmap, data);
-      }
-      listener.imageCreated(result);
    }
 
 
@@ -199,15 +124,39 @@ public final class Factory_Android
    }
 
 
+   //   @Override
+   //   public IShortBuffer createShortBuffer(final short[] array) {
+   //      return new ShortBuffer_Android(array);
+   //   }
+   //   @Override
+   //   public IFloatBuffer createFloatBuffer(final float[] array) {
+   //      return new FloatBuffer_Android(array);
+   //   }
+
+
    @Override
-   public IShortBuffer createShortBuffer(final short[] array) {
-      return new ShortBuffer_Android(array);
+   public IShortBuffer createShortBuffer(final short[] array,
+                                         final int length) {
+      return new ShortBuffer_Android(array, length);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final float[] array) {
-      return new FloatBuffer_Android(array);
+   public IFloatBuffer createFloatBuffer(final float[] array,
+                                         final int length) {
+      return new FloatBuffer_Android(array, length);
    }
+
+
+   //   @Override
+   //   public float[] getThreadLocalFloatArray() {
+   //      return _floatArrayThreadLocal.get();
+   //   }
+   //
+   //
+   //   @Override
+   //   public void setThreadLocalFloatArray(final float[] array) {
+   //      _floatArrayThreadLocal.set(array);
+   //   }
 
 }

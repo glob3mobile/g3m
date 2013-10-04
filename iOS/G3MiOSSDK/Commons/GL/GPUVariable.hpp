@@ -68,9 +68,9 @@ public:
   static bool codeContainsUniform(int code, GPUUniformKey u);
   static bool codeContainsAttribute(int code, GPUAttributeKey a);
 
-  virtual ~GPUVariable(){}
+  virtual ~GPUVariable() {}
   
-  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type){}
+  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type) {}
 
 
 };

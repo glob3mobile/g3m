@@ -54,14 +54,6 @@ public abstract class IFactory
   {
   }
 
-  public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);
-
-  public abstract void createImageFromBuffer(IByteBuffer buffer, IImageListener listener, boolean autodelete);
-
-//  virtual void createImageFromSize(int width, int height,
-//                                   IImageListener* listener,
-//                                   bool autodelete) const = 0;
-
   public abstract void deleteImage(IImage image);
 
   public abstract ITimer createTimer();
@@ -85,8 +77,10 @@ public abstract class IFactory
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
-  public abstract IShortBuffer createShortBuffer(final short[] array);
+  public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
+  public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
 
-  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+//  public abstract float[] getThreadLocalFloatArray();
+//  public abstract void    setThreadLocalFloatArray(final float[] array);
 
 }

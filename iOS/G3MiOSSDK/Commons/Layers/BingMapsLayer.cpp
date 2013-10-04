@@ -253,10 +253,10 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
 
   const IStringUtils* su = IStringUtils::instance();
   
-  const int level   = tile->getLevel();
-  const int column  = tile->getColumn();
+  const int level   = tile->_level;
+  const int column  = tile->_column;
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
-  const int row     = numRows - tile->getRow() - 1;
+  const int row     = numRows - tile->_row - 1;
 
   const int subdomainsSize = _imageUrlSubdomains.size();
   std::string subdomain = "";
@@ -273,7 +273,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   path = su->replaceSubstring(path, "{quadkey}",   quadkey);
   path = su->replaceSubstring(path, "{culture}",   "en-US");
 
-  petitions.push_back( new Petition(tile->getSector(),
+  petitions.push_back( new Petition(tile->_sector,
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),

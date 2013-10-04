@@ -109,6 +109,7 @@ public class GL
 
 
 
+
   public GL(INativeGL nativeGL, boolean verbose)
 //  _verbose(verbose),
   {
@@ -133,21 +134,17 @@ public class GL
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
-  
   public final void clearScreen(Color color)
   {
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::clearScreen()");
   //  }
   
-    GLGlobalState state = new GLGlobalState();
-    state.setClearColor(color);
-    state.applyChanges(this, _currentGLGlobalState);
+    int TODO_move_to_instance;
+    GLGlobalState clearScreenState = new GLGlobalState();
+    clearScreenState.setClearColor(color);
+    clearScreenState.applyChanges(this, _currentGLGlobalState);
   
-    //setGLGlobalState(state);
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 

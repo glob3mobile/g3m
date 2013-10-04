@@ -18,7 +18,7 @@ public:
   virtual ~IBuffer() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   /**

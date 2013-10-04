@@ -13,11 +13,8 @@
 #include "IndexedMesh.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-#include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
-#include "SimpleFloatBufferBuilder.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
@@ -57,20 +54,20 @@ Vector2I PlanetTileTessellator::getTileMeshResolution(const Planet* planet,
 Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
-  Sector sector = tile->getSector();
+  Sector sector = tile->_sector;
 
-  const double latRatio = sector.getDeltaLatitude()._degrees / renderedSector.getDeltaLatitude()._degrees;
-  const double lonRatio = sector.getDeltaLongitude()._degrees / renderedSector.getDeltaLongitude()._degrees;
+  const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
+  const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
 
   const IMathUtils* mu = IMathUtils::instance();
 
   int resX = (int) mu->ceil((resolution._x / lonRatio));
-  if (resX < 2){
+  if (resX < 2) {
     resX = 2;
   }
 
   int resY = (int) mu->ceil((resolution._y / latRatio) );
-  if (resY < 2){
+  if (resY < 2) {
     resY = 2;
   }
 
@@ -105,7 +102,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             bool mercator,
                                             bool renderDebug) const {
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
 
@@ -123,14 +120,14 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       indices,
                                       *textCoords);
 
-  if (_skirted){
-
+  if (_skirted) {
+    int _ASK_JM; // sW and nW ? Why not NW and SE ??
     const Vector3D sw = planet->toCartesian(tileSector.getSW());
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
 
     double absoluteSkirtHeight = 0;
-    if (_renderedSector != NULL){
+    if (_renderedSector != NULL) {
       const Vector3D asw = planet->toCartesian(_renderedSector->getSW());
       const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
       absoluteSkirtHeight = (anw.sub(asw).length() * 0.05 * -1);
@@ -188,7 +185,7 @@ const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
                                                    const Angle& longitude,
                                                    bool mercator) const {
-  const Sector sector = tile->getSector();
+  const Sector sector = tile->_sector;
 
   const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
   if (!mercator) {
@@ -210,7 +207,7 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
                                                       bool mercator) const {
 
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
-  if (data == NULL || data->_textCoords == NULL){
+  if (data == NULL || data->_textCoords == NULL) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
     return NULL;
   }
@@ -278,14 +275,14 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
-  if (_renderedSector == NULL){
-    return tile->getSector();
+  if (_renderedSector == NULL) {
+    return tile->_sector;
   }
 #ifdef C_CODE
-  return tile->getSector().intersection(*_renderedSector);
+  return tile->_sector.intersection(*_renderedSector);
 #endif
 #ifdef JAVA_CODE
-  return tile.getSector().intersection(_renderedSector);
+  return tile._sector.intersection(_renderedSector);
 #endif
 }
 
@@ -307,7 +304,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   //VERTICES///////////////////////////////////////////////////////////////
-  const IMathUtils* mu = IMathUtils::instance();
   double minElevation = 0;
   for (int j = 0; j < ry; j++) {
     const double v = (double) j / (ry - 1);
@@ -319,7 +315,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 
       if (elevationData != NULL) {
         const double rawElevation = elevationData->getElevationAt(position);
-        if ( !mu->isNan(rawElevation) ) {
+        if ( !ISNAN(rawElevation) ) {
           elevation = rawElevation * verticalExaggeration;
 
           if (elevation < minElevation) {
@@ -330,7 +326,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       vertices.add( position, elevation );
 
       //TEXT COORDS
-      if (mercator){
+      if (mercator) {
         //U
         const double m_u = tileSector.getUCoordinate(position._longitude);
 

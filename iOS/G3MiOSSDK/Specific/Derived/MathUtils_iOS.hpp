@@ -42,12 +42,6 @@ class MathUtils_iOS: public IMathUtils {
 
 public:
 
-//  double pi() const { return M_PI; }
-//  double halfPi() const { return M_PI_2; }
-
-  bool isNan(double v) const { return isnan(v);}
-  bool isNan(float v) const { return isnan(v);}
-
   double NanD() const { return NAN;}
   float NanF() const { return NAN; }
 

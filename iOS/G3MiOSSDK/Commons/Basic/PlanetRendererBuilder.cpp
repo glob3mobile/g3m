@@ -23,6 +23,7 @@ _renderDebug(false),
 _useTilesSplitBudget(true),
 _forceFirstLevelTilesRenderOnStart(true),
 _incrementalTileQuality(false),
+_quality(QUALITY_LOW),
 _parameters(NULL),
 _layerSet(NULL),
 _texturizer(NULL),
@@ -166,6 +167,14 @@ bool PlanetRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
  */
 bool PlanetRendererBuilder::getIncrementalTileQuality() {
   return _incrementalTileQuality;
+}
+
+Quality PlanetRendererBuilder::getQuality() const {
+  return _quality;
+}
+
+void PlanetRendererBuilder::setQuality(Quality quality) {
+  _quality = quality;
 }
 
 /**
@@ -333,7 +342,8 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
-                                   getIncrementalTileQuality());
+                                   getIncrementalTileQuality(),
+                                   getQuality());
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
@@ -344,7 +354,7 @@ LayerSet* PlanetRendererBuilder::createLayerSet() {
   return LayerBuilder::createDefaultSatelliteImagery();
 }
 
-void PlanetRendererBuilder::setRenderedSector(const Sector& sector){
+void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {
   if (_renderedSector != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _renderedSector already initialized");
     return;
@@ -352,8 +362,8 @@ void PlanetRendererBuilder::setRenderedSector(const Sector& sector){
   _renderedSector = new Sector(sector);
 }
 
-Sector PlanetRendererBuilder::getRenderedSector(){
-  if (_renderedSector == NULL){
+Sector PlanetRendererBuilder::getRenderedSector() {
+  if (_renderedSector == NULL) {
     return Sector::fullSphere();
   }
   return *_renderedSector;

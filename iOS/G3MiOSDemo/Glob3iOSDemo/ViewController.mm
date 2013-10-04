@@ -412,17 +412,17 @@ public:
   }
 
   void onWebsiteChanged(const G3MContext* context,
-                        const std::string& website){}
+                        const std::string& website) {}
 
   void onEMailChanged(const G3MContext* context,
-                      const std::string& eMail){}
+                      const std::string& eMail) {}
 
   void onAboutChanged(const G3MContext* context,
-                      const std::string& about){}
+                      const std::string& about) {}
 
-  virtual void onWebSocketOpen(const G3MContext* context){}
+  virtual void onWebSocketOpen(const G3MContext* context) {}
 
-  virtual void onWebSocketClose(const G3MContext* context){}
+  virtual void onWebSocketClose(const G3MContext* context) {}
 };
 
 
@@ -746,6 +746,7 @@ public:
 
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
+  
   builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
@@ -757,7 +758,8 @@ public:
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer
-                                               geoTileRasterizer: geoTileRasterizer];
+                                               geoTileRasterizer: geoTileRasterizer
+                                                          planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
 
@@ -836,9 +838,10 @@ public:
       }
     };
 
+    /*
     HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
-
     builder.addRenderer(hudRenderer);
+     */
   }
 
 
@@ -913,13 +916,13 @@ public:
 
       GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
 
-      for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1){
+      for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
 
         GenericQuadTree tree(1,12,areaProportion);
 
         std::string* x = new std::string("OK");
 
-        for (int i = 0; i < fc->size(); i++){
+        for (int i = 0; i < fc->size(); i++) {
           GEO2DPointGeometry* p = (GEO2DPointGeometry*) fc->get(i)->getGeometry();
           p->getPosition();
 
@@ -963,19 +966,19 @@ public:
 
    GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
 
-   for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1){
+   for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
 
    GenericQuadTree tree(1,12,areaProportion);
 
    std::string* x = new std::string("OK");
 
-   for (int i = 0; i < fc->size(); i++){
+   for (int i = 0; i < fc->size(); i++) {
    GEO2DPolygonGeometry* p = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
 
    const std::vector<Geodetic2D*>* ps = p->getCoordinates();
    Sector *s = new Sector(*ps->at(0), *ps->at(0));
-   for (unsigned int j = 0; j < ps->size(); j++){
-   if (ps->at(j) != NULL){
+   for (unsigned int j = 0; j < ps->size(); j++) {
+   if (ps->at(j) != NULL) {
    Geodetic2D g = *ps->at(j);
    Sector x(g,g);
    Sector *s2 = new Sector( s->mergedWith(x));
@@ -1178,6 +1181,7 @@ public:
   const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+//    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
   const bool useCartoDB = false;
@@ -1406,10 +1410,10 @@ public:
                                   true);
     layerSet->addLayer(pnoa);
 
-    class PNOATerrainTouchEventListener : public TerrainTouchEventListener {
+    class PNOATerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1419,7 +1423,7 @@ public:
       }
     };
 
-    pnoa->addTerrainTouchEventListener(new PNOATerrainTouchEventListener());
+    pnoa->addLayerTouchEventListener(new PNOATerrainTouchEventListener());
   }
 
   const bool testURLescape = false;
@@ -1476,10 +1480,10 @@ public:
                                       TimeInterval::fromDays(30),
                                       true);
 
-    class CatastroTerrainTouchEventListener : public TerrainTouchEventListener {
+    class CatastroTerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1489,7 +1493,7 @@ public:
       }
     };
 
-    catastro->addTerrainTouchEventListener(new CatastroTerrainTouchEventListener());
+    catastro->addLayerTouchEventListener(new CatastroTerrainTouchEventListener());
 
     layerSet->addLayer(catastro);
   }
@@ -1513,10 +1517,10 @@ public:
                                   true);
     layerSet->addLayer(temp);
 
-    class TempTerrainTouchEventListener : public TerrainTouchEventListener {
+    class TempTerrainTouchEventListener : public LayerTouchEventListener {
     public:
       bool onTerrainTouch(const G3MEventContext* context,
-                          const TerrainTouchEvent& event) {
+                          const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
@@ -1526,7 +1530,7 @@ public:
       }
     };
 
-    temp->addTerrainTouchEventListener(new TempTerrainTouchEventListener());
+    temp->addLayerTouchEventListener(new TempTerrainTouchEventListener());
   }
 
   //Worng TEMP Layer
@@ -1558,11 +1562,13 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
-                                   incrementalTileQuality);
+                                   incrementalTileQuality,
+                                   quality);
 }
 
 - (PlanetRenderer*) createPlanetRenderer: (TilesRenderParameters*) parameters
@@ -1611,9 +1617,9 @@ public:
   marksRenderer->addMark(m1);
 
 
-  if (true){
-    for (int i = 0; i < 10; i+=2){
-      for (int j = 0; j < 10; j+=2){
+  if (true) {
+    for (int i = 0; i < 10; i+=2) {
+      for (int j = 0; j < 10; j+=2) {
         Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
         Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
@@ -1694,40 +1700,59 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
-  //  const URL textureURL("file:///world.jpg", false);
+    const URL textureURL("file:///world.jpg", false);
 
-  //const Vector3D radius(50000, 50000, 50000);
-  //  const double factor = 80;
-  //  const Vector3D radius(6378137.0 / factor, 6378137.0 / factor, 6356752.314245 / factor);
-  //
-  //  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                        Angle::fromDegrees(-121),
-  //                                                        radius._x * 1.1),
-  //                                         URL("file:///world.jpg", false),
-  //                                         radius,
-  //                                         32,
-  //                                         0,
-  //                                         false,
-  //                                         false
-  //                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-  //                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                         );
-  //  shapesRenderer->addShape(ellipsoid1);
-  //
-  //  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                       Angle::fromDegrees(-119),
-  //                                                       radius._x * 1.1),
-  //                                        URL("file:///mercator_debug.png", false),
-  //                                        radius,
-  //                                        32,
-  //                                        0,
-  //                                        false,
-  //                                        true
-  //                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-  //                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                        );
-  //  shapesRenderer->addShape(mercator1);
-  //
+  const double factor = 2e5;
+  const Vector3D radius1(factor, factor, factor);
+  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
+  const Vector3D radiusBox(factor, factor*1.5, factor*2);
+  
+  
+  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
+                                           Angle::fromDegrees(10),
+                                           radiusBox.z()/2),
+                            ABSOLUTE,
+                            radiusBox,
+                            2,
+                            Color::fromRGBA(0,    1, 0, 1),
+                            Color::newFromRGBA(0, 0.75, 0, 1));
+  //box->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(box1);
+ 
+  
+    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          radius1._x),
+                                           ABSOLUTE,
+                                           planet,
+                                           URL("file:///world.jpg", false),
+                                           radius1,
+                                           32,
+                                           0,
+                                           false,
+                                           false
+                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                           );
+  //ellipsoid1->setScale(2);
+    shapesRenderer->addShape(ellipsoid1);
+  
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                       Angle::fromDegrees(5),
+                                                       radius2._x),
+                                          ABSOLUTE,
+                                          planet,
+                                          URL("file:///mercator_debug.png", false),
+                                          radius2,
+                                          32,
+                                          0,
+                                          false,
+                                          true
+                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                          );
+    shapesRenderer->addShape(mercator1);
+  
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
   //                                                       radius._x * 1.1),
@@ -1858,6 +1883,8 @@ public:
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
+  
+  const Planet* _planet;
 
 private:
 
@@ -1968,7 +1995,8 @@ private:
                            color);
   }
 
-  EllipsoidShape* createEllipsoidShape(const GEO2DPointGeometry* geometry) const {
+  EllipsoidShape* createEllipsoidShape(const GEO2DPointGeometry* geometry,
+                                       const Planet* planet) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -1990,7 +2018,8 @@ private:
                               true);
   }
 
-  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry) const {
+  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry,
+                           const Planet* planet) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -2045,7 +2074,8 @@ private:
 
 
 public:
-  SampleSymbolizer() :
+  SampleSymbolizer(const Planet* planet) :
+  _planet(planet),
   _colorIndex(0) {
 
   }
@@ -2117,11 +2147,11 @@ public:
     const double population = properties->getAsNumber("population", 0);
 
     if (population > 2000000) {
-      //    if (rand()%2 == 0){
+      //    if (rand()%2 == 0) {
       //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
       //    }
       //    else {
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
       //    }
 
       Mark* mark = createMark(geometry);
@@ -2140,8 +2170,9 @@ public:
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
                              geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
+                                        planet: (const Planet*) planet
 {
-  GEOSymbolizer* symbolizer = new SampleSymbolizer();
+  GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
 
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
@@ -2652,7 +2683,7 @@ public:
       }
 
 
-      if (false){ //Infinite random flights
+      if (false) { //Infinite random flights
 
         int time = rand()%10; //SECS OF FLIGHT
 
@@ -2660,11 +2691,11 @@ public:
           G3MWidget_iOS* _iosWidget;
           int _time;
         public:
-          FlightTask(G3MWidget_iOS* iosWidget, int time): _iosWidget(iosWidget), _time(time){}
+          FlightTask(G3MWidget_iOS* iosWidget, int time): _iosWidget(iosWidget), _time(time) {}
 
-          void run(const G3MContext* context){
+          void run(const G3MContext* context) {
 
-            if (rand() % 2 == 0){
+            if (rand() % 2 == 0) {
               [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(_time),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%360-180, rand()%(int)1e7),
                                                              Geodetic3D::fromDegrees(rand()%180-90, rand()%260-180, rand()%(int)1e4),
@@ -2690,14 +2721,14 @@ public:
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;
         public:
-          RenderedSectorTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget){}
+          RenderedSectorTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {}
 
-          static int randomInt(int max){
+          static int randomInt(int max) {
             int i = rand();
             return i % max;
           }
 
-          void run(const G3MContext* context){
+          void run(const G3MContext* context) {
 
             double minLat = randomInt(180) -90;
             double minLon = randomInt(360) - 180;
@@ -2776,9 +2807,9 @@ public:
 
       if (true) {
         //      NSString* geojsonName = @"geojson/countries";
-        //      NSString* geojsonName = @"geojson/countries-50m";
+        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
-        NSString* geojsonName = @"geojson/cities";
+//        NSString* geojsonName = @"geojson/cities";
         //      NSString* geojsonName = @"geojson/test";
 
         NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName

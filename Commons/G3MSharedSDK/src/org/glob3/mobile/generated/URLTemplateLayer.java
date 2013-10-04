@@ -41,10 +41,10 @@ public class URLTemplateLayer extends Layer
   {
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
-    final int level = tile.getLevel();
-    final int column = tile.getColumn();
+    final int level = tile._level;
+    final int column = tile._column;
     final int numRows = (int) _mu.pow(2.0, level);
-    final int row = numRows - tile.getRow() - 1;
+    final int row = numRows - tile._row - 1;
   
     final double north = MercatorUtils.latitudeToMeters(sector._upper._latitude);
     final double south = MercatorUtils.latitudeToMeters(sector._lower._latitude);
@@ -123,7 +123,7 @@ public class URLTemplateLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;

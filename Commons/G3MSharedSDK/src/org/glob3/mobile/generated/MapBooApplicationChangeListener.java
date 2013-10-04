@@ -44,10 +44,17 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class IWebSocket;
 //class MapBoo_Scene;
+<<<<<<< HEAD
 //class ErrorRenderer;
 
+=======
+>>>>>>> purgatory
 //class SceneLighting;
-
+//class G3MEventContext;
+//class Camera;
+//class Tile;
+//class MarksRenderer;
+//class MapBooBuilder;
 
 
 
@@ -74,5 +81,7 @@ public abstract class MapBooApplicationChangeListener
   public abstract void onWebSocketOpen(G3MContext context);
 
   public abstract void onWebSocketClose(G3MContext context);
+
+  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile);
 
 }

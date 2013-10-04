@@ -39,8 +39,7 @@ public class ShortBuffer_WebGL
 
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_gl
-				.createBuffer();
+		return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_gl.createBuffer();
    }-*/;
 
 
@@ -64,6 +63,15 @@ public class ShortBuffer_WebGL
       final int size = array.length;
       _buffer = jsCreateBufferWithSize(size);
       for (int i = 0; i < size; i++) {
+         rawPut(i, array[i]);
+      }
+   }
+
+
+   public ShortBuffer_WebGL(final short[] array,
+                            final int length) {
+      _buffer = jsCreateBufferWithSize(length);
+      for (int i = 0; i < length; i++) {
          rawPut(i, array[i]);
       }
    }

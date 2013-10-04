@@ -110,7 +110,7 @@ public class LayerSet
   
         Tile petitionTile = tile;
         final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
-        while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
+        while ((petitionTile._level > maxLevel) && (petitionTile != null))
         {
           petitionTile = petitionTile.getParent();
         }
@@ -141,16 +141,14 @@ public class LayerSet
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
-  
-  
     for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
       if (layer.isAvailable(ec, tile))
       {
-        TerrainTouchEvent tte = new TerrainTouchEvent(position, tile.getSector(), layer);
+        LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
-        if (layer.onTerrainTouchEventListener(ec, tte))
+        if (layer.onLayerTouchEventListener(ec, tte))
         {
           return true;
         }
@@ -218,7 +216,7 @@ public class LayerSet
     return null;
   }
 
-  public final Layer getLayer(String name)
+  public final Layer getLayerByName(String name)
   {
     final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
@@ -228,7 +226,18 @@ public class LayerSet
         return _layers.get(i);
       }
     }
-  
+    return null;
+  }
+  public final Layer getLayerByTitle(String title)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      if (title.equals(_layers.get(i).getTitle()))
+      {
+        return _layers.get(i);
+      }
+    }
     return null;
   }
 
@@ -412,6 +421,15 @@ public class LayerSet
     for (int i = 0; i < thatSize; i++)
     {
       addLayer(thatLayers.get(i));
+    }
+  }
+
+  public final void disableAllLayers()
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      _layers.get(i).setEnable(false);
     }
   }
 

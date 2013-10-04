@@ -64,9 +64,7 @@ public class Vector4D
 
   public final boolean isNan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z) || mu.isNan(_w));
+    return ((_x != _x) || (_y != _y) || (_z != _z) || (_w != _w));
   }
 
   public final boolean isZero()

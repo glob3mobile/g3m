@@ -46,7 +46,7 @@ void SGGeometryNode::createGLState() {
                                               true, (float)1.0),
                         false);
 
-  if (_normals != NULL){
+  if (_normals != NULL) {
 
 //    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
 //                                                      (float)0.0), false);
@@ -57,7 +57,7 @@ void SGGeometryNode::createGLState() {
 
   }
 
-  if (_uv != NULL){
+  if (_uv != NULL) {
     _glState->addGLFeature(new TextureCoordsGLFeature(_uv,
                                                      2,
                                                      0,

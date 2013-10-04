@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 public interface ChangedListener
 {
-  public void dispose();
+  void dispose();
 
   void changed();
 }

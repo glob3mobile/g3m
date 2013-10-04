@@ -38,9 +38,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   private boolean initMesh(G3MRenderContext rc)
   {
-    //TEXTURED
     IGLTextureId texId = null;
-  //  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
   
     texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   

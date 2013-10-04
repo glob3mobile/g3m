@@ -159,19 +159,19 @@ public:
 
   }
 
-  MeshRenderer* getMeshRenderer(){
+  MeshRenderer* getMeshRenderer() {
     return _meshRenderer;
   }
 
-  MarksRenderer* getMarksRenderer(){
+  MarksRenderer* getMarksRenderer() {
     return _marksRenderer;
   }
 
-  ShapesRenderer* getShapesRenderer(){
+  ShapesRenderer* getShapesRenderer() {
     return _shapesRenderer;
   }
 
-  GEOTileRasterizer* getGeoTileRasterizer(){
+  GEOTileRasterizer* getGeoTileRasterizer() {
     return _geoTileRasterizer;
   }
 

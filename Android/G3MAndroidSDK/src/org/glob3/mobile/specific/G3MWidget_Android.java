@@ -140,7 +140,7 @@ public final class G3MWidget_Android
 
    private void initSingletons() {
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-      final IFactory factory = new Factory_Android(getContext());
+      final IFactory factory = new Factory_Android();
       final IStringUtils stringUtils = new StringUtils_Android();
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();

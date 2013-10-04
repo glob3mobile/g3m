@@ -64,7 +64,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
 
   std::vector<Petition*> petitions;
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }
@@ -78,10 +78,10 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   // http://[abc].tile.openstreetmap.org/zoom/x/y.png
   // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
 
-  const int level   = tile->getLevel();
-  const int column  = tile->getColumn();
+  const int level   = tile->_level;
+  const int column  = tile->_column;
   const int numRows = (int) mu->pow(2.0, level);
-  const int row     = numRows - tile->getRow() - 1;
+  const int row     = numRows - tile->_row - 1;
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 

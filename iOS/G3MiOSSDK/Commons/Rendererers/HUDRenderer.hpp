@@ -68,7 +68,7 @@ public:
   void addImage(const std::string name,
                 IImage* image,
                 const Vector2D& size,
-                const Vector2D position){
+                const Vector2D position) {
     _images.push_back(new ShownImage(name, image, size, position));
   }
 

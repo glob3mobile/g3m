@@ -10,6 +10,10 @@
 #define __G3MiOSSDK__EllipsoidShape__
 
 #include "AbstractMeshShape.hpp"
+#include "Ellipsoid.hpp"
+#include "Planet.hpp"
+#include "Quadric.hpp"
+
 
 class Color;
 class FloatBufferBuilderFromGeodetic;
@@ -23,11 +27,21 @@ class IGLTextureId;
 
 class EllipsoidShape : public AbstractMeshShape {
 private:
+  
+#ifdef C_CODE
+  const Ellipsoid* _ellipsoid;
+  const Quadric    _quadric;
+#endif
+#ifdef JAVA_CODE
+  private Ellipsoid _ellipsoid;
+  private final Quadric _quadric;
+#endif
+
   URL _textureURL;
 
-  const double _radiusX;
+  /*const double _radiusX;
   const double _radiusY;
-  const double _radiusZ;
+  const double _radiusZ;*/
 
   const short _resolution;
 
@@ -68,10 +82,9 @@ public:
                  Color* borderColor = NULL,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
+  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(URL("", false)),
-  _radiusX(radius.x()),
-  _radiusY(radius.y()),
-  _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
   _texturedInside(texturedInside),
@@ -87,6 +100,7 @@ public:
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
+                 const Planet* planet,
                  const URL& textureURL,
                  const Vector3D& radius,
                  short resolution,
@@ -95,10 +109,9 @@ public:
                  bool mercator,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
+  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(textureURL),
-  _radiusX(radius.x()),
-  _radiusY(radius.y()),
-  _radiusZ(radius.z()),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
   _texturedInside(texturedInside),
@@ -109,14 +122,18 @@ public:
   _textureImage(NULL),
   _withNormals(withNormals)
   {
-
+    
   }
 
 
   ~EllipsoidShape();
 
   void imageDownloaded(IImage* image);
-
+  
+  
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const;
+  
 };
 
 #endif

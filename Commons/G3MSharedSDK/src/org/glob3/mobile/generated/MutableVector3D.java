@@ -70,9 +70,7 @@ public class MutableVector3D
 
   public final boolean isNan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z));
+    return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
   public final boolean isZero()

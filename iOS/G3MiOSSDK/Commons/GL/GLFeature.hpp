@@ -113,9 +113,9 @@ private:
 public:
 
   GLCameraGroupFeature(Matrix44D* matrix, GLFeatureID id):
-  GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)){}
+  GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)) {}
 
-  ~GLCameraGroupFeature(){
+  ~GLCameraGroupFeature() {
     _matrixHolder->_release();
 
 #ifdef JAVA_CODE
@@ -123,7 +123,7 @@ public:
 #endif
   }
   const Matrix44D* getMatrix() const{ return _matrixHolder->getMatrix();}
-  const void setMatrix(const Matrix44D* matrix){_matrixHolder->setMatrix(matrix);}
+  const void setMatrix(const Matrix44D* matrix) {_matrixHolder->setMatrix(matrix);}
   const Matrix44DHolder* getMatrixHolder() const{ return _matrixHolder;}
 
   void applyOnGlobalGLState(GLGlobalState* state) const {}
@@ -131,14 +131,14 @@ public:
 
 class ModelViewGLFeature: public GLCameraGroupFeature{
 public:
-  ModelViewGLFeature(Matrix44D* modelview): GLCameraGroupFeature(modelview, GLF_MODEL_VIEW){}
+  ModelViewGLFeature(Matrix44D* modelview): GLCameraGroupFeature(modelview, GLF_MODEL_VIEW) {}
 
   ModelViewGLFeature(const Camera* cam);
 };
 
 class ModelGLFeature: public GLCameraGroupFeature{
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, GLF_MODEL){}
+  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, GLF_MODEL) {}
 
   ModelGLFeature(const Camera* cam);
 };
@@ -146,14 +146,14 @@ public:
 class ProjectionGLFeature: public GLCameraGroupFeature{
 public:
 
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, GLF_PROJECTION){}
+  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, GLF_PROJECTION) {}
   ProjectionGLFeature(const Camera* cam);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature{
 public:
 
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM){}
+  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM) {}
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////

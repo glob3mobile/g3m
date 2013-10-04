@@ -44,6 +44,9 @@
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "TerrainTouchListener.hpp"
+#include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 
 const std::string MapBoo_CameraPosition::description() const {
@@ -181,7 +184,8 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const URL& tubesURL,
                              const std::string& applicationId,
                              MapBoo_ViewType viewType,
-                             MapBooApplicationChangeListener* applicationListener) :
+                             MapBooApplicationChangeListener* applicationListener,
+                             bool enableNotifications) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _applicationId(applicationId),
@@ -198,12 +202,14 @@ _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
 _applicationListener(applicationListener),
+_enableNotifications(enableNotifications),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
 _lastApplicationCurrentSceneIndex(-1),
 _context(NULL),
-_webSocket(NULL)
+_webSocket(NULL),
+_marksRenderer(NULL)
 {
 
 }
@@ -248,6 +254,129 @@ GL* MapBooBuilder::getGL() {
   return _gl;
 }
 
+
+class MapBooBuilder_TerrainTouchListener : public TerrainTouchListener {
+private:
+  MapBooBuilder* _mapBooBuilder;
+
+public:
+  MapBooBuilder_TerrainTouchListener(MapBooBuilder* mapBooBuilder) :
+  _mapBooBuilder(mapBooBuilder)
+  {
+  }
+
+  ~MapBooBuilder_TerrainTouchListener() {
+
+  }
+
+  bool onTerrainTouch(const G3MEventContext* ec,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile) {
+    return _mapBooBuilder->onTerrainTouch(ec,
+                                          camera,
+                                          position,
+                                          tile);
+  }
+};
+
+const std::string MapBooBuilder::escapeString(const std::string& str) const {
+  const IStringUtils* su = IStringUtils::instance();
+
+  return su->replaceSubstring(str, "\"", "\\\"");
+}
+
+const std::string MapBooBuilder::toCameraPositionJSON(const Camera* camera) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("{");
+
+  const Geodetic3D position = camera->getGeodeticPosition();
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"height\":");
+  isb->addDouble( position._height );
+
+  isb->addString(",\"heading\":");
+  isb->addDouble( camera->getHeading()._degrees );
+
+  isb->addString(",\"pitch\":");
+  isb->addDouble( camera->getPitch()._degrees );
+
+  isb->addString(",\"animated\":");
+  isb->addBool( true );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+
+}
+
+const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      camera,
+                                                            const Geodetic3D&  position,
+                                                            const std::string& message) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("notification=");
+
+  isb->addString("{");
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"message\":");
+  isb->addString("\"");
+  isb->addString( escapeString(message) );
+  isb->addString("\"");
+
+  isb->addString(",\"cameraPosition\":");
+  isb->addString( toCameraPositionJSON(camera) );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+void MapBooBuilder::sendNotification(const Camera*      camera,
+                                     const Geodetic3D&  position,
+                                     const std::string& message) const {
+  if ((_webSocket != NULL) && _isApplicationTubeOpen) {
+    _webSocket->send( getSendNotificationCommand(camera,
+                                                 position,
+                                                 message) );
+  }
+  else {
+    ILogger::instance()->logError("Can't send notification, websocket disconnected");
+  }
+}
+
+bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
+                                   const Camera*          camera,
+                                   const Geodetic3D&      position,
+                                   const Tile*            tile) {
+  if (_applicationListener != NULL) {
+    _applicationListener->onTerrainTouch(this,
+                                         ec,
+                                         camera,
+                                         position,
+                                         tile);
+  }
+
+  return true;
+}
+
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
 
@@ -260,11 +389,13 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  const Quality quality = QUALITY_LOW;
 
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
-                                                                      incrementalTileQuality);
+                                                                      incrementalTileQuality,
+                                                                      quality);
 
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
@@ -272,20 +403,27 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   int TODO_CHECK_MAPBOO_FULLSPHERE;
   const Sector renderedSector = Sector::fullSphere();
 
-  return new PlanetRenderer(tessellator,
-                            elevationDataProvider,
-                            verticalExaggeration,
-                            texturizer,
-                            tileRasterizer,
-                            _layerSet,
-                            parameters,
-                            showStatistics,
-                            texturePriority,
-                            renderedSector);
+  PlanetRenderer* result = new PlanetRenderer(tessellator,
+                                              elevationDataProvider,
+                                              verticalExaggeration,
+                                              texturizer,
+                                              tileRasterizer,
+                                              _layerSet,
+                                              parameters,
+                                              showStatistics,
+                                              texturePriority,
+                                              renderedSector);
+
+  if (_enableNotifications) {
+    result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
+  }
+
+  return result;
 }
 
 const Planet* MapBooBuilder::createPlanet() {
-  return Planet::createEarth();
+  //return Planet::createEarth();
+  return Planet::createSphericalEarth();
 }
 
 std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
@@ -548,6 +686,17 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           hasWarnings);
 }
 
+MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObject) const {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  return new MapBoo_Notification(Geodetic2D::fromDegrees(jsonObject->getAsNumber("latitude",  0),
+                                                         jsonObject->getAsNumber("longitude", 0)),
+                                 jsonObject->getAsString("message", ""),
+                                 parseCameraPosition( jsonObject->getAsObject("cameraPosition") ));
+}
+
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
@@ -563,10 +712,6 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
     }
     else {
       const JSONString* jsonError = jsonObject->getAsString("error");
-//      if (jsonError != NULL) {
-//        ILogger::instance()->logError("Server Error: %s",
-//                                      jsonError->value().c_str());
-//      }
       if (jsonError == NULL) {
         const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
 
@@ -614,16 +759,46 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
         if (jsonCurrentSceneIndex != NULL) {
           setApplicationCurrentSceneIndex( (int) jsonCurrentSceneIndex->value() );
         }
+
+        if (_enableNotifications) {
+          const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
+          if (jsonNotification != NULL) {
+            setApplicationNotification( parseNotification(jsonNotification) );
+          }
+        }
       }
       else {
         ILogger::instance()->logError("Server Error: %s",
                                       jsonError->value().c_str());
       }
     }
-    
+
     delete jsonBaseObject;
   }
-  
+
+}
+
+void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
+  if (_marksRenderer != NULL) {
+    const std::string message = notification->_message;
+    if (message.size() > 0) {
+      const Geodetic2D position = notification->_position;
+      _marksRenderer->addMark( new Mark(message,
+                                        Geodetic3D(position, 0),
+                                        ABSOLUTE,
+                                        0) );
+    }
+    
+    const MapBoo_CameraPosition* cameraPosition = notification->_cameraPosition;
+    if (cameraPosition != NULL) {
+      _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                            cameraPosition->getPosition(),
+                                            cameraPosition->getHeading(),
+                                            cameraPosition->getPitch());
+    }
+  }
+
+  delete notification;
 }
 
 void MapBooBuilder::setApplicationCurrentSceneIndex(int sceneIndex) {
@@ -835,7 +1010,7 @@ const URL MapBooBuilder::createApplicationRestURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-//  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
+  //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
 
   return URL(path, false);
 }
@@ -878,6 +1053,13 @@ Color MapBooBuilder::getCurrentBackgroundColor() {
   return (scene == NULL) ? Color::black() : scene->getBackgroundColor();
 }
 
+MarksRenderer* MapBooBuilder::getMarksRenderer() {
+  if (_marksRenderer == NULL) {
+    _marksRenderer = new MarksRenderer(false);
+  }
+  return _marksRenderer;
+}
+
 G3MWidget* MapBooBuilder::create() {
   if (_g3mWidget != NULL) {
     ILogger::instance()->logError("The G3MWidget was already created, can't be created more than once");
@@ -889,6 +1071,8 @@ G3MWidget* MapBooBuilder::create() {
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
   mainRenderer->addRenderer(planetRenderer);
+
+  mainRenderer->addRenderer(getMarksRenderer());
 
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
 
@@ -935,15 +1119,15 @@ int MapBooBuilder::getApplicationTimestamp() const {
 }
 
 void MapBooBuilder::saveApplicationData() const {
-//  std::string                _applicationId;
-//  std::string                _applicationName;
-//  std::string                _applicationWebsite;
-//  std::string                _applicationEMail;
-//  std::string                _applicationAbout;
-//  int                        _applicationTimestamp;
-//  std::vector<MapBoo_Scene*> _applicationScenes;
-//  int                        _applicationCurrentSceneIndex;
-//  int                        _lastApplicationCurrentSceneIndex;
+  //  std::string                _applicationId;
+  //  std::string                _applicationName;
+  //  std::string                _applicationWebsite;
+  //  std::string                _applicationEMail;
+  //  std::string                _applicationAbout;
+  //  int                        _applicationTimestamp;
+  //  std::vector<MapBoo_Scene*> _applicationScenes;
+  //  int                        _applicationCurrentSceneIndex;
+  //  int                        _lastApplicationCurrentSceneIndex;
   int __DGD_at_work;
 }
 
@@ -1053,10 +1237,17 @@ void MapBooBuilder::changedCurrentScene() {
     if (currentScene != NULL) {
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
+        //if (cameraPosition->isAnimated()) {
         _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
                                               cameraPosition->getPosition(),
                                               cameraPosition->getHeading(),
                                               cameraPosition->getPitch());
+        //}
+        //else {
+        //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
+        //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
+        //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
+        //}
       }
     }
   }
@@ -1068,8 +1259,7 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_PRESENTATION) {
-    if ((_webSocket != NULL) &&
-        _isApplicationTubeOpen) {
+    if ((_webSocket != NULL) && _isApplicationTubeOpen) {
       if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
         if (_lastApplicationCurrentSceneIndex >= 0) {
           _webSocket->send( getApplicationCurrentSceneCommand() );

@@ -32,6 +32,7 @@ public class PlanetRendererBuilder
   private boolean _useTilesSplitBudget;
   private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
+  private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
@@ -214,7 +215,7 @@ public class PlanetRendererBuilder
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality());
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
   }
   private TileTessellator createTileTessellator()
   {
@@ -251,6 +252,7 @@ public class PlanetRendererBuilder
      _useTilesSplitBudget = true;
      _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
+     _quality = Quality.QUALITY_LOW;
      _parameters = null;
      _layerSet = null;
      _texturizer = null;
@@ -424,6 +426,15 @@ public class PlanetRendererBuilder
     GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
     addTileRasterizer(geoTileRasterizer);
     return geoTileRasterizer;
+  }
+
+  public final Quality getQuality()
+  {
+    return _quality;
+  }
+  public final void setQuality(Quality quality)
+  {
+    _quality = quality;
   }
 
 }

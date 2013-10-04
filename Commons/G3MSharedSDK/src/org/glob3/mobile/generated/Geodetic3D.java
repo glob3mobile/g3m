@@ -62,21 +62,6 @@ public class Geodetic3D
 
   }
 
-  public final Angle latitude()
-  {
-    return _latitude;
-  }
-
-  public final Angle longitude()
-  {
-    return _longitude;
-  }
-
-  public final double height()
-  {
-    return _height;
-  }
-
   public final Geodetic2D asGeodetic2D()
   {
     return new Geodetic2D(_latitude, _longitude);
@@ -118,4 +103,10 @@ public class Geodetic3D
   {
     return new Geodetic3D(_latitude.div(magnitude), _longitude.div(magnitude), _height / magnitude);
   }
+
+  public final boolean isEquals(Geodetic3D that)
+  {
+    return (_latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude) && (_height == that._height));
+  }
+
 }

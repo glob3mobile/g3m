@@ -145,7 +145,7 @@ public class TileTextureBuilder extends RCObject
     {
       final Petition petition = _petitions.get(i);
 
-      final long priority = _texturePriority + _tile.getLevel();
+      final long priority = _texturePriority + _tile._level;
 
       //      printf("%s\n", petition->getURL().getPath().c_str());
 
@@ -183,7 +183,7 @@ public class TileTextureBuilder extends RCObject
       java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
       String textureId = _tile.getKey().tinyDescription();
 
-      final Sector tileSector = _tile.getSector();
+      final Sector tileSector = _tile._sector;
 
       for (int i = 0; i < _petitionsCount; i++)
       {

@@ -110,14 +110,6 @@ public:
 
   }
   
-  const Angle latitude() const {
-    return _latitude;
-  }
-  
-  const Angle longitude() const {
-    return _longitude;
-  }
-  
   Geodetic2D add(const Geodetic2D& that) const {
     return Geodetic2D(_latitude.add(that._latitude),
                       _longitude.add(that._longitude));

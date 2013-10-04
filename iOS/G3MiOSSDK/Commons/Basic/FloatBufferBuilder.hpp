@@ -21,6 +21,7 @@ protected:
     NO_CENTER,FIRST_VERTEX,GIVEN_CENTER
   };
 
+
 #ifdef C_CODE
   std::vector<float> _values;
 #endif
@@ -31,7 +32,9 @@ protected:
     private int     _size;
 
     public FloatArrayList() {
-      this(256);
+      this(1024);
+//      _array = IFactory.instance().getThreadLocalFloatArray();
+//      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -60,6 +63,7 @@ protected:
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
+        //IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }

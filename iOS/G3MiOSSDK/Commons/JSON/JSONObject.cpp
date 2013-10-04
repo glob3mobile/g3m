@@ -190,7 +190,7 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
     std::string key = keys[i];
     visitor->visitObjectBeforeChild(this, key);
     const JSONBaseObject* child = get(key);
-    if(child != NULL){
+    if(child != NULL) {
         child->acceptVisitor(visitor);
     }
   }

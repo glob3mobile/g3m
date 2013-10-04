@@ -39,12 +39,15 @@ public class FloatBufferBuilder
   }
 
 
+
   public final class FloatArrayList {
     private float[] _array;
     private int     _size;
 
     public FloatArrayList() {
-      this(256);
+      this(1024);
+//      _array = IFactory.instance().getThreadLocalFloatArray();
+//      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -73,6 +76,7 @@ public class FloatBufferBuilder
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
+        //IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
@@ -89,7 +93,8 @@ public class FloatBufferBuilder
 
   public final IFloatBuffer create()
   {
-    return IFactory.instance().createFloatBuffer( _values.toArray() );
+    //return IFactory.instance().createFloatBuffer( _values.toArray() );
+    return IFactory.instance().createFloatBuffer( _values._array, _values._size );
   }
 
   public void dispose()

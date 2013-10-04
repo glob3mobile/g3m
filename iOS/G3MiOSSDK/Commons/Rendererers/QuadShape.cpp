@@ -119,7 +119,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
   Mesh* im = NULL;
-  if (_withNormals){
+  if (_withNormals) {
     FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     normals.add((double)0.0, (double)0.0, (double)1.0);
     normals.add((double)0.0, (double)0.0, (double)1.0);

@@ -93,10 +93,10 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
                                             const Sector& sector) const {
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 
-  const int level   = tile->getLevel();
-  const int column  = tile->getColumn();
+  const int level   = tile->_level;
+  const int column  = tile->_column;
   const int numRows = (int) _mu->pow(2.0, level);
-  const int row     = numRows - tile->getRow() - 1;
+  const int row     = numRows - tile->_row - 1;
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
@@ -125,7 +125,7 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
                                                                 const Tile* tile) const {
   std::vector<Petition*> petitions;
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }

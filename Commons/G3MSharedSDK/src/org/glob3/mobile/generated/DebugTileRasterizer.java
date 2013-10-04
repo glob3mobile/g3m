@@ -33,13 +33,13 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("L:");
-    isb.addInt(tile.getLevel());
+    isb.addInt(tile._level);
   
     isb.addString(", C:");
-    isb.addInt(tile.getColumn());
+    isb.addInt(tile._column);
   
     isb.addString(", R:");
-    isb.addInt(tile.getRow());
+    isb.addInt(tile._row);
   
     final String s = isb.getString();
     if (isb != null)
@@ -123,7 +123,7 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
       ColumnCanvasElement col = new ColumnCanvasElement();
       col.add(new TextCanvasElement(getTileKeyLabel(tile), _font, _color));
   
-      final Sector sectorTile = tile.getSector();
+      final Sector sectorTile = tile._sector;
       col.add(new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color));
       col.add(new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color));
       col.add(new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color));

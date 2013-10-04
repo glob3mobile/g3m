@@ -144,7 +144,7 @@ void AbstractMesh::createGLState() {
                                                _pointSize),
                         false);   //POINT SIZE
 
-  if (_normals != NULL){
+  if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
                            false);
   }

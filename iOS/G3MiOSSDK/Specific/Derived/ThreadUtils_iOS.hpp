@@ -21,7 +21,7 @@ public:
     _backgroundQueue = [[NSOperationQueue alloc] init];
 
     [_backgroundQueue setMaxConcurrentOperationCount: 1];
-    [_backgroundQueue setName:@"com.glob3.backgroundqueue"];
+    [_backgroundQueue setName: @"com.glob3.backgroundqueue"];
   }
 
   ~ThreadUtils_iOS() {
@@ -30,34 +30,34 @@ public:
 
   void invokeInRendererThread(GTask* task,
                               bool autoDelete) const {
-    dispatch_async( dispatch_get_main_queue(), ^{
-      task->run(_context);
-      if (autoDelete) {
-        delete task;
-      }
-    });
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                     task->run(_context);
+                     if (autoDelete) {
+                       delete task;
+                     }
+                   });
   }
 
   void invokeInBackground(GTask* task,
                           bool autoDelete) const {
-    [ _backgroundQueue addOperationWithBlock:^{
-     task->run(_context);
-     if (autoDelete) {
-       delete task;
-     }
-     }];
+    [ _backgroundQueue addOperationWithBlock:
+     ^{
+        task->run(_context);
+        if (autoDelete) {
+          delete task;
+        }
+      }
+     ];
   }
 
   void onResume(const G3MContext* context) {
-    
   }
 
   void onPause(const G3MContext* context) {
-
   }
 
   void onDestroy(const G3MContext* context) {
-
   }
   
 };

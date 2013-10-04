@@ -13,6 +13,18 @@
 #include "Shape.hpp"
 #include <vector>
 
+
+struct ShapeDistance {
+  double _distance;
+  Shape* _shape;
+  
+  ShapeDistance(double distance, Shape* shape):
+  _distance(distance),
+  _shape(shape)
+  {}
+};
+
+
 class ShapesRenderer : public LeafRenderer {
 private:
   const bool _renderNotReadyShapes;
@@ -21,9 +33,11 @@ private:
 
 #ifdef C_CODE
   const G3MContext* _context;
+  const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
   private G3MContext _context;
+  private Camera    _lastCamera;
 #endif
   
   GLState* _glState;
@@ -41,7 +55,8 @@ public:
 //  _projection(NULL),
 //  _model(NULL),
   _glState(new GLState()),
-  _glStateTransparent(new GLState())
+  _glStateTransparent(new GLState()),
+  _lastCamera(NULL)
   {
   }
 
@@ -95,10 +110,8 @@ public:
   RenderState getRenderState(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
-
+                    const TouchEvent* touchEvent);
+  
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
   }
@@ -110,6 +123,10 @@ public:
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);
+  
+  std::vector<ShapeDistance> intersectionsDistances(const Vector3D& origin,
+                                                     const Vector3D& direction) const;
+
 
 };
 

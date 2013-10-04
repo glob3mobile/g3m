@@ -1,5 +1,5 @@
 //
-//  TerrainTouchEventListener.hpp
+//  LayerTouchEventListener.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 14/08/12.
@@ -13,16 +13,16 @@
 #include "Sector.hpp"
 class Layer;
 
-class TerrainTouchEvent {
+class LayerTouchEvent {
 private:
   const Geodetic3D _position;
   const Sector     _sector;
   const Layer*     _layer;
 
 public:
-  TerrainTouchEvent(const Geodetic3D& position,
-                    const Sector& sector,
-                    const Layer* layer):
+  LayerTouchEvent(const Geodetic3D& position,
+                  const Sector& sector,
+                  const Layer* layer):
   _position(position),
   _sector(sector),
   _layer(layer)
@@ -45,22 +45,22 @@ public:
 };
 
 
-class TerrainTouchEventListener {
+class LayerTouchEventListener {
 public:
 
   /**
    Process terrain touch event, return true if the event was processed.
    */
   virtual bool onTerrainTouch(const G3MEventContext* context,
-                              const TerrainTouchEvent& ev) = 0;
+                              const LayerTouchEvent& ev) = 0;
 
 #ifdef C_CODE
-  virtual ~TerrainTouchEventListener() { }
+  virtual ~LayerTouchEventListener() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
-
+  
 };
 
 #endif

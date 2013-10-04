@@ -66,6 +66,8 @@ import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LayerTouchEvent;
+import org.glob3.mobile.generated.LayerTouchEventListener;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
@@ -87,8 +89,6 @@ import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TerrainTouchEvent;
-import org.glob3.mobile.generated.TerrainTouchEventListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -1138,14 +1138,14 @@ public class G3MWebGLDemo
                   TimeInterval.fromDays(30), // time interval to cache
                   true); // read expired
          layerSet.addLayer(osm);
-         osm.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+         osm.addLayerTouchEventListener(new LayerTouchEventListener() {
 
             @Override
             public boolean onTerrainTouch(final G3MEventContext context,
-                                          final TerrainTouchEvent ev) {
+                                          final LayerTouchEvent ev) {
                final Geodetic3D position = ev.getPosition();
-               Window.alert("touching terrain on osm layer " + Double.toString(position.latitude().degrees()) + ","
-                            + Double.toString(position.longitude().degrees()));
+               Window.alert("touching terrain on osm layer " + Double.toString(position._latitude._degrees) + ","
+                            + Double.toString(position._longitude._degrees));
                return false;
             }
 
@@ -1331,6 +1331,7 @@ public class G3MWebGLDemo
 
       builder.setInitializationTask(initializationTask);
       */
+<<<<<<< HEAD
 
 
       //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
@@ -1342,6 +1343,19 @@ public class G3MWebGLDemo
       //      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
       //      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
       //      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+=======
+
+
+      //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+      // set elevations
+      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
+      final Vector2I extent = new Vector2I(256, 256);
+      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+>>>>>>> purgatory
 
 
       _widget = builder.createWidget();

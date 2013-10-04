@@ -44,18 +44,6 @@ public:
   virtual ~IFactory() {
   }
 
-  virtual void createImageFromFileName(const std::string& filename,
-                                       IImageListener* listener,
-                                       bool autodelete) const = 0;
-
-  virtual void createImageFromBuffer(const IByteBuffer* buffer,
-                                     IImageListener* listener,
-                                     bool autodelete) const = 0;
-
-//  virtual void createImageFromSize(int width, int height,
-//                                   IImageListener* listener,
-//                                   bool autodelete) const = 0;
-
   virtual void deleteImage(const IImage* image) const = 0;
 
   virtual ITimer* createTimer() const = 0;
@@ -98,9 +86,11 @@ public:
                                       bool autodeleteWebSocket) const = 0;
 #ifdef JAVA_CODE
 
-  public abstract IShortBuffer createShortBuffer(final short[] array);
+  public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
+  public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
 
-  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+//  public abstract float[] getThreadLocalFloatArray();
+//  public abstract void    setThreadLocalFloatArray(final float[] array);
 #endif
   
 };

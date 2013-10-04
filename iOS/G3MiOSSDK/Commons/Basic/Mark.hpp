@@ -189,7 +189,7 @@ public:
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
-  Mark(IImage*            image,
+  Mark(const IImage*      image,
        const std::string& imageID,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
@@ -267,7 +267,7 @@ public:
 
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
-                        double verticalExaggeration){}
+                        double verticalExaggeration) {}
 };
 
 #endif

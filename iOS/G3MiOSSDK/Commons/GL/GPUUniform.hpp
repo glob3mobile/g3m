@@ -196,7 +196,7 @@ public:
   const float _x, _y, _z;
 
   GPUUniformValueVec3Float(float x, float y, float z):
-  GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z){}
+  GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
     gl->uniform3f(id, _x, _y, _z);
@@ -207,7 +207,7 @@ public:
   }
 
   //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL){
+  //    if (value != NULL) {
   //      delete value;
   //    }
   //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
@@ -230,7 +230,7 @@ public:
 
 class GPUUniformVec3Float: public GPUUniform{
 public:
-  GPUUniformVec3Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec3Float()){}
+  GPUUniformVec3Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec3Float()) {}
 };
 ////////////////////////////////////////////////////////////
 
@@ -239,7 +239,7 @@ public:
   const float _x, _y, _z, _w;
 
   GPUUniformValueVec4Float(const Color& color):
-  GPUUniformValue(GLType::glVec4Float()),_x(color.getRed()),_y(color.getGreen()), _z(color.getBlue()), _w(color.getAlpha()){}
+  GPUUniformValue(GLType::glVec4Float()),_x(color.getRed()),_y(color.getGreen()), _z(color.getBlue()), _w(color.getAlpha()) {}
 
   GPUUniformValueVec4Float(float x, float y, float z, float w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w) {}
@@ -315,18 +315,18 @@ public:
   {
   }
 
-  ~GPUUniformValueMatrix4(){
-//    if (_ownsProvider){
+  ~GPUUniformValueMatrix4() {
+//    if (_ownsProvider) {
       _provider->_release();
 //    }
-    if (_lastModelSet != NULL){
+    if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
 
-    if (_lastModelSet != NULL){
+    if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
 
@@ -338,7 +338,7 @@ public:
   }
 
   bool isEquals(const GPUUniformValue* v) const{
-    if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()){
+    if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()) {
       return true;
     }
 

@@ -64,9 +64,7 @@ public class MutableVector2D
 
   public final boolean isNan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return mu.isNan(_x) || mu.isNan(_y);
+    return (_x != _x) || (_y != _y);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

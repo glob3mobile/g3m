@@ -34,7 +34,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
       Tile* petitionTile = tile;
 #endif
       const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-      while ((petitionTile->getLevel() > maxLevel) && (petitionTile != NULL)) {
+      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
         petitionTile = petitionTile->getParent();
       }
 
@@ -63,14 +63,12 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
 
-
-
   for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(ec, tile)) {
-      TerrainTouchEvent tte(position, tile->getSector(), layer);
+      LayerTouchEvent tte(position, tile->_sector, layer);
 
-      if (layer->onTerrainTouchEventListener(ec, tte)) {
+      if (layer->onLayerTouchEventListener(ec, tte)) {
         return true;
       }
     }
@@ -110,14 +108,30 @@ Layer* LayerSet::getLayer(int index) const {
   return NULL;
 }
 
-Layer* LayerSet::getLayer(const std::string& name) const {
+void LayerSet::disableAllLayers() {
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    _layers[i]->setEnable(false);
+  }
+}
+
+Layer* LayerSet::getLayerByName(const std::string& name) const {
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     if (_layers[i]->getName() == name) {
       return _layers[i];
     }
   }
+  return NULL;
+}
 
+Layer* LayerSet::getLayerByTitle(const std::string& title) const {
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    if (_layers[i]->getTitle() == title) {
+      return _layers[i];
+    }
+  }
   return NULL;
 }
 

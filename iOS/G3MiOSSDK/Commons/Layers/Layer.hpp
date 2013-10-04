@@ -15,7 +15,7 @@
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "URL.hpp"
-#include "TerrainTouchEventListener.hpp"
+#include "LayerTouchEventListener.hpp"
 #include "TimeInterval.hpp"
 
 class Petition;
@@ -27,8 +27,8 @@ class LayerTilesRenderParameters;
 
 class Layer {
 protected:
-  LayerCondition*                         _condition;
-  std::vector<TerrainTouchEventListener*> _listeners;
+  LayerCondition*                       _condition;
+  std::vector<LayerTouchEventListener*> _listeners;
 
   LayerSet* _layerSet;
 
@@ -48,6 +48,8 @@ protected:
 
   void notifyChanges() const;
 
+  std::string _title;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
@@ -59,7 +61,8 @@ protected:
   _timeToCacheMS(timeToCache.milliseconds()),
   _readExpired(readExpired),
   _enable(true),
-  _parameters(parameters)
+  _parameters(parameters),
+  _title("")
   {
 
   }
@@ -114,15 +117,15 @@ public:
   virtual void initialize(const G3MContext* context) {
   }
 
-  void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
+  void addLayerTouchEventListener(LayerTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
 
-  bool onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   const TerrainTouchEvent& tte) const {
+  bool onLayerTouchEventListener(const G3MEventContext* ec,
+                                 const LayerTouchEvent& tte) const {
     const int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++) {
-      TerrainTouchEventListener* listener = _listeners[i];
+      LayerTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
         if (listener->onTerrainTouch(ec, tte)) {
           return true;
@@ -145,8 +148,13 @@ public:
   virtual const std::string description() const = 0;
 
   bool isEquals(const Layer* that) const;
-
+  
   virtual Layer* copy() const = 0;
+
+
+  const std::string getTitle() const;
+
+  void setTitle(const std::string& title);
   
 };
 

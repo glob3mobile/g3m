@@ -88,7 +88,7 @@ Vector3D SubviewElevationData::getMinMaxAverageElevations() const {
   for (int x = 0; x < _width; x++) {
     for (int y = 0; y < _height; y++) {
       const double height = getElevationAt(x, y);
-      if ( !mu->isNan(height) ) {
+      if ( !ISNAN(height) ) {
         if (height < minHeight) {
           minHeight = height;
         }

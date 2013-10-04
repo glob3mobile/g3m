@@ -36,7 +36,8 @@ public:
                     const URL& tubesURL,
                     const std::string& applicationId,
                     MapBoo_ViewType viewType,
-                    MapBooApplicationChangeListener* applicationListener);
+                    MapBooApplicationChangeListener* applicationListener,
+                    bool enableNotifications);
 
   void initializeWidget();
   

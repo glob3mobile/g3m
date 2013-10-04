@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 public abstract class Layer
 {
   protected LayerCondition _condition;
-  protected java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
+  protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
 
   protected LayerSet _layerSet;
 
@@ -49,6 +49,8 @@ public abstract class Layer
     }
   }
 
+  protected String _title;
+
   protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
@@ -58,6 +60,7 @@ public abstract class Layer
      _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;
+     _title = "";
 
   }
 
@@ -148,17 +151,17 @@ public abstract class Layer
   {
   }
 
-  public final void addTerrainTouchEventListener(TerrainTouchEventListener listener)
+  public final void addLayerTouchEventListener(LayerTouchEventListener listener)
   {
     _listeners.add(listener);
   }
 
-  public final boolean onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
+  public final boolean onLayerTouchEventListener(G3MEventContext ec, LayerTouchEvent tte)
   {
     final int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++)
     {
-      TerrainTouchEventListener listener = _listeners.get(i);
+      LayerTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
         if (listener.onTerrainTouch(ec, tte))
@@ -266,5 +269,16 @@ public abstract class Layer
   }
 
   public abstract Layer copy();
+
+
+  public final String getTitle()
+  {
+    return _title;
+  }
+
+  public final void setTitle(String title)
+  {
+    _title = title;
+  }
 
 }

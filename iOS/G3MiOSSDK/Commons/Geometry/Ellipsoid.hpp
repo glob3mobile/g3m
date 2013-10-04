@@ -9,7 +9,10 @@
 #ifndef __G3MiOSSDK__Ellipsoid__
 #define __G3MiOSSDK__Ellipsoid__
 
+#include <vector>
+
 #include "Vector3D.hpp"
+
 
 class Ellipsoid {
 private:
@@ -59,6 +62,9 @@ public:
     return (_radii._x + _radii._y + _radii._y) /3;
   }
   
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                                        const Vector3D& direction) const;
+
   
 };
 

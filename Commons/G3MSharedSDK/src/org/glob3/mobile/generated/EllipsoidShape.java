@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class Color;
 //class FloatBufferBuilderFromGeodetic;
 //class FloatBufferBuilderFromCartesian2D;
@@ -28,11 +29,15 @@ package org.glob3.mobile.generated;
 
 public class EllipsoidShape extends AbstractMeshShape
 {
+
+  private Ellipsoid _ellipsoid;
+  private final Quadric _quadric;
+
   private URL _textureURL = new URL();
 
-  private final double _radiusX;
-  private final double _radiusY;
-  private final double _radiusZ;
+  /*const double _radiusX;
+  const double _radiusY;
+  const double _radiusZ;*/
 
   private final short _resolution;
 
@@ -177,7 +182,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(_radiusX, _radiusY, _radiusZ)));
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid.getRadii()));
     final Sector sector = new Sector(Sector.fullSphere());
   
   //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
@@ -237,10 +242,9 @@ public class EllipsoidShape extends AbstractMeshShape
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
   {
      super(position, altitudeMode);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _quadric = Quadric.fromEllipsoid(_ellipsoid);
      _textureURL = new URL(new URL("", false));
-     _radiusX = radius.x();
-     _radiusY = radius.y();
-     _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;
@@ -253,17 +257,16 @@ public class EllipsoidShape extends AbstractMeshShape
 
   }
 
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
   {
-     this(position, altitudeMode, textureURL, radius, resolution, borderWidth, texturedInside, mercator, true);
+     this(position, altitudeMode, planet, textureURL, radius, resolution, borderWidth, texturedInside, mercator, true);
   }
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
   {
      super(position, altitudeMode);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _quadric = Quadric.fromEllipsoid(_ellipsoid);
      _textureURL = new URL(textureURL);
-     _radiusX = radius.x();
-     _radiusY = radius.y();
-     _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;
@@ -279,6 +282,7 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public void dispose()
   {
+    _ellipsoid = null;
     if (_surfaceColor != null)
        _surfaceColor.dispose();
     if (_borderColor != null)
@@ -293,6 +297,16 @@ public class EllipsoidShape extends AbstractMeshShape
     _textureImage = image;
   
     cleanMesh();
+  }
+
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+  //  MutableMatrix44D* M = createTransformMatrix(_planet);
+  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+  //  delete M;
+  //  return transformedQuadric.intersectionsDistances(origin, direction);
+    return new java.util.ArrayList<Double>();
   }
 
 }

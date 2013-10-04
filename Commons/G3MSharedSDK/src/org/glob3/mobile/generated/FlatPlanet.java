@@ -112,20 +112,20 @@ public class FlatPlanet extends Planet
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    final double x = geodetic.longitude().degrees() * _size._x / 360.0;
-    final double y = geodetic.latitude().degrees() * _size._y / 180.0;
-    return new Vector3D(x, y, geodetic.height());
+    final double x = geodetic._longitude._degrees * _size._x / 360.0;
+    final double y = geodetic._latitude._degrees * _size._y / 180.0;
+    return new Vector3D(x, y, geodetic._height);
   }
 
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
+    return toCartesian(geodetic._latitude, geodetic._longitude, 0.0);
   }
 
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+    return toCartesian(geodetic._latitude, geodetic._longitude, height);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D position)
@@ -152,7 +152,7 @@ public class FlatPlanet extends Planet
 
   public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
   {
-    return new Geodetic2D(P0.latitude().add(P1.latitude()).times(0.5), P0.longitude().add(P1.longitude()).times(0.5));
+    return new Geodetic2D(P0._latitude.add(P1._latitude).times(0.5), P0._longitude.add(P1._longitude).times(0.5));
   }
 
 
@@ -320,7 +320,7 @@ public class FlatPlanet extends Planet
     final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay);
   
     // create effect
-    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin).height()*0.6);
+    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin)._height *0.6);
   }
 
   public final double distanceToHorizon(Vector3D position)

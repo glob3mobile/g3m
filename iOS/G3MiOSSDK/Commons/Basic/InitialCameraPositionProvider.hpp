@@ -18,7 +18,7 @@ class Vector2I;
 class InitialCameraPositionProvider{
 public:
 
-  virtual ~InitialCameraPositionProvider(){}
+  virtual ~InitialCameraPositionProvider() {}
   virtual Geodetic3D getCameraPosition(const Planet* planet,
                                        const PlanetRenderer* planetRenderer,
                                        const Vector2I& viewportExtent) const = 0;

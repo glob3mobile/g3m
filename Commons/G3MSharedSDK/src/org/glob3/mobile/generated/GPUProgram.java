@@ -388,17 +388,19 @@ public class GPUProgram
   
     for (int i = 0; i < _nUniforms; i++)
     {
-      if (_createdUniforms[i] != null) //Texture Samplers return null
+      GPUUniform uniform = _createdUniforms[i];
+      if (uniform != null) //Texture Samplers return null
       {
-        _createdUniforms[i].applyChanges(gl);
+        uniform.applyChanges(gl);
       }
     }
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      if (_createdAttributes[i] != null)
+      GPUAttribute attribute = _createdAttributes[i];
+      if (attribute != null)
       {
-        _createdAttributes[i].applyChanges(gl);
+        attribute.applyChanges(gl);
       }
     }
   

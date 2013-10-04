@@ -58,26 +58,23 @@ public class G3MDrawingShapesActivity
       initializeToolbar();
 
       final G3MBuilder_Android g3mBuilder = new G3MBuilder_Android(this);
-      
-      ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(
-    		  new URL("file:///full-earth-2048x1024.bil", false),
-              Sector.fullSphere(),
-              new Vector2I(2048, 1024));
+
+      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(new URL(
+               "file:///full-earth-2048x1024.bil", false), Sector.fullSphere(), new Vector2I(2048, 1024));
       g3mBuilder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
       g3mBuilder.getPlanetRendererBuilder().setVerticalExaggeration(20);
-      
+
       g3mBuilder.setLogFPS(true);
-      
+
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
       initializeShapes(renderers);
-      
-      MarksRenderer marksRenderer = new MarksRenderer(true);
+
+      final MarksRenderer marksRenderer = new MarksRenderer(true);
       renderers.add(marksRenderer);
-      marksRenderer.addMark(new Mark("Everest", 
-    		  Geodetic3D.fromDegrees(27.987778, 86.944444,0), AltitudeMode.RELATIVE_TO_GROUND, 
-    		  6e7, 20, Color.red(), Color.black(), null, false, null));
-      
+      marksRenderer.addMark(new Mark("Everest", Geodetic3D.fromDegrees(27.987778, 86.944444, 0), AltitudeMode.RELATIVE_TO_GROUND,
+               6e7, 20, Color.red(), Color.black(), null, false, null));
+
       for (final Renderer renderer : renderers) {
          g3mBuilder.addRenderer(renderer);
       }
@@ -94,9 +91,9 @@ public class G3MDrawingShapesActivity
                final int i1 = r.nextInt((max - min) + 1) + min;
 
                _boxShape.setAnimatedScale(1, 1, i1);
-               _circleShape.setPosition(new Geodetic3D(G3MGlob3Constants.SAN_FRANCISCO_POSITION.latitude().add(
-                        Angle.fromDegrees(i1 / 5)), G3MGlob3Constants.SAN_FRANCISCO_POSITION.longitude().add(
-                        Angle.fromDegrees(i1 / 5)), Math.abs(i1) * 5000));
+               _circleShape.setPosition(new Geodetic3D(
+                        G3MGlob3Constants.SAN_FRANCISCO_POSITION._latitude.add(Angle.fromDegrees(i1 / 5)),
+                        G3MGlob3Constants.SAN_FRANCISCO_POSITION._longitude.add(Angle.fromDegrees(i1 / 5)), Math.abs(i1) * 5000));
             }
          }
       });

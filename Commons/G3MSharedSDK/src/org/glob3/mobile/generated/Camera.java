@@ -450,7 +450,7 @@ public class Camera
     final Angle pitch = getPitch();
     setPitch(Angle.zero());
   
-    final double dist = getGeodeticPosition().height() - g3d.height();
+    final double dist = getGeodeticPosition()._height - g3d._height;
   
     MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())

@@ -51,7 +51,11 @@ package org.glob3.mobile.generated;
 //class ICameraActivityListener;
 //class GLState;
 //class PlanetRenderer;
+<<<<<<< HEAD
 //class ErrorRenderer;
+=======
+//class G3MRenderContext;
+>>>>>>> purgatory
 
 
 

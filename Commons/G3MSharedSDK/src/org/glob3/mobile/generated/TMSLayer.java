@@ -52,7 +52,7 @@ public abstract class TMSLayer extends Layer
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;
@@ -62,11 +62,11 @@ public abstract class TMSLayer extends Layer
     isb.addString(_mapServerURL.getPath());
     isb.addString(_mapLayer);
     isb.addString("/");
-    isb.addInt(tile.getLevel());
+    isb.addInt(tile._level);
     isb.addString("/");
-    isb.addInt(tile.getColumn());
+    isb.addInt(tile._column);
     isb.addString("/");
-    isb.addInt(tile.getRow());
+    isb.addInt(tile._row);
     isb.addString(".");
     isb.addString(IStringUtils.instance().replaceSubstring(_format, "image/", ""));
   

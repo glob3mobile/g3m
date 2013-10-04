@@ -11,20 +11,6 @@ public class MathUtils_JavaDesktop
 
 
    @Override
-   public boolean isNan(final double v) {
-      return (v != v);
-      // return Double.isNaN(v);
-   }
-
-
-   @Override
-   public boolean isNan(final float v) {
-      return (v != v);
-      // return Float.isNaN(v);
-   }
-
-
-   @Override
    public double NanD() {
       return Double.NaN;
    }

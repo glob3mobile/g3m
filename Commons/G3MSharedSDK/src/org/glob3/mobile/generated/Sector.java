@@ -144,35 +144,21 @@ public class Sector
     return new Sector(new Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(-180)), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(180)));
   }
 
-  public final Geodetic2D lower()
-  {
-    return _lower;
-  }
-
-  public final Angle lowerLatitude()
-  {
-    return _lower._latitude;
-  }
-
-  public final Angle lowerLongitude()
-  {
-    return _lower._longitude;
-  }
-
-  public final Geodetic2D upper()
-  {
-    return _upper;
-  }
-
-  public final Angle upperLatitude()
-  {
-    return _upper._latitude;
-  }
-
-  public final Angle upperLongitude()
-  {
-    return _upper._longitude;
-  }
+//  const Angle lowerLatitude() const {
+//    return _lower._latitude;
+//  }
+//
+//  const Angle lowerLongitude() const {
+//    return _lower._longitude;
+//  }
+//
+//  const Angle upperLatitude() const {
+//    return _upper._latitude;
+//  }
+//
+//  const Angle upperLongitude() const {
+//    return _upper._longitude;
+//  }
 
   public final boolean contains(Angle latitude, Angle longitude)
   {
@@ -201,16 +187,6 @@ public class Sector
   
     // Overlapping on all axes means Sectors are intersecting
     return true;
-  }
-
-  public final Angle getDeltaLatitude()
-  {
-    return _deltaLatitude;
-  }
-
-  public final Angle getDeltaLongitude()
-  {
-    return _deltaLongitude;
   }
 
   public final Geodetic2D getSW()
@@ -456,27 +432,27 @@ public class Sector
     double lat = g._latitude._degrees;
     double lon = g._longitude._degrees;
   
-    if (lat > _upper._latitude.degrees())
+    if (lat > _upper._latitude._degrees)
     {
-      lat = _upper._latitude.degrees();
+      lat = _upper._latitude._degrees;
     }
     else
     {
-      if (lat < _lower._latitude.degrees())
+      if (lat < _lower._latitude._degrees)
       {
-        lat = _lower._latitude.degrees();
+        lat = _lower._latitude._degrees;
       }
     }
   
-    if (lon > _upper._longitude.degrees())
+    if (lon > _upper._longitude._degrees)
     {
-      lon = _upper._longitude.degrees();
+      lon = _upper._longitude._degrees;
     }
     else
     {
-      if (lon < _lower._longitude.degrees())
+      if (lon < _lower._longitude._degrees)
       {
-        lon = _lower._longitude.degrees();
+        lon = _lower._longitude._degrees;
       }
     }
   

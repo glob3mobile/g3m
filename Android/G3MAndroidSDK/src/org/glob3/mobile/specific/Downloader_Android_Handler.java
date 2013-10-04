@@ -182,7 +182,7 @@ public final class Downloader_Android_Handler {
 
       try {
          if (_g3mURL.isFileProtocol()) {
-            data = getData(downloader.getAppContext().getAssets().open(_g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "")));
+            data = getData(downloader.getAppContext().getAssets().open(_g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "")), -1);
             if (data != null) {
                statusCode = 200;
             }
@@ -196,7 +196,7 @@ public final class Downloader_Android_Handler {
             statusCode = connection.getResponseCode();
 
             if (statusCode == 200) {
-               data = getData(connection.getInputStream());
+               data = getData(connection.getInputStream(), connection.getContentLength());
             }
          }
       }
@@ -218,12 +218,15 @@ public final class Downloader_Android_Handler {
    }
 
 
-   private byte[] getData(final InputStream is) {
+   private byte[] getData(final InputStream is,
+                          final int contentLength) {
       byte[] data = null;
 
       try {
          final BufferedInputStream bis = new BufferedInputStream(is);
-         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         final boolean hasContentLength = contentLength > 0;
+         final ByteArrayOutputStream baos = hasContentLength ? new ByteArrayOutputStream(contentLength)
+                                                            : new ByteArrayOutputStream(4096);
          final byte[] buffer = new byte[4096];
          int length = 0;
 

@@ -1,22 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  ShapesRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 10/28/12.
-//
-//
-
-//
-//  ShapesRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 10/28/12.
-//
-//
-
-
-
 public class ShapesRenderer extends LeafRenderer
 {
   private final boolean _renderNotReadyShapes;
@@ -24,6 +6,7 @@ public class ShapesRenderer extends LeafRenderer
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
   private G3MContext _context;
+  private Camera    _lastCamera;
 
   private GLState _glState;
   private GLState _glStateTransparent;
@@ -87,6 +70,7 @@ public class ShapesRenderer extends LeafRenderer
      _context = null;
      _glState = new GLState();
      _glStateTransparent = new GLState();
+     _lastCamera = null;
   }
 
   public void dispose()
@@ -182,6 +166,29 @@ public class ShapesRenderer extends LeafRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
+    if (_lastCamera != null)
+    {
+      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
+      {
+        final Vector3D origin = _lastCamera.getCartesianPosition();
+        final Vector2I pixel = touchEvent.getTouch(0).getPos();
+        final Vector3D direction = _lastCamera.pixel2Ray(pixel);
+        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+  
+        if (!shapeDistances.isEmpty())
+        {
+  //        printf ("Found %d intersections with shapes:\n",
+  //                (int)shapeDistances.size());
+          for (int i = 0; i<shapeDistances.size(); i++)
+          {
+  //          printf ("   %d: shape %x to distance %f\n",
+  //                  i+1,
+  //                  (unsigned int)shapeDistances[i]._shape,
+  //                  shapeDistances[i]._distance);
+          }
+        }
+      }
+    }
     return false;
   }
 
@@ -199,6 +206,9 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+    // Saving camera for use in onTouchEvent
+    _lastCamera = rc.getCurrentCamera();
+  
     final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
   
     //Setting camera matrixes
@@ -229,5 +239,32 @@ public class ShapesRenderer extends LeafRenderer
       }
     }
   }
+
+  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    java.util.ArrayList<ShapeDistance> shapeDistances = new java.util.ArrayList<ShapeDistance>();
+    for (int n = 0; n<_shapes.size(); n++)
+    {
+      Shape shape = _shapes.get(n);
+      java.util.ArrayList<Double> distances = shape.intersectionsDistances(origin, direction);
+      for (int i = 0; i<distances.size(); i++)
+      {
+        shapeDistances.add(new ShapeDistance(distances.get(i), shape));
+      }
+    }
+  
+    // sort vector
+    java.util.Collections.sort(shapeDistances,
+                               new java.util.Comparator<ShapeDistance>() {
+                                 @Override
+                                 public int compare(final ShapeDistance sd1,
+                                                    final ShapeDistance sd2) {
+                                   return Double.compare(sd1._distance, sd2._distance);
+                                 }
+                               });
+  
+    return shapeDistances;
+  }
+
 
 }

@@ -74,7 +74,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      const double latInRadians = coordinate->_latitude.radians();
+      const double latInRadians = coordinate->_latitude._radians;
       if (latInRadians < minLatInRadians) {
         minLatInRadians = latInRadians;
       }
@@ -82,7 +82,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<s
         maxLatInRadians = latInRadians;
       }
 
-      const double lonInRadians = coordinate->_longitude.radians();
+      const double lonInRadians = coordinate->_longitude._radians;
       if (lonInRadians < minLonInRadians) {
         minLonInRadians = lonInRadians;
       }
@@ -125,16 +125,16 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
 
   const Geodetic2D* coordinate0 = coordinates->at(0);
 
-  double minLatInRadians = coordinate0->_latitude.radians();
+  double minLatInRadians = coordinate0->_latitude._radians;
   double maxLatInRadians = minLatInRadians;
 
-  double minLonInRadians = coordinate0->_longitude.radians();
+  double minLonInRadians = coordinate0->_longitude._radians;
   double maxLonInRadians = minLonInRadians;
 
   for (int i = 1; i < size; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
 
-    const double latInRadians = coordinate->_latitude.radians();
+    const double latInRadians = coordinate->_latitude._radians;
     if (latInRadians < minLatInRadians) {
       minLatInRadians = latInRadians;
     }
@@ -142,7 +142,7 @@ Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodet
       maxLatInRadians = latInRadians;
     }
 
-    const double lonInRadians = coordinate->_longitude.radians();
+    const double lonInRadians = coordinate->_longitude._radians;
     if (lonInRadians < minLonInRadians) {
       minLonInRadians = lonInRadians;
     }

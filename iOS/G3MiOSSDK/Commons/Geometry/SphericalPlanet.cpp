@@ -291,7 +291,7 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
   
   // save params for possible inertial animations
   _lastDragAxis = rotationAxis.asMutableVector3D();
-  double radians = rotationDelta.radians();
+  double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
   _validSingleDrag = true;
@@ -317,9 +317,9 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _centerRay = centerRay.asMutableVector3D();
   _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
   _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
-  _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1).degrees();
+  _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
   _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
-  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
   
   // middle point in 3D
   Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
@@ -339,7 +339,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   // init params
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
-  const double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
+  const double finalRaysAngle = finalRay0.angleBetween(finalRay1)._degrees;
   const double factor = finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, angle0, angle1;
   double distance = _origin.sub(_centerPoint).length();
@@ -353,7 +353,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     const Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
     const Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
     angle0 = point0.angleBetween(point1)._degrees;
-    if (mu->isNan(angle0)) return MutableMatrix44D::invalid();
+    if (ISNAN(angle0)) return MutableMatrix44D::invalid();
   }
     
   // compute estimated camera translation: step 1
@@ -366,7 +366,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     const Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
     const Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
     angle1 = point0.angleBetween(point1)._degrees;
-    if (mu->isNan(angle1)) return MutableMatrix44D::invalid();
+    if (ISNAN(angle1)) return MutableMatrix44D::invalid();
   }
   
   // compute estimated camera translation: steps 2..n until convergence
@@ -384,7 +384,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
       const Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
       const Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
       angle_n = point0.angleBetween(point1)._degrees;
-      if (mu->isNan(angle_n)) return MutableMatrix44D::invalid();
+      if (ISNAN(angle_n)) return MutableMatrix44D::invalid();
     }
   }
   //if (iter>2) printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
@@ -472,7 +472,7 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
   const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double height   = toGeodetic3D(origin).height();
+  const double height   = toGeodetic3D(origin)._height;
   const double distance = height * 0.6;
   
   // create effect
@@ -506,7 +506,7 @@ void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
   Vector3D origin = _origin.asVector3D();
   double maxDist = _sphere.getRadius() * 5;
 
-  if (pos.distanceTo(origin) > maxDist){
+  if (pos.distanceTo(origin) > maxDist) {
     nextCamera->copyFromForcingMatrixCreation(*previousCamera);
 //    Vector3D pos2 = nextCamera->getCartesianPosition();
 //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);

@@ -78,7 +78,7 @@ public class HereLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -115,7 +115,7 @@ public class HereLayer extends Layer
   //  isb->addString("&nomrk");
   
     isb.addString("&z=");
-    final int level = tile.getLevel();
+    final int level = tile._level;
     isb.addInt(level);
   
   //  isb->addString("&t=3");

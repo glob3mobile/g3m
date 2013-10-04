@@ -27,7 +27,7 @@ public class ShortBufferBuilder
     private int     _size;
 
     public ShortArrayList() {
-      this(256);
+      this(1024);
     }
 
     public ShortArrayList(final int initialCapacity) {
@@ -78,7 +78,8 @@ public class ShortBufferBuilder
 
   public final IShortBuffer create()
   {
-    return IFactory.instance().createShortBuffer( _values.toArray() );
+    //return IFactory.instance().createShortBuffer( _values.toArray() );
+    return IFactory.instance().createShortBuffer( _values._array, _values._size );
   }
 
   public final String description()

@@ -10,6 +10,7 @@
 
 #include "OrderedRenderable.hpp"
 #include "Camera.hpp"
+#include "TouchEvent.hpp"
 
 class TransparentShapeWrapper : public OrderedRenderable {
 private:
@@ -74,14 +75,14 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
   }
 */
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL){
+  if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());
   }
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL){
+  if (f == NULL) {
     _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
     f->setMatrix(cam->getModelViewMatrix44D());
@@ -90,6 +91,9 @@ void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 }
 
 void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+  // Saving camera for use in onTouchEvent
+  _lastCamera = rc->getCurrentCamera();
+
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
   
   //Setting camera matrixes
@@ -131,3 +135,78 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 
   _shapes.clear();
 }
+
+
+#ifdef C_CODE
+class SortShapeDistanceClass {
+public:
+  bool operator() (ShapeDistance sd1, ShapeDistance sd2) {
+    return (sd1._distance < sd2._distance);
+  }
+} sortShapeDistanceObject;
+#endif
+
+
+
+std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
+                                                                   const Vector3D& direction) const
+{
+  std::vector<ShapeDistance> shapeDistances;
+  for (int n=0; n<_shapes.size(); n++) {
+    Shape* shape = _shapes[n];
+    std::vector<double> distances = shape->intersectionsDistances(origin, direction);
+    for (int i=0; i<distances.size(); i++) {
+      shapeDistances.push_back(ShapeDistance(distances[i], shape));
+    }
+  }
+  
+  // sort vector
+#ifdef C_CODE
+    std::sort(shapeDistances.begin(),
+              shapeDistances.end(),
+              sortShapeDistanceObject);
+#endif
+#ifdef JAVA_CODE
+  java.util.Collections.sort(shapeDistances,
+                             new java.util.Comparator<ShapeDistance>() {
+                               @Override
+                               public int compare(final ShapeDistance sd1,
+                                                  final ShapeDistance sd2) {
+                                 return Double.compare(sd1._distance, sd2._distance);
+                               }
+                             });
+#endif
+
+  return shapeDistances;
+}
+
+
+bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
+                                  const TouchEvent* touchEvent)
+{
+  if (_lastCamera != NULL) {
+    if (touchEvent->getTouchCount() ==1 &&
+        touchEvent->getTapCount()==1 &&
+        touchEvent->getType()==Down) {
+      const Vector3D origin = _lastCamera->getCartesianPosition();
+      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+      std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+      
+      if (!shapeDistances.empty()) {
+//        printf ("Found %d intersections with shapes:\n",
+//                (int)shapeDistances.size());
+        for (int i=0; i<shapeDistances.size(); i++) {
+//          printf ("   %d: shape %x to distance %f\n",
+//                  i+1,
+//                  (unsigned int)shapeDistances[i]._shape,
+//                  shapeDistances[i]._distance);
+        }
+      }
+    }
+  }
+  return false;
+}
+
+
+

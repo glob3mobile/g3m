@@ -42,7 +42,7 @@ public:
     _glState->addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
   }
 
-  ~SGRotateNode(){
+  ~SGRotateNode() {
     _glState->_release();
   }
 

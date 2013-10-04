@@ -34,56 +34,6 @@ public:
     delete timer;
   }
 
-//  void createImageFromSize(int width, int height,
-//                           IImageListener* listener,
-//                           bool autodelete) const {
-//    listener->imageCreated( new Image_iOS(width, height) );
-//    if (autodelete) {
-//      delete listener;
-//    }
-//  }
-
-  void createImageFromFileName(const std::string& filename,
-                               IImageListener* listener,
-                               bool autodelete) const {
-    NSString* fn = [NSString stringWithCppString: filename];
-
-    UIImage* image = [UIImage imageNamed:fn];
-    if (image) {
-      listener->imageCreated( new Image_iOS(image, NULL) );
-    }
-    else {
-      printf("Can't read image %s\n", filename.c_str());
-      listener->imageCreated( NULL );
-    }
-
-    if (autodelete) {
-      delete listener;
-    }
-  }
-
-  void createImageFromBuffer(const IByteBuffer* buffer,
-                             IImageListener* listener,
-                             bool autodelete) const {
-    ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
-
-    NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
-                                  length: buffer_iOS->size()];
-
-    UIImage* image = [UIImage imageWithData:data];
-    if (image) {
-      listener->imageCreated( new Image_iOS(image, data) );
-    }
-    else {
-      printf("Can't read image from IByteBuffer %s\n", buffer->description().c_str());
-      listener->imageCreated( NULL );
-    }
-
-    if (autodelete) {
-      delete listener;
-    }
-  }
-
   void deleteImage(const IImage* image) const {
     delete image;
   }

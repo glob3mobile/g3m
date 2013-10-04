@@ -45,29 +45,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
-  private MutableMatrix44D createTransformMatrix(Planet planet)
-  {
-  
-    double altitude = _position._height;
-    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
-    {
-      altitude += _surfaceElevation;
-    }
-  
-    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
-  
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-  
-  //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
-  
-    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
-  }
   private MutableMatrix44D getTransformMatrix(Planet planet)
   {
     if (_transformMatrix == null)
@@ -93,6 +70,32 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     if (_transformMatrix != null)
        _transformMatrix.dispose();
     _transformMatrix = null;
+  }
+
+
+
+  public final MutableMatrix44D createTransformMatrix(Planet planet)
+  {
+  
+    double altitude = _position._height;
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      altitude += _surfaceElevation;
+    }
+  
+    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
+  
+    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
+  
+    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
+    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
+    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+  
+  //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
+    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
+  
+    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
 
   public Shape(Geodetic3D position, AltitudeMode altitudeMode)
@@ -352,5 +355,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
   {
   }
+
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+
 
 }

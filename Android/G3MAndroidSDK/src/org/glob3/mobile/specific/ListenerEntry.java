@@ -17,7 +17,16 @@ import android.util.Log;
 
 public final class ListenerEntry {
 
-   final static String                   TAG = "Downloader_Android_ListenerEntry";
+   final static String                   TAG           = "Downloader_Android_ListenerEntry";
+
+   private static BitmapFactory.Options  _options;
+   private static byte[]                 _temp_storage = new byte[128 * 1024];
+
+   static {
+      _options = new BitmapFactory.Options();
+      _options.inTempStorage = _temp_storage;
+   }
+
 
    private boolean                       _canceled;
    private final long                    _requestId;
@@ -96,7 +105,10 @@ public final class ListenerEntry {
       }
       if (_imageListener != null) {
          final int __DGD_parse_bitmap_in_background;
-         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+         //         final long start = System.currentTimeMillis();
+         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+         //         ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
             _imageListener.onError(url);
@@ -117,7 +129,10 @@ public final class ListenerEntry {
          _bufferListener.onCanceledDownload(url, buffer, false);
       }
       if (_imageListener != null) {
-         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+         //         final long start = System.currentTimeMillis();
+         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+         //         ILogger.instance().logInfo(
+         //                  "DOWNLOADER - onCanceledDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
          }

@@ -156,6 +156,26 @@ _initialCameraPositionHasBeenSet(false)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
+
+  _renderContext = new G3MRenderContext(_frameTasksExecutor,
+                                        IFactory::instance(),
+                                        IStringUtils::instance(),
+                                        _threadUtils,
+                                        ILogger::instance(),
+                                        IMathUtils::instance(),
+                                        IJSONParser::instance(),
+                                        _planet,
+                                        _gl,
+                                        _currentCamera,
+                                        _nextCamera,
+                                        _texturesHandler,
+                                        _downloader,
+                                        _effectsScheduler,
+                                        IFactory::instance()->createTimer(),
+                                        _storage,
+                                        _gpuProgramManager,
+                                        _surfaceElevationProvider);
+
 }
 
 
@@ -204,6 +224,8 @@ G3MWidget* G3MWidget::create(GL*                              gl,
 
 G3MWidget::~G3MWidget() {
   delete _mainRendererState;
+  delete _renderContext;
+
   delete _userData;
 
   delete _planet;
@@ -363,7 +385,7 @@ void G3MWidget::render(int width, int height) {
     onResizeViewportEvent(_width, _height);
   }
 
-  if (!_initialCameraPositionHasBeenSet){
+  if (!_initialCameraPositionHasBeenSet) {
     _initialCameraPositionHasBeenSet = true;
 
     Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
@@ -418,32 +440,16 @@ void G3MWidget::render(int width, int height) {
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
-  G3MRenderContext rc(_frameTasksExecutor,
-                      IFactory::instance(),
-                      IStringUtils::instance(),
-                      _threadUtils,
-                      ILogger::instance(),
-                      IMathUtils::instance(),
-                      IJSONParser::instance(),
-                      _planet,
-                      _gl,
-                      _currentCamera,
-                      _nextCamera,
-                      _texturesHandler,
-                      _downloader,
-                      _effectsScheduler,
-                      IFactory::instance()->createTimer(),
-                      _storage,
-                      _gpuProgramManager,
-                      _surfaceElevationProvider);
 
   delete _mainRendererState;
-  _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(&rc) : RenderState::busy());
+  _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(_renderContext) : RenderState::busy());
   RenderState_Type renderStateType = _mainRendererState->_type;
 
-  _effectsScheduler->doOneCyle(&rc);
+  _renderContext->clear();
 
-  _frameTasksExecutor->doPreRenderCycle(&rc);
+  _effectsScheduler->doOneCyle(_renderContext);
+
+  _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
 
   Renderer* selectedRenderer;
@@ -465,35 +471,35 @@ void G3MWidget::render(int width, int height) {
 //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
-      _selectedRenderer->stop(&rc);
+      _selectedRenderer->stop(_renderContext);
     }
     _selectedRenderer = selectedRenderer;
-    _selectedRenderer->start(&rc);
+    _selectedRenderer->start(_renderContext);
   }
 
   _gl->clearScreen(*_backgroundColor);
 
-  if (_rootState == NULL){
+  if (_rootState == NULL) {
     _rootState = new GLState();
   }
 
 
   if (renderStateType == RENDER_READY) {
-    _cameraRenderer->render(&rc, _rootState);
+    _cameraRenderer->render(_renderContext, _rootState);
 
     _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
   }
 
   if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(&rc, _rootState);
+    _selectedRenderer->render(_renderContext, _rootState);
   }
 
-  std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
+  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
     const int orderedRenderablesCount = orderedRenderables->size();
     for (int i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(&rc);
+      orderedRenderable->render(_renderContext);
       delete orderedRenderable;
     }
   }
@@ -638,6 +644,13 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                           const Angle& toPitch,
                                           const bool linearTiming,
                                           const bool linearHeight) {
+
+  if (fromPosition.isEquals(toPosition) &&
+      fromHeading.isEquals(toHeading) &&
+      fromPitch.isEquals(toPitch)) {
+    return;
+  }
+
   double finalLatInDegrees = toPosition._latitude._degrees;
   double finalLonInDegrees = toPosition._longitude._degrees;
 
@@ -694,7 +707,7 @@ PlanetRenderer* G3MWidget::getPlanetRenderer() {
   return _mainRenderer->getPlanetRenderer();
 }
 
-void G3MWidget::setShownSector(const Sector& sector){
+void G3MWidget::setShownSector(const Sector& sector) {
   getPlanetRenderer()->setRenderedSector(sector);
   _initialCameraPositionHasBeenSet = false;
 }

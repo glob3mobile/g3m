@@ -16,5 +16,5 @@ public interface IGLTextureId
 
   String description();
 
-  public void dispose();
+  void dispose();
 }

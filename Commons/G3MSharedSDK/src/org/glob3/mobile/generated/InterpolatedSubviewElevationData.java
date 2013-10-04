@@ -23,8 +23,6 @@ public class InterpolatedSubviewElevationData extends SubviewElevationData
   public InterpolatedSubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent)
   {
      super(elevationData, sector, extent);
-    IMathUtils mu = IMathUtils.instance();
-
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
@@ -45,7 +43,7 @@ public class InterpolatedSubviewElevationData extends SubviewElevationData
 
         if (!_hasNoData)
         {
-          if (mu.isNan(height))
+          if ((height != height))
           {
             _hasNoData = true;
           }

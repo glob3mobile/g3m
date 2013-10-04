@@ -48,13 +48,13 @@ DebugTileRasterizer::~DebugTileRasterizer() {
 std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
-  isb->addInt( tile->getLevel() );
+  isb->addInt( tile->_level );
 
   isb->addString(", C:");
-  isb->addInt( tile->getColumn() );
+  isb->addInt( tile->_column );
 
   isb->addString(", R:");
-  isb->addInt( tile->getRow() );
+  isb->addInt( tile->_row );
 
   const std::string s = isb->getString();
   delete isb;
@@ -104,7 +104,7 @@ void DebugTileRasterizer::rawRasterize(const IImage* image,
     ColumnCanvasElement col;
     col.add( new TextCanvasElement(getTileKeyLabel(tile), _font, _color) );
 
-    const Sector sectorTile = tile->getSector();
+    const Sector sectorTile = tile->_sector;
     col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
     col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
     col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );

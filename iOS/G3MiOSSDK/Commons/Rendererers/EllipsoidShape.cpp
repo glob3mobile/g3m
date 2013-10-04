@@ -24,6 +24,7 @@
 #include "MercatorUtils.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
+  delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
   
@@ -212,7 +213,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              Vector3D(_radiusX, _radiusY, _radiusZ)
+                                              _ellipsoid->getRadii()
                                               ));
   const Sector sector(Sector::fullSphere());
 
@@ -234,7 +235,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
       vertices.add(innerPoint);
 
-      if (_withNormals){
+      if (_withNormals) {
         Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
         normals.add(n);
       }
@@ -256,4 +257,14 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
   
   return surfaceMesh;
+}
+
+
+std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
+                                           const Vector3D& direction) const {
+//  MutableMatrix44D* M = createTransformMatrix(_planet);
+//  const Quadric transformedQuadric = _quadric.transformBy(*M);
+//  delete M;
+//  return transformedQuadric.intersectionsDistances(origin, direction);
+  return std::vector<double>();
 }

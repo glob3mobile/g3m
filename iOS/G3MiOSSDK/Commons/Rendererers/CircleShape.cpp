@@ -33,7 +33,7 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
 
-  if (_useNormals){
+  if (_useNormals) {
 
     FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     for (int i = 0; i <= _steps+1; i++) {
