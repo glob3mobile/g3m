@@ -255,36 +255,56 @@ wants.
 
 There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them:
 
-![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
-![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
-![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
-![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/pointcloud.png)
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/wbdata.png)
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/lwmining2.png)
+
+###WebGL Demos
+
++ <a href="http://galileo.glob3mobile.com" >Galileo</a>
++ <a href="http://owmg.glob3mobile.com/">Open Weather Map</a>
++ <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
++ <a href="http://meteorite.glob3mobile.com">Meteorite</a>
++ <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
+
 
 Videos
 ======
 
-
-
-+ <a href"http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
-+ <a href"http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
-+ <a href"http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
-+ <a href"http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>
-+ <a href"http://www.youtube.com/embed/Nk_yc81sU44?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Mobile</a>
-+ <a href"http://www.youtube.com/embed/bbMo2iH8Tfs?feature=player_detailpage" frameborder="0" allowfullscreen>Streaming point clouds Desktop devices</a>
-
++ <a href="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
++ <a href="http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
++ <a href="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
++ <a href="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>
++ <a href="http://www.youtube.com/embed/Nk_yc81sU44?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Mobile</a>
++ <a href="http://www.youtube.com/embed/bbMo2iH8Tfs?feature=player_detailpage" frameborder="0" allowfullscreen>Streaming point clouds Desktop devices</a>
 
 
 Architecture
 ============ 
 
+The G3M architecture has been created to have a Multiplatform API creating the fewest possible amount of source code.
+We have developed a core in C++ that is translated to Java (to work on Android devices) and later is translated to GWT (HTML5 - Javascript)
+In every platform there are some libraries that must be developed in the diferent prgramming languages, this classes are declared as abstract and must be developed individually for every platform.
+The result is that we have a native API on IOS, Android and webGL and we can  easily add new platforms when it was needed. 
+
+![Rasterizing labels](https://dl.dropboxusercontent.com/u/20446978/wiki-github/arch.png)
+
+Slides
+======
+
++ <a href="http://prezi.com/3ziicw6amq1k/?utm_campaign=share&utm_medium=copy" >Notthingam FOSS4G 2013</a>
++ <a href="https://docs.google.com/presentation/d/1jVjls2m6yFb3j2_-VRWRonGIFk7TrXr3rjEgurBFJcE/edit?usp=sharing" >G3M Capabilities</a>
+
+
 Roadpmap
 ========
+
+Our roadmap is changing continously, and we are open to change the order of new development according the requests of our users.
+
 ##Near (weeks)
 
 + GPS Support
 + MBTiles
 + CartoCSS extension for 3d symbolization
-
 
 ##After (months)
 
