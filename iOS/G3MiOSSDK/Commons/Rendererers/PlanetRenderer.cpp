@@ -723,9 +723,8 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
 
         int _DGG_At_Work;
         const int terrainTouchListenersSize = _terrainTouchListeners.size();
-        // for (int i = 0; i < terrainTouchListenersSize; i++) {
-        for (int i = terrainTouchListenersSize-1; i >= 0; i--) {
-          TerrainTouchListener* listener = _terrainTouchListeners[i];
+        for (int j = terrainTouchListenersSize-1; j >= 0; j--) {
+          TerrainTouchListener* listener = _terrainTouchListeners[j];
           if (listener->onTerrainTouch(ec, _lastCamera, position, tile)) {
             return true;
           }
