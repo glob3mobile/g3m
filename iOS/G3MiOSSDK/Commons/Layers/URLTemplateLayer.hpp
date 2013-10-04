@@ -18,7 +18,7 @@ private:
   const bool        _isTransparent;
 
   const IStringUtils* _su;
-  const IMathUtils*   _mu;
+  mutable const IMathUtils*   _mu;
 
   URLTemplateLayer(const std::string&                urlTemplate,
                    const Sector&                     sector,

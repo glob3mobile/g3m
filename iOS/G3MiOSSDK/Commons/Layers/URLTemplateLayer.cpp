@@ -32,7 +32,7 @@ _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
 _su(IStringUtils::instance()),
-_mu(IMathUtils::instance())
+_mu(NULL)
 {
 
 }
@@ -91,6 +91,11 @@ URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 const std::string URLTemplateLayer::getPath(const Tile* tile,
                                             const Sector& sector) const {
+
+  if (_mu == NULL) {
+    _mu = IMathUtils::instance();
+  }
+
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 
   const int level   = tile->_level;
