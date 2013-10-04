@@ -212,7 +212,7 @@ the latest version of the API but is a good getting started to test G3M.
 <table>
   <tr>
     <td>[iOS]  (https://itunes.apple.com/es/app/g3m/id601442573?mt=8#) </td>
-    <td>[https://play.google.com/store/apps/details?id=org.glob3.mobile.demo] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android) </td>
+    <td> <a href="https://play.google.com/store/apps/details?id=org.glob3.mobile.demo" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/android"></a></td>
     <td>[Amazon] (http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE) </td>
   </tr>
 </table>
