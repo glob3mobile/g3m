@@ -78,8 +78,9 @@ public:
   
   Layer* getLayer(int index) const;
   
-  Layer* getLayer(const std::string& name) const;
-  
+  Layer* getLayerByName(const std::string& name) const;
+  Layer* getLayerByTitle(const std::string& title) const;
+
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
   
   //  const Angle calculateSplitLatitude(const Tile* tile) const;
@@ -87,6 +88,8 @@ public:
   bool isEquals(const LayerSet* that) const;
 
   void takeLayersFrom(LayerSet* that);
+
+  void disableAllLayers();
   
 };
 

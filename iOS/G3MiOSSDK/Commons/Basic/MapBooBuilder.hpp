@@ -43,6 +43,7 @@ class G3MEventContext;
 class Camera;
 class Tile;
 class MarksRenderer;
+class MapBooBuilder;
 
 #include <vector>
 #include <string>
@@ -81,6 +82,12 @@ public:
   virtual void onWebSocketOpen(const G3MContext* context) = 0;
 
   virtual void onWebSocketClose(const G3MContext* context) = 0;
+
+  virtual void onTerrainTouch(MapBooBuilder*         builder,
+                              const G3MEventContext* ec,
+                              const Camera*          camera,
+                              const Geodetic3D&      position,
+                              const Tile*            tile) = 0;
 
 };
 
@@ -503,7 +510,11 @@ public:
                       const Geodetic3D&      position,
                       const Tile*            tile);
   
-  
+
+  void sendNotification(const Camera*      camera,
+                        const Geodetic3D&  position,
+                        const std::string& message) const;
+
   void changeScene(int sceneIndex);
   
   void changeScene(const MapBoo_Scene* scene);

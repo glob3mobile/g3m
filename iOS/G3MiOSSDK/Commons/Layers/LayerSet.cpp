@@ -108,14 +108,30 @@ Layer* LayerSet::getLayer(int index) const {
   return NULL;
 }
 
-Layer* LayerSet::getLayer(const std::string& name) const {
+void LayerSet::disableAllLayers() {
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    _layers[i]->setEnable(false);
+  }
+}
+
+Layer* LayerSet::getLayerByName(const std::string& name) const {
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     if (_layers[i]->getName() == name) {
       return _layers[i];
     }
   }
+  return NULL;
+}
 
+Layer* LayerSet::getLayerByTitle(const std::string& title) const {
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    if (_layers[i]->getTitle() == title) {
+      return _layers[i];
+    }
+  }
   return NULL;
 }
 

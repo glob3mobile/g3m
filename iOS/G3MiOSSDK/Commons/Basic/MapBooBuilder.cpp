@@ -348,23 +348,29 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      c
   return s;
 }
 
+void MapBooBuilder::sendNotification(const Camera*      camera,
+                                     const Geodetic3D&  position,
+                                     const std::string& message) const {
+  if ((_webSocket != NULL) && _isApplicationTubeOpen) {
+    _webSocket->send( getSendNotificationCommand(camera,
+                                                 position,
+                                                 message) );
+  }
+  else {
+    ILogger::instance()->logError("Can't send notification, websocket disconnected");
+  }
+}
+
 bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
                                    const Camera*          camera,
                                    const Geodetic3D&      position,
                                    const Tile*            tile) {
-
-//  if (_applicationListener == NULL) {
-//    return false;
-//  }
-
-  if ((_webSocket != NULL) && _isApplicationTubeOpen) {
-    int _DGD_At_Work;
-    _webSocket->send( getSendNotificationCommand(camera,
-                                                 position,
-                                                 "Hello \"3D\" world!") );
-  }
-  else {
-    ILogger::instance()->logError("Can't fire the notification event");
+  if (_applicationListener != NULL) {
+    _applicationListener->onTerrainTouch(this,
+                                         ec,
+                                         camera,
+                                         position,
+                                         tile);
   }
 
   return true;

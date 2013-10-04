@@ -24,5 +24,7 @@ MapBoxLayer* MapBoxLayer::copy() const {
   return new MapBoxLayer(_mapKey,
                          TimeInterval::fromMilliseconds(_timeToCacheMS),
                          _readExpired,
+                         _initialLevel,
+                         _maxLevel,
                          (_condition == NULL) ? NULL : _condition->copy());
 }

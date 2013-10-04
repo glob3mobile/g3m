@@ -62,6 +62,14 @@ const std::string Layer::getName() {
   return _name;
 }
 
+const std::string Layer::getTitle() const {
+  return _title;
+}
+
+void Layer::getTitle(const std::string& title) {
+  _title = title;
+}
+
 void Layer::setParameters(const LayerTilesRenderParameters* parameters) {
   if (parameters != _parameters) {
     delete _parameters;

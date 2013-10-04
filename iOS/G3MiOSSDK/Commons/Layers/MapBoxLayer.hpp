@@ -41,7 +41,8 @@ public:
   MapBoxLayer(const std::string& mapKey,
               const TimeInterval& timeToCache,
               bool readExpired = true,
-              //int initialMapBoxLevel = 1,
+              int initialLevel = 1,
+              int maxLevel = 19,
               LayerCondition* condition = NULL) :
   MercatorTiledLayer("MapBoxLayer",
                      "http://",
@@ -51,8 +52,8 @@ public:
                      timeToCache,
                      readExpired,
                      Sector::fullSphere(),
-                     1, //initialMapBoxLevel,
-                     19,
+                     initialLevel,
+                     maxLevel,
                      condition),
   _mapKey(mapKey)
   {

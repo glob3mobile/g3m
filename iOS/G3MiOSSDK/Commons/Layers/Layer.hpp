@@ -48,6 +48,8 @@ protected:
 
   void notifyChanges() const;
 
+  std::string _title;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
@@ -59,7 +61,8 @@ protected:
   _timeToCacheMS(timeToCache.milliseconds()),
   _readExpired(readExpired),
   _enable(true),
-  _parameters(parameters)
+  _parameters(parameters),
+  _title("")
   {
 
   }
@@ -147,6 +150,11 @@ public:
   bool isEquals(const Layer* that) const;
   
   virtual Layer* copy() const = 0;
+
+
+  const std::string getTitle() const;
+
+  void getTitle(const std::string& title);
   
 };
 
