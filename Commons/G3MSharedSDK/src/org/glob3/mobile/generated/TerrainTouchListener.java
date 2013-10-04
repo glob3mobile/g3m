@@ -16,7 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
-public class TerrainTouchListener
+public interface TerrainTouchListener
 {
   public void dispose();
+
+  boolean onTerrainTouch();
+
 }
