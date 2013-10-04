@@ -261,6 +261,10 @@ public:
   {
   }
 
+  ~MapBooBuilder_TerrainTouchListener() {
+
+  }
+
   bool onTerrainTouch(const G3MEventContext* ec,
                       const Camera*          camera,
                       const Geodetic3D&      position,
