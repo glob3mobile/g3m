@@ -17,6 +17,9 @@ public:
 #ifdef JAVA_CODE
   public void dispose();
 #endif
+
+  virtual bool onTerrainTouch() = 0;
+
 };
 
 #endif
