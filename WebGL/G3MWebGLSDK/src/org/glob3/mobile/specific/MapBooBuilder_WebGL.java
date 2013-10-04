@@ -27,8 +27,8 @@ public class MapBooBuilder_WebGL
                               final String sceneId,
                               final MapBoo_ViewType viewType,
                               final MapBooApplicationChangeListener applicationListener,
-                              final boolean activateNotifications) {
-      super(serverURL, tubesURL, sceneId, viewType, applicationListener, activateNotifications);
+                              final boolean enableNotifications) {
+      super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications);
       _nativeWidget = new G3MWidget_WebGL();
    }
 

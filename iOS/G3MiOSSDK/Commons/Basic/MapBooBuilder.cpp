@@ -184,7 +184,7 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const std::string& applicationId,
                              MapBoo_ViewType viewType,
                              MapBooApplicationChangeListener* applicationListener,
-                             bool activateNotifications) :
+                             bool enableNotifications) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _applicationId(applicationId),
@@ -201,7 +201,7 @@ _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
 _applicationListener(applicationListener),
-_activateNotifications(activateNotifications),
+_enableNotifications(enableNotifications),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
@@ -407,7 +407,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               texturePriority,
                                               renderedSector);
 
-  if (_activateNotifications) {
+  if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
   }
 
@@ -749,9 +749,11 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
           setApplicationCurrentSceneIndex( (int) jsonCurrentSceneIndex->value() );
         }
 
-        const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
-        if (jsonNotification != NULL) {
-          setApplicationNotification( parseNotification(jsonNotification) );
+        if (_enableNotifications) {
+          const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
+          if (jsonNotification != NULL) {
+            setApplicationNotification( parseNotification(jsonNotification) );
+          }
         }
       }
       else {

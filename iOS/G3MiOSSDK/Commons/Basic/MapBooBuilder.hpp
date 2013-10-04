@@ -313,7 +313,7 @@ private:
 
   MapBooApplicationChangeListener* _applicationListener;
 
-  const bool _activateNotifications;
+  const bool _enableNotifications;
 
   std::string                _applicationId;
   std::string                _applicationName;
@@ -419,7 +419,7 @@ protected:
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* applicationListener,
-                bool activateNotifications);
+                bool enableNotifications);
 
   virtual ~MapBooBuilder();
 
