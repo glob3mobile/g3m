@@ -212,7 +212,10 @@ the latest version of the API but is a good getting started to test G3M.
 <br>[iOS]  (https://itunes.apple.com/es/app/g3m/id601442573?mt=8#) </br>
 <br>[Android Play] (https://play.google.com/store/apps/details?id=org.glob3.mobile.demo) </br>
 <br>[Amazon] (http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE) </br>
-+ Another app
++ [Open Weather Map App](http://owmgapp.glob3mobile.com). Proof of concept of app developed to consume open data from an interesting API.
+Open Weather Map (http://www.openweathermap.org) has realtime weather data that is changing all the time, in this app the cache is only used
+for the base layer, all the other layers are changing dinamically when ther servers change. G3M allows the cache managemente exactly developer
+wants.
 + Another more
 
 
