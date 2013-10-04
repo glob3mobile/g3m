@@ -251,7 +251,9 @@ wants.
   </tr>
 </table>
 
-###There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them.
+###Other projects:
+
+There are another different projects developed that are used for demo purpose and that projects are not in the app stores. Below some screenshots of some of them.
 
 
 
