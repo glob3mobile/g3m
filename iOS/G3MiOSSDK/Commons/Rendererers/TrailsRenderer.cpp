@@ -19,7 +19,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Camera.hpp"
 
-#define MAX_POSITIONS_PER_SEGMENT 64
+#define MAX_POSITIONS_PER_SEGMENT 256
 
 TrailSegment::~TrailSegment() {
   delete _previousSegmentLastPosition;
