@@ -262,13 +262,15 @@ There are another different projects developed that are used for demo purpose an
 
 Videos
 ======
-![Rasterizing labels](http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage)
-<iframe width="640" height="360" src="<" frameborder="0" allowfullscreen></iframe>
-<iframe width="640" height="360" src="http://youtu.be/kEep7i0ZurE?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-<iframe width="640" height="360" src="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-<iframe width="640" height="360" src="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-<iframe width="640" height="360" src="http://www.youtube.com/embed/Nk_yc81sU44?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-<iframe width="640" height="360" src="http://www.youtube.com/embed/bbMo2iH8Tfs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+
+
+
++ <a href"http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
++ <a href"http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
++ <a href"http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
++ <a href"http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>
++ <a href"http://www.youtube.com/embed/Nk_yc81sU44?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Mobile</a>
++ <a href"http://www.youtube.com/embed/bbMo2iH8Tfs?feature=player_detailpage" frameborder="0" allowfullscreen>Streaming point clouds Desktop devices</a>
 
 
 
