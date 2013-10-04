@@ -17,6 +17,7 @@ class VisibleSectorListenerEntry;
 class VisibleSectorListener;
 class ElevationDataProvider;
 class LayerTilesRenderParameters;
+class TerrainTouchListener;
 
 #include "IStringBuilder.hpp"
 #include "LeafRenderer.hpp"
@@ -282,6 +283,8 @@ private:
   Sector* _renderedSector;
   bool _validLayerTilesRenderParameters;
 
+  std::vector<TerrainTouchListener*> _terrainTouchListeners;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -427,6 +430,8 @@ public:
   }
 
   void setRenderedSector(const Sector& sector);
+
+  void addTerrainTouchListener(TerrainTouchListener* listener);
 
 };
 
