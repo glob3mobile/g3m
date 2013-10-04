@@ -768,7 +768,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
   if (_marksRenderer != NULL) {
     const std::string message = notification->_message;
-    if (!message.empty()) {
+    if (message.size() > 0) {
       const Geodetic2D position = notification->_position;
       _marksRenderer->addMark( new Mark(message,
                                         Geodetic3D(position, 0),
