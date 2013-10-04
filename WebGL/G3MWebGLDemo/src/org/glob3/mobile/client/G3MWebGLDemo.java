@@ -65,6 +65,8 @@ import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LayerTouchEvent;
+import org.glob3.mobile.generated.LayerTouchEventListener;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
@@ -87,8 +89,6 @@ import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TerrainTouchEvent;
-import org.glob3.mobile.generated.TerrainTouchEventListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -1113,11 +1113,11 @@ public class G3MWebGLDemo
                   TimeInterval.fromDays(30), // time interval to cache
                   true); // read expired
          layerSet.addLayer(osm);
-         osm.addTerrainTouchEventListener(new TerrainTouchEventListener() {
+         osm.addLayerTouchEventListener(new LayerTouchEventListener() {
 
             @Override
             public boolean onTerrainTouch(final G3MEventContext context,
-                                          final TerrainTouchEvent ev) {
+                                          final LayerTouchEvent ev) {
                final Geodetic3D position = ev.getPosition();
                Window.alert("touching terrain on osm layer " + Double.toString(position._latitude._degrees) + ","
                             + Double.toString(position._longitude._degrees));

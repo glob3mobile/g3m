@@ -253,8 +253,6 @@ public class LayerSet
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
-  
-  
     for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
@@ -262,7 +260,7 @@ public class LayerSet
       {
         LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
-        if (layer.onTerrainTouchEventListener(ec, tte))
+        if (layer.onLayerTouchEventListener(ec, tte))
         {
           return true;
         }

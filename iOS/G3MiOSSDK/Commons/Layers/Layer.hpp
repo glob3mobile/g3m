@@ -118,8 +118,8 @@ public:
     _listeners.push_back(listener);
   }
 
-  bool onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   const LayerTouchEvent& tte) const {
+  bool onLayerTouchEventListener(const G3MEventContext* ec,
+                                 const LayerTouchEvent& tte) const {
     const int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++) {
       LayerTouchEventListener* listener = _listeners[i];
@@ -145,7 +145,7 @@ public:
   virtual const std::string description() const = 0;
 
   bool isEquals(const Layer* that) const;
-
+  
   virtual Layer* copy() const = 0;
   
 };
