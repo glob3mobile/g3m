@@ -42,6 +42,7 @@ class SceneLighting;
 class G3MEventContext;
 class Camera;
 class Tile;
+class MarksRenderer;
 
 #include <vector>
 #include <string>
@@ -407,6 +408,10 @@ private:
   MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
 
   void setApplicationNotification(MapBoo_Notification* notification);
+
+
+  MarksRenderer* _marksRenderer;
+  MarksRenderer* getMarksRenderer();
 
 protected:
   MapBooBuilder(const URL& serverURL,

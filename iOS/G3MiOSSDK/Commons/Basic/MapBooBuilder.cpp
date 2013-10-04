@@ -44,6 +44,8 @@
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "TerrainTouchListener.hpp"
+#include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 
 const std::string MapBoo_CameraPosition::description() const {
@@ -205,7 +207,8 @@ _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
 _lastApplicationCurrentSceneIndex(-1),
 _context(NULL),
-_webSocket(NULL)
+_webSocket(NULL),
+_marksRenderer(NULL)
 {
 
 }
@@ -763,10 +766,24 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 }
 
 void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
-
-  const Geodetic2D             position       = notification->_position;
-  const std::string            message        = notification->_message;
-  const MapBoo_CameraPosition* cameraPosition = notification->_cameraPosition;
+  if (_marksRenderer != NULL) {
+    const std::string message = notification->_message;
+    if (!message.empty()) {
+      const Geodetic2D position = notification->_position;
+      _marksRenderer->addMark( new Mark(message,
+                                        Geodetic3D(position, 0),
+                                        ABSOLUTE,
+                                        0) );
+    }
+    
+    const MapBoo_CameraPosition* cameraPosition = notification->_cameraPosition;
+    if (cameraPosition != NULL) {
+      _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                            cameraPosition->getPosition(),
+                                            cameraPosition->getHeading(),
+                                            cameraPosition->getPitch());
+    }
+  }
 
   delete notification;
 }
@@ -1023,6 +1040,13 @@ Color MapBooBuilder::getCurrentBackgroundColor() {
   return (scene == NULL) ? Color::black() : scene->getBackgroundColor();
 }
 
+MarksRenderer* MapBooBuilder::getMarksRenderer() {
+  if (_marksRenderer == NULL) {
+    _marksRenderer = new MarksRenderer(false);
+  }
+  return _marksRenderer;
+}
+
 G3MWidget* MapBooBuilder::create() {
   if (_g3mWidget != NULL) {
     ILogger::instance()->logError("The G3MWidget was already created, can't be created more than once");
@@ -1034,6 +1058,8 @@ G3MWidget* MapBooBuilder::create() {
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
   mainRenderer->addRenderer(planetRenderer);
+
+  mainRenderer->addRenderer(getMarksRenderer());
 
   std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
 
