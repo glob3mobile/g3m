@@ -328,7 +328,7 @@ public class LayerSet
     return null;
   }
 
-  public final Layer getLayer(String name)
+  public final Layer getLayerByName(String name)
   {
     final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
@@ -338,7 +338,18 @@ public class LayerSet
         return _layers.get(i);
       }
     }
-  
+    return null;
+  }
+  public final Layer getLayerByTitle(String title)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      if (title.equals(_layers.get(i).getTitle()))
+      {
+        return _layers.get(i);
+      }
+    }
     return null;
   }
 
@@ -401,6 +412,15 @@ public class LayerSet
     for (int i = 0; i < thatSize; i++)
     {
       addLayer(thatLayers.get(i));
+    }
+  }
+
+  public final void disableAllLayers()
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      _layers.get(i).setEnable(false);
     }
   }
 

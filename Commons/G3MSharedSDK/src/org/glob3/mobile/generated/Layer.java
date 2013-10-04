@@ -49,6 +49,8 @@ public abstract class Layer
     }
   }
 
+  protected String _title;
+
   protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
@@ -58,6 +60,7 @@ public abstract class Layer
      _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;
+     _title = "";
 
   }
 
@@ -266,5 +269,16 @@ public abstract class Layer
   }
 
   public abstract Layer copy();
+
+
+  public final String getTitle()
+  {
+    return _title;
+  }
+
+  public final void getTitle(String title)
+  {
+    _title = title;
+  }
 
 }

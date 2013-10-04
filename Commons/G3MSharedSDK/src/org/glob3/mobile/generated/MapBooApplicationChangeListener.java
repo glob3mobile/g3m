@@ -49,6 +49,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Tile;
 //class MarksRenderer;
+//class MapBooBuilder;
 
 
 
@@ -75,5 +76,7 @@ public abstract class MapBooApplicationChangeListener
   public abstract void onWebSocketOpen(G3MContext context);
 
   public abstract void onWebSocketClose(G3MContext context);
+
+  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile);
 
 }
