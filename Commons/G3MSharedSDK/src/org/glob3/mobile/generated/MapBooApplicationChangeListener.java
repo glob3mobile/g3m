@@ -48,6 +48,7 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class Camera;
 //class Tile;
+//class MarksRenderer;
 
 
 

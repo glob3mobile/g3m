@@ -563,13 +563,35 @@ public abstract class MapBooBuilder
 
   private void setApplicationNotification(MapBoo_Notification notification)
   {
+    if (_marksRenderer != null)
+    {
+      final String message = notification._message;
+      if (!message.length() == 0)
+      {
+        final Geodetic2D position = notification._position;
+        _marksRenderer.addMark(new Mark(message, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
+      }
   
-    final Geodetic2D position = notification._position;
-    final String message = notification._message;
-    final MapBoo_CameraPosition cameraPosition = notification._cameraPosition;
+      final MapBoo_CameraPosition cameraPosition = notification._cameraPosition;
+      if (cameraPosition != null)
+      {
+        _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+      }
+    }
   
     if (notification != null)
        notification.dispose();
+  }
+
+
+  private MarksRenderer _marksRenderer;
+  private MarksRenderer getMarksRenderer()
+  {
+    if (_marksRenderer == null)
+    {
+      _marksRenderer = new MarksRenderer(false);
+    }
+    return _marksRenderer;
   }
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean activateNotifications)
@@ -597,6 +619,7 @@ public abstract class MapBooBuilder
      _lastApplicationCurrentSceneIndex = -1;
      _context = null;
      _webSocket = null;
+     _marksRenderer = null;
   
   }
 
@@ -642,6 +665,8 @@ public abstract class MapBooBuilder
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
     mainRenderer.addRenderer(planetRenderer);
+  
+    mainRenderer.addRenderer(getMarksRenderer());
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
   
