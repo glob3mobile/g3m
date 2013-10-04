@@ -1036,24 +1036,26 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final boolean onTerrainTouch(G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile)
   {
-  
-  //  if (_applicationListener == NULL) {
-  //    return false;
-  //  }
-  
-    if ((_webSocket != null) && _isApplicationTubeOpen)
+    if (_applicationListener != null)
     {
-      int _DGD_At_Work;
-      _webSocket.send(getSendNotificationCommand(camera, position, "Hello \"3D\" world!"));
-    }
-    else
-    {
-      ILogger.instance().logError("Can't fire the notification event");
+      _applicationListener.onTerrainTouch(this, ec, camera, position, tile);
     }
   
     return true;
   }
 
+
+  public final void sendNotification(Camera camera, Geodetic3D position, String message)
+  {
+    if ((_webSocket != null) && _isApplicationTubeOpen)
+    {
+      _webSocket.send(getSendNotificationCommand(camera, position, message));
+    }
+    else
+    {
+      ILogger.instance().logError("Can't send notification, websocket disconnected");
+    }
+  }
 
   public final void changeScene(int sceneIndex)
   {
