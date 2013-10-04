@@ -12,5 +12,5 @@ public interface IGLUniformID
 {
   boolean isValid();
 
-  public void dispose();
+  void dispose();
 }

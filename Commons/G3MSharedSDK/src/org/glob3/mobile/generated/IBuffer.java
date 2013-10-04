@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 public interface IBuffer
 {
-  public void dispose();
+  void dispose();
 
   /**
    Answer the size (the count of elements) of the buffer

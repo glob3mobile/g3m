@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 
 public interface IElevationDataListener
 {
-  public void dispose();
+  void dispose();
 
   /**
    Callback method for ElevationData creation. Pointer is owned by Listener

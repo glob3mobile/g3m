@@ -5,7 +5,7 @@ package org.glob3.mobile.generated;
 //  virtual ~IStorageImageListener() { }
 ///#endif
 ///#ifdef JAVA_CODE
-//  public void dispose();
+//  void dispose();
 ///#endif
 //
 //  /**

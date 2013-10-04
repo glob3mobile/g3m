@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 public interface TerrainTouchListener
 {
-  public void dispose();
+  void dispose();
 
   boolean onTerrainTouch(G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile);
 
