@@ -43,6 +43,8 @@
 #include "SceneLighting.hpp"
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"
+#include "TerrainTouchListener.hpp"
+
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -179,7 +181,8 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const URL& tubesURL,
                              const std::string& applicationId,
                              MapBoo_ViewType viewType,
-                             MapBooApplicationChangeListener* applicationListener) :
+                             MapBooApplicationChangeListener* applicationListener,
+                             bool activateNotifications) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _applicationId(applicationId),
@@ -196,6 +199,7 @@ _threadUtils(NULL),
 _layerSet( new LayerSet() ),
 _downloader(NULL),
 _applicationListener(applicationListener),
+_activateNotifications(activateNotifications),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
 _applicationCurrentSceneIndex(-1),
@@ -246,6 +250,119 @@ GL* MapBooBuilder::getGL() {
   return _gl;
 }
 
+
+class MapBooBuilder_TerrainTouchListener : public TerrainTouchListener {
+private:
+  MapBooBuilder* _mapBooBuilder;
+
+public:
+  MapBooBuilder_TerrainTouchListener(MapBooBuilder* mapBooBuilder) :
+  _mapBooBuilder(mapBooBuilder)
+  {
+  }
+
+  bool onTerrainTouch(const G3MEventContext* ec,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile) {
+    return _mapBooBuilder->onTerrainTouch(ec,
+                                          camera,
+                                          position,
+                                          tile);
+  }
+};
+
+const std::string MapBooBuilder::escapeString(const std::string& str) const {
+  const IStringUtils* su = IStringUtils::instance();
+
+  return su->replaceSubstring(str, "\"", "\\\"");
+}
+
+const std::string MapBooBuilder::toCameraPositionJSON(const Camera* camera) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("{");
+
+  const Geodetic3D position = camera->getGeodeticPosition();
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"height\":");
+  isb->addDouble( position._height );
+
+  isb->addString(",\"heading\":");
+  isb->addDouble( camera->getHeading()._degrees );
+
+  isb->addString(",\"pitch\":");
+  isb->addDouble( camera->getPitch()._degrees );
+
+  isb->addString(",\"animated\":");
+  isb->addBool( true );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+
+}
+
+const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      camera,
+                                                            const Geodetic3D&  position,
+                                                            const std::string& message) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("notification=");
+
+  isb->addString("{");
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"message\":");
+  isb->addString("\"");
+  isb->addString( escapeString(message) );
+  isb->addString("\"");
+
+  isb->addString(",\"cameraPosition\":");
+  isb->addString( toCameraPositionJSON(camera) );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
+                                   const Camera*          camera,
+                                   const Geodetic3D&      position,
+                                   const Tile*            tile) {
+
+//  if (_applicationListener == NULL) {
+//    return false;
+//  }
+
+  if ((_webSocket != NULL) && _isApplicationTubeOpen) {
+    int _DGD_At_Work;
+    _webSocket->send( getSendNotificationCommand(camera,
+                                                 position,
+                                                 "Hello \"3D\" world!") );
+  }
+  else {
+    ILogger::instance()->logError("Can't fire the notification event");
+  }
+
+  return true;
+}
+
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
 
@@ -272,16 +389,22 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   int TODO_CHECK_MAPBOO_FULLSPHERE;
   const Sector renderedSector = Sector::fullSphere();
 
-  return new PlanetRenderer(tessellator,
-                            elevationDataProvider,
-                            verticalExaggeration,
-                            texturizer,
-                            tileRasterizer,
-                            _layerSet,
-                            parameters,
-                            showStatistics,
-                            texturePriority,
-                            renderedSector);
+  PlanetRenderer* result = new PlanetRenderer(tessellator,
+                                              elevationDataProvider,
+                                              verticalExaggeration,
+                                              texturizer,
+                                              tileRasterizer,
+                                              _layerSet,
+                                              parameters,
+                                              showStatistics,
+                                              texturePriority,
+                                              renderedSector);
+
+  if (_activateNotifications) {
+    result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
+  }
+
+  return result;
 }
 
 const Planet* MapBooBuilder::createPlanet() {
@@ -545,6 +668,17 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           hasWarnings);
 }
 
+MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObject) const {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  return new MapBoo_Notification(Geodetic2D::fromDegrees(jsonObject->getAsNumber("latitude",  0),
+                                                         jsonObject->getAsNumber("longitude", 0)),
+                                 jsonObject->getAsString("message", ""),
+                                 parseCameraPosition( jsonObject->getAsObject("cameraPosition") ));
+}
+
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
@@ -607,16 +741,30 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
         if (jsonCurrentSceneIndex != NULL) {
           setApplicationCurrentSceneIndex( (int) jsonCurrentSceneIndex->value() );
         }
+
+        const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
+        if (jsonNotification != NULL) {
+          setApplicationNotification( parseNotification(jsonNotification) );
+        }
       }
       else {
         ILogger::instance()->logError("Server Error: %s",
                                       jsonError->value().c_str());
       }
     }
-    
+
     delete jsonBaseObject;
   }
-  
+
+}
+
+void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
+
+  const Geodetic2D             position       = notification->_position;
+  const std::string            message        = notification->_message;
+  const MapBoo_CameraPosition* cameraPosition = notification->_cameraPosition;
+
+  delete notification;
 }
 
 void MapBooBuilder::setApplicationCurrentSceneIndex(int sceneIndex) {
@@ -828,7 +976,7 @@ const URL MapBooBuilder::createApplicationRestURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-//  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
+  //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
 
   return URL(path, false);
 }
@@ -927,15 +1075,15 @@ int MapBooBuilder::getApplicationTimestamp() const {
 }
 
 void MapBooBuilder::saveApplicationData() const {
-//  std::string                _applicationId;
-//  std::string                _applicationName;
-//  std::string                _applicationWebsite;
-//  std::string                _applicationEMail;
-//  std::string                _applicationAbout;
-//  int                        _applicationTimestamp;
-//  std::vector<MapBoo_Scene*> _applicationScenes;
-//  int                        _applicationCurrentSceneIndex;
-//  int                        _lastApplicationCurrentSceneIndex;
+  //  std::string                _applicationId;
+  //  std::string                _applicationName;
+  //  std::string                _applicationWebsite;
+  //  std::string                _applicationEMail;
+  //  std::string                _applicationAbout;
+  //  int                        _applicationTimestamp;
+  //  std::vector<MapBoo_Scene*> _applicationScenes;
+  //  int                        _applicationCurrentSceneIndex;
+  //  int                        _lastApplicationCurrentSceneIndex;
   int __DGD_at_work;
 }
 
