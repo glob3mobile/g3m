@@ -211,9 +211,9 @@ and mapboo publish to different stores. Try it!
 the latest version of the API but is a good getting started to test G3M.
 <table>
   <tr>
-    <td><a href="https://itunes.apple.com/es/app/g3m/id601442573?mt=8#" ></img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.png"></a></td>
-    <td> <a href="https://play.google.com/store/apps/details?id=org.glob3.mobile.demo"></img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
-    <td><a href="http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE"> </img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/amazon.png"></a></td>
+    <td><a href="https://itunes.apple.com/es/app/g3m/id601442573?mt=8#" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.png"></a></td>
+    <td> <a href="https://play.google.com/store/apps/details?id=org.glob3.mobile.demo"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+    <td><a href="http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE"> <img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/amazon.png"></a></td>
   </tr>
 </table>
 
