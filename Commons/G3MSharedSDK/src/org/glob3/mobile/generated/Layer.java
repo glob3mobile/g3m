@@ -276,7 +276,7 @@ public abstract class Layer
     return _title;
   }
 
-  public final void getTitle(String title)
+  public final void setTitle(String title)
   {
     _title = title;
   }
