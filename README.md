@@ -204,9 +204,18 @@ But you can develop more complex things only parameterizing the builder
 Use Cases Deployed Apps and Demos
 =================================
 
-+ [Mapboo] (http://www.mapboo.com) is a platform for automatic deploying of mobile map apps. This web page 
++ [Mapboo] (http://www.mapboo.com) is a platform for automatic deploying of mobile map apps. You have a dashboard where you 
+can define your differents applicatiosn with all the maps you want. You can publish you mobile map app simply with a click
+and mapboo publish to different stores. Try it!
 
++ The G3M Demo application: This is a demo of the capabilities of the API, is based in the master branch and normally is not 
+the latest version of the API but is a good getting started to test G3M.
 
+[iOS]  (https://itunes.apple.com/es/app/g3m/id601442573?mt=8#) </br>
+[Android Play] (https://play.google.com/store/apps/details?id=org.glob3.mobile.demo) </br>
+[Amazon] (http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE) </br>
+
++
 
 
 Videos
