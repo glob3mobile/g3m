@@ -721,7 +721,6 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
           return true;
         }
 
-        int _DGG_At_Work;
         const int terrainTouchListenersSize = _terrainTouchListeners.size();
         for (int j = terrainTouchListenersSize-1; j >= 0; j--) {
           TerrainTouchListener* listener = _terrainTouchListeners[j];
