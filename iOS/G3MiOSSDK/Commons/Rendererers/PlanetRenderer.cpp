@@ -729,6 +729,8 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
             return true;
           }
         }
+
+        return false;
       }
     }
 
