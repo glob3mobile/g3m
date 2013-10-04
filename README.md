@@ -209,6 +209,7 @@ can define your differents applicatiosn with all the maps you want. You can publ
 and mapboo publish to different stores. Try it!
 + The G3M Demo application: This is a demo of the capabilities of the API, is based in the master branch and normally is not 
 the latest version of the API but is a good getting started to test G3M.
+
 <table>
   <tr>
     <td><a href="https://itunes.apple.com/es/app/g3m/id601442573?mt=8#" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.jpg"></a></td>
@@ -221,6 +222,15 @@ the latest version of the API but is a good getting started to test G3M.
 Open Weather Map (http://www.openweathermap.org) has realtime weather data that is changing all the time, in this app the cache is only used
 for the base layer, all the other layers are changing dinamically when ther servers change. G3M allows the cache managemente exactly developer
 wants.
+
+<table>
+  <tr>
+    <td><a href="https://itunes.apple.com/es/app/g3m/id601442573?mt=8#" ><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/appstore.jpg"></a></td>
+    <td> <a href="https://play.google.com/store/apps/details?id=org.glob3.mobile.demo"><img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/GooglePlay.png"></a></td>
+    <td><a href="http://www.amazon.com/IGO-SOFTWARE-glob3-mobile/dp/B00AHK2ACE"> <img src="https://dl.dropboxusercontent.com/u/20446978/wiki-github/amazon.png"></a></td>
+  </tr>
+</table>
+
 + Another more
 
 
