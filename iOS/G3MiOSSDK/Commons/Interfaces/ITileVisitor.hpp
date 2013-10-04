@@ -17,7 +17,7 @@ public:
   virtual ~ITileVisitor() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
     
   virtual void visitTile(std::vector<Layer*>& layers, Tile* tile) const = 0;

@@ -58,7 +58,7 @@ public:
   virtual ~LayerTouchEventListener() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
   
 };
