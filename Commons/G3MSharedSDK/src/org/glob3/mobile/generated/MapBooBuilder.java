@@ -9,7 +9,7 @@ public abstract class MapBooBuilder
 
   private MapBooApplicationChangeListener _applicationListener;
 
-  private final boolean _activateNotifications;
+  private final boolean _enableNotifications;
 
   private String _applicationId;
   private String _applicationName;
@@ -57,7 +57,7 @@ public abstract class MapBooBuilder
   
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
   
-    if (_activateNotifications)
+    if (_enableNotifications)
     {
       result.addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
     }
@@ -594,7 +594,7 @@ public abstract class MapBooBuilder
     return _marksRenderer;
   }
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean activateNotifications)
+  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -612,7 +612,7 @@ public abstract class MapBooBuilder
      _layerSet = new LayerSet();
      _downloader = null;
      _applicationListener = applicationListener;
-     _activateNotifications = activateNotifications;
+     _enableNotifications = enableNotifications;
      _gpuProgramManager = null;
      _isApplicationTubeOpen = false;
      _applicationCurrentSceneIndex = -1;
@@ -938,10 +938,13 @@ public abstract class MapBooBuilder
             setApplicationCurrentSceneIndex((int) jsonCurrentSceneIndex.value());
           }
   
-          final JSONObject jsonNotification = jsonObject.getAsObject("notification");
-          if (jsonNotification != null)
+          if (_enableNotifications)
           {
-            setApplicationNotification(parseNotification(jsonNotification));
+            final JSONObject jsonNotification = jsonObject.getAsObject("notification");
+            if (jsonNotification != null)
+            {
+              setApplicationNotification(parseNotification(jsonNotification));
+            }
           }
         }
         else
