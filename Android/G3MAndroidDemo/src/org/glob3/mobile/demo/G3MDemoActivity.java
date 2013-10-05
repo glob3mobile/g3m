@@ -109,5 +109,15 @@ public class G3MDemoActivity
       });
 
 
+      final Button threeDModelButton = (Button) findViewById(R.id.threeDModelButton);
+      threeDModelButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), ThreeDModelActivity.class);
+            startActivity(intent);
+         }
+      });
+
+
    }
 }
