@@ -45,6 +45,9 @@ Android/G3MAndroidSDK/libs/java_websocket.jar
 Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
 
+Android/G3MAndroidTestingApplication/bin/
+Android/G3MAndroidTestingApplication/gen/
+
 JavaDesktop/G3MJavaDesktopDemo/bin/
 JavaDesktop/G3MJavaDesktopSDK/bin/
 
