@@ -329,7 +329,12 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
 class SceneJSParserAsyncTask : public GAsyncTask {
 private:
   ShapesRenderer*    _shapesRenderer;
+#ifdef C_CODE
   const URL          _url;
+#endif
+#ifdef JAVA_CODE
+  private final URL _url;
+#endif
   IByteBuffer*       _buffer;
   const std::string  _uriPrefix;
   const bool         _isTransparent;
