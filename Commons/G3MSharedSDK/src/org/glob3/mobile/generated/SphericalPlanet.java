@@ -616,9 +616,11 @@ public class SphericalPlanet extends Planet
 
   public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
   {
-    Vector3D v = new Vector3D(_sphere.getRadius() * 5, 0, 0);
-    Geodetic2D center = shownSector._center;
-    return new Geodetic3D(center._latitude, center._longitude, toGeodetic3D(v)._height);
+    final Vector3D asw = toCartesian(shownSector.getSW());
+    final Vector3D ane = toCartesian(shownSector.getNE());
+    final double height = asw.sub(ane).length() * 1.9;
+
+    return new Geodetic3D(shownSector._center, height);
   }
 
 }
