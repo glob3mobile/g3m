@@ -17,12 +17,13 @@ private:
   const Sector      _sector;
   const bool        _isTransparent;
 
-  const IStringUtils* _su;
 #ifdef C_CODE
   mutable const IMathUtils*   _mu;
+  mutable const IStringUtils* _su;
 #endif
 #ifdef JAVA_CODE
-  private IMathUtils _mu;
+  private IMathUtils   _mu;
+  private IStringUtils _su;
 #endif
 
   URLTemplateLayer(const std::string&                urlTemplate,

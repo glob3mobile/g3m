@@ -31,7 +31,7 @@ Layer(condition,
 _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
-_su(IStringUtils::instance()),
+_su(NULL),
 _mu(NULL)
 {
 
@@ -94,6 +94,10 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 
   if (_mu == NULL) {
     _mu = IMathUtils::instance();
+  }
+
+  if (_su == NULL) {
+    _su = IStringUtils::instance();
   }
 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
