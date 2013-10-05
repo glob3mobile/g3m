@@ -36,13 +36,13 @@ public class G3MDemoActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_g3_mdemo);
 
-      final Button simpleG3MButton = (Button) findViewById(R.id.simpleG3MButton);
+      final Button simpleRasterLayerButton = (Button) findViewById(R.id.simpleRasterLayerButton);
 
 
-      simpleG3MButton.setOnClickListener(new OnClickListener() {
+      simpleRasterLayerButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
+            final Intent intent = new Intent(getApplicationContext(), SimplestRasterActivity.class);
             startActivity(intent);
          }
       });
@@ -59,10 +59,10 @@ public class G3MDemoActivity
       });
 
 
-      final Button switchLayerG3MButton = (Button) findViewById(R.id.switchLayersG3MButton);
+      final Button scenarioButton = (Button) findViewById(R.id.scenarioButton);
 
 
-      switchLayerG3MButton.setOnClickListener(new OnClickListener() {
+      scenarioButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
             final Intent intent = new Intent(getApplicationContext(), G3MSwitchLayerActivity.class);
@@ -95,19 +95,6 @@ public class G3MDemoActivity
          @Override
          public void onClick(final View v) {
             final Intent intent = new Intent(getApplicationContext(), G3MNetCDFActivity.class);
-            startActivity(intent);
-         }
-      });
-
-      final Button tileCachingG3MButton = (Button) findViewById(R.id.tileCachingG3MButton);
-
-      System.out.println(tileCachingG3MButton);
-
-
-      tileCachingG3MButton.setOnClickListener(new OnClickListener() {
-         @Override
-         public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSimpleTileCacheExampleActivity.class);
             startActivity(intent);
          }
       });
