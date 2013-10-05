@@ -365,8 +365,11 @@ public class FlatPlanet extends Planet
 
   public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
   {
-    Geodetic2D g = shownSector._center;
-    return Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, _size.length());
+    final Vector3D asw = toCartesian(shownSector.getSW());
+    final Vector3D ane = toCartesian(shownSector.getNE());
+    final double height = asw.sub(ane).length() * 1.9;
+
+    return new Geodetic3D(shownSector._center, height);
   }
 
 }
