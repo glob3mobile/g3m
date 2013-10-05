@@ -129,7 +129,7 @@ public final class StringUtils_JavaDesktop
    public int indexOf(final String string,
                       final String search,
                       final int fromIndex) {
-      return string.indexOf(string, fromIndex);
+      return string.indexOf(search, fromIndex);
    }
 
 
@@ -138,7 +138,7 @@ public final class StringUtils_JavaDesktop
                       final String search,
                       final int fromIndex,
                       final int endIndex) {
-      final int pos = string.indexOf(string, fromIndex);
+      final int pos = string.indexOf(search, fromIndex);
       return ((pos < 0) || (pos > endIndex)) ? -1 : pos;
    }
 
