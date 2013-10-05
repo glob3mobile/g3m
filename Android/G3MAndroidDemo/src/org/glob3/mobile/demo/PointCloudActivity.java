@@ -114,8 +114,10 @@ public class PointCloudActivity
 
                   double minHeight = Double.MAX_VALUE;
                   double maxHeight = Double.MIN_VALUE;
+                  double totalHeight = 0;
                   for (int i = 0; i < size; i = i + 3) {
                      final double height = _pointsJson.get(i + 2).asNumber().value();
+                     totalHeight += height;
                      if (height < minHeight) {
                         minHeight = height;
                      }
@@ -123,6 +125,7 @@ public class PointCloudActivity
                         maxHeight = height;
                      }
                   }
+                  final double averageHeight = totalHeight / (size / 3.0);
 
                   for (int i = 0; i < size; i = i + 3) {
                      final double latDegrees = _pointsJson.getAsNumber(i + 1, 0);
@@ -139,7 +142,7 @@ public class PointCloudActivity
                      //        final Color interpolatedColor = fromColor.mixedWith(toColor, normalize((float) height, 744, 775, 1, 0));
 
                      final Color interpolatedColor = interpolateColor(Color.red(), Color.green(), Color.blue(),
-                              normalize((float) height, (float) minHeight, (float) maxHeight, 1, 0));
+                              normalize((float) height, (float) minHeight, (float) (averageHeight * 2), 1, 0));
 
                      colors.add(interpolatedColor);
 
