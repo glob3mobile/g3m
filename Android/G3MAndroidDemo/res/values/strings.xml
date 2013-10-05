@@ -21,5 +21,7 @@
     <string name="scenario">Scenario</string>
     <string name="title_activity_simplest_raster">SimplestRasterActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_scenario_terrain">ScenarioTerrain</string>
+    <string name="title_activity_plane_flying">PlaneFlyingActivity</string>
 
 </resources>

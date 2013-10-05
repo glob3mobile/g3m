@@ -55,7 +55,17 @@
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.SimplestRasterActivity"
-            android:label="@string/title_activity_simplest_raster" android:screenOrientation="portrait">
+            android:label="@string/title_activity_simplest_raster"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.ScenarioTerrainActivity"
+            android:label="@string/title_activity_scenario_terrain"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.PlaneFlyingActivity"
+            android:label="@string/title_activity_plane_flying" >
         </activity>
     </application>
 

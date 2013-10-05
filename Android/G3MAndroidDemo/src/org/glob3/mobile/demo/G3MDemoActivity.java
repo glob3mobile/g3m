@@ -65,7 +65,7 @@ public class G3MDemoActivity
       scenarioButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSwitchLayerActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), ScenarioTerrainActivity.class);
             startActivity(intent);
          }
       });
