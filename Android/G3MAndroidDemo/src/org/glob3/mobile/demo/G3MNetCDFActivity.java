@@ -48,17 +48,14 @@ public class G3MNetCDFActivity
             Activity {
 
    private G3MWidget_Android                          _widgetAndroid;
-   private boolean                                    _isDone                 = false;
-   private final ShapesRenderer                       _shapesRenderer         = new ShapesRenderer();
-   private final ArrayList<ArrayList<WindModelCsiro>> _wmsss                  = new ArrayList<ArrayList<WindModelCsiro>>();
-   private final ArrayList<Mesh>                      meshes                  = new ArrayList<Mesh>();
-   private final ArrayList<BoxShape>                  _boxShapes              = new ArrayList<BoxShape>();
-   final MeshRenderer                                 _meshRenderer           = new MeshRenderer();
+   private boolean                                    _isDone         = false;
+   private final ShapesRenderer                       _shapesRenderer = new ShapesRenderer();
+   private final ArrayList<ArrayList<WindModelCsiro>> _wmsss          = new ArrayList<ArrayList<WindModelCsiro>>();
+   private final ArrayList<Mesh>                      meshes          = new ArrayList<Mesh>();
+   private final ArrayList<BoxShape>                  _boxShapes      = new ArrayList<BoxShape>();
+   final MeshRenderer                                 _meshRenderer   = new MeshRenderer();
 
-   private int                                        _period                 = 0;
-   public final Geodetic2D                            EAST_AUSTRALIA_POSITION = new Geodetic2D( //
-                                                                                       Angle.fromDegreesMinutes(-27, 43), //
-                                                                                       Angle.fromDegreesMinutes(153, 15));
+   private int                                        _period         = 0;
 
 
    @Override
@@ -71,14 +68,6 @@ public class G3MNetCDFActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
 
-      //Some periods with polygons
-      //      builder.setInitializationTask(getInitializationTaskPeriods());
-      //      builder.addPeriodicalTask(PaintGeometriesTask());
-      //        builder.addRenderer(_shapesRenderer);
-      //Some periods with points  
-      //      builder.setInitializationTask(getInitializationTaskCreateMeshes(builder.getPlanet()));
-      //      builder.addPeriodicalTask(PaintMeshesTask());
-      //      builder.addRenderer(_meshRenderer);
       //Single period with points
       builder.setInitializationTask(getInitializationTaskSinglePeriodMeshes(builder.getPlanet()));
       builder.addRenderer(_meshRenderer);
@@ -533,7 +522,10 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(EAST_AUSTRALIA_POSITION, 17000000),
+
+
+                  _widgetAndroid.setAnimatedCameraPosition(
+                           new Geodetic3D(Angle.fromDegreesMinutes(-27, 43), Angle.fromDegreesMinutes(153, 15), 17000000),
                            TimeInterval.fromSeconds(5));
                }
 
@@ -641,8 +633,8 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(EAST_AUSTRALIA_POSITION, 17000000),
-                           TimeInterval.fromSeconds(5));
+                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegreesMinutes(-27, 43), //
+                           Angle.fromDegreesMinutes(153, 15), 17000000), TimeInterval.fromSeconds(5));
                }
 
 
