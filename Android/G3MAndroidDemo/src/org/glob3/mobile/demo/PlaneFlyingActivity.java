@@ -9,7 +9,6 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.widget.RelativeLayout;
 
 

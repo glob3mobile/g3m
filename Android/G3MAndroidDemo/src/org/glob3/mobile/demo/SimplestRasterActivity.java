@@ -15,7 +15,6 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -30,7 +29,7 @@ public class SimplestRasterActivity
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
-   private RelativeLayout    _bar;
+
    private Spinner           _spinnerLayer;
 
 

@@ -2,9 +2,8 @@
 
 package org.glob3.mobile.demo;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
 
 
 public class SymbologyActivity
@@ -12,7 +11,7 @@ public class SymbologyActivity
             Activity {
 
    @Override
-   protected void onCreate(Bundle savedInstanceState) {
+   protected void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_symbology);
    }

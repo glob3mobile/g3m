@@ -4,12 +4,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -17,20 +12,14 @@ import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SceneJSShapesParser;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.JSONParser_Android;
@@ -60,52 +49,10 @@ public class G3MShowMarkersActivity
 
       builder.setInitializationTask(getWeatherMarkerLayersTask());
 
-      if (true) {
-         final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
-         builder.setShownSector(spain);
-
-         final CircleShape circle = new CircleShape(new Geodetic3D(spain.getNE(), 0), AltitudeMode.RELATIVE_TO_GROUND, 100000,
-                  Color.fromRGBA(1, 0, 0, 1), 64, true);
-         _shapeRenderer.addShape(circle);
-
-
-         final CircleShape circle2 = new CircleShape(new Geodetic3D(spain.getNW(), 0), AltitudeMode.RELATIVE_TO_GROUND, 100000,
-                  Color.fromRGBA(1, 0, 0, 1), 64, false);
-         _shapeRenderer.addShape(circle2);
-
-         //public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
-
-         final BoxShape box = new BoxShape(new Geodetic3D(spain.getSW(), 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
-                  100000, 100000, 100000), 1, Color.fromRGBA(1, 0, 0, 1), Color.fromRGBA(0, 0, 1, 1), true);
-         _shapeRenderer.addShape(box);
-
-         final BoxShape box2 = new BoxShape(new Geodetic3D(spain.getSE(), 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
-                  100000, 100000, 100000), 1, Color.fromRGBA(1, 0, 0, 1), Color.fromRGBA(0, 0, 1, 1), false);
-         _shapeRenderer.addShape(box2);
-
-         final GEORenderer geo = new GEORenderer(null, null, _shapeRenderer, null, null);
-
-         //         (Geodetic3D position, AltitudeMode altitudeMode, 
-         //        		 Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
-
-         geo.getShapesRenderer().addShape(
-                  new EllipsoidShape(new Geodetic3D(spain.getCenter(), 100000), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
-                           100000, 100000, 100000), (short) 20, 1, false, false, Color.red(), Color.blue(), true));
-
-         geo.getShapesRenderer().addShape(
-                  new EllipsoidShape(new Geodetic3D(spain.getCenter().add(Geodetic2D.fromDegrees(20, 20)), 100000),
-                           AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(100000, 100000, 100000), (short) 20, 1, false, false,
-                           Color.red(), Color.blue(), false));
-
-
-         builder.addRenderer(geo);
-      }
 
       builder.addRenderer(_weatherMarkers);
       builder.addRenderer(_shapeRenderer);
-      builder.setLogFPS(true);
-      final Planet planet = Planet.createFlatEarth();
-      builder.setPlanet(planet);
+
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();
@@ -166,6 +113,7 @@ public class G3MShowMarkersActivity
                               AltitudeMode.RELATIVE_TO_GROUND, 0, //
                               true, //
                               14));
+
                   }
 
 
@@ -202,69 +150,12 @@ public class G3MShowMarkersActivity
                      listener, //
                      false);
 
-            //////
-
-            //Seymour-plane on Gran Canaria
-            if (true) {
-               final URL planeFilePath = new URL("file:///seymour-plane.json", false);
-               final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
-
-                  @Override
-                  public void onDownload(final URL url,
-                                         final IByteBuffer buffer,
-                                         final boolean expired) {
-                     Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
-
-                     final Shape plane = SceneJSShapesParser.parseFromJSON( //
-                              buffer, //
-                              URL.FILE_PROTOCOL, //
-                              false, //
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
-                              AltitudeMode.ABSOLUTE);
-                     if (plane != null) {
-                        final double scale = 1000;
-                        plane.setScale(scale, scale, scale);
-                        plane.setPitch(Angle.fromDegrees(90));
-                        plane.setHeading(Angle.fromDegrees(0));
-                        plane.setAnimatedPosition(TimeInterval.fromSeconds(60), new Geodetic3D(Angle.fromDegrees(28.127222),
-                                 Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90), Angle.fromDegrees(720));
-
-                        _shapeRenderer.addShape(plane);
-                        ILogger.instance().logInfo("PLANE SHOWN");
-                     }
-                  }
-
-
-                  @Override
-                  public void onError(final URL url) {
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IByteBuffer data,
-                                                 final boolean expired) {
-                  }
-               };
-
-               downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
-            }
          }
 
 
          @Override
          public boolean isDone(final G3MContext context) {
-            if (_WeatherMarkerIsDone) {
-               _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(45d), Angle.fromDegrees(0.d), 3000000),
-                        TimeInterval.fromSeconds(3));
-               return true;
-            }
-            return false;
+            return _WeatherMarkerIsDone;
          }
       };
       return initializationTask;
