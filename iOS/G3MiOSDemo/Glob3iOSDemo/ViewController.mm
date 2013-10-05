@@ -2770,8 +2770,6 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
       }
 
-      int _DGD_At_Work;
-
       class PlaneShapeLoadListener : public ShapeLoadListener {
       public:
         void onBeforeAddShape(SGShape* shape) {
@@ -2803,8 +2801,6 @@ public:
         }
       };
 
-//      ShapeLoadListener* listener=NULL,
-//      bool               deleteListener=true
       _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
                                        URL::FILE_PROTOCOL + "textures-A320/",
                                        false,
