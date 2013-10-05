@@ -550,6 +550,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         if (tile != null)
         {
           ILogger.instance().logInfo("Touched on %s", tile.description());
+          ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
+  
           if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
           {
             return true;
