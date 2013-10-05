@@ -25,8 +25,7 @@ public class GEOObjectParserAsyncTask extends GAsyncTask
   {
     if (_buffer != null)
        _buffer.dispose();
-    if (_geoObject != null)
-       _geoObject.dispose();
+//    delete _geoObject;
   }
 
   public final void runInBackground(G3MContext context)

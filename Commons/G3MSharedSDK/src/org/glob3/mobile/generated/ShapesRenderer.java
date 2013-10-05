@@ -1,6 +1,38 @@
 package org.glob3.mobile.generated; 
 public class ShapesRenderer extends LeafRenderer
 {
+  private static class LoadQueueItem
+  {
+    public final URL _url;
+    public final TimeInterval _timeToCache;
+    public final long _priority;
+    public final boolean _readExpired;
+    public final String _uriPrefix;
+    public final boolean _isTransparent;
+    public Geodetic3D _position;
+    public final AltitudeMode _altitudeMode;
+    public ShapeLoadListener _listener;
+    public final boolean _deleteListener;
+    public final boolean _isBSON;
+
+    public LoadQueueItem(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+    {
+       _url = url;
+       _priority = priority;
+       _timeToCache = timeToCache;
+       _readExpired = readExpired;
+       _uriPrefix = uriPrefix;
+       _isTransparent = isTransparent;
+       _position = position;
+       _altitudeMode = altitudeMode;
+       _listener = listener;
+       _deleteListener = deleteListener;
+       _isBSON = isBSON;
+
+    }
+  }
+
+
   private final boolean _renderNotReadyShapes;
 
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
@@ -11,30 +43,28 @@ public class ShapesRenderer extends LeafRenderer
   private GLState _glState;
   private GLState _glStateTransparent;
 
-//  ProjectionGLFeature* _projection;
-//  ModelGLFeature*      _model;
   private void updateGLState(G3MRenderContext rc)
   {
   
     final Camera cam = rc.getCurrentCamera();
     /*
   
-    if (_projection == NULL) {
-      _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-      _glState->addGLFeature(_projection, true);
-      _glStateTransparent->addGLFeature(_projection, true);
-    } else{
-      _projection->setMatrix(cam->getProjectionMatrix44D());
-    }
+     if (_projection == NULL) {
+     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+     _glState->addGLFeature(_projection, true);
+     _glStateTransparent->addGLFeature(_projection, true);
+     } else{
+     _projection->setMatrix(cam->getProjectionMatrix44D());
+     }
   
-    if (_model == NULL) {
-      _model = new ModelGLFeature(cam->getModelMatrix44D());
-      _glState->addGLFeature(_model, true);
-      _glStateTransparent->addGLFeature(_model, true);
-    } else{
-      _model->setMatrix(cam->getModelMatrix44D());
-    }
-  */
+     if (_model == NULL) {
+     _model = new ModelGLFeature(cam->getModelMatrix44D());
+     _glState->addGLFeature(_model, true);
+     _glStateTransparent->addGLFeature(_model, true);
+     } else{
+     _model->setMatrix(cam->getModelMatrix44D());
+     }
+     */
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
@@ -57,14 +87,36 @@ public class ShapesRenderer extends LeafRenderer
   
   }
 
+  private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
+
+  private void drainLoadQueue()
+  {
+  
+    final int loadQueueSize = _loadQueue.size();
+    for (int i = 0; i < loadQueueSize; i++)
+    {
+      LoadQueueItem item = _loadQueue.get(i);
+      requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._uriPrefix, item._isTransparent, item._position, item._altitudeMode, item._listener, item._deleteListener, item._isBSON);
+    }
+  
+    _loadQueue.clear();
+  }
+
+
+  private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+  {
+  
+    IDownloader downloader = _context.getDownloader();
+    downloader.requestBuffer(url, priority, timeToCache, readExpired, new ShapesRenderer_SceneJSBufferDownloadListener(this, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, _context.getThreadUtils(), isBSON), true);
+  
+  }
+
 
   public ShapesRenderer()
   {
      this(true);
   }
   public ShapesRenderer(boolean renderNotReadyShapes)
-//  _projection(NULL),
-//  _model(NULL),
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _context = null;
@@ -86,7 +138,7 @@ public class ShapesRenderer extends LeafRenderer
     _glState._release();
     _glStateTransparent._release();
 
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -137,12 +189,17 @@ public class ShapesRenderer extends LeafRenderer
   public final void initialize(G3MContext context)
   {
     _context = context;
-
-    final int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++)
+  
+    if (_context != null)
     {
-      Shape shape = _shapes.get(i);
-      shape.initialize(context);
+      final int shapesCount = _shapes.size();
+      for (int i = 0; i < shapesCount; i++)
+      {
+        Shape shape = _shapes.get(i);
+        shape.initialize(context);
+      }
+  
+      drainLoadQueue();
     }
   }
 
@@ -177,14 +234,14 @@ public class ShapesRenderer extends LeafRenderer
   
         if (!shapeDistances.isEmpty())
         {
-  //        printf ("Found %d intersections with shapes:\n",
-  //                (int)shapeDistances.size());
+          //        printf ("Found %d intersections with shapes:\n",
+          //                (int)shapeDistances.size());
           for (int i = 0; i<shapeDistances.size(); i++)
           {
-  //          printf ("   %d: shape %x to distance %f\n",
-  //                  i+1,
-  //                  (unsigned int)shapeDistances[i]._shape,
-  //                  shapeDistances[i]._distance);
+            //          printf ("   %d: shape %x to distance %f\n",
+            //                  i+1,
+            //                  (unsigned int)shapeDistances[i]._shape,
+            //                  shapeDistances[i]._distance);
           }
         }
       }
@@ -266,5 +323,70 @@ public class ShapesRenderer extends LeafRenderer
     return shapeDistances;
   }
 
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  {
+     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, true);
+  }
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  {
+     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, null, true);
+  }
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, false)); // isBson
+    }
+    else
+    {
+      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, false); // isBson
+    }
+  }
+
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  {
+     loadJSONSceneJS(url, uriPrefix, isTransparent, position, altitudeMode, listener, true);
+  }
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  {
+     loadJSONSceneJS(url, uriPrefix, isTransparent, position, altitudeMode, null, true);
+  }
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  {
+    loadJSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener);
+  }
+
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  {
+     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, true);
+  }
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  {
+     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, null, true);
+  }
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, true)); // isBson
+    }
+    else
+    {
+      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, true); // isBson
+    }
+  }
+
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  {
+     loadBSONSceneJS(url, uriPrefix, isTransparent, position, altitudeMode, listener, true);
+  }
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  {
+     loadBSONSceneJS(url, uriPrefix, isTransparent, position, altitudeMode, null, true);
+  }
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  {
+    loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener);
+  }
 
 }

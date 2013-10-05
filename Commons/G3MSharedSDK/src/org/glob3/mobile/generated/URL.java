@@ -52,6 +52,10 @@ public class URL
    
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
+  public URL(String path)
+  {
+     this(path, false);
+  }
   public URL(String path, boolean escapePath)
   {
      _path = escapePath ? escape(path) : path;

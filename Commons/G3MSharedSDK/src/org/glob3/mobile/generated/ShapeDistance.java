@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class ShapeDistance
 {
   public double _distance;

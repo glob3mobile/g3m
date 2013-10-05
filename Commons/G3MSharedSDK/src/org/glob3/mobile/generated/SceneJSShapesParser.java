@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class Shape;
+//class SGShape;
 //class IByteBuffer;
 //class JSONBaseObject;
 //class JSONObject;
@@ -34,7 +35,7 @@ package org.glob3.mobile.generated;
 
 public class SceneJSShapesParser
 {
-  private Shape _rootShape;
+  private SGShape _rootShape;
   private final String _uriPrefix;
 
   private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
@@ -49,7 +50,7 @@ public class SceneJSShapesParser
        _statistics.dispose();
   }
 
-  private Shape getRootShape()
+  private SGShape getRootShape()
   {
     return _rootShape;
   }
@@ -652,26 +653,26 @@ public class SceneJSShapesParser
   private SceneJSParserStatistics _statistics;
 
 
-  public static Shape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
-  public static Shape parseFromJSON(String json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
-  public static Shape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
-  public static Shape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
