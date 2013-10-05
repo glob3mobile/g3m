@@ -65,7 +65,15 @@
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.PlaneFlyingActivity"
-            android:label="@string/title_activity_plane_flying" >
+            android:label="@string/title_activity_plane_flying"
+             android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.PointCloudActivity"
+            android:label="@string/title_activity_point_cloud"
+             android:screenOrientation="portrait"
+             >
         </activity>
     </application>
 

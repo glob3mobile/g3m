@@ -99,6 +99,15 @@ public class G3MDemoActivity
          }
       });
 
+      final Button pointCloudButton = (Button) findViewById(R.id.pointCloudButton);
+      pointCloudButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), PointCloudActivity.class);
+            startActivity(intent);
+         }
+      });
+
 
    }
 }

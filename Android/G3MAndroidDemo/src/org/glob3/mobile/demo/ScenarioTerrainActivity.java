@@ -41,7 +41,7 @@ public class ScenarioTerrainActivity
 
       final LayerSet layerSet = new LayerSet();
 
-      //bla
+
       final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
       layerSet.addLayer(mboxTerrainLayer);
 
@@ -68,6 +68,7 @@ public class ScenarioTerrainActivity
       builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
       builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
 
+      //The sector is shrinked to adjust the projection of
       builder.setShownSector(demSector.shrinkedByPercent(0.1f));
 
 

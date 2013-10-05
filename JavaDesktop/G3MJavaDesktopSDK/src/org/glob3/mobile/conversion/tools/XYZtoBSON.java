@@ -42,11 +42,10 @@ public class XYZtoBSON {
          IFactory.setInstance(new Factory_JavaDesktop());
          ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
-         final String pathFileJson = "/Users/mdelacalle/Desktop/AUSTRALIA-MINING/LAS/338000_8092000_1K_class4326_500.json";
-         final String pathFileBson = "/Users/mdelacalle/Desktop/AUSTRALIA-MINING/LAS/338000_8092000_1K_class4326_500.bson";
+         final String pathFileJson = "/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.json";
+         final String pathFileBson = "/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.bson";
 
-         final FileInputStream fstream = new FileInputStream(
-                  "/Users/mdelacalle/Desktop/AUSTRALIA-MINING/LAS/338000_8092000_1K_class4326_500.xyz");
+         final FileInputStream fstream = new FileInputStream("/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.xyz");
 
          final BufferedWriter out = new BufferedWriter(new FileWriter(pathFileJson));
 

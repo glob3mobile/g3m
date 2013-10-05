@@ -18,10 +18,12 @@
     <string name="switchText">  Press button to switch base layer</string>
     <string name="animation">  Press button to move or stop the shapes</string>
     <string name="simplest_raster">Raster Layers</string>
-    <string name="scenario">Scenario</string>
+    <string name="scenario">Scenario+DEM</string>
+    <string name="pointClouds">Point clouds</string>
     <string name="title_activity_simplest_raster">SimplestRasterActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scenario_terrain">ScenarioTerrain</string>
     <string name="title_activity_plane_flying">PlaneFlyingActivity</string>
+    <string name="title_activity_point_cloud">PointCloudActivity</string>
 
 </resources>
