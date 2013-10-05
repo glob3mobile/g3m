@@ -27,17 +27,22 @@
 
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
-  unsigned int numStrides = 60;
+//  unsigned int numStrides = 60;
+  unsigned int numStrides = 5;
 
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   
   FloatBufferBuilderFromColor colors;
   ShortBufferBuilder indices;
-  
+
+
   int indicesCounter=0;
-  const float r1=12;
-  const float r2=18;
+//  const float r1=12;
+//  const float r2=18;
+  const float r1=0;
+//  const float r2=120;
+  const float r2=50;
+  
   for (int step=0; step<=numStrides; step++) {
     const double angle = (double) step * 2 * PI / numStrides;
     const double c = IMathUtils::instance()->cos(angle);
@@ -49,14 +54,21 @@ void BusyMeshRenderer::initialize(const G3MContext* context)
     indices.add((short) (indicesCounter++));
     indices.add((short) (indicesCounter++));
     
-    float col = (float) (1.1 * step / numStrides);
-    if (col>1) {
-      colors.add(255, 255, 255, 0);
-      colors.add(255, 255, 255, 0);
-    } else {
-      colors.add(255, 255, 255, 1 - col);
-      colors.add(255, 255, 255, 1 - col);
-    }
+//    float col = (float) (1.0 * step / numStrides);
+//    if (col>1) {
+//      colors.add(1, 1, 1, 0);
+//      colors.add(1, 1, 1, 0);
+//    }
+//    else {
+//      colors.add(1, 1, 1, 1 - col);
+//      colors.add(1, 1, 1, 1 - col);
+//    }
+
+//    colors.add(Color::red().wheelStep(numStrides, step));
+//    colors.add(Color::red().wheelStep(numStrides, step));
+
+    colors.add(1,1,1,1);
+    colors.add(1,1,1,0);
   }
   
   // the two last indices
@@ -84,6 +96,24 @@ void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
 }
 
+void BusyMeshRenderer::createGLState() {
+  if (_projectionFeature == NULL) {
+    _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
+    _glState->addGLFeature(_projectionFeature, false);
+  }
+  else {
+    _projectionFeature->setMatrix(_projectionMatrix.asMatrix44D());
+  }
+
+  if (_modelFeature == NULL) {
+    _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
+    _glState->addGLFeature(_modelFeature, false);
+  }
+  else {
+    _modelFeature->setMatrix(_modelviewMatrix.asMatrix44D());
+  }
+}
+
 void BusyMeshRenderer::render(const G3MRenderContext* rc, GLState* glState)
 {
   GL* gl = rc->getGL();
@@ -93,21 +123,4 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc, GLState* glState)
   gl->clearScreen(*_backgroundColor);
   
   _mesh->render(rc, _glState);
-}
-
-void BusyMeshRenderer::createGLState() {
-
-  if (_projectionFeature == NULL) {
-    _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
-    _glState->addGLFeature(_projectionFeature, false);
-  } else{
-    _projectionFeature->setMatrix(_projectionMatrix.asMatrix44D());
-  }
-
-  if (_modelFeature == NULL) {
-    _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
-    _glState->addGLFeature(_modelFeature, false);
-  } else{
-    _modelFeature->setMatrix(_modelviewMatrix.asMatrix44D());
-  }
 }
