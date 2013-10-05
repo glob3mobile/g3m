@@ -40,6 +40,7 @@ public class PointCloudActivity
    private RelativeLayout     _placeHolder;
    private G3MBuilder_Android _builder;
    final MeshRenderer         _meshRenderer = new MeshRenderer();
+   boolean                    _isDone       = false;
 
 
    @Override
@@ -48,10 +49,10 @@ public class PointCloudActivity
       setContentView(R.layout.activity_point_cloud);
 
       /*
-      40.342244323527
-      -5.86641693954211
-      40.1540848526184
-      -5.51167850675718
+      39.1353919693813
+      -77.6089543461732
+      39.1215022335016
+      -77.591121367969
       */
 
       final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
@@ -68,6 +69,10 @@ public class PointCloudActivity
       _builder.addRenderer(_meshRenderer);
 
       _g3mWidget = _builder.createWidget();
+
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.12787093899339d, -77.59965772558118d, 2000),
+               TimeInterval.fromSeconds(5));
+
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
@@ -132,7 +137,7 @@ public class PointCloudActivity
                      final double lotDegrees = _pointsJson.getAsNumber(i, 0);
                      final double height = _pointsJson.get(i + 2).asNumber().value();
 
-                     final Geodetic3D position = Geodetic3D.fromDegrees(latDegrees, lotDegrees, height);
+                     final Geodetic3D position = Geodetic3D.fromDegrees(latDegrees, lotDegrees, height - 180);
 
                      //ILogger.instance().logInfo("Point::" + position.description());
 
@@ -142,7 +147,7 @@ public class PointCloudActivity
                      //        final Color interpolatedColor = fromColor.mixedWith(toColor, normalize((float) height, 744, 775, 1, 0));
 
                      final Color interpolatedColor = interpolateColor(Color.red(), Color.green(), Color.blue(),
-                              normalize((float) height, (float) minHeight, (float) (averageHeight * 2), 1, 0));
+                              normalize((float) height, (float) minHeight, (float) (averageHeight * 1.5), 1, 0));
 
                      colors.add(interpolatedColor);
 
@@ -154,7 +159,7 @@ public class PointCloudActivity
 
                   _meshRenderer.addMesh(new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(),
                            lineWidth, 4F, flatColor, colors.create(), 1, false));
-
+                  _isDone = true;
                }
 
 
@@ -190,7 +195,7 @@ public class PointCloudActivity
          @Override
          public boolean isDone(final G3MContext context) {
 
-            return true;
+            return _isDone;
          }
       };
 
