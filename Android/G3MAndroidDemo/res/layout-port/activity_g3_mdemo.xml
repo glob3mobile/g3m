@@ -85,6 +85,21 @@
                 android:textColor="#7a8e27"
                 android:textSize="20sp" />
         </TableRow>
+        
+                <TableRow android:layout_margin="3dp" >
+
+            <Button
+                android:id="@+id/pointCloudButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/pointClouds"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+
+        </TableRow>
 
 
       
