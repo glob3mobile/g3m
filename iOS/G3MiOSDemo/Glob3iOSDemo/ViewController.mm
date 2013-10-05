@@ -241,11 +241,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-//  [self initWithBuilderAndSegmentedWorld];
+  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -353,10 +353,24 @@ public:
 //                                                                                false));
 
 
-  const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
-                                            -17.2423142646939311, 145.4950606689779420);
+//  const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
+//                                            -17.2423142646939311, 145.4950606689779420);
+  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
+                                            40.3423148480663158, -5.5116079822178570);
+
+//  final Geodetic2D lower = new Geodetic2D( //
+//                                          Angle.fromDegrees(40.1540143280790858), //
+//                                          Angle.fromDegrees(-5.8664874640814313));
+//  final Geodetic2D upper = new Geodetic2D( //
+//                                          Angle.fromDegrees(40.3423148480663158), //
+//                                          Angle.fromDegrees(-5.5116079822178570));
+//  
+//  final Sector demSector = new Sector(lower, upper);
 
   builder.setShownSector(sector);
+
+//  builder.setPlanet(Planet::createSphericalEarth());
+  builder.setPlanet(Planet::createFlatEarth());
 
 //  int _DIEGO_AT_WORK;
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);

@@ -153,8 +153,12 @@ public:
 
   Geodetic3D getDefaultCameraPosition(const Vector2I& viewport,
                                       const Sector& shownSector) const{
-    Geodetic2D g = shownSector._center;
-    return Geodetic3D::fromDegrees(g._latitude._degrees, g._longitude._degrees, _size.length());
+    const Vector3D asw = toCartesian(shownSector.getSW());
+    const Vector3D ane = toCartesian(shownSector.getNE());
+    const double height = asw.sub(ane).length() * 1.9;
+
+    return Geodetic3D(shownSector._center,
+                      height);
   }
 
 };
