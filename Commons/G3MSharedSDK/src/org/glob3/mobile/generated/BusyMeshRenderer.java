@@ -60,34 +60,25 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     }
   }
 
-  public BusyMeshRenderer(Color backgroundColor)
+  private Mesh createMesh(G3MRenderContext rc)
   {
-     _degrees = 0;
-     _backgroundColor = backgroundColor;
-     _projectionFeature = null;
-     _modelFeature = null;
-     _glState = new GLState();
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D.invalid();
-  }
-
-  public final void initialize(G3MContext context)
-  {
-  //  unsigned int numStrides = 60;
-    int numStrides = 5;
+    final int numStrides = 5;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
-  
     int indicesCounter = 0;
-  //  const float r1=12;
-  //  const float r2=18;
-    final float r1 = 0F;
-  //  const float r2=120;
-    final float r2 = 50F;
+  
+    final float innerRadius = 0F;
+  
+  //  const float r2=50;
+    final Camera camera = rc.getCurrentCamera();
+    final int width = camera.getWidth();
+    final int height = camera.getHeight();
+    final int minSize = (width < height) ? width : height;
+    final float outerRadius = minSize / 8.0f;
   
     for (int step = 0; step<=numStrides; step++)
     {
@@ -95,27 +86,27 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
       final double c = IMathUtils.instance().cos(angle);
       final double s = IMathUtils.instance().sin(angle);
   
-      vertices.add((r1 * c), (r1 * s), 0);
-      vertices.add((r2 * c), (r2 * s), 0);
+      vertices.add((innerRadius * c), (innerRadius * s), 0);
+      vertices.add((outerRadius * c), (outerRadius * s), 0);
   
       indices.add((short)(indicesCounter++));
       indices.add((short)(indicesCounter++));
   
-  //    float col = (float) (1.0 * step / numStrides);
-  //    if (col>1) {
-  //      colors.add(1, 1, 1, 0);
-  //      colors.add(1, 1, 1, 0);
-  //    }
-  //    else {
-  //      colors.add(1, 1, 1, 1 - col);
-  //      colors.add(1, 1, 1, 1 - col);
-  //    }
+      //    float col = (float) (1.0 * step / numStrides);
+      //    if (col>1) {
+      //      colors.add(1, 1, 1, 0);
+      //      colors.add(1, 1, 1, 0);
+      //    }
+      //    else {
+      //      colors.add(1, 1, 1, 1 - col);
+      //      colors.add(1, 1, 1, 1 - col);
+      //    }
   
-  //    colors.add(Color::red().wheelStep(numStrides, step));
-  //    colors.add(Color::red().wheelStep(numStrides, step));
+      //    colors.add(Color::red().wheelStep(numStrides, step));
+      //    colors.add(Color::red().wheelStep(numStrides, step));
   
-      colors.add(1,1,1,1);
-      colors.add(1,1,1,0);
+      colors.add(1, 1, 1, 1);
+      colors.add(1, 1, 1, 0);
     }
   
     // the two last indices
@@ -123,7 +114,90 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     indices.add((short) 1);
   
     // create mesh
-    _mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+  }
+  private Mesh getMesh(G3MRenderContext rc)
+  {
+    if (_mesh == null)
+    {
+      _mesh = createMesh(rc);
+    }
+    return _mesh;
+  }
+
+
+  public BusyMeshRenderer(Color backgroundColor)
+  {
+     _degrees = 0;
+     _backgroundColor = backgroundColor;
+     _projectionFeature = null;
+     _modelFeature = null;
+     _glState = new GLState();
+     _mesh = null;
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    _projectionMatrix = MutableMatrix44D.invalid();
+  }
+
+  public final void initialize(G3MContext context)
+  {
+  ////  unsigned int numStrides = 60;
+  //  unsigned int numStrides = 5;
+  //
+  //  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  //
+  //  FloatBufferBuilderFromColor colors;
+  //  ShortBufferBuilder indices;
+  //
+  //
+  //  int indicesCounter=0;
+  ////  const float r1=12;
+  ////  const float r2=18;
+  //  const float r1=0;
+  ////  const float r2=120;
+  //  const float r2=50;
+  //
+  //  for (int step=0; step<=numStrides; step++) {
+  //    const double angle = (double) step * 2 * PI / numStrides;
+  //    const double c = IMathUtils::instance()->cos(angle);
+  //    const double s = IMathUtils::instance()->sin(angle);
+  //
+  //    vertices.add( (r1 * c), (r1 * s), 0);
+  //    vertices.add( (r2 * c), (r2 * s), 0);
+  //
+  //    indices.add((short) (indicesCounter++));
+  //    indices.add((short) (indicesCounter++));
+  //
+  ////    float col = (float) (1.0 * step / numStrides);
+  ////    if (col>1) {
+  ////      colors.add(1, 1, 1, 0);
+  ////      colors.add(1, 1, 1, 0);
+  ////    }
+  ////    else {
+  ////      colors.add(1, 1, 1, 1 - col);
+  ////      colors.add(1, 1, 1, 1 - col);
+  ////    }
+  //
+  ////    colors.add(Color::red().wheelStep(numStrides, step));
+  ////    colors.add(Color::red().wheelStep(numStrides, step));
+  //
+  //    colors.add(1,1,1,1);
+  //    colors.add(1,1,1,0);
+  //  }
+  //
+  //  // the two last indices
+  //  indices.add((short) 0);
+  //  indices.add((short) 1);
+  //
+  //  // create mesh
+  //  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+  //                          true,
+  //                          vertices.getCenter(),
+  //                          vertices.create(),
+  //                          indices.create(),
+  //                          1,
+  //                          1,
+  //                          NULL,
+  //                          colors.create());
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
@@ -139,7 +213,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
     gl.clearScreen(_backgroundColor);
   
-    _mesh.render(rc, _glState);
+    Mesh mesh = getMesh(rc);
+    if (mesh != null)
+    {
+      mesh.render(rc, _glState);
+    }
+  //  _mesh->render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
