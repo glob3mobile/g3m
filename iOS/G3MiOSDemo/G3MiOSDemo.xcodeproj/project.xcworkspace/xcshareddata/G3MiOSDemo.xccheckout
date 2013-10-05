@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>813DF111-EC88-4068-B2A3-A7C88205ED3D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>G3MiOSDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C2FDC017-C12C-460A-AFB4-742AC7E83F4D</key>
+		<string>ssh://github.com/glob3mobile/g3m.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS/G3MiOSDemo/G3MiOSDemo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C2FDC017-C12C-460A-AFB4-742AC7E83F4D</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/glob3mobile/g3m.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C2FDC017-C12C-460A-AFB4-742AC7E83F4D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C2FDC017-C12C-460A-AFB4-742AC7E83F4D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>g3m</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -28,8 +28,10 @@
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
+		CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */ = {isa = PBXBuildFile; fileRef = CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */; };
 		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
 		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
+		CFA245431800708D00921325 /* washington-memorial.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA245421800708D00921325 /* washington-memorial.json */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
@@ -126,8 +128,10 @@
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
+		CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial-normals.json"; sourceTree = "<group>"; };
 		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
 		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CFA245421800708D00921325 /* washington-memorial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial.json"; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -287,6 +291,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFA245421800708D00921325 /* washington-memorial.json */,
+				CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */,
 				CF8BE69217E0D22D0072273A /* aus4326.bil */,
 				CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */,
 				CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */,
@@ -389,6 +395,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					D8EEF3851577920A003FEB5E = {
+						DevelopmentTeam = N847RXR927;
+					};
+				};
 			};
 			buildConfigurationList = D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "G3MiOSDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -445,6 +456,7 @@
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
+				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				E71B153A1626D27F003D1013 /* Default-Portrait@2x.png in Resources */,
 				E71B153B1626D27F003D1013 /* Icon-72.png in Resources */,
 				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
@@ -490,6 +502,7 @@
 				D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */,
 				D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */,
 				D87DFC7617CF61200036C466 /* FlatColorMesh+DirectionLight.fsh in Resources */,
+				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
 				D87DFC7717CF61200036C466 /* FlatColorMesh+DirectionLight.vsh in Resources */,
 				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
 			);
@@ -630,7 +643,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
@@ -645,6 +658,7 @@
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
@@ -657,6 +671,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
@@ -666,6 +682,7 @@
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";

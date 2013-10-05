@@ -241,11 +241,11 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
 
 
-//  [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
 }
@@ -1202,7 +1202,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1240,7 +1240,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
@@ -2829,11 +2829,11 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
-        NSString* geojsonName = @"geojson/countries-50m";
+//        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
-//        NSString* geojsonName = @"geojson/cities";
+        NSString* geojsonName = @"geojson/cities";
         //      NSString* geojsonName = @"geojson/test";
 
         NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
@@ -2854,6 +2854,37 @@ public:
         }
       }
 
+      //  Touched on (Tile level=18, row=161854, column=74976, sector=(Sector (lat=38.888895015761768548d, lon=-77.036132812499985789d) - (lat=38.889963929167578272d, lon=-77.034759521484360789d)))
+      //  Camera position=(lat=38.889495390450342427d, lon=-77.035258992009289614d, height=666.01783933913191049) heading=1.074786 pitch=0.180631
+
+      const bool loadWashingtonModel = false;
+      if (loadWashingtonModel) {
+        NSString* washingtonFilePath = [[NSBundle mainBundle] pathForResource: @"washington-memorial"
+                                                                       ofType: @"json"];
+        if (washingtonFilePath) {
+          NSString *nsWashingtonJSON = [NSString stringWithContentsOfFile: washingtonFilePath
+                                                                 encoding: NSUTF8StringEncoding
+                                                                    error: nil];
+          if (nsWashingtonJSON) {
+            std::string washingtonJSON = [nsWashingtonJSON UTF8String];
+
+            Shape* washington = SceneJSShapesParser::parseFromJSON(washingtonJSON,
+                                                                   URL::FILE_PROTOCOL + "/images/" ,
+                                                                   false,
+                                                                   new Geodetic3D(Angle::fromDegrees(38.888895015761768548),
+                                                                                  Angle::fromDegrees(-77.036132812499985789),
+                                                                                  10000),
+                                                                   ABSOLUTE //RELATIVE_TO_GROUND
+                                                                   );
+
+            const double scale = 100;
+            washington->setScale(scale, scale, scale);
+            washington->setPitch(Angle::fromDegrees(90));
+//            washington->setHeading(Angle::fromDegrees(0));
+            _shapesRenderer->addShape(washington);
+          }
+        }
+      }
 
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
