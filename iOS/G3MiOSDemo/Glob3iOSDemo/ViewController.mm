@@ -370,7 +370,7 @@ public:
   builder.setShownSector(sector);
 
 //  builder.setPlanet(Planet::createSphericalEarth());
-  builder.setPlanet(Planet::createFlatEarth());
+//  builder.setPlanet(Planet::createFlatEarth());
 
 //  int _DIEGO_AT_WORK;
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
