@@ -124,7 +124,7 @@ public:
 
   ~GEOObjectParserAsyncTask() {
     delete _buffer;
-    delete _geoObject;
+//    delete _geoObject;
   }
 
   void runInBackground(const G3MContext* context) {
@@ -208,7 +208,7 @@ public:
 void GEORenderer::requestBuffer(const URL& url,
                                 GEOSymbolizer* symbolizer,
                                 long long priority,
-                                const TimeInterval timeToCache,
+                                const TimeInterval& timeToCache,
                                 bool readExpired,
                                 bool isBSON) {
 //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
@@ -250,7 +250,7 @@ void GEORenderer::initialize(const G3MContext* context) {
 void GEORenderer::loadJSON(const URL& url,
                            GEOSymbolizer* symbolizer,
                            long long priority,
-                           const TimeInterval timeToCache,
+                           const TimeInterval& timeToCache,
                            bool readExpired) {
   if (_context == NULL) {
     _loadQueue.push_back(new LoadQueueItem(url,
@@ -273,7 +273,7 @@ void GEORenderer::loadJSON(const URL& url,
 void GEORenderer::loadBSON(const URL& url,
                            GEOSymbolizer* symbolizer,
                            long long priority,
-                           const TimeInterval timeToCache,
+                           const TimeInterval& timeToCache,
                            bool readExpired) {
   if (_context == NULL) {
     _loadQueue.push_back(new LoadQueueItem(url,

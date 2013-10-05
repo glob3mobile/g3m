@@ -2770,6 +2770,51 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
       }
 
+      int _DGD_At_Work;
+
+      class PlaneShapeLoadListener : public ShapeLoadListener {
+      public:
+        void onBeforeAddShape(SGShape* shape) {
+          const double scale = 200;
+          shape->setScale(scale, scale, scale);
+          shape->setPitch(Angle::fromDegrees(90));
+        }
+
+        void onAfterAddShape(SGShape* shape) {
+          shape->setAnimatedPosition(TimeInterval::fromSeconds(26),
+                                     Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+                                                10000),
+                                     true);
+
+          const double fromDistance = 75000;
+          const double toDistance   = 18750;
+
+          const Angle fromAzimuth = Angle::fromDegrees(-90);
+          const Angle toAzimuth   = Angle::fromDegrees(270);
+
+          const Angle fromAltitude = Angle::fromDegrees(90);
+          const Angle toAltitude   = Angle::fromDegrees(15);
+
+          shape->orbitCamera(TimeInterval::fromSeconds(20),
+                             fromDistance, toDistance,
+                             fromAzimuth,  toAzimuth,
+                             fromAltitude, toAltitude);
+        }
+      };
+
+//      ShapeLoadListener* listener=NULL,
+//      bool               deleteListener=true
+      _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
+                                       URL::FILE_PROTOCOL + "textures-A320/",
+                                       false,
+                                       new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                      Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                      10000),
+                                       ABSOLUTE,
+                                       new PlaneShapeLoadListener(),
+                                       true);
+
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
@@ -2801,7 +2846,7 @@ public:
                                                     10000),
                                          true);
 
-              /*
+              /**/
                const double fromDistance = 75000;
                const double toDistance   = 18750;
 
@@ -2821,7 +2866,7 @@ public:
                fromDistance, toDistance,
                fromAzimuth,  toAzimuth,
                fromAltitude, toAltitude);
-               */
+               /**/
 
               delete buffer;
             }

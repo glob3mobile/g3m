@@ -44,7 +44,7 @@ private:
     LoadQueueItem(const URL& url,
                   GEOSymbolizer* symbolizer,
                   long long priority,
-                  const TimeInterval timeToCache,
+                  const TimeInterval& timeToCache,
                   bool readExpired,
                   bool isBSON) :
     _url(url),
@@ -81,7 +81,7 @@ private:
   void requestBuffer(const URL& url,
                      GEOSymbolizer* symbolizer,
                      long long priority,
-                     const TimeInterval timeToCache,
+                     const TimeInterval& timeToCache,
                      bool readExpired,
                      bool isBSON);
 
@@ -195,7 +195,7 @@ public:
   void loadJSON(const URL& url,
                 GEOSymbolizer* symbolizer,
                 long long priority,
-                const TimeInterval timeToCache,
+                const TimeInterval& timeToCache,
                 bool readExpired);
 
   void loadBSON(const URL& url) {
@@ -218,7 +218,7 @@ public:
   void loadBSON(const URL& url,
                 GEOSymbolizer* symbolizer,
                 long long priority,
-                const TimeInterval timeToCache,
+                const TimeInterval& timeToCache,
                 bool readExpired);
 
   void setEnable(bool enable);

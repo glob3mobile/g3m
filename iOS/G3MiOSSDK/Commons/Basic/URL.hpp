@@ -50,7 +50,7 @@ public:
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
   URL(const std::string& path,
-      const bool escapePath) :
+      const bool escapePath=false) :
   _path(  escapePath ? escape(path) : path  )
   {
   }
