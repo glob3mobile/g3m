@@ -269,4 +269,10 @@ public class G3MShowMarkersActivity
       };
       return initializationTask;
    }
+
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
+   }
 }

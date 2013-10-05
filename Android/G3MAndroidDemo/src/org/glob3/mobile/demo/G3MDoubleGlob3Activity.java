@@ -87,4 +87,10 @@ public class G3MDoubleGlob3Activity
       super.onPause();
    }
 
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
+   }
+
 }

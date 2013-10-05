@@ -81,10 +81,8 @@ public class ScenarioTerrainActivity
 
 
    @Override
-   public boolean onCreateOptionsMenu(final Menu menu) {
-      // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.scenario_terrain, menu);
-      return true;
+   public void onBackPressed() {
+      System.exit(0);
    }
 
 }

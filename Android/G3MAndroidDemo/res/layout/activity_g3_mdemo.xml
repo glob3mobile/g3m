@@ -50,13 +50,13 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/threedshapes"
+                android:id="@+id/symbology"
                 android:layout_width="fill_parent"
                 android:layout_height="75dp"
                 android:layout_margin="2dp"
                 android:layout_weight="0.5"
                 android:background="@drawable/buttonbackground"
-                android:text="@string/threedshapes"
+                android:text="@string/symbology"
                 android:textColor="#7a8e27"
                 android:textSize="20sp" />
         </TableRow>

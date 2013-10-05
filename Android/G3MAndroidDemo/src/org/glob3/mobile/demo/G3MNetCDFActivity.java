@@ -48,14 +48,17 @@ public class G3MNetCDFActivity
             Activity {
 
    private G3MWidget_Android                          _widgetAndroid;
-   private boolean                                    _isDone         = false;
-   private final ShapesRenderer                       _shapesRenderer = new ShapesRenderer();
-   private final ArrayList<ArrayList<WindModelCsiro>> _wmsss          = new ArrayList<ArrayList<WindModelCsiro>>();
-   private final ArrayList<Mesh>                      meshes          = new ArrayList<Mesh>();
-   private final ArrayList<BoxShape>                  _boxShapes      = new ArrayList<BoxShape>();
-   final MeshRenderer                                 _meshRenderer   = new MeshRenderer();
+   private boolean                                    _isDone                 = false;
+   private final ShapesRenderer                       _shapesRenderer         = new ShapesRenderer();
+   private final ArrayList<ArrayList<WindModelCsiro>> _wmsss                  = new ArrayList<ArrayList<WindModelCsiro>>();
+   private final ArrayList<Mesh>                      meshes                  = new ArrayList<Mesh>();
+   private final ArrayList<BoxShape>                  _boxShapes              = new ArrayList<BoxShape>();
+   final MeshRenderer                                 _meshRenderer           = new MeshRenderer();
 
-   private int                                        _period         = 0;
+   private int                                        _period                 = 0;
+   public final Geodetic2D                            EAST_AUSTRALIA_POSITION = new Geodetic2D( //
+                                                                                       Angle.fromDegreesMinutes(-27, 43), //
+                                                                                       Angle.fromDegreesMinutes(153, 15));
 
 
    @Override
@@ -159,7 +162,8 @@ public class G3MNetCDFActivity
                         final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(meridWinds.get(i), -10, 10, 1, 0));
                         final Geodetic3D position3D = new Geodetic3D(position, levels.get(i) * 10000);
 
-                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth, interpolatedColor, interpolatedColor));
+                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth,
+                                 interpolatedColor, interpolatedColor));
 
                      }
                   }
@@ -244,7 +248,7 @@ public class G3MNetCDFActivity
                      final JSONArray features = yearObject.getAsArray("features");
 
                      final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
-                    		 
+
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
                      for (int i = 0; i < features.size(); i++) {
@@ -396,9 +400,8 @@ public class G3MNetCDFActivity
 
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
-                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND,
-                        		   extent, borderWidth, interpolatedColor,
-                                    interpolatedColor));
+                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent,
+                                    borderWidth, interpolatedColor, interpolatedColor));
                         }
 
 
@@ -491,7 +494,7 @@ public class G3MNetCDFActivity
                      final JSONArray features = yearObject.getAsArray("features");
 
                      final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
-                    		 
+
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
 
@@ -530,7 +533,7 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(G3MGlob3Constants.EAST_AUSTRALIA_POSITION, 17000000),
+                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(EAST_AUSTRALIA_POSITION, 17000000),
                            TimeInterval.fromSeconds(5));
                }
 
@@ -638,7 +641,7 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(G3MGlob3Constants.EAST_AUSTRALIA_POSITION, 17000000),
+                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(EAST_AUSTRALIA_POSITION, 17000000),
                            TimeInterval.fromSeconds(5));
                }
 
@@ -684,6 +687,12 @@ public class G3MNetCDFActivity
 
       return initializationTask;
 
+   }
+
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
    }
 
 }

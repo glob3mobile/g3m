@@ -16,9 +16,8 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/g3mgen"
+        android:largeHeap="true"
         android:theme="@android:style/Theme.Black.NoTitleBar" >
-        android:label="@string/app_name"
-        android:largeHeap="true" >
         <activity
             android:name="org.glob3.mobile.demo.G3MDemoActivity"
             android:label="@string/app_name"
@@ -32,53 +31,76 @@
         <activity
             android:name="org.glob3.mobile.demo.G3MSimplestGlob3Activity"
             android:label="@string/title_activity_g3_msimplest"
+            android:launchMode="standard"
+            android:process=":G"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.G3MDoubleGlob3Activity"
+            android:launchMode="standard"
+            android:process=":F"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.G3MSwitchLayerActivity"
-            android:configChanges="orientation" >
+            android:configChanges="orientation"
+            android:process=":E" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.G3MDrawingShapesActivity"
-            android:configChanges="orientation" >
+            android:configChanges="orientation"
+            android:process=":D" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.G3MShowMarkersActivity"
-            android:configChanges="orientation" >
+            android:configChanges="orientation"
+            android:launchMode="standard"
+            android:process=":C" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.G3MNetCDFActivity"
-            android:configChanges="orientation" >
+            android:configChanges="orientation"
+            android:launchMode="standard"
+            android:process=":B" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.SimplestRasterActivity"
             android:label="@string/title_activity_simplest_raster"
+            android:launchMode="standard"
+            android:process=":A"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.ScenarioTerrainActivity"
             android:label="@string/title_activity_scenario_terrain"
+            android:launchMode="standard"
+            android:process=":H"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.PlaneFlyingActivity"
             android:label="@string/title_activity_plane_flying"
+            android:launchMode="standard"
+            android:process=":I"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.PointCloudActivity"
             android:label="@string/title_activity_point_cloud"
+            android:launchMode="standard"
+            android:process=":J"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.ThreeDModelActivity"
             android:label="@string/title_activity_three_dmodel"
-             android:screenOrientation="portrait"
-             >
+            android:launchMode="singleTask"
+            android:process=":K"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.SymbologyActivity"
+            android:label="@string/title_activity_symbology" >
         </activity>
     </application>
 

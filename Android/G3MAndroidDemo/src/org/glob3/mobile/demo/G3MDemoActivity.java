@@ -20,6 +20,7 @@ public class G3MDemoActivity
    @Override
    protected void onDestroy() {
       Log.i(getClass().toString(), "Destroy");
+      finish();
       super.onDestroy();
    }
 
@@ -27,6 +28,7 @@ public class G3MDemoActivity
    @Override
    protected void onPause() {
       Log.i(getClass().toString(), "Pause");
+
       super.onDestroy();
    }
 
@@ -42,6 +44,7 @@ public class G3MDemoActivity
       simpleRasterLayerButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
+
             final Intent intent = new Intent(getApplicationContext(), SimplestRasterActivity.class);
             startActivity(intent);
          }
@@ -53,6 +56,7 @@ public class G3MDemoActivity
       doubleG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
+
             final Intent intent = new Intent(getApplicationContext(), G3MDoubleGlob3Activity.class);
             startActivity(intent);
          }
@@ -65,17 +69,19 @@ public class G3MDemoActivity
       scenarioButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
+
             final Intent intent = new Intent(getApplicationContext(), ScenarioTerrainActivity.class);
             startActivity(intent);
          }
       });
 
 
-      final Button drawingShapesG3MButton = (Button) findViewById(R.id.threedshapes);
+      final Button drawingShapesG3MButton = (Button) findViewById(R.id.symbology);
       drawingShapesG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MDrawingShapesActivity.class);
+            finish();
+            final Intent intent = new Intent(getApplicationContext(), SymbologyActivity.class);
             startActivity(intent);
          }
       });

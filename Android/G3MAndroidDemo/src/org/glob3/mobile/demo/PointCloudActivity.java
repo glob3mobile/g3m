@@ -89,7 +89,7 @@ public class PointCloudActivity
             final double lonDegrees = pointsJson.getAsNumber(i, 0);
             final double height = pointsJson.get(i + 2).asNumber().value();
 
-            vertices.add(Angle.fromDegrees(latDegrees), Angle.fromDegrees(lonDegrees), height);
+            vertices.add(Angle.fromDegrees(latDegrees), Angle.fromDegrees(lonDegrees), height - 150);
 
             final Color interpolatedColor = interpolateColor(fromColor, middleColor, toColor,
                      normalize((float) height, (float) minHeight, (float) (averageHeight * 1.5), 1, 0));
@@ -117,6 +117,7 @@ public class PointCloudActivity
       public void onPostExecute(final G3MContext context) {
          if (_mesh != null) {
             setPointsCloudMesh(_mesh);
+            _mesh = null;
          }
       }
    }
@@ -137,7 +138,6 @@ public class PointCloudActivity
       public void onDownload(final URL url,
                              final IByteBuffer buffer,
                              final boolean expired) {
-
          _threadUtils.invokeAsyncTask(new PointsCloudParser(buffer), true);
       }
 
@@ -170,6 +170,9 @@ public class PointCloudActivity
    private void setPointsCloudMesh(final DirectMesh mesh) {
       _meshRenderer.addMesh(mesh);
       _isPointsCloudLoader = true;
+
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.12787093899339d, -77.59965772558118d, 5000),
+               TimeInterval.fromSeconds(5));
    }
 
 
@@ -193,8 +196,6 @@ public class PointCloudActivity
 
       _g3mWidget = _builder.createWidget();
 
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.12787093899339d, -77.59965772558118d, 2000),
-               TimeInterval.fromSeconds(5));
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
@@ -260,10 +261,8 @@ public class PointCloudActivity
 
 
    @Override
-   public boolean onCreateOptionsMenu(final Menu menu) {
-      // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.point_cloud, menu);
-      return true;
+   public void onBackPressed() {
+      System.exit(0);
    }
 
 }
