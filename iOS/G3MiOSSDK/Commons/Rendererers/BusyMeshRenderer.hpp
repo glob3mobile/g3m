@@ -32,6 +32,10 @@ private:
   GLState* _glState;
   
   void createGLState();
+
+  Mesh* createMesh(const G3MRenderContext* rc);
+  Mesh* getMesh(const G3MRenderContext* rc);
+
   
 public:    
   BusyMeshRenderer(Color* backgroundColor):
@@ -39,7 +43,8 @@ public:
   _backgroundColor(backgroundColor),
   _projectionFeature(NULL),
   _modelFeature(NULL),
-  _glState(new GLState())
+  _glState(new GLState()),
+  _mesh(NULL)
   {
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D::invalid();
