@@ -538,9 +538,11 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                              Camera* nextCamera) const{
 
-  Vector3D pos = nextCamera->getCartesianPosition();
-  Vector3D origin = _origin.asVector3D();
-  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
+  int __ASK_JM;
+
+//  Vector3D pos = nextCamera->getCartesianPosition();
+//  Vector3D origin = _origin.asVector3D();
+//  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
 
   /*
   // this constrainst is not right (probably confusing origin with (0,0,0))
