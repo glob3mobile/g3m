@@ -561,7 +561,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           for (int j = terrainTouchListenersSize-1; j >= 0; j--)
           {
             TerrainTouchListener listener = _terrainTouchListeners.get(j);
-            if (listener.onTerrainTouch(ec, _lastCamera, position, tile))
+            if (listener.onTerrainTouch(ec, pixel, _lastCamera, position, tile))
             {
               return true;
             }
