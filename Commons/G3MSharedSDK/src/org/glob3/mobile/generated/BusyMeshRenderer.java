@@ -78,13 +78,15 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int width = camera.getWidth();
     final int height = camera.getHeight();
     final int minSize = (width < height) ? width : height;
-    final float outerRadius = minSize / 8.0f;
+    final float outerRadius = minSize / 10.0f;
   
-    for (int step = 0; step<=numStrides; step++)
+    final IMathUtils mu = IMathUtils.instance();
+  
+    for (int step = 0; step <= numStrides; step++)
     {
       final double angle = (double) step * 2 * DefineConstants.PI / numStrides;
-      final double c = IMathUtils.instance().cos(angle);
-      final double s = IMathUtils.instance().sin(angle);
+      final double c = mu.cos(angle);
+      final double s = mu.sin(angle);
   
       vertices.add((innerRadius * c), (innerRadius * s), 0);
       vertices.add((outerRadius * c), (outerRadius * s), 0);
@@ -140,64 +142,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 
   public final void initialize(G3MContext context)
   {
-  ////  unsigned int numStrides = 60;
-  //  unsigned int numStrides = 5;
-  //
-  //  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  //
-  //  FloatBufferBuilderFromColor colors;
-  //  ShortBufferBuilder indices;
-  //
-  //
-  //  int indicesCounter=0;
-  ////  const float r1=12;
-  ////  const float r2=18;
-  //  const float r1=0;
-  ////  const float r2=120;
-  //  const float r2=50;
-  //
-  //  for (int step=0; step<=numStrides; step++) {
-  //    const double angle = (double) step * 2 * PI / numStrides;
-  //    const double c = IMathUtils::instance()->cos(angle);
-  //    const double s = IMathUtils::instance()->sin(angle);
-  //
-  //    vertices.add( (r1 * c), (r1 * s), 0);
-  //    vertices.add( (r2 * c), (r2 * s), 0);
-  //
-  //    indices.add((short) (indicesCounter++));
-  //    indices.add((short) (indicesCounter++));
-  //
-  ////    float col = (float) (1.0 * step / numStrides);
-  ////    if (col>1) {
-  ////      colors.add(1, 1, 1, 0);
-  ////      colors.add(1, 1, 1, 0);
-  ////    }
-  ////    else {
-  ////      colors.add(1, 1, 1, 1 - col);
-  ////      colors.add(1, 1, 1, 1 - col);
-  ////    }
-  //
-  ////    colors.add(Color::red().wheelStep(numStrides, step));
-  ////    colors.add(Color::red().wheelStep(numStrides, step));
-  //
-  //    colors.add(1,1,1,1);
-  //    colors.add(1,1,1,0);
-  //  }
-  //
-  //  // the two last indices
-  //  indices.add((short) 0);
-  //  indices.add((short) 1);
-  //
-  //  // create mesh
-  //  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-  //                          true,
-  //                          vertices.getCenter(),
-  //                          vertices.create(),
-  //                          indices.create(),
-  //                          1,
-  //                          1,
-  //                          NULL,
-  //                          colors.create());
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
