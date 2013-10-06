@@ -749,6 +749,8 @@ public abstract class MapBooBuilder
     return _marksRenderer;
   }
 
+  private boolean _hasParsedApplication;
+
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
   {
      _serverURL = serverURL;
@@ -775,6 +777,7 @@ public abstract class MapBooBuilder
      _context = null;
      _webSocket = null;
      _marksRenderer = null;
+     _hasParsedApplication = false;
   
   }
 
@@ -1085,6 +1088,7 @@ public abstract class MapBooBuilder
   
             setApplicationTimestamp(timestamp);
             saveApplicationData();
+            setHasParsedApplication();
           }
   
           final JSONNumber jsonCurrentSceneIndex = jsonObject.getAsNumber("currentSceneIndex");
@@ -1204,6 +1208,19 @@ public abstract class MapBooBuilder
   
     return true;
   }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setHasParsedApplication()
+  {
+    _hasParsedApplication = true;
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final boolean hasParsedApplication()
+  {
+    return _hasParsedApplication;
+  }
+
 
   public final MapBoo_Notification createNotification(Geodetic2D position, Camera camera, String message, URL iconURL)
   {
