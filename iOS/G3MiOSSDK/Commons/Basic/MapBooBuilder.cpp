@@ -804,6 +804,22 @@ MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObje
                                  );
 }
 
+std::vector<MapBoo_Notification*>* MapBooBuilder::parseNotifications(const JSONArray* jsonArray) const {
+  std::vector<MapBoo_Notification*>* result = new std::vector<MapBoo_Notification*>();
+
+  if (jsonArray != NULL) {
+    const int size = jsonArray->size();
+    for (int i = 0; i < size; i++) {
+      MapBoo_Notification* notification = parseNotification( jsonArray->getAsObject(i) );
+      if (notification != NULL) {
+        result->push_back(notification);
+      }
+    }
+  }
+
+  return result;
+}
+
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
@@ -868,9 +884,14 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
         }
 
         if (_enableNotifications) {
+          const JSONArray* jsonNotifications = jsonObject->getAsArray("notifications");
+          if (jsonNotifications != NULL) {
+            addApplicationNotifications( parseNotifications(jsonNotifications) );
+          }
+
           const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
           if (jsonNotification != NULL) {
-            setApplicationNotification( parseNotification(jsonNotification) );
+            addApplicationNotification( parseNotification(jsonNotification) );
           }
         }
       }
@@ -885,7 +906,23 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
 }
 
-void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
+void MapBooBuilder::addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications) {
+  if (notifications == NULL) {
+    return;
+  }
+
+  const int size = notifications->size();
+  for (int i = 0; i < size; i++) {
+    MapBoo_Notification* notification = notifications->at(i);
+    if (notification != NULL) {
+      addApplicationNotification(notification);
+    }
+  }
+
+  delete notifications;
+}
+
+void MapBooBuilder::addApplicationNotification(MapBoo_Notification* notification) {
   if (_marksRenderer != NULL) {
     const std::string message = notification->getMessage();
 
@@ -990,7 +1027,9 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
       view = "runtime";
   }
 
-  return URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
+  const std::string options = _enableNotifications ? "/enableNotifications" : "";
+
+  return URL(tubesPath + "/application/" + _applicationId + "/" + view + options, false);
 }
 
 

@@ -29,6 +29,7 @@ class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
 class JSONString;
+class JSONArray;
 class TimeInterval;
 class MapQuestLayer;
 class BingMapsLayer;
@@ -448,8 +449,10 @@ private:
   const std::string toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const;
 
   MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
+  std::vector<MapBoo_Notification*>* parseNotifications(const JSONArray* jsonArray) const;
 
-  void setApplicationNotification(MapBoo_Notification* notification);
+  void addApplicationNotification(MapBoo_Notification* notification);
+  void addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications);
 
   const URL* parseURL(const JSONString* jsonString) const;
 
