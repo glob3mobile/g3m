@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.demo;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -31,7 +32,7 @@ public class PlaneFlyingActivity
       builder.setPlanet(Planet.createSphericalEarth());
 
       builder.getPlanetRendererBuilder().setLayerSet(layerset);
-
+      builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
       _g3mWidget = builder.createWidget();
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);

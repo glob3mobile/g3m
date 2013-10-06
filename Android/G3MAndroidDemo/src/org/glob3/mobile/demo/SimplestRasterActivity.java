@@ -48,7 +48,7 @@ public class SimplestRasterActivity
 
       _spinnerLayer = (Spinner) findViewById(R.id.spinnerLayers);
       final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Map Box OSM",
-               "Map Box Terrain", "Map Box Aerial", "CartoDB Meteorites", "MapQuest Aerial", "MapQuest OSM",
+               "Open Street Map", "Map Box Terrain", "Map Box Aerial", "CartoDB Meteorites", "MapQuest Aerial", "MapQuest OSM",
                "WMS Nasa Blue Marble", "ESRI ArcGis Online", "Bing Aerial", "Bing Aerial With Labels"));
       _spinnerLayer.setAdapter(viewAdapter);
 

@@ -4,6 +4,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -53,6 +54,7 @@ public class G3MShowMarkersActivity
       builder.addRenderer(_weatherMarkers);
       builder.addRenderer(_shapeRenderer);
 
+      builder.setBackgroundColor(Color.fromRGBA255(231, 55, 54, 255));
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();

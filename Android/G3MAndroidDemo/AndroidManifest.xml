@@ -100,7 +100,16 @@
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.SymbologyActivity"
-            android:label="@string/title_activity_symbology" >
+            android:label="@string/title_activity_symbology"   android:launchMode="singleTask"
+            android:process=":L"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.FlatWorldActivity"
+            android:label="@string/title_activity_flat_world" 
+              android:launchMode="singleTask"
+            android:process=":M"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
