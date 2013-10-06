@@ -285,22 +285,36 @@ public:
 };
 
 class MapBoo_Notification {
-public:
+private:
   const Geodetic2D             _position;
-  const std::string            _message;
   const MapBoo_CameraPosition* _cameraPosition;
+  const std::string            _message;
+
+public:
 
   MapBoo_Notification(const Geodetic2D&            position,
-                      const std::string&           message,
-                      const MapBoo_CameraPosition* cameraPosition) :
+                      const MapBoo_CameraPosition* cameraPosition,
+                      const std::string&           message) :
   _position(position),
-  _message(message),
-  _cameraPosition(cameraPosition)
+  _cameraPosition(cameraPosition),
+  _message(message)
   {
   }
 
   ~MapBoo_Notification() {
     delete _cameraPosition;
+  }
+
+  const Geodetic2D getPosition() const {
+    return _position;
+  }
+
+  const MapBoo_CameraPosition* getCameraPosition() const {
+    return _cameraPosition;
+  }
+
+  const std::string getMessage() const {
+    return _message;
   }
 };
 
@@ -407,13 +421,18 @@ private:
 
   const std::string getApplicationCurrentSceneCommand() const;
 
-  const std::string getSendNotificationCommand(const Camera*      camera,
-                                               const Geodetic3D&  position,
+  const std::string getSendNotificationCommand(const Geodetic2D&  position,
+                                               const Camera*      camera,
                                                const std::string& message) const;
+
+  const std::string getSendNotificationCommand(const Geodetic2D&            position,
+                                               const MapBoo_CameraPosition* cameraPosition,
+                                               const std::string&           message) const;
 
   const std::string escapeString(const std::string& str) const;
 
   const std::string toCameraPositionJSON(const Camera* camera) const;
+  const std::string toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const;
 
   MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
 
@@ -512,11 +531,18 @@ public:
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);
-  
 
-  void sendNotification(const Camera*      camera,
-                        const Geodetic3D&  position,
+  const MapBoo_Notification* createNotification(const Geodetic2D&  position,
+                                                const Camera*      camera,
+                                                const std::string& message) const;
+
+  void sendNotification(const Geodetic2D&  position,
+                        const Camera*      camera,
                         const std::string& message) const;
+
+  void sendNotification(const Geodetic2D&            position,
+                        const MapBoo_CameraPosition* cameraPosition,
+                        const std::string&           message) const;
 
   void changeScene(int sceneIndex);
   
