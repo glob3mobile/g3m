@@ -484,7 +484,37 @@ public abstract class MapBooBuilder
     return s;
   }
 
-  private String getSendNotificationCommand(Camera camera, Geodetic3D position, String message)
+  private String getSendNotificationCommand(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addString("notification=");
+  
+    isb.addString("{");
+  
+    isb.addString("\"latitude\":");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString(",\"longitude\":");
+    isb.addDouble(position._longitude._degrees);
+  
+    isb.addString(",\"message\":");
+    isb.addString("\"");
+    isb.addString(escapeString(message));
+    isb.addString("\"");
+  
+    isb.addString(",\"cameraPosition\":");
+    isb.addString(toCameraPositionJSON(cameraPosition));
+  
+    isb.addString("}");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  private String getSendNotificationCommand(Geodetic2D position, Camera camera, String message)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -553,7 +583,39 @@ public abstract class MapBooBuilder
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  private String toCameraPositionJSON(MapBoo_CameraPosition cameraPosition)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
+    isb.addString("{");
+  
+    final Geodetic3D position = cameraPosition.getPosition();
+  
+    isb.addString("\"latitude\":");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString(",\"longitude\":");
+    isb.addDouble(position._longitude._degrees);
+  
+    isb.addString(",\"height\":");
+    isb.addDouble(position._height);
+  
+    isb.addString(",\"heading\":");
+    isb.addDouble(cameraPosition.getHeading()._degrees);
+  
+    isb.addString(",\"pitch\":");
+    isb.addDouble(cameraPosition.getPitch()._degrees);
+  
+    isb.addString(",\"animated\":");
+    isb.addBool(true);
+  
+    isb.addString("}");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   private MapBoo_Notification parseNotification(JSONObject jsonObject)
@@ -563,21 +625,21 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), jsonObject.getAsString("message", ""), parseCameraPosition(jsonObject.getAsObject("cameraPosition")));
+    return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), jsonObject.getAsString("message", ""));
   }
 
   private void setApplicationNotification(MapBoo_Notification notification)
   {
     if (_marksRenderer != null)
     {
-      final String message = notification._message;
+      final String message = notification.getMessage();
       if (message.length() > 0)
       {
-        final Geodetic2D position = notification._position;
+        final Geodetic2D position = notification.getPosition();
         _marksRenderer.addMark(new Mark(message, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
       }
   
-      final MapBoo_CameraPosition cameraPosition = notification._cameraPosition;
+      final MapBoo_CameraPosition cameraPosition = notification.getCameraPosition();
       if (cameraPosition != null)
       {
         _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
@@ -1049,12 +1111,29 @@ public abstract class MapBooBuilder
     return true;
   }
 
+  public final MapBoo_Notification createNotification(Geodetic2D position, Camera camera, String message)
+  {
+    MapBoo_CameraPosition cameraPosition = new MapBoo_CameraPosition(camera.getGeodeticPosition(), camera.getHeading(), camera.getPitch(), true); // animated
+    return new MapBoo_Notification(position, cameraPosition, message);
+  }
 
-  public final void sendNotification(Camera camera, Geodetic3D position, String message)
+  public final void sendNotification(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message)
   {
     if ((_webSocket != null) && _isApplicationTubeOpen)
     {
-      _webSocket.send(getSendNotificationCommand(camera, position, message));
+      _webSocket.send(getSendNotificationCommand(position, cameraPosition, message));
+    }
+    else
+    {
+      ILogger.instance().logError("Can't send notification, websocket disconnected");
+    }
+  }
+
+  public final void sendNotification(Geodetic2D position, Camera camera, String message)
+  {
+    if ((_webSocket != null) && _isApplicationTubeOpen)
+    {
+      _webSocket.send(getSendNotificationCommand(position, camera, message));
     }
     else
     {
