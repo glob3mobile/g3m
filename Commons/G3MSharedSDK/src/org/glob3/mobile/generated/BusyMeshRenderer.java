@@ -78,7 +78,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int width = camera.getWidth();
     final int height = camera.getHeight();
     final int minSize = (width < height) ? width : height;
-    final float outerRadius = minSize / 10.0f;
+    final float outerRadius = minSize / 15.0f;
   
     final IMathUtils mu = IMathUtils.instance();
   
