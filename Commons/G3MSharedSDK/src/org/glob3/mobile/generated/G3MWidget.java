@@ -116,7 +116,7 @@ public class G3MWidget
     {
       _initialCameraPositionHasBeenSet = true;
   
-      Geodetic3D g = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer(), new Vector2I(_width,_height));
+      Geodetic3D g = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
   
       _currentCamera.setGeodeticPosition(g);
       _currentCamera.setHeading(Angle.zero());

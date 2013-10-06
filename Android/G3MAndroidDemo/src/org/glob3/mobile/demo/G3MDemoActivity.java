@@ -124,6 +124,15 @@ public class G3MDemoActivity
          }
       });
 
+      final Button flatWorldButton = (Button) findViewById(R.id.flatWorldButton);
+      flatWorldButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), FlatWorldActivity.class);
+            startActivity(intent);
+         }
+      });
+
 
    }
 }

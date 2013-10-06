@@ -12,6 +12,7 @@ import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.MercatorTiledLayer;
+import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -59,6 +60,11 @@ public class SimpleRasterLayerBuilder
       blueMarble.setEnable(false);
       layerSet.addLayer(blueMarble);
 
+
+      final OSMLayer osmLayer = new OSMLayer(TimeInterval.fromDays(30));
+      osmLayer.setTitle("Open Street Map");
+      osmLayer.setEnable(false);
+      layerSet.addLayer(osmLayer);
 
       final BingMapsLayer bingMapsAerialLayer = new BingMapsLayer(BingMapType.Aerial(),
                "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30));
