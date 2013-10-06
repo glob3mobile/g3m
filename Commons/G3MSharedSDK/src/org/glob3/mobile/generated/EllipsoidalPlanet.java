@@ -628,12 +628,13 @@ public class EllipsoidalPlanet extends Planet
     Vector3D origin = _origin.asVector3D();
     double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
   
-    if (pos.distanceTo(origin) > maxDist)
-    {
-      nextCamera.copyFromForcingMatrixCreation(previousCamera);
+    /*
+    // this constrainst is not right (probably confusing origin with (0,0,0))
+    if (pos.distanceTo(origin) > maxDist) {
+      nextCamera->copyFromForcingMatrixCreation(*previousCamera);
   //    Vector3D pos2 = nextCamera->getCartesianPosition();
   //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
-    }
+    }*/
   
   }
 
