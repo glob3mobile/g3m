@@ -1013,9 +1013,7 @@ public abstract class MapBooBuilder
         view = "runtime";
     }
   
-    final String options = _enableNotifications ? "/enableNotifications" : "";
-  
-    return new URL(tubesPath + "/application/" + _applicationId + "/" + view + options, false);
+    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
