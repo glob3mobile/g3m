@@ -265,6 +265,9 @@ std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origi
   MutableMatrix44D* M = createTransformMatrix(_planet);
   const Quadric transformedQuadric = _quadric.transformBy(*M);
   delete M;
-  return transformedQuadric.intersectionsDistances(origin, direction);
-  return std::vector<double>();
+  std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);
+  std::vector<double> closerDistance;
+  if (!distances.empty())
+    closerDistance.push_back(distances[0]);
+  return closerDistance;
 }

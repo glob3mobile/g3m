@@ -324,7 +324,7 @@ std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
   
   if (tmin < tmax) {
     distances.push_back(tmin);
-    distances.push_back(tmax);
+    //distances.push_back(tmax);
   }
 
   return distances;
