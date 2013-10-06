@@ -45,6 +45,7 @@ class Camera;
 class Tile;
 class MarksRenderer;
 class MapBooBuilder;
+class Vector2I;
 
 #include <vector>
 #include <string>
@@ -86,6 +87,7 @@ public:
 
   virtual void onTerrainTouch(MapBooBuilder*         builder,
                               const G3MEventContext* ec,
+                              const Vector2I&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
@@ -289,19 +291,23 @@ private:
   const Geodetic2D             _position;
   const MapBoo_CameraPosition* _cameraPosition;
   const std::string            _message;
+  const URL*                   _iconURL;
 
 public:
 
   MapBoo_Notification(const Geodetic2D&            position,
                       const MapBoo_CameraPosition* cameraPosition,
-                      const std::string&           message) :
+                      const std::string&           message,
+                      const URL*                   iconURL) :
   _position(position),
   _cameraPosition(cameraPosition),
-  _message(message)
+  _message(message),
+  _iconURL(iconURL)
   {
   }
 
   ~MapBoo_Notification() {
+    delete _iconURL;
     delete _cameraPosition;
   }
 
@@ -316,6 +322,11 @@ public:
   const std::string getMessage() const {
     return _message;
   }
+
+  const URL* getIconURL() const {
+    return _iconURL;
+  }
+
 };
 
 
@@ -423,11 +434,13 @@ private:
 
   const std::string getSendNotificationCommand(const Geodetic2D&  position,
                                                const Camera*      camera,
-                                               const std::string& message) const;
+                                               const std::string& message,
+                                               const URL*         iconURL) const;
 
   const std::string getSendNotificationCommand(const Geodetic2D&            position,
                                                const MapBoo_CameraPosition* cameraPosition,
-                                               const std::string&           message) const;
+                                               const std::string&           message,
+                                               const URL*                   iconURL) const;
 
   const std::string escapeString(const std::string& str) const;
 
@@ -438,6 +451,7 @@ private:
 
   void setApplicationNotification(MapBoo_Notification* notification);
 
+  const URL* parseURL(const JSONString* jsonString) const;
 
   MarksRenderer* _marksRenderer;
   MarksRenderer* getMarksRenderer();
@@ -528,26 +542,35 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);
 
   const MapBoo_Notification* createNotification(const Geodetic2D&  position,
                                                 const Camera*      camera,
-                                                const std::string& message) const;
+                                                const std::string& message,
+                                                const URL*         iconURL) const;
 
   void sendNotification(const Geodetic2D&  position,
                         const Camera*      camera,
-                        const std::string& message) const;
+                        const std::string& message,
+                        const URL*         iconURL) const;
 
   void sendNotification(const Geodetic2D&            position,
                         const MapBoo_CameraPosition* cameraPosition,
-                        const std::string&           message) const;
+                        const std::string&           message,
+                        const URL*                   iconURL) const;
 
   void changeScene(int sceneIndex);
   
   void changeScene(const MapBoo_Scene* scene);
-  
+
+
+  const URL getServerURL() const {
+    return _serverURL;
+  }
+
 };
 
 #endif

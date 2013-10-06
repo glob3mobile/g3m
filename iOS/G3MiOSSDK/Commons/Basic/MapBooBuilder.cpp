@@ -270,10 +270,12 @@ public:
   }
 
   bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) {
     return _mapBooBuilder->onTerrainTouch(ec,
+                                          pixel,
                                           camera,
                                           position,
                                           tile);
@@ -352,7 +354,8 @@ const std::string MapBooBuilder::toCameraPositionJSON(const Camera* camera) cons
 
 const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&            position,
                                                             const MapBoo_CameraPosition* cameraPosition,
-                                                            const std::string&           message) const {
+                                                            const std::string&           message,
+                                                            const URL*                   iconURL) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("notification=");
@@ -369,6 +372,13 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&   
   isb->addString("\"");
   isb->addString( escapeString(message) );
   isb->addString("\"");
+
+  if (iconURL != NULL) {
+    isb->addString(",\"iconURL\":");
+    isb->addString("\"");
+    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString("\"");
+  }
 
   isb->addString(",\"cameraPosition\":");
   isb->addString( toCameraPositionJSON(cameraPosition) );
@@ -382,7 +392,8 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&   
 
 const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  position,
                                                             const Camera*      camera,
-                                                            const std::string& message) const {
+                                                            const std::string& message,
+                                                            const URL*         iconURL) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("notification=");
@@ -400,6 +411,13 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  p
   isb->addString( escapeString(message) );
   isb->addString("\"");
 
+  if (iconURL != NULL) {
+    isb->addString(",\"iconURL\":");
+    isb->addString("\"");
+    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString("\"");
+  }
+
   isb->addString(",\"cameraPosition\":");
   isb->addString( toCameraPositionJSON(camera) );
 
@@ -412,11 +430,13 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  p
 
 void MapBooBuilder::sendNotification(const Geodetic2D&            position,
                                      const MapBoo_CameraPosition* cameraPosition,
-                                     const std::string&           message) const {
+                                     const std::string&           message,
+                                     const URL*                   iconURL) const {
   if ((_webSocket != NULL) && _isApplicationTubeOpen) {
     _webSocket->send( getSendNotificationCommand(position,
                                                  cameraPosition,
-                                                 message) );
+                                                 message,
+                                                 iconURL) );
   }
   else {
     ILogger::instance()->logError("Can't send notification, websocket disconnected");
@@ -425,11 +445,13 @@ void MapBooBuilder::sendNotification(const Geodetic2D&            position,
 
 void MapBooBuilder::sendNotification(const Geodetic2D&  position,
                                      const Camera*      camera,
-                                     const std::string& message) const {
+                                     const std::string& message,
+                                     const URL*         iconURL) const {
   if ((_webSocket != NULL) && _isApplicationTubeOpen) {
     _webSocket->send( getSendNotificationCommand(position,
                                                  camera,
-                                                 message) );
+                                                 message,
+                                                 iconURL) );
   }
   else {
     ILogger::instance()->logError("Can't send notification, websocket disconnected");
@@ -437,12 +459,14 @@ void MapBooBuilder::sendNotification(const Geodetic2D&  position,
 }
 
 bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
+                                   const Vector2I&        pixel,
                                    const Camera*          camera,
                                    const Geodetic3D&      position,
                                    const Tile*            tile) {
   if (_applicationListener != NULL) {
     _applicationListener->onTerrainTouch(this,
                                          ec,
+                                         pixel,
                                          camera,
                                          position,
                                          tile);
@@ -760,6 +784,13 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           hasWarnings);
 }
 
+const URL* MapBooBuilder::parseURL(const JSONString* jsonString) const {
+  if (jsonString == NULL) {
+    return NULL;
+  }
+  return new URL(jsonString->value());
+}
+
 MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -768,7 +799,9 @@ MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObje
   return new MapBoo_Notification(Geodetic2D::fromDegrees(jsonObject->getAsNumber("latitude",  0),
                                                          jsonObject->getAsNumber("longitude", 0)),
                                  parseCameraPosition( jsonObject->getAsObject("cameraPosition") ),
-                                 jsonObject->getAsString("message", ""));
+                                 jsonObject->getAsString("message", ""),
+                                 parseURL( jsonObject->getAsString("iconURL") )
+                                 );
 }
 
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
@@ -855,20 +888,48 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
   if (_marksRenderer != NULL) {
     const std::string message = notification->getMessage();
-    if (message.size() > 0) {
-      const Geodetic2D position = notification->getPosition();
-      _marksRenderer->addMark( new Mark(message,
-                                        Geodetic3D(position, 0),
-                                        ABSOLUTE,
-                                        0) );
+
+    const bool hasMessage = (message.size() > 0);
+    const URL* iconURL = notification->getIconURL();
+
+    const Geodetic2D position = notification->getPosition();
+
+    bool newMark = false;
+
+    if (hasMessage) {
+      if (iconURL == NULL) {
+        _marksRenderer->addMark( new Mark(message,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+      }
+      else {
+        _marksRenderer->addMark( new Mark(message,
+                                          *iconURL,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+      }
+      newMark = true;
+    }
+    else {
+      if (iconURL != NULL) {
+        _marksRenderer->addMark( new Mark(*iconURL,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+        newMark = true;
+      }
     }
 
-    const MapBoo_CameraPosition* cameraPosition = notification->getCameraPosition();
-    if (cameraPosition != NULL) {
-      _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
-                                            cameraPosition->getPosition(),
-                                            cameraPosition->getHeading(),
-                                            cameraPosition->getPitch());
+    if (newMark) {
+      const MapBoo_CameraPosition* cameraPosition = notification->getCameraPosition();
+      if (cameraPosition != NULL) {
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                              cameraPosition->getPosition(),
+                                              cameraPosition->getHeading(),
+                                              cameraPosition->getPitch());
+      }
     }
   }
 
@@ -1405,10 +1466,11 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
 
 const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  position,
                                                              const Camera*      camera,
-                                                             const std::string& message) const {
+                                                             const std::string& message,
+                                                             const URL*         iconURL) const {
   MapBoo_CameraPosition* cameraPosition = new MapBoo_CameraPosition(camera->getGeodeticPosition(),
                                                                     camera->getHeading(),
                                                                     camera->getPitch(),
                                                                     true /* animated */);
-  return new MapBoo_Notification(position, cameraPosition, message);
+  return new MapBoo_Notification(position, cameraPosition, message, iconURL);
 }
