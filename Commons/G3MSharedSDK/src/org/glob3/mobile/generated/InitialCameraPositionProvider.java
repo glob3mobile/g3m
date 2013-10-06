@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 //class PlanetRenderer;
 //class Planet;
-//class Vector2I;
 
 public abstract class InitialCameraPositionProvider
 {
@@ -27,5 +26,5 @@ public abstract class InitialCameraPositionProvider
   public void dispose()
   {
   }
-  public abstract Geodetic3D getCameraPosition(Planet planet, PlanetRenderer planetRenderer, Vector2I viewportExtent);
+  public abstract Geodetic3D getCameraPosition(Planet planet, PlanetRenderer planetRenderer);
 }
