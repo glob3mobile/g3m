@@ -199,13 +199,13 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
 
       if (!shapeDistances.empty()) {
-        //        printf ("Found %d intersections with shapes:\n",
-        //                (int)shapeDistances.size());
+        printf ("Found %d intersections with shapes:\n",
+                (int)shapeDistances.size());
         for (int i=0; i<shapeDistances.size(); i++) {
-          //          printf ("   %d: shape %x to distance %f\n",
-          //                  i+1,
-          //                  (unsigned int)shapeDistances[i]._shape,
-          //                  shapeDistances[i]._distance);
+          printf ("   %d: shape %x to distance %f\n",
+                  i+1,
+                  (unsigned int)shapeDistances[i]._shape,
+                  shapeDistances[i]._distance);
         }
       }
     }

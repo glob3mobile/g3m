@@ -719,8 +719,10 @@ public:
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
-                                                                    meshRenderer: meshRenderer];
-  builder.setInitializationTask(initializationTask, true);
+                                                                    meshRenderer: meshRenderer
+                                                                          planet: builder.getPlanet()];
+                                             
+  //builder.setInitializationTask(initializationTask, true);
 
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
@@ -1535,6 +1537,7 @@ public:
                                            Angle::fromDegrees(-122),
                                            45000),
                             ABSOLUTE,
+                            planet,
                             Vector3D(20000, 30000, 50000),
                             2,
                             Color::fromRGBA(0,    1, 0, 0.5),
@@ -1554,6 +1557,7 @@ public:
                                            Angle::fromDegrees(10),
                                            radiusBox.z()/2),
                             ABSOLUTE,
+                            planet,
                             radiusBox,
                             2,
                             Color::fromRGBA(0,    1, 0, 1),
@@ -1877,6 +1881,7 @@ private:
 
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
+                        planet,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
@@ -2215,6 +2220,7 @@ public:
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
                                            meshRenderer: (MeshRenderer*) meshRenderer
+                                                 planet: (const Planet*) planet
 {
   class SampleInitializationTask : public GInitializationTask {
   private:
@@ -2222,6 +2228,7 @@ public:
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
+    const Planet*   _planet;
 
     void testRadarModel(const G3MContext* context) {
 
@@ -2238,11 +2245,13 @@ public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
                              GEORenderer*    geoRenderer,
-                             MeshRenderer*   meshRenderer) :
+                             MeshRenderer*   meshRenderer,
+                             const Planet*   planet) :
     _iosWidget(iosWidget),
     _shapesRenderer(shapesRenderer),
     _geoRenderer(geoRenderer),
-    _meshRenderer(meshRenderer)
+    _meshRenderer(meshRenderer),
+    _planet(planet)
     {
 
     }
@@ -2667,6 +2676,7 @@ public:
                                                    Angle::fromDegrees(-15.431389),
                                                    1000000),
                                     RELATIVE_TO_GROUND,
+                                    _planet,
                                     Vector3D(100, 100, 100),
                                     1.0,
                                     Color::fromRGBA(1.0, 0.0, 0.0, 1.0),
@@ -2697,7 +2707,8 @@ public:
   GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
                                                                          shapesRenderer,
                                                                          geoRenderer,
-                                                                         meshRenderer);
+                                                                         meshRenderer,
+                                                                         planet);
 
   return initializationTask;
 }
