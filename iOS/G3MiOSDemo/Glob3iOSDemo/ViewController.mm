@@ -1854,6 +1854,7 @@ private:
 
     return new EllipsoidShape(new Geodetic3D(geometry->getPosition(), 0),
                               RELATIVE_TO_GROUND,
+                              planet,
                               Vector3D(radius, radius, radius),
                               10,
                               0.0,

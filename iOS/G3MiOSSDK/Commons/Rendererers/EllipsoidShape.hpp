@@ -28,6 +28,8 @@ class IGLTextureId;
 class EllipsoidShape : public AbstractMeshShape {
 private:
   
+  const Planet* _planet;
+  
 #ifdef C_CODE
   const Ellipsoid* _ellipsoid;
   const Quadric    _quadric;
@@ -73,6 +75,7 @@ protected:
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
+                 const Planet* planet,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
@@ -93,7 +96,8 @@ public:
   _borderColor(borderColor),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _planet(planet)
   {
 
   }
@@ -120,7 +124,8 @@ public:
   _borderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _planet(planet)
   {
     
   }
