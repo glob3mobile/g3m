@@ -643,8 +643,27 @@ public abstract class MapBooBuilder
   
     return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), jsonObject.getAsString("message", ""), parseURL(jsonObject.getAsString("iconURL")));
   }
+  private java.util.ArrayList<MapBoo_Notification> parseNotifications(JSONArray jsonArray)
+  {
+    java.util.ArrayList<MapBoo_Notification> result = new java.util.ArrayList<MapBoo_Notification>();
+  
+    if (jsonArray != null)
+    {
+      final int size = jsonArray.size();
+      for (int i = 0; i < size; i++)
+      {
+        MapBoo_Notification notification = parseNotification(jsonArray.getAsObject(i));
+        if (notification != null)
+        {
+          result.add(notification);
+        }
+      }
+    }
+  
+    return result;
+  }
 
-  private void setApplicationNotification(MapBoo_Notification notification)
+  private void addApplicationNotification(MapBoo_Notification notification)
   {
     if (_marksRenderer != null)
     {
@@ -690,6 +709,25 @@ public abstract class MapBooBuilder
   
     if (notification != null)
        notification.dispose();
+  }
+  private void addApplicationNotifications(java.util.ArrayList<MapBoo_Notification> notifications)
+  {
+    if (notifications == null)
+    {
+      return;
+    }
+  
+    final int size = notifications.size();
+    for (int i = 0; i < size; i++)
+    {
+      MapBoo_Notification notification = notifications.get(i);
+      if (notification != null)
+      {
+        addApplicationNotification(notification);
+      }
+    }
+  
+    notifications = null;
   }
 
   private URL parseURL(JSONString jsonString)
@@ -975,7 +1013,9 @@ public abstract class MapBooBuilder
         view = "runtime";
     }
   
-    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
+    final String options = _enableNotifications ? "/enableNotifications" : "";
+  
+    return new URL(tubesPath + "/application/" + _applicationId + "/" + view + options, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1057,10 +1097,16 @@ public abstract class MapBooBuilder
   
           if (_enableNotifications)
           {
+            final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
+            if (jsonNotifications != null)
+            {
+              addApplicationNotifications(parseNotifications(jsonNotifications));
+            }
+  
             final JSONObject jsonNotification = jsonObject.getAsObject("notification");
             if (jsonNotification != null)
             {
-              setApplicationNotification(parseNotification(jsonNotification));
+              addApplicationNotification(parseNotification(jsonNotification));
             }
           }
         }

@@ -35,6 +35,7 @@ package org.glob3.mobile.generated;
 //class JSONBaseObject;
 //class JSONObject;
 //class JSONString;
+//class JSONArray;
 //class TimeInterval;
 //class MapQuestLayer;
 //class BingMapsLayer;
