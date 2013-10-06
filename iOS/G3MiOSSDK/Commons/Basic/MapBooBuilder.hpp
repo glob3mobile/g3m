@@ -459,6 +459,8 @@ private:
   MarksRenderer* _marksRenderer;
   MarksRenderer* getMarksRenderer();
 
+  bool _hasParsedApplication;
+
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
@@ -549,6 +551,13 @@ public:
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setHasParsedApplication();
+
+  /** Private to MapbooBuilder, don't call it */
+  bool hasParsedApplication() const;
+
 
   const MapBoo_Notification* createNotification(const Geodetic2D&  position,
                                                 const Camera*      camera,

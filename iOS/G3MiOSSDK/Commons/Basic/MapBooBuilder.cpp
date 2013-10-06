@@ -209,7 +209,8 @@ _applicationCurrentSceneIndex(-1),
 _lastApplicationCurrentSceneIndex(-1),
 _context(NULL),
 _webSocket(NULL),
-_marksRenderer(NULL)
+_marksRenderer(NULL),
+_hasParsedApplication(false)
 {
 
 }
@@ -876,6 +877,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
           setApplicationTimestamp(timestamp);
           saveApplicationData();
+          setHasParsedApplication();
         }
 
         const JSONNumber* jsonCurrentSceneIndex = jsonObject->getAsNumber("currentSceneIndex");
@@ -1128,7 +1130,8 @@ public:
   }
 
   bool isDone(const G3MContext* context) {
-    return true;
+    return _builder->isApplicationTubeOpen() && _builder->hasParsedApplication();
+    //return true;
   }
 };
 
@@ -1301,6 +1304,14 @@ void MapBooBuilder::saveApplicationData() const {
   //  int                        _applicationCurrentSceneIndex;
   //  int                        _lastApplicationCurrentSceneIndex;
   int __DGD_at_work;
+}
+
+void MapBooBuilder::setHasParsedApplication() {
+  _hasParsedApplication = true;
+}
+
+bool MapBooBuilder::hasParsedApplication() const {
+  return _hasParsedApplication;
 }
 
 void MapBooBuilder::setApplicationTimestamp(const int timestamp) {
