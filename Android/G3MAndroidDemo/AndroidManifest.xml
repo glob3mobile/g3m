@@ -78,7 +78,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.glob3.mobile.demo.PlaneFlyingActivity"
+            android:name="org.glob3.mobile.demo.PlaneFlyingActivity__"
             android:label="@string/title_activity_plane_flying"
             android:launchMode="standard"
             android:process=":I"

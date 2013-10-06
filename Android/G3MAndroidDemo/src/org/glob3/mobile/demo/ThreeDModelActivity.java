@@ -4,6 +4,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Planet;
@@ -41,6 +42,7 @@ public class ThreeDModelActivity
       _builder = new G3MBuilder_Android(this);
       _builder.setPlanet(Planet.createSphericalEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
 
       final ShapesRenderer planeShapeRenderer = new ShapesRenderer();
       planeShapeRenderer.loadBSONSceneJS(new URL("file:///A320.bson", false), "file:///textures-A320/", false, new Geodetic3D(
