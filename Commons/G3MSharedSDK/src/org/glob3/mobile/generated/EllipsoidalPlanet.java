@@ -624,9 +624,11 @@ public class EllipsoidalPlanet extends Planet
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
   
-    Vector3D pos = nextCamera.getCartesianPosition();
-    Vector3D origin = _origin.asVector3D();
-    double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
+    int __ASK_JM;
+  
+  //  Vector3D pos = nextCamera->getCartesianPosition();
+  //  Vector3D origin = _origin.asVector3D();
+  //  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
   
     /*
     // this constrainst is not right (probably confusing origin with (0,0,0))
