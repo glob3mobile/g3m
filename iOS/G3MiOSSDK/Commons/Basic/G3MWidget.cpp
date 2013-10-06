@@ -389,8 +389,7 @@ void G3MWidget::render(int width, int height) {
     _initialCameraPositionHasBeenSet = true;
 
     Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
-                                                                     _mainRenderer->getPlanetRenderer(),
-                                                                     Vector2I(_width,_height));
+                                                                     _mainRenderer->getPlanetRenderer());
 
     _currentCamera->setGeodeticPosition(g);
     _currentCamera->setHeading(Angle::zero());

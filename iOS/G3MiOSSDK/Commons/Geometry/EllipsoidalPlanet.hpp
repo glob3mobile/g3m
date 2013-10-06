@@ -170,8 +170,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Vector2I& viewport,
-                                      const Sector& shownSector) const{
+  Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const{
     const Vector3D asw = toCartesian(shownSector.getSW());
     const Vector3D ane = toCartesian(shownSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;

@@ -674,8 +674,7 @@ G3MWidget* IG3MBuilder::create() {
     mainRenderer = getPlanetRendererBuilder()->create();
   }
 
-  int TODO_VIEWPORT;
-  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(Vector2I(1024,1024), shownSector);
+  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(shownSector);
 //  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
 
   //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
