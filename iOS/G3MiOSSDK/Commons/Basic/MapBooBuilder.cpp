@@ -1027,9 +1027,7 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
       view = "runtime";
   }
 
-  const std::string options = _enableNotifications ? "/enableNotifications" : "";
-
-  return URL(tubesPath + "/application/" + _applicationId + "/" + view + options, false);
+  return URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
 }
 
 
