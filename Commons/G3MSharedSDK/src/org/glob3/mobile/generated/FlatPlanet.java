@@ -350,15 +350,14 @@ public class FlatPlanet extends Planet
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
   
-    Vector3D pos = nextCamera.getCartesianPosition();
-    Vector3D origin = _origin.asVector3D();
-    double maxDist = _size.length() * 1.5;
-  
-    if (pos.distanceTo(origin) > maxDist)
-    {
-      //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-      nextCamera.copyFrom(previousCamera);
-    }
+  //  Vector3D pos = nextCamera->getCartesianPosition();
+  //  Vector3D origin = _origin.asVector3D();
+  //  double maxDist = _size.length() * 1.5;
+  //
+  //  if (pos.distanceTo(origin) > maxDist) {
+  //    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+  //    nextCamera->copyFrom(*previousCamera);
+  //  }
   
   
   }
