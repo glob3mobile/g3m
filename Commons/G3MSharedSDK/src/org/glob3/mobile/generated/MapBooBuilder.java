@@ -203,9 +203,14 @@ public abstract class MapBooBuilder
     {
       return parseWMSLayer(jsonLayer);
     }
+    else if (layerType.compareTo("URLTemplate") == 0)
+    {
+      return parseURLTemplateLayer(jsonLayer);
+    }
     else
     {
       ILogger.instance().logError("Unsupported layer type \"%s\"", layerType);
+      ILogger.instance().logError("%s", jsonBaseObjectLayer.description());
       return null;
     }
   }
@@ -290,6 +295,37 @@ public abstract class MapBooBuilder
     return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
+  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer)
+  {
+    final String urlTemplate = jsonLayer.getAsString("url", "");
+  
+    final boolean transparent = jsonLayer.getAsBoolean("transparent", true);
+  
+    final int firstLevel = (int) jsonLayer.getAsNumber("firstLevel", 1);
+    final int maxLevel = (int) jsonLayer.getAsNumber("maxLevel", 19);
+  
+    final String projection = jsonLayer.getAsString("projection", "EPSG_900913");
+    final boolean mercator = (projection.equals("EPSG_900913"));
+  
+    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
+  
+    final Sector sector = Sector.fromDegrees(lowerLat, lowerLon, upperLat, upperLon);
+  
+    URLTemplateLayer result;
+    if (mercator)
+    {
+      result = URLTemplateLayer.newMercator(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+    }
+    else
+    {
+      result = URLTemplateLayer.newWGS84(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+    }
+  
+    return result;
+  }
 
   private int getApplicationCurrentSceneIndex()
   {
