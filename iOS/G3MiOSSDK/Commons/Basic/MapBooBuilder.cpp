@@ -1482,7 +1482,13 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 #endif
 
   if (_applicationListener != NULL) {
+#ifdef C_CODE
     _applicationListener->onScenesChanged(_context, _applicationScenes);
+#endif
+#ifdef JAVA_CODE
+    _applicationListener.onScenesChanged(_context,
+                                         new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+#endif
   }
 
   changedCurrentScene();
