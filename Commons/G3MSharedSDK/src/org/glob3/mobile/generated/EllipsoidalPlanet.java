@@ -502,9 +502,9 @@ public class EllipsoidalPlanet extends Planet
       }
     }
   
-  //  if (iter>5)
-  //    printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n",
-  //           iter, precision, angle_n, dAccum);
+    //  if (iter>5)
+    //    printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n",
+    //           iter, precision, angle_n, dAccum);
   
     // start to compound matrix
     MutableMatrix44D matrix = MutableMatrix44D.identity();
@@ -626,17 +626,17 @@ public class EllipsoidalPlanet extends Planet
   
     int __ASK_JM;
   
-  //  Vector3D pos = nextCamera->getCartesianPosition();
-  //  Vector3D origin = _origin.asVector3D();
-  //  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
+    //  Vector3D pos = nextCamera->getCartesianPosition();
+    //  Vector3D origin = _origin.asVector3D();
+    //  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
   
     /*
-    // this constrainst is not right (probably confusing origin with (0,0,0))
-    if (pos.distanceTo(origin) > maxDist) {
-      nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-  //    Vector3D pos2 = nextCamera->getCartesianPosition();
-  //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
-    }*/
+     // this constrainst is not right (probably confusing origin with (0,0,0))
+     if (pos.distanceTo(origin) > maxDist) {
+     nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+     //    Vector3D pos2 = nextCamera->getCartesianPosition();
+     //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+     }*/
   
   }
 
