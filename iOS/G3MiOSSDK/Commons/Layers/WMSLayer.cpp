@@ -35,7 +35,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
@@ -70,7 +70,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),

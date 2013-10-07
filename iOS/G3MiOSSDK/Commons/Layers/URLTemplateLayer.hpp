@@ -54,6 +54,15 @@ public:
                                        bool                readExpired = true,
                                        LayerCondition*     condition = NULL);
 
+  static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
+                                    const Sector&       sector,
+                                    bool                isTransparent,
+                                    const int           firstLevel,
+                                    const int           maxLevel,
+                                    const TimeInterval& timeToCache,
+                                    bool                readExpired = true,
+                                    LayerCondition*     condition = NULL);
+
   const std::string description() const;
 
   URLTemplateLayer* copy() const;

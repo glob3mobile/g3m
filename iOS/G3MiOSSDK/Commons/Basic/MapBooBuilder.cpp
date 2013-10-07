@@ -612,7 +612,7 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   const std::string srs = jsonLayer->getAsString("projection", "EPSG_4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
   if (srs.compare("EPSG_4326") == 0) {
-    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere());
   }
   else if (srs.compare("EPSG_900913") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);

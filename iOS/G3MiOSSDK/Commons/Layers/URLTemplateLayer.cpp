@@ -15,6 +15,7 @@
 #include "IStringUtils.hpp"
 #include "IMathUtils.hpp"
 #include "MercatorUtils.hpp"
+#include "LevelTileCondition.hpp"
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
                                    const Sector&                     sector,
@@ -51,10 +52,28 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                               isTransparent,
                               timeToCache,
                               readExpired,
-                              condition,
-                              LayerTilesRenderParameters::createDefaultMercator(firstLevel,
+                              (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
+                              LayerTilesRenderParameters::createDefaultMercator(2,
                                                                                 maxLevel));
 }
+
+URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
+                                             const Sector&       sector,
+                                             bool                isTransparent,
+                                             const int           firstLevel,
+                                             const int           maxLevel,
+                                             const TimeInterval& timeToCache,
+                                             bool                readExpired,
+                                             LayerCondition*     condition) {
+  return new URLTemplateLayer(urlTemplate,
+                              sector,
+                              isTransparent,
+                              timeToCache,
+                              readExpired,
+                              (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
+                              LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel));
+}
+
 
 bool URLTemplateLayer::rawIsEquals(const Layer* that) const {
   URLTemplateLayer* t = (URLTemplateLayer*) that;
