@@ -47,6 +47,7 @@
 #include "TerrainTouchListener.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "URLTemplateLayer.hpp"
 
 
 const std::string MapBoo_CameraPosition::description() const {
@@ -640,6 +641,45 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
                       layerTilesRenderParameters);
 }
 
+URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLayer) const {
+  const std::string urlTemplate = jsonLayer->getAsString("url", "");
+
+  const bool transparent = jsonLayer->getAsBoolean("transparent", true);
+
+  const int firstLevel = (int) jsonLayer->getAsNumber("firstLevel", 1);
+  const int maxLevel   = (int) jsonLayer->getAsNumber("maxLevel", 19);
+
+  const std::string projection = jsonLayer->getAsString("projection", "EPSG_900913");
+  const bool mercator = (projection == "EPSG_900913");
+
+  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
+  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
+  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
+  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
+
+  const Sector sector = Sector::fromDegrees(lowerLat, lowerLon,
+                                            upperLat, upperLon);
+
+  URLTemplateLayer* result;
+  if (mercator) {
+    result = URLTemplateLayer::newMercator(urlTemplate,
+                                           sector,
+                                           transparent,
+                                           firstLevel,
+                                           maxLevel,
+                                           TimeInterval::fromDays(30));
+  }
+  else {
+    result = URLTemplateLayer::newWGS84(urlTemplate,
+                                        sector,
+                                        transparent,
+                                        firstLevel,
+                                        maxLevel,
+                                        TimeInterval::fromDays(30));
+  }
+  
+  return result;
+}
 
 Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
   if (jsonBaseObjectLayer == NULL) {
@@ -677,8 +717,12 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   else if (layerType.compare("WMS") == 0) {
     return parseWMSLayer(jsonLayer);
   }
+  else if (layerType.compare("URLTemplate") == 0) {
+    return parseURLTemplateLayer(jsonLayer);
+  }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
+    ILogger::instance()->logError("%s", jsonBaseObjectLayer->description().c_str());
     return NULL;
   }
 }

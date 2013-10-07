@@ -47,6 +47,7 @@ class Tile;
 class MarksRenderer;
 class MapBooBuilder;
 class Vector2I;
+class URLTemplateLayer;
 
 #include <vector>
 #include <string>
@@ -416,6 +417,7 @@ private:
 
   WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
 
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
 
   const int getApplicationCurrentSceneIndex();
   const MapBoo_Scene* getApplicationCurrentScene();
