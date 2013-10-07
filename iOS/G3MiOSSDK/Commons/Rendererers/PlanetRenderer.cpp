@@ -362,7 +362,6 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
-//<<<<<<< HEAD
 
       if (sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
         Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
@@ -372,15 +371,6 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
         else {
           topLevelTiles.push_back(tile);
         }
-//=======
-//      
-//      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
-//      if (parameters->_firstLevel == 0) {
-//        _firstLevelTiles.push_back(tile);
-//      }
-//      else {
-//        topLevelTiles.push_back(tile);
-//>>>>>>> webgl-port
       }
     }
   }
@@ -442,30 +432,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     
     const int firstLevelTilesCount = _firstLevelTiles.size();
     
-//<<<<<<< HEAD
-//    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
-//      TilesStatistics statistics;
-//      
-//      PlanetRendererContext prc(_tessellator,
-//                                _elevationDataProvider,
-//                                _texturizer,
-//                                _tileRasterizer,
-//                                _layerSet,
-//                                layerTilesRenderParameters,
-//                                _parameters,
-//                                &statistics,
-//                                _lastSplitTimer,
-//                                true,
-//                                _texturePriority,
-//                                _verticalExaggeration,
-//                                *_renderedSector);
-//=======
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-//      TilesStatistics statistics;
       _statistics.clear();
-
-//      const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
-//>>>>>>> purgatory
 
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -615,26 +583,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
   
-//<<<<<<< HEAD
-//  TilesStatistics statistics;
-//  
-//  PlanetRendererContext prc(_tessellator,
-//                            _elevationDataProvider,
-//                            _texturizer,
-//                            _tileRasterizer,
-//                            _layerSet,
-//                            layerTilesRenderParameters,
-//                            _parameters,
-//                            &statistics,
-//                            _lastSplitTimer,
-//                            _firstRender /* if first render, force full render */,
-//                            _texturePriority,
-//                            _verticalExaggeration,
-//                            *_renderedSector);
-//=======
-  //TilesStatistics statistics;
   _statistics.clear();
-//>>>>>>> purgatory
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -642,8 +591,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
   double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
-
-//  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -811,8 +758,6 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
   _visibleSectorListeners.push_back( new VisibleSectorListenerEntry(listener,
                                                                     stabilizationInterval) );
 }
-
-
 
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
