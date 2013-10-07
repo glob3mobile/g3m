@@ -48,7 +48,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     java.util.ArrayList<Tile> topLevelTiles = new java.util.ArrayList<Tile>();
   
-    @SuppressWarnings("null")
     final Angle fromLatitude = parameters._topSector._lower._latitude;
     final Angle fromLongitude = parameters._topSector._lower._longitude;
   
