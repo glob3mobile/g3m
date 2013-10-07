@@ -977,7 +977,8 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onScenesChanged(_context, _applicationScenes);
+      _applicationListener.onScenesChanged(_context,
+                                           new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
     }
   
     changedCurrentScene();
