@@ -275,7 +275,7 @@ public abstract class MapBooBuilder
     LayerTilesRenderParameters layerTilesRenderParameters = null;
     if (srs.compareTo("EPSG_4326") == 0)
     {
-      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
     }
     else if (srs.compareTo("EPSG_900913") == 0)
     {

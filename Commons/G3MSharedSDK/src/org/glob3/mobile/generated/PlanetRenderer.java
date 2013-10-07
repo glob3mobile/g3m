@@ -73,7 +73,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileLower = new Geodetic2D(tileLatFrom, tileLonFrom);
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
-  //<<<<<<< HEAD
   
         if (sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
@@ -86,15 +85,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           {
             topLevelTiles.add(tile);
           }
-  //=======
-  //
-  //      Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
-  //      if (parameters->_firstLevel == 0) {
-  //        _firstLevelTiles.push_back(tile);
-  //      }
-  //      else {
-  //        topLevelTiles.push_back(tile);
-  //>>>>>>> webgl-port
         }
       }
     }
@@ -424,26 +414,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-  //<<<<<<< HEAD
-  //  TilesStatistics statistics;
-  //
-  //  PlanetRendererContext prc(_tessellator,
-  //                            _elevationDataProvider,
-  //                            _texturizer,
-  //                            _tileRasterizer,
-  //                            _layerSet,
-  //                            layerTilesRenderParameters,
-  //                            _parameters,
-  //                            &statistics,
-  //                            _lastSplitTimer,
-  //                            _firstRender /* if first render, force full render */,
-  //                            _texturePriority,
-  //                            _verticalExaggeration,
-  //                            *_renderedSector);
-  //=======
-    //TilesStatistics statistics;
     _statistics.clear();
-  //>>>>>>> purgatory
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -451,8 +422,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-  
-  //  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
@@ -609,31 +578,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
-  //<<<<<<< HEAD
-  //    if (_parameters->_forceFirstLevelTilesRenderOnStart) {
-  //      TilesStatistics statistics;
-  //
-  //      PlanetRendererContext prc(_tessellator,
-  //                                _elevationDataProvider,
-  //                                _texturizer,
-  //                                _tileRasterizer,
-  //                                _layerSet,
-  //                                layerTilesRenderParameters,
-  //                                _parameters,
-  //                                &statistics,
-  //                                _lastSplitTimer,
-  //                                true,
-  //                                _texturePriority,
-  //                                _verticalExaggeration,
-  //                                *_renderedSector);
-  //=======
       if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
       {
-  //      TilesStatistics statistics;
         _statistics.clear();
-  
-  //      const LayerTilesRenderParameters* layerTilesRenderParameters = _layerSet->getLayerTilesRenderParameters();
-  //>>>>>>> purgatory
   
         for (int i = 0; i < firstLevelTilesCount; i++)
         {

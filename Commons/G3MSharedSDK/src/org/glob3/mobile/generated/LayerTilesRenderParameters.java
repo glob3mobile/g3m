@@ -54,7 +54,7 @@ public class LayerTilesRenderParameters
   }
 
 
-  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector, int firstLevel, int maxLevel)
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
   {
     final int topSectorSplitsByLatitude = 2;
     final int topSectorSplitsByLongitude = 4;
@@ -63,12 +63,12 @@ public class LayerTilesRenderParameters
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
-  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector)
   {
     final int firstLevel = 0;
     final int maxLevel = 17;
 
-    return createDefaultNonMercator(topSector, firstLevel, maxLevel);
+    return createDefaultWGS84(topSector, firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
