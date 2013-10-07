@@ -359,10 +359,9 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
-    if (hasWarnings && (_viewType != MapBoo_ViewType.VIEW_PRESENTATION))
-    {
-      return null;
-    }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
   
     return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
