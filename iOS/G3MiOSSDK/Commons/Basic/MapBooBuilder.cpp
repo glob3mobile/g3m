@@ -815,9 +815,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-    return NULL;
-  }
+//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+//    return NULL;
+//  }
 
   return new MapBoo_Scene(jsonObject->getAsString("name", ""),
                           jsonObject->getAsString("description", ""),
