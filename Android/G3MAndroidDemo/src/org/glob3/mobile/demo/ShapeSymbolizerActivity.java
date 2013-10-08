@@ -22,6 +22,7 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 public class ShapeSymbolizerActivity
@@ -79,9 +80,20 @@ public class ShapeSymbolizerActivity
 
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+
+      final TextView labelUsPopulation = (TextView) findViewById(R.id.labelUSPopulation);
+      labelUsPopulation.bringToFront();
+      labelUsPopulation.setBackgroundColor(toAndroidColor(Color.fromRGBA255(0, 0, 0, 180)));
+
       _placeHolder.addView(_g3mWidget);
 
 
+   }
+
+
+   private int toAndroidColor(final Color c) {
+      return android.graphics.Color.argb(Math.round(c.getAlpha() * 255), Math.round(c.getRed() * 255),
+               Math.round(c.getGreen() * 255), Math.round(c.getBlue() * 255));
    }
 
 

@@ -121,7 +121,10 @@
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.ShapeSymbolizerActivity"
-            android:label="@string/title_activity_shape_symbolizer" >
+            android:label="@string/title_activity_shape_symbolizer"
+             android:launchMode="singleTask"
+            android:process=":O"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

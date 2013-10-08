@@ -27,10 +27,8 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.JSONString;
 import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector3D;
 
 
@@ -115,29 +113,6 @@ public class Symbology {
 
                                                    final ArrayList<GEOSymbol> result = new ArrayList<GEOSymbol>();
 
-                                                   final JSONObject properties = geometry.getFeature().getProperties();
-
-                                                   final String name = properties.getAsString("name", "");
-
-
-                                                   final Mark mark = new Mark( //
-                                                            new URL("file:///restaurant-24@2x.png"), //
-                                                            new Geodetic3D(geometry.getPosition(), 0), //
-                                                            AltitudeMode.RELATIVE_TO_GROUND, //
-                                                            5000, //
-                                                            null, //
-                                                            false, // 
-                                                            new MarkTouchListener() {
-                                                               @Override
-                                                               public boolean touchedMark(final Mark mark) {
-
-                                                                  return false;
-                                                               }
-                                                            }, //
-                                                            true);
-
-
-                                                   result.add(new GEOMarkSymbol(mark));
                                                    return result;
 
                                                 }
@@ -184,6 +159,7 @@ public class Symbology {
 
 
    public static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
+      @SuppressWarnings("unused")
       final JSONObject properties = geometry.getFeature().getProperties();
 
       // final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
@@ -198,6 +174,7 @@ public class Symbology {
 
 
    public static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+      @SuppressWarnings("unused")
       final JSONObject properties = geometry.getFeature().getProperties();
 
       // final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
@@ -346,7 +323,12 @@ public class Symbology {
                                                                    255), Color.fromRGBA255(252, 205, 21, 255).muchDarker(), false);
 
 
+                                                 final long popFormated = Math.round(popMax / 1000);
+                                                 final Mark m = new Mark("" + popFormated, new Geodetic3D(geometry.getPosition(),
+                                                          height / 5), AltitudeMode.RELATIVE_TO_GROUND);
+
                                                  result.add(new GEOShapeSymbol(bs));
+                                                 result.add(new GEOMarkSymbol(m));
                                                  return result;
 
                                               }
