@@ -23,10 +23,16 @@ class ICanvas;
 class IWebSocket;
 class IWebSocketListener;
 class URL;
+class IDeviceInfo;
 
 class IFactory {
 private:
-  static IFactory* _instance;
+  static IFactory*     _instance;
+
+  mutable IDeviceInfo* _deviceInfo;
+
+protected:
+  virtual IDeviceInfo* createDeviceInfo() const = 0;
 
 public:
   static void setInstance(IFactory* factory) {
@@ -39,6 +45,12 @@ public:
 
   static IFactory* instance() {
     return _instance;
+  }
+
+  IFactory() :
+  _deviceInfo(NULL)
+  {
+
   }
 
   virtual ~IFactory() {
@@ -84,6 +96,10 @@ public:
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,
                                       bool autodeleteWebSocket) const = 0;
+
+  IDeviceInfo* getDeviceInfo() const;
+
+
 #ifdef JAVA_CODE
 
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);

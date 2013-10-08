@@ -123,6 +123,10 @@
 		CF494C9A17FF0A1400D16D33 /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */; };
 		CF494C9B17FF0A5D00D16D33 /* TerrainTouchListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
+		CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F78451804AD4B00550409 /* IDeviceInfo.cpp */; };
+		CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */; };
+		CF4F784B1804AE7C00550409 /* IDeviceInfo.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78461804AD4B00550409 /* IDeviceInfo.hpp */; };
+		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
 		CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */; };
 		CF4FAAC81695D010009734CA /* JSONVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAC61695D010009734CA /* JSONVisitor.cpp */; };
 		CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */; };
@@ -620,14 +624,14 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */,
+				CF4F784B1804AE7C00550409 /* IDeviceInfo.hpp in CopyFiles */,
 				CF26127517F9CBFD003C2006 /* RenderState.hpp in CopyFiles */,
 				CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */,
 				CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */,
 				CF494C9B17FF0A5D00D16D33 /* TerrainTouchListener.hpp in CopyFiles */,
 				FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */,
 				CFDDDF9D17F8CA5C00DD3499 /* URLTemplateLayer.hpp in CopyFiles */,
-				CF7B07BA17F61B4200FE363D /* CanvasImageFactory.hpp in CopyFiles */,
-				CF7B07B517F5DBDC00FE363D /* ImageFactory.hpp in CopyFiles */,
 				CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */,
 				CF76461817EA414B00302F01 /* CartoCSSTokens.hpp in CopyFiles */,
 				CF76461917EA414B00302F01 /* CartoCSSLexer.hpp in CopyFiles */,
@@ -1126,6 +1130,10 @@
 		CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchListener.hpp; path = Commons/Rendererers/TerrainTouchListener.hpp; sourceTree = "<group>"; };
 		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
 		CF4CA476164C669D009BB7EB /* SGNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGNode.hpp; path = Commons/Rendererers/SGNode.hpp; sourceTree = "<group>"; };
+		CF4F78451804AD4B00550409 /* IDeviceInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceInfo.cpp; path = Commons/Interfaces/IDeviceInfo.cpp; sourceTree = "<group>"; };
+		CF4F78461804AD4B00550409 /* IDeviceInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDeviceInfo.hpp; path = Commons/Interfaces/IDeviceInfo.hpp; sourceTree = "<group>"; };
+		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; };
+		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
 		CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBufferBuilder.cpp; path = Commons/Basic/ByteBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ByteBufferBuilder.hpp; path = Commons/Basic/ByteBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF4FAAC61695D010009734CA /* JSONVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONVisitor.cpp; sourceTree = "<group>"; };
@@ -1657,6 +1665,8 @@
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
 				CF4027D01770DD5C00D5A80C /* WebSocket_iOS.mm */,
 				CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */,
+				CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */,
+				CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -1976,6 +1986,8 @@
 				CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */,
 				CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */,
 				44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */,
+				CF4F78451804AD4B00550409 /* IDeviceInfo.cpp */,
+				CF4F78461804AD4B00550409 /* IDeviceInfo.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -2547,6 +2559,7 @@
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
 				CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */,
+				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
 				CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */,
 				CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */,
 				CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */,
@@ -2580,6 +2593,7 @@
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,
 				A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */,
+				CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */,
 				A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */,
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,
 				A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */,

@@ -240,7 +240,6 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-
   [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
@@ -440,10 +439,10 @@ public:
 
   void onTerrainTouch(MapBooBuilder*         builder,
                       const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) { }
-
 };
 
 
