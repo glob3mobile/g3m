@@ -922,8 +922,6 @@ public abstract class MapBooBuilder
     if (isb != null)
        isb.dispose();
   
-    //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
-  
     return new URL(path, false);
   }
 
