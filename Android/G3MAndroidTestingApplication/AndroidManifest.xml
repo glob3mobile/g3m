@@ -20,7 +20,9 @@
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
             android:name="com.glob3.mobile.g3mandroidtestingapplication.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:configChanges="screenSize|orientation|screenLayout"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -100,16 +100,28 @@
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.SymbologyActivity"
-            android:label="@string/title_activity_symbology"   android:launchMode="singleTask"
+            android:label="@string/title_activity_symbology"
+            android:launchMode="singleTask"
             android:process=":L"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.FlatWorldActivity"
-            android:label="@string/title_activity_flat_world" 
-              android:launchMode="singleTask"
+            android:label="@string/title_activity_flat_world"
+            android:launchMode="singleTask"
             android:process=":M"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.CameraAnimation"
+            android:label="@string/title_activity_camera_animation"
+            android:launchMode="singleTask"
+            android:process=":N"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.glob3.mobile.demo.ShapeSymbolizerActivity"
+            android:label="@string/title_activity_shape_symbolizer" >
         </activity>
     </application>
 

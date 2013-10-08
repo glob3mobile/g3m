@@ -1,0 +1,1546 @@
+{
+"type": "FeatureCollection",
+                                                                                
+"features": [
+{ "type": "Feature", "id": 587, "properties": { "NAME": "Faribault", "ADM0NAME": "United States of America", "POP_MAX": 25376 }, "geometry": { "type": "Point", "coordinates": [ -93.268012737790229, 44.290486469594669 ] } }
+,
+{ "type": "Feature", "id": 588, "properties": { "NAME": "Mankato", "ADM0NAME": "United States of America", "POP_MAX": 56325 }, "geometry": { "type": "Point", "coordinates": [ -93.999156740071896, 44.163620828318074 ] } }
+,
+{ "type": "Feature", "id": 589, "properties": { "NAME": "Albert Lea", "ADM0NAME": "United States of America", "POP_MAX": 20522 }, "geometry": { "type": "Point", "coordinates": [ -93.368704266111081, 43.647786681180719 ] } }
+,
+{ "type": "Feature", "id": 590, "properties": { "NAME": "Willmar", "ADM0NAME": "United States of America", "POP_MAX": 18473 }, "geometry": { "type": "Point", "coordinates": [ -95.043304892745311, 45.121882750522502 ] } }
+,
+{ "type": "Feature", "id": 591, "properties": { "NAME": "Brainerd", "ADM0NAME": "United States of America", "POP_MAX": 28187 }, "geometry": { "type": "Point", "coordinates": [ -94.200849855307126, 46.358008849160285 ] } }
+,
+{ "type": "Feature", "id": 592, "properties": { "NAME": "Crookston", "ADM0NAME": "United States of America", "POP_MAX": 8653 }, "geometry": { "type": "Point", "coordinates": [ -96.6077313657334, 47.773762226444489 ] } }
+,
+{ "type": "Feature", "id": 593, "properties": { "NAME": "Hardin", "ADM0NAME": "United States of America", "POP_MAX": 4448 }, "geometry": { "type": "Point", "coordinates": [ -107.612486004449238, 45.73176800443116 ] } }
+,
+{ "type": "Feature", "id": 594, "properties": { "NAME": "Glendive", "ADM0NAME": "United States of America", "POP_MAX": 5856 }, "geometry": { "type": "Point", "coordinates": [ -104.710492596234587, 47.108583189983563 ] } }
+,
+{ "type": "Feature", "id": 595, "properties": { "NAME": "Dillon", "ADM0NAME": "United States of America", "POP_MAX": 4463 }, "geometry": { "type": "Point", "coordinates": [ -112.683985231357553, 45.21567547513223 ] } }
+,
+{ "type": "Feature", "id": 596, "properties": { "NAME": "Polson", "ADM0NAME": "United States of America", "POP_MAX": 5326 }, "geometry": { "type": "Point", "coordinates": [ -114.156686037027555, 47.688005187056149 ] } }
+,
+{ "type": "Feature", "id": 597, "properties": { "NAME": "Devils Lake", "ADM0NAME": "United States of America", "POP_MAX": 7813 }, "geometry": { "type": "Point", "coordinates": [ -98.859686932148577, 48.112217019740115 ] } }
+,
+{ "type": "Feature", "id": 598, "properties": { "NAME": "Burley", "ADM0NAME": "United States of America", "POP_MAX": 14042 }, "geometry": { "type": "Point", "coordinates": [ -113.791876263263077, 42.53581321112415 ] } }
+,
+{ "type": "Feature", "id": 599, "properties": { "NAME": "Wallace", "ADM0NAME": "United States of America", "POP_MAX": 1028 }, "geometry": { "type": "Point", "coordinates": [ -115.926888063401861, 47.474219786664776 ] } }
+,
+{ "type": "Feature", "id": 600, "properties": { "NAME": "Kennewick", "ADM0NAME": "United States of America", "POP_MAX": 102504 }, "geometry": { "type": "Point", "coordinates": [ -119.136097861591736, 46.21137697253198 ] } }
+,
+{ "type": "Feature", "id": 601, "properties": { "NAME": "Centralia", "ADM0NAME": "United States of America", "POP_MAX": 18880 }, "geometry": { "type": "Point", "coordinates": [ -122.952970827101808, 46.716410745320502 ] } }
+,
+{ "type": "Feature", "id": 602, "properties": { "NAME": "Glendale", "ADM0NAME": "United States of America", "POP_MAX": 500000 }, "geometry": { "type": "Point", "coordinates": [ -112.195823813712423, 33.581941140775768 ] } }
+,
+{ "type": "Feature", "id": 603, "properties": { "NAME": "Safford", "ADM0NAME": "United States of America", "POP_MAX": 10668 }, "geometry": { "type": "Point", "coordinates": [ -109.706880128806631, 32.833821430486353 ] } }
+,
+{ "type": "Feature", "id": 604, "properties": { "NAME": "Casa Grande", "ADM0NAME": "United States of America", "POP_MAX": 44655 }, "geometry": { "type": "Point", "coordinates": [ -111.756625815663824, 32.879374205551585 ] } }
+,
+{ "type": "Feature", "id": 605, "properties": { "NAME": "Mesa", "ADM0NAME": "United States of America", "POP_MAX": 1085394 }, "geometry": { "type": "Point", "coordinates": [ -111.736084433827784, 33.423914610827183 ] } }
+,
+{ "type": "Feature", "id": 606, "properties": { "NAME": "Lake Havasu City", "ADM0NAME": "United States of America", "POP_MAX": 56133 }, "geometry": { "type": "Point", "coordinates": [ -114.308278851155762, 34.498293476391325 ] } }
+,
+{ "type": "Feature", "id": 607, "properties": { "NAME": "Berkeley", "ADM0NAME": "United States of America", "POP_MAX": 496356 }, "geometry": { "type": "Point", "coordinates": [ -122.271151979442834, 37.873901386561158 ] } }
+,
+{ "type": "Feature", "id": 608, "properties": { "NAME": "National City", "ADM0NAME": "United States of America", "POP_MAX": 150000 }, "geometry": { "type": "Point", "coordinates": [ -117.098005210216343, 32.67194500633201 ] } }
+,
+{ "type": "Feature", "id": 609, "properties": { "NAME": "Mendocino", "ADM0NAME": "United States of America", "POP_MAX": 548 }, "geometry": { "type": "Point", "coordinates": [ -123.799430788042628, 39.307767353363715 ] } }
+,
+{ "type": "Feature", "id": 610, "properties": { "NAME": "Paso Robles", "ADM0NAME": "United States of America", "POP_MAX": 27157 }, "geometry": { "type": "Point", "coordinates": [ -120.68998234239217, 35.626596699052129 ] } }
+,
+{ "type": "Feature", "id": 611, "properties": { "NAME": "Riverside", "ADM0NAME": "United States of America", "POP_MAX": 297554 }, "geometry": { "type": "Point", "coordinates": [ -117.398038576103033, 33.941945006336994 ] } }
+,
+{ "type": "Feature", "id": 612, "properties": { "NAME": "Delano", "ADM0NAME": "United States of America", "POP_MAX": 44757 }, "geometry": { "type": "Point", "coordinates": [ -119.243068076435918, 35.761937275224568 ] } }
+,
+{ "type": "Feature", "id": 613, "properties": { "NAME": "San Mateo", "ADM0NAME": "United States of America", "POP_MAX": 626406 }, "geometry": { "type": "Point", "coordinates": [ -122.313061566031479, 37.556918150882893 ] } }
+,
+{ "type": "Feature", "id": 614, "properties": { "NAME": "Vallejo", "ADM0NAME": "United States of America", "POP_MAX": 146289 }, "geometry": { "type": "Point", "coordinates": [ -122.258052003856847, 38.111948871913739 ] } }
+,
+{ "type": "Feature", "id": 615, "properties": { "NAME": "Glenwood Springs", "ADM0NAME": "United States of America", "POP_MAX": 14004 }, "geometry": { "type": "Point", "coordinates": [ -107.324699953015795, 39.546589985200683 ] } }
+,
+{ "type": "Feature", "id": 616, "properties": { "NAME": "Aurora", "ADM0NAME": "United States of America", "POP_MAX": 587540 }, "geometry": { "type": "Point", "coordinates": [ -104.808496950076062, 39.695857359875845 ] } }
+,
+{ "type": "Feature", "id": 617, "properties": { "NAME": "Greeley", "ADM0NAME": "United States of America", "POP_MAX": 125410 }, "geometry": { "type": "Point", "coordinates": [ -104.739974000857046, 40.419198220881242 ] } }
+,
+{ "type": "Feature", "id": 618, "properties": { "NAME": "Tonopah", "ADM0NAME": "United States of America", "POP_MAX": 3261 }, "geometry": { "type": "Point", "coordinates": [ -117.228979127860157, 38.066990375819728 ] } }
+,
+{ "type": "Feature", "id": 619, "properties": { "NAME": "Deming", "ADM0NAME": "United States of America", "POP_MAX": 16298 }, "geometry": { "type": "Point", "coordinates": [ -107.755784751194653, 32.261091531395437 ] } }
+,
+{ "type": "Feature", "id": 620, "properties": { "NAME": "Truth or Consequences", "ADM0NAME": "United States of America", "POP_MAX": 7121 }, "geometry": { "type": "Point", "coordinates": [ -107.252895550346295, 33.133596414211411 ] } }
+,
+{ "type": "Feature", "id": 621, "properties": { "NAME": "Las Vegas", "ADM0NAME": "United States of America", "POP_MAX": 16998 }, "geometry": { "type": "Point", "coordinates": [ -105.222502687382303, 35.597011941565086 ] } }
+,
+{ "type": "Feature", "id": 622, "properties": { "NAME": "Farmington", "ADM0NAME": "United States of America", "POP_MAX": 43278 }, "geometry": { "type": "Point", "coordinates": [ -108.186094402889125, 36.754150613444665 ] } }
+,
+{ "type": "Feature", "id": 623, "properties": { "NAME": "Springfield", "ADM0NAME": "United States of America", "POP_MAX": 56032 }, "geometry": { "type": "Point", "coordinates": [ -122.978033896763236, 44.051948058135338 ] } }
+,
+{ "type": "Feature", "id": 624, "properties": { "NAME": "Tillamook", "ADM0NAME": "United States of America", "POP_MAX": 8145 }, "geometry": { "type": "Point", "coordinates": [ -123.842503094357937, 45.455247415237295 ] } }
+,
+{ "type": "Feature", "id": 625, "properties": { "NAME": "Ontario", "ADM0NAME": "United States of America", "POP_MAX": 12187 }, "geometry": { "type": "Point", "coordinates": [ -116.961889487559631, 44.026626606312391 ] } }
+,
+{ "type": "Feature", "id": 626, "properties": { "NAME": "La Grande", "ADM0NAME": "United States of America", "POP_MAX": 15004 }, "geometry": { "type": "Point", "coordinates": [ -118.086601198176027, 45.324686909051991 ] } }
+,
+{ "type": "Feature", "id": 627, "properties": { "NAME": "Richfield", "ADM0NAME": "United States of America", "POP_MAX": 7621 }, "geometry": { "type": "Point", "coordinates": [ -112.08329838239689, 38.772477029468462 ] } }
+,
+{ "type": "Feature", "id": 628, "properties": { "NAME": "Nephi", "ADM0NAME": "United States of America", "POP_MAX": 5117 }, "geometry": { "type": "Point", "coordinates": [ -111.835484051341155, 39.710275084485261 ] } }
+,
+{ "type": "Feature", "id": 629, "properties": { "NAME": "Lander", "ADM0NAME": "United States of America", "POP_MAX": 6821 }, "geometry": { "type": "Point", "coordinates": [ -108.732598512591835, 42.833004373234758 ] } }
+,
+{ "type": "Feature", "id": 630, "properties": { "NAME": "Powell", "ADM0NAME": "United States of America", "POP_MAX": 6895 }, "geometry": { "type": "Point", "coordinates": [ -108.758436728737706, 44.758674946159033 ] } }
+,
+{ "type": "Feature", "id": 631, "properties": { "NAME": "Paragould", "ADM0NAME": "United States of America", "POP_MAX": 23450 }, "geometry": { "type": "Point", "coordinates": [ -90.502884360500502, 36.057087218259653 ] } }
+,
+{ "type": "Feature", "id": 632, "properties": { "NAME": "Iowa City", "ADM0NAME": "United States of America", "POP_MAX": 98516 }, "geometry": { "type": "Point", "coordinates": [ -91.529979290517701, 41.661086241719488 ] } }
+,
+{ "type": "Feature", "id": 633, "properties": { "NAME": "Ottumwa", "ADM0NAME": "United States of America", "POP_MAX": 25982 }, "geometry": { "type": "Point", "coordinates": [ -92.414809002435391, 41.012882913266424 ] } }
+,
+{ "type": "Feature", "id": 634, "properties": { "NAME": "Spencer", "ADM0NAME": "United States of America", "POP_MAX": 11203 }, "geometry": { "type": "Point", "coordinates": [ -95.147174521652005, 43.145285053574412 ] } }
+,
+{ "type": "Feature", "id": 635, "properties": { "NAME": "Ft. Dodge", "ADM0NAME": "United States of America", "POP_MAX": 26879 }, "geometry": { "type": "Point", "coordinates": [ -94.180256797038794, 42.506822732608384 ] } }
+,
+{ "type": "Feature", "id": 636, "properties": { "NAME": "Hutchinson", "ADM0NAME": "United States of America", "POP_MAX": 44477 }, "geometry": { "type": "Point", "coordinates": [ -97.923490846532843, 38.065491759283304 ] } }
+,
+{ "type": "Feature", "id": 637, "properties": { "NAME": "Kansas City", "ADM0NAME": "United States of America", "POP_MAX": 501577 }, "geometry": { "type": "Point", "coordinates": [ -94.630146377123708, 39.113580516943443 ] } }
+,
+{ "type": "Feature", "id": 638, "properties": { "NAME": "Lawrence", "ADM0NAME": "United States of America", "POP_MAX": 92726 }, "geometry": { "type": "Point", "coordinates": [ -95.255229941574328, 38.959752420094162 ] } }
+,
+{ "type": "Feature", "id": 639, "properties": { "NAME": "Garden City", "ADM0NAME": "United States of America", "POP_MAX": 28564 }, "geometry": { "type": "Point", "coordinates": [ -100.864086549669707, 37.975213032069405 ] } }
+,
+{ "type": "Feature", "id": 640, "properties": { "NAME": "Manhattan", "ADM0NAME": "United States of America", "POP_MAX": 56949 }, "geometry": { "type": "Point", "coordinates": [ -96.592435141775013, 39.194027525889396 ] } }
+,
+{ "type": "Feature", "id": 641, "properties": { "NAME": "Hays", "ADM0NAME": "United States of America", "POP_MAX": 21394 }, "geometry": { "type": "Point", "coordinates": [ -99.322191001160832, 38.879369729664234 ] } }
+,
+{ "type": "Feature", "id": 642, "properties": { "NAME": "Goodland", "ADM0NAME": "United States of America", "POP_MAX": 4378 }, "geometry": { "type": "Point", "coordinates": [ -101.711037436717334, 39.348488382009805 ] } }
+,
+{ "type": "Feature", "id": 643, "properties": { "NAME": "Independence", "ADM0NAME": "United States of America", "POP_MAX": 148102 }, "geometry": { "type": "Point", "coordinates": [ -94.41528121110224, 39.091113910980141 ] } }
+,
+{ "type": "Feature", "id": 644, "properties": { "NAME": "Kirksville", "ADM0NAME": "United States of America", "POP_MAX": 19193 }, "geometry": { "type": "Point", "coordinates": [ -92.582809083816187, 40.193682270359602 ] } }
+,
+{ "type": "Feature", "id": 645, "properties": { "NAME": "Kearney", "ADM0NAME": "United States of America", "POP_MAX": 31553 }, "geometry": { "type": "Point", "coordinates": [ -99.08114628273546, 40.700705585791127 ] } }
+,
+{ "type": "Feature", "id": 646, "properties": { "NAME": "Grand Island", "ADM0NAME": "United States of America", "POP_MAX": 45651 }, "geometry": { "type": "Point", "coordinates": [ -98.357986289243001, 40.922268289242595 ] } }
+,
+{ "type": "Feature", "id": 647, "properties": { "NAME": "Alliance", "ADM0NAME": "United States of America", "POP_MAX": 8344 }, "geometry": { "type": "Point", "coordinates": [ -102.870191489456317, 42.101395283062459 ] } }
+,
+{ "type": "Feature", "id": 648, "properties": { "NAME": "Bartlesville", "ADM0NAME": "United States of America", "POP_MAX": 34610 }, "geometry": { "type": "Point", "coordinates": [ -95.980586183439243, 36.747200133301419 ] } }
+,
+{ "type": "Feature", "id": 649, "properties": { "NAME": "Enid", "ADM0NAME": "United States of America", "POP_MAX": 46138 }, "geometry": { "type": "Point", "coordinates": [ -97.878093100764545, 36.395542011555278 ] } }
+,
+{ "type": "Feature", "id": 650, "properties": { "NAME": "Ardmore", "ADM0NAME": "United States of America", "POP_MAX": 24960 }, "geometry": { "type": "Point", "coordinates": [ -97.129404949719856, 34.181077696767773 ] } }
+,
+{ "type": "Feature", "id": 651, "properties": { "NAME": "McAlester", "ADM0NAME": "United States of America", "POP_MAX": 21668 }, "geometry": { "type": "Point", "coordinates": [ -95.765973960131021, 34.932995624830539 ] } }
+,
+{ "type": "Feature", "id": 652, "properties": { "NAME": "Stillwater", "ADM0NAME": "United States of America", "POP_MAX": 47667 }, "geometry": { "type": "Point", "coordinates": [ -97.068297568534661, 36.135351174965649 ] } }
+,
+{ "type": "Feature", "id": 653, "properties": { "NAME": "Lead", "ADM0NAME": "United States of America", "POP_MAX": 2874 }, "geometry": { "type": "Point", "coordinates": [ -103.765769899290717, 44.350844542511595 ] } }
+,
+{ "type": "Feature", "id": 654, "properties": { "NAME": "Slidell", "ADM0NAME": "United States of America", "POP_MAX": 84239 }, "geometry": { "type": "Point", "coordinates": [ -89.781093792463878, 30.27495953268965 ] } }
+,
+{ "type": "Feature", "id": 655, "properties": { "NAME": "Lake Charles", "ADM0NAME": "United States of America", "POP_MAX": 83821 }, "geometry": { "type": "Point", "coordinates": [ -93.217188966631227, 30.226383686335282 ] } }
+,
+{ "type": "Feature", "id": 656, "properties": { "NAME": "Metairie", "ADM0NAME": "United States of America", "POP_MAX": 394206 }, "geometry": { "type": "Point", "coordinates": [ -90.152776531723134, 29.983866189589492 ] } }
+,
+{ "type": "Feature", "id": 657, "properties": { "NAME": "New Iberia", "ADM0NAME": "United States of America", "POP_MAX": 37540 }, "geometry": { "type": "Point", "coordinates": [ -91.8183079444903, 30.003580748508909 ] } }
+,
+{ "type": "Feature", "id": 658, "properties": { "NAME": "Bryan", "ADM0NAME": "United States of America", "POP_MAX": 146692 }, "geometry": { "type": "Point", "coordinates": [ -96.369683880380819, 30.674185810360427 ] } }
+,
+{ "type": "Feature", "id": 659, "properties": { "NAME": "San Marcos", "ADM0NAME": "United States of America", "POP_MAX": 70371 }, "geometry": { "type": "Point", "coordinates": [ -97.941112509944446, 29.883071308404169 ] } }
+,
+{ "type": "Feature", "id": 660, "properties": { "NAME": "Longview", "ADM0NAME": "United States of America", "POP_MAX": 75920 }, "geometry": { "type": "Point", "coordinates": [ -94.740274293785717, 32.500534280419913 ] } }
+,
+{ "type": "Feature", "id": 661, "properties": { "NAME": "McAllen", "ADM0NAME": "United States of America", "POP_MAX": 364004 }, "geometry": { "type": "Point", "coordinates": [ -98.229725384294568, 26.20303753560313 ] } }
+,
+{ "type": "Feature", "id": 662, "properties": { "NAME": "Harlingen", "ADM0NAME": "United States of America", "POP_MAX": 110339 }, "geometry": { "type": "Point", "coordinates": [ -97.690197592951279, 26.197559833780133 ] } }
+,
+{ "type": "Feature", "id": 663, "properties": { "NAME": "Alice", "ADM0NAME": "United States of America", "POP_MAX": 22655 }, "geometry": { "type": "Point", "coordinates": [ -98.070484458187138, 27.750462462366954 ] } }
+,
+{ "type": "Feature", "id": 664, "properties": { "NAME": "New Braunfels", "ADM0NAME": "United States of America", "POP_MAX": 45840 }, "geometry": { "type": "Point", "coordinates": [ -98.126320843278563, 29.697811298637816 ] } }
+,
+{ "type": "Feature", "id": 665, "properties": { "NAME": "Cleburne", "ADM0NAME": "United States of America", "POP_MAX": 35545 }, "geometry": { "type": "Point", "coordinates": [ -97.39248966651769, 32.351525287906327 ] } }
+,
+{ "type": "Feature", "id": 666, "properties": { "NAME": "Brownwood", "ADM0NAME": "United States of America", "POP_MAX": 20988 }, "geometry": { "type": "Point", "coordinates": [ -98.982315105977193, 31.707895323711 ] } }
+,
+{ "type": "Feature", "id": 667, "properties": { "NAME": "Alpine", "ADM0NAME": "United States of America", "POP_MAX": 6587 }, "geometry": { "type": "Point", "coordinates": [ -103.665000856321456, 30.36071657207799 ] } }
+,
+{ "type": "Feature", "id": 668, "properties": { "NAME": "Van Horn", "ADM0NAME": "United States of America", "POP_MAX": 2175 }, "geometry": { "type": "Point", "coordinates": [ -104.832242270714175, 31.042483743304615 ] } }
+,
+{ "type": "Feature", "id": 669, "properties": { "NAME": "Big Spring", "ADM0NAME": "United States of America", "POP_MAX": 24122 }, "geometry": { "type": "Point", "coordinates": [ -101.475186199737152, 32.243185647606424 ] } }
+,
+{ "type": "Feature", "id": 670, "properties": { "NAME": "Vernon", "ADM0NAME": "United States of America", "POP_MAX": 11660 }, "geometry": { "type": "Point", "coordinates": [ -99.290384157085271, 34.151053689606044 ] } }
+,
+{ "type": "Feature", "id": 671, "properties": { "NAME": "Childress", "ADM0NAME": "United States of America", "POP_MAX": 6557 }, "geometry": { "type": "Point", "coordinates": [ -100.213919516789474, 34.424887104320874 ] } }
+,
+{ "type": "Feature", "id": 672, "properties": { "NAME": "Hereford", "ADM0NAME": "United States of America", "POP_MAX": 15675 }, "geometry": { "type": "Point", "coordinates": [ -102.398592368360653, 34.821917133619252 ] } }
+,
+{ "type": "Feature", "id": 673, "properties": { "NAME": "Dalhart", "ADM0NAME": "United States of America", "POP_MAX": 7088 }, "geometry": { "type": "Point", "coordinates": [ -102.51861088235853, 36.060807921384651 ] } }
+,
+{ "type": "Feature", "id": 674, "properties": { "NAME": "Texas City", "ADM0NAME": "United States of America", "POP_MAX": 69914 }, "geometry": { "type": "Point", "coordinates": [ -94.962767173018449, 29.410877908337284 ] } }
+,
+{ "type": "Feature", "id": 675, "properties": { "NAME": "Pasadena", "ADM0NAME": "United States of America", "POP_MAX": 628492 }, "geometry": { "type": "Point", "coordinates": [ -95.147742962407278, 29.660862649549188 ] } }
+,
+{ "type": "Feature", "id": 676, "properties": { "NAME": "Baytown", "ADM0NAME": "United States of America", "POP_MAX": 86034 }, "geometry": { "type": "Point", "coordinates": [ -94.967728110518465, 29.755843932101641 ] } }
+,
+{ "type": "Feature", "id": 677, "properties": { "NAME": "Arlington", "ADM0NAME": "United States of America", "POP_MAX": 724777 }, "geometry": { "type": "Point", "coordinates": [ -97.020238486503274, 32.68476076154036 ] } }
+,
+{ "type": "Feature", "id": 684, "properties": { "NAME": "New London", "ADM0NAME": "United States of America", "POP_MAX": 96178 }, "geometry": { "type": "Point", "coordinates": [ -72.100028322015589, 41.355523497577735 ] } }
+,
+{ "type": "Feature", "id": 685, "properties": { "NAME": "Stamford", "ADM0NAME": "United States of America", "POP_MAX": 746920 }, "geometry": { "type": "Point", "coordinates": [ -73.539191123128035, 41.053345559750994 ] } }
+,
+{ "type": "Feature", "id": 686, "properties": { "NAME": "Waterbury", "ADM0NAME": "United States of America", "POP_MAX": 174236 }, "geometry": { "type": "Point", "coordinates": [ -73.05002201505323, 41.5500077505082 ] } }
+,
+{ "type": "Feature", "id": 687, "properties": { "NAME": "New Bedford", "ADM0NAME": "United States of America", "POP_MAX": 136082 }, "geometry": { "type": "Point", "coordinates": [ -70.944698325266131, 41.656125304219586 ] } }
+,
+{ "type": "Feature", "id": 688, "properties": { "NAME": "Springfield", "ADM0NAME": "United States of America", "POP_MAX": 421780 }, "geometry": { "type": "Point", "coordinates": [ -72.579999025142399, 42.120024636903736 ] } }
+,
+{ "type": "Feature", "id": 689, "properties": { "NAME": "Salem", "ADM0NAME": "United States of America", "POP_MAX": 335509 }, "geometry": { "type": "Point", "coordinates": [ -70.883091745775914, 42.522498903477697 ] } }
+,
+{ "type": "Feature", "id": 690, "properties": { "NAME": "Pittsfield", "ADM0NAME": "United States of America", "POP_MAX": 46230 }, "geometry": { "type": "Point", "coordinates": [ -73.259828330158257, 42.448195820173225 ] } }
+,
+{ "type": "Feature", "id": 691, "properties": { "NAME": "Montpelier", "ADM0NAME": "United States of America", "POP_MAX": 8538 }, "geometry": { "type": "Point", "coordinates": [ -72.575813234126827, 44.259971536326248 ] } }
+,
+{ "type": "Feature", "id": 692, "properties": { "NAME": "Auburn", "ADM0NAME": "United States of America", "POP_MAX": 73929 }, "geometry": { "type": "Point", "coordinates": [ -85.480839479295639, 32.609700743636438 ] } }
+,
+{ "type": "Feature", "id": 693, "properties": { "NAME": "Florence", "ADM0NAME": "United States of America", "POP_MAX": 45349 }, "geometry": { "type": "Point", "coordinates": [ -87.677242880997142, 34.799696267733793 ] } }
+,
+{ "type": "Feature", "id": 694, "properties": { "NAME": "Winter Haven", "ADM0NAME": "United States of America", "POP_MAX": 108932 }, "geometry": { "type": "Point", "coordinates": [ -81.733006227327451, 28.021918761196332 ] } }
+,
+{ "type": "Feature", "id": 695, "properties": { "NAME": "Melbourne", "ADM0NAME": "United States of America", "POP_MAX": 265414 }, "geometry": { "type": "Point", "coordinates": [ -80.60832035492723, 28.08331036275905 ] } }
+,
+{ "type": "Feature", "id": 696, "properties": { "NAME": "Homestead", "ADM0NAME": "United States of America", "POP_MAX": 85967 }, "geometry": { "type": "Point", "coordinates": [ -80.47778568695793, 25.468302021277111 ] } }
+,
+{ "type": "Feature", "id": 697, "properties": { "NAME": "Sanford", "ADM0NAME": "United States of America", "POP_MAX": 333460 }, "geometry": { "type": "Point", "coordinates": [ -81.279984783640828, 28.789959736134108 ] } }
+,
+{ "type": "Feature", "id": 698, "properties": { "NAME": "Miami Beach", "ADM0NAME": "United States of America", "POP_MAX": 407750 }, "geometry": { "type": "Point", "coordinates": [ -80.131781105166397, 25.809919533946811 ] } }
+,
+{ "type": "Feature", "id": 699, "properties": { "NAME": "Coral Springs", "ADM0NAME": "United States of America", "POP_MAX": 250000 }, "geometry": { "type": "Point", "coordinates": [ -80.270821575628986, 26.270837014769995 ] } }
+,
+{ "type": "Feature", "id": 700, "properties": { "NAME": "Port Charlotte", "ADM0NAME": "United States of America", "POP_MAX": 64279 }, "geometry": { "type": "Point", "coordinates": [ -82.105696657016551, 27.000043150840668 ] } }
+,
+{ "type": "Feature", "id": 701, "properties": { "NAME": "Spring Hill", "ADM0NAME": "United States of America", "POP_MAX": 114697 }, "geometry": { "type": "Point", "coordinates": [ -82.547711020625059, 28.47894512838559 ] } }
+,
+{ "type": "Feature", "id": 702, "properties": { "NAME": "Palm Coast", "ADM0NAME": "United States of America", "POP_MAX": 48577 }, "geometry": { "type": "Point", "coordinates": [ -81.223295737416606, 29.53800193177517 ] } }
+,
+{ "type": "Feature", "id": 703, "properties": { "NAME": "Palatka", "ADM0NAME": "United States of America", "POP_MAX": 21452 }, "geometry": { "type": "Point", "coordinates": [ -81.651305787874037, 29.647685159314733 ] } }
+,
+{ "type": "Feature", "id": 704, "properties": { "NAME": "Leesburg", "ADM0NAME": "United States of America", "POP_MAX": 49574 }, "geometry": { "type": "Point", "coordinates": [ -81.883332968864579, 28.810501117970318 ] } }
+,
+{ "type": "Feature", "id": 705, "properties": { "NAME": "Lake City", "ADM0NAME": "United States of America", "POP_MAX": 29395 }, "geometry": { "type": "Point", "coordinates": [ -82.639746746536844, 30.189719257624233 ] } }
+,
+{ "type": "Feature", "id": 706, "properties": { "NAME": "Crestview", "ADM0NAME": "United States of America", "POP_MAX": 22403 }, "geometry": { "type": "Point", "coordinates": [ -86.572607464326097, 30.754206765764366 ] } }
+,
+{ "type": "Feature", "id": 707, "properties": { "NAME": "Panama City", "ADM0NAME": "United States of America", "POP_MAX": 100072 }, "geometry": { "type": "Point", "coordinates": [ -85.655273276496814, 30.158610045384421 ] } }
+,
+{ "type": "Feature", "id": 708, "properties": { "NAME": "Dalton", "ADM0NAME": "United States of America", "POP_MAX": 58557 }, "geometry": { "type": "Point", "coordinates": [ -84.970302166468116, 34.769723937004471 ] } }
+,
+{ "type": "Feature", "id": 709, "properties": { "NAME": "Marietta", "ADM0NAME": "United States of America", "POP_MAX": 61360 }, "geometry": { "type": "Point", "coordinates": [ -84.54324813000801, 33.955613422678368 ] } }
+,
+{ "type": "Feature", "id": 710, "properties": { "NAME": "Waycross", "ADM0NAME": "United States of America", "POP_MAX": 19824 }, "geometry": { "type": "Point", "coordinates": [ -82.354906251744069, 31.213816954568415 ] } }
+,
+{ "type": "Feature", "id": 711, "properties": { "NAME": "La Grange", "ADM0NAME": "United States of America", "POP_MAX": 31776 }, "geometry": { "type": "Point", "coordinates": [ -85.031874635543829, 33.03647055971885 ] } }
+,
+{ "type": "Feature", "id": 712, "properties": { "NAME": "Southaven", "ADM0NAME": "United States of America", "POP_MAX": 121268 }, "geometry": { "type": "Point", "coordinates": [ -90.00345748061585, 34.968910745273547 ] } }
+,
+{ "type": "Feature", "id": 713, "properties": { "NAME": "Meridian", "ADM0NAME": "United States of America", "POP_MAX": 42290 }, "geometry": { "type": "Point", "coordinates": [ -88.70361434096219, 32.364186013817687 ] } }
+,
+{ "type": "Feature", "id": 714, "properties": { "NAME": "Laurel", "ADM0NAME": "United States of America", "POP_MAX": 28841 }, "geometry": { "type": "Point", "coordinates": [ -89.139272503398786, 31.697379169739577 ] } }
+,
+{ "type": "Feature", "id": 715, "properties": { "NAME": "Spartanburg", "ADM0NAME": "United States of America", "POP_MAX": 124126 }, "geometry": { "type": "Point", "coordinates": [ -81.932270550244994, 34.949428730299474 ] } }
+,
+{ "type": "Feature", "id": 716, "properties": { "NAME": "Orangeburg", "ADM0NAME": "United States of America", "POP_MAX": 35472 }, "geometry": { "type": "Point", "coordinates": [ -80.862232504993301, 33.496804218574937 ] } }
+,
+{ "type": "Feature", "id": 717, "properties": { "NAME": "Galesburg", "ADM0NAME": "United States of America", "POP_MAX": 32094 }, "geometry": { "type": "Point", "coordinates": [ -90.371083619940237, 40.947770608578708 ] } }
+,
+{ "type": "Feature", "id": 718, "properties": { "NAME": "Joliet", "ADM0NAME": "United States of America", "POP_MAX": 578460 }, "geometry": { "type": "Point", "coordinates": [ -88.106674033342586, 41.529983132995085 ] } }
+,
+{ "type": "Feature", "id": 719, "properties": { "NAME": "Cape Girardeau", "ADM0NAME": "United States of America", "POP_MAX": 40427 }, "geometry": { "type": "Point", "coordinates": [ -89.51808659031434, 37.305822366376617 ] } }
+,
+{ "type": "Feature", "id": 720, "properties": { "NAME": "Rockford", "ADM0NAME": "United States of America", "POP_MAX": 255978 }, "geometry": { "type": "Point", "coordinates": [ -89.06969018731786, 42.26970542303718 ] } }
+,
+{ "type": "Feature", "id": 721, "properties": { "NAME": "Evanston", "ADM0NAME": "United States of America", "POP_MAX": 350000 }, "geometry": { "type": "Point", "coordinates": [ -87.69995467298935, 42.048349425314882 ] } }
+,
+{ "type": "Feature", "id": 722, "properties": { "NAME": "Rock Island", "ADM0NAME": "United States of America", "POP_MAX": 165728 }, "geometry": { "type": "Point", "coordinates": [ -90.534613689927824, 41.493396218932446 ] } }
+,
+{ "type": "Feature", "id": 723, "properties": { "NAME": "Elgin", "ADM0NAME": "United States of America", "POP_MAX": 389514 }, "geometry": { "type": "Point", "coordinates": [ -88.28991866224959, 42.039461078960642 ] } }
+,
+{ "type": "Feature", "id": 724, "properties": { "NAME": "Richmond", "ADM0NAME": "United States of America", "POP_MAX": 44400 }, "geometry": { "type": "Point", "coordinates": [ -84.890281211064064, 39.828898334811242 ] } }
+,
+{ "type": "Feature", "id": 725, "properties": { "NAME": "Terre Haute", "ADM0NAME": "United States of America", "POP_MAX": 73236 }, "geometry": { "type": "Point", "coordinates": [ -87.413873943821557, 39.466646544445098 ] } }
+,
+{ "type": "Feature", "id": 726, "properties": { "NAME": "Lafayette", "ADM0NAME": "United States of America", "POP_MAX": 133977 }, "geometry": { "type": "Point", "coordinates": [ -86.878247723116317, 40.417208678238069 ] } }
+,
+{ "type": "Feature", "id": 727, "properties": { "NAME": "Marion", "ADM0NAME": "United States of America", "POP_MAX": 38297 }, "geometry": { "type": "Point", "coordinates": [ -85.659174847134864, 40.558337014827202 ] } }
+,
+{ "type": "Feature", "id": 728, "properties": { "NAME": "South Bend", "ADM0NAME": "United States of America", "POP_MAX": 239822 }, "geometry": { "type": "Point", "coordinates": [ -86.250017335744019, 41.683307107604946 ] } }
+,
+{ "type": "Feature", "id": 729, "properties": { "NAME": "New Albany", "ADM0NAME": "United States of America", "POP_MAX": 120625 }, "geometry": { "type": "Point", "coordinates": [ -85.821283815234551, 38.310877298021239 ] } }
+,
+{ "type": "Feature", "id": 730, "properties": { "NAME": "Elkhart", "ADM0NAME": "United States of America", "POP_MAX": 149190 }, "geometry": { "type": "Point", "coordinates": [ -85.968794191211714, 41.682945372579013 ] } }
+,
+{ "type": "Feature", "id": 731, "properties": { "NAME": "Hopkinsville", "ADM0NAME": "United States of America", "POP_MAX": 35604 }, "geometry": { "type": "Point", "coordinates": [ -87.488623903131838, 36.865487486817642 ] } }
+,
+{ "type": "Feature", "id": 732, "properties": { "NAME": "London", "ADM0NAME": "United States of America", "POP_MAX": 7844 }, "geometry": { "type": "Point", "coordinates": [ -84.083353720826437, 37.128882262209231 ] } }
+,
+{ "type": "Feature", "id": 733, "properties": { "NAME": "Madisonville", "ADM0NAME": "United States of America", "POP_MAX": 22294 }, "geometry": { "type": "Point", "coordinates": [ -87.502214804824575, 37.332745787600629 ] } }
+,
+{ "type": "Feature", "id": 734, "properties": { "NAME": "Rocky Mount", "ADM0NAME": "United States of America", "POP_MAX": 58361 }, "geometry": { "type": "Point", "coordinates": [ -77.790766237077378, 35.937998880042983 ] } }
+,
+{ "type": "Feature", "id": 735, "properties": { "NAME": "Salisbury", "ADM0NAME": "United States of America", "POP_MAX": 41352 }, "geometry": { "type": "Point", "coordinates": [ -80.474478395291271, 35.670780048661697 ] } }
+,
+{ "type": "Feature", "id": 736, "properties": { "NAME": "Durham", "ADM0NAME": "United States of America", "POP_MAX": 309495 }, "geometry": { "type": "Point", "coordinates": [ -78.919999635519389, 35.999958922360975 ] } }
+,
+{ "type": "Feature", "id": 737, "properties": { "NAME": "Lumberton", "ADM0NAME": "United States of America", "POP_MAX": 32785 }, "geometry": { "type": "Point", "coordinates": [ -79.011906170350528, 34.627200336743442 ] } }
+,
+{ "type": "Feature", "id": 738, "properties": { "NAME": "Zanesville", "ADM0NAME": "United States of America", "POP_MAX": 40052 }, "geometry": { "type": "Point", "coordinates": [ -82.013325034294724, 39.940286884616228 ] } }
+,
+{ "type": "Feature", "id": 739, "properties": { "NAME": "Mansfield", "ADM0NAME": "United States of America", "POP_MAX": 77768 }, "geometry": { "type": "Point", "coordinates": [ -82.515542441523394, 40.758324807796726 ] } }
+,
+{ "type": "Feature", "id": 740, "properties": { "NAME": "Bowling Green", "ADM0NAME": "United States of America", "POP_MAX": 37080 }, "geometry": { "type": "Point", "coordinates": [ -83.651390423298778, 41.374747130390233 ] } }
+,
+{ "type": "Feature", "id": 741, "properties": { "NAME": "Springfield", "ADM0NAME": "United States of America", "POP_MAX": 84576 }, "geometry": { "type": "Point", "coordinates": [ -83.799986004354082, 39.920003884941764 ] } }
+,
+{ "type": "Feature", "id": 742, "properties": { "NAME": "Lancaster", "ADM0NAME": "United States of America", "POP_MAX": 48829 }, "geometry": { "type": "Point", "coordinates": [ -82.605304404414312, 39.71921510727168 ] } }
+,
+{ "type": "Feature", "id": 743, "properties": { "NAME": "Johnson City", "ADM0NAME": "United States of America", "POP_MAX": 77538 }, "geometry": { "type": "Point", "coordinates": [ -82.353614340936758, 36.313324807778827 ] } }
+,
+{ "type": "Feature", "id": 744, "properties": { "NAME": "Kingsport", "ADM0NAME": "United States of America", "POP_MAX": 57467 }, "geometry": { "type": "Point", "coordinates": [ -82.561947877721479, 36.548323383626268 ] } }
+,
+{ "type": "Feature", "id": 745, "properties": { "NAME": "Columbia", "ADM0NAME": "United States of America", "POP_MAX": 116091 }, "geometry": { "type": "Point", "coordinates": [ -87.035266562635172, 35.614995340002679 ] } }
+,
+{ "type": "Feature", "id": 746, "properties": { "NAME": "Barlett", "ADM0NAME": "United States of America", "POP_MAX": 286423 }, "geometry": { "type": "Point", "coordinates": [ -89.841090130354758, 35.222900409988029 ] } }
+,
+{ "type": "Feature", "id": 747, "properties": { "NAME": "Blacksburg", "ADM0NAME": "United States of America", "POP_MAX": 67508 }, "geometry": { "type": "Point", "coordinates": [ -80.414197837022755, 37.229418761233035 ] } }
+,
+{ "type": "Feature", "id": 748, "properties": { "NAME": "Harrisonburg", "ADM0NAME": "United States of America", "POP_MAX": 42538 }, "geometry": { "type": "Point", "coordinates": [ -78.869175864360386, 38.449421812995809 ] } }
+,
+{ "type": "Feature", "id": 749, "properties": { "NAME": "Petersburg", "ADM0NAME": "United States of America", "POP_MAX": 118577 }, "geometry": { "type": "Point", "coordinates": [ -77.402236980890905, 37.227765115399791 ] } }
+,
+{ "type": "Feature", "id": 750, "properties": { "NAME": "Hampton", "ADM0NAME": "United States of America", "POP_MAX": 366766 }, "geometry": { "type": "Point", "coordinates": [ -76.349949790131518, 37.030025247234846 ] } }
+,
+{ "type": "Feature", "id": 751, "properties": { "NAME": "Sheboygan", "ADM0NAME": "United States of America", "POP_MAX": 53705 }, "geometry": { "type": "Point", "coordinates": [ -87.714424074031058, 43.75082948717062 ] } }
+,
+{ "type": "Feature", "id": 752, "properties": { "NAME": "Waukesha", "ADM0NAME": "United States of America", "POP_MAX": 249912 }, "geometry": { "type": "Point", "coordinates": [ -88.231369264462955, 43.011649799667623 ] } }
+,
+{ "type": "Feature", "id": 753, "properties": { "NAME": "La Crosse", "ADM0NAME": "United States of America", "POP_MAX": 87381 }, "geometry": { "type": "Point", "coordinates": [ -91.239428549956756, 43.801369037952156 ] } }
+,
+{ "type": "Feature", "id": 754, "properties": { "NAME": "Eau Claire", "ADM0NAME": "United States of America", "POP_MAX": 79740 }, "geometry": { "type": "Point", "coordinates": [ -91.498353313955135, 44.811359068880677 ] } }
+,
+{ "type": "Feature", "id": 755, "properties": { "NAME": "Tomah", "ADM0NAME": "United States of America", "POP_MAX": 12997 }, "geometry": { "type": "Point", "coordinates": [ -90.503892050930347, 43.985052916533448 ] } }
+,
+{ "type": "Feature", "id": 756, "properties": { "NAME": "Janesville", "ADM0NAME": "United States of America", "POP_MAX": 69278 }, "geometry": { "type": "Point", "coordinates": [ -89.021579428854011, 42.68262595526528 ] } }
+,
+{ "type": "Feature", "id": 757, "properties": { "NAME": "Appleton", "ADM0NAME": "United States of America", "POP_MAX": 203665 }, "geometry": { "type": "Point", "coordinates": [ -88.400506227354185, 44.268679015167493 ] } }
+,
+{ "type": "Feature", "id": 758, "properties": { "NAME": "Parkersburg", "ADM0NAME": "United States of America", "POP_MAX": 61935 }, "geometry": { "type": "Point", "coordinates": [ -81.561647177847703, 39.266658751475632 ] } }
+,
+{ "type": "Feature", "id": 759, "properties": { "NAME": "White Sulphur Springs", "ADM0NAME": "United States of America", "POP_MAX": 2407 }, "geometry": { "type": "Point", "coordinates": [ -80.303481080837344, 37.793880431157163 ] } }
+,
+{ "type": "Feature", "id": 760, "properties": { "NAME": "Clarksburg", "ADM0NAME": "United States of America", "POP_MAX": 28773 }, "geometry": { "type": "Point", "coordinates": [ -80.336915732530201, 39.283272724457504 ] } }
+,
+{ "type": "Feature", "id": 761, "properties": { "NAME": "Dover", "ADM0NAME": "United States of America", "POP_MAX": 76039 }, "geometry": { "type": "Point", "coordinates": [ -75.524703004646426, 39.158086567230384 ] } }
+,
+{ "type": "Feature", "id": 762, "properties": { "NAME": "St. Charles", "ADM0NAME": "United States of America", "POP_MAX": 69208 }, "geometry": { "type": "Point", "coordinates": [ -76.938931927178146, 38.603055846199595 ] } }
+,
+{ "type": "Feature", "id": 763, "properties": { "NAME": "Annapolis", "ADM0NAME": "United States of America", "POP_MAX": 81300 }, "geometry": { "type": "Point", "coordinates": [ -76.492499228608665, 38.978330097503033 ] } }
+,
+{ "type": "Feature", "id": 764, "properties": { "NAME": "Hagerstown", "ADM0NAME": "United States of America", "POP_MAX": 79662 }, "geometry": { "type": "Point", "coordinates": [ -77.720279583431306, 39.641648782401546 ] } }
+,
+{ "type": "Feature", "id": 765, "properties": { "NAME": "Paterson", "ADM0NAME": "United States of America", "POP_MAX": 151205 }, "geometry": { "type": "Point", "coordinates": [ -74.170005332114897, 40.919994526221899 ] } }
+,
+{ "type": "Feature", "id": 766, "properties": { "NAME": "Saratoga Springs", "ADM0NAME": "United States of America", "POP_MAX": 55793 }, "geometry": { "type": "Point", "coordinates": [ -73.785015911540484, 43.082963276230487 ] } }
+,
+{ "type": "Feature", "id": 767, "properties": { "NAME": "Poughkeepsie", "ADM0NAME": "United States of America", "POP_MAX": 170996 }, "geometry": { "type": "Point", "coordinates": [ -73.921415854574946, 41.700231139180573 ] } }
+,
+{ "type": "Feature", "id": 768, "properties": { "NAME": "Plattsburg", "ADM0NAME": "United States of America", "POP_MAX": 29238 }, "geometry": { "type": "Point", "coordinates": [ -73.457981609781427, 44.694983743359387 ] } }
+,
+{ "type": "Feature", "id": 769, "properties": { "NAME": "Beaver Falls", "ADM0NAME": "United States of America", "POP_MAX": 120125 }, "geometry": { "type": "Point", "coordinates": [ -80.319423260199471, 40.751942768408696 ] } }
+,
+{ "type": "Feature", "id": 770, "properties": { "NAME": "Altoona", "ADM0NAME": "United States of America", "POP_MAX": 78607 }, "geometry": { "type": "Point", "coordinates": [ -78.394967083433983, 40.518597838394669 ] } }
+,
+{ "type": "Feature", "id": 771, "properties": { "NAME": "Williamsport", "ADM0NAME": "United States of America", "POP_MAX": 56877 }, "geometry": { "type": "Point", "coordinates": [ -77.001382895602774, 41.241086038267383 ] } }
+,
+{ "type": "Feature", "id": 772, "properties": { "NAME": "Lancaster", "ADM0NAME": "United States of America", "POP_MAX": 209489 }, "geometry": { "type": "Point", "coordinates": [ -76.30576644052195, 40.037774474134949 ] } }
+,
+{ "type": "Feature", "id": 773, "properties": { "NAME": "Allentown", "ADM0NAME": "United States of America", "POP_MAX": 496442 }, "geometry": { "type": "Point", "coordinates": [ -75.500027508227049, 40.599988219254385 ] } }
+,
+{ "type": "Feature", "id": 784, "properties": { "NAME": "Waterville", "ADM0NAME": "United States of America", "POP_MAX": 25152 }, "geometry": { "type": "Point", "coordinates": [ -69.645785361393791, 44.551891702343028 ] } }
+,
+{ "type": "Feature", "id": 785, "properties": { "NAME": "Calais", "ADM0NAME": "United States of America", "POP_MAX": 3306 }, "geometry": { "type": "Point", "coordinates": [ -67.242392010147171, 45.165988585483547 ] } }
+,
+{ "type": "Feature", "id": 786, "properties": { "NAME": "Houlton", "ADM0NAME": "United States of America", "POP_MAX": 6703 }, "geometry": { "type": "Point", "coordinates": [ -67.83971989100894, 46.125516580279054 ] } }
+,
+{ "type": "Feature", "id": 787, "properties": { "NAME": "Benton Harbor", "ADM0NAME": "United States of America", "POP_MAX": 58382 }, "geometry": { "type": "Point", "coordinates": [ -86.454190919729228, 42.116639830588497 ] } }
+,
+{ "type": "Feature", "id": 788, "properties": { "NAME": "Battle Creek", "ADM0NAME": "United States of America", "POP_MAX": 70820 }, "geometry": { "type": "Point", "coordinates": [ -85.179746746546925, 42.321097634951343 ] } }
+,
+{ "type": "Feature", "id": 789, "properties": { "NAME": "Bay City", "ADM0NAME": "United States of America", "POP_MAX": 68549 }, "geometry": { "type": "Point", "coordinates": [ -83.888895306112204, 43.594456603055448 ] } }
+,
+{ "type": "Feature", "id": 790, "properties": { "NAME": "Alpena", "ADM0NAME": "United States of America", "POP_MAX": 18330 }, "geometry": { "type": "Point", "coordinates": [ -83.432695761839568, 45.061602192253986 ] } }
+,
+{ "type": "Feature", "id": 791, "properties": { "NAME": "Iron Mountain", "ADM0NAME": "United States of America", "POP_MAX": 16183 }, "geometry": { "type": "Point", "coordinates": [ -88.064092653134082, 45.822460143103342 ] } }
+,
+{ "type": "Feature", "id": 792, "properties": { "NAME": "Ironwood", "ADM0NAME": "United States of America", "POP_MAX": 7064 }, "geometry": { "type": "Point", "coordinates": [ -90.159391115056565, 46.455806497272533 ] } }
+,
+{ "type": "Feature", "id": 809, "properties": { "NAME": "Sand Point", "ADM0NAME": "United States of America", "POP_MAX": 667 }, "geometry": { "type": "Point", "coordinates": [ -160.497190797955085, 55.339708678297711 ] } }
+,
+{ "type": "Feature", "id": 810, "properties": { "NAME": "Hydaburg", "ADM0NAME": "United States of America", "POP_MAX": 382 }, "geometry": { "type": "Point", "coordinates": [ -132.800638470370359, 55.213979918531663 ] } }
+,
+{ "type": "Feature", "id": 811, "properties": { "NAME": "Mekoryuk", "ADM0NAME": "United States of America", "POP_MAX": 99 }, "geometry": { "type": "Point", "coordinates": [ -166.189937216820994, 60.388646709763748 ] } }
+,
+{ "type": "Feature", "id": 812, "properties": { "NAME": "Atqasuk", "ADM0NAME": "United States of America", "POP_MAX": 201 }, "geometry": { "type": "Point", "coordinates": [ -157.395778037526014, 70.469379495415581 ] } }
+,
+{ "type": "Feature", "id": 813, "properties": { "NAME": "Port Heiden", "ADM0NAME": "United States of America", "POP_MAX": 102 }, "geometry": { "type": "Point", "coordinates": [ -158.626891522231517, 56.949093647379755 ] } }
+,
+{ "type": "Feature", "id": 814, "properties": { "NAME": "Perryville", "ADM0NAME": "United States of America", "POP_MAX": 113 }, "geometry": { "type": "Point", "coordinates": [ -159.151148927832566, 55.918613911047373 ] } }
+,
+{ "type": "Feature", "id": 815, "properties": { "NAME": "Dillingham", "ADM0NAME": "United States of America", "POP_MAX": 2488 }, "geometry": { "type": "Point", "coordinates": [ -158.480312073062692, 59.056560311371641 ] } }
+,
+{ "type": "Feature", "id": 816, "properties": { "NAME": "Goodnews Bay", "ADM0NAME": "United States of America", "POP_MAX": 230 }, "geometry": { "type": "Point", "coordinates": [ -161.587130239005972, 59.120992654535257 ] } }
+,
+{ "type": "Feature", "id": 817, "properties": { "NAME": "Nyac", "ADM0NAME": "United States of America", "POP_MAX": 100 }, "geometry": { "type": "Point", "coordinates": [ -159.940480592874735, 61.004143289323054 ] } }
+,
+{ "type": "Feature", "id": 818, "properties": { "NAME": "Tununak", "ADM0NAME": "United States of America", "POP_MAX": 352 }, "geometry": { "type": "Point", "coordinates": [ -165.255789227336152, 60.585486673110267 ] } }
+,
+{ "type": "Feature", "id": 819, "properties": { "NAME": "Mountain Village", "ADM0NAME": "United States of America", "POP_MAX": 755 }, "geometry": { "type": "Point", "coordinates": [ -163.729009035272696, 62.085524311462677 ] } }
+,
+{ "type": "Feature", "id": 820, "properties": { "NAME": "Emmonak", "ADM0NAME": "United States of America", "POP_MAX": 100 }, "geometry": { "type": "Point", "coordinates": [ -164.522991579221213, 62.77698081374416 ] } }
+,
+{ "type": "Feature", "id": 821, "properties": { "NAME": "Kaltag", "ADM0NAME": "United States of America", "POP_MAX": 190 }, "geometry": { "type": "Point", "coordinates": [ -158.72189864300006, 64.327196267851946 ] } }
+,
+{ "type": "Feature", "id": 822, "properties": { "NAME": "Teller", "ADM0NAME": "United States of America", "POP_MAX": 83 }, "geometry": { "type": "Point", "coordinates": [ -166.360786379033215, 65.263599059196849 ] } }
+,
+{ "type": "Feature", "id": 823, "properties": { "NAME": "Koyukuk", "ADM0NAME": "United States of America", "POP_MAX": 101 }, "geometry": { "type": "Point", "coordinates": [ -157.700849855561103, 64.880289122671797 ] } }
+,
+{ "type": "Feature", "id": 824, "properties": { "NAME": "Kobuk", "ADM0NAME": "United States of America", "POP_MAX": 151 }, "geometry": { "type": "Point", "coordinates": [ -156.880977419034451, 66.907245502888316 ] } }
+,
+{ "type": "Feature", "id": 825, "properties": { "NAME": "Selawik", "ADM0NAME": "United States of America", "POP_MAX": 832 }, "geometry": { "type": "Point", "coordinates": [ -160.009391115336001, 66.603879007118849 ] } }
+,
+{ "type": "Feature", "id": 826, "properties": { "NAME": "Talkeetna", "ADM0NAME": "United States of America", "POP_MAX": 1078 }, "geometry": { "type": "Point", "coordinates": [ -150.109426922588057, 62.323778502544428 ] } }
+,
+{ "type": "Feature", "id": 827, "properties": { "NAME": "Whittier", "ADM0NAME": "United States of America", "POP_MAX": 177 }, "geometry": { "type": "Point", "coordinates": [ -148.677679689509347, 60.784156717056476 ] } }
+,
+{ "type": "Feature", "id": 828, "properties": { "NAME": "Montana", "ADM0NAME": "United States of America", "POP_MAX": 10 }, "geometry": { "type": "Point", "coordinates": [ -150.072762493876922, 62.079684874613804 ] } }
+,
+{ "type": "Feature", "id": 829, "properties": { "NAME": "Lake Minchumina", "ADM0NAME": "United States of America", "POP_MAX": 32 }, "geometry": { "type": "Point", "coordinates": [ -152.312186525461414, 63.882830626574105 ] } }
+,
+{ "type": "Feature", "id": 830, "properties": { "NAME": "Cantwell", "ADM0NAME": "United States of America", "POP_MAX": 222 }, "geometry": { "type": "Point", "coordinates": [ -148.95078963417194, 63.39159446120749 ] } }
+,
+{ "type": "Feature", "id": 831, "properties": { "NAME": "Gulkana", "ADM0NAME": "United States of America", "POP_MAX": 119 }, "geometry": { "type": "Point", "coordinates": [ -145.382196087608207, 62.271352761984303 ] } }
+,
+{ "type": "Feature", "id": 832, "properties": { "NAME": "Eagle", "ADM0NAME": "United States of America", "POP_MAX": 104 }, "geometry": { "type": "Point", "coordinates": [ -141.199996584010705, 64.78799501459855 ] } }
+,
+{ "type": "Feature", "id": 833, "properties": { "NAME": "Nenana", "ADM0NAME": "United States of America", "POP_MAX": 75 }, "geometry": { "type": "Point", "coordinates": [ -149.093003175839186, 64.563796813100282 ] } }
+,
+{ "type": "Feature", "id": 834, "properties": { "NAME": "Big Delta", "ADM0NAME": "United States of America", "POP_MAX": 591 }, "geometry": { "type": "Point", "coordinates": [ -145.842193849654279, 64.152529926705256 ] } }
+,
+{ "type": "Feature", "id": 835, "properties": { "NAME": "Allakaket", "ADM0NAME": "United States of America", "POP_MAX": 97 }, "geometry": { "type": "Point", "coordinates": [ -152.645499513743999, 66.565483417925975 ] } }
+,
+{ "type": "Feature", "id": 836, "properties": { "NAME": "Tanana", "ADM0NAME": "United States of America", "POP_MAX": 308 }, "geometry": { "type": "Point", "coordinates": [ -152.078789919015179, 65.171873391878705 ] } }
+,
+{ "type": "Feature", "id": 1802, "properties": { "NAME": "Virginia", "ADM0NAME": "United States of America", "POP_MAX": 8709 }, "geometry": { "type": "Point", "coordinates": [ -92.536403647618101, 47.523674132367944 ] } }
+,
+{ "type": "Feature", "id": 1803, "properties": { "NAME": "Winona", "ADM0NAME": "United States of America", "POP_MAX": 32897 }, "geometry": { "type": "Point", "coordinates": [ -91.639197430166575, 44.050423603382683 ] } }
+,
+{ "type": "Feature", "id": 1804, "properties": { "NAME": "Rochester", "ADM0NAME": "United States of America", "POP_MAX": 108511 }, "geometry": { "type": "Point", "coordinates": [ -92.469689373529377, 44.022053242054596 ] } }
+,
+{ "type": "Feature", "id": 1805, "properties": { "NAME": "Lakeville", "ADM0NAME": "United States of America", "POP_MAX": 261308 }, "geometry": { "type": "Point", "coordinates": [ -93.242510418454287, 44.650102761913786 ] } }
+,
+{ "type": "Feature", "id": 1806, "properties": { "NAME": "Ely", "ADM0NAME": "United States of America", "POP_MAX": 3731 }, "geometry": { "type": "Point", "coordinates": [ -91.825697674307946, 47.900421161991858 ] } }
+,
+{ "type": "Feature", "id": 1807, "properties": { "NAME": "Moorhead", "ADM0NAME": "United States of America", "POP_MAX": 35528 }, "geometry": { "type": "Point", "coordinates": [ -96.742193442556868, 46.874308084188328 ] } }
+,
+{ "type": "Feature", "id": 1808, "properties": { "NAME": "St. Cloud", "ADM0NAME": "United States of America", "POP_MAX": 112794 }, "geometry": { "type": "Point", "coordinates": [ -94.162221722168908, 45.561209939651917 ] } }
+,
+{ "type": "Feature", "id": 1809, "properties": { "NAME": "Miles City", "ADM0NAME": "United States of America", "POP_MAX": 8615 }, "geometry": { "type": "Point", "coordinates": [ -105.839984376838004, 46.40888429675158 ] } }
+,
+{ "type": "Feature", "id": 1810, "properties": { "NAME": "Bozeman", "ADM0NAME": "United States of America", "POP_MAX": 44921 }, "geometry": { "type": "Point", "coordinates": [ -111.03783248069999, 45.680091572139247 ] } }
+,
+{ "type": "Feature", "id": 1811, "properties": { "NAME": "Glasgow", "ADM0NAME": "United States of America", "POP_MAX": 3240 }, "geometry": { "type": "Point", "coordinates": [ -106.635258831593831, 48.183969745977379 ] } }
+,
+{ "type": "Feature", "id": 1812, "properties": { "NAME": "Dickinson", "ADM0NAME": "United States of America", "POP_MAX": 16399 }, "geometry": { "type": "Point", "coordinates": [ -102.788801108596658, 46.883997415243016 ] } }
+,
+{ "type": "Feature", "id": 1813, "properties": { "NAME": "Jamestown", "ADM0NAME": "United States of America", "POP_MAX": 15081 }, "geometry": { "type": "Point", "coordinates": [ -98.702978151223476, 46.906011575399475 ] } }
+,
+{ "type": "Feature", "id": 1814, "properties": { "NAME": "Williston", "ADM0NAME": "United States of America", "POP_MAX": 13564 }, "geometry": { "type": "Point", "coordinates": [ -103.628000530800421, 48.156787942591791 ] } }
+,
+{ "type": "Feature", "id": 1815, "properties": { "NAME": "Lihue", "ADM0NAME": "United States of America", "POP_MAX": 15536 }, "geometry": { "type": "Point", "coordinates": [ -159.371006309018327, 21.981512267031462 ] } }
+,
+{ "type": "Feature", "id": 1816, "properties": { "NAME": "Wahiawa", "ADM0NAME": "United States of America", "POP_MAX": 174766 }, "geometry": { "type": "Point", "coordinates": [ -158.023620851656148, 21.503091856873368 ] } }
+,
+{ "type": "Feature", "id": 1817, "properties": { "NAME": "Wailuku", "ADM0NAME": "United States of America", "POP_MAX": 52148 }, "geometry": { "type": "Point", "coordinates": [ -156.50472131551723, 20.891475442482772 ] } }
+,
+{ "type": "Feature", "id": 1818, "properties": { "NAME": "Montpelier", "ADM0NAME": "United States of America", "POP_MAX": 2997 }, "geometry": { "type": "Point", "coordinates": [ -111.296912273995304, 42.322622089703998 ] } }
+,
+{ "type": "Feature", "id": 1819, "properties": { "NAME": "Twin Falls", "ADM0NAME": "United States of America", "POP_MAX": 47315 }, "geometry": { "type": "Point", "coordinates": [ -114.460569297119946, 42.560953795434159 ] } }
+,
+{ "type": "Feature", "id": 1820, "properties": { "NAME": "Caldwell", "ADM0NAME": "United States of America", "POP_MAX": 132476 }, "geometry": { "type": "Point", "coordinates": [ -116.670537762298011, 43.660964171415003 ] } }
+,
+{ "type": "Feature", "id": 1821, "properties": { "NAME": "Salmon", "ADM0NAME": "United States of America", "POP_MAX": 3601 }, "geometry": { "type": "Point", "coordinates": [ -113.894996583901502, 45.175677916538348 ] } }
+,
+{ "type": "Feature", "id": 1822, "properties": { "NAME": "Coeur d'Alene", "ADM0NAME": "United States of America", "POP_MAX": 34514 }, "geometry": { "type": "Point", "coordinates": [ -116.779445843353187, 47.678083312056174 ] } }
+,
+{ "type": "Feature", "id": 1823, "properties": { "NAME": "Richland", "ADM0NAME": "United States of America", "POP_MAX": 44869 }, "geometry": { "type": "Point", "coordinates": [ -119.291101320251244, 46.291811339394258 ] } }
+,
+{ "type": "Feature", "id": 1824, "properties": { "NAME": "Bellingham", "ADM0NAME": "United States of America", "POP_MAX": 99662 }, "geometry": { "type": "Point", "coordinates": [ -122.486926922477551, 48.760136127815656 ] } }
+,
+{ "type": "Feature", "id": 1825, "properties": { "NAME": "Longview", "ADM0NAME": "United States of America", "POP_MAX": 66231 }, "geometry": { "type": "Point", "coordinates": [ -122.93695113309127, 46.13871990872974 ] } }
+,
+{ "type": "Feature", "id": 1826, "properties": { "NAME": "Walla Walla", "ADM0NAME": "United States of America", "POP_MAX": 45150 }, "geometry": { "type": "Point", "coordinates": [ -118.341882773697989, 46.065158507362128 ] } }
+,
+{ "type": "Feature", "id": 1827, "properties": { "NAME": "Aberdeen", "ADM0NAME": "United States of America", "POP_MAX": 32745 }, "geometry": { "type": "Point", "coordinates": [ -123.814391115191199, 46.974896259644538 ] } }
+,
+{ "type": "Feature", "id": 1828, "properties": { "NAME": "Bremerton", "ADM0NAME": "United States of America", "POP_MAX": 126820 }, "geometry": { "type": "Point", "coordinates": [ -122.642017532761201, 47.573595523621123 ] } }
+,
+{ "type": "Feature", "id": 1829, "properties": { "NAME": "Everett", "ADM0NAME": "United States of America", "POP_MAX": 486903 }, "geometry": { "type": "Point", "coordinates": [ -122.199967693960673, 47.960417499882738 ] } }
+,
+{ "type": "Feature", "id": 1830, "properties": { "NAME": "Bullhead City", "ADM0NAME": "United States of America", "POP_MAX": 37989 }, "geometry": { "type": "Point", "coordinates": [ -114.567487835531779, 35.148176288894035 ] } }
+,
+{ "type": "Feature", "id": 1831, "properties": { "NAME": "Winslow", "ADM0NAME": "United States of America", "POP_MAX": 9931 }, "geometry": { "type": "Point", "coordinates": [ -110.700695436427736, 35.284705423009029 ] } }
+,
+{ "type": "Feature", "id": 1832, "properties": { "NAME": "Gila Bend", "ADM0NAME": "United States of America", "POP_MAX": 2088 }, "geometry": { "type": "Point", "coordinates": [ -112.724654583571294, 32.950377623520581 ] } }
+,
+{ "type": "Feature", "id": 1833, "properties": { "NAME": "Tombstone", "ADM0NAME": "United States of America", "POP_MAX": 1570 }, "geometry": { "type": "Point", "coordinates": [ -110.06688399436797, 31.713140481588653 ] } }
+,
+{ "type": "Feature", "id": 1834, "properties": { "NAME": "Willcox", "ADM0NAME": "United States of America", "POP_MAX": 5146 }, "geometry": { "type": "Point", "coordinates": [ -109.831394492413892, 32.253210875470984 ] } }
+,
+{ "type": "Feature", "id": 1835, "properties": { "NAME": "Scottsdale", "ADM0NAME": "United States of America", "POP_MAX": 15401 }, "geometry": { "type": "Point", "coordinates": [ -111.868040203685041, 33.692347838367368 ] } }
+,
+{ "type": "Feature", "id": 1836, "properties": { "NAME": "Kingman", "ADM0NAME": "United States of America", "POP_MAX": 42182 }, "geometry": { "type": "Point", "coordinates": [ -114.052222129149413, 35.189879169753567 ] } }
+,
+{ "type": "Feature", "id": 1837, "properties": { "NAME": "Grand Canyon", "ADM0NAME": "United States of America", "POP_MAX": 1550 }, "geometry": { "type": "Point", "coordinates": [ -112.138592164949159, 36.054787617022555 ] } }
+,
+{ "type": "Feature", "id": 1838, "properties": { "NAME": "Arcata", "ADM0NAME": "United States of America", "POP_MAX": 20905 }, "geometry": { "type": "Point", "coordinates": [ -124.088224529905744, 40.885190449073264 ] } }
+,
+{ "type": "Feature", "id": 1839, "properties": { "NAME": "Stockton", "ADM0NAME": "United States of America", "POP_MAX": 685306 }, "geometry": { "type": "Point", "coordinates": [ -121.28973901557174, 37.958133971196958 ] } }
+,
+{ "type": "Feature", "id": 1840, "properties": { "NAME": "Barstow", "ADM0NAME": "United States of America", "POP_MAX": 21119 }, "geometry": { "type": "Point", "coordinates": [ -117.021885825450397, 34.899018370598696 ] } }
+,
+{ "type": "Feature", "id": 1841, "properties": { "NAME": "Victorville", "ADM0NAME": "United States of America", "POP_MAX": 83496 }, "geometry": { "type": "Point", "coordinates": [ -117.29031905299064, 34.536508198071203 ] } }
+,
+{ "type": "Feature", "id": 1842, "properties": { "NAME": "Pasadena", "ADM0NAME": "United States of America", "POP_MAX": 144618 }, "geometry": { "type": "Point", "coordinates": [ -118.138871909439274, 34.160381285634799 ] } }
+,
+{ "type": "Feature", "id": 1843, "properties": { "NAME": "Visalia", "ADM0NAME": "United States of America", "POP_MAX": 121968 }, "geometry": { "type": "Point", "coordinates": [ -119.316009360615908, 36.325029519692976 ] } }
+,
+{ "type": "Feature", "id": 1844, "properties": { "NAME": "El Centro", "ADM0NAME": "United States of America", "POP_MAX": 45000 }, "geometry": { "type": "Point", "coordinates": [ -115.558047527918518, 32.79237693178834 ] } }
+,
+{ "type": "Feature", "id": 1845, "properties": { "NAME": "San Luis Obispo", "ADM0NAME": "United States of America", "POP_MAX": 65386 }, "geometry": { "type": "Point", "coordinates": [ -120.658588909774949, 35.283180968256545 ] } }
+,
+{ "type": "Feature", "id": 1846, "properties": { "NAME": "Merced", "ADM0NAME": "United States of America", "POP_MAX": 96091 }, "geometry": { "type": "Point", "coordinates": [ -120.481933025985086, 37.302618427574544 ] } }
+,
+{ "type": "Feature", "id": 1847, "properties": { "NAME": "Yuba City", "ADM0NAME": "United States of America", "POP_MAX": 116217 }, "geometry": { "type": "Point", "coordinates": [ -121.615765626901123, 39.141033344573998 ] } }
+,
+{ "type": "Feature", "id": 1848, "properties": { "NAME": "Redding", "ADM0NAME": "United States of America", "POP_MAX": 96058 }, "geometry": { "type": "Point", "coordinates": [ -122.39057621446932, 40.587043272965218 ] } }
+,
+{ "type": "Feature", "id": 1849, "properties": { "NAME": "Santa Rosa", "ADM0NAME": "United States of America", "POP_MAX": 231792 }, "geometry": { "type": "Point", "coordinates": [ -122.699988852816944, 38.450403665209365 ] } }
+,
+{ "type": "Feature", "id": 1850, "properties": { "NAME": "Oceanside", "ADM0NAME": "United States of America", "POP_MAX": 609854 }, "geometry": { "type": "Point", "coordinates": [ -117.334967490490783, 33.220464496894067 ] } }
+,
+{ "type": "Feature", "id": 1851, "properties": { "NAME": "Modesto", "ADM0NAME": "United States of America", "POP_MAX": 323386 }, "geometry": { "type": "Point", "coordinates": [ -120.989989870062686, 37.655413430831175 ] } }
+,
+{ "type": "Feature", "id": 1852, "properties": { "NAME": "Irvine", "ADM0NAME": "United States of America", "POP_MAX": 3010232 }, "geometry": { "type": "Point", "coordinates": [ -117.829950197198457, 33.680410582507875 ] } }
+,
+{ "type": "Feature", "id": 1853, "properties": { "NAME": "Ukiah", "ADM0NAME": "United States of America", "POP_MAX": 27828 }, "geometry": { "type": "Point", "coordinates": [ -123.210862062454396, 39.154236673024684 ] } }
+,
+{ "type": "Feature", "id": 1854, "properties": { "NAME": "Needles", "ADM0NAME": "United States of America", "POP_MAX": 6974 }, "geometry": { "type": "Point", "coordinates": [ -114.613350669190766, 34.848427143384981 ] } }
+,
+{ "type": "Feature", "id": 1855, "properties": { "NAME": "Bishop", "ADM0NAME": "United States of America", "POP_MAX": 4827 }, "geometry": { "type": "Point", "coordinates": [ -118.39407597031277, 37.363958352704913 ] } }
+,
+{ "type": "Feature", "id": 1856, "properties": { "NAME": "Palm Springs", "ADM0NAME": "United States of America", "POP_MAX": 390115 }, "geometry": { "type": "Point", "coordinates": [ -116.533052614185522, 33.77735556948744 ] } }
+,
+{ "type": "Feature", "id": 1857, "properties": { "NAME": "Santa Maria", "ADM0NAME": "United States of America", "POP_MAX": 110705 }, "geometry": { "type": "Point", "coordinates": [ -120.436638633081259, 34.940126972486951 ] } }
+,
+{ "type": "Feature", "id": 1858, "properties": { "NAME": "Tulare", "ADM0NAME": "United States of America", "POP_MAX": 55908 }, "geometry": { "type": "Point", "coordinates": [ -119.344121339782703, 36.207026386554503 ] } }
+,
+{ "type": "Feature", "id": 1859, "properties": { "NAME": "Mt. Shasta", "ADM0NAME": "United States of America", "POP_MAX": 3855 }, "geometry": { "type": "Point", "coordinates": [ -122.309392539338774, 41.310358295754611 ] } }
+,
+{ "type": "Feature", "id": 1860, "properties": { "NAME": "Crescent City", "ADM0NAME": "United States of America", "POP_MAX": 11534 }, "geometry": { "type": "Point", "coordinates": [ -124.200491579059928, 41.756455097514277 ] } }
+,
+{ "type": "Feature", "id": 1861, "properties": { "NAME": "Fort Collins", "ADM0NAME": "United States of America", "POP_MAX": 228385 }, "geometry": { "type": "Point", "coordinates": [ -105.058869264530131, 40.560688292496479 ] } }
+,
+{ "type": "Feature", "id": 1862, "properties": { "NAME": "Pueblo", "ADM0NAME": "United States of America", "POP_MAX": 112195 }, "geometry": { "type": "Point", "coordinates": [ -104.630006552939903, 38.28038820296905 ] } }
+,
+{ "type": "Feature", "id": 1863, "properties": { "NAME": "Lamar", "ADM0NAME": "United States of America", "POP_MAX": 8620 }, "geometry": { "type": "Point", "coordinates": [ -102.619405763543853, 38.086498229009976 ] } }
+,
+{ "type": "Feature", "id": 1864, "properties": { "NAME": "Trinidad", "ADM0NAME": "United States of America", "POP_MAX": 9156 }, "geometry": { "type": "Point", "coordinates": [ -104.506396526897731, 37.171334451336975 ] } }
+,
+{ "type": "Feature", "id": 1865, "properties": { "NAME": "Gunnison", "ADM0NAME": "United States of America", "POP_MAX": 7324 }, "geometry": { "type": "Point", "coordinates": [ -106.928290040904869, 38.544764830574366 ] } }
+,
+{ "type": "Feature", "id": 1866, "properties": { "NAME": "Durango", "ADM0NAME": "United States of America", "POP_MAX": 23233 }, "geometry": { "type": "Point", "coordinates": [ -107.87998905620816, 37.275643329918125 ] } }
+,
+{ "type": "Feature", "id": 1867, "properties": { "NAME": "Montrose", "ADM0NAME": "United States of America", "POP_MAX": 21789 }, "geometry": { "type": "Point", "coordinates": [ -107.865519655166395, 38.477275410001027 ] } }
+,
+{ "type": "Feature", "id": 1868, "properties": { "NAME": "Craig", "ADM0NAME": "United States of America", "POP_MAX": 9391 }, "geometry": { "type": "Point", "coordinates": [ -107.550396771050544, 40.517280089371184 ] } }
+,
+{ "type": "Feature", "id": 1869, "properties": { "NAME": "Boulder", "ADM0NAME": "United States of America", "POP_MAX": 122274 }, "geometry": { "type": "Point", "coordinates": [ -105.246092978723709, 40.038446267754807 ] } }
+,
+{ "type": "Feature", "id": 1870, "properties": { "NAME": "Boulder City", "ADM0NAME": "United States of America", "POP_MAX": 15479 }, "geometry": { "type": "Point", "coordinates": [ -114.831580242759287, 35.978952452634246 ] } }
+,
+{ "type": "Feature", "id": 1871, "properties": { "NAME": "Winnemucca", "ADM0NAME": "United States of America", "POP_MAX": 9666 }, "geometry": { "type": "Point", "coordinates": [ -117.734684694268367, 40.973376280779235 ] } }
+,
+{ "type": "Feature", "id": 1872, "properties": { "NAME": "Roswell", "ADM0NAME": "United States of America", "POP_MAX": 46096 }, "geometry": { "type": "Point", "coordinates": [ -104.522467897340562, 33.394536559069309 ] } }
+,
+{ "type": "Feature", "id": 1873, "properties": { "NAME": "Clovis", "ADM0NAME": "United States of America", "POP_MAX": 33792 }, "geometry": { "type": "Point", "coordinates": [ -103.204770550330124, 34.405069192536871 ] } }
+,
+{ "type": "Feature", "id": 1874, "properties": { "NAME": "Las Cruces", "ADM0NAME": "United States of America", "POP_MAX": 115167 }, "geometry": { "type": "Point", "coordinates": [ -106.777808270070977, 32.312612934390586 ] } }
+,
+{ "type": "Feature", "id": 1875, "properties": { "NAME": "Hobbs", "ADM0NAME": "United States of America", "POP_MAX": 28738 }, "geometry": { "type": "Point", "coordinates": [ -103.140614259639733, 32.71261435854575 ] } }
+,
+{ "type": "Feature", "id": 1876, "properties": { "NAME": "Socorro", "ADM0NAME": "United States of America", "POP_MAX": 8668 }, "geometry": { "type": "Point", "coordinates": [ -106.898989503795406, 34.062118549631862 ] } }
+,
+{ "type": "Feature", "id": 1877, "properties": { "NAME": "Gallup", "ADM0NAME": "United States of America", "POP_MAX": 23800 }, "geometry": { "type": "Point", "coordinates": [ -108.733993776263617, 35.524070657385153 ] } }
+,
+{ "type": "Feature", "id": 1878, "properties": { "NAME": "Raton", "ADM0NAME": "United States of America", "POP_MAX": 7073 }, "geometry": { "type": "Point", "coordinates": [ -104.43988895853812, 36.897397683757788 ] } }
+,
+{ "type": "Feature", "id": 1879, "properties": { "NAME": "Tucumcari", "ADM0NAME": "United States of America", "POP_MAX": 5313 }, "geometry": { "type": "Point", "coordinates": [ -103.725513958535316, 35.169802875808216 ] } }
+,
+{ "type": "Feature", "id": 1880, "properties": { "NAME": "Roseburg", "ADM0NAME": "United States of America", "POP_MAX": 30479 }, "geometry": { "type": "Point", "coordinates": [ -123.356098675410749, 43.218433043483572 ] } }
+,
+{ "type": "Feature", "id": 1881, "properties": { "NAME": "Pendleton", "ADM0NAME": "United States of America", "POP_MAX": 16799 }, "geometry": { "type": "Point", "coordinates": [ -118.787488649350678, 45.672598489456902 ] } }
+,
+{ "type": "Feature", "id": 1882, "properties": { "NAME": "John Day", "ADM0NAME": "United States of America", "POP_MAX": 1573 }, "geometry": { "type": "Point", "coordinates": [ -118.952026409768109, 44.416525287954585 ] } }
+,
+{ "type": "Feature", "id": 1883, "properties": { "NAME": "Grants Pass", "ADM0NAME": "United States of America", "POP_MAX": 46189 }, "geometry": { "type": "Point", "coordinates": [ -123.327185711543393, 42.439540017764386 ] } }
+,
+{ "type": "Feature", "id": 1884, "properties": { "NAME": "Corvallis", "ADM0NAME": "United States of America", "POP_MAX": 59030 }, "geometry": { "type": "Point", "coordinates": [ -123.279979290644803, 44.572355569530714 ] } }
+,
+{ "type": "Feature", "id": 1885, "properties": { "NAME": "Albany", "ADM0NAME": "United States of America", "POP_MAX": 51376 }, "geometry": { "type": "Point", "coordinates": [ -123.086941977818469, 44.620492166210568 ] } }
+,
+{ "type": "Feature", "id": 1886, "properties": { "NAME": "Astoria", "ADM0NAME": "United States of America", "POP_MAX": 10011 }, "geometry": { "type": "Point", "coordinates": [ -123.829997397743341, 46.188380960162249 ] } }
+,
+{ "type": "Feature", "id": 1887, "properties": { "NAME": "Logan", "ADM0NAME": "United States of America", "POP_MAX": 72490 }, "geometry": { "type": "Point", "coordinates": [ -111.833597861562566, 41.735939553894411 ] } }
+,
+{ "type": "Feature", "id": 1888, "properties": { "NAME": "Parowan", "ADM0NAME": "United States of America", "POP_MAX": 2571 }, "geometry": { "type": "Point", "coordinates": [ -112.827206463454559, 37.842533792160111 ] } }
+,
+{ "type": "Feature", "id": 1889, "properties": { "NAME": "Kanab", "ADM0NAME": "United States of America", "POP_MAX": 3442 }, "geometry": { "type": "Point", "coordinates": [ -112.525493613518449, 37.047388528484987 ] } }
+,
+{ "type": "Feature", "id": 1890, "properties": { "NAME": "Monticello", "ADM0NAME": "United States of America", "POP_MAX": 1864 }, "geometry": { "type": "Point", "coordinates": [ -109.342199546122799, 37.871782652837226 ] } }
+,
+{ "type": "Feature", "id": 1891, "properties": { "NAME": "Moab", "ADM0NAME": "United States of America", "POP_MAX": 5730 }, "geometry": { "type": "Point", "coordinates": [ -109.549189495667918, 38.573703632657725 ] } }
+,
+{ "type": "Feature", "id": 1892, "properties": { "NAME": "Price", "ADM0NAME": "United States of America", "POP_MAX": 10281 }, "geometry": { "type": "Point", "coordinates": [ -110.810016928941195, 39.599790872245251 ] } }
+,
+{ "type": "Feature", "id": 1893, "properties": { "NAME": "Cedar City", "ADM0NAME": "United States of America", "POP_MAX": 27738 }, "geometry": { "type": "Point", "coordinates": [ -113.061093996007571, 37.677427590987463 ] } }
+,
+{ "type": "Feature", "id": 1894, "properties": { "NAME": "Vernal", "ADM0NAME": "United States of America", "POP_MAX": 14353 }, "geometry": { "type": "Point", "coordinates": [ -109.528002158428251, 40.455397561701773 ] } }
+,
+{ "type": "Feature", "id": 1895, "properties": { "NAME": "Ogden", "ADM0NAME": "United States of America", "POP_MAX": 377224 }, "geometry": { "type": "Point", "coordinates": [ -111.968034100169859, 41.232378559426138 ] } }
+,
+{ "type": "Feature", "id": 1896, "properties": { "NAME": "Green River", "ADM0NAME": "United States of America", "POP_MAX": 11358 }, "geometry": { "type": "Point", "coordinates": [ -109.46498274924835, 41.514557717955938 ] } }
+,
+{ "type": "Feature", "id": 1897, "properties": { "NAME": "Rawlins", "ADM0NAME": "United States of America", "POP_MAX": 8533 }, "geometry": { "type": "Point", "coordinates": [ -107.234292034721136, 41.790664895691464 ] } }
+,
+{ "type": "Feature", "id": 1898, "properties": { "NAME": "Douglas", "ADM0NAME": "United States of America", "POP_MAX": 6298 }, "geometry": { "type": "Point", "coordinates": [ -105.38453414083358, 42.756471577010416 ] } }
+,
+{ "type": "Feature", "id": 1899, "properties": { "NAME": "Riverton", "ADM0NAME": "United States of America", "POP_MAX": 11508 }, "geometry": { "type": "Point", "coordinates": [ -108.395048056861299, 43.028160419784911 ] } }
+,
+{ "type": "Feature", "id": 1900, "properties": { "NAME": "Thermopolis", "ADM0NAME": "United States of America", "POP_MAX": 3445 }, "geometry": { "type": "Point", "coordinates": [ -108.214671469946438, 43.64597800605037 ] } }
+,
+{ "type": "Feature", "id": 1901, "properties": { "NAME": "Gillette", "ADM0NAME": "United States of America", "POP_MAX": 29113 }, "geometry": { "type": "Point", "coordinates": [ -105.505250286667433, 44.283174254425262 ] } }
+,
+{ "type": "Feature", "id": 1902, "properties": { "NAME": "Jonesboro", "ADM0NAME": "United States of America", "POP_MAX": 58619 }, "geometry": { "type": "Point", "coordinates": [ -90.70416406427745, 35.842578347816016 ] } }
+,
+{ "type": "Feature", "id": 1903, "properties": { "NAME": "Texarkana", "ADM0NAME": "United States of America", "POP_MAX": 74414 }, "geometry": { "type": "Point", "coordinates": [ -94.03747481461636, 33.442104714993889 ] } }
+,
+{ "type": "Feature", "id": 1904, "properties": { "NAME": "Pine Bluff", "ADM0NAME": "United States of America", "POP_MAX": 53217 }, "geometry": { "type": "Point", "coordinates": [ -92.003051189933672, 34.228697529124759 ] } }
+,
+{ "type": "Feature", "id": 1905, "properties": { "NAME": "Hot Springs", "ADM0NAME": "United States of America", "POP_MAX": 44182 }, "geometry": { "type": "Point", "coordinates": [ -93.055002483883243, 34.503952045727488 ] } }
+,
+{ "type": "Feature", "id": 1906, "properties": { "NAME": "Fort Smith", "ADM0NAME": "United States of America", "POP_MAX": 93988 }, "geometry": { "type": "Point", "coordinates": [ -94.398357179526613, 35.386223774246616 ] } }
+,
+{ "type": "Feature", "id": 1907, "properties": { "NAME": "Fayetteville", "ADM0NAME": "United States of America", "POP_MAX": 151671 }, "geometry": { "type": "Point", "coordinates": [ -94.1572091082366, 36.062978331540933 ] } }
+,
+{ "type": "Feature", "id": 1908, "properties": { "NAME": "Conway", "ADM0NAME": "United States of America", "POP_MAX": 61995 }, "geometry": { "type": "Point", "coordinates": [ -92.451318401849562, 35.091280536940701 ] } }
+,
+{ "type": "Feature", "id": 1909, "properties": { "NAME": "El Dorado", "ADM0NAME": "United States of America", "POP_MAX": 22416 }, "geometry": { "type": "Point", "coordinates": [ -92.662519980626428, 33.213927428209274 ] } }
+,
+{ "type": "Feature", "id": 1910, "properties": { "NAME": "Davenport", "ADM0NAME": "United States of America", "POP_MAX": 255738 }, "geometry": { "type": "Point", "coordinates": [ -90.587530356594755, 41.553986835794717 ] } }
+,
+{ "type": "Feature", "id": 1911, "properties": { "NAME": "Burlington", "ADM0NAME": "United States of America", "POP_MAX": 29773 }, "geometry": { "type": "Point", "coordinates": [ -91.112769614409274, 40.807934182796885 ] } }
+,
+{ "type": "Feature", "id": 1912, "properties": { "NAME": "Dubuque", "ADM0NAME": "United States of America", "POP_MAX": 62483 }, "geometry": { "type": "Point", "coordinates": [ -90.664450726061204, 42.500931619327105 ] } }
+,
+{ "type": "Feature", "id": 1913, "properties": { "NAME": "Waterloo", "ADM0NAME": "United States of America", "POP_MAX": 98347 }, "geometry": { "type": "Point", "coordinates": [ -92.342797894036607, 42.493154316267237 ] } }
+,
+{ "type": "Feature", "id": 1914, "properties": { "NAME": "Sioux City", "ADM0NAME": "United States of America", "POP_MAX": 90932 }, "geometry": { "type": "Point", "coordinates": [ -96.39999210792007, 42.500389016788006 ] } }
+,
+{ "type": "Feature", "id": 1915, "properties": { "NAME": "Council Bluffs", "ADM0NAME": "United States of America", "POP_MAX": 101805 }, "geometry": { "type": "Point", "coordinates": [ -95.860800213386597, 41.262273375507107 ] } }
+,
+{ "type": "Feature", "id": 1916, "properties": { "NAME": "Ames", "ADM0NAME": "United States of America", "POP_MAX": 57104 }, "geometry": { "type": "Point", "coordinates": [ -93.61972253596872, 42.053852965353883 ] } }
+,
+{ "type": "Feature", "id": 1917, "properties": { "NAME": "Mason City", "ADM0NAME": "United States of America", "POP_MAX": 27802 }, "geometry": { "type": "Point", "coordinates": [ -93.200833375810873, 43.154018370631718 ] } }
+,
+{ "type": "Feature", "id": 1918, "properties": { "NAME": "Emporia", "ADM0NAME": "United States of America", "POP_MAX": 29048 }, "geometry": { "type": "Point", "coordinates": [ -96.181374961109327, 38.404230772956453 ] } }
+,
+{ "type": "Feature", "id": 1919, "properties": { "NAME": "Salina", "ADM0NAME": "United States of America", "POP_MAX": 48031 }, "geometry": { "type": "Point", "coordinates": [ -97.60717940447438, 38.824670226083242 ] } }
+,
+{ "type": "Feature", "id": 1920, "properties": { "NAME": "Dodge City", "ADM0NAME": "United States of America", "POP_MAX": 25932 }, "geometry": { "type": "Point", "coordinates": [ -100.018195029483934, 37.760058206222254 ] } }
+,
+{ "type": "Feature", "id": 1921, "properties": { "NAME": "Coffeyville", "ADM0NAME": "United States of America", "POP_MAX": 11760 }, "geometry": { "type": "Point", "coordinates": [ -95.626318401862306, 37.038060932456233 ] } }
+,
+{ "type": "Feature", "id": 1922, "properties": { "NAME": "St. Charles", "ADM0NAME": "United States of America", "POP_MAX": 360485 }, "geometry": { "type": "Point", "coordinates": [ -90.506165813951156, 38.784285094247025 ] } }
+,
+{ "type": "Feature", "id": 1923, "properties": { "NAME": "Poplar Bluff", "ADM0NAME": "United States of America", "POP_MAX": 20662 }, "geometry": { "type": "Point", "coordinates": [ -90.402683758286685, 36.760196756022879 ] } }
+,
+{ "type": "Feature", "id": 1924, "properties": { "NAME": "Joplin", "ADM0NAME": "United States of America", "POP_MAX": 73763 }, "geometry": { "type": "Point", "coordinates": [ -94.513078859214602, 37.084595559735078 ] } }
+,
+{ "type": "Feature", "id": 1925, "properties": { "NAME": "Columbia", "ADM0NAME": "United States of America", "POP_MAX": 398093 }, "geometry": { "type": "Point", "coordinates": [ -92.33390954768231, 38.952078469898879 ] } }
+,
+{ "type": "Feature", "id": 1926, "properties": { "NAME": "St. Joseph", "ADM0NAME": "United States of America", "POP_MAX": 78012 }, "geometry": { "type": "Point", "coordinates": [ -94.846391847497159, 39.769031188001009 ] } }
+,
+{ "type": "Feature", "id": 1927, "properties": { "NAME": "McCook", "ADM0NAME": "United States of America", "POP_MAX": 8012 }, "geometry": { "type": "Point", "coordinates": [ -100.626168255397886, 40.20559368800275 ] } }
+,
+{ "type": "Feature", "id": 1928, "properties": { "NAME": "Norfolk", "ADM0NAME": "United States of America", "POP_MAX": 25030 }, "geometry": { "type": "Point", "coordinates": [ -97.433598268405945, 42.028712381043874 ] } }
+,
+{ "type": "Feature", "id": 1929, "properties": { "NAME": "North Platte", "ADM0NAME": "United States of America", "POP_MAX": 25247 }, "geometry": { "type": "Point", "coordinates": [ -100.77050053078915, 41.13628623357954 ] } }
+,
+{ "type": "Feature", "id": 1930, "properties": { "NAME": "Sidney", "ADM0NAME": "United States of America", "POP_MAX": 6492 }, "geometry": { "type": "Point", "coordinates": [ -102.978272747594758, 41.139800230975368 ] } }
+,
+{ "type": "Feature", "id": 1931, "properties": { "NAME": "Scottsbluff", "ADM0NAME": "United States of America", "POP_MAX": 25475 }, "geometry": { "type": "Point", "coordinates": [ -103.660685874225123, 41.867507750509333 ] } }
+,
+{ "type": "Feature", "id": 1932, "properties": { "NAME": "Chadron", "ADM0NAME": "United States of America", "POP_MAX": 5798 }, "geometry": { "type": "Point", "coordinates": [ -103.003077435094951, 42.827914244653925 ] } }
+,
+{ "type": "Feature", "id": 1933, "properties": { "NAME": "Lawton", "ADM0NAME": "United States of America", "POP_MAX": 91752 }, "geometry": { "type": "Point", "coordinates": [ -98.409972780128612, 34.599036681144469 ] } }
+,
+{ "type": "Feature", "id": 1934, "properties": { "NAME": "Norman", "ADM0NAME": "United States of America", "POP_MAX": 113525 }, "geometry": { "type": "Point", "coordinates": [ -97.344146364108724, 35.227913023920451 ] } }
+,
+{ "type": "Feature", "id": 1935, "properties": { "NAME": "Muskogee", "ADM0NAME": "United States of America", "POP_MAX": 39295 }, "geometry": { "type": "Point", "coordinates": [ -95.369434856939392, 35.748217182451015 ] } }
+,
+{ "type": "Feature", "id": 1936, "properties": { "NAME": "Ponca City", "ADM0NAME": "United States of America", "POP_MAX": 25273 }, "geometry": { "type": "Point", "coordinates": [ -97.08527327654258, 36.707357604004471 ] } }
+,
+{ "type": "Feature", "id": 1937, "properties": { "NAME": "Shawnee", "ADM0NAME": "United States of America", "POP_MAX": 29628 }, "geometry": { "type": "Point", "coordinates": [ -96.9337838152789, 35.342789732905317 ] } }
+,
+{ "type": "Feature", "id": 1938, "properties": { "NAME": "Woodward", "ADM0NAME": "United States of America", "POP_MAX": 12931 }, "geometry": { "type": "Point", "coordinates": [ -99.397690268739325, 36.433420836425285 ] } }
+,
+{ "type": "Feature", "id": 1939, "properties": { "NAME": "Guymon", "ADM0NAME": "United States of America", "POP_MAX": 11178 }, "geometry": { "type": "Point", "coordinates": [ -101.479501181833598, 36.685808531738701 ] } }
+,
+{ "type": "Feature", "id": 1940, "properties": { "NAME": "Yankton", "ADM0NAME": "United States of America", "POP_MAX": 15580 }, "geometry": { "type": "Point", "coordinates": [ -97.39248966651769, 42.882019469263469 ] } }
+,
+{ "type": "Feature", "id": 1941, "properties": { "NAME": "Brookings", "ADM0NAME": "United States of America", "POP_MAX": 22411 }, "geometry": { "type": "Point", "coordinates": [ -96.788030437999737, 44.306764545766612 ] } }
+,
+{ "type": "Feature", "id": 1942, "properties": { "NAME": "Mitchell", "ADM0NAME": "United States of America", "POP_MAX": 15205 }, "geometry": { "type": "Point", "coordinates": [ -98.026197755712985, 43.71429424954033 ] } }
+,
+{ "type": "Feature", "id": 1943, "properties": { "NAME": "Aberdeen", "ADM0NAME": "United States of America", "POP_MAX": 26041 }, "geometry": { "type": "Point", "coordinates": [ -98.486402223488312, 45.465117613805091 ] } }
+,
+{ "type": "Feature", "id": 1944, "properties": { "NAME": "Mobridge", "ADM0NAME": "United States of America", "POP_MAX": 3156 }, "geometry": { "type": "Point", "coordinates": [ -100.434707073756499, 45.540125955276778 ] } }
+,
+{ "type": "Feature", "id": 1945, "properties": { "NAME": "Houma", "ADM0NAME": "United States of America", "POP_MAX": 64592 }, "geometry": { "type": "Point", "coordinates": [ -90.719486126451955, 29.595931212374467 ] } }
+,
+{ "type": "Feature", "id": 1946, "properties": { "NAME": "Monroe", "ADM0NAME": "United States of America", "POP_MAX": 101724 }, "geometry": { "type": "Point", "coordinates": [ -92.119193971509617, 32.509603494287148 ] } }
+,
+{ "type": "Feature", "id": 1947, "properties": { "NAME": "Conroe", "ADM0NAME": "United States of America", "POP_MAX": 41643 }, "geometry": { "type": "Point", "coordinates": [ -95.455863689947478, 30.312063211075213 ] } }
+,
+{ "type": "Feature", "id": 1948, "properties": { "NAME": "Nacogdoches", "ADM0NAME": "United States of America", "POP_MAX": 30691 }, "geometry": { "type": "Point", "coordinates": [ -94.655266562665702, 31.603741474426613 ] } }
+,
+{ "type": "Feature", "id": 1949, "properties": { "NAME": "Eagle Pass", "ADM0NAME": "United States of America", "POP_MAX": 53276 }, "geometry": { "type": "Point", "coordinates": [ -100.489277386256731, 28.71102398580831 ] } }
+,
+{ "type": "Feature", "id": 1950, "properties": { "NAME": "Edinburg", "ADM0NAME": "United States of America", "POP_MAX": 150000 }, "geometry": { "type": "Point", "coordinates": [ -98.159962200700477, 26.303186461384598 ] } }
+,
+{ "type": "Feature", "id": 1951, "properties": { "NAME": "Kingsville", "ADM0NAME": "United States of America", "POP_MAX": 25264 }, "geometry": { "type": "Point", "coordinates": [ -97.855846396662798, 27.515954812626376 ] } }
+,
+{ "type": "Feature", "id": 1952, "properties": { "NAME": "Port Arthur", "ADM0NAME": "United States of America", "POP_MAX": 56945 }, "geometry": { "type": "Point", "coordinates": [ -93.928592571777244, 29.898987649550179 ] } }
+,
+{ "type": "Feature", "id": 1953, "properties": { "NAME": "Huntsville", "ADM0NAME": "United States of America", "POP_MAX": 35590 }, "geometry": { "type": "Point", "coordinates": [ -95.550586590338469, 30.723769347144525 ] } }
+,
+{ "type": "Feature", "id": 1954, "properties": { "NAME": "Killeen", "ADM0NAME": "United States of America", "POP_MAX": 137919 }, "geometry": { "type": "Point", "coordinates": [ -97.72748213884978, 31.117285379047132 ] } }
+,
+{ "type": "Feature", "id": 1955, "properties": { "NAME": "Lufkin", "ADM0NAME": "United States of America", "POP_MAX": 43264 }, "geometry": { "type": "Point", "coordinates": [ -94.728879640465436, 31.338434671040261 ] } }
+,
+{ "type": "Feature", "id": 1956, "properties": { "NAME": "Del Rio", "ADM0NAME": "United States of America", "POP_MAX": 36068 }, "geometry": { "type": "Point", "coordinates": [ -100.896384319852132, 29.362948017386543 ] } }
+,
+{ "type": "Feature", "id": 1957, "properties": { "NAME": "San Angelo", "ADM0NAME": "United States of America", "POP_MAX": 88256 }, "geometry": { "type": "Point", "coordinates": [ -100.436696616399786, 31.464008401509545 ] } }
+,
+{ "type": "Feature", "id": 1958, "properties": { "NAME": "Sherman", "ADM0NAME": "United States of America", "POP_MAX": 40284 }, "geometry": { "type": "Point", "coordinates": [ -96.608584026866197, 33.635994688953133 ] } }
+,
+{ "type": "Feature", "id": 1959, "properties": { "NAME": "Beaumont", "ADM0NAME": "United States of America", "POP_MAX": 111485 }, "geometry": { "type": "Point", "coordinates": [ -94.101682781738987, 30.086263040175879 ] } }
+,
+{ "type": "Feature", "id": 1960, "properties": { "NAME": "Bay City", "ADM0NAME": "United States of America", "POP_MAX": 18663 }, "geometry": { "type": "Point", "coordinates": [ -95.964359783699535, 28.981110859181797 ] } }
+,
+{ "type": "Feature", "id": 1961, "properties": { "NAME": "Port Lavaca", "ADM0NAME": "United States of America", "POP_MAX": 11743 }, "geometry": { "type": "Point", "coordinates": [ -96.629693849457396, 28.616016865039853 ] } }
+,
+{ "type": "Feature", "id": 1962, "properties": { "NAME": "Falfurrias", "ADM0NAME": "United States of America", "POP_MAX": 5349 }, "geometry": { "type": "Point", "coordinates": [ -98.144898520687434, 27.226902688601967 ] } }
+,
+{ "type": "Feature", "id": 1963, "properties": { "NAME": "Beeville", "ADM0NAME": "United States of America", "POP_MAX": 13004 }, "geometry": { "type": "Point", "coordinates": [ -97.750839886245785, 28.405978005989425 ] } }
+,
+{ "type": "Feature", "id": 1964, "properties": { "NAME": "Fort Stockton", "ADM0NAME": "United States of America", "POP_MAX": 7721 }, "geometry": { "type": "Point", "coordinates": [ -102.884996787308012, 30.891691913876969 ] } }
+,
+{ "type": "Feature", "id": 1965, "properties": { "NAME": "Pecos", "ADM0NAME": "United States of America", "POP_MAX": 8372 }, "geometry": { "type": "Point", "coordinates": [ -103.499894655148921, 31.415794290181054 ] } }
+,
+{ "type": "Feature", "id": 1966, "properties": { "NAME": "Dumas", "ADM0NAME": "United States of America", "POP_MAX": 13629 }, "geometry": { "type": "Point", "coordinates": [ -101.966887452994456, 35.862396259600018 ] } }
+,
+{ "type": "Feature", "id": 1967, "properties": { "NAME": "Denton", "ADM0NAME": "United States of America", "POP_MAX": 176930 }, "geometry": { "type": "Point", "coordinates": [ -97.128836508964582, 33.215761941555513 ] } }
+,
+{ "type": "Feature", "id": 1968, "properties": { "NAME": "Midland", "ADM0NAME": "United States of America", "POP_MAX": 98501 }, "geometry": { "type": "Point", "coordinates": [ -102.097499635612166, 32.030717996238366 ] } }
+,
+{ "type": "Feature", "id": 1969, "properties": { "NAME": "Temple", "ADM0NAME": "United States of America", "POP_MAX": 61161 }, "geometry": { "type": "Point", "coordinates": [ -97.363008261895231, 31.10209250795333 ] } }
+,
+{ "type": "Feature", "id": 1976, "properties": { "NAME": "New Haven", "ADM0NAME": "United States of America", "POP_MAX": 846766 }, "geometry": { "type": "Point", "coordinates": [ -72.900005332109856, 41.330382913267727 ] } }
+,
+{ "type": "Feature", "id": 1977, "properties": { "NAME": "Lowell", "ADM0NAME": "United States of America", "POP_MAX": 723629 }, "geometry": { "type": "Point", "coordinates": [ -71.316691123119199, 42.633688373884922 ] } }
+,
+{ "type": "Feature", "id": 1978, "properties": { "NAME": "Worcester", "ADM0NAME": "United States of America", "POP_MAX": 287365 }, "geometry": { "type": "Point", "coordinates": [ -71.800020794345073, 42.270428893089218 ] } }
+,
+{ "type": "Feature", "id": 1979, "properties": { "NAME": "Manchester", "ADM0NAME": "United States of America", "POP_MAX": 196566 }, "geometry": { "type": "Point", "coordinates": [ -71.455287314526004, 42.995991840683246 ] } }
+,
+{ "type": "Feature", "id": 1980, "properties": { "NAME": "Newport", "ADM0NAME": "United States of America", "POP_MAX": 45968 }, "geometry": { "type": "Point", "coordinates": [ -71.313357993236423, 41.490398985859485 ] } }
+,
+{ "type": "Feature", "id": 1981, "properties": { "NAME": "Dothan", "ADM0NAME": "United States of America", "POP_MAX": 61741 }, "geometry": { "type": "Point", "coordinates": [ -85.390586590297858, 31.223454609190867 ] } }
+,
+{ "type": "Feature", "id": 1982, "properties": { "NAME": "Tuscaloosa", "ADM0NAME": "United States of America", "POP_MAX": 121373 }, "geometry": { "type": "Point", "coordinates": [ -87.544176067845569, 33.225115375800385 ] } }
+,
+{ "type": "Feature", "id": 1983, "properties": { "NAME": "Gadsden", "ADM0NAME": "United States of America", "POP_MAX": 41709 }, "geometry": { "type": "Point", "coordinates": [ -86.006647177865489, 34.014550393707225 ] } }
+,
+{ "type": "Feature", "id": 1984, "properties": { "NAME": "Enterprise", "ADM0NAME": "United States of America", "POP_MAX": 24205 }, "geometry": { "type": "Point", "coordinates": [ -85.843995607226816, 31.327815164204253 ] } }
+,
+{ "type": "Feature", "id": 1985, "properties": { "NAME": "Selma", "ADM0NAME": "United States of America", "POP_MAX": 20126 }, "geometry": { "type": "Point", "coordinates": [ -87.021158896619511, 32.407568378726864 ] } }
+,
+{ "type": "Feature", "id": 1986, "properties": { "NAME": "Coral Gables", "ADM0NAME": "United States of America", "POP_MAX": 150000 }, "geometry": { "type": "Point", "coordinates": [ -80.291078737087389, 25.715418720496871 ] } }
+,
+{ "type": "Feature", "id": 1987, "properties": { "NAME": "Cape Coral", "ADM0NAME": "United States of America", "POP_MAX": 132489 }, "geometry": { "type": "Point", "coordinates": [ -81.97968367687281, 26.602909768677478 ] } }
+,
+{ "type": "Feature", "id": 1988, "properties": { "NAME": "Naples", "ADM0NAME": "United States of America", "POP_MAX": 262306 }, "geometry": { "type": "Point", "coordinates": [ -81.794992107861617, 26.142059345498694 ] } }
+,
+{ "type": "Feature", "id": 1989, "properties": { "NAME": "Fort Pierce", "ADM0NAME": "United States of America", "POP_MAX": 228245 }, "geometry": { "type": "Point", "coordinates": [ -80.325805299587557, 27.44678590800379 ] } }
+,
+{ "type": "Feature", "id": 1990, "properties": { "NAME": "Kissimmee", "ADM0NAME": "United States of America", "POP_MAX": 225494 }, "geometry": { "type": "Point", "coordinates": [ -81.407780600698629, 28.292057311001997 ] } }
+,
+{ "type": "Feature", "id": 1991, "properties": { "NAME": "Titusville", "ADM0NAME": "United States of America", "POP_MAX": 52311 }, "geometry": { "type": "Point", "coordinates": [ -80.807791383573829, 28.612347838347091 ] } }
+,
+{ "type": "Feature", "id": 1992, "properties": { "NAME": "St. Augustine", "ADM0NAME": "United States of America", "POP_MAX": 76331 }, "geometry": { "type": "Point", "coordinates": [ -81.314711346140882, 29.894879373182903 ] } }
+,
+{ "type": "Feature", "id": 1993, "properties": { "NAME": "Ocala", "ADM0NAME": "United States of America", "POP_MAX": 141382 }, "geometry": { "type": "Point", "coordinates": [ -82.140268190219786, 29.187351500458817 ] } }
+,
+{ "type": "Feature", "id": 1994, "properties": { "NAME": "Fort Lauderdale", "ADM0NAME": "United States of America", "POP_MAX": 2042042 }, "geometry": { "type": "Point", "coordinates": [ -80.141785524196052, 26.13606487935283 ] } }
+,
+{ "type": "Feature", "id": 1995, "properties": { "NAME": "Apalachicola", "ADM0NAME": "United States of America", "POP_MAX": 2284 }, "geometry": { "type": "Point", "coordinates": [ -84.992523032353574, 29.7256132192108 ] } }
+,
+{ "type": "Feature", "id": 1996, "properties": { "NAME": "Vero Beach", "ADM0NAME": "United States of America", "POP_MAX": 86039 }, "geometry": { "type": "Point", "coordinates": [ -80.391124310004443, 27.642252013147868 ] } }
+,
+{ "type": "Feature", "id": 1997, "properties": { "NAME": "Valdosta", "ADM0NAME": "United States of America", "POP_MAX": 61179 }, "geometry": { "type": "Point", "coordinates": [ -83.278596640745093, 30.83285829571264 ] } }
+,
+{ "type": "Feature", "id": 1998, "properties": { "NAME": "Albany", "ADM0NAME": "United States of America", "POP_MAX": 88766 }, "geometry": { "type": "Point", "coordinates": [ -84.155829917115796, 31.578730081197421 ] } }
+,
+{ "type": "Feature", "id": 1999, "properties": { "NAME": "Athens", "ADM0NAME": "United States of America", "POP_MAX": 110301 }, "geometry": { "type": "Point", "coordinates": [ -83.378022096474751, 33.961297830230478 ] } }
+,
+{ "type": "Feature", "id": 2000, "properties": { "NAME": "Macon", "ADM0NAME": "United States of America", "POP_MAX": 115592 }, "geometry": { "type": "Point", "coordinates": [ -83.630048056762234, 32.850383727035876 ] } }
+,
+{ "type": "Feature", "id": 2001, "properties": { "NAME": "Columbus", "ADM0NAME": "United States of America", "POP_MAX": 217980 }, "geometry": { "type": "Point", "coordinates": [ -84.980017335738978, 32.470432758609832 ] } }
+,
+{ "type": "Feature", "id": 2002, "properties": { "NAME": "Douglas", "ADM0NAME": "United States of America", "POP_MAX": 13441 }, "geometry": { "type": "Point", "coordinates": [ -82.850689943152361, 31.507778339660774 ] } }
+,
+{ "type": "Feature", "id": 2003, "properties": { "NAME": "Dublin", "ADM0NAME": "United States of America", "POP_MAX": 22623 }, "geometry": { "type": "Point", "coordinates": [ -82.918282716590113, 32.53745709129231 ] } }
+,
+{ "type": "Feature", "id": 2004, "properties": { "NAME": "Gulfport", "ADM0NAME": "United States of America", "POP_MAX": 82165 }, "geometry": { "type": "Point", "coordinates": [ -89.092763714336058, 30.367563699356651 ] } }
+,
+{ "type": "Feature", "id": 2005, "properties": { "NAME": "Hattiesburg", "ADM0NAME": "United States of America", "POP_MAX": 58874 }, "geometry": { "type": "Point", "coordinates": [ -89.290245200339484, 31.327272561665154 ] } }
+,
+{ "type": "Feature", "id": 2006, "properties": { "NAME": "Tupelo", "ADM0NAME": "United States of America", "POP_MAX": 35956 }, "geometry": { "type": "Point", "coordinates": [ -88.703330120584553, 34.257920551585642 ] } }
+,
+{ "type": "Feature", "id": 2007, "properties": { "NAME": "Greenville", "ADM0NAME": "United States of America", "POP_MAX": 38107 }, "geometry": { "type": "Point", "coordinates": [ -91.061687461088752, 33.410375385566738 ] } }
+,
+{ "type": "Feature", "id": 2008, "properties": { "NAME": "Natchez", "ADM0NAME": "United States of America", "POP_MAX": 23863 }, "geometry": { "type": "Point", "coordinates": [ -91.387507366689022, 31.554803893046312 ] } }
+,
+{ "type": "Feature", "id": 2009, "properties": { "NAME": "Florence", "ADM0NAME": "United States of America", "POP_MAX": 57438 }, "geometry": { "type": "Point", "coordinates": [ -79.762790569767617, 34.195676288890297 ] } }
+,
+{ "type": "Feature", "id": 2010, "properties": { "NAME": "Greenville", "ADM0NAME": "United States of America", "POP_MAX": 350954 }, "geometry": { "type": "Point", "coordinates": [ -82.394154502069739, 34.852922992994365 ] } }
+,
+{ "type": "Feature", "id": 2011, "properties": { "NAME": "Sumter", "ADM0NAME": "United States of America", "POP_MAX": 50868 }, "geometry": { "type": "Point", "coordinates": [ -80.341721640733397, 33.920654316232742 ] } }
+,
+{ "type": "Feature", "id": 2012, "properties": { "NAME": "Anderson", "ADM0NAME": "United States of America", "POP_MAX": 61558 }, "geometry": { "type": "Point", "coordinates": [ -82.650262900508324, 34.503745339998318 ] } }
+,
+{ "type": "Feature", "id": 2013, "properties": { "NAME": "Aiken", "ADM0NAME": "United States of America", "POP_MAX": 46196 }, "geometry": { "type": "Point", "coordinates": [ -81.720603883577496, 33.549462503080406 ] } }
+,
+{ "type": "Feature", "id": 2014, "properties": { "NAME": "Beaufort", "ADM0NAME": "United States of America", "POP_MAX": 31626 }, "geometry": { "type": "Point", "coordinates": [ -80.689504030057662, 32.432166360497774 ] } }
+,
+{ "type": "Feature", "id": 2015, "properties": { "NAME": "Rock Hill", "ADM0NAME": "United States of America", "POP_MAX": 94564 }, "geometry": { "type": "Point", "coordinates": [ -81.030000042428867, 34.94038535464847 ] } }
+,
+{ "type": "Feature", "id": 2016, "properties": { "NAME": "Decatur", "ADM0NAME": "United States of America", "POP_MAX": 77868 }, "geometry": { "type": "Point", "coordinates": [ -88.954735963684584, 39.840706399589806 ] } }
+,
+{ "type": "Feature", "id": 2017, "properties": { "NAME": "Alton", "ADM0NAME": "United States of America", "POP_MAX": 84276 }, "geometry": { "type": "Point", "coordinates": [ -90.184221640772819, 38.890996926929859 ] } }
+,
+{ "type": "Feature", "id": 2018, "properties": { "NAME": "Quincy", "ADM0NAME": "United States of America", "POP_MAX": 47108 }, "geometry": { "type": "Point", "coordinates": [ -91.40972823257448, 39.935971902520009 ] } }
+,
+{ "type": "Feature", "id": 2019, "properties": { "NAME": "Urbana", "ADM0NAME": "United States of America", "POP_MAX": 144074 }, "geometry": { "type": "Point", "coordinates": [ -88.204187461077311, 40.109992288262845 ] } }
+,
+{ "type": "Feature", "id": 2020, "properties": { "NAME": "Bloomington", "ADM0NAME": "United States of America", "POP_MAX": 128979 }, "geometry": { "type": "Point", "coordinates": [ -88.993596640768033, 40.484594745946652 ] } }
+,
+{ "type": "Feature", "id": 2021, "properties": { "NAME": "Kankakee", "ADM0NAME": "United States of America", "POP_MAX": 69608 }, "geometry": { "type": "Point", "coordinates": [ -87.861107627091656, 41.120369892433473 ] } }
+,
+{ "type": "Feature", "id": 2022, "properties": { "NAME": "Waukegan", "ADM0NAME": "United States of America", "POP_MAX": 200000 }, "geometry": { "type": "Point", "coordinates": [ -87.844726198055127, 42.364040750185779 ] } }
+,
+{ "type": "Feature", "id": 2023, "properties": { "NAME": "Aurora", "ADM0NAME": "United States of America", "POP_MAX": 350000 }, "geometry": { "type": "Point", "coordinates": [ -88.299995566546386, 41.765395120300695 ] } }
+,
+{ "type": "Feature", "id": 2024, "properties": { "NAME": "Carbondale", "ADM0NAME": "United States of America", "POP_MAX": 32444 }, "geometry": { "type": "Point", "coordinates": [ -89.220249472800162, 37.726830260258509 ] } }
+,
+{ "type": "Feature", "id": 2025, "properties": { "NAME": "Belleville", "ADM0NAME": "United States of America", "POP_MAX": 143900 }, "geometry": { "type": "Point", "coordinates": [ -90.000227703597602, 38.525153624519533 ] } }
+,
+{ "type": "Feature", "id": 2026, "properties": { "NAME": "Bloomington", "ADM0NAME": "United States of America", "POP_MAX": 100310 }, "geometry": { "type": "Point", "coordinates": [ -86.526408733857068, 39.165657164561139 ] } }
+,
+{ "type": "Feature", "id": 2027, "properties": { "NAME": "Muncie", "ADM0NAME": "United States of America", "POP_MAX": 85449 }, "geometry": { "type": "Point", "coordinates": [ -85.38637496106611, 40.193759785008012 ] } }
+,
+{ "type": "Feature", "id": 2028, "properties": { "NAME": "Kokomo", "ADM0NAME": "United States of America", "POP_MAX": 61121 }, "geometry": { "type": "Point", "coordinates": [ -86.133642010222729, 40.486765156102763 ] } }
+,
+{ "type": "Feature", "id": 2029, "properties": { "NAME": "Gary", "ADM0NAME": "United States of America", "POP_MAX": 591180 }, "geometry": { "type": "Point", "coordinates": [ -87.330003094211918, 41.580393492695862 ] } }
+,
+{ "type": "Feature", "id": 2030, "properties": { "NAME": "Fort Wayne", "ADM0NAME": "United States of America", "POP_MAX": 299871 }, "geometry": { "type": "Point", "coordinates": [ -85.129982342250003, 41.080398172055766 ] } }
+,
+{ "type": "Feature", "id": 2031, "properties": { "NAME": "Covington", "ADM0NAME": "United States of America", "POP_MAX": 585489 }, "geometry": { "type": "Point", "coordinates": [ -84.508599082156252, 39.084008401539904 ] } }
+,
+{ "type": "Feature", "id": 2032, "properties": { "NAME": "Bowling Green", "ADM0NAME": "United States of America", "POP_MAX": 71140 }, "geometry": { "type": "Point", "coordinates": [ -86.443648927541687, 36.990699482260766 ] } }
+,
+{ "type": "Feature", "id": 2033, "properties": { "NAME": "Paducah", "ADM0NAME": "United States of America", "POP_MAX": 41317 }, "geometry": { "type": "Point", "coordinates": [ -88.600003094216959, 37.083717060386107 ] } }
+,
+{ "type": "Feature", "id": 2034, "properties": { "NAME": "Owensboro", "ADM0NAME": "United States of America", "POP_MAX": 67825 }, "geometry": { "type": "Point", "coordinates": [ -87.113323813611999, 37.774579283696255 ] } }
+,
+{ "type": "Feature", "id": 2035, "properties": { "NAME": "Jacksonville", "ADM0NAME": "United States of America", "POP_MAX": 77288 }, "geometry": { "type": "Point", "coordinates": [ -77.430555665786812, 34.754324360181499 ] } }
+,
+{ "type": "Feature", "id": 2036, "properties": { "NAME": "Goldsboro", "ADM0NAME": "United States of America", "POP_MAX": 47602 }, "geometry": { "type": "Point", "coordinates": [ -77.993053631283942, 35.385138569168475 ] } }
+,
+{ "type": "Feature", "id": 2037, "properties": { "NAME": "Greenville", "ADM0NAME": "United States of America", "POP_MAX": 92565 }, "geometry": { "type": "Point", "coordinates": [ -77.366683595474115, 35.612876606278746 ] } }
+,
+{ "type": "Feature", "id": 2038, "properties": { "NAME": "Fayetteville", "ADM0NAME": "United States of America", "POP_MAX": 243306 }, "geometry": { "type": "Point", "coordinates": [ -78.883593588969688, 35.062936013828619 ] } }
+,
+{ "type": "Feature", "id": 2039, "properties": { "NAME": "Hickory", "ADM0NAME": "United States of America", "POP_MAX": 89462 }, "geometry": { "type": "Point", "coordinates": [ -81.34140222341972, 35.733489399247901 ] } }
+,
+{ "type": "Feature", "id": 2040, "properties": { "NAME": "Asheville", "ADM0NAME": "United States of America", "POP_MAX": 142755 }, "geometry": { "type": "Point", "coordinates": [ -82.554144736445323, 35.601197732580772 ] } }
+,
+{ "type": "Feature", "id": 2041, "properties": { "NAME": "Winston-Salem", "ADM0NAME": "United States of America", "POP_MAX": 281683 }, "geometry": { "type": "Point", "coordinates": [ -80.259995363063808, 36.105430520668676 ] } }
+,
+{ "type": "Feature", "id": 2042, "properties": { "NAME": "Kitty Hawk", "ADM0NAME": "United States of America", "POP_MAX": 3413 }, "geometry": { "type": "Point", "coordinates": [ -75.70471785653524, 36.077318541501938 ] } }
+,
+{ "type": "Feature", "id": 2043, "properties": { "NAME": "Akron", "ADM0NAME": "United States of America", "POP_MAX": 703200 }, "geometry": { "type": "Point", "coordinates": [ -81.519995973420464, 41.07039878240721 ] } }
+,
+{ "type": "Feature", "id": 2044, "properties": { "NAME": "Lima", "ADM0NAME": "United States of America", "POP_MAX": 68364 }, "geometry": { "type": "Point", "coordinates": [ -84.105264528118255, 40.742873554541347 ] } }
+,
+{ "type": "Feature", "id": 2045, "properties": { "NAME": "Oak Ridge", "ADM0NAME": "United States of America", "POP_MAX": 33556 }, "geometry": { "type": "Point", "coordinates": [ -84.269724773887106, 36.010655943845393 ] } }
+,
+{ "type": "Feature", "id": 2046, "properties": { "NAME": "Murfreesboro", "ADM0NAME": "United States of America", "POP_MAX": 115774 }, "geometry": { "type": "Point", "coordinates": [ -86.390267172984181, 35.845963154131255 ] } }
+,
+{ "type": "Feature", "id": 2047, "properties": { "NAME": "Clarksville", "ADM0NAME": "United States of America", "POP_MAX": 132536 }, "geometry": { "type": "Point", "coordinates": [ -87.359432822402084, 36.530081603027156 ] } }
+,
+{ "type": "Feature", "id": 2048, "properties": { "NAME": "Jackson", "ADM0NAME": "United States of America", "POP_MAX": 63196 }, "geometry": { "type": "Point", "coordinates": [ -88.81389184747303, 35.614866148921919 ] } }
+,
+{ "type": "Feature", "id": 2049, "properties": { "NAME": "Alexandria", "ADM0NAME": "United States of America", "POP_MAX": 127273 }, "geometry": { "type": "Point", "coordinates": [ -77.09998152841581, 38.820432758635206 ] } }
+,
+{ "type": "Feature", "id": 2050, "properties": { "NAME": "Fredericksburg", "ADM0NAME": "United States of America", "POP_MAX": 133134 }, "geometry": { "type": "Point", "coordinates": [ -77.460786378677653, 38.303513406419654 ] } }
+,
+{ "type": "Feature", "id": 2051, "properties": { "NAME": "Roanoke", "ADM0NAME": "United States of America", "POP_MAX": 198171 }, "geometry": { "type": "Point", "coordinates": [ -79.941616863713591, 37.271199156741147 ] } }
+,
+{ "type": "Feature", "id": 2052, "properties": { "NAME": "Danville", "ADM0NAME": "United States of America", "POP_MAX": 45894 }, "geometry": { "type": "Point", "coordinates": [ -79.395319459740108, 36.586253884928453 ] } }
+,
+{ "type": "Feature", "id": 2053, "properties": { "NAME": "Winchester", "ADM0NAME": "United States of America", "POP_MAX": 53941 }, "geometry": { "type": "Point", "coordinates": [ -78.166634767352321, 39.178731301931009 ] } }
+,
+{ "type": "Feature", "id": 2054, "properties": { "NAME": "Bristol", "ADM0NAME": "United States of America", "POP_MAX": 37443 }, "geometry": { "type": "Point", "coordinates": [ -82.176002443149628, 36.611523660319222 ] } }
+,
+{ "type": "Feature", "id": 2055, "properties": { "NAME": "Superior", "ADM0NAME": "United States of America", "POP_MAX": 27580 }, "geometry": { "type": "Point", "coordinates": [ -92.103897747551287, 46.721242491739815 ] } }
+,
+{ "type": "Feature", "id": 2056, "properties": { "NAME": "West Bend", "ADM0NAME": "United States of America", "POP_MAX": 34530 }, "geometry": { "type": "Point", "coordinates": [ -88.18333602064763, 43.425707213406383 ] } }
+,
+{ "type": "Feature", "id": 2057, "properties": { "NAME": "Fond du Lac", "ADM0NAME": "United States of America", "POP_MAX": 54299 }, "geometry": { "type": "Point", "coordinates": [ -88.446911663552328, 43.773437926298357 ] } }
+,
+{ "type": "Feature", "id": 2058, "properties": { "NAME": "Oshkosh", "ADM0NAME": "United States of America", "POP_MAX": 72698 }, "geometry": { "type": "Point", "coordinates": [ -88.54251306329229, 44.025102151559736 ] } }
+,
+{ "type": "Feature", "id": 2059, "properties": { "NAME": "Rhinelander", "ADM0NAME": "United States of America", "POP_MAX": 11483 }, "geometry": { "type": "Point", "coordinates": [ -89.412072389467653, 45.63991314603237 ] } }
+,
+{ "type": "Feature", "id": 2060, "properties": { "NAME": "Racine", "ADM0NAME": "United States of America", "POP_MAX": 131654 }, "geometry": { "type": "Point", "coordinates": [ -87.811834148901255, 42.727713642439994 ] } }
+,
+{ "type": "Feature", "id": 2061, "properties": { "NAME": "Marinette", "ADM0NAME": "United States of America", "POP_MAX": 27169 }, "geometry": { "type": "Point", "coordinates": [ -87.630475709773009, 45.100385354689138 ] } }
+,
+{ "type": "Feature", "id": 2062, "properties": { "NAME": "Wheeling", "ADM0NAME": "United States of America", "POP_MAX": 52492 }, "geometry": { "type": "Point", "coordinates": [ -80.72107833018805, 40.064310322116853 ] } }
+,
+{ "type": "Feature", "id": 2063, "properties": { "NAME": "Morgantown", "ADM0NAME": "United States of America", "POP_MAX": 58808 }, "geometry": { "type": "Point", "coordinates": [ -79.956060426539182, 39.629814879406752 ] } }
+,
+{ "type": "Feature", "id": 2064, "properties": { "NAME": "Huntington", "ADM0NAME": "United States of America", "POP_MAX": 85396 }, "geometry": { "type": "Point", "coordinates": [ -82.445288331822553, 38.419578673347246 ] } }
+,
+{ "type": "Feature", "id": 2065, "properties": { "NAME": "Beckley", "ADM0NAME": "United States of America", "POP_MAX": 37836 }, "geometry": { "type": "Point", "coordinates": [ -81.183013958445088, 37.780186176599784 ] } }
+,
+{ "type": "Feature", "id": 2066, "properties": { "NAME": "Wilmington", "ADM0NAME": "United States of America", "POP_MAX": 161560 }, "geometry": { "type": "Point", "coordinates": [ -75.546898032315823, 39.746267719576451 ] } }
+,
+{ "type": "Feature", "id": 2067, "properties": { "NAME": "Cumberland", "ADM0NAME": "United States of America", "POP_MAX": 21316 }, "geometry": { "type": "Point", "coordinates": [ -78.762774090271364, 39.653172626802757 ] } }
+,
+{ "type": "Feature", "id": 2068, "properties": { "NAME": "Atlantic City", "ADM0NAME": "United States of America", "POP_MAX": 76573 }, "geometry": { "type": "Point", "coordinates": [ -74.423323203209691, 39.364637267100989 ] } }
+,
+{ "type": "Feature", "id": 2069, "properties": { "NAME": "Newark", "ADM0NAME": "United States of America", "POP_MAX": 280123 }, "geometry": { "type": "Point", "coordinates": [ -74.170005332114897, 40.700421365413604 ] } }
+,
+{ "type": "Feature", "id": 2070, "properties": { "NAME": "Schenectady", "ADM0NAME": "United States of America", "POP_MAX": 149255 }, "geometry": { "type": "Point", "coordinates": [ -73.939967693767699, 42.81458172512265 ] } }
+,
+{ "type": "Feature", "id": 2071, "properties": { "NAME": "Binghamton", "ADM0NAME": "United States of America", "POP_MAX": 139895 }, "geometry": { "type": "Point", "coordinates": [ -75.918322389413618, 42.099018167177007 ] } }
+,
+{ "type": "Feature", "id": 2072, "properties": { "NAME": "Utica", "ADM0NAME": "United States of America", "POP_MAX": 105150 }, "geometry": { "type": "Point", "coordinates": [ -75.233067059007283, 43.101179218613424 ] } }
+,
+{ "type": "Feature", "id": 2073, "properties": { "NAME": "Watertown", "ADM0NAME": "United States of America", "POP_MAX": 33821 }, "geometry": { "type": "Point", "coordinates": [ -75.911061850676617, 43.975156879749647 ] } }
+,
+{ "type": "Feature", "id": 2074, "properties": { "NAME": "Niagara Falls", "ADM0NAME": "United States of America", "POP_MAX": 153134 }, "geometry": { "type": "Point", "coordinates": [ -79.036943401795952, 43.094823017441456 ] } }
+,
+{ "type": "Feature", "id": 2075, "properties": { "NAME": "Jamestown", "ADM0NAME": "United States of America", "POP_MAX": 45756 }, "geometry": { "type": "Point", "coordinates": [ -79.235535931093523, 42.097364521343763 ] } }
+,
+{ "type": "Feature", "id": 2076, "properties": { "NAME": "Elmira", "ADM0NAME": "United States of America", "POP_MAX": 62376 }, "geometry": { "type": "Point", "coordinates": [ -76.808035524182799, 42.090129820822767 ] } }
+,
+{ "type": "Feature", "id": 2077, "properties": { "NAME": "York", "ADM0NAME": "United States of America", "POP_MAX": 218010 }, "geometry": { "type": "Point", "coordinates": [ -76.728040406995035, 39.962921161960196 ] } }
+,
+{ "type": "Feature", "id": 2078, "properties": { "NAME": "Johnstown", "ADM0NAME": "United States of America", "POP_MAX": 69286 }, "geometry": { "type": "Point", "coordinates": [ -78.922221722107963, 40.327084980320933 ] } }
+,
+{ "type": "Feature", "id": 2079, "properties": { "NAME": "Scranton", "ADM0NAME": "United States of America", "POP_MAX": 156196 }, "geometry": { "type": "Point", "coordinates": [ -75.662679078865722, 41.409292825377349 ] } }
+,
+{ "type": "Feature", "id": 2080, "properties": { "NAME": "State College", "ADM0NAME": "United States of America", "POP_MAX": 87926 }, "geometry": { "type": "Point", "coordinates": [ -77.860245200293832, 40.793723163916638 ] } }
+,
+{ "type": "Feature", "id": 2081, "properties": { "NAME": "Erie", "ADM0NAME": "United States of America", "POP_MAX": 178182 }, "geometry": { "type": "Point", "coordinates": [ -80.08499312510736, 42.129920673687536 ] } }
+,
+{ "type": "Feature", "id": 2082, "properties": { "NAME": "Wilkes Barre", "ADM0NAME": "United States of America", "POP_MAX": 158913 }, "geometry": { "type": "Point", "coordinates": [ -75.877937257577571, 41.249044208840246 ] } }
+,
+{ "type": "Feature", "id": 2097, "properties": { "NAME": "Bar Harbor", "ADM0NAME": "United States of America", "POP_MAX": 6090 }, "geometry": { "type": "Point", "coordinates": [ -68.20437463547654, 44.387896544464752 ] } }
+,
+{ "type": "Feature", "id": 2098, "properties": { "NAME": "Lewiston", "ADM0NAME": "United States of America", "POP_MAX": 57688 }, "geometry": { "type": "Point", "coordinates": [ -70.215259645250228, 44.1007047720027 ] } }
+,
+{ "type": "Feature", "id": 2099, "properties": { "NAME": "Presque Isle", "ADM0NAME": "United States of America", "POP_MAX": 9466 }, "geometry": { "type": "Point", "coordinates": [ -68.002164755918386, 46.793408629435362 ] } }
+,
+{ "type": "Feature", "id": 2100, "properties": { "NAME": "Ann Arbor", "ADM0NAME": "United States of America", "POP_MAX": 265976 }, "geometry": { "type": "Point", "coordinates": [ -83.719990887166205, 42.300375385602365 ] } }
+,
+{ "type": "Feature", "id": 2101, "properties": { "NAME": "Kalamazoo", "ADM0NAME": "United States of America", "POP_MAX": 183381 }, "geometry": { "type": "Point", "coordinates": [ -85.587189576952369, 42.292158832867983 ] } }
+,
+{ "type": "Feature", "id": 2102, "properties": { "NAME": "Muskegon", "ADM0NAME": "United States of America", "POP_MAX": 101177 }, "geometry": { "type": "Point", "coordinates": [ -86.248363689910661, 43.234581928574755 ] } }
+,
+{ "type": "Feature", "id": 2103, "properties": { "NAME": "Flint", "ADM0NAME": "United States of America", "POP_MAX": 295212 }, "geometry": { "type": "Point", "coordinates": [ -83.687538087686846, 43.012864195826523 ] } }
+,
+{ "type": "Feature", "id": 2104, "properties": { "NAME": "Grand Rapids", "ADM0NAME": "United States of America", "POP_MAX": 535829 }, "geometry": { "type": "Point", "coordinates": [ -85.669949383267749, 42.963719908717053 ] } }
+,
+{ "type": "Feature", "id": 2105, "properties": { "NAME": "Pontiac", "ADM0NAME": "United States of America", "POP_MAX": 67994 }, "geometry": { "type": "Point", "coordinates": [ -83.290223838010888, 42.651852639835511 ] } }
+,
+{ "type": "Feature", "id": 2106, "properties": { "NAME": "Cadillac", "ADM0NAME": "United States of America", "POP_MAX": 14097 }, "geometry": { "type": "Point", "coordinates": [ -85.413608440883934, 44.251212381052824 ] } }
+,
+{ "type": "Feature", "id": 2107, "properties": { "NAME": "Traverse City", "ADM0NAME": "United States of America", "POP_MAX": 43189 }, "geometry": { "type": "Point", "coordinates": [ -85.622174521613886, 44.768441791862244 ] } }
+,
+{ "type": "Feature", "id": 2108, "properties": { "NAME": "Petoskey", "ADM0NAME": "United States of America", "POP_MAX": 12667 }, "geometry": { "type": "Point", "coordinates": [ -84.955186810022724, 45.373753681513051 ] } }
+,
+{ "type": "Feature", "id": 2109, "properties": { "NAME": "Escanaba", "ADM0NAME": "United States of America", "POP_MAX": 17318 }, "geometry": { "type": "Point", "coordinates": [ -87.064360394015466, 45.745694802933826 ] } }
+,
+{ "type": "Feature", "id": 2110, "properties": { "NAME": "Marquette", "ADM0NAME": "United States of America", "POP_MAX": 26591 }, "geometry": { "type": "Point", "coordinates": [ -87.406587566868382, 46.546731179890116 ] } }
+,
+{ "type": "Feature", "id": 2111, "properties": { "NAME": "Hancock", "ADM0NAME": "United States of America", "POP_MAX": 16355 }, "geometry": { "type": "Point", "coordinates": [ -88.580805299620522, 47.127290058473193 ] } }
+,
+{ "type": "Feature", "id": 2153, "properties": { "NAME": "Wrangell", "ADM0NAME": "United States of America", "POP_MAX": 2070 }, "geometry": { "type": "Point", "coordinates": [ -132.37159489126708, 56.471267516192938 ] } }
+,
+{ "type": "Feature", "id": 2154, "properties": { "NAME": "Shishmaref", "ADM0NAME": "United States of America", "POP_MAX": 254 }, "geometry": { "type": "Point", "coordinates": [ -166.071889284305541, 66.256975117143497 ] } }
+,
+{ "type": "Feature", "id": 2155, "properties": { "NAME": "Hoonah", "ADM0NAME": "United States of America", "POP_MAX": 361 }, "geometry": { "type": "Point", "coordinates": [ -135.438616986005911, 58.11540488599104 ] } }
+,
+{ "type": "Feature", "id": 2156, "properties": { "NAME": "Atka", "ADM0NAME": "United States of America", "POP_MAX": 61 }, "geometry": { "type": "Point", "coordinates": [ -174.200488730952657, 52.196489684144524 ] } }
+,
+{ "type": "Feature", "id": 2157, "properties": { "NAME": "Nikolski", "ADM0NAME": "United States of America", "POP_MAX": 18 }, "geometry": { "type": "Point", "coordinates": [ -168.867687624160453, 52.938434060775137 ] } }
+,
+{ "type": "Feature", "id": 2158, "properties": { "NAME": "Karluk", "ADM0NAME": "United States of America", "POP_MAX": 96 }, "geometry": { "type": "Point", "coordinates": [ -154.455027305092386, 57.57228558260357 ] } }
+,
+{ "type": "Feature", "id": 2159, "properties": { "NAME": "False Pass", "ADM0NAME": "United States of America", "POP_MAX": 35 }, "geometry": { "type": "Point", "coordinates": [ -163.415023032667307, 54.851211363842651 ] } }
+,
+{ "type": "Feature", "id": 2160, "properties": { "NAME": "Kivalina", "ADM0NAME": "United States of America", "POP_MAX": 374 }, "geometry": { "type": "Point", "coordinates": [ -164.48590342849846, 67.731492240174248 ] } }
+,
+{ "type": "Feature", "id": 2161, "properties": { "NAME": "Newhalen", "ADM0NAME": "United States of America", "POP_MAX": 160 }, "geometry": { "type": "Point", "coordinates": [ -154.897196697997856, 59.720345681895935 ] } }
+,
+{ "type": "Feature", "id": 2162, "properties": { "NAME": "Pilot Point", "ADM0NAME": "United States of America", "POP_MAX": 68 }, "geometry": { "type": "Point", "coordinates": [ -157.569126629649134, 57.564559955975881 ] } }
+,
+{ "type": "Feature", "id": 2163, "properties": { "NAME": "Chignik", "ADM0NAME": "United States of America", "POP_MAX": 118 }, "geometry": { "type": "Point", "coordinates": [ -158.402228232842532, 56.295670999265042 ] } }
+,
+{ "type": "Feature", "id": 2164, "properties": { "NAME": "King Salmon", "ADM0NAME": "United States of America", "POP_MAX": 292 }, "geometry": { "type": "Point", "coordinates": [ -156.661378420010038, 58.68870322583723 ] } }
+,
+{ "type": "Feature", "id": 2165, "properties": { "NAME": "Quinhagak", "ADM0NAME": "United States of America", "POP_MAX": 250 }, "geometry": { "type": "Point", "coordinates": [ -161.915786379015429, 59.74923280754706 ] } }
+,
+{ "type": "Feature", "id": 2166, "properties": { "NAME": "Aniak", "ADM0NAME": "United States of America", "POP_MAX": 501 }, "geometry": { "type": "Point", "coordinates": [ -159.522185711688167, 61.578707701760152 ] } }
+,
+{ "type": "Feature", "id": 2167, "properties": { "NAME": "Kotlit", "ADM0NAME": "United States of America", "POP_MAX": 1002 }, "geometry": { "type": "Point", "coordinates": [ -163.553283327264211, 63.034587828719168 ] } }
+,
+{ "type": "Feature", "id": 2168, "properties": { "NAME": "Unalakleet", "ADM0NAME": "United States of America", "POP_MAX": 741 }, "geometry": { "type": "Point", "coordinates": [ -160.788051597109927, 63.873425515896997 ] } }
+,
+{ "type": "Feature", "id": 2169, "properties": { "NAME": "Koyuk", "ADM0NAME": "United States of America", "POP_MAX": 254 }, "geometry": { "type": "Point", "coordinates": [ -161.15747173452479, 64.940268737248914 ] } }
+,
+{ "type": "Feature", "id": 2170, "properties": { "NAME": "McGrath", "ADM0NAME": "United States of America", "POP_MAX": 138 }, "geometry": { "type": "Point", "coordinates": [ -155.595784547935494, 62.956814798119865 ] } }
+,
+{ "type": "Feature", "id": 2171, "properties": { "NAME": "Hughes", "ADM0NAME": "United States of America", "POP_MAX": 78 }, "geometry": { "type": "Point", "coordinates": [ -154.254987835690542, 66.049184182897761 ] } }
+,
+{ "type": "Feature", "id": 2172, "properties": { "NAME": "Ambler", "ADM0NAME": "United States of America", "POP_MAX": 258 }, "geometry": { "type": "Point", "coordinates": [ -157.85140914104349, 67.086485208292629 ] } }
+,
+{ "type": "Feature", "id": 2173, "properties": { "NAME": "Wales", "ADM0NAME": "United States of America", "POP_MAX": 99 }, "geometry": { "type": "Point", "coordinates": [ -168.087502687633872, 65.609598611607055 ] } }
+,
+{ "type": "Feature", "id": 2174, "properties": { "NAME": "Kotzebue", "ADM0NAME": "United States of America", "POP_MAX": 3194 }, "geometry": { "type": "Point", "coordinates": [ -162.59659753624473, 66.898693053344005 ] } }
+,
+{ "type": "Feature", "id": 2175, "properties": { "NAME": "Wasilla", "ADM0NAME": "United States of America", "POP_MAX": 8521 }, "geometry": { "type": "Point", "coordinates": [ -149.439441977923849, 61.581730773049287 ] } }
+,
+{ "type": "Feature", "id": 2176, "properties": { "NAME": "Circle", "ADM0NAME": "United States of America", "POP_MAX": 100 }, "geometry": { "type": "Point", "coordinates": [ -144.060519655311197, 65.825890318964696 ] } }
+,
+{ "type": "Feature", "id": 2177, "properties": { "NAME": "Denali Park", "ADM0NAME": "United States of America", "POP_MAX": 1826 }, "geometry": { "type": "Point", "coordinates": [ -148.914099367244717, 63.733098164008425 ] } }
+,
+{ "type": "Feature", "id": 2178, "properties": { "NAME": "Yakutat", "ADM0NAME": "United States of America", "POP_MAX": 109 }, "geometry": { "type": "Point", "coordinates": [ -139.72721826369235, 59.547307148366656 ] } }
+,
+{ "type": "Feature", "id": 2179, "properties": { "NAME": "Homer", "ADM0NAME": "United States of America", "POP_MAX": 6560 }, "geometry": { "type": "Point", "coordinates": [ -151.548279665106804, 59.642934386322736 ] } }
+,
+{ "type": "Feature", "id": 2180, "properties": { "NAME": "Tanacross", "ADM0NAME": "United States of America", "POP_MAX": 136 }, "geometry": { "type": "Point", "coordinates": [ -143.346403037469713, 63.38570334792621 ] } }
+,
+{ "type": "Feature", "id": 2181, "properties": { "NAME": "Wiseman", "ADM0NAME": "United States of America", "POP_MAX": 14 }, "geometry": { "type": "Point", "coordinates": [ -150.107489056377091, 67.410470600546489 ] } }
+,
+{ "type": "Feature", "id": 4796, "properties": { "NAME": "Christiansted", "ADM0NAME": "United States Virgin Islands", "POP_MAX": 32543 }, "geometry": { "type": "Point", "coordinates": [ -64.749986004277787, 17.750375182053574 ] } }
+,
+{ "type": "Feature", "id": 4859, "properties": { "NAME": "Kailua-Kona", "ADM0NAME": "United States of America", "POP_MAX": 9870 }, "geometry": { "type": "Point", "coordinates": [ -155.98374656796085, 19.65236463203928 ] } }
+,
+{ "type": "Feature", "id": 4869, "properties": { "NAME": "Butte", "ADM0NAME": "United States of America", "POP_MAX": 34190 }, "geometry": { "type": "Point", "coordinates": [ -112.533839357333591, 46.003896096880169 ] } }
+,
+{ "type": "Feature", "id": 4870, "properties": { "NAME": "Grand Forks", "ADM0NAME": "United States of America", "POP_MAX": 58566 }, "geometry": { "type": "Point", "coordinates": [ -97.032485800956408, 47.925277525924344 ] } }
+,
+{ "type": "Feature", "id": 4871, "properties": { "NAME": "Pocatello", "ADM0NAME": "United States of America", "POP_MAX": 63998 }, "geometry": { "type": "Point", "coordinates": [ -112.444723349846129, 42.871348285995225 ] } }
+,
+{ "type": "Feature", "id": 4872, "properties": { "NAME": "Tacoma", "ADM0NAME": "United States of America", "POP_MAX": 719868 }, "geometry": { "type": "Point", "coordinates": [ -122.515013063428114, 47.211315937379709 ] } }
+,
+{ "type": "Feature", "id": 4873, "properties": { "NAME": "Yuma", "ADM0NAME": "United States of America", "POP_MAX": 92489 }, "geometry": { "type": "Point", "coordinates": [ -114.623608441000783, 32.685277525863398 ] } }
+,
+{ "type": "Feature", "id": 4874, "properties": { "NAME": "Prescott", "ADM0NAME": "United States of America", "POP_MAX": 55038 }, "geometry": { "type": "Point", "coordinates": [ -112.447772259351439, 34.590019143709526 ] } }
+,
+{ "type": "Feature", "id": 4875, "properties": { "NAME": "Long Beach", "ADM0NAME": "United States of America", "POP_MAX": 2036134 }, "geometry": { "type": "Point", "coordinates": [ -118.158043865819593, 33.786967385893718 ] } }
+,
+{ "type": "Feature", "id": 4876, "properties": { "NAME": "Grand Junction", "ADM0NAME": "United States of America", "POP_MAX": 104214 }, "geometry": { "type": "Point", "coordinates": [ -108.5499998390884, 39.093852761891526 ] } }
+,
+{ "type": "Feature", "id": 4877, "properties": { "NAME": "Ely", "ADM0NAME": "United States of America", "POP_MAX": 4216 }, "geometry": { "type": "Point", "coordinates": [ -114.887675010012174, 39.247021707204794 ] } }
+,
+{ "type": "Feature", "id": 4878, "properties": { "NAME": "Carson City", "ADM0NAME": "United States of America", "POP_MAX": 57341 }, "geometry": { "type": "Point", "coordinates": [ -119.766395306255731, 39.163848489430904 ] } }
+,
+{ "type": "Feature", "id": 4879, "properties": { "NAME": "Carlsbad", "ADM0NAME": "United States of America", "POP_MAX": 25302 }, "geometry": { "type": "Point", "coordinates": [ -104.228299806519033, 32.420565001448153 ] } }
+,
+{ "type": "Feature", "id": 4880, "properties": { "NAME": "Alamogordo", "ADM0NAME": "United States of America", "POP_MAX": 36058 }, "geometry": { "type": "Point", "coordinates": [ -105.959718670458244, 32.899476337713111 ] } }
+,
+{ "type": "Feature", "id": 4881, "properties": { "NAME": "Medford", "ADM0NAME": "United States of America", "POP_MAX": 108525 }, "geometry": { "type": "Point", "coordinates": [ -122.874422650018175, 42.326627013206689 ] } }
+,
+{ "type": "Feature", "id": 4882, "properties": { "NAME": "Klamath Falls", "ADM0NAME": "United States of America", "POP_MAX": 42978 }, "geometry": { "type": "Point", "coordinates": [ -121.780535931263728, 42.225005309104574 ] } }
+,
+{ "type": "Feature", "id": 4883, "properties": { "NAME": "St. George", "ADM0NAME": "United States of America", "POP_MAX": 98638 }, "geometry": { "type": "Point", "coordinates": [ -113.583336020749186, 37.104155089357505 ] } }
+,
+{ "type": "Feature", "id": 4884, "properties": { "NAME": "Provo", "ADM0NAME": "United States of America", "POP_MAX": 356712 }, "geometry": { "type": "Point", "coordinates": [ -111.637770021392498, 40.248898538263347 ] } }
+,
+{ "type": "Feature", "id": 4885, "properties": { "NAME": "Laramie", "ADM0NAME": "United States of America", "POP_MAX": 26934 }, "geometry": { "type": "Point", "coordinates": [ -105.590568076381317, 41.311365986184342 ] } }
+,
+{ "type": "Feature", "id": 4886, "properties": { "NAME": "Little Rock", "ADM0NAME": "United States of America", "POP_MAX": 270893 }, "geometry": { "type": "Point", "coordinates": [ -92.331093182122515, 34.736082579582558 ] } }
+,
+{ "type": "Feature", "id": 4887, "properties": { "NAME": "Wichita", "ADM0NAME": "United States of America", "POP_MAX": 401843 }, "geometry": { "type": "Point", "coordinates": [ -97.32998702166077, 37.719983132979792 ] } }
+,
+{ "type": "Feature", "id": 4888, "properties": { "NAME": "Jefferson City", "ADM0NAME": "United States of America", "POP_MAX": 55139 }, "geometry": { "type": "Point", "coordinates": [ -92.173325034335448, 38.576623351082276 ] } }
+,
+{ "type": "Feature", "id": 4889, "properties": { "NAME": "Rapid City", "ADM0NAME": "United States of America", "POP_MAX": 73632 }, "geometry": { "type": "Point", "coordinates": [ -103.230557090043703, 44.080550963408996 ] } }
+,
+{ "type": "Feature", "id": 4890, "properties": { "NAME": "Lafayette", "ADM0NAME": "United States of America", "POP_MAX": 158214 }, "geometry": { "type": "Point", "coordinates": [ -92.019949383293181, 30.199977029434194 ] } }
+,
+{ "type": "Feature", "id": 4891, "properties": { "NAME": "Galveston", "ADM0NAME": "United States of America", "POP_MAX": 68612 }, "geometry": { "type": "Point", "coordinates": [ -94.797480104332863, 29.301143004365485 ] } }
+,
+{ "type": "Feature", "id": 4892, "properties": { "NAME": "Freeport", "ADM0NAME": "United States of America", "POP_MAX": 74892 }, "geometry": { "type": "Point", "coordinates": [ -95.356877483892333, 28.959484272267787 ] } }
+,
+{ "type": "Feature", "id": 4893, "properties": { "NAME": "Victoria", "ADM0NAME": "United States of America", "POP_MAX": 64209 }, "geometry": { "type": "Point", "coordinates": [ -97.003340293143822, 28.804997577931147 ] } }
+,
+{ "type": "Feature", "id": 4894, "properties": { "NAME": "Odessa", "ADM0NAME": "United States of America", "POP_MAX": 106054 }, "geometry": { "type": "Point", "coordinates": [ -102.367224773959606, 31.845561339336598 ] } }
+,
+{ "type": "Feature", "id": 4895, "properties": { "NAME": "Wichita Falls", "ADM0NAME": "United States of America", "POP_MAX": 101212 }, "geometry": { "type": "Point", "coordinates": [ -98.493068483253921, 33.913626321441143 ] } }
+,
+{ "type": "Feature", "id": 4896, "properties": { "NAME": "Waco", "ADM0NAME": "United States of America", "POP_MAX": 167347 }, "geometry": { "type": "Point", "coordinates": [ -97.146380657727661, 31.549171161926552 ] } }
+,
+{ "type": "Feature", "id": 4897, "properties": { "NAME": "Lubbock", "ADM0NAME": "United States of America", "POP_MAX": 213300 }, "geometry": { "type": "Point", "coordinates": [ -101.879967693879507, 33.580003274564774 ] } }
+,
+{ "type": "Feature", "id": 4900, "properties": { "NAME": "Hartford", "ADM0NAME": "United States of America", "POP_MAX": 913000 }, "geometry": { "type": "Point", "coordinates": [ -72.681912942024042, 41.771966019603724 ] } }
+,
+{ "type": "Feature", "id": 4901, "properties": { "NAME": "Providence", "ADM0NAME": "United States of America", "POP_MAX": 1277000 }, "geometry": { "type": "Point", "coordinates": [ -71.416925555951195, 41.823048172924359 ] } }
+,
+{ "type": "Feature", "id": 4902, "properties": { "NAME": "Birmingham", "ADM0NAME": "United States of America", "POP_MAX": 1128047 }, "geometry": { "type": "Point", "coordinates": [ -86.82499515963957, 33.530006326322507 ] } }
+,
+{ "type": "Feature", "id": 4903, "properties": { "NAME": "Mobile", "ADM0NAME": "United States of America", "POP_MAX": 253466 }, "geometry": { "type": "Point", "coordinates": [ -88.049984987118421, 30.680025247209471 ] } }
+,
+{ "type": "Feature", "id": 4904, "properties": { "NAME": "Pensacola", "ADM0NAME": "United States of America", "POP_MAX": 234384 }, "geometry": { "type": "Point", "coordinates": [ -87.216935060357287, 30.421126321427153 ] } }
+,
+{ "type": "Feature", "id": 4905, "properties": { "NAME": "St. Petersburg", "ADM0NAME": "United States of America", "POP_MAX": 800313 }, "geometry": { "type": "Point", "coordinates": [ -82.679382570104735, 27.770538756312476 ] } }
+,
+{ "type": "Feature", "id": 4906, "properties": { "NAME": "Biloxi", "ADM0NAME": "United States of America", "POP_MAX": 50644 }, "geometry": { "type": "Point", "coordinates": [ -88.885308676900422, 30.395804869604149 ] } }
+,
+{ "type": "Feature", "id": 4907, "properties": { "NAME": "Springfield", "ADM0NAME": "United States of America", "POP_MAX": 134715 }, "geometry": { "type": "Point", "coordinates": [ -89.650016521955479, 39.820009988457002 ] } }
+,
+{ "type": "Feature", "id": 4908, "properties": { "NAME": "Frankfort", "ADM0NAME": "United States of America", "POP_MAX": 36688 }, "geometry": { "type": "Point", "coordinates": [ -84.873357179488437, 38.200806497239569 ] } }
+,
+{ "type": "Feature", "id": 4909, "properties": { "NAME": "Greensboro", "ADM0NAME": "United States of America", "POP_MAX": 388887 }, "geometry": { "type": "Point", "coordinates": [ -79.800023439233826, 36.070006326332589 ] } }
+,
+{ "type": "Feature", "id": 4910, "properties": { "NAME": "Dayton", "ADM0NAME": "United States of America", "POP_MAX": 773000 }, "geometry": { "type": "Point", "coordinates": [ -84.201933287122074, 39.752321854556612 ] } }
+,
+{ "type": "Feature", "id": 4911, "properties": { "NAME": "Virginia Beach", "ADM0NAME": "United States of America", "POP_MAX": 1491000 }, "geometry": { "type": "Point", "coordinates": [ -75.980264585917439, 36.855160192761275 ] } }
+,
+{ "type": "Feature", "id": 4912, "properties": { "NAME": "Madison", "ADM0NAME": "United States of America", "POP_MAX": 327447 }, "geometry": { "type": "Point", "coordinates": [ -89.401116985821773, 43.073015563014337 ] } }
+,
+{ "type": "Feature", "id": 4913, "properties": { "NAME": "Green Bay", "ADM0NAME": "United States of America", "POP_MAX": 198611 }, "geometry": { "type": "Point", "coordinates": [ -88.000013877092158, 44.529980895051324 ] } }
+,
+{ "type": "Feature", "id": 4914, "properties": { "NAME": "Trenton", "ADM0NAME": "United States of America", "POP_MAX": 366513 }, "geometry": { "type": "Point", "coordinates": [ -74.743355348393322, 40.216962503107027 ] } }
+,
+{ "type": "Feature", "id": 4917, "properties": { "NAME": "Lansing", "ADM0NAME": "United States of America", "POP_MAX": 279952 }, "geometry": { "type": "Point", "coordinates": [ -84.546736289187663, 42.73352724107275 ] } }
+,
+{ "type": "Feature", "id": 4921, "properties": { "NAME": "Gambell", "ADM0NAME": "United States of America", "POP_MAX": 681 }, "geometry": { "type": "Point", "coordinates": [ -171.731078737453203, 63.77971030593568 ] } }
+,
+{ "type": "Feature", "id": 4922, "properties": { "NAME": "Palmer", "ADM0NAME": "United States of America", "POP_MAX": 13111 }, "geometry": { "type": "Point", "coordinates": [ -149.112691896542401, 61.59971417148688 ] } }
+,
+{ "type": "Feature", "id": 4923, "properties": { "NAME": "Seward", "ADM0NAME": "United States of America", "POP_MAX": 2900 }, "geometry": { "type": "Point", "coordinates": [ -149.469982749408359, 60.126160704684139 ] } }
+,
+{ "type": "Feature", "id": 5382, "properties": { "NAME": "Duluth", "ADM0NAME": "United States of America", "POP_MAX": 84800 }, "geometry": { "type": "Point", "coordinates": [ -92.106378216301266, 46.783331725138396 ] } }
+,
+{ "type": "Feature", "id": 5383, "properties": { "NAME": "Bemidji", "ADM0NAME": "United States of America", "POP_MAX": 14796 }, "geometry": { "type": "Point", "coordinates": [ -94.880188234216064, 47.473573831261092 ] } }
+,
+{ "type": "Feature", "id": 5384, "properties": { "NAME": "Havre", "ADM0NAME": "United States of America", "POP_MAX": 11154 }, "geometry": { "type": "Point", "coordinates": [ -109.677682944561695, 48.545239684129911 ] } }
+,
+{ "type": "Feature", "id": 5385, "properties": { "NAME": "Kalispell", "ADM0NAME": "United States of America", "POP_MAX": 32062 }, "geometry": { "type": "Point", "coordinates": [ -114.315978639567277, 48.197767353399286 ] } }
+,
+{ "type": "Feature", "id": 5386, "properties": { "NAME": "Idaho Falls", "ADM0NAME": "United States of America", "POP_MAX": 79399 }, "geometry": { "type": "Point", "coordinates": [ -112.033301434154509, 43.466686624213708 ] } }
+,
+{ "type": "Feature", "id": 5387, "properties": { "NAME": "Lewiston", "ADM0NAME": "United States of America", "POP_MAX": 49289 }, "geometry": { "type": "Point", "coordinates": [ -117.016588991140566, 46.416609923379269 ] } }
+,
+{ "type": "Feature", "id": 5388, "properties": { "NAME": "Yakima", "ADM0NAME": "United States of America", "POP_MAX": 99287 }, "geometry": { "type": "Point", "coordinates": [ -120.5046964944097, 46.602231668171555 ] } }
+,
+{ "type": "Feature", "id": 5389, "properties": { "NAME": "Wenatchee", "ADM0NAME": "United States of America", "POP_MAX": 62625 }, "geometry": { "type": "Point", "coordinates": [ -120.309023683536566, 47.423628559450833 ] } }
+,
+{ "type": "Feature", "id": 5390, "properties": { "NAME": "Douglas", "ADM0NAME": "United States of America", "POP_MAX": 30185 }, "geometry": { "type": "Point", "coordinates": [ -109.548362672751296, 31.358640156066372 ] } }
+,
+{ "type": "Feature", "id": 5391, "properties": { "NAME": "Bakersfield", "ADM0NAME": "United States of America", "POP_MAX": 443129 }, "geometry": { "type": "Point", "coordinates": [ -119.019980918231909, 35.369971536290677 ] } }
+,
+{ "type": "Feature", "id": 5392, "properties": { "NAME": "Oakland", "ADM0NAME": "United States of America", "POP_MAX": 1510271 }, "geometry": { "type": "Point", "coordinates": [ -122.221103354768161, 37.76892071436032 ] } }
+,
+{ "type": "Feature", "id": 5393, "properties": { "NAME": "Lancaster", "ADM0NAME": "United States of America", "POP_MAX": 225799 }, "geometry": { "type": "Point", "coordinates": [ -118.135822999934135, 34.698048725415674 ] } }
+,
+{ "type": "Feature", "id": 5394, "properties": { "NAME": "Chico", "ADM0NAME": "United States of America", "POP_MAX": 95888 }, "geometry": { "type": "Point", "coordinates": [ -121.836398154571327, 39.728620217948787 ] } }
+,
+{ "type": "Feature", "id": 5395, "properties": { "NAME": "Monterey", "ADM0NAME": "United States of America", "POP_MAX": 124288 }, "geometry": { "type": "Point", "coordinates": [ -121.893578126902298, 36.60025819807953 ] } }
+,
+{ "type": "Feature", "id": 5396, "properties": { "NAME": "Salinas", "ADM0NAME": "United States of America", "POP_MAX": 156784 }, "geometry": { "type": "Point", "coordinates": [ -121.641655519479286, 36.682217019694463 ] } }
+,
+{ "type": "Feature", "id": 5397, "properties": { "NAME": "Los Alamos", "ADM0NAME": "United States of America", "POP_MAX": 12233 }, "geometry": { "type": "Point", "coordinates": [ -106.297708375863294, 35.891102517738204 ] } }
+,
+{ "type": "Feature", "id": 5398, "properties": { "NAME": "Eugene", "ADM0NAME": "United States of America", "POP_MAX": 245158 }, "geometry": { "type": "Point", "coordinates": [ -123.100016115188339, 44.0500101919244 ] } }
+,
+{ "type": "Feature", "id": 5399, "properties": { "NAME": "Coos Bay", "ADM0NAME": "United States of America", "POP_MAX": 31976 }, "geometry": { "type": "Point", "coordinates": [ -124.216588787718763, 43.366615213080536 ] } }
+,
+{ "type": "Feature", "id": 5400, "properties": { "NAME": "Bend", "ADM0NAME": "United States of America", "POP_MAX": 75441 }, "geometry": { "type": "Point", "coordinates": [ -121.30999617703003, 44.071920999216104 ] } }
+,
+{ "type": "Feature", "id": 5401, "properties": { "NAME": "Cody", "ADM0NAME": "United States of America", "POP_MAX": 9161 }, "geometry": { "type": "Point", "coordinates": [ -109.057100669168506, 44.523211282421016 ] } }
+,
+{ "type": "Feature", "id": 5402, "properties": { "NAME": "Cedar Rapids", "ADM0NAME": "United States of America", "POP_MAX": 170621 }, "geometry": { "type": "Point", "coordinates": [ -91.660023032380309, 41.969982115744301 ] } }
+,
+{ "type": "Feature", "id": 5403, "properties": { "NAME": "Springfield", "ADM0NAME": "United States of America", "POP_MAX": 210939 }, "geometry": { "type": "Point", "coordinates": [ -93.319999228676011, 37.180016091962045 ] } }
+,
+{ "type": "Feature", "id": 5404, "properties": { "NAME": "Lincoln", "ADM0NAME": "United States of America", "POP_MAX": 246220 }, "geometry": { "type": "Point", "coordinates": [ -96.680000856293589, 40.819974791520963 ] } }
+,
+{ "type": "Feature", "id": 5405, "properties": { "NAME": "Alexandria", "ADM0NAME": "United States of America", "POP_MAX": 76565 }, "geometry": { "type": "Point", "coordinates": [ -92.445013877109943, 31.311097838357796 ] } }
+,
+{ "type": "Feature", "id": 5406, "properties": { "NAME": "Abilene", "ADM0NAME": "United States of America", "POP_MAX": 114247 }, "geometry": { "type": "Point", "coordinates": [ -99.732786093935999, 32.448625304182713 ] } }
+,
+{ "type": "Feature", "id": 5407, "properties": { "NAME": "Brownsville", "ADM0NAME": "United States of America", "POP_MAX": 181399 }, "geometry": { "type": "Point", "coordinates": [ -97.500002483901028, 25.919979877724359 ] } }
+,
+{ "type": "Feature", "id": 5408, "properties": { "NAME": "Tyler", "ADM0NAME": "United States of America", "POP_MAX": 112245 }, "geometry": { "type": "Point", "coordinates": [ -95.300782716639617, 32.351086038231813 ] } }
+,
+{ "type": "Feature", "id": 5411, "properties": { "NAME": "Concord", "ADM0NAME": "United States of America", "POP_MAX": 44606 }, "geometry": { "type": "Point", "coordinates": [ -71.538047120841384, 43.208071918809082 ] } }
+,
+{ "type": "Feature", "id": 5412, "properties": { "NAME": "Huntsville", "ADM0NAME": "United States of America", "POP_MAX": 212733 }, "geometry": { "type": "Point", "coordinates": [ -86.60999536308924, 34.719959532707378 ] } }
+,
+{ "type": "Feature", "id": 5413, "properties": { "NAME": "Key West", "ADM0NAME": "United States of America", "POP_MAX": 29377 }, "geometry": { "type": "Point", "coordinates": [ -81.782744793408483, 24.555231139112038 ] } }
+,
+{ "type": "Feature", "id": 5414, "properties": { "NAME": "West Palm Beach", "ADM0NAME": "United States of America", "POP_MAX": 1250000 }, "geometry": { "type": "Point", "coordinates": [ -80.123621258245578, 26.745019957480224 ] } }
+,
+{ "type": "Feature", "id": 5415, "properties": { "NAME": "Sarasota", "ADM0NAME": "United States of America", "POP_MAX": 589959 }, "geometry": { "type": "Point", "coordinates": [ -82.530786989049489, 27.336120828250841 ] } }
+,
+{ "type": "Feature", "id": 5416, "properties": { "NAME": "Daytona Beach", "ADM0NAME": "United States of America", "POP_MAX": 216890 }, "geometry": { "type": "Point", "coordinates": [ -81.023075400501796, 29.210554218557661 ] } }
+,
+{ "type": "Feature", "id": 5417, "properties": { "NAME": "Gainesville", "ADM0NAME": "United States of America", "POP_MAX": 191097 }, "geometry": { "type": "Point", "coordinates": [ -82.325037273879332, 29.651380024223556 ] } }
+,
+{ "type": "Feature", "id": 5418, "properties": { "NAME": "Ft. Myers", "ADM0NAME": "United States of America", "POP_MAX": 188606 }, "geometry": { "type": "Point", "coordinates": [ -81.860491985791555, 26.640297667440734 ] } }
+,
+{ "type": "Feature", "id": 5419, "properties": { "NAME": "Brunswick", "ADM0NAME": "United States of America", "POP_MAX": 47085 }, "geometry": { "type": "Point", "coordinates": [ -81.491651450308382, 31.149686502094141 ] } }
+,
+{ "type": "Feature", "id": 5420, "properties": { "NAME": "Augusta", "ADM0NAME": "United States of America", "POP_MAX": 262332 }, "geometry": { "type": "Point", "coordinates": [ -81.984980511182641, 33.460811583483519 ] } }
+,
+{ "type": "Feature", "id": 5421, "properties": { "NAME": "Vicksburg", "ADM0NAME": "United States of America", "POP_MAX": 25701 }, "geometry": { "type": "Point", "coordinates": [ -90.877745200345828, 32.352481301903708 ] } }
+,
+{ "type": "Feature", "id": 5422, "properties": { "NAME": "Myrtle Beach", "ADM0NAME": "United States of America", "POP_MAX": 49357 }, "geometry": { "type": "Point", "coordinates": [ -78.886978395284928, 33.68891135561995 ] } }
+,
+{ "type": "Feature", "id": 5423, "properties": { "NAME": "Charleston", "ADM0NAME": "United States of America", "POP_MAX": 411940 }, "geometry": { "type": "Point", "coordinates": [ -79.992104738062778, 32.79237693178834 ] } }
+,
+{ "type": "Feature", "id": 5424, "properties": { "NAME": "Peoria", "ADM0NAME": "United States of America", "POP_MAX": 172308 }, "geometry": { "type": "Point", "coordinates": [ -89.670041139468708, 40.69998211573909 ] } }
+,
+{ "type": "Feature", "id": 5425, "properties": { "NAME": "Evansville", "ADM0NAME": "United States of America", "POP_MAX": 174102 }, "geometry": { "type": "Point", "coordinates": [ -87.555829103327369, 37.974696267746481 ] } }
+,
+{ "type": "Feature", "id": 5426, "properties": { "NAME": "Louisville", "ADM0NAME": "United States of America", "POP_MAX": 948000 }, "geometry": { "type": "Point", "coordinates": [ -85.750650124693436, 38.226962764381426 ] } }
+,
+{ "type": "Feature", "id": 5427, "properties": { "NAME": "Lexington", "ADM0NAME": "United States of America", "POP_MAX": 264578 }, "geometry": { "type": "Point", "coordinates": [ -84.500020794395937, 38.050014667811922 ] } }
+,
+{ "type": "Feature", "id": 5428, "properties": { "NAME": "Charlotte", "ADM0NAME": "United States of America", "POP_MAX": 995000 }, "geometry": { "type": "Point", "coordinates": [ -80.83198394628829, 35.206940384811901 ] } }
+,
+{ "type": "Feature", "id": 5429, "properties": { "NAME": "Youngstown", "ADM0NAME": "United States of America", "POP_MAX": 311990 }, "geometry": { "type": "Point", "coordinates": [ -80.649739015409125, 41.099699319516731 ] } }
+,
+{ "type": "Feature", "id": 5430, "properties": { "NAME": "Canton", "ADM0NAME": "United States of America", "POP_MAX": 258660 }, "geometry": { "type": "Point", "coordinates": [ -81.378635092886043, 40.798864968929649 ] } }
+,
+{ "type": "Feature", "id": 5431, "properties": { "NAME": "Toledo", "ADM0NAME": "United States of America", "POP_MAX": 469924 }, "geometry": { "type": "Point", "coordinates": [ -83.579973593871387, 41.670026264506077 ] } }
+,
+{ "type": "Feature", "id": 5432, "properties": { "NAME": "Columbus", "ADM0NAME": "United States of America", "POP_MAX": 1270000 }, "geometry": { "type": "Point", "coordinates": [ -82.991955463224087, 39.981920243229297 ] } }
+,
+{ "type": "Feature", "id": 5433, "properties": { "NAME": "Chattanooga", "ADM0NAME": "United States of America", "POP_MAX": 257589 }, "geometry": { "type": "Point", "coordinates": [ -85.25000085624788, 35.069989846836449 ] } }
+,
+{ "type": "Feature", "id": 5434, "properties": { "NAME": "Charlottesville", "ADM0NAME": "United States of America", "POP_MAX": 87925 }, "geometry": { "type": "Point", "coordinates": [ -78.476925905048915, 38.029189065598189 ] } }
+,
+{ "type": "Feature", "id": 5435, "properties": { "NAME": "Lynchburg", "ADM0NAME": "United States of America", "POP_MAX": 103893 }, "geometry": { "type": "Point", "coordinates": [ -79.142466676535946, 37.413619404137421 ] } }
+,
+{ "type": "Feature", "id": 5436, "properties": { "NAME": "Wausau", "ADM0NAME": "United States of America", "POP_MAX": 75422 }, "geometry": { "type": "Point", "coordinates": [ -89.62999190444242, 44.959153665235362 ] } }
+,
+{ "type": "Feature", "id": 5437, "properties": { "NAME": "Albany", "ADM0NAME": "United States of America", "POP_MAX": 870716 }, "geometry": { "type": "Point", "coordinates": [ -73.819949179769822, 42.670016905786042 ] } }
+,
+{ "type": "Feature", "id": 5438, "properties": { "NAME": "Ithaca", "ADM0NAME": "United States of America", "POP_MAX": 59930 }, "geometry": { "type": "Point", "coordinates": [ -76.496943401785757, 42.440573546410121 ] } }
+,
+{ "type": "Feature", "id": 5439, "properties": { "NAME": "Harrisburg", "ADM0NAME": "United States of America", "POP_MAX": 528892 }, "geometry": { "type": "Point", "coordinates": [ -76.884749187920136, 40.273599872898842 ] } }
+,
+{ "type": "Feature", "id": 5444, "properties": { "NAME": "Bangor", "ADM0NAME": "United States of America", "POP_MAX": 50213 }, "geometry": { "type": "Point", "coordinates": [ -68.778344768942361, 44.801152973502951 ] } }
+,
+{ "type": "Feature", "id": 5445, "properties": { "NAME": "Portland", "ADM0NAME": "United States of America", "POP_MAX": 135866 }, "geometry": { "type": "Point", "coordinates": [ -70.245527399270429, 43.672161575598466 ] } }
+,
+{ "type": "Feature", "id": 5446, "properties": { "NAME": "Saginaw", "ADM0NAME": "United States of America", "POP_MAX": 121379 }, "geometry": { "type": "Point", "coordinates": [ -83.950829510214021, 43.419480203315175 ] } }
+,
+{ "type": "Feature", "id": 5450, "properties": { "NAME": "Ketchikan", "ADM0NAME": "United States of America", "POP_MAX": 9070 }, "geometry": { "type": "Point", "coordinates": [ -131.66398950389447, 55.356219298414999 ] } }
+,
+{ "type": "Feature", "id": 5451, "properties": { "NAME": "Unalaska", "ADM0NAME": "United States of America", "POP_MAX": 3571 }, "geometry": { "type": "Point", "coordinates": [ -166.53160282597409, 53.868584003812657 ] } }
+,
+{ "type": "Feature", "id": 5452, "properties": { "NAME": "Togiak", "ADM0NAME": "United States of America", "POP_MAX": 236 }, "geometry": { "type": "Point", "coordinates": [ -160.378323433183368, 59.070361007001623 ] } }
+,
+{ "type": "Feature", "id": 5453, "properties": { "NAME": "Red Devil", "ADM0NAME": "United States of America", "POP_MAX": 25 }, "geometry": { "type": "Point", "coordinates": [ -157.312527305103856, 61.760996316669775 ] } }
+,
+{ "type": "Feature", "id": 5454, "properties": { "NAME": "Hooper Bay", "ADM0NAME": "United States of America", "POP_MAX": 1079 }, "geometry": { "type": "Point", "coordinates": [ -166.096564780724862, 61.531087869403166 ] } }
+,
+{ "type": "Feature", "id": 5455, "properties": { "NAME": "Wainwright", "ADM0NAME": "United States of America", "POP_MAX": 174 }, "geometry": { "type": "Point", "coordinates": [ -160.038304079203243, 70.636888650689684 ] } }
+,
+{ "type": "Feature", "id": 5456, "properties": { "NAME": "Galena", "ADM0NAME": "United States of America", "POP_MAX": 500 }, "geometry": { "type": "Point", "coordinates": [ -156.926995281990315, 64.733295511017559 ] } }
+,
+{ "type": "Feature", "id": 5457, "properties": { "NAME": "Kaktovik", "ADM0NAME": "United States of America", "POP_MAX": 101 }, "geometry": { "type": "Point", "coordinates": [ -143.602913173522722, 70.08785551610498 ] } }
+,
+{ "type": "Feature", "id": 5458, "properties": { "NAME": "Skagway", "ADM0NAME": "United States of America", "POP_MAX": 955 }, "geometry": { "type": "Point", "coordinates": [ -135.31389591666948, 59.458320331960067 ] } }
+,
+{ "type": "Feature", "id": 5459, "properties": { "NAME": "Cordova", "ADM0NAME": "United States of America", "POP_MAX": 2257 }, "geometry": { "type": "Point", "coordinates": [ -145.757496177127933, 60.542776101821175 ] } }
+,
+{ "type": "Feature", "id": 5460, "properties": { "NAME": "Kenai", "ADM0NAME": "United States of America", "POP_MAX": 7610 }, "geometry": { "type": "Point", "coordinates": [ -151.258013144923325, 60.554351622654451 ] } }
+,
+{ "type": "Feature", "id": 5461, "properties": { "NAME": "Fort Yukon", "ADM0NAME": "United States of America", "POP_MAX": 833 }, "geometry": { "type": "Point", "coordinates": [ -145.273778932659837, 66.564682433225414 ] } }
+,
+{ "type": "Feature", "id": 6165, "properties": { "NAME": "Santa Cruz", "ADM0NAME": "United States of America", "POP_MAX": 148444 }, "geometry": { "type": "Point", "coordinates": [ -122.026390426699891, 36.971946285644037 ] } }
+,
+{ "type": "Feature", "id": 6170, "properties": { "NAME": "San Bernardino", "ADM0NAME": "United States of America", "POP_MAX": 1745000 }, "geometry": { "type": "Point", "coordinates": [ -117.301980080874387, 34.122329585653802 ] } }
+,
+{ "type": "Feature", "id": 6171, "properties": { "NAME": "Bridgeport", "ADM0NAME": "United States of America", "POP_MAX": 1018000 }, "geometry": { "type": "Point", "coordinates": [ -73.201907041961078, 41.1819245156953 ] } }
+,
+{ "type": "Feature", "id": 6172, "properties": { "NAME": "Rochester", "ADM0NAME": "United States of America", "POP_MAX": 755000 }, "geometry": { "type": "Point", "coordinates": [ -77.621895648749557, 43.172371496497362 ] } }
+,
+{ "type": "Feature", "id": 6206, "properties": { "NAME": "International Falls", "ADM0NAME": "United States of America", "POP_MAX": 15240 }, "geometry": { "type": "Point", "coordinates": [ -93.410846396645013, 48.601127745653457 ] } }
+,
+{ "type": "Feature", "id": 6207, "properties": { "NAME": "St. Paul", "ADM0NAME": "United States of America", "POP_MAX": 734854 }, "geometry": { "type": "Point", "coordinates": [ -93.084974814612565, 44.943986632357735 ] } }
+,
+{ "type": "Feature", "id": 6208, "properties": { "NAME": "Billings", "ADM0NAME": "United States of America", "POP_MAX": 104552 }, "geometry": { "type": "Point", "coordinates": [ -108.540000449439844, 45.78830202135839 ] } }
+,
+{ "type": "Feature", "id": 6209, "properties": { "NAME": "Great Falls", "ADM0NAME": "United States of America", "POP_MAX": 66558 }, "geometry": { "type": "Point", "coordinates": [ -111.299987021716674, 47.500290546755991 ] } }
+,
+{ "type": "Feature", "id": 6210, "properties": { "NAME": "Missoula", "ADM0NAME": "United States of America", "POP_MAX": 72856 }, "geometry": { "type": "Point", "coordinates": [ -113.993052614175269, 46.872241026896631 ] } }
+,
+{ "type": "Feature", "id": 6211, "properties": { "NAME": "Minot", "ADM0NAME": "United States of America", "POP_MAX": 39439 }, "geometry": { "type": "Point", "coordinates": [ -101.295817303252193, 48.232493915899511 ] } }
+,
+{ "type": "Feature", "id": 6212, "properties": { "NAME": "Fargo", "ADM0NAME": "United States of America", "POP_MAX": 162842 }, "geometry": { "type": "Point", "coordinates": [ -96.789425701671632, 46.877227802612879 ] } }
+,
+{ "type": "Feature", "id": 6213, "properties": { "NAME": "Hilo", "ADM0NAME": "United States of America", "POP_MAX": 52391 }, "geometry": { "type": "Point", "coordinates": [ -155.090027305094907, 19.699997781345246 ] } }
+,
+{ "type": "Feature", "id": 6214, "properties": { "NAME": "Olympia", "ADM0NAME": "United States of America", "POP_MAX": 156984 }, "geometry": { "type": "Point", "coordinates": [ -122.899434043247425, 47.038044859905085 ] } }
+,
+{ "type": "Feature", "id": 6215, "properties": { "NAME": "Spokane", "ADM0NAME": "United States of America", "POP_MAX": 347705 }, "geometry": { "type": "Point", "coordinates": [ -117.419949383394737, 47.669995950402381 ] } }
+,
+{ "type": "Feature", "id": 6216, "properties": { "NAME": "Vancouver", "ADM0NAME": "United States of America", "POP_MAX": 525802 }, "geometry": { "type": "Point", "coordinates": [ -122.639992514926064, 45.63030132962615 ] } }
+,
+{ "type": "Feature", "id": 6217, "properties": { "NAME": "Flagstaff", "ADM0NAME": "United States of America", "POP_MAX": 63993 }, "geometry": { "type": "Point", "coordinates": [ -111.650508261952439, 35.198095722487949 ] } }
+,
+{ "type": "Feature", "id": 6218, "properties": { "NAME": "Tucson", "ADM0NAME": "United States of America", "POP_MAX": 823000 }, "geometry": { "type": "Point", "coordinates": [ -110.891932066525783, 32.206942622755662 ] } }
+,
+{ "type": "Feature", "id": 6219, "properties": { "NAME": "Santa Barbara", "ADM0NAME": "United States of America", "POP_MAX": 181632 }, "geometry": { "type": "Point", "coordinates": [ -119.719989870057645, 34.434989846833844 ] } }
+,
+{ "type": "Feature", "id": 6220, "properties": { "NAME": "Fresno", "ADM0NAME": "United States of America", "POP_MAX": 616353 }, "geometry": { "type": "Point", "coordinates": [ -119.77298405137293, 36.747716897624457 ] } }
+,
+{ "type": "Feature", "id": 6221, "properties": { "NAME": "Eureka", "ADM0NAME": "United States of America", "POP_MAX": 42398 }, "geometry": { "type": "Point", "coordinates": [ -124.14749739774453, 40.802223937028543 ] } }
+,
+{ "type": "Feature", "id": 6222, "properties": { "NAME": "Colorado Springs", "ADM0NAME": "United States of America", "POP_MAX": 493654 }, "geometry": { "type": "Point", "coordinates": [ -104.791986329958831, 38.862962462411531 ] } }
+,
+{ "type": "Feature", "id": 6223, "properties": { "NAME": "Reno", "ADM0NAME": "United States of America", "POP_MAX": 328585 }, "geometry": { "type": "Point", "coordinates": [ -119.820009604758468, 39.52997601221881 ] } }
+,
+{ "type": "Feature", "id": 6224, "properties": { "NAME": "Elko", "ADM0NAME": "United States of America", "POP_MAX": 19252 }, "geometry": { "type": "Point", "coordinates": [ -115.761988567958497, 40.83250632635162 ] } }
+,
+{ "type": "Feature", "id": 6225, "properties": { "NAME": "Albuquerque", "ADM0NAME": "United States of America", "POP_MAX": 898642 }, "geometry": { "type": "Point", "coordinates": [ -106.641330812387992, 35.104974791498023 ] } }
+,
+{ "type": "Feature", "id": 6226, "properties": { "NAME": "Salem", "ADM0NAME": "United States of America", "POP_MAX": 229010 }, "geometry": { "type": "Point", "coordinates": [ -123.023896730422393, 44.928070291211725 ] } }
+,
+{ "type": "Feature", "id": 6227, "properties": { "NAME": "Casper", "ADM0NAME": "United States of America", "POP_MAX": 60791 }, "geometry": { "type": "Point", "coordinates": [ -106.3124878354987, 42.866619892440497 ] } }
+,
+{ "type": "Feature", "id": 6228, "properties": { "NAME": "Topeka", "ADM0NAME": "United States of America", "POP_MAX": 132091 }, "geometry": { "type": "Point", "coordinates": [ -95.669984987148894, 39.050005309091887 ] } }
+,
+{ "type": "Feature", "id": 6229, "properties": { "NAME": "Kansas City", "ADM0NAME": "United States of America", "POP_MAX": 1469000 }, "geometry": { "type": "Point", "coordinates": [ -94.606040077545799, 39.109034368397488 ] } }
+,
+{ "type": "Feature", "id": 6230, "properties": { "NAME": "Tulsa", "ADM0NAME": "United States of America", "POP_MAX": 946962 }, "geometry": { "type": "Point", "coordinates": [ -95.930020794441589, 36.120003274575026 ] } }
+,
+{ "type": "Feature", "id": 6231, "properties": { "NAME": "Sioux Falls", "ADM0NAME": "United States of America", "POP_MAX": 155724 }, "geometry": { "type": "Point", "coordinates": [ -96.729997804535969, 43.5499890330683 ] } }
+,
+{ "type": "Feature", "id": 6232, "properties": { "NAME": "Shreveport", "ADM0NAME": "United States of America", "POP_MAX": 248053 }, "geometry": { "type": "Point", "coordinates": [ -93.77002343928973, 32.500017516097046 ] } }
+,
+{ "type": "Feature", "id": 6233, "properties": { "NAME": "Baton Rouge", "ADM0NAME": "United States of America", "POP_MAX": 422072 }, "geometry": { "type": "Point", "coordinates": [ -91.140158123523975, 30.457945779435136 ] } }
+,
+{ "type": "Feature", "id": 6234, "properties": { "NAME": "Ft. Worth", "ADM0NAME": "United States of America", "POP_MAX": 1440454 }, "geometry": { "type": "Point", "coordinates": [ -97.340038087741448, 32.739977029444219 ] } }
+,
+{ "type": "Feature", "id": 6235, "properties": { "NAME": "Corpus Christi", "ADM0NAME": "United States of America", "POP_MAX": 277454 }, "geometry": { "type": "Point", "coordinates": [ -97.401894777194798, 27.742814350387846 ] } }
+,
+{ "type": "Feature", "id": 6236, "properties": { "NAME": "Austin", "ADM0NAME": "United States of America", "POP_MAX": 1161000 }, "geometry": { "type": "Point", "coordinates": [ -97.744724221421166, 30.268895544297379 ] } }
+,
+{ "type": "Feature", "id": 6237, "properties": { "NAME": "Amarillo", "ADM0NAME": "United States of America", "POP_MAX": 181766 }, "geometry": { "type": "Point", "coordinates": [ -101.829996583853244, 35.229980081212034 ] } }
+,
+{ "type": "Feature", "id": 6238, "properties": { "NAME": "El Paso", "ADM0NAME": "United States of America", "POP_MAX": 753000 }, "geometry": { "type": "Point", "coordinates": [ -106.511941018331243, 31.781929805371249 ] } }
+,
+{ "type": "Feature", "id": 6239, "properties": { "NAME": "Laredo", "ADM0NAME": "United States of America", "POP_MAX": 434768 }, "geometry": { "type": "Point", "coordinates": [ -99.50721846698184, 27.506136290490986 ] } }
+,
+{ "type": "Feature", "id": 6241, "properties": { "NAME": "Burlington", "ADM0NAME": "United States of America", "POP_MAX": 93807 }, "geometry": { "type": "Point", "coordinates": [ -73.212466879962676, 44.47579815579337 ] } }
+,
+{ "type": "Feature", "id": 6242, "properties": { "NAME": "Montgomery", "ADM0NAME": "United States of America", "POP_MAX": 198325 }, "geometry": { "type": "Point", "coordinates": [ -86.279188681772723, 32.361602192203065 ] } }
+,
+{ "type": "Feature", "id": 6243, "properties": { "NAME": "Tallahassee", "ADM0NAME": "United States of America", "POP_MAX": 221222 }, "geometry": { "type": "Point", "coordinates": [ -84.280034222129416, 30.449987608862102 ] } }
+,
+{ "type": "Feature", "id": 6244, "properties": { "NAME": "Orlando", "ADM0NAME": "United States of America", "POP_MAX": 1350000 }, "geometry": { "type": "Point", "coordinates": [ -81.381976215170766, 28.511922684589933 ] } }
+,
+{ "type": "Feature", "id": 6245, "properties": { "NAME": "Jacksonville", "ADM0NAME": "United States of America", "POP_MAX": 988000 }, "geometry": { "type": "Point", "coordinates": [ -81.671932676760491, 30.331966629909687 ] } }
+,
+{ "type": "Feature", "id": 6246, "properties": { "NAME": "Savannah", "ADM0NAME": "United States of America", "POP_MAX": 180187 }, "geometry": { "type": "Point", "coordinates": [ -81.109995159616574, 32.021106179832088 ] } }
+,
+{ "type": "Feature", "id": 6247, "properties": { "NAME": "Columbia", "ADM0NAME": "United States of America", "POP_MAX": 398093 }, "geometry": { "type": "Point", "coordinates": [ -80.899982138782434, 34.039975198394757 ] } }
+,
+{ "type": "Feature", "id": 6248, "properties": { "NAME": "Indianapolis", "ADM0NAME": "United States of America", "POP_MAX": 1436000 }, "geometry": { "type": "Point", "coordinates": [ -86.171993915385201, 39.751934281314504 ] } }
+,
+{ "type": "Feature", "id": 6249, "properties": { "NAME": "Wilmington", "ADM0NAME": "United States of America", "POP_MAX": 161560 }, "geometry": { "type": "Point", "coordinates": [ -77.94502038746856, 34.22551942853886 ] } }
+,
+{ "type": "Feature", "id": 6250, "properties": { "NAME": "Knoxville", "ADM0NAME": "United States of America", "POP_MAX": 655400 }, "geometry": { "type": "Point", "coordinates": [ -83.920030356568077, 35.970012429847827 ] } }
+,
+{ "type": "Feature", "id": 6251, "properties": { "NAME": "Richmond", "ADM0NAME": "United States of America", "POP_MAX": 912000 }, "geometry": { "type": "Point", "coordinates": [ -77.451931862941592, 37.551965205784768 ] } }
+,
+{ "type": "Feature", "id": 6252, "properties": { "NAME": "Charleston", "ADM0NAME": "United States of America", "POP_MAX": 123799 }, "geometry": { "type": "Point", "coordinates": [ -81.632728110465166, 38.349737975104802 ] } }
+,
+{ "type": "Feature", "id": 6253, "properties": { "NAME": "Baltimore", "ADM0NAME": "United States of America", "POP_MAX": 2255000 }, "geometry": { "type": "Point", "coordinates": [ -76.621930845685483, 39.301935908916732 ] } }
+,
+{ "type": "Feature", "id": 6254, "properties": { "NAME": "Syracuse", "ADM0NAME": "United States of America", "POP_MAX": 662577 }, "geometry": { "type": "Point", "coordinates": [ -76.150013673594231, 43.049993712428261 ] } }
+,
+{ "type": "Feature", "id": 6257, "properties": { "NAME": "Augusta", "ADM0NAME": "United States of America", "POP_MAX": 24042 }, "geometry": { "type": "Point", "coordinates": [ -69.77998905605574, 44.310562763539963 ] } }
+,
+{ "type": "Feature", "id": 6258, "properties": { "NAME": "Sault Ste. Marie", "ADM0NAME": "United States of America", "POP_MAX": 83805 }, "geometry": { "type": "Point", "coordinates": [ -84.345275717897891, 46.495261453327373 ] } }
+,
+{ "type": "Feature", "id": 6262, "properties": { "NAME": "Sitka", "ADM0NAME": "United States of America", "POP_MAX": 8931 }, "geometry": { "type": "Point", "coordinates": [ -135.327549428975317, 57.060397691731453 ] } }
+,
+{ "type": "Feature", "id": 6774, "properties": { "NAME": "Helena", "ADM0NAME": "United States of America", "POP_MAX": 38725 }, "geometry": { "type": "Point", "coordinates": [ -112.035290976797683, 46.592749042846037 ] } }
+,
+{ "type": "Feature", "id": 6775, "properties": { "NAME": "Bismarck", "ADM0NAME": "United States of America", "POP_MAX": 63871 }, "geometry": { "type": "Point", "coordinates": [ -100.7833162859975, 46.808317280151641 ] } }
+,
+{ "type": "Feature", "id": 6776, "properties": { "NAME": "Boise", "ADM0NAME": "United States of America", "POP_MAX": 338071 }, "geometry": { "type": "Point", "coordinates": [ -116.227489870043655, 43.608590107287284 ] } }
+,
+{ "type": "Feature", "id": 6777, "properties": { "NAME": "San Jose", "ADM0NAME": "United States of America", "POP_MAX": 1668000 }, "geometry": { "type": "Point", "coordinates": [ -121.851934914877006, 37.301928788140458 ] } }
+,
+{ "type": "Feature", "id": 6778, "properties": { "NAME": "Sacramento", "ADM0NAME": "United States of America", "POP_MAX": 1604000 }, "geometry": { "type": "Point", "coordinates": [ -121.471983946450962, 38.576967240294152 ] } }
+,
+{ "type": "Feature", "id": 6779, "properties": { "NAME": "Las Vegas", "ADM0NAME": "United States of America", "POP_MAX": 1823000 }, "geometry": { "type": "Point", "coordinates": [ -115.221952004694174, 36.211943640024288 ] } }
+,
+{ "type": "Feature", "id": 6780, "properties": { "NAME": "Santa Fe", "ADM0NAME": "United States of America", "POP_MAX": 92681 }, "geometry": { "type": "Point", "coordinates": [ -105.937239422411324, 35.686928933753052 ] } }
+,
+{ "type": "Feature", "id": 6781, "properties": { "NAME": "Portland", "ADM0NAME": "United States of America", "POP_MAX": 1875000 }, "geometry": { "type": "Point", "coordinates": [ -122.681935932132888, 45.521969681728024 ] } }
+,
+{ "type": "Feature", "id": 6782, "properties": { "NAME": "Salt Lake City", "ADM0NAME": "United States of America", "POP_MAX": 966000 }, "geometry": { "type": "Point", "coordinates": [ -111.93199778104821, 40.776962154040064 ] } }
+,
+{ "type": "Feature", "id": 6783, "properties": { "NAME": "Cheyenne", "ADM0NAME": "United States of America", "POP_MAX": 72927 }, "geometry": { "type": "Point", "coordinates": [ -104.819710735883461, 41.140006936704538 ] } }
+,
+{ "type": "Feature", "id": 6784, "properties": { "NAME": "Des Moines", "ADM0NAME": "United States of America", "POP_MAX": 380655 }, "geometry": { "type": "Point", "coordinates": [ -93.619980918130238, 41.579980081237352 ] } }
+,
+{ "type": "Feature", "id": 6785, "properties": { "NAME": "Omaha", "ADM0NAME": "United States of America", "POP_MAX": 877110 }, "geometry": { "type": "Point", "coordinates": [ -96.009990073413292, 41.240000833189242 ] } }
+,
+{ "type": "Feature", "id": 6786, "properties": { "NAME": "Oklahoma City", "ADM0NAME": "United States of America", "POP_MAX": 788000 }, "geometry": { "type": "Point", "coordinates": [ -97.520629372787369, 35.471988806036848 ] } }
+,
+{ "type": "Feature", "id": 6787, "properties": { "NAME": "Pierre", "ADM0NAME": "United States of America", "POP_MAX": 13879 }, "geometry": { "type": "Point", "coordinates": [ -100.350552003769224, 44.368337014842325 ] } }
+,
+{ "type": "Feature", "id": 6788, "properties": { "NAME": "San Antonio", "ADM0NAME": "United States of America", "POP_MAX": 1473000 }, "geometry": { "type": "Point", "coordinates": [ -98.509251198963284, 29.48927904852593 ] } }
+,
+{ "type": "Feature", "id": 6791, "properties": { "NAME": "Jackson", "ADM0NAME": "United States of America", "POP_MAX": 250902 }, "geometry": { "type": "Point", "coordinates": [ -90.184996787257148, 32.298815326968452 ] } }
+,
+{ "type": "Feature", "id": 6792, "properties": { "NAME": "Raleigh", "ADM0NAME": "United States of America", "POP_MAX": 1163515 }, "geometry": { "type": "Point", "coordinates": [ -78.644693442484481, 35.818781350745724 ] } }
+,
+{ "type": "Feature", "id": 6793, "properties": { "NAME": "Cleveland", "ADM0NAME": "United States of America", "POP_MAX": 1890000 }, "geometry": { "type": "Point", "coordinates": [ -81.696944069989627, 41.471932653717317 ] } }
+,
+{ "type": "Feature", "id": 6794, "properties": { "NAME": "Cincinnati", "ADM0NAME": "United States of America", "POP_MAX": 1636000 }, "geometry": { "type": "Point", "coordinates": [ -84.458868508477337, 39.163830643616848 ] } }
+,
+{ "type": "Feature", "id": 6795, "properties": { "NAME": "Nashville", "ADM0NAME": "United States of America", "POP_MAX": 877000 }, "geometry": { "type": "Point", "coordinates": [ -86.781930845726322, 36.171920243214061 ] } }
+,
+{ "type": "Feature", "id": 6796, "properties": { "NAME": "Memphis", "ADM0NAME": "United States of America", "POP_MAX": 1081000 }, "geometry": { "type": "Point", "coordinates": [ -90.001941018265143, 35.121932653691829 ] } }
+,
+{ "type": "Feature", "id": 6797, "properties": { "NAME": "Norfolk", "ADM0NAME": "United States of America", "POP_MAX": 1047869 }, "geometry": { "type": "Point", "coordinates": [ -76.280005739024489, 36.849958718913911 ] } }
+,
+{ "type": "Feature", "id": 6798, "properties": { "NAME": "Milwaukee", "ADM0NAME": "United States of America", "POP_MAX": 1388000 }, "geometry": { "type": "Point", "coordinates": [ -87.921912942084987, 43.054600907304177 ] } }
+,
+{ "type": "Feature", "id": 6799, "properties": { "NAME": "Buffalo", "ADM0NAME": "United States of America", "POP_MAX": 1016000 }, "geometry": { "type": "Point", "coordinates": [ -78.881947935538278, 42.881924108800831 ] } }
+,
+{ "type": "Feature", "id": 6800, "properties": { "NAME": "Pittsburgh", "ADM0NAME": "United States of America", "POP_MAX": 1838000 }, "geometry": { "type": "Point", "coordinates": [ -80.00193125260023, 40.43194445384313 ] } }
+,
+{ "type": "Feature", "id": 6804, "properties": { "NAME": "Kodiak", "ADM0NAME": "United States of America", "POP_MAX": 9461 }, "geometry": { "type": "Point", "coordinates": [ -152.4069869405009, 57.789998391849281 ] } }
+,
+{ "type": "Feature", "id": 6805, "properties": { "NAME": "Cold Bay", "ADM0NAME": "United States of America", "POP_MAX": 200 }, "geometry": { "type": "Point", "coordinates": [ -162.715091595490037, 55.200001443596591 ] } }
+,
+{ "type": "Feature", "id": 6806, "properties": { "NAME": "Bethel", "ADM0NAME": "United States of America", "POP_MAX": 6228 }, "geometry": { "type": "Point", "coordinates": [ -161.755796144639845, 60.793303445572008 ] } }
+,
+{ "type": "Feature", "id": 6807, "properties": { "NAME": "Point Hope", "ADM0NAME": "United States of America", "POP_MAX": 461 }, "geometry": { "type": "Point", "coordinates": [ -166.808020062303257, 68.347726053024189 ] } }
+,
+{ "type": "Feature", "id": 6808, "properties": { "NAME": "Barrow", "ADM0NAME": "United States of America", "POP_MAX": 4336 }, "geometry": { "type": "Point", "coordinates": [ -156.788579958096534, 71.290569680965746 ] } }
+,
+{ "type": "Feature", "id": 6809, "properties": { "NAME": "Nome", "ADM0NAME": "United States of America", "POP_MAX": 3485 }, "geometry": { "type": "Point", "coordinates": [ -165.406374351034628, 64.50610007644633 ] } }
+,
+{ "type": "Feature", "id": 6810, "properties": { "NAME": "Valdez", "ADM0NAME": "United States of America", "POP_MAX": 4036 }, "geometry": { "type": "Point", "coordinates": [ -146.348286989304711, 61.135995706315725 ] } }
+,
+{ "type": "Feature", "id": 6811, "properties": { "NAME": "Juneau", "ADM0NAME": "United States of America", "POP_MAX": 30711 }, "geometry": { "type": "Point", "coordinates": [ -134.419996990884613, 58.314126606369427 ] } }
+,
+{ "type": "Feature", "id": 6812, "properties": { "NAME": "Fairbanks", "ADM0NAME": "United States of America", "POP_MAX": 56993 }, "geometry": { "type": "Point", "coordinates": [ -147.71065861203158, 64.836984272411257 ] } }
+,
+{ "type": "Feature", "id": 6813, "properties": { "NAME": "Prudhoe Bay", "ADM0NAME": "United States of America", "POP_MAX": 2500 }, "geometry": { "type": "Point", "coordinates": [ -148.669359783910409, 70.292181009086619 ] } }
+,
+{ "type": "Feature", "id": 7106, "properties": { "NAME": "Minneapolis", "ADM0NAME": "United States of America", "POP_MAX": 2616000 }, "geometry": { "type": "Point", "coordinates": [ -93.25373219666352, 44.981925126061867 ] } }
+,
+{ "type": "Feature", "id": 7107, "properties": { "NAME": "Honolulu", "ADM0NAME": "United States of America", "POP_MAX": 786000 }, "geometry": { "type": "Point", "coordinates": [ -157.859943744773602, 21.308822302073963 ] } }
+,
+{ "type": "Feature", "id": 7108, "properties": { "NAME": "Seattle", "ADM0NAME": "United States of America", "POP_MAX": 3074000 }, "geometry": { "type": "Point", "coordinates": [ -122.34193084586849, 47.571947912530732 ] } }
+,
+{ "type": "Feature", "id": 7109, "properties": { "NAME": "Phoenix", "ADM0NAME": "United States of America", "POP_MAX": 3551000 }, "geometry": { "type": "Point", "coordinates": [ -112.071937559694675, 33.541925736367602 ] } }
+,
+{ "type": "Feature", "id": 7110, "properties": { "NAME": "San Diego", "ADM0NAME": "United States of America", "POP_MAX": 2916000 }, "geometry": { "type": "Point", "coordinates": [ -117.181935728660278, 32.821969681677331 ] } }
+,
+{ "type": "Feature", "id": 7111, "properties": { "NAME": "St. Louis", "ADM0NAME": "United States of America", "POP_MAX": 2199000 }, "geometry": { "type": "Point", "coordinates": [ -90.241926369828604, 38.636963578185146 ] } }
+,
+{ "type": "Feature", "id": 7112, "properties": { "NAME": "New Orleans", "ADM0NAME": "United States of America", "POP_MAX": 785000 }, "geometry": { "type": "Point", "coordinates": [ -90.04191273864285, 29.996948319361479 ] } }
+,
+{ "type": "Feature", "id": 7113, "properties": { "NAME": "Dallas", "ADM0NAME": "United States of America", "POP_MAX": 4798000 }, "geometry": { "type": "Point", "coordinates": [ -96.841962787498176, 32.821969681677331 ] } }
+,
+{ "type": "Feature", "id": 7115, "properties": { "NAME": "Boston", "ADM0NAME": "United States of America", "POP_MAX": 4467000 }, "geometry": { "type": "Point", "coordinates": [ -71.071959532186838, 42.331906001702293 ] } }
+,
+{ "type": "Feature", "id": 7116, "properties": { "NAME": "Tampa", "ADM0NAME": "United States of America", "POP_MAX": 2314000 }, "geometry": { "type": "Point", "coordinates": [ -82.46056670996677, 27.94893379298594 ] } }
+,
+{ "type": "Feature", "id": 7117, "properties": { "NAME": "Philadelphia", "ADM0NAME": "United States of America", "POP_MAX": 5492000 }, "geometry": { "type": "Point", "coordinates": [ -75.171941832007917, 40.001919022526465 ] } }
+,
+{ "type": "Feature", "id": 7118, "properties": { "NAME": "Detroit", "ADM0NAME": "United States of America", "POP_MAX": 4101000 }, "geometry": { "type": "Point", "coordinates": [ -83.082001646492699, 42.331906001702293 ] } }
+,
+{ "type": "Feature", "id": 7119, "properties": { "NAME": "Anchorage", "ADM0NAME": "United States of America", "POP_MAX": 260283 }, "geometry": { "type": "Point", "coordinates": [ -149.900214886454364, 61.219969908790006 ] } }
+,
+{ "type": "Feature", "id": 7222, "properties": { "NAME": "San Francisco", "ADM0NAME": "United States of America", "POP_MAX": 3450000 }, "geometry": { "type": "Point", "coordinates": [ -122.417168773552248, 37.769195629687431 ] } }
+,
+{ "type": "Feature", "id": 7223, "properties": { "NAME": "Denver", "ADM0NAME": "United States of America", "POP_MAX": 2313000 }, "geometry": { "type": "Point", "coordinates": [ -104.985961810968206, 39.741133906965501 ] } }
+,
+{ "type": "Feature", "id": 7224, "properties": { "NAME": "Houston", "ADM0NAME": "United States of America", "POP_MAX": 4459000 }, "geometry": { "type": "Point", "coordinates": [ -95.341925149145993, 29.821920243188856 ] } }
+,
+{ "type": "Feature", "id": 7225, "properties": { "NAME": "Miami", "ADM0NAME": "United States of America", "POP_MAX": 5585000 }, "geometry": { "type": "Point", "coordinates": [ -80.226051939450031, 25.789556555021534 ] } }
+,
+{ "type": "Feature", "id": 7226, "properties": { "NAME": "Atlanta", "ADM0NAME": "United States of America", "POP_MAX": 4506000 }, "geometry": { "type": "Point", "coordinates": [ -84.40189524187565, 33.831959712605851 ] } }
+,
+{ "type": "Feature", "id": 7227, "properties": { "NAME": "Chicago", "ADM0NAME": "United States of America", "POP_MAX": 8990000 }, "geometry": { "type": "Point", "coordinates": [ -87.752000832709314, 41.831936519278429 ] } }
+,
+{ "type": "Feature", "id": 7262, "properties": { "NAME": "Los Angeles", "ADM0NAME": "United States of America", "POP_MAX": 12500000 }, "geometry": { "type": "Point", "coordinates": [ -118.181926369940413, 33.991924108765431 ] } }
+,
+{ "type": "Feature", "id": 7263, "properties": { "NAME": "Washington, D.C.", "ADM0NAME": "United States of America", "POP_MAX": 4338000 }, "geometry": { "type": "Point", "coordinates": [ -77.011364439437159, 38.901495235087054 ] } }
+,
+{ "type": "Feature", "id": 7264, "properties": { "NAME": "New York", "ADM0NAME": "United States of America", "POP_MAX": 19040000 }, "geometry": { "type": "Point", "coordinates": [ -73.981962787406815, 40.75192492259464 ] } }
+
+]
+}

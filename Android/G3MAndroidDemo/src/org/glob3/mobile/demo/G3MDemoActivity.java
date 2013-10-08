@@ -80,7 +80,6 @@ public class G3MDemoActivity
       drawingShapesG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            finish();
             final Intent intent = new Intent(getApplicationContext(), SymbologyActivity.class);
             startActivity(intent);
          }
@@ -96,11 +95,11 @@ public class G3MDemoActivity
          }
       });
 
-      final Button netCDFButton = (Button) findViewById(R.id.netCDFG3MButton);
-      netCDFButton.setOnClickListener(new OnClickListener() {
+      final Button threeDSymbology = (Button) findViewById(R.id.threeDsymbologyButton);
+      threeDSymbology.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MNetCDFActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), ShapeSymbolizerActivity.class);
             startActivity(intent);
          }
       });
@@ -129,6 +128,15 @@ public class G3MDemoActivity
          @Override
          public void onClick(final View v) {
             final Intent intent = new Intent(getApplicationContext(), FlatWorldActivity.class);
+            startActivity(intent);
+         }
+      });
+
+      final Button cameraAnimationButton = (Button) findViewById(R.id.cameraAnimation);
+      cameraAnimationButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), CameraAnimation.class);
             startActivity(intent);
          }
       });
