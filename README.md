@@ -1,5 +1,6 @@
 g3m
 ===
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 ##The multiplatform advanced visualization framework
 
