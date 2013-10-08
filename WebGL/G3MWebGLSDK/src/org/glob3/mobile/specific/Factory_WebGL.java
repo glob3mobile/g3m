@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -146,6 +147,12 @@ public final class Factory_WebGL
    public IFloatBuffer createFloatBuffer(final float[] array,
                                          final int length) {
       return new FloatBuffer_WebGL(array, length);
+   }
+
+
+   @Override
+   protected IDeviceInfo createDeviceInfo() {
+      return new DeviceInfo_WebGL();
    }
 
 }

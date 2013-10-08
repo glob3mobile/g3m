@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -14,27 +15,19 @@ import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.URL;
 
+import android.content.Context;
+
 
 public final class Factory_Android
          extends
             IFactory {
 
 
-   //   private static class FloatArrayThreadLocal
-   //            extends
-   //               ThreadLocal<float[]> {
-   //      @Override
-   //      protected float[] initialValue() {
-   //         return new float[1024];
-   //      }
-   //   }
+   private final Context _context;
 
 
-   //   private final FloatArrayThreadLocal _floatArrayThreadLocal;
-
-
-   public Factory_Android() {
-      //      _floatArrayThreadLocal = new FloatArrayThreadLocal();
+   public Factory_Android(final Context context) {
+      _context = context;
    }
 
 
@@ -148,15 +141,10 @@ public final class Factory_Android
    }
 
 
-   //   @Override
-   //   public float[] getThreadLocalFloatArray() {
-   //      return _floatArrayThreadLocal.get();
-   //   }
-   //
-   //
-   //   @Override
-   //   public void setThreadLocalFloatArray(final float[] array) {
-   //      _floatArrayThreadLocal.set(array);
-   //   }
+   @Override
+   protected IDeviceInfo createDeviceInfo() {
+      return new DeviceInfo_Android(_context);
+   }
+
 
 }
