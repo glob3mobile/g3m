@@ -1229,8 +1229,6 @@ const URL MapBooBuilder::createApplicationRestURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-  //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
-
   return URL(path, false);
 }
 
