@@ -343,7 +343,7 @@ public class Symbology {
                                                  final BoxShape bs = new BoxShape(new Geodetic3D(geometry.getPosition(), 0),
                                                           AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(boxExtent / 4,
                                                                    boxExtent / 4, height / 2), 2, Color.fromRGBA255(252, 205, 21,
-                                                                   255), Color.fromRGBA255(252, 205, 21, 255).darker(), false);
+                                                                   255), Color.fromRGBA255(252, 205, 21, 255).muchDarker(), false);
 
 
                                                  result.add(new GEOShapeSymbol(bs));
