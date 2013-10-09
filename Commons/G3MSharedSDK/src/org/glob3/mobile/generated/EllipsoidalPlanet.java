@@ -76,9 +76,14 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-    final double cosLatitude = latitude.cosinus();
+  //  const double cosLatitude = latitude.cosinus();
+  //
+  //  return Vector3D(cosLatitude * longitude.cosinus(),
+  //                  cosLatitude * longitude.sinus(),
+  //                  latitude.sinus());
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
-    return new Vector3D(cosLatitude * longitude.cosinus(), cosLatitude * longitude.sinus(), latitude.sinus());
+    return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)

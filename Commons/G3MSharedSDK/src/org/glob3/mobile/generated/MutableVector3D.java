@@ -153,8 +153,10 @@ public class MutableVector3D
     final double v = axis.y();
     final double w = axis.z();
   
-    final double cosTheta = theta.cosinus();
-    final double sinTheta = theta.sinus();
+  //  const double cosTheta = theta.cosinus();
+  //  const double sinTheta = theta.sinus();
+    final double cosTheta = java.lang.Math.cos(theta._radians);
+    final double sinTheta = java.lang.Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);

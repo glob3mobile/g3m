@@ -821,8 +821,10 @@ public class MutableMatrix44D
   {
     final Vector3D a = axis.normalized();
   
-    final double c = angle.cosinus();
-    final double s = angle.sinus();
+  //  const double c = angle.cosinus();
+  //  const double s = angle.sinus();
+    final double c = java.lang.Math.cos(angle._radians);
+    final double s = java.lang.Math.sin(angle._radians);
   
     return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
   }
