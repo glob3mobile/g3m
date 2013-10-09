@@ -416,8 +416,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _statistics.clear();
   
-    int _DGD_At_Work_DPI;
-    final float dpiFactor = IFactory.instance().getDeviceInfo().getPixelsInMM(0.1f);
+    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
+    final float dpiFactor = deviceInfo.getPixelsInMM(0.1f);
+    final float deviceQualityFactor = deviceInfo.getQualityFactor();
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -435,7 +436,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor, deviceQualityFactor); // if first render, force full render
       }
     }
     else
@@ -454,7 +455,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor); // if first render, force full render
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor, deviceQualityFactor); // if first render, force full render
         }
   
         toVisit = toVisitInNextIteration;

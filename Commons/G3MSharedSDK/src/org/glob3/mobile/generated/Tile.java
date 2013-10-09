@@ -166,7 +166,7 @@ public class Tile
 
   private ITimer _lodTimer;
   private boolean _lastLodTest;
-  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, float dpiFactor)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, float dpiFactor, float deviceQualityFactor)
   {
   
     if ((_level >= layerTilesRenderParameters._maxLevelForPoles) && (_sector.touchesPoles()))
@@ -226,15 +226,16 @@ public class Tile
       _lodTimer.start();
     }
   
-    //  const double projectedSize = extent->squaredProjectedArea(rc);
-    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    //    return true;
-    //  }
-  
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
     int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
   
-    //Adjusting shown texture size in case of incomplete mesh
+    // Adjusting shown texture size in case of incomplete mesh
+    int __ASK_JM;
+    /*
+     the tile's renderer sector is already known or it's already known
+     if the sector is an intersection with the renderedSector?
+     avoid 2 virtual methods invocation (getRenderedSector() and fullContains)
+     */
     Sector renderedSector = _planetRenderer.getRenderedSector();
     if (!renderedSector.fullContains(_sector))
     {
@@ -262,7 +263,7 @@ public class Tile
   
     final Vector2F ex = boundingVolume.projectedExtent(rc);
     final float t = (ex._x * ex._y);
-    _lastLodTest = t <= ((texWidth * texHeight) * (factor / dpiFactor));
+    _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
   
     return _lastLodTest;
   }
@@ -718,7 +719,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, float dpiFactor)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, float dpiFactor, float deviceQualityFactor)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -736,7 +737,7 @@ public class Tile
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, dpiFactor) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, dpiFactor, deviceQualityFactor) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
