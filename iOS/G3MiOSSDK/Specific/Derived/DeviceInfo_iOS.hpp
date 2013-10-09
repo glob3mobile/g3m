@@ -23,6 +23,14 @@ public:
     return _dpi;
   }
 
+  DeviceInfo_Platform getPlatform() const {
+    return DEVICE_iOS;
+  }
+
+  float getQualityFactor() const {
+    return 1;
+  }
+
 };
 
 #endif

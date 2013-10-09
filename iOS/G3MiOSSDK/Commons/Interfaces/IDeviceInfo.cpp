@@ -8,6 +8,6 @@
 
 #include "IDeviceInfo.hpp"
 
-float IDeviceInfo::getPixelsInMM(float millimeters) {
+float IDeviceInfo::getPixelsInMM(float millimeters) const {
   return getDPI() / 25.4f * millimeters;
 }

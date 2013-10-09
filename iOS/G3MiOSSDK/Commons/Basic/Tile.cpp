@@ -348,7 +348,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TilesRenderParameters* tilesRenderParameters,
                                const TilesStatistics* tilesStatistics,
                                const ITimer* lastSplitTimer,
-                               const float dpiFactor) {
+                               const float dpiFactor,
+                               const float deviceQualityFactor) {
 
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
@@ -397,15 +398,16 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     _lodTimer->start();
   }
 
-  //  const double projectedSize = extent->squaredProjectedArea(rc);
-  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-  //    return true;
-  //  }
-
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
   int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
-  //Adjusting shown texture size in case of incomplete mesh
+  // Adjusting shown texture size in case of incomplete mesh
+  int __ASK_JM;
+  /*
+   the tile's renderer sector is already known or it's already known
+   if the sector is an intersection with the renderedSector?
+   avoid 2 virtual methods invocation (getRenderedSector() and fullContains)
+   */
   Sector renderedSector = _planetRenderer->getRenderedSector();
   if (!renderedSector.fullContains(_sector)) {
     Sector meshSector = renderedSector.intersection(_sector);
@@ -431,7 +433,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   const Vector2F ex = boundingVolume->projectedExtent(rc);
   const float t = (ex._x * ex._y);
-  _lastLodTest = t <= ((texWidth * texHeight) * (factor / dpiFactor));
+  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
 
   return _lastLodTest;
 }
@@ -666,7 +668,8 @@ void Tile::render(const G3MRenderContext* rc,
                   const Sector& renderedSector,
                   bool isForcedFullRender,
                   long long texturePriority,
-                  const float dpiFactor) {
+                  const float dpiFactor,
+                  const float deviceQualityFactor) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -692,7 +695,14 @@ void Tile::render(const G3MRenderContext* rc,
 
     const bool isRawRender = (
                               (toVisitInNextIteration == NULL) ||
-                              meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, dpiFactor) ||
+                              meetsRenderCriteria(rc,
+                                                  layerTilesRenderParameters,
+                                                  texturizer,
+                                                  tilesRenderParameters,
+                                                  tilesStatistics,
+                                                  lastSplitTimer,
+                                                  dpiFactor,
+                                                  deviceQualityFactor) ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 

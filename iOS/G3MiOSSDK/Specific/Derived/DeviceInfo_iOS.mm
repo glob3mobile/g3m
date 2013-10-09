@@ -10,16 +10,13 @@
 
 #import <UIKit/UIKit.h>
 
-DeviceInfo_iOS::DeviceInfo_iOS() {
 
+DeviceInfo_iOS::DeviceInfo_iOS() {
   UIScreen* mainScreen = [UIScreen mainScreen];
 
-  const float scale = [mainScreen respondsToSelector:@selector(scale)] ? [mainScreen scale] : 1;
-
-//  float scale = 1;
-//  if ([mainScreen respondsToSelector:@selector(scale)]) {
-//    scale = [mainScreen scale];
-//  }
+  const float scale = [mainScreen respondsToSelector:@selector(scale)]
+  /*                          */ ? [mainScreen scale]
+  /*                          */ : 1;
 
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
     _dpi = 132 * scale;

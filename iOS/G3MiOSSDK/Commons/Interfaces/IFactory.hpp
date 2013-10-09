@@ -97,7 +97,7 @@ public:
                                       bool autodeleteListener,
                                       bool autodeleteWebSocket) const = 0;
 
-  IDeviceInfo* getDeviceInfo() const;
+  const IDeviceInfo* getDeviceInfo() const;
 
 
 #ifdef JAVA_CODE

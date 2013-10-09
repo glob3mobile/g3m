@@ -586,8 +586,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   
   _statistics.clear();
 
-  int _DGD_At_Work_DPI;
-  const float dpiFactor = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.1f);
+  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+  const float deviceQualityFactor = deviceInfo->getQualityFactor();
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -623,7 +624,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    *_renderedSector,
                    _firstRender, /* if first render, force full render */
                    _texturePriority,
-                   dpiFactor);
+                   dpiFactor,
+                   deviceQualityFactor);
     }
   }
   else {
@@ -660,7 +662,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      *_renderedSector,
                      _firstRender, /* if first render, force full render */
                      _texturePriority,
-                     dpiFactor);
+                     dpiFactor,
+                     deviceQualityFactor);
       }
       
       toVisit = toVisitInNextIteration;

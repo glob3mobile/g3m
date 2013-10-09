@@ -10,7 +10,7 @@
 
 IFactory* IFactory::_instance = NULL;
 
-IDeviceInfo* IFactory::getDeviceInfo() const {
+const IDeviceInfo* IFactory::getDeviceInfo() const {
   if (_deviceInfo == NULL) {
     _deviceInfo = createDeviceInfo();
   }
