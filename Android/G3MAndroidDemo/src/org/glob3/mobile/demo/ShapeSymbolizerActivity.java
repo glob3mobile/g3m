@@ -55,7 +55,7 @@ public class ShapeSymbolizerActivity
       builder.setPlanet(Planet.createFlatEarth());
 
       final LayerSet layerSet = new LayerSet();
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 6);
       layerSet.addLayer(mboxTerrainLayer);
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
