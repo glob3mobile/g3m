@@ -55,4 +55,10 @@ public class FlatWorldActivity
       _placeHolder.addView(_g3mWidget);
    }
 
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
+   }
+
 }

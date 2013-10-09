@@ -7,7 +7,6 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.RelativeLayout;
 
@@ -24,9 +23,9 @@ public class MainActivity
    protected void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
-      Log.e("", "jjj");
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
       _g3mWidget = builder.createWidget();
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);

@@ -16,6 +16,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/g3mgen"
+        android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
