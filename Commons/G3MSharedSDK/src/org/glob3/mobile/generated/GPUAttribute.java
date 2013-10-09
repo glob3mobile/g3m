@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
 public class GPUAttribute extends GPUVariable
 {
-  private final int _id;
 
   private boolean _dirty;
   private GPUAttributeValue _value;
 
-  private final int _type;
-  private final int _size;
   private boolean _enabled;
 
-  private final GPUAttributeKey _key;
 
+  public final int _id;
+  public final int _type;
+  public final int _size;
+  public final GPUAttributeKey _key;
 
   public void dispose()
   {
@@ -33,22 +33,10 @@ public class GPUAttribute extends GPUVariable
      _key = getAttributeKey(name);
   }
 
-  public final String getName()
-  {
-     return _name;
-  }
-  public final int getID()
-  {
-     return _id;
-  }
-  public final int getType()
-  {
-     return _type;
-  }
-  public final int getSize()
-  {
-     return _size;
-  }
+//  const std::string getName() const{ return _name;}
+//  const int getID() const{ return _id;}
+//  int getType() const{ return _type;}
+//  int getSize() const{ return _size;}
   public final boolean wasSet()
   {
      return _value != null;
@@ -57,10 +45,7 @@ public class GPUAttribute extends GPUVariable
   {
      return _enabled;
   }
-  public final GPUAttributeKey getKey()
-  {
-     return _key;
-  }
+//  GPUAttributeKey getKey() const { return _key;}
 
 
   public final int getIndex()
@@ -86,7 +71,7 @@ public class GPUAttribute extends GPUVariable
     if (v != _value)
     {
 
-      if (v.getEnabled() && _type != v.getType()) //type checking
+      if (v._enabled && _type != v._type) //type checking
       {
         ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
         return;
@@ -120,7 +105,7 @@ public class GPUAttribute extends GPUVariable
     {
       if (_dirty)
       {
-        if (_value.getEnabled())
+        if (_value._enabled)
         {
           if (!_enabled)
           {

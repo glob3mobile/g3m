@@ -14,7 +14,7 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
 
   public final boolean isEquals(GPUAttributeValue v)
   {
-    return (v.getEnabled() == false);
+    return (v._enabled == false);
   }
 
   public final GPUAttributeValue shallowCopy()
@@ -34,7 +34,7 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
     {
       return new GPUAttributeValueDisabled();
     }
-    if (oldAtt.getEnabled())
+    if (oldAtt._enabled)
     {
       if (oldAtt != null)
          oldAtt.dispose();

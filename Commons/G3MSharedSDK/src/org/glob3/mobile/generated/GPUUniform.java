@@ -1,14 +1,13 @@
 package org.glob3.mobile.generated; 
 public class GPUUniform extends GPUVariable
 {
-  private final IGLUniformID _id;
 
   private boolean _dirty;
   private GPUUniformValue _value;
-  private final int _type;
 
-  private final GPUUniformKey _key;
-
+  public final IGLUniformID _id;
+  public final int _type;
+  public final GPUUniformKey _key;
 
   public void dispose()
   {
@@ -33,18 +32,9 @@ public class GPUUniform extends GPUVariable
      _key = getUniformKey(name);
   }
 
-  public final String getName()
-  {
-     return _name;
-  }
-  public final IGLUniformID getID()
-  {
-     return _id;
-  }
-  public final int getType()
-  {
-     return _type;
-  }
+//  const std::string getName() const { return _name; }
+//  const IGLUniformID* getID() const { return _id; }
+//  int getType() const { return _type; }
   public final boolean wasSet()
   {
      return _value != null;
@@ -53,10 +43,7 @@ public class GPUUniform extends GPUVariable
   {
      return _value;
   }
-  public final GPUUniformKey getKey()
-  {
-     return _key;
-  }
+//  GPUUniformKey getKey() const { return _key;}
 
 
   public final int getIndex()

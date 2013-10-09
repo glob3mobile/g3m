@@ -24,12 +24,12 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
   public final boolean isEquals(GPUAttributeValue v)
   {
 
-    if (!v.getEnabled())
+    if (!v._enabled)
     {
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-    return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized()));
+    return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
   }
 
   public final String description()
