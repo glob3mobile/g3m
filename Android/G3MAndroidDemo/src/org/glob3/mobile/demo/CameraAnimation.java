@@ -31,9 +31,9 @@ public class CameraAnimation
    private G3MBuilder_Android _builder;
    private G3MWidget_Android  _g3mWidget;
    private RelativeLayout     _placeHolder;
-   SGShape                    _sphynxShape;
-   SGShape                    _eiffelShape;
-   SGShape                    _arcShape;
+   private SGShape            _sphynxShape;
+   private SGShape            _eiffelShape;
+   private SGShape            _arcShape;
 
 
    @Override
@@ -110,7 +110,7 @@ public class CameraAnimation
       };
 
 
-      eifelTowerRenderer.loadBSONSceneJS(new URL("file:///eifeltower.bson", false), "file:///images/eifel/", true,
+      eifelTowerRenderer.loadBSONSceneJS(new URL("file:///eifeltower.bson", false), "file:///images/eifel/", false,
                new Geodetic3D(latitudeP, longitudeP, 0), AltitudeMode.ABSOLUTE, Plistener);
 
 
@@ -142,7 +142,7 @@ public class CameraAnimation
       };
 
 
-      arcRenderer.loadBSONSceneJS(new URL("file:///arcdeTriomphe.bson", false), "file:///images/arc/", true, new Geodetic3D(
+      arcRenderer.loadBSONSceneJS(new URL("file:///arcdeTriomphe.bson", false), "file:///images/arc/", false, new Geodetic3D(
                latitudeA, longitudeA, 0), AltitudeMode.ABSOLUTE, alistener);
 
 

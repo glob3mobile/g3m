@@ -22,11 +22,16 @@ _ellipsoid(ellipsoid)
 
 Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                   const Angle& longitude) const {
-  const double cosLatitude = latitude.cosinus();
+//  const double cosLatitude = latitude.cosinus();
+//
+//  return Vector3D(cosLatitude * longitude.cosinus(),
+//                  cosLatitude * longitude.sinus(),
+//                  latitude.sinus());
+  const double cosLatitude = COS(latitude._radians);
 
-  return Vector3D(cosLatitude * longitude.cosinus(),
-                  cosLatitude * longitude.sinus(),
-                  latitude.sinus());
+  return Vector3D(cosLatitude * COS(longitude._radians),
+                  cosLatitude * SIN(longitude._radians),
+                  SIN(latitude._radians));
 }
 
 
