@@ -23,17 +23,14 @@
 class GPUAttribute;
 
 class GPUAttributeValue : public RCObject {
-protected:
-  const bool _enabled;
-  const int _type;
-  const int _attributeSize;
-  const int _index;
-  const int           _stride;
-  const bool          _normalized;
-
-  const int _arrayElementSize;
-
 public:
+  const bool _enabled;
+  const int  _type;
+  const int  _attributeSize;
+  const int  _index;
+  const int  _stride;
+  const bool _normalized;
+  const int  _arrayElementSize;
 
   GPUAttributeValue(bool enabled):
   _enabled(enabled),
@@ -55,12 +52,13 @@ public:
   _arrayElementSize(arrayElementSize)
   {}
 
-  int getType() const { return _type;}
-  int getAttributeSize() const { return _attributeSize;}
-  int getIndex() const { return _index;}
-  int getStride() const { return _stride;}
-  bool getNormalized() const { return _normalized;}
-  bool getEnabled() const { return _enabled;}
+//  int getType() const { return _type;}
+//  int getAttributeSize() const { return _attributeSize;}
+//  int getIndex() const { return _index;}
+//  int getStride() const { return _stride;}
+//  bool getNormalized() const { return _normalized;}
+//  bool getEnabled() const { return _enabled;}
+
   virtual ~GPUAttributeValue() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -75,7 +73,6 @@ public:
 
 class GPUAttribute: public GPUVariable{
 private:
-  const int _id;
 
   bool _dirty;
 #ifdef C_CODE
@@ -85,13 +82,14 @@ private:
   private GPUAttributeValue _value;
 #endif
 
-  const int _type;
-  const int _size;
   bool _enabled;
 
-  const GPUAttributeKey _key;
 
 public:
+  const int _id;
+  const int _type;
+  const int _size;
+  const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
     delete _value;
@@ -110,15 +108,17 @@ public:
   _type(type),
   _size(size),
   _enabled(false),
-  _key(getAttributeKey(name)) {}
+  _key(getAttributeKey(name))
+  {
+  }
 
-  const std::string getName() const{ return _name;}
-  const int getID() const{ return _id;}
-  int getType() const{ return _type;}
-  int getSize() const{ return _size;}
+//  const std::string getName() const{ return _name;}
+//  const int getID() const{ return _id;}
+//  int getType() const{ return _type;}
+//  int getSize() const{ return _size;}
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
-  GPUAttributeKey getKey() const { return _key;}
+//  GPUAttributeKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -144,7 +144,7 @@ public:
   void set(const GPUAttributeValue* v) {
     if (v != _value) {
 
-      if (v->getEnabled() && _type != v->getType()) { //type checking
+      if (v->_enabled && _type != v->_type) { //type checking
         ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
         return;
       }
@@ -170,7 +170,7 @@ public:
     }
     else {
       if (_dirty) {
-        if (_value->getEnabled()) {
+        if (_value->_enabled) {
           if (!_enabled) {
             gl->enableVertexAttribArray(_id);
             _enabled = true;
@@ -201,7 +201,7 @@ public:
   }
 
   bool isEquals(const GPUAttributeValue* v) const{
-    return (v->getEnabled() == false);
+    return (v->_enabled == false);
   }
 
   GPUAttributeValue* shallowCopy() const{
@@ -217,7 +217,7 @@ public:
     if (oldAtt == NULL) {
       return new GPUAttributeValueDisabled();
     }
-    if (oldAtt->getEnabled()) {
+    if (oldAtt->_enabled) {
       delete oldAtt;
       return new GPUAttributeValueDisabled();
     }
@@ -247,16 +247,16 @@ public:
 
   bool isEquals(const GPUAttributeValue* v) const{
 
-    if (!v->getEnabled()) {
+    if (!v->_enabled) {
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    return ((_buffer        == vecV->_buffer)         &&
-            (_timeStamp     == vecV->_timeStamp)      &&
-            (_type          == v->getType())          &&
-            (_attributeSize == v->getAttributeSize()) &&
-            (_stride        == v->getStride())        &&
-            (_normalized    == v->getNormalized()) );
+    return ((_buffer        == vecV->_buffer)     &&
+            (_timeStamp     == vecV->_timeStamp)  &&
+            (_type          == v->_type)          &&
+            (_attributeSize == v->_attributeSize) &&
+            (_stride        == v->_stride)        &&
+            (_normalized    == v->_normalized) );
   }
 
   std::string description() const{
