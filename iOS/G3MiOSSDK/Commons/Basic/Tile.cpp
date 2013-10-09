@@ -347,7 +347,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                TileTexturizer* texturizer,
                                const TilesRenderParameters* tilesRenderParameters,
                                const TilesStatistics* tilesStatistics,
-                               const ITimer* lastSplitTimer) {
+                               const ITimer* lastSplitTimer,
+                               const float dpiFactor) {
 
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
@@ -416,20 +417,21 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   double factor = 5;
   switch (tilesRenderParameters->_quality) {
-    case QUALITY_LOW:
-      factor = 5;
+    case QUALITY_HIGH:
+      factor = 1.5;
       break;
     case QUALITY_MEDIUM:
       factor = 3;
       break;
-    case QUALITY_HIGH:
-      factor = 1.5;
+    //case QUALITY_LOW:
+    default:
+      factor = 5;
       break;
   }
 
   const Vector2F ex = boundingVolume->projectedExtent(rc);
   const float t = (ex._x * ex._y);
-  _lastLodTest = t <= ((texWidth * texHeight) * factor);
+  _lastLodTest = t <= ((texWidth * texHeight) * (factor / dpiFactor));
 
   return _lastLodTest;
 }
@@ -663,7 +665,8 @@ void Tile::render(const G3MRenderContext* rc,
                   const LayerSet* layerSet,
                   const Sector& renderedSector,
                   bool isForcedFullRender,
-                  long long texturePriority) {
+                  long long texturePriority,
+                  const float dpiFactor) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -689,7 +692,7 @@ void Tile::render(const G3MRenderContext* rc,
 
     const bool isRawRender = (
                               (toVisitInNextIteration == NULL) ||
-                              meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer) ||
+                              meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, dpiFactor) ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 

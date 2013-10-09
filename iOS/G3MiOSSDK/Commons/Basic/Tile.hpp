@@ -93,7 +93,8 @@ private:
                                   TileTexturizer* texturizer,
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const TilesStatistics* tilesStatistics,
-                                  const ITimer* lastSplitTimer);
+                                  const ITimer* lastSplitTimer,
+                                  const float dpiFactor);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -227,7 +228,8 @@ public:
               const LayerSet* layerSet,
               const Sector& renderedSector,
               bool isForcedFullRender,
-              long long texturePriority);
+              long long texturePriority,
+              const float dpiFactor);
 
   const TileKey getKey() const;
 
