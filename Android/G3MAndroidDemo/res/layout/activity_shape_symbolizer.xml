@@ -11,5 +11,14 @@
     tools:context=".SimplestRasterActivity" >
     </RelativeLayout>
 
+        <TextView
+            android:id="@+id/labelUSPopulation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+              android:padding="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/uspopulation"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

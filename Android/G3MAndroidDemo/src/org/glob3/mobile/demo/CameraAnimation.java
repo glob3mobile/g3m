@@ -153,7 +153,7 @@ public class CameraAnimation
          @Override
          public void onClick(final View v) {
 
-            final double fromDistance = 10000;
+            final double fromDistance = 6000;
             final double toDistance = 2000;
 
             final Angle fromAzimuth = Angle.fromDegrees(-90);
