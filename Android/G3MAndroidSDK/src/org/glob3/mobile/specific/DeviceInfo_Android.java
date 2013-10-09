@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.DeviceInfo_Platform;
 import org.glob3.mobile.generated.IDeviceInfo;
 
 import android.content.Context;
@@ -31,6 +32,18 @@ public class DeviceInfo_Android
          _dpi = (metrics.xdpi + metrics.ydpi) / 2;
       }
       return _dpi;
+   }
+
+
+   @Override
+   public DeviceInfo_Platform getPlatform() {
+      return DeviceInfo_Platform.DEVICE_Android;
+   }
+
+
+   @Override
+   public float getQualityFactor() {
+      return 2;
    }
 
 }
