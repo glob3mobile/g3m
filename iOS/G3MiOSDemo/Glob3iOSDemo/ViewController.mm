@@ -332,10 +332,10 @@ public:
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
-//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer(builder.getPlanet()) );
 //
 //  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-//                        new SampleSymbolizer());
+//                        new SampleSymbolizer(builder.getPlanet()));
 
 //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
 //                                               new ToggleGEORendererTask(geoRenderer)));
@@ -691,7 +691,7 @@ public:
   //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   //Draw light direction
-  if (true) {
+  if (false) {
 
     Vector3D lightDir = Vector3D(100000, 0,0);
     //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
@@ -1399,7 +1399,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1541,59 +1541,59 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
-    const URL textureURL("file:///world.jpg", false);
+//    const URL textureURL("file:///world.jpg", false);
+//
+//  const double factor = 2e5;
+//  const Vector3D radius1(factor, factor, factor);
+//  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
+//  const Vector3D radiusBox(factor, factor*1.5, factor*2);
 
-  const double factor = 2e5;
-  const Vector3D radius1(factor, factor, factor);
-  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
-  const Vector3D radiusBox(factor, factor*1.5, factor*2);
   
-  
-  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
-                                           Angle::fromDegrees(10),
-                                           radiusBox.z()/2),
-                            ABSOLUTE,
-                            radiusBox,
-                            2,
-                            Color::fromRGBA(0,    1, 0, 1),
-                            Color::newFromRGBA(0, 0.75, 0, 1));
-  //box->setAnimatedScale(1, 1, 20);
-  shapesRenderer->addShape(box1);
- 
-  
-    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-                                                          Angle::fromDegrees(0),
-                                                          radius1._x),
-                                           ABSOLUTE,
-                                           planet,
-                                           URL("file:///world.jpg", false),
-                                           radius1,
-                                           32,
-                                           0,
-                                           false,
-                                           false
-                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                           );
-  //ellipsoid1->setScale(2);
-    shapesRenderer->addShape(ellipsoid1);
-  
-  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-                                                       Angle::fromDegrees(5),
-                                                       radius2._x),
-                                          ABSOLUTE,
-                                          planet,
-                                          URL("file:///mercator_debug.png", false),
-                                          radius2,
-                                          32,
-                                          0,
-                                          false,
-                                          true
-                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
-                                          );
-    shapesRenderer->addShape(mercator1);
-  
+//  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
+//                                           Angle::fromDegrees(10),
+//                                           radiusBox.z()/2),
+//                            ABSOLUTE,
+//                            radiusBox,
+//                            2,
+//                            Color::fromRGBA(0,    1, 0, 1),
+//                            Color::newFromRGBA(0, 0.75, 0, 1));
+//  //box->setAnimatedScale(1, 1, 20);
+//  shapesRenderer->addShape(box1);
+// 
+//  
+//    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+//                                                          Angle::fromDegrees(0),
+//                                                          radius1._x),
+//                                           ABSOLUTE,
+//                                           planet,
+//                                           URL("file:///world.jpg", false),
+//                                           radius1,
+//                                           32,
+//                                           0,
+//                                           false,
+//                                           false
+//                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+//                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
+//                                           );
+//  //ellipsoid1->setScale(2);
+//    shapesRenderer->addShape(ellipsoid1);
+//  
+//  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+//                                                       Angle::fromDegrees(5),
+//                                                       radius2._x),
+//                                          ABSOLUTE,
+//                                          planet,
+//                                          URL("file:///mercator_debug.png", false),
+//                                          radius2,
+//                                          32,
+//                                          0,
+//                                          false,
+//                                          true
+//                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+//                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
+//                                          );
+//    shapesRenderer->addShape(mercator1);
+
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
   //                                                       radius._x * 1.1),
@@ -2467,6 +2467,7 @@ public:
                                                 10000),
                                      true);
 
+          /*
           const double fromDistance = 75000;
           const double toDistance   = 18750;
 
@@ -2480,6 +2481,7 @@ public:
                              fromDistance, toDistance,
                              fromAzimuth,  toAzimuth,
                              fromAltitude, toAltitude);
+           */
         }
       };
 
@@ -2552,7 +2554,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
 //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2660,7 +2662,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
 
         Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
                                                    Angle::fromDegrees(-15.431389),

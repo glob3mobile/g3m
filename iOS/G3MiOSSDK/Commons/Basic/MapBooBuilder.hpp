@@ -227,6 +227,7 @@ public:
 
 class MapBoo_Scene {
 private:
+  const std::string            _id;
   const std::string            _name;
   const std::string            _description;
   const MapBoo_MultiImage*     _screenshot;
@@ -237,7 +238,8 @@ private:
   const bool                   _hasWarnings;
 
 public:
-  MapBoo_Scene(const std::string&           name,
+  MapBoo_Scene(const std::string&           id,
+               const std::string&           name,
                const std::string&           description,
                MapBoo_MultiImage*           screenshot,
                const Color&                 backgroundColor,
@@ -245,6 +247,7 @@ public:
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
                const bool                   hasWarnings) :
+  _id(id),
   _name(name),
   _description(description),
   _screenshot(screenshot),
@@ -254,6 +257,10 @@ public:
   _overlayLayer(overlayLayer),
   _hasWarnings(hasWarnings)
   {
+  }
+
+  const std::string getId() const {
+    return _id;
   }
 
   const std::string getName() const {
@@ -424,7 +431,9 @@ private:
 
   Color getCurrentBackgroundColor();
 
+//  const std::string parseSceneId(const JSONObject* jsonObject) const;
   MapBoo_Scene* parseScene(const JSONObject* json) const;
+  
   Color         parseColor(const JSONString* jsonColor) const;
 
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;

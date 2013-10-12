@@ -808,6 +808,15 @@ const MapBoo_CameraPosition* MapBooBuilder::parseCameraPosition(const JSONObject
                                    animated);
 }
 
+//const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+//  if (jsonObject == NULL) {
+//    ILogger::instance()->logError("Missing Scene ID");
+//    return "";
+//  }
+//
+//  return jsonObject->getAsString("$oid", "");
+//}
+
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -819,7 +828,8 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 //    return NULL;
 //  }
 
-  return new MapBoo_Scene(jsonObject->getAsString("name", ""),
+  return new MapBoo_Scene(jsonObject->getAsString("id", ""),
+                          jsonObject->getAsString("name", ""),
                           jsonObject->getAsString("description", ""),
                           parseMultiImage( jsonObject->getAsObject("screenshot") ),
                           parseColor( jsonObject->getAsString("backgroundColor") ),
