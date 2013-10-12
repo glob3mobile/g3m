@@ -1,6 +1,7 @@
 package org.glob3.mobile.generated; 
 public class MapBoo_Scene
 {
+  private final String _id;
   private final String _name;
   private final String _description;
   private final MapBoo_MultiImage _screenshot;
@@ -10,8 +11,9 @@ public class MapBoo_Scene
   private Layer _overlayLayer;
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
+  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
   {
+     _id = id;
      _name = name;
      _description = description;
      _screenshot = screenshot;
@@ -20,6 +22,11 @@ public class MapBoo_Scene
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
      _hasWarnings = hasWarnings;
+  }
+
+  public final String getId()
+  {
+    return _id;
   }
 
   public final String getName()

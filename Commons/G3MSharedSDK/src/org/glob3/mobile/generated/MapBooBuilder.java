@@ -350,6 +350,17 @@ public abstract class MapBooBuilder
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
   }
 
+//  const std::string parseSceneId(const JSONObject* jsonObject) const;
+
+  //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+  //  if (jsonObject == NULL) {
+  //    ILogger::instance()->logError("Missing Scene ID");
+  //    return "";
+  //  }
+  //
+  //  return jsonObject->getAsString("$oid", "");
+  //}
+  
   private MapBoo_Scene parseScene(JSONObject jsonObject)
   {
     if (jsonObject == null)
@@ -363,8 +374,9 @@ public abstract class MapBooBuilder
   //    return NULL;
   //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
+
   private Color parseColor(JSONString jsonColor)
   {
     if (jsonColor == null)
