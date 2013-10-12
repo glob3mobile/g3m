@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.glob3.mobile.demo"
-    android:versionCode="4"
-    android:versionName="1.3" >
+    android:versionCode="5"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -11,14 +11,18 @@
     <uses-feature android:glEsVersion="0x00020000" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" 
+        
+        />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/g3mgen"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@android:style/Theme.Black.NoTitleBar" >
+        android:theme="@android:style/Theme.Black.NoTitleBar" 
+         android:hardwareAccelerated="true"
+        >
         <activity
             android:name="org.glob3.mobile.demo.G3MDemoActivity"
             android:label="@string/app_name"
@@ -97,14 +101,18 @@
             android:label="@string/title_activity_three_dmodel"
             android:launchMode="singleTask"
             android:process=":K"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            
+            >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.SymbologyActivity"
             android:label="@string/title_activity_symbology"
             android:launchMode="singleTask"
             android:process=":L"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+             >
         </activity>
         <activity
             android:name="org.glob3.mobile.demo.FlatWorldActivity"
@@ -125,7 +133,9 @@
             android:label="@string/title_activity_shape_symbolizer"
              android:launchMode="singleTask"
             android:process=":O"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+             >
         </activity>
     </application>
 

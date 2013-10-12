@@ -55,7 +55,7 @@ public class ShapeSymbolizerActivity
       builder.setPlanet(Planet.createFlatEarth());
 
       final LayerSet layerSet = new LayerSet();
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 6);
+      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
       layerSet.addLayer(mboxTerrainLayer);
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
@@ -65,7 +65,7 @@ public class ShapeSymbolizerActivity
                demSector, new Vector2I(2048, 1024), 0);
 
       _vectorialRenderer = builder.createGEORenderer(Symbology.USCitiesSymbolizer);
-      _vectorialRenderer.loadJSON(new URL("file:///uscities.geojson"));
+      _vectorialRenderer.loadJSON(new URL("file:///uscitieslite.geojson"));
       builder.addRenderer(_vectorialRenderer);
 
 
