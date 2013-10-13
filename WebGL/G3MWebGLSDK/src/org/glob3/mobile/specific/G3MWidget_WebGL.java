@@ -178,22 +178,44 @@ public final class G3MWidget_WebGL
       exportJSFunctions();
    }
 
-
+  
    private native void exportJSFunctions() /*-{
-		var that = this;
-		if (!$wnd.G3M) {
-			$wnd.G3M = {};
-		}
-		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
-		});
-		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
-		});
-		$wnd.G3M.getCameraData = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
-		});
-   }-*/;
+	var that = this;
+	if (!$wnd.G3M) {
+		$wnd.G3M = {};
+	}	
+	
+//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
+//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
+//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+//	});
+//	$wnd.angleFromDegrees = $entry(function (degrees) {
+//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
+//	});
+																															
+	$wnd.G3M.takeScreenshotAsImage = $entry(function() {
+		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+	});
+	$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+	});
+	$wnd.G3M.getCameraData = $entry(function() {
+		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+	});
+	// temp Java function with parameters and return value to test JS function calls
+	$wnd.G3M.moveToSpain = $entry(function(height) {
+		//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
+		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
+	}); 
+}-*/;
+   
+   public double moveToSpain(final double height) {
+	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(40.422383),
+			   Angle.fromDegrees(-3.703187),
+			   height);
+	   _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+	   return height;
+   }
 
 
    public final native JavaScriptObject getCameraData() /*-{

@@ -102,6 +102,8 @@ import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
@@ -120,9 +122,23 @@ public class G3MWebGLDemo
    private MarksRenderer        _markersRenderer;
    private final ShapesRenderer _shapesRenderer    = new ShapesRenderer();
 
+   private native void runUserPlugin() /*-{
+	$wnd.onLoadG3M();
+}-*/;
+   
+  @Override
+  public void onModuleLoad() {
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-   @Override
-   public void onModuleLoad() {
+			@Override
+			public void execute() {
+				runUserPlugin();
+			}
+
+		});
+
+
+
       if (_widget == null) {
 
          // initialize a customized widget without using any builder
@@ -1345,9 +1361,11 @@ public class G3MWebGLDemo
 
       _widget = builder.createWidget();
 
+      /*
+      // set the camera looking at Tenerife
       final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
       _widget.setCameraPosition(position);
-      _widget.setCameraPitch(Angle.fromDegrees(75));
+      _widget.setCameraPitch(Angle.fromDegrees(75));*/
 
 
       /*
