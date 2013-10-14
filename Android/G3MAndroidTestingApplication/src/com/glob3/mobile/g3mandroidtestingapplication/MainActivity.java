@@ -2,6 +2,11 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -29,6 +34,40 @@ public class MainActivity
       _g3mWidget = builder.createWidget();
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
+      
+      if (true) { //Incomplete world
+
+          int time = 5; //SECS
+
+          class RenderedSectorTask extends GTask{
+            G3MWidget_Android _androidWidget;
+          
+            public  RenderedSectorTask(G3MWidget_Android androidWidget){ _androidWidget = androidWidget;}
+
+            int randomInt(int max) {
+            	return (int) (Math.random() * max);
+            }
+
+
+    		@Override
+    		public void run(G3MContext context) {
+
+                double minLat = randomInt(180) -90;
+                double minLon = randomInt(360) - 180;
+
+                double maxLat = minLat + randomInt(90 - (int)minLat);
+                double maxLon = minLon + randomInt(90 - (int)minLat);
+
+                Sector sector = Sector.fromDegrees(minLat, minLon, maxLat, maxLon);
+                _androidWidget.getG3MWidget().setShownSector(sector);
+    			
+    		}
+          };
+          _g3mWidget.getG3MWidget().addPeriodicalTask(
+        		  TimeInterval.fromSeconds(time), 
+        		  new RenderedSectorTask(_g3mWidget));
+        }
+
    }
 
 
