@@ -18,7 +18,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-    Sector sector = _planetRenderer.getRenderedSector();
+    final Sector sector = _planetRenderer.getRenderedSector();
   
     final Geodetic3D position = nextCamera.getGeodeticPosition();
     final double height = position._height;
@@ -26,7 +26,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
     final Geodetic3D center = nextCamera.getGeodeticCenterOfView();
   
     final boolean invalidHeight = (height > _maxHeight);
-    final boolean invalidPosition = !sector.contains(center._latitude, center._longitude);
+    final boolean invalidPosition = sector == null? false : !sector.contains(center._latitude, center._longitude);
   
     if (invalidHeight && !invalidPosition)
     {
@@ -37,7 +37,15 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
   
     if (invalidPosition)
     {
-      if (previousCamera.isCenterOfViewWithin(sector, _maxHeight))
+  
+      boolean previousCameraWasValid = previousCamera.getHeight() < _maxHeight;
+      if (previousCameraWasValid && sector != null)
+      {
+        final Geodetic3D position = previousCamera.getGeodeticCenterOfView();
+        previousCameraWasValid = sector.contains(position._latitude, position._longitude);
+      }
+  
+      if (previousCameraWasValid)
       {
         nextCamera.copyFrom(previousCamera);
         return true;
