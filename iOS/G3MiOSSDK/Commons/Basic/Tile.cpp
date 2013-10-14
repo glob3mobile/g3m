@@ -65,7 +65,8 @@ _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
 _lodTimer(NULL),
 _planetRenderer(planetRenderer),
-_tessellatorData(NULL)
+_tessellatorData(NULL),
+_renderedVStileSectorRatio(getRenderedVSTileSectorsRatio(planetRenderer))
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -166,22 +167,22 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
       _tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
-                                                               layerTilesRenderParameters->_tileMeshResolution,
-                                                               this,
-                                                               NULL,
-                                                               _verticalExaggeration,
-                                                               layerTilesRenderParameters->_mercator,
-                                                               tilesRenderParameters->_renderDebug);
+                                                     layerTilesRenderParameters->_tileMeshResolution,
+                                                     this,
+                                                     NULL,
+                                                     _verticalExaggeration,
+                                                     layerTilesRenderParameters->_mercator,
+                                                     tilesRenderParameters->_renderDebug);
 
     }
     else {
       Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
-                                                                    layerTilesRenderParameters->_tileMeshResolution,
-                                                                    this,
-                                                                    _elevationData,
-                                                                    _verticalExaggeration,
-                                                                    layerTilesRenderParameters->_mercator,
-                                                                    tilesRenderParameters->_renderDebug);
+                                                          layerTilesRenderParameters->_tileMeshResolution,
+                                                          this,
+                                                          _elevationData,
+                                                          _verticalExaggeration,
+                                                          layerTilesRenderParameters->_mercator,
+                                                          tilesRenderParameters->_renderDebug);
 
       MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
       if (meshHolder == NULL) {
@@ -295,7 +296,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
                      double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates,
                      ElevationDataProvider* elevationDataProvider,
-                     const Sector& renderedSector,
+                     const Sector* renderedSector,
                      const TileTessellator* tessellator,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const TilesRenderParameters* tilesRenderParameters) {
@@ -328,7 +329,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
    return false;
    }*/
 
-  if (!renderedSector.touchesWith(_sector)) { //Incomplete world
+  if (renderedSector != NULL && !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
 
@@ -408,27 +409,34 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
    if the sector is an intersection with the renderedSector?
    avoid 2 virtual methods invocation (getRenderedSector() and fullContains)
    */
-  Sector renderedSector = _planetRenderer->getRenderedSector();
-  if (!renderedSector.fullContains(_sector)) {
-    Sector meshSector = renderedSector.intersection(_sector);
-    const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-    const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-    texWidth *= rx;
-    texHeight *= ry;
+//  const Sector* renderedSector = _planetRenderer->getRenderedSector();
+//  if (renderedSector != NULL){
+//    if (!renderedSector->fullContains(_sector)) {
+//      Sector meshSector = renderedSector->intersection(_sector);
+//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
+//      texWidth *= rx;
+//      texHeight *= ry;
+//    }
+//  }
+
+  if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
+    texWidth *= _renderedVStileSectorRatio._x;
+    texHeight *= _renderedVStileSectorRatio._y;
   }
 
   double factor = 5;
   switch (tilesRenderParameters->_quality) {
     case QUALITY_HIGH:
-      factor = 1.5;
-      break;
+    factor = 1.5;
+    break;
     case QUALITY_MEDIUM:
-      factor = 3;
-      break;
+    factor = 3;
+    break;
     //case QUALITY_LOW:
     default:
-      factor = 5;
-      break;
+    factor = 5;
+    break;
   }
 
   const Vector2F ex = boundingVolume->projectedExtent(rc);
@@ -457,7 +465,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
     return;
   }
 
-//  TileTexturizer* texturizer = prc->getTexturizer();
+  //  TileTexturizer* texturizer = prc->getTexturizer();
   if (texturizer != NULL) {
     const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
 
@@ -553,14 +561,14 @@ std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
   const Geodetic2D upper = _sector._upper;
 
   const Angle splitLongitude = Angle::midAngle(lower._longitude,
-                                             upper._longitude);
+                                               upper._longitude);
 
-  
+
   const Angle splitLatitude = mercator
   /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                            upper._latitude)
+                                                                              upper._latitude)
   /*                               */ : Angle::midAngle(lower._latitude,
-                                                      upper._latitude);
+                                                        upper._latitude);
 
   return getSubTiles(splitLatitude, splitLongitude);
 }
@@ -665,7 +673,7 @@ void Tile::render(const G3MRenderContext* rc,
                   const TileTessellator* tessellator,
                   TileRasterizer* tileRasterizer,
                   const LayerSet* layerSet,
-                  const Sector& renderedSector,
+                  const Sector* renderedSector,
                   bool isForcedFullRender,
                   long long texturePriority,
                   const float dpiFactor,
@@ -789,10 +797,10 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
 
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
 
-  Sector renderedSector = _planetRenderer->getRenderedSector();
+  const Sector* renderedSector = _planetRenderer->getRenderedSector();
 
   Sector s1(Geodetic2D(lower._latitude, lower._longitude), Geodetic2D(splitLatitude, splitLongitude));
-  if (renderedSector.touchesWith(s1)) {
+  if (renderedSector == NULL || renderedSector->touchesWith(s1)) {
     subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
                                        splitLatitude, splitLongitude,
                                        nextLevel,
@@ -802,7 +810,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s2(Geodetic2D(lower._latitude, splitLongitude), Geodetic2D(splitLatitude, upper._longitude));
-  if (renderedSector.touchesWith(s2)) {
+  if (renderedSector == NULL || renderedSector->touchesWith(s2)) {
     subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
                                        splitLatitude, upper._longitude,
                                        nextLevel,
@@ -812,7 +820,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s3(Geodetic2D(splitLatitude, lower._longitude), Geodetic2D(upper._latitude, splitLongitude));
-  if (renderedSector.touchesWith(s3)) {
+  if (renderedSector == NULL || renderedSector->touchesWith(s3)) {
     subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
                                        upper._latitude, splitLongitude,
                                        nextLevel,
@@ -822,7 +830,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   }
 
   Sector s4(Geodetic2D(splitLatitude, splitLongitude), Geodetic2D(upper._latitude, upper._longitude));
-  if (renderedSector.touchesWith(s4)) {
+  if (renderedSector == NULL || renderedSector->touchesWith(s4)) {
     subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
                                        upper._latitude, upper._longitude,
                                        nextLevel,
@@ -998,7 +1006,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
                                              _sector,
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
-  
+
   ILogger::instance()->logError("Can't create subview of elevation data from ancestor");
   return NULL;
   
@@ -1009,4 +1017,17 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
     delete _tessellatorData;
     _tessellatorData = tessellatorData;
   }
+}
+
+const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
+  const Sector* renderedSector = pr->getRenderedSector();
+  if (renderedSector != NULL){
+    if (!renderedSector->fullContains(_sector)) {
+      Sector meshSector = renderedSector->intersection(_sector);
+      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
+      return Vector2D(rx,ry);
+    }
+  }
+  return Vector2D(1.0,1.0);
 }

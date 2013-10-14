@@ -35,7 +35,7 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
                                                      const Camera* previousCamera,
                                                      Camera* nextCamera) const{
 
-  Sector sector = _planetRenderer->getRenderedSector();
+  const Sector* sector = _planetRenderer->getRenderedSector();
 
   const Geodetic3D position = nextCamera->getGeodeticPosition();
   const double height = position._height;
@@ -43,7 +43,9 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
   const Geodetic3D center = nextCamera->getGeodeticCenterOfView();
 
   const bool invalidHeight   = (height > _maxHeight);
-  const bool invalidPosition = !sector.contains(center._latitude, center._longitude);
+  const bool invalidPosition = sector== NULL?
+                                              false :
+                                              !sector->contains(center._latitude, center._longitude);
 
   if (invalidHeight && !invalidPosition) {
     Geodetic3D newPos(position._latitude, position._longitude, _maxHeight);
@@ -52,7 +54,14 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
   }
 
   if (invalidPosition) {
-    if (previousCamera->isCenterOfViewWithin(sector, _maxHeight)) {
+
+    bool previousCameraWasValid = previousCamera->getHeight() < _maxHeight;
+    if (previousCameraWasValid && sector != NULL){
+      const Geodetic3D position = previousCamera->getGeodeticCenterOfView();
+      previousCameraWasValid = sector->contains(position._latitude, position._longitude);
+    }
+
+    if (previousCameraWasValid) {
       nextCamera->copyFrom(*previousCamera);
       return true;
     }
