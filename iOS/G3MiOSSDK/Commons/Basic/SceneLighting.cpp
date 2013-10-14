@@ -10,9 +10,8 @@
 
 #include "GLState.hpp"
 #include "Vector3D.hpp"
-
-#include "IFactory.hpp"
-#include "ITimer.hpp"
+//#include "IFactory.hpp"
+//#include "ITimer.hpp"
 
 void DefaultSceneLighting::modifyGLState(GLState* glState) {
   const Vector3D lightDir(1, 0,0);
