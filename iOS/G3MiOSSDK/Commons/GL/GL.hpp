@@ -59,11 +59,9 @@ private:
 //                               const std::string& name);
   IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
                                           const std::string& name);
-
-//  IFloatBuffer* _billboardTexCoord;
-//  IFloatBuffer* getBillboardTexCoord();
-
 //  const bool _verbose;
+
+  GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
 
 public:
