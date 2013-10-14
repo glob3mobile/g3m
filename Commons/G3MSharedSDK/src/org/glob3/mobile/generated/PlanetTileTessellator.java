@@ -361,10 +361,16 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (_skirted)
     {
-      int _ASK_JM; // sW and nW ? Why not NW and SE ??
-      final Vector3D sw = planet.toCartesian(tileSector.getSW());
+  //    int _ASK_JM; // sW and nW ? Why not NW and SE ??
+  //    const Vector3D sw = planet->toCartesian(tileSector.getSW());
+  //    const Vector3D nw = planet->toCartesian(tileSector.getNW());
+  //    const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
+  
+      final Vector3D se = planet.toCartesian(tileSector.getSE());
       final Vector3D nw = planet.toCartesian(tileSector.getNW());
-      final double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
+      final double diagonalLength = nw.sub(se).length();
+      //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
+      final double relativeSkirtHeight = (diagonalLength * -0.05 * 0.70710678118) + minElevation;
   
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
