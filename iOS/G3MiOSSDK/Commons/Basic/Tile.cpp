@@ -403,23 +403,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
   // Adjusting shown texture size in case of incomplete mesh
-  int __ASK_JM;
-  /*
-   the tile's renderer sector is already known or it's already known
-   if the sector is an intersection with the renderedSector?
-   avoid 2 virtual methods invocation (getRenderedSector() and fullContains)
-   */
-//  const Sector* renderedSector = _planetRenderer->getRenderedSector();
-//  if (renderedSector != NULL){
-//    if (!renderedSector->fullContains(_sector)) {
-//      Sector meshSector = renderedSector->intersection(_sector);
-//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-//      texWidth *= rx;
-//      texHeight *= ry;
-//    }
-//  }
-
   if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
     texWidth *= _renderedVStileSectorRatio._x;
     texHeight *= _renderedVStileSectorRatio._y;
