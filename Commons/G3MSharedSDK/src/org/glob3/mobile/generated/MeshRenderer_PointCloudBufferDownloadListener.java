@@ -3,6 +3,7 @@ public class MeshRenderer_PointCloudBufferDownloadListener extends IBufferDownlo
 {
   private MeshRenderer _meshRenderer;
   private final float _pointSize;
+  private final double _deltaHeight;
   private MeshLoadListener _listener;
   private boolean _deleteListener;
   private final IThreadUtils _threadUtils;
@@ -11,10 +12,11 @@ public class MeshRenderer_PointCloudBufferDownloadListener extends IBufferDownlo
   private G3MContext _context;
 
 
-  public MeshRenderer_PointCloudBufferDownloadListener(MeshRenderer meshRenderer, float pointSize, MeshLoadListener listener, boolean deleteListener, IThreadUtils threadUtils, boolean isBSON, G3MContext context)
+  public MeshRenderer_PointCloudBufferDownloadListener(MeshRenderer meshRenderer, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, IThreadUtils threadUtils, boolean isBSON, G3MContext context)
   {
      _meshRenderer = meshRenderer;
      _pointSize = pointSize;
+     _deltaHeight = deltaHeight;
      _listener = listener;
      _deleteListener = deleteListener;
      _threadUtils = threadUtils;
@@ -26,7 +28,7 @@ public class MeshRenderer_PointCloudBufferDownloadListener extends IBufferDownlo
   {
     ILogger.instance().logInfo("Downloaded PointCloud buffer from \"%s\" (%db)", url.getPath(), buffer.size());
 
-    _threadUtils.invokeAsyncTask(new PointCloudParserAsyncTask(_meshRenderer, url, buffer, _pointSize, _listener, _deleteListener, _isBSON, _context), true);
+    _threadUtils.invokeAsyncTask(new PointCloudParserAsyncTask(_meshRenderer, url, buffer, _pointSize, _deltaHeight, _listener, _deleteListener, _isBSON, _context), true);
 
   }
 

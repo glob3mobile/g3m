@@ -7,6 +7,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
   public final URL _url;
   private IByteBuffer _buffer;
   private final float _pointSize;
+  private final double _deltaHeight;
   private MeshLoadListener _listener;
   private final boolean _deleteListener;
   private final boolean _isBSON;
@@ -14,12 +15,13 @@ public class PointCloudParserAsyncTask extends GAsyncTask
   private Mesh _mesh;
 
 
-  public PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
+  public PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
   {
      _meshRenderer = meshRenderer;
      _url = url;
      _buffer = buffer;
      _pointSize = pointSize;
+     _deltaHeight = deltaHeight;
      _listener = listener;
      _deleteListener = deleteListener;
      _isBSON = isBSON;
@@ -68,7 +70,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
             final double latInDegrees = jsonAveragePoint.getAsNumber(1, 0);
             final double height = jsonAveragePoint.getAsNumber(2, 0);
 
-            averagePoint = new Geodetic3D(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
+            averagePoint = new Geodetic3D(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height + _deltaHeight);
           }
           else
           {
@@ -99,7 +101,6 @@ public class PointCloudParserAsyncTask extends GAsyncTask
             if (jsonColors == null)
             {
               _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointSize, null, null, 1, false); // colors.create(), -  flatColor, -  lineWidth
-
             }
             else
             {
@@ -117,19 +118,6 @@ public class PointCloudParserAsyncTask extends GAsyncTask
 
               _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointSize, null, colors.create(), 1, false); // flatColor, -  lineWidth
             }
-
-//            const int primitive,
-//            bool owner,
-//            const Vector3D& center,
-//            IFloatBuffer* vertices,
-//            float lineWidth,
-//            float pointSize,
-//            Color* flatColor = NULL,
-//            IFloatBuffer* colors = NULL,
-//            const float colorsIntensity = 0.0f,
-//            bool depthTest = true,
-//            IFloatBuffer* normals = NULL
-
           }
 
           if (averagePoint != null)
