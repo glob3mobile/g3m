@@ -49,6 +49,7 @@ private:
     const long long    _priority;
     const bool         _readExpired;
     const float        _pointSize;
+    const double       _deltaHeight;
     MeshLoadListener*  _listener;
     const bool         _deleteListener;
     const bool         _isBSON;
@@ -58,6 +59,7 @@ private:
                   const TimeInterval& timeToCache,
                   bool                readExpired,
                   float               pointSize,
+                  double              deltaHeight,
                   MeshLoadListener*   listener,
                   bool                deleteListener,
                   bool                isBSON) :
@@ -66,6 +68,7 @@ private:
     _timeToCache(timeToCache),
     _readExpired(readExpired),
     _pointSize(pointSize),
+    _deltaHeight(deltaHeight),
     _listener(listener),
     _deleteListener(deleteListener),
     _isBSON(isBSON)
@@ -100,6 +103,7 @@ private:
                      const TimeInterval& timeToCache,
                      bool                readExpired,
                      float               pointSize,
+                     double              deltaHeight,
                      MeshLoadListener*   listener,
                      bool                deleteListener,
                      bool                isBSON);
@@ -164,11 +168,13 @@ public:
                           const TimeInterval& timeToCache,
                           bool                readExpired,
                           float               pointSize,
+                          double              deltaHeight=0,
                           MeshLoadListener*   listener=NULL,
                           bool                deleteListener=true);
 
   void loadJSONPointCloud(const URL&        url,
                           float             pointSize,
+                          double            deltaHeight=0,
                           MeshLoadListener* listener=NULL,
                           bool              deleteListener=true) {
     loadJSONPointCloud(url,
@@ -176,9 +182,35 @@ public:
                        TimeInterval::fromDays(30),
                        true,
                        pointSize,
+                       deltaHeight,
                        listener,
                        deleteListener);
   }
+
+  void loadBSONPointCloud(const URL&          url,
+                          long long           priority,
+                          const TimeInterval& timeToCache,
+                          bool                readExpired,
+                          float               pointSize,
+                          double              deltaHeight=0,
+                          MeshLoadListener*   listener=NULL,
+                          bool                deleteListener=true);
+
+  void loadBSONPointCloud(const URL&        url,
+                          float             pointSize,
+                          double            deltaHeight=0,
+                          MeshLoadListener* listener=NULL,
+                          bool              deleteListener=true) {
+    loadBSONPointCloud(url,
+                       DownloadPriority::MEDIUM,
+                       TimeInterval::fromDays(30),
+                       true,
+                       pointSize,
+                       deltaHeight,
+                       listener,
+                       deleteListener);
+  }
+
 
 };
 

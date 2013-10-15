@@ -91,6 +91,7 @@ void MeshRenderer::drainLoadQueue() {
                   item->_timeToCache,
                   item->_readExpired,
                   item->_pointSize,
+                  item->_deltaHeight,
                   item->_listener,
                   item->_deleteListener,
                   item->_isBSON);
@@ -107,6 +108,7 @@ void MeshRenderer::loadJSONPointCloud(const URL&          url,
                                       const TimeInterval& timeToCache,
                                       bool                readExpired,
                                       float               pointSize,
+                                      double              deltaHeight,
                                       MeshLoadListener*   listener,
                                       bool                deleteListener) {
   if (_context == NULL) {
@@ -115,6 +117,7 @@ void MeshRenderer::loadJSONPointCloud(const URL&          url,
                                            timeToCache,
                                            readExpired,
                                            pointSize,
+                                           deltaHeight,
                                            listener,
                                            deleteListener,
                                            false /* isBson */));
@@ -125,9 +128,42 @@ void MeshRenderer::loadJSONPointCloud(const URL&          url,
                   timeToCache,
                   readExpired,
                   pointSize,
+                  deltaHeight,
                   listener,
                   deleteListener,
                   false /* isBson */);
+  }
+}
+
+void MeshRenderer::loadBSONPointCloud(const URL&          url,
+                                      long long           priority,
+                                      const TimeInterval& timeToCache,
+                                      bool                readExpired,
+                                      float               pointSize,
+                                      double              deltaHeight,
+                                      MeshLoadListener*   listener,
+                                      bool                deleteListener) {
+  if (_context == NULL) {
+    _loadQueue.push_back(new LoadQueueItem(url,
+                                           priority,
+                                           timeToCache,
+                                           readExpired,
+                                           pointSize,
+                                           deltaHeight,
+                                           listener,
+                                           deleteListener,
+                                           true /* isBson */));
+  }
+  else {
+    requestBuffer(url,
+                  priority,
+                  timeToCache,
+                  readExpired,
+                  pointSize,
+                  deltaHeight,
+                  listener,
+                  deleteListener,
+                  true /* isBson */);
   }
 }
 
@@ -149,6 +185,7 @@ private:
 #endif
   IByteBuffer*      _buffer;
   const float       _pointSize;
+  const double      _deltaHeight;
   MeshLoadListener* _listener;
   const bool        _deleteListener;
   const bool        _isBSON;
@@ -161,6 +198,7 @@ public:
                             const URL&        url,
                             IByteBuffer*      buffer,
                             float             pointSize,
+                            double            deltaHeight,
                             MeshLoadListener* listener,
                             bool              deleteListener,
                             bool              isBSON,
@@ -169,6 +207,7 @@ public:
   _url(url),
   _buffer(buffer),
   _pointSize(pointSize),
+  _deltaHeight(deltaHeight),
   _listener(listener),
   _deleteListener(deleteListener),
   _isBSON(isBSON),
@@ -214,7 +253,7 @@ public:
 
             averagePoint = new Geodetic3D(Angle::fromDegrees(latInDegrees),
                                           Angle::fromDegrees(lonInDegrees),
-                                          height);
+                                          height + _deltaHeight);
           }
           else {
             ILogger::instance()->logError("Invalid averagePoint for PointCloud");
@@ -252,7 +291,6 @@ public:
                                      NULL, // colors.create(),
                                      1,
                                      false);
-
             }
             else {
               FloatBufferBuilderFromColor colors;
@@ -277,19 +315,6 @@ public:
                                      1,
                                      false);
             }
-
-//            const int primitive,
-//            bool owner,
-//            const Vector3D& center,
-//            IFloatBuffer* vertices,
-//            float lineWidth,
-//            float pointSize,
-//            Color* flatColor = NULL,
-//            IFloatBuffer* colors = NULL,
-//            const float colorsIntensity = 0.0f,
-//            bool depthTest = true,
-//            IFloatBuffer* normals = NULL
-
           }
 
           delete averagePoint;
@@ -336,6 +361,7 @@ class MeshRenderer_PointCloudBufferDownloadListener : public IBufferDownloadList
 private:
   MeshRenderer*       _meshRenderer;
   const float         _pointSize;
+  const double        _deltaHeight;
   MeshLoadListener*   _listener;
   bool                _deleteListener;
   const IThreadUtils* _threadUtils;
@@ -352,6 +378,7 @@ public:
 
   MeshRenderer_PointCloudBufferDownloadListener(MeshRenderer*       meshRenderer,
                                                 float               pointSize,
+                                                double              deltaHeight,
                                                 MeshLoadListener*   listener,
                                                 bool                deleteListener,
                                                 const IThreadUtils* threadUtils,
@@ -359,6 +386,7 @@ public:
                                                 const G3MContext*   context) :
   _meshRenderer(meshRenderer),
   _pointSize(pointSize),
+  _deltaHeight(deltaHeight),
   _listener(listener),
   _deleteListener(deleteListener),
   _threadUtils(threadUtils),
@@ -378,6 +406,7 @@ public:
                                                                 url,
                                                                 buffer,
                                                                 _pointSize,
+                                                                _deltaHeight,
                                                                 _listener,
                                                                 _deleteListener,
                                                                 _isBSON,
@@ -415,6 +444,7 @@ void MeshRenderer::requestBuffer(const URL&          url,
                                  const TimeInterval& timeToCache,
                                  bool                readExpired,
                                  float               pointSize,
+                                 double              deltaHeight,
                                  MeshLoadListener*   listener,
                                  bool                deleteListener,
                                  bool                isBSON) {
@@ -425,6 +455,7 @@ void MeshRenderer::requestBuffer(const URL&          url,
                             readExpired,
                             new MeshRenderer_PointCloudBufferDownloadListener(this,
                                                                               pointSize,
+                                                                              deltaHeight,
                                                                               listener,
                                                                               deleteListener,
                                                                               _context->getThreadUtils(),
