@@ -610,6 +610,7 @@ public:
 //                                   true);
   meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
                                    2,
+                                   0,
                                    new TestMeshLoadListener(),
                                    true);
 
