@@ -13,34 +13,55 @@
 
 #include "IFactory.hpp"
 #include "ITimer.hpp"
+#include "Context.hpp"
+#include "Camera.hpp"
 
-void DefaultSceneLighting::modifyGLState(GLState* glState) {
+void DefaultSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);
 
-  //    //ROTATING LIGHT
-  //    ITimer *timer = IFactory::instance()->createTimer();
-  //    double sec = timer->now().milliseconds();
-  //    delete timer;
-  //    double angle = ((int)sec % 36000) / 100.0;
-  //
-  //    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle),
-  //                                                                       Vector3D::upZ(),
-  //                                                                       Vector3D::zero);
-  //
-  //    glState->clearGLFeatureGroup(LIGHTING_GROUP);
-  //    glState->addGLFeature(new DirectionLightGLFeature(lightDir.transformedBy(m, 1.0),
-  //                                                      Color::yellow(),
-  //                                                      (float)0.2),
-  //                          false);
-
   //STATIC LIGHT
-
-  if (glState->getGLFeature(GLF_DIRECTION_LIGTH) == NULL) {
+  DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
+  if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
                                                       Color::yellow(),
-                                                      (float)0.2),
+                                                      (float)0.4),
                           false);
+  }
+  /* //Add this to obtain a rotating "sun"
+   else{
+
+   ITimer *timer = IFactory::instance()->createTimer();
+   double sec = timer->now().milliseconds();
+   delete timer;
+   double angle = ((int)sec % 36000) / 100.0;
+
+   MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle),
+   Vector3D::upZ(),
+   Vector3D::zero);
+
+   f->setLightDirection(lightDir.transformedBy(m, 1.0));
+
+   }
+   */
+
+}
+
+void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
+
+  const Vector3D cameraVector = rc->getCurrentCamera()->getCartesianPosition();
+  const Vector3D lightDir = cameraVector;
+
+  DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
+  if (f == NULL) {
+    glState->clearGLFeatureGroup(LIGHTING_GROUP);
+    glState->addGLFeature(new DirectionLightGLFeature(lightDir,
+                                                      Color::yellow(),
+                                                      (float)0.4),
+                          false);
+  }
+  else{
+    f->setLightDirection(lightDir);
   }
   
 }
