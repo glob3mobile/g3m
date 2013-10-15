@@ -141,7 +141,12 @@ private:
 #endif
 
   MeshRenderer*     _meshRenderer;
-  const URL         _url;
+#ifdef C_CODE
+  const URL          _url;
+#endif
+#ifdef JAVA_CODE
+  public final URL _url;
+#endif
   IByteBuffer*      _buffer;
   const float       _pointSize;
   MeshLoadListener* _listener;
