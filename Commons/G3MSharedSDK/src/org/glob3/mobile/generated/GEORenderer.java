@@ -56,6 +56,8 @@ public class GEORenderer extends LeafRenderer
     {
       LoadQueueItem item = _loadQueue.get(i);
       requestBuffer(item._url, item._symbolizer, item._priority, item._timeToCache, item._readExpired, item._isBSON);
+      if (item != null)
+         item.dispose();
     }
   
     _loadQueue.clear();
