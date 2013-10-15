@@ -121,11 +121,6 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       *textCoords);
 
   if (_skirted) {
-//    int _ASK_JM; // sW and nW ? Why not NW and SE ??
-//    const Vector3D sw = planet->toCartesian(tileSector.getSW());
-//    const Vector3D nw = planet->toCartesian(tileSector.getNW());
-//    const double relativeSkirtHeight = (nw.sub(sw).length() * 0.05 * -1) + minElevation;
-
     const Vector3D se = planet->toCartesian(tileSector.getSE());
     const Vector3D nw = planet->toCartesian(tileSector.getNW());
     const double diagonalLength = nw.sub(se).length();
@@ -136,6 +131,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     if (_renderedSector != NULL) {
       const Vector3D ase = planet->toCartesian(_renderedSector->getSE());
       const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
+      //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
       absoluteSkirtHeight = (anw.sub(ase).length() * -0.05 * 0.70710678118);
     }
 
