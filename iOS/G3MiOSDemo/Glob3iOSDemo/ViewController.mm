@@ -1019,7 +1019,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -2422,7 +2422,7 @@ public:
 
       if (false) { //Incomplete world
 
-        int time = 5; //SECS
+        int time = 15; //SECS
 
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;

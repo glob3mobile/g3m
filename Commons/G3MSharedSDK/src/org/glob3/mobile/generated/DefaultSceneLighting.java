@@ -1,9 +1,11 @@
 package org.glob3.mobile.generated; 
-//class ITimer;
-
 public class DefaultSceneLighting extends SceneLighting
 {
 
+
+  ///#include "IFactory.hpp"
+  ///#include "ITimer.hpp"
+  
   public final void modifyGLState(GLState glState)
   {
     final Vector3D lightDir = new Vector3D(1, 0,0);
