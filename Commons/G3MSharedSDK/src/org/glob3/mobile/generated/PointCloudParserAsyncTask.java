@@ -4,7 +4,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
   private G3MContext _context;
 
   private MeshRenderer _meshRenderer;
-  private Url _url = new URL();
+  public final URL _url;
   private IByteBuffer _buffer;
   private final float _pointSize;
   private MeshLoadListener _listener;
@@ -17,7 +17,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
   public PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
   {
      _meshRenderer = meshRenderer;
-     _url = new URL(url);
+     _url = url;
      _buffer = buffer;
      _pointSize = pointSize;
      _listener = listener;

@@ -72,6 +72,9 @@ private:
     {
 
     }
+
+    ~LoadQueueItem() {
+    }
   };
   
   

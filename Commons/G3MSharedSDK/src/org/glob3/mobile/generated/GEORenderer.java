@@ -47,6 +47,10 @@ public class GEORenderer extends LeafRenderer
        _isBSON = isBSON;
 
     }
+
+    public void dispose()
+    {
+    }
   }
 
   private void drainLoadQueue()
