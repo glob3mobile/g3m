@@ -234,6 +234,7 @@ void GEORenderer::drainLoadQueue() {
                   item->_timeToCache,
                   item->_readExpired,
                   item->_isBSON);
+    delete item;
   }
 
   _loadQueue.clear();

@@ -229,6 +229,8 @@ void ShapesRenderer::drainLoadQueue() {
                   item->_listener,
                   item->_deleteListener,
                   item->_isBSON);
+
+    delete item;
   }
 
   _loadQueue.clear();
