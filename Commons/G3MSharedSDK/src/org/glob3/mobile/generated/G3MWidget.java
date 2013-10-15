@@ -224,7 +224,7 @@ public class G3MWidget
     {
       _cameraRenderer.render(_renderContext, _rootState);
   
-      _sceneLighting.modifyGLState(_rootState); //Applying ilumination to rootState
+      _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
     }
   
     if (_selectedRenderer.isEnable())
