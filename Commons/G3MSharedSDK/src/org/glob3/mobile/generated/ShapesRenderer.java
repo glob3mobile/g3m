@@ -30,6 +30,10 @@ public class ShapesRenderer extends LeafRenderer
        _isBSON = isBSON;
 
     }
+
+    public void dispose()
+    {
+    }
   }
 
 
