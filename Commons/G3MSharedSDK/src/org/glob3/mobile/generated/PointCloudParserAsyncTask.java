@@ -84,7 +84,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
           }
           else
           {
-            FloatBufferBuilderFromGeodetic vertices = (averagePoint == null) ? FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_context.getPlanet()) : FloatBufferBuilderFromGeodetic.builderWithGivenCenter(_context.getPlanet(), averagePoint);
+            FloatBufferBuilderFromGeodetic verticesBuilder = (averagePoint == null) ? FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_context.getPlanet()) : FloatBufferBuilderFromGeodetic.builderWithGivenCenter(_context.getPlanet(), averagePoint);
             /*                 */
             /*                 */
 
@@ -94,17 +94,18 @@ public class PointCloudParserAsyncTask extends GAsyncTask
               final double latInDegrees = jsonPoints.getAsNumber(i + 1, 0);
               final double height = jsonPoints.getAsNumber(i + 2, 0);
 
-              vertices.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
+              verticesBuilder.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
             }
 
+            IFloatBuffer colors = null;
             final JSONArray jsonColors = jsonObject.getAsArray("colors");
             if (jsonColors == null)
             {
-              _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointSize, null, null, 1, false); // colors.create(), -  flatColor, -  lineWidth
+              // TODO: color ramp from height
             }
             else
             {
-              FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+              FloatBufferBuilderFromColor colorsBuilder = new FloatBufferBuilderFromColor();
 
               final int colorsSize = jsonColors.size();
               for (int i = 0; i < colorsSize; i += 3)
@@ -113,11 +114,13 @@ public class PointCloudParserAsyncTask extends GAsyncTask
                 final int green = (int) jsonColors.getAsNumber(i + 1, 0);
                 final int blue = (int) jsonColors.getAsNumber(i + 2, 0);
 
-                colors.addBase255(red, green, blue, 1);
+                colorsBuilder.addBase255(red, green, blue, 1);
               }
 
-              _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointSize, null, colors.create(), 1, false); // flatColor, -  lineWidth
+              colors = colorsBuilder.create();
             }
+
+            _mesh = new DirectMesh(GLPrimitive.points(), true, verticesBuilder.getCenter(), verticesBuilder.create(), 1, _pointSize, null, colors, 1, true); // flatColor, -  lineWidth
           }
 
           if (averagePoint != null)
