@@ -34,6 +34,7 @@ public class XYZtoBSON {
    private static int i;
 
 
+   //THIS CLASS CONVERTS XYZ IN 4326 COORDINATES TO A JSON ARRAY AND AFTER THAT TO BSON
    public static void main(final String[] args) {
       try {
 
@@ -42,10 +43,10 @@ public class XYZtoBSON {
          IFactory.setInstance(new Factory_JavaDesktop());
          ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
-         final String pathFileJson = "/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.json";
-         final String pathFileBson = "/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.bson";
+         final String pathFileJson = "/Users/mdelacalle/Desktop/SUIZA/points_10.json";
+         final String pathFileBson = "/Users/mdelacalle/Desktop/SUIZA/points_10.bson";
 
-         final FileInputStream fstream = new FileInputStream("/Users/mdelacalle/Desktop/LOUDON_LAZ/18STJ7435_2000_4326.xyz");
+         final FileInputStream fstream = new FileInputStream("/Users/mdelacalle/Desktop/SUIZA/points.asc");
 
          final BufferedWriter out = new BufferedWriter(new FileWriter(pathFileJson));
 
@@ -53,6 +54,8 @@ public class XYZtoBSON {
          final DataInputStream in = new DataInputStream(fstream);
          final BufferedReader br = new BufferedReader(new InputStreamReader(in));
          String strLine;
+
+         final int factor = 10;
 
          out.write("{\"points\": [");
          //Read File Line By Linel
@@ -68,9 +71,9 @@ public class XYZtoBSON {
                firstComma = false;
             }
             else {
-               //   if ((i % factor) == 0) {
-               out.write("," + strLine);
-               //  }
+               if ((i % factor) == 0) {
+                  out.write("," + strLine);
+               }
             }
 
 

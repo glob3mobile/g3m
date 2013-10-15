@@ -607,15 +607,12 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
                                Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
   std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
-  if (imageFormat.compare("JPG") == 0) {
-    imageFormat = "image/jpeg";
-  }
-  const std::string srs = jsonLayer->getAsString("projection", "EPSG_4326");
+  const std::string srs = jsonLayer->getAsString("projection", "EPSG:4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
-  if (srs.compare("EPSG_4326") == 0) {
+  if (srs.compare("EPSG:4326") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere());
   }
-  else if (srs.compare("EPSG_900913") == 0) {
+  else if (srs.compare("EPSG:3857") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
   }
   const bool isTransparent = jsonLayer->getAsBoolean("transparent", false);
@@ -632,7 +629,7 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
                       queryServerVersion,
                       sector,
                       imageFormat,
-                      (srs.compare("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913",
+                      srs,
                       style,
                       isTransparent,
                       NULL,
@@ -649,8 +646,8 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
   const int firstLevel = (int) jsonLayer->getAsNumber("firstLevel", 1);
   const int maxLevel   = (int) jsonLayer->getAsNumber("maxLevel", 19);
 
-  const std::string projection = jsonLayer->getAsString("projection", "EPSG_900913");
-  const bool mercator = (projection == "EPSG_900913");
+  const std::string projection = jsonLayer->getAsString("projection", "EPSG:3857");
+  const bool mercator = (projection == "EPSG:3857");
 
   const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
   const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
