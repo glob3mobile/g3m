@@ -2,6 +2,12 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -26,6 +32,25 @@ public class MainActivity
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       builder.getPlanetRendererBuilder().setRenderDebug(true);
+      
+      if (true){ //Testing lights
+      ShapesRenderer sr = new ShapesRenderer();
+      sr.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), 
+    		  AltitudeMode.RELATIVE_TO_GROUND, 
+    		  new Vector3D(1000000,1000000,1000000), (float)1.0, 
+    		  Color.red(), Color.black(), 
+    		  true)); //With normals
+      
+      sr.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), 
+    		  AltitudeMode.RELATIVE_TO_GROUND, 
+    		  new Vector3D(1000000,1000000,1000000), (float)1.0, 
+    		  Color.blue(), Color.black(), 
+    		  true)); //With normals
+      
+      builder.addRenderer(sr);
+      }
+      
+      
       _g3mWidget = builder.createWidget();
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
