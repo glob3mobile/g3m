@@ -97,6 +97,9 @@ public class ShapesRenderer extends LeafRenderer
     {
       LoadQueueItem item = _loadQueue.get(i);
       requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._uriPrefix, item._isTransparent, item._position, item._altitudeMode, item._listener, item._deleteListener, item._isBSON);
+  
+      if (item != null)
+         item.dispose();
     }
   
     _loadQueue.clear();
