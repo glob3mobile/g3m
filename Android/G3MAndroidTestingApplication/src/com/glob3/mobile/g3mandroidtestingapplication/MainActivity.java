@@ -2,6 +2,13 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 

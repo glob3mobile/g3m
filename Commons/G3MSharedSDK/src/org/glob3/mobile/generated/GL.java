@@ -101,11 +101,9 @@ public class GL
 //                               const std::string& name);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
-
-//  IFloatBuffer* _billboardTexCoord;
-//  IFloatBuffer* getBillboardTexCoord();
-
 //  const bool _verbose;
+
+  private GLGlobalState _clearScreenState = new GLGlobalState(); //State used to clear screen with certain color
 
 
 
@@ -140,10 +138,8 @@ public class GL
   //    ILogger::instance()->logInfo("GL::clearScreen()");
   //  }
   
-    int TODO_move_to_instance;
-    GLGlobalState clearScreenState = new GLGlobalState();
-    clearScreenState.setClearColor(color);
-    clearScreenState.applyChanges(this, _currentGLGlobalState);
+    _clearScreenState.setClearColor(color);
+    _clearScreenState.applyChanges(this, _currentGLGlobalState);
   
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }

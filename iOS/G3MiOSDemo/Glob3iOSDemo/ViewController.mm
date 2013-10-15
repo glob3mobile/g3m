@@ -2422,7 +2422,7 @@ public:
 
       if (false) { //Incomplete world
 
-        int time = 5; //SECS
+        int time = 15; //SECS
 
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;

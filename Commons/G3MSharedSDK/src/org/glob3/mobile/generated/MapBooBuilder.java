@@ -272,17 +272,13 @@ public abstract class MapBooBuilder
     final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
     final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
-    if (imageFormat.compareTo("JPG") == 0)
-    {
-      imageFormat = "image/jpeg";
-    }
-    final String srs = jsonLayer.getAsString("projection", "EPSG_4326");
+    final String srs = jsonLayer.getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
-    if (srs.compareTo("EPSG_4326") == 0)
+    if (srs.compareTo("EPSG:4326") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
     }
-    else if (srs.compareTo("EPSG_900913") == 0)
+    else if (srs.compareTo("EPSG:3857") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
@@ -292,7 +288,7 @@ public abstract class MapBooBuilder
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonLayer.getAsBoolean("acceptExpiration", false);
   
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
   private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer)
@@ -304,8 +300,8 @@ public abstract class MapBooBuilder
     final int firstLevel = (int) jsonLayer.getAsNumber("firstLevel", 1);
     final int maxLevel = (int) jsonLayer.getAsNumber("maxLevel", 19);
   
-    final String projection = jsonLayer.getAsString("projection", "EPSG_900913");
-    final boolean mercator = (projection.equals("EPSG_900913"));
+    final String projection = jsonLayer.getAsString("projection", "EPSG:3857");
+    final boolean mercator = (projection.equals("EPSG:3857"));
   
     final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
     final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
