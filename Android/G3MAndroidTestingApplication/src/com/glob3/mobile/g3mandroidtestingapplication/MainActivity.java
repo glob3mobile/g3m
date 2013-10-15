@@ -41,7 +41,7 @@ public class MainActivity
                    Angle.fromDegrees(-5.85449532145337));
           final Geodetic2D upper = new Geodetic2D( //
                    Angle.fromDegrees(40.3320215899527), //
-                   Angle.fromDegrees(-5.5116079822178570));
+                   Angle.fromDegrees(-1.5116079822178570));
 
           final Sector demSector = new Sector(lower, upper);
 
