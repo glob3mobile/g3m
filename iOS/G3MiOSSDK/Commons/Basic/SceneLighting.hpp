@@ -18,8 +18,6 @@ public:
   virtual void modifyGLState(GLState* glState, const G3MRenderContext* rc) = 0;
 };
 
-class ITimer;
-
 class DefaultSceneLighting: public SceneLighting {
 public:
 

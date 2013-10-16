@@ -10,9 +10,6 @@
 
 #include "GLState.hpp"
 #include "Vector3D.hpp"
-
-#include "IFactory.hpp"
-#include "ITimer.hpp"
 #include "Context.hpp"
 #include "Camera.hpp"
 

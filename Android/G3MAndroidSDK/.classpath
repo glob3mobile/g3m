@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/G3MSharedSDK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="lib/java_websocket.jar" sourcepath="/Users/dgd/Downloads/Java-WebSocket-master"/>
+	<classpathentry kind="lib" path="libs/java_websocket.jar"/>
+	<classpathentry kind="lib" path="libs/g3msharedsdk.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
