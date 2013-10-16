@@ -27,31 +27,36 @@ EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
-  
+
+  delete _texId; //Releasing texture
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 
 }
 
-const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
-  if (_textureImage == NULL) {
-    return NULL;
+const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+
+  if (_texId == NULL){
+    if (_textureImage == NULL) {
+      return NULL;
+    }
+
+    _texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                      GLFormat::rgba(),
+                                                      _textureURL.getPath(),
+                                                      false);
+
+    rc->getFactory()->deleteImage(_textureImage);
+    _textureImage = NULL;
   }
 
-  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _textureURL.getPath(),
-                                                                       false);
-
-  rc->getFactory()->deleteImage(_textureImage);
-  _textureImage = NULL;
-
-  if (texId == NULL) {
+  if (_texId == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
   }
 
-  return texId;
+  return _texId;
 }
 
 
@@ -107,7 +112,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create surface indices
   ShortBufferBuilder indices;
   short delta = (short) (2*_resolution - 1);
-  
+
   // create indices for textupe mapping depending on the flag _texturedInside
   if (!_texturedInside) {
     for (short j=0; j<_resolution-1; j++) {
@@ -217,7 +222,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
                                               ));
   const Sector sector(Sector::fullSphere());
 
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
 
@@ -239,7 +244,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
         Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
         normals.add(n);
       }
-      
+
       const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
@@ -255,16 +260,16 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     compositeMesh->addMesh(createBorderMesh(rc, &vertices));
     return compositeMesh;
   }
-  
+
   return surfaceMesh;
 }
 
 
 std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
-                                           const Vector3D& direction) const {
-//  MutableMatrix44D* M = createTransformMatrix(_planet);
-//  const Quadric transformedQuadric = _quadric.transformBy(*M);
-//  delete M;
-//  return transformedQuadric.intersectionsDistances(origin, direction);
+                                                           const Vector3D& direction) const {
+  //  MutableMatrix44D* M = createTransformMatrix(_planet);
+  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+  //  delete M;
+  //  return transformedQuadric.intersectionsDistances(origin, direction);
   return std::vector<double>();
 }

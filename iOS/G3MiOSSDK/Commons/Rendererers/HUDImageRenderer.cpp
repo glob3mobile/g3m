@@ -119,7 +119,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const IStringUtils* su = IStringUtils::instance();
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
-  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_image,
+  const TextureIDReference* texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                                        GLFormat::rgba(),
                                                                        textureName,
                                                                        false);

@@ -22,12 +22,12 @@
 #include "IImageDownloadListener.hpp"
 #include "Color.hpp"
 
-const IGLTextureId* QuadShape::getTextureId(const G3MRenderContext* rc) {
+const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
     return NULL;
   }
 
-  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+  const TextureIDReference* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
                                                                        GLFormat::rgba(),
                                                                        _textureURL.getPath(),
                                                                        false);
@@ -147,7 +147,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
                         color);
   }
 
-  const IGLTextureId* texId = getTextureId(rc);
+  const TextureIDReference* texId = getTextureId(rc);
   if (texId == NULL) {
     return im;
   }
@@ -159,7 +159,6 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     true);

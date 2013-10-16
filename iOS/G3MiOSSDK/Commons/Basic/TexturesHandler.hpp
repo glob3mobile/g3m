@@ -138,17 +138,21 @@ class TexturesHandler;
 
 class TextureIDReference{
 private:
-  IGLTextureId* _id;
+  const IGLTextureId* _id;
   TexturesHandler* _texHandler;
 public:
 
-  TextureIDReference(IGLTextureId* id,
-                      TexturesHandler* texHandler):
+  TextureIDReference(const IGLTextureId* id,
+                     TexturesHandler* texHandler):
   _texHandler(texHandler), _id(id){}
 
   ~TextureIDReference();
 
   TextureIDReference* createCopy();
+
+  const IGLTextureId* getID() const{
+    return _id;
+  }
 
 };
 
@@ -162,6 +166,8 @@ private:
 
   //void showHolders(const std::string& message) const;
 
+  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
+
 public:
 
   TexturesHandler(GL* const  gl,
@@ -173,12 +179,11 @@ public:
 
   ~TexturesHandler();
 
-  const IGLTextureId* getGLTextureId(const IImage* image,
+  const TextureIDReference* getGLTextureId(const IImage* image,
                                      int format,
                                      const std::string& name,
                                      bool hasMipMap);
 
-  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
 
   void releaseGLTextureId(const IGLTextureId* glTextureId);
 

@@ -42,10 +42,10 @@ void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
 
 bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #ifdef C_CODE
-  const IGLTextureId* texId = NULL;
+  const TextureIDReference* texId = NULL;
 #endif
 #ifdef JAVA_CODE
-  IGLTextureId texId = null;
+  TextureIDReference texId = null;
 #endif
 
   texId = rc->getTexturesHandler()->getGLTextureId(_image,
@@ -84,7 +84,6 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
                                   1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     false);

@@ -419,7 +419,7 @@ void Mark::createGLState(const Planet* planet) {
                         false);
 
   if (_textureId != NULL) {
-    _glState->addGLFeature(new TextureGLFeature(_textureId,
+    _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
                                                getBillboardTexCoords(),
                                                2,
                                                0,

@@ -56,13 +56,17 @@ public:
   }
 };
 
+SGLayerNode::~SGLayerNode(){
+  delete _textureId; //Releasing texture through TextureIDReference class
+}
+
 bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
   if (!_initialized) {
     _initialized = true;
     requestImage(rc);
   }
 
-  const IGLTextureId* textureId = getTextureId(rc);
+  const TextureIDReference* textureId = getTextureId(rc);
   return (textureId != NULL);
 }
 
@@ -96,7 +100,7 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
                                     true);
 }
 
-const IGLTextureId* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
+const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   if (_textureId == NULL) {
     if (_downloadedImage != NULL) {
       const bool hasMipMap = false;
@@ -138,14 +142,14 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
     requestImage(rc);
   }
 
-  const IGLTextureId* textureId = getTextureId(rc);
+  const TextureIDReference* textureId = getTextureId(rc);
   if (textureId == NULL) {
     return false;
   }
   state->clearGLFeatureGroup(COLOR_GROUP);
 
-  state->addGLFeature(new TextureIDGLFeature(textureId,
-                                               false, 0,0), false);
+  state->addGLFeature(new TextureIDGLFeature(textureId->getID(),
+                                            false, 0,0), false);
 
 
   return true;

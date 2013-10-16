@@ -19,6 +19,7 @@ class Color;
 class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
+class TextureIDReference;
 
 class IGLTextureId;
 
@@ -65,7 +66,9 @@ private:
 
   bool _textureRequested;
   IImage* _textureImage;
-  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+
+  const TextureIDReference* _texId;
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -93,7 +96,8 @@ public:
   _borderColor(borderColor),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _texId(NULL)
   {
 
   }
@@ -120,7 +124,8 @@ public:
   _borderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
-  _withNormals(withNormals)
+  _withNormals(withNormals),
+  _texId(NULL)
   {
     
   }
