@@ -2,15 +2,7 @@ package org.glob3.mobile.generated;
 public class DefaultSceneLighting extends SceneLighting
 {
 
-<<<<<<< HEAD
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
-=======
-
-  ///#include "IFactory.hpp"
-  ///#include "ITimer.hpp"
-  
-  public final void modifyGLState(GLState glState)
->>>>>>> purgatory
   {
     final Vector3D lightDir = new Vector3D(1, 0,0);
   
