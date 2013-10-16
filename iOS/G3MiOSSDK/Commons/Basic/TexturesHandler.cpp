@@ -205,3 +205,13 @@ TexturesHandler::~TexturesHandler() {
     ILogger::instance()->logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
   }
 }
+
+
+TextureIDReference::~TextureIDReference(){
+  _texHandler->releaseGLTextureId(_id);
+}
+
+TextureIDReference* TextureIDReference::createCopy(){
+  _texHandler->retainGLTextureId(_id);
+  return new TextureIDReference(_id, _texHandler);
+}

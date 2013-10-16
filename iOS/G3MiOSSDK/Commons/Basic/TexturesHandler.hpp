@@ -134,6 +134,24 @@ public:
 #endif
 };
 
+class TexturesHandler;
+
+class TextureIDReference{
+private:
+  IGLTextureId* _id;
+  TexturesHandler* _texHandler;
+public:
+
+  TextureIDReference(IGLTextureId* id,
+                      TexturesHandler* texHandler):
+  _texHandler(texHandler), _id(id){}
+
+  ~TextureIDReference();
+
+  TextureIDReference* createCopy();
+
+};
+
 class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
