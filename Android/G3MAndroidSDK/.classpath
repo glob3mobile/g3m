@@ -5,7 +5,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="libs/java_websocket.jar"/>
-	<classpathentry kind="lib" path="libs/g3msharedsdk.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/G3MSharedSDK"/>
+	<classpathentry exported="true" kind="lib" path="lib/java_websocket.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
