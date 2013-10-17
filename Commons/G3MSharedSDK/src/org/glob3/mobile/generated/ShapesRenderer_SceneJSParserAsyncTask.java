@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class SceneJSParserAsyncTask extends GAsyncTask
+public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
 {
   private ShapesRenderer _shapesRenderer;
   private final URL _url;
@@ -14,7 +14,7 @@ public class SceneJSParserAsyncTask extends GAsyncTask
 
   private SGShape _sgShape;
 
-  public SceneJSParserAsyncTask(ShapesRenderer shapesRenderer, URL url, IByteBuffer buffer, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+  public ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer shapesRenderer, URL url, IByteBuffer buffer, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
      _shapesRenderer = shapesRenderer;
      _url = url;

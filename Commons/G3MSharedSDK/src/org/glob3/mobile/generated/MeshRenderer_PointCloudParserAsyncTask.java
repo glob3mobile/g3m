@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PointCloudParserAsyncTask extends GAsyncTask
+public class MeshRenderer_PointCloudParserAsyncTask extends GAsyncTask
 {
   private G3MContext _context;
 
@@ -15,7 +15,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
   private Mesh _mesh;
 
 
-  public PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
+  public MeshRenderer_PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
   {
      _meshRenderer = meshRenderer;
      _url = url;
