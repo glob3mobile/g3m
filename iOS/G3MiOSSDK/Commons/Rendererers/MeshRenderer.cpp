@@ -167,7 +167,7 @@ void MeshRenderer::loadBSONPointCloud(const URL&          url,
   }
 }
 
-class PointCloudParserAsyncTask : public GAsyncTask {
+class MeshRenderer_PointCloudParserAsyncTask : public GAsyncTask {
 private:
 #ifdef C_CODE
   const G3MContext* _context;
@@ -194,15 +194,15 @@ private:
 
 public:
 
-  PointCloudParserAsyncTask(MeshRenderer*     meshRenderer,
-                            const URL&        url,
-                            IByteBuffer*      buffer,
-                            float             pointSize,
-                            double            deltaHeight,
-                            MeshLoadListener* listener,
-                            bool              deleteListener,
-                            bool              isBSON,
-                            const G3MContext* context) :
+  MeshRenderer_PointCloudParserAsyncTask(MeshRenderer*     meshRenderer,
+                                         const URL&        url,
+                                         IByteBuffer*      buffer,
+                                         float             pointSize,
+                                         double            deltaHeight,
+                                         MeshLoadListener* listener,
+                                         bool              deleteListener,
+                                         bool              isBSON,
+                                         const G3MContext* context) :
   _meshRenderer(meshRenderer),
   _url(url),
   _buffer(buffer),
@@ -322,7 +322,7 @@ public:
     _buffer = NULL;
   }
 
-  ~PointCloudParserAsyncTask() {
+  ~MeshRenderer_PointCloudParserAsyncTask() {
     if (_deleteListener) {
       delete _listener;
     }
@@ -396,17 +396,17 @@ public:
                                  url.getPath().c_str(),
                                  buffer->size());
 
-    _threadUtils->invokeAsyncTask(new PointCloudParserAsyncTask(_meshRenderer,
-                                                                url,
-                                                                buffer,
-                                                                _pointSize,
-                                                                _deltaHeight,
-                                                                _listener,
-                                                                _deleteListener,
-                                                                _isBSON,
-                                                                _context),
+    _threadUtils->invokeAsyncTask(new MeshRenderer_PointCloudParserAsyncTask(_meshRenderer,
+                                                                             url,
+                                                                             buffer,
+                                                                             _pointSize,
+                                                                             _deltaHeight,
+                                                                             _listener,
+                                                                             _deleteListener,
+                                                                             _isBSON,
+                                                                             _context),
                                   true);
-
+    
   }
 
   void onError(const URL& url) {

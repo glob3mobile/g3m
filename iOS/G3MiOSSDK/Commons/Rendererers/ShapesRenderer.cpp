@@ -328,7 +328,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
   }
 }
 
-class SceneJSParserAsyncTask : public GAsyncTask {
+class ShapesRenderer_SceneJSParserAsyncTask : public GAsyncTask {
 private:
   ShapesRenderer*    _shapesRenderer;
 #ifdef C_CODE
@@ -349,16 +349,16 @@ private:
   SGShape* _sgShape;
 
 public:
-  SceneJSParserAsyncTask(ShapesRenderer*    shapesRenderer,
-                         const URL&         url,
-                         IByteBuffer*       buffer,
-                         const std::string& uriPrefix,
-                         bool               isTransparent,
-                         Geodetic3D*        position,
-                         AltitudeMode       altitudeMode,
-                         ShapeLoadListener* listener,
-                         bool               deleteListener,
-                         bool               isBSON) :
+  ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer*    shapesRenderer,
+                                        const URL&         url,
+                                        IByteBuffer*       buffer,
+                                        const std::string& uriPrefix,
+                                        bool               isTransparent,
+                                        Geodetic3D*        position,
+                                        AltitudeMode       altitudeMode,
+                                        ShapeLoadListener* listener,
+                                        bool               deleteListener,
+                                        bool               isBSON) :
   _shapesRenderer(shapesRenderer),
   _url(url),
   _buffer(buffer),
@@ -393,7 +393,7 @@ public:
     _buffer = NULL;
   }
 
-  ~SceneJSParserAsyncTask() {
+  ~ShapesRenderer_SceneJSParserAsyncTask() {
     if (_deleteListener) {
       delete _listener;
     }
@@ -466,16 +466,16 @@ public:
                                  url.getPath().c_str(),
                                  buffer->size());
 
-    _threadUtils->invokeAsyncTask(new SceneJSParserAsyncTask(_shapesRenderer,
-                                                             url,
-                                                             buffer,
-                                                             _uriPrefix,
-                                                             _isTransparent,
-                                                             _position,
-                                                             _altitudeMode,
-                                                             _listener,
-                                                             _deleteListener,
-                                                             _isBSON),
+    _threadUtils->invokeAsyncTask(new ShapesRenderer_SceneJSParserAsyncTask(_shapesRenderer,
+                                                                            url,
+                                                                            buffer,
+                                                                            _uriPrefix,
+                                                                            _isTransparent,
+                                                                            _position,
+                                                                            _altitudeMode,
+                                                                            _listener,
+                                                                            _deleteListener,
+                                                                            _isBSON),
                                   true);
 
   }

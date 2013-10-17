@@ -90,7 +90,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
 }
 
 
-class GEOObjectParserAsyncTask : public GAsyncTask {
+class GEORenderer_GEOObjectParserAsyncTask : public GAsyncTask {
 private:
 #ifdef C_CODE
   const URL          _url;
@@ -108,11 +108,11 @@ private:
   GEOObject* _geoObject;
 
 public:
-  GEOObjectParserAsyncTask(const URL& url,
-                           IByteBuffer* buffer,
-                           GEORenderer* geoRenderer,
-                           GEOSymbolizer* symbolizer,
-                           bool isBSON) :
+  GEORenderer_GEOObjectParserAsyncTask(const URL& url,
+                                       IByteBuffer* buffer,
+                                       GEORenderer* geoRenderer,
+                                       GEOSymbolizer* symbolizer,
+                                       bool isBSON) :
   _url(url),
   _buffer(buffer),
   _geoRenderer(geoRenderer),
@@ -122,7 +122,7 @@ public:
   {
   }
 
-  ~GEOObjectParserAsyncTask() {
+  ~GEORenderer_GEOObjectParserAsyncTask() {
     delete _buffer;
 //    delete _geoObject;
   }
@@ -182,11 +182,11 @@ public:
 //                                 url.getPath().c_str(),
 //                                 buffer->size());
 
-    _threadUtils->invokeAsyncTask(new GEOObjectParserAsyncTask(url,
-                                                               buffer,
-                                                               _geoRenderer,
-                                                               _symbolizer,
-                                                               _isBSON),
+    _threadUtils->invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url,
+                                                                           buffer,
+                                                                           _geoRenderer,
+                                                                           _symbolizer,
+                                                                           _isBSON),
                                   true);
   }
 
