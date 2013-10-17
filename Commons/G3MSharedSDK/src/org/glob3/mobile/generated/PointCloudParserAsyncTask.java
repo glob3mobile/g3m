@@ -94,7 +94,7 @@ public class PointCloudParserAsyncTask extends GAsyncTask
               final double latInDegrees = jsonPoints.getAsNumber(i + 1, 0);
               final double height = jsonPoints.getAsNumber(i + 2, 0);
 
-              verticesBuilder.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
+              verticesBuilder.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height + _deltaHeight);
             }
 
             IFloatBuffer colors = null;
