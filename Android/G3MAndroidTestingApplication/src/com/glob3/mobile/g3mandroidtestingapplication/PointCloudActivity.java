@@ -6,13 +6,13 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
-import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GAsyncTask;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
@@ -23,13 +23,13 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Quality;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.JSONParser_Android;
@@ -82,7 +82,10 @@ public class PointCloudActivity
             final int green = (int) pointsJson.get(i + 4).asNumber().value();
             final int blue = (int) pointsJson.get(i + 5).asNumber().value();
 
-            vertices.add(Angle.fromDegrees(latDegrees), Angle.fromDegrees(lonDegrees), height - 150);
+
+            //     ILogger.instance().logInfo(latDegrees + "," + lonDegrees);
+
+            vertices.add(Angle.fromDegrees(latDegrees), Angle.fromDegrees(lonDegrees), height - 1150);
 
             //            final Color interpolatedColor = interpolateColor(fromColor, middleColor, toColor,
             //                     normalize((float) height, (float) minHeight, (float) (averageHeight * 1.5), 1, 0));
@@ -164,7 +167,7 @@ public class PointCloudActivity
       _meshRenderer.addMesh(mesh);
       _isPointsCloudLoader = true;
 
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(46.3d, 7.16d, 15000), TimeInterval.fromSeconds(5));
+
    }
 
 
@@ -173,26 +176,92 @@ public class PointCloudActivity
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.activity_main);
+      /*MDT
+            FILENAME=\\psf\Home\Desktop\SUIZA\mdt_town_300.bil
+                     DESCRIPTION=mdt_town_300.bil
+                     UPPER LEFT X=7.1475267929
+                     UPPER LEFT Y=46.3566926359
+                     LOWER RIGHT X=7.1737468920
+                     LOWER RIGHT Y=46.3427207284
+      */
 
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("MapQuest Aerial").setEnable(true);
+      //      final Geodetic2D lower = new Geodetic2D( //
+      //               Angle.fromDegrees(46.3427207284), //
+      //               Angle.fromDegrees(7.1475267929));
+      //      final Geodetic2D upper = new Geodetic2D( //
+      //               Angle.fromDegrees(46.3566926359), //
+      //               Angle.fromDegrees(7.1737468920));
+      //
+      //      final Sector demSector = new Sector(lower, upper);
+
+      /**
+       * FILENAME=\\psf\Home\Downloads\Archive\matterhorn.asc DESCRIPTION=matterhorn.asc UPPER LEFT X=7.6258137669 UPPER LEFT
+       * Y=46.0072241194 LOWER RIGHT X=7.7002694041 LOWER RIGHT Y=45.9556662899 NUM COLUMNS=1784 NUM ROWS=1236 MIN
+       * ELEVATION=2167.013 meters MAX ELEVATION=4535.022 meters
+       */
+
+
+      final Geodetic2D lower = new Geodetic2D( //
+               Angle.fromDegrees(45.9556662899), //
+               Angle.fromDegrees(7.6258137669));
+      final Geodetic2D upper = new Geodetic2D( //
+               Angle.fromDegrees(46.0072241194), //
+               Angle.fromDegrees(7.7002694041));
+
+      final Sector demSector = new Sector(lower, upper);
+
+
+      //      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      //      layerSet.disableAllLayers();
+      //      layerSet.getLayerByTitle("MapQuest Aerial").setEnable(true);
+
+      final LayerSet layerSet = new LayerSet();
+
+      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+      //      layerSet.addLayer(mboxTerrainLayer);
+      //      final MapBoxLayer mboxTownLidar = new MapBoxLayer("bobbysud.town-lidar", TimeInterval.fromDays(30), true, 10);
+      //      mboxTownLidar.setEnable(true);
+      //      layerSet.addLayer(mboxTownLidar);
+
+      final MapBoxLayer mboxMatterhornLidar = new MapBoxLayer("bobbysud.matterhorn-imagery", TimeInterval.fromDays(30), true, 10);
+      mboxMatterhornLidar.setEnable(true);
+      layerSet.addLayer(mboxMatterhornLidar);
+
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
       _builder.setPlanet(Planet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
-      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
-               Sector.fullSphere(), new Vector2I(2048, 1024), 0);
-      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
-      _builder.setInitializationTask(pointCloudInitializationTask());
+
+      //  NUM COLUMNS=1872
+      //         NUM ROWS=998
+      //      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///mdt_town_300_300.bil", false),
+      //               demSector, new Vector2I(624, 333), -1200);
+      //      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+
+
+      //      NUM COLUMNS=1784
+      //               NUM ROWS=1236
+      //      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///matterhorn_300.bil", false),
+      //               demSector, new Vector2I(1784, 1236), -2160);
+      //      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+      _builder.getPlanetRendererBuilder().setQuality(Quality.QUALITY_HIGH);
+
+      //      
+      //      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
+      //               Sector.fullSphere(), new Vector2I(2048, 1024), -1700);
+      //      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+
+      _meshRenderer.loadJSONPointCloud(new URL("file:///matterhorn.json"), 2);
+      //  _builder.setInitializationTask(pointCloudInitializationTask());
+      _builder.setShownSector(demSector);
       _builder.addRenderer(_meshRenderer);
       //rgb(175,221,233)
-      _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
+      _builder.setBackgroundColor(Color.fromRGBA255(0, 0, 50, 200));
 
       _g3mWidget = _builder.createWidget();
-
+      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(demSector.getCenter(), 3000), TimeInterval.fromSeconds(5));
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
@@ -211,7 +280,7 @@ public class PointCloudActivity
             final IBufferDownloadListener listener = new PointsCloudDownloader(context.getThreadUtils());
 
             downloader.requestBuffer( //
-                     new URL("file:///points.bson", false), //
+                     new URL("file:///points_10.bson", false), //
                      0, //
                      TimeInterval.forever(), //
                      true, //
