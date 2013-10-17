@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class DefaultSceneLighting extends SceneLighting
+public class FixedFocusSceneLighting extends SceneLighting
 {
 
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
