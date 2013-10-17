@@ -36,7 +36,7 @@ public class GL
 
   /////////////////////////////////////////////////
   //CURRENT GL STATUS
-  private GLGlobalState _currentGLGlobalState = new GLGlobalState();
+  private GLGlobalState _currentGLGlobalState;
   private GPUProgram _currentGPUProgram;
   /////////////////////////////////////////////////
 
@@ -130,6 +130,9 @@ public class GL
     GLVariable.init(_nativeGL);
     GLError.init(_nativeGL);
 
+    GLGlobalState.initializationAvailable();
+
+    _currentGLGlobalState = new GLGlobalState();
     _clearScreenState = new GLGlobalState();
 
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
@@ -273,6 +276,7 @@ public class GL
   {
     _nativeGL.dispose();
     _clearScreenState.dispose();
+    _currentGLGlobalState.dispose();
   }
 
   public final int createProgram()
