@@ -46,14 +46,18 @@ void DefaultSceneLighting::modifyGLState(GLState* glState, const G3MRenderContex
 
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
 
-  const Vector3D cameraVector = rc->getCurrentCamera()->getCartesianPosition();
-  const Vector3D lightDir = cameraVector;
+  const Vector3D cameraVector = rc->getCurrentCamera()->getViewDirection().times(-1);
+  //const Vector3D lightDir = cameraVector; //Light from camera
+
+  //Light slightly different of camera position
+  const Vector3D rotationLightDirAxis = rc->getCurrentCamera()->getUp().cross(cameraVector);
+  const Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle::fromDegrees(10.0));
 
   DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
-                                                      Color::yellow(),
+                                                      Color::white(),
                                                       (float)0.4),
                           false);
   }
