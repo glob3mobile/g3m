@@ -13,7 +13,7 @@
 #include "Context.hpp"
 #include "Camera.hpp"
 
-void DefaultSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
+void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);
 
   //STATIC LIGHT

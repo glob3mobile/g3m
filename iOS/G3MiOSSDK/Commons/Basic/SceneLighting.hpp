@@ -18,7 +18,7 @@ public:
   virtual void modifyGLState(GLState* glState, const G3MRenderContext* rc) = 0;
 };
 
-class DefaultSceneLighting: public SceneLighting {
+class FixedFocusSceneLighting: public SceneLighting {
 public:
 
   void modifyGLState(GLState* glState, const G3MRenderContext* rc);
