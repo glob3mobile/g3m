@@ -39,8 +39,8 @@ private:
 
   /////////////////////////////////////////////////
   //CURRENT GL STATUS
-  GLGlobalState _currentGLGlobalState;
-  GPUProgram*   _currentGPUProgram;
+  GLGlobalState* _currentGLGlobalState;
+  GPUProgram*    _currentGPUProgram;
   /////////////////////////////////////////////////
 
   std::list<const IGLTextureId*> _texturesIdBag;
@@ -61,7 +61,7 @@ private:
                                           const std::string& name);
 //  const bool _verbose;
 
-  GLGlobalState _clearScreenState; //State used to clear screen with certain color
+  GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
 
 public:
@@ -72,7 +72,8 @@ public:
   _nativeGL(nativeGL),
 //  _verbose(verbose),
   _texturesIdAllocationCounter(0),
-  _currentGPUProgram(NULL)
+  _currentGPUProgram(NULL),
+  _clearScreenState(NULL)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -88,6 +89,11 @@ public:
     GLFormat::init(_nativeGL);
     GLVariable::init(_nativeGL);
     GLError::init(_nativeGL);
+
+    GLGlobalState::initializationAvailable();
+
+    _currentGLGlobalState = new GLGlobalState();
+    _clearScreenState = new GLGlobalState();
     
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
@@ -130,9 +136,13 @@ public:
   ~GL() {
 #ifdef C_CODE
     delete _nativeGL;
+    delete _clearScreenState;
+    delete _currentGLGlobalState;
 #endif
 #ifdef JAVA_CODE
     _nativeGL.dispose();
+    _clearScreenState.dispose();
+    _currentGLGlobalState.dispose();
 #endif
   }
   
@@ -239,7 +249,7 @@ public:
   }
 
   GLGlobalState* getCurrentGLGlobalState() {
-    return &_currentGLGlobalState;
+    return _currentGLGlobalState;
   }
   
   

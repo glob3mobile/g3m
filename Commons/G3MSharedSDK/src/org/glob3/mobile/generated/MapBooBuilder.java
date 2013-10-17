@@ -915,7 +915,7 @@ public abstract class MapBooBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new DefaultSceneLighting();
+    return new CameraFocusSceneLighting();
   }
 
   protected final URL createApplicationRestURL()

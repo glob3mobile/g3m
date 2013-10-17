@@ -16,10 +16,10 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DefaultSceneLighting;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ErrorRenderer;
+import org.glob3.mobile.generated.FixedFocusSceneLighting;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -890,7 +890,7 @@ public class G3MWebGLDemo
 
          final WidgetUserData userData = null;
 
-         final SceneLighting lighting = new DefaultSceneLighting();
+         final SceneLighting lighting = new FixedFocusSceneLighting();
 
          final ICameraActivityListener cameraActivityListener = null;
 
