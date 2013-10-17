@@ -1544,7 +1544,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new DefaultSceneLighting();
+  return new CameraFocusSceneLighting();
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

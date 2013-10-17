@@ -246,9 +246,14 @@ public:
 };
 
 class DirectionLightGLFeature: public GLFeature{
+
+  GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
+
 public:
   DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight);
   void applyOnGlobalGLState(GLGlobalState* state) const{}
+
+  void setLightDirection(const Vector3D& lightDir);
 };
 
 class VertexNormalGLFeature: public GLFeature{
