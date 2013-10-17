@@ -472,7 +472,7 @@ void Mark::render(const G3MRenderContext* rc,
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
-          _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+          _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                 GLFormat::rgba(),
                                                                 _imageID,
                                                                 false);

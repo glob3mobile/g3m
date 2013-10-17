@@ -48,7 +48,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   TextureIDReference texId = null;
 #endif
 
-  texId = rc->getTexturesHandler()->getGLTextureId(_image,
+  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                    GLFormat::rgba(),
                                                    "BusyQuadRenderer-Texture",
                                                    false);

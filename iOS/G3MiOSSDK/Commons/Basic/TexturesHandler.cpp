@@ -117,7 +117,7 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
 }
 
 
-const TextureIDReference* TexturesHandler::getGLTextureId(const IImage* image,
+const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                     int format,
                                                     const std::string& name,
                                                     bool hasMipMap) {

@@ -27,7 +27,7 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                        GLFormat::rgba(),
                                                                        _textureURL.getPath(),
                                                                        false);

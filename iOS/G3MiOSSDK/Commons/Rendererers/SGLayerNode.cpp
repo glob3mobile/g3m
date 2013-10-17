@@ -104,7 +104,7 @@ const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) 
   if (_textureId == NULL) {
     if (_downloadedImage != NULL) {
       const bool hasMipMap = false;
-      _textureId = rc->getTexturesHandler()->getGLTextureId(_downloadedImage,
+      _textureId = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
                                                             GLFormat::rgba(),
                                                             getURL().getPath(),
                                                             hasMipMap);

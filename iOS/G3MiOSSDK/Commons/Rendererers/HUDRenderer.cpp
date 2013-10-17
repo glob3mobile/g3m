@@ -88,7 +88,7 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
 
   _factory = rc->getFactory();
 
-  texId = rc->getTexturesHandler()->getGLTextureId(_image,
+  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                    GLFormat::rgba(),
                                                    _name,
                                                    false);
