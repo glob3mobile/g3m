@@ -276,7 +276,7 @@ public:
 
               verticesBuilder.add(Angle::fromDegrees(latInDegrees),
                                   Angle::fromDegrees(lonInDegrees),
-                                  height);
+                                  height + _deltaHeight);
             }
 
             IFloatBuffer* colors = NULL;
