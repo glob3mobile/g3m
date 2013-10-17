@@ -148,7 +148,7 @@ public:
 
   ~TextureIDReference();
 
-  TextureIDReference* createCopy();
+  TextureIDReference* createCopy() const;
 
   const IGLTextureId* getID() const{
     return _id;

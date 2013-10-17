@@ -80,10 +80,10 @@ HUDRenderer::~HUDRenderer() {
 Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
   //TEXTURED
 #ifdef C_CODE
-  const IGLTextureId* texId = NULL;
+  const TextureIDReference* texId = NULL;
 #endif
 #ifdef JAVA_CODE
-  IGLTextureId texId = null;
+  TextureIDReference texId = null;
 #endif
 
   _factory = rc->getFactory();
@@ -128,7 +128,6 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
                                   1);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    rc->getTexturesHandler(),
                                                     texCoords.create(),
                                                     true,
                                                     false);

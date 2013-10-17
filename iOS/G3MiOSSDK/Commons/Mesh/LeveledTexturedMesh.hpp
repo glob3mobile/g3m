@@ -40,10 +40,10 @@ private:
   mutable LazyTextureMappingInitializer* _initializer;
 
 #ifdef C_CODE
-  const IGLTextureId* _glTextureId;
+  const TextureIDReference* _glTextureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _glTextureId;
+  private TextureIDReference _glTextureId;
 #endif
 
   mutable bool _initialized;
@@ -52,8 +52,6 @@ private:
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-
-  TexturesHandler* _texturesHandler;
 
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
 
@@ -65,7 +63,6 @@ private:
 
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
-                     TexturesHandler* texturesHandler,
                      bool ownedTexCoords,
                      bool transparent) :
   _initializer(initializer),
@@ -74,7 +71,6 @@ public:
   _texCoords(NULL),
   _translation(0,0),
   _scale(1,1),
-  _texturesHandler(texturesHandler),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
   {
@@ -100,7 +96,7 @@ public:
     return _glTextureId != NULL;
   }
 
-  void setGLTextureId(const IGLTextureId* glTextureId) {
+  void setGLTextureId(const TextureIDReference* glTextureId) {
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
@@ -108,7 +104,7 @@ public:
   GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
 
 
-  const IGLTextureId* getGLTextureId() const {
+  const TextureIDReference* getGLTextureId() const {
     return _glTextureId;
   }
 
@@ -157,9 +153,9 @@ public:
   BoundingVolume* getBoundingVolume() const;
 
   bool setGLTextureIdForLevel(int level,
-                              const IGLTextureId* glTextureId);
+                              const TextureIDReference* glTextureId);
 
-  const IGLTextureId* getTopLevelGLTextureId() const;
+  const TextureIDReference* getTopLevelTextureId() const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
 

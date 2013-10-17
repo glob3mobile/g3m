@@ -149,13 +149,12 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              true,
                              _withNormals? normals->create() : NULL);
 
-  const IGLTextureId* texId = getTextureId(rc);
+  const TextureIDReference* texId = getTextureId(rc);
   if (texId == NULL) {
     return im;
   }
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    rc->getTexturesHandler(),
                                                     texCoords->create(),
                                                     true,
                                                     true);

@@ -20,6 +20,7 @@ class IDownloader;
 class LeveledTexturedMesh;
 class IFloatBuffer;
 class TileRasterizer;
+class TextureIDReference;
 
 
 class MultiLayerTileTexturizer : public TileTexturizer {
@@ -63,7 +64,7 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  const IGLTextureId* getTopLevelGLTextureIdForTile(Tile* tile);
+  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile);
   
   bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
