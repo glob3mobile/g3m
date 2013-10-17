@@ -189,17 +189,29 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
   return bestInsertionNode->add(element, maxElementsPerNode, maxDepth, childAreaProportion);
 }
 
-void GenericQuadTree_Node::remove(const void* element) {
+bool GenericQuadTree_Node::remove(const void* element) {
+
+  bool wasRemoved = false;
 
 #ifdef C_CODE
-  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
-       it != _elements.end();
-       it++) {
-    if ((*it)->_element == element) {
-      _elements.erase(it);
-      return;
+//  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
+//       it != _elements.end();
+//       it++) {
+//    if ((*it)->_element == element) {
+//      _elements.erase(it);
+//      wasRemoved = true;
+//    }
+//  }
+
+  for (int i = 0; i < _elements.size(); i++) {
+    GenericQuadTree_Element* item = _elements[i];
+    if (item == element){
+      _elements.erase(_elements.begin() + i);
+      wasRemoved = true;
+      break;
     }
   }
+
 #endif
 #ifdef JAVA_CODE
   for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
@@ -208,26 +220,45 @@ void GenericQuadTree_Node::remove(const void* element) {
     if (qTElement._element == element)
     {
       _elements.remove(qTElement);
-      return;
+      wasRemoved = true;
     }
   }
 #endif
 
-  if (_children != NULL) {
+  if (wasRemoved){
+    return true;
+  } else{
+    if (_children != NULL) {
 
-    int nChild = 0;
-    for (int i = 0; i < 4; i++) {
-      nChild += _children[i]->getNElements();
-    }
-
-    if (nChild == 0) {
       for (int i = 0; i < 4; i++) {
-        delete _children[i];
+        if (_children[i]->remove(element)){
+          //The item was removed from one of my children
+
+          //Removing all children if none has an item
+          int nChild = 0;
+          for (int i = 0; i < 4; i++) {
+            nChild += _children[i]->getSubtreeNElements();
+          }
+
+          if (nChild == 0) {
+            for (int i = 0; i < 4; i++) {
+              delete _children[i];
+            }
+            delete [] _children;
+          }
+
+          return true;
+        }
       }
-      delete [] _children;
+
+      return false;
+
+
+
     }
 
   }
+
 
 }
 
@@ -453,10 +484,11 @@ bool GenericQuadTree::add(GenericQuadTree_Element* element) {
   return _root->add(element, _maxElementsPerNode, _maxDepth, _childAreaProportion);
 }
 
-void GenericQuadTree::remove(const void* element) {
+bool GenericQuadTree::remove(const void* element) {
   if (_root != NULL) {
-    _root->remove(element);
+    return _root->remove(element);
   }
+  return false;
 }
 
 bool GenericQuadTree::add(const Sector& sector,
@@ -624,7 +656,7 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
 
     delete geos[i];
   }
-
+  
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
   

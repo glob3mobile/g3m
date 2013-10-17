@@ -365,7 +365,9 @@ Mark::~Mark() {
   delete _position;
 
   if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->removeListener(this);
+    if (!_surfaceElevationProvider->removeListener(this)){
+      ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
+    }
   }
 
   delete _cartesianPosition;
@@ -381,6 +383,7 @@ Mark::~Mark() {
 
   _glState->_release();
 
+  delete _textureId; //Releasing texture
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {

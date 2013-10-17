@@ -168,6 +168,12 @@ private:
 
   const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
 
+  friend class TextureIDReference;
+
+  void releaseGLTextureId(const IGLTextureId* glTextureId);
+
+  void retainGLTextureId(const IGLTextureId* glTextureId);
+
 public:
 
   TexturesHandler(GL* const  gl,
@@ -185,9 +191,6 @@ public:
                                      bool hasMipMap);
 
 
-  void releaseGLTextureId(const IGLTextureId* glTextureId);
-
-  void retainGLTextureId(const IGLTextureId* glTextureId);
 
 };
 

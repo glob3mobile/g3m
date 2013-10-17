@@ -739,7 +739,8 @@ public:
 
   GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                      geoRenderer: geoRenderer
-                                                                    meshRenderer: meshRenderer];
+                                                                    meshRenderer: meshRenderer
+                                                                   marksRenderer: marksRenderer];
   builder.setInitializationTask(initializationTask, true);
 
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
@@ -2235,6 +2236,7 @@ public:
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
                                            meshRenderer: (MeshRenderer*) meshRenderer
+                                          marksRenderer: (MarksRenderer*) marksRenderer
 {
   class SampleInitializationTask : public GInitializationTask {
   private:
@@ -2242,6 +2244,7 @@ public:
     ShapesRenderer* _shapesRenderer;
     GEORenderer*    _geoRenderer;
     MeshRenderer*   _meshRenderer;
+    MarksRenderer*  _marksRenderer;
 
     void testRadarModel(const G3MContext* context) {
 
@@ -2258,11 +2261,13 @@ public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
                              GEORenderer*    geoRenderer,
-                             MeshRenderer*   meshRenderer) :
+                             MeshRenderer*   meshRenderer,
+                             MarksRenderer*  marksRenderer) :
     _iosWidget(iosWidget),
     _shapesRenderer(shapesRenderer),
     _geoRenderer(geoRenderer),
-    _meshRenderer(meshRenderer)
+    _meshRenderer(meshRenderer),
+    _marksRenderer(marksRenderer)
     {
 
     }
@@ -2471,6 +2476,55 @@ public:
           }
         };
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
+      }
+
+      if (true) { //Adding and deleting marks
+
+        int time = 1; //SECS
+
+        class MarksTask: public GTask{
+          G3MWidget_iOS* _iosWidget;
+          MarksRenderer* _marksRenderer;
+
+          std::list<Mark*> _marks;
+
+        public:
+          MarksTask(G3MWidget_iOS* iosWidget, MarksRenderer* marksRenderer): _iosWidget(iosWidget), _marksRenderer(marksRenderer)
+          {
+          }
+
+          static int randomInt(int max) {
+            int i = rand();
+            return i % max;
+          }
+
+          void run(const G3MContext* context) {
+
+            double minLat = randomInt(180) - 90;
+            double minLon = randomInt(360) - 180;
+
+            Mark* m1 = new Mark("RANDOM MARK",
+                                URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                                Geodetic3D(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon), 0),
+                                RELATIVE_TO_GROUND,
+                                1e9);
+            _marksRenderer->addMark(m1);
+
+            _marks.push_back(m1);
+            if (_marks.size() > 10){
+              while (_marks.size() > 0){
+                Mark* m2 = _marks.front();
+                _marksRenderer->removeMark(m2);
+                _marks.pop_front();
+                delete m2;
+              }
+            }
+
+
+          }
+        };
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time),
+                                               new MarksTask(_iosWidget, _marksRenderer));
       }
 
       class PlaneShapeLoadListener : public ShapeLoadListener {
@@ -2719,7 +2773,8 @@ public:
   GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
                                                                          shapesRenderer,
                                                                          geoRenderer,
-                                                                         meshRenderer);
+                                                                         meshRenderer,
+                                                                         marksRenderer);
 
   return initializationTask;
 }

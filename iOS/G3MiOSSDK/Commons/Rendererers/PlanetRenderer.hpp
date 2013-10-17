@@ -429,7 +429,7 @@ public:
   void addListener(const Geodetic2D& position,
                    SurfaceElevationListener* listener);
 
-  void removeListener(SurfaceElevationListener* listener);
+  bool removeListener(SurfaceElevationListener* listener);
 
   void sectorElevationChanged(ElevationData* elevationData) const;
 
