@@ -433,8 +433,8 @@ public:
 
   void sectorElevationChanged(ElevationData* elevationData) const;
 
-  Sector getRenderedSector() const{
-    return *_renderedSector;
+  const Sector* getRenderedSector() const{
+    return _renderedSector;
   }
 
   void setRenderedSector(const Sector& sector);

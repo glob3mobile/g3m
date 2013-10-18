@@ -65,6 +65,8 @@ private:
 
   BoundingVolume* _boundingVolume;
 
+  const Vector2D _renderedVStileSectorRatio;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
                                   const TileTessellator* tessellator,
@@ -81,7 +83,7 @@ private:
                         double cameraAngle2HorizonInRadians,
                         const Frustum* cameraFrustumInModelCoordinates,
                         ElevationDataProvider* elevationDataProvider,
-                        const Sector& renderedSector,
+                        const Sector* renderedSector,
                         const TileTessellator* tessellator,
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
@@ -156,6 +158,8 @@ private:
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
 
+  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
+
 public:
   const Sector    _sector;
   const int       _level;
@@ -227,7 +231,7 @@ public:
               const TileTessellator* tessellator,
               TileRasterizer* tileRasterizer,
               const LayerSet* layerSet,
-              const Sector& renderedSector,
+              const Sector* renderedSector,
               bool isForcedFullRender,
               long long texturePriority,
               const float dpiFactor,

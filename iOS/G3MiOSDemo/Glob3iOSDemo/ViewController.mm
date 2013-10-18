@@ -2453,7 +2453,7 @@ public:
 
 
 
-      if (false) { //Incomplete world
+      if (true) { //Incomplete world
 
         int time = 15; //SECS
 

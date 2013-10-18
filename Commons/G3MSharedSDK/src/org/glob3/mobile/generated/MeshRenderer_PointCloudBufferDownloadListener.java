@@ -28,7 +28,7 @@ public class MeshRenderer_PointCloudBufferDownloadListener extends IBufferDownlo
   {
     ILogger.instance().logInfo("Downloaded PointCloud buffer from \"%s\" (%db)", url.getPath(), buffer.size());
 
-    _threadUtils.invokeAsyncTask(new PointCloudParserAsyncTask(_meshRenderer, url, buffer, _pointSize, _deltaHeight, _listener, _deleteListener, _isBSON, _context), true);
+    _threadUtils.invokeAsyncTask(new MeshRenderer_PointCloudParserAsyncTask(_meshRenderer, url, buffer, _pointSize, _deltaHeight, _listener, _deleteListener, _isBSON, _context), true);
 
   }
 

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GEOObjectParserAsyncTask extends GAsyncTask
+public class GEORenderer_GEOObjectParserAsyncTask extends GAsyncTask
 {
   public final URL _url;
 
@@ -11,7 +11,7 @@ public class GEOObjectParserAsyncTask extends GAsyncTask
 
   private GEOObject _geoObject;
 
-  public GEOObjectParserAsyncTask(URL url, IByteBuffer buffer, GEORenderer geoRenderer, GEOSymbolizer symbolizer, boolean isBSON)
+  public GEORenderer_GEOObjectParserAsyncTask(URL url, IByteBuffer buffer, GEORenderer geoRenderer, GEOSymbolizer symbolizer, boolean isBSON)
   {
      _url = url;
      _buffer = buffer;

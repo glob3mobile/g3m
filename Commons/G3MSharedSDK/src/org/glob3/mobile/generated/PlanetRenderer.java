@@ -74,7 +74,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
-        if (sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
+        if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
           Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
           if (parameters._firstLevel == 0)
@@ -331,7 +331,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
-     _renderedSector = new Sector(renderedSector);
+     _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
     _layerSet.setChangeListener(this);
@@ -804,11 +804,19 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final void setRenderedSector(Sector sector)
   {
-    if (!_renderedSector.isEquals(sector))
+    if ((_renderedSector != null && !_renderedSector.isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector.fullSphere())))
     {
       if (_renderedSector != null)
          _renderedSector.dispose();
-      _renderedSector = new Sector(sector);
+  
+      if (sector.isEquals(Sector.fullSphere()))
+      {
+        _renderedSector = null;
+      }
+      else
+      {
+        _renderedSector = new Sector(sector);
+      }
     }
   
     _tessellator.setRenderedSector(sector);
