@@ -26,6 +26,7 @@
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF8BE69217E0D22D0072273A /* aus4326.bil */; };
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
+		CF8E9887180D98DC00A08208 /* pointcloud in Resources */ = {isa = PBXBuildFile; fileRef = CF8E9886180D98DC00A08208 /* pointcloud */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
 		CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */ = {isa = PBXBuildFile; fileRef = CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */; };
@@ -126,6 +127,7 @@
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CF8BE69217E0D22D0072273A /* aus4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = aus4326.bil; sourceTree = "<group>"; };
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
+		CF8E9886180D98DC00A08208 /* pointcloud */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pointcloud; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
 		CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial-normals.json"; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF8E9886180D98DC00A08208 /* pointcloud */,
 				CFA245421800708D00921325 /* washington-memorial.json */,
 				CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */,
 				CF8BE69217E0D22D0072273A /* aus4326.bil */,
@@ -451,6 +454,7 @@
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
+				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,

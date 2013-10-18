@@ -997,7 +997,8 @@ public abstract class IG3MBuilder
   {
     if (_sceneLighting == null)
     {
-      _sceneLighting = new DefaultSceneLighting();
+      //_sceneLighting = new DefaultSceneLighting();
+      _sceneLighting = new CameraFocusSceneLighting();
     }
     return _sceneLighting;
   }

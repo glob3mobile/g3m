@@ -36,7 +36,7 @@ public class GL
 
   /////////////////////////////////////////////////
   //CURRENT GL STATUS
-  private GLGlobalState _currentGLGlobalState = new GLGlobalState();
+  private GLGlobalState _currentGLGlobalState;
   private GPUProgram _currentGPUProgram;
   /////////////////////////////////////////////////
 
@@ -101,11 +101,9 @@ public class GL
 //                               const std::string& name);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
-
-//  IFloatBuffer* _billboardTexCoord;
-//  IFloatBuffer* getBillboardTexCoord();
-
 //  const bool _verbose;
+
+  private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
 
 
@@ -116,6 +114,7 @@ public class GL
      _nativeGL = nativeGL;
      _texturesIdAllocationCounter = 0;
      _currentGPUProgram = null;
+     _clearScreenState = null;
     //Init Constants
     GLCullFace.init(_nativeGL);
     GLBufferType.init(_nativeGL);
@@ -131,6 +130,11 @@ public class GL
     GLVariable.init(_nativeGL);
     GLError.init(_nativeGL);
 
+    GLGlobalState.initializationAvailable();
+
+    _currentGLGlobalState = new GLGlobalState();
+    _clearScreenState = new GLGlobalState();
+
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
@@ -139,11 +143,8 @@ public class GL
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::clearScreen()");
   //  }
-  
-    int TODO_move_to_instance;
-    GLGlobalState clearScreenState = new GLGlobalState();
-    clearScreenState.setClearColor(color);
-    clearScreenState.applyChanges(this, _currentGLGlobalState);
+    _clearScreenState.setClearColor(color);
+    _clearScreenState.applyChanges(this, _currentGLGlobalState);
   
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
@@ -274,6 +275,8 @@ public class GL
   public void dispose()
   {
     _nativeGL.dispose();
+    _clearScreenState.dispose();
+    _currentGLGlobalState.dispose();
   }
 
   public final int createProgram()

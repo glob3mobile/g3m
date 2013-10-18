@@ -156,6 +156,12 @@ public class WMSLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
+    final String path = _mapServerURL.getPath();
+    if (path.length() == 0)
+    {
+      return petitions;
+    }
+  
     final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
@@ -173,7 +179,7 @@ public class WMSLayer extends Layer
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
      //Server name
-    String req = _mapServerURL.getPath();
+    String req = path;
      if (req.charAt(req.length() - 1) != '?')
      {
         req += '?';

@@ -20,7 +20,7 @@ public class GEORenderer_GEOObjectBufferDownloadListener extends IBufferDownload
 //                                 url.getPath().c_str(),
 //                                 buffer->size());
 
-    _threadUtils.invokeAsyncTask(new GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer, _isBSON), true);
+    _threadUtils.invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer, _isBSON), true);
   }
 
   public final void onError(URL url)

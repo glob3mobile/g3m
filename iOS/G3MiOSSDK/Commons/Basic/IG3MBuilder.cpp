@@ -810,7 +810,8 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
-    _sceneLighting = new DefaultSceneLighting();
+    //_sceneLighting = new DefaultSceneLighting();
+    _sceneLighting = new CameraFocusSceneLighting();
   }
   return _sceneLighting;
 }

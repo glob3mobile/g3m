@@ -474,7 +474,7 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 6.0f;
+  float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   //ElevationDataProvider* elevationDataProvider = NULL;
@@ -535,6 +535,16 @@ public:
   return GPUProgramSources([name UTF8String], vertexSource, fragmentSource);
 }
 
+class TestMeshLoadListener : public MeshLoadListener {
+public:
+  void onBeforeAddMesh(Mesh* mesh) {
+  }
+
+  void onAfterAddMesh(Mesh* mesh) {
+  }
+
+};
+
 - (void) initCustomizedWithBuilder
 {
 
@@ -592,6 +602,17 @@ public:
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+
+//  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
+//                                   10,
+//                                   new TestMeshLoadListener(),
+//                                   true);
+  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+                                   2,
+                                   0,
+                                   new TestMeshLoadListener(),
+                                   true);
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
@@ -2422,7 +2443,7 @@ public:
 
       if (true) { //Incomplete world
 
-        int time = 5; //SECS
+        int time = 15; //SECS
 
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;

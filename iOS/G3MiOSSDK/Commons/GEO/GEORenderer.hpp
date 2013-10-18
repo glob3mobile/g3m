@@ -56,6 +56,9 @@ private:
     {
 
     }
+
+    ~LoadQueueItem() {
+    }
   };
 
   void drainLoadQueue();

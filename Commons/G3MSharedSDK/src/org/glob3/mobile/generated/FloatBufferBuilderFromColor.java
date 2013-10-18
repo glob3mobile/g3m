@@ -19,6 +19,14 @@ public class FloatBufferBuilderFromColor extends FloatBufferBuilder
     _values.push_back(a);
   }
 
+  public final void addBase255(int r, int g, int b, float a) //RGBA
+  {
+    _values.push_back(r / 255.0f);
+    _values.push_back(g / 255.0f);
+    _values.push_back(b / 255.0f);
+    _values.push_back(a);
+  }
+
   public final void add(Color c) //RGBA
   {
     _values.push_back(c.getRed());

@@ -88,6 +88,9 @@ private:
     {
 
     }
+
+    ~LoadQueueItem() {
+    }
   };
 
 

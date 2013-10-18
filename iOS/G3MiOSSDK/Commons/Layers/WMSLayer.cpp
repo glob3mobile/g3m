@@ -100,6 +100,11 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
+  const std::string path = _mapServerURL.getPath();
+  if (path.empty()) {
+    return petitions;
+  }
+
   const Sector tileSector = tile->_sector;
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
@@ -116,7 +121,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
 
 	//Server name
-  std::string req = _mapServerURL.getPath();
+  std::string req = path;
 	if (req[req.size() - 1] != '?') {
 		req += '?';
 	}
