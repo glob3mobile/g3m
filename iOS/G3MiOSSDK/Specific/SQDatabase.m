@@ -227,12 +227,12 @@
     }
 
 		if (rc == SQLITE_BUSY) {
-			usleep(10000 /* 10ms */);
-
 			if (numOfRetries == _busyRetryTimeout) {
 				NSLog(@"SQLite Busy 1: %@", _dbPath);
 				break;
 			}
+
+      usleep(10000 /* 10ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -292,12 +292,12 @@
     }
 
 		if (rc == SQLITE_BUSY) {
-			usleep(10000 /* 10ms */);
-
 			if (numOfRetries == _busyRetryTimeout) {
 				NSLog(@"SQLite Busy 2: %@", _dbPath);
 				break;
 			}
+
+      usleep(10000 /* 10ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -368,12 +368,12 @@
 			return YES;
 
 		if (rc == SQLITE_BUSY) {
-			usleep(10000 /* 10ms */);
-
 			if (numOfRetries == _busyRetryTimeout) {
 				NSLog(@"SQLite Busy 3: %@", _dbPath);
 				break;
 			}
+
+      usleep(10000 /* 10ms */);
 		}
     else {
 			NSLog(@"SQLite Step Failed: %s", sqlite3_errmsg(_db));

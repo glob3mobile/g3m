@@ -14,12 +14,12 @@
 
 std::vector<double> Quadric::intersectionsDistances(const Vector3D& origin,
                                                     const Vector3D& direction) const {
-  double x0 = origin.x();
-  double y0 = origin.y();
-  double z0 = origin.z();
-  double u = direction.x();
-  double v = direction.y();
-  double w = direction.z();
+  double x0 = origin._x;
+  double y0 = origin._y;
+  double z0 = origin._z;
+  double u = direction._x;
+  double v = direction._y;
+  double w = direction._z;
   double A = Q.get0();
   double D = Q.get1();
   double F = Q.get2();

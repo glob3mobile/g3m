@@ -31,12 +31,12 @@ std::vector<double> FlatPlanet::intersectionsDistances(const Vector3D& origin,
   std::vector<double> intersections;
 
   // compute intersection with plane
-  if (direction.z()==0) return intersections;
-  const double t = -origin.z() / direction.z();
-  const double x = origin.x() + t * direction.x();
+  if (direction._z == 0) return intersections;
+  const double t = -origin._z / direction._z;
+  const double x = origin._x + t * direction._x;
   const double halfWidth = 0.5 * _size._x;
   if (x < -halfWidth || x > halfWidth) return intersections;
-  const double y = origin.y() + t * direction.y();
+  const double y = origin._y + t * direction._y;
   const double halfHeight = 0.5 * _size._y;
   if (y < -halfHeight || y > halfHeight) return intersections;
   intersections.push_back(t);
@@ -181,8 +181,8 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double d0 = _distanceBetweenInitialPoints;
   const Vector3D r1 = finalRay0;
   const Vector3D r2 = finalRay1;
-  double k = (r1.x()/r1.z() - r2.x()/r2.z()) * (r1.x()/r1.z() - r2.x()/r2.z()) +
-  (r1.y()/r1.z() - r2.y()/r2.z()) * (r1.y()/r1.z() - r2.y()/r2.z());
+  double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
+              (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
   double zc = _origin.z();
   double uz = _centerRay.z();
   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
@@ -252,10 +252,10 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
 
 double FlatPlanet::distanceToHorizon(const Vector3D& position) const
 {
-  double xCorner = 0.5 * _size.x();
-  if (position.x()>0) xCorner *= -1;
-  double yCorner = 0.5 * _size.y();
-  if (position.y()>0) yCorner *= -1;
+  double xCorner = 0.5 * _size._x;
+  if (position._x > 0) xCorner *= -1;
+  double yCorner = 0.5 * _size._y;
+  if (position._y > 0) yCorner *= -1;
   const Vector3D fartherCorner(xCorner, yCorner, 0.0);
   return position.sub(fartherCorner).length();
 }

@@ -185,7 +185,9 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
 
   Vector3D dirN = dir.normalized();
 
-  _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float)dirN.x(), (float)dirN.y(), (float)dirN.z());
+  _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x,
+                                                                    (float) dirN._y,
+                                                                    (float) dirN._z);
 
   _values.addUniformValue(LIGHT_DIRECTION,
                           _lightDirectionUniformValue,
