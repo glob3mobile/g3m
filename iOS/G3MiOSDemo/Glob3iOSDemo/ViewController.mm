@@ -562,8 +562,8 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
 
   const Planet* planet = Planet::createEarth();
-  //  const Planet* planet = Planet::createSphericalEarth();
-  //  const Planet* planet = Planet::createFlatEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -2424,6 +2424,17 @@ public:
       //testWebSocket(context);
 
       testCanvas(context->getFactory());
+      
+      
+      if (false) {
+        [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                       Geodetic3D(Angle::fromDegrees(-80),Angle::fromDegrees(-150),50000),
+                                                       Geodetic3D(Angle::fromDegrees(40.032213257223013159),Angle::fromDegrees(-3.603964137481248553),1139.1668803810473491),
+                                                       Angle::fromDegrees(87),
+                                                       Angle::fromDegrees(34),
+                                                       Angle::fromDegrees(20),
+                                                       Angle::fromDegrees(45));
+      }
 
 
       if (false) {

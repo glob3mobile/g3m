@@ -263,8 +263,8 @@ double FlatPlanet::distanceToHorizon(const Vector3D& position) const
 
 MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
 {
-  const Vector3D P0 = toCartesian(origin.asGeodetic2D());
-  const Vector3D P1 = toCartesian(destination.asGeodetic2D());
+  const Vector3D P0 = toCartesian(origin);
+  const Vector3D P1 = toCartesian(destination);
   return MutableMatrix44D::createTranslationMatrix(P1.sub(P0));
 }
 
