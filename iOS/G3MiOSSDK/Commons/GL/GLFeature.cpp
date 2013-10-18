@@ -185,13 +185,22 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
 
   Vector3D dirN = dir.normalized();
 
+  _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float)dirN.x(), (float)dirN.y(), (float)dirN.z());
+
   _values.addUniformValue(LIGHT_DIRECTION,
-                          new GPUUniformValueVec3Float((float)dirN.x(), (float)dirN.y(), (float)dirN.z()),
+                          _lightDirectionUniformValue,
                           false);
   _values.addUniformValue(LIGHT_COLOR,
                           new GPUUniformValueVec4Float(lightColor),
                           false);
 
+}
+
+void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir){
+  Vector3D dirN = lightDir.normalized();
+  _lightDirectionUniformValue->changeValue((float)dirN._x,
+                                           (float)dirN._y,
+                                           (float)dirN._z);
 }
 
 VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride):
