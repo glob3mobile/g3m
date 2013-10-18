@@ -57,8 +57,8 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
 
     bool previousCameraWasValid = previousCamera->getHeight() < _maxHeight;
     if (previousCameraWasValid && sector != NULL){
-      const Geodetic3D position = previousCamera->getGeodeticCenterOfView();
-      previousCameraWasValid = sector->contains(position._latitude, position._longitude);
+      const Geodetic3D centerPosition = previousCamera->getGeodeticCenterOfView();
+      previousCameraWasValid = sector->contains(centerPosition._latitude, centerPosition._longitude);
     }
 
     if (previousCameraWasValid) {

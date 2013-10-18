@@ -41,8 +41,8 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
       boolean previousCameraWasValid = previousCamera.getHeight() < _maxHeight;
       if (previousCameraWasValid && sector != null)
       {
-        final Geodetic3D position = previousCamera.getGeodeticCenterOfView();
-        previousCameraWasValid = sector.contains(position._latitude, position._longitude);
+        final Geodetic3D centerPosition = previousCamera.getGeodeticCenterOfView();
+        previousCameraWasValid = sector.contains(centerPosition._latitude, centerPosition._longitude);
       }
   
       if (previousCameraWasValid)
