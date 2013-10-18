@@ -194,18 +194,18 @@ bool GenericQuadTree_Node::remove(const void* element) {
   bool wasRemoved = false;
 
 #ifdef C_CODE
-//  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
-//       it != _elements.end();
-//       it++) {
-//    if ((*it)->_element == element) {
-//      _elements.erase(it);
-//      wasRemoved = true;
-//    }
-//  }
+  //  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
+  //       it != _elements.end();
+  //       it++) {
+  //    if ((*it)->_element == element) {
+  //      _elements.erase(it);
+  //      wasRemoved = true;
+  //    }
+  //  }
 
   for (int i = 0; i < _elements.size(); i++) {
     GenericQuadTree_Element* item = _elements[i];
-    if (item == element){
+    if (item->_element == element){
       _elements.erase(_elements.begin() + i);
       wasRemoved = true;
       break;
@@ -245,21 +245,15 @@ bool GenericQuadTree_Node::remove(const void* element) {
               delete _children[i];
             }
             delete [] _children;
+            _children = NULL;
           }
 
           return true;
         }
       }
-
-      return false;
-
-
-
     }
-
   }
-
-
+  return false;
 }
 
 bool GenericQuadTree_Node::acceptVisitor(const Sector& sector,
@@ -653,7 +647,7 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
 #endif
     GenericQuadTreeVisitorGeodetic_TESTER vis(g);
     tree.acceptVisitor(g, vis);
-
+    
     delete geos[i];
   }
   

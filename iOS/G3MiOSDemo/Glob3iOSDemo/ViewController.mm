@@ -2511,7 +2511,7 @@ public:
             _marksRenderer->addMark(m1);
 
             _marks.push_back(m1);
-            if (_marks.size() > 10){
+            if (_marks.size() > 5){
               while (_marks.size() > 0){
                 Mark* m2 = _marks.front();
                 _marksRenderer->removeMark(m2);
