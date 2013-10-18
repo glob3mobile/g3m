@@ -207,6 +207,7 @@ bool GenericQuadTree_Node::remove(const void* element) {
     GenericQuadTree_Element* item = _elements[i];
     if (item->_element == element){
       _elements.erase(_elements.begin() + i);
+      delete item;
       wasRemoved = true;
       break;
     }
