@@ -29,7 +29,7 @@ public class ShapesRenderer_SceneJSBufferDownloadListener extends IBufferDownloa
   {
     ILogger.instance().logInfo("Downloaded SceneJS buffer from \"%s\" (%db)", url.getPath(), buffer.size());
 
-    _threadUtils.invokeAsyncTask(new SceneJSParserAsyncTask(_shapesRenderer, url, buffer, _uriPrefix, _isTransparent, _position, _altitudeMode, _listener, _deleteListener, _isBSON), true);
+    _threadUtils.invokeAsyncTask(new ShapesRenderer_SceneJSParserAsyncTask(_shapesRenderer, url, buffer, _uriPrefix, _isTransparent, _position, _altitudeMode, _listener, _deleteListener, _isBSON), true);
 
   }
 

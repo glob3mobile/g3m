@@ -141,6 +141,7 @@ public final class Factory_Android
    }
 
 
+   @Override
    protected IDeviceInfo createDeviceInfo() {
       return new DeviceInfo_Android(_context);
    }

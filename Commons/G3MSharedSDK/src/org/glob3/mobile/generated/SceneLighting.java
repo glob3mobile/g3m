@@ -17,11 +17,12 @@ package org.glob3.mobile.generated;
 
 
 //class GLState;
+//class G3MRenderContext;
 
 public abstract class SceneLighting
 {
   public void dispose()
   {
   }
-  public abstract void modifyGLState(GLState glState);
+  public abstract void modifyGLState(GLState glState, G3MRenderContext rc);
 }

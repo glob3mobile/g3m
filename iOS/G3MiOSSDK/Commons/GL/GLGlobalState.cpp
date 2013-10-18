@@ -15,6 +15,8 @@
 #include "INativeGL.hpp"
 #include "GL.hpp"
 
+bool GLGlobalState::_initializationAvailable = false;
+
 
 void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
 

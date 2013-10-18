@@ -1040,11 +1040,23 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
+
+//  const std::string& mapKey,
+//  const TimeInterval& timeToCache,
+//  bool readExpired = true,
+//  int initialLevel = 1,
+//  int maxLevel = 19,
+//  LayerCondition* condition = NULL
+  if (true) {
+    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+                                       TimeInterval::fromDays(30)));
+  }
+
 
   const bool useCartoDB = false;
   if (useCartoDB) {
@@ -2452,7 +2464,7 @@ public:
 
 
 
-      if (false) { //Incomplete world
+      if (true) { //Incomplete world
 
         int time = 15; //SECS
 
