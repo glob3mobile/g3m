@@ -4,9 +4,7 @@ public class TexturesHandler
   private java.util.ArrayList<TextureHolder> _textureHolders = new java.util.ArrayList<TextureHolder>();
 
   private final GL _gl;
-
   private final boolean _verbose;
-
   //void showHolders(const std::string& message) const;
 
 
@@ -44,65 +42,6 @@ public class TexturesHandler
     }
   
     return null;
-  }
-
-//C++ TO JAVA CONVERTER TODO TASK: Java has no concept of a 'friend' class:
-//  friend class TextureIDReference;
-
-  private void releaseGLTextureId(IGLTextureId glTextureId)
-  {
-    if (glTextureId == null)
-    {
-      return;
-    }
-  
-    for (int i = 0; i < _textureHolders.size(); i++)
-    {
-      TextureHolder holder = _textureHolders.get(i);
-  
-      if (holder._glTextureId.isEquals(glTextureId))
-      {
-        holder.release();
-  
-        //showHolders("releaseGLTextureId(  ): released holder " + holder->description());
-  
-        if (!holder.isRetained())
-        {
-          _gl.deleteTexture(holder._glTextureId);
-  
-          _textureHolders.remove(i);
-  
-          if (holder != null)
-             holder.dispose();
-        }
-  
-        return;
-      }
-    }
-  }
-
-  private void retainGLTextureId(IGLTextureId glTextureId)
-  {
-    if (glTextureId == null)
-    {
-      return;
-    }
-  
-    for (int i = 0; i < _textureHolders.size(); i++)
-    {
-      TextureHolder holder = _textureHolders.get(i);
-  
-      if (holder._glTextureId.isEquals(glTextureId))
-      {
-        holder.retain();
-  
-        //showHolders("retainGLTextureId(): retained holder " + holder->description());
-  
-        return;
-      }
-    }
-  
-    ILogger.instance().logInfo("break (point) on me 6\n");
   }
 
 
@@ -148,5 +87,59 @@ public class TexturesHandler
   }
 
 
-
+  //This two methods are supposed to be accessed only by TextureIDReference class
+  public final void releaseGLTextureId(IGLTextureId glTextureId)
+  {
+    if (glTextureId == null)
+    {
+      return;
+    }
+  
+    for (int i = 0; i < _textureHolders.size(); i++)
+    {
+      TextureHolder holder = _textureHolders.get(i);
+  
+      if (holder._glTextureId.isEquals(glTextureId))
+      {
+        holder.release();
+  
+        //showHolders("releaseGLTextureId(  ): released holder " + holder->description());
+  
+        if (!holder.isRetained())
+        {
+          _gl.deleteTexture(holder._glTextureId);
+  
+          _textureHolders.remove(i);
+  
+          if (holder != null)
+             holder.dispose();
+        }
+  
+        return;
+      }
+    }
+  }
+  public final void retainGLTextureId(IGLTextureId glTextureId)
+  {
+    if (glTextureId == null)
+    {
+      return;
+    }
+  
+    for (int i = 0; i < _textureHolders.size(); i++)
+    {
+      TextureHolder holder = _textureHolders.get(i);
+  
+      if (holder._glTextureId.isEquals(glTextureId))
+      {
+        holder.retain();
+  
+        //showHolders("retainGLTextureId(): retained holder " + holder->description());
+  
+        return;
+      }
+    }
+  
+    ILogger.instance().logInfo("break (point) on me 6\n");
+  }
 }

@@ -529,17 +529,17 @@ public class GenericQuadTree_Node
   
             //Removing all children if none has an item
             int nChild = 0;
-            for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
             {
-              nChild += _children[i].getSubtreeNElements();
+              nChild += _children[j].getSubtreeNElements();
             }
   
             if (nChild == 0)
             {
-              for (int i = 0; i < 4; i++)
+              for (int j = 0; j < 4; j++)
               {
-                if (_children[i] != null)
-                   _children[i].dispose();
+                if (_children[j] != null)
+                   _children[j].dispose();
               }
               _children = null;
               _children = null;
