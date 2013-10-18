@@ -193,53 +193,13 @@ void Camera::setPitch(const Angle& angle) {
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d)
 {
-  printf ("pitch1 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);
-
-  
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
-  
-  
   setPitch(Angle::zero());
-
-  printf ("pitch2 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);
-  
-
-
-  //const double dist = getGeodeticPosition()._height - g3d._height;
-  
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  
-  printf ("pitch3 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);
-  
-
-  
-  /*moveForward(dist);
-  
-  printf ("pitch4 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);*/
-
-  
   setHeading(heading);
-  
-  printf ("pitch5 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);
-
   setPitch(pitch);
-  
-  printf ("pitch6 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
-          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
-          getGeodeticPosition()._height);
-
 }
 
 

@@ -17,19 +17,15 @@ bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent, 
                                          CameraContext *cameraContext) 
 {
-  // test for camera pitch
+  /*
+  // testing set camera methods
   if (touchEvent->getTouchCount()==4 && touchEvent->getType()==Up) {
-    printf("setting pitch\n");
     Camera *camera = cameraContext->getNextCamera();
-    // Aranjuez de frente
-    //camera->setGeodeticPosition(Geodetic3D(Angle::fromDegrees(40.032213257223013159),Angle::fromDegrees(-3.603964137481248553),1139.1668803810473491));
-    
-    // Aranjuez con pitch y heading
     camera->setGeodeticPosition(Geodetic3D(Angle::fromDegrees(40.027865),Angle::fromDegrees(-3.599683),1000.670056));
     camera->setPitch(Angle::fromDegrees(50.739328));
     camera->setHeading(Angle::fromDegrees(-36.706477));
     return true;
-  }
+  }*/
   
   
   // three finger needed
