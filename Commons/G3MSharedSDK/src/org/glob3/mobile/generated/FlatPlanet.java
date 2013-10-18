@@ -90,14 +90,14 @@ public class FlatPlanet extends Planet
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // compute intersection with plane
-    if (direction.z() == 0)
+    if (direction._z == 0)
        return intersections;
-    final double t = -origin.z() / direction.z();
-    final double x = origin.x() + t * direction.x();
+    final double t = -origin._z / direction._z;
+    final double x = origin._x + t * direction._x;
     final double halfWidth = 0.5 * _size._x;
     if (x < -halfWidth || x > halfWidth)
        return intersections;
-    final double y = origin.y() + t * direction.y();
+    final double y = origin._y + t * direction._y;
     final double halfHeight = 0.5 * _size._y;
     if (y < -halfHeight || y > halfHeight)
        return intersections;
@@ -259,7 +259,7 @@ public class FlatPlanet extends Planet
     double d0 = _distanceBetweenInitialPoints;
     final Vector3D r1 = finalRay0;
     final Vector3D r2 = finalRay1;
-    double k = (r1.x()/r1.z() - r2.x()/r2.z()) * (r1.x()/r1.z() - r2.x()/r2.z()) + (r1.y()/r1.z() - r2.y()/r2.z()) * (r1.y()/r1.z() - r2.y()/r2.z());
+    double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) + (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
     double zc = _origin.z();
     double uz = _centerRay.z();
     double t2 = (d0 / mu.sqrt(k) - zc) / uz;
@@ -325,11 +325,11 @@ public class FlatPlanet extends Planet
 
   public final double distanceToHorizon(Vector3D position)
   {
-    double xCorner = 0.5 * _size.x();
-    if (position.x()>0)
+    double xCorner = 0.5 * _size._x;
+    if (position._x > 0)
        xCorner *= -1;
-    double yCorner = 0.5 * _size.y();
-    if (position.y()>0)
+    double yCorner = 0.5 * _size._y;
+    if (position._y > 0)
        yCorner *= -1;
     final Vector3D fartherCorner = new Vector3D(xCorner, yCorner, 0.0);
     return position.sub(fartherCorner).length();

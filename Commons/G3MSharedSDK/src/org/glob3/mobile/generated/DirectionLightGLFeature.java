@@ -11,7 +11,7 @@ public class DirectionLightGLFeature extends GLFeature
   
     Vector3D dirN = dir.normalized();
   
-    _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float)dirN.x(), (float)dirN.y(), (float)dirN.z());
+    _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x, (float) dirN._y, (float) dirN._z);
   
     _values.addUniformValue(GPUUniformKey.LIGHT_DIRECTION, _lightDirectionUniformValue, false);
     _values.addUniformValue(GPUUniformKey.LIGHT_COLOR, new GPUUniformValueVec4Float(lightColor), false);

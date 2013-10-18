@@ -591,7 +591,10 @@ public class Camera
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
     final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
   
-    System.out.printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n", normal.x(), normal.y(), normal.z(), north2D.x(), north2D.y(), up2D.x(), up2D.y());
+  //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+  //         normal._x, normal._y, normal._z,
+  //         north2D._x, north2D._y,
+  //         up2D._x, up2D._y);
   
     return up2D.signedAngleBetween(north2D, normal);
   }
