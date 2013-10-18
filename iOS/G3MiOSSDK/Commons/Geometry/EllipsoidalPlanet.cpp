@@ -541,15 +541,6 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
   const Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
   const MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(P1.sub(rotatedP0));
   return traslation.multiply(rotation);
-  
-  
-  /*MutableMatrix44D M2 = rotation.multiply(MutableMatrix44D::createTranslationMatrix(P1.sub(rotatedP0)));
-  MutableMatrix44D M3 = MutableMatrix44D::createTranslationMatrix(P1.sub(rotatedP0)).multiply(rotation);
-  const Vector3D finalP0 = rotatedP0.transformedBy(MutableMatrix44D::createTranslationMatrix(P1.sub(rotatedP0)), 1);
-  const Vector3D final2P0 = P0.transformedBy(M2, 1);
-  const Vector3D final3P0 = P0.transformedBy(M3, 1);
-  printf ("------------ratio = %f %f %f\n", P1.x()/rotatedP0.x(), P1.y()/rotatedP0.y(), P1.z()/rotatedP0.z());
-  return rotation;*/
 }
 
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
