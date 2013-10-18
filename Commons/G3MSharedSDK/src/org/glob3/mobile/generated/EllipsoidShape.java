@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromGeodetic;
 //class FloatBufferBuilderFromCartesian2D;
 //class FloatBufferBuilderFromCartesian3D;
+//class TextureIDReference;
 
 //class IGLTextureId;
 
@@ -137,13 +138,13 @@ public class EllipsoidShape extends AbstractMeshShape
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
     Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, 1, true, _withNormals? normals.create() : null);
   
-    final IGLTextureId texId = getTextureId(rc);
+    final TextureIDReference texId = getTextureId(rc);
     if (texId == null)
     {
       return im;
     }
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   
@@ -151,25 +152,31 @@ public class EllipsoidShape extends AbstractMeshShape
 
   private boolean _textureRequested;
   private IImage _textureImage;
-  private IGLTextureId getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureId(G3MRenderContext rc)
   {
-    if (_textureImage == null)
+  
+    if (_texId == null)
     {
-      return null;
+      if (_textureImage == null)
+      {
+        return null;
+      }
+  
+      _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+  
+      rc.getFactory().deleteImage(_textureImage);
+      _textureImage = null;
     }
   
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
-  
-    rc.getFactory().deleteImage(_textureImage);
-    _textureImage = null;
-  
-    if (texId == null)
+    if (_texId == null)
     {
       rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
     }
   
-    return texId;
+    return _texId;
   }
+
+  private final TextureIDReference _texId;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -185,7 +192,7 @@ public class EllipsoidShape extends AbstractMeshShape
     final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid.getRadii()));
     final Sector sector = new Sector(Sector.fullSphere());
   
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+    //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
   
@@ -254,6 +261,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
+     _texId = null;
 
   }
 
@@ -276,6 +284,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
+     _texId = null;
 
   }
 
@@ -287,6 +296,9 @@ public class EllipsoidShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    if (_texId != null)
+       _texId.dispose(); //Releasing texture
   
     super.dispose();
   
@@ -302,10 +314,10 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-  //  MutableMatrix44D* M = createTransformMatrix(_planet);
-  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
-  //  delete M;
-  //  return transformedQuadric.intersectionsDistances(origin, direction);
+    //  MutableMatrix44D* M = createTransformMatrix(_planet);
+    //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+    //  delete M;
+    //  return transformedQuadric.intersectionsDistances(origin, direction);
     return new java.util.ArrayList<Double>();
   }
 

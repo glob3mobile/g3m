@@ -13,6 +13,6 @@ public interface SurfaceElevationProvider
 
   void addListener(Geodetic2D position, SurfaceElevationListener listener);
 
-  void removeListener(SurfaceElevationListener listener);
+  boolean removeListener(SurfaceElevationListener listener);
 
 }

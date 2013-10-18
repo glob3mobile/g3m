@@ -3,7 +3,7 @@ public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;
 
-  private IGLTextureId _glTextureId;
+  private TextureIDReference _glTextureId;
 
   private boolean _initialized;
 
@@ -12,8 +12,6 @@ public class LazyTextureMapping extends TextureMapping
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
 
-  private TexturesHandler _texturesHandler;
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  LazyTextureMapping operator =(LazyTextureMapping that);
 
@@ -21,20 +19,14 @@ public class LazyTextureMapping extends TextureMapping
 //  LazyTextureMapping(LazyTextureMapping that);
   private void releaseGLTextureId()
   {
-    if (_texturesHandler != null)
-    {
-      if (_glTextureId != null)
-      {
-        _texturesHandler.releaseGLTextureId(_glTextureId);
-        _glTextureId = null;
-      }
-    }
+    _glTextureId = null;
+    _glTextureId = null;
   }
 
   private final boolean _transparent;
 
 
-  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
+  public LazyTextureMapping(LazyTextureMappingInitializer initializer, boolean ownedTexCoords, boolean transparent)
   {
      _initializer = initializer;
      _glTextureId = null;
@@ -42,7 +34,6 @@ public class LazyTextureMapping extends TextureMapping
      _texCoords = null;
      _translation = new MutableVector2D(0,0);
      _scale = new MutableVector2D(1,1);
-     _texturesHandler = texturesHandler;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
   }
@@ -70,7 +61,7 @@ public class LazyTextureMapping extends TextureMapping
     return _glTextureId != null;
   }
 
-  public final void setGLTextureId(IGLTextureId glTextureId)
+  public final void setGLTextureId(TextureIDReference glTextureId)
   {
     releaseGLTextureId();
     _glTextureId = glTextureId;
@@ -80,7 +71,7 @@ public class LazyTextureMapping extends TextureMapping
 //  GLGlobalState bind(G3MRenderContext rc, GLGlobalState parentState, GPUProgramState progState);
 
 
-  public final IGLTextureId getGLTextureId()
+  public final TextureIDReference getGLTextureId()
   {
     return _glTextureId;
   }
@@ -117,11 +108,11 @@ public class LazyTextureMapping extends TextureMapping
       if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
       {
   
-        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
       }
   
     }

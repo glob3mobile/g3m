@@ -38,9 +38,9 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   private boolean initMesh(G3MRenderContext rc)
   {
-    IGLTextureId texId = null;
+    TextureIDReference texId = null;
   
-    texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
+    texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   
     rc.getFactory().deleteImage(_image);
     _image = null;
@@ -68,7 +68,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
     DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, false);
+    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
     _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   

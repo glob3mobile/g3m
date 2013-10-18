@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class SimpleTextureMapping extends TextureMapping
 {
-  private IGLTextureId _glTextureId;
+  private TextureIDReference _glTextureId;
 
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
@@ -13,19 +13,21 @@ public class SimpleTextureMapping extends TextureMapping
 
   private void releaseGLTextureId()
   {
-    if (_texturesHandler != null)
+  
+    if (_glTextureId != null)
     {
-      if (_glTextureId != null)
-      {
-        _texturesHandler.releaseGLTextureId(_glTextureId);
-        _glTextureId = null;
-      }
+      _glTextureId = null;
+      _glTextureId = null;
+    }
+    else
+    {
+      ILogger.instance().logError("Releasing invalid simple texture mapping");
     }
   }
   private TexturesHandler _texturesHandler;
 
 
-  public SimpleTextureMapping(IGLTextureId glTextureId, TexturesHandler texturesHandler, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
+  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
@@ -33,7 +35,6 @@ public class SimpleTextureMapping extends TextureMapping
      _scale = new MutableVector2D(1, 1);
      _ownedTexCoords = ownedTexCoords;
      _isTransparent = isTransparent;
-     _texturesHandler = texturesHandler;
 
   }
 
@@ -58,7 +59,7 @@ public class SimpleTextureMapping extends TextureMapping
 
   public final IGLTextureId getGLTextureId()
   {
-    return _glTextureId;
+    return _glTextureId.getID();
   }
 
   public final IFloatBuffer getTexCoords()
@@ -89,11 +90,11 @@ public class SimpleTextureMapping extends TextureMapping
   
       if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId, _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
       }
     }
   }

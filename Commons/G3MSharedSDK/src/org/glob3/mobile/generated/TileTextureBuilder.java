@@ -247,13 +247,15 @@ public class TileTextureBuilder extends RCObject
       {
         final boolean isMipmap = false;
 
-        final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
+        final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, isMipmap);
 
         if (glTextureId != null)
         {
           if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
           {
-            _texturesHandler.releaseGLTextureId(glTextureId);
+            if (glTextureId != null)
+               glTextureId.dispose();
+            //_texturesHandler->releaseGLTextureId(glTextureId);
           }
         }
       }
@@ -391,15 +393,17 @@ public class TileTextureBuilder extends RCObject
     {
       final boolean ownedTexCoords = true;
       final boolean transparent = false;
-      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), _texturesHandler, ownedTexCoords, transparent);
+      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), ownedTexCoords, transparent);
 
       if (ancestor != _tile)
       {
-        final IGLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
+        final TextureIDReference glTextureId = _texturizer.getTopLevelTextureIdForTile(ancestor);
         if (glTextureId != null)
         {
-          _texturesHandler.retainGLTextureId(glTextureId);
-          mapping.setGLTextureId(glTextureId);
+          TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+
+//          _texturesHandler->retainGLTextureId(glTextureId);
+          mapping.setGLTextureId(glTextureIdRetainedCopy);
           fallbackSolved = true;
         }
       }

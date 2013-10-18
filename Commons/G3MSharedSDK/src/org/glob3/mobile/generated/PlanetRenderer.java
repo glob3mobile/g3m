@@ -784,9 +784,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _elevationListenersTree.add(position, listener);
   }
 
-  public final void removeListener(SurfaceElevationListener listener)
+  public final boolean removeListener(SurfaceElevationListener listener)
   {
-    _elevationListenersTree.remove(listener);
+    return _elevationListenersTree.remove(listener);
   }
 
   public final void sectorElevationChanged(ElevationData elevationData)

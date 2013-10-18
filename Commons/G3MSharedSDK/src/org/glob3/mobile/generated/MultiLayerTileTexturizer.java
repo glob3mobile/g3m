@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class LeveledTexturedMesh;
 //class IFloatBuffer;
 //class TileRasterizer;
+//class TextureIDReference;
 
 
 public class MultiLayerTileTexturizer extends TileTexturizer
@@ -149,7 +150,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final IGLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
+    final TextureIDReference glTextureId = ancestorMesh.getTopLevelTextureId();
     if (glTextureId == null)
     {
       return;
@@ -162,18 +163,23 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     }
   
     final int level = tile._level - ancestorTile._level;
-    _texturesHandler.retainGLTextureId(glTextureId);
-    if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
+  //  _texturesHandler->retainGLTextureId(glTextureId);
+  
+    final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+  
+    if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
-      _texturesHandler.releaseGLTextureId(glTextureId);
+  //    _texturesHandler->releaseGLTextureId(glTextureId);
+      if (glTextureIdRetainedCopy != null)
+         glTextureIdRetainedCopy.dispose();
     }
   }
 
-  public final IGLTextureId getTopLevelGLTextureIdForTile(Tile tile)
+  public final TextureIDReference getTopLevelTextureIdForTile(Tile tile)
   {
     LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
   
-    return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
+    return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
