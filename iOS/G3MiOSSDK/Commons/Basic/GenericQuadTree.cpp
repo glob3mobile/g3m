@@ -237,13 +237,13 @@ bool GenericQuadTree_Node::remove(const void* element) {
 
           //Removing all children if none has an item
           int nChild = 0;
-          for (int i = 0; i < 4; i++) {
-            nChild += _children[i]->getSubtreeNElements();
+          for (int j = 0; j < 4; j++) {
+            nChild += _children[j]->getSubtreeNElements();
           }
 
           if (nChild == 0) {
-            for (int i = 0; i < 4; i++) {
-              delete _children[i];
+            for (int j = 0; j < 4; j++) {
+              delete _children[j];
             }
             delete [] _children;
             _children = NULL;

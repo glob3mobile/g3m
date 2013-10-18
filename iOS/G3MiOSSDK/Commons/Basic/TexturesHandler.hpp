@@ -161,18 +161,10 @@ private:
   std::vector<TextureHolder*> _textureHolders;
 
   GL* const _gl;
-
   const bool _verbose;
-
   //void showHolders(const std::string& message) const;
 
   const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
-
-  friend class TextureIDReference;
-
-  void releaseGLTextureId(const IGLTextureId* glTextureId);
-
-  void retainGLTextureId(const IGLTextureId* glTextureId);
 
 public:
 
@@ -191,7 +183,9 @@ public:
                                      bool hasMipMap);
 
 
-
+  //This two methods are supposed to be accessed only by TextureIDReference class
+  void releaseGLTextureId(const IGLTextureId* glTextureId);
+  void retainGLTextureId(const IGLTextureId* glTextureId);
 };
 
 #endif

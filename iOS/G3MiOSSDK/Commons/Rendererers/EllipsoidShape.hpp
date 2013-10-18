@@ -68,7 +68,12 @@ private:
   IImage* _textureImage;
   const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
+#ifdef C_CODE
   const TextureIDReference* _texId;
+#endif
+#ifdef JAVA_CODE
+  TextureIDReference _texId;
+#endif
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
