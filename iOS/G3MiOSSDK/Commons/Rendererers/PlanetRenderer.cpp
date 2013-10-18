@@ -27,6 +27,7 @@
 #include "ElevationData.hpp"
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
+#include "Sector.hpp"
 
 #include <algorithm>
 
@@ -136,7 +137,7 @@ _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
-_renderedSector(new Sector(renderedSector)),
+_renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true)
 {
@@ -364,7 +365,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
 
-      if (sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
+      if (_renderedSector == NULL || sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
         Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
         if (parameters->_firstLevel == 0) {
           _firstLevelTiles.push_back(tile);
@@ -621,7 +622,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tessellator,
                    _tileRasterizer,
                    _layerSet,
-                   *_renderedSector,
+                   _renderedSector,
                    _firstRender, /* if first render, force full render */
                    _texturePriority,
                    dpiFactor,
@@ -659,7 +660,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _tessellator,
                      _tileRasterizer,
                      _layerSet,
-                     *_renderedSector,
+                     _renderedSector,
                      _firstRender, /* if first render, force full render */
                      _texturePriority,
                      dpiFactor,
@@ -788,9 +789,15 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
 }
 
 void PlanetRenderer::setRenderedSector(const Sector& sector) {
-  if (!_renderedSector->isEquals(sector)) {
+  if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
+      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))){
     delete _renderedSector;
-    _renderedSector = new Sector(sector);
+
+    if (sector.isEquals(Sector::fullSphere())){
+      _renderedSector = NULL;
+    } else{
+      _renderedSector = new Sector(sector);
+    }
   }
 
   _tessellator->setRenderedSector(sector);
