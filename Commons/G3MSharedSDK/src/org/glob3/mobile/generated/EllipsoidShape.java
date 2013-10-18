@@ -176,7 +176,7 @@ public class EllipsoidShape extends AbstractMeshShape
     return _texId;
   }
 
-  private final TextureIDReference _texId;
+  TextureIDReference _texId;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -297,8 +297,7 @@ public class EllipsoidShape extends AbstractMeshShape
     if (_borderColor != null)
        _borderColor.dispose();
   
-    if (_texId != null)
-       _texId.dispose(); //Releasing texture
+    _texId = null; //Releasing texture
   
     super.dispose();
   
