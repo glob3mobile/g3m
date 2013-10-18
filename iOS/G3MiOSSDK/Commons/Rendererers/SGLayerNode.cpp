@@ -144,8 +144,7 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
   }
   state->clearGLFeatureGroup(COLOR_GROUP);
 
-  state->addGLFeature(new TextureIDGLFeature(textureId,
-                                               false, 0,0), false);
+  state->addGLFeature(new TextureIDGLFeature(textureId), false);
 
 
   return true;
