@@ -157,6 +157,10 @@ void Camera::print() {
 const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
+  
+  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n", normal.x(), normal.y(), normal.z(),
+         north2D.x(), north2D.y(), up2D.x(), up2D.y());
+  
   return up2D.signedAngleBetween(north2D, normal);
 }
 
@@ -189,19 +193,53 @@ void Camera::setPitch(const Angle& angle) {
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d)
 {
+  printf ("pitch1 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);
+
+  
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
+  
+  
   setPitch(Angle::zero());
 
-  const double dist = getGeodeticPosition()._height - g3d._height;
+  printf ("pitch2 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);
+  
+
+
+  //const double dist = getGeodeticPosition()._height - g3d._height;
   
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
   
-  moveForward(dist);
+  printf ("pitch3 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);
+  
+
+  
+  /*moveForward(dist);
+  
+  printf ("pitch4 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);*/
+
   
   setHeading(heading);
+  
+  printf ("pitch5 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);
+
   setPitch(pitch);
+  
+  printf ("pitch6 = %f  head=%f   pos=%f, %f, %f\n", getPitch()._degrees, getHeading()._degrees,
+          getGeodeticPosition()._latitude._degrees, getGeodeticPosition()._longitude._degrees,
+          getGeodeticPosition()._height);
+
 }
 
 
