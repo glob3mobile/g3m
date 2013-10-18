@@ -337,8 +337,8 @@ public class FlatPlanet extends Planet
 
   public final MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination)
   {
-    final Vector3D P0 = toCartesian(origin.asGeodetic2D());
-    final Vector3D P1 = toCartesian(destination.asGeodetic2D());
+    final Vector3D P0 = toCartesian(origin);
+    final Vector3D P1 = toCartesian(destination);
     return MutableMatrix44D.createTranslationMatrix(P1.sub(P0));
   }
 

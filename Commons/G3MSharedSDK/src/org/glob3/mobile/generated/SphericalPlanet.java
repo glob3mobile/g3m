@@ -595,7 +595,10 @@ public class SphericalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     final Angle angle = P0.angleBetween(P1);
-    return MutableMatrix44D.createRotationMatrix(angle, axis);
+    final MutableMatrix44D rotation = MutableMatrix44D.createRotationMatrix(angle, axis);
+    final Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
+    final MutableMatrix44D traslation = MutableMatrix44D.createTranslationMatrix(P1.sub(rotatedP0));
+    return traslation.multiply(rotation);
   }
 
   public final Vector3D getNorth()
