@@ -240,7 +240,6 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-
   [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
@@ -333,10 +332,10 @@ public:
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
-//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer() );
+//  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer(builder.getPlanet()) );
 //
 //  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-//                        new SampleSymbolizer());
+//                        new SampleSymbolizer(builder.getPlanet()));
 
 //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
 //                                               new ToggleGEORendererTask(geoRenderer)));
@@ -440,10 +439,10 @@ public:
 
   void onTerrainTouch(MapBooBuilder*         builder,
                       const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) { }
-
 };
 
 
@@ -475,7 +474,7 @@ public:
 
 - (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 6.0f;
+  float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   //ElevationDataProvider* elevationDataProvider = NULL;
@@ -536,6 +535,16 @@ public:
   return GPUProgramSources([name UTF8String], vertexSource, fragmentSource);
 }
 
+class TestMeshLoadListener : public MeshLoadListener {
+public:
+  void onBeforeAddMesh(Mesh* mesh) {
+  }
+
+  void onAfterAddMesh(Mesh* mesh) {
+  }
+
+};
+
 - (void) initCustomizedWithBuilder
 {
 
@@ -553,9 +562,9 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
 
   const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
-  //builder.setPlanet(Planet::createSphericalEarth());
-  //  builder.setPlanet(Planet::createFlatEarth());
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -593,6 +602,17 @@ public:
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+
+//  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
+//                                   10,
+//                                   new TestMeshLoadListener(),
+//                                   true);
+  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+                                   2,
+                                   0,
+                                   new TestMeshLoadListener(),
+                                   true);
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
@@ -692,7 +712,7 @@ public:
   //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
   //Draw light direction
-  if (true) {
+  if (false) {
 
     Vector3D lightDir = Vector3D(100000, 0,0);
     //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
@@ -1022,11 +1042,23 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
+
+//  const std::string& mapKey,
+//  const TimeInterval& timeToCache,
+//  bool readExpired = true,
+//  int initialLevel = 1,
+//  int maxLevel = 19,
+//  LayerCondition* condition = NULL
+  if (true) {
+    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+                                       TimeInterval::fromDays(30)));
+  }
+
 
   const bool useCartoDB = false;
   if (useCartoDB) {
@@ -1545,8 +1577,8 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
 
-    const URL textureURL("file:///world.jpg", false);
-
+//    const URL textureURL("file:///world.jpg", false);
+//
   const double factor = 2e5;
   const Vector3D radius1(factor, factor, factor);
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
@@ -1555,7 +1587,7 @@ public:
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
                                            Angle::fromDegrees(10),
-                                           radiusBox.z()/2),
+                                           radiusBox._z/2),
                             ABSOLUTE,
                             planet,
                             radiusBox,
@@ -1598,7 +1630,7 @@ public:
                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
                                           );
     shapesRenderer->addShape(mercator1);
-  
+
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
   //                                                       radius._x * 1.1),
@@ -2402,6 +2434,17 @@ public:
       //testWebSocket(context);
 
       testCanvas(context->getFactory());
+      
+      
+      if (false) {
+        [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                       Geodetic3D(Angle::fromDegrees(-80),Angle::fromDegrees(-150),50000),
+                                                       Geodetic3D(Angle::fromDegrees(40.032213257223013159),Angle::fromDegrees(-3.603964137481248553),1139.1668803810473491),
+                                                       Angle::fromDegrees(87),
+                                                       Angle::fromDegrees(34),
+                                                       Angle::fromDegrees(20),
+                                                       Angle::fromDegrees(45));
+      }
 
 
       if (false) {
@@ -2433,7 +2476,7 @@ public:
 
       if (false) { //Incomplete world
 
-        int time = 5; //SECS
+        int time = 15; //SECS
 
         class RenderedSectorTask: public GTask{
           G3MWidget_iOS* _iosWidget;
@@ -2478,6 +2521,7 @@ public:
                                                 10000),
                                      true);
 
+          /*
           const double fromDistance = 75000;
           const double toDistance   = 18750;
 
@@ -2491,6 +2535,7 @@ public:
                              fromDistance, toDistance,
                              fromAzimuth,  toAzimuth,
                              fromAltitude, toAltitude);
+           */
         }
       };
 
@@ -2563,7 +2608,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
 //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2671,7 +2716,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
 
         Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
                                                    Angle::fromDegrees(-15.431389),

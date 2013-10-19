@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShapeSymbolizerActivity" >
+
+        <RelativeLayout 
+    android:id="@+id/g3mWidgetHolder"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".SimplestRasterActivity" >
+    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelUSPopulation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+              android:padding="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/uspopulation"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>

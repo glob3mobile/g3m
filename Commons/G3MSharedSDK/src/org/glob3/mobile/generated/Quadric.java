@@ -33,7 +33,7 @@ public class Quadric
   {
     // assuming ellipsoid is centered on origin
     final Vector3D R = ellipsoid.getOneOverRadiiSquared();
-    return new Quadric(new MutableMatrix44D(R.x(), 0, 0, 0, 0, R.y(), 0, 0, 0, 0, R.z(), 0, 0, 0, 0, -1));
+    return new Quadric(new MutableMatrix44D(R._x, 0, 0, 0, 0, R._y, 0, 0, 0, 0, R._z, 0, 0, 0, 0, -1));
 
   }
 
@@ -56,12 +56,12 @@ public class Quadric
   
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    double x0 = origin.x();
-    double y0 = origin.y();
-    double z0 = origin.z();
-    double u = direction.x();
-    double v = direction.y();
-    double w = direction.z();
+    double x0 = origin._x;
+    double y0 = origin._y;
+    double z0 = origin._z;
+    double u = direction._x;
+    double v = direction._y;
+    double w = direction._z;
     double A = Q.get0();
     double D = Q.get1();
     double F = Q.get2();

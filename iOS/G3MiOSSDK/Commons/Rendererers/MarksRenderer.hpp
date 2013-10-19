@@ -110,7 +110,7 @@ public:
     
   }
   
-  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
+//  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

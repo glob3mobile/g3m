@@ -28,6 +28,9 @@ package org.glob3.mobile.generated;
 
 public class GLGlobalState
 {
+
+  private static boolean _initializationAvailable = false;
+
   private boolean _depthTest;
   private boolean _blend;
   private boolean _cullFace;
@@ -76,6 +79,11 @@ public class GLGlobalState
   }
 
 
+  public static void initializationAvailable()
+  {
+    _initializationAvailable = true;
+  }
+
   public GLGlobalState()
   {
      _depthTest = false;
@@ -94,6 +102,12 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
+
+    if (!_initializationAvailable)
+    {
+      ILogger.instance().logError("GLGlobalState creation before it is available.");
+    }
+
   }
 
   public static GLGlobalState newDefault()

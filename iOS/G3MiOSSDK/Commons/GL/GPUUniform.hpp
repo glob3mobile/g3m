@@ -46,7 +46,6 @@ public:
 
 class GPUUniform: public GPUVariable {
 private:
-  const IGLUniformID* _id;
 
   bool _dirty;
 #ifdef C_CODE
@@ -55,11 +54,11 @@ private:
 #ifdef JAVA_CODE
   private GPUUniformValue _value;
 #endif
-  const int _type;
-
-  const GPUUniformKey _key;
 
 public:
+  const IGLUniformID* _id;
+  const int           _type;
+  const GPUUniformKey _key;
 
   virtual ~GPUUniform() {
     delete _id;
@@ -85,12 +84,12 @@ public:
   {
   }
 
-  const std::string getName() const { return _name; }
-  const IGLUniformID* getID() const { return _id; }
-  int getType() const { return _type; }
+//  const std::string getName() const { return _name; }
+//  const IGLUniformID* getID() const { return _id; }
+//  int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   const GPUUniformValue* getSetValue() const { return _value; }
-  GPUUniformKey getKey() const { return _key;}
+//  GPUUniformKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -192,8 +191,9 @@ public:
 };
 ////////////////////////////////////////////////////////////
 class GPUUniformValueVec3Float:public GPUUniformValue{
+protected:
+  float _x, _y, _z;
 public:
-  const float _x, _y, _z;
 
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
@@ -205,13 +205,6 @@ public:
     GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
-
-  //  GPUUniformValue* copyOrCreate(GPUUniformValue* value) const {
-  //    if (value != NULL) {
-  //      delete value;
-  //    }
-  //      return new GPUUniformValueVec4Float(_x,_y,_z,_w);
-  //  }
 
   std::string description() const{
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -227,6 +220,19 @@ public:
   }
 };
 
+class GPUUniformValueVec3FloatMutable :public GPUUniformValueVec3Float{
+
+public:
+
+  GPUUniformValueVec3FloatMutable(float x, float y, float z):
+  GPUUniformValueVec3Float(x,y,z){}
+
+  void changeValue(float x, float y, float z){
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+};
 
 class GPUUniformVec3Float: public GPUUniform{
 public:

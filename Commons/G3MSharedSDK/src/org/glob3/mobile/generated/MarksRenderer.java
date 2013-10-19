@@ -42,6 +42,69 @@ public class MarksRenderer extends LeafRenderer
 
   private GLState _glState;
 
+
+  //void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent) {
+  //
+  //  if ( touchEvent->getType() == DownUp ) {
+  //    
+  //    if (_lastCamera != NULL) {
+  //      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
+  //      const Planet* planet = ec->getPlanet();
+  //      
+  //      double minSqDistance = IMathUtils::instance()->maxDouble();
+  //      Mark* nearestMark = NULL;
+  //      
+  //      const int marksSize = _marks.size();
+  //      for (int i = 0; i < marksSize; i++) {
+  //        Mark* mark = _marks[i];
+  //        
+  //        if (!mark->isReady()) {
+  //          continue;
+  //        }
+  //        
+  //        if (!mark->isRendered()) {
+  //          continue;
+  //        }
+  //        
+  //        const int textureWidth = mark->getTextureWidth();
+  //        if (textureWidth <= 0) {
+  //          continue;
+  //        }
+  //        
+  //        const int textureHeight = mark->getTextureHeight();
+  //        if (textureHeight <= 0) {
+  //          continue;
+  //        }
+  //        
+  //        const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
+  //        const Vector2F markPixelF = _lastCamera->point2Pixel(*cartesianMarkPosition);
+  //        const Vector2I markPixel((int)markPixelF._x, (int)markPixelF._y);
+  //        
+  //        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
+  //                                         markPixel._y - (textureHeight / 2),
+  //                                         textureWidth,
+  //                                         textureHeight);
+  //        
+  //        if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
+  //          const double distance = markPixel.sub(touchedPixel).squaredLength();
+  //          if (distance < minSqDistance) {
+  //            nearestMark = mark;
+  //            minSqDistance = distance;
+  //          }
+  //        }
+  //      }
+  //      
+  //      if (nearestMark != NULL) {
+  //        if (!nearestMark->touched()) {
+  //          if (_markTouchListener != NULL) {
+  //            _markTouchListener->touchedMark(nearestMark);
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
+  
   private void updateGLState(G3MRenderContext rc)
   {
     final Camera cam = rc.getCurrentCamera();
@@ -348,75 +411,5 @@ public class MarksRenderer extends LeafRenderer
 
   }
 
-  public final void onTouchEventRecived(G3MEventContext ec, TouchEvent touchEvent)
-  {
-  
-    if (touchEvent.getType() == TouchEventType.DownUp)
-    {
-  
-      if (_lastCamera != null)
-      {
-        final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
-        final Planet planet = ec.getPlanet();
-  
-        double minSqDistance = IMathUtils.instance().maxDouble();
-        Mark nearestMark = null;
-  
-        final int marksSize = _marks.size();
-        for (int i = 0; i < marksSize; i++)
-        {
-          Mark mark = _marks.get(i);
-  
-          if (!mark.isReady())
-          {
-            continue;
-          }
-  
-          if (!mark.isRendered())
-          {
-            continue;
-          }
-  
-          final int textureWidth = mark.getTextureWidth();
-          if (textureWidth <= 0)
-          {
-            continue;
-          }
-  
-          final int textureHeight = mark.getTextureHeight();
-          if (textureHeight <= 0)
-          {
-            continue;
-          }
-  
-          final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
-          final Vector2F markPixelF = _lastCamera.point2Pixel(cartesianMarkPosition);
-          final Vector2I markPixel = new Vector2I((int)markPixelF._x, (int)markPixelF._y);
-  
-          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
-  
-          if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
-          {
-            final double distance = markPixel.sub(touchedPixel).squaredLength();
-            if (distance < minSqDistance)
-            {
-              nearestMark = mark;
-              minSqDistance = distance;
-            }
-          }
-        }
-  
-        if (nearestMark != null)
-        {
-          if (!nearestMark.touched())
-          {
-            if (_markTouchListener != null)
-            {
-              _markTouchListener.touchedMark(nearestMark);
-            }
-          }
-        }
-      }
-    }
-  }
+//  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 }

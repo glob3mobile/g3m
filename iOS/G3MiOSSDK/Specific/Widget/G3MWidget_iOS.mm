@@ -69,7 +69,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
-  SceneLighting* sceneLighting = new DefaultSceneLighting();
+  SceneLighting* sceneLighting = new CameraFocusSceneLighting();
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   

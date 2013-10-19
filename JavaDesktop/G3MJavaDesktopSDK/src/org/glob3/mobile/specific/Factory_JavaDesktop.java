@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -126,6 +127,12 @@ public class Factory_JavaDesktop
    public IFloatBuffer createFloatBuffer(final float[] array,
                                          final int length) {
       return new FloatBuffer_JavaDesktop(array, length);
+   }
+
+
+   @Override
+   protected IDeviceInfo createDeviceInfo() {
+      throw new RuntimeException("Not yet implemented");
    }
 
 

@@ -352,7 +352,7 @@ public class LayerSet
   
     if (first)
     {
-      errors.add("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
+      errors.add("Can't find any enabled Layer");
       return null;
     }
   

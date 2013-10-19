@@ -70,23 +70,7 @@ public:
   bool isZero() const {
     return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
-  
-//  double x() const {
-//    return _x;
-//  }
-//  
-//  double y() const {
-//    return _y;
-//  }
-//  
-//  double z() const {
-//    return _z;
-//  }
-//  
-//  double w() const {
-//    return _w;
-//  }
-  
+    
   const std::string description() const;
 
   Vector4D transformedBy(const MutableMatrix44D &m) const;

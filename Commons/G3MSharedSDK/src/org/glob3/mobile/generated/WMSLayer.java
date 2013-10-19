@@ -113,7 +113,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -135,7 +135,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -156,6 +156,12 @@ public class WMSLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
+    final String path = _mapServerURL.getPath();
+    if (path.length() == 0)
+    {
+      return petitions;
+    }
+  
     final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
@@ -173,7 +179,7 @@ public class WMSLayer extends Layer
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
      //Server name
-    String req = _mapServerURL.getPath();
+    String req = path;
      if (req.charAt(req.length() - 1) != '?')
      {
         req += '?';

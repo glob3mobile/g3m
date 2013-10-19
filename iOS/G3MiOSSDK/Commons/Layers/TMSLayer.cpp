@@ -33,7 +33,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(sector)
+      ? LayerTilesRenderParameters::createDefaultWGS84(sector)
       : parameters),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),

@@ -203,9 +203,14 @@ public abstract class MapBooBuilder
     {
       return parseWMSLayer(jsonLayer);
     }
+    else if (layerType.compareTo("URLTemplate") == 0)
+    {
+      return parseURLTemplateLayer(jsonLayer);
+    }
     else
     {
       ILogger.instance().logError("Unsupported layer type \"%s\"", layerType);
+      ILogger.instance().logError("%s", jsonBaseObjectLayer.description());
       return null;
     }
   }
@@ -267,17 +272,13 @@ public abstract class MapBooBuilder
     final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
     final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
-    if (imageFormat.compareTo("JPG") == 0)
-    {
-      imageFormat = "image/jpeg";
-    }
-    final String srs = jsonLayer.getAsString("projection", "EPSG_4326");
+    final String srs = jsonLayer.getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
-    if (srs.compareTo("EPSG_4326") == 0)
+    if (srs.compareTo("EPSG:4326") == 0)
     {
-      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere());
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
     }
-    else if (srs.compareTo("EPSG_900913") == 0)
+    else if (srs.compareTo("EPSG:3857") == 0)
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
@@ -287,9 +288,40 @@ public abstract class MapBooBuilder
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonLayer.getAsBoolean("acceptExpiration", false);
   
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, (srs.compareTo("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913", style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
+  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer)
+  {
+    final String urlTemplate = jsonLayer.getAsString("url", "");
+  
+    final boolean transparent = jsonLayer.getAsBoolean("transparent", true);
+  
+    final int firstLevel = (int) jsonLayer.getAsNumber("firstLevel", 1);
+    final int maxLevel = (int) jsonLayer.getAsNumber("maxLevel", 19);
+  
+    final String projection = jsonLayer.getAsString("projection", "EPSG:3857");
+    final boolean mercator = (projection.equals("EPSG:3857"));
+  
+    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
+  
+    final Sector sector = Sector.fromDegrees(lowerLat, lowerLon, upperLat, upperLon);
+  
+    URLTemplateLayer result;
+    if (mercator)
+    {
+      result = URLTemplateLayer.newMercator(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+    }
+    else
+    {
+      result = URLTemplateLayer.newWGS84(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+    }
+  
+    return result;
+  }
 
   private int getApplicationCurrentSceneIndex()
   {
@@ -314,6 +346,17 @@ public abstract class MapBooBuilder
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
   }
 
+//  const std::string parseSceneId(const JSONObject* jsonObject) const;
+
+  //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+  //  if (jsonObject == NULL) {
+  //    ILogger::instance()->logError("Missing Scene ID");
+  //    return "";
+  //  }
+  //
+  //  return jsonObject->getAsString("$oid", "");
+  //}
+  
   private MapBoo_Scene parseScene(JSONObject jsonObject)
   {
     if (jsonObject == null)
@@ -323,13 +366,13 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
-    if (hasWarnings && (_viewType != MapBoo_ViewType.VIEW_PRESENTATION))
-    {
-      return null;
-    }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
+
   private Color parseColor(JSONString jsonColor)
   {
     if (jsonColor == null)
@@ -484,7 +527,7 @@ public abstract class MapBooBuilder
     return s;
   }
 
-  private String getSendNotificationCommand(Camera camera, Geodetic3D position, String message)
+  private String getSendNotificationCommand(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message, URL iconURL)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -502,6 +545,52 @@ public abstract class MapBooBuilder
     isb.addString("\"");
     isb.addString(escapeString(message));
     isb.addString("\"");
+  
+    if (iconURL != null)
+    {
+      isb.addString(",\"iconURL\":");
+      isb.addString("\"");
+      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString("\"");
+    }
+  
+    isb.addString(",\"cameraPosition\":");
+    isb.addString(toCameraPositionJSON(cameraPosition));
+  
+    isb.addString("}");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  private String getSendNotificationCommand(Geodetic2D position, Camera camera, String message, URL iconURL)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addString("notification=");
+  
+    isb.addString("{");
+  
+    isb.addString("\"latitude\":");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString(",\"longitude\":");
+    isb.addDouble(position._longitude._degrees);
+  
+    isb.addString(",\"message\":");
+    isb.addString("\"");
+    isb.addString(escapeString(message));
+    isb.addString("\"");
+  
+    if (iconURL != null)
+    {
+      isb.addString(",\"iconURL\":");
+      isb.addString("\"");
+      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString("\"");
+    }
   
     isb.addString(",\"cameraPosition\":");
     isb.addString(toCameraPositionJSON(camera));
@@ -553,7 +642,39 @@ public abstract class MapBooBuilder
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  private String toCameraPositionJSON(MapBoo_CameraPosition cameraPosition)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
   
+    isb.addString("{");
+  
+    final Geodetic3D position = cameraPosition.getPosition();
+  
+    isb.addString("\"latitude\":");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString(",\"longitude\":");
+    isb.addDouble(position._longitude._degrees);
+  
+    isb.addString(",\"height\":");
+    isb.addDouble(position._height);
+  
+    isb.addString(",\"heading\":");
+    isb.addDouble(cameraPosition.getHeading()._degrees);
+  
+    isb.addString(",\"pitch\":");
+    isb.addDouble(cameraPosition.getPitch()._degrees);
+  
+    isb.addString(",\"animated\":");
+    isb.addBool(true);
+  
+    isb.addString("}");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   private MapBoo_Notification parseNotification(JSONObject jsonObject)
@@ -563,31 +684,103 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), jsonObject.getAsString("message", ""), parseCameraPosition(jsonObject.getAsObject("cameraPosition")));
+    return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), jsonObject.getAsString("message", ""), parseURL(jsonObject.getAsString("iconURL")));
+  }
+  private java.util.ArrayList<MapBoo_Notification> parseNotifications(JSONArray jsonArray)
+  {
+    java.util.ArrayList<MapBoo_Notification> result = new java.util.ArrayList<MapBoo_Notification>();
+  
+    if (jsonArray != null)
+    {
+      final int size = jsonArray.size();
+      for (int i = 0; i < size; i++)
+      {
+        MapBoo_Notification notification = parseNotification(jsonArray.getAsObject(i));
+        if (notification != null)
+        {
+          result.add(notification);
+        }
+      }
+    }
+  
+    return result;
   }
 
-  private void setApplicationNotification(MapBoo_Notification notification)
+  private void addApplicationNotification(MapBoo_Notification notification)
   {
     if (_marksRenderer != null)
     {
-      final String message = notification._message;
-      if (message.length() > 0)
+      final String message = notification.getMessage();
+  
+      final boolean hasMessage = (message.length() > 0);
+      final URL iconURL = notification.getIconURL();
+  
+      final Geodetic2D position = notification.getPosition();
+  
+      boolean newMark = false;
+  
+      if (hasMessage)
       {
-        final Geodetic2D position = notification._position;
-        _marksRenderer.addMark(new Mark(message, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
+        if (iconURL == null)
+        {
+          _marksRenderer.addMark(new Mark(message, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
+        }
+        else
+        {
+          _marksRenderer.addMark(new Mark(message, iconURL, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
+        }
+        newMark = true;
+      }
+      else
+      {
+        if (iconURL != null)
+        {
+          _marksRenderer.addMark(new Mark(iconURL, new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0));
+          newMark = true;
+        }
       }
   
-      final MapBoo_CameraPosition cameraPosition = notification._cameraPosition;
-      if (cameraPosition != null)
+      if (newMark)
       {
-        _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+        final MapBoo_CameraPosition cameraPosition = notification.getCameraPosition();
+        if (cameraPosition != null)
+        {
+          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+        }
       }
     }
   
     if (notification != null)
        notification.dispose();
   }
+  private void addApplicationNotifications(java.util.ArrayList<MapBoo_Notification> notifications)
+  {
+    if (notifications == null)
+    {
+      return;
+    }
+  
+    final int size = notifications.size();
+    for (int i = 0; i < size; i++)
+    {
+      MapBoo_Notification notification = notifications.get(i);
+      if (notification != null)
+      {
+        addApplicationNotification(notification);
+      }
+    }
+  
+    notifications = null;
+  }
 
+  private URL parseURL(JSONString jsonString)
+  {
+    if (jsonString == null)
+    {
+      return null;
+    }
+    return new URL(jsonString.value());
+  }
 
   private MarksRenderer _marksRenderer;
   private MarksRenderer getMarksRenderer()
@@ -598,6 +791,8 @@ public abstract class MapBooBuilder
     }
     return _marksRenderer;
   }
+
+  private boolean _hasParsedApplication;
 
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
   {
@@ -625,6 +820,7 @@ public abstract class MapBooBuilder
      _context = null;
      _webSocket = null;
      _marksRenderer = null;
+     _hasParsedApplication = false;
   
   }
 
@@ -719,7 +915,7 @@ public abstract class MapBooBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new DefaultSceneLighting();
+    return new CameraFocusSceneLighting();
   }
 
   protected final URL createApplicationRestURL()
@@ -733,8 +929,6 @@ public abstract class MapBooBuilder
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
-  
-    //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
   
     return new URL(path, false);
   }
@@ -824,7 +1018,8 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onScenesChanged(_context, _applicationScenes);
+      _applicationListener.onScenesChanged(_context,
+                                           new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
     }
   
     changedCurrentScene();
@@ -935,6 +1130,7 @@ public abstract class MapBooBuilder
   
             setApplicationTimestamp(timestamp);
             saveApplicationData();
+            setHasParsedApplication();
           }
   
           final JSONNumber jsonCurrentSceneIndex = jsonObject.getAsNumber("currentSceneIndex");
@@ -945,10 +1141,16 @@ public abstract class MapBooBuilder
   
           if (_enableNotifications)
           {
+            final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
+            if (jsonNotifications != null)
+            {
+              addApplicationNotifications(parseNotifications(jsonNotifications));
+            }
+  
             final JSONObject jsonNotification = jsonObject.getAsObject("notification");
             if (jsonNotification != null)
             {
-              setApplicationNotification(parseNotification(jsonNotification));
+              addApplicationNotification(parseNotification(jsonNotification));
             }
           }
         }
@@ -1039,22 +1241,52 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final boolean onTerrainTouch(G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile)
+  public final boolean onTerrainTouch(G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile)
   {
     if (_applicationListener != null)
     {
-      _applicationListener.onTerrainTouch(this, ec, camera, position, tile);
+      _applicationListener.onTerrainTouch(this, ec, pixel, camera, position, tile);
     }
   
     return true;
   }
 
+  /** Private to MapbooBuilder, don't call it */
+  public final void setHasParsedApplication()
+  {
+    _hasParsedApplication = true;
+  }
 
-  public final void sendNotification(Camera camera, Geodetic3D position, String message)
+  /** Private to MapbooBuilder, don't call it */
+  public final boolean hasParsedApplication()
+  {
+    return _hasParsedApplication;
+  }
+
+
+  public final MapBoo_Notification createNotification(Geodetic2D position, Camera camera, String message, URL iconURL)
+  {
+    MapBoo_CameraPosition cameraPosition = new MapBoo_CameraPosition(camera.getGeodeticPosition(), camera.getHeading(), camera.getPitch(), true); // animated
+    return new MapBoo_Notification(position, cameraPosition, message, iconURL);
+  }
+
+  public final void sendNotification(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message, URL iconURL)
   {
     if ((_webSocket != null) && _isApplicationTubeOpen)
     {
-      _webSocket.send(getSendNotificationCommand(camera, position, message));
+      _webSocket.send(getSendNotificationCommand(position, cameraPosition, message, iconURL));
+    }
+    else
+    {
+      ILogger.instance().logError("Can't send notification, websocket disconnected");
+    }
+  }
+
+  public final void sendNotification(Geodetic2D position, Camera camera, String message, URL iconURL)
+  {
+    if ((_webSocket != null) && _isApplicationTubeOpen)
+    {
+      _webSocket.send(getSendNotificationCommand(position, camera, message, iconURL));
     }
     else
     {
@@ -1087,6 +1319,12 @@ public abstract class MapBooBuilder
         break;
       }
     }
+  }
+
+
+  public final URL getServerURL()
+  {
+    return _serverURL;
   }
 
 }

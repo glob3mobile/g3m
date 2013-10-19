@@ -40,7 +40,6 @@ Android/G3MAndroidSDK/gen/
 Android/G3MAndroidSDK/build.xml
 Android/G3MAndroidSDK/local.properties
 Android/G3MAndroidSDK/libs/g3msharedsdk.jar
-Android/G3MAndroidSDK/libs/java_websocket.jar
 
 Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
@@ -60,3 +59,5 @@ WebGL/G3MWebGLTemplate/gwt-unitCache/
 WebGL/G3MWebGLTemplate/war/org.glob3.mobile.G3MWebGLTemplate/
 WebGL/G3MWebGLTemplate/war/WEB-INF/classes/
 WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/
+
+*.xccheckout

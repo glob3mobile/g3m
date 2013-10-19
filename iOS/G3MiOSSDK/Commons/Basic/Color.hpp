@@ -45,6 +45,17 @@ public:
 
   static Color* parse(const std::string& str);
 
+
+  static Color fromRGBA255(const int red,
+                           const int green,
+                           const int blue,
+                           const int alpha) {
+    return Color(red   / 255.0f,
+                 green / 255.0f,
+                 blue  / 255.0f,
+                 alpha / 255.0f);
+  }
+
   static Color fromRGBA(const float red,
                         const float green,
                         const float blue,

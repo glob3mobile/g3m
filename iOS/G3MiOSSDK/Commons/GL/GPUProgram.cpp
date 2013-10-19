@@ -135,7 +135,7 @@ void GPUProgram::getVariables(GL* gl) {
     if (u != NULL) {
       _uniforms[u->getIndex()] = u;
 
-      int code = GPUVariable::getUniformCode(u->getKey());
+      const int code = GPUVariable::getUniformCode(u->_key);
       _uniformsCode = _uniformsCode | code;
     }
 
@@ -154,7 +154,7 @@ void GPUProgram::getVariables(GL* gl) {
     if (a != NULL) {
       _attributes[a->getIndex()] = a;
 
-      int code = GPUVariable::getAttributeCode(a->getKey());
+      const int code = GPUVariable::getAttributeCode(a->_key);
       _attributesCode = _attributesCode | code;
     }
 
@@ -176,7 +176,7 @@ GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
 
 GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->getType() == GLType::glBool()) {
+  if (u!= NULL && u->_type == GLType::glBool()) {
     return (GPUUniformBool*)u;
   }
   return NULL;
@@ -184,7 +184,7 @@ GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
 
 GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->getType() == GLType::glVec2Float()) {
+  if (u!= NULL && u->_type == GLType::glVec2Float()) {
     return (GPUUniformVec2Float*)u;
   }
   return NULL;
@@ -192,7 +192,7 @@ GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string name) 
 
 GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string name) const{
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->getType() == GLType::glVec4Float()) {
+  if (u!= NULL && u->_type == GLType::glVec4Float()) {
     return (GPUUniformVec4Float*)u;
   }
   return NULL;
@@ -200,7 +200,7 @@ GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string name) 
 
 GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string name) const{
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->getType() == GLType::glFloat()) {
+  if (u!= NULL && u->_type == GLType::glFloat()) {
     return (GPUUniformFloat*)u;
   }
   return NULL;
@@ -208,7 +208,7 @@ GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string name) const{
 
 GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string name) const{
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->getType() == GLType::glMatrix4Float()) {
+  if (u!= NULL && u->_type == GLType::glMatrix4Float()) {
     return (GPUUniformMatrix4Float*)u;
   }
   return NULL;
@@ -242,7 +242,7 @@ GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string name, int x
 
 GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string name) const{
   GPUAttributeVec1Float* a = (GPUAttributeVec1Float*)getGPUAttribute(name);
-  if (a!= NULL && a->getSize() == 1 && a->getType() == GLType::glFloat()) {
+  if (a!= NULL && a->_size == 1 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec1Float*)a;
   }
   return NULL;
@@ -251,7 +251,7 @@ GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string na
 
 GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string name) const{
   GPUAttributeVec2Float* a = (GPUAttributeVec2Float*)getGPUAttribute(name);
-  if (a!= NULL && a->getSize() == 2 && a->getType() == GLType::glFloat()) {
+  if (a!= NULL && a->_size == 2 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec2Float*)a;
   }
   return NULL;
@@ -260,7 +260,7 @@ GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string na
 
 GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string name) const{
   GPUAttributeVec3Float* a = (GPUAttributeVec3Float*)getGPUAttribute(name);
-  if (a!= NULL && a->getSize() == 3 && a->getType() == GLType::glFloat()) {
+  if (a!= NULL && a->_size == 3 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec3Float*)a;
   }
   return NULL;
@@ -269,7 +269,7 @@ GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string na
 
 GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string name) const{
   GPUAttributeVec4Float* a = (GPUAttributeVec4Float*)getGPUAttribute(name);
-  if (a!= NULL && a->getSize() == 4 && a->getType() == GLType::glFloat()) {
+  if (a!= NULL && a->_size == 4 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec4Float*)a;
   }
   return NULL;
@@ -377,7 +377,7 @@ GPUAttribute* GPUProgram::getGPUAttribute(int key) const{
 
 GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
   GPUAttribute* a = getGPUAttribute(key);
-  if (a->getType() == GLType::glFloat() && a->getSize() == x) {
+  if (a->_type == GLType::glFloat() && a->_size == x) {
     return a;
   }
   return NULL;

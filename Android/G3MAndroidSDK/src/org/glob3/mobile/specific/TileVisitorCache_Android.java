@@ -17,8 +17,8 @@ public class TileVisitorCache_Android
          implements
             ITileVisitor {
 
-   private long     _debugCounter = 0;
-   final G3MContext _context;
+   private long             _debugCounter = 0;
+   private final G3MContext _context;
 
 
    public TileVisitorCache_Android(final G3MContext context) {

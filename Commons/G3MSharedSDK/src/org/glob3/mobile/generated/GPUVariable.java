@@ -2,11 +2,6 @@ package org.glob3.mobile.generated;
 public class GPUVariable
 {
 
-
-  protected final GPUVariableType _variableType;
-  protected final String _name;
-
-
   public static GPUUniformKey getUniformKey(String name)
   {
   
@@ -167,6 +162,9 @@ public class GPUVariable
   public void dispose()
   {
   }
+
+  public final GPUVariableType _variableType;
+  public final String _name;
 
   public GPUVariable(String name, GPUVariableType type)
   {

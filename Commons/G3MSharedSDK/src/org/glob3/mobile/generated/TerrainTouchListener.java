@@ -20,11 +20,12 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Geodetic3D;
 //class Tile;
+//class Vector2I;
 
 public interface TerrainTouchListener
 {
   void dispose();
 
-  boolean onTerrainTouch(G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile);
+  boolean onTerrainTouch(G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile);
 
 }

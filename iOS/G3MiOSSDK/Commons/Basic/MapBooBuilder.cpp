@@ -47,6 +47,7 @@
 #include "TerrainTouchListener.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "URLTemplateLayer.hpp"
 
 
 const std::string MapBoo_CameraPosition::description() const {
@@ -209,7 +210,8 @@ _applicationCurrentSceneIndex(-1),
 _lastApplicationCurrentSceneIndex(-1),
 _context(NULL),
 _webSocket(NULL),
-_marksRenderer(NULL)
+_marksRenderer(NULL),
+_hasParsedApplication(false)
 {
 
 }
@@ -270,10 +272,12 @@ public:
   }
 
   bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) {
     return _mapBooBuilder->onTerrainTouch(ec,
+                                          pixel,
                                           camera,
                                           position,
                                           tile);
@@ -284,6 +288,38 @@ const std::string MapBooBuilder::escapeString(const std::string& str) const {
   const IStringUtils* su = IStringUtils::instance();
 
   return su->replaceSubstring(str, "\"", "\\\"");
+}
+
+const std::string MapBooBuilder::toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("{");
+
+  const Geodetic3D position = cameraPosition->getPosition();
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"height\":");
+  isb->addDouble( position._height );
+
+  isb->addString(",\"heading\":");
+  isb->addDouble( cameraPosition->getHeading()._degrees );
+
+  isb->addString(",\"pitch\":");
+  isb->addDouble( cameraPosition->getPitch()._degrees );
+
+  isb->addString(",\"animated\":");
+  isb->addBool( true );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 
 const std::string MapBooBuilder::toCameraPositionJSON(const Camera* camera) const {
@@ -316,12 +352,12 @@ const std::string MapBooBuilder::toCameraPositionJSON(const Camera* camera) cons
   const std::string s = isb->getString();
   delete isb;
   return s;
-
 }
 
-const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      camera,
-                                                            const Geodetic3D&  position,
-                                                            const std::string& message) const {
+const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&            position,
+                                                            const MapBoo_CameraPosition* cameraPosition,
+                                                            const std::string&           message,
+                                                            const URL*                   iconURL) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("notification=");
@@ -339,6 +375,51 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      c
   isb->addString( escapeString(message) );
   isb->addString("\"");
 
+  if (iconURL != NULL) {
+    isb->addString(",\"iconURL\":");
+    isb->addString("\"");
+    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString("\"");
+  }
+
+  isb->addString(",\"cameraPosition\":");
+  isb->addString( toCameraPositionJSON(cameraPosition) );
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  position,
+                                                            const Camera*      camera,
+                                                            const std::string& message,
+                                                            const URL*         iconURL) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("notification=");
+
+  isb->addString("{");
+
+  isb->addString("\"latitude\":");
+  isb->addDouble(position._latitude._degrees);
+
+  isb->addString(",\"longitude\":");
+  isb->addDouble(position._longitude._degrees);
+
+  isb->addString(",\"message\":");
+  isb->addString("\"");
+  isb->addString( escapeString(message) );
+  isb->addString("\"");
+
+  if (iconURL != NULL) {
+    isb->addString(",\"iconURL\":");
+    isb->addString("\"");
+    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString("\"");
+  }
+
   isb->addString(",\"cameraPosition\":");
   isb->addString( toCameraPositionJSON(camera) );
 
@@ -349,13 +430,30 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Camera*      c
   return s;
 }
 
-void MapBooBuilder::sendNotification(const Camera*      camera,
-                                     const Geodetic3D&  position,
-                                     const std::string& message) const {
+void MapBooBuilder::sendNotification(const Geodetic2D&            position,
+                                     const MapBoo_CameraPosition* cameraPosition,
+                                     const std::string&           message,
+                                     const URL*                   iconURL) const {
   if ((_webSocket != NULL) && _isApplicationTubeOpen) {
-    _webSocket->send( getSendNotificationCommand(camera,
-                                                 position,
-                                                 message) );
+    _webSocket->send( getSendNotificationCommand(position,
+                                                 cameraPosition,
+                                                 message,
+                                                 iconURL) );
+  }
+  else {
+    ILogger::instance()->logError("Can't send notification, websocket disconnected");
+  }
+}
+
+void MapBooBuilder::sendNotification(const Geodetic2D&  position,
+                                     const Camera*      camera,
+                                     const std::string& message,
+                                     const URL*         iconURL) const {
+  if ((_webSocket != NULL) && _isApplicationTubeOpen) {
+    _webSocket->send( getSendNotificationCommand(position,
+                                                 camera,
+                                                 message,
+                                                 iconURL) );
   }
   else {
     ILogger::instance()->logError("Can't send notification, websocket disconnected");
@@ -363,12 +461,14 @@ void MapBooBuilder::sendNotification(const Camera*      camera,
 }
 
 bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
+                                   const Vector2I&        pixel,
                                    const Camera*          camera,
                                    const Geodetic3D&      position,
                                    const Tile*            tile) {
   if (_applicationListener != NULL) {
     _applicationListener->onTerrainTouch(this,
                                          ec,
+                                         pixel,
                                          camera,
                                          position,
                                          tile);
@@ -507,15 +607,12 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
                                Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
   std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
-  if (imageFormat.compare("JPG") == 0) {
-    imageFormat = "image/jpeg";
-  }
-  const std::string srs = jsonLayer->getAsString("projection", "EPSG_4326");
+  const std::string srs = jsonLayer->getAsString("projection", "EPSG:4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
-  if (srs.compare("EPSG_4326") == 0) {
-    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere());
+  if (srs.compare("EPSG:4326") == 0) {
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere());
   }
-  else if (srs.compare("EPSG_900913") == 0) {
+  else if (srs.compare("EPSG:3857") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
   }
   const bool isTransparent = jsonLayer->getAsBoolean("transparent", false);
@@ -532,7 +629,7 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
                       queryServerVersion,
                       sector,
                       imageFormat,
-                      (srs.compare("EPSG_4326") == 0) ? "EPSG:4326" : "EPSG:900913",
+                      srs,
                       style,
                       isTransparent,
                       NULL,
@@ -541,6 +638,45 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
                       layerTilesRenderParameters);
 }
 
+URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLayer) const {
+  const std::string urlTemplate = jsonLayer->getAsString("url", "");
+
+  const bool transparent = jsonLayer->getAsBoolean("transparent", true);
+
+  const int firstLevel = (int) jsonLayer->getAsNumber("firstLevel", 1);
+  const int maxLevel   = (int) jsonLayer->getAsNumber("maxLevel", 19);
+
+  const std::string projection = jsonLayer->getAsString("projection", "EPSG:3857");
+  const bool mercator = (projection == "EPSG:3857");
+
+  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
+  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
+  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
+  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
+
+  const Sector sector = Sector::fromDegrees(lowerLat, lowerLon,
+                                            upperLat, upperLon);
+
+  URLTemplateLayer* result;
+  if (mercator) {
+    result = URLTemplateLayer::newMercator(urlTemplate,
+                                           sector,
+                                           transparent,
+                                           firstLevel,
+                                           maxLevel,
+                                           TimeInterval::fromDays(30));
+  }
+  else {
+    result = URLTemplateLayer::newWGS84(urlTemplate,
+                                        sector,
+                                        transparent,
+                                        firstLevel,
+                                        maxLevel,
+                                        TimeInterval::fromDays(30));
+  }
+  
+  return result;
+}
 
 Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const {
   if (jsonBaseObjectLayer == NULL) {
@@ -578,8 +714,12 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   else if (layerType.compare("WMS") == 0) {
     return parseWMSLayer(jsonLayer);
   }
+  else if (layerType.compare("URLTemplate") == 0) {
+    return parseURLTemplateLayer(jsonLayer);
+  }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
+    ILogger::instance()->logError("%s", jsonBaseObjectLayer->description().c_str());
     return NULL;
   }
 }
@@ -665,6 +805,15 @@ const MapBoo_CameraPosition* MapBooBuilder::parseCameraPosition(const JSONObject
                                    animated);
 }
 
+//const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+//  if (jsonObject == NULL) {
+//    ILogger::instance()->logError("Missing Scene ID");
+//    return "";
+//  }
+//
+//  return jsonObject->getAsString("$oid", "");
+//}
+
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -672,11 +821,12 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-    return NULL;
-  }
+//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+//    return NULL;
+//  }
 
-  return new MapBoo_Scene(jsonObject->getAsString("name", ""),
+  return new MapBoo_Scene(jsonObject->getAsString("id", ""),
+                          jsonObject->getAsString("name", ""),
                           jsonObject->getAsString("description", ""),
                           parseMultiImage( jsonObject->getAsObject("screenshot") ),
                           parseColor( jsonObject->getAsString("backgroundColor") ),
@@ -686,6 +836,13 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           hasWarnings);
 }
 
+const URL* MapBooBuilder::parseURL(const JSONString* jsonString) const {
+  if (jsonString == NULL) {
+    return NULL;
+  }
+  return new URL(jsonString->value());
+}
+
 MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -693,8 +850,26 @@ MapBoo_Notification* MapBooBuilder::parseNotification(const JSONObject* jsonObje
 
   return new MapBoo_Notification(Geodetic2D::fromDegrees(jsonObject->getAsNumber("latitude",  0),
                                                          jsonObject->getAsNumber("longitude", 0)),
+                                 parseCameraPosition( jsonObject->getAsObject("cameraPosition") ),
                                  jsonObject->getAsString("message", ""),
-                                 parseCameraPosition( jsonObject->getAsObject("cameraPosition") ));
+                                 parseURL( jsonObject->getAsString("iconURL") )
+                                 );
+}
+
+std::vector<MapBoo_Notification*>* MapBooBuilder::parseNotifications(const JSONArray* jsonArray) const {
+  std::vector<MapBoo_Notification*>* result = new std::vector<MapBoo_Notification*>();
+
+  if (jsonArray != NULL) {
+    const int size = jsonArray->size();
+    for (int i = 0; i < size; i++) {
+      MapBoo_Notification* notification = parseNotification( jsonArray->getAsObject(i) );
+      if (notification != NULL) {
+        result->push_back(notification);
+      }
+    }
+  }
+
+  return result;
 }
 
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
@@ -753,6 +928,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
           setApplicationTimestamp(timestamp);
           saveApplicationData();
+          setHasParsedApplication();
         }
 
         const JSONNumber* jsonCurrentSceneIndex = jsonObject->getAsNumber("currentSceneIndex");
@@ -761,9 +937,14 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
         }
 
         if (_enableNotifications) {
+          const JSONArray* jsonNotifications = jsonObject->getAsArray("notifications");
+          if (jsonNotifications != NULL) {
+            addApplicationNotifications( parseNotifications(jsonNotifications) );
+          }
+
           const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
           if (jsonNotification != NULL) {
-            setApplicationNotification( parseNotification(jsonNotification) );
+            addApplicationNotification( parseNotification(jsonNotification) );
           }
         }
       }
@@ -778,23 +959,67 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
 }
 
-void MapBooBuilder::setApplicationNotification(MapBoo_Notification* notification) {
-  if (_marksRenderer != NULL) {
-    const std::string message = notification->_message;
-    if (message.size() > 0) {
-      const Geodetic2D position = notification->_position;
-      _marksRenderer->addMark( new Mark(message,
-                                        Geodetic3D(position, 0),
-                                        ABSOLUTE,
-                                        0) );
+void MapBooBuilder::addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications) {
+  if (notifications == NULL) {
+    return;
+  }
+
+  const int size = notifications->size();
+  for (int i = 0; i < size; i++) {
+    MapBoo_Notification* notification = notifications->at(i);
+    if (notification != NULL) {
+      addApplicationNotification(notification);
     }
-    
-    const MapBoo_CameraPosition* cameraPosition = notification->_cameraPosition;
-    if (cameraPosition != NULL) {
-      _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
-                                            cameraPosition->getPosition(),
-                                            cameraPosition->getHeading(),
-                                            cameraPosition->getPitch());
+  }
+
+  delete notifications;
+}
+
+void MapBooBuilder::addApplicationNotification(MapBoo_Notification* notification) {
+  if (_marksRenderer != NULL) {
+    const std::string message = notification->getMessage();
+
+    const bool hasMessage = (message.size() > 0);
+    const URL* iconURL = notification->getIconURL();
+
+    const Geodetic2D position = notification->getPosition();
+
+    bool newMark = false;
+
+    if (hasMessage) {
+      if (iconURL == NULL) {
+        _marksRenderer->addMark( new Mark(message,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+      }
+      else {
+        _marksRenderer->addMark( new Mark(message,
+                                          *iconURL,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+      }
+      newMark = true;
+    }
+    else {
+      if (iconURL != NULL) {
+        _marksRenderer->addMark( new Mark(*iconURL,
+                                          Geodetic3D(position, 0),
+                                          ABSOLUTE,
+                                          0) );
+        newMark = true;
+      }
+    }
+
+    if (newMark) {
+      const MapBoo_CameraPosition* cameraPosition = notification->getCameraPosition();
+      if (cameraPosition != NULL) {
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                              cameraPosition->getPosition(),
+                                              cameraPosition->getHeading(),
+                                              cameraPosition->getPitch());
+      }
     }
   }
 
@@ -956,7 +1181,8 @@ public:
   }
 
   bool isDone(const G3MContext* context) {
-    return true;
+    return _builder->isApplicationTubeOpen() && _builder->hasParsedApplication();
+    //return true;
   }
 };
 
@@ -1009,8 +1235,6 @@ const URL MapBooBuilder::createApplicationRestURL() const {
   isb->addInt(_applicationTimestamp);
   const std::string path = isb->getString();
   delete isb;
-
-  //  http://mapboo.com/web/applications/2gr3ae0537oddp90mxg?view=runtime&lastTs=38
 
   return URL(path, false);
 }
@@ -1129,6 +1353,14 @@ void MapBooBuilder::saveApplicationData() const {
   //  int                        _applicationCurrentSceneIndex;
   //  int                        _lastApplicationCurrentSceneIndex;
   int __DGD_at_work;
+}
+
+void MapBooBuilder::setHasParsedApplication() {
+  _hasParsedApplication = true;
+}
+
+bool MapBooBuilder::hasParsedApplication() const {
+  return _hasParsedApplication;
 }
 
 void MapBooBuilder::setApplicationTimestamp(const int timestamp) {
@@ -1299,14 +1531,20 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 #endif
 
   if (_applicationListener != NULL) {
+#ifdef C_CODE
     _applicationListener->onScenesChanged(_context, _applicationScenes);
+#endif
+#ifdef JAVA_CODE
+    _applicationListener.onScenesChanged(_context,
+                                         new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+#endif
   }
 
   changedCurrentScene();
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new DefaultSceneLighting();
+  return new CameraFocusSceneLighting();
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {
@@ -1315,7 +1553,7 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
     if (!_isApplicationTubeOpen) {
       _webSocket = NULL;
     }
-    
+
     if (_isApplicationTubeOpen) {
       if (_applicationListener != NULL) {
         _applicationListener->onWebSocketOpen(_context);
@@ -1327,4 +1565,15 @@ void MapBooBuilder::setApplicationTubeOpened(bool open) {
       }
     }
   }
+}
+
+const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  position,
+                                                             const Camera*      camera,
+                                                             const std::string& message,
+                                                             const URL*         iconURL) const {
+  MapBoo_CameraPosition* cameraPosition = new MapBoo_CameraPosition(camera->getGeodeticPosition(),
+                                                                    camera->getHeading(),
+                                                                    camera->getPitch(),
+                                                                    true /* animated */);
+  return new MapBoo_Notification(position, cameraPosition, message, iconURL);
 }

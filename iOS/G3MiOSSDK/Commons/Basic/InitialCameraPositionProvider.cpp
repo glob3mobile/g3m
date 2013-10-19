@@ -12,8 +12,11 @@
 #include "PlanetRenderer.hpp"
 
 Geodetic3D SimpleInitialCameraPositionProvider::getCameraPosition(const Planet* planet,
-                                                                  const PlanetRenderer* planetRenderer,
-                                                                  const Vector2I& viewportExtent) const {
-  return planet->getDefaultCameraPosition(viewportExtent,
-                                          planetRenderer->getRenderedSector());
+                                                                  const PlanetRenderer* planetRenderer) const {
+  const Sector* sector = planetRenderer->getRenderedSector();
+  if (sector == NULL){
+    return planet->getDefaultCameraPosition(Sector::fullSphere());
+  }
+
+  return planet->getDefaultCameraPosition(*sector);
 }

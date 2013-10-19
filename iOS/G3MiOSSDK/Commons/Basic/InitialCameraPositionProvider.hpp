@@ -13,15 +13,13 @@
 
 class PlanetRenderer;
 class Planet;
-class Vector2I;
 
 class InitialCameraPositionProvider{
 public:
 
   virtual ~InitialCameraPositionProvider() {}
   virtual Geodetic3D getCameraPosition(const Planet* planet,
-                                       const PlanetRenderer* planetRenderer,
-                                       const Vector2I& viewportExtent) const = 0;
+                                       const PlanetRenderer* planetRenderer) const = 0;
 };
 
 class SimpleInitialCameraPositionProvider: public InitialCameraPositionProvider{
@@ -29,8 +27,7 @@ class SimpleInitialCameraPositionProvider: public InitialCameraPositionProvider{
 public:
 
   Geodetic3D getCameraPosition(const Planet* planet,
-                               const PlanetRenderer* planetRenderer,
-                               const Vector2I& viewportExtent) const;
+                               const PlanetRenderer* planetRenderer) const;
 };
 
 #endif

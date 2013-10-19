@@ -25,15 +25,13 @@ package org.glob3.mobile.generated;
 
 public abstract class GPUAttributeValue extends RCObject
 {
-  protected final boolean _enabled;
-  protected final int _type;
-  protected final int _attributeSize;
-  protected final int _index;
-  protected final int _stride;
-  protected final boolean _normalized;
-
-  protected final int _arrayElementSize;
-
+  public final boolean _enabled;
+  public final int _type;
+  public final int _attributeSize;
+  public final int _index;
+  public final int _stride;
+  public final boolean _normalized;
+  public final int _arrayElementSize;
 
   public GPUAttributeValue(boolean enabled)
   {
@@ -57,30 +55,13 @@ public abstract class GPUAttributeValue extends RCObject
      _arrayElementSize = arrayElementSize;
   }
 
-  public final int getType()
-  {
-     return _type;
-  }
-  public final int getAttributeSize()
-  {
-     return _attributeSize;
-  }
-  public final int getIndex()
-  {
-     return _index;
-  }
-  public final int getStride()
-  {
-     return _stride;
-  }
-  public final boolean getNormalized()
-  {
-     return _normalized;
-  }
-  public final boolean getEnabled()
-  {
-     return _enabled;
-  }
+//  int getType() const { return _type;}
+//  int getAttributeSize() const { return _attributeSize;}
+//  int getIndex() const { return _index;}
+//  int getStride() const { return _stride;}
+//  bool getNormalized() const { return _normalized;}
+//  bool getEnabled() const { return _enabled;}
+
   public void dispose()
   {
     super.dispose();

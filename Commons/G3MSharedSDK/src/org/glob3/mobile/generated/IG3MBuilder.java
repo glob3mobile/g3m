@@ -415,8 +415,7 @@ public abstract class IG3MBuilder
       mainRenderer = getPlanetRendererBuilder().create();
     }
   
-    int TODO_VIEWPORT;
-    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(new Vector2I(1024,1024), shownSector);
+    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(shownSector);
   //  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
   
     //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
@@ -998,7 +997,8 @@ public abstract class IG3MBuilder
   {
     if (_sceneLighting == null)
     {
-      _sceneLighting = new DefaultSceneLighting();
+      //_sceneLighting = new DefaultSceneLighting();
+      _sceneLighting = new CameraFocusSceneLighting();
     }
     return _sceneLighting;
   }

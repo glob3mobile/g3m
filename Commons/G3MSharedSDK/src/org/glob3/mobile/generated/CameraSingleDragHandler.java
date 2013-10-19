@@ -127,11 +127,13 @@ public class CameraSingleDragHandler extends CameraEventHandler
     if (_useInertia)
     {
       final Touch touch = touchEvent.getTouch(0);
-      Vector2I currPixel = touch.getPos();
-      Vector2I prevPixel = touch.getPrevPos();
-      double desp = currPixel.sub(prevPixel).length();
+      final Vector2I currPixel = touch.getPos();
+      final Vector2I prevPixel = touch.getPrevPos();
+      final double desp = currPixel.sub(prevPixel).length();
   
-      if (cameraContext.getCurrentGesture() == Gesture.Drag && desp>2)
+      final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);
+  
+      if ((cameraContext.getCurrentGesture() == Gesture.Drag) && (desp > delta))
       {
         Effect effect = planet.createEffectFromLastSingleDrag();
         if (effect != null)

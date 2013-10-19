@@ -60,9 +60,9 @@ public:
   }
 
 
-  static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector,
-                                                              const int firstLevel,
-                                                              const int maxLevel) {
+  static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,
+                                                        const int firstLevel,
+                                                        const int maxLevel) {
     const int  topSectorSplitsByLatitude  = 2;
     const int  topSectorSplitsByLongitude = 4;
     const bool mercator = false;
@@ -77,11 +77,11 @@ public:
                                           mercator);
   }
 
-  static LayerTilesRenderParameters* createDefaultNonMercator(const Sector& topSector) {
+  static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector) {
     const int  firstLevel = 0;
     const int  maxLevel = 17;
 
-    return createDefaultNonMercator(topSector, firstLevel, maxLevel);
+    return createDefaultWGS84(topSector, firstLevel, maxLevel);
   }
 
   static LayerTilesRenderParameters* createDefaultMercator(const int firstLevel,

@@ -3,6 +3,7 @@
 package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.LayerSet;
@@ -48,6 +49,9 @@ public class ScenarioTerrainActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       //  builder.setPlanet(Planet.createSphericalEarth());
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+
+      builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
 
 
       final Geodetic2D lower = new Geodetic2D( //

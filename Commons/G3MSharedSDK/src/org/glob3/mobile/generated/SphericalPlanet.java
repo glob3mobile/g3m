@@ -72,9 +72,14 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-    final double cosLatitude = latitude.cosinus();
+  //  const double cosLatitude = latitude.cosinus();
+  //
+  //  return Vector3D(cosLatitude * longitude.cosinus(),
+  //                  cosLatitude * longitude.sinus(),
+  //                  latitude.sinus());
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
-    return new Vector3D(cosLatitude * longitude.cosinus(), cosLatitude * longitude.sinus(), latitude.sinus());
+    return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
@@ -590,7 +595,10 @@ public class SphericalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     final Angle angle = P0.angleBetween(P1);
-    return MutableMatrix44D.createRotationMatrix(angle, axis);
+    final MutableMatrix44D rotation = MutableMatrix44D.createRotationMatrix(angle, axis);
+    final Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
+    final MutableMatrix44D traslation = MutableMatrix44D.createTranslationMatrix(P1.sub(rotatedP0));
+    return traslation.multiply(rotation);
   }
 
   public final Vector3D getNorth()
@@ -601,20 +609,19 @@ public class SphericalPlanet extends Planet
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
   
-    Vector3D pos = nextCamera.getCartesianPosition();
-    Vector3D origin = _origin.asVector3D();
-    double maxDist = _sphere.getRadius() * 5;
-  
-    if (pos.distanceTo(origin) > maxDist)
-    {
-      nextCamera.copyFromForcingMatrixCreation(previousCamera);
-  //    Vector3D pos2 = nextCamera->getCartesianPosition();
-  //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
-    }
+    //  Vector3D pos = nextCamera->getCartesianPosition();
+    //  Vector3D origin = _origin.asVector3D();
+    //  double maxDist = _sphere.getRadius() * 5;
+    //
+    //  if (pos.distanceTo(origin) > maxDist) {
+    //    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    ////    Vector3D pos2 = nextCamera->getCartesianPosition();
+    ////    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+    //  }
   
   }
 
-  public final Geodetic3D getDefaultCameraPosition(Vector2I viewport, Sector shownSector)
+  public final Geodetic3D getDefaultCameraPosition(Sector shownSector)
   {
     final Vector3D asw = toCartesian(shownSector.getSW());
     final Vector3D ane = toCartesian(shownSector.getNE());

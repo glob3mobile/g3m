@@ -21,9 +21,14 @@
 #include "Canvas_iOS.hpp"
 #include "WebSocket_iOS.hpp"
 #import "NSString_CppAdditions.h"
-
+#include "DeviceInfo_iOS.hpp"
 
 class Factory_iOS: public IFactory {
+protected:
+  IDeviceInfo* createDeviceInfo() const {
+    return new DeviceInfo_iOS();
+  }
+
 public:
 
   ITimer* createTimer() const {

@@ -16,6 +16,7 @@ public class MapBooBuilder_ApplicationTubeConnector extends GInitializationTask
 
   public final boolean isDone(G3MContext context)
   {
-    return true;
+    return _builder.isApplicationTubeOpen() && _builder.hasParsedApplication();
+    //return true;
   }
 }

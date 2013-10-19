@@ -389,8 +389,7 @@ void G3MWidget::render(int width, int height) {
     _initialCameraPositionHasBeenSet = true;
 
     Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
-                                                                     _mainRenderer->getPlanetRenderer(),
-                                                                     Vector2I(_width,_height));
+                                                                     _mainRenderer->getPlanetRenderer());
 
     _currentCamera->setGeodeticPosition(g);
     _currentCamera->setHeading(Angle::zero());
@@ -487,7 +486,7 @@ void G3MWidget::render(int width, int height) {
   if (renderStateType == RENDER_READY) {
     _cameraRenderer->render(_renderContext, _rootState);
 
-    _sceneLighting->modifyGLState(_rootState);  //Applying ilumination to rootState
+    _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
   }
 
   if (_selectedRenderer->isEnable()) {

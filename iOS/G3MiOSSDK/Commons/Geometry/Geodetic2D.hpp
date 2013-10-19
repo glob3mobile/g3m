@@ -71,10 +71,13 @@ public:
                                  const Angle& toLongitude) {
     const Angle dLon = toLongitude.sub(fromLongitude);
 
-    const double toLatCos = toLatitude.cosinus();
+//    const double toLatCos = toLatitude.cosinus();
+    const double toLatCos = COS(toLatitude._radians);
 
-    const double y = dLon.sinus() * toLatCos;
-    const double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos*dLon.cosinus();
+//    const double y = dLon.sinus() * toLatCos;
+    const double y = SIN(dLon._radians) * toLatCos;
+//    const double x = fromLatitude.cosinus() * toLatitude.sinus() - fromLatitude.sinus() * toLatCos * dLon.cosinus();
+    const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(dLon._radians);
     const double radians = IMathUtils::instance()->atan2(y, x);
 
     return radians;

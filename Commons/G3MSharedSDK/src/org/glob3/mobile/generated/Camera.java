@@ -449,15 +449,9 @@ public class Camera
     final Angle heading = getHeading();
     final Angle pitch = getPitch();
     setPitch(Angle.zero());
-  
-    final double dist = getGeodeticPosition()._height - g3d._height;
-  
     MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())
        applyTransform(dragMatrix);
-  
-    moveForward(dist);
-  
     setHeading(heading);
     setPitch(pitch);
   }
@@ -596,6 +590,12 @@ public class Camera
   {
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
     final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
+  
+  //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+  //         normal._x, normal._y, normal._z,
+  //         north2D._x, north2D._y,
+  //         up2D._x, up2D._y);
+  
     return up2D.signedAngleBetween(north2D, normal);
   }
 

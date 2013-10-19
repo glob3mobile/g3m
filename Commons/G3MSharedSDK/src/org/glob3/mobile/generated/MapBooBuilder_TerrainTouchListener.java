@@ -13,8 +13,8 @@ public class MapBooBuilder_TerrainTouchListener implements TerrainTouchListener
 
   }
 
-  public final boolean onTerrainTouch(G3MEventContext ec, Camera camera, Geodetic3D position, Tile tile)
+  public final boolean onTerrainTouch(G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile)
   {
-    return _mapBooBuilder.onTerrainTouch(ec, camera, position, tile);
+    return _mapBooBuilder.onTerrainTouch(ec, pixel, camera, position, tile);
   }
 }

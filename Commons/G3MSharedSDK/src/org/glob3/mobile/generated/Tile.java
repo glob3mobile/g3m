@@ -69,6 +69,8 @@ public class Tile
 
   private BoundingVolume _boundingVolume;
 
+  private final Vector2D _renderedVStileSectorRatio ;
+
   private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
   
@@ -154,7 +156,7 @@ public class Tile
      return false;
      }*/
   
-    if (!renderedSector.touchesWith(_sector)) //Incomplete world
+    if (renderedSector != null && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
@@ -166,7 +168,7 @@ public class Tile
 
   private ITimer _lodTimer;
   private boolean _lastLodTest;
-  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, float dpiFactor, float deviceQualityFactor)
   {
   
     if ((_level >= layerTilesRenderParameters._maxLevelForPoles) && (_sector.touchesPoles()))
@@ -226,42 +228,34 @@ public class Tile
       _lodTimer.start();
     }
   
-    //  const double projectedSize = extent->squaredProjectedArea(rc);
-    //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    //    return true;
-    //  }
-  
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
     int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
   
-    //Adjusting shown texture size in case of incomplete mesh
-    Sector renderedSector = _planetRenderer.getRenderedSector();
-    if (!renderedSector.fullContains(_sector))
+    // Adjusting shown texture size in case of incomplete mesh
+    if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0)
     {
-      Sector meshSector = renderedSector.intersection(_sector);
-      final double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-      final double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-      texWidth *= rx;
-      texHeight *= ry;
+      texWidth *= _renderedVStileSectorRatio._x;
+      texHeight *= _renderedVStileSectorRatio._y;
     }
   
     double factor = 5;
     switch (tilesRenderParameters._quality)
     {
-      case QUALITY_LOW:
-        factor = 5;
-        break;
-      case QUALITY_MEDIUM:
-        factor = 3;
-        break;
       case QUALITY_HIGH:
-        factor = 1.5;
-        break;
+      factor = 1.5;
+      break;
+      case QUALITY_MEDIUM:
+      factor = 3;
+      break;
+      //case QUALITY_LOW:
+      default:
+      factor = 5;
+      break;
     }
   
     final Vector2F ex = boundingVolume.projectedExtent(rc);
     final float t = (ex._x * ex._y);
-    _lastLodTest = t <= ((texWidth * texHeight) * factor);
+    _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
   
     return _lastLodTest;
   }
@@ -561,6 +555,22 @@ public class Tile
     return _boundingVolume;
   }
 
+  private Vector2D getRenderedVSTileSectorsRatio(PlanetRenderer pr)
+  {
+    final Sector renderedSector = pr.getRenderedSector();
+    if (renderedSector != null)
+    {
+      if (!renderedSector.fullContains(_sector))
+      {
+        Sector meshSector = renderedSector.intersection(_sector);
+        final double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+        final double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
+        return new Vector2D(rx,ry);
+      }
+    }
+    return new Vector2D(1.0,1.0);
+  }
+
   public final Sector _sector ;
   public final int _level;
   public final int _row;
@@ -598,6 +608,7 @@ public class Tile
      _lodTimer = null;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
+     _renderedVStileSectorRatio = new Vector2D(getRenderedVSTileSectorsRatio(planetRenderer));
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -705,7 +716,7 @@ public class Tile
       return;
     }
   
-  //  TileTexturizer* texturizer = prc->getTexturizer();
+    //  TileTexturizer* texturizer = prc->getTexturizer();
     if (texturizer != null)
     {
       final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
@@ -717,7 +728,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, float dpiFactor, float deviceQualityFactor)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -735,7 +746,7 @@ public class Tile
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, dpiFactor, deviceQualityFactor) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
@@ -971,28 +982,28 @@ public class Tile
   
     java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
   
-    Sector renderedSector = _planetRenderer.getRenderedSector();
+    final Sector renderedSector = _planetRenderer.getRenderedSector();
   
     Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
-    if (renderedSector.touchesWith(s1))
+    if (renderedSector == null || renderedSector.touchesWith(s1))
     {
       subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
     }
   
     Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
-    if (renderedSector.touchesWith(s2))
+    if (renderedSector == null || renderedSector.touchesWith(s2))
     {
       subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
     }
   
     Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
-    if (renderedSector.touchesWith(s3))
+    if (renderedSector == null || renderedSector.touchesWith(s3))
     {
       subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
     }
   
     Sector s4 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
-    if (renderedSector.touchesWith(s4))
+    if (renderedSector == null || renderedSector.touchesWith(s4))
     {
       subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
     }

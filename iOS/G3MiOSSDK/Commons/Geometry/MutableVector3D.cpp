@@ -32,9 +32,11 @@ MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
   const double v = axis.y();
   const double w = axis.z();
   
-  const double cosTheta = theta.cosinus();
-  const double sinTheta = theta.sinus();
-  
+//  const double cosTheta = theta.cosinus();
+//  const double sinTheta = theta.sinus();
+  const double cosTheta = COS(theta._radians);
+  const double sinTheta = SIN(theta._radians);
+
   const double ms = axis.squaredLength();
   const double m = IMathUtils::instance()->sqrt(ms);
   

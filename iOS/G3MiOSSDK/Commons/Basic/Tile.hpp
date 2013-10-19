@@ -65,6 +65,8 @@ private:
 
   BoundingVolume* _boundingVolume;
 
+  const Vector2D _renderedVStileSectorRatio;
+
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
                                   const TileTessellator* tessellator,
@@ -81,7 +83,7 @@ private:
                         double cameraAngle2HorizonInRadians,
                         const Frustum* cameraFrustumInModelCoordinates,
                         ElevationDataProvider* elevationDataProvider,
-                        const Sector& renderedSector,
+                        const Sector* renderedSector,
                         const TileTessellator* tessellator,
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
@@ -93,7 +95,9 @@ private:
                                   TileTexturizer* texturizer,
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const TilesStatistics* tilesStatistics,
-                                  const ITimer* lastSplitTimer);
+                                  const ITimer* lastSplitTimer,
+                                  const float dpiFactor,
+                                  const float deviceQualityFactor);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -153,6 +157,8 @@ private:
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
+
+  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
 
 public:
   const Sector    _sector;
@@ -225,9 +231,11 @@ public:
               const TileTessellator* tessellator,
               TileRasterizer* tileRasterizer,
               const LayerSet* layerSet,
-              const Sector& renderedSector,
+              const Sector* renderedSector,
               bool isForcedFullRender,
-              long long texturePriority);
+              long long texturePriority,
+              const float dpiFactor,
+              const float deviceQualityFactor);
 
   const TileKey getKey() const;
 

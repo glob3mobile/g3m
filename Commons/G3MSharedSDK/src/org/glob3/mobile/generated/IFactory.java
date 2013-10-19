@@ -29,10 +29,15 @@ package org.glob3.mobile.generated;
 //class IWebSocket;
 //class IWebSocketListener;
 //class URL;
+//class IDeviceInfo;
 
 public abstract class IFactory
 {
   private static IFactory _instance = null;
+
+  private IDeviceInfo _deviceInfo;
+
+  protected abstract IDeviceInfo createDeviceInfo();
 
   public static void setInstance(IFactory factory)
   {
@@ -48,6 +53,12 @@ public abstract class IFactory
   public static IFactory instance()
   {
     return _instance;
+  }
+
+  public IFactory()
+  {
+     _deviceInfo = null;
+
   }
 
   public void dispose()
@@ -76,6 +87,17 @@ public abstract class IFactory
   public abstract ICanvas createCanvas();
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
+
+  public final IDeviceInfo getDeviceInfo()
+  {
+    if (_deviceInfo == null)
+    {
+      _deviceInfo = createDeviceInfo();
+    }
+    return _deviceInfo;
+  }
+
+
 
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);

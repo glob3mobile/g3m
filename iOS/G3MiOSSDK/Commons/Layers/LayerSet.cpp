@@ -302,7 +302,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
   }
 
   if (first) {
-    errors.push_back("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
+    errors.push_back("Can't find any enabled Layer");
     return NULL;
   }
 

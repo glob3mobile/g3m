@@ -26,27 +26,28 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
+//  mutable double _sin;
+//  mutable double _cos;
+
   private Angle(double degrees, double radians)
+//  _sin(2),
+//  _cos(2)
   {
      _degrees = degrees;
      _radians = radians;
-     _sin = 2;
-     _cos = 2;
   }
 
-  private double _sin;
-  private double _cos;
 
   public final double _degrees;
   public final double _radians;
 
 
   public Angle(Angle angle)
+//  _sin(angle._sin),
+//  _cos(angle._cos)
   {
      _degrees = angle._degrees;
      _radians = angle._radians;
-     _sin = angle._sin;
-     _cos = angle._cos;
 
   }
 
@@ -116,28 +117,25 @@ public class Angle
     return (_degrees != _degrees);
   }
 
-  public final double sinus()
-  {
-    if (_sin > 1)
-    {
-      _sin = java.lang.Math.sin(_radians);
-    }
-    return _sin;
-  }
+//  double sinus() const {
+////    if (_sin > 1) {
+////      _sin = SIN(_radians);
+////    }
+////    return _sin;
+//    return SIN(_radians);
+//  }
+//
+//  double cosinus() const {
+////    if (_cos > 1) {
+////      _cos = COS(_radians);
+////    }
+////    return _cos;
+//    return COS(_radians);
+//  }
 
-  public final double cosinus()
-  {
-    if (_cos > 1)
-    {
-      _cos = java.lang.Math.cos(_radians);
-    }
-    return _cos;
-  }
-
-  public final double tangent()
-  {
-    return java.lang.Math.tan(_radians);
-  }
+//  double tangent() const {
+//    return TAN(_radians);
+//  }
 
   public final boolean closeTo(Angle other)
   {

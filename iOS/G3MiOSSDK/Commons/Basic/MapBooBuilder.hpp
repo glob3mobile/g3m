@@ -29,6 +29,7 @@ class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
 class JSONString;
+class JSONArray;
 class TimeInterval;
 class MapQuestLayer;
 class BingMapsLayer;
@@ -45,6 +46,8 @@ class Camera;
 class Tile;
 class MarksRenderer;
 class MapBooBuilder;
+class Vector2I;
+class URLTemplateLayer;
 
 #include <vector>
 #include <string>
@@ -86,6 +89,7 @@ public:
 
   virtual void onTerrainTouch(MapBooBuilder*         builder,
                               const G3MEventContext* ec,
+                              const Vector2I&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
@@ -223,6 +227,7 @@ public:
 
 class MapBoo_Scene {
 private:
+  const std::string            _id;
   const std::string            _name;
   const std::string            _description;
   const MapBoo_MultiImage*     _screenshot;
@@ -233,7 +238,8 @@ private:
   const bool                   _hasWarnings;
 
 public:
-  MapBoo_Scene(const std::string&           name,
+  MapBoo_Scene(const std::string&           id,
+               const std::string&           name,
                const std::string&           description,
                MapBoo_MultiImage*           screenshot,
                const Color&                 backgroundColor,
@@ -241,6 +247,7 @@ public:
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
                const bool                   hasWarnings) :
+  _id(id),
   _name(name),
   _description(description),
   _screenshot(screenshot),
@@ -250,6 +257,10 @@ public:
   _overlayLayer(overlayLayer),
   _hasWarnings(hasWarnings)
   {
+  }
+
+  const std::string getId() const {
+    return _id;
   }
 
   const std::string getName() const {
@@ -285,23 +296,46 @@ public:
 };
 
 class MapBoo_Notification {
-public:
+private:
   const Geodetic2D             _position;
-  const std::string            _message;
   const MapBoo_CameraPosition* _cameraPosition;
+  const std::string            _message;
+  const URL*                   _iconURL;
+
+public:
 
   MapBoo_Notification(const Geodetic2D&            position,
+                      const MapBoo_CameraPosition* cameraPosition,
                       const std::string&           message,
-                      const MapBoo_CameraPosition* cameraPosition) :
+                      const URL*                   iconURL) :
   _position(position),
+  _cameraPosition(cameraPosition),
   _message(message),
-  _cameraPosition(cameraPosition)
+  _iconURL(iconURL)
   {
   }
 
   ~MapBoo_Notification() {
+    delete _iconURL;
     delete _cameraPosition;
   }
+
+  const Geodetic2D getPosition() const {
+    return _position;
+  }
+
+  const MapBoo_CameraPosition* getCameraPosition() const {
+    return _cameraPosition;
+  }
+
+  const std::string getMessage() const {
+    return _message;
+  }
+
+  const URL* getIconURL() const {
+    return _iconURL;
+  }
+
 };
 
 
@@ -390,13 +424,16 @@ private:
 
   WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
 
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
 
   const int getApplicationCurrentSceneIndex();
   const MapBoo_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
 
+//  const std::string parseSceneId(const JSONObject* jsonObject) const;
   MapBoo_Scene* parseScene(const JSONObject* json) const;
+  
   Color         parseColor(const JSONString* jsonColor) const;
 
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
@@ -407,21 +444,33 @@ private:
 
   const std::string getApplicationCurrentSceneCommand() const;
 
-  const std::string getSendNotificationCommand(const Camera*      camera,
-                                               const Geodetic3D&  position,
-                                               const std::string& message) const;
+  const std::string getSendNotificationCommand(const Geodetic2D&  position,
+                                               const Camera*      camera,
+                                               const std::string& message,
+                                               const URL*         iconURL) const;
+
+  const std::string getSendNotificationCommand(const Geodetic2D&            position,
+                                               const MapBoo_CameraPosition* cameraPosition,
+                                               const std::string&           message,
+                                               const URL*                   iconURL) const;
 
   const std::string escapeString(const std::string& str) const;
 
   const std::string toCameraPositionJSON(const Camera* camera) const;
+  const std::string toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const;
 
   MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
+  std::vector<MapBoo_Notification*>* parseNotifications(const JSONArray* jsonArray) const;
 
-  void setApplicationNotification(MapBoo_Notification* notification);
+  void addApplicationNotification(MapBoo_Notification* notification);
+  void addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications);
 
+  const URL* parseURL(const JSONString* jsonString) const;
 
   MarksRenderer* _marksRenderer;
   MarksRenderer* getMarksRenderer();
+
+  bool _hasParsedApplication;
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -509,19 +558,42 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);
-  
 
-  void sendNotification(const Camera*      camera,
-                        const Geodetic3D&  position,
-                        const std::string& message) const;
+  /** Private to MapbooBuilder, don't call it */
+  void setHasParsedApplication();
+
+  /** Private to MapbooBuilder, don't call it */
+  bool hasParsedApplication() const;
+
+
+  const MapBoo_Notification* createNotification(const Geodetic2D&  position,
+                                                const Camera*      camera,
+                                                const std::string& message,
+                                                const URL*         iconURL) const;
+
+  void sendNotification(const Geodetic2D&  position,
+                        const Camera*      camera,
+                        const std::string& message,
+                        const URL*         iconURL) const;
+
+  void sendNotification(const Geodetic2D&            position,
+                        const MapBoo_CameraPosition* cameraPosition,
+                        const std::string&           message,
+                        const URL*                   iconURL) const;
 
   void changeScene(int sceneIndex);
   
   void changeScene(const MapBoo_Scene* scene);
-  
+
+
+  const URL getServerURL() const {
+    return _serverURL;
+  }
+
 };
 
 #endif

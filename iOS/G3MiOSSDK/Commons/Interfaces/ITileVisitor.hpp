@@ -20,8 +20,8 @@ public:
   void dispose();
 #endif
     
-  virtual void visitTile(std::vector<Layer*>& layers, Tile* tile) const = 0;
+  virtual void visitTile(std::vector<Layer*>& layers,
+                         const Tile* tile) const = 0;
 };
-
 
 #endif

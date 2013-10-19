@@ -85,14 +85,6 @@ public:
     return Angle::fromRadians(a);
   }
 
-  double x() const {
-    return _x;
-  }
-
-  double y() const {
-    return _y;
-  }
-
   static Vector2D nan() {
     const IMathUtils* mu = IMathUtils::instance();
 

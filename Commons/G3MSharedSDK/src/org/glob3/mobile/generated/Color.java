@@ -120,6 +120,12 @@ public class Color
     return Color.newFromRGBA(r, g, b, a);
   }
 
+
+  public static Color fromRGBA255(int red, int green, int blue, int alpha)
+  {
+    return new Color(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
+  }
+
   public static Color fromRGBA(float red, float green, float blue, float alpha)
   {
     return new Color(red, green, blue, alpha);

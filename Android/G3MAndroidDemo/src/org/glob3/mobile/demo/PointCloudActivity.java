@@ -192,6 +192,8 @@ public class PointCloudActivity
 
       _builder.setInitializationTask(pointCloudInitializationTask());
       _builder.addRenderer(_meshRenderer);
+      //rgb(175,221,233)
+      _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
 
       _g3mWidget = _builder.createWidget();
 
