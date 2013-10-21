@@ -30,7 +30,6 @@ import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 public class XYZtoBSON {
 
-   @SuppressWarnings("unused")
    private static int i;
 
 
