@@ -83,4 +83,16 @@ public class Trail
     addPosition(position._latitude, position._longitude, position._height);
   }
 
+  public final void clear()
+  {
+    final int segmentsSize = _segments.size();
+    for (int i = 0; i < segmentsSize; i++)
+    {
+      TrailSegment segment = _segments.get(i);
+      if (segment != null)
+         segment.dispose();
+    }
+    _segments.clear();
+  }
+
 }
