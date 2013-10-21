@@ -142,12 +142,9 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   return surfaceMesh;
 }
 
-void Trail::addPosition(const Geodetic3D& position) {
-
-  const Geodetic3D pos = (_heightDelta == 0)
-  /*             */ ? position
-  /*             */ : Geodetic3D(position._latitude, position._longitude, position._height + _heightDelta);
-
+void Trail::addPosition(const Angle& latitude,
+                        const Angle& longitude,
+                        const double height) {
   const int lastSegmentIndex = _segments.size() - 1;
 
   TrailSegment* currentSegment;
@@ -156,7 +153,9 @@ void Trail::addPosition(const Geodetic3D& position) {
     TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
     if (lastSegmentIndex >= 0) {
       TrailSegment* previousSegment = _segments[lastSegmentIndex];
-      previousSegment->setNextSegmentFirstPosition( pos );
+      previousSegment->setNextSegmentFirstPosition(latitude,
+                                                   longitude,
+                                                   height  + _heightDelta);
       newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
       newSegment->addPosition( previousSegment->getLastPosition() );
     }
@@ -167,7 +166,9 @@ void Trail::addPosition(const Geodetic3D& position) {
     currentSegment = _segments[lastSegmentIndex];
   }
 
-  currentSegment->addPosition( pos );
+  currentSegment->addPosition(latitude,
+                              longitude,
+                              height  + _heightDelta);
 }
 
 Trail::~Trail() {
