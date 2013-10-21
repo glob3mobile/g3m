@@ -383,7 +383,12 @@ Mark::~Mark() {
 
   _glState->_release();
 
-  delete _textureId; //Releasing texture
+  if (_textureId){
+    delete _textureId; //Releasing texture
+#ifdef JAVA_CODE
+    _textureId.dispose();
+#endif
+  }
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
