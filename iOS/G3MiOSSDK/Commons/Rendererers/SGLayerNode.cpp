@@ -142,15 +142,13 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
     requestImage(rc);
   }
 
-  const TextureIDReference* textureId = getTextureId(rc);
-  if (textureId == NULL) {
+  _textureId = getTextureId(rc);
+  if (_textureId == NULL) {
     return false;
   }
   state->clearGLFeatureGroup(COLOR_GROUP);
 
-  state->addGLFeature(new TextureIDGLFeature(textureId->getID(),
-                                            false, 0,0), false);
-
+  state->addGLFeature(new TextureIDGLFeature(_textureId->getID()), false);
 
   return true;
   

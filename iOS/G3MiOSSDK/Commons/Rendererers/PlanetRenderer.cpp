@@ -489,7 +489,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   return RenderState::ready();
 }
 
-void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
+void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
                                            const int firstLevel,
                                            const int maxLevel) {
   if (_tileVisitor != NULL) {
@@ -499,24 +499,23 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
       return;
     }
     
-    const int firstLevelCache = (firstLevel < parameters-> _firstLevel)
-    ? parameters->_firstLevel
-    : firstLevel;
-    if(firstLevel < firstLevelCache) {
-      ILogger::instance()->logInfo("Can only precache from level %", firstLevelCache);
+    const int firstLevelToVisit = (firstLevel < parameters-> _firstLevel) ? parameters->_firstLevel : firstLevel;
+    if (firstLevel < firstLevelToVisit) {
+      ILogger::instance()->logError("Can only visit from level %", firstLevelToVisit);
+      return;
     }
     
-    const int maxLevelCache = (maxLevel > parameters->_maxLevel)
-    ? parameters->_maxLevel
-    : maxLevel;
-    if(maxLevel > maxLevelCache) {
-      ILogger::instance()->logInfo("Can only precache to level %", maxLevelCache);
+    const int maxLevelToVisit = (maxLevel > parameters->_maxLevel) ? parameters->_maxLevel : maxLevel;
+    if (maxLevel > maxLevelToVisit) {
+      ILogger::instance()->logError("Can only visit to level %", maxLevelToVisit);
+      return;
     }
     
-    if(firstLevelCache > maxLevelCache) {
-      ILogger::instance()->logInfo("Can't precache, first level is more than max level");
+    if (firstLevelToVisit > maxLevelToVisit) {
+      ILogger::instance()->logError("Can't visit, first level is gratter than max level");
+      return;
     }
-    // Get Layers to Cache
+
     std::vector<Layer*> layers;
     const int layersCount = _layerSet->size();
     for (int i = 0; i < layersCount; i++) {
@@ -525,23 +524,28 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector sector,
         layers.push_back(layer);
       }
     }
-    // Get Tiles to Cache
+
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       if (tile->_sector.touchesWith(sector)) {
         _tileVisitor->visitTile(layers, tile);
-        visitSubTilesTouchesWith(layers, tile, sector, firstLevelCache,
-                                 maxLevelCache);
+        visitSubTilesTouchesWith(layers,
+                                 tile,
+                                 sector,
+                                 firstLevelToVisit,
+                                 maxLevelToVisit);
       }
     }
-  }else{
+  }
+  else {
     ILogger::instance()->logError("TileVisitor is NULL");
   }
 }
 
-void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* tile,
-                                              const Sector sectorToVisit,
+void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
+                                              Tile* tile,
+                                              const Sector& sectorToVisit,
                                               const int topLevel,
                                               const int maxLevel) {
   if (tile->_level < maxLevel) {

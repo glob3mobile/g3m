@@ -258,12 +258,13 @@ private:
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
   
-  void visitTilesTouchesWith(const Sector sector,
+  void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
                              const int maxLevel);
   
-  void visitSubTilesTouchesWith(std::vector<Layer*> layers, Tile* tile,
-                                const Sector sectorToVisit,
+  void visitSubTilesTouchesWith(std::vector<Layer*> layers,
+                                Tile* tile,
+                                const Sector& sectorToVisit,
                                 const int topLevel,
                                 const int maxLevel);
 

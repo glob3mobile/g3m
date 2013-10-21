@@ -162,18 +162,6 @@ public:
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
 
-  double x() const {
-    return _x;
-  }
-
-  double y() const {
-    return _y;
-  }
-
-  double z() const {
-    return _z;
-  }
-
   Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   
   MutableVector3D asMutableVector3D() const;

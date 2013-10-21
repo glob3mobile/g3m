@@ -562,8 +562,8 @@ public:
   builder.setCameraRenderer([self createCameraRenderer]);
 
   const Planet* planet = Planet::createEarth();
-  //  const Planet* planet = Planet::createSphericalEarth();
-  //  const Planet* planet = Planet::createFlatEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -1041,11 +1041,23 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
+
+//  const std::string& mapKey,
+//  const TimeInterval& timeToCache,
+//  bool readExpired = true,
+//  int initialLevel = 1,
+//  int maxLevel = 19,
+//  LayerCondition* condition = NULL
+  if (true) {
+    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+                                       TimeInterval::fromDays(30)));
+  }
+
 
   const bool useCartoDB = false;
   if (useCartoDB) {
@@ -2417,6 +2429,17 @@ public:
       //testWebSocket(context);
 
       testCanvas(context->getFactory());
+      
+      
+      if (false) {
+        [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                                       Geodetic3D(Angle::fromDegrees(-80),Angle::fromDegrees(-150),50000),
+                                                       Geodetic3D(Angle::fromDegrees(40.032213257223013159),Angle::fromDegrees(-3.603964137481248553),1139.1668803810473491),
+                                                       Angle::fromDegrees(87),
+                                                       Angle::fromDegrees(34),
+                                                       Angle::fromDegrees(20),
+                                                       Angle::fromDegrees(45));
+      }
 
 
       if (false) {
@@ -2446,7 +2469,7 @@ public:
 
 
 
-      if (true) { //Incomplete world
+      if (false) { //Incomplete world
 
         int time = 15; //SECS
 

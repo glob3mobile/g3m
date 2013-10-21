@@ -17,6 +17,17 @@ bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent, 
                                          CameraContext *cameraContext) 
 {
+  /*
+  // testing set camera methods
+  if (touchEvent->getTouchCount()==4 && touchEvent->getType()==Up) {
+    Camera *camera = cameraContext->getNextCamera();
+    camera->setGeodeticPosition(Geodetic3D(Angle::fromDegrees(40.027865),Angle::fromDegrees(-3.599683),1000.670056));
+    camera->setPitch(Angle::fromDegrees(50.739328));
+    camera->setHeading(Angle::fromDegrees(-36.706477));
+    return true;
+  }*/
+  
+  
   // three finger needed
   if (touchEvent->getTouchCount()!=3) return false;
   

@@ -154,7 +154,11 @@ public class SGLayerNode extends SGNode
     }
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
+<<<<<<< HEAD
     state.addGLFeature(new TextureIDGLFeature(textureId.getID(), false, 0,0), false);
+=======
+    state.addGLFeature(new TextureIDGLFeature(textureId), false);
+>>>>>>> purgatory
   
   
     return true;

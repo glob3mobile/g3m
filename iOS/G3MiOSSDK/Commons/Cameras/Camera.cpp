@@ -157,6 +157,12 @@ void Camera::print() {
 const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
+  
+//  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+//         normal._x, normal._y, normal._z,
+//         north2D._x, north2D._y,
+//         up2D._x, up2D._y);
+
   return up2D.signedAngleBetween(north2D, normal);
 }
 
@@ -192,14 +198,8 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d)
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
   setPitch(Angle::zero());
-
-  const double dist = getGeodeticPosition()._height - g3d._height;
-  
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  
-  moveForward(dist);
-  
   setHeading(heading);
   setPitch(pitch);
 }

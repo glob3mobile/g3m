@@ -537,7 +537,10 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
   if (axis.length()<1e-3) return MutableMatrix44D::invalid();
 
   const Angle angle = P0.angleBetween(P1);
-  return MutableMatrix44D::createRotationMatrix(angle, axis);
+  const MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(angle, axis);
+  const Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
+  const MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(P1.sub(rotatedP0));
+  return traslation.multiply(rotation);
 }
 
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
