@@ -383,7 +383,7 @@ Mark::~Mark() {
 
   _glState->_release();
 
-  if (_textureId){
+  if (_textureId != NULL){
     delete _textureId; //Releasing texture
 #ifdef JAVA_CODE
     _textureId.dispose();
