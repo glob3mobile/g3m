@@ -52,13 +52,8 @@ public class Trail
     return _visible;
   }
 
-  public final void addPosition(Geodetic3D position)
+  public final void addPosition(Angle latitude, Angle longitude, double height)
   {
-  
-    final Geodetic3D pos = (_heightDelta == 0) ? position : new Geodetic3D(position._latitude, position._longitude, position._height + _heightDelta);
-    /*             */
-    /*             */
-  
     final int lastSegmentIndex = _segments.size() - 1;
   
     TrailSegment currentSegment;
@@ -68,7 +63,7 @@ public class Trail
       if (lastSegmentIndex >= 0)
       {
         TrailSegment previousSegment = _segments.get(lastSegmentIndex);
-        previousSegment.setNextSegmentFirstPosition(pos);
+        previousSegment.setNextSegmentFirstPosition(latitude, longitude, height + _heightDelta);
         newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
         newSegment.addPosition(previousSegment.getLastPosition());
       }
@@ -80,7 +75,12 @@ public class Trail
       currentSegment = _segments.get(lastSegmentIndex);
     }
   
-    currentSegment.addPosition(pos);
+    currentSegment.addPosition(latitude, longitude, height + _heightDelta);
+  }
+
+  public final void addPosition(Geodetic3D position)
+  {
+    addPosition(position._latitude, position._longitude, position._height);
   }
 
 }

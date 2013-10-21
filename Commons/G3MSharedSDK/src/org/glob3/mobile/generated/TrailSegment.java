@@ -172,18 +172,23 @@ public class TrailSegment
     return _positions.size();
   }
 
-  public final void addPosition(Geodetic3D position)
+  public final void addPosition(Angle latitude, Angle longitude, double height)
   {
     _positionsDirty = true;
-    _positions.add(new Geodetic3D(position));
+    _positions.add(new Geodetic3D(latitude, longitude, height));
   }
 
-  public final void setNextSegmentFirstPosition(Geodetic3D position)
+  public final void addPosition(Geodetic3D position)
+  {
+    addPosition(position._latitude, position._longitude, position._height);
+  }
+
+  public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height)
   {
     _positionsDirty = true;
     if (_nextSegmentFirstPosition != null)
        _nextSegmentFirstPosition.dispose();
-    _nextSegmentFirstPosition = new Geodetic3D(position);
+    _nextSegmentFirstPosition = new Geodetic3D(latitude, longitude, height);
   }
 
   public final void setPreviousSegmentLastPosition(Geodetic3D position)
