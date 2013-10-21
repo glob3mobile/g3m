@@ -393,8 +393,8 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-      _textureId = null; //Releasing texture
       _textureId.dispose();
+      _textureId = null; //Releasing texture
     }
   }
 
