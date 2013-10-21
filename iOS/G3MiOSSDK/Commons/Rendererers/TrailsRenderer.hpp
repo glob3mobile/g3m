@@ -151,7 +151,9 @@ public:
   void addPosition(const Geodetic3D& position) {
     addPosition(position._latitude, position._longitude, position._height);
   }
-  
+
+  void clear();
+
 };
 
 

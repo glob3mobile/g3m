@@ -142,6 +142,15 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   return surfaceMesh;
 }
 
+void Trail::clear() {
+  const int segmentsSize = _segments.size();
+  for (int i = 0; i < segmentsSize; i++) {
+    TrailSegment* segment = _segments[i];
+    delete segment;
+  }
+  _segments.clear();
+}
+
 void Trail::addPosition(const Angle& latitude,
                         const Angle& longitude,
                         const double height) {
