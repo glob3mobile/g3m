@@ -72,22 +72,6 @@ public class Vector4D
     return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
 
-//  double x() const {
-//    return _x;
-//  }
-//  
-//  double y() const {
-//    return _y;
-//  }
-//  
-//  double z() const {
-//    return _z;
-//  }
-//  
-//  double w() const {
-//    return _w;
-//  }
-
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
