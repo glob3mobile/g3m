@@ -22,6 +22,8 @@ private:
 
   const bool _isTransparent;
 
+  GLState* _glState;
+
 public:
 
   SGShape(SGNode* node,
@@ -34,7 +36,17 @@ public:
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent)
   {
-    
+    _glState = new GLState();
+    if (_isTransparent){
+      _glState->addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+    } else{
+      _glState->addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+    }
+  }
+
+  ~SGShape()
+  {
+    _glState->_release();
   }
 
   SGNode* getNode() const {

@@ -148,7 +148,7 @@ public class SGLayerNode extends SGNode
     }
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-    state.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
+    state.addGLFeature(new TextureIDGLFeature(textureId), false);
   
   
     return true;

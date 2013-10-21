@@ -195,23 +195,26 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         return;
       }
   
-      final int firstLevelCache = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
-      if(firstLevel < firstLevelCache)
+      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+      if (firstLevel < firstLevelToVisit)
       {
-        ILogger.instance().logInfo("Can only precache from level %", firstLevelCache);
+        ILogger.instance().logError("Can only visit from level %", firstLevelToVisit);
+        return;
       }
   
-      final int maxLevelCache = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
-      if(maxLevel > maxLevelCache)
+      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+      if (maxLevel > maxLevelToVisit)
       {
-        ILogger.instance().logInfo("Can only precache to level %", maxLevelCache);
+        ILogger.instance().logError("Can only visit to level %", maxLevelToVisit);
+        return;
       }
   
-      if(firstLevelCache > maxLevelCache)
+      if (firstLevelToVisit > maxLevelToVisit)
       {
-        ILogger.instance().logInfo("Can't precache, first level is more than max level");
+        ILogger.instance().logError("Can't visit, first level is gratter than max level");
+        return;
       }
-      // Get Layers to Cache
+  
       java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
       final int layersCount = _layerSet.size();
       for (int i = 0; i < layersCount; i++)
@@ -222,7 +225,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           layers.add(layer);
         }
       }
-      // Get Tiles to Cache
+  
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
@@ -230,7 +233,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         if (tile._sector.touchesWith(sector))
         {
           _tileVisitor.visitTile(layers, tile);
-          visitSubTilesTouchesWith(layers, tile, sector, firstLevelCache, maxLevelCache);
+          visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
         }
       }
     }

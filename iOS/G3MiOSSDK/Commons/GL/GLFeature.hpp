@@ -31,7 +31,8 @@ enum GLFeatureID{
   GLF_TEXTURE_COORDS,
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
-  GLF_MODEL_VIEW
+  GLF_MODEL_VIEW,
+  GLF_BLENDING_MODE
 };
 
 class GLFeature: public RCObject {
@@ -224,7 +225,7 @@ public:
   }
 };
 
-class TextureIDGLFeature: public GLColorGroupFeature{
+class TextureIDGLFeature: public PriorityGLFeature{
 #ifdef C_CODE
   IGLTextureId const* _texID;
 #endif
@@ -233,8 +234,20 @@ class TextureIDGLFeature: public GLColorGroupFeature{
 #endif
 
 public:
-  TextureIDGLFeature(const IGLTextureId* texID,
-                   bool blend, int sFactor, int dFactor);
+  TextureIDGLFeature(const IGLTextureId* texID);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class BlendingModeGLFeature: public GLColorGroupFeature{
+#ifdef C_CODE
+  IGLTextureId const* _texID;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texID = null;
+#endif
+
+public:
+  BlendingModeGLFeature(bool blend, int sFactor, int dFactor);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
