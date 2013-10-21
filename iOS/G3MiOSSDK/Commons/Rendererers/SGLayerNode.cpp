@@ -57,7 +57,12 @@ public:
 };
 
 SGLayerNode::~SGLayerNode(){
+#ifdef C_CODE
   delete _textureId; //Releasing texture through TextureIDReference class
+#endif
+#ifdef JAVA_CODE
+  _textureId.dispose(); //Releasing texture through TextureIDReference class
+#endif
 }
 
 bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {

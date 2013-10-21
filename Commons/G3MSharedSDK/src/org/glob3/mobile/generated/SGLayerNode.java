@@ -89,7 +89,7 @@ public class SGLayerNode extends SGNode
 
   public void dispose()
   {
-    _textureId = null; //Releasing texture through TextureIDReference class
+	 _textureId.dispose(); //Releasing texture through TextureIDReference class
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
