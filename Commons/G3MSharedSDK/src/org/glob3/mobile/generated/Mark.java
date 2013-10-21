@@ -391,7 +391,11 @@ public class Mark implements SurfaceElevationListener
   
     _glState._release();
   
-    _textureId = null; //Releasing texture
+    if (_textureId)
+    {
+      _textureId = null; //Releasing texture
+      _textureId.dispose();
+    }
   }
 
   public final String getLabel()
