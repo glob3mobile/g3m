@@ -1,21 +1,18 @@
 package org.glob3.mobile.generated; 
-public class TextureIDGLFeature extends GLColorGroupFeature
+public class TextureIDGLFeature extends PriorityGLFeature
 {
   private IGLTextureId _texID = null;
 
 
   //////////////////////////////////////////
   
-  public TextureIDGLFeature(IGLTextureId texID, boolean blend, int sFactor, int dFactor)
+  public TextureIDGLFeature(IGLTextureId texID)
   {
-     super(GLFeatureID.GLF_TEXTURE_ID, 4, blend, sFactor, dFactor);
+     super(GLFeatureGroupName.COLOR_GROUP, GLFeatureID.GLF_TEXTURE_ID, 4);
      _texID = texID;
-  
-  
   }
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
-    blendingOnGlobalGLState(state);
     state.bindTexture(_texID);
   }
 }
