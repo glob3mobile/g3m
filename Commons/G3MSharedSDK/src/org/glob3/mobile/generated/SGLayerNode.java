@@ -147,19 +147,14 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    final TextureIDReference textureId = getTextureId(rc);
-    if (textureId == null)
+    _textureId = getTextureId(rc);
+    if (_textureId == null)
     {
       return false;
     }
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-<<<<<<< HEAD
-    state.addGLFeature(new TextureIDGLFeature(textureId.getID(), false, 0,0), false);
-=======
-    state.addGLFeature(new TextureIDGLFeature(textureId), false);
->>>>>>> purgatory
-  
+    state.addGLFeature(new TextureIDGLFeature(_textureId.getID()), false);
   
     return true;
   
