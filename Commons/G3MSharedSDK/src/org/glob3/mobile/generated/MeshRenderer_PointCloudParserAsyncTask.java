@@ -14,6 +14,28 @@ public class MeshRenderer_PointCloudParserAsyncTask extends GAsyncTask
 
   private Mesh _mesh;
 
+  private float normalize(float value, float max, float min)
+  {
+    return (value - min) / (max - min);
+  }
+
+  private Color interpolateColor(Color from, Color middle, Color to, float d)
+  {
+    if (d <= 0)
+    {
+      return from;
+    }
+    if (d >= 1)
+    {
+      return to;
+    }
+    if (d <= 0.5)
+    {
+      return from.mixedWith(middle, d * 2);
+    }
+    return middle.mixedWith(to, (d - 0.5f) * 2);
+  }
+
 
   public MeshRenderer_PointCloudParserAsyncTask(MeshRenderer meshRenderer, URL url, IByteBuffer buffer, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON, G3MContext context)
   {
@@ -88,6 +110,9 @@ public class MeshRenderer_PointCloudParserAsyncTask extends GAsyncTask
             /*                 */
             /*                 */
 
+            double minHeight = jsonPoints.getAsNumber(2, 0);
+            double maxHeight = minHeight;
+
             for (int i = 0; i < size *3; i += 3)
             {
               final double lonInDegrees = jsonPoints.getAsNumber(i, 0);
@@ -95,13 +120,35 @@ public class MeshRenderer_PointCloudParserAsyncTask extends GAsyncTask
               final double height = jsonPoints.getAsNumber(i + 2, 0);
 
               verticesBuilder.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height + _deltaHeight);
+
+              if (height < minHeight)
+              {
+                minHeight = height;
+              }
+              if (height > maxHeight)
+              {
+                maxHeight = height;
+              }
             }
 
             IFloatBuffer colors = null;
             final JSONArray jsonColors = jsonObject.getAsArray("colors");
             if (jsonColors == null)
             {
-              // TODO: color ramp from height
+              final Color fromColor = Color.red();
+              final Color middleColor = Color.green();
+              final Color toColor = Color.blue();
+              FloatBufferBuilderFromColor colorsBuilder = new FloatBufferBuilderFromColor();
+
+              for (int i = 0; i < size *3; i += 3)
+              {
+                final double height = jsonPoints.getAsNumber(i + 2, 0);
+
+                final Color interpolatedColor = interpolateColor(fromColor, middleColor, toColor, normalize((float) height, (float) minHeight, (float) maxHeight));
+                colorsBuilder.add(interpolatedColor);
+              }
+
+              colors = colorsBuilder.create();
             }
             else
             {

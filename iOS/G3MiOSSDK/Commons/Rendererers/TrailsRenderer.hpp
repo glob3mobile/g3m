@@ -54,15 +54,29 @@ public:
     return _positions.size();
   }
 
-  void addPosition(const Geodetic3D& position) {
+  void addPosition(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height) {
     _positionsDirty = true;
-    _positions.push_back(new Geodetic3D(position));
+    _positions.push_back(new Geodetic3D(latitude,
+                                        longitude,
+                                        height));
   }
 
-  void setNextSegmentFirstPosition(const Geodetic3D& position) {
+  void addPosition(const Geodetic3D& position) {
+    addPosition(position._latitude,
+                position._longitude,
+                position._height);
+  }
+
+  void setNextSegmentFirstPosition(const Angle& latitude,
+                                   const Angle& longitude,
+                                   const double height) {
     _positionsDirty = true;
     delete _nextSegmentFirstPosition;
-    _nextSegmentFirstPosition = new Geodetic3D(position);
+    _nextSegmentFirstPosition = new Geodetic3D(latitude,
+                                               longitude,
+                                               height);
   }
 
   void setPreviousSegmentLastPosition(const Geodetic3D& position) {
@@ -130,8 +144,16 @@ public:
     return _visible;
   }
 
-  void addPosition(const Geodetic3D& position);
-  
+  void addPosition(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height);
+
+  void addPosition(const Geodetic3D& position) {
+    addPosition(position._latitude, position._longitude, position._height);
+  }
+
+  void clear();
+
 };
 
 
