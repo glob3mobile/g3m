@@ -203,19 +203,23 @@ public final class G3MWidget_WebGL
 		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
 	});
 	// temp Java function with parameters and return value to test JS function calls
-	$wnd.G3M.moveCameraTo = $entry(function(latitude, longitude, height) {
+	$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
+		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+	});
+	$wnd.G3M.moveCameraTo = $entry(function(position) {
 		//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
 		//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
-		return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
+		//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
+		that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
 	}); 
 }-*/;
    
-   public double moveCameraTo(final double latitude, final double longitude, final double height) {
-	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(latitude),
-			   Angle.fromDegrees(longitude),
-			   height);
+   public void moveCameraTo(final Geodetic3D position) {
 	   _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
-	   return height;
+   }
+   
+   public Geodetic3D newGeodetic3D(final double latitude, final double longitude, final double height) {
+	   return new Geodetic3D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude), height);
    }
 
 
