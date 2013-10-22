@@ -19,7 +19,12 @@
 void SimpleTextureMapping::releaseGLTextureId() {
 
   if (_glTextureId != NULL){
+#ifdef C_CODE
     delete _glTextureId;
+#endif
+#ifdef JAVA_CODE
+    _glTextureId.dispose();
+#endif
     _glTextureId = NULL;
   } else{
     ILogger::instance()->logError("Releasing invalid simple texture mapping");

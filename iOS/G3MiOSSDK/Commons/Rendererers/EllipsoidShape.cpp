@@ -56,7 +56,11 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
   }
 
-  return _texId;
+  if (_texId == NULL){
+    return NULL;
+  }
+
+  return _texId->createCopy(); //The copy will be handle by the TextureMapping
 }
 
 

@@ -63,7 +63,12 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
+#ifdef C_CODE
   delete _glTextureId;
+#endif
+#ifdef JAVA_CODE
+  _glTextureId.dispose();
+#endif
   _glTextureId = NULL;
 }
 
