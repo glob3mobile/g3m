@@ -23,9 +23,8 @@ public class ByteBufferIterator
 {
   private final IByteBuffer _buffer;
   private int _cursor;
-  private int _timestamp;
-
-//  void checkTimestamp() const;
+  private int _bufferTimestamp;
+  private int _bufferSize;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  ByteBufferIterator(ByteBufferIterator that);
@@ -34,37 +33,30 @@ public class ByteBufferIterator
   {
      _buffer = buffer;
      _cursor = 0;
-     _timestamp = buffer.timestamp();
-  
+     _bufferTimestamp = buffer.timestamp();
+     _bufferSize = buffer.size();
   }
 
-
-  //void ByteBufferIterator::checkTimestamp() const {
-  //  if (_timestamp != _buffer->timestamp()) {
-  //    ILogger::instance()->logError("The buffer was changed after the iteration started");
-  //  }
-  //}
-  
   public final boolean hasNext()
   {
-    //checkTimestamp();
-    if (_timestamp != _buffer.timestamp())
+    if (_bufferTimestamp != _buffer.timestamp())
     {
       ILogger.instance().logError("The buffer was changed after the iteration started");
+      _bufferSize = _buffer.size();
     }
   
-    return (_cursor < _buffer.size());
+    return (_cursor < _bufferSize);
   }
 
   public final byte nextUInt8()
   {
-    //checkTimestamp();
-    if (_timestamp != _buffer.timestamp())
+    if (_bufferTimestamp != _buffer.timestamp())
     {
       ILogger.instance().logError("The buffer was changed after the iteration started");
+      _bufferSize = _buffer.size();
     }
   
-    if (_cursor >= _buffer.size())
+    if (_cursor >= _bufferSize)
     {
       ILogger.instance().logError("Iteration overflow");
       return 0;
@@ -79,15 +71,9 @@ public class ByteBufferIterator
     final short b2 = (short) (nextUInt8() & 0xFF);
   
     final int iResult = (((int) b1) | ((int)(b2 << 8)));
-    final short result = (short) iResult;
-  //  if (result != -9999) {
-  //    printf("break point on me\n");
-  //  }
-  
-  //  if (result > 0) {
-  //    printf("break point on me\n");
-  //  }
-    return result;
+    //  const short result = (short) iResult;
+    //  return result;
+    return (short) iResult;
   }
   public final int nextInt32()
   {

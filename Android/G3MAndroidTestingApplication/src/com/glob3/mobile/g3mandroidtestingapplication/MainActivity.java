@@ -1,9 +1,10 @@
+
+
 package com.glob3.mobile.g3mandroidtestingapplication;
 
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
@@ -180,4 +181,3 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-}

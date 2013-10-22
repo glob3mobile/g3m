@@ -105,22 +105,6 @@ public:
                   Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
   }
 
-//  const Angle lowerLatitude() const {
-//    return _lower._latitude;
-//  }
-//
-//  const Angle lowerLongitude() const {
-//    return _lower._longitude;
-//  }
-//
-//  const Angle upperLatitude() const {
-//    return _upper._latitude;
-//  }
-//
-//  const Angle upperLongitude() const {
-//    return _upper._longitude;
-//  }
-
   bool contains(const Angle& latitude,
                 const Angle& longitude) const;
   

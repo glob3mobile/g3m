@@ -144,22 +144,6 @@ public class Sector
     return new Sector(new Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(-180)), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(180)));
   }
 
-//  const Angle lowerLatitude() const {
-//    return _lower._latitude;
-//  }
-//
-//  const Angle lowerLongitude() const {
-//    return _lower._longitude;
-//  }
-//
-//  const Angle upperLatitude() const {
-//    return _upper._latitude;
-//  }
-//
-//  const Angle upperLongitude() const {
-//    return _upper._longitude;
-//  }
-
   public final boolean contains(Angle latitude, Angle longitude)
   {
     return (latitude.isBetween(_lower._latitude, _upper._latitude) && longitude.isBetween(_lower._longitude, _upper._longitude));

@@ -191,7 +191,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
       if (parameters == null)
       {
-        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
         return;
       }
   

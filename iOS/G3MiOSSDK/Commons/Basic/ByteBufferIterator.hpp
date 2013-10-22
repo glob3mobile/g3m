@@ -17,12 +17,11 @@ class ByteBufferIterator {
 private:
   const IByteBuffer* _buffer;
   int                _cursor;
-  int                _timestamp;
-
-//  void checkTimestamp() const;
+  int                _bufferTimestamp;
+  mutable int        _bufferSize;
 
   ByteBufferIterator(const ByteBufferIterator& that);
-  
+
 public:
   ByteBufferIterator(const IByteBuffer* buffer);
 
@@ -38,7 +37,7 @@ public:
   const std::string nextZeroTerminatedString();
 
   double nextDouble();
-
+  
 };
 
 #endif
