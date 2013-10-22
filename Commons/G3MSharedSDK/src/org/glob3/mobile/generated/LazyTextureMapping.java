@@ -19,7 +19,7 @@ public class LazyTextureMapping extends TextureMapping
 //  LazyTextureMapping(LazyTextureMapping that);
   private void releaseGLTextureId()
   {
-    _glTextureId = null;
+    _glTextureId.dispose();
     _glTextureId = null;
   }
 

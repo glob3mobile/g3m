@@ -16,7 +16,7 @@ public class SimpleTextureMapping extends TextureMapping
   
     if (_glTextureId != null)
     {
-      _glTextureId = null;
+      _glTextureId.dispose();
       _glTextureId = null;
     }
     else

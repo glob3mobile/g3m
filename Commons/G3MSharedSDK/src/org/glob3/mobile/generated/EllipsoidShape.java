@@ -173,7 +173,12 @@ public class EllipsoidShape extends AbstractMeshShape
       rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
     }
   
-    return _texId;
+    if (_texId == null)
+    {
+      return null;
+    }
+  
+    return _texId.createCopy(); //The copy will be handle by the TextureMapping
   }
 
   TextureIDReference _texId;
