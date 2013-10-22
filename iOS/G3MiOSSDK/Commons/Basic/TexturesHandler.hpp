@@ -146,7 +146,7 @@ public:
                      TexturesHandler* texHandler):
   _texHandler(texHandler), _id(id){}
 
-  ~TextureIDReference();
+  virtual ~TextureIDReference();
 
   TextureIDReference* createCopy() const;
 
