@@ -63,13 +63,15 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
+  if (_glTextureId != NULL){
 #ifdef C_CODE
-  delete _glTextureId;
+    delete _glTextureId;
 #endif
 #ifdef JAVA_CODE
-  _glTextureId.dispose();
+    _glTextureId.dispose();
 #endif
-  _glTextureId = NULL;
+    _glTextureId = NULL;
+  }
 }
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
