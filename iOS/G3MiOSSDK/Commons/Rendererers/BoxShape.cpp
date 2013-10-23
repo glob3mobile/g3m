@@ -354,6 +354,8 @@ bool BoxShape::isVisible(const G3MRenderContext *rc) const
   const Frustum* cameraFrustumInModelCoordinates = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   bool result = orientedBox->touchesFrustum(cameraFrustumInModelCoordinates);
   if (!result) printf("  -- box invisible\n");
+  else
+    printf(" -- box visible\n");
   return result;
 }
 

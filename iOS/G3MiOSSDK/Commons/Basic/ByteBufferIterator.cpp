@@ -16,33 +16,27 @@
 ByteBufferIterator::ByteBufferIterator(const IByteBuffer* buffer) :
 _buffer(buffer),
 _cursor(0),
-_timestamp(buffer->timestamp())
+_bufferTimestamp( buffer->timestamp() ),
+_bufferSize( buffer->size() )
 {
-
 }
 
-//void ByteBufferIterator::checkTimestamp() const {
-//  if (_timestamp != _buffer->timestamp()) {
-//    ILogger::instance()->logError("The buffer was changed after the iteration started");
-//  }
-//}
-
 bool ByteBufferIterator::hasNext() const {
-  //checkTimestamp();
-  if (_timestamp != _buffer->timestamp()) {
+  if (_bufferTimestamp != _buffer->timestamp()) {
     ILogger::instance()->logError("The buffer was changed after the iteration started");
+    _bufferSize = _buffer->size();
   }
 
-  return ( _cursor < _buffer->size() );
+  return ( _cursor < _bufferSize );
 }
 
 unsigned char ByteBufferIterator::nextUInt8() {
-  //checkTimestamp();
-  if (_timestamp != _buffer->timestamp()) {
+  if (_bufferTimestamp != _buffer->timestamp()) {
     ILogger::instance()->logError("The buffer was changed after the iteration started");
+    _bufferSize = _buffer->size();
   }
 
-  if (_cursor >= _buffer->size()) {
+  if (_cursor >= _bufferSize) {
     ILogger::instance()->logError("Iteration overflow");
     return 0;
   }
@@ -63,15 +57,9 @@ short ByteBufferIterator::nextInt16() {
 
   const int iResult = (((int) b1) |
                        ((int) (b2 << 8)));
-  const short result = (short) iResult;
-//  if (result != -9999) {
-//    printf("break point on me\n");
-//  }
-
-//  if (result > 0) {
-//    printf("break point on me\n");
-//  }
-  return result;
+  //  const short result = (short) iResult;
+  //  return result;
+  return (short) iResult;
 }
 
 int ByteBufferIterator::nextInt32() {
@@ -127,7 +115,6 @@ long long ByteBufferIterator::nextInt64() {
           ((long long) b7 << 48) |
           ((long long) b8 << 56));
 }
-
 
 IByteBuffer* ByteBufferIterator::nextBufferUpTo(unsigned char sentinel) {
   ByteBufferBuilder builder;

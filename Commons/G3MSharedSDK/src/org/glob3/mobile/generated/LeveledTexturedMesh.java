@@ -114,7 +114,7 @@ public class LeveledTexturedMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
+  public final boolean setGLTextureIdForLevel(int level, TextureIDReference glTextureId)
   {
   
     if (_mappings.size() > 0)
@@ -133,7 +133,7 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-  public final IGLTextureId getTopLevelGLTextureId()
+  public final TextureIDReference getTopLevelTextureId()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping != null)

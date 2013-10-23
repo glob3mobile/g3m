@@ -14,6 +14,7 @@
 class IImage;
 class IGLTextureId;
 class Color;
+class TextureIDReference;
 
 #include "URL.hpp"
 
@@ -32,7 +33,7 @@ private:
   private IImage _textureImage;
 #endif
 
-  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
   const bool _withNormals;
 

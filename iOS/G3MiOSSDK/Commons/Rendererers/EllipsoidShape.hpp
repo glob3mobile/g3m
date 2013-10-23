@@ -19,6 +19,7 @@ class Color;
 class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
+class TextureIDReference;
 
 class IGLTextureId;
 class G3MRenderContext;
@@ -68,7 +69,14 @@ private:
 
   bool _textureRequested;
   IImage* _textureImage;
-  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+
+#ifdef C_CODE
+  const TextureIDReference* _texId;
+#endif
+#ifdef JAVA_CODE
+  TextureIDReference _texId;
+#endif
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -98,7 +106,8 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _planet(planet)
+  _planet(planet),
+  _texId(NULL)
   {
 
   }
@@ -126,7 +135,8 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _planet(planet)
+  _planet(planet),
+  _texId(NULL)
   {
     
   }

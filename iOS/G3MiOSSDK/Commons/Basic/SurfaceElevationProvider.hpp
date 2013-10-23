@@ -85,7 +85,7 @@ public:
   virtual void addListener(const Geodetic2D& position,
                            SurfaceElevationListener* listener) = 0;
 
-  virtual void removeListener(SurfaceElevationListener* listener) = 0;
+  virtual bool removeListener(SurfaceElevationListener* listener) = 0;
   
 };
 

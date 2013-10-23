@@ -70,7 +70,7 @@ public class Mark implements SurfaceElevationListener
    */
   private final boolean _autoDeleteListener;
 
-  private IGLTextureId _textureId;
+  private TextureIDReference _textureId;
 
   private Vector3D _cartesianPosition;
 
@@ -92,7 +92,7 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId, getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
     }
   }
 
@@ -366,7 +366,10 @@ public class Mark implements SurfaceElevationListener
   
     if (_surfaceElevationProvider != null)
     {
-      _surfaceElevationProvider.removeListener(this);
+      if (!_surfaceElevationProvider.removeListener(this))
+      {
+        ILogger.instance().logError("Couldn't remove mark as listener of Surface Elevation Provider.");
+      }
     }
   
     if (_cartesianPosition != null)
@@ -388,6 +391,11 @@ public class Mark implements SurfaceElevationListener
   
     _glState._release();
   
+    if (_textureId != null)
+    {
+      _textureId.dispose();
+      _textureId = null; //Releasing texture
+    }
   }
 
   public final String getLabel()
@@ -567,7 +575,7 @@ public class Mark implements SurfaceElevationListener
         {
           if (_textureImage != null)
           {
-            _textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _imageID, false);
+            _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
   
             rc.getFactory().deleteImage(_textureImage);
             _textureImage = null;

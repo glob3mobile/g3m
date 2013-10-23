@@ -37,7 +37,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 
     if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
 
-      state.addGLFeature(new TextureGLFeature(_glTextureId,
+      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               isTransparent(),
                                               GLBlendFactor::srcAlpha(),
@@ -46,7 +46,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                          false); //TRANSFORM
     }
     else {
-      state.addGLFeature(new TextureGLFeature(_glTextureId,
+      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               isTransparent(),
                                               GLBlendFactor::srcAlpha(),
@@ -63,11 +63,14 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
-  if (_texturesHandler) {
-    if (_glTextureId != NULL) {
-      _texturesHandler->releaseGLTextureId(_glTextureId);
-      _glTextureId = NULL;
-    }
+  if (_glTextureId != NULL){
+#ifdef C_CODE
+    delete _glTextureId;
+#endif
+#ifdef JAVA_CODE
+    _glTextureId.dispose();
+#endif
+    _glTextureId = NULL;
   }
 }
 
@@ -159,7 +162,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return (_currentLevel >= 0) ? _mappings->at(_currentLevel) : NULL;
 }
 
-const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
+const TextureIDReference* LeveledTexturedMesh::getTopLevelTextureId() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
@@ -171,7 +174,7 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 }
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
-                                                 const IGLTextureId* glTextureId) {
+                                                 const TextureIDReference* glTextureId) {
 
   if (_mappings->size() > 0) {
     if (glTextureId != NULL) {

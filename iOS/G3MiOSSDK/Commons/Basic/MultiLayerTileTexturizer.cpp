@@ -482,14 +482,15 @@ public:
       if (_mesh != NULL) {
         const bool isMipmap = false;
 
-        const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
+        const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
                                                                            GLFormat::rgba(),
                                                                            textureId,
                                                                            isMipmap);
 
         if (glTextureId != NULL) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-            _texturesHandler->releaseGLTextureId(glTextureId);
+            delete glTextureId;
+            //_texturesHandler->releaseGLTextureId(glTextureId);
           }
         }
       }
@@ -611,15 +612,16 @@ public:
                                                                               ancestor,
                                                                               _tessellator,
                                                                               _mercator),
-                                                           _texturesHandler,
                                                            ownedTexCoords,
                                                            transparent);
 
       if (ancestor != _tile) {
-        const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
+        const TextureIDReference* glTextureId = _texturizer->getTopLevelTextureIdForTile(ancestor);
         if (glTextureId != NULL) {
-          _texturesHandler->retainGLTextureId(glTextureId);
-          mapping->setGLTextureId(glTextureId);
+          TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
+
+//          _texturesHandler->retainGLTextureId(glTextureId);
+          mapping->setGLTextureId(glTextureIdRetainedCopy);
           fallbackSolved = true;
         }
       }
@@ -870,10 +872,10 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
 //  }
 }
 
-const IGLTextureId* MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
+const TextureIDReference* MultiLayerTileTexturizer::getTopLevelTextureIdForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
 
-  return (mesh == NULL) ? NULL : mesh->getTopLevelGLTextureId();
+  return (mesh == NULL) ? NULL : mesh->getTopLevelTextureId();
 }
 
 bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
@@ -901,7 +903,7 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
 
-  const IGLTextureId* glTextureId = ancestorMesh->getTopLevelGLTextureId();
+  const TextureIDReference* glTextureId = ancestorMesh->getTopLevelTextureId();
   if (glTextureId == NULL) {
     return;
   }
@@ -912,9 +914,13 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   }
 
   const int level = tile->_level - ancestorTile->_level;
-  _texturesHandler->retainGLTextureId(glTextureId);
-  if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
-    _texturesHandler->releaseGLTextureId(glTextureId);
+//  _texturesHandler->retainGLTextureId(glTextureId);
+
+  const TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
+
+  if (!tileMesh->setGLTextureIdForLevel(level, glTextureIdRetainedCopy)) {
+//    _texturesHandler->releaseGLTextureId(glTextureId);
+    delete glTextureIdRetainedCopy;
   }
 }
 

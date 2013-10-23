@@ -40,12 +40,13 @@ public class GenericQuadTree
        _root.dispose();
   }
 
-  public final void remove(Object element)
+  public final boolean remove(Object element)
   {
     if (_root != null)
     {
-      _root.remove(element);
+      return _root.remove(element);
     }
+    return false;
   }
 
   public final boolean add(Sector sector, Object element)

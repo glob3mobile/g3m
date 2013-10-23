@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class IGLTextureId;
 //class Color;
+//class TextureIDReference;
 
 
 public class QuadShape extends AbstractMeshShape
@@ -32,14 +33,14 @@ public class QuadShape extends AbstractMeshShape
   private boolean _textureRequested;
   private IImage _textureImage;
 
-  private IGLTextureId getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureId(G3MRenderContext rc)
   {
     if (_textureImage == null)
     {
       return null;
     }
   
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
     rc.getFactory().deleteImage(_textureImage);
     _textureImage = null;
@@ -96,7 +97,7 @@ public class QuadShape extends AbstractMeshShape
       im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
     }
   
-    final IGLTextureId texId = getTextureId(rc);
+    final TextureIDReference texId = getTextureId(rc);
     if (texId == null)
     {
       return im;
@@ -108,7 +109,7 @@ public class QuadShape extends AbstractMeshShape
     texCoords.add(0, 0);
     texCoords.add(1, 0);
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   }

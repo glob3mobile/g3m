@@ -36,11 +36,11 @@ public class HUDRenderer extends LeafRenderer
     private Mesh createMesh(G3MRenderContext rc)
     {
       //TEXTURED
-      IGLTextureId texId = null;
+      TextureIDReference texId = null;
     
       _factory = rc.getFactory();
     
-      texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), _name, false);
+      texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _name, false);
     
       if (texId == null)
       {
@@ -70,7 +70,7 @@ public class HUDRenderer extends LeafRenderer
     
       DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
     
-      TextureMapping texMap = new SimpleTextureMapping(texId, rc.getTexturesHandler(), texCoords.create(), true, false);
+      TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
     
       return new TexturedMesh(im, true, texMap, true, true);
     }

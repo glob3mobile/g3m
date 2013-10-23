@@ -136,16 +136,21 @@ GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)
 
 //////////////////////////////////////////
 
-TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID,
-                                       bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(GLF_TEXTURE_ID, 4, blend, sFactor, dFactor),
+TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID):
+PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_ID, 4),
 _texID(texID) {
-
-  
 }
+
 void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
-  blendingOnGlobalGLState(state);
   state->bindTexture(_texID);
+}
+
+BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFactor):
+GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor){
+}
+
+void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+  blendingOnGlobalGLState(state);
 }
 
 TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized,

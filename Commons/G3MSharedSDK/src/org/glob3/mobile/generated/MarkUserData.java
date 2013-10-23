@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class MarkTouchListener;
 //class GLGlobalState;
 //class GPUProgramState;
+//class TextureIDReference;
 
 
 

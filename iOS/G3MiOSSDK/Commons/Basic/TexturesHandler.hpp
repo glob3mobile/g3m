@@ -134,15 +134,37 @@ public:
 #endif
 };
 
+class TexturesHandler;
+
+class TextureIDReference{
+private:
+  const IGLTextureId* _id;
+  TexturesHandler* _texHandler;
+public:
+
+  TextureIDReference(const IGLTextureId* id,
+                     TexturesHandler* texHandler):
+  _texHandler(texHandler), _id(id){}
+
+  virtual ~TextureIDReference();
+
+  TextureIDReference* createCopy() const;
+
+  const IGLTextureId* getID() const{
+    return _id;
+  }
+
+};
+
 class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
 
   GL* const _gl;
-
   const bool _verbose;
-
   //void showHolders(const std::string& message) const;
+
+  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
 
 public:
 
@@ -155,17 +177,15 @@ public:
 
   ~TexturesHandler();
 
-  const IGLTextureId* getGLTextureId(const IImage* image,
+  const TextureIDReference* getTextureIDReference(const IImage* image,
                                      int format,
                                      const std::string& name,
                                      bool hasMipMap);
 
-  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
 
+  //This two methods are supposed to be accessed only by TextureIDReference class
   void releaseGLTextureId(const IGLTextureId* glTextureId);
-
   void retainGLTextureId(const IGLTextureId* glTextureId);
-
 };
 
 #endif

@@ -497,8 +497,10 @@ public class GenericQuadTree_Node
   
   }
 
-  public final void remove(Object element)
+  public final boolean remove(Object element)
   {
+  
+    boolean wasRemoved = false;
   
     for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
     {
@@ -506,30 +508,48 @@ public class GenericQuadTree_Node
       if (qTElement._element == element)
       {
         _elements.remove(qTElement);
-        return;
+        wasRemoved = true;
       }
     }
   
-    if (_children != null)
+    if (wasRemoved)
     {
-  
-      int nChild = 0;
-      for (int i = 0; i < 4; i++)
+      return true;
+    }
+    else
+    {
+      if (_children != null)
       {
-        nChild += _children[i].getNElements();
-      }
   
-      if (nChild == 0)
-      {
         for (int i = 0; i < 4; i++)
         {
-          if (_children[i] != null)
-             _children[i].dispose();
+          if (_children[i].remove(element))
+          {
+            //The item was removed from one of my children
+  
+            //Removing all children if none has an item
+            int nChild = 0;
+            for (int j = 0; j < 4; j++)
+            {
+              nChild += _children[j].getSubtreeNElements();
+            }
+  
+            if (nChild == 0)
+            {
+              for (int j = 0; j < 4; j++)
+              {
+                if (_children[j] != null)
+                   _children[j].dispose();
+              }
+              _children = null;
+              _children = null;
+            }
+  
+            return true;
+          }
         }
-        _children = null;
       }
-  
     }
-  
+    return false;
   }
 }

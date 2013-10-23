@@ -147,7 +147,10 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
     if (f->getGroup() == COLOR_GROUP) {
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
       if (pf->getPriority() > priority) {
-        priority = pf->getPriority();
+
+        if (pf->getID() != GLF_BLENDING_MODE){  //We do not take into account Blending if TexID not set
+          priority = pf->getPriority();
+        }
       }
     }
   }

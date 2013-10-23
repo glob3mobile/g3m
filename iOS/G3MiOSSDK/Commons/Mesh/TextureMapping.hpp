@@ -11,6 +11,7 @@
 
 //#include <vector>
 #include "MutableVector2D.hpp"
+#include "TexturesHandler.hpp"
 
 class IGLTextureId;
 
@@ -37,10 +38,10 @@ public:
 class SimpleTextureMapping : public TextureMapping {
 private:
 #ifdef C_CODE
-  const IGLTextureId* _glTextureId;
+  const TextureIDReference* _glTextureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _glTextureId;
+  private TextureIDReference _glTextureId;
 #endif
 
   IFloatBuffer* _texCoords;
@@ -56,8 +57,7 @@ private:
 
 public:
   
-  SimpleTextureMapping(const IGLTextureId* glTextureId,
-                       TexturesHandler* texturesHandler,
+  SimpleTextureMapping(const TextureIDReference* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
                        bool isTransparent) :
@@ -66,8 +66,7 @@ public:
   _translation(0, 0),
   _scale(1, 1),
   _ownedTexCoords(ownedTexCoords),
-  _isTransparent(isTransparent),
-  _texturesHandler(texturesHandler)
+  _isTransparent(isTransparent)
   {
     
   }
@@ -81,7 +80,7 @@ public:
   virtual ~SimpleTextureMapping();
   
   const IGLTextureId* getGLTextureId() const {
-    return _glTextureId;
+    return _glTextureId->getID();
   }
 
   IFloatBuffer* getTexCoords() const {

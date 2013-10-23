@@ -16,7 +16,11 @@ public class GLFeatureColorGroup extends GLFeatureGroup
         PriorityGLFeature pf = ((PriorityGLFeature) f);
         if (pf.getPriority() > priority)
         {
-          priority = pf.getPriority();
+  
+          if (pf.getID() != GLFeatureID.GLF_BLENDING_MODE) //We do not take into account Blending if TexID not set
+          {
+            priority = pf.getPriority();
+          }
         }
       }
     }

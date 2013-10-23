@@ -27,31 +27,40 @@ EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
-  
+
+  delete _texId; //Releasing texture
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 
 }
 
-const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
-  if (_textureImage == NULL) {
-    return NULL;
+const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+
+  if (_texId == NULL){
+    if (_textureImage == NULL) {
+      return NULL;
+    }
+
+    _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                      GLFormat::rgba(),
+                                                      _textureURL.getPath(),
+                                                      false);
+
+    rc->getFactory()->deleteImage(_textureImage);
+    _textureImage = NULL;
   }
 
-  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _textureURL.getPath(),
-                                                                       false);
-
-  rc->getFactory()->deleteImage(_textureImage);
-  _textureImage = NULL;
-
-  if (texId == NULL) {
+  if (_texId == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
   }
 
-  return texId;
+  if (_texId == NULL){
+    return NULL;
+  }
+
+  return _texId->createCopy(); //The copy will be handle by the TextureMapping
 }
 
 
@@ -107,7 +116,7 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create surface indices
   ShortBufferBuilder indices;
   short delta = (short) (2*_resolution - 1);
-  
+
   // create indices for textupe mapping depending on the flag _texturedInside
   if (!_texturedInside) {
     for (short j=0; j<_resolution-1; j++) {
@@ -144,13 +153,12 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              true,
                              _withNormals? normals->create() : NULL);
 
-  const IGLTextureId* texId = getTextureId(rc);
+  const TextureIDReference* texId = getTextureId(rc);
   if (texId == NULL) {
     return im;
   }
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    rc->getTexturesHandler(),
                                                     texCoords->create(),
                                                     true,
                                                     true);
@@ -217,7 +225,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
                                               ));
   const Sector sector(Sector::fullSphere());
 
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
 
@@ -239,7 +247,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
         Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
         normals.add(n);
       }
-      
+
       const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
@@ -255,13 +263,13 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     compositeMesh->addMesh(createBorderMesh(rc, &vertices));
     return compositeMesh;
   }
-  
+
   return surfaceMesh;
 }
 
 
 std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
-                                           const Vector3D& direction) const {
+                                                           const Vector3D& direction) const {
   MutableMatrix44D* M = getTransformMatrix(_planet);
   const Quadric transformedQuadric = _quadric.transformBy(*M);
   std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);

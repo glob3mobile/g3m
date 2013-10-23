@@ -192,6 +192,28 @@ private:
 
   Mesh* _mesh;
 
+  float normalize(float value,
+                  float max,
+                  float min) {
+    return (value - min) / (max - min);
+  }
+
+  Color interpolateColor(const Color& from,
+                         const Color& middle,
+                         const Color& to,
+                         float d) {
+    if (d <= 0) {
+      return from;
+    }
+    if (d >= 1) {
+      return to;
+    }
+    if (d <= 0.5) {
+      return from.mixedWith(middle, d * 2);
+    }
+    return middle.mixedWith(to, (d - 0.5f) * 2);
+  }
+
 public:
 
   MeshRenderer_PointCloudParserAsyncTask(MeshRenderer*     meshRenderer,
@@ -269,6 +291,9 @@ public:
             /*                 */ ? FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet())
             /*                 */ : FloatBufferBuilderFromGeodetic::builderWithGivenCenter(_context->getPlanet(), *averagePoint);
 
+            double minHeight = jsonPoints->getAsNumber(2, 0);
+            double maxHeight = minHeight;
+
             for (int i = 0; i < size*3; i += 3) {
               const double lonInDegrees = jsonPoints->getAsNumber(i    , 0);
               const double latInDegrees = jsonPoints->getAsNumber(i + 1, 0);
@@ -277,12 +302,32 @@ public:
               verticesBuilder.add(Angle::fromDegrees(latInDegrees),
                                   Angle::fromDegrees(lonInDegrees),
                                   height + _deltaHeight);
+
+              if (height < minHeight) {
+                minHeight = height;
+              }
+              if (height > maxHeight) {
+                maxHeight = height;
+              }
             }
 
             IFloatBuffer* colors = NULL;
             const JSONArray* jsonColors = jsonObject->getAsArray("colors");
             if (jsonColors == NULL) {
-              // TODO: color ramp from height
+              const Color fromColor   = Color::red();
+              const Color middleColor = Color::green();
+              const Color toColor     = Color::blue();
+              FloatBufferBuilderFromColor colorsBuilder;
+
+              for (int i = 0; i < size*3; i += 3) {
+                const double height = jsonPoints->getAsNumber(i + 2, 0);
+
+                const Color interpolatedColor = interpolateColor(fromColor, middleColor, toColor,
+                                                                 normalize((float) height, (float) minHeight, (float) maxHeight));
+                colorsBuilder.add(interpolatedColor);
+              }
+
+              colors = colorsBuilder.create();
             }
             else {
               FloatBufferBuilderFromColor colorsBuilder;
@@ -295,7 +340,7 @@ public:
 
                 colorsBuilder.addBase255(red, green, blue, 1);
               }
-
+              
               colors = colorsBuilder.create();
             }
 

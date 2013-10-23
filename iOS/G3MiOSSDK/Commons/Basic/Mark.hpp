@@ -25,6 +25,7 @@ class IGLTextureId;
 class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
+class TextureIDReference;
 
 #include "SurfaceElevationProvider.hpp"
 
@@ -108,10 +109,10 @@ private:
   const bool        _autoDeleteListener;
 
 #ifdef C_CODE
-  const IGLTextureId* _textureId;
+  const TextureIDReference* _textureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _textureId;
+  private TextureIDReference _textureId;
 #endif
 
   Vector3D* _cartesianPosition;

@@ -495,7 +495,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
     if (parameters == NULL) {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+      ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
     
@@ -782,8 +782,8 @@ void PlanetRenderer::addListener(const Geodetic2D& position,
   _elevationListenersTree.add(position, listener);
 }
 
-void PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
-  _elevationListenersTree.remove(listener);
+bool PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
+  return _elevationListenersTree.remove(listener);
 }
 
 void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{

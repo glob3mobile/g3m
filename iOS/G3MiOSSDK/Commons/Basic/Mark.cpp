@@ -365,7 +365,9 @@ Mark::~Mark() {
   delete _position;
 
   if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->removeListener(this);
+    if (!_surfaceElevationProvider->removeListener(this)){
+      ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
+    }
   }
 
   delete _cartesianPosition;
@@ -381,6 +383,12 @@ Mark::~Mark() {
 
   _glState->_release();
 
+  if (_textureId != NULL){
+#ifdef JAVA_CODE
+    _textureId.dispose();
+#endif
+    delete _textureId; //Releasing texture
+  }
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
@@ -419,7 +427,7 @@ void Mark::createGLState(const Planet* planet) {
                         false);
 
   if (_textureId != NULL) {
-    _glState->addGLFeature(new TextureGLFeature(_textureId,
+    _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
                                                getBillboardTexCoords(),
                                                2,
                                                0,
@@ -472,7 +480,7 @@ void Mark::render(const G3MRenderContext* rc,
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
-          _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+          _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                 GLFormat::rgba(),
                                                                 _imageID,
                                                                 false);

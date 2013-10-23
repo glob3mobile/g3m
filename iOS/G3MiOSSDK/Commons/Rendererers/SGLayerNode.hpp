@@ -14,6 +14,7 @@
 
 class IGLTextureId;
 class IImage;
+class TextureIDReference;
 
 class SGLayerNode : public SGNode {
 private:
@@ -30,16 +31,16 @@ private:
 
   mutable bool _initialized;
 
-  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
   IImage* _downloadedImage;
   void requestImage(const G3MRenderContext* rc);
 
 #ifdef C_CODE
-  const IGLTextureId* _textureId;
+  const TextureIDReference* _textureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _textureId;
+  private TextureIDReference _textureId;
 #endif
 
   URL getURL() const;
@@ -63,6 +64,8 @@ public:
   _initialized(false)
   {
   }
+
+  ~SGLayerNode();
   
   bool isReadyToRender(const G3MRenderContext* rc);
 
