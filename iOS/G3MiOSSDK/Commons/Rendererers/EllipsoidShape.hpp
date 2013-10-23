@@ -150,7 +150,7 @@ public:
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
-  bool isVisible(const G3MRenderContext *rc) const {
+  bool isVisible(const G3MRenderContext *rc) {
     int __TODO_isVisible_Method;
     return true;
   }

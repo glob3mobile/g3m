@@ -14,6 +14,8 @@
 #include "Planet.hpp"
 #include "Quadric.hpp"
 
+class BoundingVolume;
+
 
 class BoxShape : public AbstractMeshShape {
 private:
@@ -22,6 +24,8 @@ private:
   double _extentZ;
   
   const Planet* _planet;
+  
+  BoundingVolume* _boundingVolume;
 
 #ifdef C_CODE
   const Quadric _frontQuadric;
@@ -65,6 +69,7 @@ public:
            Color* borderColor = NULL,
            bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
+  _boundingVolume(NULL),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
@@ -88,6 +93,7 @@ public:
   ~BoxShape() {
     delete _surfaceColor;
     delete _borderColor;
+    if (_boundingVolume) delete _boundingVolume;
     
 #ifdef JAVA_CODE
   super.dispose();
@@ -132,7 +138,7 @@ public:
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
   
-  bool isVisible(const G3MRenderContext *rc) const;
+  bool isVisible(const G3MRenderContext *rc);
 };
 
 #endif

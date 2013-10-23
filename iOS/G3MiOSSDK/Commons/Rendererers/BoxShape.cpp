@@ -348,11 +348,12 @@ std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
 }
 
 
-bool BoxShape::isVisible(const G3MRenderContext *rc) const
+bool BoxShape::isVisible(const G3MRenderContext *rc)
 {
-  OrientedBox *orientedBox = new OrientedBox(getExtent(), *getTransformMatrix(_planet));
+  if (_boundingVolume == NULL)
+    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(_planet));
   const Frustum* cameraFrustumInModelCoordinates = rc->getCurrentCamera()->getFrustumInModelCoordinates();
-  bool result = orientedBox->touchesFrustum(cameraFrustumInModelCoordinates);
+  bool result = _boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates);
   if (!result) printf("  -- box invisible\n");
   else
     printf(" -- box visible\n");
