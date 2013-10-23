@@ -40,13 +40,19 @@ std::vector<double> OrientedBox::intersectionsDistances(const Vector3D& origin,
   double tmin=-1e10, tmax=1e10;
   double t1, t2;
   
-  // AGUSTIN: OPTIMIZA TANTA LLAMADA A TRANSFORMBY QUE INCLUYE INVERSAS
-  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtent._x).transformBy(_transformMatrix);
-  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtent._x).transformBy(_transformMatrix);
-  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtent._y).transformBy(_transformMatrix);
-  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtent._y).transformBy(_transformMatrix);
-  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtent._z).transformBy(_transformMatrix);
-  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtent._z).transformBy(_transformMatrix);
+  // create quadrics for the 6 sides
+  // QUESTION: CREATE 6 MATRICES EVERYTIME OR SAVE THEM INSIDE THE CLASS??
+  MutableMatrix44D inverse = _transformMatrix.inversed();
+  MutableMatrix44D transpose = inverse.transposed();
+  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
+  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
+  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtent._y).transformBy(inverse, transpose);
+  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtent._y).transformBy(inverse, transpose);
+  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtent._z).transformBy(inverse, transpose);
+  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtent._z).transformBy(inverse, transpose);
+  
+  // ALL THIS CODE COULD BE OPTIMIZED
+  // FOR EXAMPLE, WHEN CUADRICS ARE PLANES, MATH EXPRESSIONS ARE SIMPLER
   
   // intersecction with X planes
   std::vector<double> frontDistance = front.intersectionsDistances(origin, direction);

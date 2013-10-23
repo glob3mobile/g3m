@@ -12,7 +12,6 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
-#include "Quadric.hpp"
 
 class OrientedBox;
 
@@ -26,23 +25,6 @@ private:
   const Planet* _planet;
   
   OrientedBox* _boundingVolume;
-
-#ifdef C_CODE
-  const Quadric _frontQuadric;
-  const Quadric _backQuadric;
-  const Quadric _leftQuadric;
-  const Quadric _rightQuadric;
-  const Quadric _topQuadric;
-  const Quadric _bottomQuadric;
-#endif
-#ifdef JAVA_CODE
-  private final Quadric _frontQuadric;
-  private final Quadric _backQuadric;
-  private final Quadric _leftQuadric;
-  private final Quadric _rightQuadric;
-  private final Quadric _topQuadric;
-  private final Quadric _bottomQuadric;
-#endif
 
   float _borderWidth;
 
@@ -73,12 +55,6 @@ public:
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
-  _frontQuadric(Quadric::fromPlane(1, 0, 0, -extent._x/2)),
-  _backQuadric(Quadric::fromPlane(-1, 0, 0, -extent._x/2)),
-  _leftQuadric(Quadric::fromPlane(0, -1, 0, -extent._y/2)),
-  _rightQuadric(Quadric::fromPlane(0, 1, 0, -extent._y/2)),
-  _topQuadric(Quadric::fromPlane(0, 0, 1, -extent._z/2)),
-  _bottomQuadric(Quadric::fromPlane(0, 0, -1, -extent._z/2)),
   _borderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
@@ -93,7 +69,8 @@ public:
   ~BoxShape() {
     delete _surfaceColor;
     delete _borderColor;
-    if (_boundingVolume) delete _boundingVolume;
+    if (_boundingVolume)
+      delete _boundingVolume;
     
 #ifdef JAVA_CODE
   super.dispose();
