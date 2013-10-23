@@ -30,38 +30,38 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RelativeLayout;
 
-public class MainActivity extends Activity {
 
-	private G3MWidget_Android _g3mWidget;
-	private RelativeLayout _placeHolder;
+public class MainActivity
+         extends
+            Activity {
 
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+   private G3MWidget_Android _g3mWidget;
+   private RelativeLayout    _placeHolder;
 
-		setContentView(R.layout.activity_main);
-		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-		builder.getPlanetRendererBuilder().setRenderDebug(true);
 
-		final ShapesRenderer shapesRenderer = new ShapesRenderer();
-		builder.addRenderer(shapesRenderer);
+   @Override
+   protected void onCreate(final Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
 
-		final MarksRenderer marksRenderer = new MarksRenderer(true);
-		builder.addRenderer(marksRenderer);
+      setContentView(R.layout.activity_main);
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
 
-		if (false) { // Testing lights
-			shapesRenderer.addShape(new BoxShape(Geodetic3D
-					.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND,
-					new Vector3D(1000000, 1000000, 1000000), (float) 1.0, Color
-							.red(), Color.black(), true)); // With normals
+      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      builder.addRenderer(shapesRenderer);
+      
+      final MarksRenderer marksRenderer = new MarksRenderer(true);
+      builder.addRenderer(marksRenderer);
 
-			shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180,
-					0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
-					1000000, 1000000), (float) 1.0, Color.blue(),
-					Color.black(), true)); // With normals
+      if (false) { // Testing lights
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
+                  1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
 
-		}
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
+                  1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
 
+      }
+      
 		if (true) { // Adding and deleting marks
 
 			int time = 1; // SECS
@@ -107,77 +107,84 @@ public class MainActivity extends Activity {
 					.fromSeconds(time), markTask));
 		}
 
-		if (false) {
 
-			final GInitializationTask initializationTask = new GInitializationTask() {
+      if (false) {
 
-				@Override
-				public void run(G3MContext context) {
+         final GInitializationTask initializationTask = new GInitializationTask() {
 
-					final IBufferDownloadListener listener = new IBufferDownloadListener() {
+            @Override
+            public void run(final G3MContext context) {
 
-						@Override
-						public void onError(URL url) {
-							// TODO Auto-generated method stub
+               final IBufferDownloadListener listener = new IBufferDownloadListener() {
 
-						}
+                  @Override
+                  public void onError(final URL url) {
+                     // TODO Auto-generated method stub
 
-						@Override
-						public void onDownload(URL url, IByteBuffer buffer,
-								boolean expired) {
-							// TODO Auto-generated method stub
+                  }
 
-							final Shape shape = SceneJSShapesParser
-									.parseFromBSON(buffer, URL.FILE_PROTOCOL
-											+ "2029/", true,
-											Geodetic3D.fromDegrees(0, 0, 0),
-											AltitudeMode.ABSOLUTE);
 
-							shapesRenderer.addShape(shape);
-						}
+                  @Override
+                  public void onDownload(final URL url,
+                                         final IByteBuffer buffer,
+                                         final boolean expired) {
+                     // TODO Auto-generated method stub
 
-						@Override
-						public void onCanceledDownload(URL url,
-								IByteBuffer buffer, boolean expired) {
-							// TODO Auto-generated method stub
+                     final Shape shape = SceneJSShapesParser.parseFromBSON(buffer, URL.FILE_PROTOCOL + "2029/", true,
+                              Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.ABSOLUTE);
 
-						}
+                     shapesRenderer.addShape(shape);
+                  }
 
-						@Override
-						public void onCancel(URL url) {
-							// TODO Auto-generated method stub
 
-						}
-					};
+                  @Override
+                  public void onCanceledDownload(final URL url,
+                                                 final IByteBuffer buffer,
+                                                 final boolean expired) {
+                     // TODO Auto-generated method stub
 
-					context.getDownloader().requestBuffer(
-							new URL(URL.FILE_PROTOCOL + "2029/2029.bson"),
-							1000, TimeInterval.forever(), true, listener, true);
+                  }
 
-				};
 
-				@Override
-				public boolean isDone(G3MContext context) {
-					// TODO Auto-generated method stub
-					return true;
-				}
+                  @Override
+                  public void onCancel(final URL url) {
+                     // TODO Auto-generated method stub
 
-			};
+                  }
+               };
 
-			builder.setInitializationTask(initializationTask);
+               context.getDownloader().requestBuffer(new URL(URL.FILE_PROTOCOL + "2029/2029.bson"), 1000, TimeInterval.forever(),
+                        true, listener, true);
 
-		}
 
-		_g3mWidget = builder.createWidget();
-		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-		_placeHolder.addView(_g3mWidget);
+            }
 
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+            @Override
+            public boolean isDone(final G3MContext context) {
+               // TODO Auto-generated method stub
+               return true;
+            }
 
+         };
+
+         builder.setInitializationTask(initializationTask);
+
+      }
+
+
+      _g3mWidget = builder.createWidget();
+      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      _placeHolder.addView(_g3mWidget);
+
+   }
+
+
+   @Override
+   public boolean onCreateOptionsMenu(final Menu menu) {
+      // Inflate the menu; this adds items to the action bar if it is present.
+      getMenuInflater().inflate(R.menu.main, menu);
+      return true;
+   }
+
+}
