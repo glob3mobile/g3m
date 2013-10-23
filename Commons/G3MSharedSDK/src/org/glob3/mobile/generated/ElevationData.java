@@ -246,6 +246,7 @@ public abstract class ElevationData
   
     final double nanD = mu.NanD();
   
+    int _CHECK; // evaluate if this condiction can be rewrited using (uv < 0 || uv > 1)
     if (!_sector.contains(latitude, longitude))
     {
       //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
