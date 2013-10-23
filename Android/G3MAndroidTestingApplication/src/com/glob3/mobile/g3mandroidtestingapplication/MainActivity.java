@@ -5,6 +5,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
@@ -16,8 +17,10 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -52,6 +55,40 @@ public class MainActivity
       
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
+      
+      if (false){
+          shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"),
+                  URL.FILE_PROTOCOL + "textures-A320/",
+                  false,
+                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
+                                 Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                 10000),
+                  AltitudeMode.ABSOLUTE,
+                  new ShapeLoadListener() {
+					
+					@Override
+					public void onBeforeAddShape(SGShape shape) {
+						// TODO Auto-generated method stub
+				          double scale = 1e5;
+				          shape.setScale(scale, scale, scale);
+				          shape.setPitch(Angle.fromDegrees(90));
+						
+					}
+					
+					@Override
+					public void onAfterAddShape(SGShape shape) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void dispose() {
+						// TODO Auto-generated method stub
+						
+					}
+				},
+                  true);
+      }
 
       if (false) { // Testing lights
          shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
