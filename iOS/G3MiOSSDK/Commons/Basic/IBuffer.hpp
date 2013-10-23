@@ -20,18 +20,15 @@ class IBuffer {
 
 public:
 #ifdef C_CODE
-  virtual ~IBuffer() { }
+  virtual ~IBuffer();
 #endif
 //#ifdef JAVA_CODE
 //  void dispose(){}
 //#endif
 
-  IBuffer(): _id(_nextbufferID++) //The id helps us to identify unambiguously the buffer
-  {}
+  IBuffer();
 
-  long long getID() const{
-    return _id;
-  }
+  long long getID() const;
 
   /**
    Answer the size (the count of elements) of the buffer
