@@ -25,7 +25,9 @@ public abstract class IBuffer
 
   private final long _id;
 
-  void dispose(){}
+///#ifdef JAVA_CODE
+//  void dispose(){}
+///#endif
 
   public IBuffer() //The id helps us to identify unambiguously the buffer
   {
