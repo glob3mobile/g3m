@@ -7,6 +7,7 @@
 //
 
 #include "OrientedBox.hpp"
+#include "Quadric.hpp"
 
 
 int __TODO_GUS_implement_OrientedBox_empty_methods;
@@ -31,3 +32,77 @@ const std::vector<Vector3D> OrientedBox::getCorners() const
   return std::vector<Vector3D>(corners, corners+8);
 }
 
+
+std::vector<double> OrientedBox::intersectionsDistances(const Vector3D& origin,
+                                                        const Vector3D& direction) const {
+  std::vector<double> distances;
+  
+  double tmin=-1e10, tmax=1e10;
+  double t1, t2;
+  
+  // AGUSTIN: OPTIMIZA TANTA LLAMADA A TRANSFORMBY QUE INCLUYE INVERSAS
+  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtent._x).transformBy(_transformMatrix);
+  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtent._x).transformBy(_transformMatrix);
+  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtent._y).transformBy(_transformMatrix);
+  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtent._y).transformBy(_transformMatrix);
+  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtent._z).transformBy(_transformMatrix);
+  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtent._z).transformBy(_transformMatrix);
+  
+  // intersecction with X planes
+  std::vector<double> frontDistance = front.intersectionsDistances(origin, direction);
+  std::vector<double> backDistance = back.intersectionsDistances(origin, direction);
+  if (frontDistance.size()==1 && backDistance.size()==1) {
+    if (frontDistance[0] < backDistance[0]) {
+      t1 = frontDistance[0];
+      t2 = backDistance[0];
+    } else {
+      t2 = frontDistance[0];
+      t1 = backDistance[0];
+    }
+    if (t1 > tmin)
+      tmin = t1;
+    if (t2 < tmax)
+      tmax = t2;
+  }
+  
+  // intersections with Y planes
+  std::vector<double> leftDistance = left.intersectionsDistances(origin, direction);
+  std::vector<double> rightDistance = right.intersectionsDistances(origin, direction);
+  if (leftDistance.size()==1 && rightDistance.size()==1) {
+    if (leftDistance[0] < rightDistance[0]) {
+      t1 = leftDistance[0];
+      t2 = rightDistance[0];
+    } else {
+      t2 = leftDistance[0];
+      t1 = rightDistance[0];
+    }
+    if (t1 > tmin)
+      tmin = t1;
+    if (t2 < tmax)
+      tmax = t2;
+  }
+  
+  // intersections with Z planes
+  std::vector<double> topDistance = top.intersectionsDistances(origin, direction);
+  std::vector<double> bottomDistance = bottom.intersectionsDistances(origin, direction);
+  if (topDistance.size()==1 && bottomDistance.size()==1) {
+    if (topDistance[0] < bottomDistance[0]) {
+      t1 = topDistance[0];
+      t2 = bottomDistance[0];
+    } else {
+      t2 = topDistance[0];
+      t1 = bottomDistance[0];
+    }
+    if (t1 > tmin)
+      tmin = t1;
+    if (t2 < tmax)
+      tmax = t2;
+  }
+  
+  if (tmin < tmax) {
+    distances.push_back(tmin);
+    //distances.push_back(tmax);
+  }
+  
+  return distances;
+}

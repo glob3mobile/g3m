@@ -258,93 +258,10 @@ Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
   return surface;
 }
 
+
 std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
                                                      const Vector3D& direction) const {
-  std::vector<double> distances;
-  
-  double tmin=-1e10, tmax=1e10;
-  double t1, t2;
-  // transform 6 planes
-  MutableMatrix44D* M = getTransformMatrix(_planet);
-  const Quadric transformedFront = _frontQuadric.transformBy(*M);
-  const Quadric transformedBack = _backQuadric.transformBy(*M);
-  const Quadric transformedLeft = _leftQuadric.transformBy(*M);
-  const Quadric transformedRight = _rightQuadric.transformBy(*M);
-  const Quadric transformedTop = _topQuadric.transformBy(*M);
-  const Quadric transformedBottom = _bottomQuadric.transformBy(*M);
-  
-  
-  {
-    const Vector3D punto(_extentX/2, _extentY/2, _extentZ/2);
-    const Vector3D punto2 = punto.transformedBy(*M, 1);
-    printf ("punto = %f, %f, %f\n", punto2._x, punto2._y, punto2._z);
-  }
-  {
-    const Vector3D punto(-_extentX/2, -_extentY/2, -_extentZ/2);
-    const Vector3D punto2 = punto.transformedBy(*M, 1);
-    printf ("punto = %f, %f, %f\n", punto2._x, punto2._y, punto2._z);
-  }
-  
-  
-  //delete M;
-  
-  // intersecction with X planes
-  std::vector<double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
-  std::vector<double> backDistance = transformedBack.intersectionsDistances(origin, direction);
-  if (frontDistance.size()==1 && backDistance.size()==1) {
-    if (frontDistance[0] < backDistance[0]) {
-      t1 = frontDistance[0];
-      t2 = backDistance[0];
-    } else {
-      t2 = frontDistance[0];
-      t1 = backDistance[0];
-    }
-    if (t1 > tmin)
-      tmin = t1;
-    if (t2 < tmax)
-      tmax = t2;
-  }
-  
-  // intersections with Y planes
-  std::vector<double> leftDistance = transformedLeft.intersectionsDistances(origin, direction);
-  std::vector<double> rightDistance = transformedRight.intersectionsDistances(origin, direction);
-  if (leftDistance.size()==1 && rightDistance.size()==1) {
-    if (leftDistance[0] < rightDistance[0]) {
-      t1 = leftDistance[0];
-      t2 = rightDistance[0];
-    } else {
-      t2 = leftDistance[0];
-      t1 = rightDistance[0];
-    }
-    if (t1 > tmin)
-      tmin = t1;
-    if (t2 < tmax)
-      tmax = t2;
-  }
-  
-  // intersections with Z planes
-  std::vector<double> topDistance = transformedTop.intersectionsDistances(origin, direction);
-  std::vector<double> bottomDistance = transformedBottom.intersectionsDistances(origin, direction);
-  if (topDistance.size()==1 && bottomDistance.size()==1) {
-    if (topDistance[0] < bottomDistance[0]) {
-      t1 = topDistance[0];
-      t2 = bottomDistance[0];
-    } else {
-      t2 = topDistance[0];
-      t1 = bottomDistance[0];
-    }
-    if (t1 > tmin)
-      tmin = t1;
-    if (t2 < tmax)
-      tmax = t2;
-  }
-  
-  if (tmin < tmax) {
-    distances.push_back(tmin);
-    //distances.push_back(tmax);
-  }
-
-  return distances;
+  return _boundingVolume->intersectionsDistances(origin, direction);
 }
 
 
@@ -352,12 +269,7 @@ bool BoxShape::isVisible(const G3MRenderContext *rc)
 {
   if (_boundingVolume == NULL)
     _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(_planet));
-  const Frustum* cameraFrustumInModelCoordinates = rc->getCurrentCamera()->getFrustumInModelCoordinates();
-  bool result = _boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates);
-  if (!result) printf("  -- box invisible\n");
-  else
-    printf(" -- box visible\n");
-  return result;
+  return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
 
 

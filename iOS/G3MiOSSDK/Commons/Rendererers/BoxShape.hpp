@@ -14,7 +14,7 @@
 #include "Planet.hpp"
 #include "Quadric.hpp"
 
-class BoundingVolume;
+class OrientedBox;
 
 
 class BoxShape : public AbstractMeshShape {
@@ -25,7 +25,7 @@ private:
   
   const Planet* _planet;
   
-  BoundingVolume* _boundingVolume;
+  OrientedBox* _boundingVolume;
 
 #ifdef C_CODE
   const Quadric _frontQuadric;
