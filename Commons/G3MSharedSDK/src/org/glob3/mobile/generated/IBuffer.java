@@ -25,7 +25,7 @@ public abstract class IBuffer
 
   private final long _id;
 
-  void dispose();
+  void dispose(){}
 
   public IBuffer() //The id helps us to identify unambiguously the buffer
   {
