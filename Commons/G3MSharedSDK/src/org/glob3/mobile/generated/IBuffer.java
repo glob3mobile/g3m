@@ -18,14 +18,29 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IBuffer
+public abstract class IBuffer
 {
+
+  private static long _nextbufferID = 0;
+
+  private final long _id;
+
   void dispose();
+
+  public IBuffer() //The id helps us to identify unambiguously the buffer
+  {
+     _id = _nextbufferID++;
+  }
+
+  public final long getID()
+  {
+    return _id;
+  }
 
   /**
    Answer the size (the count of elements) of the buffer
    **/
-  int size();
+  public abstract int size();
 
   /**
    Answer the timestamp of the buffer.
@@ -33,8 +48,8 @@ public interface IBuffer
    This number will be different each time the buffer changes its contents.
    It provides a fast method to check if the Buffer has changed.
    **/
-  int timestamp();
+  public abstract int timestamp();
 
-  String description();
+  public abstract String description();
 
 }
