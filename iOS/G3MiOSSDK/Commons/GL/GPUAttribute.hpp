@@ -230,11 +230,13 @@ public:
 class GPUAttributeValueVecFloat: public GPUAttributeValue{
   const IFloatBuffer* _buffer;
   const int _timeStamp;
+  const long long _id;
 public:
   GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()) {}
+  _timeStamp(buffer->timestamp()),
+  _id(buffer->getID()){}
 
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0) {
@@ -251,12 +253,14 @@ public:
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    return ((_buffer->getID()        == vecV->_buffer->getID())     &&
+    bool equal = ((_id      == vecV->_buffer->getID())     &&
             (_timeStamp     == vecV->_timeStamp)  &&
             (_type          == v->_type)          &&
             (_attributeSize == v->_attributeSize) &&
             (_stride        == v->_stride)        &&
             (_normalized    == v->_normalized) );
+
+    return equal;
   }
 
   std::string description() const{
