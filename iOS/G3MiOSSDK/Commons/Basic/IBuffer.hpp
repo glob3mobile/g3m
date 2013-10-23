@@ -13,6 +13,11 @@
 
 
 class IBuffer {
+
+  static long long _nextbufferID;
+
+  const long long _id;
+
 public:
 #ifdef C_CODE
   virtual ~IBuffer() { }
@@ -20,6 +25,13 @@ public:
 #ifdef JAVA_CODE
   void dispose();
 #endif
+
+  IBuffer(): _id(_nextbufferID++) //The id helps us to identify unambiguously the buffer
+  {}
+
+  long long getID() const{
+    return _id;
+  }
 
   /**
    Answer the size (the count of elements) of the buffer

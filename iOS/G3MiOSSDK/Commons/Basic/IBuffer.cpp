@@ -7,3 +7,5 @@
 //
 
 #include "IBuffer.hpp"
+
+long long IBuffer::_nextbufferID = 0;

@@ -251,7 +251,7 @@ public:
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    return ((_buffer        == vecV->_buffer)     &&
+    return ((_buffer->getID()        == vecV->_buffer->getID())     &&
             (_timeStamp     == vecV->_timeStamp)  &&
             (_type          == v->_type)          &&
             (_attributeSize == v->_attributeSize) &&
