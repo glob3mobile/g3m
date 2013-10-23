@@ -29,7 +29,7 @@ public abstract class IBuffer
 //  void dispose(){}
 ///#endif
 
-  public IBuffer() //The id helps us to identify unambiguously the buffer
+  public IBuffer()
   {
      _id = _nextbufferID++;
   }
