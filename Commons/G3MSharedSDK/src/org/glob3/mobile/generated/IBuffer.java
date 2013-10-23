@@ -37,6 +37,18 @@ public abstract class IBuffer
     return _id;
   }
 
+  public void fPrueba()
+  {
+    int a = 0;
+    a++;
+  }
+
+  public final void fp2()
+  {
+    int a = 0;
+    a++;
+  }
+
   /**
    Answer the size (the count of elements) of the buffer
    **/
