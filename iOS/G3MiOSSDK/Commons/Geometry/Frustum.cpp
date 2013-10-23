@@ -8,6 +8,7 @@
 
 #include "Frustum.hpp"
 #include "Box.hpp"
+#include "OrientedBox.hpp"
 
 
 Frustum::Frustum (const FrustumData& data):
@@ -116,6 +117,19 @@ bool Frustum::touchesWithBox(const Box* that) const {
                 && (_farPlane.signedDistance(corners[4]) >= 0) && (_farPlane.signedDistance(corners[5]) >= 0)
                 && (_farPlane.signedDistance(corners[6]) >= 0) && (_farPlane.signedDistance(corners[7]) >= 0));
 #endif
+}
+
+
+bool Frustum::touchesWithOrientedBox(const OrientedBox* that) const
+{
+  // create an array with the 8 corners of the box
+  const std::vector<Vector3D> corners = that->getCorners();
+  return (!testAllCornersInside(_leftPlane,   corners) &&
+          !testAllCornersInside(_bottomPlane, corners) &&
+          !testAllCornersInside(_rightPlane,  corners) &&
+          !testAllCornersInside(_topPlane,    corners) &&
+          !testAllCornersInside(_nearPlane,   corners) &&
+          !testAllCornersInside(_farPlane,    corners));
 }
 
 

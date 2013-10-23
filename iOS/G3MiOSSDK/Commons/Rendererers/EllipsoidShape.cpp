@@ -262,9 +262,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
 std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
                                            const Vector3D& direction) const {
-  MutableMatrix44D* M = createTransformMatrix(_planet);
+  MutableMatrix44D* M = getTransformMatrix(_planet);
   const Quadric transformedQuadric = _quadric.transformBy(*M);
-  delete M;
   std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);
   std::vector<double> closerDistance;
   if (!distances.empty())

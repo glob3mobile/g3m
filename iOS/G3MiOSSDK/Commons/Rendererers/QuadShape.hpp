@@ -104,6 +104,11 @@ public:
     return intersections;
   }
 
+  bool isVisible(const G3MRenderContext *rc) const {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+
 };
 
 #endif

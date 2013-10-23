@@ -69,19 +69,16 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
   Geodetic3D positionWithSurfaceElevation(_position->_latitude,
                                           _position->_longitude,
                                           altitude);
-
-  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
+  const Vector3D scale(_scaleX, _scaleY, _scaleZ);
+  const Vector3D translation(_translationX, _translationY, _translationZ);
   
-  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
-  const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-
-//  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
-  const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
-
-  return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
+  return new MutableMatrix44D(planet->createTransformMatrix(positionWithSurfaceElevation,
+                                                            *_heading,
+                                                            *_pitch,
+                                                            scale,
+                                                            translation));
 }
+
 
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
   if (_transformMatrix == NULL) {
@@ -112,9 +109,11 @@ void Shape::render(const G3MRenderContext* rc,
       _pendingEffects.clear();
     }
     
-    getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
-    _glState->setParent(parentGLState);
-    rawRender(rc, _glState, renderNotReadyShapes);
+    if (isVisible(rc)) {
+      getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
+      _glState->setParent(parentGLState);
+      rawRender(rc, _glState, renderNotReadyShapes);
+    }
   }
 }
 

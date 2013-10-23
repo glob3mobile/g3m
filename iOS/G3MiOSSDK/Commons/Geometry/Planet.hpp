@@ -111,6 +111,12 @@ public:
                                        Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const = 0;
+  
+  MutableMatrix44D createTransformMatrix(const Geodetic3D& position,
+                                         const Angle& heading,
+                                         const Angle& pitch,
+                                         const Vector3D& scale,
+                                         const Vector3D& translation) const;
 };
 
 #endif

@@ -1565,7 +1565,7 @@ public:
   //  circle->setScale(2.0, 0.5, 1);
   shapesRenderer->addShape(circle);
 
-  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
+/*  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
                                            Angle::fromDegrees(-122),
                                            45000),
                             ABSOLUTE,
@@ -1575,7 +1575,7 @@ public:
                             Color::fromRGBA(0,    1, 0, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
-  shapesRenderer->addShape(box);
+  shapesRenderer->addShape(box);*/
 
 //    const URL textureURL("file:///world.jpg", false);
 //
@@ -1583,6 +1583,7 @@ public:
   const Vector3D radius1(factor, factor, factor);
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   const Vector3D radiusBox(factor, factor*1.5, factor*2);
+  //const Vector3D radiusBox(1000, 2000, 3000);
   
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),

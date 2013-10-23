@@ -80,6 +80,8 @@ public:
   _useNormals(useNormals),
   _planet(planet)
   {
+    const Vector3D pos = planet->toCartesian(*position);
+    printf ("la shape está en %f %f %f\n", pos._x, pos._y, pos._z);
 
   }
 
@@ -130,6 +132,7 @@ public:
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
   
+  bool isVisible(const G3MRenderContext *rc) const;
 };
 
 #endif

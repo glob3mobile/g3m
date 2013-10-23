@@ -608,6 +608,7 @@
 		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
 		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
 		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
+		FB0F2B9F1816C3240058394E /* OrientedBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0F2B9D1816C3240058394E /* OrientedBox.cpp */; };
 		FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2B1B2517F880B5006307EC /* Quadric.cpp */; };
 		FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2B1B2617F880B5006307EC /* Quadric.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
@@ -1570,6 +1571,8 @@
 		E87557C616E915D10031FBB3 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
 		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
 		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
+		FB0F2B9D1816C3240058394E /* OrientedBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrientedBox.cpp; path = Commons/Geometry/OrientedBox.cpp; sourceTree = "<group>"; };
+		FB0F2B9E1816C3240058394E /* OrientedBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrientedBox.hpp; path = Commons/Geometry/OrientedBox.hpp; sourceTree = "<group>"; };
 		FB2B1B2517F880B5006307EC /* Quadric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quadric.cpp; path = Commons/Geometry/Quadric.cpp; sourceTree = "<group>"; };
 		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
@@ -1895,6 +1898,8 @@
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				CCB2566315B5F58500079B96 /* Box.cpp */,
 				CC41E3CB15B4651700B5581C /* Box.hpp */,
+				FB0F2B9D1816C3240058394E /* OrientedBox.cpp */,
+				FB0F2B9E1816C3240058394E /* OrientedBox.hpp */,
 				CC41E3C915B4649800B5581C /* BoundingVolume.hpp */,
 				D8B749A9175E040800046B96 /* Ellipsoid.cpp */,
 				D8B749AA175E040800046B96 /* Ellipsoid.hpp */,
@@ -1922,6 +1927,8 @@
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				D80A28691746474E0058CEC3 /* Planet.cpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
+				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
+				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
 				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
@@ -1947,8 +1954,6 @@
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF5C1193178C76F2000ED715 /* BoundingArea.cpp */,
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
-				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
-				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2763,6 +2768,7 @@
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
 				CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */,
+				FB0F2B9F1816C3240058394E /* OrientedBox.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEORasterLineSymbol.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,

@@ -14,6 +14,9 @@
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
 #include "DirectMesh.hpp"
+#include "OrientedBox.hpp"
+#include "Camera.hpp"
+
 
 Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
@@ -262,15 +265,29 @@ std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
   double tmin=-1e10, tmax=1e10;
   double t1, t2;
   // transform 6 planes
-  MutableMatrix44D* M = createTransformMatrix(_planet);
+  MutableMatrix44D* M = getTransformMatrix(_planet);
   const Quadric transformedFront = _frontQuadric.transformBy(*M);
   const Quadric transformedBack = _backQuadric.transformBy(*M);
   const Quadric transformedLeft = _leftQuadric.transformBy(*M);
   const Quadric transformedRight = _rightQuadric.transformBy(*M);
   const Quadric transformedTop = _topQuadric.transformBy(*M);
   const Quadric transformedBottom = _bottomQuadric.transformBy(*M);
-  delete M;
-
+  
+  
+  {
+    const Vector3D punto(_extentX/2, _extentY/2, _extentZ/2);
+    const Vector3D punto2 = punto.transformedBy(*M, 1);
+    printf ("punto = %f, %f, %f\n", punto2._x, punto2._y, punto2._z);
+  }
+  {
+    const Vector3D punto(-_extentX/2, -_extentY/2, -_extentZ/2);
+    const Vector3D punto2 = punto.transformedBy(*M, 1);
+    printf ("punto = %f, %f, %f\n", punto2._x, punto2._y, punto2._z);
+  }
+  
+  
+  //delete M;
+  
   // intersecction with X planes
   std::vector<double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
   std::vector<double> backDistance = transformedBack.intersectionsDistances(origin, direction);
@@ -329,4 +346,16 @@ std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
 
   return distances;
 }
+
+
+bool BoxShape::isVisible(const G3MRenderContext *rc) const
+{
+  OrientedBox *orientedBox = new OrientedBox(getExtent(), *getTransformMatrix(_planet));
+  const Frustum* cameraFrustumInModelCoordinates = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  bool result = orientedBox->touchesFrustum(cameraFrustumInModelCoordinates);
+  if (!result) printf("  -- box invisible\n");
+  return result;
+}
+
+
 

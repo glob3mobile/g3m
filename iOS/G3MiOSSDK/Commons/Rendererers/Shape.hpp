@@ -14,6 +14,7 @@
 #include "Vector3D.hpp"
 
 class MutableMatrix44D;
+class G3MRenderContext;
 
 #include "Effects.hpp"
 #include <vector>
@@ -46,7 +47,6 @@ private:
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
 
@@ -57,14 +57,17 @@ private:
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _surfaceElevation;
   
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+
+  
 protected:
   virtual void cleanTransformMatrix();
+  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
+
 
   
 public:
   
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
-
   Shape(Geodetic3D* position,
         AltitudeMode altitudeMode) :
   _position( position ),
@@ -257,6 +260,7 @@ public:
   virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const = 0;
   
+  virtual bool isVisible(const G3MRenderContext *rc) const = 0;
 
 };
 

@@ -21,6 +21,7 @@ class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
 
 class IGLTextureId;
+class G3MRenderContext;
 
 #include "URL.hpp"
 
@@ -138,7 +139,12 @@ public:
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
-  
+
+  bool isVisible(const G3MRenderContext *rc) const {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+
 };
 
 #endif
