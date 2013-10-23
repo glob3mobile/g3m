@@ -22,9 +22,9 @@ public:
 #ifdef C_CODE
   virtual ~IBuffer() { }
 #endif
-#ifdef JAVA_CODE
-  void dispose(){}
-#endif
+//#ifdef JAVA_CODE
+//  void dispose(){}
+//#endif
 
   IBuffer(): _id(_nextbufferID++) //The id helps us to identify unambiguously the buffer
   {}
