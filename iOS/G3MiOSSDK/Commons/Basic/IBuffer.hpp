@@ -30,6 +30,16 @@ public:
 
   long long getID() const;
 
+  virtual void fPrueba(){
+    int a = 0;
+    a++;
+  }
+
+  void fp2(){
+    int a = 0;
+    a++;
+  }
+
   /**
    Answer the size (the count of elements) of the buffer
    **/
