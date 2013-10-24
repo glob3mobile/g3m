@@ -86,11 +86,15 @@ public class MainActivity
                   }, true);
       }
 
-      if (false) { // Testing lights
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+      if (true) { // Testing lights
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, 
+        		 builder.getPlanet(),
+        		 new Vector3D(
                   1000000, 1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
 
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, 
+        		 builder.getPlanet(),
+        		 new Vector3D(
                   1000000, 1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
 
       }
