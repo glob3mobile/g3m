@@ -244,7 +244,7 @@ public class ShapesRenderer extends LeafRenderer
           System.out.printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
           for (int i = 0; i<shapeDistances.size(); i++)
           {
-            System.out.printf ("   %d: shape %x to distance %f\n", i+1, (int)shapeDistances.get(i)._shape, shapeDistances.get(i)._distance);
+            System.out.printf ("   %d: shape %d to distance %f\n", i+1, shapeDistances.get(i)._shape, shapeDistances.get(i)._distance);
           }
         }
       }

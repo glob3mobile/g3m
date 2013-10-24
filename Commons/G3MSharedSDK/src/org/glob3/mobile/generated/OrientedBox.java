@@ -24,35 +24,57 @@ package org.glob3.mobile.generated;
 public class OrientedBox extends BoundingVolume
 {
 
-  private final Vector3D _halfExtent ;
-  private final MutableMatrix44D _transformMatrix = new MutableMatrix44D();
+  private final double _halfExtentX;
+  private final double _halfExtentY;
+  private final double _halfExtentZ;
+  private final MutableMatrix44D _transformMatrix;
+
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+
 
   public OrientedBox(Vector3D extent, MutableMatrix44D transformMatrix)
   {
-     _halfExtent = new Vector3D(extent.times(0.5));
+     _halfExtentX = extent._x/2;
+     _halfExtentY = extent._y/2;
+     _halfExtentZ = extent._z/2;
      _transformMatrix = new MutableMatrix44D(transformMatrix);
   }
 
   public void dispose()
   {
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
   }
 
   public final double projectedArea(G3MRenderContext rc)
   {
+    int __TODO_OrientedBox_projectedArea;
+    return 0;
   }
+
   public final void render(G3MRenderContext rc, GLState parentState)
   {
+    int __TODO_OrientedBox_render;
   }
 
   public final boolean touches(BoundingVolume that)
   {
+    int __TODO_OrientedBox_touches;
+    return true;
   }
+
   public final boolean touchesBox(Box that)
   {
+    int __TODO_OrientedBox_touchesBox;
+    return true;
   }
+
   public final boolean touchesSphere(Sphere that)
   {
+    int __TODO_OrientedBox_touchesSphere;
+    return true;
   }
+
 
   public final boolean touchesFrustum(Frustum frustum)
   {
@@ -61,39 +83,77 @@ public class OrientedBox extends BoundingVolume
 
   public final boolean contains(Vector3D point)
   {
+    int __TODO_OrientedBox_contains;
+    return true;
   }
 
   public final boolean fullContains(BoundingVolume that)
   {
+    int __TODO_OrientedBox_fullContains;
+    return true;
   }
+
   public final boolean fullContainedInBox(Box that)
   {
+    int __TODO_OrientedBox_fullContainedInBox;
+    return true;
   }
+
   public final boolean fullContainedInSphere(Sphere that)
   {
+    int __TODO_OrientedBox_fullContainedInSphere;
+    return true;
   }
+
 
   public final BoundingVolume mergedWith(BoundingVolume that)
   {
+    int __TODO_OrientedBox_mergedWith;
+    return (BoundingVolume) null;
   }
+
+
   public final BoundingVolume mergedWithBox(Box that)
   {
+    int __TODO_OrientedBox_mergedWithBox;
+    return (BoundingVolume) null;
   }
+
+
   public final BoundingVolume mergedWithSphere(Sphere that)
   {
+    int __TODO_OrientedBox_mergedWithSphere;
+    return (BoundingVolume) null;
   }
+
+
 
   public final Sphere createSphere()
   {
+    int __TODO_OrientedBox_createSphere;
+    return (Sphere) null;
   }
+
+
 
   public final java.util.ArrayList<Vector3D> getCorners()
   {
-    int __TODO_convert_to_java_this_code_as_in_Box_class;
+    int __TODO_GUS_implement_all_the_OrientedBox_empty_methods;
   
-    Vector3D[] corners = { new Vector3D(_halfExtent._x, _halfExtent._y, _halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(-_halfExtent._x, _halfExtent._y, _halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(_halfExtent._x, -_halfExtent._y, _halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(-_halfExtent._x, -_halfExtent._y, _halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(_halfExtent._x, _halfExtent._y, -_halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(-_halfExtent._x, _halfExtent._y, -_halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(_halfExtent._x, -_halfExtent._y, -_halfExtent._z).transformedBy(_transformMatrix, 1), new Vector3D(-_halfExtent._x, -_halfExtent._y, -_halfExtent._z).transformedBy(_transformMatrix, 1) };
   
-    return new java.util.ArrayList<Vector3D>(corners, corners+8);
+    if (_cornersD == null) {
+      _cornersD = new java.util.ArrayList<Vector3D>(8);
+      _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+      _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+    }
+    return _cornersD;
+  
   }
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
@@ -108,12 +168,12 @@ public class OrientedBox extends BoundingVolume
     // QUESTION: CREATE 6 MATRICES EVERYTIME OR SAVE THEM INSIDE THE CLASS??
     MutableMatrix44D inverse = _transformMatrix.inversed();
     MutableMatrix44D transpose = inverse.transposed();
-    Quadric front = Quadric.fromPlane(1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
-    Quadric back = Quadric.fromPlane(-1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
-    Quadric left = Quadric.fromPlane(0, -1, 0, -_halfExtent._y).transformBy(inverse, transpose);
-    Quadric right = Quadric.fromPlane(0, 1, 0, -_halfExtent._y).transformBy(inverse, transpose);
-    Quadric top = Quadric.fromPlane(0, 0, 1, -_halfExtent._z).transformBy(inverse, transpose);
-    Quadric bottom = Quadric.fromPlane(0, 0, -1, -_halfExtent._z).transformBy(inverse, transpose);
+    Quadric front = Quadric.fromPlane(1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
+    Quadric back = Quadric.fromPlane(-1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
+    Quadric left = Quadric.fromPlane(0, -1, 0, -_halfExtentY).transformBy(inverse, transpose);
+    Quadric right = Quadric.fromPlane(0, 1, 0, -_halfExtentY).transformBy(inverse, transpose);
+    Quadric top = Quadric.fromPlane(0, 0, 1, -_halfExtentZ).transformBy(inverse, transpose);
+    Quadric bottom = Quadric.fromPlane(0, 0, -1, -_halfExtentZ).transformBy(inverse, transpose);
   
     // ALL THIS CODE COULD BE OPTIMIZED
     // FOR EXAMPLE, WHEN CUADRICS ARE PLANES, MATH EXPRESSIONS ARE SIMPLER
