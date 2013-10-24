@@ -10,23 +10,24 @@
 #include "Quadric.hpp"
 
 
-int __TODO_GUS_implement_OrientedBox_empty_methods;
 
 
 
 const std::vector<Vector3D> OrientedBox::getCorners() const
 {
+  int __TODO_GUS_implement_OrientedBox_empty_methods;
+
   int __TODO_convert_to_java_this_code_as_in_Box_class;
   
   const Vector3D corners[8] = {
-    Vector3D(_halfExtent._x,  _halfExtent._y,   _halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(-_halfExtent._x, _halfExtent._y,   _halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(_halfExtent._x,  -_halfExtent._y,  _halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(-_halfExtent._x, -_halfExtent._y,  _halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(_halfExtent._x,  _halfExtent._y,   -_halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(-_halfExtent._x, _halfExtent._y,   -_halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(_halfExtent._x,  -_halfExtent._y,  -_halfExtent._z).transformedBy(_transformMatrix, 1),
-    Vector3D(-_halfExtent._x, -_halfExtent._y,  -_halfExtent._z).transformedBy(_transformMatrix, 1)
+    Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_halfExtentX,  -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(-_halfExtentX, -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_halfExtentX,  _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(-_halfExtentX, _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_halfExtentX,  -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(-_halfExtentX, -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1)
   };
   
   return std::vector<Vector3D>(corners, corners+8);
@@ -42,14 +43,14 @@ std::vector<double> OrientedBox::intersectionsDistances(const Vector3D& origin,
   
   // create quadrics for the 6 sides
   // QUESTION: CREATE 6 MATRICES EVERYTIME OR SAVE THEM INSIDE THE CLASS??
-  MutableMatrix44D inverse = _transformMatrix.inversed();
+  MutableMatrix44D inverse = _transformMatrix->inversed();
   MutableMatrix44D transpose = inverse.transposed();
-  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
-  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtent._x).transformBy(inverse, transpose);
-  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtent._y).transformBy(inverse, transpose);
-  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtent._y).transformBy(inverse, transpose);
-  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtent._z).transformBy(inverse, transpose);
-  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtent._z).transformBy(inverse, transpose);
+  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
+  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
+  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtentY).transformBy(inverse, transpose);
+  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtentY).transformBy(inverse, transpose);
+  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtentZ).transformBy(inverse, transpose);
+  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtentZ).transformBy(inverse, transpose);
   
   // ALL THIS CODE COULD BE OPTIMIZED
   // FOR EXAMPLE, WHEN CUADRICS ARE PLANES, MATH EXPRESSIONS ARE SIMPLER

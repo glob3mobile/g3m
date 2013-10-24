@@ -20,16 +20,20 @@ class MutableMatrix44D;
 class OrientedBox: public BoundingVolume {
   
 private:
-  const Vector3D _halfExtent;
-  const MutableMatrix44D _transformMatrix;
+  const double _halfExtentX, _halfExtentY, _halfExtentZ;
+  const MutableMatrix44D* _transformMatrix;
   
 public:
   OrientedBox(const Vector3D& extent, const MutableMatrix44D& transformMatrix):
-  _halfExtent(extent.times(0.5)),
-  _transformMatrix(transformMatrix)
+  _halfExtentX(extent._x/2),
+  _halfExtentY(extent._y/2),
+  _halfExtentZ(extent._z/2),
+  _transformMatrix(new MutableMatrix44D(transformMatrix))
   {}
   
-  ~OrientedBox() {}
+  ~OrientedBox() {
+    delete _transformMatrix;
+  }
   
   double projectedArea(const G3MRenderContext* rc) const{}
   void render(const G3MRenderContext* rc,
