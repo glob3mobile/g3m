@@ -219,7 +219,7 @@ double ElevationData::getElevationAt(const Angle& latitude,
 
   const double nanD = mu->NanD();
 
-  int _CHECK; // evaluate if this condiction can be rewrited using (uv < 0 || uv > 1)
+  int _CHECK; // evaluate if this condition can be rewrited using (uv < 0 || uv > 1)
   if (!_sector.contains(latitude, longitude)) {
     //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
     //                                  _sector.description().c_str(),
