@@ -22,11 +22,18 @@
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
 #include "MercatorUtils.hpp"
+#include "OrientedBox.hpp"
+#include "Camera.hpp"
+#include "Quadric.hpp"
+
 
 EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
+  if (_boundingVolume)
+    delete _boundingVolume;
+
 
   delete _texId; //Releasing texture
 
@@ -271,10 +278,20 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
                                                            const Vector3D& direction) const {
   MutableMatrix44D* M = getTransformMatrix(_planet);
-  const Quadric transformedQuadric = _quadric.transformBy(*M);
+  const Quadric transformedQuadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
   std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);
   std::vector<double> closerDistance;
   if (!distances.empty())
     closerDistance.push_back(distances[0]);
   return closerDistance;
+}
+
+
+bool EllipsoidShape::isVisible(const G3MRenderContext *rc)
+{
+  if (_boundingVolume == NULL) {
+    const Vector3D extent = _ellipsoid->getRadii().times(2);
+    _boundingVolume = new OrientedBox(extent, *getTransformMatrix(_planet));
+  }
+  return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }

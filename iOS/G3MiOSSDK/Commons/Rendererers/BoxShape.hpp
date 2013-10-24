@@ -61,23 +61,10 @@ public:
   _useNormals(useNormals),
   _planet(planet)
   {
-    const Vector3D pos = planet->toCartesian(*position);
-    printf ("la shape está en %f %f %f\n", pos._x, pos._y, pos._z);
-
   }
 
-  ~BoxShape() {
-    delete _surfaceColor;
-    delete _borderColor;
-    if (_boundingVolume)
-      delete _boundingVolume;
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  }
-
+  ~BoxShape();
+  
   void setExtent(const Vector3D& extent) {
     if ((_extentX != extent._x) ||
         (_extentY != extent._y) ||

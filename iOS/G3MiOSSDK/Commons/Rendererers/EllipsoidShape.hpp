@@ -12,7 +12,6 @@
 #include "AbstractMeshShape.hpp"
 #include "Ellipsoid.hpp"
 #include "Planet.hpp"
-#include "Quadric.hpp"
 
 
 class Color;
@@ -24,6 +23,8 @@ class TextureIDReference;
 class IGLTextureId;
 class G3MRenderContext;
 
+class OrientedBox;
+
 #include "URL.hpp"
 
 
@@ -32,13 +33,13 @@ private:
   
   const Planet* _planet;
   
+  OrientedBox* _boundingVolume;
+  
 #ifdef C_CODE
   const Ellipsoid* _ellipsoid;
-  const Quadric    _quadric;
 #endif
 #ifdef JAVA_CODE
   private Ellipsoid _ellipsoid;
-  private final Quadric _quadric;
 #endif
 
   URL _textureURL;
@@ -95,7 +96,7 @@ public:
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  _boundingVolume(NULL),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
@@ -124,7 +125,7 @@ public:
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  _boundingVolume(NULL),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
@@ -150,11 +151,7 @@ public:
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
-  bool isVisible(const G3MRenderContext *rc) {
-    int __TODO_isVisible_Method;
-    return true;
-  }
-
+  bool isVisible(const G3MRenderContext *rc);
 };
 
 #endif
