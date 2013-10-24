@@ -23,6 +23,11 @@ private:
   const double _halfExtentX, _halfExtentY, _halfExtentZ;
   const MutableMatrix44D* _transformMatrix;
   
+#ifdef JAVA_CODE
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+#endif
+
+  
 public:
   OrientedBox(const Vector3D& extent, const MutableMatrix44D& transformMatrix):
   _halfExtentX(extent._x/2),
@@ -35,29 +40,82 @@ public:
     delete _transformMatrix;
   }
   
-  double projectedArea(const G3MRenderContext* rc) const{}
-  void render(const G3MRenderContext* rc,
-              const GLState& parentState) const{}
+  double projectedArea(const G3MRenderContext* rc) const {
+    int __TODO_OrientedBox_projectedArea;
+    return 0;
+  }
   
-  bool touches(const BoundingVolume* that) const{}
-  bool touchesBox(const Box* that) const{}
-  bool touchesSphere(const Sphere* that) const{}
+  void render(const G3MRenderContext* rc,
+              const GLState& parentState) const  {
+    int __TODO_OrientedBox_render;
+  }
+
+  bool touches(const BoundingVolume* that) const  {
+    int __TODO_OrientedBox_touches;
+    return true;
+  }
+
+  bool touchesBox(const Box* that) const  {
+    int __TODO_OrientedBox_touchesBox;
+    return true;
+  }
+
+  bool touchesSphere(const Sphere* that) const  {
+    int __TODO_OrientedBox_touchesSphere;
+    return true;
+  }
+
   
   bool touchesFrustum(const Frustum* frustum) const {
     return frustum->touchesWithOrientedBox(this);
   };
   
-  bool contains(const Vector3D& point) const{}
+  bool contains(const Vector3D& point) const  {
+    int __TODO_OrientedBox_contains;
+    return true;
+  }
+
+  bool fullContains(const BoundingVolume* that) const  {
+    int __TODO_OrientedBox_fullContains;
+    return true;
+  }
+
+  bool fullContainedInBox(const Box* that) const  {
+    int __TODO_OrientedBox_fullContainedInBox;
+    return true;
+  }
+
+  bool fullContainedInSphere(const Sphere* that) const  {
+    int __TODO_OrientedBox_fullContainedInSphere;
+    return true;
+  }
+
   
-  bool fullContains(const BoundingVolume* that) const{}
-  bool fullContainedInBox(const Box* that) const{}
-  bool fullContainedInSphere(const Sphere* that) const{}
+  BoundingVolume* mergedWith(const BoundingVolume* that) const {
+    int __TODO_OrientedBox_mergedWith;
+    return (BoundingVolume*) NULL;
+  }
   
-  BoundingVolume* mergedWith(const BoundingVolume* that) const{}
-  BoundingVolume* mergedWithBox(const Box* that) const{}
-  BoundingVolume* mergedWithSphere(const Sphere* that) const{}
+
+  BoundingVolume* mergedWithBox(const Box* that) const {
+    int __TODO_OrientedBox_mergedWithBox;
+    return (BoundingVolume*) NULL;
+  }
   
-  Sphere* createSphere() const{}
+
+  BoundingVolume* mergedWithSphere(const Sphere* that) const {
+    int __TODO_OrientedBox_mergedWithSphere;
+    return (BoundingVolume*) NULL;
+  }
+  
+
+  
+  Sphere* createSphere() const {
+    int __TODO_OrientedBox_createSphere;
+    return (Sphere*) NULL;
+  }
+  
+
   
   const std::vector<Vector3D> getCorners() const;
   std::vector<double> intersectionsDistances(const Vector3D& origin,

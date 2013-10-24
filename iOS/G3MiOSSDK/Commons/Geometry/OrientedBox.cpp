@@ -15,10 +15,9 @@
 
 const std::vector<Vector3D> OrientedBox::getCorners() const
 {
-  int __TODO_GUS_implement_OrientedBox_empty_methods;
-
-  int __TODO_convert_to_java_this_code_as_in_Box_class;
+  int __TODO_GUS_implement_all_the_OrientedBox_empty_methods;
   
+#ifdef C_CODE
   const Vector3D corners[8] = {
     Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
     Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
@@ -31,6 +30,23 @@ const std::vector<Vector3D> OrientedBox::getCorners() const
   };
   
   return std::vector<Vector3D>(corners, corners+8);
+#endif
+
+#ifdef JAVA_CODE
+  if (_cornersD == null) {
+    _cornersD = new java.util.ArrayList<Vector3D>(8);
+    _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(_transformMatrix, 1));
+    _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+    _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1));
+  }
+  return _cornersD;
+#endif
+
 }
 
 

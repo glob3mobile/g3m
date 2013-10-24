@@ -202,9 +202,9 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         printf ("Found %d intersections with shapes:\n",
                 (int)shapeDistances.size());
         for (int i=0; i<shapeDistances.size(); i++) {
-          printf ("   %d: shape %x to distance %f\n",
+          printf ("   %d: shape %d to distance %f\n",
                   i+1,
-                  (unsigned int)shapeDistances[i]._shape,
+                  shapeDistances[i]._shape,
                   shapeDistances[i]._distance);
         }
       }
