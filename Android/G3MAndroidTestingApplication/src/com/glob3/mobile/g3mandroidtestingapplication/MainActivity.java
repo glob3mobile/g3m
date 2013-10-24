@@ -52,97 +52,90 @@ public class MainActivity
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
-      
+
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
-      
-      if (false){
-          shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"),
-                  URL.FILE_PROTOCOL + "textures-A320/",
-                  false,
-                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
-                                 Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 10000),
-                  AltitudeMode.ABSOLUTE,
-                  new ShapeLoadListener() {
-					
-					@Override
-					public void onBeforeAddShape(SGShape shape) {
-						// TODO Auto-generated method stub
-				          double scale = 1e5;
-				          shape.setScale(scale, scale, scale);
-				          shape.setPitch(Angle.fromDegrees(90));
-						
-					}
-					
-					@Override
-					public void onAfterAddShape(SGShape shape) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void dispose() {
-						// TODO Auto-generated method stub
-						
-					}
-				},
-                  true);
+
+      if (false) {
+         shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"), URL.FILE_PROTOCOL + "textures-A320/", false,
+                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+                           10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+                     @Override
+                     public void onBeforeAddShape(final SGShape shape) {
+                        // TODO Auto-generated method stub
+                        final double scale = 1e5;
+                        shape.setScale(scale, scale, scale);
+                        shape.setPitch(Angle.fromDegrees(90));
+
+                     }
+
+
+                     @Override
+                     public void onAfterAddShape(final SGShape shape) {
+                        // TODO Auto-generated method stub
+
+                     }
+
+
+                     @Override
+                     public void dispose() {
+                        // TODO Auto-generated method stub
+
+                     }
+                  }, true);
       }
 
       if (false) { // Testing lights
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
-                  1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+                  1000000, 1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
 
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(1000000,
-                  1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
+         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+                  1000000, 1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
 
       }
-      
-		if (true) { // Adding and deleting marks
 
-			int time = 1; // SECS
+      if (true) { // Adding and deleting marks
 
-			final GTask markTask = new GTask() {
-				ArrayList<Mark> _marks = new ArrayList<Mark>();
+         final int time = 1; // SECS
 
-				int randomInt(int max) {
-					return (int) (Math.random() * max);
-				}
+         final GTask markTask = new GTask() {
+            ArrayList<Mark> _marks = new ArrayList<Mark>();
 
-				@Override
-				public void run(G3MContext context) {
-					double lat = randomInt(180) - 90;
-					double lon = randomInt(360) - 180;
 
-					Mark m1 = new Mark(
-							"RANDOM MARK",
-							new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",
-									false),
-							Geodetic3D.fromDegrees(lat, lon, 0),
-							AltitudeMode.RELATIVE_TO_GROUND, 1e9);
-					marksRenderer.addMark(m1);
+            int randomInt(final int max) {
+               return (int) (Math.random() * max);
+            }
 
-					_marks.add(m1);
-					if (_marks.size() > 5) {
 
-						marksRenderer.removeAllMarks();
-						
-						for (int i = 0; i < _marks.size(); i++){
-							_marks.get(i).dispose();
-						}
-						
-						
-						_marks.clear();
+            @Override
+            public void run(final G3MContext context) {
+               final double lat = randomInt(180) - 90;
+               final double lon = randomInt(360) - 180;
 
-					}
+               final Mark m1 = new Mark("RANDOM MARK", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                        Geodetic3D.fromDegrees(lat, lon, 0), AltitudeMode.RELATIVE_TO_GROUND, 1e9);
+               marksRenderer.addMark(m1);
 
-				};
-			};
+               _marks.add(m1);
+               if (_marks.size() > 5) {
 
-			builder.addPeriodicalTask(new PeriodicalTask(TimeInterval
-					.fromSeconds(time), markTask));
-		}
+                  marksRenderer.removeAllMarks();
+
+                  for (int i = 0; i < _marks.size(); i++) {
+                     _marks.get(i).dispose();
+                  }
+
+
+                  _marks.clear();
+
+               }
+
+            }
+         };
+
+         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), markTask));
+      }
 
 
       if (false) {
