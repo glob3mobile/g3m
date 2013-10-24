@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class Box;
+//class OrientedBox;
 
 public class FrustumData
 {

@@ -50,6 +50,11 @@ public class Quadric
     return new Quadric(T.multiply(Q).multiply(I));
   }
 
+  public final Quadric transformBy(MutableMatrix44D inverse, MutableMatrix44D transpose)
+  {
+    return new Quadric(transpose.multiply(Q).multiply(inverse));
+  }
+
 
   // Algorithm from http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Cuadricas.pdf
   

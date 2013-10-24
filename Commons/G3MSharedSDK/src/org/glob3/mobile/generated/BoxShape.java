@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class OrientedBox;
+
 
 public class BoxShape extends AbstractMeshShape
 {
@@ -24,22 +26,9 @@ public class BoxShape extends AbstractMeshShape
   private double _extentY;
   private double _extentZ;
 
-///#ifdef C_CODE
-//  const Quadric _frontQuadric;
-//  const Quadric _backQuadric;
-//  const Quadric _leftQuadric;
-//  const Quadric _rightQuadric;
-//  const Quadric _topQuadric;
-//  const Quadric _bottomQuadric;
-///#endif
-///#ifdef JAVA_CODE
-//  private final Quadric _frontQuadric;
-//  private final Quadric _backQuadric;
-//  private final Quadric _leftQuadric;
-//  private final Quadric _rightQuadric;
-//  private final Quadric _topQuadric;
-//  private final Quadric _bottomQuadric;
-///#endif
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+
+  private OrientedBox _boundingVolume;
 
   private float _borderWidth;
 
@@ -192,23 +181,18 @@ public class BoxShape extends AbstractMeshShape
     return surface;
   }
 
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-     this(position, altitudeMode, extent, borderWidth, surfaceColor, borderColor, true);
+     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, borderColor, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
+     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
-//  _frontQuadric(Quadric::fromPlane(1, 0, 0, -extent.x()/2)),
-//  _backQuadric(Quadric::fromPlane(-1, 0, 0, -extent.x()/2)),
-//  _leftQuadric(Quadric::fromPlane(0, -1, 0, -extent.y()/2)),
-//  _rightQuadric(Quadric::fromPlane(0, 1, 0, -extent.y()/2)),
-//  _topQuadric(Quadric::fromPlane(0, 0, 1, -extent.z()/2)),
-//  _bottomQuadric(Quadric::fromPlane(0, 0, -1, -extent.z()/2)),
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
+     _boundingVolume = null;
      _extentX = extent._x;
      _extentY = extent._y;
      _extentZ = extent._z;
@@ -216,7 +200,7 @@ public class BoxShape extends AbstractMeshShape
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _useNormals = useNormals;
-
+     _planet = planet;
   }
 
   public void dispose()
@@ -225,9 +209,12 @@ public class BoxShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
-
-  super.dispose();
-
+    if (_boundingVolume != null)
+      if (_boundingVolume != null)
+         _boundingVolume.dispose();
+  
+    super.dispose();
+  
   }
 
   public final void setExtent(Vector3D extent)
@@ -273,77 +260,13 @@ public class BoxShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    java.util.ArrayList<Double> distances = new java.util.ArrayList<Double>();
-  
-  //  double tmin=-1e10, tmax=1e10;
-  //  double t1, t2;
-  //  // transform 6 planes
-  //  MutableMatrix44D* M = createTransformMatrix(_planet);
-  //  const Quadric transformedFront = _frontQuadric.transformBy(*M);
-  //  const Quadric transformedBack = _backQuadric.transformBy(*M);
-  //  const Quadric transformedLeft = _leftQuadric.transformBy(*M);
-  //  const Quadric transformedRight = _rightQuadric.transformBy(*M);
-  //  const Quadric transformedTop = _topQuadric.transformBy(*M);
-  //  const Quadric transformedBottom = _bottomQuadric.transformBy(*M);
-  //  delete M;
-  //
-  //  // intersecction with X planes
-  //  std::vector<double> frontDistance = transformedFront.intersectionsDistances(origin, direction);
-  //  std::vector<double> backDistance = transformedBack.intersectionsDistances(origin, direction);
-  //  if (frontDistance.size()==1 && backDistance.size()==1) {
-  //    if (frontDistance[0] < backDistance[0]) {
-  //      t1 = frontDistance[0];
-  //      t2 = backDistance[0];
-  //    } else {
-  //      t2 = frontDistance[0];
-  //      t1 = backDistance[0];
-  //    }
-  //    if (t1 > tmin)
-  //      tmin = t1;
-  //    if (t2 < tmax)
-  //      tmax = t2;
-  //  }
-  //
-  //  // intersections with Y planes
-  //  std::vector<double> leftDistance = transformedLeft.intersectionsDistances(origin, direction);
-  //  std::vector<double> rightDistance = transformedRight.intersectionsDistances(origin, direction);
-  //  if (leftDistance.size()==1 && rightDistance.size()==1) {
-  //    if (leftDistance[0] < rightDistance[0]) {
-  //      t1 = leftDistance[0];
-  //      t2 = rightDistance[0];
-  //    } else {
-  //      t2 = leftDistance[0];
-  //      t1 = rightDistance[0];
-  //    }
-  //    if (t1 > tmin)
-  //      tmin = t1;
-  //    if (t2 < tmax)
-  //      tmax = t2;
-  //  }
-  //
-  //  // intersections with Z planes
-  //  std::vector<double> topDistance = transformedTop.intersectionsDistances(origin, direction);
-  //  std::vector<double> bottomDistance = transformedBottom.intersectionsDistances(origin, direction);
-  //  if (topDistance.size()==1 && bottomDistance.size()==1) {
-  //    if (topDistance[0] < bottomDistance[0]) {
-  //      t1 = topDistance[0];
-  //      t2 = bottomDistance[0];
-  //    } else {
-  //      t2 = topDistance[0];
-  //      t1 = bottomDistance[0];
-  //    }
-  //    if (t1 > tmin)
-  //      tmin = t1;
-  //    if (t2 < tmax)
-  //      tmax = t2;
-  //  }
-  //
-  //  if (tmin < tmax) {
-  //    distances.push_back(tmin);
-  //    distances.push_back(tmax);
-  //  }
-  
-    return distances;
+    return _boundingVolume.intersectionsDistances(origin, direction);
   }
 
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    if (_boundingVolume == null)
+      _boundingVolume = new OrientedBox(getExtent(), getTransformMatrix(_planet));
+    return _boundingVolume.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+  }
 }

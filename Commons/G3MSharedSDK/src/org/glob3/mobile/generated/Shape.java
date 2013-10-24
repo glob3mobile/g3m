@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class MutableMatrix44D;
+//class G3MRenderContext;
 
 
 
@@ -45,16 +46,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
-  private MutableMatrix44D getTransformMatrix(Planet planet)
-  {
-    if (_transformMatrix == null)
-    {
-      _transformMatrix = createTransformMatrix(planet);
-      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
-    }
-    return _transformMatrix;
-  }
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
@@ -65,16 +56,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private SurfaceElevationProvider _surfaceElevationProvider;
   private double _surfaceElevation;
 
-  protected void cleanTransformMatrix()
-  {
-    if (_transformMatrix != null)
-       _transformMatrix.dispose();
-    _transformMatrix = null;
-  }
-
-
-
-  public final MutableMatrix44D createTransformMatrix(Planet planet)
+  private MutableMatrix44D createTransformMatrix(Planet planet)
   {
   
     double altitude = _position._height;
@@ -84,19 +66,32 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     }
   
     Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
+    final Vector3D scale = new Vector3D(_scaleX, _scaleY, _scaleZ);
+    final Vector3D translation = new Vector3D(_translationX, _translationY, _translationZ);
   
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-  
-  //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
-  
-    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
+    return new MutableMatrix44D(planet.createTransformMatrix(positionWithSurfaceElevation, _heading, _pitch, scale, translation));
   }
+
+
+  protected void cleanTransformMatrix()
+  {
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
+  }
+  protected final MutableMatrix44D getTransformMatrix(Planet planet)
+  {
+    if (_transformMatrix == null)
+    {
+      _transformMatrix = createTransformMatrix(planet);
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
+    }
+    return _transformMatrix;
+  }
+
+
+
 
   public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {
@@ -320,9 +315,12 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         _pendingEffects.clear();
       }
   
-      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
-      _glState.setParent(parentGLState);
-      rawRender(rc, _glState, renderNotReadyShapes);
+      if (isVisible(rc))
+      {
+        getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+        _glState.setParent(parentGLState);
+        rawRender(rc, _glState, renderNotReadyShapes);
+      }
     }
   }
 
@@ -358,5 +356,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
 
+  public abstract boolean isVisible(G3MRenderContext rc);
 
 }

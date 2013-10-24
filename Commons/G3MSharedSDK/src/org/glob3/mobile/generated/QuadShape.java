@@ -175,4 +175,10 @@ public class QuadShape extends AbstractMeshShape
     return intersections;
   }
 
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+
 }
