@@ -121,7 +121,10 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
                                      vertices.create(),
                                      1,
                                      1,
-                                     new Color(_color));
+                                     new Color(_color),
+                                     0, // colorsIntensity
+                                     false // depthTest
+                                     );
 
   // Debug unions
 //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
