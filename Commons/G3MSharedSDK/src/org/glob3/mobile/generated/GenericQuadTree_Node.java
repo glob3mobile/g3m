@@ -516,40 +516,39 @@ public class GenericQuadTree_Node
     {
       return true;
     }
-    else
+  
+    if (_children != null)
     {
-      if (_children != null)
+  
+      for (int i = 0; i < 4; i++)
       {
-  
-        for (int i = 0; i < 4; i++)
+        if (_children[i].remove(element))
         {
-          if (_children[i].remove(element))
-          {
-            //The item was removed from one of my children
+          //The item was removed from one of my children
   
-            //Removing all children if none has an item
-            int nChild = 0;
+          //Removing all children if none has an item
+          int nChild = 0;
+          for (int j = 0; j < 4; j++)
+          {
+            nChild += _children[j].getSubtreeNElements();
+          }
+  
+          if (nChild == 0)
+          {
             for (int j = 0; j < 4; j++)
             {
-              nChild += _children[j].getSubtreeNElements();
+              if (_children[j] != null)
+                 _children[j].dispose();
             }
-  
-            if (nChild == 0)
-            {
-              for (int j = 0; j < 4; j++)
-              {
-                if (_children[j] != null)
-                   _children[j].dispose();
-              }
-              _children = null;
-              _children = null;
-            }
-  
-            return true;
+            _children = null;
+            _children = null;
           }
+  
+          return true;
         }
       }
     }
+  
     return false;
   }
 }

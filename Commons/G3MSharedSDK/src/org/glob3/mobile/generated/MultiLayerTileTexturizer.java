@@ -29,8 +29,6 @@ package org.glob3.mobile.generated;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private TexturesHandler _texturesHandler;
-
   private LeveledTexturedMesh getMesh(Tile tile)
   {
     TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
@@ -39,7 +37,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public MultiLayerTileTexturizer()
   {
-     _texturesHandler = null;
   
   }
 
@@ -65,9 +62,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
-    _texturesHandler = rc.getTexturesHandler();
-  
-  
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
     if (builderHolder == null)
