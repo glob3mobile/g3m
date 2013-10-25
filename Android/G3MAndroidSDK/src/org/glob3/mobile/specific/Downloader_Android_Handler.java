@@ -4,6 +4,8 @@ package org.glob3.mobile.specific;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -182,7 +184,15 @@ public final class Downloader_Android_Handler {
 
       try {
          if (_g3mURL.isFileProtocol()) {
-            data = getData(downloader.getAppContext().getAssets().open(_g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "")), -1);
+            final String filePath = _g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "");
+
+            final File f = new File(filePath);
+
+
+            final InputStream fileIS = f.exists() ? new FileInputStream(f)
+                                                 : downloader.getAppContext().getAssets().open(filePath);
+
+            data = getData(fileIS, -1);
             if (data != null) {
                statusCode = 200;
             }
