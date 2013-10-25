@@ -32,7 +32,6 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.specific.JSONParser_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -60,7 +59,7 @@ public class PointCloudActivity
       public void runInBackground(final G3MContext context) {
 
 
-         final JSONParser_Android parser = new JSONParser_Android();
+         //final JSONParser_Android parser = new JSONParser_Android();
          final JSONBaseObject objectBase = BSONParser.parse(_buffer);
          final JSONObject object = objectBase.asObject();
          final JSONArray pointsJson = object.getAsArray("points");
@@ -268,6 +267,7 @@ public class PointCloudActivity
    }
 
 
+   @SuppressWarnings("unused")
    private GInitializationTask pointCloudInitializationTask() {
 
 
