@@ -217,18 +217,12 @@ double ElevationData::getElevationAt(const Angle& latitude,
 
   const IMathUtils* mu = IMathUtils::instance();
 
-  const double nanD = mu->NanD();
-
   const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
   const double u = uv._x;
   const double v = uv._y;
 
   if (u < 0 || u > 1 || v < 0 || v > 1){
-
-    if (_sector.contains(latitude, longitude)){
-      printf("error");
-    }
-    return nanD;
+    return NAND;
   }
 
 //  int _CHECK; // evaluate if this condition can be rewrited using (uv < 0 || uv > 1)
@@ -262,12 +256,12 @@ double ElevationData::getElevationAt(const Angle& latitude,
       // linear on Y
       const double heightY = getElevationAt(x, y);
       if (ISNAN(heightY)) {
-        return nanD;
+        return NAND;
       }
 
       const double heightNextY = getElevationAt(x, nextY);
       if (ISNAN(heightNextY)) {
-        return nanD;
+        return NAND;
       }
 
       result = mu->linearInterpolation(heightNextY, heightY, alphaY);
@@ -278,11 +272,11 @@ double ElevationData::getElevationAt(const Angle& latitude,
       // linear on X
       const double heightX = getElevationAt(x, y);
       if (ISNAN(heightX)) {
-        return nanD;
+        return NAND;
       }
       const double heightNextX = getElevationAt(nextX, y);
       if (ISNAN(heightNextX)) {
-        return nanD;
+        return NAND;
       }
 
       result = mu->linearInterpolation(heightX, heightNextX, alphaX);
@@ -291,19 +285,19 @@ double ElevationData::getElevationAt(const Angle& latitude,
       // bilinear
       const double valueNW = getElevationAt(x, y);
       if (ISNAN(valueNW)) {
-        return nanD;
+        return NAND;
       }
       const double valueNE = getElevationAt(nextX, y);
       if (ISNAN(valueNE)) {
-        return nanD;
+        return NAND;
       }
       const double valueSE = getElevationAt(nextX, nextY);
       if (ISNAN(valueSE)) {
-        return nanD;
+        return NAND;
       }
       const double valueSW = getElevationAt(x, nextY);
       if (ISNAN(valueSW)) {
-        return nanD;
+        return NAND;
       }
 
       result = getInterpolator()->interpolation(valueSW,

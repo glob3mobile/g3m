@@ -38,10 +38,7 @@ public:
   }
   
   static MutableVector2D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return MutableVector2D(mu->NanD(),
-                           mu->NanD());
+    return MutableVector2D(NAND, NAND);
   }
   
   bool isEquals(double x, double y) const{

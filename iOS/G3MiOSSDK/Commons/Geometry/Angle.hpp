@@ -93,7 +93,7 @@ public:
   }
   
   static Angle nan() {
-    return Angle::fromDegrees(IMathUtils::instance()->NanD());
+    return Angle::fromDegrees(NAND);
   }
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {

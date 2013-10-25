@@ -44,10 +44,7 @@ public:
   }
 
   static Vector2F nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return Vector2F(mu->NanF(),
-                    mu->NanF());
+    return Vector2F(NANF, NANF);
   }
 
   const double squaredDistanceTo(const Vector2I& that) const;

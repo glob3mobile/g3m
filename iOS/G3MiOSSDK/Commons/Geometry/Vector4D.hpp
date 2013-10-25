@@ -48,12 +48,7 @@ public:
   }
   
   static Vector4D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return Vector4D(mu->NanD(),
-                    mu->NanD(),
-                    mu->NanD(),
-                    mu->NanD());
+    return Vector4D(NAND,NAND,NAND,NAND);
   }
   
   static Vector4D zero() {

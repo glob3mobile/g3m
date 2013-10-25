@@ -18,7 +18,7 @@ public final class MathUtils_WebGL
 
    @Override
    public float NanF() {
-      return (float) Double.NaN;
+      return Float.NaN;
    }
 
 
