@@ -56,9 +56,7 @@ public class Vector3D
 
   public static Vector3D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector3D(mu.NanD(), mu.NanD(), mu.NanD());
+    return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
 //  static Vector3D zero() {

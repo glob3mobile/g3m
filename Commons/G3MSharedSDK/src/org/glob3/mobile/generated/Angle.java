@@ -99,7 +99,7 @@ public class Angle
 
   public static Angle nan()
   {
-    return Angle.fromDegrees(IMathUtils.instance().NanD());
+    return Angle.fromDegrees(java.lang.Double.NaN);
   }
 
   public static Angle midAngle(Angle angle1, Angle angle2)

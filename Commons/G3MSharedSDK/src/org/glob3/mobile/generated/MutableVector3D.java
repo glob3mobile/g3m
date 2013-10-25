@@ -58,9 +58,7 @@ public class MutableVector3D
 
   public static MutableVector3D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new MutableVector3D(mu.NanD(), mu.NanD(), mu.NanD());
+    return new MutableVector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
   public final boolean equalTo(MutableVector3D v)
