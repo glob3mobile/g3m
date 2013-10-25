@@ -448,7 +448,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _layerSet,
                                       _tilesRenderParameters,
                                       true,
-                                      _texturePriority);
+                                      _texturePriority,
+                                      _verticalExaggeration);
       }
     }
     
