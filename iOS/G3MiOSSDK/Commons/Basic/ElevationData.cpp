@@ -219,19 +219,29 @@ double ElevationData::getElevationAt(const Angle& latitude,
 
   const double nanD = mu->NanD();
 
-  int _CHECK; // evaluate if this condition can be rewrited using (uv < 0 || uv > 1)
-  if (!_sector.contains(latitude, longitude)) {
-    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-    //                                  _sector.description().c_str(),
-    //                                  latitude.description().c_str(),
-    //                                  longitude.description().c_str());
+  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const double u = uv._x;
+  const double v = uv._y;
+
+  if (u < 0 || u > 1 || v < 0 || v > 1){
+
+    if (_sector.contains(latitude, longitude)){
+      printf("error");
+    }
     return nanD;
   }
 
+//  int _CHECK; // evaluate if this condition can be rewrited using (uv < 0 || uv > 1)
+//  if (!_sector.contains(latitude, longitude)) {
+//    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
+//    //                                  _sector.description().c_str(),
+//    //                                  latitude.description().c_str(),
+//    //                                  longitude.description().c_str());
+//    return nanD;
+//  }
 
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double u = mu->clamp(uv._x, 0, 1);
-  const double v = mu->clamp(uv._y, 0, 1);
+//  const double u = mu->clamp(uv._x, 0, 1);
+//  const double v = mu->clamp(uv._y, 0, 1);
   const double dX = u * (_width - 1);
   const double dY = (1.0 - v) * (_height - 1);
 
