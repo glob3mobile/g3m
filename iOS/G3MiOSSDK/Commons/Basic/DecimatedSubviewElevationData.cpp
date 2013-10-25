@@ -70,7 +70,7 @@ double DecimatedSubviewElevationData::getElevationBoxAt(const ElevationData* ele
                                                           yy);
 
       if (ISNAN(height)) {
-        return mu->NanD();
+        return NAND;
       }
 
       double size = ysize;

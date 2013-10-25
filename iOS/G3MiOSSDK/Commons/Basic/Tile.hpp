@@ -212,7 +212,8 @@ public:
                                const LayerSet* layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool isForcedFullRender,
-                               long long texturePriority);
+                               long long texturePriority,
+                               float verticalExaggeration);
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState,

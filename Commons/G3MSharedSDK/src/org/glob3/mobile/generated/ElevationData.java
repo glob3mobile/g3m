@@ -242,24 +242,15 @@ public abstract class ElevationData
   public final double getElevationAt(Angle latitude, Angle longitude)
   {
   
-    final IMathUtils mu = IMathUtils.instance();
+    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+    final double u = uv._x;
+    final double v = uv._y;
   
-    final double nanD = mu.NanD();
-  
-    int _CHECK; // evaluate if this condiction can be rewrited using (uv < 0 || uv > 1)
-    if (!_sector.contains(latitude, longitude))
+    if (u < 0 || u > 1 || v < 0 || v > 1)
     {
-      //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-      //                                  _sector.description().c_str(),
-      //                                  latitude.description().c_str(),
-      //                                  longitude.description().c_str());
-      return nanD;
+      return java.lang.Double.NaN;
     }
   
-  
-    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-    final double u = mu.clamp(uv._x, 0, 1);
-    final double v = mu.clamp(uv._y, 0, 1);
     final double dX = u * (_width - 1);
     final double dY = (1.0 - v) * (_height - 1);
   
@@ -284,16 +275,16 @@ public abstract class ElevationData
         final double heightY = getElevationAt(x, y);
         if ((heightY != heightY))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
         final double heightNextY = getElevationAt(x, nextY);
         if ((heightNextY != heightNextY))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
-        result = mu.linearInterpolation(heightNextY, heightY, alphaY);
+        result = IMathUtils.instance().linearInterpolation(heightNextY, heightY, alphaY);
       }
     }
     else
@@ -304,15 +295,15 @@ public abstract class ElevationData
         final double heightX = getElevationAt(x, y);
         if ((heightX != heightX))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double heightNextX = getElevationAt(nextX, y);
         if ((heightNextX != heightNextX))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
-        result = mu.linearInterpolation(heightX, heightNextX, alphaX);
+        result = IMathUtils.instance().linearInterpolation(heightX, heightNextX, alphaX);
       }
       else
       {
@@ -320,22 +311,22 @@ public abstract class ElevationData
         final double valueNW = getElevationAt(x, y);
         if ((valueNW != valueNW))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueNE = getElevationAt(nextX, y);
         if ((valueNE != valueNE))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueSE = getElevationAt(nextX, nextY);
         if ((valueSE != valueSE))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueSW = getElevationAt(x, nextY);
         if ((valueSW != valueSW))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
         result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);

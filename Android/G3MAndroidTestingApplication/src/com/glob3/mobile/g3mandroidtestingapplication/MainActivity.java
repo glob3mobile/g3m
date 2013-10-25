@@ -5,26 +5,15 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.SGShape;
-import org.glob3.mobile.generated.SceneJSShapesParser;
-import org.glob3.mobile.generated.Shape;
-import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -56,44 +45,44 @@ public class MainActivity
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
 
-      if (false) {
-         shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"), URL.FILE_PROTOCOL + "textures-A320/", false,
-                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
-                           10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+      //      if (false) {
+      //         shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"), URL.FILE_PROTOCOL + "textures-A320/", false,
+      //                  new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+      //                           10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+      //
+      //                     @Override
+      //                     public void onBeforeAddShape(final SGShape shape) {
+      //                        // TODO Auto-generated method stub
+      //                        final double scale = 1e5;
+      //                        shape.setScale(scale, scale, scale);
+      //                        shape.setPitch(Angle.fromDegrees(90));
+      //
+      //                     }
+      //
+      //
+      //                     @Override
+      //                     public void onAfterAddShape(final SGShape shape) {
+      //                        // TODO Auto-generated method stub
+      //
+      //                     }
+      //
+      //
+      //                     @Override
+      //                     public void dispose() {
+      //                        // TODO Auto-generated method stub
+      //
+      //                     }
+      //                  }, true);
+      //      }
 
-                     @Override
-                     public void onBeforeAddShape(final SGShape shape) {
-                        // TODO Auto-generated method stub
-                        final double scale = 1e5;
-                        shape.setScale(scale, scale, scale);
-                        shape.setPitch(Angle.fromDegrees(90));
-
-                     }
-
-
-                     @Override
-                     public void onAfterAddShape(final SGShape shape) {
-                        // TODO Auto-generated method stub
-
-                     }
-
-
-                     @Override
-                     public void dispose() {
-                        // TODO Auto-generated method stub
-
-                     }
-                  }, true);
-      }
-
-      if (false) { // Testing lights
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
-                  1000000, 1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
-
-         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
-                  1000000, 1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
-
-      }
+      //      if (false) { // Testing lights
+      //         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+      //                  1000000, 1000000, 1000000), (float) 1.0, Color.red(), Color.black(), true)); // With normals
+      //
+      //         shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180, 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+      //                  1000000, 1000000, 1000000), (float) 1.0, Color.blue(), Color.black(), true)); // With normals
+      //
+      //      }
 
       if (true) { // Adding and deleting marks
 
@@ -138,69 +127,69 @@ public class MainActivity
       }
 
 
-      if (false) {
-
-         final GInitializationTask initializationTask = new GInitializationTask() {
-
-            @Override
-            public void run(final G3MContext context) {
-
-               final IBufferDownloadListener listener = new IBufferDownloadListener() {
-
-                  @Override
-                  public void onError(final URL url) {
-                     // TODO Auto-generated method stub
-
-                  }
-
-
-                  @Override
-                  public void onDownload(final URL url,
-                                         final IByteBuffer buffer,
-                                         final boolean expired) {
-                     // TODO Auto-generated method stub
-
-                     final Shape shape = SceneJSShapesParser.parseFromBSON(buffer, URL.FILE_PROTOCOL + "2029/", true,
-                              Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.ABSOLUTE);
-
-                     shapesRenderer.addShape(shape);
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IByteBuffer buffer,
-                                                 final boolean expired) {
-                     // TODO Auto-generated method stub
-
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                     // TODO Auto-generated method stub
-
-                  }
-               };
-
-               context.getDownloader().requestBuffer(new URL(URL.FILE_PROTOCOL + "2029/2029.bson"), 1000, TimeInterval.forever(),
-                        true, listener, true);
-
-
-            }
-
-
-            @Override
-            public boolean isDone(final G3MContext context) {
-               // TODO Auto-generated method stub
-               return true;
-            }
-
-         };
-
-         builder.setInitializationTask(initializationTask);
-
-      }
+      //      if (false) {
+      //
+      //         final GInitializationTask initializationTask = new GInitializationTask() {
+      //
+      //            @Override
+      //            public void run(final G3MContext context) {
+      //
+      //               final IBufferDownloadListener listener = new IBufferDownloadListener() {
+      //
+      //                  @Override
+      //                  public void onError(final URL url) {
+      //                     // TODO Auto-generated method stub
+      //
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onDownload(final URL url,
+      //                                         final IByteBuffer buffer,
+      //                                         final boolean expired) {
+      //                     // TODO Auto-generated method stub
+      //
+      //                     final Shape shape = SceneJSShapesParser.parseFromBSON(buffer, URL.FILE_PROTOCOL + "2029/", true,
+      //                              Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.ABSOLUTE);
+      //
+      //                     shapesRenderer.addShape(shape);
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onCanceledDownload(final URL url,
+      //                                                 final IByteBuffer buffer,
+      //                                                 final boolean expired) {
+      //                     // TODO Auto-generated method stub
+      //
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onCancel(final URL url) {
+      //                     // TODO Auto-generated method stub
+      //
+      //                  }
+      //               };
+      //
+      //               context.getDownloader().requestBuffer(new URL(URL.FILE_PROTOCOL + "2029/2029.bson"), 1000, TimeInterval.forever(),
+      //                        true, listener, true);
+      //
+      //
+      //            }
+      //
+      //
+      //            @Override
+      //            public boolean isDone(final G3MContext context) {
+      //               // TODO Auto-generated method stub
+      //               return true;
+      //            }
+      //
+      //         };
+      //
+      //         builder.setInitializationTask(initializationTask);
+      //
+      //      }
 
 
       _g3mWidget = builder.createWidget();

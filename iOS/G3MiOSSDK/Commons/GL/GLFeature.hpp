@@ -239,13 +239,6 @@ public:
 };
 
 class BlendingModeGLFeature: public GLColorGroupFeature{
-#ifdef C_CODE
-  IGLTextureId const* _texID;
-#endif
-#ifdef JAVA_CODE
-  private IGLTextureId _texID = null;
-#endif
-
 public:
   BlendingModeGLFeature(bool blend, int sFactor, int dFactor);
   void applyOnGlobalGLState(GLGlobalState* state) const;

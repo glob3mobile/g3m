@@ -12,7 +12,6 @@
 
 double CompositeElevationData::getElevationAt(int x,
                                               int y) const{
-  const IMathUtils* mu = IMathUtils::instance();
   const int size = _data.size();
   for (int i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
@@ -21,7 +20,7 @@ double CompositeElevationData::getElevationAt(int x,
     }
   }
 
-  return mu->NanD();
+  return NAND;
 }
 
 

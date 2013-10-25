@@ -40,11 +40,7 @@ public:
   MutableVector3D normalized() const;
   
   static MutableVector3D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return MutableVector3D(mu->NanD(),
-                           mu->NanD(),
-                           mu->NanD());
+    return MutableVector3D(NAND, NAND, NAND);
   }
   
   bool equalTo(const MutableVector3D& v) const{

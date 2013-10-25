@@ -9,19 +9,6 @@ public final class MathUtils_WebGL
          extends
             IMathUtils {
 
-
-   @Override
-   public double NanD() {
-      return Double.NaN;
-   }
-
-
-   @Override
-   public float NanF() {
-      return (float) Double.NaN;
-   }
-
-
    @Override
    public double sin(final double v) {
       return Math.sin(v);

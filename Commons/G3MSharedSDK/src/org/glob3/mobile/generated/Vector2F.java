@@ -59,9 +59,7 @@ public class Vector2F
 
   public static Vector2F nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector2F(mu.NanF(), mu.NanF());
+    return new Vector2F(java.lang.Float.NaN, java.lang.Float.NaN);
   }
 
   public final double squaredDistanceTo(Vector2I that)

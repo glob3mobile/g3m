@@ -53,7 +53,6 @@ private:
   const bool _isTransparent;
 
   void releaseGLTextureId();
-  TexturesHandler* _texturesHandler;
 
 public:
   
