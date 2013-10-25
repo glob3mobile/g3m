@@ -734,8 +734,7 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
   _builder->stepCanceled(_position);
 }
 
-MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
-_texturesHandler(NULL)
+MultiLayerTileTexturizer::MultiLayerTileTexturizer()
 {
 
 }
@@ -792,9 +791,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
-  _texturesHandler = rc->getTexturesHandler();
-
-
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
 
   if (builderHolder == NULL) {
