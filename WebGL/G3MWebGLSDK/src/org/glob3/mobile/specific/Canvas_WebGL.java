@@ -105,15 +105,13 @@ public class Canvas_WebGL
 				listener.@org.glob3.mobile.generated.IImageListener::dispose()();
 			}
 		};
-		jsImage.src = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas
-				.toDataURL();
+		jsImage.src = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas.toDataURL();
    }-*/;
 
 
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
-		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext
-				.measureText(text).width;
+		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.measureText(text).width;
 
 		var height = Math
 				.round(this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66);
@@ -127,10 +125,10 @@ public class Canvas_WebGL
          return null;
       }
 
-      final int r = Math.round(255 * color.getRed());
-      final int g = Math.round(255 * color.getGreen());
-      final int b = Math.round(255 * color.getBlue());
-      final float a = color.getAlpha();
+      final int r = Math.round(255 * color._red);
+      final int g = Math.round(255 * color._green);
+      final int b = Math.round(255 * color._blue);
+      final float a = color._alpha;
 
       return "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
    }
@@ -235,8 +233,7 @@ public class Canvas_WebGL
 		context.lineTo(x + width - radius, y);
 		context.quadraticCurveTo(x + width, y, x + width, y + radius);
 		context.lineTo(x + width, y + height - radius);
-		context.quadraticCurveTo(x + width, y + height, x + width - radius, y
-				+ height);
+		context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
 		context.lineTo(x + radius, y + height);
 		context.quadraticCurveTo(x, y + height, x, y + height - radius);
 		context.lineTo(x, y + radius);
@@ -318,8 +315,8 @@ public class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
-		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
-				destLeft, destTop, destWidth, destHeight);
+		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop,
+				destWidth, destHeight);
    }-*/;
 
 

@@ -39,7 +39,6 @@ public class ShapeSymbolizerActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_shape_symbolizer);
 
-      //xM’n,yM’n -174.2,17.7504 : xM‡x,yM‡x -64.75,71.2906
 
       final Geodetic2D lower = new Geodetic2D( //
                Angle.fromDegrees(17.7504), //
@@ -92,8 +91,8 @@ public class ShapeSymbolizerActivity
 
 
    private int toAndroidColor(final Color c) {
-      return android.graphics.Color.argb(Math.round(c.getAlpha() * 255), Math.round(c.getRed() * 255),
-               Math.round(c.getGreen() * 255), Math.round(c.getBlue() * 255));
+      return android.graphics.Color.argb(Math.round(c._alpha * 255), Math.round(c._red * 255), Math.round(c._green * 255),
+               Math.round(c._blue * 255));
    }
 
 
