@@ -1,8 +1,6 @@
 package org.glob3.mobile.generated; 
 public class GLFeatureLightingGroup extends GLFeatureGroup
 {
-//  void applyOnGlobalGLState(GLGlobalState* state);
-//  void addToGPUVariableSet(GPUVariableValueSet* vs);
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
   
@@ -12,7 +10,7 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
     for(int i = 0; i < size; i++)
     {
       final GLFeature f = features.get(i);
-      if (f.getID() == GLFeatureID.GLF_VERTEX_NORMAL)
+      if (f._id == GLFeatureID.GLF_VERTEX_NORMAL)
       {
         normalsAvailable = true;
         break;
@@ -27,7 +25,7 @@ public class GLFeatureLightingGroup extends GLFeatureGroup
       {
         final GLFeature f = features.get(i);
   
-        if (f.getGroup() == GLFeatureGroupName.LIGHTING_GROUP)
+        if (f._group == GLFeatureGroupName.LIGHTING_GROUP)
         {
           f.applyOnGlobalGLState(state);
           vs.combineWith(f.getGPUVariableValueSet());

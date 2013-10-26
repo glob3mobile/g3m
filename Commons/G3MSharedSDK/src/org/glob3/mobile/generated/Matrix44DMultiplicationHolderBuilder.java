@@ -6,8 +6,8 @@ public class Matrix44DMultiplicationHolderBuilder
 
   public void dispose()
   {
-    final int size = _providers.size();
-    for (int i = 0; i < size; i++)
+    final int providersSize = _providers.size();
+    for (int i = 0; i < providersSize; i++)
     {
       _providers.get(i)._release();
     }
@@ -26,14 +26,14 @@ public class Matrix44DMultiplicationHolderBuilder
 
   public final Matrix44DMultiplicationHolder create()
   {
-    Matrix44DProvider[] ps = new Matrix44DProvider[_providers.size()];
-    final int size = _providers.size();
-    for (int i = 0; i < size; i++)
+    final int providersSize = _providers.size();
+    Matrix44DProvider[] ps = new Matrix44DProvider[providersSize];
+    for (int i = 0; i < providersSize; i++)
     {
       ps[i] = _providers.get(i);
     }
 
-    return new Matrix44DMultiplicationHolder(ps, size);
+    return new Matrix44DMultiplicationHolder(ps, providersSize);
   }
 
 }
