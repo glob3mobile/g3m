@@ -46,9 +46,6 @@ public abstract class GLFeatureGroup //: public GLFeatureSet
     }
   }
 
-//  virtual void addToGPUVariableSet(GPUVariableValueSet* vs)= 0;
-//  virtual void applyOnGlobalGLState(GLGlobalState* state)= 0;
-
   public static void applyToAllGroups(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
   

@@ -63,7 +63,7 @@ public class GLFeatureSet
     for (int i = 0; i < _nFeatures; i++)
     {
       final GLFeature f = _features[i];
-      if (f.getGroup() == g)
+      if (f._group == g)
       {
         f._release();
   

@@ -18,17 +18,20 @@ public class GLCameraGroupFeature extends GLFeature
 
     super.dispose();
   }
+
   public final Matrix44D getMatrix()
   {
-     return _matrixHolder.getMatrix();
+    return _matrixHolder.getMatrix();
   }
+
   public final void setMatrix(Matrix44D matrix)
   {
-     _matrixHolder.setMatrix(matrix);
+    _matrixHolder.setMatrix(matrix);
   }
+
   public final Matrix44DHolder getMatrixHolder()
   {
-     return _matrixHolder;
+    return _matrixHolder;
   }
 
   public final void applyOnGlobalGLState(GLGlobalState state)

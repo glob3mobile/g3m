@@ -8,6 +8,7 @@ public class BillboardGLFeature extends GLFeature
   
     _values.addUniformValue(GPUUniformKey.BILLBOARD_POSITION, new GPUUniformValueVec4Float((float)position._x, (float)position._y, (float)position._z, (float)1.0), false);
   }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
     state.disableDepthTest();

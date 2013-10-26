@@ -17,6 +17,7 @@ public class TextureGLFeature extends GLColorGroupFeature
       _values.addUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
     }
   }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
     blendingOnGlobalGLState(state);
