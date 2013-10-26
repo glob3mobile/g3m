@@ -141,15 +141,7 @@ public final class Downloader_WebGL
                              final boolean deleteListener) {
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl;
-      final String urlPath = url.getPath();
-      if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
-         proxyUrl = new URL(_proxy + urlPath, false);
-      }
-      else {
-         // assumes the URL is a relative URL to the server, no need to use proxy
-         proxyUrl = url;
-      }
+      final URL proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
@@ -178,6 +170,22 @@ public final class Downloader_WebGL
    }
 
 
+   private URL getProxiedURL(final URL url) {
+      if (_proxy == null) {
+         return url;
+      }
+
+      final String urlPath = url.getPath();
+      if (!urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
+         // assumes the URL is a relative URL to the server, no need to use proxy
+         return url;
+      }
+
+      // return proxied url
+      return new URL(_proxy + urlPath);
+   }
+
+
    @Override
    public long requestImage(final URL url,
                             final long priority,
@@ -187,7 +195,7 @@ public final class Downloader_WebGL
                             final boolean deleteListener) {
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = new URL(_proxy + url.getPath(), false);
+      final URL proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
