@@ -187,10 +187,10 @@ public:
   }
   
   void setClearColor(const Color& color) {
-    _clearColorR = color.getRed();
-    _clearColorG = color.getGreen();
-    _clearColorB = color.getBlue();
-    _clearColorA = color.getAlpha();
+    _clearColorR = color._red;
+    _clearColorG = color._green;
+    _clearColorB = color._blue;
+    _clearColorA = color._alpha;
   }
   
   void applyChanges(GL* gl, GLGlobalState& currentState) const;

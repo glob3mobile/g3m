@@ -23,10 +23,10 @@ CGColorRef TextUtils_iOS::toCGColor(const Color* color) {
     return NULL;
   }
 
-  return [[UIColor colorWithRed: color->getRed()
-                          green: color->getGreen()
-                           blue: color->getBlue()
-                          alpha: color->getAlpha()] CGColor];
+  return [[UIColor colorWithRed: color->_red
+                          green: color->_green
+                           blue: color->_blue
+                          alpha: color->_alpha] CGColor];
 }
 
 

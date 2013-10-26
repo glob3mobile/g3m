@@ -75,7 +75,7 @@ public:
 };
 
 
-class GeometryGLFeature: public GLFeature{
+class GeometryGLFeature: public GLFeature {
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec4Float* _position;
 
@@ -89,12 +89,20 @@ class GeometryGLFeature: public GLFeature{
 
 public:
 
-  GeometryGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride,
+  GeometryGLFeature(IFloatBuffer* buffer,
+                    int arrayElementSize,
+                    int index,
+                    bool normalized,
+                    int stride,
                     bool depthTestEnabled,
-                    bool cullFace, int culledFace,
-                    bool  polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits,
+                    bool cullFace,
+                    int culledFace,
+                    bool  polygonOffsetFill,
+                    float polygonOffsetFactor,
+                    float polygonOffsetUnits,
                     float lineWidth,
-                    bool needsPointSize, float pointSize);
+                    bool needsPointSize,
+                    float pointSize);
 
   ~GeometryGLFeature();
 
@@ -103,7 +111,7 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-class GLCameraGroupFeature: public GLFeature{
+class GLCameraGroupFeature: public GLFeature {
 private:
 
 #ifdef C_CODE
@@ -144,32 +152,44 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
-class ModelViewGLFeature: public GLCameraGroupFeature{
+class ModelViewGLFeature: public GLCameraGroupFeature {
 public:
-  ModelViewGLFeature(Matrix44D* modelview): GLCameraGroupFeature(modelview, GLF_MODEL_VIEW) {}
+  ModelViewGLFeature(Matrix44D* modelview) :
+  GLCameraGroupFeature(modelview, GLF_MODEL_VIEW)
+  {
+  }
 
   ModelViewGLFeature(const Camera* cam);
 };
 
-class ModelGLFeature: public GLCameraGroupFeature{
+class ModelGLFeature: public GLCameraGroupFeature {
 public:
-  ModelGLFeature(Matrix44D* model): GLCameraGroupFeature(model, GLF_MODEL) {}
+  ModelGLFeature(Matrix44D* model) :
+  GLCameraGroupFeature(model, GLF_MODEL)
+  {
+  }
 
   ModelGLFeature(const Camera* cam);
 };
 
-class ProjectionGLFeature: public GLCameraGroupFeature{
+class ProjectionGLFeature: public GLCameraGroupFeature {
 public:
 
-  ProjectionGLFeature(Matrix44D* projection): GLCameraGroupFeature(projection, GLF_PROJECTION) {}
+  ProjectionGLFeature(Matrix44D* projection) :
+  GLCameraGroupFeature(projection, GLF_PROJECTION)
+  {
+  }
+
   ProjectionGLFeature(const Camera* cam);
 };
 
-class ModelTransformGLFeature: public GLCameraGroupFeature{
+class ModelTransformGLFeature: public GLCameraGroupFeature {
 public:
 
-  ModelTransformGLFeature(Matrix44D* transform): GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM) {}
-
+  ModelTransformGLFeature(Matrix44D* transform) :
+  GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM)
+  {
+  }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -266,7 +286,7 @@ public:
   }
 };
 
-class TextureIDGLFeature: public PriorityGLFeature{
+class TextureIDGLFeature: public PriorityGLFeature {
 #ifdef C_CODE
   IGLTextureId const* _texID;
 #endif
@@ -285,19 +305,29 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class TextureCoordsGLFeature: public PriorityGLFeature{
+class TextureCoordsGLFeature: public PriorityGLFeature {
 public:
-  TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
-                         bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
+  TextureCoordsGLFeature(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride,
+                         bool coordsTransformed,
+                         const Vector2D& translate,
+                         const Vector2D& scale);
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class DirectionLightGLFeature: public GLFeature{
+class DirectionLightGLFeature: public GLFeature {
 
   GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
 
 public:
-  DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight);
+  DirectionLightGLFeature(const Vector3D& dir,
+                          const Color& lightColor,
+                          float ambientLight);
+
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 
   void setLightDirection(const Vector3D& lightDir);
@@ -305,7 +335,11 @@ public:
 
 class VertexNormalGLFeature: public GLFeature{
 public:
-  VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride);
+  VertexNormalGLFeature(IFloatBuffer* buffer,
+                        int arrayElementSize,
+                        int index,
+                        bool normalized,
+                        int stride);
   
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };

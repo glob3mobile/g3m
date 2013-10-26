@@ -244,8 +244,14 @@ class GPUUniformValueVec4Float:public GPUUniformValue{
 public:
   const float _x, _y, _z, _w;
 
-  GPUUniformValueVec4Float(const Color& color):
-  GPUUniformValue(GLType::glVec4Float()),_x(color.getRed()),_y(color.getGreen()), _z(color.getBlue()), _w(color.getAlpha()) {}
+  GPUUniformValueVec4Float(const Color& color) :
+  GPUUniformValue(GLType::glVec4Float()),
+  _x(color._red),
+  _y(color._green),
+  _z(color._blue),
+  _w(color._alpha)
+  {
+  }
 
   GPUUniformValueVec4Float(float x, float y, float z, float w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w) {}
