@@ -19,10 +19,6 @@ package org.glob3.mobile.generated;
 
 public class Color
 {
-  private final float _red;
-  private final float _green;
-  private final float _blue;
-  private final float _alpha;
 
   private Color(float red, float green, float blue, float alpha)
   {
@@ -32,6 +28,11 @@ public class Color
      _alpha = alpha;
 
   }
+
+  public final float _red;
+  public final float _green;
+  public final float _blue;
+  public final float _alpha;
 
   public Color(Color that)
   {
@@ -242,25 +243,21 @@ public class Color
     return Color.fromRGBA(0, 0, 1, 1);
   }
 
-  public final float getRed()
-  {
-    return _red;
-  }
-
-  public final float getGreen()
-  {
-    return _green;
-  }
-
-  public final float getBlue()
-  {
-    return _blue;
-  }
-
-  public final float getAlpha()
-  {
-    return _alpha;
-  }
+//  float getRed() const {
+//    return _red;
+//  }
+//
+//  float getGreen() const {
+//    return _green;
+//  }
+//
+//  float getBlue() const {
+//    return _blue;
+//  }
+//
+//  float getAlpha() const {
+//    return _alpha;
+//  }
 
   public final Color mixedWith(Color that, float factor)
   {
@@ -272,10 +269,10 @@ public class Color
 
     final float frac2 = 1 - frac1;
 
-    final float newRed = (getRed() * frac2) + (that.getRed() * frac1);
-    final float newGreen = (getGreen() * frac2) + (that.getGreen() * frac1);
-    final float newBlue = (getBlue() * frac2) + (that.getBlue() * frac1);
-    final float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
+    final float newRed = (_red * frac2) + (that._red * frac1);
+    final float newGreen = (_green * frac2) + (that._green * frac1);
+    final float newBlue = (_blue * frac2) + (that._blue * frac1);
+    final float newAlpha = (_alpha * frac2) + (that._alpha * frac1);
 
     return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
@@ -332,9 +329,9 @@ public class Color
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final float r = getRed();
-    final float g = getGreen();
-    final float b = getBlue();
+    final float r = _red;
+    final float g = _green;
+    final float b = _blue;
   
     final float max = mu.max(r, g, b);
     final float min = mu.min(r, g, b);

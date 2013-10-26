@@ -13,8 +13,9 @@ public class TextureGLFeature extends GLColorGroupFeature
   
     if (coordsTransformed)
     {
-      _values.addUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
-      _values.addUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
+      _values.addUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, new GPUUniformValueVec2Float((float) translate._x, (float) translate._y), false);
+  
+      _values.addUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, new GPUUniformValueVec2Float((float) scale._x, (float) scale._y), false);
     }
   }
 

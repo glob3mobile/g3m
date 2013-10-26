@@ -6,5 +6,4 @@ public class ModelTransformGLFeature extends GLCameraGroupFeature
   {
      super(transform, GLFeatureID.GLF_MODEL_TRANSFORM);
   }
-
 }
