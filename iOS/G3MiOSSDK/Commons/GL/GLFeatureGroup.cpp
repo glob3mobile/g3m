@@ -56,7 +56,7 @@ void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
 
   for (int i = 0; i < _nFeatures; i++) {
     const GLFeature* f = _features[i];
-    if (f->getGroup() == g) {
+    if (f->_group == g) {
       f->_release();
 
       for (int j = i; j < _nFeatures; j++) {
@@ -109,7 +109,9 @@ GLFeatureSet::~GLFeatureSet() {
 
 GLFeatureGroup** GLFeatureGroup::_groups = NULL;
 
-void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) {
+void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features,
+                                      GPUVariableValueSet& vs,
+                                      GLGlobalState& state) {
 
   if (_groups == NULL) {
     _groups = new GLFeatureGroup*[N_GLFEATURES_GROUPS];
@@ -126,40 +128,43 @@ void GLFeatureGroup::applyToAllGroups(const GLFeatureSet& features, GPUVariableV
 
 }
 
-void GLFeatureNoGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) {
+void GLFeatureNoGroup::apply(const GLFeatureSet& features,
+                             GPUVariableValueSet& vs,
+                             GLGlobalState& state) {
 
   const int size = features.size();
   for(int i = 0; i < size; i++) {
     const GLFeature* f = features.get(i);
-    if (f->getGroup() == NO_GROUP) {
+    if (f->_group == NO_GROUP) {
       f->applyOnGlobalGLState(&state);
       vs.combineWith(f->getGPUVariableValueSet());
     }
   }
 }
 
-void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) {
+void GLFeatureColorGroup::apply(const GLFeatureSet& features,
+                                GPUVariableValueSet& vs,
+                                GLGlobalState& state) {
 
-  const int size = features.size();
+  const int featuresSize = features.size();
   int priority = -1;
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < featuresSize; i++) {
     const GLFeature* f = features.get(i);
-    if (f->getGroup() == COLOR_GROUP) {
+    if (f->_group == COLOR_GROUP) {
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
-      if (pf->getPriority() > priority) {
-
-        if (pf->getID() != GLF_BLENDING_MODE){  //We do not take into account Blending if TexID not set
-          priority = pf->getPriority();
+      if (pf->_priority > priority) {
+        if (pf->_id != GLF_BLENDING_MODE){  //We do not take into account Blending if TexID not set
+          priority = pf->_priority;
         }
       }
     }
   }
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < featuresSize; i++) {
     const GLFeature* f = features.get(i);
-    if (f->getGroup() == COLOR_GROUP) {
+    if (f->_group == COLOR_GROUP) {
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
-      if (pf->getPriority() == priority) {
+      if (pf->_priority == priority) {
         pf->applyOnGlobalGLState(&state);
         vs.combineWith(f->getGPUVariableValueSet());
       }
@@ -168,29 +173,31 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features, GPUVariableValueSe
 }
 
 
-void GLFeatureCameraGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) {
-
-  const int size = features.size();
+void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
+                                 GPUVariableValueSet& vs,
+                                 GLGlobalState& state) {
 
   Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder;
   Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder;
 
   bool normalsAvailable = false;
 
-  for (int i = 0; i < size; i++) {
+  const int featuresSize = features.size();
+  for (int i = 0; i < featuresSize; i++) {
     const GLFeature* f = features.get(i);
-    const GLFeatureGroupName group = f->getGroup();
-    const GLFeatureID id = f->getID();
+    const GLFeatureGroupName group = f->_group;
+    const GLFeatureID id = f->_id;
     if (group == CAMERA_GROUP) {
       GLCameraGroupFeature* cf = ((GLCameraGroupFeature*) f);
 
       if (id == GLF_MODEL_TRANSFORM) {
         modelTransformHolderBuilder.add(cf->getMatrixHolder());
-      } else{
+      }
+      else {
         modelViewHolderBuilder.add(cf->getMatrixHolder());
       }
-
-    } else{
+    }
+    else {
       if (group == LIGHTING_GROUP) {
         if (id == GLF_VERTEX_NORMAL) {
           normalsAvailable = true;
@@ -228,7 +235,7 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
   bool normalsAvailable = false;
   for(int i = 0; i < size; i++) {
     const GLFeature* f = features.get(i);
-    if (f->getID() == GLF_VERTEX_NORMAL) {
+    if (f->_id == GLF_VERTEX_NORMAL) {
       normalsAvailable = true;
       break;
     }
@@ -240,7 +247,7 @@ void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValu
     for(int i = 0; i < size; i++) {
       const GLFeature* f = features.get(i);
 
-      if (f->getGroup() == LIGHTING_GROUP) {
+      if (f->_group == LIGHTING_GROUP) {
         f->applyOnGlobalGLState(&state);
         vs.combineWith(f->getGPUVariableValueSet());
       }

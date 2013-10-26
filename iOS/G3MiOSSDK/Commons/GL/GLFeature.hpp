@@ -36,40 +36,41 @@ enum GLFeatureID{
 };
 
 class GLFeature: public RCObject {
-public:
+protected:
+  GPUVariableValueSet _values;
 
-  GLFeature(GLFeatureGroupName group, GLFeatureID id): _group(group), _id(id)
-  {}
+public:
+  const GLFeatureGroupName _group;
+  const GLFeatureID _id;
+
+  GLFeature(GLFeatureGroupName group,
+            GLFeatureID id) :
+  _group(group),
+  _id(id)
+  {
+  }
 
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return &_values;
   }
 
-  GLFeatureGroupName getGroup() const {
-    return _group;
-  }
-
-  GLFeatureID getID() const{
-    return _id;
-  }
-
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
 
-protected:
-  const GLFeatureGroupName _group;
-  GPUVariableValueSet _values;
-  const GLFeatureID _id;
 };
 
 class BillboardGLFeature: public GLFeature{
 public:
-  BillboardGLFeature(const Vector3D& position, int textureWidth, int textureHeight);
+  BillboardGLFeature(const Vector3D& position,
+                     int textureWidth,
+                     int textureHeight);
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class ViewportExtentGLFeature: public GLFeature{
+class ViewportExtentGLFeature: public GLFeature {
 public:
-  ViewportExtentGLFeature(int viewportWidth, int viewportHeight);
+  ViewportExtentGLFeature(int viewportWidth,
+                          int viewportHeight);
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
@@ -98,7 +99,7 @@ public:
   ~GeometryGLFeature();
 
   void applyOnGlobalGLState(GLGlobalState* state) const ;
-  
+
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -113,8 +114,12 @@ private:
 #endif
 public:
 
-  GLCameraGroupFeature(Matrix44D* matrix, GLFeatureID id):
-  GLFeature(CAMERA_GROUP, id), _matrixHolder(new Matrix44DHolder(matrix)) {}
+  GLCameraGroupFeature(Matrix44D* matrix,
+                       GLFeatureID id) :
+  GLFeature(CAMERA_GROUP, id),
+  _matrixHolder(new Matrix44DHolder(matrix))
+  {
+  }
 
   ~GLCameraGroupFeature() {
     _matrixHolder->_release();
@@ -123,9 +128,18 @@ public:
     super.dispose();
 #endif
   }
-  const Matrix44D* getMatrix() const{ return _matrixHolder->getMatrix();}
-  const void setMatrix(const Matrix44D* matrix) {_matrixHolder->setMatrix(matrix);}
-  const Matrix44DHolder* getMatrixHolder() const{ return _matrixHolder;}
+
+  const Matrix44D* getMatrix() const {
+    return _matrixHolder->getMatrix();
+  }
+
+  const void setMatrix(const Matrix44D* matrix) {
+    _matrixHolder->setMatrix(matrix);
+  }
+
+  const Matrix44DHolder* getMatrixHolder() const{
+    return _matrixHolder;
+  }
 
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
@@ -159,22 +173,32 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-class PriorityGLFeature: public GLFeature{
-  const int _priority;
+class PriorityGLFeature: public GLFeature {
 public:
-  PriorityGLFeature(GLFeatureGroupName g, GLFeatureID id, int p): GLFeature(g, id), _priority(p) {}
+  const int _priority;
 
-  int getPriority() const { return _priority;}
+  PriorityGLFeature(GLFeatureGroupName g,
+                    GLFeatureID id,
+                    int priority) :
+  GLFeature(g, id),
+  _priority(priority)
+  {
+  }
 };
 
-class GLColorGroupFeature: public PriorityGLFeature{
+class GLColorGroupFeature: public PriorityGLFeature {
 
   const bool _blend;
   const int _sFactor;
   const int _dFactor;
-  
+
 public:
-  GLColorGroupFeature(GLFeatureID id, int p, bool blend, int sFactor, int dFactor): PriorityGLFeature(COLOR_GROUP, id, p),
+  GLColorGroupFeature(GLFeatureID id,
+                      int priority,
+                      bool blend,
+                      int sFactor,
+                      int dFactor) :
+  PriorityGLFeature(COLOR_GROUP, id, priority),
   _blend(blend),
   _sFactor(sFactor),
   _dFactor(dFactor)
@@ -185,32 +209,49 @@ public:
     if (_blend) {
       state->enableBlend();
       state->setBlendFactors(_sFactor, _dFactor);
-    } else{
+    }
+    else {
       state->disableBlend();
     }
   }
 };
 
-class TextureGLFeature: public GLColorGroupFeature{
+class TextureGLFeature: public GLColorGroupFeature {
 #ifdef C_CODE
   IGLTextureId const* _texID;
 #endif
 #ifdef JAVA_CODE
   private IGLTextureId _texID = null;
 #endif
-  
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
-                   IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
-                   bool blend, int sFactor, int dFactor,
-                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor,
+                   bool coordsTransformed,
+                   const Vector2D& translate,
+                   const Vector2D& scale);
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
 class ColorGLFeature: public GLColorGroupFeature{
 public:
-  ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
-                 bool blend, int sFactor, int dFactor);
+  ColorGLFeature(IFloatBuffer* colors,
+                 int arrayElementSize,
+                 int index,
+                 bool normalized,
+                 int stride,
+                 bool blend,
+                 int sFactor,
+                 int dFactor);
+
   void applyOnGlobalGLState(GLGlobalState* state) const{
     blendingOnGlobalGLState(state);
   }
@@ -219,7 +260,7 @@ public:
 class FlatColorGLFeature: public GLColorGroupFeature{
 public:
   FlatColorGLFeature(const Color& color,
-                 bool blend, int sFactor, int dFactor);
+                     bool blend, int sFactor, int dFactor);
   void applyOnGlobalGLState(GLGlobalState* state) const{
     blendingOnGlobalGLState(state);
   }
@@ -247,7 +288,7 @@ public:
 class TextureCoordsGLFeature: public PriorityGLFeature{
 public:
   TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized, int stride,
-                   bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
+                         bool coordsTransformed, const Vector2D& translate, const Vector2D& scale);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
@@ -265,7 +306,7 @@ public:
 class VertexNormalGLFeature: public GLFeature{
 public:
   VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride);
-
+  
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 
