@@ -9,14 +9,11 @@
 #include "Shape.hpp"
 #include "GL.hpp"
 #include "Planet.hpp"
-
 #include "ShapeScaleEffect.hpp"
 #include "ShapeOrbitCameraEffect.hpp"
 #include "ShapePositionEffect.hpp"
 #include "ShapeFullPositionEffect.hpp"
-
 #include "Camera.hpp"
-//#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:
