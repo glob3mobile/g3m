@@ -204,14 +204,16 @@ void TrailsRenderer::updateGLState(const G3MRenderContext* rc) {
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
     _glState->addGLFeature(_projection, true);
-  } else{
+  }
+  else {
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
     _glState->addGLFeature(_model, true);
-  } else{
+  }
+  else {
     _model->setMatrix(cam->getModelMatrix44D());
   }
 }

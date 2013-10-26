@@ -14,7 +14,6 @@
 
 class TimeInterval {
 private:
-  const long long _milliseconds;
 
   explicit TimeInterval(const long long milliseconds) :
   _milliseconds(milliseconds)
@@ -23,6 +22,8 @@ private:
   }
 
 public:
+  const long long _milliseconds;
+
   TimeInterval(const TimeInterval& other) :
   _milliseconds(other._milliseconds)
   {
