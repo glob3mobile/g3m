@@ -12,13 +12,14 @@ package org.glob3.mobile.generated;
 
 public class TimeInterval
 {
-  private final long _milliseconds;
 
   private TimeInterval(long milliseconds)
   {
      _milliseconds = milliseconds;
 
   }
+
+  public final long _milliseconds;
 
   public TimeInterval(TimeInterval other)
   {
