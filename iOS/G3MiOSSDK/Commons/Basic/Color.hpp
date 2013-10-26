@@ -126,22 +126,6 @@ public:
     return Color::fromRGBA(0, 0, 1, 1);
   }
 
-  float getRed() const {
-    return _red;
-  }
-
-  float getGreen() const {
-    return _green;
-  }
-
-  float getBlue() const {
-    return _blue;
-  }
-
-  float getAlpha() const {
-    return _alpha;
-  }
-
   Color mixedWith(const Color& that,
                   float factor) const {
     float frac1 = factor;
