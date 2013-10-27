@@ -31,7 +31,8 @@ public final class ES2Renderer
 
    private final NativeGL2_Android _nativeGL;
 
-   private long                    _startTime;
+
+   //private long                    _startTime;
 
 
    public ES2Renderer(final G3MWidget_Android widget) {
@@ -41,7 +42,7 @@ public final class ES2Renderer
       _nativeGL = new NativeGL2_Android();
       _gl = new GL(_nativeGL, false);
 
-      _startTime = System.currentTimeMillis();
+      //_startTime = System.currentTimeMillis();
    }
 
 
@@ -63,22 +64,23 @@ public final class ES2Renderer
       widget.render(_width, _height);
 
 
-      // experimental FPS reduction - DGD
-      final long now = System.currentTimeMillis();
-      final long timeElapsedInRender = now - _startTime;
-      final long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
-      if (timeLeftInMS > 0) {
-         try {
-            // ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
-            Thread.sleep(timeLeftInMS);
-         }
-         catch (final InterruptedException e) {
-         }
-         _startTime = System.currentTimeMillis();
-      }
-      else {
-         _startTime = now;
-      }
+      //      // experimental FPS reduction - DGD
+      //      final long now = System.currentTimeMillis();
+      //      final long timeElapsedInRender = now - _startTime;
+      //      final long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
+      //      if (timeLeftInMS > 0) {
+      //         try {
+      //            // ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
+      //            Thread.sleep(timeLeftInMS);
+      //         }
+      //         catch (final InterruptedException e) {
+      //         }
+      //         _startTime = System.currentTimeMillis();
+      //      }
+      //      else {
+      //         _startTime = now;
+      //      }
+
    }
 
 
