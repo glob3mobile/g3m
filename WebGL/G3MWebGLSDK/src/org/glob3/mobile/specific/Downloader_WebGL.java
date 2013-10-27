@@ -45,11 +45,18 @@ public final class Downloader_WebGL
       _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _delayMillis = delayMillis;
-      if ((proxy != null) && !proxy.trim().equals("")) {
-         _proxy = proxy.trim();
+
+      if (proxy == null) {
+         _proxy = null;
       }
       else {
-         _proxy = defineDefaultProxy();
+         final String trimmedProxy = proxy.trim();
+         if (trimmedProxy.isEmpty()) {
+            _proxy = defineDefaultProxy();
+         }
+         else {
+            _proxy = trimmedProxy;
+         }
       }
 
       final Downloader_WebGL thisDownloader = this;
