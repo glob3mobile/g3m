@@ -20,11 +20,11 @@ public final class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 
-   private static final int        GOAL_MS_PER_FRAME = 33;   // 33ms => 30FPS
+   // private static final int        GOAL_MS_PER_FRAME = 33;   // 33ms => 30FPS
 
    final private G3MWidget_Android _widgetAndroid;
 
-   private boolean                 _hasRendered      = false;
+   private boolean                 _hasRendered = false;
    private int                     _width;
    private int                     _height;
    private final GL                _gl;
