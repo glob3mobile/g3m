@@ -33,6 +33,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   private Angle _heading;
   private Angle _pitch;
+  private Angle _roll;
 
   private double _scaleX;
   private double _scaleY;
@@ -89,11 +90,15 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
+    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.downY());
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   
   //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
+  
+    int __ROLL_DOESNT_WORK;
+  //  const MutableMatrix44D localTransform  = rollRotation.multiply(headingRotation).multiply(pitchRotation).multiply(translation).multiply(scale);
+    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -104,6 +109,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _altitudeMode = altitudeMode;
      _heading = new Angle(Angle.zero());
      _pitch = new Angle(Angle.zero());
+     _roll = new Angle(Angle.zero());
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;
@@ -134,6 +140,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
        _heading.dispose();
     if (_pitch != null)
        _pitch.dispose();
+    if (_roll != null)
+       _roll.dispose();
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();
@@ -154,6 +162,11 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final Angle getPitch()
   {
     return _pitch;
+  }
+
+  public final Angle getRoll()
+  {
+    return _roll;
   }
 
   public final void setPosition(Geodetic3D position, AltitudeMode altitudeMode)
@@ -188,13 +201,13 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     addShapeEffect(effect);
   }
 
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading)
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll)
   {
-     setAnimatedPosition(duration, position, pitch, heading, false);
+     setAnimatedPosition(duration, position, pitch, heading, roll, false);
   }
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, boolean linearInterpolation)
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation)
   {
-    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading,heading, linearInterpolation);
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation);
     addShapeEffect(effect);
   }
 
@@ -209,17 +222,19 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final void setHeading(Angle heading)
   {
-    if (_heading != null)
-       _heading.dispose();
-    _heading = new Angle(heading);
+    _heading = heading;
     cleanTransformMatrix();
   }
 
   public final void setPitch(Angle pitch)
   {
-    if (_pitch != null)
-       _pitch.dispose();
-    _pitch = new Angle(pitch);
+    _pitch = pitch;
+    cleanTransformMatrix();
+  }
+
+  public final void setRoll(Angle roll)
+  {
+    _roll = roll;
     cleanTransformMatrix();
   }
 
@@ -328,13 +343,11 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public void initialize(G3MContext context)
   {
-
     _surfaceElevationProvider = context.getSurfaceElevationProvider();
     if (_surfaceElevationProvider != null)
     {
       _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
     }
-
   }
 
   public abstract boolean isReadyToRender(G3MRenderContext rc);
@@ -352,7 +365,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _transformMatrix = null;
   }
 
-  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
+  public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) // Without considering vertical exaggeration
   {
   }
 
