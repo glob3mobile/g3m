@@ -45,6 +45,7 @@ Shape::~Shape() {
   
   delete _heading;
   delete _pitch;
+  delete _roll;
   
   delete _transformMatrix;
 
@@ -68,14 +69,18 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
                                           altitude);
 
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
+
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
+  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::downY());
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
 
 //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
   const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(translation).multiply(scale);
+
+  int __ROLL_DOESNT_WORK;
+//  const MutableMatrix44D localTransform  = rollRotation.multiply(headingRotation).multiply(pitchRotation).multiply(translation).multiply(scale);
+  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(rollRotation ).multiply(translation).multiply(scale);
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
@@ -157,12 +162,14 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Geodetic3D& position,
                                 const Angle& pitch,
                                 const Angle& heading,
+                                const Angle& roll,
                                 bool linearInterpolation) {
   Effect* effect = new ShapeFullPositionEffect(duration,
                                                this,
-                                               *_position,
-                                               position,
-                                               *_pitch, pitch,*_heading,heading,
+                                               *_position, position,
+                                               *_pitch,    pitch,
+                                               *_heading,  heading,
+                                               *_roll,     roll,
                                                linearInterpolation);
   addShapeEffect(effect);
 }

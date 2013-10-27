@@ -20,12 +20,17 @@ private:
   
   const Geodetic3D _fromPosition;
   const Geodetic3D _toPosition;
+
   const Angle _fromPitch;
   const Angle _toPitch;
+
   const Angle _fromHeading;
   const Angle _toHeading;
-  
-  
+
+  const Angle _fromRoll;
+  const Angle _toRoll;
+
+
 public:
   ShapeFullPositionEffect(const TimeInterval& duration,
                           Shape* shape,
@@ -35,11 +40,19 @@ public:
                           const Angle& toPitch,
                           const Angle& fromHeading,
                           const Angle& toHeading,
+                          const Angle& fromRoll,
+                          const Angle& toRoll,
                           const bool linearTiming=false) :
   EffectWithDuration(duration, linearTiming),
   _shape(shape),
   _fromPosition(fromPosition),
-  _toPosition(toPosition), _fromPitch(fromPitch),_toPitch(toPitch), _fromHeading(fromHeading), _toHeading(toHeading)
+  _toPosition(toPosition),
+  _fromPitch(fromPitch),
+  _toPitch(toPitch),
+  _fromHeading(fromHeading),
+  _toHeading(toHeading),
+  _fromRoll(fromRoll),
+  _toRoll(toRoll)
   {
     
   }

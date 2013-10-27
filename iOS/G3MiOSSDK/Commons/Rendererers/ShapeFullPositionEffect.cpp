@@ -24,7 +24,10 @@ void ShapeFullPositionEffect::doStep(const G3MRenderContext *rc,
   if (!_fromHeading.isNan() && !_toHeading.isNan()) {
     _shape->setHeading(Angle::linearInterpolation(_fromHeading, _toHeading, alpha));
   }
-  
+
+  if (!_fromRoll.isNan() && !_toRoll.isNan()) {
+    _shape->setRoll(Angle::linearInterpolation(_fromRoll, _toRoll, alpha));
+  }
 }
 
 void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
@@ -35,6 +38,10 @@ void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
   
   if (!_toHeading.isNan()) {
     _shape->setHeading(_toHeading);
+  }
+
+  if (!_toRoll.isNan()) {
+    _shape->setRoll(_toRoll);
   }
 }
 
@@ -47,5 +54,9 @@ void ShapeFullPositionEffect::stop(const G3MRenderContext *rc,
   
   if (!_toHeading.isNan()) {
     _shape->setHeading(_toHeading);
+  }
+
+  if (!_toRoll.isNan()) {
+    _shape->setRoll(_toRoll);
   }
 }
