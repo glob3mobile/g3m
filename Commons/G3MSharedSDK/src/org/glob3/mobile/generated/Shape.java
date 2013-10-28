@@ -92,12 +92,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
     final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-  
-  //  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(scale);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-  
-    int __ROLL_DOESNT_WORK;
-  //  const MutableMatrix44D localTransform  = rollRotation.multiply(headingRotation).multiply(pitchRotation).multiply(translation).multiply(scale);
     final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
