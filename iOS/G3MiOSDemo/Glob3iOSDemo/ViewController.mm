@@ -1629,6 +1629,19 @@ public:
                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
                                           );
     shapesRenderer->addShape(mercator1);
+  
+  // adding touch listener
+  class TestShapeTouchListener : public ShapeTouchListener {
+  public:
+    bool touchedShape(Shape* mark) {
+      printf ("touched on shape!\n");
+      return true;
+    }
+  };
+
+  shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
+  
+
 
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),

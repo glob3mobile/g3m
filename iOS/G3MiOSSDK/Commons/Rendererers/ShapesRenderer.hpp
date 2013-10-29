@@ -41,6 +41,16 @@ public:
 };
 
 
+class ShapeTouchListener {
+public:
+  virtual ~ShapeTouchListener() {
+  }
+  
+  virtual bool touchedShape(Shape* shape) = 0;
+};
+
+
+
 class ShapesRenderer : public LeafRenderer {
 private:
   class LoadQueueItem {
@@ -97,6 +107,10 @@ private:
   const bool _renderNotReadyShapes;
 
   std::vector<Shape*> _shapes;
+  
+  ShapeTouchListener* _shapeTouchListener;
+  bool               _autoDeleteShapeTouchListener;
+
 
 #ifdef C_CODE
   const G3MContext* _context;
@@ -136,7 +150,9 @@ public:
   _context(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
-  _lastCamera(NULL)
+  _lastCamera(NULL),
+  _autoDeleteShapeTouchListener(false),
+  _shapeTouchListener(NULL)
   {
   }
 
@@ -149,6 +165,12 @@ public:
 
     _glState->_release();
     _glStateTransparent->_release();
+    
+    if ( _autoDeleteShapeTouchListener ) {
+      delete _shapeTouchListener;
+    }
+    _shapeTouchListener = NULL;
+
 
 #ifdef JAVA_CODE
     super.dispose();
@@ -259,6 +281,9 @@ public:
                     listener,
                     deleteListener);
   }
+  
+  void setShapeTouchListener(ShapeTouchListener* shapeTouchListener,
+                             bool autoDelete);
   
 };
 

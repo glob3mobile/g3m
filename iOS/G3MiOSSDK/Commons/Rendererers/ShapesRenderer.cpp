@@ -190,6 +190,7 @@ std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* 
 bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent)
 {
+  bool handled = false;
   if (_lastCamera != NULL) {
     if (touchEvent->getTouchCount() ==1 &&
         touchEvent->getTapCount()==1 &&
@@ -200,18 +201,14 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       std::vector<ShapeDistance> shapeDistances = intersectionsDistances(ec->getPlanet(), origin, direction);
 
       if (!shapeDistances.empty()) {
-        printf ("Found %d intersections with shapes:\n",
-                (int)shapeDistances.size());
-        for (int i=0; i<shapeDistances.size(); i++) {
-          printf ("   %d: shape %d to distance %f\n",
-                  i+1,
-                  shapeDistances[i]._shape,
-                  shapeDistances[i]._distance);
-        }
+        printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
+        if (_shapeTouchListener != NULL)
+            handled = _shapeTouchListener->touchedShape(shapeDistances[0]._shape);
       }
+
     }
   }
-  return false;
+  return handled;
 }
 
 void ShapesRenderer::drainLoadQueue() {
@@ -537,3 +534,15 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                             true);
   
 }
+
+
+void ShapesRenderer::setShapeTouchListener(ShapeTouchListener* shapeTouchListener,
+                                          bool autoDelete) {
+  if ( _autoDeleteShapeTouchListener ) {
+    delete _shapeTouchListener;
+  }
+  
+  _shapeTouchListener = shapeTouchListener;
+  _autoDeleteShapeTouchListener = autoDelete;
+}
+
