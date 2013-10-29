@@ -21,10 +21,7 @@ package org.glob3.mobile.generated;
 public interface IBuffer
 {
 
-  void dispose(){}
-
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  IBuffer();
+  void dispose();
 
   long getID();
 
