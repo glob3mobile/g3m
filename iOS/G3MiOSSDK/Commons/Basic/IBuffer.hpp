@@ -16,7 +16,7 @@ class IBuffer {
 
 public:
 #ifdef C_CODE
-  virtual ~IBuffer();
+  virtual ~IBuffer(){}
 #endif
 #ifdef JAVA_CODE
   void dispose();
