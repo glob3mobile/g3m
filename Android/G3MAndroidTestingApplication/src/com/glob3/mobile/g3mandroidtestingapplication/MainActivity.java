@@ -275,6 +275,14 @@ public class MainActivity
       _logger.logInfo("hola cabron");
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
+      
+      if (true) {
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(-12.0875), Angle.fromDegrees(15.2036), 2328992);
+    	  _g3mWidget.setCameraPosition(position);
+    	  _g3mWidget.setCameraHeading(Angle.fromDegrees(-40.72));
+    	  _g3mWidget.setCameraPitch(Angle.fromDegrees(35.48));
+      }
+
 
    }
 
