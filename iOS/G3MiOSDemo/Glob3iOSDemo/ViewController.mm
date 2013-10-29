@@ -597,9 +597,8 @@ public:
   builder.setBusyRenderer(busyRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-  
   builder.addRenderer(shapesRenderer);
-
+  
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
@@ -760,6 +759,14 @@ public:
   // initialization
   builder.initializeWidget();
   //  [self testGenericQuadTree:geoTileRasterizer];
+  
+  if (true) {
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
+    //[self G3MWidget].widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
+    [self G3MWidget].widget->setCameraPosition(position);
+    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-40.72));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(35.48));
+  }
 
 }
 
