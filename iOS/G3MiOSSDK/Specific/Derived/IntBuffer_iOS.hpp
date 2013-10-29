@@ -18,10 +18,15 @@ private:
   int*      _values;
   int       _timestamp;
 
+  //ID
+  const long long _id;
+  static long long _nextID;
+
 public:
   IntBuffer_iOS(int size) :
   _size(size),
-  _timestamp(0)
+  _timestamp(0),
+  _id(_nextID++)
   {
     _values = new int[size];
     
@@ -31,7 +36,7 @@ public:
   }
 
   long long getID() const{
-    return 0;
+    return _id;
   }
 
   virtual ~IntBuffer_iOS() {

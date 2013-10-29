@@ -13,6 +13,8 @@
 
 GLuint ShortBuffer_iOS::_boundIBO = -1;
 
+long long ShortBuffer_iOS::_nextID = 0;
+
 const std::string ShortBuffer_iOS::description() const {
   std::ostringstream oss;
 
