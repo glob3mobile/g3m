@@ -99,8 +99,10 @@ public:
 
   void imageDownloaded(IImage* image);
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
+                                             const Vector3D& direction) const
+  {
     std::vector<double> intersections;
     return intersections;
   }

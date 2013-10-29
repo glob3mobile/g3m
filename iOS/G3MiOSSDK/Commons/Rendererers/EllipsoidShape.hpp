@@ -11,7 +11,6 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Ellipsoid.hpp"
-#include "Planet.hpp"
 
 
 class Color;
@@ -30,8 +29,6 @@ class OrientedBox;
 
 class EllipsoidShape : public AbstractMeshShape {
 private:
-  
-  const Planet* _planet;
   
   OrientedBox* _boundingVolume;
   
@@ -85,7 +82,6 @@ protected:
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
-                 const Planet* planet,
                  const Vector3D& radius,
                  short resolution,
                  float borderWidth,
@@ -107,7 +103,6 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _planet(planet),
   _texId(NULL)
   {
 
@@ -115,7 +110,6 @@ public:
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
-                 const Planet* planet,
                  const URL& textureURL,
                  const Vector3D& radius,
                  short resolution,
@@ -136,7 +130,6 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _planet(planet),
   _texId(NULL)
   {
     
@@ -148,7 +141,8 @@ public:
   void imageDownloaded(IImage* image);
   
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
                                              const Vector3D& direction) const;
 
   bool isVisible(const G3MRenderContext *rc);

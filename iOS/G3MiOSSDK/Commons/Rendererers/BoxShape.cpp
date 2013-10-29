@@ -273,7 +273,8 @@ Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
 }
 
 
-std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
+std::vector<double> BoxShape::intersectionsDistances(const Planet* planet,
+                                                     const Vector3D& origin,
                                                      const Vector3D& direction) const {
   return _boundingVolume->intersectionsDistances(origin, direction);
 }
@@ -282,7 +283,7 @@ std::vector<double> BoxShape::intersectionsDistances(const Vector3D& origin,
 bool BoxShape::isVisible(const G3MRenderContext *rc)
 {
   if (_boundingVolume == NULL)
-    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(_planet));
+    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(rc->getPlanet()));
   return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
 

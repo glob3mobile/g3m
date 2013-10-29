@@ -11,7 +11,6 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
-#include "Planet.hpp"
 
 class OrientedBox;
 
@@ -22,7 +21,6 @@ private:
   double _extentY;
   double _extentZ;
   
-  const Planet* _planet;
   
   OrientedBox* _boundingVolume;
 
@@ -44,7 +42,6 @@ protected:
 public:
   BoxShape(Geodetic3D* position,
            AltitudeMode altitudeMode,
-           const Planet* planet,
            const Vector3D& extent,
            float borderWidth,
            const Color& surfaceColor,
@@ -58,8 +55,7 @@ public:
   _borderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
-  _useNormals(useNormals),
-  _planet(planet)
+  _useNormals(useNormals)
   {
   }
 
@@ -99,7 +95,8 @@ public:
     }
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
                                              const Vector3D& direction) const;
   
   bool isVisible(const G3MRenderContext *rc);

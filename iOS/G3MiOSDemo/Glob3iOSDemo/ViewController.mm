@@ -596,7 +596,7 @@ public:
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
+  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
   
   builder.addRenderer(shapesRenderer);
 
@@ -620,8 +620,7 @@ public:
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer
-                                               geoTileRasterizer: geoTileRasterizer
-                                                          planet: builder.getPlanet()];
+                                               geoTileRasterizer: geoTileRasterizer];
   builder.addRenderer(geoRenderer);
 
 
@@ -1535,7 +1534,7 @@ public:
 
 }
 
-- (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
+- (ShapesRenderer*) createShapesRenderer
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -1592,7 +1591,6 @@ public:
                                            Angle::fromDegrees(10),
                                            radiusBox._z/2),
                             ABSOLUTE,
-                            planet,
                             radiusBox,
                             2,
                             Color::fromRGBA(0,    1, 0, 1),
@@ -1605,7 +1603,6 @@ public:
                                                           Angle::fromDegrees(0),
                                                           radius1._x),
                                            ABSOLUTE,
-                                           planet,
                                            URL("file:///world.jpg", false),
                                            radius1,
                                            32,
@@ -1622,7 +1619,6 @@ public:
                                                        Angle::fromDegrees(5),
                                                        radius2._x),
                                           ABSOLUTE,
-                                          planet,
                                           URL("file:///mercator_debug.png", false),
                                           radius2,
                                           32,
@@ -1765,8 +1761,6 @@ class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
   
-  const Planet* _planet;
-
 private:
 
   //  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
@@ -1889,7 +1883,6 @@ private:
 
     return new EllipsoidShape(new Geodetic3D(geometry->getPosition(), 0),
                               RELATIVE_TO_GROUND,
-                              planet,
                               Vector3D(radius, radius, radius),
                               10,
                               0.0,
@@ -1900,8 +1893,7 @@ private:
                               true);
   }
 
-  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry,
-                           const Planet* planet) const {
+  BoxShape* createBoxShape(const GEO2DPointGeometry* geometry) const {
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
     const double population = properties->getAsNumber("population", 0);
@@ -1917,7 +1909,6 @@ private:
 
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
-                        planet,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
@@ -1957,8 +1948,7 @@ private:
 
 
 public:
-  SampleSymbolizer(const Planet* planet) :
-  _planet(planet),
+  SampleSymbolizer() :
   _colorIndex(0) {
 
   }
@@ -2034,7 +2024,7 @@ public:
       //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
       //    }
       //    else {
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry) ) );
       //    }
 
       Mark* mark = createMark(geometry);
@@ -2053,9 +2043,8 @@ public:
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
                              geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
-                                        planet: (const Planet*) planet
 {
-  GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
+  GEOSymbolizer* symbolizer = new SampleSymbolizer();
 
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
@@ -2257,7 +2246,6 @@ public:
                                             geoRenderer: (GEORenderer*) geoRenderer
                                            meshRenderer: (MeshRenderer*) meshRenderer
                                           marksRenderer: (MarksRenderer*) marksRenderer
-                                                 planet: (const Planet*) planet
 
 {
   class SampleInitializationTask : public GInitializationTask {
@@ -2268,7 +2256,6 @@ public:
     MeshRenderer*   _meshRenderer;
     MarksRenderer*  _marksRenderer;
 
-    const Planet*   _planet;
 
     void testRadarModel(const G3MContext* context) {
 
@@ -2286,14 +2273,12 @@ public:
                              ShapesRenderer* shapesRenderer,
                              GEORenderer*    geoRenderer,
                              MeshRenderer*   meshRenderer,
-                             MarksRenderer*  marksRenderer,
-                             const Planet*   planet):
+                             MarksRenderer*  marksRenderer):
     _iosWidget(iosWidget),
     _shapesRenderer(shapesRenderer),
     _geoRenderer(geoRenderer),
     _meshRenderer(meshRenderer),
-    _marksRenderer(marksRenderer),
-    _planet(planet)
+    _marksRenderer(marksRenderer)
     {
 
     }
@@ -2768,7 +2753,6 @@ public:
                                                    Angle::fromDegrees(-15.431389),
                                                    1000000),
                                     RELATIVE_TO_GROUND,
-                                    _planet,
                                     Vector3D(100, 100, 100),
                                     1.0,
                                     Color::fromRGBA(1.0, 0.0, 0.0, 1.0),
@@ -2802,8 +2786,7 @@ public:
                                                                          shapesRenderer,
                                                                          geoRenderer,
                                                                          meshRenderer,
-                                                                         marksRenderer,
-                                                                         planet);
+                                                                         marksRenderer);
 
   return initializationTask;
 }

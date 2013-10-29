@@ -275,9 +275,10 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 }
 
 
-std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
+std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
+                                                           const Vector3D& origin,
                                                            const Vector3D& direction) const {
-  MutableMatrix44D* M = getTransformMatrix(_planet);
+  MutableMatrix44D* M = getTransformMatrix(planet);
   const Quadric transformedQuadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
   std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);
   std::vector<double> closerDistance;
@@ -291,7 +292,7 @@ bool EllipsoidShape::isVisible(const G3MRenderContext *rc)
 {
   if (_boundingVolume == NULL) {
     const Vector3D extent = _ellipsoid->getRadii().times(2);
-    _boundingVolume = new OrientedBox(extent, *getTransformMatrix(_planet));
+    _boundingVolume = new OrientedBox(extent, *getTransformMatrix(rc->getPlanet()));
   }
   return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
