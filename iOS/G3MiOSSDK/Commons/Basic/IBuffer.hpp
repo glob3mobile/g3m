@@ -19,10 +19,8 @@ public:
   virtual ~IBuffer();
 #endif
 #ifdef JAVA_CODE
-  void dispose(){}
+  void dispose();
 #endif
-
-  IBuffer();
 
   virtual long long getID() const = 0;
 
