@@ -169,7 +169,7 @@ public class QuadShape extends AbstractMeshShape
     cleanMesh();
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
     return intersections;
@@ -179,6 +179,10 @@ public class QuadShape extends AbstractMeshShape
   {
     int __TODO_isVisible_Method;
     return true;
+  }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
   }
 
 }

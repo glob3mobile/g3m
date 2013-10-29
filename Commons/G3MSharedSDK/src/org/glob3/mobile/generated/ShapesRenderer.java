@@ -41,6 +41,10 @@ public class ShapesRenderer extends LeafRenderer
 
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
+  private ShapeTouchListener _shapeTouchListener;
+  private boolean _autoDeleteShapeTouchListener;
+
+
   private G3MContext _context;
   private Camera    _lastCamera;
 
@@ -130,6 +134,8 @@ public class ShapesRenderer extends LeafRenderer
      _glState = new GLState();
      _glStateTransparent = new GLState();
      _lastCamera = null;
+     _autoDeleteShapeTouchListener = false;
+     _shapeTouchListener = null;
   }
 
   public void dispose()
@@ -144,6 +150,14 @@ public class ShapesRenderer extends LeafRenderer
 
     _glState._release();
     _glStateTransparent._release();
+
+    if (_autoDeleteShapeTouchListener)
+    {
+      if (_shapeTouchListener != null)
+         _shapeTouchListener.dispose();
+    }
+    _shapeTouchListener = null;
+
 
     super.dispose();
 
@@ -230,6 +244,7 @@ public class ShapesRenderer extends LeafRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
+    boolean handled = false;
     if (_lastCamera != null)
     {
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
@@ -237,19 +252,18 @@ public class ShapesRenderer extends LeafRenderer
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(ec.getPlanet(), origin, direction);
   
         if (!shapeDistances.isEmpty())
         {
           System.out.printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
-          for (int i = 0; i<shapeDistances.size(); i++)
-          {
-            System.out.printf ("   %d: shape %d to distance %f\n", i+1, shapeDistances.get(i)._shape, shapeDistances.get(i)._distance);
-          }
+          if (_shapeTouchListener != null)
+              handled = _shapeTouchListener.touchedShape(shapeDistances.get(0)._shape);
         }
+  
       }
     }
-    return false;
+    return handled;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -300,13 +314,13 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
-  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<ShapeDistance> shapeDistances = new java.util.ArrayList<ShapeDistance>();
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(origin, direction);
+      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
       for (int i = 0; i<distances.size(); i++)
       {
         shapeDistances.add(new ShapeDistance(distances.get(i), shape));
@@ -390,6 +404,18 @@ public class ShapesRenderer extends LeafRenderer
   public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
     loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener);
+  }
+
+  public final void setShapeTouchListener(ShapeTouchListener shapeTouchListener, boolean autoDelete)
+  {
+    if (_autoDeleteShapeTouchListener)
+    {
+      if (_shapeTouchListener != null)
+         _shapeTouchListener.dispose();
+    }
+  
+    _shapeTouchListener = shapeTouchListener;
+    _autoDeleteShapeTouchListener = autoDelete;
   }
 
 }

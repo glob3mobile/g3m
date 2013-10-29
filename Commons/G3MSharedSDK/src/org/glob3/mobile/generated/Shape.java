@@ -70,21 +70,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     final Vector3D scale = new Vector3D(_scaleX, _scaleY, _scaleZ);
     final Vector3D translation = new Vector3D(_translationX, _translationY, _translationZ);
   
-<<<<<<< HEAD
-    return new MutableMatrix44D(planet.createTransformMatrix(positionWithSurfaceElevation, _heading, _pitch, scale, translation));
-=======
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
-  
-    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
->>>>>>> origin/purgatory
+    return new MutableMatrix44D(planet.createTransformMatrix(positionWithSurfaceElevation, _heading, _pitch, _roll, scale, translation));
   }
+
+  private boolean _selected;
 
 
   protected void cleanTransformMatrix()
@@ -124,6 +113,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _enable = true;
      _surfaceElevation = 0;
      _glState = new GLState();
+     _selected = false;
 
   }
 
@@ -376,8 +366,27 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
   public abstract boolean isVisible(G3MRenderContext rc);
 
+  public abstract void setSelectedDrawMode(boolean mode);
+
+
+  public final void select()
+  {
+    _selected = true;
+    setSelectedDrawMode(true);
+  }
+
+  public final void unselect()
+  {
+    _selected = false;
+    setSelectedDrawMode(false);
+  }
+
+  public final boolean isSelected()
+  {
+     return _selected;
+  }
 }

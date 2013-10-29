@@ -26,16 +26,17 @@ public class BoxShape extends AbstractMeshShape
   private double _extentY;
   private double _extentZ;
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
   private OrientedBox _boundingVolume;
 
   private float _borderWidth;
+  private float _originalBorderWidth;
 
   private boolean _useNormals;
 
   private Color _surfaceColor;
   private Color _borderColor;
+  private Color _originalBorderColor;
 
   private Mesh createBorderMesh(G3MRenderContext rc)
   {
@@ -181,15 +182,15 @@ public class BoxShape extends AbstractMeshShape
     return surface;
   }
 
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
-     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, borderColor, true);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, borderColor, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor)
   {
-     this(position, altitudeMode, planet, extent, borderWidth, surfaceColor, null, true);
+     this(position, altitudeMode, extent, borderWidth, surfaceColor, null, true);
   }
-  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
+  public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
      _boundingVolume = null;
@@ -197,10 +198,11 @@ public class BoxShape extends AbstractMeshShape
      _extentY = extent._y;
      _extentZ = extent._z;
      _borderWidth = borderWidth;
+     _originalBorderWidth = borderWidth;
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
+     _originalBorderColor = (borderColor!=null)? new Color(borderColor) : null;
      _useNormals = useNormals;
-     _planet = planet;
   }
 
   public void dispose()
@@ -209,6 +211,8 @@ public class BoxShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+    if (_originalBorderColor != null)
+       _originalBorderColor.dispose();
     if (_boundingVolume != null)
       if (_boundingVolume != null)
          _boundingVolume.dispose();
@@ -258,7 +262,7 @@ public class BoxShape extends AbstractMeshShape
     }
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     return _boundingVolume.intersectionsDistances(origin, direction);
   }
@@ -266,7 +270,23 @@ public class BoxShape extends AbstractMeshShape
   public final boolean isVisible(G3MRenderContext rc)
   {
     if (_boundingVolume == null)
-      _boundingVolume = new OrientedBox(getExtent(), getTransformMatrix(_planet));
+      _boundingVolume = new OrientedBox(getExtent(), getTransformMatrix(rc.getPlanet()));
     return _boundingVolume.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
+    if (mode)
+    {
+      setBorderWidth(7);
+      setBorderColor(Color.newFromRGBA(1, 1, 0, 1));
+    }
+    else
+    {
+      setBorderWidth(_originalBorderWidth);
+      if (_originalBorderColor!=null)
+        setBorderColor(new Color(_originalBorderColor));
+    }
+  }
+
 }
