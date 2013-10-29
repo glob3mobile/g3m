@@ -201,7 +201,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       std::vector<ShapeDistance> shapeDistances = intersectionsDistances(ec->getPlanet(), origin, direction);
 
       if (!shapeDistances.empty()) {
-        printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
+        //printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
         if (_shapeTouchListener != NULL)
             handled = _shapeTouchListener->touchedShape(shapeDistances[0]._shape);
       }

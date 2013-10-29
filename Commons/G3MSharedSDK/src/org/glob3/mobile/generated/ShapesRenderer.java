@@ -257,7 +257,6 @@ public class ShapesRenderer extends LeafRenderer
   
         if (!shapeDistances.isEmpty())
         {
-          System.out.printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
           if (_shapeTouchListener != null)
               handled = _shapeTouchListener.touchedShape(shapeDistances.get(0)._shape);
         }

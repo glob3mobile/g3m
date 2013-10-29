@@ -272,7 +272,7 @@ public class MainActivity
 
       _g3mWidget = builder.createWidget();
       _logger = _g3mWidget.getG3MContext().getLogger();
-      _logger.logInfo("hola cabron");
+      _logger.logInfo("Testing shape selection");
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
       
