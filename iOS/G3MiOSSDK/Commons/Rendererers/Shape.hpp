@@ -59,6 +59,8 @@ private:
   double _surfaceElevation;
   
   MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+  
+  bool _selected;
 
   
 protected:
@@ -85,7 +87,8 @@ public:
   _transformMatrix(NULL),
   _enable(true),
   _surfaceElevation(0),
-  _glState(new GLState())
+  _glState(new GLState()),
+  _selected(false)
   {
     
   }
@@ -290,7 +293,21 @@ public:
                                                      const Vector3D& direction) const = 0;
   
   virtual bool isVisible(const G3MRenderContext *rc) = 0;
+  
+  virtual void setSelectedDrawMode(bool mode) = 0;
+  
+  
+  void select() {
+    _selected = true;
+    setSelectedDrawMode(true);
+  }
+  
+  void unselect() {
+    _selected = false;
+    setSelectedDrawMode(false);
+  }
 
+  bool isSelected() { return _selected; }
 };
 
 #endif

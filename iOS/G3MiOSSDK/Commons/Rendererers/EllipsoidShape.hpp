@@ -146,6 +146,9 @@ public:
                                              const Vector3D& direction) const;
 
   bool isVisible(const G3MRenderContext *rc);
+  
+  void setSelectedDrawMode(bool mode) {}
+
 };
 
 #endif

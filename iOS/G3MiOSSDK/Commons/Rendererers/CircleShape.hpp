@@ -75,6 +75,9 @@ public:
     int __TODO_isVisible_Method;
     return true;
   }
+  
+  void setSelectedDrawMode(bool mode) {}
+
 
 };
 

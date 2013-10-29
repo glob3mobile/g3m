@@ -1622,7 +1622,7 @@ public:
                                           URL("file:///mercator_debug.png", false),
                                           radius2,
                                           32,
-                                          0,
+                                          2,
                                           false,
                                           true
                                           //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
@@ -1633,8 +1633,11 @@ public:
   // adding touch listener
   class TestShapeTouchListener : public ShapeTouchListener {
   public:
-    bool touchedShape(Shape* mark) {
-      printf ("touched on shape!\n");
+    bool touchedShape(Shape* shape) {
+      if (!shape->isSelected())
+        shape->select();
+      else
+        shape->unselect();
       return true;
     }
   };

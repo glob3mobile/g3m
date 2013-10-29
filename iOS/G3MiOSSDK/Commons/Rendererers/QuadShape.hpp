@@ -112,6 +112,8 @@ public:
     return true;
   }
 
+  void setSelectedDrawMode(bool mode) {}
+
 };
 
 #endif

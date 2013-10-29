@@ -25,11 +25,13 @@ private:
   OrientedBox* _boundingVolume;
 
   float _borderWidth;
-
+  float _originalBorderWidth;
+  
   bool _useNormals;
 
   Color* _surfaceColor;
   Color* _borderColor;
+  Color* _originalBorderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc);
@@ -53,8 +55,10 @@ public:
   _extentY(extent._y),
   _extentZ(extent._z),
   _borderWidth(borderWidth),
+  _originalBorderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
+  _originalBorderColor((borderColor!=NULL)?new Color(*borderColor):NULL),
   _useNormals(useNormals)
   {
   }
@@ -100,6 +104,17 @@ public:
                                              const Vector3D& direction) const;
   
   bool isVisible(const G3MRenderContext *rc);
+  
+  void setSelectedDrawMode(bool mode) {
+    if (mode) {
+      setBorderWidth(6);
+      setBorderColor(Color::newFromRGBA(1, 1, 0, 1));
+    } else {
+      setBorderWidth(_originalBorderWidth);
+      setBorderColor(new Color(*_originalBorderColor));
+    }
+  }
+
 };
 
 #endif
