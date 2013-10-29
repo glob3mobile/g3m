@@ -16,6 +16,15 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.EllipsoidShape;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.ShapeTouchListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -84,7 +93,7 @@ public class MainActivity
       //
       //      }
 
-      if (true) { // Adding and deleting marks
+      if (false) { // Adding and deleting marks
 
          final int time = 1; // SECS
 
@@ -191,6 +200,71 @@ public class MainActivity
       //
       //      }
 
+      if (true) {      
+    	  // testing selecting shapes
+    	  final double factor = 2e5;
+    	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
+    	  final Vector3D radius2 = new Vector3D(factor*1.5, factor*1.5, factor*1.5);
+    	  final Vector3D radiusBox = new Vector3D(factor, factor*1.5, factor*2);
+
+    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(0),
+    			  Angle.fromDegrees(10),
+    			  radiusBox._z/2),
+    			  AltitudeMode.ABSOLUTE,
+    			  radiusBox,
+    			  0,
+    			  Color.fromRGBA(0,    1, 0, 1));
+    	  shapesRenderer.addShape(box1);
+
+    	  Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
+    			  Angle.fromDegrees(0),
+    			  radius1._x),
+    			  AltitudeMode.ABSOLUTE,
+    			  new URL("file:///world.jpg", false),
+    			  radius1,
+    			  (short)32,
+    			  (short)0,
+    			  false,
+    			  false);
+    	  shapesRenderer.addShape(ellipsoid1);
+
+    	  Shape mercator1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
+    			  Angle.fromDegrees(5),
+    			  radius2._x),
+    			  AltitudeMode.ABSOLUTE,
+    			  new URL("file:///mercator_debug.png", false),
+    			  radius2,
+    			  (short)32,
+    			  (short)0,
+    			  false,
+    			  true);
+    	  shapesRenderer.addShape(mercator1);
+
+    	  /*      // adding touch listener
+      ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
+    	  Shape _selectedShape = NULL;
+    	  @Override
+    	  boolean touchedShape(Shape shape) {
+    	  if (_selectedShape == NULL) {
+    		  shape->select();
+    		  _selectedShape = shape;
+    	  } else {
+    		  if (_selectedShape==shape) {
+    			  shape->unselect();
+    			  _selectedShape = NULL;
+    		  } else {
+    			  _selectedShape->unselect();
+    			  _selectedShape = shape;
+    			  shape->select();
+    		  }
+    	  }
+    	  return true;
+      }
+      };*/
+
+    	  //shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
+
+      }
 
       _g3mWidget = builder.createWidget();
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
