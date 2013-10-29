@@ -28,7 +28,7 @@ public class PeriodicalTask
 
   public PeriodicalTask(TimeInterval interval, GTask task)
   {
-     _intervalMS = interval.milliseconds();
+     _intervalMS = interval._milliseconds;
      _task = task;
      _lastExecutionMS = 0;
      _timer = null;
@@ -49,7 +49,7 @@ public class PeriodicalTask
 
   public final void executeIfNecessary(G3MContext context)
   {
-    long now = getTimer().now().milliseconds();
+    long now = getTimer().now()._milliseconds;
 
     long interval = now - _lastExecutionMS;
 

@@ -52,9 +52,7 @@ public class Vector4D
 
   public static Vector4D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector4D(mu.NanD(), mu.NanD(), mu.NanD(), mu.NanD());
+    return new Vector4D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
   public static Vector4D zero()

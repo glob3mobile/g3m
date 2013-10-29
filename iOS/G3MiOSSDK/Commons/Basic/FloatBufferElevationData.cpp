@@ -12,7 +12,7 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
-const float FloatBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->NanF();
+const float FloatBufferElevationData::NO_DATA_VALUE = NANF;
 
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
@@ -50,7 +50,7 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
   const float value = _buffer->get(index);
   if (value == NO_DATA_VALUE) {
-    return IMathUtils::instance()->NanD();
+    return NAND;
   }
   return value;
 }

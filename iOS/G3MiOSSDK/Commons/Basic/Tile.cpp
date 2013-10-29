@@ -438,7 +438,16 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const LayerSet* layerSet,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    bool isForcedFullRender,
-                                   long long texturePriority) {
+                                   long long texturePriority,
+                                   float verticalExaggeration) {
+
+  //You have to set _verticalExaggertion
+  if (verticalExaggeration != _verticalExaggeration) {
+    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+    _verticalExaggeration = verticalExaggeration;
+  }
+
+
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
                                              elevationDataProvider,
                                              tessellator,

@@ -267,7 +267,7 @@ void PlanetRendererBuilder::setIncrementalTileQuality(const bool incrementalTile
 void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
                                                      const TimeInterval& stabilizationInterval) {
   getVisibleSectorListeners()->push_back(listener);
-  getStabilizationMilliSeconds()->push_back(stabilizationInterval.milliseconds());
+  getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
 void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {

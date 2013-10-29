@@ -48,7 +48,7 @@ public class Petition
   {
      _sector = new Sector(sector);
      _url = url;
-     _timeToCacheInMS = timeToCache.milliseconds();
+     _timeToCacheInMS = timeToCache._milliseconds;
      _readExpired = readExpired;
      _isTransparent = isTransparent;
      _image = null;

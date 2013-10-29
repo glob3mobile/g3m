@@ -32,7 +32,7 @@ private:
 public:
   PeriodicalTask(const TimeInterval& interval,
                  GTask* task):
-  _intervalMS(interval.milliseconds()),
+  _intervalMS(interval._milliseconds),
   _task(task),
   _lastExecutionMS(0),
   _timer(NULL)
@@ -50,7 +50,7 @@ public:
   }
 
   void executeIfNecessary(const G3MContext* context) {
-    long long now = getTimer()->now().milliseconds();
+    long long now = getTimer()->now()._milliseconds;
 
     long long interval = now - _lastExecutionMS;
 

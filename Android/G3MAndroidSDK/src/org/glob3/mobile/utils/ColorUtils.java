@@ -27,8 +27,8 @@ public class ColorUtils {
 
 
    public static int toAndroidColor(final Color c) {
-      return android.graphics.Color.argb(Math.round(c.getAlpha() * 255), Math.round(c.getRed() * 255),
-               Math.round(c.getGreen() * 255), Math.round(c.getBlue() * 255));
+      return android.graphics.Color.argb(Math.round(c._alpha * 255), Math.round(c._red * 255), Math.round(c._green * 255),
+               Math.round(c._blue * 255));
    }
 
 

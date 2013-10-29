@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -28,11 +29,12 @@ import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Quality;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.specific.JSONParser_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -60,7 +62,7 @@ public class PointCloudActivity
       public void runInBackground(final G3MContext context) {
 
 
-         final JSONParser_Android parser = new JSONParser_Android();
+         //final JSONParser_Android parser = new JSONParser_Android();
          final JSONBaseObject objectBase = BSONParser.parse(_buffer);
          final JSONObject object = objectBase.asObject();
          final JSONArray pointsJson = object.getAsArray("points");
@@ -243,9 +245,9 @@ public class PointCloudActivity
 
       //      NUM COLUMNS=1784
       //               NUM ROWS=1236
-      //      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///matterhorn_300.bil", false),
-      //               demSector, new Vector2I(1784, 1236), -2160);
-      //      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///matterhorn_300.bil", false),
+               demSector, new Vector2I(1784, 1236), -2160);
+      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
       _builder.getPlanetRendererBuilder().setQuality(Quality.QUALITY_HIGH);
 
       //      
@@ -256,7 +258,7 @@ public class PointCloudActivity
       _meshRenderer.loadJSONPointCloud(new URL("file:///matterhorn.json"), 2);
       //  _builder.setInitializationTask(pointCloudInitializationTask());
       _builder.setShownSector(demSector);
-      _builder.addRenderer(_meshRenderer);
+      // _builder.addRenderer(_meshRenderer);
       //rgb(175,221,233)
       _builder.setBackgroundColor(Color.fromRGBA255(0, 0, 50, 200));
 
@@ -268,6 +270,7 @@ public class PointCloudActivity
    }
 
 
+   @SuppressWarnings("unused")
    private GInitializationTask pointCloudInitializationTask() {
 
 

@@ -228,32 +228,33 @@ bool GenericQuadTree_Node::remove(const void* element) {
 
   if (wasRemoved){
     return true;
-  } else{
-    if (_children != NULL) {
+  }
+  
+  if (_children != NULL) {
 
-      for (int i = 0; i < 4; i++) {
-        if (_children[i]->remove(element)){
-          //The item was removed from one of my children
+    for (int i = 0; i < 4; i++) {
+      if (_children[i]->remove(element)){
+        //The item was removed from one of my children
 
-          //Removing all children if none has an item
-          int nChild = 0;
-          for (int j = 0; j < 4; j++) {
-            nChild += _children[j]->getSubtreeNElements();
-          }
-
-          if (nChild == 0) {
-            for (int j = 0; j < 4; j++) {
-              delete _children[j];
-            }
-            delete [] _children;
-            _children = NULL;
-          }
-
-          return true;
+        //Removing all children if none has an item
+        int nChild = 0;
+        for (int j = 0; j < 4; j++) {
+          nChild += _children[j]->getSubtreeNElements();
         }
+
+        if (nChild == 0) {
+          for (int j = 0; j < 4; j++) {
+            delete _children[j];
+          }
+          delete [] _children;
+          _children = NULL;
+        }
+
+        return true;
       }
     }
   }
+
   return false;
 }
 
@@ -648,10 +649,10 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
 #endif
     GenericQuadTreeVisitorGeodetic_TESTER vis(g);
     tree.acceptVisitor(g, vis);
-    
+
     delete geos[i];
   }
-  
+
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
   

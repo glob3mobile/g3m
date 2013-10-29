@@ -31,11 +31,11 @@ private:
   
 #ifdef C_CODE
   const Ellipsoid* _ellipsoid;
-  const Quadric    _quadric;
+//  const Quadric    _quadric;
 #endif
 #ifdef JAVA_CODE
   private Ellipsoid _ellipsoid;
-  private final Quadric _quadric;
+//  private final Quadric _quadric;
 #endif
 
   URL _textureURL;
@@ -91,7 +91,7 @@ public:
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
@@ -119,7 +119,7 @@ public:
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),

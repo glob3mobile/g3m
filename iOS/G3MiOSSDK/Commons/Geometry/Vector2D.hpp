@@ -86,10 +86,7 @@ public:
   }
 
   static Vector2D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return Vector2D(mu->NanD(),
-                    mu->NanD());
+    return Vector2D(NAND, NAND);
   }
   
   double maxAxis() const {

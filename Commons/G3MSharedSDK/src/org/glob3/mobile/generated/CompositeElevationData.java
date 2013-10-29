@@ -87,7 +87,6 @@ public class CompositeElevationData extends ElevationData
 
   public final double getElevationAt(int x, int y)
   {
-    final IMathUtils mu = IMathUtils.instance();
     final int size = _data.size();
     for (int i = 0; i < size; i++)
     {
@@ -98,7 +97,7 @@ public class CompositeElevationData extends ElevationData
       }
     }
   
-    return mu.NanD();
+    return java.lang.Double.NaN;
   }
 
   public final String description(boolean detailed)

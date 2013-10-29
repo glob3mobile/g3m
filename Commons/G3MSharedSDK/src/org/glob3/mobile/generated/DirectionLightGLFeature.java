@@ -17,6 +17,7 @@ public class DirectionLightGLFeature extends GLFeature
     _values.addUniformValue(GPUUniformKey.LIGHT_COLOR, new GPUUniformValueVec4Float(lightColor), false);
   
   }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
   }

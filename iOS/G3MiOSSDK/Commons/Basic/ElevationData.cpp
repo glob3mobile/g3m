@@ -215,22 +215,14 @@ Interpolator* ElevationData::getInterpolator() const {
 double ElevationData::getElevationAt(const Angle& latitude,
                                      const Angle& longitude) const {
 
-  const IMathUtils* mu = IMathUtils::instance();
+  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const double u = uv._x;
+  const double v = uv._y;
 
-  const double nanD = mu->NanD();
-
-  if (!_sector.contains(latitude, longitude)) {
-    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-    //                                  _sector.description().c_str(),
-    //                                  latitude.description().c_str(),
-    //                                  longitude.description().c_str());
-    return nanD;
+  if (u < 0 || u > 1 || v < 0 || v > 1){
+    return NAND;
   }
 
-
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double u = mu->clamp(uv._x, 0, 1);
-  const double v = mu->clamp(uv._y, 0, 1);
   const double dX = u * (_width - 1);
   const double dY = (1.0 - v) * (_height - 1);
 
@@ -251,15 +243,15 @@ double ElevationData::getElevationAt(const Angle& latitude,
       // linear on Y
       const double heightY = getElevationAt(x, y);
       if (ISNAN(heightY)) {
-        return nanD;
+        return NAND;
       }
 
       const double heightNextY = getElevationAt(x, nextY);
       if (ISNAN(heightNextY)) {
-        return nanD;
+        return NAND;
       }
 
-      result = mu->linearInterpolation(heightNextY, heightY, alphaY);
+      result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
     }
   }
   else {
@@ -267,32 +259,32 @@ double ElevationData::getElevationAt(const Angle& latitude,
       // linear on X
       const double heightX = getElevationAt(x, y);
       if (ISNAN(heightX)) {
-        return nanD;
+        return NAND;
       }
       const double heightNextX = getElevationAt(nextX, y);
       if (ISNAN(heightNextX)) {
-        return nanD;
+        return NAND;
       }
 
-      result = mu->linearInterpolation(heightX, heightNextX, alphaX);
+      result = IMathUtils::instance()->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
       const double valueNW = getElevationAt(x, y);
       if (ISNAN(valueNW)) {
-        return nanD;
+        return NAND;
       }
       const double valueNE = getElevationAt(nextX, y);
       if (ISNAN(valueNE)) {
-        return nanD;
+        return NAND;
       }
       const double valueSE = getElevationAt(nextX, nextY);
       if (ISNAN(valueSE)) {
-        return nanD;
+        return NAND;
       }
       const double valueSW = getElevationAt(x, nextY);
       if (ISNAN(valueSW)) {
-        return nanD;
+        return NAND;
       }
 
       result = getInterpolator()->interpolation(valueSW,

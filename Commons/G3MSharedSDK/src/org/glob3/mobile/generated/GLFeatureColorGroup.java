@@ -1,33 +1,34 @@
 package org.glob3.mobile.generated; 
 public class GLFeatureColorGroup extends GLFeatureGroup
 {
-//  void applyOnGlobalGLState(GLGlobalState* state);
-//  void addToGPUVariableSet(GPUVariableValueSet* vs);
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
   
-    final int size = features.size();
+    final int featuresSize = features.size();
     int priority = -1;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < featuresSize; i++)
     {
       final GLFeature f = features.get(i);
-      if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
+      if (f._group == GLFeatureGroupName.COLOR_GROUP)
       {
         PriorityGLFeature pf = ((PriorityGLFeature) f);
-        if (pf.getPriority() > priority)
+        if (pf._priority > priority)
         {
-          priority = pf.getPriority();
+          if (pf._id != GLFeatureID.GLF_BLENDING_MODE) //We do not take into account Blending if TexID not set
+          {
+            priority = pf._priority;
+          }
         }
       }
     }
   
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < featuresSize; i++)
     {
       final GLFeature f = features.get(i);
-      if (f.getGroup() == GLFeatureGroupName.COLOR_GROUP)
+      if (f._group == GLFeatureGroupName.COLOR_GROUP)
       {
         PriorityGLFeature pf = ((PriorityGLFeature) f);
-        if (pf.getPriority() == priority)
+        if (pf._priority == priority)
         {
           pf.applyOnGlobalGLState(state);
           vs.combineWith(f.getGPUVariableValueSet());

@@ -56,7 +56,7 @@ public abstract class Layer
      _condition = condition;
      _name = name;
      _layerSet = null;
-     _timeToCacheMS = timeToCache.milliseconds();
+     _timeToCacheMS = timeToCache._milliseconds;
      _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;

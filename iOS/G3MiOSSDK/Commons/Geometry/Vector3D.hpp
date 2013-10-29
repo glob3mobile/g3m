@@ -43,11 +43,9 @@ public:
   }
   
   static Vector3D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return Vector3D(mu->NanD(),
-                    mu->NanD(),
-                    mu->NanD());
+    return Vector3D(NAND,
+                    NAND,
+                    NAND);
   }
   
 //  static Vector3D zero() {

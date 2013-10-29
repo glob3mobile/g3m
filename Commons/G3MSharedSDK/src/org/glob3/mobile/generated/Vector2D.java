@@ -105,9 +105,7 @@ public class Vector2D
 
   public static Vector2D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector2D(mu.NanD(), mu.NanD());
+    return new Vector2D(java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
   public final double maxAxis()

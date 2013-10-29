@@ -42,8 +42,8 @@ class MathUtils_iOS: public IMathUtils {
 
 public:
 
-  double NanD() const { return NAN;}
-  float NanF() const { return NAN; }
+//  double NanD() const { return NAN;}
+//  float NanF() const { return NAN; }
 
   double sin(double v) const { return MathAux::sin_(v); }
   float  sin(float v)  const { return sinf(v); }

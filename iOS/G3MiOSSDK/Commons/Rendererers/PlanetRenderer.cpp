@@ -53,7 +53,7 @@ public:
   VisibleSectorListenerEntry(VisibleSectorListener* listener,
                              const TimeInterval& stabilizationInterval) :
   _listener(listener),
-  _stabilizationIntervalInMS(stabilizationInterval.milliseconds()),
+  _stabilizationIntervalInMS(stabilizationInterval._milliseconds),
   _lastSector(NULL),
   _timer(NULL),
   _whenNotifyInMS(0)
@@ -78,7 +78,7 @@ public:
       }
     }
     else {
-      const long long now = getTimer()->now().milliseconds();
+      const long long now = getTimer()->now()._milliseconds;
       
       if ( (_lastSector == NULL) || (!_lastSector->isEquals(*visibleSector)) ) {
         delete _lastSector;
@@ -448,7 +448,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _layerSet,
                                       _tilesRenderParameters,
                                       true,
-                                      _texturePriority);
+                                      _texturePriority,
+                                      _verticalExaggeration);
       }
     }
     
