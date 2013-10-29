@@ -23,6 +23,10 @@ public final class FloatBuffer_Android
    //   private boolean           _disposed              = false;
    private int               _vertexBuffer          = -1;
    private int               _vertexBufferTimeStamp = -1;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    public FloatBuffer_Android(final int size) {
@@ -172,6 +176,12 @@ public final class FloatBuffer_Android
          }
       }
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 
    //   @Override

@@ -13,6 +13,10 @@ public final class IntBuffer_Android
 
    private final IntBuffer _buffer;
    private int             _timestamp;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    public IntBuffer_Android(final int size) {
@@ -66,5 +70,11 @@ public final class IntBuffer_Android
    public String description() {
       return "IntBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 }
