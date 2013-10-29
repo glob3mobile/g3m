@@ -152,7 +152,6 @@ public class G3MNetCDFActivity
                         final Geodetic3D position3D = new Geodetic3D(position, levels.get(i) * 10000);
 
                         _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, 
-                        		context.getPlanet(),
                         		extent, borderWidth,
                                  interpolatedColor, interpolatedColor));
 
@@ -392,7 +391,6 @@ public class G3MNetCDFActivity
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
                            _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, 
-                        		   context.getPlanet(),
                         		   extent,
                                     borderWidth, interpolatedColor, interpolatedColor));
                         }
