@@ -47,7 +47,9 @@ private:
 
   const short _resolution;
 
-  const float _borderWidth;
+  float _borderWidth;
+  float _originalBorderWidth;
+
   
   const bool _texturedInside;
 
@@ -57,6 +59,8 @@ private:
 
   Color* _surfaceColor;
   Color* _borderColor;
+  Color* _originalBorderColor;
+
 
   Mesh* createBorderMesh(const G3MRenderContext* rc,
                          FloatBufferBuilderFromGeodetic *vertices);
@@ -96,10 +100,12 @@ public:
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _originalBorderWidth(borderWidth),
   _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
+  _originalBorderColor((borderColor!=NULL)? new Color(*borderColor) : NULL),
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
@@ -123,10 +129,12 @@ public:
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _originalBorderWidth(borderWidth),
   _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(NULL),
   _borderColor(NULL),
+  _originalBorderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
@@ -137,6 +145,20 @@ public:
 
 
   ~EllipsoidShape();
+  
+  void setBorderColor(Color* color) {
+    delete _borderColor;
+    _borderColor = color;
+    cleanMesh();
+  }
+  
+  void setBorderWidth(float borderWidth) {
+    if (_borderWidth != borderWidth) {
+      _borderWidth = borderWidth;
+      cleanMesh();
+    }
+  }
+
 
   void imageDownloaded(IImage* image);
   
@@ -146,8 +168,18 @@ public:
                                              const Vector3D& direction) const;
 
   bool isVisible(const G3MRenderContext *rc);
-  
-  void setSelectedDrawMode(bool mode) {}
+    
+  void setSelectedDrawMode(bool mode) {
+    if (mode) {
+      setBorderWidth(5);
+      setBorderColor(Color::newFromRGBA(1, 1, 0, 1));
+    } else {
+      setBorderWidth(_originalBorderWidth);
+      if (_originalBorderColor!=NULL)
+        setBorderColor(new Color(*_originalBorderColor));
+    }
+  }
+
 
 };
 

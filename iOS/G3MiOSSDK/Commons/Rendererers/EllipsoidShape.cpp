@@ -31,6 +31,7 @@ EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
+  delete _originalBorderColor;
   if (_boundingVolume)
     delete _boundingVolume;
 

@@ -58,7 +58,7 @@ public:
   _originalBorderWidth(borderWidth),
   _surfaceColor(new Color(surfaceColor)),
   _borderColor(borderColor),
-  _originalBorderColor((borderColor!=NULL)?new Color(*borderColor):NULL),
+  _originalBorderColor((borderColor!=NULL)? new Color(*borderColor) : NULL),
   _useNormals(useNormals)
   {
   }
@@ -107,11 +107,12 @@ public:
   
   void setSelectedDrawMode(bool mode) {
     if (mode) {
-      setBorderWidth(6);
+      setBorderWidth(7);
       setBorderColor(Color::newFromRGBA(1, 1, 0, 1));
     } else {
       setBorderWidth(_originalBorderWidth);
-      setBorderColor(new Color(*_originalBorderColor));
+      if (_originalBorderColor!=NULL)
+        setBorderColor(new Color(*_originalBorderColor));
     }
   }
 

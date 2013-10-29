@@ -1592,9 +1592,9 @@ public:
                                            radiusBox._z/2),
                             ABSOLUTE,
                             radiusBox,
-                            2,
-                            Color::fromRGBA(0,    1, 0, 1),
-                            Color::newFromRGBA(0, 0.75, 0, 1));
+                            0,
+                             Color::fromRGBA(0,    1, 0, 1));
+                            //Color::newFromRGBA(0, 0.75, 0, 1));
   //box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box1);
  
@@ -1622,7 +1622,7 @@ public:
                                           URL("file:///mercator_debug.png", false),
                                           radius2,
                                           32,
-                                          2,
+                                          0,
                                           false,
                                           true
                                           //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
@@ -1632,12 +1632,23 @@ public:
   
   // adding touch listener
   class TestShapeTouchListener : public ShapeTouchListener {
+  private:
+    Shape* _selectedShape = NULL;
   public:
     bool touchedShape(Shape* shape) {
-      if (!shape->isSelected())
+      if (_selectedShape == NULL) {
         shape->select();
-      else
-        shape->unselect();
+        _selectedShape = shape;
+      } else {
+        if (_selectedShape==shape) {
+          shape->unselect();
+          _selectedShape = NULL;
+        } else {
+          _selectedShape->unselect();
+          _selectedShape = shape;
+          shape->select();
+        }
+      }
       return true;
     }
   };
