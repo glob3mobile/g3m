@@ -39,6 +39,10 @@ public:
       ILogger::instance()->logError("Allocating error.");
     }
   }
+
+  long long getID() const{
+    return 0;
+  }
   
   FloatBuffer_iOS(float f0,
                   float f1,

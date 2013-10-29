@@ -14,10 +14,6 @@
 
 class IBuffer {
 
-  static long long _nextbufferID;
-
-  const long long _id;
-
 public:
 #ifdef C_CODE
   virtual ~IBuffer();
@@ -28,17 +24,7 @@ public:
 
   IBuffer();
 
-  long long getID() const;
-
-  virtual void fPrueba(){
-    int a = 0;
-    a++;
-  }
-
-  void fp2(){
-    int a = 0;
-    a++;
-  }
+  virtual long long getID() const = 0;
 
   /**
    Answer the size (the count of elements) of the buffer

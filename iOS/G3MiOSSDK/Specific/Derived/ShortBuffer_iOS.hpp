@@ -40,6 +40,10 @@ public:
     }
   }
 
+  long long getID() const{
+    return 0;
+  }
+
   virtual ~ShortBuffer_iOS() {
     if (_indexBufferCreated) {
       glDeleteBuffers(1, &_indexBuffer);

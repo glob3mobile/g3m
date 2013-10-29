@@ -30,6 +30,10 @@ public:
     }
   }
 
+  long long getID() const{
+    return 0;
+  }
+
   virtual ~IntBuffer_iOS() {
     delete [] _values;
   }
