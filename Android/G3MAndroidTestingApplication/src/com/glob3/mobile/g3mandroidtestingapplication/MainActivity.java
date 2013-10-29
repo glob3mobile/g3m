@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.ShapeTouchListener;
+import org.glob3.mobile.generated.ILogger;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class MainActivity
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
+   private ILogger			 _logger;
 
 
    @Override
@@ -239,34 +241,38 @@ public class MainActivity
     			  false,
     			  true);
     	  shapesRenderer.addShape(mercator1);
+    	  
+    	 
 
-    	  /*      // adding touch listener
-      ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
-    	  Shape _selectedShape = NULL;
-    	  @Override
-    	  boolean touchedShape(Shape shape) {
-    	  if (_selectedShape == NULL) {
-    		  shape->select();
-    		  _selectedShape = shape;
-    	  } else {
-    		  if (_selectedShape==shape) {
-    			  shape->unselect();
-    			  _selectedShape = NULL;
-    		  } else {
-    			  _selectedShape->unselect();
-    			  _selectedShape = shape;
-    			  shape->select();
+    	  // adding touch listener
+    	  ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
+    		  Shape _selectedShape = null;
+    		  
+    		  public boolean touchedShape(Shape shape) {
+    			      			  
+    			  if (_selectedShape == null) {
+    				  shape.select();
+    				  _selectedShape = shape;
+    			  } else {
+    				  if (_selectedShape==shape) {
+    					  shape.unselect();
+    					  _selectedShape = null;
+    				  } else {
+    					  _selectedShape.unselect();
+    					  _selectedShape = shape;
+    					  shape.select();
+    				  }
+    			  }
+    			  return true;
     		  }
-    	  }
-    	  return true;
-      }
-      };*/
-
-    	  //shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
-
+    	  };
+      
+    	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);
       }
 
       _g3mWidget = builder.createWidget();
+      _logger = _g3mWidget.getG3MContext().getLogger();
+      _logger.logInfo("hola cabron");
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
 

@@ -245,9 +245,10 @@ public class ShapesRenderer extends LeafRenderer
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     boolean handled = false;
+        
     if (_lastCamera != null)
     {
-      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
+      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() <=1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();

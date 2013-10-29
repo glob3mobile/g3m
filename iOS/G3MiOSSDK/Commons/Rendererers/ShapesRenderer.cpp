@@ -193,7 +193,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
   bool handled = false;
   if (_lastCamera != NULL) {
     if (touchEvent->getTouchCount() ==1 &&
-        touchEvent->getTapCount()==1 &&
+        touchEvent->getTapCount()<=1 &&
         touchEvent->getType()==Down) {
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
