@@ -2515,7 +2515,7 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
       }
 
-      if (true) { //Adding and deleting marks
+      if (false) { //Adding and deleting marks
 
         int time = 1; //SECS
 
@@ -2570,6 +2570,7 @@ public:
           const double scale = 200;
           shape->setScale(scale, scale, scale);
           shape->setPitch(Angle::fromDegrees(90));
+          //shape->setRoll(Angle::fromDegrees(45));
         }
 
         void onAfterAddShape(SGShape* shape) {
@@ -2579,7 +2580,7 @@ public:
                                                 10000),
                                      true);
 
-          /*
+          /**/
           const double fromDistance = 75000;
           const double toDistance   = 18750;
 
@@ -2593,7 +2594,7 @@ public:
                              fromDistance, toDistance,
                              fromAzimuth,  toAzimuth,
                              fromAltitude, toAltitude);
-           */
+          /* */
         }
       };
 
@@ -2666,7 +2667,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
 //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2753,23 +2754,10 @@ public:
                                        Geodetic3D(Angle::fromDegrees(28.127222),
                                                   Angle::fromDegrees(-15.431389),
                                                   10000),
-                                       Angle::fromDegrees(90), Angle::fromDegrees(720));
+                                       Angle::fromDegrees(90),
+                                       Angle::fromDegrees(720),
+                                       Angle::zero());
 
-
-
-            //          JSONBaseObject* jsonObject = IJSONParser::instance()->parse(planeJSON);
-            //
-            //          IByteBuffer* bson = BSONGenerator::generate(jsonObject);
-            //          printf("%s\n", bson->description().c_str());
-            //
-            //          JSONBaseObject* bsonObject = BSONParser::parse(bson);
-            //          printf("%s\n", bsonObject->description().c_str());
-            //
-            //          delete bson;
-            //
-            //          delete jsonObject;
-            //
-            //          delete bsonObject;
           }
         }
       }
@@ -2797,7 +2785,9 @@ public:
                                    Geodetic3D(Angle::fromDegrees(28.127222),
                                               Angle::fromDegrees(-15.431389),
                                               10000),
-                                   Angle::fromDegrees(90), Angle::fromDegrees(720));
+                                   Angle::fromDegrees(90),
+                                   Angle::fromDegrees(720),
+                                   Angle::zero());
       }
 
 

@@ -35,10 +35,10 @@ public class TextUtils_WebGL
          return null;
       }
 
-      final int r = Math.round(255 * color.getRed());
-      final int g = Math.round(255 * color.getGreen());
-      final int b = Math.round(255 * color.getBlue());
-      final float a = color.getAlpha();
+      final int r = Math.round(255 * color._red);
+      final int g = Math.round(255 * color._green);
+      final int b = Math.round(255 * color._blue);
+      final float a = color._alpha;
 
       return "rgba(" + r + "," + g + "," + b + "," + a + ")";
    }
@@ -163,7 +163,8 @@ public class TextUtils_WebGL
 		if (labelBottom) {
 			resultWidth = Math.max(textWidth, imageWidth);
 			resultHeight = textHeight + separation + imageHeight;
-		} else {
+		}
+		else {
 			resultWidth = textWidth + separation + imageWidth;
 			resultHeight = Math.max(textHeight, imageHeight);
 		}
@@ -179,7 +180,8 @@ public class TextUtils_WebGL
 
 		if (labelBottom) {
 			context.drawImage(htmlImage, (resultWidth - imageWidth) / 2, 0);
-		} else {
+		}
+		else {
 			context.drawImage(htmlImage, 0, (resultHeight - imageHeight) / 2);
 		}
 
@@ -197,11 +199,10 @@ public class TextUtils_WebGL
 		//context.fillText(label, 0, 0);
 
 		if (labelBottom) {
-			context.fillText(label, (resultWidth - textWidth) / 2, imageHeight
-					+ separation);
-		} else {
-			context.fillText(label, imageWidth + separation,
-					(resultHeight - textHeight) / 2);
+			context.fillText(label, (resultWidth - textWidth) / 2, imageHeight + separation);
+		}
+		else {
+			context.fillText(label, imageWidth + separation, (resultHeight - textHeight) / 2);
 		}
 
 		var jsResult = new Image();

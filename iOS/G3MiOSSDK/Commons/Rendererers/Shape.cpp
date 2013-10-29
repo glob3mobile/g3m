@@ -9,14 +9,11 @@
 #include "Shape.hpp"
 #include "GL.hpp"
 #include "Planet.hpp"
-
 #include "ShapeScaleEffect.hpp"
 #include "ShapeOrbitCameraEffect.hpp"
 #include "ShapePositionEffect.hpp"
 #include "ShapeFullPositionEffect.hpp"
-
 #include "Camera.hpp"
-//#include "GPUProgramState.hpp"
 
 class ShapePendingEffect {
 public:
@@ -48,6 +45,7 @@ Shape::~Shape() {
   
   delete _heading;
   delete _pitch;
+  delete _roll;
   
   delete _transformMatrix;
 
@@ -75,6 +73,7 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
   return new MutableMatrix44D(planet->createTransformMatrix(positionWithSurfaceElevation,
                                                             *_heading,
                                                             *_pitch,
+                                                            *_roll,
                                                             scale,
                                                             translation));
 }
@@ -159,12 +158,14 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Geodetic3D& position,
                                 const Angle& pitch,
                                 const Angle& heading,
+                                const Angle& roll,
                                 bool linearInterpolation) {
   Effect* effect = new ShapeFullPositionEffect(duration,
                                                this,
-                                               *_position,
-                                               position,
-                                               *_pitch, pitch,*_heading,heading,
+                                               *_position, position,
+                                               *_pitch,    pitch,
+                                               *_heading,  heading,
+                                               *_roll,     roll,
                                                linearInterpolation);
   addShapeEffect(effect);
 }

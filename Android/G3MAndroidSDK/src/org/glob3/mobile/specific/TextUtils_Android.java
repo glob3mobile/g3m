@@ -26,9 +26,9 @@ public class TextUtils_Android
 
    private static int toAndroidColor(final org.glob3.mobile.generated.Color g3mColor) {
       return android.graphics.Color.rgb( //
-               floatTo255(g3mColor.getRed()), //
-               floatTo255(g3mColor.getGreen()), //
-               floatTo255(g3mColor.getBlue()));
+               floatTo255(g3mColor._red), //
+               floatTo255(g3mColor._green), //
+               floatTo255(g3mColor._blue));
    }
 
 

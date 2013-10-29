@@ -57,22 +57,30 @@ public class Trail
     final int lastSegmentIndex = _segments.size() - 1;
   
     TrailSegment currentSegment;
-    if ((lastSegmentIndex < 0) || (_segments.get(lastSegmentIndex).getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT))
+    if (lastSegmentIndex < 0)
     {
       TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
-      if (lastSegmentIndex >= 0)
-      {
-        TrailSegment previousSegment = _segments.get(lastSegmentIndex);
-        previousSegment.setNextSegmentFirstPosition(latitude, longitude, height + _heightDelta);
-        newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
-        newSegment.addPosition(previousSegment.getLastPosition());
-      }
       _segments.add(newSegment);
       currentSegment = newSegment;
     }
     else
     {
-      currentSegment = _segments.get(lastSegmentIndex);
+      TrailSegment previousSegment = _segments.get(lastSegmentIndex);
+      if (previousSegment.getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT)
+      {
+        TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
+  
+        previousSegment.setNextSegmentFirstPosition(latitude, longitude, height + _heightDelta);
+        newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
+        newSegment.addPosition(previousSegment.getLastPosition());
+  
+        _segments.add(newSegment);
+        currentSegment = newSegment;
+      }
+      else
+      {
+        currentSegment = previousSegment;
+      }
     }
   
     currentSegment.addPosition(latitude, longitude, height + _heightDelta);

@@ -11,10 +11,10 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
   public GPUUniformValueVec4Float(Color color)
   {
      super(GLType.glVec4Float());
-     _x = color.getRed();
-     _y = color.getGreen();
-     _z = color.getBlue();
-     _w = color.getAlpha();
+     _x = color._red;
+     _y = color._green;
+     _z = color._blue;
+     _w = color._alpha;
   }
 
   public GPUUniformValueVec4Float(float x, float y, float z, float w)

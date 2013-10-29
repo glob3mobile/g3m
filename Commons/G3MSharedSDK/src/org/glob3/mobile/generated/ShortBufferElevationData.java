@@ -28,7 +28,7 @@ public class ShortBufferElevationData extends BufferElevationData
     final short value = _buffer[index];
     if (value == NO_DATA_VALUE)
     {
-      return IMathUtils.instance().NanD();
+      return java.lang.Double.NaN;
     }
     return value;
   }

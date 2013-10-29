@@ -162,7 +162,7 @@ GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   const int size = _features.size();
   for (int i = 0; i < size; i++) {
     GLFeature* f = _features.get(i);
-    if (f->getID() == id) {
+    if (f->_id == id) {
       return f;
     }
   }

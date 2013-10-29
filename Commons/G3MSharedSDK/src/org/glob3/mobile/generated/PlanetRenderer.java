@@ -592,7 +592,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
           Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _texturePriority);
+          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _texturePriority, _verticalExaggeration);
         }
       }
   

@@ -50,7 +50,7 @@ ShortBufferElevationData::~ShortBufferElevationData() {
 double ShortBufferElevationData::getValueInBufferAt(int index) const {
   const short value = _buffer[index];
   if (value == NO_DATA_VALUE) {
-    return IMathUtils::instance()->NanD();
+    return NAND;
   }
   return value;
 }

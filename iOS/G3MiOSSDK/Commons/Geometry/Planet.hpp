@@ -115,6 +115,7 @@ public:
   MutableMatrix44D createTransformMatrix(const Geodetic3D& position,
                                          const Angle& heading,
                                          const Angle& pitch,
+                                         const Angle& roll,
                                          const Vector3D& scale,
                                          const Vector3D& translation) const;
 };

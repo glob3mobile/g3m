@@ -122,21 +122,22 @@ public class G3MWebGLDemo
    private MarksRenderer        _markersRenderer;
    private final ShapesRenderer _shapesRenderer    = new ShapesRenderer();
 
+
    private native void runUserPlugin() /*-{
-	$wnd.onLoadG3M();
-}-*/;
-   
-  @Override
-  public void onModuleLoad() {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+		$wnd.onLoadG3M();
+   }-*/;
 
-			@Override
-			public void execute() {
-				runUserPlugin();
-			}
 
-		});
+   @Override
+   public void onModuleLoad() {
+      Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
+         @Override
+         public void execute() {
+            runUserPlugin();
+         }
+
+      });
 
 
       if (_widget == null) {
@@ -248,14 +249,20 @@ public class G3MWebGLDemo
 
       quad.setPitch(Angle.fromDegrees(90));
       quad.setHeading(Angle.fromDegrees(0));
-      quad.setAnimatedPosition(TimeInterval.fromSeconds(60),
-               new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90),
-               Angle.fromDegrees(720));
+      quad.setAnimatedPosition( //
+               TimeInterval.fromSeconds(60), //
+               new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+               Angle.fromDegrees(90), //
+               Angle.fromDegrees(720), Angle.zero());
 
       quad2.setPitch(Angle.fromDegrees(90));
       quad2.setHeading(Angle.fromDegrees(0));
-      quad2.setAnimatedPosition(TimeInterval.fromSeconds(60), new Geodetic3D(Angle.fromDegrees(28),
-               Angle.fromDegrees(-15.431389), 10000), Angle.fromDegrees(90), Angle.fromDegrees(720));
+      quad2.setAnimatedPosition( //
+               TimeInterval.fromSeconds(60), //
+               new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-15.431389), 10000), //
+               Angle.fromDegrees(90), //
+               Angle.fromDegrees(720), //
+               Angle.zero());
 
       final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
          @Override
@@ -501,9 +508,12 @@ public class G3MWebGLDemo
                      plane.setScale(scale, scale, scale);
                      plane.setPitch(Angle.fromDegrees(90));
                      plane.setHeading(Angle.fromDegrees(0));
-                     plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000),
-                              Angle.fromDegrees(90), Angle.fromDegrees(720));
+                     plane.setAnimatedPosition( //
+                              TimeInterval.fromSeconds(60), //
+                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+                              Angle.fromDegrees(90), //
+                              Angle.fromDegrees(720), //
+                              Angle.zero());
 
                      _shapesRenderer.addShape(plane);
                      ILogger.instance().logInfo("PLANE SHOWN");

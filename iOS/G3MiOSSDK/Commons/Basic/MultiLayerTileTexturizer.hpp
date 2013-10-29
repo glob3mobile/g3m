@@ -25,8 +25,6 @@ class TextureIDReference;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
-  TexturesHandler* _texturesHandler;
-  
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:

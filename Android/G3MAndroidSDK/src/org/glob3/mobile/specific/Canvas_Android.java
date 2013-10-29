@@ -134,10 +134,10 @@ public class Canvas_Android
 
    private static int toAndroidColor(final org.glob3.mobile.generated.Color g3mColor) {
       return android.graphics.Color.argb( //
-               floatTo255(g3mColor.getAlpha()), //
-               floatTo255(g3mColor.getRed()), //
-               floatTo255(g3mColor.getGreen()), //
-               floatTo255(g3mColor.getBlue()));
+               floatTo255(g3mColor._alpha), //
+               floatTo255(g3mColor._red), //
+               floatTo255(g3mColor._green), //
+               floatTo255(g3mColor._blue));
    }
 
 

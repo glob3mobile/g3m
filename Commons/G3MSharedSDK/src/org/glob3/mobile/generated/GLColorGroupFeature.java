@@ -6,9 +6,9 @@ public abstract class GLColorGroupFeature extends PriorityGLFeature
   private final int _sFactor;
   private final int _dFactor;
 
-  public GLColorGroupFeature(GLFeatureID id, int p, boolean blend, int sFactor, int dFactor)
+  public GLColorGroupFeature(GLFeatureID id, int priority, boolean blend, int sFactor, int dFactor)
   {
-     super(GLFeatureGroupName.COLOR_GROUP, id, p);
+     super(GLFeatureGroupName.COLOR_GROUP, id, priority);
      _blend = blend;
      _sFactor = sFactor;
      _dFactor = dFactor;

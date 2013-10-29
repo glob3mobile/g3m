@@ -105,7 +105,7 @@ protected:
 
   EffectWithDuration(const TimeInterval& duration,
                      const bool linearTiming) :
-  _durationMS(duration.milliseconds()),
+  _durationMS(duration._milliseconds),
   _linearTiming(linearTiming),
   _started(0)
   {
@@ -113,7 +113,7 @@ protected:
   }
 
   double percentDone(const TimeInterval& when) const {
-    const long long elapsed = when.milliseconds() - _started;
+    const long long elapsed = when._milliseconds - _started;
 
     const double percent = (double) elapsed / _durationMS;
     if (percent > 1) return 1;
@@ -135,7 +135,7 @@ public:
 
   virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& when) {
-    _started = when.milliseconds();
+    _started = when._milliseconds;
   }
 
   virtual bool isDone(const G3MRenderContext *rc,

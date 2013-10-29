@@ -25,17 +25,22 @@ public class ShapeFullPositionEffect extends EffectWithDuration
 
   private final Geodetic3D _fromPosition ;
   private final Geodetic3D _toPosition ;
+
   private final Angle _fromPitch ;
   private final Angle _toPitch ;
+
   private final Angle _fromHeading ;
   private final Angle _toHeading ;
 
+  private final Angle _fromRoll ;
+  private final Angle _toRoll ;
 
-  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading)
+
+  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll)
   {
-     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, false);
+     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, fromRoll, toRoll, false);
   }
-  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, boolean linearTiming)
+  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll, boolean linearTiming)
   {
      super(duration, linearTiming);
      _shape = shape;
@@ -45,6 +50,8 @@ public class ShapeFullPositionEffect extends EffectWithDuration
      _toPitch = new Angle(toPitch);
      _fromHeading = new Angle(fromHeading);
      _toHeading = new Angle(toHeading);
+     _fromRoll = new Angle(fromRoll);
+     _toRoll = new Angle(toRoll);
 
   }
 
@@ -65,6 +72,10 @@ public class ShapeFullPositionEffect extends EffectWithDuration
       _shape.setHeading(Angle.linearInterpolation(_fromHeading, _toHeading, alpha));
     }
   
+    if (!_fromRoll.isNan() && !_toRoll.isNan())
+    {
+      _shape.setRoll(Angle.linearInterpolation(_fromRoll, _toRoll, alpha));
+    }
   }
 
   public final void cancel(TimeInterval when)
@@ -79,6 +90,11 @@ public class ShapeFullPositionEffect extends EffectWithDuration
     {
       _shape.setHeading(_toHeading);
     }
+  
+    if (!_toRoll.isNan())
+    {
+      _shape.setRoll(_toRoll);
+    }
   }
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
@@ -91,6 +107,11 @@ public class ShapeFullPositionEffect extends EffectWithDuration
     if (!_toHeading.isNan())
     {
       _shape.setHeading(_toHeading);
+    }
+  
+    if (!_toRoll.isNan())
+    {
+      _shape.setRoll(_toRoll);
     }
   }
 

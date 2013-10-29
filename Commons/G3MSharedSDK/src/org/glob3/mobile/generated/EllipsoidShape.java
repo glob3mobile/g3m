@@ -39,6 +39,10 @@ public class EllipsoidShape extends AbstractMeshShape
   private OrientedBox _boundingVolume;
 
   private Ellipsoid _ellipsoid;
+<<<<<<< HEAD
+=======
+//  private final Quadric _quadric;
+>>>>>>> origin/purgatory
 
   private URL _textureURL = new URL();
 
@@ -257,11 +261,19 @@ public class EllipsoidShape extends AbstractMeshShape
   {
      this(position, altitudeMode, planet, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null, true);
   }
+<<<<<<< HEAD
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
      _boundingVolume = null;
+=======
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  {
+     super(position, altitudeMode);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+>>>>>>> origin/purgatory
      _textureURL = new URL(new URL("", false));
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
@@ -282,10 +294,14 @@ public class EllipsoidShape extends AbstractMeshShape
      this(position, altitudeMode, planet, textureURL, radius, resolution, borderWidth, texturedInside, mercator, true);
   }
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+<<<<<<< HEAD
      _boundingVolume = null;
+=======
+>>>>>>> origin/purgatory
      _textureURL = new URL(textureURL);
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;

@@ -86,7 +86,7 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext *rc) {
     
     executedCounter++;
   }
-  
+
 //  if (false) {
 //    //    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
 //    //      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",

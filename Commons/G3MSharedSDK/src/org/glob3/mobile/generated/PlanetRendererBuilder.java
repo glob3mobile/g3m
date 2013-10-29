@@ -380,7 +380,7 @@ public class PlanetRendererBuilder
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
     getVisibleSectorListeners().add(listener);
-    getStabilizationMilliSeconds().add(stabilizationInterval.milliseconds());
+    getStabilizationMilliSeconds().add(stabilizationInterval._milliseconds);
   }
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {

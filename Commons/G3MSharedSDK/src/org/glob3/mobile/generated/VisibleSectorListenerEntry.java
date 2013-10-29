@@ -22,7 +22,7 @@ public class VisibleSectorListenerEntry
   public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
      _listener = listener;
-     _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
+     _stabilizationIntervalInMS = stabilizationInterval._milliseconds;
      _lastSector = null;
      _timer = null;
      _whenNotifyInMS = 0;
@@ -49,7 +49,7 @@ public class VisibleSectorListenerEntry
     }
     else
     {
-      final long now = getTimer().now().milliseconds();
+      final long now = getTimer().now()._milliseconds;
 
       if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {

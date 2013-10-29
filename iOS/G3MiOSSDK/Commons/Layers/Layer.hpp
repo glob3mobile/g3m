@@ -58,7 +58,7 @@ protected:
   _condition(condition),
   _name(name),
   _layerSet(NULL),
-  _timeToCacheMS(timeToCache.milliseconds()),
+  _timeToCacheMS(timeToCache._milliseconds),
   _readExpired(readExpired),
   _enable(true),
   _parameters(parameters),

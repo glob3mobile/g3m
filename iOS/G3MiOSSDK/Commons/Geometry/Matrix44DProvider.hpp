@@ -84,8 +84,8 @@ class Matrix44DMultiplicationHolderBuilder{
 public:
 
   ~Matrix44DMultiplicationHolderBuilder() {
-    const int size = _providers.size();
-    for (int i = 0; i < size; i++) {
+    const int providersSize = _providers.size();
+    for (int i = 0; i < providersSize; i++) {
       _providers[i]->_release();
     }
   }
@@ -99,14 +99,14 @@ public:
     provider->_retain();
   }
 
-  Matrix44DMultiplicationHolder* create() const{
-    const Matrix44DProvider* ps[_providers.size()];
-    const int size = _providers.size();
-    for (int i = 0; i < size; i++) {
+  Matrix44DMultiplicationHolder* create() const {
+    const int providersSize = _providers.size();
+    const Matrix44DProvider* ps[providersSize];
+    for (int i = 0; i < providersSize; i++) {
       ps[i] = _providers[i];
     }
 
-    return new Matrix44DMultiplicationHolder(ps, size);
+    return new Matrix44DMultiplicationHolder(ps, providersSize);
   }
 
 };

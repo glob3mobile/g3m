@@ -24,7 +24,6 @@ public class SimpleTextureMapping extends TextureMapping
       ILogger.instance().logError("Releasing invalid simple texture mapping");
     }
   }
-  private TexturesHandler _texturesHandler;
 
 
   public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
