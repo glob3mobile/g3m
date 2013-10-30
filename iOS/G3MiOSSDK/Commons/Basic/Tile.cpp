@@ -416,28 +416,42 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   Vector2F psw = camera->point2Pixel(sw);
   Vector2F pse = camera->point2Pixel(se);
 
-  double southDistSquared = psw.squaredDistanceTo(pse);
-  double eastDistSquared = pse.squaredDistanceTo(pne);
-  double northDistSquared = pnw.squaredDistanceTo(pne);
-  double westDistSquared = psw.squaredDistanceTo(pnw);
-
-  //TODO: ARC
+  double southLinearDistSquared = psw.squaredDistanceTo(pse);
+  double eastLinearDistSquared = pse.squaredDistanceTo(pne);
+  double northLinearDistSquared = pnw.squaredDistanceTo(pne);
+  double westLinearDistSquared = psw.squaredDistanceTo(pnw);
 
   /*
-   
-   a = ang / 2
-   Arco = Cuerda * (a / sen(a))
-   
+   Arco = ang * Cuerda / (2 * sen(ang/2))
    */
 
-  double longestWidthSquared = southDistSquared;
-  if (northDistSquared > longestWidthSquared){
-    longestWidthSquared = northDistSquared;
+  Vector3D nNW = planet->centricSurfaceNormal(nw);
+  Vector3D nNE = planet->centricSurfaceNormal(ne);
+  Vector3D nSE = planet->centricSurfaceNormal(se);
+  Vector3D nSW = planet->centricSurfaceNormal(sw);
+
+  Angle northAngle = nNW.angleBetween(nNE);
+  double northArcSegmentRatio = northAngle._radians / (2 * SIN(northAngle._radians/2));
+  Angle eastAngle = nNE.angleBetween(nSE);
+  double eastArcSegmentRatio = eastAngle._radians / (2 * SIN(eastAngle._radians/2));
+  Angle southAngle = nSW.angleBetween(nSE);
+  double southArcSegmentRatio = southAngle._radians / (2 * SIN(southAngle._radians/2));
+  Angle westAngle = nNW.angleBetween(nSW);
+  double westArcSegmentRatio = westAngle._radians / (2 * SIN(westAngle._radians/2));
+
+  double southArcDistSquared = southLinearDistSquared * (southArcSegmentRatio * southArcSegmentRatio);
+  double eastArcDistSquared = eastLinearDistSquared * (eastArcSegmentRatio * eastArcSegmentRatio);
+  double northArcDistSquared = northLinearDistSquared * (northArcSegmentRatio * northArcSegmentRatio);
+  double westArcDistSquared = westLinearDistSquared * (westArcSegmentRatio * westArcSegmentRatio);
+
+  double longestWidthSquared = southArcDistSquared;
+  if (northArcDistSquared > longestWidthSquared){
+    longestWidthSquared = northArcDistSquared;
   }
 
-  double longestHeightSquared = eastDistSquared;
-  if (westDistSquared > longestHeightSquared){
-    longestHeightSquared = westDistSquared;
+  double longestHeightSquared = eastArcDistSquared;
+  if (westArcDistSquared > longestHeightSquared){
+    longestHeightSquared = westArcDistSquared;
   }
 
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
