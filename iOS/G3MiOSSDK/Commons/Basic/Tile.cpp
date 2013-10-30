@@ -414,13 +414,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     prepareTestLODData(planet);
   }
 
-//  Vector3D nw = planet->toCartesian( _sector.getNW() );
-//  Vector3D ne = planet->toCartesian( _sector.getNE() );
-//  Vector3D sw = planet->toCartesian( _sector.getSW() );
-//  Vector3D se = planet->toCartesian( _sector.getSE() );
-
-  //TODO: HEIGHT
-
   const Camera* camera = rc->getCurrentCamera();
   Vector2F pnw = camera->point2Pixel(*_cornerNW);
   Vector2F pne = camera->point2Pixel(*_cornerNE);
@@ -432,33 +425,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   double northLinearDistSquared = pnw.squaredDistanceTo(pne);
   double westLinearDistSquared = psw.squaredDistanceTo(pnw);
 
-  /*
-   Arco = ang * Cuerda / (2 * sen(ang/2))
-   */
-
-//  Vector3D nNW = planet->centricSurfaceNormal(nw);
-//  Vector3D nNE = planet->centricSurfaceNormal(ne);
-//  Vector3D nSE = planet->centricSurfaceNormal(se);
-//  Vector3D nSW = planet->centricSurfaceNormal(sw);
-//
-//  Angle northAngle = nNW.angleBetween(nNE);
-//  double northArcSegmentRatio = northAngle._radians / (2 * SIN(northAngle._radians/2));
-//  Angle eastAngle = nNE.angleBetween(nSE);
-//  double eastArcSegmentRatio = eastAngle._radians / (2 * SIN(eastAngle._radians/2));
-//  Angle southAngle = nSW.angleBetween(nSE);
-//  double southArcSegmentRatio = southAngle._radians / (2 * SIN(southAngle._radians/2));
-//  Angle westAngle = nNW.angleBetween(nSW);
-//  double westArcSegmentRatio = westAngle._radians / (2 * SIN(westAngle._radians/2));
-//
   double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
   double eastArcDistSquared = eastLinearDistSquared * _eastArcSegmentRatioSquared;
   double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
   double westArcDistSquared = westLinearDistSquared * _westArcSegmentRatioSquared;
-
-  //  double southArcDistSquared = southLinearDistSquared * (southArcSegmentRatio * southArcSegmentRatio);
-  //  double eastArcDistSquared = eastLinearDistSquared * (eastArcSegmentRatio * eastArcSegmentRatio);
-  //  double northArcDistSquared = northLinearDistSquared * (northArcSegmentRatio * northArcSegmentRatio);
-  //  double westArcDistSquared = westLinearDistSquared * (westArcSegmentRatio * westArcSegmentRatio);
 
   double longestWidthSquared = southArcDistSquared;
   if (northArcDistSquared > longestWidthSquared){
@@ -493,11 +463,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     break;
   }
 
-//  const Vector2F ex = boundingVolume->projectedExtent(rc);
-//  const float t = (ex._x * ex._y);
-//  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
-
-  double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
+  const double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
 
   _lastLodTest = (longestWidthSquared <= (texWidth * texWidth) * correctionFactor) &&
                   (longestHeightSquared <= (texHeight * texHeight) * correctionFactor);
