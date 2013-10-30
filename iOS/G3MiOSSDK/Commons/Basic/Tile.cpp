@@ -367,11 +367,13 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
+
+
   //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-  const Box* boundingVolume = getTileBoundingVolume(rc);
-  if (boundingVolume == NULL) {
-    return true;
-  }
+//  const Box* boundingVolume = getTileBoundingVolume(rc);
+//  if (boundingVolume == NULL) {
+//    return true;
+//  }
 
   if ((_lodTimer != NULL) &&
       (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
@@ -399,6 +401,45 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     _lodTimer->start();
   }
 
+  const Planet* planet = rc->getPlanet();
+
+  Vector3D nw = planet->toCartesian( _sector.getNW() );
+  Vector3D ne = planet->toCartesian( _sector.getNE() );
+  Vector3D sw = planet->toCartesian( _sector.getSW() );
+  Vector3D se = planet->toCartesian( _sector.getSE() );
+
+  //TODO: HEIGHT
+
+  const Camera* camera = rc->getCurrentCamera();
+  Vector2F pnw = camera->point2Pixel(nw);
+  Vector2F pne = camera->point2Pixel(ne);
+  Vector2F psw = camera->point2Pixel(sw);
+  Vector2F pse = camera->point2Pixel(se);
+
+  double southDistSquared = psw.squaredDistanceTo(pse);
+  double eastDistSquared = pse.squaredDistanceTo(pne);
+  double northDistSquared = pnw.squaredDistanceTo(pne);
+  double westDistSquared = psw.squaredDistanceTo(pnw);
+
+  //TODO: ARC
+
+  /*
+   
+   a = ang / 2
+   Arco = Cuerda * (a / sen(a))
+   
+   */
+
+  double longestWidthSquared = southDistSquared;
+  if (northDistSquared > longestWidthSquared){
+    longestWidthSquared = northDistSquared;
+  }
+
+  double longestHeightSquared = eastDistSquared;
+  if (westDistSquared > longestHeightSquared){
+    longestHeightSquared = westDistSquared;
+  }
+
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
   int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
@@ -422,9 +463,14 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     break;
   }
 
-  const Vector2F ex = boundingVolume->projectedExtent(rc);
-  const float t = (ex._x * ex._y);
-  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
+//  const Vector2F ex = boundingVolume->projectedExtent(rc);
+//  const float t = (ex._x * ex._y);
+//  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
+
+  double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
+
+  _lastLodTest = (longestWidthSquared <= (texWidth * texWidth) * correctionFactor) &&
+                  (longestHeightSquared <= (texHeight * texHeight) * correctionFactor);
 
   return _lastLodTest;
 }
