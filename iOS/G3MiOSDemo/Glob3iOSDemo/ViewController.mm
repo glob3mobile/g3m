@@ -752,6 +752,8 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
 
@@ -2466,7 +2468,6 @@ public:
           }
         }
       }
-
 
 
       if (false) { //Incomplete world

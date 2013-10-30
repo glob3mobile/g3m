@@ -444,10 +444,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
   // Adjusting shown texture size in case of incomplete mesh
-  if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
-    texWidth *= _renderedVStileSectorRatio._x;
-    texHeight *= _renderedVStileSectorRatio._y;
-  }
+//  if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
+//    texWidth *= _renderedVStileSectorRatio._x;
+//    texHeight *= _renderedVStileSectorRatio._y;
+//  }
+
+  //TODO: PASAR TAMAÑO ESPERADO DE TEXTURA DIRECTAMENTE
 
   double factor = 5;
   switch (tilesRenderParameters->_quality) {
