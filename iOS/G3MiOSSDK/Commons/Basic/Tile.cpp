@@ -379,14 +379,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     }
   }
 
-
-
-  //const Extent* extent = getTessellatorMesh(rc, trc)->getExtent();
-//  const Box* boundingVolume = getTileBoundingVolume(rc);
-//  if (boundingVolume == NULL) {
-//    return true;
-//  }
-
   if ((_lodTimer != NULL) &&
       (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
     return _lastLodTest;
@@ -415,18 +407,25 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   const Planet* planet = rc->getPlanet();
 
-  Vector3D nw = planet->toCartesian( _sector.getNW() );
-  Vector3D ne = planet->toCartesian( _sector.getNE() );
-  Vector3D sw = planet->toCartesian( _sector.getSW() );
-  Vector3D se = planet->toCartesian( _sector.getSE() );
+  if (_northArcSegmentRatioSquared == 0 ||
+      _eastArcSegmentRatioSquared == 0 ||
+      _southArcSegmentRatioSquared == 0 ||
+      _westArcSegmentRatioSquared == 0){
+    prepareTestLODData(planet);
+  }
+
+//  Vector3D nw = planet->toCartesian( _sector.getNW() );
+//  Vector3D ne = planet->toCartesian( _sector.getNE() );
+//  Vector3D sw = planet->toCartesian( _sector.getSW() );
+//  Vector3D se = planet->toCartesian( _sector.getSE() );
 
   //TODO: HEIGHT
 
   const Camera* camera = rc->getCurrentCamera();
-  Vector2F pnw = camera->point2Pixel(nw);
-  Vector2F pne = camera->point2Pixel(ne);
-  Vector2F psw = camera->point2Pixel(sw);
-  Vector2F pse = camera->point2Pixel(se);
+  Vector2F pnw = camera->point2Pixel(*_cornerNW);
+  Vector2F pne = camera->point2Pixel(*_cornerNE);
+  Vector2F psw = camera->point2Pixel(*_cornerSW);
+  Vector2F pse = camera->point2Pixel(*_cornerSE);
 
   double southLinearDistSquared = psw.squaredDistanceTo(pse);
   double eastLinearDistSquared = pse.squaredDistanceTo(pne);
@@ -437,24 +436,29 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
    Arco = ang * Cuerda / (2 * sen(ang/2))
    */
 
-  Vector3D nNW = planet->centricSurfaceNormal(nw);
-  Vector3D nNE = planet->centricSurfaceNormal(ne);
-  Vector3D nSE = planet->centricSurfaceNormal(se);
-  Vector3D nSW = planet->centricSurfaceNormal(sw);
+//  Vector3D nNW = planet->centricSurfaceNormal(nw);
+//  Vector3D nNE = planet->centricSurfaceNormal(ne);
+//  Vector3D nSE = planet->centricSurfaceNormal(se);
+//  Vector3D nSW = planet->centricSurfaceNormal(sw);
+//
+//  Angle northAngle = nNW.angleBetween(nNE);
+//  double northArcSegmentRatio = northAngle._radians / (2 * SIN(northAngle._radians/2));
+//  Angle eastAngle = nNE.angleBetween(nSE);
+//  double eastArcSegmentRatio = eastAngle._radians / (2 * SIN(eastAngle._radians/2));
+//  Angle southAngle = nSW.angleBetween(nSE);
+//  double southArcSegmentRatio = southAngle._radians / (2 * SIN(southAngle._radians/2));
+//  Angle westAngle = nNW.angleBetween(nSW);
+//  double westArcSegmentRatio = westAngle._radians / (2 * SIN(westAngle._radians/2));
+//
+  double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
+  double eastArcDistSquared = eastLinearDistSquared * _eastArcSegmentRatioSquared;
+  double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
+  double westArcDistSquared = westLinearDistSquared * _westArcSegmentRatioSquared;
 
-  Angle northAngle = nNW.angleBetween(nNE);
-  double northArcSegmentRatio = northAngle._radians / (2 * SIN(northAngle._radians/2));
-  Angle eastAngle = nNE.angleBetween(nSE);
-  double eastArcSegmentRatio = eastAngle._radians / (2 * SIN(eastAngle._radians/2));
-  Angle southAngle = nSW.angleBetween(nSE);
-  double southArcSegmentRatio = southAngle._radians / (2 * SIN(southAngle._radians/2));
-  Angle westAngle = nNW.angleBetween(nSW);
-  double westArcSegmentRatio = westAngle._radians / (2 * SIN(westAngle._radians/2));
-
-  double southArcDistSquared = southLinearDistSquared * (southArcSegmentRatio * southArcSegmentRatio);
-  double eastArcDistSquared = eastLinearDistSquared * (eastArcSegmentRatio * eastArcSegmentRatio);
-  double northArcDistSquared = northLinearDistSquared * (northArcSegmentRatio * northArcSegmentRatio);
-  double westArcDistSquared = westLinearDistSquared * (westArcSegmentRatio * westArcSegmentRatio);
+  //  double southArcDistSquared = southLinearDistSquared * (southArcSegmentRatio * southArcSegmentRatio);
+  //  double eastArcDistSquared = eastLinearDistSquared * (eastArcSegmentRatio * eastArcSegmentRatio);
+  //  double northArcDistSquared = northLinearDistSquared * (northArcSegmentRatio * northArcSegmentRatio);
+  //  double westArcDistSquared = westLinearDistSquared * (westArcSegmentRatio * westArcSegmentRatio);
 
   double longestWidthSquared = southArcDistSquared;
   if (northArcDistSquared > longestWidthSquared){
