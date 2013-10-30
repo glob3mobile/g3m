@@ -17,7 +17,7 @@ public final class GLTextureId_Android
    //   }
 
 
-   public GLTextureId_Android(final int textureId) {
+   GLTextureId_Android(final int textureId) {
       _glTextureId = textureId;
    }
 
