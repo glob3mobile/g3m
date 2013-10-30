@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
@@ -74,12 +75,18 @@ public class ScenarioTerrainActivity
       //The sector is shrinked to adjust the projection of
       builder.setShownSector(demSector.shrinkedByPercent(0.1f));
 
-
       _g3mWidget = builder.createWidget();
+
+      // set the initial camera position to be into the valley
+      final Geodetic3D position = Geodetic3D.fromDegrees(40.13966959177994, -5.89060128999895, 4694.511700438305);
+      final Angle heading = Angle.fromDegrees(51.146970);
+      final Angle pitch = Angle.fromDegrees(69.137225);
+      _g3mWidget.setCameraPosition(position);
+      _g3mWidget.setCameraHeading(heading);
+      _g3mWidget.setCameraPitch(pitch);
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
-
    }
 
 
