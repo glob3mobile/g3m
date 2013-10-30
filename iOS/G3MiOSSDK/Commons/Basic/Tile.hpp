@@ -65,7 +65,22 @@ private:
 
   BoundingVolume* _boundingVolume;
 
+  //LOD TEST DATA
   const Vector2D _renderedVStileSectorRatio;
+
+  Vector3D* _cornerNE;
+  Vector3D* _cornerNW;
+  Vector3D* _cornerSE;
+  Vector3D* _cornerSW;
+  void computeTileCorners(const Planet* planet);
+
+  double _northArcSegmentRatioSquared;
+  double _eastArcSegmentRatioSquared;
+  double _westArcSegmentRatioSquared;
+  double _southArcSegmentRatioSquared;
+
+  void prepareTestLODData(const Planet* planet);
+  //////////////////////////////////////////
 
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
