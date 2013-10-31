@@ -105,9 +105,9 @@ public final class ListenerEntry {
       }
       if (_imageListener != null) {
          final int __DGD_parse_bitmap_in_background;
-         //         final long start = System.currentTimeMillis();
+         final long start = System.currentTimeMillis();
          final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
-         //         ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+         ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
          if (bitmap == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
