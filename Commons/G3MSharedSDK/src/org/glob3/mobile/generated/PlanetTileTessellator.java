@@ -95,7 +95,7 @@ public class PlanetTileTessellator extends TileTessellator
     return tile._sector.intersection(_renderedSector);
   }
 
-  private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
+  private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData data)
   {
   
     final int rx = meshResolution._x;
@@ -106,7 +106,9 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    double minElevation = 0;
+    double minElevation = java.lang.Double.NaN;
+    double maxElevation = java.lang.Double.NaN;
+    double averageElevation = 0;
     for (int j = 0; j < ry; j++)
     {
       final double v = (double) j / (ry - 1);
@@ -124,10 +126,34 @@ public class PlanetTileTessellator extends TileTessellator
           {
             elevation = rawElevation * verticalExaggeration;
   
-            if (elevation < minElevation)
+            //MIN
+            if (minElevation == java.lang.Double.NaN)
             {
               minElevation = elevation;
             }
+            else
+            {
+              if (elevation < minElevation)
+              {
+                minElevation = elevation;
+              }
+            }
+  
+            //MAX
+            if (maxElevation == java.lang.Double.NaN)
+            {
+              maxElevation = elevation;
+            }
+            else
+            {
+              if (elevation > maxElevation)
+              {
+                maxElevation = elevation;
+              }
+            }
+  
+            //AVERAGE
+            averageElevation += elevation;
           }
         }
         vertices.add(position, elevation);
@@ -152,6 +178,10 @@ public class PlanetTileTessellator extends TileTessellator
         }
       }
     }
+  
+    data._minHeight = minElevation;
+    data._maxHeight = maxElevation;
+    data._averageHeight = averageElevation / (rx * ry);
   
     //INDEX///////////////////////////////////////////////////////////////
     for (short j = 0; j < (ry-1); j++)
@@ -346,7 +376,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug, TileTessellatorMeshData data)
   {
   
     final Sector tileSector = tile._sector;
@@ -357,7 +387,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords);
+    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords, data);
   
     if (_skirted)
     {
