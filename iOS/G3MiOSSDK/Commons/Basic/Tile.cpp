@@ -361,8 +361,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TilesRenderParameters* tilesRenderParameters,
                                const TilesStatistics* tilesStatistics,
                                const ITimer* lastSplitTimer,
-                               const float dpiFactor,
-                               const float deviceQualityFactor) {
+                               double texWidthSquared,
+                               double texHeightSquared) {
 
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
@@ -440,35 +440,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
     longestHeightSquared = westArcDistSquared;
   }
 
-  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
-  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
-
-  // Adjusting shown texture size in case of incomplete mesh
-//  if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
-//    texWidth *= _renderedVStileSectorRatio._x;
-//    texHeight *= _renderedVStileSectorRatio._y;
-//  }
-
-  //TODO: PASAR TAMAÑO ESPERADO DE TEXTURA DIRECTAMENTE
-
-  double factor = 5;
-  switch (tilesRenderParameters->_quality) {
-    case QUALITY_HIGH:
-    factor = 1.5;
-    break;
-    case QUALITY_MEDIUM:
-    factor = 3;
-    break;
-    //case QUALITY_LOW:
-    default:
-    factor = 5;
-    break;
-  }
-
-  const double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
-
-  _lastLodTest = (longestWidthSquared <= (texWidth * texWidth) * correctionFactor) &&
-                  (longestHeightSquared <= (texHeight * texHeight) * correctionFactor);
+  _lastLodTest = (longestWidthSquared <= texWidthSquared) &&
+  (longestHeightSquared <= texHeightSquared);
 
   return _lastLodTest;
 }
@@ -712,8 +685,8 @@ void Tile::render(const G3MRenderContext* rc,
                   const Sector* renderedSector,
                   bool isForcedFullRender,
                   long long texturePriority,
-                  const float dpiFactor,
-                  const float deviceQualityFactor) {
+                  double texWidthSquared,
+                  double texHeightSquared) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -745,8 +718,8 @@ void Tile::render(const G3MRenderContext* rc,
                                                   tilesRenderParameters,
                                                   tilesStatistics,
                                                   lastSplitTimer,
-                                                  dpiFactor,
-                                                  deviceQualityFactor) ||
+                                                  texWidthSquared,
+                                                  texHeightSquared) ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 

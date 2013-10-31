@@ -111,8 +111,8 @@ private:
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const TilesStatistics* tilesStatistics,
                                   const ITimer* lastSplitTimer,
-                                  const float dpiFactor,
-                                  const float deviceQualityFactor);
+                                  double texWidthSquared,
+                                  double texHeightSquared);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -250,8 +250,8 @@ public:
               const Sector* renderedSector,
               bool isForcedFullRender,
               long long texturePriority,
-              const float dpiFactor,
-              const float deviceQualityFactor);
+              double texWidth,
+              double texHeight);
 
   const TileKey getKey() const;
 
