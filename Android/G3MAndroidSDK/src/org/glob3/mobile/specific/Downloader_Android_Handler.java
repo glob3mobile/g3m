@@ -224,13 +224,13 @@ public final class Downloader_Android_Handler {
       // inform downloader to remove myself, to avoid adding new Listener
       downloader.removeDownloadingHandlerForUrl(_g3mURL.getPath());
 
-      final IImage image = _hasImageListeners ? decodeImage(data, _g3mURL) : null;
+      final IImage image = (!_hasImageListeners || (data == null)) ? null : decodeImage(data, _g3mURL);
       context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image, this), true);
    }
 
 
-   private IImage decodeImage(final byte[] data,
-                              final URL url) {
+   private static IImage decodeImage(final byte[] data,
+                                     final URL url) {
       // final long start = System.currentTimeMillis();
       final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
       // ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
