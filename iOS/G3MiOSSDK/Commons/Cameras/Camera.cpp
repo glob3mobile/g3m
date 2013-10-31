@@ -469,3 +469,11 @@ bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
   const Geodetic3D position = getGeodeticCenterOfView();
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }
+
+void Camera::setRoll(const Angle& angle){
+
+}
+
+Angle Camera::getRoll() const{
+
+}

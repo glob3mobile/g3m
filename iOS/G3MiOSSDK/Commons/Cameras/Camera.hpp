@@ -334,6 +334,9 @@ public:
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
 
+  void setRoll(const Angle& angle);
+  Angle getRoll() const;
+
 private:
   const Angle getHeading(const Vector3D& normal) const;
 
