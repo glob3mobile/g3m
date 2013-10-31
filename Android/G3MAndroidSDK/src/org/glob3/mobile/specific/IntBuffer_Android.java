@@ -19,7 +19,7 @@ public final class IntBuffer_Android
    private final long _id = _nextID++;
 
 
-   public IntBuffer_Android(final int size) {
+   IntBuffer_Android(final int size) {
       // _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
       //_buffer = ByteBuffer.allocate(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
       _buffer = IntBuffer.wrap(new int[size]);

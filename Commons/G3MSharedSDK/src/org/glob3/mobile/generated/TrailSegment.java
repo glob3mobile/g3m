@@ -102,7 +102,7 @@ public class TrailSegment
       vertices.add(offsetP.transformedBy(matrix, 1));
     }
   
-    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, false); // depthTest -  colorsIntensity -  colors
+    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
   
     return surfaceMesh;
   

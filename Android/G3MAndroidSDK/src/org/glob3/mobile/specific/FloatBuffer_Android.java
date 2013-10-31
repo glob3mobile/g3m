@@ -29,27 +29,27 @@ public final class FloatBuffer_Android
    private final long _id = _nextID++;
 
 
-   public FloatBuffer_Android(final int size) {
+   FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    }
 
 
-   public FloatBuffer_Android(final float f0,
-                              final float f1,
-                              final float f2,
-                              final float f3,
-                              final float f4,
-                              final float f5,
-                              final float f6,
-                              final float f7,
-                              final float f8,
-                              final float f9,
-                              final float f10,
-                              final float f11,
-                              final float f12,
-                              final float f13,
-                              final float f14,
-                              final float f15) {
+   FloatBuffer_Android(final float f0,
+                       final float f1,
+                       final float f2,
+                       final float f3,
+                       final float f4,
+                       final float f5,
+                       final float f6,
+                       final float f7,
+                       final float f8,
+                       final float f9,
+                       final float f10,
+                       final float f11,
+                       final float f12,
+                       final float f13,
+                       final float f14,
+                       final float f15) {
       _buffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
       _buffer.put(0, f0);
       _buffer.put(1, f1);
@@ -70,15 +70,15 @@ public final class FloatBuffer_Android
    }
 
 
-   //   public FloatBuffer_Android(final float[] array) {
+   //     FloatBuffer_Android(final float[] array) {
    //      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    //      _buffer.put(array);
    //      _buffer.rewind();
    //   }
 
 
-   public FloatBuffer_Android(final float[] array,
-                              final int length) {
+   FloatBuffer_Android(final float[] array,
+                       final int length) {
       _buffer = ByteBuffer.allocateDirect(length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
       _buffer.put(array, 0, length);
       _buffer.rewind();

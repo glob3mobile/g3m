@@ -21,8 +21,8 @@ public final class Downloader_Android_WorkerThread
    private G3MContext               _context;
 
 
-   public Downloader_Android_WorkerThread(final Downloader_Android downloader,
-                                          final int id) {
+   Downloader_Android_WorkerThread(final Downloader_Android downloader,
+                                   final int id) {
       _downloader = downloader;
       _stopping = false;
       _id = id;
