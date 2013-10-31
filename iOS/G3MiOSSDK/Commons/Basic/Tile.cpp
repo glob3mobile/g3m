@@ -407,41 +407,34 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
   const Planet* planet = rc->getPlanet();
 
-  if (_northArcSegmentRatioSquared == 0 ||
-      _eastArcSegmentRatioSquared == 0 ||
-      _southArcSegmentRatioSquared == 0 ||
-      _westArcSegmentRatioSquared == 0){
+  if ((_northArcSegmentRatioSquared == 0) ||
+      (_eastArcSegmentRatioSquared  == 0) ||
+      (_southArcSegmentRatioSquared == 0) ||
+      (_westArcSegmentRatioSquared  == 0)) {
     prepareTestLODData(planet);
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  Vector2F pnw = camera->point2Pixel(*_cornerNW);
-  Vector2F pne = camera->point2Pixel(*_cornerNE);
-  Vector2F psw = camera->point2Pixel(*_cornerSW);
-  Vector2F pse = camera->point2Pixel(*_cornerSE);
+  const Vector2F pnw = camera->point2Pixel(*_cornerNW);
+  const Vector2F pne = camera->point2Pixel(*_cornerNE);
+  const Vector2F psw = camera->point2Pixel(*_cornerSW);
+  const Vector2F pse = camera->point2Pixel(*_cornerSE);
 
-  double southLinearDistSquared = psw.squaredDistanceTo(pse);
-  double eastLinearDistSquared = pse.squaredDistanceTo(pne);
-  double northLinearDistSquared = pnw.squaredDistanceTo(pne);
-  double westLinearDistSquared = psw.squaredDistanceTo(pnw);
+  const double southLinearDistSquared = psw.squaredDistanceTo(pse);
+  const double eastLinearDistSquared  = pse.squaredDistanceTo(pne);
+  const double northLinearDistSquared = pnw.squaredDistanceTo(pne);
+  const double westLinearDistSquared  = psw.squaredDistanceTo(pnw);
 
-  double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
-  double eastArcDistSquared = eastLinearDistSquared * _eastArcSegmentRatioSquared;
-  double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
-  double westArcDistSquared = westLinearDistSquared * _westArcSegmentRatioSquared;
+  const double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
+  const double eastArcDistSquared  = eastLinearDistSquared  * _eastArcSegmentRatioSquared;
+  const double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
+  const double westArcDistSquared  = westLinearDistSquared  * _westArcSegmentRatioSquared;
 
-  double longestWidthSquared = southArcDistSquared;
-  if (northArcDistSquared > longestWidthSquared){
-    longestWidthSquared = northArcDistSquared;
-  }
+  const double longestWidthSquared  = (northArcDistSquared > southArcDistSquared) ? northArcDistSquared : southArcDistSquared;
+  const double longestHeightSquared = (westArcDistSquared  > eastArcDistSquared)  ? westArcDistSquared  : eastArcDistSquared;
 
-  double longestHeightSquared = eastArcDistSquared;
-  if (westArcDistSquared > longestHeightSquared){
-    longestHeightSquared = westArcDistSquared;
-  }
-
-  _lastLodTest = (longestWidthSquared <= texWidthSquared) &&
-  (longestHeightSquared <= texHeightSquared);
+  _lastLodTest = ((longestWidthSquared  <= texWidthSquared) &&
+                  (longestHeightSquared <= texHeightSquared));
 
   return _lastLodTest;
 }
