@@ -12,6 +12,8 @@
 #include "Sector.hpp"
 #include <list>
 
+#include "TileTessellator.hpp"
+
 class G3MRenderContext;
 class Mesh;
 class TileTessellator;
@@ -60,8 +62,7 @@ private:
   bool _texturizerDirty;    //Texturizer needs to be called
 
   float _verticalExaggeration;
-  double _minHeight;
-  double _maxHeight;
+  TileTessellatorMeshData _tileTessellatorMeshData;
 
   BoundingVolume* _boundingVolume;
 
@@ -155,8 +156,8 @@ private:
   ITexturizerData* _texturizerData;
   PlanetTileTessellatorData* _tessellatorData;
 
-  Box* _tileBoundingVolume;
-  Box* getTileBoundingVolume(const G3MRenderContext *rc);
+//  Box* _tileBoundingVolume;
+//  Box* getTileBoundingVolume(const G3MRenderContext *rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;

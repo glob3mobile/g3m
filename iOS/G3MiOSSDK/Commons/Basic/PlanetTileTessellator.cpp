@@ -100,7 +100,8 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             const ElevationData* elevationData,
                                             float verticalExaggeration,
                                             bool mercator,
-                                            bool renderDebug) const {
+                                            bool renderDebug,
+                                            TileTessellatorMeshData& data) const {
 
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
@@ -118,7 +119,8 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       mercator,
                                       vertices,
                                       indices,
-                                      *textCoords);
+                                      *textCoords,
+                                      data);
 
   if (_skirted) {
     const Vector3D se = planet->toCartesian(tileSector.getSE());
@@ -296,7 +298,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             bool mercator,
                                             FloatBufferBuilderFromGeodetic& vertices,
                                             ShortBufferBuilder& indices,
-                                            FloatBufferBuilderFromCartesian2D& textCoords) const{
+                                            FloatBufferBuilderFromCartesian2D& textCoords,
+                                            TileTessellatorMeshData& data) const{
 
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
@@ -306,7 +309,9 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   //VERTICES///////////////////////////////////////////////////////////////
-  double minElevation = 0;
+  double minElevation = NAND;
+  double maxElevation = NAND;
+  double averageElevation = 0;
   for (int j = 0; j < ry; j++) {
     const double v = (double) j / (ry - 1);
 
@@ -320,9 +325,26 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         if ( !ISNAN(rawElevation) ) {
           elevation = rawElevation * verticalExaggeration;
 
-          if (elevation < minElevation) {
+          //MIN
+          if (minElevation == NAND){
             minElevation = elevation;
+          } else{
+            if (elevation < minElevation) {
+              minElevation = elevation;
+            }
           }
+
+          //MAX
+          if (maxElevation == NAND){
+            maxElevation = elevation;
+          } else{
+            if (elevation > maxElevation) {
+              maxElevation = elevation;
+            }
+          }
+
+          //AVERAGE
+          averageElevation += elevation;
         }
       }
       vertices.add( position, elevation );
@@ -344,6 +366,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       }
     }
   }
+
+  data._minHeight = minElevation;
+  data._maxHeight = maxElevation;
+  data._averageHeight = averageElevation / (rx * ry);
 
   //INDEX///////////////////////////////////////////////////////////////
   for (short j = 0; j < (ry-1); j++) {

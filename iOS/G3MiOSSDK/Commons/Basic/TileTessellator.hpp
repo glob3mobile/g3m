@@ -22,6 +22,13 @@ class Sector;
 #include "Vector2I.hpp"
 #include "Vector2D.hpp"
 
+class TileTessellatorMeshData{
+public:
+  double _minHeight;
+  double _maxHeight;
+  double _averageHeight;
+};
+
 
 class TileTessellator {
 public:
@@ -36,7 +43,8 @@ public:
                                const ElevationData* elevationData,
                                float verticalExaggeration,
                                bool mercator,
-                               bool debug) const = 0;
+                               bool debug,
+                               TileTessellatorMeshData& data) const = 0;
 
   virtual Vector2I getTileMeshResolution(const Planet* planet,
                                          const Vector2I& resolution,
