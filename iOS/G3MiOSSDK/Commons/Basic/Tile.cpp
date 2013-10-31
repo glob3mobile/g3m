@@ -1058,13 +1058,16 @@ void Tile::prepareTestLODData(const Planet* planet){
    */
 
   Angle northAngle = nNW.angleBetween(nNE);
-  double northArcSegmentRatio = northAngle._radians / (2 * SIN(northAngle._radians/2));
+  double northArcSegmentRatio = northAngle.isZero()? 0 : northAngle._radians / (2 * SIN(northAngle._radians/2));
+
   Angle eastAngle = nNE.angleBetween(nSE);
-  double eastArcSegmentRatio = eastAngle._radians / (2 * SIN(eastAngle._radians/2));
+  double eastArcSegmentRatio = eastAngle.isZero()? 0 : eastAngle._radians / (2 * SIN(eastAngle._radians/2));
+
   Angle southAngle = nSW.angleBetween(nSE);
-  double southArcSegmentRatio = southAngle._radians / (2 * SIN(southAngle._radians/2));
+  double southArcSegmentRatio = southAngle.isZero()? 0: southAngle._radians / (2 * SIN(southAngle._radians/2));
+
   Angle westAngle = nNW.angleBetween(nSW);
-  double westArcSegmentRatio = westAngle._radians / (2 * SIN(westAngle._radians/2));
+  double westArcSegmentRatio = westAngle.isZero()? 0 : westAngle._radians / (2 * SIN(westAngle._radians/2));
 
   _southArcSegmentRatioSquared = (southArcSegmentRatio * southArcSegmentRatio);
   _eastArcSegmentRatioSquared = (eastArcSegmentRatio * eastArcSegmentRatio);
