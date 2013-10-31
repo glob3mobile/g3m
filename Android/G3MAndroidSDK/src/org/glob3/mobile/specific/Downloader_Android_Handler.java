@@ -186,11 +186,9 @@ public final class Downloader_Android_Handler {
          if (_g3mURL.isFileProtocol()) {
             final String filePath = _g3mURL.getPath().replaceFirst(URL.FILE_PROTOCOL, "");
 
-            final File f = new File(filePath);
-
-
-            final InputStream fileIS = f.exists() ? new FileInputStream(f)
-                                                 : downloader.getAppContext().getAssets().open(filePath);
+            final File file = new File(filePath);
+            final InputStream fileIS = file.exists() ? new FileInputStream(file) //
+                                                    : downloader.getAppContext().getAssets().open(filePath);
 
             data = getData(fileIS, -1);
             if (data != null) {
@@ -257,13 +255,13 @@ public final class Downloader_Android_Handler {
       return data;
    }
 
-   public class ProcessResponseGTask
+   private class ProcessResponseGTask
             extends
                GTask {
 
-      int                        _statusCode = 0;
-      byte[]                     _data       = null;
-      Downloader_Android_Handler _handler;
+      private final int                        _statusCode;
+      private final byte[]                     _data;
+      private final Downloader_Android_Handler _handler;
 
 
       public ProcessResponseGTask(final int statusCode,
