@@ -106,8 +106,9 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    double minElevation = java.lang.Double.NaN;
-    double maxElevation = java.lang.Double.NaN;
+    IMathUtils mu = IMathUtils.instance();
+    double minElevation = mu.maxDouble();
+    double maxElevation = mu.minDouble();
     double averageElevation = 0;
     for (int j = 0; j < ry; j++)
     {
@@ -127,29 +128,15 @@ public class PlanetTileTessellator extends TileTessellator
             elevation = rawElevation * verticalExaggeration;
   
             //MIN
-            if (minElevation == java.lang.Double.NaN)
+            if (elevation < minElevation)
             {
               minElevation = elevation;
             }
-            else
-            {
-              if (elevation < minElevation)
-              {
-                minElevation = elevation;
-              }
-            }
   
             //MAX
-            if (maxElevation == java.lang.Double.NaN)
+            if (elevation > maxElevation)
             {
               maxElevation = elevation;
-            }
-            else
-            {
-              if (elevation > maxElevation)
-              {
-                maxElevation = elevation;
-              }
             }
   
             //AVERAGE
@@ -179,6 +166,15 @@ public class PlanetTileTessellator extends TileTessellator
       }
     }
   
+    if (minElevation == mu.maxDouble())
+    {
+      minElevation = 0;
+    }
+    if (maxElevation == mu.minDouble())
+    {
+      maxElevation = 0;
+    }
+  
     data._minHeight = minElevation;
     data._maxHeight = maxElevation;
     data._averageHeight = averageElevation / (rx * ry);
@@ -199,7 +195,7 @@ public class PlanetTileTessellator extends TileTessellator
       indices.add((short)(jTimesResolution + 2* rx - 1));
     }
   
-    return minElevation;
+    return maxElevation - minElevation;
   }
 
   private void createEastSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2I meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
