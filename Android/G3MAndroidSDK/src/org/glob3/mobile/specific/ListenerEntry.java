@@ -34,9 +34,9 @@ public final class ListenerEntry {
    private final IImageDownloadListener  _imageListener;
 
 
-   public ListenerEntry(final IBufferDownloadListener bufferListener,
-                        final IImageDownloadListener imageListener,
-                        final long requestId) {
+   ListenerEntry(final IBufferDownloadListener bufferListener,
+                 final IImageDownloadListener imageListener,
+                 final long requestId) {
       _bufferListener = bufferListener;
       _imageListener = imageListener;
       _requestId = requestId;

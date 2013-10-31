@@ -18,18 +18,18 @@ public class ShortBuffer_Android
    //   private int               _glBuffer;
 
 
-   public ShortBuffer_Android(final int size) {
+   ShortBuffer_Android(final int size) {
       _buffer = ShortBuffer.wrap(new short[size]);
    }
 
 
-   public ShortBuffer_Android(final short[] array) {
+   ShortBuffer_Android(final short[] array) {
       _buffer = ShortBuffer.wrap(array);
    }
 
 
-   public ShortBuffer_Android(final short[] array,
-                              final int length) {
+   ShortBuffer_Android(final short[] array,
+                       final int length) {
       final short[] result = new short[length];
       System.arraycopy(array, 0, result, 0, length);
       _buffer = ShortBuffer.wrap(result);
