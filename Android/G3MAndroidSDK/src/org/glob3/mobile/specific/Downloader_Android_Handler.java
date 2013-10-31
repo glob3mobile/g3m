@@ -11,26 +11,39 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.URL;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
 public final class Downloader_Android_Handler {
 
-   final static String                    TAG        = "Downloader_Android_Handler";
+   private static BitmapFactory.Options                      _options;
+   private static byte[]                                     _temp_storage = new byte[128 * 1024];
 
-   private long                           _priority;
-   private final URL                      _g3mURL;
-   private java.net.URL                   _javaURL;
-   private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
+   static {
+      _options = new BitmapFactory.Options();
+      _options.inTempStorage = _temp_storage;
+   }
+
+
+   private final static String                               TAG           = "Downloader_Android_Handler";
+
+   private long                                              _priority;
+   private final URL                                         _g3mURL;
+   private java.net.URL                                      _javaURL;
+   private final ArrayList<Downloader_Android_ListenerEntry> _listeners    = new ArrayList<Downloader_Android_ListenerEntry>();
+
+   private boolean                                           _hasImageListeners;
 
 
    Downloader_Android_Handler(final URL url,
@@ -39,10 +52,11 @@ public final class Downloader_Android_Handler {
                               final long requestId) {
       _priority = priority;
       _g3mURL = url;
+      _hasImageListeners = false;
       try {
          _javaURL = new java.net.URL(url.getPath());
 
-         final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+         final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, requestId);
          _listeners.add(entry);
       }
       catch (final MalformedURLException e) {
@@ -66,10 +80,11 @@ public final class Downloader_Android_Handler {
                               final long requestId) {
       _priority = priority;
       _g3mURL = url;
+      _hasImageListeners = true;
       try {
          _javaURL = new java.net.URL(url.getPath());
 
-         final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
+         final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, requestId);
          _listeners.add(entry);
       }
       catch (final MalformedURLException e) {
@@ -87,10 +102,10 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public void addListener(final IBufferDownloadListener listener,
-                           final long priority,
-                           final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+   void addListener(final IBufferDownloadListener listener,
+                    final long priority,
+                    final long requestId) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, requestId);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -102,12 +117,14 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public void addListener(final IImageDownloadListener listener,
-                           final long priority,
-                           final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
+   void addListener(final IImageDownloadListener listener,
+                    final long priority,
+                    final long requestId) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, requestId);
 
       synchronized (this) {
+         _hasImageListeners = true;
+
          _listeners.add(entry);
 
          if (priority > _priority) {
@@ -117,55 +134,41 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public synchronized long getPriority() {
+   synchronized long getPriority() {
       return _priority;
    }
 
 
-   public boolean cancelListenerForRequestId(final long requestId) {
-      boolean canceled = false;
-
+   boolean cancelListenerForRequestId(final long requestId) {
       synchronized (this) {
-         final Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext() && !canceled) {
-            final ListenerEntry entry = iter.next();
-
-            if (entry.getRequestId() == requestId) {
+         for (final Downloader_Android_ListenerEntry entry : _listeners) {
+            if (entry._requestId == requestId) {
                entry.cancel();
-               canceled = true;
+               return true;
             }
          }
       }
 
-      return canceled;
+      return false;
    }
 
 
-   public boolean removeListenerForRequestId(final long requestId) {
-      boolean removed = false;
-
+   boolean removeListenerForRequestId(final long requestId) {
       synchronized (this) {
-         final Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext()) {
-            final ListenerEntry entry = iter.next();
-
-            if (entry.getRequestId() == requestId) {
+         for (final Downloader_Android_ListenerEntry entry : _listeners) {
+            if (entry._requestId == requestId) {
                entry.onCancel(_g3mURL);
                _listeners.remove(entry);
-               removed = true;
-
-               break;
+               return true;
             }
          }
       }
 
-      return removed;
+      return false;
    }
 
 
-   public synchronized boolean hasListener() {
+   synchronized boolean hasListener() {
       return !_listeners.isEmpty();
    }
 
@@ -221,8 +224,23 @@ public final class Downloader_Android_Handler {
       // inform downloader to remove myself, to avoid adding new Listener
       downloader.removeDownloadingHandlerForUrl(_g3mURL.getPath());
 
+      final IImage image = _hasImageListeners ? decodeImage(data, _g3mURL) : null;
+      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image, this), true);
+   }
 
-      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+
+   private IImage decodeImage(final byte[] data,
+                              final URL url) {
+      // final long start = System.currentTimeMillis();
+      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+      // ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+
+      if (bitmap == null) {
+         ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
+         return null;
+      }
+
+      return new Image_Android(bitmap, data);
    }
 
 
@@ -261,14 +279,17 @@ public final class Downloader_Android_Handler {
 
       private final int                        _statusCode;
       private final byte[]                     _data;
+      private final IImage                     _image;
       private final Downloader_Android_Handler _handler;
 
 
       public ProcessResponseGTask(final int statusCode,
                                   final byte[] data,
+                                  final IImage image,
                                   final Downloader_Android_Handler handler) {
          _statusCode = statusCode;
          _data = data;
+         _image = image;
          _handler = handler;
       }
 
@@ -279,14 +300,14 @@ public final class Downloader_Android_Handler {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               for (final ListenerEntry entry : _listeners) {
+               for (final Downloader_Android_ListenerEntry entry : _listeners) {
                   if (entry.isCanceled()) {
-                     entry.onCanceledDownload(_g3mURL, _data);
+                     entry.onCanceledDownload(_g3mURL, _data, _image);
 
                      entry.onCancel(_g3mURL);
                   }
                   else {
-                     entry.onDownload(_g3mURL, _data);
+                     entry.onDownload(_g3mURL, _data, _image);
                   }
                }
             }
@@ -300,7 +321,7 @@ public final class Downloader_Android_Handler {
                   Log.e(TAG, msg);
                }
 
-               for (final ListenerEntry entry : _listeners) {
+               for (final Downloader_Android_ListenerEntry entry : _listeners) {
                   entry.onError(_g3mURL);
                }
             }

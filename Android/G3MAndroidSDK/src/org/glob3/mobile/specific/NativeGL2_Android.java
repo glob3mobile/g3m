@@ -343,8 +343,13 @@ public final class NativeGL2_Android
    public void texImage2D(final IImage image,
                           final int format) {
       checkOpenGLThread();
-      final Bitmap b = ((Image_Android) image).getBitmap();
-      GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, b, 0);
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+      if (bitmap == null) {
+         ILogger.instance().logError("texImage2D(): bitmap is null");
+      }
+      else {
+         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+      }
    }
 
 
@@ -748,7 +753,7 @@ public final class NativeGL2_Android
          case GLES20.GL_FLOAT_VEC2:
             return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT_VEC3:
-             return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
             return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
             //         case GLES20.GL_SAMPLER_2D:
@@ -784,8 +789,8 @@ public final class NativeGL2_Android
          ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
 
          switch (type[0]) {
-         	case GLES20.GL_FLOAT_VEC3:
-             return new GPUAttributeVec3Float(nameStr, id);
+            case GLES20.GL_FLOAT_VEC3:
+               return new GPUAttributeVec3Float(nameStr, id);
             case GLES20.GL_FLOAT_VEC4:
                return new GPUAttributeVec4Float(nameStr, id);
             case GLES20.GL_FLOAT_VEC2:
@@ -803,17 +808,20 @@ public final class NativeGL2_Android
    }
 
 
-@Override
-public void uniform3f(IGLUniformID location, float v0, float v1, float v2) {
-    int loc = ((GLUniformID_Android)location).getID();
-    GLES20.glUniform3f(loc, v0, v1, v2);
-}
+   @Override
+   public void uniform3f(final IGLUniformID location,
+                         final float v0,
+                         final float v1,
+                         final float v2) {
+      final int loc = ((GLUniformID_Android) location).getID();
+      GLES20.glUniform3f(loc, v0, v1, v2);
+   }
 
 
-@Override
-public int Type_Vec3Float() {
-	return GLES20.GL_FLOAT_VEC3;
-}
+   @Override
+   public int Type_Vec3Float() {
+      return GLES20.GL_FLOAT_VEC3;
+   }
 
 
 }
