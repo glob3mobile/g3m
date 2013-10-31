@@ -555,15 +555,16 @@ public:
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-//  const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-  const Planet* planet = Planet::createFlatEarth();
+//  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -2551,7 +2552,7 @@ public:
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
 
-      if (false){
+      if (true){
 
         class PlaneShapeLoadListener : public ShapeLoadListener {
         public:
