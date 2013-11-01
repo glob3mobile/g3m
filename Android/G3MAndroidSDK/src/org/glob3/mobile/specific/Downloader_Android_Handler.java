@@ -225,7 +225,7 @@ public final class Downloader_Android_Handler {
       downloader.removeDownloadingHandlerForUrl(_g3mURL.getPath());
 
       final IImage image = (!_hasImageListeners || (data == null)) ? null : decodeImage(data, _g3mURL);
-      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image, this), true);
+      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image), true);
    }
 
 
@@ -277,56 +277,59 @@ public final class Downloader_Android_Handler {
             extends
                GTask {
 
-      private final int                        _statusCode;
-      private final byte[]                     _data;
-      private IImage                           _image;
-      private final Downloader_Android_Handler _handler;
+      private final int    _statusCode;
+      private final byte[] _data;
+      private IImage       _image;
+
+
+      // private final Downloader_Android_Handler _handler;
 
 
       public ProcessResponseGTask(final int statusCode,
                                   final byte[] data,
-                                  final IImage image,
-                                  final Downloader_Android_Handler handler) {
+                                  final IImage image
+      //final Downloader_Android_Handler handler
+      ) {
          _statusCode = statusCode;
          _data = data;
          _image = image;
-         _handler = handler;
+         //_handler = handler;
       }
 
 
       @Override
       public void run(final G3MContext context) {
-         synchronized (_handler) {
-            final boolean dataIsValid = (_data != null) && (_statusCode == 200);
+         //synchronized (_handler) {
+         final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
-            if (dataIsValid) {
-               for (final Downloader_Android_ListenerEntry entry : _listeners) {
-                  final IImage imageCopy = (_image == null) ? null : _image.shallowCopy();
-                  if (entry.isCanceled()) {
-                     entry.onCanceledDownload(_g3mURL, _data, imageCopy);
+         if (dataIsValid) {
+            for (final Downloader_Android_ListenerEntry entry : _listeners) {
+               final IImage imageCopy = (_image == null) ? null : _image.shallowCopy();
+               if (entry.isCanceled()) {
+                  entry.onCanceledDownload(_g3mURL, _data, imageCopy);
 
-                     entry.onCancel(_g3mURL);
-                  }
-                  else {
-                     entry.onDownload(_g3mURL, _data, imageCopy);
-                  }
-               }
-            }
-            else {
-               final ILogger logger = ILogger.instance();
-               final String msg = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath();
-               if (logger != null) {
-                  logger.logError(TAG + " " + msg);
+                  entry.onCancel(_g3mURL);
                }
                else {
-                  Log.e(TAG, msg);
-               }
-
-               for (final Downloader_Android_ListenerEntry entry : _listeners) {
-                  entry.onError(_g3mURL);
+                  entry.onDownload(_g3mURL, _data, imageCopy);
                }
             }
          }
+         else {
+            final ILogger logger = ILogger.instance();
+            final String msg = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL.getPath();
+            if (logger != null) {
+               logger.logError(TAG + " " + msg);
+            }
+            else {
+               Log.e(TAG, msg);
+            }
+
+            for (final Downloader_Android_ListenerEntry entry : _listeners) {
+               entry.onError(_g3mURL);
+            }
+         }
+         // }
 
          if (_image != null) {
             _image.dispose();

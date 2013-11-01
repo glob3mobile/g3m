@@ -37,7 +37,7 @@ public class MapBooBuilder_Android
       final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
       final boolean saveInBackground = true;
       return new CachedDownloader( //
-               new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
+               new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //
                getStorage(), //
                saveInBackground);
    }
