@@ -33,7 +33,7 @@ public abstract class EffectWithDuration extends Effect
   }
 
 
-  //  virtual void stop(const G3MRenderContext *rc,
+  //  virtual void stop(const G3MRenderContext* rc,
   //                    const TimeInterval& when) {
   //
   //  }
