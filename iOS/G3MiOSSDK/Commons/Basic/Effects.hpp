@@ -120,7 +120,7 @@ protected:
     if (percent < 0) return 0;
     return percent;
   }
-  
+
   double getAlpha(const TimeInterval& when) const {
     const double percent = percentDone(when);
     return _linearTiming ? percent : pace(percent);
@@ -213,9 +213,10 @@ private:
                               const TimeInterval& when);
 
 public:
-  EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
-
-  };
+  EffectsScheduler() :
+  _effectsRuns(std::vector<EffectRun*>())
+  {
+  }
 
   void doOneCyle(const G3MRenderContext* rc);
 
@@ -240,9 +241,9 @@ public:
   }
 
   void onPause(const G3MContext* context) {
-
+    
   }
-
+  
   void onDestroy(const G3MContext* context) {
     
   }
