@@ -64,7 +64,6 @@ public class EffectsScheduler
   public EffectsScheduler()
   {
      _effectsRuns = new java.util.ArrayList<EffectRun>();
-
   }
 
   public final void doOneCyle(G3MRenderContext rc)
