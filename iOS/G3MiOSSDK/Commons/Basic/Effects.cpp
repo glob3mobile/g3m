@@ -37,7 +37,8 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const int indexToRemove = indicesToRemove[i];
-    delete _effectsRuns[indexToRemove];
+    EffectRun* effectRun = _effectsRuns[indexToRemove];
+    delete effectRun;
     
 #ifdef C_CODE
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);

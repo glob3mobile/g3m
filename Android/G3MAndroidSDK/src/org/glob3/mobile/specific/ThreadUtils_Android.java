@@ -33,7 +33,8 @@ public final class ThreadUtils_Android
       _widgetAndroid = widgetAndroid;
 
       final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
-      _backgroundExecutor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.DAYS, workQueue);
+      //      _backgroundExecutor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.DAYS, workQueue);
+      _backgroundExecutor = new ThreadPoolExecutor(4, 4, 1, TimeUnit.DAYS, workQueue);
    }
 
 
