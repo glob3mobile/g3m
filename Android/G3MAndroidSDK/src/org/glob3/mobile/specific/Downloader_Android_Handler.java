@@ -279,7 +279,7 @@ public final class Downloader_Android_Handler {
 
       private final int                        _statusCode;
       private final byte[]                     _data;
-      private final IImage                     _image;
+      private IImage                           _image;
       private final Downloader_Android_Handler _handler;
 
 
@@ -301,13 +301,14 @@ public final class Downloader_Android_Handler {
 
             if (dataIsValid) {
                for (final Downloader_Android_ListenerEntry entry : _listeners) {
+                  final IImage imageCopy = (_image == null) ? null : _image.shallowCopy();
                   if (entry.isCanceled()) {
-                     entry.onCanceledDownload(_g3mURL, _data, _image);
+                     entry.onCanceledDownload(_g3mURL, _data, imageCopy);
 
                      entry.onCancel(_g3mURL);
                   }
                   else {
-                     entry.onDownload(_g3mURL, _data, _image);
+                     entry.onDownload(_g3mURL, _data, imageCopy);
                   }
                }
             }
@@ -326,6 +327,13 @@ public final class Downloader_Android_Handler {
                }
             }
          }
+
+         if (_image != null) {
+            _image.dispose();
+            _image = null;
+         }
       }
    }
+
+
 }
