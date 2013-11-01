@@ -775,7 +775,7 @@ public:
     _builder->start();
   }
 
-  bool isCanceled(const G3MRenderContext *rc) {
+  bool isCanceled(const G3MRenderContext* rc) {
     return _builder->isCanceled();
   }
 };
@@ -925,7 +925,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   LayerSet* layerSet) {
 }
 
-bool MultiLayerTileTexturizer::isReady(const G3MRenderContext *rc,
+bool MultiLayerTileTexturizer::isReady(const G3MRenderContext* rc,
                                        LayerSet* layerSet) {
   if (layerSet != NULL) {
     return layerSet->isReady();

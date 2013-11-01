@@ -10,7 +10,7 @@
 
 #include "Shape.hpp"
 
-void ShapeFullPositionEffect::doStep(const G3MRenderContext *rc,
+void ShapeFullPositionEffect::doStep(const G3MRenderContext* rc,
                                      const TimeInterval& when) {
   const double alpha = getAlpha(when);
   
@@ -45,7 +45,7 @@ void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
   }
 }
 
-void ShapeFullPositionEffect::stop(const G3MRenderContext *rc,
+void ShapeFullPositionEffect::stop(const G3MRenderContext* rc,
                                    const TimeInterval& when) {
   _shape->setPosition( new Geodetic3D(_toPosition) );
   if (!_toPitch.isNan()) {

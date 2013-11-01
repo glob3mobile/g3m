@@ -141,7 +141,7 @@ private:
   PlanetTileTessellatorData* _tessellatorData;
 
   Box* _tileBoundingVolume;
-  Box* getTileBoundingVolume(const G3MRenderContext *rc);
+  Box* getTileBoundingVolume(const G3MRenderContext* rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
@@ -152,7 +152,7 @@ private:
 
   const PlanetRenderer* _planetRenderer;
 
-  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext* rc,
                                           ElevationDataProvider* elevationDataProvider,
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,

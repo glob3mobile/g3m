@@ -131,16 +131,16 @@ public:
   _renderer(renderer)
   { }
   
-  virtual void start(const G3MRenderContext *rc,
+  virtual void start(const G3MRenderContext* rc,
                      const TimeInterval& when) {}
   
-  virtual void doStep(const G3MRenderContext *rc,
+  virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     EffectWithForce::doStep(rc, when);
     _renderer->incDegrees(3);
   }
   
-  virtual void stop(const G3MRenderContext *rc,
+  virtual void stop(const G3MRenderContext* rc,
                     const TimeInterval& when) { }
   
   virtual void cancel(const TimeInterval& when) {

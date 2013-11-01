@@ -81,7 +81,7 @@ public:
   {
   }
 
-  virtual void doStep(const G3MRenderContext *rc,
+  virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     const double alpha = getAlpha(when);
 
@@ -124,7 +124,7 @@ public:
 
   }
 
-  virtual void stop(const G3MRenderContext *rc,
+  virtual void stop(const G3MRenderContext* rc,
                     const TimeInterval& when) {
     Camera* camera = rc->getNextCamera();
     camera->setGeodeticPosition(_toPosition);
@@ -136,7 +136,7 @@ public:
     // do nothing, just leave the effect in the intermediate state
   }
 
-  virtual void start(const G3MRenderContext *rc,
+  virtual void start(const G3MRenderContext* rc,
                      const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
 

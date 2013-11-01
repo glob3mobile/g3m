@@ -28,14 +28,14 @@ public:
   virtual ~RotateWithAxisEffect() {
   }
 
-  void start(const G3MRenderContext *rc,
+  void start(const G3MRenderContext* rc,
              const TimeInterval& when) {
   }
 
-  void doStep(const G3MRenderContext *rc,
+  void doStep(const G3MRenderContext* rc,
               const TimeInterval& when);
 
-  void stop(const G3MRenderContext *rc,
+  void stop(const G3MRenderContext* rc,
             const TimeInterval& when);
 
   void cancel(const TimeInterval& when) {
@@ -51,14 +51,14 @@ public:
 
   SingleTranslationEffect(const Vector3D& desp);
 
-  void start(const G3MRenderContext *rc,
+  void start(const G3MRenderContext* rc,
              const TimeInterval& when) {
   }
 
-  void doStep(const G3MRenderContext *rc,
+  void doStep(const G3MRenderContext* rc,
               const TimeInterval& when);
 
-  void stop(const G3MRenderContext *rc,
+  void stop(const G3MRenderContext* rc,
             const TimeInterval& when);
 
   void cancel(const TimeInterval& when) {
@@ -81,13 +81,13 @@ public:
                           double distance,
                           const bool linearTiming=false);
 
-  void start(const G3MRenderContext *rc,
+  void start(const G3MRenderContext* rc,
              const TimeInterval& when);
 
-  void doStep(const G3MRenderContext *rc,
+  void doStep(const G3MRenderContext* rc,
               const TimeInterval& when);
 
-  void stop(const G3MRenderContext *rc,
+  void stop(const G3MRenderContext* rc,
             const TimeInterval& when);
 
   void cancel(const TimeInterval& when) {
@@ -109,13 +109,13 @@ public:
                              double distance,
                              const bool linearTiming=false);
 
-  void start(const G3MRenderContext *rc,
+  void start(const G3MRenderContext* rc,
              const TimeInterval& when);
 
-  void doStep(const G3MRenderContext *rc,
+  void doStep(const G3MRenderContext* rc,
               const TimeInterval& when);
 
-  void stop(const G3MRenderContext *rc,
+  void stop(const G3MRenderContext* rc,
             const TimeInterval& when);
 
   void cancel(const TimeInterval& when) {}

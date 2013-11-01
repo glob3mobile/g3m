@@ -213,7 +213,7 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   return _debugMesh;
 }
 
-Box* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
+Box* Tile::getTileBoundingVolume(const G3MRenderContext* rc) {
   if (_tileBoundingVolume == NULL) {
     const Planet* planet = rc->getPlanet();
 
@@ -271,7 +271,7 @@ Box* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
   return _tileBoundingVolume;
 }
 
-const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext *rc,
+const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
                                               ElevationDataProvider* elevationDataProvider,
                                               const TileTessellator* tessellator,
                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -290,7 +290,7 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext *rc,
   return _boundingVolume;
 }
 
-bool Tile::isVisible(const G3MRenderContext *rc,
+bool Tile::isVisible(const G3MRenderContext* rc,
                      const Planet* planet,
                      const Vector3D& cameraNormalizedPosition,
                      double cameraAngle2HorizonInRadians,
@@ -343,7 +343,7 @@ bool Tile::isVisible(const G3MRenderContext *rc,
           boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
 }
 
-bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
+bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                TileTexturizer* texturizer,
                                const TilesRenderParameters* tilesRenderParameters,
@@ -476,7 +476,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
   }
 }
 
-void Tile::rawRender(const G3MRenderContext *rc,
+void Tile::rawRender(const G3MRenderContext* rc,
                      const GLState* glState,
                      TileTexturizer* texturizer,
                      ElevationDataProvider* elevationDataProvider,
