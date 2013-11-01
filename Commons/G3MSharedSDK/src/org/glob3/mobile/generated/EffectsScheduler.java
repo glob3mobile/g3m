@@ -133,8 +133,9 @@ public class EffectsScheduler
     for (int i = indicesToRemove.size() - 1; i >= 0; i--)
     {
       final int indexToRemove = indicesToRemove.get(i);
-      if (_effectsRuns.get(indexToRemove) != null)
-         _effectsRuns.get(indexToRemove).dispose();
+      EffectRun effectRun = _effectsRuns.get(indexToRemove);
+      if (effectRun != null)
+         effectRun.dispose();
   
       _effectsRuns.remove(indexToRemove);
     }
