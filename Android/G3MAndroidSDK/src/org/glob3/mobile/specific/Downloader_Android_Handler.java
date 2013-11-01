@@ -222,7 +222,7 @@ public final class Downloader_Android_Handler {
       // inform downloader to remove myself, to avoid adding new Listener
       downloader.removeDownloadingHandlerForUrl(_g3mURL.getPath());
 
-      final IImage image = (!_hasImageListeners || (data == null)) ? null : decodeImage(data, _g3mURL);
+      final IImage image = (_hasImageListeners && (data != null)) ? decodeImage(data, _g3mURL) : null;
       context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image), true);
    }
 
