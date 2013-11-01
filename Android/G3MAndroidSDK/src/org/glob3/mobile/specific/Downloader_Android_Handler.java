@@ -27,21 +27,21 @@ import android.util.Log;
 
 public final class Downloader_Android_Handler {
 
-   private static BitmapFactory.Options                      _options;
-   private static byte[]                                     _temp_storage = new byte[128 * 1024];
+   private static final int                                  DEFAULT_BUFFER_SIZE = 16 * 1024;
 
+   private static BitmapFactory.Options                      _bitmapFactoryOptions;
    static {
-      _options = new BitmapFactory.Options();
-      _options.inTempStorage = _temp_storage;
+      _bitmapFactoryOptions = new BitmapFactory.Options();
+      _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
 
 
-   private final static String                               TAG           = "Downloader_Android_Handler";
+   private final static String                               TAG                 = "Downloader_Android_Handler";
 
    private long                                              _priority;
    private final URL                                         _g3mURL;
    private java.net.URL                                      _javaURL;
-   private final ArrayList<Downloader_Android_ListenerEntry> _listeners    = new ArrayList<Downloader_Android_ListenerEntry>();
+   private final ArrayList<Downloader_Android_ListenerEntry> _listeners          = new ArrayList<Downloader_Android_ListenerEntry>();
 
    private boolean                                           _hasImageListeners;
 
@@ -56,8 +56,7 @@ public final class Downloader_Android_Handler {
       try {
          _javaURL = new java.net.URL(url.getPath());
 
-         final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, requestId);
-         _listeners.add(entry);
+         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, requestId));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -84,8 +83,7 @@ public final class Downloader_Android_Handler {
       try {
          _javaURL = new java.net.URL(url.getPath());
 
-         final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, requestId);
-         _listeners.add(entry);
+         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, requestId));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -232,7 +230,7 @@ public final class Downloader_Android_Handler {
    private static IImage decodeImage(final byte[] data,
                                      final URL url) {
       // final long start = System.currentTimeMillis();
-      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _bitmapFactoryOptions);
       // ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
       if (bitmap == null) {
@@ -250,12 +248,11 @@ public final class Downloader_Android_Handler {
 
       try {
          final BufferedInputStream bis = new BufferedInputStream(is);
-         final boolean hasContentLength = contentLength > 0;
-         final ByteArrayOutputStream baos = hasContentLength ? new ByteArrayOutputStream(contentLength)
-                                                            : new ByteArrayOutputStream(4096);
-         final byte[] buffer = new byte[4096];
-         int length = 0;
 
+         final int size = (contentLength > 0) ? contentLength : DEFAULT_BUFFER_SIZE;
+         final ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
+         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+         int length;
          while ((length = bis.read(buffer)) > 0) {
             baos.write(buffer, 0, length);
          }

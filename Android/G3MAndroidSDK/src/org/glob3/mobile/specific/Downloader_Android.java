@@ -291,8 +291,8 @@ public final class Downloader_Android
 
 
    Downloader_Android_Handler getHandlerToRun() {
-      long selectedPriority = Long.MIN_VALUE;
       Downloader_Android_Handler selectedHandler = null;
+      long selectedPriority = Long.MIN_VALUE;
       String selectedURL = null;
 
       synchronized (this) {
@@ -301,9 +301,6 @@ public final class Downloader_Android
             return null;
          }
 
-         //         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
-         //
-         //         while (it.hasNext()) {
          for (final Map.Entry<String, Downloader_Android_Handler> e : _queuedHandlers.entrySet()) {
             //            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
             final String url = e.getKey();

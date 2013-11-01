@@ -56,6 +56,7 @@ public final class Downloader_Android_ListenerEntry {
       if (_bufferListener != null) {
          _bufferListener.onCancel(url);
       }
+
       if (_imageListener != null) {
          _imageListener.onCancel(url);
       }
@@ -66,6 +67,7 @@ public final class Downloader_Android_ListenerEntry {
       if (_bufferListener != null) {
          _bufferListener.onError(url);
       }
+
       if (_imageListener != null) {
          _imageListener.onError(url);
       }
@@ -79,6 +81,7 @@ public final class Downloader_Android_ListenerEntry {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
          _bufferListener.onDownload(url, buffer, false);
       }
+
       if (_imageListener != null) {
          if (image == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
@@ -98,6 +101,7 @@ public final class Downloader_Android_ListenerEntry {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
          _bufferListener.onCanceledDownload(url, buffer, false);
       }
+
       if (_imageListener != null) {
          if (image == null) {
             ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
@@ -108,5 +112,6 @@ public final class Downloader_Android_ListenerEntry {
          }
       }
    }
+
 
 }
