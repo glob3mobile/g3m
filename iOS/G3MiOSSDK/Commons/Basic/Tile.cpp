@@ -899,7 +899,7 @@ const std::string Tile::description() const {
 //  return _maxHeight;
 //}
 
-#pragma mark ElevationData methods
+//#pragma mark ElevationData methods
 
 void Tile::setElevationData(ElevationData* ed, int level) {
   if (_elevationDataLevel < level) {
