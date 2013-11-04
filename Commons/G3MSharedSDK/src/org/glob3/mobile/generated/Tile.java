@@ -483,9 +483,6 @@ public class Tile
   private ITexturizerData _texturizerData;
   private PlanetTileTessellatorData _tessellatorData;
 
-//  Box* _tileBoundingVolume;
-//  Box* getTileBoundingVolume(const G3MRenderContext *rc);
-
   private int _elevationDataLevel;
   private ElevationData _elevationData;
   private boolean _mustActualizeMeshDueToNewElevationData;
@@ -553,6 +550,7 @@ public class Tile
   //  }
   //  return _tileBoundingVolume;
   //}
+  
   
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
