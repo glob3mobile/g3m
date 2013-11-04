@@ -434,25 +434,32 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
     int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
   
-    double factor = 5;
-    switch (_tilesRenderParameters._quality)
-    {
-      case QUALITY_HIGH:
-        factor = 1.5;
-        break;
-      case QUALITY_MEDIUM:
-        factor = 3;
-        break;
-        //case QUALITY_LOW:
-      default:
-        factor = 5;
-        break;
-    }
+  //  double factor = 5;
+  //  switch (_tilesRenderParameters->_quality) {
+  //    case QUALITY_HIGH:
+  //      factor = 1.5;
+  //      break;
+  //    case QUALITY_MEDIUM:
+  //      factor = 3;
+  //      break;
+  //      //case QUALITY_LOW:
+  //    default:
+  //      factor = 5;
+  //      break;
+  //  }
   
-    final double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
+  
+  
+    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+    final double correctionFactor = (factor * deviceQualityFactor) / deviceInfo.getDPI();
+  
+    // dpiFactor;
   
     texWidth *= correctionFactor;
     texHeight *= correctionFactor;
+  
+    final double texWidthSquared = texWidth * texWidth;
+    final double texHeightSquared = texHeight * texHeight;
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
@@ -463,7 +470,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidth, texHeight); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared); // if first render, force full render
       }
     }
     else

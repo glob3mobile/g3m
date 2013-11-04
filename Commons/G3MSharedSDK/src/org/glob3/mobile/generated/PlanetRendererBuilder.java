@@ -32,7 +32,9 @@ public class PlanetRendererBuilder
   private boolean _useTilesSplitBudget;
   private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
-  private Quality _quality;
+
+  private double _texturePixelsPerInch;
+
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
@@ -215,7 +217,7 @@ public class PlanetRendererBuilder
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
+    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getTexturePixelsPerInch());
   }
   private TileTessellator createTileTessellator()
   {
@@ -246,13 +248,13 @@ public class PlanetRendererBuilder
   }
 
   public PlanetRendererBuilder()
+  //_quality(QUALITY_LOW),
   {
      _showStatistics = false;
      _renderDebug = false;
      _useTilesSplitBudget = true;
      _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
-     _quality = Quality.QUALITY_LOW;
      _parameters = null;
      _layerSet = null;
      _texturizer = null;
@@ -263,6 +265,7 @@ public class PlanetRendererBuilder
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
+     _texturePixelsPerInch = 1.0;
   }
   public void dispose()
   {
@@ -428,13 +431,16 @@ public class PlanetRendererBuilder
     return geoTileRasterizer;
   }
 
-  public final Quality getQuality()
+//  Quality getQuality() const;
+//  void setQuality(Quality quality);
+
+  public final void setTexturePixelsPerInch(double d)
   {
-    return _quality;
+    _texturePixelsPerInch = d;
   }
-  public final void setQuality(Quality quality)
+  public final double getTexturePixelsPerInch()
   {
-    _quality = quality;
+    return _texturePixelsPerInch;
   }
 
 }

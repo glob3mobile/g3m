@@ -307,40 +307,38 @@ public class Tile
   
     final Planet planet = rc.getPlanet();
   
-    if (_northArcSegmentRatioSquared == 0 || _eastArcSegmentRatioSquared == 0 || _southArcSegmentRatioSquared == 0 || _westArcSegmentRatioSquared == 0)
+    if ((_northArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {
       prepareTestLODData(planet);
     }
   
     final Camera camera = rc.getCurrentCamera();
-    Vector2F pnw = camera.point2Pixel(_cornerNW);
-    Vector2F pne = camera.point2Pixel(_cornerNE);
-    Vector2F psw = camera.point2Pixel(_cornerSW);
-    Vector2F pse = camera.point2Pixel(_cornerSE);
+    final Vector2F pnw = camera.point2Pixel(_cornerNW);
+    final Vector2F pne = camera.point2Pixel(_cornerNE);
+    final Vector2F psw = camera.point2Pixel(_cornerSW);
+    final Vector2F pse = camera.point2Pixel(_cornerSE);
   
-    double southLinearDistSquared = psw.squaredDistanceTo(pse);
-    double eastLinearDistSquared = pse.squaredDistanceTo(pne);
-    double northLinearDistSquared = pnw.squaredDistanceTo(pne);
-    double westLinearDistSquared = psw.squaredDistanceTo(pnw);
+    final double southLinearDistSquared = psw.squaredDistanceTo(pse);
+    final double eastLinearDistSquared = pse.squaredDistanceTo(pne);
+    final double northLinearDistSquared = pnw.squaredDistanceTo(pne);
+    final double westLinearDistSquared = psw.squaredDistanceTo(pnw);
   
-    double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
-    double eastArcDistSquared = eastLinearDistSquared * _eastArcSegmentRatioSquared;
-    double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
-    double westArcDistSquared = westLinearDistSquared * _westArcSegmentRatioSquared;
+    final double southArcDistSquared = southLinearDistSquared * _southArcSegmentRatioSquared;
+    final double eastArcDistSquared = eastLinearDistSquared * _eastArcSegmentRatioSquared;
+    final double northArcDistSquared = northLinearDistSquared * _northArcSegmentRatioSquared;
+    final double westArcDistSquared = westLinearDistSquared * _westArcSegmentRatioSquared;
   
-    double longestWidthSquared = southArcDistSquared;
-    if (northArcDistSquared > longestWidthSquared)
-    {
-      longestWidthSquared = northArcDistSquared;
-    }
+    final double longestWidthSquared = (northArcDistSquared > southArcDistSquared) ? northArcDistSquared : southArcDistSquared;
+    final double longestHeightSquared = (westArcDistSquared > eastArcDistSquared) ? westArcDistSquared : eastArcDistSquared;
   
-    double longestHeightSquared = eastArcDistSquared;
-    if (westArcDistSquared > longestHeightSquared)
-    {
-      longestHeightSquared = westArcDistSquared;
-    }
+    _lastLodTest = ((longestWidthSquared <= texWidthSquared) && (longestHeightSquared <= texHeightSquared));
   
-    _lastLodTest = (longestWidthSquared <= texWidthSquared) && (longestHeightSquared <= texHeightSquared);
+  //  if (_lastLodTest){
+  //    printf("LD: %f, %f, %f, %f\n", sqrt(southLinearDistSquared),
+  //           sqrt(eastLinearDistSquared),
+  //           sqrt(northLinearDistSquared),
+  //           sqrt(westLinearDistSquared));
+  //  }
   
     return _lastLodTest;
   }

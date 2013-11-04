@@ -45,9 +45,11 @@ public abstract class MapBooBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-    final Quality quality = Quality.QUALITY_LOW;
+  //  const Quality quality = QUALITY_LOW;
   
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
+    double texturePixelsPerInch = 512;
+  
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, texturePixelsPerInch);
   
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
