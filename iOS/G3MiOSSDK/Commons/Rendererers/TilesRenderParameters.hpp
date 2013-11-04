@@ -40,19 +40,17 @@ public:
   _incrementalTileQuality(incrementalTileQuality),
   _quality(quality)
   {
-
     switch (quality) {
       case QUALITY_LOW:
-        _texturePixelsPerInch = 256;
-        break;
-      case QUALITY_MEDIUM:
         _texturePixelsPerInch = 512;
         break;
-      default:
-        _texturePixelsPerInch = 1024;
+      case QUALITY_MEDIUM:
+        _texturePixelsPerInch = 256;
+        break;
+      default: //HIGH
+        _texturePixelsPerInch = 128;
         break;
     }
-
   }
 
   ~TilesRenderParameters() {
