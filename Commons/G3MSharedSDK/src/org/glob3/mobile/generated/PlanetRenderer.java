@@ -420,7 +420,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _statistics.clear();
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-    final float dpiFactor = deviceInfo.getPixelsInMM(0.1f);
+  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
     final float deviceQualityFactor = deviceInfo.getQualityFactor();
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
