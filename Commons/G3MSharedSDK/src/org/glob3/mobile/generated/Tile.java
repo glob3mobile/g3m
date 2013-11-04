@@ -977,7 +977,7 @@ public class Tile
   
   ///#pragma mark ElevationData methods
   
-  public final void Tile.setElevationData(ElevationData ed, int level)
+  public final void setElevationData(ElevationData ed, int level)
   {
     if (_elevationDataLevel < level)
     {

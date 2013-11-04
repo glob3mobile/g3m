@@ -593,7 +593,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _statistics.clear();
 
   const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+//  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
   const float deviceQualityFactor = deviceInfo->getQualityFactor();
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
