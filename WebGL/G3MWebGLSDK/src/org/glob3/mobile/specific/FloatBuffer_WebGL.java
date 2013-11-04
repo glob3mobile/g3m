@@ -18,6 +18,10 @@ public final class FloatBuffer_WebGL
 
    private JavaScriptObject       _webGLBuffer     = null;
    private JavaScriptObject       _gl              = null;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
@@ -223,5 +227,11 @@ public final class FloatBuffer_WebGL
    public String description() {
       return "FloatBuffer_WebGL(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 }

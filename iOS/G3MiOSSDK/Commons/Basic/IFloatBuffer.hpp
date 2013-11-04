@@ -13,6 +13,8 @@
 
 class IFloatBuffer : public IBuffer {
 public:
+
+  IFloatBuffer(): IBuffer(){}
   
   virtual ~IFloatBuffer() {
   }

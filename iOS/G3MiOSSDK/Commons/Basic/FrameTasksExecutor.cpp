@@ -48,7 +48,7 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
   return rc->getFrameStartTimer()->elapsedTime().lowerThan(_maxTimePerFrame);
 }
 
-void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext *rc) {
+void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
   
 //  int canceledCounter = 0;
   std::list<FrameTask*>::iterator i = _preRenderTasks.begin();

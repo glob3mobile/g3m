@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public abstract class Effect
 {
 
-  protected final double pace(double f)
+  protected static double pace(double f)
   {
     if (f < 0)
        return 0;
@@ -18,13 +18,13 @@ public abstract class Effect
     return result;
   }
 
-  protected final double sigmoid(double x)
+  protected static double sigmoid(double x)
   {
     x = 12.0 *x - 6.0;
     return (1.0 / (1.0 + IMathUtils.instance().exp(-1.0 * x)));
   }
 
-  protected final double gently(double x, double lower, double upper)
+  protected static double gently(double x, double lower, double upper)
   {
     final double uperSquared = upper * upper;
     final double lowerPerUper = lower * upper;

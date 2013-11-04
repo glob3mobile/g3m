@@ -29,7 +29,7 @@ public final class Downloader_Android_WorkerThread
 
       setName("Downloader_WorkerThread #" + _id);
 
-      this.setPriority(Thread.NORM_PRIORITY + 1);
+      setPriority(Thread.NORM_PRIORITY - 1);
    }
 
 

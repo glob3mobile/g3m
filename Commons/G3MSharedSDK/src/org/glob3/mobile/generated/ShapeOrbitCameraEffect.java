@@ -54,14 +54,12 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
   {
     final double alpha = getAlpha(when);
   
-    final Geodetic3D center = _shape.getPosition();
-  
     IMathUtils mu = IMathUtils.instance();
     final double distance = mu.linearInterpolation(_fromDistance, _toDistance, alpha);
     final double azimuthInRadians = mu.linearInterpolation(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
     final double altitudeInRadians = mu.linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);
   
-    rc.getNextCamera().setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
+    rc.getNextCamera().setPointOfView(_shape.getPosition(), distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
   }
 
   public final void cancel(TimeInterval when)
@@ -71,9 +69,7 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-    final Geodetic3D center = _shape.getPosition();
-  
-    rc.getNextCamera().setPointOfView(center, _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));
+    rc.getNextCamera().setPointOfView(_shape.getPosition(), _toDistance, Angle.fromRadians(_toAzimuthInRadians), Angle.fromRadians(_toAltitudeInRadians));
   
   }
 

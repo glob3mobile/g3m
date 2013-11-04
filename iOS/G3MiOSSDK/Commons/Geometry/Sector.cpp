@@ -77,7 +77,7 @@ Sector::~Sector() {
 }
 
 
-bool Sector::isBackOriented(const G3MRenderContext *rc,
+bool Sector::isBackOriented(const G3MRenderContext* rc,
                             double minHeight,
                             const Planet* planet,
                             const Vector3D& cameraNormalizedPosition,

@@ -110,8 +110,12 @@ public class CameraAnimation
       };
 
 
-      eifelTowerRenderer.loadBSONSceneJS(new URL("file:///eifeltower.bson", false), "file:///images/eifel/", false,
-               new Geodetic3D(latitudeP, longitudeP, 0), AltitudeMode.ABSOLUTE, Plistener);
+      eifelTowerRenderer.loadBSONSceneJS( //
+               new URL("file:///eifeltower.bson", false), //
+               "file:///images/eifel/", //
+               true, // isTransparent
+               new Geodetic3D(latitudeP, longitudeP, 0), //
+               AltitudeMode.ABSOLUTE, Plistener);
 
 
       final ShapesRenderer arcRenderer = new ShapesRenderer();

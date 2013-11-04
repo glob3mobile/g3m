@@ -22,7 +22,7 @@ public:
 
   }
   
-  virtual bool isCanceled(const G3MRenderContext *rc) = 0;
+  virtual bool isCanceled(const G3MRenderContext* rc) = 0;
   
   virtual void execute(const G3MRenderContext* rc) = 0;
   

@@ -20,7 +20,10 @@ package org.glob3.mobile.generated;
 
 public interface IBuffer
 {
+
   void dispose();
+
+  long getID();
 
   /**
    Answer the size (the count of elements) of the buffer

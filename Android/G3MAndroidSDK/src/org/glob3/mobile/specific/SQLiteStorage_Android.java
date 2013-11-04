@@ -140,20 +140,20 @@ public final class SQLiteStorage_Android
                                      final String name,
                                      final byte[] contents,
                                      final TimeInterval timeToExpires) {
-      final ContentValues values = new ContentValues();
+      final ContentValues values = new ContentValues(3);
       values.put("name", name);
       values.put("contents", contents);
       final long expiration = System.currentTimeMillis() + timeToExpires.milliseconds();
       values.put("expiration", Long.toString(expiration));
 
-      if (_writeDB != null) {
-         final long r = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-         if (r == -1) {
-            ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
-         }
+      if (_writeDB == null) {
+         ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\". _writeDB not available\n", _databaseName);
       }
       else {
-         ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\". _writeDB not available\n", _databaseName);
+         final long rowID = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+         if (rowID == -1) {
+            ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
+         }
       }
    }
 

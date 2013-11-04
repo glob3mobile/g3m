@@ -27,7 +27,7 @@ public:
   virtual ~TileTexturizer() {
   }
 
-  virtual bool isReady(const G3MRenderContext *rc,
+  virtual bool isReady(const G3MRenderContext* rc,
                        LayerSet* layerSet) = 0;
 
   virtual void initialize(const G3MContext* context,

@@ -22,23 +22,24 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   std::vector<int> indicesToRemove;
   const TimeInterval now = _timer->now();
 
-  for (int i = 0; i < _effectsRuns.size(); i++) {
+  const int size = _effectsRuns.size();
+  for (int i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
-    
-    if (effectRun->_started == true) {
-      if (effectRun->_target == target) {
+
+    if (effectRun->_target == target) {
+      if (effectRun->_started) {
         effectRun->_effect->cancel(now);
-        
-        indicesToRemove.push_back(i);
       }
+      indicesToRemove.push_back(i);
     }
   }
-  
+
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const int indexToRemove = indicesToRemove[i];
-    delete _effectsRuns[indexToRemove];
-    
+    EffectRun* effectRun = _effectsRuns[indexToRemove];
+    delete effectRun;
+
 #ifdef C_CODE
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
 #endif
@@ -49,26 +50,29 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
 
 }
 
-void EffectsScheduler::processFinishedEffects(const G3MRenderContext *rc,
+void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
                                               const TimeInterval& when) {
   std::vector<int> indicesToRemove;
-  for (int i = 0; i < _effectsRuns.size(); i++) {
+  const int size = _effectsRuns.size();
+  for (int i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
-    
-    if (effectRun->_started == true) {
-      if (effectRun->_effect->isDone(rc, when)) {
-        effectRun->_effect->stop(rc, when);
-        
+
+    if (effectRun->_started) {
+      Effect* effect = effectRun->_effect;
+      if (effect->isDone(rc, when)) {
+        effect->stop(rc, when);
+
         indicesToRemove.push_back(i);
       }
     }
   }
-  
+
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const int indexToRemove = indicesToRemove[i];
-    delete _effectsRuns[indexToRemove];
-    
+    EffectRun* effectRun = _effectsRuns[indexToRemove];
+    delete effectRun;
+
 #ifdef C_CODE
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
 #endif
@@ -78,22 +82,22 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext *rc,
   }
 }
 
-void EffectsScheduler::doOneCyle(const G3MRenderContext *rc) {
+void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
   const TimeInterval now = _timer->now();
-  
-  
+
   processFinishedEffects(rc, now);
-  
-  
-  for (int i = 0; i < _effectsRuns.size(); i++) {
+
+  const int size = _effectsRuns.size();
+  for (int i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
-    
-    if (effectRun->_started == false) {
-      effectRun->_effect->start(rc, now);
+    Effect* effect = effectRun->_effect;
+
+    if (!effectRun->_started) {
+      effect->start(rc, now);
       effectRun->_started = true;
     }
-    
-    effectRun->_effect->doStep(rc, now);
+
+    effect->doStep(rc, now);
   }
 }
 

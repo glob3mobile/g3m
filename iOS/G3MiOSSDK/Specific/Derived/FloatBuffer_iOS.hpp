@@ -21,6 +21,11 @@ private:
   float*    _values;
   int       _timestamp;
 
+  //ID
+  const long long _id;
+  static long long _nextID;
+
+  //VBO
   static GLuint     _boundVertexBuffer;
   mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
@@ -33,11 +38,16 @@ public:
   _values(new float[size]),
   _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
-  _vertexBufferCreated(false)
+  _vertexBufferCreated(false),
+  _id(_nextID++)
   {
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
+  }
+
+  long long getID() const{
+    return _id;
   }
   
   FloatBuffer_iOS(float f0,
@@ -60,7 +70,8 @@ public:
   _timestamp(0),
   _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
-  _vertexBufferCreated(false)
+  _vertexBufferCreated(false),
+  _id(_nextID)
   {
     _values = new float[16];
     _values[ 0] = f0;

@@ -12,6 +12,10 @@ public class ShortBuffer_Android
             IShortBuffer {
    private final ShortBuffer _buffer;
    private int               _timestamp;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    //   private boolean           _hasGLBuffer = false;
@@ -88,6 +92,12 @@ public class ShortBuffer_Android
    public String description() {
       return "ShortBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 
    //   @Override
