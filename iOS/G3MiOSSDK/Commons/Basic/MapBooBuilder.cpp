@@ -489,15 +489,13 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-//  const Quality quality = QUALITY_LOW;
-
-  double texturePixelsPerInch = 512;
+  const Quality quality = QUALITY_LOW;
 
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
                                                                       useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
                                                                       incrementalTileQuality,
-                                                                      texturePixelsPerInch);
+                                                                      quality);
 
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
@@ -676,7 +674,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                         maxLevel,
                                         TimeInterval::fromDays(30));
   }
-  
+
   return result;
 }
 
@@ -823,9 +821,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-//    return NULL;
-//  }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
 
   return new MapBoo_Scene(jsonObject->getAsString("id", ""),
                           jsonObject->getAsString("name", ""),

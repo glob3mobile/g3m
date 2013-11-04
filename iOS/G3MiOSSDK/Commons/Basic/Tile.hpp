@@ -297,8 +297,8 @@ public:
                    ElevationDataProvider* elevationDataProvider);
 
   
-  double getMinHeight() const;
-  double getMaxHeight() const;
+//  double getMinHeight() const;
+//  double getMaxHeight() const;
 
   const std::string description() const;
 

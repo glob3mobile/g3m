@@ -1444,15 +1444,13 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-//  const Quality quality = QUALITY_LOW;
-
-  double texturePixelsPerInch = 512;
+  const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
                                    forceFirstLevelTilesRenderOnStart,
                                    incrementalTileQuality,
-                                   texturePixelsPerInch);
+                                   quality);
 }
 
 - (PlanetRenderer*) createPlanetRenderer: (TilesRenderParameters*) parameters

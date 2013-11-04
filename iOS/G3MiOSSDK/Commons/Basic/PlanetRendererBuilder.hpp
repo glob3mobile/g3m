@@ -28,16 +28,14 @@ private:
   bool _useTilesSplitBudget;
   bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
-
-  double _texturePixelsPerInch;
-
+  Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
-  
+
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
   TileRasterizer* getTileRasterizer();
@@ -92,12 +90,9 @@ public:
 
   GEOTileRasterizer* createGEOTileRasterizer();
 
-//  Quality getQuality() const;
-//  void setQuality(Quality quality);
-
-  void setTexturePixelsPerInch(double d);
-  double getTexturePixelsPerInch() const;
-
+  Quality getQuality() const;
+  void setQuality(Quality quality);
+  
 };
 
 #endif
