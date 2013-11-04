@@ -623,8 +623,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
 
-  texWidth *= correctionFactor;
-  texHeight *= correctionFactor;
+//  texWidth *= correctionFactor;
+//  texHeight *= correctionFactor;
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
