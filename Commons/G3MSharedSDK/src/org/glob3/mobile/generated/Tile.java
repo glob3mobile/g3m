@@ -975,8 +975,7 @@ public class Tile
   //  return _maxHeight;
   //}
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark ElevationData methods
+  ///#pragma mark ElevationData methods
   
   public final void Tile.setElevationData(ElevationData ed, int level)
   {
