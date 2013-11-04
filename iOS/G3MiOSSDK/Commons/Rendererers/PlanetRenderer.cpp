@@ -607,24 +607,28 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
   int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
-  double factor = 5;
-  switch (_tilesRenderParameters->_quality) {
-    case QUALITY_HIGH:
-      factor = 1.5;
-      break;
-    case QUALITY_MEDIUM:
-      factor = 3;
-      break;
-      //case QUALITY_LOW:
-    default:
-      factor = 5;
-      break;
-  }
+//  double factor = 5;
+//  switch (_tilesRenderParameters->_quality) {
+//    case QUALITY_HIGH:
+//      factor = 1.5;
+//      break;
+//    case QUALITY_MEDIUM:
+//      factor = 3;
+//      break;
+//      //case QUALITY_LOW:
+//    default:
+//      factor = 5;
+//      break;
+//  }
+  const double factor = _tilesRenderParameters->_texturePixelsPerInch;
 
   const double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
 
-//  texWidth *= correctionFactor;
-//  texHeight *= correctionFactor;
+  texWidth *= correctionFactor;
+  texHeight *= correctionFactor;
+
+  const double texWidthSquared = texWidth * texWidth;
+  const double texHeightSquared = texHeight * texHeight;
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -653,8 +657,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _renderedSector,
                    _firstRender, /* if first render, force full render */
                    _texturePriority,
-                   texWidth,
-                   texHeight);
+                   texWidthSquared,
+                   texHeightSquared);
     }
   }
   else {

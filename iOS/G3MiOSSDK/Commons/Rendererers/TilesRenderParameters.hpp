@@ -10,11 +10,11 @@
 #define G3MiOSSDK_TilesRenderParameters_hpp
 
 
-enum Quality {
-  QUALITY_LOW,
-  QUALITY_MEDIUM,
-  QUALITY_HIGH
-};
+//enum Quality {
+//  QUALITY_LOW,
+//  QUALITY_MEDIUM,
+//  QUALITY_HIGH
+//};
 
 
 class TilesRenderParameters {
@@ -23,18 +23,20 @@ public:
   const bool    _useTilesSplitBudget;
   const bool    _forceFirstLevelTilesRenderOnStart;
   const bool    _incrementalTileQuality;
-  const Quality _quality;
+//  const Quality _quality;
+  const double   _texturePixelsPerInch;
 
   TilesRenderParameters(const bool    renderDebug,
                         const bool    useTilesSplitBudget,
                         const bool    forceFirstLevelTilesRenderOnStart,
                         const bool    incrementalTileQuality,
-                        const Quality quality) :
+                        const double  texturePixelsPerInch) :
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality),
-  _quality(quality)
+//  _quality(quality),
+  _texturePixelsPerInch(texturePixelsPerInch)
   {
   }
 
