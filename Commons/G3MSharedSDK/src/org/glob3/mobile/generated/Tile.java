@@ -967,50 +967,8 @@ public class Tile
   }
 
 
-  //double getMinHeight() const {
-  //  return _minHeight;
-  //}
-  //
-  //double Tile::getMaxHeight() const {
-  //  return _maxHeight;
-  //}
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark ElevationData methods
-  
-  public final void Tile.setElevationData(ElevationData ed, int level)
-  {
-    if (_elevationDataLevel < level)
-    {
-  
-      if (_elevationData != null)
-      {
-        if (_elevationData != null)
-           _elevationData.dispose();
-      }
-  
-      _elevationData = ed;
-      _elevationDataLevel = level;
-      _mustActualizeMeshDueToNewElevationData = true;
-  
-      //If the elevation belongs to tile's level, we notify the sub-tree
-      if (isElevationDataSolved())
-      {
-        if (_subtiles != null)
-        {
-          final int subtilesSize = _subtiles.size();
-          for (int i = 0; i < subtilesSize; i++)
-          {
-            Tile subtile = _subtiles.get(i);
-            subtile.ancestorChangedElevationData(this);
-          }
-        }
-      }
-  
-    }
-  }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double getMaxHeight();
+//  double getMinHeight() const;
+//  double getMaxHeight() const;
 
   public final String description()
   {
@@ -1082,8 +1040,37 @@ public class Tile
     return _elevationData;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setElevationData(ElevationData ed, int level);
+  public final void setElevationData(ElevationData ed, int level)
+  {
+    if (_elevationDataLevel < level)
+    {
+  
+      if (_elevationData != null)
+      {
+        if (_elevationData != null)
+           _elevationData.dispose();
+      }
+  
+      _elevationData = ed;
+      _elevationDataLevel = level;
+      _mustActualizeMeshDueToNewElevationData = true;
+  
+      //If the elevation belongs to tile's level, we notify the sub-tree
+      if (isElevationDataSolved())
+      {
+        if (_subtiles != null)
+        {
+          final int subtilesSize = _subtiles.size();
+          for (int i = 0; i < subtilesSize; i++)
+          {
+            Tile subtile = _subtiles.get(i);
+            subtile.ancestorChangedElevationData(this);
+          }
+        }
+      }
+  
+    }
+  }
 
   public final void getElevationDataFromAncestor(Vector2I extent)
   {
@@ -1187,3 +1174,13 @@ public class Tile
   }
 
 }
+//double Tile::getMinHeight() const {
+//  return _minHeight;
+//}
+//
+//double Tile::getMaxHeight() const {
+//  return _maxHeight;
+//}
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark ElevationData methods

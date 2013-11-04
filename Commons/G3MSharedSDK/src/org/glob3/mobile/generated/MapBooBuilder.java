@@ -45,11 +45,9 @@ public abstract class MapBooBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-  //  const Quality quality = QUALITY_LOW;
+    final Quality quality = Quality.QUALITY_LOW;
   
-    double texturePixelsPerInch = 512;
-  
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, texturePixelsPerInch);
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
@@ -368,9 +366,9 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
-  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-  //    return NULL;
-  //  }
+    //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+    //    return NULL;
+    //  }
   
     return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
