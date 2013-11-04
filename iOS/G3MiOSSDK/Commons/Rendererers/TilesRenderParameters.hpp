@@ -9,22 +9,13 @@
 #ifndef G3MiOSSDK_TilesRenderParameters_hpp
 #define G3MiOSSDK_TilesRenderParameters_hpp
 
-
-//enum Quality {
-//  QUALITY_LOW,
-//  QUALITY_MEDIUM,
-//  QUALITY_HIGH
-//};
-
-
 class TilesRenderParameters {
 public:
   const bool    _renderDebug;
   const bool    _useTilesSplitBudget;
   const bool    _forceFirstLevelTilesRenderOnStart;
   const bool    _incrementalTileQuality;
-//  const Quality _quality;
-  const double   _texturePixelsPerInch;
+  const double   _texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
 
   TilesRenderParameters(const bool    renderDebug,
                         const bool    useTilesSplitBudget,
@@ -35,7 +26,6 @@ public:
   _useTilesSplitBudget(useTilesSplitBudget),
   _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality),
-//  _quality(quality),
   _texturePixelsPerInch(texturePixelsPerInch)
   {
   }

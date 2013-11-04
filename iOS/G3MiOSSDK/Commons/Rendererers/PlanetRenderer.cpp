@@ -620,9 +620,13 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 //      factor = 5;
 //      break;
 //  }
-  const double factor = _tilesRenderParameters->_texturePixelsPerInch;
 
-  const double correctionFactor = (factor * deviceQualityFactor) / dpiFactor;
+
+
+  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+  const double correctionFactor = (factor * deviceQualityFactor) / deviceInfo->getDPI();
+
+  // dpiFactor;
 
   texWidth *= correctionFactor;
   texHeight *= correctionFactor;
