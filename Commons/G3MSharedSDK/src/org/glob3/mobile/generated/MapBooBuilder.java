@@ -347,16 +347,6 @@ public abstract class MapBooBuilder
   }
 
 //  const std::string parseSceneId(const JSONObject* jsonObject) const;
-
-  //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
-  //  if (jsonObject == NULL) {
-  //    ILogger::instance()->logError("Missing Scene ID");
-  //    return "";
-  //  }
-  //
-  //  return jsonObject->getAsString("$oid", "");
-  //}
-  
   private MapBoo_Scene parseScene(JSONObject jsonObject)
   {
     if (jsonObject == null)
@@ -370,7 +360,7 @@ public abstract class MapBooBuilder
   //    return NULL;
   //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
 
   private Color parseColor(JSONString jsonColor)
@@ -391,6 +381,41 @@ public abstract class MapBooBuilder
     if (color != null)
        color.dispose();
     return result;
+  }
+
+  //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+  //  if (jsonObject == NULL) {
+  //    ILogger::instance()->logError("Missing Scene ID");
+  //    return "";
+  //  }
+  //
+  //  return jsonObject->getAsString("$oid", "");
+  //}
+  
+  private Sector parseSector(JSONBaseObject jsonBaseObjectLayer)
+  {
+    if (jsonBaseObjectLayer == null)
+    {
+      return null;
+    }
+  
+    if (jsonBaseObjectLayer.asNull() != null)
+    {
+      return null;
+    }
+  
+    final JSONObject jsonObject = jsonBaseObjectLayer.asObject();
+    if (jsonObject == null)
+    {
+      return null;
+    }
+  
+    final double lowerLat = jsonObject.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = jsonObject.getAsNumber("lowerLon", -180.0);
+    final double upperLat = jsonObject.getAsNumber("upperLat", 90.0);
+    final double upperLon = jsonObject.getAsNumber("upperLon", 180.0);
+  
+    return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
   private MapBoo_MultiImage parseMultiImage(JSONObject jsonObject)
@@ -476,17 +501,29 @@ public abstract class MapBooBuilder
   
       if (currentScene != null)
       {
+        final Sector sector = currentScene.getSector();
+        if (sector == null)
+        {
+          _g3mWidget.setShownSector(Sector.fullSphere());
+        }
+        else
+        {
+          _g3mWidget.setShownSector(sector);
+        }
+  
         final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
         if (cameraPosition != null)
         {
-          //if (cameraPosition->isAnimated()) {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
-          //}
-          //else {
-          //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
-          //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
-          //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
-          //}
+          if (cameraPosition.isAnimated())
+          {
+            _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          }
+          else
+          {
+            _g3mWidget.setCameraPosition(cameraPosition.getPosition());
+            _g3mWidget.setCameraHeading(cameraPosition.getHeading());
+            _g3mWidget.setCameraPitch(cameraPosition.getPitch());
+          }
         }
       }
     }
@@ -1170,8 +1207,13 @@ public abstract class MapBooBuilder
   public final void openApplicationTube(G3MContext context)
   {
   
-    IDownloader downloader = context.getDownloader();
-    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  //  IDownloader* downloader = context->getDownloader();
+  //  downloader->requestBuffer(createApplicationRestURL(),
+  //                            DownloadPriority::HIGHEST,
+  //                            TimeInterval::zero(),
+  //                            false, // readExpired
+  //                            new MapBooBuilder_RestJSON(this),
+  //                            true);
   
     final IFactory factory = context.getFactory();
     _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener

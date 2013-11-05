@@ -54,6 +54,7 @@ package org.glob3.mobile.generated;
 //class MapBooBuilder;
 //class Vector2I;
 //class URLTemplateLayer;
+//class Sector;
 
 
 
