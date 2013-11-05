@@ -451,7 +451,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
   
     final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (factor * deviceQualityFactor) / deviceInfo.getDPI();
+    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
   
     // dpiFactor;
   
