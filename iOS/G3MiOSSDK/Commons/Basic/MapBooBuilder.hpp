@@ -48,6 +48,7 @@ class MarksRenderer;
 class MapBooBuilder;
 class Vector2I;
 class URLTemplateLayer;
+class Sector;
 
 #include <vector>
 #include <string>
@@ -233,6 +234,7 @@ private:
   const MapBoo_MultiImage*     _screenshot;
   const Color                  _backgroundColor;
   const MapBoo_CameraPosition* _cameraPosition;
+  const Sector*                _sector;
   Layer*                       _baseLayer;
   Layer*                       _overlayLayer;
   const bool                   _hasWarnings;
@@ -244,6 +246,7 @@ public:
                MapBoo_MultiImage*           screenshot,
                const Color&                 backgroundColor,
                const MapBoo_CameraPosition* cameraPosition,
+               Sector*                      sector,
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
                const bool                   hasWarnings) :
@@ -253,6 +256,7 @@ public:
   _screenshot(screenshot),
   _backgroundColor(backgroundColor),
   _cameraPosition(cameraPosition),
+  _sector(sector),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer),
   _hasWarnings(hasWarnings)
@@ -281,6 +285,10 @@ public:
 
   const MapBoo_CameraPosition* getCameraPosition() const {
     return _cameraPosition;
+  }
+
+  const Sector* getSector() const {
+    return _sector;
   }
 
   bool hasWarnings() const {
@@ -435,6 +443,7 @@ private:
   MapBoo_Scene* parseScene(const JSONObject* json) const;
   
   Color         parseColor(const JSONString* jsonColor) const;
+  Sector*       parseSector(const JSONBaseObject* jsonBaseObjectLayer) const;
 
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
   MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
