@@ -27,7 +27,7 @@ import android.util.Log;
 
 public final class Downloader_Android_Handler {
 
-   private static final int                                  DEFAULT_BUFFER_SIZE = 16 * 1024;
+   private static final int                                  DEFAULT_BUFFER_SIZE = 32 * 1024;
 
    private static BitmapFactory.Options                      _bitmapFactoryOptions;
    static {
@@ -247,7 +247,7 @@ public final class Downloader_Android_Handler {
       byte[] data = null;
 
       try {
-         final BufferedInputStream bis = new BufferedInputStream(is);
+         final BufferedInputStream bis = new BufferedInputStream(is, DEFAULT_BUFFER_SIZE);
 
          final int size = (contentLength > 0) ? contentLength : DEFAULT_BUFFER_SIZE;
          final ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
