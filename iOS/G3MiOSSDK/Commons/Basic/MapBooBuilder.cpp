@@ -1503,17 +1503,17 @@ void MapBooBuilder::changedCurrentScene() {
 
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
-        if (cameraPosition->isAnimated()) {
-          _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
-                                                cameraPosition->getPosition(),
-                                                cameraPosition->getHeading(),
-                                                cameraPosition->getPitch());
-        }
-        else {
-          _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
-          _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
-          _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
-        }
+        //if (cameraPosition->isAnimated()) {
+        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                              cameraPosition->getPosition(),
+                                              cameraPosition->getHeading(),
+                                              cameraPosition->getPitch());
+        //}
+        //else {
+        //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
+        //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
+        //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
+        //}
       }
     }
   }
