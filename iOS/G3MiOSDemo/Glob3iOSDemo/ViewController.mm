@@ -566,9 +566,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-//  const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-  const Planet* planet = Planet::createFlatEarth();
+//  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -1444,7 +1444,7 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const Quality quality = QUALITY_HIGH;
+  const Quality quality = QUALITY_MEDIUM;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
