@@ -52,7 +52,6 @@ public abstract class MapBooBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    int TODO_CHECK_MAPBOO_FULLSPHERE;
     final Sector renderedSector = Sector.fullSphere();
   
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
