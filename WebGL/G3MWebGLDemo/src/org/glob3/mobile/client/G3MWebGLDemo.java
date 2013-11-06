@@ -100,6 +100,7 @@ import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
+import org.glob3.mobile.generated.Camera;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
@@ -1368,12 +1369,50 @@ public class G3MWebGLDemo
       //      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
       //      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
+      
+      // camera constrainer
+      if (true) {
+    	  final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
+    		  private boolean firstTime = true;
+    		  @Override public void dispose() {}
+    		  public boolean onCameraChange(Planet planet,
+    				  Camera previousCamera,
+    				  Camera nextCamera) {
+    			  if (firstTime) {
+    				  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
+    				  nextCamera.setGeodeticPosition(position);
+    				  firstTime = false;
+    			  } else {
+    				  final double maxHeight = 5e5;
+    				  final double minLat=26.5, maxLat=30.5, minLon=-19.5, maxLon=-12.5;
+    				  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+    				  final double lat = cameraPosition._latitude._degrees;
+    				  final double lon = cameraPosition._longitude._degrees;
+    				  final double pitch = nextCamera.getPitch()._degrees;
+    				  final double heading = nextCamera.getHeading()._degrees;
+    				  if (cameraPosition._height>maxHeight 
+    						  || lon<minLon || lon>maxLon 
+    						  || lat<minLat || lat>maxLat
+    						  || pitch>0.01 || Math.abs(heading)>0.01)
+    					  nextCamera.copyFrom(previousCamera);
+    			  }
+    			  return true;
+    		  }
+    	  };
+    	  builder.addCameraConstraint(myCameraConstrainer);
+    	  builder.setPlanet(Planet.createFlatEarth());
+      }
+
+      
+      
+
 
       _widget = builder.createWidget();
 
+      
       /*
-      // set the camera looking at Tenerife
-      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
+      // set the camera looking at
+      final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 7);
       _widget.setCameraPosition(position);
       _widget.setCameraPitch(Angle.fromDegrees(75));*/
 
