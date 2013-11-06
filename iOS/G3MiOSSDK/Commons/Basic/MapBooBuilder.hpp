@@ -393,7 +393,8 @@ private:
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
 
-  std::vector<ICameraConstrainer*>* createCameraConstraints();
+  std::vector<ICameraConstrainer*>* createCameraConstraints(const Planet* planet,
+                                                            PlanetRenderer* planetRenderer);
 
   CameraRenderer* createCameraRenderer();
 

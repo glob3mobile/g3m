@@ -16,7 +16,8 @@
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MWidget.hpp"
-#include "SimpleCameraConstrainer.hpp"
+//#include "SimpleCameraConstrainer.hpp"
+#include "SectorAndHeightCameraConstrainer.hpp"
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
@@ -486,7 +487,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   TileTexturizer* texturizer = new MultiLayerTileTexturizer();
   TileRasterizer* tileRasterizer = NULL;
 
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -526,10 +527,15 @@ const Planet* MapBooBuilder::createPlanet() {
   return Planet::createSphericalEarth();
 }
 
-std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
+std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints(const Planet* planet,
+                                                                         PlanetRenderer* planetRenderer) {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
-  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  cameraConstraints->push_back(scc);
+  //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+
+  const Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Sector::fullSphere());
+
+  cameraConstraints->push_back( new RenderedSectorCameraConstrainer(planetRenderer,
+                                                                    initialCameraPosition._height * 1.2) );
 
   return cameraConstraints;
 }
@@ -1317,13 +1323,14 @@ G3MWidget* MapBooBuilder::create() {
 
 
   CompositeRenderer* mainRenderer = new CompositeRenderer();
+  const Planet* planet = createPlanet();
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
   mainRenderer->addRenderer(planetRenderer);
 
   mainRenderer->addRenderer(getMarksRenderer());
 
-  std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
+  std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints(planet, planetRenderer);
 
   GInitializationTask* initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
 
@@ -1331,9 +1338,6 @@ G3MWidget* MapBooBuilder::create() {
 
   ICameraActivityListener* cameraActivityListener = NULL;
 
-  const Planet* planet = createPlanet();
-  //  int TODO_VIEWPORT;
-  //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
