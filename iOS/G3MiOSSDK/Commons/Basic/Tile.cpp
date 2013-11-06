@@ -65,8 +65,7 @@ _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
 _lodTimer(NULL),
 _planetRenderer(planetRenderer),
-_tessellatorData(NULL),
-_renderedVStileSectorRatio(getRenderedVSTileSectorsRatio(planetRenderer))
+_tessellatorData(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -399,14 +398,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     _lodTimer->start();
   }
 
-  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
-  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
-
-  // Adjusting shown texture size in case of incomplete mesh
-  if (_renderedVStileSectorRatio._x != 1.0 || _renderedVStileSectorRatio._y != 1.0){
-    texWidth *= _renderedVStileSectorRatio._x;
-    texHeight *= _renderedVStileSectorRatio._y;
-  }
+  const int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+  const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
 
   double factor = 5;
   switch (tilesRenderParameters->_quality) {
@@ -1011,15 +1004,15 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
-  const Sector* renderedSector = pr->getRenderedSector();
-  if (renderedSector != NULL){
-    if (!renderedSector->fullContains(_sector)) {
-      Sector meshSector = renderedSector->intersection(_sector);
-      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-      return Vector2D(rx,ry);
-    }
-  }
-  return Vector2D(1.0,1.0);
-}
+//const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
+//  const Sector* renderedSector = pr->getRenderedSector();
+//  if (renderedSector != NULL){
+//    if (!renderedSector->fullContains(_sector)) {
+//      Sector meshSector = renderedSector->intersection(_sector);
+//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
+//      return Vector2D(rx,ry);
+//    }
+//  }
+//  return Vector2D(1.0,1.0);
+//}
