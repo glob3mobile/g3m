@@ -41,7 +41,7 @@ public abstract class MapBooBuilder
     TileTexturizer texturizer = new MultiLayerTileTexturizer();
     TileRasterizer tileRasterizer = null;
   
-    final boolean renderDebug = false;
+    final boolean renderDebug = true;
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
