@@ -1371,29 +1371,35 @@ public class G3MWebGLDemo
 
       
       // camera constrainer
-      final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
-    	  private boolean firstTime = true;
-    	  @Override public void dispose() {}
-    	  public boolean onCameraChange(Planet planet,
-    			  Camera previousCamera,
-    			  Camera nextCamera) {
-    		  if (firstTime) {
-    			  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 7e5);
-    			  nextCamera.setGeodeticPosition(position);
-    			  firstTime = false;
-    		  } else {
-    			  final double maxHeight = 8e5;
-    			  final double minLat=27.5, maxLat=29.5, minLon=-18.5, maxLon=-13.3;
-    			  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-    			  final double lat = cameraPosition._latitude._degrees;
-    			  final double lon = cameraPosition._longitude._degrees;
-    			  if (cameraPosition._height>maxHeight || lon<minLon || lon>maxLon || lat<minLat || lat>maxLat)
-    				  nextCamera.copyFrom(previousCamera);
+      if (true) {
+    	  final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
+    		  private boolean firstTime = true;
+    		  @Override public void dispose() {}
+    		  public boolean onCameraChange(Planet planet,
+    				  Camera previousCamera,
+    				  Camera nextCamera) {
+    			  if (firstTime) {
+    				  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 7e5);
+    				  nextCamera.setGeodeticPosition(position);
+    				  firstTime = false;
+    			  } else {
+    				  final double maxHeight = 8e5;
+    				  final double minLat=27.5, maxLat=29.5, minLon=-18.5, maxLon=-13.3;
+    				  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+    				  final double lat = cameraPosition._latitude._degrees;
+    				  final double lon = cameraPosition._longitude._degrees;
+    				  final double pitch = nextCamera.getPitch()._degrees;
+    				  if (cameraPosition._height>maxHeight 
+    						  || lon<minLon || lon>maxLon 
+    						  || lat<minLat || lat>maxLat
+    						  || pitch>0.01)
+    					  nextCamera.copyFrom(previousCamera);
+    			  }
+    			  return true;
     		  }
-    		  return true;
-    	  }
-      };
-      builder.addCameraConstraint(myCameraConstrainer);
+    	  };
+    	  builder.addCameraConstraint(myCameraConstrainer);
+      }
 
 
 
