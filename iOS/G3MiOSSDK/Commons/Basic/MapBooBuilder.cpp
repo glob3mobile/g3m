@@ -77,6 +77,7 @@ MapBoo_Scene::~MapBoo_Scene() {
   delete _baseLayer;
   delete _overlayLayer;
   delete _cameraPosition;
+  delete _sector;
 }
 
 const std::string MapBoo_MultiImage_Level::description() const {
@@ -814,6 +815,29 @@ const MapBoo_CameraPosition* MapBooBuilder::parseCameraPosition(const JSONObject
 //  return jsonObject->getAsString("$oid", "");
 //}
 
+Sector* MapBooBuilder::parseSector(const JSONBaseObject* jsonBaseObjectLayer) const {
+  if (jsonBaseObjectLayer == NULL) {
+    return NULL;
+  }
+
+  if (jsonBaseObjectLayer->asNull() != NULL) {
+    return NULL;
+  }
+
+  const JSONObject* jsonObject = jsonBaseObjectLayer->asObject();
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  const double lowerLat = jsonObject->getAsNumber("lowerLat",  -90.0);
+  const double lowerLon = jsonObject->getAsNumber("lowerLon", -180.0);
+  const double upperLat = jsonObject->getAsNumber("upperLat",   90.0);
+  const double upperLon = jsonObject->getAsNumber("upperLon",  180.0);
+
+  return new Sector(Geodetic2D::fromDegrees(lowerLat, lowerLon),
+                    Geodetic2D::fromDegrees(upperLat, upperLon));
+}
+
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   if (jsonObject == NULL) {
     return NULL;
@@ -831,6 +855,7 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           parseMultiImage( jsonObject->getAsObject("screenshot") ),
                           parseColor( jsonObject->getAsString("backgroundColor") ),
                           parseCameraPosition( jsonObject->getAsObject("cameraPosition") ),
+                          parseSector( jsonObject->get("sector") ),
                           parseLayer( jsonObject->get("baseLayer") ),
                           parseLayer( jsonObject->get("overlayLayer") ),
                           hasWarnings);
@@ -1155,6 +1180,7 @@ public:
 
   void onMesssage(IWebSocket* ws,
                   const std::string& message) {
+    //ILogger::instance()->logInfo(message);
     _builder->parseApplicationJSON(message, ws->getURL());
   }
 
@@ -1241,13 +1267,13 @@ const URL MapBooBuilder::createApplicationRestURL() const {
 
 void MapBooBuilder::openApplicationTube(const G3MContext* context) {
 
-  IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(createApplicationRestURL(),
-                            DownloadPriority::HIGHEST,
-                            TimeInterval::zero(),
-                            false, // readExpired
-                            new MapBooBuilder_RestJSON(this),
-                            true);
+//  IDownloader* downloader = context->getDownloader();
+//  downloader->requestBuffer(createApplicationRestURL(),
+//                            DownloadPriority::HIGHEST,
+//                            TimeInterval::zero(),
+//                            false, // readExpired
+//                            new MapBooBuilder_RestJSON(this),
+//                            true);
 
   const IFactory* factory = context->getFactory();
   _webSocket = factory->createWebSocket(createApplicationTubeURL(),
@@ -1467,6 +1493,14 @@ void MapBooBuilder::changedCurrentScene() {
     _g3mWidget->resetPeriodicalTasksTimeouts();
 
     if (currentScene != NULL) {
+      const Sector* sector = currentScene->getSector();
+      if (sector == NULL) {
+        _g3mWidget->setShownSector( Sector::fullSphere() );
+      }
+      else {
+        _g3mWidget->setShownSector( *sector );
+      }
+
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
         //if (cameraPosition->isAnimated()) {

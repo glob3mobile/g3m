@@ -11,8 +11,6 @@
 
 #include <list>
 
-#include "TimeInterval.hpp"
-
 class G3MRenderContext;
 
 
@@ -32,18 +30,12 @@ public:
 
 class FrameTasksExecutor {
 private:
-  const int          _minimumExecutionsPerFrame;
-  const int          _maximumExecutionsPerFrame;
-  const int          _maximumQueuedTasks;
-#ifdef C_CODE
-  const TimeInterval _maxTimePerFrame;
-  const TimeInterval _maxTimePerFrameStressed;
-#endif
-#ifdef JAVA_CODE
-  private final TimeInterval _maxTimePerFrame;
-  private final TimeInterval _maxTimePerFrameStressed;
-#endif
-  
+  const int       _minimumExecutionsPerFrame;
+  const int       _maximumExecutionsPerFrame;
+  const int       _maximumQueuedTasks;
+  const long long _maxTimePerFrameMS;
+  const long long _maxTimePerFrameStressedMS;
+
   std::list<FrameTask*> _preRenderTasks;
   
   inline bool canExecutePreRenderStep(const G3MRenderContext* rc,
@@ -56,8 +48,8 @@ public:
   _minimumExecutionsPerFrame(1),
   _maximumExecutionsPerFrame(8),
   _maximumQueuedTasks(64),
-  _maxTimePerFrame(TimeInterval::fromMilliseconds(5)),
-  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
+  _maxTimePerFrameMS(5),
+  _maxTimePerFrameStressedMS(25),
   _stressed(false)
   {
 

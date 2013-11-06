@@ -7,11 +7,12 @@ public class MapBoo_Scene
   private final MapBoo_MultiImage _screenshot;
   private final Color _backgroundColor ;
   private final MapBoo_CameraPosition _cameraPosition;
+  private final Sector _sector;
   private Layer _baseLayer;
   private Layer _overlayLayer;
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
+  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
   {
      _id = id;
      _name = name;
@@ -19,6 +20,7 @@ public class MapBoo_Scene
      _screenshot = screenshot;
      _backgroundColor = new Color(backgroundColor);
      _cameraPosition = cameraPosition;
+     _sector = sector;
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
      _hasWarnings = hasWarnings;
@@ -54,6 +56,11 @@ public class MapBoo_Scene
     return _cameraPosition;
   }
 
+  public final Sector getSector()
+  {
+    return _sector;
+  }
+
   public final boolean hasWarnings()
   {
     return _hasWarnings;
@@ -83,6 +90,8 @@ public class MapBoo_Scene
        _overlayLayer.dispose();
     if (_cameraPosition != null)
        _cameraPosition.dispose();
+    if (_sector != null)
+       _sector.dispose();
   }
 
   public final String description()
