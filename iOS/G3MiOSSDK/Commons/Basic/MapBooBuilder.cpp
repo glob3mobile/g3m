@@ -501,7 +501,6 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
 
-  int TODO_CHECK_MAPBOO_FULLSPHERE;
   const Sector renderedSector = Sector::fullSphere();
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
