@@ -41,7 +41,7 @@ public abstract class MapBooBuilder
     TileTexturizer texturizer = new MultiLayerTileTexturizer();
     TileRasterizer tileRasterizer = null;
   
-    final boolean renderDebug = true;
+    final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
@@ -64,11 +64,14 @@ public abstract class MapBooBuilder
     return result;
   }
 
-  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
+  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints(Planet planet, PlanetRenderer planetRenderer)
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
-    SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
-    cameraConstraints.add(scc);
+    //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  
+    final Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(Sector.fullSphere());
+  
+    cameraConstraints.add(new RenderedSectorCameraConstrainer(planetRenderer, initialCameraPosition._height * 1.2));
   
     return cameraConstraints;
   }
@@ -897,13 +900,14 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+    final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
     mainRenderer.addRenderer(planetRenderer);
   
     mainRenderer.addRenderer(getMarksRenderer());
   
-    java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
+    java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints(planet, planetRenderer);
   
     GInitializationTask initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
   
@@ -911,9 +915,6 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    final Planet planet = createPlanet();
-    //  int TODO_VIEWPORT;
-    //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
