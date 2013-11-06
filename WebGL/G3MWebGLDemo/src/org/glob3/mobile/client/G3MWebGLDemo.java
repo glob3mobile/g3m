@@ -1379,28 +1379,32 @@ public class G3MWebGLDemo
     				  Camera previousCamera,
     				  Camera nextCamera) {
     			  if (firstTime) {
-    				  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 7e5);
+    				  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
     				  nextCamera.setGeodeticPosition(position);
     				  firstTime = false;
     			  } else {
-    				  final double maxHeight = 8e5;
-    				  final double minLat=27.5, maxLat=29.5, minLon=-18.5, maxLon=-13.3;
+    				  final double maxHeight = 5e5;
+    				  final double minLat=26.5, maxLat=30.5, minLon=-19.5, maxLon=-12.5;
     				  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
     				  final double lat = cameraPosition._latitude._degrees;
     				  final double lon = cameraPosition._longitude._degrees;
     				  final double pitch = nextCamera.getPitch()._degrees;
+    				  final double heading = nextCamera.getHeading()._degrees;
     				  if (cameraPosition._height>maxHeight 
     						  || lon<minLon || lon>maxLon 
     						  || lat<minLat || lat>maxLat
-    						  || pitch>0.01)
+    						  || pitch>0.01 || Math.abs(heading)>0.01)
     					  nextCamera.copyFrom(previousCamera);
     			  }
     			  return true;
     		  }
     	  };
     	  builder.addCameraConstraint(myCameraConstrainer);
+    	  builder.setPlanet(Planet.createFlatEarth());
       }
 
+      
+      
 
 
       _widget = builder.createWidget();
