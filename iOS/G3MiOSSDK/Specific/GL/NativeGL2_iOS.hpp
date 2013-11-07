@@ -600,7 +600,10 @@ public:
     // writes zvalue
     gl_FragColor = vec4(R/255.0, G/255.0, B/255.0, 0.0);
  */
-    return (pixel.red * 65536.0) + (pixel.green * 256.0) + pixel.blue;
+    const float r = pixel.red * 255;
+    const float g = pixel.green * 255;
+    const float b = pixel.blue * 255;
+    return (r * 65536.0) + (g * 256.0) + b;
   }
 
 };
