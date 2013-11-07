@@ -251,6 +251,10 @@ public:
   GLGlobalState* getCurrentGLGlobalState() {
     return _currentGLGlobalState;
   }
+
+  double readPixelAsDouble(int x, int y) const{
+    return _nativeGL->read1PixelAsDouble(x, y);
+  }
   
   
 };

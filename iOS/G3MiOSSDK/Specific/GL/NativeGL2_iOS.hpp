@@ -581,10 +581,26 @@ public:
     }
   }
 
-  virtual Color read1PixelAsRGBColor(int x, int y) const{
+  Color read1PixelAsRGBColor(int x, int y) const{
     struct{ GLubyte red, green, blue; } pixel;
     glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
     return Color::fromRGBA(pixel.red, pixel.green, pixel.blue, 1.0);
+  }
+
+  double read1PixelAsDouble(int x, int y) const{
+    struct{ GLubyte red, green, blue; } pixel;
+    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
+/*
+    highp float Z = floor(z+0.5);
+    highp float R = floor(Z/65536.0);
+    Z -= R * 65536.0;
+    highp float G = floor(Z/256.0);
+    highp float B = Z - G * 256.0;
+
+    // writes zvalue
+    gl_FragColor = vec4(R/255.0, G/255.0, B/255.0, 0.0);
+ */
+    return (pixel.red * 65536.0) + (pixel.green * 256.0) + pixel.blue;
   }
 
 };
