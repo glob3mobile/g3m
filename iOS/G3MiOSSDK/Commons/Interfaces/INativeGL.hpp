@@ -198,7 +198,7 @@ public:
   virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
 
-  virtual Color read1PixelAsRGBColor(int x, int y) const = 0;
+  virtual Color read1PixelAsRGBAColor(int x, int y) const = 0;
   virtual double read1PixelAsDouble(int x, int y) const = 0;
   
 };

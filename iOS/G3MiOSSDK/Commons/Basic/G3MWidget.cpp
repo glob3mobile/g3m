@@ -373,6 +373,10 @@ void G3MWidget::resetPeriodicalTasksTimeouts() {
   }
 }
 
+//TODO: TESTING Z HAS TO BE REMOVED
+bool G3MWidget::RENDERING_Z = false;
+double lastZ;
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -394,7 +398,7 @@ void G3MWidget::render(int width, int height) {
     _currentCamera->setGeodeticPosition(g);
     _currentCamera->setHeading(Angle::zero());
     _currentCamera->setPitch(Angle::zero());
-    
+
     _nextCamera->setGeodeticPosition(g);
     _nextCamera->setHeading(Angle::zero());
     _nextCamera->setPitch(Angle::zero());
@@ -440,6 +444,7 @@ void G3MWidget::render(int width, int height) {
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
 
+
   delete _mainRendererState;
   _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(_renderContext) : RenderState::busy());
   RenderState_Type renderStateType = _mainRendererState->_type;
@@ -467,13 +472,35 @@ void G3MWidget::render(int width, int height) {
       break;
   }
 
-//  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
+  //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop(_renderContext);
     }
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start(_renderContext);
+  }
+
+
+  //TODO: TESTING Z HAS TO BE REMOVED
+  if (true){
+
+    if (_selectedRenderer == _mainRenderer){
+      RENDERING_Z = true;
+
+      _gl->clearScreen(*_backgroundColor);
+      if (_selectedRenderer->isEnable()) {
+        _selectedRenderer->render(_renderContext, _rootState);
+      }
+
+      double z = _gl->readPixelAsDouble(_width/2, _height/2);
+      if (z != lastZ){
+      printf("Z = %f\n", z);
+        lastZ = z;
+      }
+
+      RENDERING_Z = false;
+    }
   }
 
   _gl->clearScreen(*_backgroundColor);

@@ -581,15 +581,15 @@ public:
     }
   }
 
-  Color read1PixelAsRGBColor(int x, int y) const{
-    struct{ GLubyte red, green, blue; } pixel;
-    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
-    return Color::fromRGBA(pixel.red, pixel.green, pixel.blue, 1.0);
+  Color read1PixelAsRGBAColor(int x, int y) const{
+    struct{ GLubyte red, green, blue, alpha; } pixel;
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+    return Color::fromRGBA(pixel.red, pixel.green, pixel.blue, pixel.alpha);
   }
 
   double read1PixelAsDouble(int x, int y) const{
-    struct{ GLubyte red, green, blue; } pixel;
-    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
+    struct{ GLubyte red, green, blue, alpha; } pixel;
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
 /*
     highp float Z = floor(z+0.5);
     highp float R = floor(Z/65536.0);

@@ -208,6 +208,8 @@ public:
   PlanetRenderer* getPlanetRenderer();
 
   void setShownSector(const Sector& sector);
+
+  static bool RENDERING_Z;
   
 private:
   IStorage*                _storage;

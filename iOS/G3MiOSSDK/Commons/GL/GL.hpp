@@ -120,7 +120,7 @@ public:
                   int count, const GLState* state,
                   GPUProgramManager& progManager);
   
-  int getError();
+  int getError() const;
   
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
@@ -253,7 +253,12 @@ public:
   }
 
   double readPixelAsDouble(int x, int y) const{
-    return _nativeGL->read1PixelAsDouble(x, y);
+    double d = _nativeGL->read1PixelAsDouble(x, y);
+    int e = getError();
+    if (e != GLError::noError()){
+      ILogger::instance()->logError("Problem at read1PixelAsDouble");
+    }
+    return d;
   }
   
   

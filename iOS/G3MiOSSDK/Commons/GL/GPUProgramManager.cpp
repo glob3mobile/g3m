@@ -10,7 +10,13 @@
 
 #include "GLState.hpp"
 
+#include "G3MWidget.hpp"
+
 GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
+
+  if (G3MWidget::RENDERING_Z){
+    return getProgram(gl, "ZRender");
+  }
 
   bool texture = GPUVariable::codeContainsAttribute(attributesCode, TEXTURE_COORDS);
   bool flatColor = GPUVariable::codeContainsUniform(uniformsCode, FLAT_COLOR);

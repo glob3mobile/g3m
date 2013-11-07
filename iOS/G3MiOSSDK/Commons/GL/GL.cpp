@@ -62,7 +62,7 @@ void GL::drawArrays(int mode,
                         count);
 }
 
-int GL::getError() {
+int GL::getError() const {
 //  if (_verbose) {
 //    ILogger::instance()->logInfo("GL::getError()");
 //  }
