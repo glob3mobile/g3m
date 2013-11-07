@@ -400,6 +400,10 @@ public:
     return GL_RGBA;
   }
 
+  int Format_RGB() const {
+    return GL_RGB;
+  }
+
   int Variable_Viewport() const {
     return GL_VIEWPORT;
   }
@@ -576,7 +580,13 @@ public:
         break;
     }
   }
-  
+
+  virtual Color read1PixelAsRGBColor(int x, int y) const{
+    struct{ GLubyte red, green, blue; } pixel;
+    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixel);
+    return Color::fromRGBA(pixel.red, pixel.green, pixel.blue, 1.0);
+  }
+
 };
 
 #endif

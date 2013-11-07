@@ -45,6 +45,8 @@
 		D84625DC1777292B00FC4862 /* TexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625DA1777292B00FC4862 /* TexturedMesh.vsh */; };
 		D84625E3177732B500FC4862 /* ColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E1177732B500FC4862 /* ColorMesh.fsh */; };
 		D84625E4177732B500FC4862 /* ColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E2177732B500FC4862 /* ColorMesh.vsh */; };
+		D86F9350182BCAD700C1E904 /* ZRender.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D86F934E182BCAD700C1E904 /* ZRender.fsh */; };
+		D86F9351182BCAD700C1E904 /* ZRender.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D86F934F182BCAD700C1E904 /* ZRender.vsh */; };
 		D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */; };
 		D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D9017C3951500CEF074 /* NoColorMesh.vsh */; };
 		D87DFC7617CF61200036C466 /* FlatColorMesh+DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D87DFC7417CF61200036C466 /* FlatColorMesh+DirectionLight.fsh */; };
@@ -147,6 +149,8 @@
 		D84625DA1777292B00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625E1177732B500FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
 		D84625E2177732B500FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
+		D86F934E182BCAD700C1E904 /* ZRender.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ZRender.fsh; sourceTree = "<group>"; };
+		D86F934F182BCAD700C1E904 /* ZRender.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ZRender.vsh; sourceTree = "<group>"; };
 		D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.fsh; sourceTree = "<group>"; };
 		D8769D9017C3951500CEF074 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.vsh; sourceTree = "<group>"; };
 		D87DFC7417CF61200036C466 /* FlatColorMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "FlatColorMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 		E7A1A98F16F0E51A00D138D8 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D86F934E182BCAD700C1E904 /* ZRender.fsh */,
+				D86F934F182BCAD700C1E904 /* ZRender.vsh */,
 				D87DFC7417CF61200036C466 /* FlatColorMesh+DirectionLight.fsh */,
 				D87DFC7517CF61200036C466 /* FlatColorMesh+DirectionLight.vsh */,
 				D8FFA6A017A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh */,
@@ -452,6 +458,7 @@
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				D8EEF3A11577920B003FEB5E /* MainStoryboard_iPad.storyboard in Resources */,
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
+				D86F9351182BCAD700C1E904 /* ZRender.vsh in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
@@ -474,6 +481,7 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
+				D86F9350182BCAD700C1E904 /* ZRender.fsh in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
 				CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */,

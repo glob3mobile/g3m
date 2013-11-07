@@ -91,6 +91,7 @@ GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh+DirectionLight"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh+DirectionLight"));
   gpuProgramFactory->add( loadDefaultGPUProgramSources("NoColorMesh") );
+  gpuProgramFactory->add( loadDefaultGPUProgramSources("ZRender"));
 
 
   return new GPUProgramManager(gpuProgramFactory);

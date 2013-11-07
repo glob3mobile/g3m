@@ -360,6 +360,8 @@
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D86F934C182BC9FB00C1E904 /* ZRender.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D86F934A182BC9FB00C1E904 /* ZRender.fsh */; };
+		D86F934D182BC9FB00C1E904 /* ZRender.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D86F934B182BC9FB00C1E904 /* ZRender.vsh */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -1452,6 +1454,8 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D86F934A182BC9FB00C1E904 /* ZRender.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ZRender.fsh; sourceTree = "<group>"; };
+		D86F934B182BC9FB00C1E904 /* ZRender.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ZRender.vsh; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
@@ -2430,6 +2434,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D86F934A182BC9FB00C1E904 /* ZRender.fsh */,
+				D86F934B182BC9FB00C1E904 /* ZRender.vsh */,
 				D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */,
 				D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */,
 				D89ABFA917CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh */,
@@ -2602,6 +2608,7 @@
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* LeafRenderer.cpp in Sources */,
+				D86F934D182BC9FB00C1E904 /* ZRender.vsh in Sources */,
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
@@ -2748,6 +2755,7 @@
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
+				D86F934C182BC9FB00C1E904 /* ZRender.fsh in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
