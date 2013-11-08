@@ -210,6 +210,17 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d)
 //  //TODO: NO LONGER NEEDED!!!
 //}
 
+const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
+
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
+                                                      0, 0, _width, _height);
+  if (obj.isNan()) {
+    return obj;
+  }
+
+  return obj.sub(_position.asVector3D());
+}
+
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;
   const int py = _height - pixel._y;

@@ -9,6 +9,8 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
+#include "G3MWidget.hpp"
+
 GLState::~GLState() {
   delete _accumulatedFeatures;
 
@@ -89,7 +91,6 @@ void GLState::setParent(const GLState* parent) const{
 
 void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
-
   if (_valuesSet == NULL && _globalState == NULL) {
 
     _valuesSet   = new GPUVariableValueSet();
@@ -125,6 +126,18 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
   if (_valuesSet == NULL || _globalState == NULL) {
     ILogger::instance()->logError("GLState logic error.");
+    return;
+  }
+
+  if (G3MWidget::RENDERING_Z){ //TODO: RENDER Z
+    GPUProgram* zRenderProgram = progManager.getProgram(gl, "ZRender");
+
+    gl->useProgram(zRenderProgram);
+
+    _valuesSet->applyValuesToProgram(zRenderProgram);
+    _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
+
+    zRenderProgram->applyChanges(gl);
     return;
   }
 

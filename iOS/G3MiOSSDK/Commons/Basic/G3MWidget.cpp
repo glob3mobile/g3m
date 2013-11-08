@@ -296,6 +296,11 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+
+//TODO: TESTING Z HAS TO BE REMOVED
+bool G3MWidget::RENDERING_Z = false;
+double lastZ;
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(IFactory::instance(),
@@ -341,6 +346,44 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
     _clickOnProcess = false;
   }
 
+  ///////////////////////////////////////////////////
+
+
+
+  //TODO: TESTING Z HAS TO BE REMOVED
+  if (true){
+    if (touchEvent->getType() == Down) {
+      if (_mainRenderer->isEnable()){
+        RENDERING_Z = true;
+
+        _gl->clearScreen(Color::black());
+        _mainRenderer->render(_renderContext, _rootState);
+
+        int x = touchEvent->getTouch(0)->getPos()._x; //_width/2;
+        int y = touchEvent->getTouch(0)->getPos()._y; //_height/2;
+
+        double z = _gl->readPixelAsDouble(x,y, _width, _height);
+        if (z != lastZ){
+          printf("Z = %f\n", z);
+          lastZ = z;
+        }
+
+        if (z != NAND){
+          Vector3D pixel3D(x,y,z);
+          MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
+          Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+          printf("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+          printf("DIST: %f\n", _currentCamera->getCartesianPosition().sub(pos).length());
+          printf("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+        }
+
+        RENDERING_Z = false;
+      }
+    }
+  }
+
+
+
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
@@ -372,10 +415,6 @@ void G3MWidget::resetPeriodicalTasksTimeouts() {
     pt->resetTimeout();
   }
 }
-
-//TODO: TESTING Z HAS TO BE REMOVED
-bool G3MWidget::RENDERING_Z = false;
-double lastZ;
 
 void G3MWidget::render(int width, int height) {
   if (_paused) {
@@ -479,28 +518,6 @@ void G3MWidget::render(int width, int height) {
     }
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start(_renderContext);
-  }
-
-
-  //TODO: TESTING Z HAS TO BE REMOVED
-  if (true){
-
-    if (_selectedRenderer == _mainRenderer){
-      RENDERING_Z = true;
-
-      _gl->clearScreen(*_backgroundColor);
-      if (_selectedRenderer->isEnable()) {
-        _selectedRenderer->render(_renderContext, _rootState);
-      }
-
-      double z = _gl->readPixelAsDouble(_width/2, _height/2);
-      if (z != lastZ){
-      printf("Z = %f\n", z);
-        lastZ = z;
-      }
-
-      RENDERING_Z = false;
-    }
   }
 
   _gl->clearScreen(*_backgroundColor);

@@ -588,22 +588,19 @@ public:
   }
 
   double read1PixelAsDouble(int x, int y) const{
-    struct{ GLubyte red, green, blue, alpha; } pixel;
-    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
-/*
-    highp float Z = floor(z+0.5);
-    highp float R = floor(Z/65536.0);
-    Z -= R * 65536.0;
-    highp float G = floor(Z/256.0);
-    highp float B = Z - G * 256.0;
+    unsigned char zValue[4];
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, zValue);
 
-    // writes zvalue
-    gl_FragColor = vec4(R/255.0, G/255.0, B/255.0, 0.0);
- */
-    const float r = pixel.red * 255;
-    const float g = pixel.green * 255;
-    const float b = pixel.blue * 255;
-    return (r * 65536.0) + (g * 256.0) + b;
+    if (zValue[3] != 0){    //ZRENDER Shader sets all pixels with 0 alpha
+      return NAND;
+    }
+
+    double winZ = (double) zValue[0] * 65536.0;
+    winZ += (double) zValue[1] * 256.0;
+    winZ += (double) zValue[2];
+    winZ /= 16777215.0;
+
+    return winZ;
   }
 
 };

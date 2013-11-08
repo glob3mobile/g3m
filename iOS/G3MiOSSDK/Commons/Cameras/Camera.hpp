@@ -168,6 +168,7 @@ public:
 //              const GLGlobalState& parentState) const;
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector3D& pixel3D) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 

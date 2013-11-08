@@ -252,8 +252,12 @@ public:
     return _currentGLGlobalState;
   }
 
-  double readPixelAsDouble(int x, int y) const{
-    double d = _nativeGL->read1PixelAsDouble(x, y);
+  double readPixelAsDouble(int x, int y, int viewportWidth, int viewportHeight) const{
+
+    const int px = x;
+    const int py = viewportHeight - y;
+
+    double d = _nativeGL->read1PixelAsDouble(px, py);
     int e = getError();
     if (e != GLError::noError()){
       ILogger::instance()->logError("Problem at read1PixelAsDouble");
