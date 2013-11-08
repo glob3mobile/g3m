@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class TileRasterizer;
 //class LayerTilesRenderParameters;
-
+//class G3MEventContext;
 
 public abstract class TileTexturizer
 {
