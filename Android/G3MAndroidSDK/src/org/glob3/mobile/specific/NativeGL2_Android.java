@@ -3,9 +3,11 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUAttributeVec2Float;
 import org.glob3.mobile.generated.GPUAttributeVec3Float;
@@ -822,6 +824,52 @@ public final class NativeGL2_Android
    public int Type_Vec3Float() {
       return GLES20.GL_FLOAT_VEC3;
    }
+
+
+@Override
+public int Format_RGB() {
+	return GLES20.GL_RGB;
+}
+
+
+@Override
+public Color read1PixelAsRGBAColor(int x, int y) {
+
+    ByteBuffer pixels = ByteBuffer.allocate(4);
+    GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixels);
+    
+    byte r = pixels.get(0);
+    byte g = pixels.get(1);
+    byte b = pixels.get(2);
+    byte a = pixels.get(3);
+    
+    Color c = Color.fromRGBA(r,g,b,a);
+	return c;
+}
+
+
+@Override
+public double read1PixelAsDouble(int x, int y) {
+	
+    ByteBuffer pixels = ByteBuffer.allocate(4);
+    GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixels);
+    
+    byte r = pixels.get(0);
+    byte g = pixels.get(0);
+    byte b = pixels.get(0);
+    byte a = pixels.get(0);
+
+    if (a != 0){    //ZRENDER Shader sets all pixels with 0 alpha
+      return Double.NaN;
+    }
+
+    double winZ = (double) r * 65536.0;
+    winZ += (double) g * 256.0;
+    winZ += (double) b;
+    winZ /= 16777215.0;
+
+    return winZ;
+}
 
 
 }

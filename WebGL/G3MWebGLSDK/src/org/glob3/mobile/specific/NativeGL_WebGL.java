@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
@@ -869,6 +870,56 @@ public native void uniform3f(IGLUniformID location, float x, float y, float z) /
 @Override
 public native int Type_Vec3Float() /*-{
 	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
+}-*/;
+
+
+@Override
+public native int Format_RGB() /*- {
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.RGB;
+} -*/;
+
+
+@Override
+public native Color read1PixelAsRGBAColor(int x, int y) /*-{
+
+
+//TODO CHECK : var ctx = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+	var pixels = new Uint8Array(4);
+	void readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+	
+	var r = pixels[0];
+	var g = pixels[1];
+	var b = pixels[2];
+	var a = pixels[3];
+	
+	return @org.glob3.mobile.generated.Color::fromRGBA(FFFF)(r,g,b,a);
+}-*/;
+
+
+@Override
+public native double read1PixelAsDouble(int x, int y) /*-{
+	//TODO CHECK : var ctx = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		var pixels = new Uint8Array(4);
+		void readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		
+		var r = pixels[0];
+		var g = pixels[1];
+		var b = pixels[2];
+		var a = pixels[3];
+		
+		
+    if (a != 0){    //ZRENDER Shader sets all pixels with 0 alpha
+      return Number.NaN;
+    }
+
+    var winZ = r * 65536.0;
+    winZ +=  g * 256.0;
+    winZ +=  b;
+    winZ /= 16777215.0;
+
+    return winZ;
 }-*/;
 
 
