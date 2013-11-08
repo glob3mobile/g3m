@@ -417,6 +417,21 @@ public class GL
     return _currentGLGlobalState;
   }
 
+  public final double readPixelAsDouble(int x, int y, int viewportWidth, int viewportHeight)
+  {
+
+    final int px = x;
+    final int py = viewportHeight - y;
+
+    double d = _nativeGL.read1PixelAsDouble(px, py);
+    int e = getError();
+    if (e != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at read1PixelAsDouble");
+    }
+    return d;
+  }
+
 
 }
 //void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {

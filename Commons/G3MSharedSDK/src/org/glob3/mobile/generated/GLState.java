@@ -148,7 +148,6 @@ public class GLState extends RCObject
   public final void applyOnGPU(GL gl, GPUProgramManager progManager)
   {
   
-  
     if (_valuesSet == null && _globalState == null)
     {
   
@@ -186,6 +185,19 @@ public class GLState extends RCObject
     if (_valuesSet == null || _globalState == null)
     {
       ILogger.instance().logError("GLState logic error.");
+      return;
+    }
+  
+    if (G3MWidget.RENDERING_Z) //TODO: RENDER Z
+    {
+      GPUProgram zRenderProgram = progManager.getProgram(gl, "ZRender");
+  
+      gl.useProgram(zRenderProgram);
+  
+      _valuesSet.applyValuesToProgram(zRenderProgram);
+      _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
+  
+      zRenderProgram.applyChanges(gl);
       return;
     }
   

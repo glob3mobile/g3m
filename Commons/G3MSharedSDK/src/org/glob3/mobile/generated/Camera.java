@@ -178,17 +178,28 @@ public class Camera
 //  void render(const G3MRenderContext* rc,
 //              const GLGlobalState& parentState) const;
 
+  public final Vector3D pixel2Ray(Vector2I pixel)
+  {
+    final int px = pixel._x;
+    final int py = _height - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    if (obj.isNan())
+    {
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
 
   //void Camera::render(const G3MRenderContext* rc,
   //                    const GLGlobalState& parentState) const {
   //  //TODO: NO LONGER NEEDED!!!
   //}
   
-  public final Vector3D pixel2Ray(Vector2I pixel)
+  public final Vector3D pixel2Ray(Vector3D pixel3D)
   {
-    final int px = pixel._x;
-    final int py = _height - pixel._y;
-    final Vector3D pixel3D = new Vector3D(px, py, 0);
   
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
     if (obj.isNan())

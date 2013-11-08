@@ -172,6 +172,7 @@ public class G3MWidget
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
   
+  
     if (_mainRendererState != null)
        _mainRendererState.dispose();
     _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
@@ -201,7 +202,7 @@ public class G3MWidget
         break;
     }
   
-  //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
+    //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
     if (selectedRenderer != _selectedRenderer)
     {
       if (_selectedRenderer != null)
@@ -333,6 +334,49 @@ public class G3MWidget
     {
       _clickOnProcess = false;
     }
+  
+    ///////////////////////////////////////////////////
+  
+  
+  
+    //TODO: TESTING Z HAS TO BE REMOVED
+    if (true)
+    {
+      if (touchEvent.getType() == TouchEventType.Down)
+      {
+        if (_mainRenderer.isEnable())
+        {
+          RENDERING_Z = true;
+  
+          _gl.clearScreen(Color.black());
+          _mainRenderer.render(_renderContext, _rootState);
+  
+          int x = touchEvent.getTouch(0).getPos()._x; //_width/2;
+          int y = touchEvent.getTouch(0).getPos()._y; //_height/2;
+  
+          double z = _gl.readPixelAsDouble(x, y, _width, _height);
+          if (z != GlobalMembersG3MWidget.lastZ)
+          {
+            System.out.printf("Z = %f\n", z);
+            GlobalMembersG3MWidget.lastZ = z;
+          }
+  
+          if (z != java.lang.Double.NaN)
+          {
+            Vector3D pixel3D = new Vector3D(x,y,z);
+            MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+            Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+            System.out.printf("PIXEL 3D: %s -> %s\n", pixel3D.description(), pos.description());
+            System.out.printf("DIST: %f\n", _currentCamera.getCartesianPosition().sub(pos).length());
+            System.out.printf("GEO: %s\n", _planet.toGeodetic2D(pos).description());
+          }
+  
+          RENDERING_Z = false;
+        }
+      }
+    }
+  
+  
   
   }
 
@@ -592,6 +636,8 @@ public class G3MWidget
     getPlanetRenderer().setRenderedSector(sector);
     _initialCameraPositionHasBeenSet = false;
   }
+
+  public static boolean RENDERING_Z = false;
 
   private IStorage _storage;
   private IDownloader _downloader;
