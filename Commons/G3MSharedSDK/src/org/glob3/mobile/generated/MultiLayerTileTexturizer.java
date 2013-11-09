@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class TileRasterizer;
 //class TextureIDReference;
-
+//class G3MEventContext;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
