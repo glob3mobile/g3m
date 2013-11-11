@@ -4,7 +4,11 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
   private MeshRenderer _meshRenderer;
   private final float _pointSize;
   private final double _deltaHeight;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
   private final Color _color;
+//#endif
+  private Color _color;
   private MeshLoadListener _listener;
   private boolean _deleteListener;
   private final IThreadUtils _threadUtils;
