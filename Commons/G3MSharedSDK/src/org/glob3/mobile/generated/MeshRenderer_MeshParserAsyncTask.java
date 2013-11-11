@@ -158,8 +158,6 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
     {
       final JSONArray jsonCoordinates = jsonObject.getAsArray("coordinates");
 
-      int __DGD_At_Work;
-
       FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_context.getPlanet());
 
       final int coordinatesSize = jsonCoordinates.size();
