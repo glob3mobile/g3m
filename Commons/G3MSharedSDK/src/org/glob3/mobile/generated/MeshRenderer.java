@@ -59,12 +59,11 @@ public class MeshRenderer extends LeafRenderer
 
   private void drainLoadQueue()
   {
-  
     final int loadQueueSize = _loadQueue.size();
     for (int i = 0; i < loadQueueSize; i++)
     {
       LoadQueueItem item = _loadQueue.get(i);
-      requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._pointSize, item._deltaHeight, item._listener, item._deleteListener, item._isBSON);
+      requestPointCloudBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._pointSize, item._deltaHeight, item._listener, item._deleteListener, item._isBSON);
   
       if (item != null)
          item.dispose();
@@ -73,11 +72,10 @@ public class MeshRenderer extends LeafRenderer
     _loadQueue.clear();
   }
 
-  private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON)
+  private void requestPointCloudBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON)
   {
     IDownloader downloader = _context.getDownloader();
     downloader.requestBuffer(url, priority, timeToCache, readExpired, new MeshRenderer_PointCloudBufferDownloadListener(this, pointSize, deltaHeight, listener, deleteListener, _context.getThreadUtils(), isBSON, _context), true);
-  
   
   }
 
@@ -210,7 +208,7 @@ public class MeshRenderer extends LeafRenderer
     }
     else
     {
-      requestBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, false); // isBson
+      requestPointCloudBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, false); // isBson
     }
   }
 
@@ -251,7 +249,7 @@ public class MeshRenderer extends LeafRenderer
     }
     else
     {
-      requestBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, true); // isBson
+      requestPointCloudBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, true); // isBson
     }
   }
 

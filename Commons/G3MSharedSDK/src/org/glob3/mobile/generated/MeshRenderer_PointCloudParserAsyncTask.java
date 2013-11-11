@@ -66,16 +66,6 @@ public class MeshRenderer_PointCloudParserAsyncTask extends GAsyncTask
       }
       else
       {
-
-//      "size":48
-//      ,"bounds":{
-//        "lower":[7.1489565398362656,46.34361696257866,1169.652386999709]
-//        ,"upper":[7.171002826337067,46.3559190937692,1381.608242625843]
-//      }
-//      ,"averagePoint":[7.159396937202478,46.34958505936779,1229.5747544618582]
-//      ,"points":[ ]
-//      ,"colors":[ ]
-
         final int size = (int) jsonObject.getAsNumber("size", -1);
         if (size <= 0)
         {
