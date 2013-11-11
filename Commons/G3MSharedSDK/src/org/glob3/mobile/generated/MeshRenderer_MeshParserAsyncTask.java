@@ -8,10 +8,6 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
   private IByteBuffer _buffer;
   private final float _pointSize;
   private final double _deltaHeight;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final Color _color;
-//#endif
   private Color     _color;
   private MeshLoadListener _listener;
   private final boolean _deleteListener;
@@ -251,8 +247,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
     }
     if (_buffer != null)
        _buffer.dispose();
-    if (_color != null)
-       _color.dispose();
+    _color = null;
   }
 
   public final void onPostExecute(G3MContext context)

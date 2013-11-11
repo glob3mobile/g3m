@@ -4,10 +4,6 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
   private MeshRenderer _meshRenderer;
   private final float _pointSize;
   private final double _deltaHeight;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final Color _color;
-//#endif
   private Color _color;
   private MeshLoadListener _listener;
   private boolean _deleteListener;
@@ -49,8 +45,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
       if (_listener != null)
          _listener.dispose();
     }
-    if (_color != null)
-       _color.dispose();
+    _color = null;
   }
 
   public final void onCancel(URL url)
@@ -62,8 +57,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
       if (_listener != null)
          _listener.dispose();
     }
-    if (_color != null)
-       _color.dispose();
+    _color = null;
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -73,8 +67,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
 
   public void dispose()
   {
-    if (_color != null)
-       _color.dispose();
+    _color = null;
   }
 
 }
