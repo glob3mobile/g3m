@@ -2,6 +2,7 @@ package org.glob3.mobile.generated;
 public class MeshRenderer extends LeafRenderer
 {
 
+
   private static class LoadQueueItem
   {
     public final URL          _url;
@@ -10,11 +11,13 @@ public class MeshRenderer extends LeafRenderer
     public final boolean _readExpired;
     public final float _pointSize;
     public final double _deltaHeight;
+    public final Color _color;
     public MeshLoadListener _listener;
     public final boolean _deleteListener;
     public final boolean _isBSON;
+    public final MeshType _meshType;
 
-    public LoadQueueItem(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON)
+    public LoadQueueItem(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, Color color, MeshLoadListener listener, boolean deleteListener, boolean isBSON, MeshType meshType)
     {
        _url = url;
        _priority = priority;
@@ -22,9 +25,11 @@ public class MeshRenderer extends LeafRenderer
        _readExpired = readExpired;
        _pointSize = pointSize;
        _deltaHeight = deltaHeight;
+       _color = color;
        _listener = listener;
        _deleteListener = deleteListener;
        _isBSON = isBSON;
+       _meshType = meshType;
 
     }
 
@@ -63,7 +68,7 @@ public class MeshRenderer extends LeafRenderer
     for (int i = 0; i < loadQueueSize; i++)
     {
       LoadQueueItem item = _loadQueue.get(i);
-      requestPointCloudBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._pointSize, item._deltaHeight, item._listener, item._deleteListener, item._isBSON);
+      requestMeshBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._pointSize, item._deltaHeight, item._color, item._listener, item._deleteListener, item._isBSON, item._meshType);
   
       if (item != null)
          item.dispose();
@@ -72,10 +77,10 @@ public class MeshRenderer extends LeafRenderer
     _loadQueue.clear();
   }
 
-  private void requestPointCloudBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener, boolean isBSON)
+  private void requestMeshBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, Color color, MeshLoadListener listener, boolean deleteListener, boolean isBSON, MeshType meshType)
   {
     IDownloader downloader = _context.getDownloader();
-    downloader.requestBuffer(url, priority, timeToCache, readExpired, new MeshRenderer_PointCloudBufferDownloadListener(this, pointSize, deltaHeight, listener, deleteListener, _context.getThreadUtils(), isBSON, _context), true);
+    downloader.requestBuffer(url, priority, timeToCache, readExpired, new MeshRenderer_MeshBufferDownloadListener(this, pointSize, deltaHeight, color, listener, deleteListener, _context.getThreadUtils(), isBSON, meshType, _context), true);
   
   }
 
@@ -204,11 +209,11 @@ public class MeshRenderer extends LeafRenderer
   {
     if (_context == null)
     {
-      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, false)); // isBson
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, pointSize, deltaHeight, null, listener, deleteListener, false, MeshType.POINT_CLOUD)); // isBson -  color
     }
     else
     {
-      requestPointCloudBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, false); // isBson
+      requestMeshBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, null, listener, deleteListener, false, MeshType.POINT_CLOUD); // isBson -  color
     }
   }
 
@@ -245,11 +250,11 @@ public class MeshRenderer extends LeafRenderer
   {
     if (_context == null)
     {
-      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, true)); // isBson
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, pointSize, deltaHeight, null, listener, deleteListener, true, MeshType.POINT_CLOUD)); // isBson -  color
     }
     else
     {
-      requestPointCloudBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, deleteListener, true); // isBson
+      requestMeshBuffer(url, priority, timeToCache, readExpired, pointSize, deltaHeight, null, listener, deleteListener, true, MeshType.POINT_CLOUD); // isBson -  color
     }
   }
 
@@ -268,6 +273,72 @@ public class MeshRenderer extends LeafRenderer
   public final void loadBSONPointCloud(URL url, float pointSize, double deltaHeight, MeshLoadListener listener, boolean deleteListener)
   {
     loadBSONPointCloud(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, deltaHeight, listener, deleteListener);
+  }
+
+  public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener)
+  {
+     loadJSONMesh(url, color, priority, timeToCache, readExpired, listener, true);
+  }
+  public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired)
+  {
+     loadJSONMesh(url, color, priority, timeToCache, readExpired, null, true);
+  }
+  public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener, boolean deleteListener)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, 1, 0, color, listener, deleteListener, false, MeshType.MESH)); // isBson -  deltaHeight -  pointSize
+    }
+    else
+    {
+      requestMeshBuffer(url, priority, timeToCache, readExpired, 1, 0, color, listener, deleteListener, false, MeshType.MESH); // isBson -  deltaHeight -  pointSize
+    }
+  }
+
+  public final void loadJSONMesh(URL url, Color color, MeshLoadListener listener)
+  {
+     loadJSONMesh(url, color, listener, true);
+  }
+  public final void loadJSONMesh(URL url, Color color)
+  {
+     loadJSONMesh(url, color, null, true);
+  }
+  public final void loadJSONMesh(URL url, Color color, MeshLoadListener listener, boolean deleteListener)
+  {
+    loadJSONMesh(url, color, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, listener, deleteListener);
+  }
+
+  public final void loadBSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener)
+  {
+     loadBSONMesh(url, color, priority, timeToCache, readExpired, listener, true);
+  }
+  public final void loadBSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired)
+  {
+     loadBSONMesh(url, color, priority, timeToCache, readExpired, null, true);
+  }
+  public final void loadBSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener, boolean deleteListener)
+  {
+    if (_context == null)
+    {
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, 1, 0, color, listener, deleteListener, true, MeshType.MESH)); // isBson -  deltaHeight -  pointSize
+    }
+    else
+    {
+      requestMeshBuffer(url, priority, timeToCache, readExpired, 1, 0, color, listener, deleteListener, true, MeshType.MESH); // isBson -  deltaHeight -  pointSize
+    }
+  }
+
+  public final void loadBSONMesh(URL url, Color color, MeshLoadListener listener)
+  {
+     loadBSONMesh(url, color, listener, true);
+  }
+  public final void loadBSONMesh(URL url, Color color)
+  {
+     loadBSONMesh(url, color, null, true);
+  }
+  public final void loadBSONMesh(URL url, Color color, MeshLoadListener listener, boolean deleteListener)
+  {
+    loadBSONMesh(url, color, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, listener, deleteListener);
   }
 
 
