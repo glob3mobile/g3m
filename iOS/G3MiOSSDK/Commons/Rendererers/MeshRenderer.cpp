@@ -268,7 +268,7 @@ private:
   IByteBuffer*      _buffer;
   const float       _pointSize;
   const double      _deltaHeight;
-#if C_CODE
+#ifdef C_CODE
   const Color*      _color;
 #endif
 #ifdef JAVA_CODE
@@ -551,7 +551,7 @@ private:
   MeshRenderer*       _meshRenderer;
   const float         _pointSize;
   const double        _deltaHeight;
-#if C_CODE
+#ifdef C_CODE
   const Color*        _color;
 #endif
 #ifdef JAVA_CODE
