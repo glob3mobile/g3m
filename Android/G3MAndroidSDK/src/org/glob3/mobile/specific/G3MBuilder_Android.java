@@ -53,6 +53,9 @@ public class G3MBuilder_Android
 
       addGPUProgramSources(new GPUProgramSources("FlatColorMesh+DirectionLight",
                GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      addGPUProgramSources(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
+              GL2Shaders._zRenderFragmentShader));
 
 
       setGL(_nativeWidget.getGL());

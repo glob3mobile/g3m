@@ -271,6 +271,9 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      factory.add(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
+              GL2Shaders._zRenderFragmentShader));
 
 
       return new GPUProgramManager(factory);

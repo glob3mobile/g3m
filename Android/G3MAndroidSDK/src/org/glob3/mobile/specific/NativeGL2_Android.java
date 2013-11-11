@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
@@ -852,12 +853,14 @@ public Color read1PixelAsRGBAColor(int x, int y) {
 public double read1PixelAsDouble(int x, int y) {
 	
     ByteBuffer pixels = ByteBuffer.allocate(4);
+    pixels.order(ByteOrder.nativeOrder());
+    pixels.position(0);
     GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixels);
     
     byte r = pixels.get(0);
-    byte g = pixels.get(0);
-    byte b = pixels.get(0);
-    byte a = pixels.get(0);
+    byte g = pixels.get(1);
+    byte b = pixels.get(2);
+    byte a = pixels.get(3);
 
     if (a != 0){    //ZRENDER Shader sets all pixels with 0 alpha
       return Double.NaN;

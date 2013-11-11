@@ -296,6 +296,31 @@ public final class GL2Shaders {
 			"\n" + 
 			"  gl_PointSize = uPointSize;\n" + 
 			"}";
+	
+	public final static String _zRenderFragmentShader = "void main() {\n" + 
+			"\n" + 
+			"  // convert float z value to 24bits integer (32bits causes precision error)\n" + 
+			"  highp float zFar = 16777215.0; // 2^24-1\n" + 
+			"  highp float z = gl_FragCoord.z * zFar;\n" + 
+			"  highp float Z = floor(z+0.5);\n" + 
+			"  highp float R = floor(Z/65536.0);\n" + 
+			"  Z -= R * 65536.0;\n" + 
+			"  highp float G = floor(Z/256.0);\n" + 
+			"  highp float B = Z - G * 256.0;\n" + 
+			"\n" + 
+			"  // writes zvalue\n" + 
+			"  gl_FragColor = vec4(R/255.0, G/255.0, B/255.0, 0.0);\n" + 
+			"}";
+
+	public final static String _zRenderVertexShader = "attribute vec4 aPosition;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"}";
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 

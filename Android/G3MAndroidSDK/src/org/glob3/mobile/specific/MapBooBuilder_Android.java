@@ -100,6 +100,11 @@ public class MapBooBuilder_Android
 
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
                GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      
+      
+      gpuProgramFactory.add(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
+              GL2Shaders._zRenderFragmentShader));
+
 
 
       return new GPUProgramManager(gpuProgramFactory);
