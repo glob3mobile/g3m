@@ -2265,39 +2265,46 @@ public:
     const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
 
     const JSONObject* jsonObject = jsonBaseObject->asObject();
-    if (jsonObject != NULL) {
-
+    if (jsonObject == NULL) {
+      ILogger::instance()->logError("Invalid format for \"%s\"", url.getPath().c_str());
+    }
+    else {
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
+
+      int __DGD_At_Work;
 
       FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
 
-      for (int i = 0; i < jsonCoordinates->size(); i += 3) {
-        const double lat    = jsonCoordinates->getAsNumber(i    , 0);
-        const double lon    = jsonCoordinates->getAsNumber(i + 1, 0);
-        const double height = jsonCoordinates->getAsNumber(i + 2, 0);
+      const int coordinatesSize = jsonCoordinates->size();
+      for (int i = 0; i < coordinatesSize; i += 3) {
+        const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
+        const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
+        const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
 
-        vertices.add(Angle::fromDegrees(lat),
-                     Angle::fromDegrees(lon),
+        vertices.add(Angle::fromDegrees(latInDegrees),
+                     Angle::fromDegrees(lonInDegrees),
                      height);
       }
 
       const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
-      IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(jsonNormals->size());
-      for (int i = 0; i < jsonNormals->size(); i++) {
-        normals->put(i, jsonNormals->getAsNumber(i, 0));
+      const int normalsSize = jsonNormals->size();
+      IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
+      for (int i = 0; i < normalsSize; i++) {
+        normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
       }
 
       const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
-      ShortBufferBuilder indices;
-      for (int i = 0; i < jsonIndices->size(); i++) {
-        indices.add( jsonIndices->getAsNumber(i, 0) );
+      const int indicesSize = jsonIndices->size();
+      IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
+      for (int i = 0; i < indicesSize; i++) {
+        indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
       }
 
       Mesh* mesh = new IndexedMesh(GLPrimitive::triangles(),
                                    true,
                                    vertices.getCenter(),
                                    vertices.create(),
-                                   indices.create(),
+                                   indices,
                                    1, // lineWidth
                                    1, // pointSize
                                    Color::newFromRGBA(1,0,0,1), // flatColor

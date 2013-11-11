@@ -82,19 +82,18 @@ void MeshRenderer::initialize(const G3MContext* context) {
 }
 
 void MeshRenderer::drainLoadQueue() {
-
   const int loadQueueSize = _loadQueue.size();
   for (int i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
-    requestBuffer(item->_url,
-                  item->_priority,
-                  item->_timeToCache,
-                  item->_readExpired,
-                  item->_pointSize,
-                  item->_deltaHeight,
-                  item->_listener,
-                  item->_deleteListener,
-                  item->_isBSON);
+    requestPointCloudBuffer(item->_url,
+                            item->_priority,
+                            item->_timeToCache,
+                            item->_readExpired,
+                            item->_pointSize,
+                            item->_deltaHeight,
+                            item->_listener,
+                            item->_deleteListener,
+                            item->_isBSON);
 
     delete item;
   }
@@ -123,15 +122,15 @@ void MeshRenderer::loadJSONPointCloud(const URL&          url,
                                            false /* isBson */));
   }
   else {
-    requestBuffer(url,
-                  priority,
-                  timeToCache,
-                  readExpired,
-                  pointSize,
-                  deltaHeight,
-                  listener,
-                  deleteListener,
-                  false /* isBson */);
+    requestPointCloudBuffer(url,
+                            priority,
+                            timeToCache,
+                            readExpired,
+                            pointSize,
+                            deltaHeight,
+                            listener,
+                            deleteListener,
+                            false /* isBson */);
   }
 }
 
@@ -155,15 +154,15 @@ void MeshRenderer::loadBSONPointCloud(const URL&          url,
                                            true /* isBson */));
   }
   else {
-    requestBuffer(url,
-                  priority,
-                  timeToCache,
-                  readExpired,
-                  pointSize,
-                  deltaHeight,
-                  listener,
-                  deleteListener,
-                  true /* isBson */);
+    requestPointCloudBuffer(url,
+                            priority,
+                            timeToCache,
+                            readExpired,
+                            pointSize,
+                            deltaHeight,
+                            listener,
+                            deleteListener,
+                            true /* isBson */);
   }
 }
 
@@ -249,16 +248,6 @@ public:
         ILogger::instance()->logError("Invalid format for PointCloud");
       }
       else {
-
-//      "size":48
-//      ,"bounds":{
-//        "lower":[7.1489565398362656,46.34361696257866,1169.652386999709]
-//        ,"upper":[7.171002826337067,46.3559190937692,1381.608242625843]
-//      }
-//      ,"averagePoint":[7.159396937202478,46.34958505936779,1229.5747544618582]
-//      ,"points":[ ]
-//      ,"colors":[ ]
-
         const int size = (int) jsonObject->getAsNumber("size", -1);
         if (size <= 0) {
           ILogger::instance()->logError("Invalid size for PointCloud");
@@ -340,7 +329,7 @@ public:
 
                 colorsBuilder.addBase255(red, green, blue, 1);
               }
-              
+
               colors = colorsBuilder.create();
             }
 
@@ -451,7 +440,7 @@ public:
                                                                              _isBSON,
                                                                              _context),
                                   true);
-    
+
   }
 
   void onError(const URL& url) {
@@ -478,15 +467,15 @@ public:
 
 };
 
-void MeshRenderer::requestBuffer(const URL&          url,
-                                 long long           priority,
-                                 const TimeInterval& timeToCache,
-                                 bool                readExpired,
-                                 float               pointSize,
-                                 double              deltaHeight,
-                                 MeshLoadListener*   listener,
-                                 bool                deleteListener,
-                                 bool                isBSON) {
+void MeshRenderer::requestPointCloudBuffer(const URL&          url,
+                                           long long           priority,
+                                           const TimeInterval& timeToCache,
+                                           bool                readExpired,
+                                           float               pointSize,
+                                           double              deltaHeight,
+                                           MeshLoadListener*   listener,
+                                           bool                deleteListener,
+                                           bool                isBSON) {
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
                             priority,
@@ -501,6 +490,5 @@ void MeshRenderer::requestBuffer(const URL&          url,
                                                                               isBSON,
                                                                               _context),
                             true);
-  
   
 }

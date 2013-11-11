@@ -98,15 +98,15 @@ private:
 
   void drainLoadQueue();
 
-  void requestBuffer(const URL&          url,
-                     long long           priority,
-                     const TimeInterval& timeToCache,
-                     bool                readExpired,
-                     float               pointSize,
-                     double              deltaHeight,
-                     MeshLoadListener*   listener,
-                     bool                deleteListener,
-                     bool                isBSON);
+  void requestPointCloudBuffer(const URL&          url,
+                               long long           priority,
+                               const TimeInterval& timeToCache,
+                               bool                readExpired,
+                               float               pointSize,
+                               double              deltaHeight,
+                               MeshLoadListener*   listener,
+                               bool                deleteListener,
+                               bool                isBSON);
 
 
 public:
