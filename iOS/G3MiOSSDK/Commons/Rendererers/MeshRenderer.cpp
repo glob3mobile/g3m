@@ -419,8 +419,6 @@ private:
     else {
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
 
-      int __DGD_At_Work;
-
       FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
 
       const int coordinatesSize = jsonCoordinates->size();
