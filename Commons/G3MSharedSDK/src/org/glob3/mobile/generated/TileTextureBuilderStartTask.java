@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class BuilderStartTask extends FrameTask
+public class TileTextureBuilderStartTask extends FrameTask
 {
   private TileTextureBuilder _builder;
 
-  public BuilderStartTask(TileTextureBuilder builder)
+  public TileTextureBuilderStartTask(TileTextureBuilder builder)
   {
      _builder = builder;
     _builder._retain();
@@ -13,7 +13,6 @@ public class BuilderStartTask extends FrameTask
   {
     _builder._release();
   super.dispose();
-
   }
 
   public final void execute(G3MRenderContext rc)
