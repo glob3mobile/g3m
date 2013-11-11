@@ -25,7 +25,7 @@ protected:
   Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*           _vertices;
-  Color*                  _flatColor;
+  const Color*            _flatColor;
   IFloatBuffer*           _colors;
   const float             _colorsIntensity;
   const float             _lineWidth;
@@ -42,7 +42,7 @@ protected:
                IFloatBuffer* vertices,
                float lineWidth,
                float pointSize,
-               Color* flatColor,
+               const Color* flatColor,
                IFloatBuffer* colors,
                const float colorsIntensity,
                bool depthTest,

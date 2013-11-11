@@ -616,6 +616,17 @@ public:
                                    new TestMeshLoadListener(),
                                    true);
 
+//  void testMeshLoad(const G3MContext* context) {
+//    context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
+//                                            100000, //  priority,
+//                                            TimeInterval::fromDays(30),
+//                                            true,
+//                                            new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
+//                                            true);
+//  }
+  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
+                             Color::newFromRGBA(1, 1, 0, 1));
+
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
@@ -2247,93 +2258,93 @@ public:
 
 };
 
-class ParseMeshBufferDownloadListener : public IBufferDownloadListener {
-  MeshRenderer* _meshRenderer;
-  const Planet* _planet;
-
-public:
-  ParseMeshBufferDownloadListener(MeshRenderer* meshRenderer,
-                                  const Planet* planet) :
-  _meshRenderer(meshRenderer),
-  _planet(planet)
-  {
-  }
-
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
-
-    const JSONObject* jsonObject = jsonBaseObject->asObject();
-    if (jsonObject == NULL) {
-      ILogger::instance()->logError("Invalid format for \"%s\"", url.getPath().c_str());
-    }
-    else {
-      const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
-
-      int __DGD_At_Work;
-
-      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
-
-      const int coordinatesSize = jsonCoordinates->size();
-      for (int i = 0; i < coordinatesSize; i += 3) {
-        const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
-        const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
-        const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
-
-        vertices.add(Angle::fromDegrees(latInDegrees),
-                     Angle::fromDegrees(lonInDegrees),
-                     height);
-      }
-
-      const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
-      const int normalsSize = jsonNormals->size();
-      IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
-      for (int i = 0; i < normalsSize; i++) {
-        normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
-      }
-
-      const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
-      const int indicesSize = jsonIndices->size();
-      IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
-      for (int i = 0; i < indicesSize; i++) {
-        indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
-      }
-
-      Mesh* mesh = new IndexedMesh(GLPrimitive::triangles(),
-                                   true,
-                                   vertices.getCenter(),
-                                   vertices.create(),
-                                   indices,
-                                   1, // lineWidth
-                                   1, // pointSize
-                                   Color::newFromRGBA(1,0,0,1), // flatColor
-                                   NULL, // colors,
-                                   1, //  colorsIntensity,
-                                   true, // depthTest,
-                                   normals
-                                   );
-      _meshRenderer->addMesh(mesh);
-    }
-
-    delete jsonBaseObject;
-
-    delete buffer;
-  }
-
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
-  }
-
-  void onCancel(const URL& url) {
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-  }
-
-};
+//class ParseMeshBufferDownloadListener : public IBufferDownloadListener {
+//  MeshRenderer* _meshRenderer;
+//  const Planet* _planet;
+//
+//public:
+//  ParseMeshBufferDownloadListener(MeshRenderer* meshRenderer,
+//                                  const Planet* planet) :
+//  _meshRenderer(meshRenderer),
+//  _planet(planet)
+//  {
+//  }
+//
+//  void onDownload(const URL& url,
+//                  IByteBuffer* buffer,
+//                  bool expired) {
+//    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
+//
+//    const JSONObject* jsonObject = jsonBaseObject->asObject();
+//    if (jsonObject == NULL) {
+//      ILogger::instance()->logError("Invalid format for \"%s\"", url.getPath().c_str());
+//    }
+//    else {
+//      const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
+//
+//      int __DGD_At_Work;
+//
+//      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
+//
+//      const int coordinatesSize = jsonCoordinates->size();
+//      for (int i = 0; i < coordinatesSize; i += 3) {
+//        const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
+//        const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
+//        const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
+//
+//        vertices.add(Angle::fromDegrees(latInDegrees),
+//                     Angle::fromDegrees(lonInDegrees),
+//                     height);
+//      }
+//
+//      const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
+//      const int normalsSize = jsonNormals->size();
+//      IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
+//      for (int i = 0; i < normalsSize; i++) {
+//        normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
+//      }
+//
+//      const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
+//      const int indicesSize = jsonIndices->size();
+//      IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
+//      for (int i = 0; i < indicesSize; i++) {
+//        indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
+//      }
+//
+//      Mesh* mesh = new IndexedMesh(GLPrimitive::triangles(),
+//                                   true,
+//                                   vertices.getCenter(),
+//                                   vertices.create(),
+//                                   indices,
+//                                   1, // lineWidth
+//                                   1, // pointSize
+//                                   Color::newFromRGBA(1,0,0,1), // flatColor
+//                                   NULL, // colors,
+//                                   1, //  colorsIntensity,
+//                                   true, // depthTest,
+//                                   normals
+//                                   );
+//      _meshRenderer->addMesh(mesh);
+//    }
+//
+//    delete jsonBaseObject;
+//
+//    delete buffer;
+//  }
+//
+//  void onError(const URL& url) {
+//    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+//  }
+//
+//  void onCancel(const URL& url) {
+//  }
+//
+//  void onCanceledDownload(const URL& url,
+//                          IByteBuffer* buffer,
+//                          bool expired) {
+//  }
+//
+//};
 
 - (GInitializationTask*) createSampleInitializationTask: (ShapesRenderer*) shapesRenderer
                                             geoRenderer: (GEORenderer*) geoRenderer
@@ -2433,14 +2444,14 @@ public:
                             color);
     }
 
-    void testMeshLoad(const G3MContext* context) {
-      context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
-                                              100000, //  priority,
-                                              TimeInterval::fromDays(30),
-                                              true,
-                                              new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
-                                              true);
-    }
+//    void testMeshLoad(const G3MContext* context) {
+//      context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
+//                                              100000, //  priority,
+//                                              TimeInterval::fromDays(30),
+//                                              true,
+//                                              new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
+//                                              true);
+//    }
 
     void testCanvas(const IFactory* factory) {
 
@@ -2531,7 +2542,7 @@ public:
 
       //testWebSocket(context);
 
-      testMeshLoad( context );
+      //testMeshLoad( context );
 
       testCanvas(context->getFactory());
       
