@@ -165,6 +165,11 @@ public:
 
   void removeAllShapes(bool deleteShapes=true);
 
+  void enableAll();
+
+  void disableAll();
+
+
   void onResume(const G3MContext* context) {
     _context = context;
   }

@@ -198,8 +198,8 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   return (mapping == NULL) ? false : mapping->_transparent;
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc,
-                                 const GLState* parentGLState) const{
+void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
+                                    const GLState* parentGLState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");

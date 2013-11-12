@@ -674,3 +674,19 @@ void MeshRenderer::requestMeshBuffer(const URL&          url,
                             true);
 
 }
+
+void MeshRenderer::enableAll() {
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    mesh->setEnable(true);
+  }
+}
+
+void MeshRenderer::disableAll() {
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    mesh->setEnable(false);
+  }
+}

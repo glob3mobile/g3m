@@ -138,6 +138,10 @@ public:
 
   void clearMeshes();
 
+  void enableAll();
+
+  void disableAll();
+
   void onResume(const G3MContext* context) {
 
   }
