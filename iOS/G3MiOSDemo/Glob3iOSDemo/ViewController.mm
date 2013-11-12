@@ -773,11 +773,12 @@ public:
   //  [self testGenericQuadTree:geoTileRasterizer];
   
   if (true) {
-    Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
+    //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(-17.56), Angle::fromDegrees(19.20), 4390000));
     //[self G3MWidget].widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     [self G3MWidget].widget->setCameraPosition(position);
     [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-40.72));
-    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(35.48));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(30));
   }
 
 }
@@ -1648,6 +1649,45 @@ public:
                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
                                           );
     shapesRenderer->addShape(mercator1);
+  
+  if (true) {
+    NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                              ofType: @"json"];
+    if (planeFilePath) {
+      NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+      if (nsPlaneJSON) {
+        std::string planeJSON = [nsPlaneJSON UTF8String];
+        
+        Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                          URL::FILE_PROTOCOL + "/" ,
+                                                          false,
+                                                          new Geodetic3D(Angle::fromDegrees(0),
+                                                                         Angle::fromDegrees(5),
+                                                                         7*factor),
+                                                          ABSOLUTE);
+        
+        // Washington, DC
+        const double scale = factor/4;
+        plane->setScale(scale, scale, scale);
+        plane->setPitch(Angle::fromDegrees(80));
+        plane->setHeading(Angle::fromDegrees(-150));
+        shapesRenderer->addShape(plane);
+        
+        
+       /* plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
+                                   Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000),
+                                   Angle::fromDegrees(90),
+                                   Angle::fromDegrees(720),
+                                   Angle::zero());*/
+        
+      }
+    }
+  }
+
   
   // adding touch listener
   class TestShapeTouchListener : public ShapeTouchListener {
