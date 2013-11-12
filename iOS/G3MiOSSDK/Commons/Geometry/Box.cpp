@@ -90,7 +90,7 @@ const std::vector<Vector3F> Box::getCornersF() const {
 #endif
 }
 
-Vector2F Box::projectedExtent(const G3MRenderContext *rc) const {
+Vector2F Box::projectedExtent(const G3MRenderContext* rc) const {
   const std::vector<Vector3F> corners = getCornersF();
 
   const Camera* currentCamera = rc->getCurrentCamera();

@@ -32,15 +32,17 @@ public class EffectsScheduler
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
     java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
-    for (int i = 0; i < _effectsRuns.size(); i++)
+    final int size = _effectsRuns.size();
+    for (int i = 0; i < size; i++)
     {
       EffectRun effectRun = _effectsRuns.get(i);
   
-      if (effectRun._started == true)
+      if (effectRun._started)
       {
-        if (effectRun._effect.isDone(rc, when))
+        Effect effect = effectRun._effect;
+        if (effect.isDone(rc, when))
         {
-          effectRun._effect.stop(rc, when);
+          effect.stop(rc, when);
   
           indicesToRemove.add(i);
         }
@@ -51,8 +53,9 @@ public class EffectsScheduler
     for (int i = indicesToRemove.size() - 1; i >= 0; i--)
     {
       final int indexToRemove = indicesToRemove.get(i);
-      if (_effectsRuns.get(indexToRemove) != null)
-         _effectsRuns.get(indexToRemove).dispose();
+      EffectRun effectRun = _effectsRuns.get(indexToRemove);
+      if (effectRun != null)
+         effectRun.dispose();
   
       _effectsRuns.remove(indexToRemove);
     }
@@ -61,28 +64,27 @@ public class EffectsScheduler
   public EffectsScheduler()
   {
      _effectsRuns = new java.util.ArrayList<EffectRun>();
-
   }
 
   public final void doOneCyle(G3MRenderContext rc)
   {
     final TimeInterval now = _timer.now();
   
-  
     processFinishedEffects(rc, now);
   
-  
-    for (int i = 0; i < _effectsRuns.size(); i++)
+    final int size = _effectsRuns.size();
+    for (int i = 0; i < size; i++)
     {
       EffectRun effectRun = _effectsRuns.get(i);
+      Effect effect = effectRun._effect;
   
-      if (effectRun._started == false)
+      if (!effectRun._started)
       {
-        effectRun._effect.start(rc, now);
+        effect.start(rc, now);
         effectRun._started = true;
       }
   
-      effectRun._effect.doStep(rc, now);
+      effect.doStep(rc, now);
     }
   }
 
@@ -114,18 +116,18 @@ public class EffectsScheduler
     java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
     final TimeInterval now = _timer.now();
   
-    for (int i = 0; i < _effectsRuns.size(); i++)
+    final int size = _effectsRuns.size();
+    for (int i = 0; i < size; i++)
     {
       EffectRun effectRun = _effectsRuns.get(i);
   
-      if (effectRun._started == true)
+      if (effectRun._target == target)
       {
-        if (effectRun._target == target)
+        if (effectRun._started)
         {
           effectRun._effect.cancel(now);
-  
-          indicesToRemove.add(i);
         }
+        indicesToRemove.add(i);
       }
     }
   
@@ -133,8 +135,9 @@ public class EffectsScheduler
     for (int i = indicesToRemove.size() - 1; i >= 0; i--)
     {
       final int indexToRemove = indicesToRemove.get(i);
-      if (_effectsRuns.get(indexToRemove) != null)
-         _effectsRuns.get(indexToRemove).dispose();
+      EffectRun effectRun = _effectsRuns.get(indexToRemove);
+      if (effectRun != null)
+         effectRun.dispose();
   
       _effectsRuns.remove(indexToRemove);
     }

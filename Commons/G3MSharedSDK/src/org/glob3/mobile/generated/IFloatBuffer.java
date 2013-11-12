@@ -20,6 +20,11 @@ package org.glob3.mobile.generated;
 public abstract class IFloatBuffer implements IBuffer
 {
 
+  public IFloatBuffer()
+  {
+     super();
+  }
+
   public void dispose()
   {
   }

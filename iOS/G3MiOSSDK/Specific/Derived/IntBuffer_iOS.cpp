@@ -7,9 +7,9 @@
 //
 
 #include "IntBuffer_iOS.hpp"
-
-
 #include <sstream>
+
+long long IntBuffer_iOS::_nextID = 0;
 
 const std::string IntBuffer_iOS::description() const {
   std::ostringstream oss;

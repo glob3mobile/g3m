@@ -11,8 +11,8 @@
 #include <sstream>
 #include <OpenGLES/ES2/gl.h>
 
+long long FloatBuffer_iOS::_nextID = 0;
 GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
-
 
 const std::string FloatBuffer_iOS::description() const {
   std::ostringstream oss;

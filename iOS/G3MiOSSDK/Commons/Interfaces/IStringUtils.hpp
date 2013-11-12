@@ -161,6 +161,8 @@ public:
 
   virtual std::string toString(double value) const = 0;
 
+  virtual double parseDouble(const std::string& str) const = 0;
+
 };
 
 #endif

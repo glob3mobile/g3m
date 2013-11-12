@@ -50,10 +50,10 @@ private:
       const double delta = (averageHeight - middleHeight) / 2.0;
       return averageHeight + delta;
     }
-//    const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
-//    if (middleHeight < averageHeight) {
-//      return (averageHeight + middleHeight) / 2.0;
-//    }
+    //    const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
+    //    if (middleHeight < averageHeight) {
+    //      return (averageHeight + middleHeight) / 2.0;
+    //    }
 
     return middleHeight;
   }
@@ -81,8 +81,8 @@ public:
   {
   }
 
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when) {
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when) {
     const double alpha = getAlpha(when);
 
     double height;
@@ -108,9 +108,9 @@ public:
     camera->setHeading(heading);
 
     const Angle middlePitch = Angle::fromDegrees(0);
-//    const Angle pitch =  (alpha < 0.5)
-//    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
-//    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
+    //    const Angle pitch =  (alpha < 0.5)
+    //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
+    //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
 
     if (alpha <= 0.1) {
       camera->setPitch( Angle::linearInterpolation(_fromPitch, middlePitch, alpha*10) );
@@ -124,20 +124,20 @@ public:
 
   }
 
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when) {
     Camera* camera = rc->getNextCamera();
     camera->setGeodeticPosition(_toPosition);
     camera->setPitch(_toPitch);
     camera->setHeading(_toHeading);
   }
 
-  virtual void cancel(const TimeInterval& when) {
+  void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
 
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when) {
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
 
     _middleHeight = calculateMaxHeight(rc->getPlanet());

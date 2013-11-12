@@ -18,7 +18,7 @@ public class DeviceInfo_Android
    private float         _dpi = -1;
 
 
-   public DeviceInfo_Android(final Context context) {
+   DeviceInfo_Android(final Context context) {
       _context = context;
    }
 

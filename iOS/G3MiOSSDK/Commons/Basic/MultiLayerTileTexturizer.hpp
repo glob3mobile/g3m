@@ -21,7 +21,7 @@ class LeveledTexturedMesh;
 class IFloatBuffer;
 class TileRasterizer;
 class TextureIDReference;
-
+class G3MEventContext;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -32,7 +32,7 @@ public:
   
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const G3MRenderContext *rc,
+  bool isReady(const G3MRenderContext* rc,
                LayerSet* layerSet);
   
   void initialize(const G3MContext* context,

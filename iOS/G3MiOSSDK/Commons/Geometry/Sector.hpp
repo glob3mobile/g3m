@@ -166,7 +166,7 @@ public:
   }
 
 
-  bool isBackOriented(const G3MRenderContext *rc,
+  bool isBackOriented(const G3MRenderContext* rc,
                       double minHeight,
                       const Planet* planet,
                       const Vector3D& cameraNormalizedPosition,

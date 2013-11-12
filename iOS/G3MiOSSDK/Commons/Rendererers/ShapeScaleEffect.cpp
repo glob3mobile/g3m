@@ -11,7 +11,7 @@
 #include "IMathUtils.hpp"
 #include "Shape.hpp"
 
-void ShapeScaleEffect::doStep(const G3MRenderContext *rc,
+void ShapeScaleEffect::doStep(const G3MRenderContext* rc,
                               const TimeInterval& when) {
   const double alpha = getAlpha(when);
 
@@ -27,7 +27,7 @@ void ShapeScaleEffect::cancel(const TimeInterval& when) {
   _shape->setScale(_toScaleX, _toScaleY, _toScaleZ);
 }
 
-void ShapeScaleEffect::stop(const G3MRenderContext *rc,
+void ShapeScaleEffect::stop(const G3MRenderContext* rc,
                             const TimeInterval& when) {
   _shape->setScale(_toScaleX, _toScaleY, _toScaleZ);
 }

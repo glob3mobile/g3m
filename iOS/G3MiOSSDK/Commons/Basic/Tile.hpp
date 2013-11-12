@@ -65,8 +65,6 @@ private:
 
   BoundingVolume* _boundingVolume;
 
-  const Vector2D _renderedVStileSectorRatio;
-
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
                                   const TileTessellator* tessellator,
@@ -141,7 +139,7 @@ private:
   PlanetTileTessellatorData* _tessellatorData;
 
   Box* _tileBoundingVolume;
-  Box* getTileBoundingVolume(const G3MRenderContext *rc);
+  Box* getTileBoundingVolume(const G3MRenderContext* rc);
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
@@ -152,13 +150,13 @@ private:
 
   const PlanetRenderer* _planetRenderer;
 
-  const BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+  const BoundingVolume* getBoundingVolume(const G3MRenderContext* rc,
                                           ElevationDataProvider* elevationDataProvider,
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
 
-  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
+//  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
 
 public:
   const Sector    _sector;

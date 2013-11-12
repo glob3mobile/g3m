@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class TileRasterizer;
 //class TextureIDReference;
-
+//class G3MEventContext;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
@@ -66,20 +66,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-  
-  //    MultiLayerTileTexturizer*         texturizer,
-  //    TileRasterizer*                   tileRasterizer,
-  //    const G3MRenderContext*           rc,
-  //    const LayerTilesRenderParameters* layerTilesRenderParameters,
-  //    const std::vector<Petition*>&     petitions,
-  //    IDownloader*                      downloader,
-  //    Tile*                             tile,
-  //    const Mesh*                       tessellatorMesh,
-  //    const TileTessellator*            tessellator,
-  //    long long                         texturePriority
-  
-  //    const LayerSet* layerSet = prc->getLayerSet();
-  
       builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
       tile.setTexturizerData(builderHolder);
     }
@@ -91,7 +77,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     }
     else
     {
-      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builder));
+      rc.getFrameTasksExecutor().addPreRenderTask(new TileTextureBuilderStartTask(builder));
     }
   
     tile.setTexturizerDirty(false);
@@ -156,11 +142,10 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final int level = tile._level - ancestorTile._level;
   //  _texturesHandler->retainGLTextureId(glTextureId);
-  
     final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
   
+    final int level = tile._level - ancestorTile._level;
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
   //    _texturesHandler->releaseGLTextureId(glTextureId);

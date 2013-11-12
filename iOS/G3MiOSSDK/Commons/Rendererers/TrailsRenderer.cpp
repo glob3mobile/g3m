@@ -125,7 +125,7 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
                                      new Color(_color),
                                      NULL, // colors
                                      0.0f, // colorsIntensity
-                                     false // depthTest
+                                     true // depthTest
                                      );
 
   return surfaceMesh;

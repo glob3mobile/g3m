@@ -3,11 +3,13 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
   private final IFloatBuffer _buffer;
   private final int _timeStamp;
+  private final long _id;
   public GPUAttributeValueVecFloat(IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
   {
      super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);
      _buffer = buffer;
      _timeStamp = buffer.timestamp();
+     _id = buffer.getID();
   }
 
   public final void setAttribute(GL gl, int id)
@@ -29,7 +31,9 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-    return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
+    boolean equal = ((_id == vecV._buffer.getID()) && (_timeStamp == vecV._timeStamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
+
+    return equal;
   }
 
   public final String description()

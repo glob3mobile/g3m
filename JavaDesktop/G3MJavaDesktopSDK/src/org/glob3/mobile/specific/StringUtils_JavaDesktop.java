@@ -160,4 +160,10 @@ public final class StringUtils_JavaDesktop
       return Long.toString(value);
    }
 
+
+   @Override
+   public double parseDouble(final String str) {
+      return Double.parseDouble(str);
+   }
+
 }
