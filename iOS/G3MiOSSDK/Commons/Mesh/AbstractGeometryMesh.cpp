@@ -135,9 +135,9 @@ void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* par
 
 void AbstractGeometryMesh::zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
 
-  GLState zRenderGLState;
+  GLState* zRenderGLState = new GLState();
 
-  zRenderGLState.addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+  zRenderGLState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
                                                3,            //Our buffer contains elements of 3
                                                0,            //Index 0
                                                false,        //Not normalized
@@ -149,10 +149,12 @@ void AbstractGeometryMesh::zRender(const G3MRenderContext* rc, const GLState* pa
                                                true, _pointSize), false);
 
   if (_translationMatrix != NULL) {
-    zRenderGLState.addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+    zRenderGLState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
 
-  zRenderGLState.setParent(parentGLState);
-  rawRender(rc, &zRenderGLState, Z_BUFFER_RENDER);
+  zRenderGLState->setParent(parentGLState);
+  rawRender(rc, zRenderGLState, Z_BUFFER_RENDER);
+
+  zRenderGLState->_release();
 
 }

@@ -294,7 +294,7 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
-  std::vector<Tile*> _tilesRenderedInLastFrame;
+  std::list<Tile*> _tilesRenderedInLastFrame;
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,

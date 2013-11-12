@@ -829,15 +829,17 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   
   updateGLState(rc);
 
-  GLState zRenderGLState;
-  zRenderGLState.addGLFeature(new ModelViewGLFeature(rc->getCurrentCamera()), false);
-  zRenderGLState.setParent(glState);
+  GLState* zRenderGLState = new GLState();
+  zRenderGLState->addGLFeature(new ModelViewGLFeature(rc->getCurrentCamera()), false);
+  zRenderGLState->setParent(glState);
 
-  for (std::vector<Tile*>::iterator iter = _tilesRenderedInLastFrame.begin();
+  for (std::list<Tile*>::iterator iter = _tilesRenderedInLastFrame.begin();
        iter != _tilesRenderedInLastFrame.end();
        iter++) {
     Tile* tile = *iter;
     
-    tile->zRender(rc, zRenderGLState);
+    tile->zRender(rc, *zRenderGLState);
   }
+
+  zRenderGLState->_release();
 }

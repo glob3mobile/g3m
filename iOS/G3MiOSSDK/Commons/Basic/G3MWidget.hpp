@@ -122,7 +122,7 @@ public:
   
   void render(int width, int height);
 
-  void zRender(int width, int height);
+  void zRender();
   
   void onTouchEvent(const TouchEvent* myEvent);
   
@@ -210,8 +210,6 @@ public:
   PlanetRenderer* getPlanetRenderer();
 
   void setShownSector(const Sector& sector);
-
-  static bool RENDERING_Z;
   
 private:
   IStorage*                _storage;
