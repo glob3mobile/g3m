@@ -80,6 +80,8 @@ public:
     return false;
   }
 
+  void zRender(const G3MRenderContext* rc, GLState* glState);
+
 };
 
 #endif

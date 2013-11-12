@@ -187,3 +187,14 @@ PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
 
   return result;
 }
+
+void CompositeRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* renderer = _renderers[i];
+    if (renderer->isEnable()) {
+      renderer->zRender(rc, glState);
+    }
+  }
+
+}

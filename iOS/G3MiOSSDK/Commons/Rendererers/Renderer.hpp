@@ -32,6 +32,9 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState) = 0;
 
+  virtual void zRender(const G3MRenderContext* rc,
+                      GLState* glState) = 0;
+
   /**
    Gives to Renderer the opportunity to process touch events.
 

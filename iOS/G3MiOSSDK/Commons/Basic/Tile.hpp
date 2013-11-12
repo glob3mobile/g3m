@@ -213,7 +213,8 @@ public:
                                long long texturePriority,
                                float verticalExaggeration);
 
-  void render(const G3MRenderContext* rc,
+  //RETURN ISRAWRENDER
+  bool render(const G3MRenderContext* rc,
               const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration,
               const Planet* planet,
@@ -235,6 +236,9 @@ public:
               long long texturePriority,
               const float dpiFactor,
               const float deviceQualityFactor);
+
+  void zRender(const G3MRenderContext* rc,
+              const GLState& parentState);
 
   const TileKey getKey() const;
 

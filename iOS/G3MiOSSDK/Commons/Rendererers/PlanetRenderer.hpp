@@ -294,6 +294,8 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
+  std::vector<Tile*> _tilesRenderedInLastFrame;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -441,6 +443,8 @@ public:
   void setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
 
 };
 

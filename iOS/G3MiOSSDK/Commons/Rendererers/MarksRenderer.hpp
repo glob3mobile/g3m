@@ -106,9 +106,7 @@ public:
     return true;
   }
   
-  void modifiyGLState(GLState* state) {
-    
-  }
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
   
 //  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };

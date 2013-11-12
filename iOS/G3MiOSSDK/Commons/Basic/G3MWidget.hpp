@@ -121,6 +121,8 @@ public:
   ~G3MWidget();
   
   void render(int width, int height);
+
+  void zRender(int width, int height);
   
   void onTouchEvent(const TouchEvent* myEvent);
   

@@ -641,7 +641,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
-void Tile::render(const G3MRenderContext* rc,
+bool Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration,
                   const Planet* planet,
@@ -746,13 +746,20 @@ void Tile::render(const G3MRenderContext* rc,
         toVisitInNextIteration->push_back(subTile);
       }
     }
+
+
+    return isRawRender; //RETURN ISRAWRENDER
   }
   else {
     setIsVisible(false, texturizer);
 
     prune(texturizer, elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
+
+
+    return false;   //RETURN ISRAWRENDER
   }
+
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -1016,3 +1023,27 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
 //  }
 //  return Vector2D(1.0,1.0);
 //}
+
+void Tile::zRender(const G3MRenderContext* rc,
+                  const GLState& parentState) {
+
+  if (_tessellatorMesh == NULL) {
+    ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
+    return;
+  } else{
+    _tessellatorMesh->render(rc, &parentState);
+  }
+//
+//  else {
+//    if (_texturizedMesh != NULL) {
+//      _texturizedMesh->render(rc, &parentState);
+//    }
+//    else {
+//      if (_flatColorMesh != NULL){
+//        _flatColorMesh->render(rc, &parentState);
+//      } else{
+//        ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
+//      }
+//    }
+//  }
+}
