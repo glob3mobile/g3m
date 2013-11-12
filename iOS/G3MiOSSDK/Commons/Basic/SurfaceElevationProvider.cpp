@@ -23,6 +23,11 @@ bool SurfaceElevationProvider_Visitor::visitElement(const Geodetic2D& geodetic,
                                                     const void*   element) const{
   SurfaceElevationListener* listener = (SurfaceElevationListener*) element;
   double height = _elevationData->getElevationAt(geodetic);
+
+  if (ISNAN(height)){
+    height = 0;
+  }
+
   listener->elevationChanged(geodetic, height, _verticalExaggeration);
   return false;
 }
