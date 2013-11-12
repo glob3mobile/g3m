@@ -20,11 +20,10 @@
 }
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
-
-@property (strong, nonatomic) IBOutlet UIButton *demoSelector;
-@property (strong, nonatomic) G3MUIDropDownMenu* demoMenu;
-@property (strong, nonatomic) G3MToolbar* toolbar;
-@property (strong, nonatomic) UIButton* layerSwitcher;
-@property (strong, nonatomic) UIButton* playButton;
+@property (strong, nonatomic) IBOutlet UIButton*      demoSelector;
+@property (strong, nonatomic) G3MUIDropDownMenu*      demoMenu;
+@property (strong, nonatomic) G3MToolbar*             toolbar;
+@property (strong, nonatomic) UIButton*               layerSwitcher;
+@property (strong, nonatomic) UIButton*               playButton;
 
 @end
