@@ -12,7 +12,7 @@
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #import <G3MiOSSDK/GInitializationTask.hpp>
-#import <G3MiOSSDK/TileRendererBuilder.hpp>
+#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
@@ -56,12 +56,12 @@
 
 
   const float verticalExaggeration = 6.0f;
-  builder.getTileRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
-  builder.getTileRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
 
@@ -79,8 +79,8 @@
   userData->setMeshRenderer(meshRenderer);
   
   // Setup the builder
-  builder.getTileRendererBuilder()->setLayerSet(userData->getLayerSet());
-  //  builder.getTileRendererBuilder()->setShowStatistics(true);
+  builder.getPlanetRendererBuilder()->setLayerSet(userData->getLayerSet());
+  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
   builder.addRenderer(markerRenderer);
   builder.addRenderer(shapeRenderer);
   builder.addRenderer(meshRenderer);
@@ -200,7 +200,7 @@
   
   LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
   for (int i = 0; i < layerSet->size(); i++) {
-    layerSet->get(i)->setEnable(false);
+    layerSet->getLayer(i)->setEnable(false);
   }
 }
 
@@ -209,7 +209,7 @@
   LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
   // satellite layers
   for (int i = 0; i < satelliteLayersNames.size(); i++) {
-    layerSet->getLayer(satelliteLayersNames[i])->setEnable(enabled);
+    layerSet->getLayerByName(satelliteLayersNames[i])->setEnable(enabled);
   }
   
   ((G3MAppUserData*) [[self g3mWidget] userData])->setSatelliteLayerEnabled(enabled);
@@ -231,7 +231,7 @@
 
   LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
   // osm
-  layerSet->getLayer("osm_auto:all")->setEnable(satelliteLayerEnabled);
+  layerSet->getLayerByName("osm_auto:all")->setEnable(satelliteLayerEnabled);
   // satellite layers
   [self setSatelliteLayerEnabled: !satelliteLayerEnabled];
   
@@ -301,9 +301,9 @@
   ((G3MAppUserData*) [[self g3mWidget] userData])->setSatelliteLayerEnabled(false);
   LayerSet* layerSet = ((G3MAppUserData*) [[self g3mWidget] userData])->getLayerSet();
   
-  layerSet->getLayer("MapQuest-OSM")->setEnable(true);
-  layerSet->getLayer("CartoDB-meteoritessize")->setEnable(true);
-  layerSet->getLayer("g3m:mosaic-sst,g3m:mosaic-sla")->setEnable(true);
+  layerSet->getLayerByName("MapQuest-OSM")->setEnable(true);
+  layerSet->getLayerByName("CartoDB-meteoritessize")->setEnable(true);
+  layerSet->getLayerByName("g3m:mosaic-sst,g3m:mosaic-sla")->setEnable(true);
   
   
   [[self g3mWidget] setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),

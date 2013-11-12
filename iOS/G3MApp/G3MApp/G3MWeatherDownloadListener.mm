@@ -59,6 +59,7 @@ void G3MWeatherDownloadListener::onDownload(const URL& url,
     Mark* marker = new Mark(city->getAsString("name", ""),
                             URL(iconPathISB->getString(), false),
                             Geodetic3D(position2D, 0),
+                            ABSOLUTE,
                             0.0,
                             true,
                             14.0);

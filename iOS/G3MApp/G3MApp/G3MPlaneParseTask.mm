@@ -15,6 +15,7 @@
 #import <G3MiOSSDK/IThreadUtils.hpp>
 #import <G3MiOSSDK/URL.hpp>
 #import "G3MAppUserData.hpp"
+#import <G3MiOSSDK/SGShape.hpp>
 
 
 class G3MAddShapeTask : public GTask {
@@ -50,7 +51,7 @@ void G3MPlaneParseTask::run(const G3MContext* context) {
     
     IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
     if (buffer) {
-      Shape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL, false);
+      SGShape* plane = SceneJSShapesParser::parseFromBSON(buffer, URL::FILE_PROTOCOL, false, NULL, ABSOLUTE);
       if (plane) {
         ((G3MAppUserData*) [_widget userData])->setPlane(plane);
         plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),

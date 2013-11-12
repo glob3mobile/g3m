@@ -19,9 +19,12 @@
 MeshRenderer* G3MMeshRenderer::createMeshRenderer(const Planet* planet) {
   MeshRenderer* mr = new MeshRenderer();
   
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-                                          planet,
-                                          Geodetic2D::zero());
+//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+//                                          planet,
+//                                          Geodetic2D::zero());
+
+  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+
   FloatBufferBuilderFromColor colors;
   
   const Angle centerLat = Angle::fromDegreesMinutesSeconds(38, 53, 42);

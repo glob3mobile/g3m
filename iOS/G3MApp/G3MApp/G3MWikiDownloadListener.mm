@@ -53,7 +53,8 @@ void G3MWikiDownloadListener::onDownload(const URL& url,
     Mark* marker = new Mark(URL(markerIcon, false),
                             Geodetic3D(Angle::fromDegrees(coordinates->getAsNumber(1)->value()),
                                        Angle::fromDegrees(coordinates->getAsNumber(0)->value()),
-                                       0));
+                                       0),
+                            ABSOLUTE);
     
     MarkUserData* mud = new G3MMarkerUserData(title, URL(urlStr, false));
     marker->setUserData(mud);
