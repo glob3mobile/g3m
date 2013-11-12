@@ -40,6 +40,7 @@ private:
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
 
 public:
   BoxShape(Geodetic3D* position,

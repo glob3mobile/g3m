@@ -283,10 +283,14 @@ std::vector<double> BoxShape::intersectionsDistances(const Planet* planet,
 
 bool BoxShape::isVisible(const G3MRenderContext *rc)
 {
-  if (_boundingVolume == NULL)
-    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(rc->getPlanet()));
-  return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
+  return getBoundingVolume(rc)->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
 
 
+BoundingVolume* BoxShape::getBoundingVolume(const G3MRenderContext *rc)
+{
+  if (_boundingVolume == NULL)
+    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(rc->getPlanet()));
+  return _boundingVolume;
+}
 

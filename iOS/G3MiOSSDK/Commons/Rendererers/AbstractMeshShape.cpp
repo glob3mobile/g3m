@@ -43,6 +43,9 @@ void AbstractMeshShape::rawRender(const G3MRenderContext* rc,
   if (mesh != NULL) {
     mesh->render(rc, parentState);
   }
+  BoundingVolume* boundingVolume = getBoundingVolume(rc);
+  if (boundingVolume)
+    boundingVolume->render(rc, *parentState);
 }
 
 bool AbstractMeshShape::isTransparent(const G3MRenderContext* rc) {

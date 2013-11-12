@@ -8,10 +8,19 @@
 
 #include "OrientedBox.hpp"
 #include "Quadric.hpp"
+#include "Mesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IndexedMesh.hpp"
 
 
-
-
+OrientedBox::~OrientedBox() {
+  delete _transformMatrix;
+  if (_mesh) delete _mesh;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
 
 const std::vector<Vector3D> OrientedBox::getCorners() const
 {
@@ -129,3 +138,54 @@ std::vector<double> OrientedBox::intersectionsDistances(const Vector3D& origin,
   
   return distances;
 }
+
+
+void OrientedBox::render(const G3MRenderContext* rc, const GLState& parentState) const{
+  if (_mesh == NULL) {
+    createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+  }
+  _mesh->render(rc, &parentState);
+}
+
+
+void OrientedBox::createMesh(Color* color) const {
+  float v[] = {
+    (float)_halfExtentX,    (float)_halfExtentY,   (float)_halfExtentZ,
+    -(float)_halfExtentX,   (float)_halfExtentY,   (float)_halfExtentZ,
+    (float)_halfExtentX,    -(float)_halfExtentY,  (float)_halfExtentZ,
+    -(float)_halfExtentX,   -(float)_halfExtentY,  (float)_halfExtentZ,
+    (float)_halfExtentX,    (float)_halfExtentY,   -(float)_halfExtentZ,
+    -(float)_halfExtentX,   (float)_halfExtentY,   -(float)_halfExtentZ,
+    (float)_halfExtentX,    -(float)_halfExtentY,  -(float)_halfExtentZ,
+    -(float)_halfExtentX,   -(float)_halfExtentY,  -(float)_halfExtentZ
+  };
+  
+  short i[] = {
+    0, 1, 1, 3, 3, 2, 2, 0,
+    0, 4, 1, 5, 3, 7, 2, 6,
+    4, 5, 5, 7, 7, 6, 6, 4
+  };
+  
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  ShortBufferBuilder indices;
+  
+  const unsigned int numVertices = 8;
+  for (unsigned int n=0; n<numVertices; n++) {
+    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+  }
+  
+  const int numIndices = 24;
+  for (unsigned int n=0; n<numIndices; n++) {
+    indices.add(i[n]);
+  }
+  
+  _mesh = new IndexedMesh(GLPrimitive::lines(),
+                          true,
+                          vertices.getCenter(),
+                          vertices.create(),
+                          indices.create(),
+                          1,
+                          1,
+                          color);
+}
+

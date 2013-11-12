@@ -39,6 +39,11 @@ private:
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc){
+    int __TODO_getBoundingVolume_Method;
+    return (BoundingVolume*)NULL;
+  }
+
 
 public:
   QuadShape(Geodetic3D* position,

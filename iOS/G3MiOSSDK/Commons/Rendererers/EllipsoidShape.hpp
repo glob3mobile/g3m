@@ -82,7 +82,8 @@ private:
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
-
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
+  
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,

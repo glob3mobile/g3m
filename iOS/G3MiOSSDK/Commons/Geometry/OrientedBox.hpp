@@ -15,6 +15,8 @@
 
 class Vector3D;
 class MutableMatrix44D;
+class Mesh;
+class Color;
 
 
 class OrientedBox: public BoundingVolume {
@@ -26,19 +28,21 @@ private:
 #ifdef JAVA_CODE
   private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
 #endif
-
+  
+  mutable Mesh *_mesh;
+  void createMesh(Color* flatColor) const;
   
 public:
   OrientedBox(const Vector3D& extent, const MutableMatrix44D& transformMatrix):
   _halfExtentX(extent._x/2),
   _halfExtentY(extent._y/2),
   _halfExtentZ(extent._z/2),
-  _transformMatrix(new MutableMatrix44D(transformMatrix))
+  _transformMatrix(new MutableMatrix44D(transformMatrix)),
+  _mesh(NULL)
   {}
   
-  ~OrientedBox() {
-    delete _transformMatrix;
-  }
+  ~OrientedBox();
+
   
   double projectedArea(const G3MRenderContext* rc) const {
     int __TODO_OrientedBox_projectedArea;
@@ -46,10 +50,8 @@ public:
   }
   
   void render(const G3MRenderContext* rc,
-              const GLState& parentState) const  {
-    int __TODO_OrientedBox_render;
-  }
-
+              const GLState& parentState) const;
+  
   bool touches(const BoundingVolume* that) const  {
     int __TODO_OrientedBox_touches;
     return true;
@@ -120,8 +122,6 @@ public:
   const std::vector<Vector3D> getCorners() const;
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
-
-
 };
 
 

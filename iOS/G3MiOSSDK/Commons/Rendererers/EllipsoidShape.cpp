@@ -291,9 +291,14 @@ std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
 
 bool EllipsoidShape::isVisible(const G3MRenderContext *rc)
 {
+  return getBoundingVolume(rc)->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
+}
+
+BoundingVolume* EllipsoidShape::getBoundingVolume(const G3MRenderContext *rc)
+{
   if (_boundingVolume == NULL) {
     const Vector3D extent = _ellipsoid->getRadii().times(2);
     _boundingVolume = new OrientedBox(extent, *getTransformMatrix(rc->getPlanet()));
   }
-  return _boundingVolume->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
+  return _boundingVolume;
 }
