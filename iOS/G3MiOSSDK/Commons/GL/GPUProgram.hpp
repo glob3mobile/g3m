@@ -34,6 +34,12 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
+
+enum RenderType{
+  REGULAR_RENDER,
+  Z_BUFFER_RENDER
+};
+
 class GPUProgram {
   int _programID;
   bool _programCreated;

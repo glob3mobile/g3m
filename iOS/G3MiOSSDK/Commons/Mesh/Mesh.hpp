@@ -33,6 +33,8 @@ public:
   
   virtual void render(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
+  virtual void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+
 };
 
 

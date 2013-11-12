@@ -67,7 +67,7 @@ public:
 
   void setParent(const GLState* p) const;
 
-  void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
+  void applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType renderType) const;
 
   void addGLFeature(GLFeature* f, bool mustRetain);
 

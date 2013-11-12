@@ -34,6 +34,8 @@ public:
               IFloatBuffer* normals = NULL);
 
   ~IndexedMesh();
+
+  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{}
 };
 
 #endif

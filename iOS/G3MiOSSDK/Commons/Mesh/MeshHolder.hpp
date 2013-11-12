@@ -59,6 +59,10 @@ public:
   void render(const G3MRenderContext* rc, const GLState* parentGLState) const{
     _mesh->render(rc, parentGLState);
   }
+
+  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+    _mesh->zRender(rc, parentGLState);
+  }
   
 };
 

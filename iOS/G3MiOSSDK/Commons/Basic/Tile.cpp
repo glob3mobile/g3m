@@ -1031,7 +1031,7 @@ void Tile::zRender(const G3MRenderContext* rc,
     ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
     return;
   } else{
-    _tessellatorMesh->render(rc, &parentState);
+    _tessellatorMesh->zRender(rc, &parentState);
   }
 //
 //  else {
@@ -1041,7 +1041,7 @@ void Tile::zRender(const G3MRenderContext* rc,
 //    else {
 //      if (_flatColorMesh != NULL){
 //        _flatColorMesh->render(rc, &parentState);
-//      } else{
+//      } else{  
 //        ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
 //      }
 //    }

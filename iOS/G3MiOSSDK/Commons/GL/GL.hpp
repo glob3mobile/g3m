@@ -99,26 +99,17 @@ public:
   }
   
   void clearScreen(const Color& color);
-  
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
 
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState* state,
-                    GPUProgramManager& progManager);
-  
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
+                    GPUProgramManager& progManager,
+                    RenderType renderType);
 
   void drawArrays(int mode,
                   int first,
                   int count, const GLState* state,
-                  GPUProgramManager& progManager);
+                  GPUProgramManager& progManager,
+                  RenderType renderType);
   
   int getError() const;
   

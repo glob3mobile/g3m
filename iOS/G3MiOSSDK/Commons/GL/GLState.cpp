@@ -89,7 +89,7 @@ void GLState::setParent(const GLState* parent) const{
   }
 }
 
-void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
+void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType renderType) const{
 
   if (_valuesSet == NULL && _globalState == NULL) {
 
@@ -98,46 +98,25 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
 
-    //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-    //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
-    //
-    ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-    ////        const GLFeature* f = accumulatedFeatures->get(j);
-    ////        if (f->getGroup() == groupName) {
-    ////          group->add(f);
-    ////        }
-    ////      }
-    ////      group->addToGPUVariableSet(_valuesSet);
-    ////      group->applyOnGlobalGLState(_globalState);
-    //
-    //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
-    //
-    //      delete group;
-    //    }
-
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
     const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
-    _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+    switch (renderType) {
+      case Z_BUFFER_RENDER: //Z_BUFFER
+        _lastGPUProgramUsed = progManager.getProgram(gl, "ZRender");
+        break;
+      default:
+        _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+        break;
+    }
+
+    //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
   }
 
   if (_valuesSet == NULL || _globalState == NULL) {
     ILogger::instance()->logError("GLState logic error.");
-    return;
-  }
-
-  if (G3MWidget::RENDERING_Z){ //TODO: RENDER Z
-    GPUProgram* zRenderProgram = progManager.getProgram(gl, "ZRender");
-
-    gl->useProgram(zRenderProgram);
-
-    _valuesSet->applyValuesToProgram(zRenderProgram);
-    _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
-
-    zRenderProgram->applyChanges(gl);
     return;
   }
 

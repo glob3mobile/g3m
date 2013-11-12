@@ -162,6 +162,8 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState* parentGLState) const;
 
+  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{}
+
 };
 
 #endif
