@@ -198,9 +198,8 @@ public abstract class AbstractMesh extends Mesh
     return _flatColor.isTransparent();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
-  
     _glState.setParent(parentGLState);
     rawRender(rc);
   }
