@@ -29,11 +29,11 @@ G3MWeatherDownloadListener::G3MWeatherDownloadListener(GInitializationTask* init
 }
 
 void G3MWeatherDownloadListener::onDownload(const URL& url,
-                IByteBuffer* buffer, bool expired) {
+                                            IByteBuffer* buffer, bool expired) {
   MarksRenderer* markerRenderer = ((G3MAppUserData*) [_widget userData])->getMarkerRenderer();
   const JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
   const JSONArray* marks = json->asObject()->getAsArray("list");
-  
+
   for (int i = 0; i < marks->size(); i++) {
     const JSONObject* city = marks->getAsObject(i);
     const JSONObject* coords = city->getAsObject("coord");
@@ -55,7 +55,7 @@ void G3MWeatherDownloadListener::onDownload(const URL& url,
       iconISB->addString(".png");
     }
     iconPathISB->addString(iconISB->getString());
-    
+
     Mark* marker = new Mark(city->getAsString("name", ""),
                             URL(iconPathISB->getString(), false),
                             Geodetic3D(position2D, 0),
@@ -66,7 +66,7 @@ void G3MWeatherDownloadListener::onDownload(const URL& url,
     MarkUserData* mud = new G3MMarkerUserData(city->getAsString("name", ""));
     marker->setUserData(mud);
     markerRenderer->addMark(marker);
-    
+
     delete iconISB;
     delete iconPathISB;
   }
@@ -77,7 +77,7 @@ void G3MWeatherDownloadListener::onDownload(const URL& url,
 
 void G3MWeatherDownloadListener::onError(const URL& url) {
   NSString* message = [NSString stringWithFormat: @"Oops!\nThere was a problem getting weather markers info"];
-  
+
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"glob3 mobile"
                                                   message: message
                                                  delegate: nil

@@ -324,8 +324,11 @@
   
   if([title isEqualToString:@"Learn more..."]) {
     G3MWebViewController *webView = [self.storyboard instantiateViewControllerWithIdentifier:@"G3MWebViewController"];
-    [self presentModalViewController: webView
-                            animated: YES];
+//    [self presentModalViewController: webView
+//                            animated: YES];
+    [self presentViewController:webView
+                       animated:YES
+                     completion:nil];
     [webView loadUrl: [NSURL URLWithString: urlMarkString]];
   }
 }

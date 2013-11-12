@@ -16,7 +16,6 @@ LayerSet* G3MAppUserData::getLayerSet() {
   return _layerSet;
 }
 
-
 void G3MAppUserData::setSatelliteLayerEnabled(bool satelliteLayerEnabled) {
   _satelliteLayerEnabled = satelliteLayerEnabled;
 }
@@ -33,7 +32,6 @@ Shape* G3MAppUserData::getPlane() {
   return _plane;
 }
 
-
 void G3MAppUserData::setShapeRenderer(ShapesRenderer* shapeRenderer) {
   _shapeRenderer = shapeRenderer;
 }
@@ -42,7 +40,6 @@ ShapesRenderer* G3MAppUserData::getShapeRenderer() {
   return _shapeRenderer;
 }
 
-
 void G3MAppUserData::setMarkerRenderer(MarksRenderer* markerRenderer) {
   _markerRenderer = markerRenderer;
 }
@@ -50,7 +47,6 @@ void G3MAppUserData::setMarkerRenderer(MarksRenderer* markerRenderer) {
 MarksRenderer* G3MAppUserData::getMarkerRenderer() {
   return _markerRenderer;
 }
-
 
 void G3MAppUserData::setMeshRenderer(MeshRenderer* meshRenderer) {
   _meshRenderer = meshRenderer;

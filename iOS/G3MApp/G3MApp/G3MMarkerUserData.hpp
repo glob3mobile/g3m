@@ -14,11 +14,12 @@ class G3MMarkerUserData : public MarkUserData {
   
 private:
   const std::string _title;
-  const URL _url;
+  const URL         _url;
   
 public:
-  G3MMarkerUserData(std::string title, const URL &url);
-  G3MMarkerUserData(std::string title);
+  G3MMarkerUserData(const std::string& title,
+                    const URL& url);
+  G3MMarkerUserData(const std::string& title);
   
   std::string getTitle();
   URL getUrl();

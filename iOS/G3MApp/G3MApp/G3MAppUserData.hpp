@@ -16,7 +16,6 @@ class MarksRenderer;
 class MeshRenderer;
 
 class G3MAppUserData : public WidgetUserData {
-  
 private:
   LayerSet* _layerSet;
   bool _satelliteLayerEnabled;
@@ -24,25 +23,25 @@ private:
   ShapesRenderer* _shapeRenderer;
   MarksRenderer* _markerRenderer;
   MeshRenderer* _meshRenderer;
-  
+
 public:
   G3MAppUserData() {}
-  
+
   void setLayerSet(LayerSet* layerSet);
   LayerSet* getLayerSet();
-  
+
   void setSatelliteLayerEnabled(bool satelliteLayerEnabled);
   bool getSatelliteLayerEnabled();
-  
+
   void setPlane(Shape* plane);
   Shape* getPlane();
-  
+
   void setShapeRenderer(ShapesRenderer* shapeRenderer);
   ShapesRenderer* getShapeRenderer();
-  
+
   void setMarkerRenderer(MarksRenderer* markerRenderer);
   MarksRenderer* getMarkerRenderer();
-  
+
   void setMeshRenderer(MeshRenderer* meshRenderer);
   MeshRenderer* getMeshRenderer();
 };

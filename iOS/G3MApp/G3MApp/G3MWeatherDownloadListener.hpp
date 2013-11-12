@@ -14,26 +14,26 @@
 class GInitializationTask;
 
 class G3MWeatherDownloadListener : public IBufferDownloadListener {
-  
+
 private:
   GInitializationTask* _initTask;
   G3MWidget_iOS* _widget;
-  
+
 public:
   G3MWeatherDownloadListener(GInitializationTask* initTask,
                              G3MWidget_iOS* widget);
-  
+
   void onDownload(const URL& url,
                   IByteBuffer* buffer, bool expired);
-  
+
   void onError(const URL& url);
-  
+
   void onCancel(const URL& url) {
   }
-  
+
   void onCanceledDownload(const URL& url,
                           IByteBuffer* data, bool expired) {
   }
-  
+
 };
 
