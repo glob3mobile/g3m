@@ -19,7 +19,7 @@
 #import <G3MiOSSDK/Mark.hpp>
 #import <G3MiOSSDK/IStringBuilder.hpp>
 #import "G3MAppUserData.hpp"
-#import "G3MMarkerUserData.hpp"
+#import "G3MMarkUserData.hpp"
 #import "G3MAppInitializationTask.hpp"
 
 G3MWeatherDownloadListener::G3MWeatherDownloadListener(GInitializationTask* initTask,
@@ -30,7 +30,7 @@ G3MWeatherDownloadListener::G3MWeatherDownloadListener(GInitializationTask* init
 
 void G3MWeatherDownloadListener::onDownload(const URL& url,
                                             IByteBuffer* buffer, bool expired) {
-  MarksRenderer* markerRenderer = ((G3MAppUserData*) [_widget userData])->getMarkerRenderer();
+  MarksRenderer* marksRenderer = ((G3MAppUserData*) [_widget userData])->getMarksRenderer();
   const JSONBaseObject* json = IJSONParser::instance()->parse(buffer->getAsString());
   const JSONArray* marks = json->asObject()->getAsArray("list");
 
@@ -63,9 +63,9 @@ void G3MWeatherDownloadListener::onDownload(const URL& url,
                             0.0,
                             true,
                             14.0);
-    MarkUserData* mud = new G3MMarkerUserData(city->getAsString("name", ""));
+    MarkUserData* mud = new G3MMarkUserData(city->getAsString("name", ""));
     marker->setUserData(mud);
-    markerRenderer->addMark(marker);
+    marksRenderer->addMark(marker);
 
     delete iconISB;
     delete iconPathISB;

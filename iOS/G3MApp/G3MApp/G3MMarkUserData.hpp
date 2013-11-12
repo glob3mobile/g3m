@@ -1,5 +1,5 @@
 //
-//  G3MMarkerUserData.hpp
+//  G3MMarkUserData.hpp
 //  G3MApp
 //
 //  Created by Mari Luz Mateo on 22/02/13.
@@ -10,16 +10,16 @@
 
 #import <G3MiOSSDK/Mark.hpp>
 
-class G3MMarkerUserData : public MarkUserData {
+class G3MMarkUserData : public MarkUserData {
   
 private:
   const std::string _title;
   const URL         _url;
   
 public:
-  G3MMarkerUserData(const std::string& title,
+  G3MMarkUserData(const std::string& title,
                     const URL& url);
-  G3MMarkerUserData(const std::string& title);
+  G3MMarkUserData(const std::string& title);
   
   std::string getTitle();
   URL getUrl();
