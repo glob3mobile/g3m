@@ -17,7 +17,7 @@ class IndexedMesh : public AbstractMesh{
 private:
   IShortBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
 public:
   IndexedMesh(const int primitive,
@@ -35,7 +35,6 @@ public:
 
   ~IndexedMesh();
 
-  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{}
 };
 
 #endif

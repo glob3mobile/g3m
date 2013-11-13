@@ -48,8 +48,9 @@ protected:
                bool depthTest,
                IFloatBuffer* normals);
 
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+//  virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const = 0;
   
   GLState* _glState;
   
@@ -67,6 +68,8 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const;
   
   void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
+  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
   
 };
 

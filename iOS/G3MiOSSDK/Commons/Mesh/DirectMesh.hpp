@@ -13,7 +13,7 @@
 
 class DirectMesh : public AbstractMesh {
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
 
 public:
@@ -35,10 +35,6 @@ public:
 #endif
 
   }
-  
-//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
-
-  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{}
 
 };
 
