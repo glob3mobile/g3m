@@ -24,3 +24,19 @@ void SGShape::rawRender(const G3MRenderContext* rc,
   _glState->setParent(parentState);
   _node->render(rc, _glState, renderNotReadyShapes);
 }
+
+void SGShape::zRawRender(const G3MRenderContext* rc,
+                        GLState* parentState) {
+
+  GLState* glState = new GLState();
+  if (_isTransparent){
+    glState->addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+  } else{
+    glState->addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+  }
+  glState->setParent(parentState);
+
+  _node->zRender(rc, glState);
+
+  glState->_release();
+}

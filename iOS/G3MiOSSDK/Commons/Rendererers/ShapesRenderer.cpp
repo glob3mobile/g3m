@@ -536,3 +536,19 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                             true);
   
 }
+
+void ShapesRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+
+  GLState* state = new GLState();
+  const Camera* cam = rc->getCurrentCamera();
+  const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
+
+  state->addGLFeature(new ModelViewGLFeature(cam), true);
+  state->setParent(glState);
+
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    shape->zRender(rc, state, _renderNotReadyShapes);
+  }
+}
