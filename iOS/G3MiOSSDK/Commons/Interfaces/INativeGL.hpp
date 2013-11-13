@@ -200,6 +200,8 @@ public:
 
   virtual Color read1PixelAsRGBAColor(int x, int y) const = 0;
   virtual double read1PixelAsDouble(int x, int y) const = 0;
+
+  virtual void depthMask(bool v) const = 0;
   
 };
 

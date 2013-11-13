@@ -603,6 +603,10 @@ public:
     return winZ;
   }
 
+  void depthMask(bool v) const{
+    glDepthMask(v);
+  }
+
 };
 
 #endif
