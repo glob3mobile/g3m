@@ -48,7 +48,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
-public final class G3MWidget_WebGL
+public class G3MWidget_WebGL
          extends
             Composite {
 

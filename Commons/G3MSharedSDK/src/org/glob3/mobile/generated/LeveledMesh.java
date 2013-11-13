@@ -59,7 +59,7 @@ public class LeveledMesh extends Mesh
     return _mesh.getVertex(i);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     _mesh.render(rc, parentState);
   }

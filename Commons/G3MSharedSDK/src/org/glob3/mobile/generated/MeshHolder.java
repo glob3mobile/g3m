@@ -67,7 +67,7 @@ public class MeshHolder extends Mesh
     return _mesh.isTransparent(rc);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _mesh.render(rc, parentGLState);
   }

@@ -50,8 +50,8 @@ public:
     return _mesh->getVertex(i);
   }
   
-  void render(const G3MRenderContext* rc,
-              const GLState* parentState) const {
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const {
     _mesh->render(rc, parentState);
   }
   

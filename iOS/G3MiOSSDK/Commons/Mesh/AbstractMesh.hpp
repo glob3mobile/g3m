@@ -66,7 +66,8 @@ public:
 
   bool isTransparent(const G3MRenderContext* rc) const;
   
-  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
   
 };
 

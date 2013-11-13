@@ -1,5 +1,5 @@
 //
-//  G3MMarkerRenderer.hpp
+//  G3MMarksRenderer.hpp
 //  G3MApp
 //
 //  Created by Mari Luz Mateo on 25/02/13.
@@ -11,7 +11,7 @@
 class MarksRenderer;
 @class G3MViewController;
 
-class G3MMarkerRenderer {
+class G3MMarksRenderer {
 public:
-  static MarksRenderer* createMarkerRenderer(G3MViewController* vc);
+  static MarksRenderer* createMarksRenderer(G3MViewController* vc);
 };
