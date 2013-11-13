@@ -14,6 +14,8 @@
 #include <string>
 
 class SGNode;
+class OrientedBox;
+class BoundingVolume;
 
 class SGShape : public Shape {
 private:
@@ -23,6 +25,12 @@ private:
   const bool _isTransparent;
 
   GLState* _glState;
+  
+  OrientedBox* _boundingVolume;
+  
+protected:
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
+
 
 public:
 
@@ -34,7 +42,8 @@ public:
   Shape(position, altitudeMode),
   _node(node),
   _uriPrefix(uriPrefix),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _boundingVolume(NULL)
   {
     _glState = new GLState();
     if (_isTransparent){
@@ -44,10 +53,7 @@ public:
     }
   }
 
-  ~SGShape()
-  {
-    _glState->_release();
-  }
+  ~SGShape();
 
   SGNode* getNode() const {
     return _node;
@@ -71,18 +77,11 @@ public:
   
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const
-  {
-    std::vector<double> intersections;
-    return intersections;
-  }
+                                             const Vector3D& direction) const;
   
   
-  bool isVisible(const G3MRenderContext *rc) {
-    int __TODO_isVisible_Method;
-    return true;
-  }
-
+  bool isVisible(const G3MRenderContext *rc);
+  
   void setSelectedDrawMode(bool mode) {}
 
   

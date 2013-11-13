@@ -15,6 +15,8 @@
 
 class MutableMatrix44D;
 class G3MRenderContext;
+class BoundingVolume;
+
 
 #include "Effects.hpp"
 #include <vector>
@@ -67,6 +69,7 @@ protected:
   virtual void cleanTransformMatrix();
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
 
+  virtual BoundingVolume* getBoundingVolume(const G3MRenderContext *rc) = 0;
 
   
 public:

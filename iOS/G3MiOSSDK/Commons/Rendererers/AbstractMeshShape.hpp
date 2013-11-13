@@ -12,7 +12,6 @@
 #include "Shape.hpp"
 
 class Mesh;
-class BoundingVolume;
 
 class AbstractMeshShape : public Shape {
 private:
@@ -20,7 +19,6 @@ private:
 
 protected:
   virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
-  virtual BoundingVolume* getBoundingVolume(const G3MRenderContext *rc) = 0;
 
   Mesh* getMesh(const G3MRenderContext* rc);
 
