@@ -1621,7 +1621,7 @@ public:
   
     Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                           Angle::fromDegrees(0),
-                                                          radius1._x),
+                                                          radius1._z),
                                            ABSOLUTE,
                                            URL("file:///world.jpg", false),
                                            radius1,
