@@ -297,8 +297,9 @@ bool EllipsoidShape::isVisible(const G3MRenderContext *rc)
 BoundingVolume* EllipsoidShape::getBoundingVolume(const G3MRenderContext *rc)
 {
   if (_boundingVolume == NULL) {
-    const Vector3D extent = _ellipsoid->getRadii().times(2);
-    _boundingVolume = new OrientedBox(extent, *getTransformMatrix(rc->getPlanet()));
+    const Vector3D upper = _ellipsoid->getRadii();
+    const Vector3D lower = upper.times(-1);
+    _boundingVolume = new OrientedBox(lower, upper, *getTransformMatrix(rc->getPlanet()));
   }
   return _boundingVolume;
 }

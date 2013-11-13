@@ -289,8 +289,11 @@ bool BoxShape::isVisible(const G3MRenderContext *rc)
 
 BoundingVolume* BoxShape::getBoundingVolume(const G3MRenderContext *rc)
 {
-  if (_boundingVolume == NULL)
-    _boundingVolume = new OrientedBox(getExtent(), *getTransformMatrix(rc->getPlanet()));
+  if (_boundingVolume == NULL) {
+    const Vector3D upper = getExtent().times(0.5);
+    const Vector3D lower = upper.times(-1);
+    _boundingVolume = new OrientedBox(lower, upper, *getTransformMatrix(rc->getPlanet()));
+  }
   return _boundingVolume;
 }
 

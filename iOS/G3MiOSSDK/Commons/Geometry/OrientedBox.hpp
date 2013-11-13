@@ -22,7 +22,8 @@ class Color;
 class OrientedBox: public BoundingVolume {
   
 private:
-  const double _halfExtentX, _halfExtentY, _halfExtentZ;
+  const double _lowerX, _lowerY, _lowerZ;
+  const double _upperX, _upperY, _upperZ;
   const MutableMatrix44D* _transformMatrix;
   
 #ifdef JAVA_CODE
@@ -33,10 +34,15 @@ private:
   void createMesh(Color* flatColor) const;
   
 public:
-  OrientedBox(const Vector3D& extent, const MutableMatrix44D& transformMatrix):
-  _halfExtentX(extent._x/2),
-  _halfExtentY(extent._y/2),
-  _halfExtentZ(extent._z/2),
+  OrientedBox(const Vector3D& lower,
+              const Vector3D& upper,
+              const MutableMatrix44D& transformMatrix):
+  _lowerX(lower._x),
+  _lowerY(lower._y),
+  _lowerZ(lower._z),
+  _upperX(upper._x),
+  _upperY(upper._y),
+  _upperZ(upper._z),
   _transformMatrix(new MutableMatrix44D(transformMatrix)),
   _mesh(NULL)
   {}

@@ -28,14 +28,14 @@ const std::vector<Vector3D> OrientedBox::getCorners() const
   
 #ifdef C_CODE
   const Vector3D corners[8] = {
-    Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(_halfExtentX,  -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(-_halfExtentX, -_halfExtentY,  _halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(_halfExtentX,  _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(-_halfExtentX, _halfExtentY,   -_halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(_halfExtentX,  -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1),
-    Vector3D(-_halfExtentX, -_halfExtentY,  -_halfExtentZ).transformedBy(*_transformMatrix, 1)
+    Vector3D(_upperX, _upperY, _upperZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_lowerX, _upperY, _upperZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_upperX, _lowerY, _upperZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_lowerX, _lowerY, _upperZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_upperX, _upperY, _lowerZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_lowerX, _upperY, _lowerZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_upperX, _lowerY, _lowerZ).transformedBy(*_transformMatrix, 1),
+    Vector3D(_lowerX, _lowerY, _lowerZ).transformedBy(*_transformMatrix, 1)
   };
   
   return std::vector<Vector3D>(corners, corners+8);
@@ -70,12 +70,12 @@ std::vector<double> OrientedBox::intersectionsDistances(const Vector3D& origin,
   // QUESTION: CREATE 6 MATRICES EVERYTIME OR SAVE THEM INSIDE THE CLASS??
   MutableMatrix44D inverse = _transformMatrix->inversed();
   MutableMatrix44D transpose = inverse.transposed();
-  Quadric front = Quadric::fromPlane(1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
-  Quadric back = Quadric::fromPlane(-1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
-  Quadric left = Quadric::fromPlane(0, -1, 0, -_halfExtentY).transformBy(inverse, transpose);
-  Quadric right = Quadric::fromPlane(0, 1, 0, -_halfExtentY).transformBy(inverse, transpose);
-  Quadric top = Quadric::fromPlane(0, 0, 1, -_halfExtentZ).transformBy(inverse, transpose);
-  Quadric bottom = Quadric::fromPlane(0, 0, -1, -_halfExtentZ).transformBy(inverse, transpose);
+  Quadric front   = Quadric::fromPlane(1, 0, 0,   -_upperX).transformBy(inverse, transpose);
+  Quadric back    = Quadric::fromPlane(-1, 0, 0,  _lowerX).transformBy(inverse, transpose);
+  Quadric left    = Quadric::fromPlane(0, -1, 0,  _lowerY).transformBy(inverse, transpose);
+  Quadric right   = Quadric::fromPlane(0, 1, 0,   -_upperY).transformBy(inverse, transpose);
+  Quadric top     = Quadric::fromPlane(0, 0, 1,   -_upperZ).transformBy(inverse, transpose);
+  Quadric bottom  = Quadric::fromPlane(0, 0, -1,  _lowerZ).transformBy(inverse, transpose);
   
   // ALL THIS CODE COULD BE OPTIMIZED
   // FOR EXAMPLE, WHEN CUADRICS ARE PLANES, MATH EXPRESSIONS ARE SIMPLER
@@ -150,14 +150,14 @@ void OrientedBox::render(const G3MRenderContext* rc, const GLState& parentState)
 
 void OrientedBox::createMesh(Color* color) const {
   float v[] = {
-    (float)_halfExtentX,    (float)_halfExtentY,   (float)_halfExtentZ,
-    -(float)_halfExtentX,   (float)_halfExtentY,   (float)_halfExtentZ,
-    (float)_halfExtentX,    -(float)_halfExtentY,  (float)_halfExtentZ,
-    -(float)_halfExtentX,   -(float)_halfExtentY,  (float)_halfExtentZ,
-    (float)_halfExtentX,    (float)_halfExtentY,   -(float)_halfExtentZ,
-    -(float)_halfExtentX,   (float)_halfExtentY,   -(float)_halfExtentZ,
-    (float)_halfExtentX,    -(float)_halfExtentY,  -(float)_halfExtentZ,
-    -(float)_halfExtentX,   -(float)_halfExtentY,  -(float)_halfExtentZ
+    (float)_upperX, (float)_upperY, (float)_upperZ,
+    (float)_lowerX, (float)_upperY, (float)_upperZ,
+    (float)_upperX, (float)_lowerY, (float)_upperZ,
+    (float)_lowerX, (float)_lowerY, (float)_upperZ,
+    (float)_upperX, (float)_upperY, (float)_lowerZ,
+    (float)_lowerX, (float)_upperY, (float)_lowerZ,
+    (float)_upperX, (float)_lowerY, (float)_lowerZ,
+    (float)_lowerX, (float)_lowerY, (float)_lowerZ
   };
   
   short i[] = {
