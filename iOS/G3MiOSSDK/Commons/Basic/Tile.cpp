@@ -524,6 +524,10 @@ void Tile::rawRender(const G3MRenderContext* rc,
     }
   }
 
+  if (tilesRenderParameters->_renderDebug) {
+    debugRender(rc, glState, tessellator, layerTilesRenderParameters);
+  }
+
 
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
   //  boundingVolume->render(rc, parentState);
@@ -711,9 +715,9 @@ bool Tile::render(const G3MRenderContext* rc,
                 tilesRenderParameters,
                 isForcedFullRender,
                 texturePriority);
-      if (tilesRenderParameters->_renderDebug) {
-        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
-      }
+//      if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
+//        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
+//      }
 
       tilesStatistics->computePlanetRenderered(this);
 
@@ -1024,8 +1028,134 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
 //  return Vector2D(1.0,1.0);
 //}
 
+void Tile::actualizeQuadTree(const G3MRenderContext* rc,
+                  std::list<Tile*>& renderedTiles,
+                  const Planet* planet,
+                  const Vector3D& cameraNormalizedPosition,
+                  double cameraAngle2HorizonInRadians,
+                  const Frustum* cameraFrustumInModelCoordinates,
+                  TilesStatistics* tilesStatistics,
+                  const float verticalExaggeration,
+                  const LayerTilesRenderParameters* layerTilesRenderParameters,
+                  TileTexturizer* texturizer,
+                  const TilesRenderParameters* tilesRenderParameters,
+                  ITimer* lastSplitTimer,
+                  ElevationDataProvider* elevationDataProvider,
+                  const TileTessellator* tessellator,
+                  TileRasterizer* tileRasterizer,
+                  const LayerSet* layerSet,
+                  const Sector* renderedSector,
+                  bool isForcedFullRender,
+                  long long texturePriority,
+                  const float dpiFactor,
+                  const float deviceQualityFactor) {
+
+  tilesStatistics->computeTileProcessed(this);
+
+  if (verticalExaggeration != _verticalExaggeration) {
+    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+    _verticalExaggeration = verticalExaggeration;
+  }
+
+
+  if (isVisible(rc,
+                planet,
+                cameraNormalizedPosition,
+                cameraAngle2HorizonInRadians,
+                cameraFrustumInModelCoordinates,
+                elevationDataProvider,
+                renderedSector,
+                tessellator,
+                layerTilesRenderParameters,
+                tilesRenderParameters)) {
+    setIsVisible(true, texturizer);
+
+    tilesStatistics->computeVisibleTile(this);
+
+    const bool isRawRender = (
+                              meetsRenderCriteria(rc,
+                                                  layerTilesRenderParameters,
+                                                  texturizer,
+                                                  tilesRenderParameters,
+                                                  tilesStatistics,
+                                                  lastSplitTimer,
+                                                  dpiFactor,
+                                                  deviceQualityFactor) ||
+                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+                              );
+
+    if (isRawRender) {
+//      rawRender(rc,
+//                &parentState,
+//                texturizer,
+//                elevationDataProvider,
+//                tessellator,
+//                tileRasterizer,
+//                layerTilesRenderParameters,
+//                layerSet,
+//                tilesRenderParameters,
+//                isForcedFullRender,
+//                texturePriority);
+//      if (tilesRenderParameters->_renderDebug) {
+//        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
+//      }
+
+      renderedTiles.push_back(this);
+
+      tilesStatistics->computePlanetRenderered(this);
+
+      prune(texturizer, elevationDataProvider);
+      //TODO: AVISAR CAMBIO DE TERRENO
+    }
+    else {
+      const Geodetic2D lower = _sector._lower;
+      const Geodetic2D upper = _sector._upper;
+
+      const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                                   upper._longitude);
+
+      const Angle splitLatitude = layerTilesRenderParameters->_mercator
+      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                                  upper._latitude)
+      /*                               */ : Angle::midAngle(lower._latitude,
+                                                            upper._latitude);
+
+      std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
+      if (_justCreatedSubtiles) {
+        lastSplitTimer->start();
+        tilesStatistics->computeSplitInFrame();
+        _justCreatedSubtiles = false;
+      }
+
+      const int subTilesSize = subTiles->size();
+      for (int i = 0; i < subTilesSize; i++) {
+        Tile* subTile = subTiles->at(i);
+
+        subTile->actualizeQuadTree(rc,/* parentState,*/ renderedTiles, planet,
+                                   cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, dpiFactor, deviceQualityFactor);
+
+//        toVisitInNextIteration->push_back(subTile);
+      }
+    }
+
+
+//    return isRawRender; //RETURN ISRAWRENDER
+  }
+  else {
+    setIsVisible(false, texturizer);
+
+    prune(texturizer, elevationDataProvider);
+    //TODO: AVISAR CAMBIO DE TERRENO
+    
+    
+//    return false;   //RETURN ISRAWRENDER
+  }
+  
+}
+
+
 void Tile::zRender(const G3MRenderContext* rc,
-                  const GLState& parentState) {
+                   const GLState& parentState) {
 
   if (_tessellatorMesh == NULL) {
     ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
@@ -1033,17 +1163,5 @@ void Tile::zRender(const G3MRenderContext* rc,
   } else{
     _tessellatorMesh->zRender(rc, &parentState);
   }
-//
-//  else {
-//    if (_texturizedMesh != NULL) {
-//      _texturizedMesh->render(rc, &parentState);
-//    }
-//    else {
-//      if (_flatColorMesh != NULL){
-//        _flatColorMesh->render(rc, &parentState);
-//      } else{  
-//        ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
-//      }
-//    }
-//  }
 }
+

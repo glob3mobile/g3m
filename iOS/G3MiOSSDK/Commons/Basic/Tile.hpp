@@ -237,6 +237,28 @@ public:
               const float dpiFactor,
               const float deviceQualityFactor);
 
+  void actualizeQuadTree(const G3MRenderContext* rc,
+                               std::list<Tile*>& renderedTiles,
+                               const Planet* planet,
+                               const Vector3D& cameraNormalizedPosition,
+                               double cameraAngle2HorizonInRadians,
+                               const Frustum* cameraFrustumInModelCoordinates,
+                               TilesStatistics* tilesStatistics,
+                               const float verticalExaggeration,
+                               const LayerTilesRenderParameters* layerTilesRenderParameters,
+                               TileTexturizer* texturizer,
+                               const TilesRenderParameters* tilesRenderParameters,
+                               ITimer* lastSplitTimer,
+                               ElevationDataProvider* elevationDataProvider,
+                               const TileTessellator* tessellator,
+                               TileRasterizer* tileRasterizer,
+                               const LayerSet* layerSet,
+                               const Sector* renderedSector,
+                               bool isForcedFullRender,
+                               long long texturePriority,
+                               const float dpiFactor,
+                               const float deviceQualityFactor);
+
   void zRender(const G3MRenderContext* rc,
               const GLState& parentState);
 
