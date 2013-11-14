@@ -113,8 +113,7 @@ public:
 //  }
 
   static double longitudeToMeters(const Angle& longitude) {
-		const double mx  = longitude._degrees * _originShift / 180.0;
-		return mx;
+		return longitude._degrees * _originShift / 180.0;
   }
 
   static double latitudeToMeters(const Angle& latitude) {
