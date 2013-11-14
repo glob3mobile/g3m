@@ -147,6 +147,8 @@ public:
     // do nothing, just leave the effect in the intermediate state
   }
 
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+
 };
 
 
