@@ -2561,7 +2561,7 @@ public:
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
 
-      if (false){
+      if (true){
 
         class PlaneShapeLoadListener : public ShapeLoadListener {
         public:

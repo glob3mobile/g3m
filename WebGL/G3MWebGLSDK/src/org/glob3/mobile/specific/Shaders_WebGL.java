@@ -119,7 +119,7 @@ public final class Shaders_WebGL {
 			+ "}";
 	
 	public final static String _noColorMeshFragmentShader = "void main() {\n" + 
-			"  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" + 
+			"  gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0); //RED\n" + 
 			"}";
 
 	public final static String _noColorMeshVertexShader = "attribute vec4 aPosition;\n" + 
