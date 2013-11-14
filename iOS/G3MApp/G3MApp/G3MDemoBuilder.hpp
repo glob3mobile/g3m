@@ -11,24 +11,26 @@
 
 #include <stddef.h>
 
-class G3MWidget;
+class G3MBuilder_iOS;
+class LayerSet;
 
 class G3MDemoBuilder {
 private:
-  G3MWidget* _g3mWidget;
+  G3MBuilder_iOS* _builder;
 
-protected:
-  G3MDemoBuilder() :
-  _g3mWidget(NULL)
+  LayerSet* createLayerSet();
+
+public:
+  G3MDemoBuilder(G3MBuilder_iOS* builder) :
+  _builder(builder)
   {
 
   }
 
-public:
+  void build();
 
-  void setG3MWidget(G3MWidget* g3mWidget) {
-    _g3mWidget = g3mWidget;
-  }
+
+  ~G3MDemoBuilder();
 
 };
 

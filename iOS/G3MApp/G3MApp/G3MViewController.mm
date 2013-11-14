@@ -11,18 +11,21 @@
 #import <G3MiOSSDK/G3MWidget_iOS.h>
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
-#import <G3MiOSSDK/GInitializationTask.hpp>
-#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
-#import <G3MiOSSDK/LayerBuilder.hpp>
-#import <G3MiOSSDK/MarksRenderer.hpp>
-#import <G3MiOSSDK/ShapesRenderer.hpp>
-#import <G3MiOSSDK/MeshRenderer.hpp>
-#import <G3MiOSSDK/MercatorTiledLayer.hpp>
-#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
-#import <G3MiOSSDK/MapQuestLayer.hpp>
-#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+//#import <G3MiOSSDK/GInitializationTask.hpp>
+//#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
+//#import <G3MiOSSDK/LayerBuilder.hpp>
+//#import <G3MiOSSDK/MarksRenderer.hpp>
+//#import <G3MiOSSDK/ShapesRenderer.hpp>
+//#import <G3MiOSSDK/MeshRenderer.hpp>
+//#import <G3MiOSSDK/MercatorTiledLayer.hpp>
+//#import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+//#import <G3MiOSSDK/MapQuestLayer.hpp>
+//#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+//#include <G3MiOSSDK/TimeInterval.hpp>
 #import "G3MToolbar.h"
 #import "G3MWebViewController.h"
+
+#include "G3MDemoBuilder.hpp"
 
 @interface G3MViewController ()
 
@@ -51,50 +54,10 @@
 {
   [super viewDidLoad];
 
-  // Create a builder
-  G3MBuilder_iOS builder(self.g3mWidget);
+  G3MDemoBuilder demoBuilder(new G3MBuilder_iOS(self.g3mWidget));
 
-  const float verticalExaggeration = 6.0f;
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  demoBuilder.build();
 
-  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                                                     Sector::fullSphere(),
-                                                                                     Vector2I(2048, 1024));
-  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-
-
-  LayerSet* layerSet = [self createLayerSet: true];
-  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-
-  ShapesRenderer* shapeRenderer = new ShapesRenderer();
-  shapeRenderer->setEnable(false);
-  builder.addRenderer(shapeRenderer);
-
-//  MarksRenderer* marksRenderer = G3MMarksRenderer::createMarksRenderer(self);
-//  marksRenderer->setEnable(false);
-//  builder.addRenderer(marksRenderer);
-//
-//  MeshRenderer* meshRenderer = G3MMeshRenderer::createMeshRenderer(builder.getPlanet());
-//  meshRenderer->setEnable(false);
-//  builder.addRenderer(meshRenderer);
-//
-//  G3MAppUserData* userData = new G3MAppUserData(layerSet,
-//                                                shapeRenderer,
-//                                                marksRenderer,
-//                                                meshRenderer);
-//  userData->setSatelliteLayerEnabled(true);
-//  userData->setLayerSet([self createLayerSet: userData->getSatelliteLayerEnabled()]);
-//  userData->setMarksRenderer(marksRenderer);
-//  userData->setShapeRenderer(shapeRenderer);
-//  userData->setMeshRenderer(meshRenderer);
-
-  // Setup the builder
-  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-//  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
-//  builder.setUserData(userData);
-
-  // Initialize widget
-  builder.initializeWidget();
 //  [self showSimpleGlob3];
 
   [self initDropDownMenu];
@@ -145,56 +108,56 @@
   // Dispose of any resources that can be recreated.
 }
 
-- (LayerSet*) createLayerSet: (bool) satelliteLayerEnabled
-{
-  LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
-  // store satellite layers names
-  satelliteLayersNames = LayerBuilder::getDefaultLayersNames();
-
-  layers->addLayer(LayerBuilder::createOSMLayer(!satelliteLayerEnabled));
-
-
-  MapQuestLayer* meteoriteBase = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
-  meteoriteBase->setEnable(false);
-  layers->addLayer(meteoriteBase);
-
-  std::vector<std::string> subdomains;
-  subdomains.push_back("0.");
-  subdomains.push_back("1.");
-  subdomains.push_back("2.");
-  subdomains.push_back("3.");
-
-  MercatorTiledLayer* meteorites = new MercatorTiledLayer("CartoDB-meteoritessize",
-                                                          "http://",
-                                                          "tiles.cartocdn.com/osm2/tiles/meteoritessize",
-                                                          subdomains,
-                                                          "png",
-                                                          TimeInterval::fromDays(90),
-                                                          true,
-                                                          Sector::fullSphere(),
-                                                          2,
-                                                          17,
-                                                          NULL);
-  meteorites->setEnable(false);
-  layers->addLayer(meteorites);
-
-  WMSLayer* csiro = new WMSLayer("g3m:mosaic-sst,g3m:mosaic-sla",
-                                 URL("http://ooap-dev.it.csiro.au/geoserver/g3m/wms", false),
-                                 WMS_1_1_0,
-                                 Sector::fullSphere(),
-                                 "image/png",
-                                 "EPSG:900913",
-                                 "",
-                                 true,
-                                 NULL,
-                                 TimeInterval::fromDays(30),
-                                 true,
-                                 LayerTilesRenderParameters::createDefaultMercator(1, 19));
-  csiro->setEnable(false);
-  layers->addLayer(csiro);
-
-  return layers;
-}
+//- (LayerSet*) createLayerSet: (bool) satelliteLayerEnabled
+//{
+//  LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
+//  // store satellite layers names
+//  satelliteLayersNames = LayerBuilder::getDefaultLayersNames();
+//
+//  layers->addLayer(LayerBuilder::createOSMLayer(!satelliteLayerEnabled));
+//
+//
+//  MapQuestLayer* meteoriteBase = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+//  meteoriteBase->setEnable(false);
+//  layers->addLayer(meteoriteBase);
+//
+//  std::vector<std::string> subdomains;
+//  subdomains.push_back("0.");
+//  subdomains.push_back("1.");
+//  subdomains.push_back("2.");
+//  subdomains.push_back("3.");
+//
+//  MercatorTiledLayer* meteorites = new MercatorTiledLayer("CartoDB-meteoritessize",
+//                                                          "http://",
+//                                                          "tiles.cartocdn.com/osm2/tiles/meteoritessize",
+//                                                          subdomains,
+//                                                          "png",
+//                                                          TimeInterval::fromDays(90),
+//                                                          true,
+//                                                          Sector::fullSphere(),
+//                                                          2,
+//                                                          17,
+//                                                          NULL);
+//  meteorites->setEnable(false);
+//  layers->addLayer(meteorites);
+//
+//  WMSLayer* csiro = new WMSLayer("g3m:mosaic-sst,g3m:mosaic-sla",
+//                                 URL("http://ooap-dev.it.csiro.au/geoserver/g3m/wms", false),
+//                                 WMS_1_1_0,
+//                                 Sector::fullSphere(),
+//                                 "image/png",
+//                                 "EPSG:900913",
+//                                 "",
+//                                 true,
+//                                 NULL,
+//                                 TimeInterval::fromDays(30),
+//                                 true,
+//                                 LayerTilesRenderParameters::createDefaultMercator(1, 19));
+//  csiro->setEnable(false);
+//  layers->addLayer(csiro);
+//
+//  return layers;
+//}
 
 
 //- (void) resetWidget
@@ -327,11 +290,11 @@
 //                               timeInterval: TimeInterval::fromSeconds(5)];
 //}
 
-- (void) gotoPosition: (Geodetic3D) position
-{
-  [self.g3mWidget setAnimatedCameraPosition: position
-                               timeInterval: TimeInterval::fromSeconds(5)];
-}
+//- (void) gotoPosition: (Geodetic3D) position
+//{
+//  [self.g3mWidget setAnimatedCameraPosition: position
+//                               timeInterval: TimeInterval::fromSeconds(5)];
+//}
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
