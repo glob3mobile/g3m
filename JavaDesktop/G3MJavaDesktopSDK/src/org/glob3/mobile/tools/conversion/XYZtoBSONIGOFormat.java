@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.conversion.tools;
+package org.glob3.mobile.tools.conversion;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,8 +28,9 @@ import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 
-public class XYZtoBSON {
+public class XYZtoBSONIGOFormat {
 
+   @SuppressWarnings("unused")
    private static int i;
 
 
@@ -42,10 +43,10 @@ public class XYZtoBSON {
          IFactory.setInstance(new Factory_JavaDesktop());
          ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
-         final String pathFileJson = "/Users/mdelacalle/Desktop/SUIZA/points_10.json";
-         final String pathFileBson = "/Users/mdelacalle/Desktop/SUIZA/points_10.bson";
+         final String pathFileJson = "/Users/mdelacalle/Desktop/LWMINING/2power.json";
+         final String pathFileBson = "/Users/mdelacalle/Desktop/LWMINING/2power.bson";
 
-         final FileInputStream fstream = new FileInputStream("/Users/mdelacalle/Desktop/SUIZA/points.asc");
+         final FileInputStream fstream = new FileInputStream("/Users/mdelacalle/Desktop/LWMINING/2_power.csv");
 
          final BufferedWriter out = new BufferedWriter(new FileWriter(pathFileJson));
 
@@ -54,27 +55,28 @@ public class XYZtoBSON {
          final BufferedReader br = new BufferedReader(new InputStreamReader(in));
          String strLine;
 
-         final int factor = 10;
+         final int factor = 1;
 
-         out.write("{\"points\": [");
+         out.write("{\"size\":" + 334462 + ",");
+
+         out.write("\"points\": [");
          //Read File Line By Linel
          boolean firstComma = true;
          i = 0;
          while ((strLine = br.readLine()) != null) {
             // Print the content on the console
-
-
-            System.out.println("" + strLine);
+            System.out.println(strLine + "####" + strLine.substring(0, strLine.indexOf("(") - 3));
+            //    if (Sector.fromDegrees(factor, factor, factor, factor).contains(null, null)) {
             if (firstComma) {
-               out.write(strLine);
+               out.write(strLine.substring(0, strLine.indexOf("(") - 3));
                firstComma = false;
             }
             else {
                if ((i % factor) == 0) {
-                  out.write("," + strLine);
+                  out.write("," + strLine.substring(0, strLine.indexOf("(") - 3));
                }
             }
-
+            //      }
 
             i++;
          }
