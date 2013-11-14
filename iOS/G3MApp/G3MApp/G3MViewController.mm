@@ -385,7 +385,7 @@
                               : (NSString *) returnValue
 {
   if ([identifier isEqual: @"demoMenu"]) {
-    //[self resetWidget];
+//    [self resetWidget];
     [self updateToolbar: returnValue];
     [self.demoSelector setTitle: returnValue
                        forState: nil];
