@@ -25,6 +25,8 @@
 #import "G3MToolbar.h"
 #import "G3MWebViewController.h"
 
+#import "G3MChooseDemoViewController.h"
+
 #include "G3MDemoBuilder.hpp"
 
 @interface G3MViewController ()
@@ -38,6 +40,7 @@
 @synthesize demoMenu      = _demoMenu;
 @synthesize toolbar       = _toolbar;
 @synthesize layerSelector = _layerSelector;
+@synthesize layerMenu     = _layerMenu;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil
                bundle:(NSBundle *)nibBundleOrNil
@@ -320,7 +323,6 @@
   [self.demoSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
   UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
   [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
-//  [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
 
   self.demoMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"];
 
@@ -385,7 +387,25 @@
   [layerSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
   UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
   [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
-//  [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
+
+  G3MUIDropDownMenu* layerMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"layerMenu"];
+
+  NSMutableArray *layerNames = [NSMutableArray arrayWithObjects:
+                                @"OSM",
+                                @"Bla",
+                                nil];
+
+  layerMenu.delegate        = self;
+  layerMenu.menuWidth       = 200;
+  layerMenu.backgroundColor = [UIColor darkGrayColor];
+  layerMenu.borderColor     = [UIColor blackColor];
+  layerMenu.textColor       = [UIColor lightGrayColor];
+  layerMenu.titleArray      = layerNames;
+  layerMenu.valueArray      = layerNames;
+  [layerMenu makeMenu: layerSelector
+           targetView: self.view];
+
+  self.layerMenu = layerMenu;
 
   self.layerSelector = layerSelector;
 }
@@ -431,6 +451,26 @@
       //      [self showMeteoriteImpactsLayer];
     }
   }
+}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue
+                 sender:(id)sender {
+
+  //NSLog(@"Prepare for segue: %@", [segue identifier]);
+
+  if ([segue.destinationViewController isKindOfClass:[G3MChooseDemoViewController class]]) {
+    G3MChooseDemoViewController* viewController = (G3MChooseDemoViewController*) segue.destinationViewController;
+    UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
+    viewController.popoverController = popoverSegue.popoverController;
+  }
+
+//  if ( [[segue identifier] isEqualToString:@"showZones"] ) {
+//    ZonesTableViewController *vc = [segue destinationViewController];
+//    [vc setGlobe: _globe];
+//  }
+//  if ( [[segue identifier] isEqualToString:@"showDates"] ) {
+//    DateViewController *vc = [segue destinationViewController];
+//    [vc setGlobe: _globe];
+//  }
 }
 
 @end
