@@ -1,18 +1,15 @@
 
 
-package org.glob3.mobile.tools.gdal.main;
+package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
 
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.tools.commandline.exception.CommandLineException;
-import org.glob3.mobile.tools.conversion.jbson2bjson.exception.JBson2BJsonException;
-import org.glob3.mobile.tools.gdal.core.GDAL;
-import org.glob3.mobile.tools.gdal.core.GeoBSONConverter;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
+import org.glob3.mobile.tools.commandline.core.CommandLineException;
+import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 
-public class GdalBson {
+public class MainGdal2Bson {
    /**
     * @param args
     */

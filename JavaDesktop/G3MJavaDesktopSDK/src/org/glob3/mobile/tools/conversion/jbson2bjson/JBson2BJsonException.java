@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.conversion.jbson2bjson.exception;
+package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 public class JBson2BJsonException
          extends

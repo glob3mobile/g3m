@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.gdal.core;
+package org.glob3.mobile.tools.gdal;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 
 import org.glob3.mobile.tools.commandline.core.CommandLine;
 import org.glob3.mobile.tools.commandline.core.CommandLine.StreamGobbler;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
 import org.glob3.mobile.tools.utils.FileUtils;
 
 

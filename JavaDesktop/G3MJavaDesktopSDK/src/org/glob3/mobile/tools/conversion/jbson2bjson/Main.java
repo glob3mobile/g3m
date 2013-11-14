@@ -1,12 +1,10 @@
 
 
-package org.glob3.mobile.tools.conversion.jbson2bjson.main;
+package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 import java.io.File;
 
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.tools.conversion.jbson2bjson.core.JBson2BJson;
-import org.glob3.mobile.tools.conversion.jbson2bjson.exception.JBson2BJsonException;
 
 
 public class Main {

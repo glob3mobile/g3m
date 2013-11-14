@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.gdal.core;
+package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -14,12 +14,10 @@ import org.glob3.mobile.specific.Factory_JavaDesktop;
 import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
-import org.glob3.mobile.tools.commandline.exception.CommandLineException;
-import org.glob3.mobile.tools.commandline.utils.DecompressManager;
-import org.glob3.mobile.tools.conversion.jbson2bjson.core.JBson2BJson;
-import org.glob3.mobile.tools.conversion.jbson2bjson.exception.JBson2BJsonException;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
-import org.glob3.mobile.tools.gdal.utils.ShpUtils;
+import org.glob3.mobile.tools.commandline.core.CommandLineException;
+import org.glob3.mobile.tools.commandline.core.DecompressManager;
+import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
+import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 import org.glob3.mobile.tools.utils.FileUtils;
 
 

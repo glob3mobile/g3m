@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.commandline.exception;
+package org.glob3.mobile.tools.commandline.core;
 
 public class CommandLineException
          extends

@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.gdal.exception;
+package org.glob3.mobile.tools.gdal;
 
 public class GDALException
          extends

@@ -1,14 +1,12 @@
 
 
-package org.glob3.mobile.tools.commandline.utils;
+package org.glob3.mobile.tools.commandline.core;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.glob3.mobile.tools.commandline.core.CommandLine;
 import org.glob3.mobile.tools.commandline.core.CommandLine.StreamGobbler;
-import org.glob3.mobile.tools.commandline.exception.CommandLineException;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
+import org.glob3.mobile.tools.gdal.GDALException;
 import org.glob3.mobile.tools.utils.FileUtils;
 
 

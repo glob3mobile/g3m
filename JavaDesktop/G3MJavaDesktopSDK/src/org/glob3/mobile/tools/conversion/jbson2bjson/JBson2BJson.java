@@ -1,6 +1,6 @@
 
 
-package org.glob3.mobile.tools.conversion.jbson2bjson.core;
+package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +26,6 @@ import org.glob3.mobile.specific.JSONParser_JavaDesktop;
 import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
-import org.glob3.mobile.tools.conversion.jbson2bjson.exception.JBson2BJsonException;
 
 
 public class JBson2BJson {

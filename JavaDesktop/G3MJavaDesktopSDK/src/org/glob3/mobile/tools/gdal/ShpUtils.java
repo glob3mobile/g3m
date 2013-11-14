@@ -1,11 +1,8 @@
 
 
-package org.glob3.mobile.tools.gdal.utils;
+package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
-
-import org.glob3.mobile.tools.gdal.core.GDAL;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
 
 
 public class ShpUtils {

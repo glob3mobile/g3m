@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.tools.gdal.exception.GDALException;
+import org.glob3.mobile.tools.gdal.GDALException;
 
 
 public class FileUtils {
