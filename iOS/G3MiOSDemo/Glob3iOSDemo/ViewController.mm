@@ -483,19 +483,19 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
 
-    ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                 Sector::fromDegrees(
-                                                                                     39.4642996294239623,
-                                                                                     -6.3829977122432933,
-                                                                                     39.4829891936013553,
-                                                                                     -6.3645288909498845
-                                                                                     ),
-                                                                 Vector2I(2008, 2032),
-                                                                 0);
+//    ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                                 Sector::fromDegrees(
+//                                                                                     39.4642996294239623,
+//                                                                                     -6.3829977122432933,
+//                                                                                     39.4829891936013553,
+//                                                                                     -6.3645288909498845
+//                                                                                     ),
+//                                                                 Vector2I(2008, 2032),
+//                                                                 0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -1934,7 +1934,7 @@ private:
 
 
     return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
-                        RELATIVE_TO_GROUND,
+                        ABSOLUTE,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),

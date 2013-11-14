@@ -592,24 +592,56 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   _statistics.clear();
 
-  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
-  const float deviceQualityFactor = deviceInfo->getQualityFactor();
+//  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+//  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+//  const float deviceQualityFactor = deviceInfo->getQualityFactor();
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  const Planet* planet = rc->getPlanet();
-  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
-  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+//  const Planet* planet = rc->getPlanet();
+//  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+//  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+//  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
 
-  _tilesRenderedInLastFrame.clear();
+//  _tilesRenderedInLastFrame.clear();
+
+  _renderedTiles.clear();
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
+//    for (int i = 0; i < firstLevelTilesCount; i++) {
+//      _firstLevelTiles[i]->actualizeQuadTree(rc,
+//                                             _renderedTiles,
+//                                             planet,
+//                                             cameraNormalizedPosition,
+//                                             cameraAngle2HorizonInRadians,
+//                                             cameraFrustumInModelCoordinates,
+//                                             &_statistics,
+//                                             _verticalExaggeration,
+//                                             layerTilesRenderParameters,
+//                                             _texturizer,
+//                                             _tilesRenderParameters,
+//                                             _lastSplitTimer,
+//                                             _elevationDataProvider,
+//                                             _tessellator,
+//                                             _tileRasterizer,
+//                                             _layerSet,
+//                                             _renderedSector,
+//                                             _firstRender, // if first render, force full render
+//                                             _texturePriority,
+//                                             dpiFactor,
+//                                             deviceQualityFactor);
+//    }
+
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
+
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
+    }
+/*
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       bool rawRender = tile->render(rc,
@@ -630,7 +662,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                                     _tileRasterizer,
                                     _layerSet,
                                     _renderedSector,
-                                    _firstRender, /* if first render, force full render */
+                                    _firstRender, // if first render, force full render
                                     _texturePriority,
                                     dpiFactor,
                                     deviceQualityFactor);
@@ -639,44 +671,22 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
         _tilesRenderedInLastFrame.push_back(tile);
       }
     }
+  */
   }
   else {
 
-    std::list<Tile*> tilesToBeRendered;
-    for (int i = 0; i < firstLevelTilesCount; i++) {
-      _firstLevelTiles[i]->actualizeQuadTree(rc,
-                                             tilesToBeRendered,
-                                             planet,
-                                             cameraNormalizedPosition,
-                                             cameraAngle2HorizonInRadians,
-                                             cameraFrustumInModelCoordinates,
-                                             &_statistics,
-                                             _verticalExaggeration,
-                                             layerTilesRenderParameters,
-                                             _texturizer,
-                                             _tilesRenderParameters,
-                                             _lastSplitTimer,
-                                             _elevationDataProvider,
-                                             _tessellator,
-                                             _tileRasterizer,
-                                             _layerSet,
-                                             _renderedSector,
-                                             _firstRender, /* if first render, force full render */
-                                             _texturePriority,
-                                             dpiFactor,
-                                             deviceQualityFactor);
-    }
+    std::list<Tile*> *renderedTiles = getRenderedTilesList(rc);
 
-    for (std::list<Tile*>::iterator iter = tilesToBeRendered.begin();
-         iter != tilesToBeRendered.end();
+    for (std::list<Tile*>::iterator iter = renderedTiles->begin();
+         iter != renderedTiles->end();
          iter++) {
       Tile* tile = *iter;
 
-      tile->rawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority);
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
     }
 
-
 /*
+
     std::list<Tile*> toVisit;
     for (int i = 0; i < firstLevelTilesCount; i++) {
       toVisit.push_back(_firstLevelTiles[i]);
@@ -870,8 +880,8 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   zRenderGLState->addGLFeature(new ModelViewGLFeature(rc->getCurrentCamera()), false);
   zRenderGLState->setParent(glState);
 
-  for (std::list<Tile*>::iterator iter = _tilesRenderedInLastFrame.begin();
-       iter != _tilesRenderedInLastFrame.end();
+  for (std::list<Tile*>::iterator iter = _renderedTiles.begin();
+       iter != _renderedTiles.end();
        iter++) {
     Tile* tile = *iter;
     
@@ -879,4 +889,52 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   }
 
   zRenderGLState->_release();
+}
+
+std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* rc){
+
+  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
+  if (layerTilesRenderParameters == NULL) {
+    return NULL;
+  }
+
+  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+  const float deviceQualityFactor = deviceInfo->getQualityFactor();
+
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+
+  const Planet* planet = rc->getPlanet();
+  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+
+  _renderedTiles.clear();
+
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    _firstLevelTiles[i]->actualizeQuadTree(rc,
+                                           _renderedTiles,
+                                           planet,
+                                           cameraNormalizedPosition,
+                                           cameraAngle2HorizonInRadians,
+                                           cameraFrustumInModelCoordinates,
+                                           &_statistics,
+                                           _verticalExaggeration,
+                                           layerTilesRenderParameters,
+                                           _texturizer,
+                                           _tilesRenderParameters,
+                                           _lastSplitTimer,
+                                           _elevationDataProvider,
+                                           _tessellator,
+                                           _tileRasterizer,
+                                           _layerSet,
+                                           _renderedSector,
+                                           _firstRender, // if first render, force full render
+                                           _texturePriority,
+                                           dpiFactor,
+                                           deviceQualityFactor);
+  }
+
+  return &_renderedTiles;
+
 }

@@ -147,6 +147,18 @@ private:
 
 //  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
 
+  inline void rawRender(const G3MRenderContext* rc,
+                        const GLState* glState,
+                        TileTexturizer* texturizer,
+                        ElevationDataProvider* elevationDataProvider,
+                        const TileTessellator* tessellator,
+                        TileRasterizer* tileRasterizer,
+                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                        const LayerSet* layerSet,
+                        const TilesRenderParameters* tilesRenderParameters,
+                        bool isForcedFullRender,
+                        long long texturePriority);
+
 public:
   const Sector    _sector;
   const int       _level;
@@ -249,7 +261,7 @@ public:
                                const float deviceQualityFactor);
 
 
-  inline void rawRender(const G3MRenderContext* rc,
+  void performRawRender(const G3MRenderContext* rc,
                         const GLState* glState,
                         TileTexturizer* texturizer,
                         ElevationDataProvider* elevationDataProvider,
@@ -259,7 +271,8 @@ public:
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
                         bool isForcedFullRender,
-                        long long texturePriority);
+                        long long texturePriority,
+                        TilesStatistics* tilesStatistics);
 
   void zRender(const G3MRenderContext* rc,
               const GLState& parentState);

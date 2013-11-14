@@ -524,11 +524,6 @@ void Tile::rawRender(const G3MRenderContext* rc,
     }
   }
 
-  if (tilesRenderParameters->_renderDebug) {
-    debugRender(rc, glState, tessellator, layerTilesRenderParameters);
-  }
-
-
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
   //  boundingVolume->render(rc, parentState);
 }
@@ -715,9 +710,9 @@ bool Tile::render(const G3MRenderContext* rc,
                 tilesRenderParameters,
                 isForcedFullRender,
                 texturePriority);
-//      if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
-//        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
-//      }
+      if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
+        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
+      }
 
       tilesStatistics->computePlanetRenderered(this);
 
@@ -1015,18 +1010,38 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-//const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
-//  const Sector* renderedSector = pr->getRenderedSector();
-//  if (renderedSector != NULL){
-//    if (!renderedSector->fullContains(_sector)) {
-//      Sector meshSector = renderedSector->intersection(_sector);
-//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-//      return Vector2D(rx,ry);
-//    }
-//  }
-//  return Vector2D(1.0,1.0);
-//}
+void Tile::performRawRender(const G3MRenderContext* rc,
+                      const GLState* glState,
+                      TileTexturizer* texturizer,
+                      ElevationDataProvider* elevationDataProvider,
+                      const TileTessellator* tessellator,
+                      TileRasterizer* tileRasterizer,
+                      const LayerTilesRenderParameters* layerTilesRenderParameters,
+                      const LayerSet* layerSet,
+                      const TilesRenderParameters* tilesRenderParameters,
+                      bool isForcedFullRender,
+                      long long texturePriority,
+                      TilesStatistics* tilesStatistics){
+
+  rawRender(rc,
+            glState,
+            texturizer,
+            elevationDataProvider,
+            tessellator,
+            tileRasterizer,
+            layerTilesRenderParameters,
+            layerSet,
+            tilesRenderParameters,
+            isForcedFullRender,
+            texturePriority);
+  if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
+    debugRender(rc, glState, tessellator, layerTilesRenderParameters);
+  }
+
+  tilesStatistics->computePlanetRenderered(this);
+
+  //TODO: AVISAR CAMBIO DE TERRENO
+}
 
 void Tile::actualizeQuadTree(const G3MRenderContext* rc,
                   std::list<Tile*>& renderedTiles,
@@ -1085,27 +1100,12 @@ void Tile::actualizeQuadTree(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-//      rawRender(rc,
-//                &parentState,
-//                texturizer,
-//                elevationDataProvider,
-//                tessellator,
-//                tileRasterizer,
-//                layerTilesRenderParameters,
-//                layerSet,
-//                tilesRenderParameters,
-//                isForcedFullRender,
-//                texturePriority);
-//      if (tilesRenderParameters->_renderDebug) {
-//        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
-//      }
 
       renderedTiles.push_back(this);
 
-      tilesStatistics->computePlanetRenderered(this);
-
       prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
+
     }
     else {
       const Geodetic2D lower = _sector._lower;
@@ -1164,4 +1164,6 @@ void Tile::zRender(const G3MRenderContext* rc,
     _tessellatorMesh->zRender(rc, &parentState);
   }
 }
+
+
 
