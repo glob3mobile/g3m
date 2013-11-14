@@ -54,7 +54,6 @@
   // Create a builder
   G3MBuilder_iOS builder(self.g3mWidget);
 
-
   const float verticalExaggeration = 6.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
