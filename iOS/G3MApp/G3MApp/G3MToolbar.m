@@ -23,7 +23,7 @@
     [self baseInit: bgColor
             height: frame.size.height];
   }
-  
+
   return self;
 }
 
@@ -60,8 +60,8 @@
   [self setFrame: CGRectMake(0, screenFrame.size.height - height, screenFrame.size.width, height)];
   [self setAutoresizingMask: (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin)];
   [self setCenter: CGPointMake(screenFrame.size.width / 2, screenFrame.size.height + ([self frame].size.height / 2))];
-  
-  currentOrientation = UIDeviceOrientationPortrait;  
+
+  currentOrientation = UIDeviceOrientationPortrait;
   [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
   [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
 }
@@ -78,7 +78,7 @@
 - (void) show
 {
   CGRect screenFrame = [self getScreenFrame];
-  
+
   [UIView beginAnimations: @"slide up" context: nil];
   [UIView setAnimationDuration: 0.5];
   [self setCenter: CGPointMake(screenFrame.size.width / 2, (screenFrame.size.height - 20) - ([self frame].size.height / 2))];
@@ -88,7 +88,7 @@
 - (void) hide
 {
   CGRect screenFrame = [self getScreenFrame];
-  
+
   [UIView beginAnimations: @"slide down" context: nil];
   [UIView setAnimationDuration: 0.5];
   [self setCenter: CGPointMake(screenFrame.size.width / 2, screenFrame.size.height + ([self frame].size.height / 2))];
@@ -97,22 +97,22 @@
 
 - (void) setVisible: (BOOL)isVisible
 {
-    self->visible = isVisible;
+  self->visible = isVisible;
 
-    if ([self visible]) {
-      [self show];
-    }
-    else {
-      [self hide];
-    }
+  if ([self visible]) {
+    [self show];
+  }
+  else {
+    [self hide];
+  }
 }
 
 - (void) clear
 {
   NSArray *subviews = [self subviews];
-  
+
   if ([subviews count] == 0) return;
-  
+
   for (UIView *subview in subviews) {
     [subview removeFromSuperview];
   }
@@ -126,7 +126,7 @@
 - (void)deviceOrientationDidChange:(NSNotification *)notification {
   //Obtaining the current device orientation
   UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-  
+
   //Ignoring specific orientations
   if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || currentOrientation == orientation) {
     return;
@@ -148,12 +148,12 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 @end
