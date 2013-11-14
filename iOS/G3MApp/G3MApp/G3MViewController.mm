@@ -37,7 +37,7 @@
 @synthesize demoSelector  = _demoSelector;
 @synthesize demoMenu      = _demoMenu;
 @synthesize toolbar       = _toolbar;
-@synthesize layerSwitcher = _layerSwitcher;
+@synthesize layerSelector = _layerSelector;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil
                bundle:(NSBundle *)nibBundleOrNil
@@ -88,7 +88,7 @@
 {
   self.g3mWidget     = nil;
   self.toolbar       = nil;
-  self.layerSwitcher = nil;
+  self.layerSelector = nil;
   self.demoSelector  = nil;
   self.demoMenu      = nil;
 
@@ -320,7 +320,7 @@
   [self.demoSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
   UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
   [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
-  [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
+//  [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
 
   self.demoMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"];
 
@@ -344,38 +344,58 @@
                targetView: self.view];
 }
 
-- (UIButton*) createToolbarButton: (NSString*) imageName
-                            frame: (CGRect) frame
-{
-  UIButton* button = [UIButton buttonWithType: UIButtonTypeCustom];
-  button.layer.borderWidth = 0;
-  button.frame = frame;
-  [button setTitle: @""
-          forState: nil];
-  [button setImage: [UIImage imageNamed: imageName]
-          forState: UIControlStateNormal];
-
-  return button;
-}
+//- (UIButton*) createToolbarButton: (NSString*) imageName
+//                            frame: (CGRect) frame
+//{
+//  UIButton* button = [UIButton buttonWithType: UIButtonTypeCustom];
+//  button.layer.borderWidth = 0;
+//  button.frame = frame;
+//  [button setTitle: @""
+//          forState: nil];
+//  [button setImage: [UIImage imageNamed: imageName]
+//          forState: UIControlStateNormal];
+//
+//  return button;
+//}
 
 - (void) initToolbar
 {
   self.toolbar = [[G3MToolbar alloc] init];
   [self.view addSubview: self.toolbar];
 
-  // layerSwitcher
-  self.layerSwitcher = [self createToolbarButton: @"satellite-on-96x48.png"
-                                           frame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
-  [self.layerSwitcher addTarget: self
-                         action: @selector(switchLayer)
-               forControlEvents: UIControlEventTouchUpInside];
+//  // layerSwitcher
+//  self.layerSwitcher = [self createToolbarButton: @"satellite-on-96x48.png"
+//                                           frame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
+//  [self.layerSwitcher addTarget: self
+//                         action: @selector(switchLayer)
+//               forControlEvents: UIControlEventTouchUpInside];
+
+  UIButton* layerSelector = [UIButton buttonWithType:UIButtonTypeCustom];
+  layerSelector.layer.borderWidth = 2;
+  layerSelector.layer.frame = CGRectMake(5, 5, 200, 48);
+
+//  layerSelector.titleLabel.textAlignment = NSTextAlignmentLeft;
+
+
+  [layerSelector setTitle:@"Layer..."
+                 forState:UIControlStateNormal];
+//  [layerSelector setBackgroundImage:[UIImage imageNamed: @"selector-background.png"]
+//                           forState:UIControlStateNormal];
+  [layerSelector setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
+  [layerSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
+  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
+  [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
+//  [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
+
+  self.layerSelector = layerSelector;
 }
 
 - (void) updateToolbar: (NSString*) option
 {
   [self.toolbar removeAllSubviews];
   if ([option isEqual: @"Switch Layer"]) {
-    [self.toolbar addSubview: self.layerSwitcher];
+    //[self.toolbar addSubview: self.layerSwitcher];
+    [self.toolbar addSubview: self.layerSelector];
     self.toolbar.visible = YES;
   }
   else {
@@ -414,4 +434,3 @@
 }
 
 @end
-

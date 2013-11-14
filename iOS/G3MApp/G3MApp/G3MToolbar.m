@@ -47,7 +47,7 @@
                                         blue: 0.0
                                        alpha: 0.5];
     [self baseInit: bgColor
-            height: 68];
+            height: 58];
   }
   return self;
 }
