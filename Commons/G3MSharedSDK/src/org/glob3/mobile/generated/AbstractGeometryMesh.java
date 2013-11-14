@@ -156,7 +156,7 @@ public abstract class AbstractGeometryMesh extends Mesh
     return false; //TODO: CHECK
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _glState.setParent(parentGLState);
     rawRender(rc);

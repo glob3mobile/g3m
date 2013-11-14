@@ -25,7 +25,7 @@ protected:
   Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*           _vertices;
-  Color*                  _flatColor;
+  const Color*            _flatColor;
   IFloatBuffer*           _colors;
   const float             _colorsIntensity;
   const float             _lineWidth;
@@ -42,7 +42,7 @@ protected:
                IFloatBuffer* vertices,
                float lineWidth,
                float pointSize,
-               Color* flatColor,
+               const Color* flatColor,
                IFloatBuffer* colors,
                const float colorsIntensity,
                bool depthTest,
@@ -66,10 +66,12 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-  
-  void render(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
-  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
+
+  void zRawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
   
 };
 

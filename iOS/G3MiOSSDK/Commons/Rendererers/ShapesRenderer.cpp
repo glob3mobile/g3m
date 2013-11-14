@@ -552,3 +552,19 @@ void ShapesRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
     shape->zRender(rc, state, _renderNotReadyShapes);
   }
 }
+
+void ShapesRenderer::enableAll() {
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    shape->setEnable(true);
+  }
+}
+
+void ShapesRenderer::disableAll() {
+  const int shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    shape->setEnable(false);
+  }
+}

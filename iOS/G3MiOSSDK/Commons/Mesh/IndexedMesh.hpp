@@ -13,7 +13,7 @@
 
 class IShortBuffer;
 
-class IndexedMesh : public AbstractMesh{
+class IndexedMesh : public AbstractMesh {
 private:
   IShortBuffer*       _indices;
 protected:
@@ -27,7 +27,7 @@ public:
               IShortBuffer* indices,
               float lineWidth,
               float pointSize = 1,
-              Color* flatColor = NULL,
+              const Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = 0.0f,
               bool depthTest = true,

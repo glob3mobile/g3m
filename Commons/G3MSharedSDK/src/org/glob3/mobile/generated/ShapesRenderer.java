@@ -178,6 +178,27 @@ public class ShapesRenderer extends LeafRenderer
     _shapes.clear();
   }
 
+  public final void enableAll()
+  {
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.setEnable(true);
+    }
+  }
+
+  public final void disableAll()
+  {
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.setEnable(false);
+    }
+  }
+
+
   public final void onResume(G3MContext context)
   {
     _context = context;

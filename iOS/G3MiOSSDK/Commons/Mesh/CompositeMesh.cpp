@@ -90,7 +90,8 @@ void CompositeMesh::addMesh(Mesh* mesh) {
   _children.push_back(mesh);
 }
 
-void CompositeMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void CompositeMesh::rawRender(const G3MRenderContext* rc,
+                              const GLState* parentGLState) const{
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
@@ -98,7 +99,7 @@ void CompositeMesh::render(const G3MRenderContext* rc, const GLState* parentGLSt
   }
 }
 
-void CompositeMesh::zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void CompositeMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

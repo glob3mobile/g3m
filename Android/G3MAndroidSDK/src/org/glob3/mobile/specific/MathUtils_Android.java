@@ -198,7 +198,7 @@ public final class MathUtils_Android
 
    @Override
    public double minDouble() {
-      return Double.MIN_VALUE;
+      return -Double.MAX_VALUE;
    }
 
 
@@ -210,7 +210,7 @@ public final class MathUtils_Android
 
    @Override
    public float minFloat() {
-      return Float.MIN_VALUE;
+      return -Float.MAX_VALUE;
    }
 
 

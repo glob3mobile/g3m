@@ -81,10 +81,12 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
-  
-  void render(const G3MRenderContext* rc, const GLState* parentState) const;
 
-  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const;
+
+  void zRawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const;
 };
 
 #endif

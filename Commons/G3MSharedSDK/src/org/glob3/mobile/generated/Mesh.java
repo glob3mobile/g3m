@@ -23,6 +23,21 @@ package org.glob3.mobile.generated;
 
 public abstract class Mesh
 {
+  private boolean _enable;
+  public Mesh()
+  {
+     _enable = true;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+    _enable = enable;
+  }
+
+  public final boolean isEnable()
+  {
+    return _enable;
+  }
 
   public void dispose()
   {
@@ -36,6 +51,14 @@ public abstract class Mesh
 
   public abstract boolean isTransparent(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState parentGLState);
+  public abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
+
+  public final void render(G3MRenderContext rc, GLState parentGLState)
+  {
+    if (_enable)
+    {
+      rawRender(rc, parentGLState);
+    }
+  }
 
 }

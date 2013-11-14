@@ -56,11 +56,11 @@ public:
     return _mesh->isTransparent(rc);
   }
 
-  void render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
     _mesh->render(rc, parentGLState);
   }
 
-  void zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
     _mesh->zRender(rc, parentGLState);
   }
   

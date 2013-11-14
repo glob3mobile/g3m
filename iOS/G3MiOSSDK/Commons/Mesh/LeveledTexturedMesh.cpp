@@ -36,10 +36,9 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
     state.clearGLFeatureGroup(COLOR_GROUP);
 
     if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
-
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
-                                              isTransparent(),
+                                              _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
                                               true, _translation.asVector2D(), _scale.asVector2D()),
@@ -48,7 +47,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
     else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
-                                              isTransparent(),
+                                              _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
                                               false, Vector2D::zero(), Vector2D::zero() ),
@@ -196,11 +195,11 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 
   LazyTextureMapping* mapping = getCurrentTextureMapping();
 
-  return (mapping == NULL) ? false : mapping->isTransparent();
+  return (mapping == NULL) ? false : mapping->_transparent;
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc,
-                                 const GLState* parentGLState) const{
+void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
+                                    const GLState* parentGLState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");
@@ -212,7 +211,7 @@ void LeveledTexturedMesh::render(const G3MRenderContext* rc,
   }
 }
 
-void LeveledTexturedMesh::zRender(const G3MRenderContext* rc,
+void LeveledTexturedMesh::zRawRender(const G3MRenderContext* rc,
                            const GLState* parentState) const{
   //TODO: transparencies
   _mesh->render(rc, parentState);

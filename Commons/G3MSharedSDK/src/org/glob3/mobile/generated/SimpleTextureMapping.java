@@ -9,7 +9,7 @@ public class SimpleTextureMapping extends TextureMapping
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
 
-  private final boolean _isTransparent;
+  private final boolean _transparent;
 
   private void releaseGLTextureId()
   {
@@ -26,14 +26,14 @@ public class SimpleTextureMapping extends TextureMapping
   }
 
 
-  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
+  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent)
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
      _translation = new MutableVector2D(0, 0);
      _scale = new MutableVector2D(1, 1);
      _ownedTexCoords = ownedTexCoords;
-     _isTransparent = isTransparent;
+     _transparent = transparent;
 
   }
 
@@ -66,17 +66,6 @@ public class SimpleTextureMapping extends TextureMapping
     return _texCoords;
   }
 
-//  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
-
-  public final boolean isTransparent()
-  {
-    return _isTransparent;
-  }
-
-//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-//  
-//  void modifyGPUProgramState(GPUProgramState& progState) const;
-
   public final void modifyGLState(GLState state)
   {
     if (_texCoords == null)
@@ -89,11 +78,11 @@ public class SimpleTextureMapping extends TextureMapping
   
       if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
       }
     }
   }

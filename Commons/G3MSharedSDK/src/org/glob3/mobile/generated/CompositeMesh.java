@@ -121,7 +121,7 @@ public class CompositeMesh extends Mesh
     _children.add(mesh);
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)

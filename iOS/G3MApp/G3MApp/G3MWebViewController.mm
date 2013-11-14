@@ -17,7 +17,8 @@
 }
 
 - (IBAction)pushBackButton:(id)sender {
-  [self dismissModalViewControllerAnimated: YES];
+  [self dismissViewControllerAnimated:YES
+                           completion:nil];
 }
 
 - (void) loadUrl: (NSURL *) url {

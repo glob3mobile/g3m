@@ -32,9 +32,14 @@ public:
   virtual void onAfterAddMesh(Mesh* mesh) = 0;
 };
 
+enum MeshType {
+  POINT_CLOUD,
+  MESH
+};
 
 class MeshRenderer : public LeafRenderer {
 private:
+
 
   class LoadQueueItem {
   public:
@@ -50,9 +55,11 @@ private:
     const bool         _readExpired;
     const float        _pointSize;
     const double       _deltaHeight;
+    const Color*       _color;
     MeshLoadListener*  _listener;
     const bool         _deleteListener;
     const bool         _isBSON;
+    const MeshType     _meshType;
 
     LoadQueueItem(const URL&          url,
                   long long           priority,
@@ -60,18 +67,22 @@ private:
                   bool                readExpired,
                   float               pointSize,
                   double              deltaHeight,
+                  const Color*        color,
                   MeshLoadListener*   listener,
                   bool                deleteListener,
-                  bool                isBSON) :
+                  bool                isBSON,
+                  const MeshType      meshType) :
     _url(url),
     _priority(priority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
     _pointSize(pointSize),
     _deltaHeight(deltaHeight),
+    _color(color),
     _listener(listener),
     _deleteListener(deleteListener),
-    _isBSON(isBSON)
+    _isBSON(isBSON),
+    _meshType(meshType)
     {
 
     }
@@ -98,15 +109,17 @@ private:
 
   void drainLoadQueue();
 
-  void requestBuffer(const URL&          url,
-                     long long           priority,
-                     const TimeInterval& timeToCache,
-                     bool                readExpired,
-                     float               pointSize,
-                     double              deltaHeight,
-                     MeshLoadListener*   listener,
-                     bool                deleteListener,
-                     bool                isBSON);
+  void requestMeshBuffer(const URL&          url,
+                         long long           priority,
+                         const TimeInterval& timeToCache,
+                         bool                readExpired,
+                         float               pointSize,
+                         double              deltaHeight,
+                         const Color*        color,
+                         MeshLoadListener*   listener,
+                         bool                deleteListener,
+                         bool                isBSON,
+                         const MeshType      meshType);
 
 
 public:
@@ -124,6 +137,10 @@ public:
   }
 
   void clearMeshes();
+
+  void enableAll();
+
+  void disableAll();
 
   void onResume(const G3MContext* context) {
 
@@ -212,6 +229,48 @@ public:
   }
 
   void zRender(const G3MRenderContext* rc, GLState* glState){}
+
+  void loadJSONMesh(const URL&          url,
+                    const Color*        color,
+                    long long           priority,
+                    const TimeInterval& timeToCache,
+                    bool                readExpired,
+                    MeshLoadListener*   listener=NULL,
+                    bool                deleteListener=true);
+
+  void loadJSONMesh(const URL&        url,
+                    const Color*      color,
+                    MeshLoadListener* listener=NULL,
+                    bool              deleteListener=true) {
+    loadJSONMesh(url,
+                 color,
+                 DownloadPriority::MEDIUM,
+                 TimeInterval::fromDays(30),
+                 true,
+                 listener,
+                 deleteListener);
+  }
+
+  void loadBSONMesh(const URL&          url,
+                    const Color*        color,
+                    long long           priority,
+                    const TimeInterval& timeToCache,
+                    bool                readExpired,
+                    MeshLoadListener*   listener=NULL,
+                    bool                deleteListener=true);
+
+  void loadBSONMesh(const URL&        url,
+                    const Color*      color,
+                    MeshLoadListener* listener=NULL,
+                    bool              deleteListener=true) {
+    loadBSONMesh(url,
+                 color,
+                 DownloadPriority::MEDIUM,
+                 TimeInterval::fromDays(30),
+                 true,
+                 listener,
+                 deleteListener);
+  }
 
 
 };

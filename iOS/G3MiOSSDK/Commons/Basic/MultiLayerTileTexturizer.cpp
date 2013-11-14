@@ -752,23 +752,22 @@ void MultiLayerTileTexturizer::initialize(const G3MContext* context,
 }
 
 
-class BuilderStartTask : public FrameTask {
+class TileTextureBuilderStartTask : public FrameTask {
 private:
   TileTextureBuilder* _builder;
 
 public:
-  BuilderStartTask(TileTextureBuilder* builder) :
+  TileTextureBuilderStartTask(TileTextureBuilder* builder) :
   _builder(builder)
   {
     _builder->_retain();
   }
 
-  virtual ~BuilderStartTask() {
+  virtual ~TileTextureBuilderStartTask() {
     _builder->_release();
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   void execute(const G3MRenderContext* rc) {
@@ -794,20 +793,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
 
   if (builderHolder == NULL) {
-
-//    MultiLayerTileTexturizer*         texturizer,
-//    TileRasterizer*                   tileRasterizer,
-//    const G3MRenderContext*           rc,
-//    const LayerTilesRenderParameters* layerTilesRenderParameters,
-//    const std::vector<Petition*>&     petitions,
-//    IDownloader*                      downloader,
-//    Tile*                             tile,
-//    const Mesh*                       tessellatorMesh,
-//    const TileTessellator*            tessellator,
-//    long long                         texturePriority
-
-//    const LayerSet* layerSet = prc->getLayerSet();
-
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         tileRasterizer,
                                                                         rc,
@@ -828,7 +813,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
     builder->start();
   }
   else {
-    rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builder));
+    rc->getFrameTasksExecutor()->addPreRenderTask(new TileTextureBuilderStartTask(builder));
   }
 
   tile->setTexturizerDirty(false);
@@ -909,11 +894,10 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
 
-  const int level = tile->_level - ancestorTile->_level;
 //  _texturesHandler->retainGLTextureId(glTextureId);
-
   const TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
 
+  const int level = tile->_level - ancestorTile->_level;
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureIdRetainedCopy)) {
 //    _texturesHandler->releaseGLTextureId(glTextureId);
     delete glTextureIdRetainedCopy;

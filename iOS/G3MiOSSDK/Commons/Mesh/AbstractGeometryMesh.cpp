@@ -128,12 +128,13 @@ void AbstractGeometryMesh::createGLState() {
   }
 }
 
-void AbstractGeometryMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
+                                     const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc, _glState, REGULAR_RENDER);
 }
 
-void AbstractGeometryMesh::zRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+void AbstractGeometryMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
 
   GLState* zRenderGLState = new GLState();
 
