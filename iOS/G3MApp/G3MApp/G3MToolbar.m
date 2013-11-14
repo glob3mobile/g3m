@@ -10,7 +10,7 @@
 
 @implementation G3MToolbar
 
-@synthesize visible;
+@synthesize visible = _visible;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -19,7 +19,7 @@
     UIColor* bgColor = [UIColor colorWithRed: 0.0
                                        green: 0.0
                                         blue: 0.0
-                                       alpha: 0.7];
+                                       alpha: 0.5];
     [self baseInit: bgColor
             height: frame.size.height];
   }
@@ -45,7 +45,7 @@
     UIColor* bgColor = [UIColor colorWithRed: 0.0
                                        green: 0.0
                                         blue: 0.0
-                                       alpha: 0.7];
+                                       alpha: 0.5];
     [self baseInit: bgColor
             height: 68];
   }
@@ -55,18 +55,25 @@
 - (void) baseInit: (UIColor*) bgColor
            height: (int) height
 {
-  CGRect screenFrame = [self getScreenFrame];
-  [self setBackgroundColor: bgColor];
-  [self setFrame: CGRectMake(0, screenFrame.size.height - height, screenFrame.size.width, height)];
-  [self setAutoresizingMask: (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin)];
-  [self setCenter: CGPointMake(screenFrame.size.width / 2, screenFrame.size.height + ([self frame].size.height / 2))];
+  CGRect screenFrame = [self screenFrame];
+  self.backgroundColor  = bgColor;
+  self.frame            = CGRectMake(0,
+                                     screenFrame.size.height - height,
+                                     screenFrame.size.width,
+                                     height);
+  self.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin);
+  self.center           = CGPointMake(screenFrame.size.width / 2,
+                                      screenFrame.size.height + (self.frame.size.height / 2));
 
-  currentOrientation = UIDeviceOrientationPortrait;
+  _currentOrientation = UIDeviceOrientationPortrait;
   [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-  [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
+  [[NSNotificationCenter defaultCenter] addObserver: self
+                                           selector: @selector(deviceOrientationDidChange:)
+                                               name: UIDeviceOrientationDidChangeNotification
+                                             object: nil];
 }
 
-- (CGRect) getScreenFrame
+- (CGRect) screenFrame
 {
   CGRect screenFrame = [[UIScreen mainScreen] bounds];
   if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
@@ -77,29 +84,31 @@
 
 - (void) show
 {
-  CGRect screenFrame = [self getScreenFrame];
+  CGRect screenFrame = [self screenFrame];
 
   [UIView beginAnimations: @"slide up" context: nil];
   [UIView setAnimationDuration: 0.5];
-  [self setCenter: CGPointMake(screenFrame.size.width / 2, (screenFrame.size.height - 20) - ([self frame].size.height / 2))];
+  [self setCenter: CGPointMake(screenFrame.size.width / 2,
+                               screenFrame.size.height - (self.frame.size.height / 2))];
   [UIView commitAnimations];
 }
 
 - (void) hide
 {
-  CGRect screenFrame = [self getScreenFrame];
+  CGRect screenFrame = [self screenFrame];
 
   [UIView beginAnimations: @"slide down" context: nil];
   [UIView setAnimationDuration: 0.5];
-  [self setCenter: CGPointMake(screenFrame.size.width / 2, screenFrame.size.height + ([self frame].size.height / 2))];
+  [self setCenter: CGPointMake(screenFrame.size.width / 2,
+                               screenFrame.size.height + (self.frame.size.height / 2))];
   [UIView commitAnimations];
 }
 
 - (void) setVisible: (BOOL)isVisible
 {
-  self->visible = isVisible;
+  self.visible = isVisible;
 
-  if ([self visible]) {
+  if (isVisible) {
     [self show];
   }
   else {
@@ -128,32 +137,30 @@
   UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 
   //Ignoring specific orientations
-  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || currentOrientation == orientation) {
+  if (orientation == UIDeviceOrientationFaceUp   ||
+      orientation == UIDeviceOrientationFaceDown ||
+      orientation == UIDeviceOrientationUnknown  ||
+      _currentOrientation == orientation) {
     return;
   }
-  [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(relayoutLayers) object:nil];
+  [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                           selector:@selector(relayoutLayers)
+                                             object:nil];
   //Responding only to changes in landscape or portrait
-  currentOrientation = orientation;
-  [self performSelector:@selector(orientationChanged) withObject:nil afterDelay:0];
+  _currentOrientation = orientation;
+  [self performSelector: @selector(orientationChanged)
+             withObject: nil
+             afterDelay: 0];
 }
 
 - (void) orientationChanged
 {
-  [self setVisible: [self visible]];
+  self.visible = self.visible;
 }
 
 - (void) dealloc
 {
   [self clear];
 }
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect
- {
- // Drawing code
- }
- */
 
 @end

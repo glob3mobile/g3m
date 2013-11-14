@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface G3MToolbar : UIView {
-  UIDeviceOrientation currentOrientation;
+  UIDeviceOrientation _currentOrientation;
 }
 
 @property (nonatomic) BOOL visible;
