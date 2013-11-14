@@ -41,6 +41,12 @@ public:
   _mesh(NULL)
   {
   }
+  
+  Box(const Box* other):
+  _lower(other->_lower),
+  _upper(other->_upper),
+  _mesh(NULL)
+  {}
 
   ~Box();
   
@@ -81,7 +87,7 @@ public:
     return that->mergedWithBox(this);
   }
 
-  BoundingVolume* mergedWithBox(const Box* that) const;
+  Box* mergedWithBox(const Box* that) const;
   BoundingVolume* mergedWithSphere(const Sphere* that) const;
 
   Vector3D closestPoint(const Vector3D& point) const;

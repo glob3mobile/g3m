@@ -288,7 +288,7 @@ bool Box::touchesSphere(const Sphere* that) const {
 }
 
 
-BoundingVolume* Box::mergedWithBox(const Box* that) const {
+Box* Box::mergedWithBox(const Box* that) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double lowerX = mu->min(_lower._x, that->_lower._x);

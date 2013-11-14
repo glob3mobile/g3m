@@ -11,6 +11,8 @@
 
 #include "BoundingVolume.hpp"
 #include "Frustum.hpp"
+#include "Box.hpp"
+
 #include <vector>
 
 class Vector3D;
@@ -43,6 +45,18 @@ public:
   _upperX(upper._x),
   _upperY(upper._y),
   _upperZ(upper._z),
+  _transformMatrix(new MutableMatrix44D(transformMatrix)),
+  _mesh(NULL)
+  {}
+  
+  OrientedBox(const Box* box,
+              const MutableMatrix44D& transformMatrix):
+  _lowerX(box->getLower()._x),
+  _lowerY(box->getLower()._y),
+  _lowerZ(box->getLower()._z),
+  _upperX(box->getUpper()._x),
+  _upperY(box->getUpper()._y),
+  _upperZ(box->getUpper()._z),
   _transformMatrix(new MutableMatrix44D(transformMatrix)),
   _mesh(NULL)
   {}

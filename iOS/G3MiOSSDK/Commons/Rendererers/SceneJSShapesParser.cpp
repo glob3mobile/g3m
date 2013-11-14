@@ -516,38 +516,14 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     return NULL;
   }
   processedKeys++;
-/*
+
  int verticesCount = jsPositions->size();
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
   for (int i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
     _statistics->computeVertex();
-  }*/
-  
-  float xmin=1e10, ymin=1e10, zmin=1e10, xmax=-1e10, ymax=-1e10, zmax=-1e10;
-  
-  int verticesCount = jsPositions->size() / 3;
-  IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount*3);
-  for (int i = 0; i < verticesCount*3; i+=3) {
-    float x = (float) jsPositions->getAsNumber(i)->value();
-    float y = (float) jsPositions->getAsNumber(i+1)->value();
-    float z = (float) jsPositions->getAsNumber(i+2)->value();
-    vertices->put(i, x);
-    vertices->put(i+1, y);
-    vertices->put(i+2, z);
-    if (x<xmin) xmin = x;
-    if (y<ymin) ymin = y;
-    if (z<zmin) zmin = z;
-    if (x>xmax) xmax = x;
-    if (y>ymax) ymax = y;
-    if (z>zmax) zmax = z;
-    
-    _statistics->computeVertex();
   }
   
-  
-  printf ("extent del nodo = (%f, %f, %f) -- (%f, %f, %f)\n", xmin, ymin, zmin, xmax, ymax, zmax);
-
   const JSONArray* jsColors = jsonObject->getAsArray("colors");
   IFloatBuffer* colors = NULL;
   if (jsColors != NULL) {

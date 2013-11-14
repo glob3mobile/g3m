@@ -52,9 +52,9 @@ bool SGShape::isVisible(const G3MRenderContext *rc)
 BoundingVolume* SGShape::getBoundingVolume(const G3MRenderContext *rc)
 {
   if (_boundingVolume == NULL) {
-    const Vector3D lower = Vector3D(-3.79, -3.03, -4.72);
-    const Vector3D upper = Vector3D(3.79, 3.79, 6.43);
-    _boundingVolume = new OrientedBox(lower, upper, *getTransformMatrix(rc->getPlanet()));
+    Box* boundingBox = _node->getCopyBoundingBox();
+    _boundingVolume = new OrientedBox(boundingBox, *getTransformMatrix(rc->getPlanet()));
+    delete boundingBox;
   }
   return _boundingVolume;
 }

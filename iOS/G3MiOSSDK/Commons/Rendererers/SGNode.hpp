@@ -19,6 +19,7 @@ class G3MRenderContext;
 class SGShape;
 class GLGlobalState;
 class GPUProgramState;
+class Box;
 
 class SGNode {
 protected:
@@ -86,6 +87,8 @@ public:
   virtual std::string description() {
     return "SGNode";
   };
+  
+  virtual Box* getCopyBoundingBox();
 };
 
 #endif
