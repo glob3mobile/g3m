@@ -9,8 +9,6 @@
 #ifndef __G3MApp__G3MDemoBuilder__
 #define __G3MApp__G3MDemoBuilder__
 
-#include <stddef.h>
-
 class G3MBuilder_iOS;
 class LayerSet;
 

@@ -12,8 +12,8 @@
 #include <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/MapQuestLayer.hpp>
 #include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/MapQuestLayer.hpp>
 #include <G3MiOSSDK/WMSLayer.hpp>
 #include <G3MiOSSDK/LevelTileCondition.hpp>
 #include <G3MiOSSDK/OSMLayer.hpp>
