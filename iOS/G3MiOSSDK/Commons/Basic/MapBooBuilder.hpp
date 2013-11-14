@@ -29,6 +29,7 @@ class GPUProgramManager;
 class JSONBaseObject;
 class JSONObject;
 class JSONString;
+class JSONArray;
 class TimeInterval;
 class MapQuestLayer;
 class BingMapsLayer;
@@ -38,14 +39,22 @@ class WMSLayer;
 class G3MContext;
 class IWebSocket;
 class MapBoo_Scene;
-
+class ErrorRenderer;
 class SceneLighting;
-
-#include "URL.hpp"
-#include "Color.hpp"
+class G3MEventContext;
+class Camera;
+class Tile;
+class MarksRenderer;
+class MapBooBuilder;
+class Vector2I;
+class URLTemplateLayer;
+class Sector;
 
 #include <vector>
 #include <string>
+#include "URL.hpp"
+#include "Color.hpp"
+#include "Geodetic3D.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -74,6 +83,17 @@ public:
   virtual void onSceneChanged(const G3MContext* context,
                               int sceneIndex,
                               const MapBoo_Scene* scene) = 0;
+
+  virtual void onWebSocketOpen(const G3MContext* context) = 0;
+
+  virtual void onWebSocketClose(const G3MContext* context) = 0;
+
+  virtual void onTerrainTouch(MapBooBuilder*         builder,
+                              const G3MEventContext* ec,
+                              const Vector2I&        pixel,
+                              const Camera*          camera,
+                              const Geodetic3D&      position,
+                              const Tile*            tile) = 0;
 
 };
 
@@ -162,33 +182,89 @@ public:
 };
 
 
-class MapBoo_Scene {
+class MapBoo_CameraPosition {
 private:
-  const std::string        _name;
-  const std::string        _description;
-  const MapBoo_MultiImage* _screenshot;
-  const Color              _backgroundColor;
-  Layer*                   _baseLayer;
-  Layer*                   _overlayLayer;
-
-  const bool               _hasWarnings;
+  const Geodetic3D _position;
+  const Angle      _heading;
+  const Angle      _pitch;
+  const bool       _animated;
 
 public:
-  MapBoo_Scene(const std::string& name,
-               const std::string& description,
-               MapBoo_MultiImage* screenshot,
-               const Color&       backgroundColor,
-               Layer*             baseLayer,
-               Layer*             overlayLayer,
-               const bool         hasWarnings) :
+  MapBoo_CameraPosition(const Geodetic3D& position,
+                        const Angle&      heading,
+                        const Angle&      pitch,
+                        const bool        animated) :
+  _position(position),
+  _heading(heading),
+  _pitch(pitch),
+  _animated(animated)
+  {
+  }
+
+  ~MapBoo_CameraPosition() {
+
+  }
+
+  const Geodetic3D getPosition() const {
+    return _position;
+  }
+
+  const Angle getHeading() const {
+    return _heading;
+  }
+
+  const Angle getPitch() const {
+    return _pitch;
+  }
+
+  bool isAnimated() const {
+    return _animated;
+  }
+
+  const std::string description() const;
+
+};
+
+
+class MapBoo_Scene {
+private:
+  const std::string            _id;
+  const std::string            _name;
+  const std::string            _description;
+  const MapBoo_MultiImage*     _screenshot;
+  const Color                  _backgroundColor;
+  const MapBoo_CameraPosition* _cameraPosition;
+  const Sector*                _sector;
+  Layer*                       _baseLayer;
+  Layer*                       _overlayLayer;
+  const bool                   _hasWarnings;
+
+public:
+  MapBoo_Scene(const std::string&           id,
+               const std::string&           name,
+               const std::string&           description,
+               MapBoo_MultiImage*           screenshot,
+               const Color&                 backgroundColor,
+               const MapBoo_CameraPosition* cameraPosition,
+               Sector*                      sector,
+               Layer*                       baseLayer,
+               Layer*                       overlayLayer,
+               const bool                   hasWarnings) :
+  _id(id),
   _name(name),
   _description(description),
   _screenshot(screenshot),
   _backgroundColor(backgroundColor),
+  _cameraPosition(cameraPosition),
+  _sector(sector),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer),
   _hasWarnings(hasWarnings)
   {
+  }
+
+  const std::string getId() const {
+    return _id;
   }
 
   const std::string getName() const {
@@ -207,15 +283,66 @@ public:
     return _backgroundColor;
   }
 
+  const MapBoo_CameraPosition* getCameraPosition() const {
+    return _cameraPosition;
+  }
+
+  const Sector* getSector() const {
+    return _sector;
+  }
+
   bool hasWarnings() const {
     return _hasWarnings;
   }
 
-  void fillLayerSet(LayerSet* layerSet) const;
+  LayerSet* createLayerSet() const;
 
   ~MapBoo_Scene();
 
   const std::string description() const;
+
+};
+
+class MapBoo_Notification {
+private:
+  const Geodetic2D             _position;
+  const MapBoo_CameraPosition* _cameraPosition;
+  const std::string            _message;
+  const URL*                   _iconURL;
+
+public:
+
+  MapBoo_Notification(const Geodetic2D&            position,
+                      const MapBoo_CameraPosition* cameraPosition,
+                      const std::string&           message,
+                      const URL*                   iconURL) :
+  _position(position),
+  _cameraPosition(cameraPosition),
+  _message(message),
+  _iconURL(iconURL)
+  {
+  }
+
+  ~MapBoo_Notification() {
+    delete _iconURL;
+    delete _cameraPosition;
+  }
+
+  const Geodetic2D getPosition() const {
+    return _position;
+  }
+
+  const MapBoo_CameraPosition* getCameraPosition() const {
+    return _cameraPosition;
+  }
+
+  const std::string getMessage() const {
+    return _message;
+  }
+
+  const URL* getIconURL() const {
+    return _iconURL;
+  }
 
 };
 
@@ -234,21 +361,20 @@ private:
 
   MapBoo_ViewType _viewType;
 
-  const bool _useWebSockets;
-
   MapBooApplicationChangeListener* _applicationListener;
 
-  std::string _applicationId;
-  std::string _applicationName;
-  std::string _applicationWebsite;
-  std::string _applicationEMail;
-  std::string _applicationAbout;
-  int         _applicationTimestamp;
+  const bool _enableNotifications;
 
+  std::string                _applicationId;
+  std::string                _applicationName;
+  std::string                _applicationWebsite;
+  std::string                _applicationEMail;
+  std::string                _applicationAbout;
+  int                        _applicationTimestamp;
   std::vector<MapBoo_Scene*> _applicationScenes;
   int                        _applicationCurrentSceneIndex;
   int                        _lastApplicationCurrentSceneIndex;
-  
+
   GL* _gl;
   G3MWidget* _g3mWidget;
   IStorage*  _storage;
@@ -267,11 +393,14 @@ private:
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
 
-  std::vector<ICameraConstrainer*>* createCameraConstraints();
+  std::vector<ICameraConstrainer*>* createCameraConstraints(const Planet* planet,
+                                                            PlanetRenderer* planetRenderer);
 
   CameraRenderer* createCameraRenderer();
 
   Renderer* createBusyRenderer();
+
+  ErrorRenderer* createErrorRenderer();
 
   std::vector<PeriodicalTask*>* createPeriodicalTasks();
 
@@ -286,9 +415,6 @@ private:
   GPUProgramManager* _gpuProgramManager;
   GPUProgramManager* getGPUProgramManager();
 
-  GInitializationTask* createInitializationTask();
-
-
 
   Layer* parseLayer(const JSONBaseObject* jsonBaseObjectLayer) const;
 
@@ -296,43 +422,73 @@ private:
                                     const TimeInterval& timeToCache) const;
 
   BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
-                                    const TimeInterval& timeToCache);
+                                    const TimeInterval& timeToCache) const;
 
   CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
                                   const TimeInterval& timeToCache) const;
 
-  BingMapsLayer* parseBingMapsLayer(const JSONObject* jsonLayer,
-                                    const TimeInterval& timeToCache) const;
 
   MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
   WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
 
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
 
   const int getApplicationCurrentSceneIndex();
   const MapBoo_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
 
+//  const std::string parseSceneId(const JSONObject* jsonObject) const;
   MapBoo_Scene* parseScene(const JSONObject* json) const;
+  
   Color         parseColor(const JSONString* jsonColor) const;
+  Sector*       parseSector(const JSONBaseObject* jsonBaseObjectLayer) const;
 
   MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
   MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
+  const MapBoo_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
 
   const std::string getApplicationCurrentSceneCommand() const;
 
+  const std::string getSendNotificationCommand(const Geodetic2D&  position,
+                                               const Camera*      camera,
+                                               const std::string& message,
+                                               const URL*         iconURL) const;
+
+  const std::string getSendNotificationCommand(const Geodetic2D&            position,
+                                               const MapBoo_CameraPosition* cameraPosition,
+                                               const std::string&           message,
+                                               const URL*                   iconURL) const;
+
+  const std::string escapeString(const std::string& str) const;
+
+  const std::string toCameraPositionJSON(const Camera* camera) const;
+  const std::string toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const;
+
+  MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
+  std::vector<MapBoo_Notification*>* parseNotifications(const JSONArray* jsonArray) const;
+
+  void addApplicationNotification(MapBoo_Notification* notification);
+  void addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications);
+
+  const URL* parseURL(const JSONString* jsonString) const;
+
+  MarksRenderer* _marksRenderer;
+  MarksRenderer* getMarksRenderer();
+
+  bool _hasParsedApplication;
 
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
-                bool useWebSockets,
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
-                MapBooApplicationChangeListener* ApplicationListener);
+                MapBooApplicationChangeListener* applicationListener,
+                bool enableNotifications);
 
   virtual ~MapBooBuilder();
 
@@ -355,6 +511,8 @@ protected:
   virtual GPUProgramManager* createGPUProgramManager() = 0;
 
   SceneLighting* createSceneLighting();
+
+  const URL createApplicationRestURL() const;
 
 public:
   /** Private to MapbooBuilder, don't call it */
@@ -379,7 +537,7 @@ public:
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
   /** Private to MapbooBuilder, don't call it */
-  const URL createPollingApplicationDescriptionURL() const;
+  void saveApplicationData() const;
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
@@ -407,11 +565,45 @@ public:
   bool isApplicationTubeOpen() const {
     return _isApplicationTubeOpen;
   }
-  
+
+  /** Private to MapbooBuilder, don't call it */
+  bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setHasParsedApplication();
+
+  /** Private to MapbooBuilder, don't call it */
+  bool hasParsedApplication() const;
+
+
+  const MapBoo_Notification* createNotification(const Geodetic2D&  position,
+                                                const Camera*      camera,
+                                                const std::string& message,
+                                                const URL*         iconURL) const;
+
+  void sendNotification(const Geodetic2D&  position,
+                        const Camera*      camera,
+                        const std::string& message,
+                        const URL*         iconURL) const;
+
+  void sendNotification(const Geodetic2D&            position,
+                        const MapBoo_CameraPosition* cameraPosition,
+                        const std::string&           message,
+                        const URL*                   iconURL) const;
+
   void changeScene(int sceneIndex);
   
   void changeScene(const MapBoo_Scene* scene);
-  
+
+
+  const URL getServerURL() const {
+    return _serverURL;
+  }
+
 };
 
 #endif

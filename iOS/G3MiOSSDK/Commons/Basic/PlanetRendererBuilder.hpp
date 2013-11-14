@@ -19,7 +19,7 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-  TileRasterizer* _tileRasterizer;
+  std::vector<TileRasterizer*> _tileRasterizers;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -28,6 +28,7 @@ private:
   bool _useTilesSplitBudget;
   bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
+  Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
@@ -57,13 +58,16 @@ private:
   ElevationDataProvider* getElevationDataProvider();
   float getVerticalExaggeration();
 
+  Sector* _renderedSector;
+  Sector getRenderedSector();
+
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-  void setTileRasterizer(TileRasterizer* tileRasterizer);
+  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
@@ -81,6 +85,13 @@ public:
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 
   void setVerticalExaggeration(float verticalExaggeration);
+
+  void setRenderedSector(const Sector& sector);
+
+  GEOTileRasterizer* createGEOTileRasterizer();
+
+  Quality getQuality() const;
+  void setQuality(Quality quality);
 
 };
 

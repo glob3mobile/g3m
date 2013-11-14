@@ -133,15 +133,15 @@ std::vector<std::string> JSONObject::keys() const {
 }
 
 void JSONObject::putKeyAndValueDescription(const std::string& key,
-                                           IStringBuilder *isb) const {
+                                           IStringBuilder* isb) const {
   isb->addString("\"");
   isb->addString(key);
   isb->addString("\":");
-  isb->addString(get(key)->description());
+    isb->addString((get(key) == NULL) ? "null" : get(key)->description());
 }
 
 const std::string JSONObject::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("{");
 
@@ -190,7 +190,9 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
     std::string key = keys[i];
     visitor->visitObjectBeforeChild(this, key);
     const JSONBaseObject* child = get(key);
-    child->acceptVisitor(visitor);
+    if(child != NULL) {
+        child->acceptVisitor(visitor);
+    }
   }
 
   visitor->visitObjectAfterChildren(this);

@@ -34,15 +34,19 @@ private:
   
   Angle*      _heading;
   Angle*      _pitch;
+  Angle*      _roll;
   
   double      _scaleX;
   double      _scaleY;
   double      _scaleZ;
-  
+
+  double      _translationX;
+  double      _translationY;
+  double      _translationZ;
+
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
@@ -56,16 +60,25 @@ private:
   
 protected:
   virtual void cleanTransformMatrix();
+
   
 public:
-  Shape(Geodetic3D* position, AltitudeMode altitudeMode) :
+  
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+
+  Shape(Geodetic3D* position,
+        AltitudeMode altitudeMode) :
   _position( position ),
   _altitudeMode(altitudeMode),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
+  _roll( new Angle(Angle::zero()) ),
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
+  _translationX(0),
+  _translationY(0),
+  _translationZ(0),
   _transformMatrix(NULL),
   _enable(true),
   _surfaceElevation(0),
@@ -87,13 +100,25 @@ public:
   const Angle getPitch() const {
     return *_pitch;
   }
-  
+
+  const Angle getRoll() const {
+    return *_roll;
+  }
+
+  void setPosition(Geodetic3D* position,
+                   AltitudeMode altitudeMode) {
+    delete _position;
+    _position = position;
+    _altitudeMode = altitudeMode;
+    cleanTransformMatrix();
+  }
+
   void setPosition(Geodetic3D* position) {
     delete _position;
     _position = position;
     cleanTransformMatrix();
   }
-  
+
   void addShapeEffect(Effect* effect);
   
   void setAnimatedPosition(const TimeInterval& duration,
@@ -104,6 +129,7 @@ public:
                            const Geodetic3D& position,
                            const Angle& pitch,
                            const Angle& heading,
+                           const Angle& roll,
                            bool linearInterpolation=false);
   
   void setAnimatedPosition(const Geodetic3D& position,
@@ -114,19 +140,55 @@ public:
   }
   
   void setHeading(const Angle& heading) {
+#ifdef C_CODE
     delete _heading;
     _heading = new Angle(heading);
+#endif
+#ifdef JAVA_CODE
+    _heading = heading;
+#endif
     cleanTransformMatrix();
   }
   
   void setPitch(const Angle& pitch) {
+#ifdef C_CODE
     delete _pitch;
     _pitch = new Angle(pitch);
+#endif
+#ifdef JAVA_CODE
+    _pitch = pitch;
+#endif
+    cleanTransformMatrix();
+  }
+
+  void setRoll(const Angle& roll) {
+#ifdef C_CODE
+    delete _roll;
+    _roll = new Angle(roll);
+#endif
+#ifdef JAVA_CODE
+    _roll = roll;
+#endif
     cleanTransformMatrix();
   }
   
   void setScale(double scale) {
     setScale(scale, scale, scale);
+  }
+
+  void setTranslation(const Vector3D& translation) {
+    setTranslation(translation._x,
+                   translation._y,
+                   translation._z);
+  }
+
+  void setTranslation(double translationX,
+                      double translationY,
+                      double translationZ) {
+    _translationX = translationX;
+    _translationY = translationY;
+    _translationZ = translationZ;
+    cleanTransformMatrix();
   }
   
   void setScale(double scaleX,
@@ -159,7 +221,9 @@ public:
                         double scaleY,
                         double scaleZ) {
     setAnimatedScale(TimeInterval::fromSeconds(1),
-                     scaleX, scaleY, scaleZ);
+                     scaleX,
+                     scaleY,
+                     scaleZ);
   }
   
   void setAnimatedScale(const Vector3D& scale) {
@@ -194,14 +258,12 @@ public:
               bool renderNotReadyShapes);
 
   virtual void initialize(const G3MContext* context) {
-
     _surfaceElevationProvider = context->getSurfaceElevationProvider();
     if (_surfaceElevationProvider != NULL) {
       _surfaceElevationProvider->addListener(_position->_latitude,
                                              _position->_longitude,
                                              this);
     }
-
   }
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
@@ -213,12 +275,16 @@ public:
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
 
   void elevationChanged(const Geodetic2D& position,
-                        double rawElevation,            //Without considering vertical exaggeration
+                        double rawElevation,            // Without considering vertical exaggeration
                         double verticalExaggeration);
 
   void elevationChanged(const Sector& position,
-                   const ElevationData* rawElevationData, //Without considering vertical exaggeration
-                        double verticalExaggeration){}
+                   const ElevationData* rawElevationData, // Without considering vertical exaggeration
+                        double verticalExaggeration) {}
+  
+  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const = 0;
+  
 
 };
 

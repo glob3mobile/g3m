@@ -56,9 +56,7 @@ public class Vector3D
 
   public static Vector3D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector3D(mu.NanD(), mu.NanD(), mu.NanD());
+    return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
 //  static Vector3D zero() {
@@ -97,9 +95,7 @@ public class Vector3D
 
   public final boolean isNan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z));
+    return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
   public final boolean isZero()
@@ -203,28 +199,15 @@ public class Vector3D
     final double v = axis._y;
     final double w = axis._z;
   
-    final double cosTheta = theta.cosinus();
-    final double sinTheta = theta.sinus();
+  //  const double cosTheta = theta.cosinus();
+  //  const double sinTheta = theta.sinus();
+    final double cosTheta = java.lang.Math.cos(theta._radians);
+    final double sinTheta = java.lang.Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);
   
     return new Vector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
-  }
-
-  public final double x()
-  {
-    return _x;
-  }
-
-  public final double y()
-  {
-    return _y;
-  }
-
-  public final double z()
-  {
-    return _z;
   }
 
   public final Vector3D transformedBy(MutableMatrix44D m, double homogeneus)

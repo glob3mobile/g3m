@@ -24,27 +24,100 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
 {
   private QuadTree _quadTree = new QuadTree();
 
+  public GEOTileRasterizer()
+  {
+  }
+
   public final String getId()
   {
     return "GEOTileRasterizer";
   }
 
-  public final void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  public final void initialize(G3MContext context)
   {
-    IImage image = trc._image;
+  }
+
+
+  //class GEOTileRasterizer_ASync : public GAsyncTask {
+  //private:
+  //  const IImage*   _image;
+  //  const Tile*     _tile;
+  //  const bool      _mercator;
+  //  IImageListener* _listener;
+  //  bool            _autodelete;
+  //  const QuadTree* _quadTree;
+  //  
+  //public:
+  //  GEOTileRasterizer_ASync(const IImage*   image,
+  //                          const Tile*     tile,
+  //                          const bool      mercator,
+  //                          IImageListener* listener,
+  //                          bool            autodelete,
+  //                          const QuadTree* quadTree) :
+  //  _image(image),
+  //  _tile(tile),
+  //  _mercator(mercator),
+  //  _listener(listener),
+  //  _quadTree(quadTree)
+  //  {
+  //
+  //  }
+  //
+  //  void runInBackground(const G3MContext* context) {
+  //    const int width  = _image->getWidth();
+  //    const int height = _image->getHeight();
+  //
+  //    GEORasterProjection* projection = new GEORasterProjection(_tile->getSector(), _mercator,
+  //                                                              width, height);
+  //
+  //    ICanvas* canvas = IFactory::instance()->createCanvas();
+  //    canvas->initialize(width, height);
+  //
+  //    canvas->drawImage(_image, 0, 0);
+  //
+  //    _quadTree->acceptVisitor(_tile->getSector(),
+  //                             GEOTileRasterizer_QuadTreeVisitor(canvas, projection, _tile->_level));
+  //
+  //    canvas->createImage(_listener, _autodelete);
+  //
+  //    delete _image;
+  //    _image = NULL;
+  //    
+  //    delete projection;
+  //
+  //    delete canvas;
+  //  }
+  //
+  //  void onPostExecute(const G3MContext* context) {
+  //
+  //  }
+  //
+  //};
+  
+  public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  {
+  
+  //  _context->getThreadUtils()->invokeAsyncTask(new GEOTileRasterizer_ASync(image,
+  //                                                                          trc._tile,
+  //                                                                          trc._mercator,
+  //                                                                          listener,
+  //                                                                          autodelete,
+  //                                                                          &_quadTree),
+  //                                              true);
+  
     final Tile tile = trc._tile;
     final boolean mercator = trc._mercator;
   
     final int width = image.getWidth();
     final int height = image.getHeight();
   
-    GEORasterProjection projection = new GEORasterProjection(tile.getSector(), mercator, width, height);
+    GEORasterProjection projection = new GEORasterProjection(tile._sector, mercator, width, height);
   
     ICanvas canvas = getCanvas(width, height);
   
     canvas.drawImage(image, 0, 0);
   
-    _quadTree.acceptVisitor(tile.getSector(), new GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile.getLevel()));
+    _quadTree.acceptVisitor(tile._sector, new GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile._level));
   
     canvas.createImage(listener, autodelete);
   
@@ -61,8 +134,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
     if (sector == null)
     {
-  //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-  //                                  symbol->description().c_str());
+      //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+      //                                  symbol->description().c_str());
       if (symbol != null)
          symbol.dispose();
     }

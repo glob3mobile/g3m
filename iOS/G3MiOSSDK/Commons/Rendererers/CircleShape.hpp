@@ -18,6 +18,8 @@ private:
   int    _steps;
   Color* _color;
 
+  const bool _useNormals;
+
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
 
@@ -25,12 +27,14 @@ public:
   CircleShape(Geodetic3D* position,
               AltitudeMode altitudeMode,
               float radius,
-              Color* color = NULL,
-              int steps = 64) :
+              const Color& color,
+              int steps = 64,
+              bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _radius(radius),
-  _color(color),
-  _steps(steps)
+  _color(new Color(color)),
+  _steps(steps),
+  _useNormals(useNormals)
   {
 
   }
@@ -59,6 +63,12 @@ public:
     }
   }
   
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const {
+    std::vector<double> intersections;
+    return intersections;
+  }
+
 
 };
 

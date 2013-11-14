@@ -97,4 +97,81 @@ public final class StringUtils_JavaDesktop
       return Long.parseLong(str, 16);
    }
 
+
+   @Override
+   public int indexOfFirstNonBlank(final String string,
+                                   final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (!Character.isWhitespace(string.charAt(i))) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+
+   @Override
+   public int indexOfFirstNonChar(final String string,
+                                  final String chars,
+                                  final int fromIndex) {
+      final int stringLen = string.length();
+      for (int i = fromIndex; i < stringLen; i++) {
+         if (chars.indexOf(string.charAt(i)) > 0) {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+
+   @Override
+   public int indexOf(final String string,
+                      final String search,
+                      final int fromIndex) {
+      return string.indexOf(search, fromIndex);
+   }
+
+
+   @Override
+   public int indexOf(final String string,
+                      final String search,
+                      final int fromIndex,
+                      final int endIndex) {
+      final int pos = string.indexOf(search, fromIndex);
+      return ((pos < 0) || (pos > endIndex)) ? -1 : pos;
+   }
+
+
+   @Override
+   public String toString(final int value) {
+      return Integer.toString(value);
+   }
+
+
+   @Override
+   public String toString(final double value) {
+      return Double.toString(value);
+   }
+
+
+   @Override
+   public String toString(final long value) {
+      return Long.toString(value);
+   }
+
+
+   @Override
+   public String capitalize(final String string) {
+      if (!string.isEmpty()) {
+         return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+      }
+      return string;
+   }
+
+
+   @Override
+   public double parseDouble(final String str) {
+      return Double.parseDouble(str);
+   }
 }

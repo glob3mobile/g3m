@@ -1,8 +1,10 @@
 package org.glob3.mobile.generated; 
-//***************************************************************
-
 public class DoubleTapRotationEffect extends EffectWithDuration
 {
+  private final Vector3D _axis ;
+  private final Angle _angle ;
+  private final double _distance;
+  private double _lastAlpha;
 
   public DoubleTapRotationEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance)
   {
@@ -16,13 +18,13 @@ public class DoubleTapRotationEffect extends EffectWithDuration
      _distance = distance;
   }
 
-  public void start(G3MRenderContext rc, TimeInterval when)
+  public final void start(G3MRenderContext rc, TimeInterval when)
   {
     super.start(rc, when);
     _lastAlpha = 0;
   }
 
-  public void doStep(G3MRenderContext rc, TimeInterval when)
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     final double alpha = getAlpha(when);
     Camera camera = rc.getNextCamera();
@@ -32,7 +34,7 @@ public class DoubleTapRotationEffect extends EffectWithDuration
     _lastAlpha = alpha;
   }
 
-  public void stop(G3MRenderContext rc, TimeInterval when)
+  public final void stop(G3MRenderContext rc, TimeInterval when)
   {
     Camera camera = rc.getNextCamera();
     final double step = 1.0 - _lastAlpha;
@@ -40,12 +42,8 @@ public class DoubleTapRotationEffect extends EffectWithDuration
     camera.moveForward(_distance * step);
   }
 
-  public void cancel(TimeInterval when)
+  public final void cancel(TimeInterval when)
   {
   }
 
-  private Vector3D _axis ;
-  private Angle _angle ;
-  private double _distance;
-  private double _lastAlpha;
 }

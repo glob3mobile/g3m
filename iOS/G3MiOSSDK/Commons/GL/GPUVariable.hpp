@@ -45,12 +45,6 @@ enum GPUAttributeKey{
 };
 
 class GPUVariable {
-  
-protected:
-  
-  const GPUVariableType _variableType;
-  const std::string _name;
-
 public:
 
   static GPUUniformKey getUniformKey(const std::string& name);
@@ -68,9 +62,17 @@ public:
   static bool codeContainsUniform(int code, GPUUniformKey u);
   static bool codeContainsAttribute(int code, GPUAttributeKey a);
 
-  virtual ~GPUVariable(){}
-  
-  GPUVariable(const std::string& name, GPUVariableType type): _name(name), _variableType(type){}
+  virtual ~GPUVariable() {}
+
+  const GPUVariableType _variableType;
+  const std::string     _name;
+
+  GPUVariable(const std::string& name,
+              GPUVariableType type) :
+  _name(name),
+  _variableType(type)
+  {
+  }
 
 
 };

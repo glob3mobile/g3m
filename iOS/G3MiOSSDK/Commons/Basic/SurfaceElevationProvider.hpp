@@ -25,7 +25,7 @@ public:
   virtual ~SurfaceElevationListener() {}
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   virtual void elevationChanged(const Geodetic2D& position,
@@ -75,7 +75,7 @@ public:
   virtual ~SurfaceElevationProvider() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   virtual void addListener(const Angle& latitude,
@@ -85,7 +85,7 @@ public:
   virtual void addListener(const Geodetic2D& position,
                            SurfaceElevationListener* listener) = 0;
 
-  virtual void removeListener(SurfaceElevationListener* listener) = 0;
+  virtual bool removeListener(SurfaceElevationListener* listener) = 0;
   
 };
 

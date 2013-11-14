@@ -55,6 +55,17 @@ public abstract class IStringUtils
 
   public abstract int indexOf(String String, String search);
 
+  public abstract int indexOf(String String, String search, int fromIndex);
+
+  public abstract int indexOf(String String, String search, int fromIndex, int endIndex);
+
+  public abstract int indexOfFirstNonBlank(String String, int fromIndex);
+
+//  virtual int indexOfFirstBlank(const std::string& string,
+//                                int fromIndex) const = 0;
+
+  public abstract int indexOfFirstNonChar(String String, String chars, int fromIndex);
+
   /*
    Returns a new string that is a substring of this string. The substring begins at the
    specified beginIndex and extends to the character at index endIndex - 1. Thus the length
@@ -68,25 +79,45 @@ public abstract class IStringUtils
     return substring(String, beginIndex, String.length());
   }
 
-  public String replaceSubstring(String originalString, String toReplace, String replaceWith)
+  public String replaceSubstring(String originalString, String searchString, String replaceString, int beginIndex, int endIndex2)
   {
-    int startIndex = indexOf(originalString, toReplace);
+    int startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
     //The part to replace was not found. Return original String
     if (startIndex == -1)
     {
       return originalString;
     }
-    final int endIndex = startIndex + toReplace.length();
+    final int endReplacedIndex = startIndex + searchString.length();
     final String left = substring(originalString, 0, startIndex);
-    final String right = substring(originalString, endIndex);
-    final String result = left + replaceWith + right;
-    startIndex = indexOf(result, toReplace);
+    final String right = substring(originalString, endReplacedIndex);
+    final String result = left + replaceString + right;
+    startIndex = indexOf(result, searchString, endReplacedIndex+1, endIndex2);
     if (startIndex != -1)
     {
       //recursive call to replace other ocurrences
-      return replaceSubstring(result, toReplace, replaceWith);
+      return replaceSubstring(result, searchString, replaceString, endReplacedIndex+1, endIndex2);
     }
     return result;
+  }
+
+  public String replaceSubstring(String originalString, String searchString, String replaceString)
+  {
+    return replaceSubstring(originalString, searchString, replaceString, 0, originalString.length());
+//    int startIndex = indexOf(originalString, searchString);
+//    //The part to replace was not found. Return original String
+//    if (startIndex == -1) {
+//      return originalString;
+//    }
+//    const int endIndex = startIndex + searchString.size();
+//    const std::string left = substring(originalString, 0, startIndex);
+//    const std::string right = substring(originalString, endIndex);
+//    const std::string result = left + replaceString + right;
+//    startIndex = indexOf(result, searchString);
+//    if (startIndex != -1) {
+//      //recursive call to replace other ocurrences
+//      return replaceSubstring(result, searchString, replaceString);
+//    }
+//    return result;
   }
 
   public String left(String String, int endIndex)
@@ -105,5 +136,13 @@ public abstract class IStringUtils
   public abstract String capitalize(String String);
 
   public abstract long parseHexInt(String str);
+
+  public abstract String toString(int value);
+
+  public abstract String toString(long value);
+
+  public abstract String toString(double value);
+
+  public abstract double parseDouble(String str);
 
 }

@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  IThreadUtils.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 30/08/12.
-//
-//
-
-//
-//  IThreadUtils.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 30/08/12.
-//
-//
-
-
-
-
 //class G3MContext;
 
 public abstract class IThreadUtils
@@ -49,5 +30,10 @@ public abstract class IThreadUtils
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);
 
   public abstract void invokeInBackground(GTask task, boolean autoDelete);
+
+  public final void invokeAsyncTask(GAsyncTask task, boolean autodelete)
+  {
+    invokeInBackground(new IThreadUtils_BackgroundTask(task, autodelete), true);
+  }
 
 }

@@ -20,10 +20,6 @@
 
 class Color {
 private:
-  const float _red;
-  const float _green;
-  const float _blue;
-  const float _alpha;
 
   Color(const float red,
         const float green,
@@ -76,6 +72,11 @@ private:
   }
 
 public:
+  const float _red;
+  const float _green;
+  const float _blue;
+  const float _alpha;
+
   Color(const Color& that):
   _red(that._red),
   _green(that._green),
@@ -88,6 +89,17 @@ public:
   }
 
   static Color* parse(const std::string& str);
+
+
+  static Color fromRGBA255(const int red,
+                           const int green,
+                           const int blue,
+                           const int alpha) {
+    return Color(red   / 255.0f,
+                 green / 255.0f,
+                 blue  / 255.0f,
+                 alpha / 255.0f);
+  }
 
   static Color fromRGBA(const float red,
                         const float green,
@@ -162,22 +174,6 @@ public:
     return Color::fromRGBA(0, 0, 1, 1);
   }
 
-  float getRed() const {
-    return _red;
-  }
-
-  float getGreen() const {
-    return _green;
-  }
-
-  float getBlue() const {
-    return _blue;
-  }
-
-  float getAlpha() const {
-    return _alpha;
-  }
-
   Color mixedWith(const Color& that,
                   float factor) const {
     float frac1 = factor;
@@ -186,10 +182,10 @@ public:
 
     const float frac2 = 1 - frac1;
 
-    const float newRed   = (getRed()   * frac2) + (that.getRed()   * frac1);
-    const float newGreen = (getGreen() * frac2) + (that.getGreen() * frac1);
-    const float newBlue  = (getBlue()  * frac2) + (that.getBlue()  * frac1);
-    const float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
+    const float newRed   = (_red   * frac2) + (that._red   * frac1);
+    const float newGreen = (_green * frac2) + (that._green * frac1);
+    const float newBlue  = (_blue  * frac2) + (that._blue  * frac1);
+    const float newAlpha = (_alpha * frac2) + (that._alpha * frac1);
 
     return Color::fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
@@ -202,7 +198,7 @@ public:
     return (_alpha < 0.01);
   }
 
-  bool isEqualsTo(const Color& that) const;
+  bool isEquals(const Color& that) const;
 
   Color wheelStep(int wheelSize,
                   int step) const;

@@ -12,7 +12,8 @@ void TexturedMesh::createGLState() {
   _textureMapping->modifyGLState(*_glState);
 }
 
-void TexturedMesh::render(const G3MRenderContext* rc, const GLState* parentState) const{
+void TexturedMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentState) const{
   _glState->setParent(parentState);
   _mesh->render(rc, _glState);
 }

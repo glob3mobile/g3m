@@ -7,3 +7,4 @@
 //
 
 #include "IBuffer.hpp"
+#include "ILogger.hpp"

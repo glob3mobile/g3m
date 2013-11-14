@@ -18,6 +18,10 @@ public final class FloatBuffer_WebGL
 
    private JavaScriptObject       _webGLBuffer     = null;
    private JavaScriptObject       _gl              = null;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
@@ -56,8 +60,7 @@ public final class FloatBuffer_WebGL
 
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl
-				.createBuffer();
+		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl.createBuffer();
    }-*/;
 
 
@@ -113,6 +116,15 @@ public final class FloatBuffer_WebGL
       final int size = array.length;
       _buffer = jsCreateBufferWithSize(size);
       for (int i = 0; i < size; i++) {
+         rawPut(i, array[i]);
+      }
+   }
+
+
+   public FloatBuffer_WebGL(final float[] array,
+                            final int length) {
+      _buffer = jsCreateBufferWithSize(length);
+      for (int i = 0; i < length; i++) {
          rawPut(i, array[i]);
       }
    }
@@ -215,5 +227,11 @@ public final class FloatBuffer_WebGL
    public String description() {
       return "FloatBuffer_WebGL(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 }

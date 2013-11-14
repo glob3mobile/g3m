@@ -17,6 +17,7 @@ class VisibleSectorListenerEntry;
 class VisibleSectorListener;
 class ElevationDataProvider;
 class LayerTilesRenderParameters;
+class TerrainTouchListener;
 
 #include "IStringBuilder.hpp"
 #include "LeafRenderer.hpp"
@@ -25,108 +26,12 @@ class LayerTilesRenderParameters;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
+#include "ITileVisitor.hpp"
 #include "ChangedListener.hpp"
 #include "SurfaceElevationProvider.hpp"
 
 class EllipsoidShape;
-
 class TileRasterizer;
-
-class PlanetRendererContext {
-private:
-  const TileTessellator*       _tessellator;
-  ElevationDataProvider*       _elevationDataProvider;
-  TileTexturizer*              _texturizer;
-  TileRasterizer*              _tileRasterizer;
-
-  const TilesRenderParameters* _parameters;
-  TilesStatistics*             _statistics;
-  const LayerSet*              _layerSet;
-
-  const bool _isForcedFullRender;
-
-  const float _verticalExaggeration;
-
-
-  ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-
-  long long _texturePriority;
-public:
-  PlanetRendererContext(const TileTessellator*       tessellator,
-                        ElevationDataProvider*       elevationDataProvider,
-                        TileTexturizer*              texturizer,
-                        TileRasterizer*              tileRasterizer,
-                        const LayerSet*              layerSet,
-                        const TilesRenderParameters* parameters,
-                        TilesStatistics*             statistics,
-                        ITimer*                      lastSplitTimer,
-                        bool                         isForcedFullRender,
-                        long long                    texturePriority,
-                        const float                  verticalExaggeration) :
-  _tessellator(tessellator),
-  _elevationDataProvider(elevationDataProvider),
-  _texturizer(texturizer),
-  _tileRasterizer(tileRasterizer),
-  _layerSet(layerSet),
-  _parameters(parameters),
-  _statistics(statistics),
-  _lastSplitTimer(lastSplitTimer),
-  _isForcedFullRender(isForcedFullRender),
-  _texturePriority(texturePriority),
-  _verticalExaggeration(verticalExaggeration)
-  {
-
-  }
-
-  TileRasterizer* getTileRasterizer() const {
-    return _tileRasterizer;
-  }
-
-  const float getVerticalExaggeration() const {
-    return _verticalExaggeration;
-  }
-
-  const LayerSet* getLayerSet() const {
-    return _layerSet;
-  }
-
-  const TileTessellator* getTessellator() const {
-    return _tessellator;
-  }
-
-  ElevationDataProvider* getElevationDataProvider() const {
-    return _elevationDataProvider;
-  }
-
-  TileTexturizer* getTexturizer() const {
-    return _texturizer;
-  }
-
-  const TilesRenderParameters* getParameters() const {
-    return _parameters;
-  }
-
-  TilesStatistics* getStatistics() const {
-    return _statistics;
-  }
-
-  ITimer* getLastSplitTimer() const {
-    return _lastSplitTimer;
-  }
-
-  bool isForcedFullRender() const {
-    return _isForcedFullRender;
-  }
-
-  long long getTexturePriority() const {
-    return _texturePriority;
-  }
-
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _layerSet->getLayerTilesRenderParameters();
-  }
-
-};
 
 
 class TilesStatistics {
@@ -168,6 +73,19 @@ public:
     delete _renderedSector;
   }
 
+  void clear() {
+    _tilesProcessed = 0;
+    _tilesVisible = 0;
+    _tilesRendered = 0;
+    _splitsCountInFrame = 0;
+    _buildersStartsInFrame = 0;
+    delete _renderedSector;
+    _renderedSector = NULL;
+    for (int i = 0; i < _maxLOD; i++) {
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
+  }
+
   int getSplitsCountInFrame() const {
     return _splitsCountInFrame;
   }
@@ -187,19 +105,19 @@ public:
   void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
 
   void computeVisibleTile(Tile* tile) {
     _tilesVisible++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
   void computeRenderedSector(Tile* tile) {
-    const Sector sector = tile->getSector();
+    const Sector sector = tile->_sector;
     if (_renderedSector == NULL) {
 #ifdef C_CODE
       _renderedSector = new Sector( sector );
@@ -227,7 +145,7 @@ public:
   void computePlanetRenderered(Tile* tile) {
     _tilesRendered++;
 
-    const int level = tile->getLevel();
+    const int level = tile->_level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
 
@@ -258,7 +176,7 @@ public:
   static std::string asLogString(const int m[], const int nMax) {
 
     bool first = true;
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     for(int i = 0; i < nMax; i++) {
       const int level   = i;
       const int counter = m[i];
@@ -286,6 +204,10 @@ public:
                     _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
                     _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
                     _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
+//    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
+//                    _tilesProcessed,
+//                    _tilesVisible,
+//                    _tilesRendered);
   }
 
 };
@@ -293,13 +215,16 @@ public:
 
 class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
 private:
-  const TileTessellator*       _tessellator;
+  TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
-  const TilesRenderParameters* _parameters;
+  const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
+  ITileVisitor*                _tileVisitor = NULL;
+
+  TilesStatistics _statistics;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -332,33 +257,54 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
+  
+  void visitTilesTouchesWith(const Sector& sector,
+                             const int topLevel,
+                             const int maxLevel);
+  
+  void visitSubTilesTouchesWith(std::vector<Layer*> layers,
+                                Tile* tile,
+                                const Sector& sectorToVisit,
+                                const int topLevel,
+                                const int maxLevel);
 
   long long _texturePriority;
 
   float _verticalExaggeration;
 
-
-  bool isReadyToRenderTiles(const G3MRenderContext* rc);
-
   bool _recreateTilesPending;
 
   GLState* _glState;
-  ProjectionGLFeature* _projection;
-  ModelGLFeature*      _model;
   void updateGLState(const G3MRenderContext* rc);
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
+  
+  Sector* _renderedSector;
+//  bool _validLayerTilesRenderParameters;
+  bool _layerTilesRenderParametersDirty;
+#ifdef C_CODE
+  const LayerTilesRenderParameters* _layerTilesRenderParameters;
+#endif
+#ifdef JAVA_CODE
+  private LayerTilesRenderParameters _layerTilesRenderParameters;
+#endif
+  std::vector<std::string> _errors;
+
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
+
+  std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
 public:
-  PlanetRenderer(const TileTessellator* tessellator,
-                 ElevationDataProvider* elevationDataProvider,
-                 float verticalExaggeration,
-                 TileTexturizer*  texturizer,
-                 TileRasterizer*  tileRasterizer,
-                 LayerSet* layerSet,
-                 const TilesRenderParameters* parameters,
-                 bool showStatistics,
-                 long long texturePriority);
+  PlanetRenderer(TileTessellator*             tessellator,
+                 ElevationDataProvider*       elevationDataProvider,
+                 float                        verticalExaggeration,
+                 TileTexturizer*              texturizer,
+                 TileRasterizer*              tileRasterizer,
+                 LayerSet*                    layerSet,
+                 const TilesRenderParameters* tilesRenderParameters,
+                 bool                         showStatistics,
+                 long long                    texturePriority,
+                 const Sector&                renderedSector);
 
   ~PlanetRenderer();
 
@@ -374,8 +320,14 @@ public:
 
   }
 
-  bool isReadyToRender(const G3MRenderContext* rc);
+  RenderState getRenderState(const G3MRenderContext* rc);
 
+  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
+                         const int topLevel,
+                         const int maxLevel) {
+    _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
+  }
 
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
@@ -467,6 +419,10 @@ public:
     return (_elevationDataProvider == NULL) ? NULL : this;
   }
 
+  PlanetRenderer* getPlanetRenderer() {
+    return this;
+  }
+
   void addListener(const Angle& latitude,
                    const Angle& longitude,
                    SurfaceElevationListener* listener);
@@ -474,9 +430,17 @@ public:
   void addListener(const Geodetic2D& position,
                    SurfaceElevationListener* listener);
 
-  void removeListener(SurfaceElevationListener* listener);
+  bool removeListener(SurfaceElevationListener* listener);
 
   void sectorElevationChanged(ElevationData* elevationData) const;
+
+  const Sector* getRenderedSector() const{
+    return _renderedSector;
+  }
+
+  void setRenderedSector(const Sector& sector);
+
+  void addTerrainTouchListener(TerrainTouchListener* listener);
 
 };
 

@@ -16,7 +16,7 @@ void JSONFloat::acceptVisitor(JSONVisitor* visitor) const {
 }
 
 const std::string JSONFloat::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("float/");
   isb->addFloat(_value);

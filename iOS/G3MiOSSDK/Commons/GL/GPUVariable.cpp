@@ -9,8 +9,8 @@
 #include "GPUVariable.hpp"
 #include "ILogger.hpp"
 
-bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u){
-  if (u == UNRECOGNIZED_UNIFORM){
+bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u) {
+  if (u == UNRECOGNIZED_UNIFORM) {
     return false;
   }
 #ifdef C_CODE
@@ -106,27 +106,27 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return  POINT_SIZE;
   }
 
-  if (name.compare("uAmbientLight") == 0){
+  if (name.compare("uAmbientLight") == 0) {
     return AMBIENT_LIGHT;
   }
 
-  if (name.compare("uLightDirection") == 0){
+  if (name.compare("uLightDirection") == 0) {
     return LIGHT_DIRECTION;
   }
 
-  if (name.compare("uLightColor") == 0){
+  if (name.compare("uLightColor") == 0) {
     return LIGHT_COLOR;
   }
 
-  if (name.compare("uProjection") == 0){
+  if (name.compare("uProjection") == 0) {
     return PROJECTION;
   }
 
-  if (name.compare("uCameraModel") == 0){
+  if (name.compare("uCameraModel") == 0) {
     return CAMERA_MODEL;
   }
 
-  if (name.compare("uModel") == 0){
+  if (name.compare("uModel") == 0) {
     return MODEL;
   }
 
@@ -151,7 +151,7 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
     return  TEXTURE_COORDS;
   }
 
-  if (name.compare("aNormal") == 0){
+  if (name.compare("aNormal") == 0) {
     return  NORMAL;
   }
 

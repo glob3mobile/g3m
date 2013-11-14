@@ -19,7 +19,7 @@
 class TexturedMesh: public Mesh
 {
 private:
-  Mesh*           _mesh;
+  Mesh*                 _mesh;
   const TextureMapping* _textureMapping;
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
@@ -60,7 +60,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   BoundingVolume* getBoundingVolume()  const {
@@ -83,7 +82,8 @@ public:
     return _transparent;
   }
   
-  void render(const G3MRenderContext* rc, const GLState* parentState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const;
 };
 
 #endif

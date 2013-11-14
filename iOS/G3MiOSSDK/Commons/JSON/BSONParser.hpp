@@ -46,7 +46,7 @@ private:
 
 public:
 
-  static JSONBaseObject* parse(IByteBuffer* buffer,
+  static JSONBaseObject* parse(const IByteBuffer* buffer,
                                bool nullAsObject = false);
 
 };

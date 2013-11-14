@@ -29,7 +29,7 @@ public abstract class AbstractMesh extends Mesh
   protected Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
   protected IFloatBuffer _vertices;
-  protected Color _flatColor;
+  protected final Color _flatColor;
   protected IFloatBuffer _colors;
   protected final float _colorsIntensity;
   protected final float _lineWidth;
@@ -109,7 +109,7 @@ public abstract class AbstractMesh extends Mesh
   protected final void createGLState()
   {
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //POINT SIZE - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0.0f, 0.0f, _lineWidth, true, _pointSize), false); //POINT SIZE -  Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {
@@ -198,9 +198,8 @@ public abstract class AbstractMesh extends Mesh
     return _flatColor.isTransparent();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
-  
     _glState.setParent(parentGLState);
     rawRender(rc);
   }

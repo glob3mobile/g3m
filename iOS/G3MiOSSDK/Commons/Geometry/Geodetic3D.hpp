@@ -84,18 +84,6 @@ public:
     
   }
   
-  const Angle latitude() const {
-    return _latitude;
-  }
-  
-  const Angle longitude() const {
-    return _longitude;
-  }
-  
-  double height() const {
-    return _height;
-  }
-
   Geodetic2D asGeodetic2D() const {
     return Geodetic2D(_latitude, _longitude);
   }
@@ -126,6 +114,9 @@ public:
                       _longitude.div(magnitude),
                       _height / magnitude);
   }
+
+  bool isEquals(const Geodetic3D& that) const;
+
 };
 
 

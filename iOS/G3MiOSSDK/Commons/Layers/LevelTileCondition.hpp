@@ -36,7 +36,9 @@ public:
   
   bool isAvailable(const G3MEventContext* ec,
                    const Tile* tile) const;
-  
+
+  LayerCondition* copy() const;
+
 };
 
 #endif

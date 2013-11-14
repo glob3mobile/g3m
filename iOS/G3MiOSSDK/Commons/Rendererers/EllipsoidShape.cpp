@@ -15,6 +15,7 @@
 #include "Color.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
@@ -23,33 +24,43 @@
 #include "MercatorUtils.hpp"
 
 EllipsoidShape::~EllipsoidShape() {
+  delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
-  
+
+  delete _texId; //Releasing texture
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 
 }
 
-const IGLTextureId* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
-  if (_textureImage == NULL) {
-    return NULL;
+const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+
+  if (_texId == NULL){
+    if (_textureImage == NULL) {
+      return NULL;
+    }
+
+    _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                      GLFormat::rgba(),
+                                                      _textureURL.getPath(),
+                                                      false);
+
+    rc->getFactory()->deleteImage(_textureImage);
+    _textureImage = NULL;
   }
 
-  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _textureURL.getPath(),
-                                                                       false);
-
-  rc->getFactory()->deleteImage(_textureImage);
-  _textureImage = NULL;
-
-  if (texId == NULL) {
+  if (_texId == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
   }
 
-  return texId;
+  if (_texId == NULL){
+    return NULL;
+  }
+
+  return _texId->createCopy(); //The copy will be handle by the TextureMapping
 }
 
 
@@ -99,12 +110,13 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
 
 Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                                         FloatBufferBuilderFromGeodetic* vertices,
-                                        FloatBufferBuilderFromCartesian2D* texCoords) {
+                                        FloatBufferBuilderFromCartesian2D* texCoords,
+                                        FloatBufferBuilderFromCartesian3D* normals) {
 
   // create surface indices
   ShortBufferBuilder indices;
   short delta = (short) (2*_resolution - 1);
-  
+
   // create indices for textupe mapping depending on the flag _texturedInside
   if (!_texturedInside) {
     for (short j=0; j<_resolution-1; j++) {
@@ -135,9 +147,13 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              indices.create(),
                              (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
-                             surfaceColor);
+                             surfaceColor,
+                             NULL,
+                             1,
+                             true,
+                             _withNormals? normals->create() : NULL);
 
-  const IGLTextureId* texId = getTextureId(rc);
+  const TextureIDReference* texId = getTextureId(rc);
   if (texId == NULL) {
     return im;
   }
@@ -205,13 +221,15 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              Vector3D(_radiusX, _radiusY, _radiusZ)
+                                              _ellipsoid->getRadii()
                                               ));
   const Sector sector(Sector::fullSphere());
 
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
+
+  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   const short resolution2Minus2 = (short) (2*_resolution-2);
   const short resolutionMinus1  = (short) (_resolution-1);
@@ -224,7 +242,12 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
       vertices.add(innerPoint);
-      
+
+      if (_withNormals) {
+        Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
+        normals.add(n);
+      }
+
       const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
 
       texCoords.add((float) u, (float) vv);
@@ -232,7 +255,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
 
-  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords);
+  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords, &normals);
 
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
@@ -240,6 +263,16 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     compositeMesh->addMesh(createBorderMesh(rc, &vertices));
     return compositeMesh;
   }
-  
+
   return surfaceMesh;
+}
+
+
+std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
+                                                           const Vector3D& direction) const {
+  //  MutableMatrix44D* M = createTransformMatrix(_planet);
+  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+  //  delete M;
+  //  return transformedQuadric.intersectionsDistances(origin, direction);
+  return std::vector<double>();
 }

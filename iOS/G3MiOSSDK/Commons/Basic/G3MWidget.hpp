@@ -39,21 +39,27 @@ class IStorage;
 class ITextUtils;
 class G3MEventContext;
 class SurfaceElevationProvider;
-
 class GPUProgram;
 class GPUProgramManager;
 class ICameraActivityListener;
 class GLState;
+class PlanetRenderer;
+class ErrorRenderer;
+class G3MRenderContext;
 
 #include <vector>
 #include <string>
 
 #include "Color.hpp"
 #include "Angle.hpp"
+#include "InitialCameraPositionProvider.hpp"
+#include "RenderState.hpp"
 
 class G3MContext;
 class GLGlobalState;
 class SceneLighting;
+
+class Sector;
 
 class WidgetUserData {
 private:
@@ -101,6 +107,7 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
+                           ErrorRenderer*                   errorRenderer,
                            const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -108,7 +115,8 @@ public:
                            bool                             autoDeleteInitializationTask,
                            std::vector<PeriodicalTask*>     periodicalTasks,
                            GPUProgramManager*               gpuProgramManager,
-                           SceneLighting*                   sceneLighting);
+                           SceneLighting*                   sceneLighting,
+                           const InitialCameraPositionProvider* initialCameraPositionProvider);
   
   ~G3MWidget();
   
@@ -123,19 +131,19 @@ public:
   void onResume();
   
   void onDestroy();
-  
+
   GL* getGL() const {
     return _gl;
   }
-  
-  //  const Camera* getCurrentCamera() const {
-  //    return _currentCamera;
-  //  }
-  
+
+  const Camera* getCurrentCamera() const {
+    return _currentCamera;
+  }
+
   Camera* getNextCamera() const {
     return _nextCamera;
   }
-  
+
   void setUserData(WidgetUserData* userData) {
     delete _userData;
     
@@ -196,11 +204,15 @@ public:
   }
 
   void setBackgroundColor(const Color& backgroundColor);
+
+  PlanetRenderer* getPlanetRenderer();
+
+  void setShownSector(const Sector& sector);
   
 private:
-  IStorage*           _storage;
-  IDownloader*        _downloader;
-  IThreadUtils*       _threadUtils;
+  IStorage*                _storage;
+  IDownloader*             _downloader;
+  IThreadUtils*            _threadUtils;
   ICameraActivityListener* _cameraActivityListener;
   
   FrameTasksExecutor* _frameTasksExecutor;
@@ -210,7 +222,9 @@ private:
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
-  bool                _mainRendererReady;
+  ErrorRenderer*      _errorRenderer;
+//  bool                _mainRendererReady;
+  RenderState*        _mainRendererState;
   Renderer*           _selectedRenderer;
   
   EffectsScheduler*   _effectsScheduler;
@@ -256,7 +270,12 @@ private:
 
   SceneLighting*            _sceneLighting;
   GLState*                  _rootState;
-  
+
+  const InitialCameraPositionProvider* _initialCameraPositionProvider;
+  bool _initialCameraPositionHasBeenSet;
+
+  G3MRenderContext* _renderContext;
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
@@ -267,6 +286,7 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
+            ErrorRenderer*                   errorRenderer,
             const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
@@ -274,7 +294,8 @@ private:
             bool                             autoDeleteInitializationTask,
             std::vector<PeriodicalTask*>     periodicalTasks,
             GPUProgramManager*               gpuProgramManager,
-            SceneLighting*                   sceneLighting);
+            SceneLighting*                   sceneLighting,
+            const InitialCameraPositionProvider* initialCameraPositionProvider);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

@@ -41,6 +41,18 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
 
 
+  protected final String getLayerType()
+  {
+    return "MapQuest";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    MapQuestLayer t = (MapQuestLayer) that;
+    return (_domain.equals(t._domain));
+  }
+
+
 
   public static MapQuestLayer newOSM(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
@@ -80,6 +92,11 @@ public class MapQuestLayer extends MercatorTiledLayer
   public final String description()
   {
     return "[MapQuestLayer]";
+  }
+
+  public final MapQuestLayer copy()
+  {
+    return new MapQuestLayer(_name, _domain, _subdomains, _initialLevel, _maxLevel, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
   }
 
 }

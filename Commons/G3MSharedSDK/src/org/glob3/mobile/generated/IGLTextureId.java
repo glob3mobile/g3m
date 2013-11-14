@@ -12,9 +12,9 @@ package org.glob3.mobile.generated;
 public interface IGLTextureId
 {
 
-  boolean isEqualsTo(IGLTextureId that);
+  boolean isEquals(IGLTextureId that);
 
   String description();
 
-  public void dispose();
+  void dispose();
 }

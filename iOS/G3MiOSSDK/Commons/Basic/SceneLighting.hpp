@@ -1,5 +1,5 @@
 //
-//  SceneLighting.h
+//  SceneLighting.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/08/13.
@@ -9,21 +9,27 @@
 #ifndef __G3MiOSSDK__SceneLighting__
 #define __G3MiOSSDK__SceneLighting__
 
-#include <iostream>
-
 class GLState;
+class G3MRenderContext;
 
 class SceneLighting{
 public:
-  virtual ~SceneLighting(){}
-  virtual void modifyGLState(GLState* glState) = 0;
+  virtual ~SceneLighting() {}
+  virtual void modifyGLState(GLState* glState, const G3MRenderContext* rc) = 0;
 };
 
-class DefaultSceneLighting: public SceneLighting{
-
+class FixedFocusSceneLighting: public SceneLighting {
 public:
-  void modifyGLState(GLState* glState);
+
+  void modifyGLState(GLState* glState, const G3MRenderContext* rc);
   
 };
 
-#endif /* defined(__G3MiOSSDK__SceneLighting__) */
+class CameraFocusSceneLighting: public SceneLighting {
+public:
+
+  void modifyGLState(GLState* glState, const G3MRenderContext* rc);
+
+};
+
+#endif

@@ -65,10 +65,13 @@ public class Geodetic2D
   {
     final Angle dLon = toLongitude.sub(fromLongitude);
 
-    final double toLatCos = toLatitude.cosinus();
+//    const double toLatCos = toLatitude.cosinus();
+    final double toLatCos = java.lang.Math.cos(toLatitude._radians);
 
-    final double y = dLon.sinus() * toLatCos;
-    final double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos *dLon.cosinus();
+//    const double y = dLon.sinus() * toLatCos;
+    final double y = java.lang.Math.sin(dLon._radians) * toLatCos;
+//    const double x = fromLatitude.cosinus() * toLatitude.sinus() - fromLatitude.sinus() * toLatCos * dLon.cosinus();
+    final double x = java.lang.Math.cos(fromLatitude._radians) * java.lang.Math.sin(toLatitude._radians) - java.lang.Math.sin(fromLatitude._radians) * toLatCos * java.lang.Math.cos(dLon._radians);
     final double radians = IMathUtils.instance().atan2(y, x);
 
     return radians;
@@ -99,16 +102,6 @@ public class Geodetic2D
   public void dispose()
   {
 
-  }
-
-  public final Angle latitude()
-  {
-    return _latitude;
-  }
-
-  public final Angle longitude()
-  {
-    return _longitude;
   }
 
   public final Geodetic2D add(Geodetic2D that)
@@ -148,10 +141,20 @@ public class Geodetic2D
 
   public final Angle angleTo(Geodetic2D other)
   {
-    final double cos1 = _latitude.cosinus();
-    final Vector3D normal1 = new Vector3D(cos1 * _longitude.cosinus(), cos1 * _longitude.sinus(), _latitude.sinus());
-    final double cos2 = other._latitude.cosinus();
-    final Vector3D normal2 = new Vector3D(cos2 * other._longitude.cosinus(), cos2 * other._longitude.sinus(), other._latitude.sinus());
+  //  const double cos1 = _latitude.cosinus();
+  //  const Vector3D normal1(cos1 * _longitude.cosinus(),
+  //                         cos1 * _longitude.sinus(),
+  //                         _latitude.sinus());
+  //  const double cos2 = other._latitude.cosinus();
+  //  const Vector3D normal2(cos2 * other._longitude.cosinus(),
+  //                         cos2 * other._longitude.sinus(),
+  //                         other._latitude.sinus());
+  
+    final double cos1 = java.lang.Math.cos(_latitude._radians);
+    final Vector3D normal1 = new Vector3D(cos1 * java.lang.Math.cos(_longitude._radians), cos1 * java.lang.Math.sin(_longitude._radians), java.lang.Math.sin(_latitude._radians));
+    final double cos2 = java.lang.Math.cos(other._latitude._radians);
+    final Vector3D normal2 = new Vector3D(cos2 * java.lang.Math.cos(other._longitude._radians), cos2 * java.lang.Math.sin(other._longitude._radians), java.lang.Math.sin(other._latitude._radians));
+  
     return Angle.fromRadians(Math.asin(normal1.cross(normal2).squaredLength()));
   
   }
@@ -195,9 +198,9 @@ public class Geodetic2D
     return s;
   }
 
-  public final boolean isEqualsTo(Geodetic2D that)
+  public final boolean isEquals(Geodetic2D that)
   {
-    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+    return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }
 
   @Override

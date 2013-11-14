@@ -11,6 +11,7 @@
 
 //#include <vector>
 #include "MutableVector2D.hpp"
+#include "TexturesHandler.hpp"
 
 class IGLTextureId;
 
@@ -19,15 +20,14 @@ class IFloatBuffer;
 class GLGlobalState;
 class GPUProgramState;
 class GLState;
+class TexturesHandler;
 
 class TextureMapping {
 public:
   
   virtual ~TextureMapping() {
   }
-  
-  virtual bool isTransparent() const = 0;
-  
+
   virtual void modifyGLState(GLState& state) const = 0;
 };
 
@@ -35,28 +35,35 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
-  const IGLTextureId* _glTextureId;
-  
+#ifdef C_CODE
+  const TextureIDReference* _glTextureId;
+#endif
+#ifdef JAVA_CODE
+  private TextureIDReference _glTextureId;
+#endif
+
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
   MutableVector2D _translation;
   MutableVector2D _scale;
 
-  const bool _isTransparent;
-  
+  const bool _transparent;
+
+  void releaseGLTextureId();
+
 public:
   
-  SimpleTextureMapping(const IGLTextureId* glTextureId,
+  SimpleTextureMapping(const TextureIDReference* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
-                       bool isTransparent) :
+                       bool transparent) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
   _translation(0, 0),
   _scale(1, 1),
   _ownedTexCoords(ownedTexCoords),
-  _isTransparent(isTransparent)
+  _transparent(transparent)
   {
     
   }
@@ -70,23 +77,13 @@ public:
   virtual ~SimpleTextureMapping();
   
   const IGLTextureId* getGLTextureId() const {
-    return _glTextureId;
+    return _glTextureId->getID();
   }
 
   IFloatBuffer* getTexCoords() const {
     return _texCoords;
   }
-  
-//  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
-
-  bool isTransparent() const {
-    return _isTransparent;
-  }
-  
-//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-//  
-//  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
+    
   void modifyGLState(GLState& state) const;
 
 };

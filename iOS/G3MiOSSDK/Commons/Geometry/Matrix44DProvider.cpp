@@ -12,8 +12,8 @@ void Matrix44DMultiplicationHolder::pullMatrixes() const{
   for (int j = 0; j < _nMatrix; j++) {
     const Matrix44D* newMatrix = _providers[j]->getMatrix();
 
-    if (newMatrix != _matrix[j]){
-      if (_matrix[j] != NULL){
+    if (newMatrix != _matrix[j]) {
+      if (_matrix[j] != NULL) {
         _matrix[j]->_release();
       }
 
@@ -47,7 +47,7 @@ _modelview(NULL)
 Matrix44DMultiplicationHolder::~Matrix44DMultiplicationHolder() {
 
   for (int j = 0; j < _nMatrix; j++) {
-    if (_matrix[j] != NULL){
+    if (_matrix[j] != NULL) {
       _matrix[j]->_release();
     }
     _providers[j]->_release();

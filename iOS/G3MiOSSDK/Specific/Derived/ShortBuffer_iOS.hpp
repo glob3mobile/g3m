@@ -19,11 +19,15 @@ private:
   short*    _values;
   int       _timestamp;
 
+  //ID
+  const long long _id;
+  static long long _nextID;
+
+
+  //IBO
   mutable bool      _indexBufferCreated;
   mutable GLuint    _indexBuffer; //IBO
   mutable int       _indexBufferTimeStamp;
-
-
   static GLuint _boundIBO;
 
 public:
@@ -32,12 +36,17 @@ public:
   _timestamp(0),
   _indexBuffer(-1),
   _indexBufferTimeStamp(-1),
-  _indexBufferCreated(false)
+  _indexBufferCreated(false),
+  _id(_nextID++)
   {
     _values = new short[size];
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
+  }
+
+  long long getID() const{
+    return _id;
   }
 
   virtual ~ShortBuffer_iOS() {

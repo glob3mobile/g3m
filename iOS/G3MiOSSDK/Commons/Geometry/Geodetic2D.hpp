@@ -71,10 +71,13 @@ public:
                                  const Angle& toLongitude) {
     const Angle dLon = toLongitude.sub(fromLongitude);
 
-    const double toLatCos = toLatitude.cosinus();
+//    const double toLatCos = toLatitude.cosinus();
+    const double toLatCos = COS(toLatitude._radians);
 
-    const double y = dLon.sinus() * toLatCos;
-    const double x = fromLatitude.cosinus()*toLatitude.sinus() - fromLatitude.sinus()*toLatCos*dLon.cosinus();
+//    const double y = dLon.sinus() * toLatCos;
+    const double y = SIN(dLon._radians) * toLatCos;
+//    const double x = fromLatitude.cosinus() * toLatitude.sinus() - fromLatitude.sinus() * toLatCos * dLon.cosinus();
+    const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(dLon._radians);
     const double radians = IMathUtils::instance()->atan2(y, x);
 
     return radians;
@@ -108,14 +111,6 @@ public:
 
   ~Geodetic2D() {
 
-  }
-  
-  const Angle latitude() const {
-    return _latitude;
-  }
-  
-  const Angle longitude() const {
-    return _longitude;
   }
   
   Geodetic2D add(const Geodetic2D& that) const {
@@ -175,8 +170,8 @@ public:
   
   const std::string description() const;
   
-  bool isEqualsTo(const Geodetic2D& that) const {
-    return _latitude.isEqualsTo(that._latitude) && _longitude.isEqualsTo(that._longitude);
+  bool isEquals(const Geodetic2D& that) const {
+    return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }
   
 #ifdef JAVA_CODE

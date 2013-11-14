@@ -18,8 +18,9 @@
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Camera.hpp"
+//#include "CompositeMesh.hpp"
 
-#define MAX_POSITIONS_PER_SEGMENT 64
+#define MAX_POSITIONS_PER_SEGMENT 128
 
 TrailSegment::~TrailSegment() {
   delete _previousSegmentLastPosition;
@@ -100,8 +101,6 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
   FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-  //                                             Vector3D::zero);
 
 
   const Vector3D rotationAxis = Vector3D::downZ();
@@ -123,60 +122,74 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
                                      vertices.create(),
                                      1,
                                      1,
-                                     new Color(_color));
+                                     new Color(_color),
+                                     NULL, // colors
+                                     0.0f, // colorsIntensity
+                                     true // depthTest
+                                     );
 
-  // Debug unions
+  return surfaceMesh;
+
+//  // Debug unions
 //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
 //                                   false,
-//                                   center,
-//                                   vertices,
+//                                   vertices.getCenter(),
+//                                   vertices.create(),
 //                                   2,
 //                                   1,
 //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-//
 //  CompositeMesh* cm = new CompositeMesh();
-//
 //  cm->addMesh(surfaceMesh);
 //  cm->addMesh(edgesMesh);
-//
 //  return cm;
 
-  return surfaceMesh;
 }
 
-void Trail::addPosition(const Geodetic3D& position) {
+void Trail::clear() {
+  const int segmentsSize = _segments.size();
+  for (int i = 0; i < segmentsSize; i++) {
+    TrailSegment* segment = _segments[i];
+    delete segment;
+  }
+  _segments.clear();
+}
 
+void Trail::addPosition(const Angle& latitude,
+                        const Angle& longitude,
+                        const double height) {
   const int lastSegmentIndex = _segments.size() - 1;
 
   TrailSegment* currentSegment;
-  if ((lastSegmentIndex < 0) ||
-      (_segments[lastSegmentIndex]->getSize() > MAX_POSITIONS_PER_SEGMENT)) {
-
+  if (lastSegmentIndex < 0) {
     TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
-    if (lastSegmentIndex >= 0) {
-      TrailSegment* previousSegment = _segments[lastSegmentIndex];
-      previousSegment->setNextSegmentFirstPosition( position );
-      newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
-      newSegment->addPosition( previousSegment->getLastPosition() );
-    }
     _segments.push_back(newSegment);
     currentSegment = newSegment;
   }
   else {
-    currentSegment = _segments[lastSegmentIndex];
+    TrailSegment* previousSegment = _segments[lastSegmentIndex];
+    if (previousSegment->getSize() > MAX_POSITIONS_PER_SEGMENT) {
+      TrailSegment* newSegment = new TrailSegment(_color, _ribbonWidth);
+
+      previousSegment->setNextSegmentFirstPosition(latitude,
+                                                   longitude,
+                                                   height  + _heightDelta);
+      newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
+      newSegment->addPosition( previousSegment->getLastPosition() );
+
+      _segments.push_back(newSegment);
+      currentSegment = newSegment;
+    }
+    else {
+      currentSegment = previousSegment;
+    }
   }
 
-  currentSegment->addPosition(position);
+  currentSegment->addPosition(latitude,
+                              longitude,
+                              height  + _heightDelta);
 }
 
 Trail::~Trail() {
-  //  delete _mesh;
-  //
-  //  const int positionsSize = _positions.size();
-  //  for (int i = 0; i < positionsSize; i++) {
-  //    const Geodetic3D* position = _positions[i];
-  //    delete position;
-  //  }
   const int segmentsSize = _segments.size();
   for (int i = 0; i < segmentsSize; i++) {
     TrailSegment* segment = _segments[i];
@@ -191,14 +204,16 @@ void TrailsRenderer::updateGLState(const G3MRenderContext* rc) {
   if (_projection == NULL) {
     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
     _glState->addGLFeature(_projection, true);
-  } else{
+  }
+  else {
     _projection->setMatrix(cam->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
     _model = new ModelGLFeature(cam->getModelMatrix44D());
     _glState->addGLFeature(_model, true);
-  } else{
+  }
+  else {
     _model->setMatrix(cam->getModelMatrix44D());
   }
 }
@@ -218,7 +233,8 @@ void TrailSegment::render(const G3MRenderContext* rc,
 
 
 void Trail::render(const G3MRenderContext* rc,
-                   const Frustum* frustum, const GLState* state) {
+                   const Frustum* frustum,
+                   const GLState* state) {
   if (_visible) {
     const int segmentsSize = _segments.size();
     for (int i = 0; i < segmentsSize; i++) {

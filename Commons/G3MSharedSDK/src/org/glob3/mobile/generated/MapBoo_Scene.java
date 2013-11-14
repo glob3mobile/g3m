@@ -1,24 +1,34 @@
 package org.glob3.mobile.generated; 
 public class MapBoo_Scene
 {
+  private final String _id;
   private final String _name;
   private final String _description;
   private final MapBoo_MultiImage _screenshot;
   private final Color _backgroundColor ;
+  private final MapBoo_CameraPosition _cameraPosition;
+  private final Sector _sector;
   private Layer _baseLayer;
   private Layer _overlayLayer;
-
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
+  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
   {
+     _id = id;
      _name = name;
      _description = description;
      _screenshot = screenshot;
      _backgroundColor = new Color(backgroundColor);
+     _cameraPosition = cameraPosition;
+     _sector = sector;
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
      _hasWarnings = hasWarnings;
+  }
+
+  public final String getId()
+  {
+    return _id;
   }
 
   public final String getName()
@@ -41,22 +51,33 @@ public class MapBoo_Scene
     return _backgroundColor;
   }
 
+  public final MapBoo_CameraPosition getCameraPosition()
+  {
+    return _cameraPosition;
+  }
+
+  public final Sector getSector()
+  {
+    return _sector;
+  }
+
   public final boolean hasWarnings()
   {
     return _hasWarnings;
   }
 
-  public final void fillLayerSet(LayerSet layerSet)
+  public final LayerSet createLayerSet()
   {
+    LayerSet layerSet = new LayerSet();
     if (_baseLayer != null)
     {
-      layerSet.addLayer(_baseLayer);
+      layerSet.addLayer(_baseLayer.copy());
     }
-  
     if (_overlayLayer != null)
     {
-      layerSet.addLayer(_overlayLayer);
+      layerSet.addLayer(_overlayLayer.copy());
     }
+    return layerSet;
   }
 
   public void dispose()
@@ -67,6 +88,10 @@ public class MapBoo_Scene
        _baseLayer.dispose();
     if (_overlayLayer != null)
        _overlayLayer.dispose();
+    if (_cameraPosition != null)
+       _cameraPosition.dispose();
+    if (_sector != null)
+       _sector.dispose();
   }
 
   public final String description()
@@ -84,6 +109,16 @@ public class MapBoo_Scene
   
     isb.addString(", backgroundColor=");
     isb.addString(_backgroundColor.description());
+  
+    isb.addString(", cameraPosition=");
+    if (_cameraPosition == null)
+    {
+      isb.addString("NULL");
+    }
+    else
+    {
+      isb.addString(_cameraPosition.description());
+    }
   
     isb.addString(", baseLayer=");
     if (_baseLayer == null)
@@ -104,6 +139,9 @@ public class MapBoo_Scene
     {
       isb.addString(_overlayLayer.description());
     }
+  
+    isb.addString(", hasWarnings=");
+    isb.addBool(_hasWarnings);
   
     isb.addString("]");
   

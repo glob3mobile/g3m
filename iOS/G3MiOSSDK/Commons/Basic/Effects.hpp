@@ -33,7 +33,7 @@ public:
 class Effect {
 protected:
 
-  double pace(const double f) const {
+  static double pace(const double f) {
     if (f < 0) return 0;
     if (f > 1) return 1;
 
@@ -44,14 +44,14 @@ protected:
     return result;
   }
 
-  double sigmoid(double x) const {
+  static double sigmoid(double x) {
     x = 12.0*x - 6.0;
     return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
   }
 
-  double gently(const double x,
-                const double lower,
-                const double upper) const {
+  static double gently(const double x,
+                       const double lower,
+                       const double upper) {
     const double uperSquared = upper * upper;
     const double lowerPerUper = lower * upper;
     const double tmp = uperSquared - lowerPerUper + lower - 1;
@@ -73,16 +73,16 @@ protected:
   }
 
 public:
-  virtual void start(const G3MRenderContext *rc,
+  virtual void start(const G3MRenderContext* rc,
                      const TimeInterval& when) = 0;
 
-  virtual void doStep(const G3MRenderContext *rc,
+  virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) = 0;
 
-  virtual bool isDone(const G3MRenderContext *rc,
+  virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) = 0;
 
-  virtual void stop(const G3MRenderContext *rc,
+  virtual void stop(const G3MRenderContext* rc,
                     const TimeInterval& when) = 0;
 
   virtual void cancel(const TimeInterval& when) = 0;
@@ -105,7 +105,7 @@ protected:
 
   EffectWithDuration(const TimeInterval& duration,
                      const bool linearTiming) :
-  _durationMS(duration.milliseconds()),
+  _durationMS(duration._milliseconds),
   _linearTiming(linearTiming),
   _started(0)
   {
@@ -113,14 +113,14 @@ protected:
   }
 
   double percentDone(const TimeInterval& when) const {
-    const long long elapsed = when.milliseconds() - _started;
+    const long long elapsed = when._milliseconds - _started;
 
     const double percent = (double) elapsed / _durationMS;
     if (percent > 1) return 1;
     if (percent < 0) return 0;
     return percent;
   }
-  
+
   double getAlpha(const TimeInterval& when) const {
     const double percent = percentDone(when);
     return _linearTiming ? percent : pace(percent);
@@ -128,17 +128,17 @@ protected:
 
 
 public:
-  //  virtual void stop(const G3MRenderContext *rc,
+  //  virtual void stop(const G3MRenderContext* rc,
   //                    const TimeInterval& when) {
   //
   //  }
 
-  virtual void start(const G3MRenderContext *rc,
+  virtual void start(const G3MRenderContext* rc,
                      const TimeInterval& when) {
-    _started = when.milliseconds();
+    _started = when._milliseconds;
   }
 
-  virtual bool isDone(const G3MRenderContext *rc,
+  virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     const double percent = percentDone(when);
     return (percent >= 1);
@@ -165,12 +165,12 @@ protected:
   }
 
 public:
-  virtual void doStep(const G3MRenderContext *rc,
+  virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     _force *= _friction;
   };
 
-  virtual bool isDone(const G3MRenderContext *rc,
+  virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     return (IMathUtils::instance()->abs(_force) < 1e-6);
   }
@@ -209,15 +209,16 @@ private:
   const IFactory*         _factory;
 
 
-  void processFinishedEffects(const G3MRenderContext *rc,
+  void processFinishedEffects(const G3MRenderContext* rc,
                               const TimeInterval& when);
 
 public:
-  EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
+  EffectsScheduler() :
+  _effectsRuns(std::vector<EffectRun*>())
+  {
+  }
 
-  };
-
-  void doOneCyle(const G3MRenderContext *rc);
+  void doOneCyle(const G3MRenderContext* rc);
 
   void initialize(const G3MContext* context);
 
@@ -240,9 +241,9 @@ public:
   }
 
   void onPause(const G3MContext* context) {
-
+    
   }
-
+  
   void onDestroy(const G3MContext* context) {
     
   }

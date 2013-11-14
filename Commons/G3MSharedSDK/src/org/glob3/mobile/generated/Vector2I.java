@@ -82,4 +82,22 @@ public class Vector2I
     return new MutableVector2I(_x, _y);
   }
 
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(V2I ");
+    isb.addDouble(_x);
+    isb.addString(", ");
+    isb.addDouble(_y);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final boolean isEquals(Vector2I that)
+  {
+    return ((_x == that._x) && (_y == that._y));
+  }
 }

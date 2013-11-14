@@ -13,13 +13,16 @@
 
 
 class IBuffer {
+
 public:
 #ifdef C_CODE
-  virtual ~IBuffer() { }
+  virtual ~IBuffer(){}
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
+
+  virtual long long getID() const = 0;
 
   /**
    Answer the size (the count of elements) of the buffer

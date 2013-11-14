@@ -12,23 +12,18 @@
 #include "ByteBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 #include "ILogger.hpp"
-
 #include "IThreadUtils.hpp"
 #include "Context.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
-
 #import "NSString_CppAdditions.h"
 
 
 NSString* SQLiteStorage_iOS::getDBPath() const {
-
-  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-  NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: _databaseName] ];
-
+  NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString* documentsDirectory = [paths objectAtIndex:0];
+  NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: _databaseName] ];
   //NSLog(@"dbPath=%@", dbPath);
-
   return dbPath;
 }
 
@@ -44,10 +39,6 @@ _databaseName(databaseName)
   }
   else {
     [_writeDB openReadWrite];
-
-    //    SQResultSet *imagesTable = [_writeDB executeQuery:@""];
-
-    //    xxx = [_writeDB executeQuery:@"SELECT name FROM sqlite_master WHERE type='table' AND name='buffer';"];
 
     if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS buffer;"]) {
       printf("Can't drop table \"buffer\" from database \"%s\"\n",
@@ -106,7 +97,7 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger usedSpace = [rs1 integerColumnByIndex: 1];
 
     NSLog(@"Initialized Storage on DB \"%@\", buffers=%d, usedSpace=%fMb",
-          [NSString stringWithCppString: _databaseName], //getDBPath(),
+          [NSString stringWithCppString: _databaseName],
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
@@ -120,7 +111,7 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger usedSpace = [rs2 integerColumnByIndex: 1];
 
     NSLog(@"Initialized Storage on DB \"%@\", images=%d, usedSpace=%fMb",
-          [NSString stringWithCppString: _databaseName], //getDBPath(),
+          [NSString stringWithCppString: _databaseName],
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
@@ -181,9 +172,9 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                    bool saveInBackground) {
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
 
-  NSString* name = [NSString stringWithCppString: url.getPath()];
-  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
-                                    length: buffer_iOS->size()];
+  NSString* name     = [NSString stringWithCppString: url.getPath()];
+  NSData*   contents = [NSData dataWithBytes: buffer_iOS->getPointer()
+                                      length: buffer_iOS->size()];
 
   if (saveInBackground) {
     _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer2", name, contents, timeToExpires),
@@ -211,10 +202,6 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
     image_iOS->releaseSourceBuffer();
   }
 
-  //  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
-  //    printf("Can't save \"%s\"\n", url.getPath().c_str());
-  //  }
-
   if (saveInBackground) {
     _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image2", name, contents, timeToExpires),
                                                    true);
@@ -226,8 +213,12 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
 
 IImageResult SQLiteStorage_iOS::readImage(const URL& url,
                                           bool readExpired) {
+//  NSDate* startAll = [NSDate date];
+
   IImage* image = NULL;
   bool expired = false;
+
+//  double parsedTime = 0;
 
   NSString* name = [NSString stringWithCppString: url.getPath()];
   SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
@@ -239,7 +230,10 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
     expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
 
     if (readExpired || !expired) {
+//      NSDate* startParse = [NSDate date];
       UIImage* uiImage = [UIImage imageWithData:data];
+//      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
+
       if (uiImage) {
         image = new Image_iOS(uiImage,
                               NULL /* data is not needed */);
@@ -251,6 +245,10 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
   }
 
   [rs close];
+
+//  NSLog(@"STORAGE: read image in %f (parse=%f)",
+//        ([startAll timeIntervalSinceNow] * -1000.0),
+//        parsedTime);
 
   return IImageResult(image, expired);
 }

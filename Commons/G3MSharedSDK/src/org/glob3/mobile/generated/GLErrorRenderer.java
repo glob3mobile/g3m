@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GLErrorRenderer extends LeafRenderer
+public class GLErrorRenderer extends LeafRenderer
 {
 
   public final void initialize(G3MContext context)
@@ -54,9 +54,9 @@ public abstract class GLErrorRenderer extends LeafRenderer
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc, GLState glState)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return true;
+    return RenderState.ready();
   }
 
   public final void start(G3MRenderContext rc)

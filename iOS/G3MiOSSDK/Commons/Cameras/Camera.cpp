@@ -16,6 +16,7 @@
 #include "GL.hpp"
 #include "Vector2F.hpp"
 #include "Sphere.hpp"
+#include "Sector.hpp"
 
 //#include "GPUProgramState.hpp"
 
@@ -156,6 +157,12 @@ void Camera::print() {
 const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
+  
+//  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+//         normal._x, normal._y, normal._z,
+//         north2D._x, north2D._y,
+//         up2D._x, up2D._y);
+
   return up2D.signedAngleBetween(north2D, normal);
 }
 
@@ -191,14 +198,8 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d)
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
   setPitch(Angle::zero());
-
-  const double dist = getGeodeticPosition().height() - g3d.height();
-  
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  
-  moveForward(dist);
-  
   setHeading(heading);
   setPitch(pitch);
 }
@@ -457,4 +458,14 @@ double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   const double rWorld = sphere._radius * _frustumData._znear / z;
   const double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
   return PI * rScreen * rScreen;
+}
+
+bool Camera::isPositionWithin(const Sector& sector, double height) const{
+  const Geodetic3D position = getGeodeticPosition();
+  return sector.contains(position._latitude, position._longitude) && height >= position._height;
+}
+
+bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
+  const Geodetic3D position = getGeodeticCenterOfView();
+  return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }

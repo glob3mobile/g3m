@@ -4,6 +4,7 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -12,15 +13,11 @@ import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SceneJSShapesParser;
-import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -53,11 +50,11 @@ public class G3MShowMarkersActivity
 
       builder.setInitializationTask(getWeatherMarkerLayersTask());
 
+
       builder.addRenderer(_weatherMarkers);
       builder.addRenderer(_shapeRenderer);
-      builder.setLogFPS(true);
-      final Planet planet = Planet.createFlatEarth();
-      builder.setPlanet(planet);
+
+      builder.setBackgroundColor(Color.fromRGBA255(231, 55, 54, 255));
 
       //Always after setting params
       _widgetAndroid = builder.createWidget();
@@ -118,6 +115,7 @@ public class G3MShowMarkersActivity
                               AltitudeMode.RELATIVE_TO_GROUND, 0, //
                               true, //
                               14));
+
                   }
 
 
@@ -154,70 +152,20 @@ public class G3MShowMarkersActivity
                      listener, //
                      false);
 
-            //////
-
-            //Seymour-plane on Gran Canaria
-            if (true) {
-               final URL planeFilePath = new URL("file:///seymour-plane.json", false);
-               final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
-
-                  @Override
-                  public void onDownload(final URL url,
-                                         final IByteBuffer buffer,
-                                         final boolean expired) {
-                     Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
-
-                     final Shape plane = SceneJSShapesParser.parseFromJSON(buffer, URL.FILE_PROTOCOL, false);
-
-                     plane.setPosition(new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000));
-
-                     final double scale = 1000;
-                     plane.setScale(scale, scale, scale);
-                     plane.setPitch(Angle.fromDegrees(90));
-                     plane.setHeading(Angle.fromDegrees(0));
-                     plane.setAnimatedPosition(TimeInterval.fromSeconds(60),
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000),
-                              Angle.fromDegrees(90), Angle.fromDegrees(720));
-
-                     if (plane != null) {
-                        _shapeRenderer.addShape(plane);
-                        ILogger.instance().logInfo("PLANE SHOWN");
-                     }
-                  }
-
-
-                  @Override
-                  public void onError(final URL url) {
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IByteBuffer data,
-                                                 final boolean expired) {
-                  }
-               };
-
-               downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
-            }
          }
 
 
          @Override
          public boolean isDone(final G3MContext context) {
-            if (_WeatherMarkerIsDone) {
-               _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(45d), Angle.fromDegrees(0.d), 3000000),
-                        TimeInterval.fromSeconds(3));
-               return true;
-            }
-            return false;
+            return _WeatherMarkerIsDone;
          }
       };
       return initializationTask;
+   }
+
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
    }
 }

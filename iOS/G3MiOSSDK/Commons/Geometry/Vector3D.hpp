@@ -43,11 +43,9 @@ public:
   }
   
   static Vector3D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return Vector3D(mu->NanD(),
-                    mu->NanD(),
-                    mu->NanD());
+    return Vector3D(NAND,
+                    NAND,
+                    NAND);
   }
   
 //  static Vector3D zero() {
@@ -79,11 +77,9 @@ public:
   }
 
   bool isNan() const {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return (mu->isNan(_x) ||
-            mu->isNan(_y) ||
-            mu->isNan(_z));
+    return (ISNAN(_x) ||
+            ISNAN(_y) ||
+            ISNAN(_z));
   }
   
   bool isZero() const {
@@ -163,18 +159,6 @@ public:
   
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
-
-  double x() const {
-    return _x;
-  }
-
-  double y() const {
-    return _y;
-  }
-
-  double z() const {
-    return _z;
-  }
 
   Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   

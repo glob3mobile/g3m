@@ -90,14 +90,14 @@ public class FlatPlanet extends Planet
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // compute intersection with plane
-    if (direction.z() == 0)
+    if (direction._z == 0)
        return intersections;
-    final double t = -origin.z() / direction.z();
-    final double x = origin.x() + t * direction.x();
+    final double t = -origin._z / direction._z;
+    final double x = origin._x + t * direction._x;
     final double halfWidth = 0.5 * _size._x;
     if (x < -halfWidth || x > halfWidth)
        return intersections;
-    final double y = origin.y() + t * direction.y();
+    final double y = origin._y + t * direction._y;
     final double halfHeight = 0.5 * _size._y;
     if (y < -halfHeight || y > halfHeight)
        return intersections;
@@ -112,20 +112,20 @@ public class FlatPlanet extends Planet
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    final double x = geodetic.longitude().degrees() * _size._x / 360.0;
-    final double y = geodetic.latitude().degrees() * _size._y / 180.0;
-    return new Vector3D(x, y, geodetic.height());
+    final double x = geodetic._longitude._degrees * _size._x / 360.0;
+    final double y = geodetic._latitude._degrees * _size._y / 180.0;
+    return new Vector3D(x, y, geodetic._height);
   }
 
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), 0.0);
+    return toCartesian(geodetic._latitude, geodetic._longitude, 0.0);
   }
 
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
-    return toCartesian(geodetic.latitude(), geodetic.longitude(), height);
+    return toCartesian(geodetic._latitude, geodetic._longitude, height);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D position)
@@ -150,16 +150,9 @@ public class FlatPlanet extends Planet
     return scaleToGeodeticSurface(position);
   }
 
-  public final java.util.LinkedList<Vector3D> computeCurve(Vector3D start, Vector3D stop, double granularity)
-  {
-    int TODO_compute_plane_curve;
-    java.util.LinkedList<Vector3D> positions = new java.util.LinkedList<Vector3D>();
-    return positions;
-  }
-
   public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
   {
-    return new Geodetic2D(P0.latitude().add(P1.latitude()).times(0.5), P0.longitude().add(P1.longitude()).times(0.5));
+    return new Geodetic2D(P0._latitude.add(P1._latitude).times(0.5), P0._longitude.add(P1._longitude).times(0.5));
   }
 
 
@@ -175,12 +168,6 @@ public class FlatPlanet extends Planet
   public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
     return computePreciseLatLonDistance(g1, g2);
-  }
-
-  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
-  {
-    int TODO_agustin;
-    return Vector3D.zero;
   }
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
@@ -252,7 +239,7 @@ public class FlatPlanet extends Planet
     _initialPoint1 = Plane.intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
     _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
     _centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
-  //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+    //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
   
     // middle point in 3D
     _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
@@ -272,7 +259,7 @@ public class FlatPlanet extends Planet
     double d0 = _distanceBetweenInitialPoints;
     final Vector3D r1 = finalRay0;
     final Vector3D r2 = finalRay1;
-    double k = (r1.x()/r1.z() - r2.x()/r2.z()) * (r1.x()/r1.z() - r2.x()/r2.z()) + (r1.y()/r1.z() - r2.y()/r2.z()) * (r1.y()/r1.z() - r2.y()/r2.z());
+    double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) + (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
     double zc = _origin.z();
     double uz = _centerRay.z();
     double t2 = (d0 / mu.sqrt(k) - zc) / uz;
@@ -333,16 +320,16 @@ public class FlatPlanet extends Planet
     final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay);
   
     // create effect
-    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin).height()*0.6);
+    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin)._height *0.6);
   }
 
   public final double distanceToHorizon(Vector3D position)
   {
-    double xCorner = 0.5 * _size.x();
-    if (position.x()>0)
+    double xCorner = 0.5 * _size._x;
+    if (position._x > 0)
        xCorner *= -1;
-    double yCorner = 0.5 * _size.y();
-    if (position.y()>0)
+    double yCorner = 0.5 * _size._y;
+    if (position._y > 0)
        yCorner *= -1;
     final Vector3D fartherCorner = new Vector3D(xCorner, yCorner, 0.0);
     return position.sub(fartherCorner).length();
@@ -350,14 +337,38 @@ public class FlatPlanet extends Planet
 
   public final MutableMatrix44D drag(Geodetic3D origin, Geodetic3D destination)
   {
-    final Vector3D P0 = toCartesian(origin.asGeodetic2D());
-    final Vector3D P1 = toCartesian(destination.asGeodetic2D());
+    final Vector3D P0 = toCartesian(origin);
+    final Vector3D P1 = toCartesian(destination);
     return MutableMatrix44D.createTranslationMatrix(P1.sub(P0));
   }
 
   public final Vector3D getNorth()
   {
     return Vector3D.upY();
+  }
+
+  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  {
+  
+  //  Vector3D pos = nextCamera->getCartesianPosition();
+  //  Vector3D origin = _origin.asVector3D();
+  //  double maxDist = _size.length() * 1.5;
+  //
+  //  if (pos.distanceTo(origin) > maxDist) {
+  //    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
+  //    nextCamera->copyFrom(*previousCamera);
+  //  }
+  
+  
+  }
+
+  public final Geodetic3D getDefaultCameraPosition(Sector shownSector)
+  {
+    final Vector3D asw = toCartesian(shownSector.getSW());
+    final Vector3D ane = toCartesian(shownSector.getNE());
+    final double height = asw.sub(ane).length() * 1.9;
+
+    return new Geodetic3D(shownSector._center, height);
   }
 
 }

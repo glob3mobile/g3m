@@ -15,7 +15,7 @@
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "URL.hpp"
-#include "TerrainTouchEventListener.hpp"
+#include "LayerTouchEventListener.hpp"
 #include "TimeInterval.hpp"
 
 class Petition;
@@ -26,9 +26,9 @@ class Vector2I;
 class LayerTilesRenderParameters;
 
 class Layer {
-private:
-  LayerCondition*                         _condition;
-  std::vector<TerrainTouchEventListener*> _listeners;
+protected:
+  LayerCondition*                       _condition;
+  std::vector<LayerTouchEventListener*> _listeners;
 
   LayerSet* _layerSet;
 
@@ -36,7 +36,6 @@ private:
 
   const std::string _name;
 
-protected:
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
 #endif
@@ -49,6 +48,8 @@ protected:
 
   void notifyChanges() const;
 
+  std::string _title;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
@@ -57,15 +58,20 @@ protected:
   _condition(condition),
   _name(name),
   _layerSet(NULL),
-  _timeToCacheMS(timeToCache.milliseconds()),
+  _timeToCacheMS(timeToCache._milliseconds),
   _readExpired(readExpired),
   _enable(true),
-  _parameters(parameters)
+  _parameters(parameters),
+  _title("")
   {
 
   }
 
   void setParameters(const LayerTilesRenderParameters* parameters);
+
+  virtual std::string getLayerType() const = 0;
+
+  virtual bool rawIsEquals(const Layer* that) const = 0;
 
 public:
 
@@ -111,15 +117,15 @@ public:
   virtual void initialize(const G3MContext* context) {
   }
 
-  void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
+  void addLayerTouchEventListener(LayerTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
 
-  bool onTerrainTouchEventListener(const G3MEventContext* ec,
-                                   const TerrainTouchEvent& tte) const {
+  bool onLayerTouchEventListener(const G3MEventContext* ec,
+                                 const LayerTouchEvent& tte) const {
     const int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++) {
-      TerrainTouchEventListener* listener = _listeners[i];
+      LayerTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
         if (listener->onTerrainTouch(ec, tte)) {
           return true;
@@ -140,6 +146,15 @@ public:
   }
 
   virtual const std::string description() const = 0;
+
+  bool isEquals(const Layer* that) const;
+  
+  virtual Layer* copy() const = 0;
+
+
+  const std::string getTitle() const;
+
+  void setTitle(const std::string& title);
   
 };
 

@@ -10,30 +10,6 @@ public final class MathUtils_WebGL
             IMathUtils {
 
    @Override
-   public boolean isNan(final double v) {
-      return Double.isNaN(v);
-   }
-
-
-   @Override
-   public boolean isNan(final float v) {
-      return Float.isNaN(v);
-   }
-
-
-   @Override
-   public double NanD() {
-      return Double.NaN;
-   }
-
-
-   @Override
-   public float NanF() {
-      return (float) Double.NaN;
-   }
-
-
-   @Override
    public double sin(final double v) {
       return Math.sin(v);
    }
@@ -219,7 +195,7 @@ public final class MathUtils_WebGL
 
    @Override
    public double minDouble() {
-      return Double.MIN_VALUE;
+      return -Double.MAX_VALUE;
    }
 
 
@@ -231,7 +207,7 @@ public final class MathUtils_WebGL
 
    @Override
    public float minFloat() {
-      return Float.MIN_VALUE;
+      return -Float.MAX_VALUE;
    }
 
 

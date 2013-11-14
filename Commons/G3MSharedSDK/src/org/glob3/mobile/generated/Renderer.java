@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IRenderer.h
+//  IRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -8,31 +8,30 @@ package org.glob3.mobile.generated;
 //
 
 
-//class TouchEvent;
 //class G3MContext;
 //class G3MRenderContext;
-//class G3MEventContext;
-//class GLGlobalState;
 //class GLState;
+//class G3MEventContext;
+//class TouchEvent;
 //class SurfaceElevationProvider;
+//class PlanetRenderer;
 
 
-public abstract class Renderer implements EffectTarget
+public abstract class Renderer
 {
   public abstract boolean isEnable();
 
   public abstract void setEnable(boolean enable);
 
-
   public abstract void initialize(G3MContext context);
 
-  public abstract boolean isReadyToRender(G3MRenderContext rc);
+  public abstract RenderState getRenderState(G3MRenderContext rc);
 
   public abstract void render(G3MRenderContext rc, GLState glState);
 
-  /*
-   Gives to Renderer the opportunity to process touch, events.
-   
+  /**
+   Gives to Renderer the opportunity to process touch events.
+
    The Renderer answer true if the event was processed.
    */
   public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
@@ -59,11 +58,10 @@ public abstract class Renderer implements EffectTarget
    * It is invoked by IG3MBuilder::addRenderer to avoid adding instances of PlanetRenderer.
    * Default value: FALSE
    */
-  public boolean isPlanetRenderer()
-  {
-    return false;
-  }
+  public abstract boolean isPlanetRenderer();
 
   public abstract SurfaceElevationProvider getSurfaceElevationProvider();
+
+  public abstract PlanetRenderer getPlanetRenderer();
 
 }

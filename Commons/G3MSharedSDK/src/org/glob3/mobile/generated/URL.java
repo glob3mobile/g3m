@@ -52,6 +52,10 @@ public class URL
    
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
+  public URL(String path)
+  {
+     this(path, false);
+  }
   public URL(String path, boolean escapePath)
   {
      _path = escapePath ? escape(path) : path;
@@ -81,7 +85,7 @@ public class URL
     return (_path.equals("__NULL__"));
   }
 
-  public final boolean isEqualsTo(URL that)
+  public final boolean isEquals(URL that)
   {
     return (_path.equals(that._path));
   }

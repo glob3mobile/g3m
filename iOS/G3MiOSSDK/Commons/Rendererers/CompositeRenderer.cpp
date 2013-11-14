@@ -8,6 +8,8 @@
 
 #include "CompositeRenderer.hpp"
 
+#include "ILogger.hpp"
+
 void CompositeRenderer::initialize(const G3MContext* context) {
   _context = context;
 
@@ -59,17 +61,46 @@ void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   }
 }
 
-bool CompositeRenderer::isReadyToRender(const G3MRenderContext *rc) {
+RenderState CompositeRenderer::getRenderState(const G3MRenderContext* rc) {
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
+
   for (int i = 0; i < _renderersSize; i++) {
-    Renderer* renderer = _renderers[i];
-    if (renderer->isEnable()) {
-      if (!renderer->isReadyToRender(rc)) {
-        return false;
+    Renderer* child = _renderers[i];
+    if (child->isEnable()) {
+      const RenderState childRenderState = child->getRenderState(rc);
+
+      const RenderState_Type childRenderStateType = childRenderState._type;
+
+      if (childRenderStateType == RENDER_ERROR) {
+        errorFlag = true;
+
+        const std::vector<std::string> childErrors = childRenderState.getErrors();
+#ifdef C_CODE
+        _errors.insert(_errors.end(),
+                       childErrors.begin(),
+                       childErrors.end());
+#endif
+#ifdef JAVA_CODE
+        _errors.addAll(childErrors);
+#endif
+      }
+      else if (childRenderStateType == RENDER_BUSY) {
+        busyFlag = true;
       }
     }
   }
 
-  return true;
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
 }
 
 void CompositeRenderer::start(const G3MRenderContext* rc) {
@@ -131,6 +162,25 @@ SurfaceElevationProvider* CompositeRenderer::getSurfaceElevationProvider() {
       }
       else {
         ILogger::instance()->logError("Inconsistency in Renderers: more than one SurfaceElevationProvider");
+      }
+    }
+  }
+
+  return result;
+}
+
+PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
+  PlanetRenderer* result = NULL;
+
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* renderer = _renderers[i];
+    PlanetRenderer* planetRenderer = renderer->getPlanetRenderer();
+    if (planetRenderer != NULL) {
+      if (result == NULL) {
+        result = planetRenderer;
+      }
+      else {
+        ILogger::instance()->logError("Inconsistency in Renderers: more than one PlanetRenderer");
       }
     }
   }

@@ -19,8 +19,4 @@ public abstract class ElevationDataProvider
 
   public abstract Vector2I getMinResolution();
 
-  //  virtual ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                                      const Sector& sector,
-  //                                                      const Vector2I& extent) const = 0;
-
 }

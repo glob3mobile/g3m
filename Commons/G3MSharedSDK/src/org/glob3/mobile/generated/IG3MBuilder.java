@@ -35,6 +35,13 @@ package org.glob3.mobile.generated;
 //class GPUProgramSources;
 //class GPUProgramManager;
 //class SceneLighting;
+//class Sector;
+//class GEORenderer;
+//class GEOSymbolizer;
+//class MeshRenderer;
+//class ShapesRenderer;
+//class MarksRenderer;
+//class ErrorRenderer;
 
 
 public abstract class IG3MBuilder
@@ -49,6 +56,7 @@ public abstract class IG3MBuilder
   private Color _backgroundColor;
   private PlanetRendererBuilder _planetRendererBuilder;
   private Renderer _busyRenderer;
+  private ErrorRenderer _errorRenderer;
   private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
@@ -58,6 +66,7 @@ public abstract class IG3MBuilder
   private WidgetUserData _userData;
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
+  private Sector _shownSector;
 
 
   /**
@@ -160,6 +169,15 @@ public abstract class IG3MBuilder
     }
   
     return _busyRenderer;
+  }
+  private ErrorRenderer getErrorRenderer()
+  {
+    if (_errorRenderer == null)
+    {
+      _errorRenderer = new HUDErrorRenderer();
+    }
+  
+    return _errorRenderer;
   }
 
   /**
@@ -298,6 +316,14 @@ public abstract class IG3MBuilder
   
     return periodicalTasks;
   }
+  private Sector getShownSector()
+  {
+    if (_shownSector == null)
+    {
+      return Sector.fullSphere();
+    }
+    return _shownSector;
+  }
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
@@ -334,6 +360,7 @@ public abstract class IG3MBuilder
     return false;
   }
 
+
   protected IStorage _storage;
 
 
@@ -360,6 +387,11 @@ public abstract class IG3MBuilder
    */
   protected final G3MWidget create()
   {
+  
+  
+    Sector shownSector = getShownSector();
+    getPlanetRendererBuilder().setRenderedSector(shownSector); //Shown sector
+  
     /**
      * If any renderers were set or added, the main renderer will be a composite renderer.
      *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -384,8 +416,29 @@ public abstract class IG3MBuilder
       mainRenderer = getPlanetRendererBuilder().create();
     }
   
+    final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(shownSector);
+  //  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting());
+    //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
+  //  if (!shownSector.isEquals(Sector::fullSphere())) {
+  //    const double margin = 0.2;
+  //    const double height = 1e5;
+  //
+  //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
+  //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
+  //
+  //    Sector sector = Sector::fromDegrees(shownSector._lower._latitude._degrees - latMargin,
+  //                                        shownSector._lower._longitude._degrees - lonMargin,
+  //                                        shownSector._upper._latitude._degrees + latMargin,
+  //                                        shownSector._upper._longitude._degrees + lonMargin);
+  //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
+  
+      addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
+  //  }
+  
+    InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
+  
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
   
     g3mWidget.setUserData(getUserData());
   
@@ -401,10 +454,15 @@ public abstract class IG3MBuilder
     _renderers = null;
     _renderers = null;
     _busyRenderer = null;
+    _errorRenderer = null;
     _initializationTask = null;
     _periodicalTasks = null;
     _periodicalTasks = null;
     _userData = null;
+  
+    if (_shownSector != null)
+       _shownSector.dispose();
+    _shownSector = null;
   
     return g3mWidget;
   }
@@ -427,6 +485,7 @@ public abstract class IG3MBuilder
      _backgroundColor = null;
      _planetRendererBuilder = null;
      _busyRenderer = null;
+     _errorRenderer = null;
      _renderers = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
@@ -435,6 +494,7 @@ public abstract class IG3MBuilder
      _logDownloaderStatistics = false;
      _userData = null;
      _sceneLighting = null;
+     _shownSector = null;
   }
 
   public void dispose()
@@ -473,6 +533,8 @@ public abstract class IG3MBuilder
     }
     if (_busyRenderer != null)
        _busyRenderer.dispose();
+    if (_errorRenderer != null)
+       _errorRenderer.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
     if (_initializationTask != null)
@@ -490,6 +552,8 @@ public abstract class IG3MBuilder
        _userData.dispose();
     if (_planetRendererBuilder != null)
        _planetRendererBuilder.dispose();
+    if (_shownSector != null)
+       _shownSector.dispose();
   }
 
 
@@ -723,6 +787,21 @@ public abstract class IG3MBuilder
     _busyRenderer = busyRenderer;
   }
 
+  public final void setErrorRenderer(ErrorRenderer errorRenderer)
+  {
+    if (_errorRenderer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _errorRenderer already initialized");
+      return;
+    }
+    if (errorRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+      return;
+    }
+    _errorRenderer = errorRenderer;
+  }
+
 
   /**
    * Adds a new renderer to the renderers list.
@@ -919,8 +998,65 @@ public abstract class IG3MBuilder
   {
     if (_sceneLighting == null)
     {
-      _sceneLighting = new DefaultSceneLighting();
+      //_sceneLighting = new DefaultSceneLighting();
+      _sceneLighting = new CameraFocusSceneLighting();
     }
     return _sceneLighting;
   }
+
+  public final void setShownSector(Sector sector)
+  {
+    if (_shownSector != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _shownSector already initialized");
+      return;
+    }
+    _shownSector = new Sector(sector);
+  }
+
+  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer)
+  {
+    final boolean createMeshRenderer = true;
+    final boolean createShapesRenderer = true;
+    final boolean createMarksRenderer = true;
+    final boolean createGEOTileRasterizer = true;
+
+    return createGEORenderer(symbolizer, createMeshRenderer, createShapesRenderer, createMarksRenderer, createGEOTileRasterizer);
+  }
+
+  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer, boolean createMeshRenderer, boolean createShapesRenderer, boolean createMarksRenderer, boolean createGEOTileRasterizer)
+  {
+  
+    MeshRenderer meshRenderer = createMeshRenderer ? this.createMeshRenderer() : null;
+    ShapesRenderer shapesRenderer = createShapesRenderer ? this.createShapesRenderer() : null;
+    MarksRenderer marksRenderer = createMarksRenderer ? this.createMarksRenderer() : null;
+    GEOTileRasterizer geoTileRasterizer = createGEOTileRasterizer ? getPlanetRendererBuilder().createGEOTileRasterizer() : null;
+  
+    GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+    addRenderer(geoRenderer);
+  
+    return geoRenderer;
+  }
+
+  public final MeshRenderer createMeshRenderer()
+  {
+    MeshRenderer meshRenderer = new MeshRenderer();
+    addRenderer(meshRenderer);
+    return meshRenderer;
+  }
+
+  public final ShapesRenderer createShapesRenderer()
+  {
+    ShapesRenderer shapesRenderer = new ShapesRenderer();
+    addRenderer(shapesRenderer);
+    return shapesRenderer;
+  }
+
+  public final MarksRenderer createMarksRenderer()
+  {
+    MarksRenderer marksRenderer = new MarksRenderer(false);
+    addRenderer(marksRenderer);
+    return marksRenderer;
+  }
+
 }

@@ -38,13 +38,16 @@ public class FloatBufferBuilder
      }
   }
 
-  
+
+
   public final class FloatArrayList {
     private float[] _array;
     private int     _size;
-    
+
     public FloatArrayList() {
-      this(256);
+      this(1024);
+//      _array = IFactory.instance().getThreadLocalFloatArray();
+//      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -73,10 +76,11 @@ public class FloatBufferBuilder
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
+        //IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
-    
+
     public float[] toArray() {
       final float[] result = new float[_size];
       System.arraycopy(_array, 0, result, 0, _size);
@@ -89,6 +93,28 @@ public class FloatBufferBuilder
 
   public final IFloatBuffer create()
   {
-    return IFactory.instance().createFloatBuffer( _values.toArray() );
+    //return IFactory.instance().createFloatBuffer( _values.toArray() );
+    return IFactory.instance().createFloatBuffer( _values._array, _values._size );
+  }
+
+  public void dispose()
+  {
+  }
+
+  public final int size()
+  {
+    return _values.size();
+  }
+
+  public final Vector2D getVector2D(int i)
+  {
+    int pos = i * 2;
+    return new Vector2D(_values.get(pos), _values.get(pos + 1));
+  }
+
+  public final Vector3D getVector3D(int i)
+  {
+    int pos = i * 3;
+    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
   }
 }

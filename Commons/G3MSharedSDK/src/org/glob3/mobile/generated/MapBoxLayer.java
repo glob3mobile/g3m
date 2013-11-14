@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 public class MapBoxLayer extends MercatorTiledLayer
 {
+  private final String _mapKey;
 
   private static java.util.ArrayList<String> getSubdomains()
   {
@@ -30,27 +31,54 @@ public class MapBoxLayer extends MercatorTiledLayer
     return result;
   }
 
+  protected final String getLayerType()
+  {
+    return "MapBox";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    MapBoxLayer t = (MapBoxLayer) that;
+    return (_domain.equals(t._domain));
+  }
+
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/3/3/3.png
   // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/7/62/48.png?updated=f0e992c
 
+  // TODO: parse json of layer metadata
+  // http://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8.json
+
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
+  {
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, null);
+  }
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel)
+  {
+     this(mapKey, timeToCache, readExpired, initialLevel, 19, null);
+  }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapKey, timeToCache, readExpired, null);
+     this(mapKey, timeToCache, readExpired, 1, 19, null);
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache)
   {
-     this(mapKey, timeToCache, true, null);
+     this(mapKey, timeToCache, true, 1, 19, null);
   }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, LayerCondition condition) //initialMapBoxLevel,
-              //int initialMapBoxLevel = 1,
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, LayerCondition condition)
   {
-     super("MapBoxLayer", "http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 1, 17, condition);
+     super("MapBoxLayer", "http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
+     _mapKey = mapKey;
 
   }
 
   public final String description()
   {
     return "[MapBoxLayer]";
+  }
+
+  public final MapBoxLayer copy()
+  {
+    return new MapBoxLayer(_mapKey, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

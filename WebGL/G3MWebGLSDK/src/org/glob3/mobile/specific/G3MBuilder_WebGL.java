@@ -12,8 +12,12 @@ public class G3MBuilder_WebGL extends IG3MBuilder {
 
 	public G3MBuilder_WebGL() {
 		super();
-
 		_nativeWidget = new G3MWidget_WebGL();
+	}
+	
+	public G3MBuilder_WebGL(G3MWidget_WebGL widget) {
+		super();
+		_nativeWidget = widget;
 	}
 
 	public G3MWidget_WebGL createWidget() {

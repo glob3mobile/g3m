@@ -41,16 +41,14 @@ void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
 
 
 bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
-  //TEXTURED
 #ifdef C_CODE
-  const IGLTextureId* texId = NULL;
+  const TextureIDReference* texId = NULL;
 #endif
 #ifdef JAVA_CODE
-  IGLTextureId texId = null;
+  TextureIDReference texId = null;
 #endif
-//  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
 
-  texId = rc->getTexturesHandler()->getGLTextureId(_image,
+  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                    GLFormat::rgba(),
                                                    "BusyQuadRenderer-Texture",
                                                    false);

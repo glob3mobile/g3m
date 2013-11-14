@@ -22,11 +22,11 @@ public class GenericQuadTree_Node
   }
 
 
-  //void GenericQuadTree_Node::computeElementsSector(){
+  //void GenericQuadTree_Node::computeElementsSector() {
   //
   //  delete _elementsSector;
   //  _elementsSector = new Sector(_sector);
-  //  if (_children == NULL){
+  //  if (_children == NULL) {
   //    const int size = _elements.size();
   //    for (int i = 0; i < size; i++) {
   //      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
@@ -83,9 +83,9 @@ public class GenericQuadTree_Node
     //  for (int i = 0; i < size; i++) {
     //    GenericQuadTree_Element* e = _elements[i];
     //
-    //    for (int j = 0; j < 4; j++){
+    //    for (int j = 0; j < 4; j++) {
     //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(e, maxElementsPerNode, maxDepth)){
+    //      if (child->add(e, maxElementsPerNode, maxDepth)) {
     //        break;
     //      }
     //    }
@@ -330,7 +330,7 @@ public class GenericQuadTree_Node
       else
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
-        if (geo.isEqualsTo(e._geodetic))
+        if (geo.isEquals(e._geodetic))
         {
           final boolean abort = visitor.visitElement(e._geodetic, element._element);
           if (abort)
@@ -497,8 +497,10 @@ public class GenericQuadTree_Node
   
   }
 
-  public final void remove(Object element)
+  public final boolean remove(Object element)
   {
+  
+    boolean wasRemoved = false;
   
     for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
     {
@@ -506,30 +508,47 @@ public class GenericQuadTree_Node
       if (qTElement._element == element)
       {
         _elements.remove(qTElement);
-        return;
+        wasRemoved = true;
       }
+    }
+  
+    if (wasRemoved)
+    {
+      return true;
     }
   
     if (_children != null)
     {
   
-      int nChild = 0;
       for (int i = 0; i < 4; i++)
       {
-        nChild += _children[i].getNElements();
-      }
-  
-      if (nChild == 0)
-      {
-        for (int i = 0; i < 4; i++)
+        if (_children[i].remove(element))
         {
-          if (_children[i] != null)
-             _children[i].dispose();
-        }
-        _children = null;
-      }
+          //The item was removed from one of my children
   
+          //Removing all children if none has an item
+          int nChild = 0;
+          for (int j = 0; j < 4; j++)
+          {
+            nChild += _children[j].getSubtreeNElements();
+          }
+  
+          if (nChild == 0)
+          {
+            for (int j = 0; j < 4; j++)
+            {
+              if (_children[j] != null)
+                 _children[j].dispose();
+            }
+            _children = null;
+            _children = null;
+          }
+  
+          return true;
+        }
+      }
     }
   
+    return false;
   }
 }

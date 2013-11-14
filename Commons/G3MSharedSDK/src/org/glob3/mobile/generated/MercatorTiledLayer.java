@@ -19,13 +19,74 @@ package org.glob3.mobile.generated;
 
 public class MercatorTiledLayer extends Layer
 {
-  private final String _protocol;
-  private final String _domain;
-  private final java.util.ArrayList<String> _subdomains;
-  private final String _imageFormat;
+  protected final String _protocol;
+  protected final String _domain;
+  protected final java.util.ArrayList<String> _subdomains;
+  protected final String _imageFormat;
 
-  private final Sector _sector ;
+  protected final Sector _sector ;
+  protected final int _initialLevel;
+  protected final int _maxLevel;
 
+  protected String getLayerType()
+  {
+    return "MercatorTiled";
+  }
+
+  protected boolean rawIsEquals(Layer that)
+  {
+    MercatorTiledLayer t = (MercatorTiledLayer) that;
+  
+    if (!_protocol.equals(t._protocol))
+    {
+      return false;
+    }
+  
+    if (!_domain.equals(t._domain))
+    {
+      return false;
+    }
+  
+    if (!_imageFormat.equals(t._imageFormat))
+    {
+      return false;
+    }
+  
+    if (!_sector.isEquals(t._sector))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    if (_maxLevel != t._maxLevel)
+    {
+      return false;
+    }
+  
+    final int thisSubdomainsSize = _subdomains.size();
+    final int thatSubdomainsSize = t._subdomains.size();
+  
+    if (thisSubdomainsSize != thatSubdomainsSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisSubdomainsSize; i++)
+    {
+      final String thisSubdomain = _subdomains.get(i);
+      final String thatSubdomain = t._subdomains.get(i);
+      if (thisSubdomain != thatSubdomain)
+      {
+        return false;
+      }
+    }
+  
+    return true;
+  }
 
 
   /*
@@ -40,6 +101,8 @@ public class MercatorTiledLayer extends Layer
      _subdomains = subdomains;
      _imageFormat = imageFormat;
      _sector = new Sector(sector);
+     _initialLevel = initialLevel;
+     _maxLevel = maxLevel;
   
   }
 
@@ -54,7 +117,7 @@ public class MercatorTiledLayer extends Layer
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;
@@ -69,10 +132,10 @@ public class MercatorTiledLayer extends Layer
     // http://[abc].tile.openstreetmap.org/zoom/x/y.png
     // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
   
-    final int level = tile.getLevel();
-    final int column = tile.getColumn();
+    final int level = tile._level;
+    final int column = tile._column;
     final int numRows = (int) mu.pow(2.0, level);
-    final int row = numRows - tile.getRow() - 1;
+    final int row = numRows - tile._row - 1;
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -112,6 +175,12 @@ public class MercatorTiledLayer extends Layer
   public String description()
   {
     return "[MercatorTiledLayer]";
+  }
+
+
+  public MercatorTiledLayer copy()
+  {
+    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

@@ -10,32 +10,6 @@ public final class MathUtils_Android
             IMathUtils {
 
    @Override
-   public boolean isNan(final double v) {
-      return (v != v);
-      //return Double.isNaN(v);
-   }
-
-
-   @Override
-   public boolean isNan(final float v) {
-      return (v != v);
-      //return Float.isNaN(v);
-   }
-
-
-   @Override
-   public double NanD() {
-      return Double.NaN;
-   }
-
-
-   @Override
-   public float NanF() {
-      return Float.NaN;
-   }
-
-
-   @Override
    public double sin(final double v) {
       return Math.sin(v);
    }
@@ -224,7 +198,7 @@ public final class MathUtils_Android
 
    @Override
    public double minDouble() {
-      return Double.MIN_VALUE;
+      return -Double.MAX_VALUE;
    }
 
 
@@ -236,7 +210,7 @@ public final class MathUtils_Android
 
    @Override
    public float minFloat() {
-      return Float.MIN_VALUE;
+      return -Float.MAX_VALUE;
    }
 
 
@@ -358,8 +332,9 @@ public final class MathUtils_Android
    public int parseIntHex(final String hex) {
       return Integer.parseInt(hex, 16);
    }
-    
-                
+
+
+   @Override
    public short maxInt16() {
       return Short.MAX_VALUE;
    }

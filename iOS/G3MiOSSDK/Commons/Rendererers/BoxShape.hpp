@@ -11,6 +11,9 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
+#include "Planet.hpp"
+#include "Quadric.hpp"
+
 
 class BoxShape : public AbstractMeshShape {
 private:
@@ -18,13 +21,34 @@ private:
   double _extentY;
   double _extentZ;
 
+//#ifdef C_CODE
+//  const Quadric _frontQuadric;
+//  const Quadric _backQuadric;
+//  const Quadric _leftQuadric;
+//  const Quadric _rightQuadric;
+//  const Quadric _topQuadric;
+//  const Quadric _bottomQuadric;
+//#endif
+//#ifdef JAVA_CODE
+//  private final Quadric _frontQuadric;
+//  private final Quadric _backQuadric;
+//  private final Quadric _leftQuadric;
+//  private final Quadric _rightQuadric;
+//  private final Quadric _topQuadric;
+//  private final Quadric _bottomQuadric;
+//#endif
+
   float _borderWidth;
+
+  bool _useNormals;
 
   Color* _surfaceColor;
   Color* _borderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc);
+
+  Mesh* createSurfaceMeshWithNormals(const G3MRenderContext* rc);
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -34,15 +58,23 @@ public:
            AltitudeMode altitudeMode,
            const Vector3D& extent,
            float borderWidth,
-           Color* surfaceColor = NULL,
-           Color* borderColor = NULL) :
+           const Color& surfaceColor,
+           Color* borderColor = NULL,
+           bool useNormals = true) :
   AbstractMeshShape(position, altitudeMode),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
+//  _frontQuadric(Quadric::fromPlane(1, 0, 0, -extent.x()/2)),
+//  _backQuadric(Quadric::fromPlane(-1, 0, 0, -extent.x()/2)),
+//  _leftQuadric(Quadric::fromPlane(0, -1, 0, -extent.y()/2)),
+//  _rightQuadric(Quadric::fromPlane(0, 1, 0, -extent.y()/2)),
+//  _topQuadric(Quadric::fromPlane(0, 0, 1, -extent.z()/2)),
+//  _bottomQuadric(Quadric::fromPlane(0, 0, -1, -extent.z()/2)),
   _borderWidth(borderWidth),
-  _surfaceColor(surfaceColor),
-  _borderColor(borderColor)
+  _surfaceColor(new Color(surfaceColor)),
+  _borderColor(borderColor),
+  _useNormals(useNormals)
   {
 
   }
@@ -90,6 +122,9 @@ public:
       cleanMesh();
     }
   }
+  
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const;
   
 };
 

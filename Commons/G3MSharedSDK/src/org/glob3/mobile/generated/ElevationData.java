@@ -110,7 +110,6 @@ public abstract class ElevationData
   
     final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
   
-    final IMathUtils mu = IMathUtils.instance();
     for (int x = 0; x < _width; x++)
     {
       final double u = (double) x / (_width - 1);
@@ -118,7 +117,7 @@ public abstract class ElevationData
       for (int y = 0; y < _height; y++)
       {
         final double elevation = getElevationAt(x, y);
-        if (mu.isNan(elevation))
+        if ((elevation != elevation))
         {
           continue;
         }
@@ -167,8 +166,6 @@ public abstract class ElevationData
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
-    final IMathUtils mu = IMathUtils.instance();
-  
     final Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
   
     final int width = resolution._x;
@@ -184,7 +181,7 @@ public abstract class ElevationData
         final Geodetic2D position = sector.getInnerPoint(u, v);
   
         final double elevation = getElevationAt(position);
-        if (mu.isNan(elevation))
+        if ((elevation != elevation))
         {
           continue;
         }
@@ -245,31 +242,20 @@ public abstract class ElevationData
   public final double getElevationAt(Angle latitude, Angle longitude)
   {
   
-    final IMathUtils mu = IMathUtils.instance();
+    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+    final double u = uv._x;
+    final double v = uv._y;
   
-    final double nanD = mu.NanD();
-  
-    if (!_sector.contains(latitude, longitude))
+    if (u < 0 || u > 1 || v < 0 || v > 1)
     {
-      //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-      //                                  _sector.description().c_str(),
-      //                                  latitude.description().c_str(),
-      //                                  longitude.description().c_str());
-      return nanD;
+      return java.lang.Double.NaN;
     }
   
-  
-    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-    final double u = mu.clamp(uv._x, 0, 1);
-    final double v = mu.clamp(uv._y, 0, 1);
     final double dX = u * (_width - 1);
     final double dY = (1.0 - v) * (_height - 1);
-    //const double dY = v * (_height - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;
-    //  const int nextX = (int) (dX + 1.0);
-    //  const int nextY = (int) (dY + 1.0);
     final int nextX = x + 1;
     final int nextY = y + 1;
     final double alphaY = dY - y;
@@ -287,18 +273,18 @@ public abstract class ElevationData
       {
         // linear on Y
         final double heightY = getElevationAt(x, y);
-        if (mu.isNan(heightY))
+        if ((heightY != heightY))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
         final double heightNextY = getElevationAt(x, nextY);
-        if (mu.isNan(heightNextY))
+        if ((heightNextY != heightNextY))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
-        result = mu.linearInterpolation(heightNextY, heightY, alphaY);
+        result = IMathUtils.instance().linearInterpolation(heightNextY, heightY, alphaY);
       }
     }
     else
@@ -307,40 +293,40 @@ public abstract class ElevationData
       {
         // linear on X
         final double heightX = getElevationAt(x, y);
-        if (mu.isNan(heightX))
+        if ((heightX != heightX))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double heightNextX = getElevationAt(nextX, y);
-        if (mu.isNan(heightNextX))
+        if ((heightNextX != heightNextX))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
-        result = mu.linearInterpolation(heightX, heightNextX, alphaX);
+        result = IMathUtils.instance().linearInterpolation(heightX, heightNextX, alphaX);
       }
       else
       {
         // bilinear
         final double valueNW = getElevationAt(x, y);
-        if (mu.isNan(valueNW))
+        if ((valueNW != valueNW))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueNE = getElevationAt(nextX, y);
-        if (mu.isNan(valueNE))
+        if ((valueNE != valueNE))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueSE = getElevationAt(nextX, nextY);
-        if (mu.isNan(valueSE))
+        if ((valueSE != valueSE))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
         final double valueSW = getElevationAt(x, nextY);
-        if (mu.isNan(valueSW))
+        if ((valueSW != valueSW))
         {
-          return nanD;
+          return java.lang.Double.NaN;
         }
   
         result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);

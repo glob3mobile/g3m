@@ -13,7 +13,7 @@
 #include "IStringBuilder.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
-
+#include "LayerCondition.hpp"
 
 WMSLayer::WMSLayer(const std::string& mapLayer,
                    const URL& mapServerURL,
@@ -35,7 +35,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
@@ -70,7 +70,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
       : parameters),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
@@ -99,8 +99,13 @@ double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
 std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
-  
-  const Sector tileSector = tile->getSector();
+
+  const std::string path = _mapServerURL.getPath();
+  if (path.empty()) {
+    return petitions;
+  }
+
+  const Sector tileSector = tile->_sector;
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }
@@ -110,28 +115,27 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       sector._deltaLongitude.isZero() ) {
     return petitions;
   }
-  
 
   //TODO: MUST SCALE WIDTH,HEIGHT
 
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
   
 	//Server name
-  std::string req = _mapServerURL.getPath();
+  std::string req = path;
 	if (req[req.size() - 1] != '?') {
 		req += '?';
 	}
 
-//  //If the server refer to itself as localhost...
-//  const int localhostPos = req.find("localhost");
-//  if (localhostPos != -1) {
-//    req = req.substr(localhostPos+9);
-//
-//    const int slashPos = req.find("/", 8);
-//    std::string newHost = req.substr(0, slashPos);
-//
-//    req = newHost + req;
-//  }
+  //  //If the server refer to itself as localhost...
+  //  const int localhostPos = req.find("localhost");
+  //  if (localhostPos != -1) {
+  //    req = req.substr(localhostPos+9);
+  //
+  //    const int slashPos = req.find("/", 8);
+  //    std::string newHost = req.substr(0, slashPos);
+  //
+  //    req = newHost + req;
+  //  }
 
   req += "REQUEST=GetMap&SERVICE=WMS";
   
@@ -224,7 +228,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
     req += _extraParameter;
   }
 
-//  printf("Request: %s\n", req.c_str());
+  //  printf("Request: %s\n", req.c_str());
 
   Petition *petition = new Petition(sector,
                                     URL(req, false),
@@ -366,4 +370,80 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 const std::string WMSLayer::description() const {
   return "[WMSLayer]";
+}
+
+bool WMSLayer::rawIsEquals(const Layer* that) const {
+  WMSLayer* t = (WMSLayer*) that;
+
+  if (!(_mapServerURL.isEquals(t->_mapServerURL))) {
+    return false;
+  }
+
+  if (!(_queryServerURL.isEquals(t->_queryServerURL))) {
+    return false;
+  }
+
+  if (_mapLayer != t->_mapLayer) {
+    return false;
+  }
+
+  if (_mapServerVersion != t->_mapServerVersion) {
+    return false;
+  }
+
+  if (_queryLayer != t->_queryLayer) {
+    return false;
+  }
+
+  if (_queryServerVersion != t->_queryServerVersion) {
+    return false;
+  }
+
+  if (!(_sector.isEquals(t->_sector))) {
+    return false;
+  }
+
+  if (_format != t->_format) {
+    return false;
+  }
+
+  if (_queryServerVersion != t->_queryServerVersion) {
+    return false;
+  }
+
+  if (_srs != t->_srs) {
+    return false;
+  }
+
+  if (_style != t->_style) {
+    return false;
+  }
+
+  if (_isTransparent != t->_isTransparent) {
+    return false;
+  }
+
+  if (_extraParameter != t->_extraParameter) {
+    return false;
+  }
+
+  return true;
+}
+
+WMSLayer* WMSLayer::copy() const {
+  return new WMSLayer(_mapLayer,
+                      _mapServerURL,
+                      _mapServerVersion,
+                      _queryLayer,
+                      _queryServerURL,
+                      _queryServerVersion,
+                      _sector,
+                      _format,
+                      _srs,
+                      _style,
+                      _isTransparent,
+                      (_condition == NULL) ? NULL : _condition->copy(),
+                      TimeInterval::fromMilliseconds(_timeToCacheMS),
+                      _readExpired,
+                      (_parameters == NULL) ? NULL : _parameters->copy());
 }

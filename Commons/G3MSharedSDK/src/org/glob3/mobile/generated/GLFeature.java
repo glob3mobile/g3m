@@ -1,6 +1,10 @@
 package org.glob3.mobile.generated; 
 public abstract class GLFeature extends RCObject
 {
+  protected GPUVariableValueSet _values = new GPUVariableValueSet();
+
+  public final GLFeatureGroupName _group;
+  public final GLFeatureID _id;
 
   public GLFeature(GLFeatureGroupName group, GLFeatureID id)
   {
@@ -13,19 +17,6 @@ public abstract class GLFeature extends RCObject
     return _values;
   }
 
-  public final GLFeatureGroupName getGroup()
-  {
-    return _group;
-  }
-
-  public final GLFeatureID getID()
-  {
-    return _id;
-  }
-
   public abstract void applyOnGlobalGLState(GLGlobalState state);
 
-  protected final GLFeatureGroupName _group;
-  protected GPUVariableValueSet _values = new GPUVariableValueSet();
-  protected final GLFeatureID _id;
 }

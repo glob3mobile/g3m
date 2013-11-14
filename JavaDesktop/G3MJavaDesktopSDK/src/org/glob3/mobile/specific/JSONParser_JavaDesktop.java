@@ -98,6 +98,4 @@ public class JSONParser_JavaDesktop
                                final boolean nullAsObject) {
       return parse(buffer.getAsString(), nullAsObject);
    }
-
-
 }

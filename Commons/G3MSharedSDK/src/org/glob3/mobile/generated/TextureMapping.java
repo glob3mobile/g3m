@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 //class GLState;
+//class TexturesHandler;
 
 public abstract class TextureMapping
 {
@@ -32,8 +33,6 @@ public abstract class TextureMapping
   public void dispose()
   {
   }
-
-  public abstract boolean isTransparent();
 
   public abstract void modifyGLState(GLState state);
 }

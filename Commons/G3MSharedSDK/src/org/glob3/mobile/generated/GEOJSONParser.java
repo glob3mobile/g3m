@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 public class GEOJSONParser
 {
   private final String _json;
+  private final IByteBuffer _bson;
 
   // statistics
   private int _points2DCount;
@@ -46,9 +47,10 @@ public class GEOJSONParser
   private int _holesLineStringsInPolygon2DCount;
   private int _multiPolygon2DCount;
 
-  private GEOJSONParser(String json)
+  private GEOJSONParser(String json, IByteBuffer bson)
   {
      _json = json;
+     _bson = bson;
      _points2DCount = 0;
      _coordinates2DCount = 0;
      _lineStrings2DCount = 0;
@@ -65,7 +67,7 @@ public class GEOJSONParser
 
   private GEOObject pvtParse()
   {
-    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_json);
+    final JSONBaseObject jsonBaseObject = (_bson == null) ? IJSONParser.instance().parse(_json) : BSONParser.parse(_bson);
   
     GEOObject result = null;
   
@@ -465,15 +467,20 @@ public class GEOJSONParser
   }
 
 
-  public static GEOObject parse(String json)
+  public static GEOObject parseJSON(String json)
   {
-    GEOJSONParser parser = new GEOJSONParser(json);
+    GEOJSONParser parser = new GEOJSONParser(json, null);
     return parser.pvtParse();
   }
-
-  public static GEOObject parse(IByteBuffer json)
+  public static GEOObject parseJSON(IByteBuffer json)
   {
-    return parse(json.getAsString());
+    return parseJSON(json.getAsString());
+  }
+
+  public static GEOObject parseBSON(IByteBuffer bson)
+  {
+    GEOJSONParser parser = new GEOJSONParser("", bson);
+    return parser.pvtParse();
   }
 
 }

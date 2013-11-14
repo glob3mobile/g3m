@@ -49,17 +49,17 @@ public abstract class GEORasterSymbol extends GEOSymbol
   
     final Geodetic2D coordinate0 = coordinates.get(0);
   
-    double minLatInRadians = coordinate0._latitude.radians();
+    double minLatInRadians = coordinate0._latitude._radians;
     double maxLatInRadians = minLatInRadians;
   
-    double minLonInRadians = coordinate0._longitude.radians();
+    double minLonInRadians = coordinate0._longitude._radians;
     double maxLonInRadians = minLonInRadians;
   
     for (int i = 1; i < size; i++)
     {
       final Geodetic2D coordinate = coordinates.get(i);
   
-      final double latInRadians = coordinate._latitude.radians();
+      final double latInRadians = coordinate._latitude._radians;
       if (latInRadians < minLatInRadians)
       {
         minLatInRadians = latInRadians;
@@ -69,7 +69,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
         maxLatInRadians = latInRadians;
       }
   
-      final double lonInRadians = coordinate._longitude.radians();
+      final double lonInRadians = coordinate._longitude._radians;
       if (lonInRadians < minLonInRadians)
       {
         minLonInRadians = lonInRadians;
@@ -115,7 +115,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
       {
         final Geodetic2D coordinate = coordinates.get(j);
   
-        final double latInRadians = coordinate._latitude.radians();
+        final double latInRadians = coordinate._latitude._radians;
         if (latInRadians < minLatInRadians)
         {
           minLatInRadians = latInRadians;
@@ -125,7 +125,7 @@ public abstract class GEORasterSymbol extends GEOSymbol
           maxLatInRadians = latInRadians;
         }
   
-        final double lonInRadians = coordinate._longitude.radians();
+        final double lonInRadians = coordinate._longitude._radians;
         if (lonInRadians < minLonInRadians)
         {
           minLonInRadians = lonInRadians;
@@ -274,11 +274,6 @@ public abstract class GEORasterSymbol extends GEOSymbol
       geoTileRasterizer.addSymbol(this);
     }
   
-    return false;
-  }
-
-  public final boolean deleteAfterSymbolize()
-  {
     return false;
   }
 

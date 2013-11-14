@@ -25,7 +25,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   {
   }
 
-  public void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
     final double radii = planet.getRadii().maxAxis();
@@ -50,6 +50,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
                                       minHeight);*/
     }
   
+    return true;
   }
 
 }

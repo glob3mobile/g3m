@@ -10,7 +10,7 @@
 
 #include "Camera.hpp"
 
-void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
+bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
 
@@ -33,5 +33,6 @@ void SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                     cameraPosition._longitude,
                                     minHeight);*/
   }
-  
+
+  return true;
 }

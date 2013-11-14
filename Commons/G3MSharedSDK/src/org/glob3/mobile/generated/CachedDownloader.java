@@ -33,37 +33,37 @@ public class CachedDownloader extends IDownloader
   {
     if ((_lastImageResult != null) && (_lastImageURL != null))
     {
-      if (_lastImageURL.isEqualsTo(url))
+      if (_lastImageURL.isEquals(url))
       {
         // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-        return new IImageResult(_lastImageResult.getImage().shallowCopy(), _lastImageResult.isExpired());
+        return new IImageResult(_lastImageResult._image.shallowCopy(), _lastImageResult._expired);
       }
     }
   
-    if (!_storage.isAvailable())
+    if (!_storage.isAvailable() || url.isFileProtocol())
     {
       return new IImageResult(null, false);
     }
   
     IImageResult cachedImageResult = _storage.readImage(url, readExpired);
-    IImage cachedImage = cachedImageResult.getImage();
+    IImage cachedImage = cachedImageResult._image;
   
     if (cachedImage != null)
     {
       if (_lastImageResult != null)
       {
-        IFactory.instance().deleteImage(_lastImageResult.getImage());
+        IFactory.instance().deleteImage(_lastImageResult._image);
         if (_lastImageResult != null)
            _lastImageResult.dispose();
       }
-      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult.isExpired());
+      _lastImageResult = new IImageResult(cachedImage.shallowCopy(), cachedImageResult._expired);
   
       if (_lastImageURL != null)
          _lastImageURL.dispose();
       _lastImageURL = new URL(url);
     }
   
-    return new IImageResult(cachedImage, cachedImageResult.isExpired());
+    return new IImageResult(cachedImage, cachedImageResult._expired);
   }
 
   private IImageResult _lastImageResult;
@@ -102,13 +102,13 @@ public class CachedDownloader extends IDownloader
   
     _requestsCounter++;
   
-    IByteBufferResult cachedBufferResult = _storage.isAvailable() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
+    IByteBufferResult cached = _storage.isAvailable() && !url.isFileProtocol() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
     /*                                         */
     /*                                         */
   
-    IByteBuffer cachedBuffer = cachedBufferResult.getBuffer();
+    IByteBuffer cachedBuffer = cached.getBuffer();
   
-    if (cachedBuffer != null && !cachedBufferResult.isExpired())
+    if (cachedBuffer != null && !cached.isExpired())
     {
       // cache hit
       _cacheHitsCounter++;
@@ -132,10 +132,10 @@ public class CachedDownloader extends IDownloader
   {
     _requestsCounter++;
   
-    IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
-    IImage cachedImage = cachedImageResult.getImage();
+    IImageResult cached = getCachedImageResult(url, readExpired);
+    IImage cachedImage = cached._image;
   
-    if (cachedImage != null && !cachedImageResult.isExpired())
+    if (cachedImage != null && !cached._expired)
     {
       // cache hit
       _cacheHitsCounter++;
@@ -166,12 +166,9 @@ public class CachedDownloader extends IDownloader
     if (_downloader != null)
        _downloader.dispose();
   
-    //  if (_lastImage != NULL) {
-    //    IFactory::instance()->deleteImage(_lastImage);
-    //  }
     if (_lastImageResult != null)
     {
-      IFactory.instance().deleteImage(_lastImageResult.getImage());
+      IFactory.instance().deleteImage(_lastImageResult._image);
       if (_lastImageResult != null)
          _lastImageResult.dispose();
     }

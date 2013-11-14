@@ -35,7 +35,7 @@ private:
 public:
 
 
-  static FloatBufferBuilderFromCartesian3D builderWithoutCenter(){
+  static FloatBufferBuilderFromCartesian3D builderWithoutCenter() {
 #ifdef C_CODE
     return FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
 #endif
@@ -44,7 +44,7 @@ public:
 #endif
   }
 
-  static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter(){
+  static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter() {
 #ifdef C_CODE
     return FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
 #endif
@@ -53,7 +53,7 @@ public:
 #endif
   }
 
-  static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(const Vector3D& center){
+  static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(const Vector3D& center) {
 #ifdef C_CODE
     return FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
 #endif

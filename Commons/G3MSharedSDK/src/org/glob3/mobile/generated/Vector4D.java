@@ -52,9 +52,7 @@ public class Vector4D
 
   public static Vector4D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector4D(mu.NanD(), mu.NanD(), mu.NanD(), mu.NanD());
+    return new Vector4D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
   public static Vector4D zero()
@@ -64,31 +62,13 @@ public class Vector4D
 
   public final boolean isNan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return (mu.isNan(_x) || mu.isNan(_y) || mu.isNan(_z) || mu.isNan(_w));
+    return ((_x != _x) || (_y != _y) || (_z != _z) || (_w != _w));
   }
 
   public final boolean isZero()
   {
     return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
-
-//  double x() const {
-//    return _x;
-//  }
-//  
-//  double y() const {
-//    return _y;
-//  }
-//  
-//  double z() const {
-//    return _z;
-//  }
-//  
-//  double w() const {
-//    return _w;
-//  }
 
   public final String description()
   {

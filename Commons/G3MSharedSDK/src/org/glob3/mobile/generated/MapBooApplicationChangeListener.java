@@ -35,6 +35,7 @@ package org.glob3.mobile.generated;
 //class JSONBaseObject;
 //class JSONObject;
 //class JSONString;
+//class JSONArray;
 //class TimeInterval;
 //class MapQuestLayer;
 //class BingMapsLayer;
@@ -44,9 +45,16 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class IWebSocket;
 //class MapBoo_Scene;
-
+//class ErrorRenderer;
 //class SceneLighting;
-
+//class G3MEventContext;
+//class Camera;
+//class Tile;
+//class MarksRenderer;
+//class MapBooBuilder;
+//class Vector2I;
+//class URLTemplateLayer;
+//class Sector;
 
 
 
@@ -69,5 +77,11 @@ public abstract class MapBooApplicationChangeListener
   public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
 
   public abstract void onSceneChanged(G3MContext context, int sceneIndex, MapBoo_Scene scene);
+
+  public abstract void onWebSocketOpen(G3MContext context);
+
+  public abstract void onWebSocketClose(G3MContext context);
+
+  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile);
 
 }

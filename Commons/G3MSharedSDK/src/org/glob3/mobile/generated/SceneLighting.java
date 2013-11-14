@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  SceneLighting.h
+//  SceneLighting.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/08/13.
@@ -16,13 +16,13 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class GLState;
+//class G3MRenderContext;
 
 public abstract class SceneLighting
 {
   public void dispose()
   {
   }
-  public abstract void modifyGLState(GLState glState);
+  public abstract void modifyGLState(GLState glState, G3MRenderContext rc);
 }

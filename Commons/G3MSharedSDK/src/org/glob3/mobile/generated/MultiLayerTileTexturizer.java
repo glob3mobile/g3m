@@ -23,12 +23,12 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class LeveledTexturedMesh;
 //class IFloatBuffer;
-
+//class TileRasterizer;
+//class TextureIDReference;
+//class G3MEventContext;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private TexturesHandler _texturesHandler;
-
   private LeveledTexturedMesh getMesh(Tile tile)
   {
     TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
@@ -37,7 +37,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public MultiLayerTileTexturizer()
   {
-     _texturesHandler = null;
   
   }
 
@@ -61,27 +60,24 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, PlanetRendererContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
-    _texturesHandler = rc.getTexturesHandler();
-  
-  
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, prc.getTileRasterizer(), rc, prc.getLayerSet(), rc.getDownloader(), tile, tessellatorMesh, prc.getTessellator(), prc.getTexturePriority()));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (prc.isForcedFullRender())
+    if (isForcedFullRender)
     {
       builder.start();
     }
     else
     {
-      rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builder));
+      rc.getFrameTasksExecutor().addPreRenderTask(new TileTextureBuilderStartTask(builder));
     }
   
     tile.setTexturizerDirty(false);
@@ -134,7 +130,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final IGLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
+    final TextureIDReference glTextureId = ancestorMesh.getTopLevelTextureId();
     if (glTextureId == null)
     {
       return;
@@ -146,19 +142,23 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    final int level = tile.getLevel() - ancestorTile.getLevel();
-    _texturesHandler.retainGLTextureId(glTextureId);
-    if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
+  //  _texturesHandler->retainGLTextureId(glTextureId);
+    final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+  
+    final int level = tile._level - ancestorTile._level;
+    if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
-      _texturesHandler.releaseGLTextureId(glTextureId);
+  //    _texturesHandler->releaseGLTextureId(glTextureId);
+      if (glTextureIdRetainedCopy != null)
+         glTextureIdRetainedCopy.dispose();
     }
   }
 
-  public final IGLTextureId getTopLevelGLTextureIdForTile(Tile tile)
+  public final TextureIDReference getTopLevelTextureIdForTile(Tile tile)
   {
     LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
   
-    return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
+    return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)

@@ -12,7 +12,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string ByteBuffer_iOS::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(ByteBuffer_iOS: size=");
   isb->addInt(_size);
 

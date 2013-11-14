@@ -478,8 +478,10 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis) {
   const Vector3D a = axis.normalized();
 
-  const double c = angle.cosinus();
-  const double s = angle.sinus();
+//  const double c = angle.cosinus();
+//  const double s = angle.sinus();
+  const double c = COS(angle._radians);
+  const double s = SIN(angle._radians);
 
   return MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0,
                           a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0,
@@ -549,7 +551,7 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
 
 
 void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
-  //  if (isEqualsTo(m)) {
+  //  if (isEquals(m)) {
   //    return;
   //  }
 

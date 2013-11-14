@@ -241,8 +241,8 @@ public class GLState extends RCObject
     final int size = _features.size();
     for (int i = 0; i < size; i++)
     {
-      final GLFeature f = _features.get(i);
-      if (f.getID() == id)
+      GLFeature f = _features.get(i);
+      if (f._id == id)
       {
         return f;
       }

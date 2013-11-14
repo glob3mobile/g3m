@@ -21,17 +21,18 @@
 
 class Angle {
 private:
+//  mutable double _sin;
+//  mutable double _cos;
+
   Angle(const double degrees,
         const double radians) :
   _degrees( degrees ),
-  _radians( radians ),
-  _sin(2),
-  _cos(2)
+  _radians( radians )
+//  _sin(2),
+//  _cos(2)
   {
   }
 
-  mutable double _sin;
-  mutable double _cos;
 
 public:
   const double _degrees;
@@ -40,9 +41,9 @@ public:
 
   Angle(const Angle& angle):
   _degrees(angle._degrees),
-  _radians(angle._radians),
-  _sin(angle._sin),
-  _cos(angle._cos)
+  _radians(angle._radians)
+//  _sin(angle._sin),
+//  _cos(angle._cos)
   {
 
   }
@@ -54,14 +55,18 @@ public:
 
   static Angle fromDegreesMinutes(double degrees,
                                   double minutes) {
-    const double d = degrees + ( minutes / 60.0);
+    const IMathUtils* mu = IMathUtils::instance();
+    const double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
+    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) );
     return Angle( d, TO_RADIANS(d) );
   }
 
   static Angle fromDegreesMinutesSeconds(double degrees,
                                          double minutes,
                                          double seconds) {
-    const double d = degrees + ( minutes / 60.0) + ( seconds / 3600.0 );
+    const IMathUtils* mu = IMathUtils::instance();
+    const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
     return Angle( d, TO_RADIANS(d) );
   }
 
@@ -88,7 +93,7 @@ public:
   }
   
   static Angle nan() {
-    return Angle::fromDegrees(IMathUtils::instance()->NanD());
+    return Angle::fromDegrees(NAND);
   }
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
@@ -102,34 +107,28 @@ public:
   }
 
   bool isNan() const {
-    return IMathUtils::instance()->isNan(_degrees);
+    return ISNAN(_degrees);
   }
 
-  double sinus() const {
-    if (_sin > 1) {
-      _sin = SIN(_radians);
-    }
-    return _sin;
-  }
+//  double sinus() const {
+////    if (_sin > 1) {
+////      _sin = SIN(_radians);
+////    }
+////    return _sin;
+//    return SIN(_radians);
+//  }
+//
+//  double cosinus() const {
+////    if (_cos > 1) {
+////      _cos = COS(_radians);
+////    }
+////    return _cos;
+//    return COS(_radians);
+//  }
 
-  double cosinus() const {
-    if (_cos > 1) {
-      _cos = COS(_radians);
-    }
-    return _cos;
-  }
-  
-  double tangent() const {
-    return TAN(_radians);
-  }
-
-  double degrees() const {
-    return _degrees;
-  }
-
-  double radians() const {
-    return _radians;
-  }
+//  double tangent() const {
+//    return TAN(_radians);
+//  }
 
   bool closeTo(const Angle& other) const {
     return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
@@ -192,7 +191,7 @@ public:
     return (_degrees == 0);
   }
 
-  bool isEqualsTo(const Angle& that) const {
+  bool isEquals(const Angle& that) const {
     const IMathUtils* mu = IMathUtils::instance();
     return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
   }

@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 
 public class ShortBufferElevationData extends BufferElevationData
 {
-//  IShortBuffer*  _buffer;
   private short[] _buffer;
   private boolean _hasNoData;
 
@@ -29,7 +28,7 @@ public class ShortBufferElevationData extends BufferElevationData
     final short value = _buffer[index];
     if (value == NO_DATA_VALUE)
     {
-      return IMathUtils.instance().NanD();
+      return java.lang.Double.NaN;
     }
     return value;
   }
@@ -37,13 +36,9 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public static final short NO_DATA_VALUE = -32768;
 
-
-  //const short ShortBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->minInt16();
-  
-  
-  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize)
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, bufferSize);
+     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
      _buffer = buffer;
     if (_bufferSize != (_width * _height))
     {
@@ -67,7 +62,6 @@ public class ShortBufferElevationData extends BufferElevationData
     _buffer = null;
   
     super.dispose();
-  
   }
 
   public final String description(boolean detailed)

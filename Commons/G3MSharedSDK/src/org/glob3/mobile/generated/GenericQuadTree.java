@@ -40,12 +40,13 @@ public class GenericQuadTree
        _root.dispose();
   }
 
-  public final void remove(Object element)
+  public final boolean remove(Object element)
   {
     if (_root != null)
     {
-      _root.remove(element);
+      return _root.remove(element);
     }
+    return false;
   }
 
   public final boolean add(Sector sector, Object element)
@@ -73,23 +74,32 @@ public class GenericQuadTree
 
   public final boolean acceptVisitor(Geodetic2D geo, GenericQuadTreeVisitor visitor)
   {
-  
-    final boolean aborted = _root.acceptVisitor(geo, visitor);
-    visitor.endVisit(aborted);
-    return aborted;
-  
+    if (_root != null)
+    {
+      final boolean aborted = _root.acceptVisitor(geo, visitor);
+      visitor.endVisit(aborted);
+      return aborted;
+    }
+    return false;
   }
 
   public final boolean acceptNodeVisitor(GenericQuadTreeNodeVisitor visitor)
   {
-    final boolean aborted = _root.acceptNodeVisitor(visitor);
-    visitor.endVisit(aborted);
-    return aborted;
+    if (_root != null)
+    {
+      final boolean aborted = _root.acceptNodeVisitor(visitor);
+      visitor.endVisit(aborted);
+      return aborted;
+    }
+    return false;
   }
 
   public final void symbolize(GEOTileRasterizer geoTileRasterizer)
   {
-    _root.symbolize(geoTileRasterizer);
+    if (_root != null)
+    {
+      _root.symbolize(geoTileRasterizer);
+    }
   }
 
   public final java.util.ArrayList<Geodetic2D> getGeodetics()

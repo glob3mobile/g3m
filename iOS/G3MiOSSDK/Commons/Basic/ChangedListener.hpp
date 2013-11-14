@@ -15,7 +15,7 @@ public:
   virtual ~ChangedListener() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   virtual void changed() = 0;

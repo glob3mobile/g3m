@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ShortBufferBuilder__
 
 #include <vector>
+#include "IStringBuilder.hpp"
 
 class IShortBuffer;
 
@@ -25,7 +26,7 @@ private:
     private int     _size;
 
     public ShortArrayList() {
-      this(256);
+      this(1024);
     }
 
     public ShortArrayList(final int initialCapacity) {
@@ -76,6 +77,25 @@ public:
   }
 
   IShortBuffer* create() const;
+
+  std::string description() const{
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("ShortBufferBuilder: ");
+    for (int i = 0; i < (int)_values.size(); i++) {
+
+#ifdef C_CODE
+      short v = _values[i];
+#endif
+#ifdef JAVA_CODE
+      short v = _values.get(i);
+#endif
+      isb->addInt(v);
+      isb->addString(", ");
+    }
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
 
 };
 

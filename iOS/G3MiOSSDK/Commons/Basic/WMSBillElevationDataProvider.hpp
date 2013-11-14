@@ -24,15 +24,18 @@ private:
   URL               _url;
   const std::string _layerName;
   Sector            _sector;
+  const double      _deltaHeight;
 
 public:
   WMSBillElevationDataProvider(const URL& url,
                                const std::string& layerName,
-                               const Sector& sector) :
+                               const Sector& sector,
+                               double deltaHeight) :
   _url(url),
   _sector(sector),
   _downloader(NULL),
-  _layerName(layerName)
+  _layerName(layerName),
+  _deltaHeight(deltaHeight)
   {
 
   }
@@ -57,14 +60,10 @@ public:
   }
   
   const Vector2I getMinResolution() const{
-    int WORKING_JM;
+//    int WORKING_JM;
     return Vector2I::zero();
   }
   
-//  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-//                                              const Sector& sector,
-//                                              const Vector2I& extent) const;
-
 };
 
 #endif

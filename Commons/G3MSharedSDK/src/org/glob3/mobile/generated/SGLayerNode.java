@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IGLTextureId;
 //class IImage;
+//class TextureIDReference;
 
 public class SGLayerNode extends SGNode
 {
@@ -35,14 +36,14 @@ public class SGLayerNode extends SGNode
 
   private boolean _initialized;
 
-  private IGLTextureId getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureId(G3MRenderContext rc)
   {
     if (_textureId == null)
     {
       if (_downloadedImage != null)
       {
         final boolean hasMipMap = false;
-        _textureId = rc.getTexturesHandler().getGLTextureId(_downloadedImage, GLFormat.rgba(), getURL().getPath(), hasMipMap);
+        _textureId = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL().getPath(), hasMipMap);
   
         IFactory.instance().deleteImage(_downloadedImage);
         _downloadedImage = null;
@@ -62,7 +63,7 @@ public class SGLayerNode extends SGNode
     rc.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, TimeInterval.fromDays(30), true, new SGLayerNode_ImageDownloadListener(this), true);
   }
 
-  private IGLTextureId _textureId;
+  private TextureIDReference _textureId;
 
   private URL getURL()
   {
@@ -86,6 +87,11 @@ public class SGLayerNode extends SGNode
      _initialized = false;
   }
 
+  public void dispose()
+  {
+    _textureId.dispose(); //Releasing texture through TextureIDReference class
+  }
+
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
     if (!_initialized)
@@ -94,7 +100,7 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    final IGLTextureId textureId = getTextureId(rc);
+    final TextureIDReference textureId = getTextureId(rc);
     return (textureId != null);
   }
 
@@ -141,15 +147,14 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    final IGLTextureId textureId = getTextureId(rc);
-    if (textureId == null)
+    _textureId = getTextureId(rc);
+    if (_textureId == null)
     {
       return false;
     }
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-    state.addGLFeature(new TextureIDGLFeature(textureId, false, 0,0), false);
-  
+    state.addGLFeature(new TextureIDGLFeature(_textureId.getID()), false);
   
     return true;
   

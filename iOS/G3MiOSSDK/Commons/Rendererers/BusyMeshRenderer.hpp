@@ -13,16 +13,10 @@
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
 #include "Color.hpp"
-
-//#include "GPUProgramState.hpp"
-
 #include "GLState.hpp"
 
 
-//***************************************************************
-
-
-class BusyMeshRenderer : public LeafRenderer {
+class BusyMeshRenderer : public LeafRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
@@ -38,6 +32,10 @@ private:
   GLState* _glState;
   
   void createGLState();
+
+  Mesh* createMesh(const G3MRenderContext* rc);
+  Mesh* getMesh(const G3MRenderContext* rc);
+
   
 public:    
   BusyMeshRenderer(Color* backgroundColor):
@@ -45,7 +43,8 @@ public:
   _backgroundColor(backgroundColor),
   _projectionFeature(NULL),
   _modelFeature(NULL),
-  _glState(new GLState())
+  _glState(new GLState()),
+  _mesh(NULL)
   {
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
     _projectionMatrix = MutableMatrix44D::invalid();
@@ -53,10 +52,10 @@ public:
   
   void initialize(const G3MContext* context);
   
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
+  RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
   }
-  
+
   void render(const G3MRenderContext* rc, GLState* glState);
   
   bool onTouchEvent(const G3MEventContext* ec,
@@ -68,17 +67,10 @@ public:
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
                                                                               -halfHeight, halfHeight,
-                                                                              -halfWidth, halfWidth);
-    
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-//    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
-
-//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
-  }
+                                                                              -halfWidth,  halfWidth);
+      }
   
   virtual ~BusyMeshRenderer() {
     delete _mesh;
@@ -89,17 +81,14 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   void incDegrees(double value) {
     _degrees += value; 
-    if (_degrees>360) _degrees -= 360;
+    if (_degrees>360) {
+      _degrees -= 360;
+    }
     _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-
-//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   void start(const G3MRenderContext* rc);
@@ -121,33 +110,33 @@ public:
 
 //***************************************************************
 
-class BusyMeshEffect : public EffectWithForce {  
+class BusyMeshEffect : public EffectWithForce {
 private:
   BusyMeshRenderer* _renderer;
-  
+
 public:
-  
-  BusyMeshEffect(BusyMeshRenderer *renderer): 
+
+  BusyMeshEffect(BusyMeshRenderer *renderer):
   EffectWithForce(1, 1),
   _renderer(renderer)
   { }
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when) {}
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when) {
+
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when) {}
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when) {
     EffectWithForce::doStep(rc, when);
     _renderer->incDegrees(5);
   }
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when) { }
-  
-  virtual void cancel(const TimeInterval& when) {
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when) { }
+
+  void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
- 
+
 };
 
 

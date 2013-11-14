@@ -7,12 +7,12 @@ public interface SurfaceElevationProvider
 
 
 
-  public void dispose();
+  void dispose();
 
   void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener);
 
   void addListener(Geodetic2D position, SurfaceElevationListener listener);
 
-  void removeListener(SurfaceElevationListener listener);
+  boolean removeListener(SurfaceElevationListener listener);
 
 }

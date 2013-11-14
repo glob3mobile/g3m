@@ -27,14 +27,14 @@ package org.glob3.mobile.generated;
 
 public abstract class Layer
 {
-  private LayerCondition _condition;
-  private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
+  protected LayerCondition _condition;
+  protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
 
-  private LayerSet _layerSet;
+  protected LayerSet _layerSet;
 
-  private boolean _enable;
+  protected boolean _enable;
 
-  private final String _name;
+  protected final String _name;
 
   protected LayerTilesRenderParameters _parameters;
 
@@ -49,15 +49,18 @@ public abstract class Layer
     }
   }
 
+  protected String _title;
+
   protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      _condition = condition;
      _name = name;
      _layerSet = null;
-     _timeToCacheMS = timeToCache.milliseconds();
+     _timeToCacheMS = timeToCache._milliseconds;
      _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;
+     _title = "";
 
   }
 
@@ -70,6 +73,10 @@ public abstract class Layer
       notifyChanges();
     }
   }
+
+  protected abstract String getLayerType();
+
+  protected abstract boolean rawIsEquals(Layer that);
 
 
   public final TimeInterval getTimeToCache()
@@ -144,17 +151,17 @@ public abstract class Layer
   {
   }
 
-  public final void addTerrainTouchEventListener(TerrainTouchEventListener listener)
+  public final void addLayerTouchEventListener(LayerTouchEventListener listener)
   {
     _listeners.add(listener);
   }
 
-  public final boolean onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
+  public final boolean onLayerTouchEventListener(G3MEventContext ec, LayerTouchEvent tte)
   {
     final int listenersSize = _listeners.size();
     for (int i = 0; i < listenersSize; i++)
     {
-      TerrainTouchEventListener listener = _listeners.get(i);
+      LayerTouchEventListener listener = _listeners.get(i);
       if (listener != null)
       {
         if (listener.onTerrainTouch(ec, tte))
@@ -195,5 +202,83 @@ public abstract class Layer
   }
 
   public abstract String description();
+
+  public final boolean isEquals(Layer that)
+  {
+    if (this == that)
+    {
+      return true;
+    }
+  
+    if (that == null)
+    {
+      return false;
+    }
+  
+    if (!getLayerType().equals(that.getLayerType()))
+    {
+      return false;
+    }
+  
+    if (_condition != that._condition)
+    {
+      return false;
+    }
+  
+    final int thisListenersSize = _listeners.size();
+    final int thatListenersSize = that._listeners.size();
+    if (thisListenersSize != thatListenersSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisListenersSize; i++)
+    {
+      if (_listeners.get(i) != that._listeners.get(i))
+      {
+        return false;
+      }
+    }
+  
+    if (_enable != that._enable)
+    {
+      return false;
+    }
+  
+    if (!(_name.equals(that._name)))
+    {
+      return false;
+    }
+  
+    if (!_parameters.isEquals(that._parameters))
+    {
+      return false;
+    }
+  
+    if (_timeToCacheMS != that._timeToCacheMS)
+    {
+      return false;
+    }
+  
+    if (_readExpired != that._readExpired)
+    {
+      return false;
+    }
+  
+    return rawIsEquals(that);
+  }
+
+  public abstract Layer copy();
+
+
+  public final String getTitle()
+  {
+    return _title;
+  }
+
+  public final void setTitle(String title)
+  {
+    _title = title;
+  }
 
 }

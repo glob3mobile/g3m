@@ -12,16 +12,15 @@
 
 double CompositeElevationData::getElevationAt(int x,
                                               int y) const{
-  const IMathUtils* mu = IMathUtils::instance();
   const int size = _data.size();
   for (int i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
-    if (!mu->isNan(h)) {
+    if (!ISNAN(h)) {
       return h;
     }
   }
 
-  return mu->NanD();
+  return NAND;
 }
 
 
@@ -36,19 +35,17 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
 //  Sector s = data->getSector();
 //  Sector s2 = d0->getSector();
 
-  if (!data->getSector().isEqualsTo(getSector())) {
+  if (!data->getSector().isEquals(getSector())) {
     ILogger::instance()->logError("Sectors don't match.");
   }
 
-
-  const IMathUtils* mu = IMathUtils::instance();
   _data.push_back(data);
   
   //Checking NoData
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       double height = getElevationAt(i, j);
-      if (mu->isNan(height)) {
+      if (ISNAN(height)) {
         _hasNoData = true;
         return;
       }
@@ -57,7 +54,7 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
 }
 
 const std::string CompositeElevationData::description(bool detailed) const{
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(CompositeElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");
@@ -90,7 +87,7 @@ Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
   for (int i = 0; i < _width; i++) {
     for (int j = 0; j < _height; j++) {
       const double height = getElevationAt(i, j);
-      if (!mu->isNan(height)) {
+      if (!ISNAN(height)) {
         if (height < minHeight) {
           minHeight = height;
         }

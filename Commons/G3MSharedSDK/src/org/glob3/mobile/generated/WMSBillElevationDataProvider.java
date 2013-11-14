@@ -26,13 +26,15 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   private URL _url = new URL();
   private final String _layerName;
   private Sector _sector ;
+  private final double _deltaHeight;
 
-  public WMSBillElevationDataProvider(URL url, String layerName, Sector sector)
+  public WMSBillElevationDataProvider(URL url, String layerName, Sector sector, double deltaHeight)
   {
      _url = new URL(url);
      _sector = new Sector(sector);
      _downloader = null;
      _layerName = layerName;
+     _deltaHeight = deltaHeight;
 
   }
 
@@ -102,7 +104,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
        isb.dispose();
   
   
-    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener), true);
+    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
   }
 
   public final void cancelRequest(long requestId)
@@ -119,12 +121,8 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
 
   public final Vector2I getMinResolution()
   {
-    int WORKING_JM;
+//    int WORKING_JM;
     return Vector2I.zero();
   }
-
-//  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-//                                              const Sector& sector,
-//                                              const Vector2I& extent) const;
 
 }

@@ -12,7 +12,7 @@
 #include "TouchEvent.hpp"
 #include "CameraRenderer.hpp"
 #include "GL.hpp"
-
+#include "IDeviceInfo.hpp"
 
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
@@ -80,11 +80,14 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
   // test if animation is needed
   if (_useInertia) {
     const Touch *touch = touchEvent.getTouch(0);
-    Vector2I currPixel = touch->getPos();
-    Vector2I prevPixel = touch->getPrevPos();
-    double desp        = currPixel.sub(prevPixel).length();
-    
-    if (cameraContext->getCurrentGesture()==Drag && desp>2) {
+    const Vector2I currPixel = touch->getPos();
+    const Vector2I prevPixel = touch->getPrevPos();
+    const double desp        = currPixel.sub(prevPixel).length();
+
+    const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
+
+    if ((cameraContext->getCurrentGesture() == Drag) &&
+        (desp > delta)) {
       Effect* effect = planet->createEffectFromLastSingleDrag();
       if (effect != NULL) {
         EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();

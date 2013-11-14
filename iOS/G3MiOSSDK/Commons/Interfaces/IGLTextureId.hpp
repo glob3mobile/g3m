@@ -14,7 +14,7 @@
 class IGLTextureId {
 public:
 
-  virtual bool isEqualsTo(const IGLTextureId* that) const = 0;
+  virtual bool isEquals(const IGLTextureId* that) const = 0;
   
   virtual const std::string description() const = 0;
   
@@ -22,7 +22,7 @@ public:
   virtual ~IGLTextureId() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 };
 

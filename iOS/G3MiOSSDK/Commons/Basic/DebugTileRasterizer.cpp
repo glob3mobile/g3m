@@ -18,9 +18,23 @@
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
 
+DebugTileRasterizer::DebugTileRasterizer(const GFont& font,
+                                         const Color& color,
+                                         bool showLabels,
+                                         bool showTileBounds) :
+_font(font),
+_color(color),
+_showLabels(showLabels),
+_showTileBounds(showTileBounds)
+{
+
+}
+
 DebugTileRasterizer::DebugTileRasterizer() :
 _font(GFont::monospaced(15)),
-_color(Color::white())
+_color(Color::yellow()),
+_showLabels(true),
+_showTileBounds(true)
 {
 }
 
@@ -29,19 +43,18 @@ DebugTileRasterizer::~DebugTileRasterizer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
-  isb->addInt( tile->getLevel() );
+  isb->addInt( tile->_level );
 
   isb->addString(", C:");
-  isb->addInt( tile->getColumn() );
+  isb->addInt( tile->_column );
 
   isb->addString(", R:");
-  isb->addInt( tile->getRow() );
+  isb->addInt( tile->_row );
 
   const std::string s = isb->getString();
   delete isb;
@@ -64,30 +77,11 @@ std::string DebugTileRasterizer::getSectorLabel4(const Sector& sector) const {
   return "Upper lon: " + sector._upper._longitude.description();
 }
 
-//ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
-//  if ((_canvas == NULL) ||
-//      (_canvasWidth  != width) ||
-//      (_canvasHeight != height)) {
-//    delete _canvas;
-//
-//    _canvas = IFactory::instance()->createCanvas();
-//    _canvas->initialize(width, height);
-//
-//    _canvasWidth  = width;
-//    _canvasHeight = height;
-//  }
-//  else {
-//    _canvas->setFillColor(Color::transparent());
-//    _canvas->fillRectangle(0, 0, width, height);
-//  }
-//  return _canvas;
-//}
+void DebugTileRasterizer::rawRasterize(const IImage* image,
+                                       const TileRasterizerContext& trc,
+                                       IImageListener* listener,
+                                       bool autodelete) const {
 
-void DebugTileRasterizer::rasterize(const TileRasterizerContext& trc,
-                                    IImageListener* listener,
-                                    bool autodelete) const {
-
-  const IImage* image = trc._image;
   const Tile*   tile  = trc._tile;
 
   const int width  = image->getWidth();
@@ -99,26 +93,28 @@ void DebugTileRasterizer::rasterize(const TileRasterizerContext& trc,
 
   canvas->drawImage(image, 0, 0);
 
-  canvas->setLineColor(_color);
-  canvas->setLineWidth(1);
-  canvas->strokeRectangle(0, 0, width, height);
+  if (_showTileBounds) {
+    canvas->setLineColor(_color);
+    canvas->setLineWidth(1);
+    canvas->strokeRectangle(0, 0, width, height);
+  }
 
+  if (_showLabels) {
+    canvas->setShadow(Color::black(), 2, 1, -1);
+    ColumnCanvasElement col;
+    col.add( new TextCanvasElement(getTileKeyLabel(tile), _font, _color) );
 
-  canvas->setShadow(Color::black(), 2, 1, -1);
-  ColumnCanvasElement col;
-  col.add( new TextCanvasElement(getTileKeyLabel(tile), _font, _color) );
+    const Sector sectorTile = tile->_sector;
+    col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
+    col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
+    col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );
+    col.add( new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color) );
 
-  const Sector sectorTile = tile->getSector();
-  col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
-  col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
-  col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );
-  col.add( new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color) );
-
-  const Vector2F colExtent = col.getExtent(canvas);
-  col.drawAt((width  - colExtent._x) / 2,
-             (height - colExtent._y) / 2,
-             canvas);
-
+    const Vector2F colExtent = col.getExtent(canvas);
+    col.drawAt((width  - colExtent._x) / 2,
+               (height - colExtent._y) / 2,
+               canvas);
+  }
 
   canvas->createImage(listener, autodelete);
   

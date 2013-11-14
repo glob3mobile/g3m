@@ -17,7 +17,7 @@ MutableVector2D Vector2D::asMutableVector2D() const {
 }
 
 const std::string Vector2D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V2D ");
   isb->addDouble(_x);
   isb->addString(", ");

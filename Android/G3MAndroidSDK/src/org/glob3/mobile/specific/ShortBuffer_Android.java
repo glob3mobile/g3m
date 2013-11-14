@@ -12,19 +12,39 @@ public class ShortBuffer_Android
             IShortBuffer {
    private final ShortBuffer _buffer;
    private int               _timestamp;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
 
    //   private boolean           _hasGLBuffer = false;
    //   private int               _glBuffer;
 
 
-   public ShortBuffer_Android(final int size) {
+   ShortBuffer_Android(final int size) {
       _buffer = ShortBuffer.wrap(new short[size]);
    }
 
 
-   public ShortBuffer_Android(final short[] array) {
+   ShortBuffer_Android(final short[] array) {
       _buffer = ShortBuffer.wrap(array);
+   }
+
+
+   ShortBuffer_Android(final short[] array,
+                       final int length) {
+      final short[] result = new short[length];
+      System.arraycopy(array, 0, result, 0, length);
+      _buffer = ShortBuffer.wrap(result);
+
+      //      //_buffer = ByteBuffer.allocate(length * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
+      //      _buffer = ByteBuffer.allocate(length * 2).asShortBuffer();
+      //      _buffer.put(array, 0, length);
+      //      _buffer.rewind();
+
+      //      _buffer = ShortBuffer.wrap(array, 0, length);
+      //      _buffer.rewind();
    }
 
 
@@ -72,6 +92,12 @@ public class ShortBuffer_Android
    public String description() {
       return "ShortBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
+
+
+@Override
+public long getID() {
+	return _id;
+}
 
 
    //   @Override

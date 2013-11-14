@@ -26,18 +26,20 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   private final GFont _font;
   private final Color _color ;
 
+  private final boolean _showLabels;
+  private final boolean _showTileBounds;
 
   private String getTileKeyLabel(Tile tile)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("L:");
-    isb.addInt(tile.getLevel());
+    isb.addInt(tile._level);
   
     isb.addString(", C:");
-    isb.addInt(tile.getColumn());
+    isb.addInt(tile._column);
   
     isb.addString(", R:");
-    isb.addInt(tile.getRow());
+    isb.addInt(tile._row);
   
     final String s = isb.getString();
     if (isb != null)
@@ -65,13 +67,28 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   public DebugTileRasterizer()
   {
      _font = GFont.monospaced(15);
-     _color = new Color(Color.white());
+     _color = new Color(Color.yellow());
+     _showLabels = true;
+     _showTileBounds = true;
+  }
+
+  public DebugTileRasterizer(GFont font, Color color, boolean showLabels, boolean showTileBounds)
+  {
+     _font = font;
+     _color = new Color(color);
+     _showLabels = showLabels;
+     _showTileBounds = showTileBounds;
+  
   }
 
   public void dispose()
   {
     super.dispose();
-  
+  }
+
+  public final void initialize(G3MContext context)
+  {
+
   }
 
   public final String getId()
@@ -79,30 +96,9 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
     return "DebugTileRasterizer";
   }
 
-
-  //ICanvas* DebugTileRasterizer::getCanvas(int width, int height) const {
-  //  if ((_canvas == NULL) ||
-  //      (_canvasWidth  != width) ||
-  //      (_canvasHeight != height)) {
-  //    delete _canvas;
-  //
-  //    _canvas = IFactory::instance()->createCanvas();
-  //    _canvas->initialize(width, height);
-  //
-  //    _canvasWidth  = width;
-  //    _canvasHeight = height;
-  //  }
-  //  else {
-  //    _canvas->setFillColor(Color::transparent());
-  //    _canvas->fillRectangle(0, 0, width, height);
-  //  }
-  //  return _canvas;
-  //}
-  
-  public final void rasterize(TileRasterizerContext trc, IImageListener listener, boolean autodelete)
+  public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
   
-    IImage image = trc._image;
     final Tile tile = trc._tile;
   
     final int width = image.getWidth();
@@ -114,24 +110,28 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   
     canvas.drawImage(image, 0, 0);
   
-    canvas.setLineColor(_color);
-    canvas.setLineWidth(1);
-    canvas.strokeRectangle(0, 0, width, height);
+    if (_showTileBounds)
+    {
+      canvas.setLineColor(_color);
+      canvas.setLineWidth(1);
+      canvas.strokeRectangle(0, 0, width, height);
+    }
   
+    if (_showLabels)
+    {
+      canvas.setShadow(Color.black(), 2, 1, -1);
+      ColumnCanvasElement col = new ColumnCanvasElement();
+      col.add(new TextCanvasElement(getTileKeyLabel(tile), _font, _color));
   
-    canvas.setShadow(Color.black(), 2, 1, -1);
-    ColumnCanvasElement col = new ColumnCanvasElement();
-    col.add(new TextCanvasElement(getTileKeyLabel(tile), _font, _color));
+      final Sector sectorTile = tile._sector;
+      col.add(new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color));
+      col.add(new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color));
+      col.add(new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color));
+      col.add(new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color));
   
-    final Sector sectorTile = tile.getSector();
-    col.add(new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color));
-    col.add(new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color));
-    col.add(new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color));
-    col.add(new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color));
-  
-    final Vector2F colExtent = col.getExtent(canvas);
-    col.drawAt((width - colExtent._x) / 2, (height - colExtent._y) / 2, canvas);
-  
+      final Vector2F colExtent = col.getExtent(canvas);
+      col.drawAt((width - colExtent._x) / 2, (height - colExtent._y) / 2, canvas);
+    }
   
     canvas.createImage(listener, autodelete);
   

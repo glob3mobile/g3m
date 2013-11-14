@@ -97,7 +97,6 @@ public class LeveledTexturedMesh extends Mesh
     }
   
     super.dispose();
-  
   }
 
   public final int getVertexCount()
@@ -115,7 +114,7 @@ public class LeveledTexturedMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
+  public final boolean setGLTextureIdForLevel(int level, TextureIDReference glTextureId)
   {
   
     if (_mappings.size() > 0)
@@ -134,7 +133,7 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-  public final IGLTextureId getTopLevelGLTextureId()
+  public final TextureIDReference getTopLevelTextureId()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping != null)
@@ -157,10 +156,10 @@ public class LeveledTexturedMesh extends Mesh
   
     LazyTextureMapping mapping = getCurrentTextureMapping();
   
-    return (mapping == null) ? false : mapping.isTransparent();
+    return (mapping == null) ? false : mapping._transparent;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)

@@ -50,10 +50,10 @@ public class CameraGoToPositionEffect extends EffectWithDuration
       final double delta = (averageHeight - middleHeight) / 2.0;
       return averageHeight + delta;
     }
-//    const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
-//    if (middleHeight < averageHeight) {
-//      return (averageHeight + middleHeight) / 2.0;
-//    }
+    //    const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
+    //    if (middleHeight < averageHeight) {
+    //      return (averageHeight + middleHeight) / 2.0;
+    //    }
 
     return middleHeight;
   }
@@ -72,7 +72,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
      _linearHeight = linearHeight;
   }
 
-  public void doStep(G3MRenderContext rc, TimeInterval when)
+  public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     final double alpha = getAlpha(when);
 
@@ -94,9 +94,9 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     camera.setHeading(heading);
 
     final Angle middlePitch = Angle.fromDegrees(0);
-//    const Angle pitch =  (alpha < 0.5)
-//    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
-//    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
+    //    const Angle pitch =  (alpha < 0.5)
+    //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
+    //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
 
     if (alpha <= 0.1)
     {
@@ -113,7 +113,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
 
   }
 
-  public void stop(G3MRenderContext rc, TimeInterval when)
+  public final void stop(G3MRenderContext rc, TimeInterval when)
   {
     Camera camera = rc.getNextCamera();
     camera.setGeodeticPosition(_toPosition);
@@ -121,12 +121,12 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     camera.setHeading(_toHeading);
   }
 
-  public void cancel(TimeInterval when)
+  public final void cancel(TimeInterval when)
   {
     // do nothing, just leave the effect in the intermediate state
   }
 
-  public void start(G3MRenderContext rc, TimeInterval when)
+  public final void start(G3MRenderContext rc, TimeInterval when)
   {
     super.start(rc, when);
 

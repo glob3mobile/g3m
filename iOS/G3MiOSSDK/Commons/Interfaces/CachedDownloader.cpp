@@ -15,7 +15,6 @@
 #include "TimeInterval.hpp"
 #include "IFactory.hpp"
 
-
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
   CachedDownloader* _downloader;
@@ -241,11 +240,8 @@ public:
 CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
-  //  if (_lastImage != NULL) {
-  //    IFactory::instance()->deleteImage(_lastImage);
-  //  }
   if (_lastImageResult != NULL) {
-    IFactory::instance()->deleteImage(_lastImageResult->getImage());
+    IFactory::instance()->deleteImage(_lastImageResult->_image);
     delete _lastImageResult;
   }
   delete _lastImageURL;
@@ -269,7 +265,7 @@ void CachedDownloader::cancelRequest(long long requestId) {
 }
 
 const std::string CachedDownloader::statistics() {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("CachedDownloader(cache hits=");
   isb->addInt(_cacheHitsCounter);
   isb->addString("/");
@@ -304,34 +300,34 @@ void CachedDownloader::initialize(const G3MContext* context,
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
-    if (_lastImageURL->isEqualsTo(url)) {
+    if (_lastImageURL->isEquals(url)) {
       // ILogger::instance()->logInfo("Used chached image for %s", url.description().c_str());
-      return IImageResult(_lastImageResult->getImage()->shallowCopy(),
-                          _lastImageResult->isExpired());
+      return IImageResult(_lastImageResult->_image->shallowCopy(),
+                          _lastImageResult->_expired);
     }
   }
 
-  if (!_storage->isAvailable()) {
+  if (!_storage->isAvailable() || url.isFileProtocol()) {
     return IImageResult(NULL, false);
   }
 
   IImageResult cachedImageResult = _storage->readImage(url, readExpired);
-  IImage* cachedImage = cachedImageResult.getImage();
+  IImage* cachedImage = cachedImageResult._image;
 
   if (cachedImage != NULL) {
     if (_lastImageResult != NULL) {
-      IFactory::instance()->deleteImage(_lastImageResult->getImage());
+      IFactory::instance()->deleteImage(_lastImageResult->_image);
       delete _lastImageResult;
     }
     _lastImageResult = new IImageResult(cachedImage->shallowCopy(),
-                                        cachedImageResult.isExpired());
+                                        cachedImageResult._expired);
 
     delete _lastImageURL;
     _lastImageURL = new URL(url);
   }
 
   return IImageResult(cachedImage,
-                      cachedImageResult.isExpired());
+                      cachedImageResult._expired);
 }
 
 long long CachedDownloader::requestImage(const URL& url,
@@ -342,10 +338,10 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-  IImageResult cachedImageResult = getCachedImageResult(url, readExpired);
-  IImage* cachedImage = cachedImageResult.getImage();
+  IImageResult cached = getCachedImageResult(url, readExpired);
+  IImage* cachedImage = cached._image;
 
-  if (cachedImage != NULL && !cachedImageResult.isExpired()) {
+  if (cachedImage != NULL && !cached._expired) {
     // cache hit
     _cacheHitsCounter++;
 
@@ -382,13 +378,13 @@ long long CachedDownloader::requestBuffer(const URL& url,
 
   _requestsCounter++;
 
-  IByteBufferResult cachedBufferResult = _storage->isAvailable()
+  IByteBufferResult cached = _storage->isAvailable() && !url.isFileProtocol()
   /*                                         */ ? _storage->readBuffer(url, readExpired)
   /*                                         */ : IByteBufferResult(NULL, false);
 
-  IByteBuffer* cachedBuffer = cachedBufferResult.getBuffer();
+  IByteBuffer* cachedBuffer = cached.getBuffer();
 
-  if (cachedBuffer != NULL && !cachedBufferResult.isExpired()) {
+  if (cachedBuffer != NULL && !cached.isExpired()) {
     // cache hit
     _cacheHitsCounter++;
 

@@ -24,10 +24,9 @@ private:
   
   ChangedListener* _listener;
   
-  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+//  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+
   
-  
-  LayerTilesRenderParameters* createLayerTilesRenderParameters() const;
   void layersChanged() const;
 
 #ifdef C_CODE
@@ -40,7 +39,7 @@ private:
 public:
   LayerSet() :
   _listener(NULL),
-  _layerTilesRenderParameters(NULL),
+//  _layerTilesRenderParameters(NULL),
   _context(NULL)
   {
     
@@ -75,14 +74,19 @@ public:
     }
     _listener = listener;
   }
-  
-  Layer* get(int index);
-  
-  Layer* getLayer(const std::string& name);
-  
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const;
-  
-  //  const Angle calculateSplitLatitude(const Tile* tile) const;
+
+  Layer* getLayer(int index) const;
+
+  Layer* getLayerByName(const std::string& name) const;
+  Layer* getLayerByTitle(const std::string& title) const;
+
+  LayerTilesRenderParameters* createLayerTilesRenderParameters(std::vector<std::string>& errors) const;
+
+  bool isEquals(const LayerSet* that) const;
+
+  void takeLayersFrom(LayerSet* that);
+
+  void disableAllLayers();
   
 };
 

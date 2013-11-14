@@ -20,14 +20,9 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "GPUProgramState.hpp"
 
-
-
-//***************************************************************
-
-
-public class BusyMeshRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -44,7 +39,6 @@ public class BusyMeshRenderer extends LeafRenderer
 
   private void createGLState()
   {
-  
     if (_projectionFeature == null)
     {
       _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
@@ -66,53 +60,55 @@ public class BusyMeshRenderer extends LeafRenderer
     }
   }
 
-  public BusyMeshRenderer(Color backgroundColor)
+  private Mesh createMesh(G3MRenderContext rc)
   {
-     _degrees = 0;
-     _backgroundColor = backgroundColor;
-     _projectionFeature = null;
-     _modelFeature = null;
-     _glState = new GLState();
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D.invalid();
-  }
-
-  public final void initialize(G3MContext context)
-  {
-    int numStrides = 60;
+    final int numStrides = 5;
   
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
     int indicesCounter = 0;
-    final float r1 = 12F;
-    final float r2 = 18F;
-    for (int step = 0; step<=numStrides; step++)
+  
+    final float innerRadius = 0F;
+  
+  //  const float r2=50;
+    final Camera camera = rc.getCurrentCamera();
+    final int width = camera.getWidth();
+    final int height = camera.getHeight();
+    final int minSize = (width < height) ? width : height;
+    final float outerRadius = minSize / 15.0f;
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    for (int step = 0; step <= numStrides; step++)
     {
       final double angle = (double) step * 2 * DefineConstants.PI / numStrides;
-      final double c = IMathUtils.instance().cos(angle);
-      final double s = IMathUtils.instance().sin(angle);
+      final double c = mu.cos(angle);
+      final double s = mu.sin(angle);
   
-      vertices.add((r1 * c), (r1 * s), 0);
-      vertices.add((r2 * c), (r2 * s), 0);
+      vertices.add((innerRadius * c), (innerRadius * s), 0);
+      vertices.add((outerRadius * c), (outerRadius * s), 0);
   
       indices.add((short)(indicesCounter++));
       indices.add((short)(indicesCounter++));
   
-      float col = (float)(1.1 * step / numStrides);
-      if (col>1)
-      {
-        colors.add(255, 255, 255, 0);
-        colors.add(255, 255, 255, 0);
-      }
-      else
-      {
-        colors.add(255, 255, 255, 1 - col);
-        colors.add(255, 255, 255, 1 - col);
-      }
+      //    float col = (float) (1.0 * step / numStrides);
+      //    if (col>1) {
+      //      colors.add(1, 1, 1, 0);
+      //      colors.add(1, 1, 1, 0);
+      //    }
+      //    else {
+      //      colors.add(1, 1, 1, 1 - col);
+      //      colors.add(1, 1, 1, 1 - col);
+      //    }
+  
+      //    colors.add(Color::red().wheelStep(numStrides, step));
+      //    colors.add(Color::red().wheelStep(numStrides, step));
+  
+      colors.add(1, 1, 1, 1);
+      colors.add(1, 1, 1, 0);
     }
   
     // the two last indices
@@ -120,12 +116,37 @@ public class BusyMeshRenderer extends LeafRenderer
     indices.add((short) 1);
   
     // create mesh
-    _mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+  }
+  private Mesh getMesh(G3MRenderContext rc)
+  {
+    if (_mesh == null)
+    {
+      _mesh = createMesh(rc);
+    }
+    return _mesh;
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+
+  public BusyMeshRenderer(Color backgroundColor)
   {
-    return true;
+     _degrees = 0;
+     _backgroundColor = backgroundColor;
+     _projectionFeature = null;
+     _modelFeature = null;
+     _glState = new GLState();
+     _mesh = null;
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    _projectionMatrix = MutableMatrix44D.invalid();
+  }
+
+  public final void initialize(G3MContext context)
+  {
+  }
+
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -136,7 +157,12 @@ public class BusyMeshRenderer extends LeafRenderer
   
     gl.clearScreen(_backgroundColor);
   
-    _mesh.render(rc, _glState);
+    Mesh mesh = getMesh(rc);
+    if (mesh != null)
+    {
+      mesh.render(rc, _glState);
+    }
+  //  _mesh->render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -149,14 +175,7 @@ public class BusyMeshRenderer extends LeafRenderer
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
     _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-
-    //_glState.getGPUProgramState()->setUniformMatrixValue(MODELVIEW, _projectionMatrix.multiply(_modelviewMatrix), false);
-//    _glState.setModelView(_projectionMatrix.multiply(_modelviewMatrix).asMatrix44D(), false);
-
-//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
-  }
+      }
 
   public void dispose()
   {
@@ -168,19 +187,16 @@ public class BusyMeshRenderer extends LeafRenderer
     _glState._release();
 
   super.dispose();
-
   }
 
   public final void incDegrees(double value)
   {
     _degrees += value;
     if (_degrees>360)
-       _degrees -= 360;
+    {
+      _degrees -= 360;
+    }
     _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-
-//    _glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
-//    _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
   public final void start(G3MRenderContext rc)

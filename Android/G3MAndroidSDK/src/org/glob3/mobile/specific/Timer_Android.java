@@ -15,8 +15,9 @@ public final class Timer_Android
    private long _startTimeInMilliseconds;
 
 
-   public Timer_Android() {
-      start();
+   Timer_Android() {
+      //start();
+      _startTimeInMilliseconds = SystemClock.uptimeMillis();
    }
 
 

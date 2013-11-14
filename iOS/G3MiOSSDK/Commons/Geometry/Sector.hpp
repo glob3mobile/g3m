@@ -17,7 +17,9 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
+#include "Color.hpp"
 
+class GEORasterSymbol;
 class ICanvas;
 class GEORasterProjection;
 
@@ -103,30 +105,6 @@ public:
                   Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
   }
 
-  const Geodetic2D lower() const {
-    return _lower;
-  }
-
-  const Angle lowerLatitude() const {
-    return _lower._latitude;
-  }
-
-  const Angle lowerLongitude() const {
-    return _lower._longitude;
-  }
-
-  const Geodetic2D upper() const {
-    return _upper;
-  }
-
-  const Angle upperLatitude() const {
-    return _upper._latitude;
-  }
-
-  const Angle upperLongitude() const {
-    return _upper._longitude;
-  }
-
   bool contains(const Angle& latitude,
                 const Angle& longitude) const;
   
@@ -135,20 +113,7 @@ public:
                     position._longitude);
   }
 
-  bool contains(const Geodetic3D& position) const {
-    return contains(position._latitude,
-                    position._longitude);
-  }
-
   bool touchesWith(const Sector& that) const;
-
-  const Angle getDeltaLatitude() const {
-    return _deltaLatitude;
-  }
-
-  const Angle getDeltaLongitude() const {
-    return _deltaLongitude;
-  }
 
   const Geodetic2D getSW() const {
     return _lower;
@@ -200,7 +165,7 @@ public:
     return (_upper._latitude._radians - latitude._radians)   / _deltaLatitude._radians;
   }
 
-  bool isBackOriented(const G3MRenderContext *rc,
+  bool isBackOriented(const G3MRenderContext* rc,
                       double minHeight,
                       const Planet* planet,
                       const Vector3D& cameraNormalizedPosition,
@@ -230,8 +195,8 @@ public:
                   _upper.sub( delta ) );
   }
 
-  bool isEqualsTo(const Sector& that) const {
-    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
+  bool isEquals(const Sector& that) const {
+    return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
   }
   
   bool touchesNorthPole() const {
@@ -263,6 +228,10 @@ public:
   const double getAngularAreaInSquaredDegrees() const{
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
   }
+
+  const GEORasterSymbol* createGEOSymbol(const Color& c) const;
+
+  Geodetic2D getClosesInnerPoint(const Geodetic2D& g) const;
 
 
 #ifdef JAVA_CODE

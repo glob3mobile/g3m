@@ -16,7 +16,7 @@
 #include "GL.hpp"
 
 const std::string TextureSpec::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(");
   isb->addString(_id);
   isb->addString(" ");
@@ -71,7 +71,7 @@ public:
   }
 
   const std::string description() const {
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("(#");
     isb->addString(_glTextureId->description());
     isb->addString(", counter=");
@@ -117,7 +117,7 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
 }
 
 
-const IGLTextureId* TexturesHandler::getGLTextureId(const IImage* image,
+const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                     int format,
                                                     const std::string& name,
                                                     bool hasMipMap) {
@@ -129,7 +129,7 @@ const IGLTextureId* TexturesHandler::getGLTextureId(const IImage* image,
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
-    return previousId;
+    return new TextureIDReference(previousId, this);
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
@@ -146,7 +146,7 @@ const IGLTextureId* TexturesHandler::getGLTextureId(const IImage* image,
 
   //showHolders("getGLTextureId(): created holder " + holder->description());
 
-  return holder->_glTextureId;
+  return new TextureIDReference(holder->_glTextureId, this);
 }
 
 void TexturesHandler::retainGLTextureId(const IGLTextureId* glTextureId) {
@@ -157,7 +157,7 @@ void TexturesHandler::retainGLTextureId(const IGLTextureId* glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
 
-    if (holder->_glTextureId->isEqualsTo(glTextureId)) {
+    if (holder->_glTextureId->isEquals(glTextureId)) {
       holder->retain();
 
       //showHolders("retainGLTextureId(): retained holder " + holder->description());
@@ -177,7 +177,7 @@ void TexturesHandler::releaseGLTextureId(const IGLTextureId* glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
 
-    if (holder->_glTextureId->isEqualsTo(glTextureId)) {
+    if (holder->_glTextureId->isEquals(glTextureId)) {
       holder->release();
 
       //showHolders("releaseGLTextureId(  ): released holder " + holder->description());
@@ -204,4 +204,14 @@ TexturesHandler::~TexturesHandler() {
   if (_textureHolders.size() > 0) {
     ILogger::instance()->logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
   }
+}
+
+
+TextureIDReference::~TextureIDReference(){
+  _texHandler->releaseGLTextureId(_id);
+}
+
+TextureIDReference* TextureIDReference::createCopy() const{
+  _texHandler->retainGLTextureId(_id);
+  return new TextureIDReference(_id, _texHandler);
 }

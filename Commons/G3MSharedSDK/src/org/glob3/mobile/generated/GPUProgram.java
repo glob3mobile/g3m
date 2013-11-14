@@ -75,7 +75,7 @@ public class GPUProgram
       {
         _uniforms[u.getIndex()] = u;
   
-        int code = GPUVariable.getUniformCode(u.getKey());
+        final int code = GPUVariable.getUniformCode(u._key);
         _uniformsCode = _uniformsCode | code;
       }
   
@@ -96,7 +96,7 @@ public class GPUProgram
       {
         _attributes[a.getIndex()] = a;
   
-        int code = GPUVariable.getAttributeCode(a.getKey());
+        final int code = GPUVariable.getAttributeCode(a._key);
         _attributesCode = _attributesCode | code;
       }
   
@@ -236,7 +236,7 @@ public class GPUProgram
   public final GPUUniformBool getGPUUniformBool(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u.getType() == GLType.glBool())
+    if (u!= null && u._type == GLType.glBool())
     {
       return (GPUUniformBool)u;
     }
@@ -245,7 +245,7 @@ public class GPUProgram
   public final GPUUniformVec2Float getGPUUniformVec2Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u.getType() == GLType.glVec2Float())
+    if (u!= null && u._type == GLType.glVec2Float())
     {
       return (GPUUniformVec2Float)u;
     }
@@ -254,7 +254,7 @@ public class GPUProgram
   public final GPUUniformVec4Float getGPUUniformVec4Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u.getType() == GLType.glVec4Float())
+    if (u!= null && u._type == GLType.glVec4Float())
     {
       return (GPUUniformVec4Float)u;
     }
@@ -263,7 +263,7 @@ public class GPUProgram
   public final GPUUniformFloat getGPUUniformFloat(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u.getType() == GLType.glFloat())
+    if (u!= null && u._type == GLType.glFloat())
     {
       return (GPUUniformFloat)u;
     }
@@ -272,7 +272,7 @@ public class GPUProgram
   public final GPUUniformMatrix4Float getGPUUniformMatrix4Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u.getType() == GLType.glMatrix4Float())
+    if (u!= null && u._type == GLType.glMatrix4Float())
     {
       return (GPUUniformMatrix4Float)u;
     }
@@ -299,7 +299,7 @@ public class GPUProgram
   public final GPUAttributeVec1Float getGPUAttributeVec1Float(String name)
   {
     GPUAttributeVec1Float a = (GPUAttributeVec1Float)getGPUAttribute(name);
-    if (a!= null && a.getSize() == 1 && a.getType() == GLType.glFloat())
+    if (a!= null && a._size == 1 && a._type == GLType.glFloat())
     {
       return (GPUAttributeVec1Float)a;
     }
@@ -309,7 +309,7 @@ public class GPUProgram
   public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
     GPUAttributeVec2Float a = (GPUAttributeVec2Float)getGPUAttribute(name);
-    if (a!= null && a.getSize() == 2 && a.getType() == GLType.glFloat())
+    if (a!= null && a._size == 2 && a._type == GLType.glFloat())
     {
       return (GPUAttributeVec2Float)a;
     }
@@ -319,7 +319,7 @@ public class GPUProgram
   public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
     GPUAttributeVec3Float a = (GPUAttributeVec3Float)getGPUAttribute(name);
-    if (a!= null && a.getSize() == 3 && a.getType() == GLType.glFloat())
+    if (a!= null && a._size == 3 && a._type == GLType.glFloat())
     {
       return (GPUAttributeVec3Float)a;
     }
@@ -329,7 +329,7 @@ public class GPUProgram
   public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
     GPUAttributeVec4Float a = (GPUAttributeVec4Float)getGPUAttribute(name);
-    if (a!= null && a.getSize() == 4 && a.getType() == GLType.glFloat())
+    if (a!= null && a._size == 4 && a._type == GLType.glFloat())
     {
       return (GPUAttributeVec4Float)a;
     }
@@ -388,17 +388,19 @@ public class GPUProgram
   
     for (int i = 0; i < _nUniforms; i++)
     {
-      if (_createdUniforms[i] != null) //Texture Samplers return null
+      GPUUniform uniform = _createdUniforms[i];
+      if (uniform != null) //Texture Samplers return null
       {
-        _createdUniforms[i].applyChanges(gl);
+        uniform.applyChanges(gl);
       }
     }
   
     for (int i = 0; i < _nAttributes; i++)
     {
-      if (_createdAttributes[i] != null)
+      GPUAttribute attribute = _createdAttributes[i];
+      if (attribute != null)
       {
-        _createdAttributes[i].applyChanges(gl);
+        attribute.applyChanges(gl);
       }
     }
   
@@ -462,7 +464,7 @@ public class GPUProgram
   public final GPUAttribute getGPUAttributeVecXFloat(int key, int x)
   {
     GPUAttribute a = getGPUAttribute(key);
-    if (a.getType() == GLType.glFloat() && a.getSize() == x)
+    if (a._type == GLType.glFloat() && a._size == x)
     {
       return a;
     }

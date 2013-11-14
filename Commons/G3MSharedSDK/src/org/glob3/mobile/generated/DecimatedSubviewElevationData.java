@@ -64,9 +64,9 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
       {
         final double height = elevationData.getElevationAt((int) mu.min(x, maxX), yy);
   
-        if (mu.isNan(height))
+        if ((height != height))
         {
-          return mu.NanD();
+          return java.lang.Double.NaN;
         }
   
         double size = ysize;
@@ -106,8 +106,6 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
     final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
     final Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
 
-    IMathUtils mu = IMathUtils.instance();
-
     for (int x = 0; x < _width; x++)
     {
       final double u0 = (double) x / (_width - 1);
@@ -129,7 +127,7 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
 
         if (!_hasNoData)
         {
-          if (mu.isNan(height))
+          if ((height != height))
           {
             _hasNoData = true;
           }

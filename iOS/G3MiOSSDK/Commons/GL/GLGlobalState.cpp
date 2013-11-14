@@ -15,6 +15,8 @@
 #include "INativeGL.hpp"
 #include "GL.hpp"
 
+bool GLGlobalState::_initializationAvailable = false;
+
 
 void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
 
@@ -91,7 +93,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   //Texture (After blending factors)
   if (_boundTextureId != NULL) {
     if (currentState._boundTextureId == NULL ||
-        !_boundTextureId->isEqualsTo(currentState._boundTextureId)) {
+        !_boundTextureId->isEquals(currentState._boundTextureId)) {
       nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
 
       currentState._boundTextureId = _boundTextureId;
@@ -100,7 +102,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     }
   }
 
-  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack){
+  if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack) {
     nativeGL->pixelStorei(GLAlignment::unpack(), _pixelStoreIAlignmentUnpack);
     currentState._pixelStoreIAlignmentUnpack = _pixelStoreIAlignmentUnpack;
   }

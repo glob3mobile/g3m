@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class GEORasterSymbol;
 //class ICanvas;
 //class GEORasterProjection;
 
@@ -110,13 +111,19 @@ public class Sector
   {
     final Angle lowLat = Angle.max(_lower._latitude, that._lower._latitude);
     final Angle lowLon = Angle.max(_lower._longitude, that._lower._longitude);
-    final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
     final Angle upLat = Angle.min(_upper._latitude, that._upper._latitude);
     final Angle upLon = Angle.min(_upper._longitude, that._upper._longitude);
-    final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
-    return new Sector(low, up);
+    if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon))
+    {
+      final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
+      final Geodetic2D up = new Geodetic2D(upLat, upLon);
+  
+      return new Sector(low, up);
+    }
+  
+    return Sector.fromDegrees(0, 0, 0, 0); //invalid
   }
 
   public final Sector mergedWith(Sector that)
@@ -137,36 +144,6 @@ public class Sector
     return new Sector(new Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(-180)), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(180)));
   }
 
-  public final Geodetic2D lower()
-  {
-    return _lower;
-  }
-
-  public final Angle lowerLatitude()
-  {
-    return _lower._latitude;
-  }
-
-  public final Angle lowerLongitude()
-  {
-    return _lower._longitude;
-  }
-
-  public final Geodetic2D upper()
-  {
-    return _upper;
-  }
-
-  public final Angle upperLatitude()
-  {
-    return _upper._latitude;
-  }
-
-  public final Angle upperLongitude()
-  {
-    return _upper._longitude;
-  }
-
   public final boolean contains(Angle latitude, Angle longitude)
   {
     return (latitude.isBetween(_lower._latitude, _upper._latitude) && longitude.isBetween(_lower._longitude, _upper._longitude));
@@ -177,38 +154,31 @@ public class Sector
     return contains(position._latitude, position._longitude);
   }
 
-  public final boolean contains(Geodetic3D position)
-  {
-    return contains(position._latitude, position._longitude);
-  }
-
   public final boolean touchesWith(Sector that)
   {
     // from Real-Time Collision Detection - Christer Ericson
     //   page 79
   
     // Exit with no intersection if separated along an axis
-    if (_upper._latitude.lowerThan(that._lower._latitude) || _lower._latitude.greaterThan(that._upper._latitude))
+  //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+  //      _lower._latitude.greaterThan(that._upper._latitude)) {
+  //    return false;
+  //  }
+  //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+  //      _lower._longitude.greaterThan(that._upper._longitude)) {
+  //    return false;
+  //  }
+    if ((_upper._latitude._radians < that._lower._latitude._radians) || (_lower._latitude._radians > that._upper._latitude._radians))
     {
       return false;
     }
-    if (_upper._longitude.lowerThan(that._lower._longitude) || _lower._longitude.greaterThan(that._upper._longitude))
+    if ((_upper._longitude._radians < that._lower._longitude._radians) || (_lower._longitude._radians > that._upper._longitude._radians))
     {
       return false;
     }
   
     // Overlapping on all axes means Sectors are intersecting
     return true;
-  }
-
-  public final Angle getDeltaLatitude()
-  {
-    return _deltaLatitude;
-  }
-
-  public final Angle getDeltaLongitude()
-  {
-    return _deltaLongitude;
   }
 
   public final Geodetic2D getSW()
@@ -280,13 +250,13 @@ public class Sector
 
   public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
   {
-  //  const Camera* camera = rc->getCurrentCamera();
-  //  const Planet* planet = rc->getPlanet();
-  //
-  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
-  //
-  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+    //  const Camera* camera = rc->getCurrentCamera();
+    //  const Planet* planet = rc->getPlanet();
+    //
+    //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+    //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+    //
+    //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
   
     if (planet.isFlat())
        return false;
@@ -368,9 +338,9 @@ public class Sector
     return new Sector(_lower.add(delta), _upper.sub(delta));
   }
 
-  public final boolean isEqualsTo(Sector that)
+  public final boolean isEquals(Sector that)
   {
-    return _lower.isEqualsTo(that._lower) && _upper.isEqualsTo(that._upper);
+    return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
   }
 
   public final boolean touchesNorthPole()
@@ -423,6 +393,61 @@ public class Sector
   public final double getAngularAreaInSquaredDegrees()
   {
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
+  }
+
+  public final GEORasterSymbol createGEOSymbol(Color c)
+  {
+  
+    java.util.ArrayList<Geodetic2D> line = new java.util.ArrayList<Geodetic2D>();
+  
+    line.add(new Geodetic2D(getSW()));
+    line.add(new Geodetic2D(getNW()));
+    line.add(new Geodetic2D(getNE()));
+    line.add(new Geodetic2D(getSE()));
+    line.add(new Geodetic2D(getSW()));
+  
+    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+  
+    float[] dashLengths = {};
+    int dashCount = 0;
+  
+    GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
+  
+  
+    return new GEORasterLineSymbol(line, ls);
+  
+  }
+
+  public final Geodetic2D getClosesInnerPoint(Geodetic2D g)
+  {
+    double lat = g._latitude._degrees;
+    double lon = g._longitude._degrees;
+  
+    if (lat > _upper._latitude._degrees)
+    {
+      lat = _upper._latitude._degrees;
+    }
+    else
+    {
+      if (lat < _lower._latitude._degrees)
+      {
+        lat = _lower._latitude._degrees;
+      }
+    }
+  
+    if (lon > _upper._longitude._degrees)
+    {
+      lon = _upper._longitude._degrees;
+    }
+    else
+    {
+      if (lon < _lower._longitude._degrees)
+      {
+        lon = _lower._longitude._degrees;
+      }
+    }
+  
+    return Geodetic2D.fromDegrees(lat, lon);
   }
 
 

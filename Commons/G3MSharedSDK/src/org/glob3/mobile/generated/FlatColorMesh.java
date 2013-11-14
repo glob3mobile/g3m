@@ -82,10 +82,10 @@ public class FlatColorMesh extends Mesh
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-    return _flatColor.getAlpha() != 1.0;
+    return _flatColor._alpha != 1.0;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     _glState.setParent(parentState);
     _mesh.render(rc, _glState);

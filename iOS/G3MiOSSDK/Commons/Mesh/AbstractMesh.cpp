@@ -43,7 +43,7 @@ AbstractMesh::AbstractMesh(const int primitive,
                            IFloatBuffer* vertices,
                            float lineWidth,
                            float pointSize,
-                           Color* flatColor,
+                           const Color* flatColor,
                            IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
@@ -131,19 +131,20 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
-                                              3,            //Our buffer contains elements of 3
-                                              0,            //Index 0
-                                              false,        //Not normalized
-                                              0,            //Stride 0
-                                              true,         //Depth test
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,   // The attribute is a float vector of 4 elements
+                                              3,            // Our buffer contains elements of 3
+                                              0,            // Index 0
+                                              false,        // Not normalized
+                                              0,            // Stride 0
+                                              _depthTest,   // Depth test
                                               false, 0,
-                                              false, (float)0.0, (float)0.0,
+                                              false, 0.0f, 0.0f,
                                               _lineWidth,
-                                              true, _pointSize),
+                                              true,
+                                               _pointSize),
                         false);   //POINT SIZE
 
-  if (_normals != NULL){
+  if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
                            false);
   }
@@ -177,8 +178,8 @@ void AbstractMesh::createGLState() {
 
 }
 
-void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
-
+void AbstractMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc);
 }

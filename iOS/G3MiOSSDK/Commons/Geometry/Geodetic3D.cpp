@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string Geodetic3D::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(lat=");
   isb->addString(_latitude.description());
   isb->addString(", lon=");
@@ -22,4 +22,10 @@ const std::string Geodetic3D::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+bool Geodetic3D::isEquals(const Geodetic3D& that) const {
+  return (_latitude.isEquals(that._latitude)   &&
+          _longitude.isEquals(that._longitude) &&
+          (_height == that._height));
 }

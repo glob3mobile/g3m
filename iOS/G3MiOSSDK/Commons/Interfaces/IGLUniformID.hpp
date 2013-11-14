@@ -17,7 +17,7 @@ public:
   virtual ~IGLUniformID() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 };
 

@@ -1,4 +1,36 @@
 package org.glob3.mobile.generated; 
+//
+//  PlanetRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 12/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+//
+//  PlanetRenderer.h
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 12/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+//class Tile;
+//class TileTessellator;
+//class TileTexturizer;
+//class LayerSet;
+//class VisibleSectorListenerEntry;
+//class VisibleSectorListener;
+//class ElevationDataProvider;
+//class LayerTilesRenderParameters;
+//class TerrainTouchListener;
+
+
+//class EllipsoidShape;
+//class TileRasterizer;
+
+
 public class TilesStatistics
 {
   private int _tilesProcessed;
@@ -40,6 +72,22 @@ public class TilesStatistics
        _renderedSector.dispose();
   }
 
+  public final void clear()
+  {
+    _tilesProcessed = 0;
+    _tilesVisible = 0;
+    _tilesRendered = 0;
+    _splitsCountInFrame = 0;
+    _buildersStartsInFrame = 0;
+    if (_renderedSector != null)
+       _renderedSector.dispose();
+    _renderedSector = null;
+    for (int i = 0; i < _maxLOD; i++)
+    {
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
+  }
+
   public final int getSplitsCountInFrame()
   {
     return _splitsCountInFrame;
@@ -64,7 +112,7 @@ public class TilesStatistics
   {
     _tilesProcessed++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
 
@@ -72,13 +120,13 @@ public class TilesStatistics
   {
     _tilesVisible++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
   public final void computeRenderedSector(Tile tile)
   {
-    final Sector sector = tile.getSector();
+    final Sector sector = tile._sector;
     if (_renderedSector == null)
     {
       _renderedSector = sector;
@@ -101,7 +149,7 @@ public class TilesStatistics
   {
     _tilesRendered++;
 
-    final int level = tile.getLevel();
+    final int level = tile._level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
 
@@ -165,6 +213,10 @@ public class TilesStatistics
   public final void log(ILogger logger)
   {
     logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
+//    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
+//                    _tilesProcessed,
+//                    _tilesVisible,
+//                    _tilesRendered);
   }
 
 }

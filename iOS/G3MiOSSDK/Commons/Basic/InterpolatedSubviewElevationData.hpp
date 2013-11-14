@@ -21,8 +21,6 @@ public:
                        sector,
                        extent)
   {
-    IMathUtils *mu = IMathUtils::instance();
-
     for (int x = 0; x < _width; x++) {
       const double u = (double) x / (_width - 1);
 
@@ -41,7 +39,7 @@ public:
         _buffer[index] = (float) height;
 
         if (!_hasNoData) {
-          if ( mu->isNan(height) ) {
+          if ( ISNAN(height) ) {
             _hasNoData = true;
           }
         }

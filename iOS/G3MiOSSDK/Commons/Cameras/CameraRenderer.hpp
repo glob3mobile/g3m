@@ -90,8 +90,8 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
 
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
+  RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
   }
 
   void start(const G3MRenderContext* rc) {

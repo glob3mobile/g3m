@@ -42,7 +42,7 @@ public abstract class GPUUniformValue extends RCObject
      return _type;
   }
   public abstract void setUniform(GL gl, IGLUniformID id);
-  public abstract boolean isEqualsTo(GPUUniformValue v);
+  public abstract boolean isEquals(GPUUniformValue v);
 
   public abstract String description();
 }

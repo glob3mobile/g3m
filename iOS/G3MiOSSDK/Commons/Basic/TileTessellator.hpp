@@ -17,6 +17,7 @@ class MutableVector2D;
 class IFloatBuffer;
 class ElevationData;
 class Geodetic2D;
+class Sector;
 
 #include "Vector2I.hpp"
 #include "Vector2D.hpp"
@@ -27,11 +28,11 @@ public:
   virtual ~TileTessellator() {
   }
 
-  virtual bool isReady(const G3MRenderContext *rc) const = 0;
+  virtual bool isReady(const G3MRenderContext* rc) const = 0;
 
   virtual Mesh* createTileMesh(const Planet* planet,
                                const Vector2I& resolution,
-                               const Tile* tile,
+                               Tile* tile,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
                                bool mercator,
@@ -58,6 +59,8 @@ public:
                                       const Angle& latitude,
                                       const Angle& longitude,
                                       bool mercator) const = 0;
+
+  virtual void setRenderedSector(const Sector& sector) = 0;
 
 };
 

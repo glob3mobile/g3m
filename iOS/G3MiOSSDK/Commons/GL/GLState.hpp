@@ -69,7 +69,7 @@ public:
 
   void applyOnGPU(GL* gl, GPUProgramManager& progManager) const;
 
-  void addGLFeature(const GLFeature* f, bool mustRetain);
+  void addGLFeature(GLFeature* f, bool mustRetain);
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
@@ -77,7 +77,7 @@ public:
 
   int getNumberOfGLFeatures() const;
 
-  const GLFeature* getGLFeature(GLFeatureID id) const;
+  GLFeature* getGLFeature(GLFeatureID id) const;
 };
 
 #endif

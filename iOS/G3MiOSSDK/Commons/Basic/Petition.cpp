@@ -12,7 +12,7 @@
 #include "IFactory.hpp"
 
 const std::string Petition::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Petition(url=");
   isb->addString(_url.description());
   isb->addString(", sector=");

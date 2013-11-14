@@ -1,0 +1,48 @@
+{
+"type": "FeatureCollection",
+                                                                                
+"features": [
+{ "type": "Feature", "id": 80, "properties": { "osm_id": 267901573.0, "timestamp": "2011-01-02T17:28:22Z", "name": "Quai des Artistes", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4239019, 43.7326575 ] } }
+,
+{ "type": "Feature", "id": 86, "properties": { "osm_id": 268166909.0, "timestamp": "2008-06-03T06:25:23Z", "name": "Terrazino", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4252627, 43.7409657 ] } }
+,
+{ "type": "Feature", "id": 94, "properties": { "osm_id": 274499413.0, "timestamp": "2008-07-19T09:02:12Z", "name": null, "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4296044, 43.743373 ] } }
+,
+{ "type": "Feature", "id": 95, "properties": { "osm_id": 274499623.0, "timestamp": "2008-06-29T08:53:34Z", "name": null, "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4295245, 43.7429081 ] } }
+,
+{ "type": "Feature", "id": 96, "properties": { "osm_id": 274499808.0, "timestamp": "2008-06-29T08:53:46Z", "name": null, "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.429533, 43.7427034 ] } }
+,
+{ "type": "Feature", "id": 97, "properties": { "osm_id": 274500242.0, "timestamp": "2008-06-29T08:56:09Z", "name": "pizzeria monegasque", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.420435, 43.7323099 ] } }
+,
+{ "type": "Feature", "id": 113, "properties": { "osm_id": 321647302.0, "timestamp": "2010-12-31T04:47:12Z", "name": "Brasserie de Monaco", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4218369, 43.7338617 ] } }
+,
+{ "type": "Feature", "id": 131, "properties": { "osm_id": 897654574.0, "timestamp": "2010-09-05T17:36:44Z", "name": "Wine O Clock", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.427851, 43.743312 ] } }
+,
+{ "type": "Feature", "id": 145, "properties": { "osm_id": 954710927.0, "timestamp": "2010-12-31T04:47:18Z", "name": "Chez Edgar", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.421936, 43.7336218 ] } }
+,
+{ "type": "Feature", "id": 148, "properties": { "osm_id": 967714511.0, "timestamp": "2010-10-28T08:50:34Z", "name": null, "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4271771, 43.7419592 ] } }
+,
+{ "type": "Feature", "id": 149, "properties": { "osm_id": 995175662.0, "timestamp": "2010-11-19T20:00:02Z", "name": "La Saliere", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.420397, 43.728519 ] } }
+,
+{ "type": "Feature", "id": 263, "properties": { "osm_id": 1306031292.0, "timestamp": "2011-05-30T18:32:08Z", "name": "P&P", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4180875, 43.7328256 ] } }
+,
+{ "type": "Feature", "id": 267, "properties": { "osm_id": 1306037369.0, "timestamp": "2012-04-12T13:22:01Z", "name": "My Sushi", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4203302, 43.7335118 ] } }
+,
+{ "type": "Feature", "id": 269, "properties": { "osm_id": 1661139834.0, "timestamp": "2012-03-05T19:44:18Z", "name": "Pizza&co", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4180333, 43.7324714 ] } }
+,
+{ "type": "Feature", "id": 278, "properties": { "osm_id": 1662811579.0, "timestamp": "2012-04-12T13:22:02Z", "name": "Planet Pasta", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4203091, 43.7336948 ] } }
+,
+{ "type": "Feature", "id": 284, "properties": { "osm_id": 1681938981.0, "timestamp": "2012-03-19T18:13:33Z", "name": "La Chaumière", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4138923, 43.7317102 ] } }
+,
+{ "type": "Feature", "id": 308, "properties": { "osm_id": 1702431977.0, "timestamp": "2012-04-05T09:20:27Z", "name": null, "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4256052, 43.7306291 ] } }
+,
+{ "type": "Feature", "id": 323, "properties": { "osm_id": 1712696727.0, "timestamp": "2012-04-12T13:21:26Z", "name": "Monte-Carlo Bar", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4186682, 43.7324669 ] } }
+,
+{ "type": "Feature", "id": 325, "properties": { "osm_id": 1712696752.0, "timestamp": "2012-04-12T13:21:26Z", "name": "Pizza Pino", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4194336, 43.7327812 ] } }
+,
+{ "type": "Feature", "id": 465, "properties": { "osm_id": 2068942499.0, "timestamp": "2012-12-15T21:25:33Z", "name": "Sodexo", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.4139465, 43.7288397 ] } }
+,
+{ "type": "Feature", "id": 540, "properties": { "osm_id": -1903473320.0, "timestamp": "2013-07-21T11:01:23Z", "name": "Castelroc", "type": "restaurant" }, "geometry": { "type": "Point", "coordinates": [ 7.420683, 43.730347 ] } }
+
+]
+}

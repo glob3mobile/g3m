@@ -58,7 +58,7 @@ unsigned char* Image_iOS::createByteArrayRGBA8888() const {
 }
 
 const std::string Image_iOS::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Image_iOS ");
   isb->addInt(getWidth());
   isb->addString("x");

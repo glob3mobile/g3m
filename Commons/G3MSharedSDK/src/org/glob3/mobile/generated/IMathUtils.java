@@ -21,10 +21,14 @@ package org.glob3.mobile.generated;
 //#define SIN(x) java.lang.Math.sin(x)
 //#define COS(x) java.lang.Math.cos(x)
 //#define TAN(x) java.lang.Math.tan(x)
+//#define NAND java.lang.Double.NaN
+//#define NANF java.lang.Float.NaN
 
 
 //#define PI 3.14159265358979323846264338327950288
 //#define HALF_PI 1.57079632679489661923132169163975144
+
+//#define ISNAN(x) (x != x)
 
 public abstract class IMathUtils
 {
@@ -50,11 +54,8 @@ public abstract class IMathUtils
   {
   }
 
-  public abstract boolean isNan(double v);
-  public abstract boolean isNan(float v);
-
-  public abstract double NanD();
-  public abstract float NanF();
+//  virtual double NanD() const = 0;
+//  virtual float  NanF() const = 0;
 
   public abstract double sin(double v);
   public abstract float sin(float v);

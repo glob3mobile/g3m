@@ -9,40 +9,49 @@
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
-#include "EllipsoidalTileTessellator.hpp"
+#include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "TileRasterizer.hpp"
 
+#include "CompositeTileRasterizer.hpp"
 
-PlanetRendererBuilder::PlanetRendererBuilder() {
-  _showStatistics = false;
-  _renderDebug = false;
-  _useTilesSplitBudget = true;
-  _forceFirstLevelTilesRenderOnStart = true;
-  _incrementalTileQuality = false;
-
-  _parameters = NULL;
-  _layerSet = NULL;
-  _texturizer = NULL;
-  _tileRasterizer = NULL;
-  _tileTessellator = NULL;
-  _visibleSectorListeners = NULL;
-  _stabilizationMilliSeconds = NULL;
-  _texturePriority = DownloadPriority::HIGHER;
-
-  _elevationDataProvider = NULL;
-  _verticalExaggeration = 0.0f;
+PlanetRendererBuilder::PlanetRendererBuilder() :
+_showStatistics(false),
+_renderDebug(false),
+_useTilesSplitBudget(true),
+_forceFirstLevelTilesRenderOnStart(true),
+_incrementalTileQuality(false),
+_quality(QUALITY_LOW),
+_parameters(NULL),
+_layerSet(NULL),
+_texturizer(NULL),
+_tileTessellator(NULL),
+_visibleSectorListeners(NULL),
+_stabilizationMilliSeconds(NULL),
+_texturePriority(DownloadPriority::HIGHER),
+_elevationDataProvider(NULL),
+_verticalExaggeration(0),
+_renderedSector(NULL)
+{
 }
 
 PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _parameters;
   delete _layerSet;
   delete _texturizer;
-  delete _tileRasterizer;
+
+  const int tileRasterizersSize = _tileRasterizers.size();
+  for (int i = 0 ; i < tileRasterizersSize; i++) {
+    TileRasterizer* tileRasterizer = _tileRasterizers[i];
+    delete tileRasterizer;
+  }
+
   delete _tileTessellator;
   delete _elevationDataProvider;
+
+  delete _renderedSector;
 }
 
 /**
@@ -59,7 +68,21 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
 }
 
 TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
-  return _tileRasterizer;
+  const int tileRasterizersSize = _tileRasterizers.size();
+
+  if (tileRasterizersSize == 0) {
+    return NULL;
+  }
+
+  if (tileRasterizersSize == 1) {
+    return _tileRasterizers[0];
+  }
+
+  CompositeTileRasterizer* result = new CompositeTileRasterizer();
+  for (int i = 0; i < tileRasterizersSize; i++) {
+    result->addTileRasterizer(_tileRasterizers[i]);
+  }
+  return result;
 }
 
 /**
@@ -146,6 +169,14 @@ bool PlanetRendererBuilder::getIncrementalTileQuality() {
   return _incrementalTileQuality;
 }
 
+Quality PlanetRendererBuilder::getQuality() const {
+  return _quality;
+}
+
+void PlanetRendererBuilder::setQuality(Quality quality) {
+  _quality = quality;
+}
+
 /**
  * Returns the array of visibleSectorListeners.
  */
@@ -185,12 +216,8 @@ void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator)
   _tileTessellator = tileTessellator;
 }
 
-void PlanetRendererBuilder::setTileRasterizer(TileRasterizer* tileRasterizer) {
-  if (_tileRasterizer) {
-    ILogger::instance()->logError("LOGIC ERROR: _tileRasterizer already initialized");
-    return;
-  }
-  _tileRasterizer = tileRasterizer;
+void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
+  _tileRasterizers.push_back(tileRasterizer);
 }
 
 void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
@@ -240,7 +267,7 @@ void PlanetRendererBuilder::setIncrementalTileQuality(const bool incrementalTile
 void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* listener,
                                                      const TimeInterval& stabilizationInterval) {
   getVisibleSectorListeners()->push_back(listener);
-  getStabilizationMilliSeconds()->push_back(stabilizationInterval.milliseconds());
+  getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
 void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
@@ -284,7 +311,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getLayerSet(),
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTexturePriority());
+                                                      getTexturePriority(),
+                                                      getRenderedSector());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -294,7 +322,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
-  _tileRasterizer = NULL;
   _tileTessellator = NULL;
   delete _visibleSectorListeners;
   _visibleSectorListeners = NULL;
@@ -303,6 +330,11 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   _elevationDataProvider = NULL;
 
+  delete _renderedSector;
+  _renderedSector = NULL;
+
+  _tileRasterizers.clear();
+
   return planetRenderer;
 }
 
@@ -310,13 +342,35 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
                                    getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
-                                   getIncrementalTileQuality());
+                                   getIncrementalTileQuality(),
+                                   getQuality());
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-  return new EllipsoidalTileTessellator(true);
+  return new PlanetTileTessellator(true, getRenderedSector());
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {
   return LayerBuilder::createDefaultSatelliteImagery();
+}
+
+void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {
+  if (_renderedSector != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _renderedSector already initialized");
+    return;
+  }
+  _renderedSector = new Sector(sector);
+}
+
+Sector PlanetRendererBuilder::getRenderedSector() {
+  if (_renderedSector == NULL) {
+    return Sector::fullSphere();
+  }
+  return *_renderedSector;
+}
+
+GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  addTileRasterizer(geoTileRasterizer);
+  return geoTileRasterizer;
 }

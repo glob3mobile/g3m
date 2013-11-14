@@ -24,7 +24,7 @@ private:
   float*           _dashLengths;
 #endif
 #ifdef JAVA_CODE
-  final float[]    _dashLengths;
+  private final float[]    _dashLengths;
 #endif
   const int        _dashCount;
   const int        _dashPhase;
@@ -58,6 +58,18 @@ public:
     System.arraycopy(dashLengths, 0, _dashLengths, 0, _dashCount);
 #endif
   }
+
+#ifdef JAVA_CODE
+  public GEO2DLineRasterStyle(final Color color,
+                              final float width,
+                              final StrokeCap cap,
+                              final StrokeJoin join,
+                              final float miterLimit,
+                              final float[] dashLengths,
+                              final int dashPhase) {
+    this(color, width, cap, join, miterLimit, dashLengths, dashLengths.length, dashPhase);
+  }
+#endif
 
   GEO2DLineRasterStyle(const GEO2DLineRasterStyle& that) :
   _color(that._color),

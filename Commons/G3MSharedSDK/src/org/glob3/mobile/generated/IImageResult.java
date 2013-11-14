@@ -26,8 +26,9 @@ package org.glob3.mobile.generated;
 
 public class IImageResult
 {
-  private IImage _image;
-  private final boolean _expired;
+  public IImage _image;
+  public final boolean _expired;
+
 
   public IImageResult(IImage image, boolean expired)
   {
@@ -39,13 +40,12 @@ public class IImageResult
   {
   }
 
-  public final IImage getImage()
-  {
-    return _image;
-  }
+//  IImage* getImage() const {
+//    return _image;
+//  }
 
-  public final boolean isExpired()
-  {
-    return _expired;
-  }
+//  bool isExpired() const {
+//    return _expired;
+//  }
+
 }

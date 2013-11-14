@@ -87,8 +87,6 @@ public class TrailSegment
     final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(),
-    //                                             Vector3D::zero);
   
   
     final Vector3D rotationAxis = Vector3D.downZ();
@@ -104,25 +102,23 @@ public class TrailSegment
       vertices.add(offsetP.transformedBy(matrix, 1));
     }
   
-    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color));
+    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
   
-    // Debug unions
+    return surfaceMesh;
+  
+  //  // Debug unions
   //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
   //                                   false,
-  //                                   center,
-  //                                   vertices,
+  //                                   vertices.getCenter(),
+  //                                   vertices.create(),
   //                                   2,
   //                                   1,
   //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-  //
   //  CompositeMesh* cm = new CompositeMesh();
-  //
   //  cm->addMesh(surfaceMesh);
   //  cm->addMesh(edgesMesh);
-  //
   //  return cm;
   
-    return surfaceMesh;
   }
 
   private Mesh _mesh;
@@ -174,18 +170,23 @@ public class TrailSegment
     return _positions.size();
   }
 
-  public final void addPosition(Geodetic3D position)
+  public final void addPosition(Angle latitude, Angle longitude, double height)
   {
     _positionsDirty = true;
-    _positions.add(new Geodetic3D(position));
+    _positions.add(new Geodetic3D(latitude, longitude, height));
   }
 
-  public final void setNextSegmentFirstPosition(Geodetic3D position)
+  public final void addPosition(Geodetic3D position)
+  {
+    addPosition(position._latitude, position._longitude, position._height);
+  }
+
+  public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height)
   {
     _positionsDirty = true;
     if (_nextSegmentFirstPosition != null)
        _nextSegmentFirstPosition.dispose();
-    _nextSegmentFirstPosition = new Geodetic3D(position);
+    _nextSegmentFirstPosition = new Geodetic3D(latitude, longitude, height);
   }
 
   public final void setPreviousSegmentLastPosition(Geodetic3D position)

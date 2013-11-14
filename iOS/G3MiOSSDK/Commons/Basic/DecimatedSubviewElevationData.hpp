@@ -32,8 +32,6 @@ public:
     const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
     const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
 
-    IMathUtils *mu = IMathUtils::instance();
-
     for (int x = 0; x < _width; x++) {
       const double u0 = (double) x     / (_width - 1);
       const double u1 = (double) (x+1) / (_width - 1);
@@ -54,7 +52,7 @@ public:
         _buffer[index] = (float) height;
 
         if (!_hasNoData) {
-          if (mu->isNan(height)) {
+          if (ISNAN(height)) {
             _hasNoData = true;
           }
         }

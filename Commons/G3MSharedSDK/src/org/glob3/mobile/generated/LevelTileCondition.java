@@ -36,14 +36,19 @@ public class LevelTileCondition extends LayerCondition
 
   public final boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
-    final int level = tile.getLevel();
+    final int level = tile._level;
     return ((level >= _minLevel) && (level <= _maxLevel));
   }
 
   public final boolean isAvailable(G3MEventContext ec, Tile tile)
   {
-    final int level = tile.getLevel();
+    final int level = tile._level;
     return ((level >= _minLevel) && (level <= _maxLevel));
+  }
+
+  public final LayerCondition copy()
+  {
+    return new LevelTileCondition(_minLevel, _maxLevel);
   }
 
 }

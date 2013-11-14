@@ -14,9 +14,14 @@
 class GoogleMapsLayer : public Layer {
 private:
   const std::string _key;
-  const Sector      _sector;
+  const int         _initialLevel;
 
 protected:
+  std::string getLayerType() const{
+    return "GoogleMaps";
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 
@@ -34,6 +39,8 @@ public:
                                                 const Tile* tile) const;
 
   const std::string description() const;
+
+  GoogleMapsLayer* copy() const;
 
 };
 

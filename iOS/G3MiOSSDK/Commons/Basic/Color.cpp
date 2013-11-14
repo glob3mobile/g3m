@@ -84,7 +84,7 @@ Color* Color::parse(const std::string& str) {
   return Color::newFromRGBA(r, g, b, a);
 }
 
-bool Color::isEqualsTo(const Color& that) const {
+bool Color::isEquals(const Color& that) const {
   return ((_red   == that._red  ) &&
           (_green == that._green) &&
           (_blue  == that._blue ) &&
@@ -115,9 +115,9 @@ float Color::getBrightness() const {
 double Color::getHueInRadians() const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const float r = getRed();
-  const float g = getGreen();
-  const float b = getBlue();
+  const float r = _red;
+  const float g = _green;
+  const float b = _blue;
 
   const float max = mu->max(r, g, b);
   const float min = mu->min(r, g, b);
@@ -206,7 +206,7 @@ Color Color::wheelStep(int wheelSize,
 }
 
 const std::string Color::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("[Color red=");
   isb->addFloat(_red);
   isb->addString(", green=");

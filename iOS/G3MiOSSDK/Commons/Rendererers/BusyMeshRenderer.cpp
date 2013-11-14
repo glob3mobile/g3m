@@ -20,59 +20,13 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "GLConstants.hpp"
-
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUUniform.hpp"
+#include "Camera.hpp"
 
 void BusyMeshRenderer::initialize(const G3MContext* context)
 {
-  unsigned int numStrides = 60;
-
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  
-  FloatBufferBuilderFromColor colors;
-  ShortBufferBuilder indices;
-  
-  int indicesCounter=0;
-  const float r1=12;
-  const float r2=18;
-  for (int step=0; step<=numStrides; step++) {
-    const double angle = (double) step * 2 * PI / numStrides;
-    const double c = IMathUtils::instance()->cos(angle);
-    const double s = IMathUtils::instance()->sin(angle);
-    
-    vertices.add( (r1 * c), (r1 * s), 0);
-    vertices.add( (r2 * c), (r2 * s), 0);
-    
-    indices.add((short) (indicesCounter++));
-    indices.add((short) (indicesCounter++));
-    
-    float col = (float) (1.1 * step / numStrides);
-    if (col>1) {
-      colors.add(255, 255, 255, 0);
-      colors.add(255, 255, 255, 0);
-    } else {
-      colors.add(255, 255, 255, 1 - col);
-      colors.add(255, 255, 255, 1 - col);
-    }
-  }
-  
-  // the two last indices
-  indices.add((short) 0);
-  indices.add((short) 1);
-  
-  // create mesh
-  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
-                          true,
-                          vertices.getCenter(),
-                          vertices.create(),
-                          indices.create(),
-                          1,
-                          1,
-                          NULL,
-                          colors.create());
 }
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -84,30 +38,108 @@ void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
 }
 
-void BusyMeshRenderer::render(const G3MRenderContext* rc, GLState* glState)
-{
-  GL* gl = rc->getGL();
-
-  createGLState();
-  
-  gl->clearScreen(*_backgroundColor);
-  
-  _mesh->render(rc, _glState);
-}
-
 void BusyMeshRenderer::createGLState() {
-
   if (_projectionFeature == NULL) {
     _projectionFeature = new ProjectionGLFeature(_projectionMatrix.asMatrix44D());
     _glState->addGLFeature(_projectionFeature, false);
-  } else{
+  }
+  else {
     _projectionFeature->setMatrix(_projectionMatrix.asMatrix44D());
   }
 
   if (_modelFeature == NULL) {
     _modelFeature = new ModelGLFeature(_modelviewMatrix.asMatrix44D());
     _glState->addGLFeature(_modelFeature, false);
-  } else{
+  }
+  else {
     _modelFeature->setMatrix(_modelviewMatrix.asMatrix44D());
   }
+}
+
+Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
+  const int numStrides = 5;
+
+  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  FloatBufferBuilderFromColor colors;
+  ShortBufferBuilder indices;
+
+  int indicesCounter = 0;
+
+  const float innerRadius = 0;
+
+//  const float r2=50;
+  const Camera* camera = rc->getCurrentCamera();
+  const int width  = camera->getWidth();
+  const int height = camera->getHeight();
+  const int minSize = (width < height) ? width : height;
+  const float outerRadius = minSize / 15.0f;
+
+  const IMathUtils* mu = IMathUtils::instance();
+
+  for (int step = 0; step <= numStrides; step++) {
+    const double angle = (double) step * 2 * PI / numStrides;
+    const double c = mu->cos(angle);
+    const double s = mu->sin(angle);
+
+    vertices.add( (innerRadius * c), (innerRadius * s), 0);
+    vertices.add( (outerRadius * c), (outerRadius * s), 0);
+
+    indices.add((short) (indicesCounter++));
+    indices.add((short) (indicesCounter++));
+
+    //    float col = (float) (1.0 * step / numStrides);
+    //    if (col>1) {
+    //      colors.add(1, 1, 1, 0);
+    //      colors.add(1, 1, 1, 0);
+    //    }
+    //    else {
+    //      colors.add(1, 1, 1, 1 - col);
+    //      colors.add(1, 1, 1, 1 - col);
+    //    }
+
+    //    colors.add(Color::red().wheelStep(numStrides, step));
+    //    colors.add(Color::red().wheelStep(numStrides, step));
+
+    colors.add(1, 1, 1, 1);
+    colors.add(1, 1, 1, 0);
+  }
+
+  // the two last indices
+  indices.add((short) 0);
+  indices.add((short) 1);
+
+  // create mesh
+  return new IndexedMesh(GLPrimitive::triangleStrip(),
+                         true,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create(),
+                         1,
+                         1,
+                         NULL,
+                         colors.create());
+}
+
+Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
+  if (_mesh == NULL) {
+    _mesh = createMesh(rc);
+  }
+  return _mesh;
+}
+
+void BusyMeshRenderer::render(const G3MRenderContext* rc,
+                              GLState* glState)
+{
+  GL* gl = rc->getGL();
+
+  createGLState();
+  
+  gl->clearScreen(*_backgroundColor);
+
+  Mesh* mesh = getMesh(rc);
+  if (mesh != NULL) {
+    mesh->render(rc, _glState);
+  }
+//  _mesh->render(rc, _glState);
 }

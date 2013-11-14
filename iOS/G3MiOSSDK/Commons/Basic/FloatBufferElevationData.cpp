@@ -12,15 +12,16 @@
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
 
-const float FloatBufferElevationData::NO_DATA_VALUE = IMathUtils::instance()->NanF();
+const float FloatBufferElevationData::NO_DATA_VALUE = NANF;
 
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
                                                    const Sector& realSector,
                                                    const Vector2I& realExtent,
-                                                   IFloatBuffer* buffer) :
-BufferElevationData(sector, extent, realSector, realExtent, buffer->size()),
+                                                   IFloatBuffer* buffer,
+                                                   double deltaHeight) :
+BufferElevationData(sector, extent, realSector, realExtent, buffer->size(), deltaHeight),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
@@ -49,13 +50,13 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
   const float value = _buffer->get(index);
   if (value == NO_DATA_VALUE) {
-    return IMathUtils::instance()->NanD();
+    return NAND;
   }
   return value;
 }
 
 const std::string FloatBufferElevationData::description(bool detailed) const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(FloatBufferElevationData extent=");
   isb->addInt(_width);
   isb->addString("x");

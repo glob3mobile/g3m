@@ -20,15 +20,20 @@
 		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
 		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
 		CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */; };
+		CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CF3CA9DA182D99D500483977 /* isosurface-mesh.json */; };
 		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
+		CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF8BE69217E0D22D0072273A /* aus4326.bil */; };
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
+		CF8E9887180D98DC00A08208 /* pointcloud in Resources */ = {isa = PBXBuildFile; fileRef = CF8E9886180D98DC00A08208 /* pointcloud */; };
 		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
 		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
+		CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */ = {isa = PBXBuildFile; fileRef = CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */; };
 		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
 		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
+		CFA245431800708D00921325 /* washington-memorial.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA245421800708D00921325 /* washington-memorial.json */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
@@ -117,15 +122,21 @@
 		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = citation.json; sourceTree = "<group>"; };
 		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
 		CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_bil16_150x150.bil; sourceTree = "<group>"; };
+		CF3CA9DA182D99D500483977 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
 		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		CF4027E81770E8F900D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cc3d4326.json; sourceTree = "<group>"; };
+		CF8BE69217E0D22D0072273A /* aus4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = aus4326.bil; sourceTree = "<group>"; };
+		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
+		CF8E9886180D98DC00A08208 /* pointcloud */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pointcloud; sourceTree = "<group>"; };
 		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
 		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
+		CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial-normals.json"; sourceTree = "<group>"; };
 		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
 		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CFA245421800708D00921325 /* washington-memorial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial.json"; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -216,8 +227,8 @@
 			children = (
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
-				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
 				D8EEF3871577920B003FEB5E /* Products */,
+				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -285,6 +296,13 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF3CA9DA182D99D500483977 /* isosurface-mesh.json */,
+				CF8E9886180D98DC00A08208 /* pointcloud */,
+				CFA245421800708D00921325 /* washington-memorial.json */,
+				CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */,
+				CF8BE69217E0D22D0072273A /* aus4326.bil */,
+				CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */,
+				CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */,
 				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
 				E70B224C1700DBA300172DF3 /* A320.bson */,
 				CF186B0316B8572400A39478 /* A320.json */,
@@ -385,7 +403,12 @@
 		D8EEF37D1577920A003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					D8EEF3851577920A003FEB5E = {
+						DevelopmentTeam = N847RXR927;
+					};
+				};
 			};
 			buildConfigurationList = D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "G3MiOSDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -437,11 +460,13 @@
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
+				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
+				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				E71B153A1626D27F003D1013 /* Default-Portrait@2x.png in Resources */,
 				E71B153B1626D27F003D1013 /* Icon-72.png in Resources */,
 				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
@@ -457,6 +482,7 @@
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
+				CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */,
 				CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */,
 				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
 				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
@@ -487,7 +513,9 @@
 				D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */,
 				D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */,
 				D87DFC7617CF61200036C466 /* FlatColorMesh+DirectionLight.fsh in Resources */,
+				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
 				D87DFC7717CF61200036C466 /* FlatColorMesh+DirectionLight.vsh in Resources */,
+				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,9 +574,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -564,13 +593,17 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -584,9 +617,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -595,10 +629,13 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -617,7 +654,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
@@ -632,6 +669,7 @@
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
@@ -644,6 +682,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
@@ -653,6 +693,7 @@
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = G3MiOSDemo;
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";

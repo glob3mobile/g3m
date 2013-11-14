@@ -18,104 +18,109 @@ class Angle;
 
 
 class RotateWithAxisEffect : public EffectWithForce {
-public:
-  
-  RotateWithAxisEffect(const Vector3D& axis, const Angle& angle);
-  
-  virtual ~RotateWithAxisEffect() {};
-  
-  virtual void start(const G3MRenderContext *rc, const TimeInterval& when) {}
-  
-  virtual void doStep(const G3MRenderContext *rc, const TimeInterval& when);
-  
-  virtual void stop(const G3MRenderContext *rc, const TimeInterval& when);
-  
-  virtual void cancel(const TimeInterval& when) {}
-  
 private:
-  Vector3D _axis;
+  const Vector3D _axis;
+
+public:
+  RotateWithAxisEffect(const Vector3D& axis,
+                       const Angle& angle);
+
+  virtual ~RotateWithAxisEffect() {
+  }
+
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when) {
+  }
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when);
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when);
+
+  void cancel(const TimeInterval& when) {
+  }
 };
 
-//***************************************************************
 
 class SingleTranslationEffect : public EffectWithForce {
-public:
-  
-  SingleTranslationEffect(const Vector3D& desp);
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when) {}
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when);
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when);
-  
-  virtual void cancel(const TimeInterval& when) {}
-  
 private:
-  Vector3D _direction;
+  const Vector3D _direction;
+
+public:
+
+  SingleTranslationEffect(const Vector3D& desp);
+
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when) {
+  }
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when);
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when);
+
+  void cancel(const TimeInterval& when) {
+  }
+
 };
 
 
-//***************************************************************
-
 class DoubleTapRotationEffect : public EffectWithDuration {
+private:
+  const Vector3D _axis;
+  const Angle    _angle;
+  const double   _distance;
+  double         _lastAlpha;
+
 public:
-  
   DoubleTapRotationEffect(const TimeInterval& duration,
                           const Vector3D& axis,
                           const Angle& angle,
                           double distance,
                           const bool linearTiming=false);
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when);
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when);
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when);
-  
-  virtual void cancel(const TimeInterval& when) {}
-  
-private:
-  Vector3D _axis;
-  Angle    _angle;
-  double   _distance;
-  double   _lastAlpha;
+
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when);
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when);
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when);
+
+  void cancel(const TimeInterval& when) {
+  }
+
 };
 
-//***************************************************************
 
 class DoubleTapTranslationEffect : public EffectWithDuration {
+private:
+  const Vector3D _translation;
+  const double   _distance;
+  double         _lastAlpha;
+
 public:
-  
+
   DoubleTapTranslationEffect(const TimeInterval& duration,
                              const Vector3D& translation,
                              double distance,
                              const bool linearTiming=false);
-  
-  virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& when);
-  
-  virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& when);
-  
-  virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& when);
-  
-  virtual void cancel(const TimeInterval& when) {}
-  
-private:
-  Vector3D _translation;
-  double   _distance;
-  double   _lastAlpha;
+
+  void start(const G3MRenderContext* rc,
+             const TimeInterval& when);
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when);
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when);
+
+  void cancel(const TimeInterval& when) {}
+
 };
-
-
 
 
 #endif

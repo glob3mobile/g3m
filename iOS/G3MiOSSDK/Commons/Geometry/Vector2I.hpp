@@ -11,6 +11,7 @@
 
 #include "Angle.hpp"
 #include "MutableVector2I.hpp"
+#include "IStringBuilder.hpp"
 
 class Vector2I {
 public:
@@ -62,7 +63,20 @@ public:
   MutableVector2I asMutableVector2I() const {
     return MutableVector2I(_x, _y);
   }
+
+  const std::string description() const {
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("(V2I ");
+    isb->addDouble(_x);
+    isb->addString(", ");
+    isb->addDouble(_y);
+    isb->addString(")");
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
   
+  bool isEquals(const Vector2I& that) const;
 };
 
 #endif

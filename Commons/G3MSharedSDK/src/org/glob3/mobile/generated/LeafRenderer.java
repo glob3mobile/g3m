@@ -37,7 +37,7 @@ public abstract class LeafRenderer extends Renderer
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -59,7 +59,7 @@ public abstract class LeafRenderer extends Renderer
 
   public abstract void initialize(G3MContext context);
 
-  public abstract boolean isReadyToRender(G3MRenderContext rc);
+  public abstract RenderState getRenderState(G3MRenderContext rc);
 
   public abstract void render(G3MRenderContext rc, GLState glState);
 
@@ -74,6 +74,16 @@ public abstract class LeafRenderer extends Renderer
   public SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return null;
+  }
+
+  public PlanetRenderer getPlanetRenderer()
+  {
+    return null;
+  }
+
+  public boolean isPlanetRenderer()
+  {
+    return false;
   }
 
 }

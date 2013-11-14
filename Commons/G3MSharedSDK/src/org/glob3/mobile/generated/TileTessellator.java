@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class ElevationData;
 //class Geodetic2D;
+//class Sector;
 
 
 
@@ -49,5 +50,7 @@ public abstract class TileTessellator
   }
 
   public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
+
+  public abstract void setRenderedSector(Sector sector);
 
 }

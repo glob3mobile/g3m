@@ -81,9 +81,9 @@ public class TrailsRenderer extends LeafRenderer
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return true;
+    return RenderState.ready();
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -122,7 +122,9 @@ public class TrailsRenderer extends LeafRenderer
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 64
+///#include "CompositeMesh.hpp"
+
+//#define MAX_POSITIONS_PER_SEGMENT 128
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer

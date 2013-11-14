@@ -6,10 +6,10 @@ import java.util.HashMap;
 
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
@@ -38,17 +38,7 @@ public final class Factory_WebGL
    }
 
    // TODO TEMP HACK TO PRELOAD IMAGES
-   final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
-
-
-   @Override
-   public void createImageFromFileName(final String filename,
-                                       final IImageListener listener,
-                                       final boolean autodelete) {
-      final IImage result = _downloadedImages.get(filename);
-      listener.imageCreated(result);
-      //      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
-   }
+   private final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
 
 
    public void storeDownloadedImage(final String url,
@@ -66,37 +56,6 @@ public final class Factory_WebGL
       if (image != null) {
          image.dispose();
       }
-   }
-
-
-   //   @Override
-   //   public native void createImageFromSize(final int width,
-   //                                          final int height,
-   //                                          final IImageListener listener,
-   //                                          final boolean autodelete) /*-{
-   //		//      return new Image_WebGL(width, height);
-   //
-   //		var canvas = $doc.createElement("canvas");
-   //		canvas.width = width;
-   //		canvas.height = height;
-   //
-   //		var context = canvas.getContext("2d");
-   //		context.clearRect(0, 0, width, height);
-   //
-   //		var jsResult = new Image();
-   //		jsResult.onload = function() {
-   //			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-   //			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-   //		};
-   //		jsResult.src = canvas.toDataURL();
-   //   }-*/;
-
-
-   @Override
-   public void createImageFromBuffer(final IByteBuffer buffer,
-                                     final IImageListener listener,
-                                     final boolean autodelete) {
-      throw new RuntimeException("NOT IMPLEMENTED IMAGE FORM BUFFER");
    }
 
 
@@ -167,15 +126,33 @@ public final class Factory_WebGL
    }
 
 
+   //   @Override
+   //   public IShortBuffer createShortBuffer(final short[] array) {
+   //      return new ShortBuffer_WebGL(array);
+   //   }
+   //   @Override
+   //   public IFloatBuffer createFloatBuffer(final float[] array) {
+   //      return new FloatBuffer_WebGL(array);
+   //   }
+
+
    @Override
-   public IShortBuffer createShortBuffer(final short[] array) {
-      return new ShortBuffer_WebGL(array);
+   public IShortBuffer createShortBuffer(final short[] array,
+                                         final int length) {
+      return new ShortBuffer_WebGL(array, length);
    }
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(final float[] array) {
-      return new FloatBuffer_WebGL(array);
+   public IFloatBuffer createFloatBuffer(final float[] array,
+                                         final int length) {
+      return new FloatBuffer_WebGL(array, length);
+   }
+
+
+   @Override
+   protected IDeviceInfo createDeviceInfo() {
+      return new DeviceInfo_WebGL();
    }
 
 }

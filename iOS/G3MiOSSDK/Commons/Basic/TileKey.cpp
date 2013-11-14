@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 const std::string TileKey::description() const {  
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(level=");
   isb->addInt(_level);
   isb->addString(", row=");
@@ -25,7 +25,7 @@ const std::string TileKey::description() const {
 }
 
 const std::string TileKey::tinyDescription() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addInt(_level);
   isb->addString("-");
   isb->addInt(_row);

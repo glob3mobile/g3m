@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 
 public class CartoDBLayer extends MercatorTiledLayer
 {
+  private final String _userName;
+  private final String _table;
 
   private static java.util.ArrayList<String> getSubdomains()
   {
@@ -28,6 +30,17 @@ public class CartoDBLayer extends MercatorTiledLayer
     result.add("2.");
     result.add("3.");
     return result;
+  }
+
+  protected final String getLayerType()
+  {
+    return "CartoDB";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    CartoDBLayer t = (CartoDBLayer) that;
+    return (_domain.equals(t._domain));
   }
 
 
@@ -45,12 +58,19 @@ public class CartoDBLayer extends MercatorTiledLayer
                //int initialCartoDBLevel = 1,
   {
      super("CartoDBLayer", "http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, condition);
+     _userName = userName;
+     _table = table;
 
   }
 
   public final String description()
   {
     return "[CartoDBLayer]";
+  }
+
+  public final CartoDBLayer copy()
+  {
+    return new CartoDBLayer(_userName, _table, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
   }
 
 }

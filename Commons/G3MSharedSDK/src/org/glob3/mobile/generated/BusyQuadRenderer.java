@@ -20,14 +20,12 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "GPUProgramState.hpp"
-
-
 
 //***************************************************************
 
 
-public class BusyQuadRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 {
   private double _degrees;
   //  const std::string _textureFilename;
@@ -40,11 +38,9 @@ public class BusyQuadRenderer extends LeafRenderer
 
   private boolean initMesh(G3MRenderContext rc)
   {
-    //TEXTURED
-    IGLTextureId texId = null;
-  //  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+    TextureIDReference texId = null;
   
-    texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
+    texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   
     rc.getFactory().deleteImage(_image);
     _image = null;
@@ -111,9 +107,9 @@ public class BusyQuadRenderer extends LeafRenderer
   {
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return true;
+    return RenderState.ready();
   }
 
 

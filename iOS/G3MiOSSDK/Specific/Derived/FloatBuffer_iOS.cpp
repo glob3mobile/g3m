@@ -11,8 +11,8 @@
 #include <sstream>
 #include <OpenGLES/ES2/gl.h>
 
+long long FloatBuffer_iOS::_nextID = 0;
 GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
-
 
 const std::string FloatBuffer_iOS::description() const {
   std::ostringstream oss;
@@ -23,7 +23,6 @@ const std::string FloatBuffer_iOS::description() const {
   oss << ", timestamp=";
   oss << _timestamp;
   oss << ", values=(";
-//  oss << _values;
   for (int i = 0; i < _size; i++) {
     if (i > 0) {
       oss << ",";
@@ -42,6 +41,10 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
     glDeleteBuffers(1, &_vertexBuffer);
     if (GL_NO_ERROR != glGetError()) {
       ILogger::instance()->logError("Problem deleting VBO");
+    }
+
+    if (_vertexBuffer == _boundVertexBuffer) {
+      _boundVertexBuffer = -1;
     }
   }
 

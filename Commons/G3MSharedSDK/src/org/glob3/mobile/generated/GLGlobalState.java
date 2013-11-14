@@ -28,6 +28,9 @@ package org.glob3.mobile.generated;
 
 public class GLGlobalState
 {
+
+  private static boolean _initializationAvailable = false;
+
   private boolean _depthTest;
   private boolean _blend;
   private boolean _cullFace;
@@ -76,6 +79,11 @@ public class GLGlobalState
   }
 
 
+  public static void initializationAvailable()
+  {
+    _initializationAvailable = true;
+  }
+
   public GLGlobalState()
   {
      _depthTest = false;
@@ -94,6 +102,12 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
+
+    if (!_initializationAvailable)
+    {
+      ILogger.instance().logError("GLGlobalState creation before it is available.");
+    }
+
   }
 
   public static GLGlobalState newDefault()
@@ -210,10 +224,10 @@ public class GLGlobalState
 
   public final void setClearColor(Color color)
   {
-    _clearColorR = color.getRed();
-    _clearColorG = color.getGreen();
-    _clearColorB = color.getBlue();
-    _clearColorA = color.getAlpha();
+    _clearColorR = color._red;
+    _clearColorG = color._green;
+    _clearColorB = color._blue;
+    _clearColorA = color._alpha;
   }
 
   public final void applyChanges(GL gl, GLGlobalState currentState)
@@ -308,7 +322,7 @@ public class GLGlobalState
     //Texture (After blending factors)
     if (_boundTextureId != null)
     {
-      if (currentState._boundTextureId == null || !_boundTextureId.isEqualsTo(currentState._boundTextureId))
+      if (currentState._boundTextureId == null || !_boundTextureId.isEquals(currentState._boundTextureId))
       {
         nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId);
   

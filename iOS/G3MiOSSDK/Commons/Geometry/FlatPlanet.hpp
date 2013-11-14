@@ -13,6 +13,7 @@
 #include "Geodetic3D.hpp"
 #include "Planet.hpp"
 #include "Vector2D.hpp"
+#include "Sector.hpp"
 
 
 class FlatPlanet: public Planet {
@@ -78,22 +79,22 @@ public:
                        const double height) const;
   
   Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    const double x = geodetic.longitude().degrees() * _size._x / 360.0;
-    const double y = geodetic.latitude().degrees() * _size._y / 180.0;
-    return Vector3D(x, y, geodetic.height());
+    const double x = geodetic._longitude._degrees * _size._x / 360.0;
+    const double y = geodetic._latitude._degrees * _size._y / 180.0;
+    return Vector3D(x, y, geodetic._height);
   }
   
     
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        0.0);
   }
   
   Vector3D toCartesian(const Geodetic2D& geodetic,
                        const double height) const {
-    return toCartesian(geodetic.latitude(),
-                       geodetic.longitude(),
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
                        height);
   }
   
@@ -104,11 +105,7 @@ public:
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
   
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
-  
-  std::list<Vector3D> computeCurve(const Vector3D& start,
-                                   const Vector3D& stop,
-                                   double granularity) const;
-  
+    
   Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const;
   
   
@@ -117,9 +114,7 @@ public:
   
   double computeFastLatLonDistance(const Geodetic2D& g1,
                                    const Geodetic2D& g2) const;
-  
-  Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
-  
+    
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
@@ -151,6 +146,18 @@ public:
   
   Vector3D getNorth() const {
     return Vector3D::upY();
+  }
+
+  void applyCameraConstrainers(const Camera* previousCamera,
+                               Camera* nextCamera) const;
+
+  Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const{
+    const Vector3D asw = toCartesian(shownSector.getSW());
+    const Vector3D ane = toCartesian(shownSector.getNE());
+    const double height = asw.sub(ane).length() * 1.9;
+
+    return Geodetic3D(shownSector._center,
+                      height);
   }
 
 };

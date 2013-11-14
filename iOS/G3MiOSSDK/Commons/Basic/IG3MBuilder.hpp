@@ -29,6 +29,13 @@ class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
 class SceneLighting;
+class Sector;
+class GEORenderer;
+class GEOSymbolizer;
+class MeshRenderer;
+class ShapesRenderer;
+class MarksRenderer;
+class ErrorRenderer;
 
 
 class IG3MBuilder {
@@ -43,6 +50,7 @@ private:
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
   Renderer*                         _busyRenderer;
+  ErrorRenderer*                    _errorRenderer;
   std::vector<Renderer*>*           _renderers;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
@@ -52,6 +60,7 @@ private:
   WidgetUserData*                   _userData;
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
+  Sector*                           _shownSector;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -60,6 +69,7 @@ private:
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
   Renderer*                         getBusyRenderer();
+  ErrorRenderer*                    getErrorRenderer();
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
   bool                              getLogFPS();
@@ -73,11 +83,13 @@ private:
   CameraRenderer*                   createDefaultCameraRenderer();
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
+  Sector                            getShownSector() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
 
   bool containsPlanetRenderer(std::vector<Renderer*> renderers);
+
 
 protected:
   IStorage* _storage;
@@ -118,6 +130,8 @@ public:
 
   void setBusyRenderer(Renderer* busyRenderer);
 
+  void setErrorRenderer(ErrorRenderer* errorRenderer);
+
   void addRenderer(Renderer* renderer);
 
   void setRenderers(std::vector<Renderer*> renderers);
@@ -150,10 +164,38 @@ public:
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();
 
-  void addGPUProgramSources(GPUProgramSources& s);
+  void addGPUProgramSources(const GPUProgramSources& s);
 
   void setSceneLighting(SceneLighting* sceneLighting);
   SceneLighting* getSceneLighting();
+
+  void setShownSector(const Sector& sector);
+
+  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer) {
+    const bool createMeshRenderer      = true;
+    const bool createShapesRenderer    = true;
+    const bool createMarksRenderer     = true;
+    const bool createGEOTileRasterizer = true;
+
+    return createGEORenderer(symbolizer,
+                             createMeshRenderer,
+                             createShapesRenderer,
+                             createMarksRenderer,
+                             createGEOTileRasterizer);
+  }
+
+  GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer,
+                                 bool createMeshRenderer,
+                                 bool createShapesRenderer,
+                                 bool createMarksRenderer,
+                                 bool createGEOTileRasterizer);
+
+  MeshRenderer* createMeshRenderer();
+
+  ShapesRenderer* createShapesRenderer();
+
+  MarksRenderer* createMarksRenderer();
+  
 };
 
 #endif

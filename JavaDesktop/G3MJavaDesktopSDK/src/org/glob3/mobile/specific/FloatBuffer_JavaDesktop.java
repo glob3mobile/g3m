@@ -29,6 +29,14 @@ public class FloatBuffer_JavaDesktop
    }
 
 
+   public FloatBuffer_JavaDesktop(final float[] array,
+                                  final int length) {
+      _buffer = ByteBuffer.allocateDirect(length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer.put(array, 0, length);
+      _buffer.rewind();
+   }
+
+
    public FloatBuffer_JavaDesktop(final float f0,
                                   final float f1,
                                   final float f2,
@@ -110,4 +118,9 @@ public class FloatBuffer_JavaDesktop
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
 
+
+   @Override
+   public long getID() {
+      throw new RuntimeException("Not implemented");
+   }
 }

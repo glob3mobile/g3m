@@ -11,32 +11,6 @@ public class MathUtils_JavaDesktop
 
 
    @Override
-   public boolean isNan(final double v) {
-      return (v != v);
-      // return Double.isNaN(v);
-   }
-
-
-   @Override
-   public boolean isNan(final float v) {
-      return (v != v);
-      // return Float.isNaN(v);
-   }
-
-
-   @Override
-   public double NanD() {
-      return Double.NaN;
-   }
-
-
-   @Override
-   public float NanF() {
-      return Float.NaN;
-   }
-
-
-   @Override
    public double sin(final double v) {
       return Math.sin(v);
    }
@@ -225,7 +199,7 @@ public class MathUtils_JavaDesktop
 
    @Override
    public double minDouble() {
-      return Double.MIN_VALUE;
+      return -Double.MAX_VALUE;
    }
 
 
@@ -237,7 +211,7 @@ public class MathUtils_JavaDesktop
 
    @Override
    public float minFloat() {
-      return Float.MIN_VALUE;
+      return -Float.MAX_VALUE;
    }
 
 
@@ -390,5 +364,12 @@ public class MathUtils_JavaDesktop
    public float fmod(final float f1,
                      final float f2) {
       return f1 % f2;
+   }
+
+
+   @Override
+   public int parseIntHex(final String hex) {
+      // TODO Auto-generated method stub
+      return 0;
    }
 }

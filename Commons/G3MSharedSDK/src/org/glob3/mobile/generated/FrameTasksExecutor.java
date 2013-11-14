@@ -4,8 +4,8 @@ public class FrameTasksExecutor
   private final int _minimumExecutionsPerFrame;
   private final int _maximumExecutionsPerFrame;
   private final int _maximumQueuedTasks;
-  private final TimeInterval _maxTimePerFrame;
-  private final TimeInterval _maxTimePerFrameStressed;
+  private final long _maxTimePerFrameMS;
+  private final long _maxTimePerFrameStressedMS;
 
   private java.util.LinkedList<FrameTask> _preRenderTasks = new java.util.LinkedList<FrameTask>();
 
@@ -32,24 +32,23 @@ public class FrameTasksExecutor
   
     if (tasksCount > _maximumQueuedTasks)
     {
-      if (!_stressed)
-      {
-        //rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-        //                            _preRenderTasks.size());
-      }
+      //if (!_stressed) {
+      //  rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
+      //                              _preRenderTasks.size());
+      //}
       _stressed = true;
     }
   
     if (_stressed)
     {
-      return rc.getFrameStartTimer().elapsedTime().lowerThan(_maxTimePerFrameStressed);
+      return rc.getFrameStartTimer().elapsedTimeInMilliseconds() < _maxTimePerFrameStressedMS;
     }
   
     if (executedCounter >= _maximumExecutionsPerFrame)
     {
       return false;
     }
-    return rc.getFrameStartTimer().elapsedTime().lowerThan(_maxTimePerFrame);
+    return rc.getFrameStartTimer().elapsedTimeInMilliseconds() < _maxTimePerFrameMS;
   }
 
   private boolean _stressed;
@@ -59,8 +58,8 @@ public class FrameTasksExecutor
      _minimumExecutionsPerFrame = 1;
      _maximumExecutionsPerFrame = 8;
      _maximumQueuedTasks = 64;
-     _maxTimePerFrame = TimeInterval.fromMilliseconds(5);
-     _maxTimePerFrameStressed = TimeInterval.fromMilliseconds(25);
+     _maxTimePerFrameMS = 5;
+     _maxTimePerFrameStressedMS = 25;
      _stressed = false;
 
   }
@@ -73,19 +72,19 @@ public class FrameTasksExecutor
   public final void doPreRenderCycle(G3MRenderContext rc)
   {
   
-  //  int canceledCounter = 0;
+    //  int canceledCounter = 0;
     java.util.Iterator<FrameTask> i = _preRenderTasks.iterator();
     while (i.hasNext())
     {
       FrameTask task = i.next();
   
-      boolean isCanceled = task.isCanceled(rc);
+      final boolean isCanceled = task.isCanceled(rc);
       if (isCanceled)
       {
         if (task != null)
            task.dispose();
         i.remove();
-  //      canceledCounter++;
+        //      canceledCounter++;
       }
     }
   
@@ -109,29 +108,29 @@ public class FrameTasksExecutor
       executedCounter++;
     }
   
-  //  if (false) {
-  //    //    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
-  //    //      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-  //    //                                  canceledCounter,
-  //    //                                  executedCounter,
-  //    //                                  rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-  //    //                                  _preRenderTasks.size(),
-  //    //                                  _stressed);
-  //    //
-  //    //    }
-  //    //    else {
-  //    if ((executedCounter > 0) ||
-  //        (canceledCounter > 0) ||
-  //        (_preRenderTasks.size() > 0)) {
-  //      rc->getLogger()->logInfo("Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-  //                               canceledCounter,
-  //                               executedCounter,
-  //                               rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-  //                               _preRenderTasks.size(),
-  //                               _stressed);
-  //    }
-  //    //    }
-  //  }
+    //  if (false) {
+    //    //    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
+    //    //      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
+    //    //                                  canceledCounter,
+    //    //                                  executedCounter,
+    //    //                                  rc->getFrameStartTimer()->elapsedTime().milliseconds(),
+    //    //                                  _preRenderTasks.size(),
+    //    //                                  _stressed);
+    //    //
+    //    //    }
+    //    //    else {
+    //    if ((executedCounter > 0) ||
+    //        (canceledCounter > 0) ||
+    //        (_preRenderTasks.size() > 0)) {
+    //      rc->getLogger()->logInfo("Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
+    //                               canceledCounter,
+    //                               executedCounter,
+    //                               rc->getFrameStartTimer()->elapsedTime().milliseconds(),
+    //                               _preRenderTasks.size(),
+    //                               _stressed);
+    //    }
+    //    //    }
+    //  }
   
   }
 

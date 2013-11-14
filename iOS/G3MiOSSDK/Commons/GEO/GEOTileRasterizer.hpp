@@ -20,16 +20,23 @@ private:
   QuadTree _quadTree;
 
 public:
+  GEOTileRasterizer()
+  {
+  }
+
   std::string getId() const {
     return "GEOTileRasterizer";
   }
 
-  void rasterize(const TileRasterizerContext& trc,
-                 IImageListener* listener,
-                 bool autodelete) const;
+  void initialize(const G3MContext* context);
+
+  void rawRasterize(const IImage* image,
+                    const TileRasterizerContext& trc,
+                    IImageListener* listener,
+                    bool autodelete) const;
 
   void addSymbol(const GEORasterSymbol* symbol);
-
+  
 };
 
 #endif

@@ -321,11 +321,18 @@ public:
     return getProjectionMatrix().asMatrix44D();
   }
 
+  Matrix44D* getModelViewMatrix44D() const{
+    return getModelViewMatrix().asMatrix44D();
+  }
+
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
   
   double getProjectedSphereArea(const Sphere& sphere) const;
   
   void applyTransform(const MutableMatrix44D& mat);
+
+  bool isPositionWithin(const Sector& sector, double height) const;
+  bool isCenterOfViewWithin(const Sector& sector, double height) const;
 
 private:
   const Angle getHeading(const Vector3D& normal) const;

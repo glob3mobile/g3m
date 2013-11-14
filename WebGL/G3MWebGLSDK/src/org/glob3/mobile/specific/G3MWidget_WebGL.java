@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -29,6 +30,7 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
@@ -46,10 +48,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
-//import org.glob3.mobile.generated.IGLProgramId;
-
-
-public final class G3MWidget_WebGL
+public class G3MWidget_WebGL
          extends
             Composite {
 
@@ -185,12 +184,70 @@ public final class G3MWidget_WebGL
 		if (!$wnd.G3M) {
 			$wnd.G3M = {};
 		}
+
+		//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
+		//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
+		//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+		//	});
+		//	$wnd.angleFromDegrees = $entry(function (degrees) {
+		//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
+		//	});
+
 		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
 		});
 		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
 		});
+		$wnd.G3M.getCameraData = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+		});
+		// temp Java function with parameters and return value to test JS function calls
+		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+		});
+		$wnd.G3M.moveCameraTo = $entry(function(position) {
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+		});
+   }-*/;
+
+
+   public void moveCameraTo(final Geodetic3D position) {
+      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+   }
+
+
+   public Geodetic3D newGeodetic3D(final double latitude,
+                                   final double longitude,
+                                   final double height) {
+      return new Geodetic3D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude), height);
+   }
+
+
+   public final native JavaScriptObject getCameraData() /*-{
+		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
+		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
+
+		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
+		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
+		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
+		var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
+
+		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
+		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
+
+		var result = new Object();
+		result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
+		result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
+		result.height = height;
+
+		result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
+		result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
+
+		return result;
    }-*/;
 
 
@@ -408,6 +465,7 @@ public final class G3MWidget_WebGL
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
+                          final ErrorRenderer errorRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -415,7 +473,8 @@ public final class G3MWidget_WebGL
                           final boolean autoDeleteInitializationTask,
                           final ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
-                          final SceneLighting sceneLighting) {
+                          final SceneLighting sceneLighting,
+                          final InitialCameraPositionProvider initialCameraPositionProvider) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -429,12 +488,16 @@ public final class G3MWidget_WebGL
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
+               errorRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //
                initializationTask, //
                autoDeleteInitializationTask, //
-               periodicalTasks, createGPUProgramManager(), sceneLighting);
+               periodicalTasks, //
+               createGPUProgramManager(), //
+               sceneLighting, //
+               initialCameraPositionProvider);
 
       _g3mWidget.setUserData(userData);
 

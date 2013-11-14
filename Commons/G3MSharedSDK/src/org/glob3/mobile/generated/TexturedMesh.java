@@ -63,7 +63,6 @@ public class TexturedMesh extends Mesh
     _glState._release();
 
   super.dispose();
-
   }
 
   public final BoundingVolume getBoundingVolume()
@@ -91,7 +90,7 @@ public class TexturedMesh extends Mesh
     return _transparent;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     _glState.setParent(parentState);
     _mesh.render(rc, _glState);

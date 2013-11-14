@@ -15,25 +15,30 @@ class Tile;
 class TileTessellator;
 class G3MContext;
 class TilesRenderParameters;
-class PlanetRendererContext;
 class Geodetic3D;
 class LayerSet;
-
-#include "TerrainTouchEventListener.hpp"
+class TileRasterizer;
+class LayerTilesRenderParameters;
+class G3MEventContext;
 
 class TileTexturizer {
 public:
   virtual ~TileTexturizer() {
   }
 
-  virtual bool isReady(const G3MRenderContext *rc,
+  virtual bool isReady(const G3MRenderContext* rc,
                        LayerSet* layerSet) = 0;
 
   virtual void initialize(const G3MContext* context,
                           const TilesRenderParameters* parameters) = 0;
 
   virtual Mesh* texturize(const G3MRenderContext* rc,
-                          const PlanetRendererContext* prc,
+                          const TileTessellator* tessellator,
+                          TileRasterizer* tileRasterizer,
+                          const LayerTilesRenderParameters* layerTilesRenderParameters,
+                          const LayerSet* layerSet,
+                          bool isForcedFullRender,
+                          long long texturePriority,
                           Tile* tile,
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;

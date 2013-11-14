@@ -19,12 +19,12 @@ class LayerSet;
 class IDownloader;
 class LeveledTexturedMesh;
 class IFloatBuffer;
-
+class TileRasterizer;
+class TextureIDReference;
+class G3MEventContext;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
-  TexturesHandler* _texturesHandler;
-  
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:
@@ -32,14 +32,19 @@ public:
   
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const G3MRenderContext *rc,
+  bool isReady(const G3MRenderContext* rc,
                LayerSet* layerSet);
   
   void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);
   
   Mesh* texturize(const G3MRenderContext* rc,
-                  const PlanetRendererContext* prc,
+                  const TileTessellator* tessellator,
+                  TileRasterizer* tileRasterizer,
+                  const LayerTilesRenderParameters* layerTilesRenderParameters,
+                  const LayerSet* layerSet,
+                  bool isForcedFullRender,
+                  long long texturePriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh);
@@ -57,7 +62,7 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  const IGLTextureId* getTopLevelGLTextureIdForTile(Tile* tile);
+  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile);
   
   bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,

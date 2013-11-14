@@ -22,6 +22,16 @@ G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
 void G3MBuilder_iOS::initializeWidget() {
   setGL([_nativeWidget getGL]);
 
+  addGPUProgramSources(loadGPUProgramSources("Default"));
+  addGPUProgramSources(loadGPUProgramSources("Billboard"));
+  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh"));
+  addGPUProgramSources(loadGPUProgramSources("TexturedMesh"));
+  addGPUProgramSources(loadGPUProgramSources("ColorMesh"));
+  addGPUProgramSources(loadGPUProgramSources("TransformedTexCoorTexturedMesh"));
+  addGPUProgramSources(loadGPUProgramSources("TexturedMesh+DirectionLight"));
+  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh+DirectionLight"));
+  addGPUProgramSources(loadGPUProgramSources("NoColorMesh"));
+
   [_nativeWidget setWidget: create()];
 }
 
@@ -38,4 +48,31 @@ IDownloader* G3MBuilder_iOS::createDefaultDownloader() {
   return new CachedDownloader(new Downloader_iOS(8),
                               getStorage(),
                               saveInBackground);
+}
+
+GPUProgramSources G3MBuilder_iOS::loadGPUProgramSources(const std::string& name) {
+
+  NSString* nsName = [[NSString alloc] initWithUTF8String:name.c_str()];
+
+  //GPU Program Sources
+  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
+                                                                 ofType: @"vsh"];
+  if (!vertShaderPathname) {
+    NSLog(@"Can't load Shader.vsh");
+  }
+  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+                                                             encoding: NSUTF8StringEncoding
+                                                                error: nil] UTF8String]);
+
+  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
+                                                                 ofType: @"fsh"];
+  if (!fragShaderPathname) {
+    NSLog(@"Can't load Shader.fsh");
+  }
+
+  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+                                                               encoding: NSUTF8StringEncoding
+                                                                  error: nil] UTF8String]);
+
+  return GPUProgramSources(name, vertexSource, fragmentSource);
 }

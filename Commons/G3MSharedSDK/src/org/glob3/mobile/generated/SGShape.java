@@ -27,14 +27,29 @@ public class SGShape extends Shape
 
   private final boolean _isTransparent;
 
+  private GLState _glState;
 
-  public SGShape(SGNode node, String uriPrefix, boolean isTransparent)
+
+  public SGShape(SGNode node, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     super(null, AltitudeMode.ABSOLUTE);
+     super(position, altitudeMode);
      _node = node;
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;
+    _glState = new GLState();
+    if (_isTransparent)
+    {
+      _glState.addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+    }
+    else
+    {
+      _glState.addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+    }
+  }
 
+  public void dispose()
+  {
+    _glState._release();
   }
 
   public final SGNode getNode()
@@ -59,12 +74,20 @@ public class SGShape extends Shape
 
   public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
-    _node.render(rc, parentState, renderNotReadyShapes);
+    _glState.setParent(parentState);
+    _node.render(rc, _glState, renderNotReadyShapes);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _isTransparent;
   }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+    return intersections;
+  }
+
 
 }

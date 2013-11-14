@@ -53,15 +53,22 @@ public class LayerTilesRenderParameters
     return new Vector2I(256, 256);
   }
 
-  public static LayerTilesRenderParameters createDefaultNonMercator(Sector topSector)
+
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
   {
     final int topSectorSplitsByLatitude = 2;
     final int topSectorSplitsByLongitude = 4;
-    final int firstLevel = 0;
-    final int maxLevel = 17;
     final boolean mercator = false;
 
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+  }
+
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector)
+  {
+    final int firstLevel = 0;
+    final int maxLevel = 17;
+
+    return createDefaultWGS84(topSector, firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
@@ -76,6 +83,67 @@ public class LayerTilesRenderParameters
 
   public void dispose()
   {
+  }
+
+
+  public final boolean isEquals(LayerTilesRenderParameters that)
+  {
+    if (that == null)
+    {
+      return false;
+    }
+  
+    if (!(_topSector.isEquals(that._topSector)))
+    {
+      return false;
+    }
+  
+    if (_topSectorSplitsByLatitude != that._topSectorSplitsByLatitude)
+    {
+      return false;
+    }
+  
+    if (_topSectorSplitsByLongitude != that._topSectorSplitsByLongitude)
+    {
+      return false;
+    }
+  
+    if (_firstLevel != that._firstLevel)
+    {
+      return false;
+    }
+  
+    if (_maxLevel != that._maxLevel)
+    {
+      return false;
+    }
+  
+    if (_maxLevelForPoles != that._maxLevelForPoles)
+    {
+      return false;
+    }
+  
+    if (!_tileTextureResolution.isEquals(that._tileTextureResolution))
+    {
+      return false;
+    }
+  
+    if (!_tileMeshResolution.isEquals(that._tileMeshResolution))
+    {
+      return false;
+    }
+  
+    if (_mercator != that._mercator)
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+  public final LayerTilesRenderParameters copy()
+  {
+    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, _tileTextureResolution, _tileMeshResolution, _mercator);
   }
 
 }

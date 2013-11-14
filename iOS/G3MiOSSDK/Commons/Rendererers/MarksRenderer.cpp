@@ -175,17 +175,17 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
   return handled;
 }
 
-bool MarksRenderer::isReadyToRender(const G3MRenderContext* rc) {
+RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_readyWhenMarksReady) {
     int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++) {
       if (!_marks[i]->isReady()) {
-        return false;
+        return RenderState::busy();
       }
     }
   }
-  
-  return true;
+
+  return RenderState::ready();
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
@@ -214,88 +214,95 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent) {
-
-  if ( touchEvent->getType() == DownUp ) {
-    
-    if (_lastCamera != NULL) {
-      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
-      const Planet* planet = ec->getPlanet();
-      
-      double minSqDistance = IMathUtils::instance()->maxDouble();
-      Mark* nearestMark = NULL;
-      
-      const int marksSize = _marks.size();
-      for (int i = 0; i < marksSize; i++) {
-        Mark* mark = _marks[i];
-        
-        if (!mark->isReady()) {
-          continue;
-        }
-        
-        if (!mark->isRendered()) {
-          continue;
-        }
-        
-        const int textureWidth = mark->getTextureWidth();
-        if (textureWidth <= 0) {
-          continue;
-        }
-        
-        const int textureHeight = mark->getTextureHeight();
-        if (textureHeight <= 0) {
-          continue;
-        }
-        
-        const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
-        const Vector2F markPixelF = _lastCamera->point2Pixel(*cartesianMarkPosition);
-        const Vector2I markPixel((int)markPixelF._x, (int)markPixelF._y);
-        
-        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
-                                         markPixel._y - (textureHeight / 2),
-                                         textureWidth,
-                                         textureHeight);
-        
-        if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
-          const double distance = markPixel.sub(touchedPixel).squaredLength();
-          if (distance < minSqDistance) {
-            nearestMark = mark;
-            minSqDistance = distance;
-          }
-        }
-      }
-      
-      if (nearestMark != NULL) {
-        if (!nearestMark->touched()) {
-          if (_markTouchListener != NULL) {
-            _markTouchListener->touchedMark(nearestMark);
-          }
-        }
-      }
-    }
-  }
-}
+//void MarksRenderer::onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent) {
+//
+//  if ( touchEvent->getType() == DownUp ) {
+//    
+//    if (_lastCamera != NULL) {
+//      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
+//      const Planet* planet = ec->getPlanet();
+//      
+//      double minSqDistance = IMathUtils::instance()->maxDouble();
+//      Mark* nearestMark = NULL;
+//      
+//      const int marksSize = _marks.size();
+//      for (int i = 0; i < marksSize; i++) {
+//        Mark* mark = _marks[i];
+//        
+//        if (!mark->isReady()) {
+//          continue;
+//        }
+//        
+//        if (!mark->isRendered()) {
+//          continue;
+//        }
+//        
+//        const int textureWidth = mark->getTextureWidth();
+//        if (textureWidth <= 0) {
+//          continue;
+//        }
+//        
+//        const int textureHeight = mark->getTextureHeight();
+//        if (textureHeight <= 0) {
+//          continue;
+//        }
+//        
+//        const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
+//        const Vector2F markPixelF = _lastCamera->point2Pixel(*cartesianMarkPosition);
+//        const Vector2I markPixel((int)markPixelF._x, (int)markPixelF._y);
+//        
+//        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
+//                                         markPixel._y - (textureHeight / 2),
+//                                         textureWidth,
+//                                         textureHeight);
+//        
+//        if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
+//          const double distance = markPixel.sub(touchedPixel).squaredLength();
+//          if (distance < minSqDistance) {
+//            nearestMark = mark;
+//            minSqDistance = distance;
+//          }
+//        }
+//      }
+//      
+//      if (nearestMark != NULL) {
+//        if (!nearestMark->touched()) {
+//          if (_markTouchListener != NULL) {
+//            _markTouchListener->touchedMark(nearestMark);
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
 
-  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
-  if (projection == NULL) {
-    projection = new ProjectionGLFeature(cam);
-    _glState->addGLFeature(projection, true);
+//  ProjectionGLFeature* projection = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
+//  if (projection == NULL) {
+//    projection = new ProjectionGLFeature(cam);
+//    _glState->addGLFeature(projection, true);
+//  } else{
+//    projection->setMatrix(cam->getProjectionMatrix44D());
+//  }
+//
+//  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
+//  if (model == NULL) {
+//    model = new ModelGLFeature(cam);
+//    _glState->addGLFeature(model, true);
+//  } else{
+//    model->setMatrix(cam->getModelMatrix44D());
+//  }
+
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL) {
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
   } else{
-    projection->setMatrix(cam->getProjectionMatrix44D());
+    f->setMatrix(cam->getModelViewMatrix44D());
   }
 
-  ModelGLFeature* model = (ModelGLFeature*) _glState->getGLFeature(GLF_MODEL);
-  if (model == NULL) {
-    model = new ModelGLFeature(cam);
-    _glState->addGLFeature(model, true);
-  } else{
-    model->setMatrix(cam->getModelMatrix44D());
-  }
-
-  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL){
+  if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
     _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
   }

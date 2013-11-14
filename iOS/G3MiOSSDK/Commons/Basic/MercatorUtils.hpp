@@ -75,7 +75,8 @@ public:
     const IMathUtils* mu = IMathUtils::instance();
     const double pi4 = PI * 4;
 
-    const double latSin = latitude.sinus();
+//    const double latSin = latitude.sinus();
+    const double latSin = SIN(latitude._radians);
     return 1.0 - ( ( mu->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 ) + 0.5 );
   }
 
@@ -112,8 +113,7 @@ public:
 //  }
 
   static double longitudeToMeters(const Angle& longitude) {
-		const double mx  = longitude._degrees * _originShift / 180.0;
-		return mx;
+		return longitude._degrees * _originShift / 180.0;
   }
 
   static double latitudeToMeters(const Angle& latitude) {

@@ -151,10 +151,6 @@ public:
 
   const Vector2I getMinResolution() const;
 
-  //  ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                              const Sector& sector,
-  //                                              const Vector2I& extent) const;
-
 };
 
 #endif

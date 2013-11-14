@@ -70,7 +70,7 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
 
-  bool isReadyToRender(const G3MRenderContext* rc);
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void start(const G3MRenderContext* rc) {
   }
@@ -109,7 +109,7 @@ public:
     
   }
   
-  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
+//  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

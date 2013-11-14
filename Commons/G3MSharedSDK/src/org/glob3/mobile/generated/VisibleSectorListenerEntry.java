@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-///#include "GPUProgramState.hpp"
-
-
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;
@@ -25,7 +22,7 @@ public class VisibleSectorListenerEntry
   public VisibleSectorListenerEntry(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
      _listener = listener;
-     _stabilizationIntervalInMS = stabilizationInterval.milliseconds();
+     _stabilizationIntervalInMS = stabilizationInterval._milliseconds;
      _lastSector = null;
      _timer = null;
      _whenNotifyInMS = 0;
@@ -41,7 +38,7 @@ public class VisibleSectorListenerEntry
   {
     if (_stabilizationIntervalInMS == 0)
     {
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();
@@ -52,9 +49,9 @@ public class VisibleSectorListenerEntry
     }
     else
     {
-      final long now = getTimer().now().milliseconds();
+      final long now = getTimer().now()._milliseconds;
 
-      if ((_lastSector == null) || (!_lastSector.isEqualsTo(visibleSector)))
+      if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {
         if (_lastSector != null)
            _lastSector.dispose();

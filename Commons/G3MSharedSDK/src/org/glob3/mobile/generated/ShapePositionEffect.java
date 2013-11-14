@@ -44,17 +44,17 @@ public class ShapePositionEffect extends EffectWithDuration
     final double alpha = getAlpha(when);
   
     final Geodetic3D pos = Geodetic3D.linearInterpolation(_fromPosition, _toPosition, alpha);
-    _shape.setPosition(new Geodetic3D(pos));
+    _shape.setPosition(pos);
   }
 
   public final void cancel(TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(_toPosition);
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(_toPosition);
   }
 
 }

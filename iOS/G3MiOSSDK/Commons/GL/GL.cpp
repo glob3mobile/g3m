@@ -16,12 +16,10 @@
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
 #include "IFactory.hpp"
-#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IGLTextureId.hpp"
 
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
-//#include "GPUProgramState.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"
@@ -30,12 +28,9 @@ void GL::clearScreen(const Color& color) {
 //  if (_verbose) {
 //    ILogger::instance()->logInfo("GL::clearScreen()");
 //  }
+  _clearScreenState->setClearColor(color);
+  _clearScreenState->applyChanges(this, *_currentGLGlobalState);
 
-  GLGlobalState state;
-  state.setClearColor(color);
-  state.applyChanges(this, _currentGLGlobalState);
-
-  //setGLGlobalState(state);
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
@@ -92,7 +87,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     newState.setPixelStoreIAlignmentUnpack(1);
     newState.bindTexture(texId);
 
-    newState.applyChanges(this, _currentGLGlobalState);
+    newState.applyChanges(this, *_currentGLGlobalState);
     
     int linear = GLTextureParameterValue::linear();
     int clampToEdge = GLTextureParameterValue::clampToEdge();
@@ -173,8 +168,8 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
       delete textureId;
     }
 
-    if (_currentGLGlobalState.getBoundTexture() == textureId) {
-       _currentGLGlobalState.bindTexture(NULL);
+    if (_currentGLGlobalState->getBoundTexture() == textureId) {
+       _currentGLGlobalState->bindTexture(NULL);
     }
     
 //    GLState::textureHasBeenDeleted(textureId);

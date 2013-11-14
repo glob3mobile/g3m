@@ -72,9 +72,14 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-    final double cosLatitude = latitude.cosinus();
+  //  const double cosLatitude = latitude.cosinus();
+  //
+  //  return Vector3D(cosLatitude * longitude.cosinus(),
+  //                  cosLatitude * longitude.sinus(),
+  //                  latitude.sinus());
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
-    return new Vector3D(cosLatitude * longitude.cosinus(), cosLatitude * longitude.sinus(), latitude.sinus());
+    return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
@@ -382,7 +387,7 @@ public class SphericalPlanet extends Planet
   
     // save params for possible inertial animations
     _lastDragAxis = rotationAxis.asMutableVector3D();
-    double radians = rotationDelta.radians();
+    double radians = rotationDelta._radians;
     _lastDragRadiansStep = radians - _lastDragRadians;
     _lastDragRadians = radians;
     _validSingleDrag = true;
@@ -404,9 +409,9 @@ public class SphericalPlanet extends Planet
     _centerRay = centerRay.asMutableVector3D();
     _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
     _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
-    _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1).degrees();
+    _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
     _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
-    _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+    _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
   
     // middle point in 3D
     Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
@@ -424,7 +429,7 @@ public class SphericalPlanet extends Planet
     // init params
     final IMathUtils mu = IMathUtils.instance();
     MutableVector3D positionCamera = _origin;
-    final double finalRaysAngle = finalRay0.angleBetween(finalRay1).degrees();
+    final double finalRaysAngle = finalRay0.angleBetween(finalRay1)._degrees;
     final double factor = finalRaysAngle / _angleBetweenInitialRays;
     double dAccum = 0;
     double angle0;
@@ -440,7 +445,7 @@ public class SphericalPlanet extends Planet
       final Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
       final Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
       angle0 = point0.angleBetween(point1)._degrees;
-      if (mu.isNan(angle0))
+      if ((angle0 != angle0))
          return MutableMatrix44D.invalid();
     }
   
@@ -455,7 +460,7 @@ public class SphericalPlanet extends Planet
       final Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
       final Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
       angle1 = point0.angleBetween(point1)._degrees;
-      if (mu.isNan(angle1))
+      if ((angle1 != angle1))
          return MutableMatrix44D.invalid();
     }
   
@@ -477,7 +482,7 @@ public class SphericalPlanet extends Planet
         final Vector3D point0 = closestIntersection(positionCamera.asVector3D(), finalRay0);
         final Vector3D point1 = closestIntersection(positionCamera.asVector3D(), finalRay1);
         angle_n = point0.angleBetween(point1)._degrees;
-        if (mu.isNan(angle_n))
+        if ((angle_n != angle_n))
            return MutableMatrix44D.invalid();
       }
     }
@@ -567,7 +572,7 @@ public class SphericalPlanet extends Planet
     final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = toGeodetic3D(origin).height();
+    final double height = toGeodetic3D(origin)._height;
     final double distance = height * 0.6;
   
     // create effect
@@ -590,7 +595,10 @@ public class SphericalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     final Angle angle = P0.angleBetween(P1);
-    return MutableMatrix44D.createRotationMatrix(angle, axis);
+    final MutableMatrix44D rotation = MutableMatrix44D.createRotationMatrix(angle, axis);
+    final Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
+    final MutableMatrix44D traslation = MutableMatrix44D.createTranslationMatrix(P1.sub(rotatedP0));
+    return traslation.multiply(rotation);
   }
 
   public final Vector3D getNorth()
@@ -598,5 +606,28 @@ public class SphericalPlanet extends Planet
     return Vector3D.upZ();
   }
 
+  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  {
+  
+    //  Vector3D pos = nextCamera->getCartesianPosition();
+    //  Vector3D origin = _origin.asVector3D();
+    //  double maxDist = _sphere.getRadius() * 5;
+    //
+    //  if (pos.distanceTo(origin) > maxDist) {
+    //    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    ////    Vector3D pos2 = nextCamera->getCartesianPosition();
+    ////    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
+    //  }
+  
+  }
+
+  public final Geodetic3D getDefaultCameraPosition(Sector shownSector)
+  {
+    final Vector3D asw = toCartesian(shownSector.getSW());
+    final Vector3D ane = toCartesian(shownSector.getNE());
+    final double height = asw.sub(ane).length() * 1.9;
+
+    return new Geodetic3D(shownSector._center, height);
+  }
 
 }

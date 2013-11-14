@@ -18,32 +18,38 @@ public final class FloatBuffer_Android
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   static int     	_boundVertexBuffer = -1;
-   boolean      	_vertexBufferCreated = false;
-   int    			_vertexBuffer = -1;
-   int       		_vertexBufferTimeStamp = -1;
+   private static int        _boundVertexBuffer     = -1;
+   private boolean           _vertexBufferCreated   = false;
+   //   private boolean           _disposed              = false;
+   private int               _vertexBuffer          = -1;
+   private int               _vertexBufferTimeStamp = -1;
+   
+   //ID
+   private static long _nextID = 0;
+   private final long _id = _nextID++;
 
-   public FloatBuffer_Android(final int size) {
+
+   FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    }
 
 
-   public FloatBuffer_Android(final float f0,
-                              final float f1,
-                              final float f2,
-                              final float f3,
-                              final float f4,
-                              final float f5,
-                              final float f6,
-                              final float f7,
-                              final float f8,
-                              final float f9,
-                              final float f10,
-                              final float f11,
-                              final float f12,
-                              final float f13,
-                              final float f14,
-                              final float f15) {
+   FloatBuffer_Android(final float f0,
+                       final float f1,
+                       final float f2,
+                       final float f3,
+                       final float f4,
+                       final float f5,
+                       final float f6,
+                       final float f7,
+                       final float f8,
+                       final float f9,
+                       final float f10,
+                       final float f11,
+                       final float f12,
+                       final float f13,
+                       final float f14,
+                       final float f15) {
       _buffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
       _buffer.put(0, f0);
       _buffer.put(1, f1);
@@ -64,9 +70,17 @@ public final class FloatBuffer_Android
    }
 
 
-   public FloatBuffer_Android(final float[] array) {
-      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-      _buffer.put(array);
+   //     FloatBuffer_Android(final float[] array) {
+   //      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+   //      _buffer.put(array);
+   //      _buffer.rewind();
+   //   }
+
+
+   FloatBuffer_Android(final float[] array,
+                       final int length) {
+      _buffer = ByteBuffer.allocateDirect(length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer.put(array, 0, length);
       _buffer.rewind();
    }
 
@@ -115,51 +129,70 @@ public final class FloatBuffer_Android
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
-   
+
+
    void bindAsVBOToGPU() {
+      if (!_vertexBufferCreated) {
+         final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+         GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+         _vertexBuffer = ib.get(0);
+         _vertexBufferCreated = true;
+      }
 
-	    if (!_vertexBufferCreated){
-	    	java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
-	    	GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
-	    	_vertexBuffer = ib.get(0);
-	    	_vertexBufferCreated = true;
-	    }
+      if (_vertexBuffer != _boundVertexBuffer) {
+         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
+         _boundVertexBuffer = _vertexBuffer;
+      }
 
-	    if (_vertexBuffer != _boundVertexBuffer){
-	    	GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
-	    	_boundVertexBuffer = _vertexBuffer;
-	    } else{
-	      //....
-	    }
+      if (_vertexBufferTimeStamp != _timestamp) {
+         _vertexBufferTimeStamp = _timestamp;
 
-	    if (_vertexBufferTimeStamp != _timestamp){
-	      _vertexBufferTimeStamp = _timestamp;
+         final FloatBuffer buffer = getBuffer();
+         final int vboSize = 4 * size();
 
-	      FloatBuffer buffer = getBuffer();
-	      int vboSize = 4 * size();
+         //	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+      }
 
-//	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
-	      GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
-	    }
-
-//	    if (GL_NO_ERROR != glGetError()){
-//	      ILogger::instance()->logError("Problem using VBO");
-//	    }
-	  }
+      //	    if (GL_NO_ERROR != glGetError()){
+      //	      ILogger::instance()->logError("Problem using VBO");
+      //	    }
+   }
 
 
-      @Override
-      public void dispose() {
-         super.dispose();
-   
-         if (_vertexBufferCreated) {
-            final int[] buffers = new int[] { _vertexBuffer };
-            GLES20.glDeleteBuffers(1, buffers, 0);
-            _vertexBufferCreated = false;
+   @Override
+   public void dispose() {
+      super.dispose();
+
+      //      _disposed = true;
+
+      if (_vertexBufferCreated) {
+         final int[] buffers = new int[] { _vertexBuffer };
+         GLES20.glDeleteBuffers(1, buffers, 0);
+         _vertexBufferCreated = false;
+
+         if (_vertexBuffer == _boundVertexBuffer) {
+            _boundVertexBuffer = -1;
          }
       }
+   }
+
+
+@Override
+public long getID() {
+	return _id;
+}
+
+
+   //   @Override
+   //   protected void finalize() throws Throwable {
+   //      if (!_disposed) {
+   //         ILogger.instance().logError(this + " not disposed (_vertexBufferCreated=" + _vertexBufferCreated + ")");
+   //      }
    //
-   //
+   //      super.finalize();
+   //   }
+
    //   public int getGLBuffer() {
    //      if (!_hasGLBuffer) {
    //         final int[] buffers = new int[1];

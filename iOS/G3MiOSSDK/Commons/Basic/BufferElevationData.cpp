@@ -8,15 +8,17 @@
 
 #include "BufferElevationData.hpp"
 
-#include "Vector2I.hpp"
+//#include "Vector2I.hpp"
 
 BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& extent,
                                          const Sector& realSector,
                                          const Vector2I& realExtent,
-                                         int bufferSize) :
+                                         int bufferSize,
+                                         double deltaHeight) :
 ElevationData(sector, extent),
-_bufferSize(bufferSize)
+_bufferSize(bufferSize),
+_deltaHeight(deltaHeight)
 {
 
 }
@@ -30,5 +32,5 @@ double BufferElevationData::getElevationAt(int x,
 //    return IMathUtils::instance()->NanD();
 //  }
 
-  return getValueInBufferAt( index );
+  return getValueInBufferAt( index ) + _deltaHeight;
 }

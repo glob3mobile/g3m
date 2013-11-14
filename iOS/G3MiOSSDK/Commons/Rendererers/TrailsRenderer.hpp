@@ -54,15 +54,29 @@ public:
     return _positions.size();
   }
 
-  void addPosition(const Geodetic3D& position) {
+  void addPosition(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height) {
     _positionsDirty = true;
-    _positions.push_back(new Geodetic3D(position));
+    _positions.push_back(new Geodetic3D(latitude,
+                                        longitude,
+                                        height));
   }
 
-  void setNextSegmentFirstPosition(const Geodetic3D& position) {
+  void addPosition(const Geodetic3D& position) {
+    addPosition(position._latitude,
+                position._longitude,
+                position._height);
+  }
+
+  void setNextSegmentFirstPosition(const Angle& latitude,
+                                   const Angle& longitude,
+                                   const double height) {
     _positionsDirty = true;
     delete _nextSegmentFirstPosition;
-    _nextSegmentFirstPosition = new Geodetic3D(position);
+    _nextSegmentFirstPosition = new Geodetic3D(latitude,
+                                               longitude,
+                                               height);
   }
 
   void setPreviousSegmentLastPosition(const Geodetic3D& position) {
@@ -100,23 +114,27 @@ private:
 
   Color _color;
   const float _ribbonWidth;
+  const float _heightDelta;
 
   std::vector<TrailSegment*> _segments;
 
 
 public:
   Trail(Color color,
-        float ribbonWidth):
+        float ribbonWidth,
+        float heightDelta):
   _visible(true),
   _color(color),
-  _ribbonWidth(ribbonWidth)
+  _ribbonWidth(ribbonWidth),
+  _heightDelta(heightDelta)
   {
   }
 
   ~Trail();
 
   void render(const G3MRenderContext* rc,
-              const Frustum* frustum, const GLState* state);
+              const Frustum* frustum,
+              const GLState* state);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -126,8 +144,16 @@ public:
     return _visible;
   }
 
-  void addPosition(const Geodetic3D& position);
-  
+  void addPosition(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height);
+
+  void addPosition(const Geodetic3D& position) {
+    addPosition(position._latitude, position._longitude, position._height);
+  }
+
+  void clear();
+
 };
 
 
@@ -168,8 +194,8 @@ public:
 
   void initialize(const G3MContext* context);
 
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
+  RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
   }
 
   bool onTouchEvent(const G3MEventContext* ec,

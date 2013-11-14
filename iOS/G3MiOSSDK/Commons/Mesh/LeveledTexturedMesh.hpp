@@ -10,16 +10,11 @@
 #define __G3MiOSSDK__LeveledTexturedMesh__
 
 #include "Mesh.hpp"
-
 #include "TextureMapping.hpp"
-#include "IFloatBuffer.hpp"
-#include "ILogger.hpp"
-
+#include "IGLTextureId.hpp"
+#include "GLState.hpp"
 #include <vector>
 
-#include "IGLTextureId.hpp"
-
-#include "GLState.hpp"
 
 class LazyTextureMappingInitializer {
 public:
@@ -35,15 +30,16 @@ public:
   virtual IFloatBuffer* createTextCoords() const = 0;
 };
 
+
 class LazyTextureMapping : public TextureMapping {
 private:
   mutable LazyTextureMappingInitializer* _initializer;
 
 #ifdef C_CODE
-  const IGLTextureId* _glTextureId;
+  const TextureIDReference* _glTextureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _glTextureId;
+  private TextureIDReference _glTextureId;
 #endif
 
   mutable bool _initialized;
@@ -53,19 +49,17 @@ private:
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
 
-  TexturesHandler* _texturesHandler;
-
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
 
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
 
-  const bool _transparent;
 
 
 public:
+  const bool _transparent;
+
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
-                     TexturesHandler* texturesHandler,
                      bool ownedTexCoords,
                      bool transparent) :
   _initializer(initializer),
@@ -74,7 +68,6 @@ public:
   _texCoords(NULL),
   _translation(0,0),
   _scale(1,1),
-  _texturesHandler(texturesHandler),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
   {
@@ -90,30 +83,23 @@ public:
     _texCoords = NULL;
 
     releaseGLTextureId();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   bool isValid() const {
     return _glTextureId != NULL;
   }
 
-  void setGLTextureId(const IGLTextureId* glTextureId) {
+  void setGLTextureId(const TextureIDReference* glTextureId) {
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
 
-  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
-
-
-  const IGLTextureId* getGLTextureId() const {
+  const TextureIDReference* getGLTextureId() const {
     return _glTextureId;
-  }
-
-  bool isTransparent() const {
-    return _transparent;
   }
 
   void modifyGLState(GLState& state) const;
@@ -157,14 +143,14 @@ public:
   BoundingVolume* getBoundingVolume() const;
 
   bool setGLTextureIdForLevel(int level,
-                              const IGLTextureId* glTextureId);
+                              const TextureIDReference* glTextureId);
 
-  const IGLTextureId* getTopLevelGLTextureId() const;
+  const TextureIDReference* getTopLevelTextureId() const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
 
-  void render(const G3MRenderContext* rc,
-              const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
 
 };
 

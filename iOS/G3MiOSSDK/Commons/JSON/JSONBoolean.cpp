@@ -12,7 +12,7 @@
 #include "JSONVisitor.hpp"
 
 const std::string JSONBoolean::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addBool(_value);
   const std::string s = isb->getString();
   delete isb;

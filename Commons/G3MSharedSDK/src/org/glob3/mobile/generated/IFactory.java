@@ -29,10 +29,15 @@ package org.glob3.mobile.generated;
 //class IWebSocket;
 //class IWebSocketListener;
 //class URL;
+//class IDeviceInfo;
 
 public abstract class IFactory
 {
   private static IFactory _instance = null;
+
+  private IDeviceInfo _deviceInfo;
+
+  protected abstract IDeviceInfo createDeviceInfo();
 
   public static void setInstance(IFactory factory)
   {
@@ -50,17 +55,15 @@ public abstract class IFactory
     return _instance;
   }
 
+  public IFactory()
+  {
+     _deviceInfo = null;
+
+  }
+
   public void dispose()
   {
   }
-
-  public abstract void createImageFromFileName(String filename, IImageListener listener, boolean autodelete);
-
-  public abstract void createImageFromBuffer(IByteBuffer buffer, IImageListener listener, boolean autodelete);
-
-//  virtual void createImageFromSize(int width, int height,
-//                                   IImageListener* listener,
-//                                   bool autodelete) const = 0;
 
   public abstract void deleteImage(IImage image);
 
@@ -85,8 +88,21 @@ public abstract class IFactory
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
-  public abstract IShortBuffer createShortBuffer(final short[] array);
+  public final IDeviceInfo getDeviceInfo()
+  {
+    if (_deviceInfo == null)
+    {
+      _deviceInfo = createDeviceInfo();
+    }
+    return _deviceInfo;
+  }
 
-  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+
+
+  public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
+  public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
+
+//  public abstract float[] getThreadLocalFloatArray();
+//  public abstract void    setThreadLocalFloatArray(final float[] array);
 
 }

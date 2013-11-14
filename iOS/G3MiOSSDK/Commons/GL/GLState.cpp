@@ -15,7 +15,7 @@ GLState::~GLState() {
   delete _valuesSet;
   delete _globalState;
 
-  if (_parentGLState != NULL){
+  if (_parentGLState != NULL) {
     _parentGLState->_release();
   }
 }
@@ -49,7 +49,7 @@ GLFeatureSet* GLState::getAccumulatedFeatures() const{
   return _accumulatedFeatures;
 }
 
-void GLState::addGLFeature(const GLFeature* f, bool mustRetain) {
+void GLState::addGLFeature(GLFeature* f, bool mustRetain) {
   _features.add(f);
 
   if (!mustRetain) {
@@ -73,8 +73,8 @@ void GLState::setParent(const GLState* parent) const{
     if ((parent != _parentGLState) ||
         (_parentsTimeStamp != parentsTimeStamp)) {
 
-      if (_parentGLState != parent){
-        if (_parentGLState != NULL){
+      if (_parentGLState != parent) {
+        if (_parentGLState != NULL) {
           _parentGLState->_release();
         }
         _parentGLState    = parent;
@@ -92,7 +92,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
   if (_valuesSet == NULL && _globalState == NULL) {
 
-    _valuesSet = new GPUVariableValueSet();
+    _valuesSet   = new GPUVariableValueSet();
     _globalState = new GLGlobalState();
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
@@ -117,7 +117,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-    const int uniformsCode = _valuesSet->getUniformsCode();
+    const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
     _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
@@ -149,7 +149,7 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
   hasChangedStructure();
 }
 
-void GLState::clearAllGLFeatures(){
+void GLState::clearAllGLFeatures() {
   _features.clearFeatures();
   hasChangedStructure();
 }
@@ -158,11 +158,11 @@ int GLState::getNumberOfGLFeatures() const{
   return _features.size();
 }
 
-const GLFeature* GLState::getGLFeature(GLFeatureID id) const{
+GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   const int size = _features.size();
   for (int i = 0; i < size; i++) {
-    const GLFeature* f = _features.get(i);
-    if (f->getID() == id){
+    GLFeature* f = _features.get(i);
+    if (f->_id == id) {
       return f;
     }
   }

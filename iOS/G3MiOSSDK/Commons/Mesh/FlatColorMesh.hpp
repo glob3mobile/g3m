@@ -74,10 +74,11 @@ public:
   }
   
   bool isTransparent(const G3MRenderContext* rc) const {
-    return _flatColor->getAlpha() != 1.0;
+    return _flatColor->_alpha != 1.0;
   }
   
-  void render(const G3MRenderContext* rc, const GLState* parentState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const;
 };
 
 #endif

@@ -26,6 +26,13 @@
 #include "GPUProgramManager.hpp"
 #include "GPUProgramFactory.hpp"
 #include "SceneLighting.hpp"
+#include "Sector.hpp"
+#include "SectorAndHeightCameraConstrainer.hpp"
+#include "GEORenderer.hpp"
+#include "MeshRenderer.hpp"
+#include "ShapesRenderer.hpp"
+#include "MarksRenderer.hpp"
+#include "HUDErrorRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -39,6 +46,7 @@ _cameraRenderer(NULL),
 _backgroundColor(NULL),
 _planetRendererBuilder(NULL),
 _busyRenderer(NULL),
+_errorRenderer(NULL),
 _renderers(NULL),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
@@ -46,7 +54,8 @@ _periodicalTasks(NULL),
 _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
-_sceneLighting(NULL)
+_sceneLighting(NULL),
+_shownSector(NULL)
 {
 }
 
@@ -71,6 +80,7 @@ IG3MBuilder::~IG3MBuilder() {
     delete _renderers;
   }
   delete _busyRenderer;
+  delete _errorRenderer;
   delete _backgroundColor;
   delete _initializationTask;
   if (_periodicalTasks) {
@@ -81,6 +91,7 @@ IG3MBuilder::~IG3MBuilder() {
   }
   delete _userData;
   delete _planetRendererBuilder;
+  delete _shownSector;
 }
 
 /**
@@ -196,6 +207,14 @@ Renderer* IG3MBuilder::getBusyRenderer() {
   }
   
   return _busyRenderer;
+}
+
+ErrorRenderer* IG3MBuilder::getErrorRenderer() {
+  if (!_errorRenderer) {
+    _errorRenderer = new HUDErrorRenderer();
+  }
+
+  return _errorRenderer;
 }
 
 /**
@@ -470,7 +489,7 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
  *
  * @param busyRenderer - cannot be NULL.
  */
-void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
+void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
   if (_busyRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: _busyRenderer already initialized");
     return;
@@ -480,6 +499,18 @@ void IG3MBuilder::setBusyRenderer(Renderer *busyRenderer) {
     return;
   }
   _busyRenderer = busyRenderer;
+}
+
+void IG3MBuilder::setErrorRenderer(ErrorRenderer* errorRenderer) {
+  if (_errorRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer already initialized");
+    return;
+  }
+  if (!errorRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+    return;
+  }
+  _errorRenderer = errorRenderer;
 }
 
 /**
@@ -618,6 +649,11 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
  * @return G3MWidget*
  */
 G3MWidget* IG3MBuilder::create() {
+
+
+  Sector shownSector = getShownSector();
+  getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
+
   /**
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -637,26 +673,50 @@ G3MWidget* IG3MBuilder::create() {
   else {
     mainRenderer = getPlanetRendererBuilder()->create();
   }
-  
-  
-  G3MWidget * g3mWidget = G3MWidget::create(getGL(), //
-                                            getStorage(), //
-                                            getDownloader(), //
-                                            getThreadUtils(), //
-                                            getCameraActivityListener(),//
-                                            getPlanet(), //
-                                            *getCameraConstraints(), //
-                                            getCameraRenderer(), //
-                                            mainRenderer, //
-                                            getBusyRenderer(), //
-                                            *getBackgroundColor(), //
-                                            getLogFPS(), //
-                                            getLogDownloaderStatistics(), //
-                                            getInitializationTask(), //
-                                            getAutoDeleteInitializationTask(), //
+
+  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(shownSector);
+//  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
+
+  //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
+//  if (!shownSector.isEquals(Sector::fullSphere())) {
+//    const double margin = 0.2;
+//    const double height = 1e5;
+//
+//    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
+//    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
+//
+//    Sector sector = Sector::fromDegrees(shownSector._lower._latitude._degrees - latMargin,
+//                                        shownSector._lower._longitude._degrees - lonMargin,
+//                                        shownSector._upper._latitude._degrees + latMargin,
+//                                        shownSector._upper._longitude._degrees + lonMargin);
+//    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
+    
+    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
+                                                            initialCameraPosition._height * 1.2));
+//  }
+
+  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
+
+  G3MWidget * g3mWidget = G3MWidget::create(getGL(),
+                                            getStorage(),
+                                            getDownloader(),
+                                            getThreadUtils(),
+                                            getCameraActivityListener(),
+                                            getPlanet(),
+                                            *getCameraConstraints(),
+                                            getCameraRenderer(),
+                                            mainRenderer,
+                                            getBusyRenderer(),
+                                            getErrorRenderer(),
+                                            *getBackgroundColor(),
+                                            getLogFPS(),
+                                            getLogDownloaderStatistics(),
+                                            getInitializationTask(),
+                                            getAutoDeleteInitializationTask(),
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
-                                            getSceneLighting());
+                                            getSceneLighting(),
+                                            icpp);
   
   g3mWidget->setUserData(getUserData());
 
@@ -672,10 +732,14 @@ G3MWidget* IG3MBuilder::create() {
   delete _renderers;
   _renderers = NULL;
   _busyRenderer = NULL;
+  _errorRenderer = NULL;
   _initializationTask = NULL;
   delete _periodicalTasks;
   _periodicalTasks = NULL;
   _userData = NULL;
+
+  delete _shownSector;
+  _shownSector = NULL;
   
   return g3mWidget;
 }
@@ -726,11 +790,11 @@ bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
   return false;
 }
 
-void IG3MBuilder::addGPUProgramSources(GPUProgramSources& s) {
+void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
   _sources.push_back(s);
 }
 
-void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting){
+void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting) {
   _sceneLighting = sceneLighting;
 }
 
@@ -745,8 +809,63 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 }
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
-  if (_sceneLighting == NULL){
-    _sceneLighting = new DefaultSceneLighting();
+  if (_sceneLighting == NULL) {
+    //_sceneLighting = new DefaultSceneLighting();
+    _sceneLighting = new CameraFocusSceneLighting();
   }
   return _sceneLighting;
+}
+
+void IG3MBuilder::setShownSector(const Sector& sector) {
+  if (_shownSector != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: _shownSector already initialized");
+    return;
+  }
+  _shownSector = new Sector(sector);
+}
+
+Sector IG3MBuilder::getShownSector() const{
+  if (_shownSector == NULL) {
+    return Sector::fullSphere();
+  }
+  return *_shownSector;
+}
+
+MeshRenderer* IG3MBuilder::createMeshRenderer() {
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  addRenderer(meshRenderer);
+  return meshRenderer;
+}
+
+ShapesRenderer* IG3MBuilder::createShapesRenderer() {
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  addRenderer(shapesRenderer);
+  return shapesRenderer;
+}
+
+MarksRenderer* IG3MBuilder::createMarksRenderer() {
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  addRenderer(marksRenderer);
+  return marksRenderer;
+}
+
+GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
+                                            bool createMeshRenderer,
+                                            bool createShapesRenderer,
+                                            bool createMarksRenderer,
+                                            bool createGEOTileRasterizer) {
+
+  MeshRenderer*      meshRenderer      = createMeshRenderer      ? this->createMeshRenderer() : NULL;
+  ShapesRenderer*    shapesRenderer    = createShapesRenderer    ? this->createShapesRenderer() : NULL;
+  MarksRenderer*     marksRenderer     = createMarksRenderer     ? this->createMarksRenderer() : NULL;
+  GEOTileRasterizer* geoTileRasterizer = createGEOTileRasterizer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
+
+  GEORenderer* geoRenderer = new GEORenderer(symbolizer,
+                                             meshRenderer,
+                                             shapesRenderer,
+                                             marksRenderer,
+                                             geoTileRasterizer);
+  addRenderer(geoRenderer);
+
+  return geoRenderer;
 }

@@ -18,6 +18,7 @@
 #include "MutableVector3D.hpp"
 
 #include "Ellipsoid.hpp"
+#include "Sector.hpp"
 
 class EllipsoidalPlanet: public Planet {
 private:
@@ -83,7 +84,9 @@ public:
   }
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+                                             const Vector3D& direction) const {
+    return _ellipsoid.intersectionsDistances(origin, direction);
+  }
   
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
@@ -163,6 +166,19 @@ public:
   Vector3D getNorth() const {
     return Vector3D::upZ();
   }
+
+  void applyCameraConstrainers(const Camera* previousCamera,
+                               Camera* nextCamera) const;
+
+  Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const{
+    const Vector3D asw = toCartesian(shownSector.getSW());
+    const Vector3D ane = toCartesian(shownSector.getNE());
+    const double height = asw.sub(ane).length() * 1.9;
+
+    return Geodetic3D(shownSector._center,
+                      height);
+  }
+
 
 };
 

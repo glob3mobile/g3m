@@ -105,7 +105,7 @@ public class IImageUtils
       final RectangleF sourceRect = sourceRects.get(0);
       final RectangleF destRect = destRects.get(0);
   
-      if (sourceRect._x == 0 && sourceRect._y == 0 && sourceRect._width == image.getWidth() && sourceRect._height == image.getHeight() && destRect._x == 0 && destRect._y == 0 && destRect._width == width && destRect._height == height)
+      if ((sourceRect._x == 0) && (sourceRect._y == 0) && (sourceRect._width == image.getWidth()) && (sourceRect._height == image.getHeight()) && (destRect._x == 0) && (destRect._y == 0) && (destRect._width == width) && (destRect._height == height))
       {
         scale(width, height, image, listener, autodelete);
         return;

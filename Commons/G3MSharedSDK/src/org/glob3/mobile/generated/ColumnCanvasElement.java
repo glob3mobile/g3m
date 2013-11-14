@@ -42,29 +42,34 @@ public class ColumnCanvasElement extends GroupCanvasElement
     return new Vector2F(width, height);
   }
 
-  public ColumnCanvasElement()
+  public ColumnCanvasElement(Color color, float margin, float padding)
   {
-     this(Color.transparent());
+     this(color, margin, padding, 0);
+  }
+  public ColumnCanvasElement(Color color, float margin)
+  {
+     this(color, margin, 0, 0);
   }
   public ColumnCanvasElement(Color color)
   {
-     super(color);
-
+     this(color, 0, 0, 0);
+  }
+  public ColumnCanvasElement()
+  {
+     this(Color.transparent(), 0, 0, 0);
+  }
+  public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius)
+  {
+     super(color, margin, padding, cornerRadius);
   }
 
   public void dispose()
   {
   super.dispose();
-
   }
 
-  public final void drawAt(float left, float top, ICanvas canvas)
+  public final void rawDrawAt(float left, float top, Vector2F extent, ICanvas canvas)
   {
-    final Vector2F extent = getExtent(canvas);
-  
-    canvas.setFillColor(_color);
-    canvas.fillRectangle(left, top, extent._x, extent._y);
-  
     final float halfWidth = extent._x / 2;
   
     float cursorTop = top;

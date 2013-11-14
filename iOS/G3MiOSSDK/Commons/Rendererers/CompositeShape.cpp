@@ -25,7 +25,7 @@ void CompositeShape::addShape(Shape* shape) {
   _children.push_back(shape);
 }
 
-bool CompositeShape::isReadyToRender(const G3MRenderContext *rc) {
+bool CompositeShape::isReadyToRender(const G3MRenderContext* rc) {
   int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];

@@ -28,6 +28,9 @@ class GPUProgram;
 
 class GLGlobalState {
 private:
+
+  static bool _initializationAvailable;
+
   bool _depthTest;
   bool _blend;
   bool _cullFace;
@@ -81,6 +84,10 @@ private:
   }
   
 public:
+
+  static void initializationAvailable(){
+    _initializationAvailable = true;
+  }
   
   GLGlobalState() :
   _depthTest(false),
@@ -100,6 +107,11 @@ public:
   _clearColorB(0.0),
   _clearColorA(0.0)
   {
+
+    if (!_initializationAvailable){
+      ILogger::instance()->logError("GLGlobalState creation before it is available.");
+    }
+
   }
 
   static GLGlobalState* newDefault() {
@@ -175,10 +187,10 @@ public:
   }
   
   void setClearColor(const Color& color) {
-    _clearColorR = color.getRed();
-    _clearColorG = color.getGreen();
-    _clearColorB = color.getBlue();
-    _clearColorA = color.getAlpha();
+    _clearColorR = color._red;
+    _clearColorG = color._green;
+    _clearColorB = color._blue;
+    _clearColorA = color._alpha;
   }
   
   void applyChanges(GL* gl, GLGlobalState& currentState) const;

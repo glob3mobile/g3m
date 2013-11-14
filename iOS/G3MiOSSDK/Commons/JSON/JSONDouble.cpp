@@ -16,7 +16,7 @@ void JSONDouble::acceptVisitor(JSONVisitor* visitor) const {
 }
 
 const std::string JSONDouble::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
   isb->addString("double/");
   isb->addDouble(_value);

@@ -17,20 +17,28 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class Color;
 //class FloatBufferBuilderFromGeodetic;
 //class FloatBufferBuilderFromCartesian2D;
+//class FloatBufferBuilderFromCartesian3D;
+//class TextureIDReference;
+
 //class IGLTextureId;
 
 
 
 public class EllipsoidShape extends AbstractMeshShape
 {
+
+  private Ellipsoid _ellipsoid;
+//  private final Quadric _quadric;
+
   private URL _textureURL = new URL();
 
-  private final double _radiusX;
-  private final double _radiusY;
-  private final double _radiusZ;
+  /*const double _radiusX;
+  const double _radiusY;
+  const double _radiusZ;*/
 
   private final short _resolution;
 
@@ -39,6 +47,8 @@ public class EllipsoidShape extends AbstractMeshShape
   private final boolean _texturedInside;
 
   private final boolean _mercator;
+
+  private final boolean _withNormals;
 
   private Color _surfaceColor;
   private Color _borderColor;
@@ -87,7 +97,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
     return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
   }
-  private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords)
+  private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords, FloatBufferBuilderFromCartesian3D normals)
   {
   
     // create surface indices
@@ -126,9 +136,9 @@ public class EllipsoidShape extends AbstractMeshShape
   
     // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor);
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, 1, true, _withNormals? normals.create() : null);
   
-    final IGLTextureId texId = getTextureId(rc);
+    final TextureIDReference texId = getTextureId(rc);
     if (texId == null)
     {
       return im;
@@ -142,25 +152,36 @@ public class EllipsoidShape extends AbstractMeshShape
 
   private boolean _textureRequested;
   private IImage _textureImage;
-  private IGLTextureId getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureId(G3MRenderContext rc)
   {
-    if (_textureImage == null)
+  
+    if (_texId == null)
     {
-      return null;
+      if (_textureImage == null)
+      {
+        return null;
+      }
+  
+      _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+  
+      rc.getFactory().deleteImage(_textureImage);
+      _textureImage = null;
     }
   
-    final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
-  
-    rc.getFactory().deleteImage(_textureImage);
-    _textureImage = null;
-  
-    if (texId == null)
+    if (_texId == null)
     {
       rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
     }
   
-    return texId;
+    if (_texId == null)
+    {
+      return null;
+    }
+  
+    return _texId.createCopy(); //The copy will be handle by the TextureMapping
   }
+
+  TextureIDReference _texId;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -173,12 +194,14 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(_radiusX, _radiusY, _radiusZ)));
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid.getRadii()));
     final Sector sector = new Sector(Sector.fullSphere());
   
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
+    //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+  
+    FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
     final short resolution2Minus2 = (short)(2 *_resolution-2);
     final short resolutionMinus1 = (short)(_resolution-1);
@@ -194,6 +217,12 @@ public class EllipsoidShape extends AbstractMeshShape
   
         vertices.add(innerPoint);
   
+        if (_withNormals)
+        {
+          Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
+          normals.add(n);
+        }
+  
         final double vv = _mercator ? MercatorUtils.getMercatorV(innerPoint._latitude) : v;
   
         texCoords.add((float) u, (float) vv);
@@ -201,7 +230,7 @@ public class EllipsoidShape extends AbstractMeshShape
     }
   
   
-    Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords);
+    Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords, normals);
   
     if (_borderWidth > 0)
     {
@@ -214,35 +243,43 @@ public class EllipsoidShape extends AbstractMeshShape
     return surfaceMesh;
   }
 
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
-  {
-     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null);
-  }
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, borderColor, true);
+  }
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor)
+  {
+     this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null, true);
+  }
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  {
      super(position, altitudeMode);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
      _textureURL = new URL(new URL("", false));
-     _radiusX = radius.x();
-     _radiusY = radius.y();
-     _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;
      _mercator = mercator;
-     _surfaceColor = surfaceColor;
+     _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
      _textureRequested = false;
      _textureImage = null;
+     _withNormals = withNormals;
+     _texId = null;
 
   }
 
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
+  {
+     this(position, altitudeMode, planet, textureURL, radius, resolution, borderWidth, texturedInside, mercator, true);
+  }
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   {
      super(position, altitudeMode);
+     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
      _textureURL = new URL(textureURL);
-     _radiusX = radius.x();
-     _radiusY = radius.y();
-     _radiusZ = radius.z();
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;
@@ -251,16 +288,21 @@ public class EllipsoidShape extends AbstractMeshShape
      _borderColor = null;
      _textureRequested = false;
      _textureImage = null;
+     _withNormals = withNormals;
+     _texId = null;
 
   }
 
 
   public void dispose()
   {
+    _ellipsoid = null;
     if (_surfaceColor != null)
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+  
+    _texId = null; //Releasing texture
   
     super.dispose();
   
@@ -271,6 +313,16 @@ public class EllipsoidShape extends AbstractMeshShape
     _textureImage = image;
   
     cleanMesh();
+  }
+
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    //  MutableMatrix44D* M = createTransformMatrix(_planet);
+    //  const Quadric transformedQuadric = _quadric.transformBy(*M);
+    //  delete M;
+    //  return transformedQuadric.intersectionsDistances(origin, direction);
+    return new java.util.ArrayList<Double>();
   }
 
 }

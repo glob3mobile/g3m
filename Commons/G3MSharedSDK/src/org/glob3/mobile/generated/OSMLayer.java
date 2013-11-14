@@ -29,6 +29,17 @@ public class OSMLayer extends MercatorTiledLayer
     return result;
   }
 
+
+  protected final String getLayerType()
+  {
+    return "OSM";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    return true;
+  }
+
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
      this(timeToCache, readExpired, initialLevel, null);
@@ -50,6 +61,11 @@ public class OSMLayer extends MercatorTiledLayer
   public final String description()
   {
     return "[OSMLayer]";
+  }
+
+  public final OSMLayer copy()
+  {
+    return new OSMLayer(TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

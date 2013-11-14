@@ -23,17 +23,14 @@
 class GPUAttribute;
 
 class GPUAttributeValue : public RCObject {
-protected:
-  const bool _enabled;
-  const int _type;
-  const int _attributeSize;
-  const int _index;
-  const int           _stride;
-  const bool          _normalized;
-
-  const int _arrayElementSize;
-
 public:
+  const bool _enabled;
+  const int  _type;
+  const int  _attributeSize;
+  const int  _index;
+  const int  _stride;
+  const bool _normalized;
+  const int  _arrayElementSize;
 
   GPUAttributeValue(bool enabled):
   _enabled(enabled),
@@ -55,12 +52,13 @@ public:
   _arrayElementSize(arrayElementSize)
   {}
 
-  int getType() const { return _type;}
-  int getAttributeSize() const { return _attributeSize;}
-  int getIndex() const { return _index;}
-  int getStride() const { return _stride;}
-  bool getNormalized() const { return _normalized;}
-  bool getEnabled() const { return _enabled;}
+//  int getType() const { return _type;}
+//  int getAttributeSize() const { return _attributeSize;}
+//  int getIndex() const { return _index;}
+//  int getStride() const { return _stride;}
+//  bool getNormalized() const { return _normalized;}
+//  bool getEnabled() const { return _enabled;}
+
   virtual ~GPUAttributeValue() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -68,14 +66,13 @@ public:
 
   }
   virtual void setAttribute(GL* gl, const int id) const = 0;
-  virtual bool isEqualsTo(const GPUAttributeValue* v) const = 0;
+  virtual bool isEquals(const GPUAttributeValue* v) const = 0;
   virtual std::string description() const = 0;
 
 };
 
 class GPUAttribute: public GPUVariable{
 private:
-  const int _id;
 
   bool _dirty;
 #ifdef C_CODE
@@ -85,13 +82,14 @@ private:
   private GPUAttributeValue _value;
 #endif
 
-  const int _type;
-  const int _size;
   bool _enabled;
 
-  const GPUAttributeKey _key;
 
 public:
+  const int _id;
+  const int _type;
+  const int _size;
+  const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
     delete _value;
@@ -110,15 +108,17 @@ public:
   _type(type),
   _size(size),
   _enabled(false),
-  _key(getAttributeKey(name)) {}
+  _key(getAttributeKey(name))
+  {
+  }
 
-  const std::string getName() const{ return _name;}
-  const int getID() const{ return _id;}
-  int getType() const{ return _type;}
-  int getSize() const{ return _size;}
+//  const std::string getName() const{ return _name;}
+//  const int getID() const{ return _id;}
+//  int getType() const{ return _type;}
+//  int getSize() const{ return _size;}
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
-  GPUAttributeKey getKey() const { return _key;}
+//  GPUAttributeKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -144,11 +144,11 @@ public:
   void set(const GPUAttributeValue* v) {
     if (v != _value) {
 
-      if (v->getEnabled() && _type != v->getType()) { //type checking
+      if (v->_enabled && _type != v->_type) { //type checking
         ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
         return;
       }
-      if (_value == NULL || !_value->isEqualsTo(v)) {
+      if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
 
         if (_value != NULL) {
@@ -163,21 +163,21 @@ public:
 
 
   virtual void applyChanges(GL* gl) {
-
     if (_value == NULL) {
       if (_enabled) {
         ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
       }
-    } else{
+    }
+    else {
       if (_dirty) {
-
-        if (_value->getEnabled()) {
+        if (_value->_enabled) {
           if (!_enabled) {
             gl->enableVertexAttribArray(_id);
             _enabled = true;
           }
           _value->setAttribute(gl, _id);
-        } else{
+        }
+        else {
           if (_enabled) {
             gl->disableVertexAttribArray(_id);
             _enabled = false;
@@ -200,8 +200,8 @@ public:
   void setAttribute(GL* gl, const int id) const{
   }
 
-  bool isEqualsTo(const GPUAttributeValue* v) const{
-    return (v->getEnabled() == false);
+  bool isEquals(const GPUAttributeValue* v) const{
+    return (v->_enabled == false);
   }
 
   GPUAttributeValue* shallowCopy() const{
@@ -217,7 +217,7 @@ public:
     if (oldAtt == NULL) {
       return new GPUAttributeValueDisabled();
     }
-    if (oldAtt->getEnabled()) {
+    if (oldAtt->_enabled) {
       delete oldAtt;
       return new GPUAttributeValueDisabled();
     }
@@ -230,11 +230,13 @@ public:
 class GPUAttributeValueVecFloat: public GPUAttributeValue{
   const IFloatBuffer* _buffer;
   const int _timeStamp;
+  const long long _id;
 public:
   GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()) {}
+  _timeStamp(buffer->timestamp()),
+  _id(buffer->getID()){}
 
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0) {
@@ -245,23 +247,25 @@ public:
     gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
-  bool isEqualsTo(const GPUAttributeValue* v) const{
+  bool isEquals(const GPUAttributeValue* v) const{
 
-    if (!v->getEnabled()) {
+    if (!v->_enabled) {
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    return ((_buffer        == vecV->_buffer)         &&
-            (_timeStamp     == vecV->_timeStamp)      &&
-            (_type          == v->getType())          &&
-            (_attributeSize == v->getAttributeSize()) &&
-            (_stride        == v->getStride())        &&
-            (_normalized    == v->getNormalized()) );
+    bool equal = ((_id      == vecV->_buffer->getID())     &&
+            (_timeStamp     == vecV->_timeStamp)  &&
+            (_type          == v->_type)          &&
+            (_attributeSize == v->_attributeSize) &&
+            (_stride        == v->_stride)        &&
+            (_normalized    == v->_normalized) );
+
+    return equal;
   }
 
   std::string description() const{
 
-    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Attribute Value Float.");
     isb->addString(" ArrayElementSize:");
     isb->addInt(_arrayElementSize);

@@ -48,13 +48,11 @@ public class CompositeElevationData extends ElevationData
   //  Sector s = data->getSector();
   //  Sector s2 = d0->getSector();
   
-    if (!data.getSector().isEqualsTo(getSector()))
+    if (!data.getSector().isEquals(getSector()))
     {
       ILogger.instance().logError("Sectors don't match.");
     }
   
-  
-    final IMathUtils mu = IMathUtils.instance();
     _data.add(data);
   
     //Checking NoData
@@ -63,7 +61,7 @@ public class CompositeElevationData extends ElevationData
       for (int j = 0; j < _height; j++)
       {
         double height = getElevationAt(i, j);
-        if (mu.isNan(height))
+        if ((height != height))
         {
           _hasNoData = true;
           return;
@@ -89,18 +87,17 @@ public class CompositeElevationData extends ElevationData
 
   public final double getElevationAt(int x, int y)
   {
-    final IMathUtils mu = IMathUtils.instance();
     final int size = _data.size();
     for (int i = 0; i < size; i++)
     {
       final double h = _data.get(i).getElevationAt(x, y);
-      if (!mu.isNan(h))
+      if (!(h != h))
       {
         return h;
       }
     }
   
-    return mu.NanD();
+    return java.lang.Double.NaN;
   }
 
   public final String description(boolean detailed)
@@ -145,7 +142,7 @@ public class CompositeElevationData extends ElevationData
       for (int j = 0; j < _height; j++)
       {
         final double height = getElevationAt(i, j);
-        if (!mu.isNan(height))
+        if (!(height != height))
         {
           if (height < minHeight)
           {

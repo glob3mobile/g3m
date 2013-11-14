@@ -20,6 +20,7 @@ public class G3MDemoActivity
    @Override
    protected void onDestroy() {
       Log.i(getClass().toString(), "Destroy");
+      finish();
       super.onDestroy();
    }
 
@@ -27,6 +28,7 @@ public class G3MDemoActivity
    @Override
    protected void onPause() {
       Log.i(getClass().toString(), "Pause");
+
       super.onDestroy();
    }
 
@@ -36,13 +38,14 @@ public class G3MDemoActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_g3_mdemo);
 
-      final Button simpleG3MButton = (Button) findViewById(R.id.simpleG3MButton);
+      final Button simpleRasterLayerButton = (Button) findViewById(R.id.simpleRasterLayerButton);
 
 
-      simpleG3MButton.setOnClickListener(new OnClickListener() {
+      simpleRasterLayerButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSimplestGlob3Activity.class);
+
+            final Intent intent = new Intent(getApplicationContext(), SimplestRasterActivity.class);
             startActivity(intent);
          }
       });
@@ -53,29 +56,31 @@ public class G3MDemoActivity
       doubleG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
+
             final Intent intent = new Intent(getApplicationContext(), G3MDoubleGlob3Activity.class);
             startActivity(intent);
          }
       });
 
 
-      final Button switchLayerG3MButton = (Button) findViewById(R.id.switchLayersG3MButton);
+      final Button scenarioButton = (Button) findViewById(R.id.scenarioButton);
 
 
-      switchLayerG3MButton.setOnClickListener(new OnClickListener() {
+      scenarioButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MSwitchLayerActivity.class);
+
+            final Intent intent = new Intent(getApplicationContext(), ScenarioTerrainActivity.class);
             startActivity(intent);
          }
       });
 
 
-      final Button drawingShapesG3MButton = (Button) findViewById(R.id.threedshapes);
+      final Button drawingShapesG3MButton = (Button) findViewById(R.id.symbology);
       drawingShapesG3MButton.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MDrawingShapesActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), SymbologyActivity.class);
             startActivity(intent);
          }
       });
@@ -90,11 +95,48 @@ public class G3MDemoActivity
          }
       });
 
-      final Button netCDFButton = (Button) findViewById(R.id.netCDFG3MButton);
-      netCDFButton.setOnClickListener(new OnClickListener() {
+      final Button threeDSymbology = (Button) findViewById(R.id.threeDsymbologyButton);
+      threeDSymbology.setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), G3MNetCDFActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), ShapeSymbolizerActivity.class);
+            startActivity(intent);
+         }
+      });
+
+      final Button pointCloudButton = (Button) findViewById(R.id.pointCloudButton);
+      pointCloudButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), PointCloudActivity.class);
+            startActivity(intent);
+         }
+      });
+
+
+      final Button threeDModelButton = (Button) findViewById(R.id.threeDModelButton);
+      threeDModelButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), ThreeDModelActivity.class);
+            startActivity(intent);
+         }
+      });
+
+      final Button flatWorldButton = (Button) findViewById(R.id.flatWorldButton);
+      flatWorldButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), FlatWorldActivity.class);
+            startActivity(intent);
+         }
+      });
+
+      final Button cameraAnimationButton = (Button) findViewById(R.id.cameraAnimation);
+      cameraAnimationButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), CameraAnimation.class);
             startActivity(intent);
          }
       });

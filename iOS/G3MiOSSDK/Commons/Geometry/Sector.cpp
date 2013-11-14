@@ -15,6 +15,10 @@
 #include "GEORasterProjection.hpp"
 #include "ICanvas.hpp"
 
+#include "GEOSymbol.hpp"
+#include "GEO2DLineRasterStyle.hpp"
+#include "GEORasterLineSymbol.hpp"
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
   return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
@@ -32,12 +36,20 @@ bool Sector::touchesWith(const Sector &that) const {
   //   page 79
 
   // Exit with no intersection if separated along an axis
-  if (_upper._latitude.lowerThan(that._lower._latitude) ||
-      _lower._latitude.greaterThan(that._upper._latitude)) {
+//  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+//      _lower._latitude.greaterThan(that._upper._latitude)) {
+//    return false;
+//  }
+//  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+//      _lower._longitude.greaterThan(that._upper._longitude)) {
+//    return false;
+//  }
+  if ((_upper._latitude._radians < that._lower._latitude._radians) ||
+      (_lower._latitude._radians > that._upper._latitude._radians)) {
     return false;
   }
-  if (_upper._longitude.lowerThan(that._lower._longitude) ||
-      _lower._longitude.greaterThan(that._upper._longitude)) {
+  if ((_upper._longitude._radians < that._lower._longitude._radians) ||
+      (_lower._longitude._radians > that._upper._longitude._radians)) {
     return false;
   }
 
@@ -65,18 +77,18 @@ Sector::~Sector() {
 }
 
 
-bool Sector::isBackOriented(const G3MRenderContext *rc,
+bool Sector::isBackOriented(const G3MRenderContext* rc,
                             double minHeight,
                             const Planet* planet,
                             const Vector3D& cameraNormalizedPosition,
                             double cameraAngle2HorizonInRadians) const {
-//  const Camera* camera = rc->getCurrentCamera();
-//  const Planet* planet = rc->getPlanet();
-//
-//  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-//  const double angleInRadians = IMathUtils::instance()->acos(dot);
-//
-//  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const Planet* planet = rc->getPlanet();
+  //
+  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+  //
+  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
 
   if (planet->isFlat()) return false;
 
@@ -94,13 +106,18 @@ bool Sector::isBackOriented(const G3MRenderContext *rc,
 Sector Sector::intersection(const Sector& that) const {
   const Angle lowLat = Angle::max(_lower._latitude,  that._lower._latitude);
   const Angle lowLon = Angle::max(_lower._longitude, that._lower._longitude);
-  const Geodetic2D low(lowLat, lowLon);
 
   const Angle upLat = Angle::min(_upper._latitude,  that._upper._latitude);
   const Angle upLon = Angle::min(_upper._longitude, that._upper._longitude);
-  const Geodetic2D up(upLat, upLon);
 
-  return Sector(low, up);
+  if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon)) {
+    const Geodetic2D low(lowLat, lowLon);
+    const Geodetic2D up(upLat, upLon);
+
+    return Sector(low, up);
+  }
+
+  return Sector::fromDegrees(0, 0, 0, 0); //invalid
 }
 
 Sector Sector::mergedWith(const Sector& that) const {
@@ -147,7 +164,7 @@ const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
 }
 
 const std::string Sector::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(Sector ");
   isb->addString(_lower.description());
   isb->addString(" - ");
@@ -155,7 +172,7 @@ const std::string Sector::description() const {
   isb->addString(")");
   const std::string s = isb->getString();
   delete isb;
-  return s;  
+  return s;
 }
 
 const Vector2D Sector::div(const Sector& that) const {
@@ -169,7 +186,7 @@ void Sector::rasterize(ICanvas*                   canvas,
 
   const Vector2F l = projection->project(&_lower);
   const Vector2F u = projection->project(&_upper);
-  
+
   const float left   = l._x;
   const float top    = l._y;
   const float width  = u._x - left;
@@ -183,4 +200,56 @@ const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const 
     _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
   }
   return *_normalizedCartesianCenter;
+}
+
+const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
+
+  std::vector<Geodetic2D*> line;
+
+  line.push_back( new Geodetic2D( getSW() ) );
+  line.push_back( new Geodetic2D( getNW() ) );
+  line.push_back( new Geodetic2D( getNE() ) );
+  line.push_back( new Geodetic2D( getSE() ) );
+  line.push_back( new Geodetic2D( getSW() ) );
+
+  //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+
+  float dashLengths[] = {};
+  int dashCount = 0;
+
+  GEO2DLineRasterStyle ls(c, //const Color&     color,
+                          (float)1.0, //const float      width,
+                          CAP_ROUND, // const StrokeCap  cap,
+                          JOIN_ROUND, //const StrokeJoin join,
+                          1,//const float      miterLimit,
+                          dashLengths,//float            dashLengths[],
+                          dashCount,//const int        dashCount,
+                          0);//const int        dashPhase) :
+
+
+  return new GEORasterLineSymbol(&line, ls);
+
+}
+
+Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
+  double lat = g._latitude._degrees;
+  double lon = g._longitude._degrees;
+
+  if (lat > _upper._latitude._degrees) {
+    lat = _upper._latitude._degrees;
+  } else{
+    if (lat < _lower._latitude._degrees) {
+      lat = _lower._latitude._degrees;
+    }
+  }
+
+  if (lon > _upper._longitude._degrees) {
+    lon = _upper._longitude._degrees;
+  } else{
+    if (lon < _lower._longitude._degrees) {
+      lon = _lower._longitude._degrees;
+    }
+  }
+
+  return Geodetic2D::fromDegrees(lat, lon);
 }

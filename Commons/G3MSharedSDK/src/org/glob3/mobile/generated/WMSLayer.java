@@ -28,6 +28,84 @@ public class WMSLayer extends Layer
     return (_parameters._mercator) ? MercatorUtils.latitudeToMeters(latitude) : latitude._degrees;
   }
 
+  protected final String getLayerType()
+  {
+    return "WMS";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    WMSLayer t = (WMSLayer) that;
+  
+    if (!(_mapServerURL.isEquals(t._mapServerURL)))
+    {
+      return false;
+    }
+  
+    if (!(_queryServerURL.isEquals(t._queryServerURL)))
+    {
+      return false;
+    }
+  
+    if (!_mapLayer.equals(t._mapLayer))
+    {
+      return false;
+    }
+  
+    if (_mapServerVersion != t._mapServerVersion)
+    {
+      return false;
+    }
+  
+    if (!_queryLayer.equals(t._queryLayer))
+    {
+      return false;
+    }
+  
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
+  
+    if (!(_sector.isEquals(t._sector)))
+    {
+      return false;
+    }
+  
+    if (!_format.equals(t._format))
+    {
+      return false;
+    }
+  
+    if (_queryServerVersion != t._queryServerVersion)
+    {
+      return false;
+    }
+  
+    if (!_srs.equals(t._srs))
+    {
+      return false;
+    }
+  
+    if (!_style.equals(t._style))
+    {
+      return false;
+    }
+  
+    if (_isTransparent != t._isTransparent)
+    {
+      return false;
+    }
+  
+    if (!_extraParameter.equals(t._extraParameter))
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
@@ -35,7 +113,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -57,7 +135,7 @@ public class WMSLayer extends Layer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultNonMercator(Sector.fullSphere()) : parameters);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -78,7 +156,13 @@ public class WMSLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
+    final String path = _mapServerURL.getPath();
+    if (path.length() == 0)
+    {
+      return petitions;
+    }
+  
+    final Sector tileSector = tile._sector;
     if (!_sector.touchesWith(tileSector))
     {
       return petitions;
@@ -96,22 +180,22 @@ public class WMSLayer extends Layer
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
   
      //Server name
-    String req = _mapServerURL.getPath();
+    String req = path;
      if (req.charAt(req.length() - 1) != '?')
      {
         req += '?';
      }
   
-  //  //If the server refer to itself as localhost...
-  //  const int localhostPos = req.find("localhost");
-  //  if (localhostPos != -1) {
-  //    req = req.substr(localhostPos+9);
-  //
-  //    const int slashPos = req.find("/", 8);
-  //    std::string newHost = req.substr(0, slashPos);
-  //
-  //    req = newHost + req;
-  //  }
+    //  //If the server refer to itself as localhost...
+    //  const int localhostPos = req.find("localhost");
+    //  if (localhostPos != -1) {
+    //    req = req.substr(localhostPos+9);
+    //
+    //    const int slashPos = req.find("/", 8);
+    //    std::string newHost = req.substr(0, slashPos);
+    //
+    //    req = newHost + req;
+    //  }
   
     req += "REQUEST=GetMap&SERVICE=WMS";
   
@@ -214,7 +298,7 @@ public class WMSLayer extends Layer
       req += _extraParameter;
     }
   
-  //  printf("Request: %s\n", req.c_str());
+    //  printf("Request: %s\n", req.c_str());
   
     Petition petition = new Petition(sector, new URL(req, false), getTimeToCache(), getReadExpired(), _isTransparent);
     petitions.add(petition);
@@ -371,6 +455,11 @@ public class WMSLayer extends Layer
   public final String description()
   {
     return "[WMSLayer]";
+  }
+
+  public final WMSLayer copy()
+  {
+    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
   }
 
 }

@@ -33,7 +33,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultNonMercator(sector)
+      ? LayerTilesRenderParameters::createDefaultWGS84(sector)
       : parameters),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
@@ -50,7 +50,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   
   std::vector<Petition*> petitions;
 
-  const Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->_sector;
   if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }
@@ -59,11 +59,11 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   isb->addString(_mapServerURL.getPath());
   isb->addString(_mapLayer);
   isb->addString("/");
-  isb->addInt(tile->getLevel());
+  isb->addInt(tile->_level);
   isb->addString("/");
-  isb->addInt(tile->getColumn());
+  isb->addInt(tile->_column);
   isb->addString("/");
-  isb->addInt(tile->getRow());
+  isb->addInt(tile->_row);
   isb->addString(".");
   isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
 

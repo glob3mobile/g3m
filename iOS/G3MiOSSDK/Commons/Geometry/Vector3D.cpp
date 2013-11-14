@@ -49,9 +49,11 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double v = axis._y;
   const double w = axis._z;
   
-  const double cosTheta = theta.cosinus();
-  const double sinTheta = theta.sinus();
-  
+//  const double cosTheta = theta.cosinus();
+//  const double sinTheta = theta.sinus();
+  const double cosTheta = COS(theta._radians);
+  const double sinTheta = SIN(theta._radians);
+
   const double ms = axis.squaredLength();
   const double m = IMathUtils::instance()->sqrt(ms);
   
@@ -122,7 +124,7 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 
 
 const std::string Vector3D::description() const {  
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V3D ");
   isb->addDouble(_x);
   isb->addString(", ");

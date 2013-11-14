@@ -25,6 +25,7 @@ class IGLTextureId;
 class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
+class TextureIDReference;
 
 #include "SurfaceElevationProvider.hpp"
 
@@ -108,19 +109,22 @@ private:
   const bool        _autoDeleteListener;
 
 #ifdef C_CODE
-  const IGLTextureId* _textureId;
+  const TextureIDReference* _textureId;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _textureId;
+  private TextureIDReference _textureId;
 #endif
 
   Vector3D* _cartesianPosition;
-
-
-  bool    _textureSolved;
-  IImage* _textureImage;
-  int     _textureWidth;
-  int     _textureHeight;
+  bool              _textureSolved;
+#ifdef C_CODE
+  const IImage*     _textureImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _textureImage;
+#endif
+  int               _textureWidth;
+  int               _textureHeight;
   const std::string _imageID;
 
   bool    _renderedMark;
@@ -185,7 +189,7 @@ public:
   /**
    * Creates a marker whith a given pre-renderer IImage
    */
-  Mark(IImage*            image,
+  Mark(const IImage*      image,
        const std::string& imageID,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
@@ -219,7 +223,7 @@ public:
 
   void onTextureDownloadError();
 
-  void onTextureDownload(IImage* image);
+  void onTextureDownload(const IImage* image);
 
   int getTextureWidth() const {
     return _textureWidth;
@@ -263,7 +267,7 @@ public:
 
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
-                        double verticalExaggeration){}
+                        double verticalExaggeration) {}
 };
 
 #endif

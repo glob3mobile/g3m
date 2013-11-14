@@ -35,20 +35,19 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (_texCoords != NULL) {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEqualsTo(1.0, 1.0) || !_translation.isEqualsTo(0.0, 0.0)) {
-
-      state.addGLFeature(new TextureGLFeature(_glTextureId,
+    if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
+      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
-                                              isTransparent(),
+                                              _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
                                               true, _translation.asVector2D(), _scale.asVector2D()),
                          false); //TRANSFORM
     }
     else {
-      state.addGLFeature(new TextureGLFeature(_glTextureId,
+      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
-                                              isTransparent(),
+                                              _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
                                               false, Vector2D::zero(), Vector2D::zero() ),
@@ -63,11 +62,14 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
-  if (_texturesHandler) {
-    if (_glTextureId != NULL) {
-      _texturesHandler->releaseGLTextureId(_glTextureId);
-      _glTextureId = NULL;
-    }
+  if (_glTextureId != NULL){
+#ifdef C_CODE
+    delete _glTextureId;
+#endif
+#ifdef JAVA_CODE
+    _glTextureId.dispose();
+#endif
+    _glTextureId = NULL;
   }
 }
 
@@ -99,7 +101,6 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 int LeveledTexturedMesh::getVertexCount() const {
@@ -160,7 +161,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return (_currentLevel >= 0) ? _mappings->at(_currentLevel) : NULL;
 }
 
-const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
+const TextureIDReference* LeveledTexturedMesh::getTopLevelTextureId() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
@@ -172,7 +173,7 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 }
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
-                                                 const IGLTextureId* glTextureId) {
+                                                 const TextureIDReference* glTextureId) {
 
   if (_mappings->size() > 0) {
     if (glTextureId != NULL) {
@@ -194,11 +195,11 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 
   LazyTextureMapping* mapping = getCurrentTextureMapping();
 
-  return (mapping == NULL) ? false : mapping->isTransparent();
+  return (mapping == NULL) ? false : mapping->_transparent;
 }
 
-void LeveledTexturedMesh::render(const G3MRenderContext* rc,
-                                 const GLState* parentGLState) const{
+void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
+                                    const GLState* parentGLState) const{
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");

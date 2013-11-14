@@ -68,14 +68,6 @@ public class G3MNetCDFActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
 
 
-      //Some periods with polygons
-      //      builder.setInitializationTask(getInitializationTaskPeriods());
-      //      builder.addPeriodicalTask(PaintGeometriesTask());
-      //        builder.addRenderer(_shapesRenderer);
-      //Some periods with points  
-      //      builder.setInitializationTask(getInitializationTaskCreateMeshes(builder.getPlanet()));
-      //      builder.addPeriodicalTask(PaintMeshesTask());
-      //      builder.addRenderer(_meshRenderer);
       //Single period with points
       builder.setInitializationTask(getInitializationTaskSinglePeriodMeshes(builder.getPlanet()));
       builder.addRenderer(_meshRenderer);
@@ -159,7 +151,8 @@ public class G3MNetCDFActivity
                         final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(meridWinds.get(i), -10, 10, 1, 0));
                         final Geodetic3D position3D = new Geodetic3D(position, levels.get(i) * 10000);
 
-                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth, interpolatedColor, interpolatedColor));
+                        _boxShapes.add(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth,
+                                 interpolatedColor, interpolatedColor));
 
                      }
                   }
@@ -244,7 +237,7 @@ public class G3MNetCDFActivity
                      final JSONArray features = yearObject.getAsArray("features");
 
                      final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
-                    		 
+
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
                      for (int i = 0; i < features.size(); i++) {
@@ -396,9 +389,8 @@ public class G3MNetCDFActivity
 
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
-                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND,
-                        		   extent, borderWidth, interpolatedColor,
-                                    interpolatedColor));
+                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent,
+                                    borderWidth, interpolatedColor, interpolatedColor));
                         }
 
 
@@ -491,7 +483,7 @@ public class G3MNetCDFActivity
                      final JSONArray features = yearObject.getAsArray("features");
 
                      final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
-                    		 
+
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
 
@@ -530,7 +522,10 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(G3MGlob3Constants.EAST_AUSTRALIA_POSITION, 17000000),
+
+
+                  _widgetAndroid.setAnimatedCameraPosition(
+                           new Geodetic3D(Angle.fromDegreesMinutes(-27, 43), Angle.fromDegreesMinutes(153, 15), 17000000),
                            TimeInterval.fromSeconds(5));
                }
 
@@ -638,8 +633,8 @@ public class G3MNetCDFActivity
                   }
 
                   _isDone = true;
-                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(G3MGlob3Constants.EAST_AUSTRALIA_POSITION, 17000000),
-                           TimeInterval.fromSeconds(5));
+                  _widgetAndroid.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegreesMinutes(-27, 43), //
+                           Angle.fromDegreesMinutes(153, 15), 17000000), TimeInterval.fromSeconds(5));
                }
 
 
@@ -684,6 +679,12 @@ public class G3MNetCDFActivity
 
       return initializationTask;
 
+   }
+
+
+   @Override
+   public void onBackPressed() {
+      System.exit(0);
    }
 
 }

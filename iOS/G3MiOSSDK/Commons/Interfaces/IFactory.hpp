@@ -23,10 +23,16 @@ class ICanvas;
 class IWebSocket;
 class IWebSocketListener;
 class URL;
+class IDeviceInfo;
 
 class IFactory {
 private:
-  static IFactory* _instance;
+  static IFactory*     _instance;
+
+  mutable IDeviceInfo* _deviceInfo;
+
+protected:
+  virtual IDeviceInfo* createDeviceInfo() const = 0;
 
 public:
   static void setInstance(IFactory* factory) {
@@ -41,20 +47,14 @@ public:
     return _instance;
   }
 
-  virtual ~IFactory() {
+  IFactory() :
+  _deviceInfo(NULL)
+  {
+
   }
 
-  virtual void createImageFromFileName(const std::string& filename,
-                                       IImageListener* listener,
-                                       bool autodelete) const = 0;
-
-  virtual void createImageFromBuffer(const IByteBuffer* buffer,
-                                     IImageListener* listener,
-                                     bool autodelete) const = 0;
-
-//  virtual void createImageFromSize(int width, int height,
-//                                   IImageListener* listener,
-//                                   bool autodelete) const = 0;
+  virtual ~IFactory() {
+  }
 
   virtual void deleteImage(const IImage* image) const = 0;
 
@@ -96,11 +96,17 @@ public:
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,
                                       bool autodeleteWebSocket) const = 0;
+
+  const IDeviceInfo* getDeviceInfo() const;
+
+
 #ifdef JAVA_CODE
 
-  public abstract IShortBuffer createShortBuffer(final short[] array);
+  public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
+  public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
 
-  public abstract IFloatBuffer createFloatBuffer(final float[] array);
+//  public abstract float[] getThreadLocalFloatArray();
+//  public abstract void    setThreadLocalFloatArray(final float[] array);
 #endif
   
 };

@@ -19,6 +19,8 @@
 #import "NSString_CppAdditions.h"
 
 Canvas_iOS::~Canvas_iOS() {
+  _currentUIFont = nil;
+
   if (_path != NULL) {
     CGPathRelease(_path);
     _path = NULL;
@@ -31,7 +33,7 @@ Canvas_iOS::~Canvas_iOS() {
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
-  if ((_currentUIFont != NULL) &&
+  if ((_currentUIFont != nil) &&
       (_context != NULL)) {
     CGContextSelectFont(_context,
                         [[_currentUIFont fontName] UTF8String],
@@ -62,26 +64,26 @@ void Canvas_iOS::_initialize(int width, int height) {
 }
 
 CGColorRef Canvas_iOS::createCGColor(const Color& color) {
-  return CGColorCreateCopy( [[UIColor colorWithRed: color.getRed()
-                                             green: color.getGreen()
-                                              blue: color.getBlue()
-                                             alpha: color.getAlpha()] CGColor] );
+  return CGColorCreateCopy( [[UIColor colorWithRed: color._red
+                                             green: color._green
+                                              blue: color._blue
+                                             alpha: color._alpha] CGColor] );
 }
 
 void Canvas_iOS::_setFillColor(const Color& color) {
   CGContextSetRGBFillColor(_context,
-                           color.getRed(),
-                           color.getGreen(),
-                           color.getBlue(),
-                           color.getAlpha());
+                           color._red,
+                           color._green,
+                           color._blue,
+                           color._alpha);
 }
 
 void Canvas_iOS::_setLineColor(const Color& color) {
   CGContextSetRGBStrokeColor(_context,
-                             color.getRed(),
-                             color.getGreen(),
-                             color.getBlue(),
-                             color.getAlpha());
+                             color._red,
+                             color._green,
+                             color._blue,
+                             color._alpha);
 }
 
 void Canvas_iOS::_setLineWidth(float width) {

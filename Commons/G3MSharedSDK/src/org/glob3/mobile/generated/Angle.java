@@ -26,27 +26,28 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
+//  mutable double _sin;
+//  mutable double _cos;
+
   private Angle(double degrees, double radians)
+//  _sin(2),
+//  _cos(2)
   {
      _degrees = degrees;
      _radians = radians;
-     _sin = 2;
-     _cos = 2;
   }
 
-  private double _sin;
-  private double _cos;
 
   public final double _degrees;
   public final double _radians;
 
 
   public Angle(Angle angle)
+//  _sin(angle._sin),
+//  _cos(angle._cos)
   {
      _degrees = angle._degrees;
      _radians = angle._radians;
-     _sin = angle._sin;
-     _cos = angle._cos;
 
   }
 
@@ -57,13 +58,17 @@ public class Angle
 
   public static Angle fromDegreesMinutes(double degrees, double minutes)
   {
-    final double d = degrees + (minutes / 60.0);
+    final IMathUtils mu = IMathUtils.instance();
+    final double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
+    final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0));
     return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
   public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
   {
-    final double d = degrees + (minutes / 60.0) + (seconds / 3600.0);
+    final IMathUtils mu = IMathUtils.instance();
+    final double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0) + (mu.abs(seconds) / 3600.0));
     return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
@@ -94,7 +99,7 @@ public class Angle
 
   public static Angle nan()
   {
-    return Angle.fromDegrees(IMathUtils.instance().NanD());
+    return Angle.fromDegrees(java.lang.Double.NaN);
   }
 
   public static Angle midAngle(Angle angle1, Angle angle2)
@@ -109,41 +114,28 @@ public class Angle
 
   public final boolean isNan()
   {
-    return IMathUtils.instance().isNan(_degrees);
+    return (_degrees != _degrees);
   }
 
-  public final double sinus()
-  {
-    if (_sin > 1)
-    {
-      _sin = java.lang.Math.sin(_radians);
-    }
-    return _sin;
-  }
+//  double sinus() const {
+////    if (_sin > 1) {
+////      _sin = SIN(_radians);
+////    }
+////    return _sin;
+//    return SIN(_radians);
+//  }
+//
+//  double cosinus() const {
+////    if (_cos > 1) {
+////      _cos = COS(_radians);
+////    }
+////    return _cos;
+//    return COS(_radians);
+//  }
 
-  public final double cosinus()
-  {
-    if (_cos > 1)
-    {
-      _cos = java.lang.Math.cos(_radians);
-    }
-    return _cos;
-  }
-
-  public final double tangent()
-  {
-    return java.lang.Math.tan(_radians);
-  }
-
-  public final double degrees()
-  {
-    return _degrees;
-  }
-
-  public final double radians()
-  {
-    return _radians;
-  }
+//  double tangent() const {
+//    return TAN(_radians);
+//  }
 
   public final boolean closeTo(Angle other)
   {
@@ -250,7 +242,7 @@ public class Angle
     return (_degrees == 0);
   }
 
-  public final boolean isEqualsTo(Angle that)
+  public final boolean isEquals(Angle that)
   {
     final IMathUtils mu = IMathUtils.instance();
     return mu.isEquals(_degrees, that._degrees) || mu.isEquals(_radians, that._radians);

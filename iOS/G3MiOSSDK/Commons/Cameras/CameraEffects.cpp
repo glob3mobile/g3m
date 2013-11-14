@@ -19,15 +19,15 @@ _axis(axis)
 }
 
 
-void RotateWithAxisEffect::doStep(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
+void RotateWithAxisEffect::doStep(const G3MRenderContext* rc,
+                                  const TimeInterval& when) {
   EffectWithForce::doStep(rc, when);
   rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
 }
 
 
-void RotateWithAxisEffect::stop(const G3MRenderContext *rc,
-                  const TimeInterval& when) {
+void RotateWithAxisEffect::stop(const G3MRenderContext* rc,
+                                const TimeInterval& when) {
   rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
 }
 
@@ -39,15 +39,15 @@ _direction(desp)
 }
 
 
-void SingleTranslationEffect::doStep(const G3MRenderContext *rc,
-                    const TimeInterval& when) {
+void SingleTranslationEffect::doStep(const G3MRenderContext* rc,
+                                     const TimeInterval& when) {
   EffectWithForce::doStep(rc, when);
   rc->getNextCamera()->translateCamera(_direction.times(getForce()));
 }
 
 
-void SingleTranslationEffect::stop(const G3MRenderContext *rc,
-                  const TimeInterval& when) {
+void SingleTranslationEffect::stop(const G3MRenderContext* rc,
+                                   const TimeInterval& when) {
   rc->getNextCamera()->translateCamera(_direction.times(getForce()));
 }
 
@@ -64,14 +64,14 @@ _distance(distance)
 {}
 
 
-void DoubleTapRotationEffect::start(const G3MRenderContext *rc,
+void DoubleTapRotationEffect::start(const G3MRenderContext* rc,
                                     const TimeInterval& when) {
   EffectWithDuration::start(rc, when);
   _lastAlpha = 0;
 }
 
 
-void DoubleTapRotationEffect::doStep(const G3MRenderContext *rc,
+void DoubleTapRotationEffect::doStep(const G3MRenderContext* rc,
                                      const TimeInterval& when) {
   const double alpha = getAlpha(when);
   Camera *camera = rc->getNextCamera();
@@ -82,7 +82,7 @@ void DoubleTapRotationEffect::doStep(const G3MRenderContext *rc,
 }
 
 
-void DoubleTapRotationEffect::stop(const G3MRenderContext *rc,
+void DoubleTapRotationEffect::stop(const G3MRenderContext* rc,
                                    const TimeInterval& when) {
   Camera *camera = rc->getNextCamera();
   const double step = 1.0 - _lastAlpha;
@@ -92,24 +92,24 @@ void DoubleTapRotationEffect::stop(const G3MRenderContext *rc,
 
 
 DoubleTapTranslationEffect::DoubleTapTranslationEffect(const TimeInterval& duration,
-                                                 const Vector3D& translation,
-                                                 double distance,
-                                                 const bool linearTiming):
+                                                       const Vector3D& translation,
+                                                       double distance,
+                                                       const bool linearTiming):
 EffectWithDuration(duration, linearTiming),
 _translation(translation),
 _distance(distance)
 {}
 
 
-void DoubleTapTranslationEffect::start(const G3MRenderContext *rc,
-                                    const TimeInterval& when) {
+void DoubleTapTranslationEffect::start(const G3MRenderContext* rc,
+                                       const TimeInterval& when) {
   EffectWithDuration::start(rc, when);
   _lastAlpha = 0;
 }
 
 
-void DoubleTapTranslationEffect::doStep(const G3MRenderContext *rc,
-                                     const TimeInterval& when) {
+void DoubleTapTranslationEffect::doStep(const G3MRenderContext* rc,
+                                        const TimeInterval& when) {
   const double alpha = getAlpha(when);
   Camera *camera = rc->getNextCamera();
   const double step = alpha - _lastAlpha;
@@ -119,8 +119,8 @@ void DoubleTapTranslationEffect::doStep(const G3MRenderContext *rc,
 }
 
 
-void DoubleTapTranslationEffect::stop(const G3MRenderContext *rc,
-                                   const TimeInterval& when) {
+void DoubleTapTranslationEffect::stop(const G3MRenderContext* rc,
+                                      const TimeInterval& when) {
   Camera *camera = rc->getNextCamera();
   const double step = 1.0 - _lastAlpha;
   camera->translateCamera(_translation.times(step));

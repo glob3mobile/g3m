@@ -3,11 +3,13 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
   private final IFloatBuffer _buffer;
   private final int _timeStamp;
+  private final long _id;
   public GPUAttributeValueVecFloat(IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
   {
      super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);
      _buffer = buffer;
      _timeStamp = buffer.timestamp();
+     _id = buffer.getID();
   }
 
   public final void setAttribute(GL gl, int id)
@@ -21,15 +23,17 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     gl.vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
-  public final boolean isEqualsTo(GPUAttributeValue v)
+  public final boolean isEquals(GPUAttributeValue v)
   {
 
-    if (!v.getEnabled())
+    if (!v._enabled)
     {
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-    return ((_buffer == vecV._buffer) && (_timeStamp == vecV._timeStamp) && (_type == v.getType()) && (_attributeSize == v.getAttributeSize()) && (_stride == v.getStride()) && (_normalized == v.getNormalized()));
+    boolean equal = ((_id == vecV._buffer.getID()) && (_timeStamp == vecV._timeStamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
+
+    return equal;
   }
 
   public final String description()

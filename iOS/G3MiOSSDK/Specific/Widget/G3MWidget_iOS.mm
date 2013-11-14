@@ -21,6 +21,10 @@
 
 #include "GPUProgramManager.hpp"
 #include "SceneLighting.hpp"
+#include "Planet.hpp"
+#include "Sector.hpp"
+
+#include "InitialCameraPositionProvider.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -52,6 +56,7 @@
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
                 busyRenderer: (Renderer*) busyRenderer
+               errorRenderer: (ErrorRenderer*) errorRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -59,11 +64,14 @@
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
+       initialCameraPosition: (Geodetic3D) initialCameraPosition;
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
-  SceneLighting* sceneLighting = new DefaultSceneLighting();
+  SceneLighting* sceneLighting = new CameraFocusSceneLighting();
+
+  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
     _widgetVP = G3MWidget::create([_renderer getGL],
                                   storage,
@@ -75,6 +83,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   cameraRenderer,
                                   mainRenderer,
                                   busyRenderer,
+                                  errorRenderer,
                                   backgroundColor,
                                   logFPS,
                                   logDownloaderStatistics,
@@ -82,7 +91,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   autoDeleteInitializationTask,
                                   periodicalTasks,
                                   gpuProgramManager,//GPUProgramManager
-                                  sceneLighting);   //Scene Lighting
+                                  sceneLighting,    //Scene Lighting
+                                  icpp);
+  
     [self widget]->setUserData(userData);
 }
 
@@ -118,16 +129,17 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
       glver = OpenGL_2;
     }
     
-    
-    NSLog(@"----------------------------------------------------------------------------");
-    NSLog(@"OpenGL Extensions:");
-    NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    for (NSString *extension in extensions) {
-      NSLog(@"  %@", extension);
+    bool showOpenGLExtensions = false;
+    if (showOpenGLExtensions) {
+      NSLog(@"----------------------------------------------------------------------------");
+      NSLog(@"OpenGL Extensions:");
+      NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      for (NSString *extension in extensions) {
+        NSLog(@"  %@", extension);
+      }
+      NSLog(@"----------------------------------------------------------------------------");
     }
-    NSLog(@"----------------------------------------------------------------------------");
-    
     
     _lastTouchEvent = NULL;
     
@@ -171,6 +183,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                              Vector2I(0, 0),
                              1);
     pointers.push_back(touch);
+
+    delete _lastTouchEvent;
     _lastTouchEvent = TouchEvent::create(LongPress, pointers);
     [self widget]->onTouchEvent(_lastTouchEvent);
   }
@@ -261,14 +275,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  
-  //NSSet *allTouches = [event allTouches];
+- (void) touchesBegan: (NSSet*) touches
+            withEvent: (UIEvent*) event
+{
   NSSet *allTouches = [event touchesForView:self];
   
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
-  // pointers.reserve([allTouches count]);
-  
+
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch *touch = nil;
   while ((touch = [enumerator nextObject])) {
@@ -292,60 +305,67 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  
+- (void) touchesMoved: (NSSet*) touches
+            withEvent: (UIEvent*) event
+{
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
-  
+
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
-  
+
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch *touch = nil;
   while ((touch = [enumerator nextObject])) {
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
-    
+
     Touch *touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),
                              Vector2I((int) previous.x,
                                       (int) previous.y));
-    
+
     pointers.push_back(touch);
   }
-  
+
   // test if finger orders are the same that in the previous gesture
-  if (_lastTouchEvent!=NULL) {
-    if (pointers.size()==2 && _lastTouchEvent->getTouchCount()==2) {
-      Vector2I current0 = pointers[0]->getPrevPos();
-      Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+  if (_lastTouchEvent == NULL) {
+    _lastTouchEvent = TouchEvent::create(Move, pointers);
+  }
+  else {
+    if ((pointers.size() == 2) &&
+        (_lastTouchEvent->getTouchCount() == 2)) {
+
+      const Vector2I current0 = pointers[0]->getPrevPos();
+      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
-      double dist0 = current0.sub(last0).squaredLength();
-      double dist1 = current0.sub(last1).squaredLength();
-      
+      const double dist0 = current0.sub(last0).squaredLength();
+      const double dist1 = current0.sub(last1).squaredLength();
+
       // swap finger order
-      if (dist1<dist0) {
+      if (dist1 < dist0) {
         std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
         swappedPointers.push_back(pointers[1]);
         swappedPointers.push_back(pointers[0]);
         _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
-      } else {
+      }
+      else {
         _lastTouchEvent = TouchEvent::create(Move, pointers);
       }
-    } else {
+    }
+    else {
       delete _lastTouchEvent;
       _lastTouchEvent = TouchEvent::create(Move, pointers);
     }
-  } else {
-    _lastTouchEvent = TouchEvent::create(Move, pointers);
   }
-  
+
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
 
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void) touchesEnded: (NSSet*) touches
+            withEvent: (UIEvent*) event
+{
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   

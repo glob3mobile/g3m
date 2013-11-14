@@ -103,21 +103,9 @@ public class Vector2D
     return Angle.fromRadians(a);
   }
 
-  public final double x()
-  {
-    return _x;
-  }
-
-  public final double y()
-  {
-    return _y;
-  }
-
   public static Vector2D nan()
   {
-    final IMathUtils mu = IMathUtils.instance();
-
-    return new Vector2D(mu.NanD(), mu.NanD());
+    return new Vector2D(java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
   public final double maxAxis()

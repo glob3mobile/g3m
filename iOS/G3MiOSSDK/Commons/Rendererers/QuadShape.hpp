@@ -14,6 +14,7 @@
 class IImage;
 class IGLTextureId;
 class Color;
+class TextureIDReference;
 
 #include "URL.hpp"
 
@@ -25,8 +26,14 @@ private:
   const Color* _color;
 
   bool _textureRequested;
-  IImage* _textureImage;
-  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+#ifdef C_CODE
+  const IImage* _textureImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _textureImage;
+#endif
+
+  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
   const bool _withNormals;
 
@@ -54,7 +61,7 @@ public:
 
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
-            IImage* textureImage,
+            const IImage* textureImage,
             float width,
             float height,
             bool withNormals) :
@@ -92,6 +99,12 @@ public:
 
   void imageDownloaded(IImage* image);
   
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const {
+    std::vector<double> intersections;
+    return intersections;
+  }
+
 };
 
 #endif

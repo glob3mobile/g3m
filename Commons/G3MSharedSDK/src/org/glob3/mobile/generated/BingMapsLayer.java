@@ -3,7 +3,6 @@ public class BingMapsLayer extends Layer
 {
   private final String _imagerySet;
   private final String _key;
-  private final Sector _sector ;
 
   private final int _initialLevel;
 
@@ -34,7 +33,7 @@ public class BingMapsLayer extends Layer
   
     for (int i = 1; i <= zoom; i++)
     {
-      final int t = (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1);
+      final int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
       isb.addInt(t);
     }
   
@@ -45,6 +44,34 @@ public class BingMapsLayer extends Layer
   
     return result;
   }
+
+  protected final String getLayerType()
+  {
+    return "BingMaps";
+  }
+
+  protected final boolean rawIsEquals(Layer that)
+  {
+    BingMapsLayer t = (BingMapsLayer) that;
+  
+    if (!_imagerySet.equals(t._imagerySet))
+    {
+      return false;
+    }
+  
+    if (!_key.equals(t._key))
+    {
+      return false;
+    }
+  
+    if (_initialLevel != t._initialLevel)
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
 
 
   /**
@@ -69,7 +96,6 @@ public class BingMapsLayer extends Layer
      _imagerySet = imagerySet;
      _key = key;
      _initialLevel = initialLevel;
-     _sector = new Sector(Sector.fullSphere());
      _isInitialized = false;
   
   }
@@ -83,24 +109,12 @@ public class BingMapsLayer extends Layer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final Sector tileSector = tile.getSector();
-    if (!_sector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_sector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
-  
     final IStringUtils su = IStringUtils.instance();
   
-    final int level = tile.getLevel();
-    final int column = tile.getColumn();
+    final int level = tile._level;
+    final int column = tile._column;
     final int numRows = (int) IMathUtils.instance().pow(2.0, level);
-    final int row = numRows - tile.getRow() - 1;
+    final int row = numRows - tile._row - 1;
   
     final int subdomainsSize = _imageUrlSubdomains.size();
     String subdomain = "";
@@ -118,7 +132,7 @@ public class BingMapsLayer extends Layer
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
     path = su.replaceSubstring(path, "{culture}", "en-US");
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
+    petitions.add(new Petition(tile._sector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
   
     return petitions;
   }
@@ -252,6 +266,11 @@ public class BingMapsLayer extends Layer
   public final String description()
   {
     return "[BingMapsLayer]";
+  }
+
+  public final BingMapsLayer copy()
+  {
+    return new BingMapsLayer(_imagerySet, _key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
 }

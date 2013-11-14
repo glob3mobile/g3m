@@ -38,20 +38,15 @@ public:
   }
   
   static MutableVector2D nan() {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return MutableVector2D(mu->NanD(),
-                           mu->NanD());
+    return MutableVector2D(NAND, NAND);
   }
   
-  bool isEqualsTo(double x, double y) const{
+  bool isEquals(double x, double y) const{
     return _x == x && _y == y;
   }
   
   bool isNan() const {
-    const IMathUtils* mu = IMathUtils::instance();
-
-    return mu->isNan(_x) || mu->isNan(_y);
+    return ISNAN(_x) || ISNAN(_y);
   }
 
   MutableVector2D normalized() const;

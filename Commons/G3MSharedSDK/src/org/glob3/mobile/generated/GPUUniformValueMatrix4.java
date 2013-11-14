@@ -4,40 +4,40 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueMatrix4 extends GPUUniformValue
 {
-  private final boolean _ownsProvider;
+//  const bool _ownsProvider;
   protected Matrix44DProvider _provider = null;
   protected  Matrix44D _lastModelSet;
 
   public GPUUniformValueMatrix4(Matrix44DProvider[] providers, int nMatrix)
+//  _ownsProvider(true)
   {
      super(GLType.glMatrix4Float());
      _provider = new Matrix44DMultiplicationHolder(providers, nMatrix);
      _lastModelSet = null;
-     _ownsProvider = true;
   }
 
-  public GPUUniformValueMatrix4(Matrix44DProvider provider, boolean ownsProvider)
+  public GPUUniformValueMatrix4(Matrix44DProvider provider)
+//  _ownsProvider(ownsProvider)
   {
      super(GLType.glMatrix4Float());
      _provider = provider;
      _lastModelSet = null;
-     _ownsProvider = ownsProvider;
+    _provider._retain();
   }
 
   public GPUUniformValueMatrix4(Matrix44D m)
+//  _ownsProvider(true)
   {
      super(GLType.glMatrix4Float());
      _provider = new Matrix44DHolder(m);
      _lastModelSet = null;
-     _ownsProvider = true;
   }
 
   public void dispose()
   {
-    if (_ownsProvider)
-    {
+//    if (_ownsProvider) {
       _provider._release();
-    }
+//    }
     if (_lastModelSet != null)
     {
       _lastModelSet._release();
@@ -59,7 +59,7 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
     gl.uniformMatrix4fv(id, false, _lastModelSet);
   }
 
-  public final boolean isEqualsTo(GPUUniformValue v)
+  public final boolean isEquals(GPUUniformValue v)
   {
     if (_lastModelSet == ((GPUUniformValueMatrix4)v)._provider.getMatrix())
     {

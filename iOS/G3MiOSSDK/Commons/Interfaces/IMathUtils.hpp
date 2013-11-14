@@ -19,17 +19,23 @@
 #define SIN(x) sin(x)
 #define COS(x) cos(x)
 #define TAN(x) tan(x)
+#define NAND   NAN
+#define NANF   NAN
 
 #else
 
 #define SIN(x) java.lang.Math.sin(x)
 #define COS(x) java.lang.Math.cos(x)
 #define TAN(x) java.lang.Math.tan(x)
+#define NAND   java.lang.Double.NaN
+#define NANF   java.lang.Float.NaN
 
 #endif
 
 #define PI       3.14159265358979323846264338327950288
 #define HALF_PI  1.57079632679489661923132169163975144
+
+#define ISNAN(x) (x != x)
 
 class IMathUtils {
 private:
@@ -51,11 +57,8 @@ public:
   virtual ~IMathUtils() {
   }
 
-  virtual bool isNan(double v) const = 0;
-  virtual bool isNan(float v)  const = 0;
-
-  virtual double NanD() const = 0;
-  virtual float  NanF() const = 0;
+//  virtual double NanD() const = 0;
+//  virtual float  NanF() const = 0;
 
   virtual double sin(double v) const = 0;
   virtual float  sin(float v)  const = 0;

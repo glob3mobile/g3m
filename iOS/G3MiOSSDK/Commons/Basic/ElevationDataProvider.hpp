@@ -24,7 +24,7 @@ public:
   virtual ~IElevationDataListener() { }
 #endif
 #ifdef JAVA_CODE
-  public void dispose();
+  void dispose();
 #endif
 
   /**
@@ -64,10 +64,6 @@ public:
   virtual std::vector<const Sector*> getSectors() const = 0;
 
   virtual const Vector2I getMinResolution() const = 0;
-
-  //  virtual ElevationData* createSubviewOfElevationData(ElevationData* elevationData,
-  //                                                      const Sector& sector,
-  //                                                      const Vector2I& extent) const = 0;
   
 };
 

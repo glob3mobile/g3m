@@ -253,15 +253,15 @@ long long Downloader_iOS::request(const URL &url,
 
 
 const std::string Downloader_iOS::statistics() {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Downloader_iOS(downloading=");
   isb->addInt([_downloadingHandlers count]);
   isb->addString(", queued=");
   isb->addInt([_queuedHandlers count]);
   isb->addString(", totalRequests=");
-  isb->addInt(_requestsCounter);
+  isb->addLong(_requestsCounter);
   isb->addString(", totalCancels=");
-  isb->addInt(_cancelsCounter);
+  isb->addLong(_cancelsCounter);
   const std::string s = isb->getString();
   delete isb;
   return s;

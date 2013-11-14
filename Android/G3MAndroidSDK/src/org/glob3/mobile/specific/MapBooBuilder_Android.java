@@ -37,7 +37,7 @@ public class MapBooBuilder_Android
       final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
       final boolean saveInBackground = true;
       return new CachedDownloader( //
-               new Downloader_Android(8, connectTimeout, readTimeout, _nativeWidget.getContext()), //
+               new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //
                getStorage(), //
                saveInBackground);
    }
@@ -46,11 +46,11 @@ public class MapBooBuilder_Android
    public MapBooBuilder_Android(final Context context,
                                 final URL serverURL,
                                 final URL tubesURL,
-                                final boolean useWebSockets,
                                 final String sceneId,
                                 final MapBoo_ViewType viewType,
-                                final MapBooApplicationChangeListener applicationListener) {
-      super(serverURL, tubesURL, useWebSockets, sceneId, viewType, applicationListener);
+                                final MapBooApplicationChangeListener applicationListener,
+                                final boolean enableNotifications) {
+      super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications);
 
       _nativeWidget = new G3MWidget_Android(context);
    }

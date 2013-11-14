@@ -28,5 +28,20 @@
 
 	<div id="g3mWidgetHolder">
 	</div>
+	
+	<script type="text/javascript">
+	var _onLoadG3MListener = null;
+
+    function onLoadG3M() {
+    	// the G3M objets is already loaded
+    	if (_onLoadG3MListener != null)
+    		_onLoadG3MListener();
+    }
+
+    function setOnLoadG3MListener(func) {
+    	_onLoadG3MListener = func;
+    }
+	</script>
+	
 </body>
 </html>

@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+//#define TILE_DOWNLOAD_PRIORITY 1000000000
+
 public enum TileTextureBuilder_PetitionStatus
 {
   STATUS_PENDING,

@@ -12,7 +12,7 @@
 #include "IStringUtils.hpp"
 
 const std::string URL::description() const {
-  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("URL(");
   isb->addString(getPath());
   isb->addString(")");

@@ -34,8 +34,8 @@ public:
   {
     
   }
-  
-  void imageCreated(IImage* image) {
+
+  void imageCreated(const IImage* image) {
     if (_iconImage != NULL) {
       IFactory::instance()->deleteImage(_iconImage);
       _iconImage = NULL;
@@ -250,7 +250,7 @@ _glState(new GLState())
   
 }
 
-Mark::Mark(IImage*            image,
+Mark::Mark(const IImage*      image,
            const std::string& imageID,
            const Geodetic3D&  position,
            AltitudeMode altitudeMode,
@@ -345,7 +345,7 @@ void Mark::onTextureDownloadError() {
                                 _label.c_str());
 }
 
-void Mark::onTextureDownload(IImage* image) {
+void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
 
   delete _labelFontColor;
@@ -365,7 +365,9 @@ Mark::~Mark() {
   delete _position;
 
   if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->removeListener(this);
+    if (!_surfaceElevationProvider->removeListener(this)){
+      ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
+    }
   }
 
   delete _cartesianPosition;
@@ -381,13 +383,19 @@ Mark::~Mark() {
 
   _glState->_release();
 
+  if (_textureId != NULL){
+#ifdef JAVA_CODE
+    _textureId.dispose();
+#endif
+    delete _textureId; //Releasing texture
+  }
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
 
     double altitude = _position->_height;
-    if (_altitudeMode == RELATIVE_TO_GROUND){
+    if (_altitudeMode == RELATIVE_TO_GROUND) {
       altitude += _currentSurfaceElevation;
     }
 
@@ -412,14 +420,14 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet){
+void Mark::createGLState(const Planet* planet) {
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
                                                _textureWidth, _textureHeight),
                         false);
 
-  if (_textureId != NULL){
-    _glState->addGLFeature(new TextureGLFeature(_textureId,
+  if (_textureId != NULL) {
+    _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
                                                getBillboardTexCoords(),
                                                2,
                                                0,
@@ -472,7 +480,7 @@ void Mark::render(const G3MRenderContext* rc,
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
-          _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+          _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                 GLFormat::rgba(),
                                                                 _imageID,
                                                                 false);
@@ -483,7 +491,7 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-        if (_glState->getNumberOfGLFeatures() == 0){
+        if (_glState->getNumberOfGLFeatures() == 0) {
           createGLState(planet);    //GLState was disposed due to elevation change
         }
 
@@ -504,7 +512,7 @@ void Mark::render(const G3MRenderContext* rc,
 
 void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,            //Without considering vertical exaggeration
-                            double verticalExaggeration){
+                            double verticalExaggeration) {
 
   _currentSurfaceElevation = rawElevation * verticalExaggeration;
   delete _cartesianPosition;

@@ -18,7 +18,7 @@ public:
   ~SimpleCameraConstrainer() {
   }
 
-  virtual void onCameraChange(const Planet* planet,
+  virtual bool onCameraChange(const Planet* planet,
                               const Camera* previousCamera,
                               Camera* nextCamera) const;
 

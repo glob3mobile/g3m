@@ -69,8 +69,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
   FloatBufferBuilderFromColor colors;
 
-  const IMathUtils* mu = IMathUtils::instance();
-
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
 
   const int width  = resolution._x;
@@ -84,7 +82,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
       const Geodetic2D position = sector.getInnerPoint(u, v);
 
       const double elevation = getElevationAt(position);
-      if ( mu->isNan(elevation) ) {
+      if ( ISNAN(elevation) ) {
         continue;
       }
 
@@ -166,13 +164,12 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
 
-  const IMathUtils* mu = IMathUtils::instance();
   for (int x = 0; x < _width; x++) {
     const double u = (double) x / (_width  - 1);
 
     for (int y = 0; y < _height; y++) {
       const double elevation = getElevationAt(x, y);
-      if (mu->isNan(elevation)) {
+      if (ISNAN(elevation)) {
         continue;
       }
 
@@ -218,30 +215,19 @@ Interpolator* ElevationData::getInterpolator() const {
 double ElevationData::getElevationAt(const Angle& latitude,
                                      const Angle& longitude) const {
 
-  const IMathUtils* mu = IMathUtils::instance();
+  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const double u = uv._x;
+  const double v = uv._y;
 
-  const double nanD = mu->NanD();
-
-  if (!_sector.contains(latitude, longitude)) {
-    //    ILogger::instance()->logError("Sector %s doesn't contain lat=%s lon=%s",
-    //                                  _sector.description().c_str(),
-    //                                  latitude.description().c_str(),
-    //                                  longitude.description().c_str());
-    return nanD;
+  if (u < 0 || u > 1 || v < 0 || v > 1){
+    return NAND;
   }
 
-
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
-  const double u = mu->clamp(uv._x, 0, 1);
-  const double v = mu->clamp(uv._y, 0, 1);
   const double dX = u * (_width - 1);
   const double dY = (1.0 - v) * (_height - 1);
-  //const double dY = v * (_height - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;
-  //  const int nextX = (int) (dX + 1.0);
-  //  const int nextY = (int) (dY + 1.0);
   const int nextX = x + 1;
   const int nextY = y + 1;
   const double alphaY = dY - y;
@@ -256,49 +242,49 @@ double ElevationData::getElevationAt(const Angle& latitude,
     else {
       // linear on Y
       const double heightY = getElevationAt(x, y);
-      if (mu->isNan(heightY)) {
-        return nanD;
+      if (ISNAN(heightY)) {
+        return NAND;
       }
 
       const double heightNextY = getElevationAt(x, nextY);
-      if (mu->isNan(heightNextY)) {
-        return nanD;
+      if (ISNAN(heightNextY)) {
+        return NAND;
       }
 
-      result = mu->linearInterpolation(heightNextY, heightY, alphaY);
+      result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
     }
   }
   else {
     if (y == dY) {
       // linear on X
       const double heightX = getElevationAt(x, y);
-      if (mu->isNan(heightX)) {
-        return nanD;
+      if (ISNAN(heightX)) {
+        return NAND;
       }
       const double heightNextX = getElevationAt(nextX, y);
-      if (mu->isNan(heightNextX)) {
-        return nanD;
+      if (ISNAN(heightNextX)) {
+        return NAND;
       }
 
-      result = mu->linearInterpolation(heightX, heightNextX, alphaX);
+      result = IMathUtils::instance()->linearInterpolation(heightX, heightNextX, alphaX);
     }
     else {
       // bilinear
       const double valueNW = getElevationAt(x, y);
-      if (mu->isNan(valueNW)) {
-        return nanD;
+      if (ISNAN(valueNW)) {
+        return NAND;
       }
       const double valueNE = getElevationAt(nextX, y);
-      if (mu->isNan(valueNE)) {
-        return nanD;
+      if (ISNAN(valueNE)) {
+        return NAND;
       }
       const double valueSE = getElevationAt(nextX, nextY);
-      if (mu->isNan(valueSE)) {
-        return nanD;
+      if (ISNAN(valueSE)) {
+        return NAND;
       }
       const double valueSW = getElevationAt(x, nextY);
-      if (mu->isNan(valueSW)) {
-        return nanD;
+      if (ISNAN(valueSW)) {
+        return NAND;
       }
 
       result = getInterpolator()->interpolation(valueSW,

@@ -113,14 +113,14 @@ public class JSONArray extends JSONBaseObject
     {
       //isb->addString(" ");
   
-      isb.addString(this.get(0).description());
+        isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
   
       if (size <= 10)
       {
         for (int i = 1; i < size; i++)
         {
           isb.addString(", ");
-          isb.addString(this.get(i).description());
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
         }
       }
       else
@@ -128,7 +128,7 @@ public class JSONArray extends JSONBaseObject
         for (int i = 1; i < 10; i++)
         {
           isb.addString(", ");
-          isb.addString(this.get(i).description());
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
         }
         isb.addString(", ...");
         isb.addString(" size=");
@@ -170,7 +170,10 @@ public class JSONArray extends JSONBaseObject
         visitor.visitArrayInBetweenChildren(this);
       }
       visitor.visitArrayBeforeChild(this, i);
-      get(i).acceptVisitor(visitor);
+      if(get(i)!= null)
+      {
+          get(i).acceptVisitor(visitor);
+      }
     }
   
     visitor.visitArrayAfterChildren(this);

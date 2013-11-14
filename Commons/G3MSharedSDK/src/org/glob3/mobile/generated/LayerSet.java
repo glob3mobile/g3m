@@ -29,124 +29,13 @@ public class LayerSet
 
   private ChangedListener _listener;
 
-  private LayerTilesRenderParameters _layerTilesRenderParameters;
+//  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
 
 
-  private LayerTilesRenderParameters createLayerTilesRenderParameters()
-  {
-    Sector topSector = null;
-    int topSectorSplitsByLatitude = 0;
-    int topSectorSplitsByLongitude = 0;
-    int firstLevel = 0;
-    int maxLevel = 0;
-    int tileTextureWidth = 0;
-    int tileTextureHeight = 0;
-    int tileMeshWidth = 0;
-    int tileMeshHeight = 0;
-    boolean mercator = false;
-  
-    boolean first = true;
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      Layer layer = _layers.get(i);
-  
-      if (layer.isEnable() && layer.isReady())
-      {
-        final LayerTilesRenderParameters layerParam = layer.getLayerTilesRenderParameters();
-  
-        if (layerParam == null)
-        {
-          continue;
-        }
-  
-        if (first)
-        {
-          first = false;
-  
-          topSector = new Sector(layerParam._topSector);
-          topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
-          topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
-          firstLevel = layerParam._firstLevel;
-          maxLevel = layerParam._maxLevel;
-          tileTextureWidth = layerParam._tileTextureResolution._x;
-          tileTextureHeight = layerParam._tileTextureResolution._y;
-          tileMeshWidth = layerParam._tileMeshResolution._x;
-          tileMeshHeight = layerParam._tileMeshResolution._y;
-          mercator = layerParam._mercator;
-        }
-        else
-        {
-          if (!topSector.isEqualsTo(layerParam._topSector))
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSector");
-            return null;
-          }
-  
-          if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
-            return null;
-          }
-  
-          if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
-            return null;
-          }
-  
-          if (maxLevel < layerParam._maxLevel)
-          {
-            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
-            maxLevel = layerParam._maxLevel;
-          }
-  
-          if (firstLevel < layerParam._firstLevel)
-          {
-            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", firstLevel, layerParam._firstLevel);
-            firstLevel = layerParam._firstLevel;
-          }
-  
-          if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: tileTextureResolution");
-            return null;
-          }
-  
-          if ((tileMeshWidth != layerParam._tileMeshResolution._x) || (tileMeshHeight != layerParam._tileMeshResolution._y))
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: tileMeshResolution");
-            return null;
-          }
-  
-          if (mercator != layerParam._mercator)
-          {
-            ILogger.instance().logError("Inconsistency in Layer's Parameters: mercator");
-            return null;
-          }
-  
-        }
-      }
-    }
-  
-    if (first)
-    {
-      ILogger.instance().logError("Can't create LayerSet's LayerTilesRenderParameters, not found any enabled Layer");
-      return null;
-    }
-  
-    LayerTilesRenderParameters parameters = new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
-  
-    if (topSector != null)
-       topSector.dispose();
-  
-    return parameters;
-  }
   private void layersChanged()
   {
-    if (_layerTilesRenderParameters != null)
-       _layerTilesRenderParameters.dispose();
-    _layerTilesRenderParameters = null;
+  //  delete _layerTilesRenderParameters;
+  //  _layerTilesRenderParameters = NULL;
   
     if (_listener != null)
     {
@@ -157,17 +46,16 @@ public class LayerSet
   private G3MContext _context;
 
   public LayerSet()
+//  _layerTilesRenderParameters(NULL),
   {
      _listener = null;
-     _layerTilesRenderParameters = null;
      _context = null;
 
   }
 
   public void dispose()
   {
-    if (_layerTilesRenderParameters != null)
-       _layerTilesRenderParameters.dispose();
+  //  delete _layerTilesRenderParameters;
     for (int i = 0; i < _layers.size(); i++)
     {
       if (_layers.get(i) != null)
@@ -222,7 +110,7 @@ public class LayerSet
   
         Tile petitionTile = tile;
         final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
-        while ((petitionTile.getLevel() > maxLevel) && (petitionTile != null))
+        while ((petitionTile._level > maxLevel) && (petitionTile != null))
         {
           petitionTile = petitionTile.getParent();
         }
@@ -253,16 +141,14 @@ public class LayerSet
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
-  
-  
     for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
       if (layer.isAvailable(ec, tile))
       {
-        TerrainTouchEvent tte = new TerrainTouchEvent(position, tile.getSector(), layer);
+        LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
-        if (layer.onTerrainTouchEventListener(ec, tte))
+        if (layer.onLayerTouchEventListener(ec, tte))
         {
           return true;
         }
@@ -320,7 +206,7 @@ public class LayerSet
     _listener = listener;
   }
 
-  public final Layer get(int index)
+  public final Layer getLayer(int index)
   {
     if (index < _layers.size())
     {
@@ -330,7 +216,7 @@ public class LayerSet
     return null;
   }
 
-  public final Layer getLayer(String name)
+  public final Layer getLayerByName(String name)
   {
     final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
@@ -340,19 +226,210 @@ public class LayerSet
         return _layers.get(i);
       }
     }
-  
+    return null;
+  }
+  public final Layer getLayerByTitle(String title)
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      if (title.equals(_layers.get(i).getTitle()))
+      {
+        return _layers.get(i);
+      }
+    }
     return null;
   }
 
-  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
   {
-    if (_layerTilesRenderParameters == null)
+    Sector topSector = null;
+    int topSectorSplitsByLatitude = 0;
+    int topSectorSplitsByLongitude = 0;
+    int firstLevel = 0;
+    int maxLevel = 0;
+    int tileTextureWidth = 0;
+    int tileTextureHeight = 0;
+    int tileMeshWidth = 0;
+    int tileMeshHeight = 0;
+    boolean mercator = false;
+  
+    boolean first = true;
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
     {
-      _layerTilesRenderParameters = createLayerTilesRenderParameters();
+      Layer layer = _layers.get(i);
+  
+      if (layer.isEnable() && layer.isReady())
+      {
+        final LayerTilesRenderParameters layerParam = layer.getLayerTilesRenderParameters();
+  
+        if (layerParam == null)
+        {
+          continue;
+        }
+  
+        if (first)
+        {
+          first = false;
+  
+          topSector = new Sector(layerParam._topSector);
+          topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
+          topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
+          firstLevel = layerParam._firstLevel;
+          maxLevel = layerParam._maxLevel;
+          tileTextureWidth = layerParam._tileTextureResolution._x;
+          tileTextureHeight = layerParam._tileTextureResolution._y;
+          tileMeshWidth = layerParam._tileMeshResolution._x;
+          tileMeshHeight = layerParam._tileMeshResolution._y;
+          mercator = layerParam._mercator;
+        }
+        else
+        {
+          if (mercator != layerParam._mercator)
+          {
+            errors.add("Inconsistency in Layer's Parameters: mercator");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if (!topSector.isEquals(layerParam._topSector))
+          {
+            errors.add("Inconsistency in Layer's Parameters: topSector");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
+          {
+            errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
+          {
+            errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
+          {
+            errors.add("Inconsistency in Layer's Parameters: tileTextureResolution");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if ((tileMeshWidth != layerParam._tileMeshResolution._x) || (tileMeshHeight != layerParam._tileMeshResolution._y))
+          {
+            errors.add("Inconsistency in Layer's Parameters: tileMeshResolution");
+            if (topSector != null)
+               topSector.dispose();
+            return null;
+          }
+  
+          if (maxLevel < layerParam._maxLevel)
+          {
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
+            maxLevel = layerParam._maxLevel;
+          }
+  
+          if (firstLevel < layerParam._firstLevel)
+          {
+            ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", firstLevel, layerParam._firstLevel);
+            firstLevel = layerParam._firstLevel;
+          }
+  
+        }
+      }
     }
-    return _layerTilesRenderParameters;
+  
+    if (first)
+    {
+      errors.add("Can't find any enabled Layer");
+      return null;
+    }
+  
+    LayerTilesRenderParameters parameters = new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
+  
+    if (topSector != null)
+       topSector.dispose();
+  
+    return parameters;
   }
 
-  //  const Angle calculateSplitLatitude(const Tile* tile) const;
+
+  //const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters(std::vector<std::string>& errors) const {
+  //  if (_layerTilesRenderParameters == NULL) {
+  //    _layerTilesRenderParameters = createLayerTilesRenderParameters(errors);
+  //  }
+  //  return _layerTilesRenderParameters;
+  //}
+  
+  public final boolean isEquals(LayerSet that)
+  {
+    if (that == null)
+    {
+      return false;
+    }
+  
+    final int thisSize = size();
+    final int thatSize = that.size();
+  
+    if (thisSize != thatSize)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < thisSize; i++)
+    {
+      Layer thisLayer = getLayer(i);
+      Layer thatLayer = that.getLayer(i);
+  
+      if (!thisLayer.isEquals(thatLayer))
+      {
+        return false;
+      }
+    }
+  
+    return true;
+  }
+
+  public final void takeLayersFrom(LayerSet that)
+  {
+    if (that == null)
+    {
+      return;
+    }
+  
+    java.util.ArrayList<Layer> thatLayers = new java.util.ArrayList<Layer>();
+    final int thatSize = that.size();
+    for (int i = 0; i < thatSize; i++)
+    {
+      thatLayers.add(that.getLayer(i));
+    }
+  
+    that.removeAllLayers(false);
+  
+    for (int i = 0; i < thatSize; i++)
+    {
+      addLayer(thatLayers.get(i));
+    }
+  }
+
+  public final void disableAllLayers()
+  {
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      _layers.get(i).setEnable(false);
+    }
+  }
 
 }

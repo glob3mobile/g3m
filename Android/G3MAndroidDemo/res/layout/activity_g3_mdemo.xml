@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg" >
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg" >
+
+        <TableRow android:layout_margin="3dp" >
+
+            <Button
+                android:id="@+id/simpleRasterLayerButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/simplest_raster"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/scenarioButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/scenario"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_margin="3dp" >
+
+            <Button
+                android:id="@+id/doubleGlob3G3MButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/doubleGlob3"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/symbology"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/symbology"
+                android:textColor="#7a8e27"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow android:layout_margin="3dp" >
+
+            <Button
+                android:id="@+id/markersGlob3G3MButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/markersLbl"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/threeDsymbologyButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/threedsymbology"
+                android:textColor="#7a8e27"
+                android:textSize="20sp" />
+        </TableRow>
+        
+                <TableRow android:layout_margin="3dp" >
+
+            <Button
+                android:id="@+id/pointCloudButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/pointClouds"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+            
+            <Button
+                android:id="@+id/threeDModelButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/threedmodel"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+        </TableRow>
+           <TableRow android:layout_margin="3dp" >
+                
+            <Button
+                android:id="@+id/flatWorldButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/flatWorld"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+            
+            <Button
+                android:id="@+id/cameraAnimation"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/cameraAnimation"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+        </TableRow>
+
+
+      
+    </TableLayout>
+
+</RelativeLayout>

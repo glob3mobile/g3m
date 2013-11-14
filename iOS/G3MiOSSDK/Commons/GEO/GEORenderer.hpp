@@ -10,9 +10,11 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "LeafRenderer.hpp"
-//#include "GPUProgramState.hpp"
-
+#include "DownloadPriority.hpp"
+#include "URL.hpp"
+#include "TimeInterval.hpp"
 #include <vector>
+
 class GEOObject;
 class GEOSymbolizer;
 class MeshRenderer;
@@ -23,6 +25,44 @@ class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public LeafRenderer {
 private:
+
+  class LoadQueueItem {
+  public:
+#ifdef C_CODE
+    const URL          _url;
+    const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    public final URL _url;
+    public final TimeInterval _timeToCache;
+#endif
+    GEOSymbolizer*  _symbolizer;
+    const long long _priority;
+    const bool      _readExpired;
+    const bool      _isBSON;
+
+    LoadQueueItem(const URL& url,
+                  GEOSymbolizer* symbolizer,
+                  long long priority,
+                  const TimeInterval& timeToCache,
+                  bool readExpired,
+                  bool isBSON) :
+    _url(url),
+    _symbolizer(symbolizer),
+    _priority(priority),
+    _timeToCache(timeToCache),
+    _readExpired(readExpired),
+    _isBSON(isBSON)
+    {
+
+    }
+
+    ~LoadQueueItem() {
+    }
+  };
+
+  void drainLoadQueue();
+
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
   const GEOSymbolizer* _defaultSymbolizer;
@@ -31,7 +71,23 @@ private:
   ShapesRenderer*    _shapesRenderer;
   MarksRenderer*     _marksRenderer;
   GEOTileRasterizer* _geoTileRasterizer;
-  
+
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
+  std::vector<LoadQueueItem*> _loadQueue;
+
+  void requestBuffer(const URL& url,
+                     GEOSymbolizer* symbolizer,
+                     long long priority,
+                     const TimeInterval& timeToCache,
+                     bool readExpired,
+                     bool isBSON);
+
 public:
 
   /**
@@ -53,7 +109,8 @@ public:
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
-  _geoTileRasterizer(geoTileRasterizer)
+  _geoTileRasterizer(geoTileRasterizer),
+  _context(NULL)
   {
   }
 
@@ -79,12 +136,10 @@ public:
 
   }
 
-  void initialize(const G3MContext* context) {
+  void initialize(const G3MContext* context);
 
-  }
-
-  bool isReadyToRender(const G3MRenderContext* rc) {
-    return true;
+  RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);
@@ -102,26 +157,74 @@ public:
   void start(const G3MRenderContext* rc) {
 
   }
-  
+
   void stop(const G3MRenderContext* rc) {
-    
+
   }
-  MeshRenderer* getMeshRenderer(){
+
+  MeshRenderer* getMeshRenderer() {
     return _meshRenderer;
   }
-  
-  MarksRenderer* getMarksRenderer(){
+
+  MarksRenderer* getMarksRenderer() {
     return _marksRenderer;
   }
-  
-  ShapesRenderer* getShapesRenderer(){
+
+  ShapesRenderer* getShapesRenderer() {
     return _shapesRenderer;
   }
-  
-  GEOTileRasterizer* getGeoTileRasterizer(){
+
+  GEOTileRasterizer* getGeoTileRasterizer() {
     return _geoTileRasterizer;
   }
 
+  void loadJSON(const URL& url) {
+    loadJSON(url,
+             NULL,
+             DownloadPriority::MEDIUM,
+             TimeInterval::fromDays(30),
+             true);
+  }
+
+  void loadJSON(const URL& url,
+                GEOSymbolizer* symbolizer) {
+    loadJSON(url,
+             symbolizer,
+             DownloadPriority::MEDIUM,
+             TimeInterval::fromDays(30),
+             true);
+  }
+
+  void loadJSON(const URL& url,
+                GEOSymbolizer* symbolizer,
+                long long priority,
+                const TimeInterval& timeToCache,
+                bool readExpired);
+
+  void loadBSON(const URL& url) {
+    loadBSON(url,
+             NULL,
+             DownloadPriority::MEDIUM,
+             TimeInterval::fromDays(30),
+             true);
+  }
+
+  void loadBSON(const URL& url,
+                GEOSymbolizer* symbolizer) {
+    loadBSON(url,
+             symbolizer,
+             DownloadPriority::MEDIUM,
+             TimeInterval::fromDays(30),
+             true);
+  }
+
+  void loadBSON(const URL& url,
+                GEOSymbolizer* symbolizer,
+                long long priority,
+                const TimeInterval& timeToCache,
+                bool readExpired);
+
+  void setEnable(bool enable);
   
 };
 

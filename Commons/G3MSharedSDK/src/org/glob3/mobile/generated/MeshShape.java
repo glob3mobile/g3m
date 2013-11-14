@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class MeshShape extends AbstractMeshShape
+public abstract class MeshShape extends AbstractMeshShape
 {
   protected final Mesh createMesh(G3MRenderContext rc)
   {

@@ -17,14 +17,26 @@
 class GroupCanvasElement : public CanvasElement {
 private:
   Vector2F* _extent;
+  Vector2F* _rawExtent;
 
 protected:
-  const Color                 _color;
+  Color _color;
+  float _margin;
+  float _padding;
+  float _cornerRadius;
+
   std::vector<CanvasElement*> _children;
 
-  GroupCanvasElement(const Color& color) :
+  GroupCanvasElement(const Color& color,
+                     float margin,
+                     float padding,
+                     float cornerRadius) :
   _color(color),
-  _extent(NULL)
+  _margin(margin),
+  _padding(padding),
+  _cornerRadius(cornerRadius),
+  _extent(NULL),
+  _rawExtent(NULL)
   {
 
   }
@@ -40,10 +52,15 @@ public:
 
   const Vector2F getExtent(ICanvas* canvas);
 
-  virtual void drawAt(float left,
-                      float top,
-                      ICanvas* canvas) = 0;
-  
+  void drawAt(float left,
+              float top,
+              ICanvas* canvas);
+
+  virtual void rawDrawAt(float left,
+                         float top,
+                         const Vector2F& extent,
+                         ICanvas* canvas) = 0;
+
 };
 
 #endif
