@@ -62,7 +62,7 @@
 
   demoBuilder.build();
 
-//  [self showSimpleGlob3];
+  //  [self showSimpleGlob3];
 
   [self initDropDownMenu];
   [self initToolbar];
@@ -214,10 +214,10 @@
 //  [self setSatelliteLayerEnabled: !satelliteLayerEnabled];
 //
 //  if (satelliteLayerEnabled) {
-//    [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
+//    [self.layerSwitcher setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
 //  }
 //  else {
-//    [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];
+//    [self.layerSwitcher setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];
 //  }
 //}
 
@@ -306,8 +306,6 @@
 
   if([title isEqualToString:@"Learn more..."]) {
     G3MWebViewController *webView = [self.storyboard instantiateViewControllerWithIdentifier:@"G3MWebViewController"];
-    //    [self presentModalViewController: webView
-    //                            animated: YES];
     [self presentViewController:webView
                        animated:YES
                      completion:nil];
@@ -324,7 +322,7 @@
   [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
   [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateHighlighted];
 
-  [self setDemoMenu: [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"]];
+  self.demoMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"];
 
   NSMutableArray *demoNames = [NSMutableArray arrayWithObjects:
                                @"Simple glob3",
@@ -343,45 +341,45 @@
   [self.demoMenu setTitleArray: demoNames];
   [self.demoMenu setValueArray: demoNames];
   [self.demoMenu makeMenu: self.demoSelector
-               targetView: [self view]];
+               targetView: self.view];
 }
 
 - (UIButton*) createToolbarButton: (NSString*) imageName
                             frame: (CGRect) frame
 {
   UIButton* button = [UIButton buttonWithType: UIButtonTypeCustom];
+  button.layer.borderWidth = 0;
+  button.frame = frame;
   [button setTitle: @""
           forState: nil];
-  [[button layer] setBorderWidth: 0];
   [button setImage: [UIImage imageNamed: imageName]
           forState: UIControlStateNormal];
-  [button setFrame: frame];
 
   return button;
 }
 
 - (void) initToolbar
 {
-  [self setToolbar: [[G3MToolbar alloc] init]];
-  [[self view] addSubview: [self toolbar]];
+  self.toolbar = [[G3MToolbar alloc] init];
+  [self.view addSubview: self.toolbar];
 
   // layerSwitcher
-  [self setLayerSwitcher: [self createToolbarButton: @"satellite-on-96x48.png"
-                                              frame: CGRectMake(10.0, 10.0, 96.0, 48.0)]];
-  [[self layerSwitcher] addTarget: self
-                           action: @selector(switchLayer)
-                 forControlEvents: UIControlEventTouchUpInside];
+  self.layerSwitcher = [self createToolbarButton: @"satellite-on-96x48.png"
+                                           frame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
+  [self.layerSwitcher addTarget: self
+                         action: @selector(switchLayer)
+               forControlEvents: UIControlEventTouchUpInside];
 }
 
 - (void) updateToolbar: (NSString*) option
 {
-  [[self toolbar] clear];
+  [self.toolbar removeAllSubviews];
   if ([option isEqual: @"Switch Layer"]) {
-    [[self toolbar] addSubview: [self layerSwitcher]];
-    [[self toolbar] setVisible: TRUE];
+    [self.toolbar addSubview: self.layerSwitcher];
+    self.toolbar.visible = YES;
   }
   else {
-    [[self toolbar] setVisible: FALSE];
+    self.toolbar.visible = NO;
   }
 }
 
@@ -389,28 +387,28 @@
                               : (NSString *) returnValue
 {
   if ([identifier isEqual: @"demoMenu"]) {
-//    [self resetWidget];
+    //    [self resetWidget];
     [self updateToolbar: returnValue];
     [self.demoSelector setTitle: returnValue
                        forState: nil];
 
     if ([returnValue isEqual: @"Simple glob3"]) {
-//      [self showSimpleGlob3];
+      //      [self showSimpleGlob3];
     }
     else if ([returnValue isEqual: @"Switch Layer"]) {
-//      [self switchLayer];
+      //      [self switchLayer];
     }
     else if ([returnValue isEqual: @"Markers"]) {
-//      [self showMarkersDemo];
+      //      [self showMarkersDemo];
     }
     else if ([returnValue isEqual: @"3D Model"]) {
-//      [self showModelDemo];
+      //      [self showModelDemo];
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
-//      [self showMeshDemo];
+      //      [self showMeshDemo];
     }
     else if ([returnValue isEqualToString: @"Meteorite Impacts"]) {
-//      [self showMeteoriteImpactsLayer];
+      //      [self showMeteoriteImpactsLayer];
     }
   }
 }

@@ -106,7 +106,7 @@
 
 - (void) setVisible: (BOOL)isVisible
 {
-  self.visible = isVisible;
+  self->_visible = isVisible;
 
   if (isVisible) {
     [self show];
@@ -116,7 +116,7 @@
   }
 }
 
-- (void) clear
+- (void) removeAllSubviews
 {
   NSArray *subviews = [self subviews];
 
@@ -125,11 +125,6 @@
   for (UIView *subview in subviews) {
     [subview removeFromSuperview];
   }
-}
-
-- (void) addTool:(UIView *)view
-{
-  [self addSubview: view];
 }
 
 - (void)deviceOrientationDidChange:(NSNotification *)notification {
@@ -160,7 +155,7 @@
 
 - (void) dealloc
 {
-  [self clear];
+  [self removeAllSubviews];
 }
 
 @end

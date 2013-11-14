@@ -14,7 +14,6 @@
 
 @property (nonatomic) BOOL visible;
 
-- (void) clear;
-- (void) addTool:(UIView *)view;
+- (void) removeAllSubviews;
 
 @end
