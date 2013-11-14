@@ -322,7 +322,7 @@
 
   [self setDemoMenu: [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"]];
 
-  NSMutableArray *demoNames = [[NSMutableArray alloc] initWithObjects:
+  NSMutableArray *demoNames = [NSMutableArray arrayWithObjects:
                                @"Simple glob3",
                                @"Switch Layer",
                                @"Markers",
