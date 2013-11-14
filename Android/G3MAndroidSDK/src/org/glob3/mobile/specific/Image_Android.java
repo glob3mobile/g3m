@@ -119,8 +119,8 @@ public final class Image_Android
    private final String       _createdAt;
 
 
-   Image_Android(final Bitmap bitmap,
-                 final byte[] source) {
+   public Image_Android(final Bitmap bitmap,
+                        final byte[] source) {
       _createdAt = DEBUG ? createCallStackString() : null;
 
       if (bitmap == null) {
