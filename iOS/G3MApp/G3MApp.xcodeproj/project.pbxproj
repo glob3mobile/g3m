@@ -31,14 +31,6 @@
 		CFF64D701832A1A8006ABFF6 /* Default.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CFF64D5B1832A1A8006ABFF6 /* Default.fsh */; };
 		CFF64D711832A1A8006ABFF6 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CFF64D5C1832A1A8006ABFF6 /* Shader.fsh */; };
 		CFF64D721832A1A8006ABFF6 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CFF64D5D1832A1A8006ABFF6 /* Shader.vsh */; };
-		E7040CF016D7937700E19C28 /* G3MPlaneParseTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CEF16D7937700E19C28 /* G3MPlaneParseTask.mm */; };
-		E7040CF416D79AD900E19C28 /* G3MAppUserData.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CF316D79AD900E19C28 /* G3MAppUserData.mm */; };
-		E7040CF716D7AE1300E19C28 /* G3MMarkUserData.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CF616D7AE1300E19C28 /* G3MMarkUserData.mm */; };
-		E7040CFA16D7AFDC00E19C28 /* G3MWikiDownloadListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CF916D7AFDC00E19C28 /* G3MWikiDownloadListener.mm */; };
-		E7040CFD16D8E31100E19C28 /* G3MAppInitializationTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CFC16D8E31100E19C28 /* G3MAppInitializationTask.mm */; };
-		E7040D0016D8E87600E19C28 /* G3MWeatherDownloadListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7040CFF16D8E87600E19C28 /* G3MWeatherDownloadListener.mm */; };
-		E7449D3916DB7D9A0073BDA6 /* G3MMeshRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7449D3816DB7D9A0073BDA6 /* G3MMeshRenderer.mm */; };
-		E7449D3D16DB8B620073BDA6 /* G3MMarksRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7449D3C16DB8B620073BDA6 /* G3MMarksRenderer.mm */; };
 		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
@@ -103,42 +95,26 @@
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		CFF64D4A1832A1A8006ABFF6 /* FlatColorMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "FlatColorMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
-		CFF64D4B1832A1A8006ABFF6 /* FlatColorMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "FlatColorMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
-		CFF64D4C1832A1A8006ABFF6 /* TexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "TexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
-		CFF64D4D1832A1A8006ABFF6 /* TexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = "TexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
-		CFF64D4E1832A1A8006ABFF6 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = NoColorMesh.fsh; sourceTree = "<group>"; };
-		CFF64D4F1832A1A8006ABFF6 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = NoColorMesh.vsh; sourceTree = "<group>"; };
-		CFF64D501832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
-		CFF64D511832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
-		CFF64D521832A1A8006ABFF6 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ColorMesh.fsh; sourceTree = "<group>"; };
-		CFF64D531832A1A8006ABFF6 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TexturedMesh.fsh; sourceTree = "<group>"; };
-		CFF64D541832A1A8006ABFF6 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ColorMesh.vsh; sourceTree = "<group>"; };
-		CFF64D551832A1A8006ABFF6 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = TexturedMesh.vsh; sourceTree = "<group>"; };
-		CFF64D561832A1A8006ABFF6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
-		CFF64D571832A1A8006ABFF6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
-		CFF64D581832A1A8006ABFF6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = Billboard.fsh; sourceTree = "<group>"; };
-		CFF64D591832A1A8006ABFF6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = Billboard.vsh; sourceTree = "<group>"; };
-		CFF64D5A1832A1A8006ABFF6 /* Default.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = Default.vsh; sourceTree = "<group>"; };
-		CFF64D5B1832A1A8006ABFF6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = Default.fsh; sourceTree = "<group>"; };
-		CFF64D5C1832A1A8006ABFF6 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.fsh; sourceTree = "<group>"; };
-		CFF64D5D1832A1A8006ABFF6 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shader.vsh; sourceTree = "<group>"; };
-		E7040CEE16D7937700E19C28 /* G3MPlaneParseTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MPlaneParseTask.hpp; sourceTree = "<group>"; };
-		E7040CEF16D7937700E19C28 /* G3MPlaneParseTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MPlaneParseTask.mm; sourceTree = "<group>"; };
-		E7040CF216D79AD900E19C28 /* G3MAppUserData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MAppUserData.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E7040CF316D79AD900E19C28 /* G3MAppUserData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MAppUserData.mm; sourceTree = "<group>"; };
-		E7040CF516D7AE1300E19C28 /* G3MMarkUserData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MMarkUserData.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E7040CF616D7AE1300E19C28 /* G3MMarkUserData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MMarkUserData.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		E7040CF816D7AFDC00E19C28 /* G3MWikiDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MWikiDownloadListener.hpp; sourceTree = "<group>"; };
-		E7040CF916D7AFDC00E19C28 /* G3MWikiDownloadListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MWikiDownloadListener.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		E7040CFB16D8E31100E19C28 /* G3MAppInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAppInitializationTask.hpp; sourceTree = "<group>"; };
-		E7040CFC16D8E31100E19C28 /* G3MAppInitializationTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MAppInitializationTask.mm; sourceTree = "<group>"; };
-		E7040CFE16D8E87600E19C28 /* G3MWeatherDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MWeatherDownloadListener.hpp; sourceTree = "<group>"; };
-		E7040CFF16D8E87600E19C28 /* G3MWeatherDownloadListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MWeatherDownloadListener.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		E7449D3716DB7D9A0073BDA6 /* G3MMeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMeshRenderer.hpp; sourceTree = "<group>"; };
-		E7449D3816DB7D9A0073BDA6 /* G3MMeshRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MMeshRenderer.mm; sourceTree = "<group>"; };
-		E7449D3B16DB8B620073BDA6 /* G3MMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MMarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E7449D3C16DB8B620073BDA6 /* G3MMarksRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MMarksRenderer.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CFF64D4A1832A1A8006ABFF6 /* FlatColorMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "FlatColorMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
+		CFF64D4B1832A1A8006ABFF6 /* FlatColorMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "FlatColorMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
+		CFF64D4C1832A1A8006ABFF6 /* TexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
+		CFF64D4D1832A1A8006ABFF6 /* TexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
+		CFF64D4E1832A1A8006ABFF6 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.fsh; sourceTree = "<group>"; };
+		CFF64D4F1832A1A8006ABFF6 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.vsh; sourceTree = "<group>"; };
+		CFF64D501832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
+		CFF64D511832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
+		CFF64D521832A1A8006ABFF6 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
+		CFF64D531832A1A8006ABFF6 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
+		CFF64D541832A1A8006ABFF6 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
+		CFF64D551832A1A8006ABFF6 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
+		CFF64D561832A1A8006ABFF6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
+		CFF64D571832A1A8006ABFF6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
+		CFF64D581832A1A8006ABFF6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.fsh; sourceTree = "<group>"; };
+		CFF64D591832A1A8006ABFF6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
+		CFF64D5A1832A1A8006ABFF6 /* Default.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.vsh; sourceTree = "<group>"; };
+		CFF64D5B1832A1A8006ABFF6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
+		CFF64D5C1832A1A8006ABFF6 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		CFF64D5D1832A1A8006ABFF6 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
@@ -306,30 +282,14 @@
 			children = (
 				E7D1B61716D2436700AF47C1 /* G3MAppDelegate.h */,
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
-				E7040CFB16D8E31100E19C28 /* G3MAppInitializationTask.hpp */,
-				E7040CFC16D8E31100E19C28 /* G3MAppInitializationTask.mm */,
-				E7040CF216D79AD900E19C28 /* G3MAppUserData.hpp */,
-				E7040CF316D79AD900E19C28 /* G3MAppUserData.mm */,
-				E7449D3B16DB8B620073BDA6 /* G3MMarksRenderer.hpp */,
-				E7449D3C16DB8B620073BDA6 /* G3MMarksRenderer.mm */,
-				E7040CF516D7AE1300E19C28 /* G3MMarkUserData.hpp */,
-				E7040CF616D7AE1300E19C28 /* G3MMarkUserData.mm */,
-				E7449D3716DB7D9A0073BDA6 /* G3MMeshRenderer.hpp */,
-				E7449D3816DB7D9A0073BDA6 /* G3MMeshRenderer.mm */,
-				E7040CEE16D7937700E19C28 /* G3MPlaneParseTask.hpp */,
-				E7040CEF16D7937700E19C28 /* G3MPlaneParseTask.mm */,
 				E7D1B80116D27DC600AF47C1 /* G3MToolbar.h */,
 				E7D1B80216D27DC600AF47C1 /* G3MToolbar.m */,
 				E7D1B80516D27DC600AF47C1 /* G3MUIDropDownMenu.h */,
 				E7D1B80616D27DC600AF47C1 /* G3MUIDropDownMenu.m */,
 				E7D1B62616D2436700AF47C1 /* G3MViewController.h */,
 				E7D1B62716D2436700AF47C1 /* G3MViewController.mm */,
-				E7040CFE16D8E87600E19C28 /* G3MWeatherDownloadListener.hpp */,
-				E7040CFF16D8E87600E19C28 /* G3MWeatherDownloadListener.mm */,
 				E7D1B80316D27DC600AF47C1 /* G3MWebViewController.h */,
 				E7D1B80416D27DC600AF47C1 /* G3MWebViewController.mm */,
-				E7040CF816D7AFDC00E19C28 /* G3MWikiDownloadListener.hpp */,
-				E7040CF916D7AFDC00E19C28 /* G3MWikiDownloadListener.mm */,
 				E7D1B62316D2436700AF47C1 /* MainStoryboard_iPad.storyboard */,
 				E7D1B62016D2436700AF47C1 /* MainStoryboard_iPhone.storyboard */,
 				E7D1B7F116D2750400AF47C1 /* Resources */,
@@ -538,14 +498,6 @@
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
 				E7D1B80816D27DC600AF47C1 /* G3MWebViewController.mm in Sources */,
 				E7D1B80916D27DC600AF47C1 /* G3MUIDropDownMenu.m in Sources */,
-				E7040CF016D7937700E19C28 /* G3MPlaneParseTask.mm in Sources */,
-				E7040CF416D79AD900E19C28 /* G3MAppUserData.mm in Sources */,
-				E7040CF716D7AE1300E19C28 /* G3MMarkUserData.mm in Sources */,
-				E7040CFA16D7AFDC00E19C28 /* G3MWikiDownloadListener.mm in Sources */,
-				E7040CFD16D8E31100E19C28 /* G3MAppInitializationTask.mm in Sources */,
-				E7040D0016D8E87600E19C28 /* G3MWeatherDownloadListener.mm in Sources */,
-				E7449D3916DB7D9A0073BDA6 /* G3MMeshRenderer.mm in Sources */,
-				E7449D3D16DB8B620073BDA6 /* G3MMarksRenderer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

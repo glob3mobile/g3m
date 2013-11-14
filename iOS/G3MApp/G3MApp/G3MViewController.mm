@@ -22,12 +22,6 @@
 #import <G3MiOSSDK/MapQuestLayer.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import "G3MToolbar.h"
-#import "G3MAppUserData.hpp"
-#import "G3MMarkUserData.hpp"
-#import "G3MMeshRenderer.hpp"
-#import "G3MMarksRenderer.hpp"
-#import "G3MPlaneParseTask.hpp"
-#import "G3MAppInitializationTask.hpp"
 #import "G3MWebViewController.h"
 
 @interface G3MViewController ()
@@ -77,19 +71,19 @@
   shapeRenderer->setEnable(false);
   builder.addRenderer(shapeRenderer);
 
-  MarksRenderer* marksRenderer = G3MMarksRenderer::createMarksRenderer(self);
-  marksRenderer->setEnable(false);
-  builder.addRenderer(marksRenderer);
-
-  MeshRenderer* meshRenderer = G3MMeshRenderer::createMeshRenderer(builder.getPlanet());
-  meshRenderer->setEnable(false);
-  builder.addRenderer(meshRenderer);
-
-  G3MAppUserData* userData = new G3MAppUserData(layerSet,
-                                                shapeRenderer,
-                                                marksRenderer,
-                                                meshRenderer);
-  userData->setSatelliteLayerEnabled(true);
+//  MarksRenderer* marksRenderer = G3MMarksRenderer::createMarksRenderer(self);
+//  marksRenderer->setEnable(false);
+//  builder.addRenderer(marksRenderer);
+//
+//  MeshRenderer* meshRenderer = G3MMeshRenderer::createMeshRenderer(builder.getPlanet());
+//  meshRenderer->setEnable(false);
+//  builder.addRenderer(meshRenderer);
+//
+//  G3MAppUserData* userData = new G3MAppUserData(layerSet,
+//                                                shapeRenderer,
+//                                                marksRenderer,
+//                                                meshRenderer);
+//  userData->setSatelliteLayerEnabled(true);
 //  userData->setLayerSet([self createLayerSet: userData->getSatelliteLayerEnabled()]);
 //  userData->setMarksRenderer(marksRenderer);
 //  userData->setShapeRenderer(shapeRenderer);
@@ -97,12 +91,12 @@
 
   // Setup the builder
   //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
-  builder.setUserData(userData);
+//  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
+//  builder.setUserData(userData);
 
   // Initialize widget
   builder.initializeWidget();
-  [self showSimpleGlob3];
+//  [self showSimpleGlob3];
 
   [self initDropDownMenu];
   [self initToolbar];
@@ -204,135 +198,135 @@
 }
 
 
-- (void) resetWidget
-{
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  g3mAppUserData->getMarksRenderer()->setEnable(false);
-  g3mAppUserData->getShapeRenderer()->setEnable(false);
-  g3mAppUserData->getMeshRenderer()->setEnable(false);
+//- (void) resetWidget
+//{
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  g3mAppUserData->getMarksRenderer()->setEnable(false);
+//  g3mAppUserData->getShapeRenderer()->setEnable(false);
+//  g3mAppUserData->getMeshRenderer()->setEnable(false);
+//
+//  [self.g3mWidget stopCameraAnimation];
+//
+//  LayerSet* layerSet = g3mAppUserData->getLayerSet();
+//  for (int i = 0; i < layerSet->size(); i++) {
+//    layerSet->getLayer(i)->setEnable(false);
+//  }
+//}
 
-  [self.g3mWidget stopCameraAnimation];
+//- (void) setSatelliteLayerEnabled: (bool) enabled
+//{
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  LayerSet* layerSet = g3mAppUserData->getLayerSet();
+//  // satellite layers
+//  for (int i = 0; i < satelliteLayersNames.size(); i++) {
+//    layerSet->getLayerByName(satelliteLayersNames[i])->setEnable(enabled);
+//  }
+//
+//  g3mAppUserData->setSatelliteLayerEnabled(enabled);
+//}
 
-  LayerSet* layerSet = g3mAppUserData->getLayerSet();
-  for (int i = 0; i < layerSet->size(); i++) {
-    layerSet->getLayer(i)->setEnable(false);
-  }
-}
+//- (void) showSimpleGlob3
+//{
+//  [self setSatelliteLayerEnabled: true];
+//
+//  [self.g3mWidget setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+//                                                        Angle::fromDegrees(0),
+//                                                        25000000)
+//                               timeInterval: TimeInterval::fromSeconds(5)];
+//}
 
-- (void) setSatelliteLayerEnabled: (bool) enabled
-{
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  LayerSet* layerSet = g3mAppUserData->getLayerSet();
-  // satellite layers
-  for (int i = 0; i < satelliteLayersNames.size(); i++) {
-    layerSet->getLayerByName(satelliteLayersNames[i])->setEnable(enabled);
-  }
+//- (void) switchLayer
+//{
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//
+//  const bool satelliteLayerEnabled = g3mAppUserData->getSatelliteLayerEnabled();
+//
+//  LayerSet* layerSet = g3mAppUserData->getLayerSet();
+//  // osm
+//  layerSet->getLayerByName("osm_auto:all")->setEnable(satelliteLayerEnabled);
+//  // satellite layers
+//  [self setSatelliteLayerEnabled: !satelliteLayerEnabled];
+//
+//  if (satelliteLayerEnabled) {
+//    [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
+//  }
+//  else {
+//    [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];
+//  }
+//}
 
-  g3mAppUserData->setSatelliteLayerEnabled(enabled);
-}
+//- (void) showMarkersDemo
+//{
+//  [self setSatelliteLayerEnabled: true];
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  g3mAppUserData->getMarksRenderer()->setEnable(true);
+//  [self gotoPosition: Geodetic3D(Angle::fromDegrees(37.7658),
+//                                 Angle::fromDegrees(-122.4185),
+//                                 12000)];
+//}
 
-- (void) showSimpleGlob3
-{
-  [self setSatelliteLayerEnabled: true];
+//- (void) showModelDemo
+//{
+//  [self setSatelliteLayerEnabled: true];
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  g3mAppUserData->getShapeRenderer()->setEnable(true);
+//
+//  Shape* plane = g3mAppUserData->getPlane();
+//  plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                    Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                    10000));
+//
+//  plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
+//                             Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                        Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+//                                        10000),
+//                             true);
+//
+//  const double fromDistance = 50000 * 1.5;
+//  const double toDistance   = 25000 * 1.5 / 2;
+//
+//  const Angle fromAzimuth = Angle::fromDegrees(-90);
+//  const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
+//
+//  const Angle fromAltitude = Angle::fromDegrees(90);
+//  const Angle toAltitude   = Angle::fromDegrees(15);
+//
+//  plane->orbitCamera(TimeInterval::fromSeconds(20),
+//                     fromDistance, toDistance,
+//                     fromAzimuth,  toAzimuth,
+//                     fromAltitude, toAltitude);
+//
+//  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                 6000)];
+//}
 
-  [self.g3mWidget setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-                                                        Angle::fromDegrees(0),
-                                                        25000000)
-                               timeInterval: TimeInterval::fromSeconds(5)];
-}
-
-- (void) switchLayer
-{
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-
-  const bool satelliteLayerEnabled = g3mAppUserData->getSatelliteLayerEnabled();
-
-  LayerSet* layerSet = g3mAppUserData->getLayerSet();
-  // osm
-  layerSet->getLayerByName("osm_auto:all")->setEnable(satelliteLayerEnabled);
-  // satellite layers
-  [self setSatelliteLayerEnabled: !satelliteLayerEnabled];
-
-  if (satelliteLayerEnabled) {
-    [[self layerSwitcher] setImage:[UIImage imageNamed:@"satellite-on-96x48.png"] forState:UIControlStateNormal];
-  }
-  else {
-    [[self layerSwitcher] setImage:[UIImage imageNamed:@"map-on-96x48.png"] forState:UIControlStateNormal];
-  }
-}
-
-- (void) showMarkersDemo
-{
-  [self setSatelliteLayerEnabled: true];
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  g3mAppUserData->getMarksRenderer()->setEnable(true);
-  [self gotoPosition: Geodetic3D(Angle::fromDegrees(37.7658),
-                                 Angle::fromDegrees(-122.4185),
-                                 12000)];
-}
-
-- (void) showModelDemo
-{
-  [self setSatelliteLayerEnabled: true];
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  g3mAppUserData->getShapeRenderer()->setEnable(true);
-
-  Shape* plane = g3mAppUserData->getPlane();
-  plane->setPosition(new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                    Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                    10000));
-
-  plane->setAnimatedPosition(TimeInterval::fromSeconds(26),
-                             Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                        Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
-                                        10000),
-                             true);
-
-  const double fromDistance = 50000 * 1.5;
-  const double toDistance   = 25000 * 1.5 / 2;
-
-  const Angle fromAzimuth = Angle::fromDegrees(-90);
-  const Angle toAzimuth   = Angle::fromDegrees(-90 + 360);
-
-  const Angle fromAltitude = Angle::fromDegrees(90);
-  const Angle toAltitude   = Angle::fromDegrees(15);
-
-  plane->orbitCamera(TimeInterval::fromSeconds(20),
-                     fromDistance, toDistance,
-                     fromAzimuth,  toAzimuth,
-                     fromAltitude, toAltitude);
-
-  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 6000)];
-}
-
-- (void) showMeshDemo
-{
-  [self setSatelliteLayerEnabled: true];
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  g3mAppUserData->getMeshRenderer()->setEnable(true);
-  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                 6700000)];
-}
-
-- (void) showMeteoriteImpactsLayer
-{
-  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
-  g3mAppUserData->setSatelliteLayerEnabled(false);
-  LayerSet* layerSet = g3mAppUserData->getLayerSet();
-
-  layerSet->getLayerByName("MapQuest-OSM")->setEnable(true);
-  layerSet->getLayerByName("CartoDB-meteoritessize")->setEnable(true);
-  layerSet->getLayerByName("g3m:mosaic-sst,g3m:mosaic-sla")->setEnable(true);
-
-
-  [self.g3mWidget setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
-                                                        Angle::fromDegrees(0),
-                                                        25000000)
-                               timeInterval: TimeInterval::fromSeconds(5)];
-}
+//- (void) showMeshDemo
+//{
+//  [self setSatelliteLayerEnabled: true];
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  g3mAppUserData->getMeshRenderer()->setEnable(true);
+//  [self gotoPosition: Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                 6700000)];
+//}
+//
+//- (void) showMeteoriteImpactsLayer
+//{
+//  G3MAppUserData* g3mAppUserData = (G3MAppUserData*) self.g3mWidget.userData;
+//  g3mAppUserData->setSatelliteLayerEnabled(false);
+//  LayerSet* layerSet = g3mAppUserData->getLayerSet();
+//
+//  layerSet->getLayerByName("MapQuest-OSM")->setEnable(true);
+//  layerSet->getLayerByName("CartoDB-meteoritessize")->setEnable(true);
+//  layerSet->getLayerByName("g3m:mosaic-sst,g3m:mosaic-sla")->setEnable(true);
+//
+//
+//  [self.g3mWidget setAnimatedCameraPosition: Geodetic3D(Angle::fromDegrees(0),
+//                                                        Angle::fromDegrees(0),
+//                                                        25000000)
+//                               timeInterval: TimeInterval::fromSeconds(5)];
+//}
 
 - (void) gotoPosition: (Geodetic3D) position
 {
@@ -429,28 +423,28 @@
                               : (NSString *) returnValue
 {
   if ([identifier isEqual: @"demoMenu"]) {
-    [self resetWidget];
+//    [self resetWidget];
     [self updateToolbar: returnValue];
     [self.demoSelector setTitle: returnValue
                        forState: nil];
 
     if ([returnValue isEqual: @"Simple glob3"]) {
-      [self showSimpleGlob3];
+//      [self showSimpleGlob3];
     }
     else if ([returnValue isEqual: @"Switch Layer"]) {
-      [self switchLayer];
+//      [self switchLayer];
     }
     else if ([returnValue isEqual: @"Markers"]) {
-      [self showMarkersDemo];
+//      [self showMarkersDemo];
     }
     else if ([returnValue isEqual: @"3D Model"]) {
-      [self showModelDemo];
+//      [self showModelDemo];
     }
     else if ([returnValue isEqual: @"Point Mesh"]) {
-      [self showMeshDemo];
+//      [self showMeshDemo];
     }
     else if ([returnValue isEqualToString: @"Meteorite Impacts"]) {
-      [self showMeteoriteImpactsLayer];
+//      [self showMeteoriteImpactsLayer];
     }
   }
 }
