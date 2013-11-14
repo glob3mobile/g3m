@@ -690,3 +690,24 @@ void MeshRenderer::disableAll() {
     mesh->setEnable(false);
   }
 }
+
+void MeshRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+  const Camera* cam = rc->getCurrentCamera();
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+
+  GLState* state = new GLState();
+  state->addGLFeature(new ModelViewGLFeature(cam), true);
+  state->setParent(glState);
+
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume->touchesFrustum(frustum) ) {
+      mesh->zRender(rc, state);
+    }
+  }
+
+  state->_release();
+
+}
