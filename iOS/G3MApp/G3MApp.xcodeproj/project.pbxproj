@@ -53,8 +53,7 @@
 		E7D1B61B16D2436700AF47C1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B61A16D2436700AF47C1 /* Default.png */; };
 		E7D1B61D16D2436700AF47C1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B61C16D2436700AF47C1 /* Default@2x.png */; };
 		E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B61E16D2436700AF47C1 /* Default-568h@2x.png */; };
-		E7D1B62216D2436700AF47C1 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B62016D2436700AF47C1 /* MainStoryboard_iPhone.storyboard */; };
-		E7D1B62516D2436700AF47C1 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B62316D2436700AF47C1 /* MainStoryboard_iPad.storyboard */; };
+		E7D1B62216D2436700AF47C1 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B62016D2436700AF47C1 /* MainStoryboard.storyboard */; };
 		E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7D1B62716D2436700AF47C1 /* G3MViewController.mm */; };
 		E7D1B63C16D2462B00AF47C1 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B62E16D2462B00AF47C1 /* Default-Landscape.png */; };
 		E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E7D1B62F16D2462B00AF47C1 /* Default-Landscape@2x.png */; };
@@ -142,8 +141,7 @@
 		E7D1B61A16D2436700AF47C1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E7D1B61C16D2436700AF47C1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E7D1B61E16D2436700AF47C1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		E7D1B62116D2436700AF47C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		E7D1B62416D2436700AF47C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		E7D1B62116D2436700AF47C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		E7D1B62616D2436700AF47C1 /* G3MViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = G3MViewController.h; sourceTree = "<group>"; };
 		E7D1B62716D2436700AF47C1 /* G3MViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		E7D1B62E16D2462B00AF47C1 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
@@ -295,8 +293,7 @@
 				E7D1B62716D2436700AF47C1 /* G3MViewController.mm */,
 				E7D1B80316D27DC600AF47C1 /* G3MWebViewController.h */,
 				E7D1B80416D27DC600AF47C1 /* G3MWebViewController.mm */,
-				E7D1B62316D2436700AF47C1 /* MainStoryboard_iPad.storyboard */,
-				E7D1B62016D2436700AF47C1 /* MainStoryboard_iPhone.storyboard */,
+				E7D1B62016D2436700AF47C1 /* MainStoryboard.storyboard */,
 				E7D1B7F116D2750400AF47C1 /* Resources */,
 				E7D1B60F16D2436700AF47C1 /* Supporting Files */,
 			);
@@ -439,11 +436,10 @@
 				E7D1B61D16D2436700AF47C1 /* Default@2x.png in Resources */,
 				E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */,
 				CFF64D671832A1A8006ABFF6 /* ColorMesh.fsh in Resources */,
-				E7D1B62216D2436700AF47C1 /* MainStoryboard_iPhone.storyboard in Resources */,
+				E7D1B62216D2436700AF47C1 /* MainStoryboard.storyboard in Resources */,
 				CFF64D701832A1A8006ABFF6 /* Default.fsh in Resources */,
 				CFF64D711832A1A8006ABFF6 /* Shader.fsh in Resources */,
 				CFF64D661832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.vsh in Resources */,
-				E7D1B62516D2436700AF47C1 /* MainStoryboard_iPad.storyboard in Resources */,
 				E7D1B63C16D2462B00AF47C1 /* Default-Landscape.png in Resources */,
 				CFF64D691832A1A8006ABFF6 /* ColorMesh.vsh in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
@@ -518,20 +514,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		E7D1B62016D2436700AF47C1 /* MainStoryboard_iPhone.storyboard */ = {
+		E7D1B62016D2436700AF47C1 /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E7D1B62116D2436700AF47C1 /* en */,
 			);
-			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		E7D1B62316D2436700AF47C1 /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E7D1B62416D2436700AF47C1 /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
+			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
