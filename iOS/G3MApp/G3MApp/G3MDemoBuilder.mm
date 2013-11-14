@@ -29,6 +29,15 @@ LayerSet* G3MDemoBuilder::createLayerSet() {
   LayerSet* layerSet = new LayerSet();
 
 
+  MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
+                                              TimeInterval::fromDays(30),
+                                              true,
+                                              2);
+  mboxOSMLayer->setTitle("Map Box OSM");
+  mboxOSMLayer->setEnable(true);
+  layerSet->addLayer(mboxOSMLayer);
+
+
   MapQuestLayer* mqOSM = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
   mqOSM->setEnable(false);
   mqOSM->setTitle("MapQuest OSM");
@@ -57,15 +66,6 @@ LayerSet* G3MDemoBuilder::createLayerSet() {
   mboxTerrainLayer->setTitle("Map Box Terrain");
   mboxTerrainLayer->setEnable(false);
   layerSet->addLayer(mboxTerrainLayer);
-
-
-  MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
-                                              TimeInterval::fromDays(30),
-                                              true,
-                                              2);
-  mboxOSMLayer->setTitle("Map Box OSM");
-  mboxOSMLayer->setEnable(true);
-  layerSet->addLayer(mboxOSMLayer);
 
 
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
