@@ -175,6 +175,8 @@ private:
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
+  long long _frameCounter;
+
 public:
   G3MRenderContext(FrameTasksExecutor*       frameTasksExecutor,
                    const IFactory*           factory,
@@ -212,16 +214,19 @@ public:
   _texturesHandler(texturesHandler),
   _frameStartTimer(frameStartTimer),
   _orderedRenderables(NULL),
-  _gpuProgramManager(gpuProgramManager)
+  _gpuProgramManager(gpuProgramManager),
+  _frameCounter(0)
   {
 
   }
 
-  void clear() {
+  void clearForNewFrame() {
     _frameStartTimer->start();
 
     delete _orderedRenderables;
     _orderedRenderables = NULL;
+
+    _frameCounter++;
   }
 
   GL* getGL() const {
@@ -250,6 +255,10 @@ public:
   
   GPUProgramManager* getGPUProgramManager() const{
     return _gpuProgramManager;
+  }
+
+  long long frameCounter() const{
+    return _frameCounter;
   }
 
   virtual ~G3MRenderContext();

@@ -353,7 +353,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
     double z = _gl->readPixelAsDouble(x,y, _width, _height);
 
 
-    if (z != NAND){
+    if (!ISNAN(z)){
       ILogger::instance()->logInfo("Z = %f\n", z);
       Vector3D pixel3D(x,y,z);
       MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
@@ -483,7 +483,7 @@ void G3MWidget::render(int width, int height) {
   _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(_renderContext) : RenderState::busy());
   RenderState_Type renderStateType = _mainRendererState->_type;
 
-  _renderContext->clear();
+  _renderContext->clearForNewFrame();
 
   _effectsScheduler->doOneCyle(_renderContext);
 

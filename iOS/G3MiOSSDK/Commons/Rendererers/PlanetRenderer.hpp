@@ -295,6 +295,8 @@ private:
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
 //  std::list<Tile*> _tilesRenderedInLastFrame;
+
+  long long _renderedTilesListFrame;
   std::list<Tile*> _renderedTiles;
   std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
 
