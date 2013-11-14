@@ -270,4 +270,8 @@ public class HUDImageRenderer extends LeafRenderer
     return _imageFactory;
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

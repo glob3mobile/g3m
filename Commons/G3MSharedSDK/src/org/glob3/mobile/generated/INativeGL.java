@@ -168,4 +168,6 @@ public abstract class INativeGL
   public abstract Color read1PixelAsRGBAColor(int x, int y);
   public abstract double read1PixelAsDouble(int x, int y);
 
+  public abstract void depthMask(boolean v);
+
 }

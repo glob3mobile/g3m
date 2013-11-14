@@ -131,4 +131,14 @@ public class CompositeMesh extends Mesh
     }
   }
 
+  public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      child.zRender(rc, parentGLState);
+    }
+  }
+
 }

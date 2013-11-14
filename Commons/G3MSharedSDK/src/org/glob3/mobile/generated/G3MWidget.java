@@ -178,7 +178,7 @@ public class G3MWidget
     _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
     RenderState_Type renderStateType = _mainRendererState._type;
   
-    _renderContext.clear();
+    _renderContext.clearForNewFrame();
   
     _effectsScheduler.doOneCyle(_renderContext);
   
@@ -293,6 +293,19 @@ public class G3MWidget
   
   }
 
+  public final void zRender()
+  {
+  
+    if (_mainRenderer.isEnable())
+    {
+      GLState zRenderGLState = new GLState();
+      _gl.clearScreen(Color.black());
+      _mainRenderer.zRender(_renderContext, zRenderGLState);
+      zRenderGLState._release();
+    }
+  
+  }
+
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
@@ -338,45 +351,31 @@ public class G3MWidget
     ///////////////////////////////////////////////////
   
   
-  
-    //TODO: TESTING Z HAS TO BE REMOVED
-    if (true)
+    if (touchEvent.getType() == TouchEventType.Down)
     {
-      if (touchEvent.getType() == TouchEventType.Down)
+      zRender();
+  
+      int x = touchEvent.getTouch(0).getPos()._x; //_width/2;
+      int y = touchEvent.getTouch(0).getPos()._y; //_height/2;
+  
+      double z = _gl.readPixelAsDouble(x, y, _width, _height);
+  
+  
+      if (!(z != z))
       {
-        if (_mainRenderer.isEnable())
-        {
-          RENDERING_Z = true;
-  
-          _gl.clearScreen(Color.black());
-          _mainRenderer.render(_renderContext, _rootState);
-  
-          int x = touchEvent.getTouch(0).getPos()._x; //_width/2;
-          int y = touchEvent.getTouch(0).getPos()._y; //_height/2;
-  
-          double z = _gl.readPixelAsDouble(x, y, _width, _height);
-          if (z != GlobalMembersG3MWidget.lastZ)
-          {
-            System.out.printf("Z = %f\n", z);
-            GlobalMembersG3MWidget.lastZ = z;
-          }
-  
-          if (z != java.lang.Double.NaN)
-          {
-            Vector3D pixel3D = new Vector3D(x,y,z);
-            MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
-            Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-            System.out.printf("PIXEL 3D: %s -> %s\n", pixel3D.description(), pos.description());
-            System.out.printf("DIST: %f\n", _currentCamera.getCartesianPosition().sub(pos).length());
-            System.out.printf("GEO: %s\n", _planet.toGeodetic2D(pos).description());
-          }
-  
-          RENDERING_Z = false;
-        }
+        ILogger.instance().logInfo("Z = %f\n", z);
+        Vector3D pixel3D = new Vector3D(x,y,z);
+        MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+        Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+        ILogger.instance().logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description(), pos.description());
+        ILogger.instance().logInfo("DIST: %f\n", _currentCamera.getCartesianPosition().sub(pos).length());
+        ILogger.instance().logInfo("GEO: %s\n", _planet.toGeodetic2D(pos).description());
+      }
+      else
+      {
+        ILogger.instance().logInfo("NO Z");
       }
     }
-  
-  
   
   }
 
@@ -636,8 +635,6 @@ public class G3MWidget
     getPlanetRenderer().setRenderedSector(sector);
     _initialCameraPositionHasBeenSet = false;
   }
-
-  public static boolean RENDERING_Z = false;
 
   private IStorage _storage;
   private IDownloader _downloader;

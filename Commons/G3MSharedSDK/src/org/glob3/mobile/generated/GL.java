@@ -149,26 +149,15 @@ public class GL
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
-
-  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
+  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager, RenderType renderType)
   {
   
-    state.applyOnGPU(this, progManager);
+    state.applyOnGPU(this, progManager, renderType);
   
     _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
-
-  public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
+  public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager, RenderType renderType)
   {
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
@@ -177,7 +166,7 @@ public class GL
   //                                 count);
   //  }
   
-    state.applyOnGPU(this, progManager);
+    state.applyOnGPU(this, progManager, renderType);
   
     _nativeGL.drawArrays(mode, first, count);
   }

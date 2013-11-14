@@ -224,4 +224,8 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   {
 
   }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
 }

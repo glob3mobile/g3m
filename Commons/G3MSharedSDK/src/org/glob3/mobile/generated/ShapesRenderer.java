@@ -417,4 +417,22 @@ public class ShapesRenderer extends LeafRenderer
     loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    GLState state = new GLState();
+    final Camera cam = rc.getCurrentCamera();
+    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+  
+    state.addGLFeature(new ModelViewGLFeature(cam), true);
+    state.setParent(glState);
+  
+    final int shapesCount = _shapes.size();
+    for (int i = 0; i < shapesCount; i++)
+    {
+      Shape shape = _shapes.get(i);
+      shape.zRender(rc, state, _renderNotReadyShapes);
+    }
+  }
+
 }

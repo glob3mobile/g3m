@@ -21,6 +21,12 @@ public class SurfaceElevationProvider_Visitor extends GenericQuadTreeVisitor
   {
     SurfaceElevationListener listener = (SurfaceElevationListener) element;
     double height = _elevationData.getElevationAt(geodetic);
+  
+    if ((height != height))
+    {
+      height = 0;
+    }
+  
     listener.elevationChanged(geodetic, height, _verticalExaggeration);
     return false;
   }

@@ -95,4 +95,10 @@ public class TexturedMesh extends Mesh
     _glState.setParent(parentState);
     _mesh.render(rc, _glState);
   }
+
+  public final void zRawRender(G3MRenderContext rc, GLState parentState)
+  {
+    //TODO: transparencies
+    _mesh.zRender(rc, parentState);
+  }
 }

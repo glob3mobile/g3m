@@ -174,4 +174,10 @@ public class LeveledTexturedMesh extends Mesh
     }
   }
 
+  public final void zRawRender(G3MRenderContext rc, GLState parentState)
+  {
+    //TODO: transparencies
+    _mesh.render(rc, parentState);
+  }
+
 }
