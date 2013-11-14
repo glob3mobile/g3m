@@ -641,6 +641,42 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     }
   }
   else {
+
+    std::list<Tile*> tilesToBeRendered;
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      _firstLevelTiles[i]->actualizeQuadTree(rc,
+                                             tilesToBeRendered,
+                                             planet,
+                                             cameraNormalizedPosition,
+                                             cameraAngle2HorizonInRadians,
+                                             cameraFrustumInModelCoordinates,
+                                             &_statistics,
+                                             _verticalExaggeration,
+                                             layerTilesRenderParameters,
+                                             _texturizer,
+                                             _tilesRenderParameters,
+                                             _lastSplitTimer,
+                                             _elevationDataProvider,
+                                             _tessellator,
+                                             _tileRasterizer,
+                                             _layerSet,
+                                             _renderedSector,
+                                             _firstRender, /* if first render, force full render */
+                                             _texturePriority,
+                                             dpiFactor,
+                                             deviceQualityFactor);
+    }
+
+    for (std::list<Tile*>::iterator iter = tilesToBeRendered.begin();
+         iter != tilesToBeRendered.end();
+         iter++) {
+      Tile* tile = *iter;
+
+      tile->rawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority);
+    }
+
+
+/*
     std::list<Tile*> toVisit;
     for (int i = 0; i < firstLevelTilesCount; i++) {
       toVisit.push_back(_firstLevelTiles[i]);
@@ -672,7 +708,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                                       _tileRasterizer,
                                       _layerSet,
                                       _renderedSector,
-                                      _firstRender, /* if first render, force full render */
+                                      _firstRender, // if first render, force full render
                                       _texturePriority,
                                       dpiFactor,
                                       deviceQualityFactor);
@@ -684,6 +720,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
       toVisit = toVisitInNextIteration;
     }
+*/
   }
 
   if (_showStatistics) {

@@ -97,17 +97,6 @@ private:
                                   const float dpiFactor,
                                   const float deviceQualityFactor);
 
-  inline void rawRender(const G3MRenderContext* rc,
-                        const GLState* glState,
-                        TileTexturizer* texturizer,
-                        ElevationDataProvider* elevationDataProvider,
-                        const TileTessellator* tessellator,
-                        TileRasterizer* tileRasterizer,
-                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const LayerSet* layerSet,
-                        const TilesRenderParameters* tilesRenderParameters,
-                        bool isForcedFullRender,
-                        long long texturePriority);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -258,6 +247,19 @@ public:
                                long long texturePriority,
                                const float dpiFactor,
                                const float deviceQualityFactor);
+
+
+  inline void rawRender(const G3MRenderContext* rc,
+                        const GLState* glState,
+                        TileTexturizer* texturizer,
+                        ElevationDataProvider* elevationDataProvider,
+                        const TileTessellator* tessellator,
+                        TileRasterizer* tileRasterizer,
+                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                        const LayerSet* layerSet,
+                        const TilesRenderParameters* tilesRenderParameters,
+                        bool isForcedFullRender,
+                        long long texturePriority);
 
   void zRender(const G3MRenderContext* rc,
               const GLState& parentState);
