@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__Vector3F__
 #define __G3MiOSSDK__Vector3F__
 
-//#include "Vector3D.hpp"
+#include "Vector3D.hpp"
 
 
 class Vector3F {
