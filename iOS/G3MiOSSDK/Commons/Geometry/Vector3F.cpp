@@ -58,8 +58,8 @@ Vector3F Vector3F::sub(const Vector3F& that) const {
                   _z - that._z);
 }
 
-Vector3F Vector3F::cross(const Vector3F& other) const {
-  return Vector3F(_y * other._z - _z * other._y,
-                  _z * other._x - _x * other._z,
-                  _x * other._y - _y * other._x);
+Vector3F Vector3F::cross(const Vector3F& that) const {
+  return Vector3F(_y * that._z - _z * that._y,
+                  _z * that._x - _x * that._z,
+                  _x * that._y - _y * that._x);
 }

@@ -40,7 +40,7 @@ public:
 
   Vector3F sub(const Vector3F& that) const;
 
-  Vector3F cross(const Vector3F& other) const;
+  Vector3F cross(const Vector3F& that) const;
 
 };
 
