@@ -70,5 +70,6 @@ IFloatBuffer* NormalsUtils::createTriangleSmoothNormals(const IFloatBuffer* vert
 //  }
 //
 //  int __TODO;
+//  //http://stackoverflow.com/questions/3485034/convert-triangle-strips-to-triangles
 //  return normals;
 //}
