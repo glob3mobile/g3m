@@ -90,5 +90,6 @@ public class NormalsUtils
 //  }
 //
 //  int __TODO;
+//  //http://stackoverflow.com/questions/3485034/convert-triangle-strips-to-triangles
 //  return normals;
 //}
