@@ -388,18 +388,18 @@ public class PlanetTileTessellator extends TileTessellator
     //Storing textCoords in Tile
     tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
   
-    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1);
-  
     int __Testing_Terrain_Normals;
-  //  IFloatBuffer* verticesB = vertices.create();
-  //  IShortBuffer* indicesB  = indices.create();
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //
-  //  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-  //                                 vertices.getCenter(),
-  //                                 verticesB, true,
-  //                                 normals,   true,
-  //                                 indicesB,  true);
+    //  IFloatBuffer* verticesB = vertices.create();
+    //  IShortBuffer* indicesB  = indices.create();
+    //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    //
+    //  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
+    //                                 vertices.getCenter(),
+    //                                 verticesB, true,
+    //                                 normals,   true,
+    //                                 indicesB,  true);
+  
+    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true);
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
