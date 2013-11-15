@@ -1573,10 +1573,20 @@ public:
                                   ABSOLUTE,
                                   50000,
                                   Color::fromRGBA(1, 1, 0, 0.5));
-  //  circle->setHeading( Angle::fromDegrees(45) );
-  //  circle->setPitch( Angle::fromDegrees(45) );
-  //  circle->setScale(2.0, 0.5, 1);
   shapesRenderer->addShape(circle);
+
+  Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40),
+                                                    Angle::fromDegrees(-123.5),
+                                                    8000),
+                                     ABSOLUTE,
+                                     Vector3D(50000, 50000, 50000),
+                                     16,
+                                     0,
+                                     false,
+                                     false,
+                                     Color::fromRGBA(0, 1, 1, 1));
+  shapesRenderer->addShape(sphere);
+
 
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
                                            Angle::fromDegrees(-122),
