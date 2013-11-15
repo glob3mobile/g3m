@@ -59,8 +59,8 @@ public class Vector3F
    {
      return new Vector3F(_x - that._x, _y - that._y, _z - that._z);
    }
-   public Vector3F cross(Vector3F other)
+   public Vector3F cross(Vector3F that)
    {
-     return new Vector3F(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
+     return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
    }
 }
