@@ -175,23 +175,21 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
+  int __Testing_Terrain_Normals;
+  //  IFloatBuffer* verticesB = vertices.create();
+  //  IShortBuffer* indicesB  = indices.create();
+  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+  //
+  //  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
+  //                                 vertices.getCenter(),
+  //                                 verticesB, true,
+  //                                 normals,   true,
+  //                                 indicesB,  true);
+
   return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                  vertices.getCenter(),
                                  vertices.create(), true,
-                                 indices.create(), true,
-                                 1,
-                                 1);
-
-  int __Testing_Terrain_Normals;
-//  IFloatBuffer* verticesB = vertices.create();
-//  IShortBuffer* indicesB  = indices.create();
-//  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-//
-//  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-//                                 vertices.getCenter(),
-//                                 verticesB, true,
-//                                 normals,   true,
-//                                 indicesB,  true);
+                                 indices.create(), true);
 }
 
 const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
