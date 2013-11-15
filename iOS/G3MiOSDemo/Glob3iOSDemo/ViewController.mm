@@ -138,6 +138,7 @@
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
 
+#import <G3MiOSSDK/BasicShadersGL2.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -501,6 +502,10 @@ public:
 }
 
 - (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
+
+  BasicShadersGL2 shaders;
+
+
   //GPU Program Sources
   NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
                                                                  ofType: @"vsh"];

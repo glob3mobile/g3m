@@ -13,6 +13,8 @@
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
+#include "BasicShadersGL2.hpp"
+
 G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
   _nativeWidget = nativeWidget;
 
@@ -22,14 +24,24 @@ G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
 void G3MBuilder_iOS::initializeWidget() {
   setGL([_nativeWidget getGL]);
 
+  /*
+  BasicShadersGL2 basicShaders;
+  const int size = basicShaders.size();
+  for (int i = 0; i < size; i++) {
+    addGPUProgramSources(basicShaders.get(i));
+  }
+  ILogger::instance()->logInfo("Added %d shader programs.", size);
+   */
+
+
   addGPUProgramSources(loadGPUProgramSources("Default"));
   addGPUProgramSources(loadGPUProgramSources("Billboard"));
   addGPUProgramSources(loadGPUProgramSources("FlatColorMesh"));
   addGPUProgramSources(loadGPUProgramSources("TexturedMesh"));
   addGPUProgramSources(loadGPUProgramSources("ColorMesh"));
   addGPUProgramSources(loadGPUProgramSources("TransformedTexCoorTexturedMesh"));
-  addGPUProgramSources(loadGPUProgramSources("TexturedMesh+DirectionLight"));
-  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh+DirectionLight"));
+  addGPUProgramSources(loadGPUProgramSources("TexturedMesh_DirectionLight"));
+  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh_DirectionLight"));
   addGPUProgramSources(loadGPUProgramSources("NoColorMesh"));
   addGPUProgramSources(loadGPUProgramSources("ZRender"));
 
