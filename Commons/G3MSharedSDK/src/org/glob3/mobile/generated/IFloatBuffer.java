@@ -35,4 +35,6 @@ public abstract class IFloatBuffer implements IBuffer
 
   public abstract void rawPut(int i, float value);
 
+  public abstract void rawAdd(int i, float value);
+
 }
