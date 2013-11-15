@@ -15,11 +15,40 @@ package org.glob3.mobile.generated;
 
 
 
+
+
+
+
+
+
 public class Vector3F
 {
+   public Vector3F(float x, float y, float z)
+   {
+      _x = x;
+      _y = y;
+      _z = z;
+   }
+   public Vector3F(Vector3F that)
+   {
+      _x = that._x;
+      _y = that._y;
+      _z = that._z;
+   }
+   public void dispose()
+   {
+   }
+   public float dot(Vector3F v)
+   {
+     return ((_x * v._x) + (_y * v._y) + (_z * v._z));
+   }
    public double length()
    {
      return IMathUtils.instance().sqrt(squaredLength());
+   }
+   public double squaredLength()
+   {
+     return _x * _x + _y * _y + _z * _z;
    }
    public Vector3F normalized()
    {
