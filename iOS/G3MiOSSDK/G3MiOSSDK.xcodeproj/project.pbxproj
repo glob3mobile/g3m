@@ -169,6 +169,7 @@
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
 		CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723717184BE40043C74B /* ImageBuilder.hpp */; };
+		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
 		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
@@ -1193,6 +1194,8 @@
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
+		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
+		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
@@ -1949,6 +1952,8 @@
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
 				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
 				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
+				CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */,
+				CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2614,6 +2619,7 @@
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
+				CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,

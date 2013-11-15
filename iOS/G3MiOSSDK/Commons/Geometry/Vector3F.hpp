@@ -56,6 +56,19 @@ public:
     return _x * _x + _y * _y + _z * _z;
   }
 
+  Vector3F sub(const Vector3F& that) const {
+    return Vector3F(_x - that._x,
+                    _y - that._y,
+                    _z - that._z);
+  }
+
+  Vector3F cross(const Vector3F& other) const {
+    return Vector3F(_y * other._z - _z * other._y,
+                    _z * other._x - _x * other._z,
+                    _x * other._y - _y * other._x);
+  }
+
+
 };
 
 #endif

@@ -23,11 +23,11 @@
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
-
 #include "IndexedGeometryMesh.hpp"
-
 #include "IShortBuffer.hpp"
+
+#include "NormalsUtils.hpp"
+
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
@@ -181,6 +181,17 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                  indices.create(), true,
                                  1,
                                  1);
+
+  int __Testing_Terrain_Normals;
+//  IFloatBuffer* verticesB = vertices.create();
+//  IShortBuffer* indicesB  = indices.create();
+//  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+//
+//  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
+//                                 vertices.getCenter(),
+//                                 verticesB, true,
+//                                 normals,   true,
+//                                 indicesB,  true);
 }
 
 const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
@@ -355,7 +366,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       indices.add((short) (jTimesResolution + i));
       indices.add((short) (jTimesResolution + i + rx));
     }
-    indices.add((short) (jTimesResolution + 2* rx - 1));
+    indices.add((short) (jTimesResolution + 2*rx - 1));
   }
 
   return minElevation;

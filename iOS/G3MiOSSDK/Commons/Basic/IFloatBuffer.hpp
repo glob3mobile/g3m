@@ -24,7 +24,9 @@ public:
   virtual void put(int i, float value) = 0;
 
   virtual void rawPut(int i, float value) = 0;
-  
+
+  virtual void rawAdd(int i, float value) = 0;
+
 };
 
 #endif

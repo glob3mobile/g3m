@@ -126,14 +126,21 @@ public:
   
   void rawPut(int i,
               float value) {
-    
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
     
     _values[i] = value;
   }
+
+  void rawAdd(int i, float value) {
+    if (i < 0 || i > _size) {
+      ILogger::instance()->logError("Buffer Put error.");
+    }
+
+    _values[i] = _values[i] + value;
+  }
+
   
   float* getPointer() const {
     return _values;
@@ -166,6 +173,7 @@ public:
 //      ILogger::instance()->logError("Problem using VBO");
 //    }
   }
+
 
 };
 
