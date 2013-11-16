@@ -64,16 +64,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-//    return 8;
   return _demoModel->getScenesCount();
 }
 
@@ -84,17 +80,22 @@
   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier
                                                           forIndexPath: indexPath];
 
-
   const std::string sceneName = _demoModel->getScene( indexPath.row )->getName();
 
   UIButton* button = (UIButton*) [cell viewWithTag: 100];
-//  button.titleLabel.text = [NSString stringWithCppString: sceneName];
   [button setTitle: [NSString stringWithCppString: sceneName]
           forState: UIControlStateNormal];
 
-  // Configure the cell...
-
   return cell;
+}
+
+- (IBAction)changeDemo:(UIButton *)sender {
+  NSString* sceneName = [[sender titleLabel] text];
+  //NSLog(@"Touched on \"%@\"", sceneName);
+
+  _demoModel->selectScene( [sceneName toCppString] );
+
+  [self.popoverController dismissPopoverAnimated:YES];
 }
 
 /*
@@ -147,15 +148,5 @@
 }
 
  */
-
-- (IBAction)changeDemo:(UIButton *)sender {
-  NSString* text = [[sender titleLabel] text];
-  NSLog(@"Touched on \"%@\"", text);
-  //  [self dismissViewControllerAnimated:NO
-  //                           completion:nil];
-
-  [self.popoverController dismissPopoverAnimated:YES];
-
-}
 
 @end

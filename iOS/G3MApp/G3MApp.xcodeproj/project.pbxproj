@@ -209,6 +209,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */,
+				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
+				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
+				CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */,
+				CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */,
+				CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */,
+				CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */,
+				CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */,
+			);
+			name = DemoBuilder;
+			sourceTree = "<group>";
+		};
 		CFF64D5E1832A1A8006ABFF6 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,18 +310,11 @@
 		E7D1B60E16D2436700AF47C1 /* G3MApp */ = {
 			isa = PBXGroup;
 			children = (
+				CF6920AD1837E7EE007409D8 /* DemoBuilder */,
 				E7D1B61716D2436700AF47C1 /* G3MAppDelegate.h */,
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
 				CF3F8FE81835867D00589B4C /* G3MChooseDemoViewController.h */,
 				CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.mm */,
-				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */,
-				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
-				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
-				CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */,
-				CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */,
-				CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */,
-				CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */,
-				CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */,
 				E7D1B80116D27DC600AF47C1 /* G3MToolbar.h */,
 				E7D1B80216D27DC600AF47C1 /* G3MToolbar.m */,
 				E7D1B80516D27DC600AF47C1 /* G3MUIDropDownMenu.h */,

@@ -41,8 +41,6 @@ public:
 
   G3MDemoModel(G3MDemoListener* listener);
 
-//  std::vector<G3MDemoScene*> getScenes() const;
-
   int getScenesCount() const {
     return _scenes.size();
   }
@@ -50,6 +48,8 @@ public:
   const G3MDemoScene* getScene(int index) {
     return _scenes[index];
   }
+
+  void selectScene(const std::string& sceneName);
 
 };
 

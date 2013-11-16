@@ -8,6 +8,8 @@
 
 #include "G3MDemoModel.hpp"
 
+#include <G3MiOSSDK/ILogger.hpp>
+
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener) :
 _listener(listener)
 {
@@ -21,4 +23,10 @@ _listener(listener)
   _scenes.push_back( new G3MDemoScene("3D Model") );
   _scenes.push_back( new G3MDemoScene("Camera") );
 
+}
+
+void G3MDemoModel::selectScene(const std::string& sceneName) {
+#warning Diego at work!
+
+  ILogger::instance()->logInfo("Selected scene \"%s\"", sceneName.c_str());
 }
