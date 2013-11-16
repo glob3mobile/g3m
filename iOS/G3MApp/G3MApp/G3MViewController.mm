@@ -28,6 +28,8 @@
 #import "G3MChooseDemoViewController.h"
 
 #include "G3MDemoBuilder_iOS.hpp"
+#include "G3MDemoModel.hpp"
+#include "G3MDemoListener.hpp"
 
 @interface G3MViewController ()
 
@@ -48,7 +50,7 @@
   self = [super initWithNibName:nibNameOrNil
                          bundle:nibBundleOrNil];
   if (self) {
-    // Custom initialization
+    _demoModel = NULL;
   }
   return self;
 }
@@ -57,12 +59,21 @@
   return YES;
 }
 
+class DemoListener : public G3MDemoListener {
+
+};
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
 
-  G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget));
+  G3MDemoListener* listener = new DemoListener();
+
+  G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget),
+                                 listener);
   demoBuilder.initializeWidget();
+
+  _demoModel = demoBuilder.getModel();
 
   //  [self showSimpleGlob3];
 
@@ -97,6 +108,11 @@
   [super viewDidUnload];
 }
 
+- (void)dealloc
+{
+  delete _demoModel;
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   // Return YES for supported orientations
@@ -113,58 +129,6 @@
   [super didReceiveMemoryWarning];
   // Dispose of any resources that can be recreated.
 }
-
-//- (LayerSet*) createLayerSet: (bool) satelliteLayerEnabled
-//{
-//  LayerSet* layers = LayerBuilder::createDefaultSatelliteImagery();
-//  // store satellite layers names
-//  satelliteLayersNames = LayerBuilder::getDefaultLayersNames();
-//
-//  layers->addLayer(LayerBuilder::createOSMLayer(!satelliteLayerEnabled));
-//
-//
-//  MapQuestLayer* meteoriteBase = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
-//  meteoriteBase->setEnable(false);
-//  layers->addLayer(meteoriteBase);
-//
-//  std::vector<std::string> subdomains;
-//  subdomains.push_back("0.");
-//  subdomains.push_back("1.");
-//  subdomains.push_back("2.");
-//  subdomains.push_back("3.");
-//
-//  MercatorTiledLayer* meteorites = new MercatorTiledLayer("CartoDB-meteoritessize",
-//                                                          "http://",
-//                                                          "tiles.cartocdn.com/osm2/tiles/meteoritessize",
-//                                                          subdomains,
-//                                                          "png",
-//                                                          TimeInterval::fromDays(90),
-//                                                          true,
-//                                                          Sector::fullSphere(),
-//                                                          2,
-//                                                          17,
-//                                                          NULL);
-//  meteorites->setEnable(false);
-//  layers->addLayer(meteorites);
-//
-//  WMSLayer* csiro = new WMSLayer("g3m:mosaic-sst,g3m:mosaic-sla",
-//                                 URL("http://ooap-dev.it.csiro.au/geoserver/g3m/wms", false),
-//                                 WMS_1_1_0,
-//                                 Sector::fullSphere(),
-//                                 "image/png",
-//                                 "EPSG:900913",
-//                                 "",
-//                                 true,
-//                                 NULL,
-//                                 TimeInterval::fromDays(30),
-//                                 true,
-//                                 LayerTilesRenderParameters::createDefaultMercator(1, 19));
-//  csiro->setEnable(false);
-//  layers->addLayer(csiro);
-//
-//  return layers;
-//}
-
 
 //- (void) resetWidget
 //{
@@ -461,6 +425,7 @@
     G3MChooseDemoViewController* viewController = (G3MChooseDemoViewController*) segue.destinationViewController;
     UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
     viewController.popoverController = popoverSegue.popoverController;
+    viewController.demoModel = _demoModel;
   }
 
 //  if ( [[segue identifier] isEqualToString:@"showZones"] ) {

@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface G3MChooseDemoViewController : UITableViewController
+class G3MDemoModel;
+
+
+@interface G3MChooseDemoViewController : UITableViewController {
+  G3MDemoModel* _demoModel;
+}
+
+-(void)setDemoModel:(G3MDemoModel*) demoModel;
 
 @property (weak, nonatomic) UIPopoverController* popoverController;
 

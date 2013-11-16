@@ -11,12 +11,18 @@
 
 class IG3MBuilder;
 class LayerSet;
+class G3MDemoModel;
+class G3MDemoListener;
+
 
 class G3MDemoBuilder {
 private:
+  G3MDemoModel* _model;
+
   LayerSet* createLayerSet();
 
 protected:
+  G3MDemoBuilder(G3MDemoListener* listener);
 
   void build();
 
@@ -24,6 +30,8 @@ protected:
 
 public:
   virtual ~G3MDemoBuilder();
+
+  G3MDemoModel* getModel();
 
 };
 

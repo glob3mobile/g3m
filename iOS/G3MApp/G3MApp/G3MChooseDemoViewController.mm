@@ -8,6 +8,10 @@
 
 #import "G3MChooseDemoViewController.h"
 
+#include "G3MDemoModel.hpp"
+
+#import <G3MiOSSDK/NSString_CppAdditions.h>
+
 @interface G3MChooseDemoViewController ()
 
 @end
@@ -16,14 +20,28 @@
 
 @synthesize popoverController = _myPopoverController;
 
-- (id)initWithStyle:(UITableViewStyle)style
+-(void)setDemoModel:(G3MDemoModel*) demoModel
 {
-  self = [super initWithStyle:style];
-  if (self) {
-    // Custom initialization
-  }
-  return self;
+  _demoModel = demoModel;
 }
+
+//- (id)init
+//{
+//  self = [super init];
+//  if (self) {
+//    _demoModel = NULL;
+//  }
+//  return self;
+//}
+//
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//  self = [super initWithStyle:style];
+//  if (self) {
+//    // Custom initialization
+//  }
+//  return self;
+//}
 
 - (void)viewDidLoad
 {
@@ -51,21 +69,28 @@
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 8;
+//    return 8;
+  return _demoModel->getScenesCount();
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
+  static NSString *CellIdentifier = @"Cell";
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier
+                                                          forIndexPath:indexPath];
+
+  UIButton* button = (UIButton*) [cell viewWithTag:100];
+
+  button.titleLabel.text = [NSString stringWithCppString: _demoModel->getScene( indexPath.row )->getName()];
+
+  // Configure the cell...
+
+  return cell;
 }
 
 /*

@@ -20,6 +20,13 @@
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/IG3MBuilder.hpp>
 
+#include "G3MDemoModel.hpp"
+
+
+G3MDemoBuilder::G3MDemoBuilder(G3MDemoListener* listener) :
+_model( new G3MDemoModel(listener) )
+{
+}
 
 G3MDemoBuilder::~G3MDemoBuilder() {
 }
@@ -190,4 +197,8 @@ void G3MDemoBuilder::build() {
   //  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
   //  builder.setUserData(userData);
 
+}
+
+G3MDemoModel* G3MDemoBuilder::getModel() {
+  return _model;
 }

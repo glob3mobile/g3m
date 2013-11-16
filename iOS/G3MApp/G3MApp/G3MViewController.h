@@ -14,9 +14,13 @@
 @class G3MWidget_iOS;
 @class G3MToolbar;
 
+class G3MDemoModel;
+
 @interface G3MViewController : UIViewController <UIAlertViewDelegate, G3MUIDropDownMenuDelegate> {
   NSString* urlMarkString;
   std::vector<std::string> satelliteLayersNames;
+
+  G3MDemoModel* _demoModel;
 }
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;

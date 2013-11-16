@@ -22,7 +22,9 @@ protected:
   IG3MBuilder* getG3MBuilder();
 
 public:
-  G3MDemoBuilder_iOS(G3MBuilder_iOS* builder) :
+  G3MDemoBuilder_iOS(G3MBuilder_iOS* builder,
+                     G3MDemoListener* listener) :
+  G3MDemoBuilder(listener),
   _builder(builder)
   {
   }
