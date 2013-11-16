@@ -28,7 +28,7 @@ class G3MDemoScene;
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
 @property (strong, nonatomic) IBOutlet UIButton*      demoSelector;
 //@property (strong, nonatomic) G3MUIDropDownMenu*      demoMenu;
-@property (strong, nonatomic) G3MToolbar*             toolbar;
+//@property (strong, nonatomic) G3MToolbar*             toolbar;
 //@property (strong, nonatomic) UIButton*               layerSelector;
 //@property (strong, nonatomic) G3MUIDropDownMenu*      layerMenu;
 

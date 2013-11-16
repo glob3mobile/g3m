@@ -12,18 +12,20 @@
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
 
+#include "G3MRasterLayersDemoScene.hpp"
+#include "G3MVectorialDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener) :
 _listener(listener)
 {
-  _scenes.push_back( new G3MDemoScene("Raster Layers") );
-  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
-  _scenes.push_back( new G3MDemoScene("Vectorial") );
-  _scenes.push_back( new G3MDemoScene("Markers") );
-  _scenes.push_back( new G3MDemoScene("3D Symbology") );
-  _scenes.push_back( new G3MDemoScene("Point clouds") );
-  _scenes.push_back( new G3MDemoScene("3D Model") );
-  _scenes.push_back( new G3MDemoScene("Camera") );
+  _scenes.push_back( new G3MRasterLayersDemoScene() );
+//  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
+  _scenes.push_back( new G3MVectorialDemoScene() );
+//  _scenes.push_back( new G3MDemoScene("Markers") );
+//  _scenes.push_back( new G3MDemoScene("3D Symbology") );
+//  _scenes.push_back( new G3MDemoScene("Point clouds") );
+//  _scenes.push_back( new G3MDemoScene("3D Model") );
+//  _scenes.push_back( new G3MDemoScene("Camera") );
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {

@@ -37,6 +37,17 @@
   // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+
+////  CGRect frame = self.tableView.frame;
+////  frame.size.height = self.tableView.contentSize.height;
+////  self.tableView.frame = frame;
+//
+//  self.tableView.contentSize = CGSizeMake(self.tableView.contentSize.width, 100);
+}
+
 - (void)didReceiveMemoryWarning
 {
   [super didReceiveMemoryWarning];

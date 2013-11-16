@@ -40,23 +40,23 @@
 
 @implementation G3MViewController
 
-@synthesize g3mWidget     = _g3mWidget;
-@synthesize demoSelector  = _demoSelector;
+@synthesize g3mWidget    = _g3mWidget;
+@synthesize demoSelector = _demoSelector;
 //@synthesize demoMenu      = _demoMenu;
-@synthesize toolbar       = _toolbar;
+//@synthesize toolbar       = _toolbar;
 //@synthesize layerSelector = _layerSelector;
 //@synthesize layerMenu     = _layerMenu;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil
-               bundle:(NSBundle *)nibBundleOrNil
-{
-  self = [super initWithNibName:nibNameOrNil
-                         bundle:nibBundleOrNil];
-  if (self) {
-    _demoModel = NULL;
-  }
-  return self;
-}
+//- (id)initWithNibName:(NSString *)nibNameOrNil
+//               bundle:(NSBundle *)nibBundleOrNil
+//{
+//  self = [super initWithNibName:nibNameOrNil
+//                         bundle:nibBundleOrNil];
+//  if (self) {
+//    _demoModel = NULL;
+//  }
+//  return self;
+//}
 
 - (BOOL)prefersStatusBarHidden {
   return YES;
@@ -98,7 +98,7 @@ public:
   //  [self showSimpleGlob3];
 
 //  [self initDropDownMenu];
-  [self initToolbar];
+//  [self initToolbar];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -120,7 +120,7 @@ public:
 - (void)viewDidUnload
 {
   self.g3mWidget     = nil;
-  self.toolbar       = nil;
+//  self.toolbar       = nil;
 //  self.layerSelector = nil;
   self.demoSelector  = nil;
 //  self.demoMenu      = nil;
@@ -343,97 +343,97 @@ public:
 //  return button;
 //}
 
-- (void) initToolbar
-{
-  self.toolbar = [[G3MToolbar alloc] init];
-  [self.view addSubview: self.toolbar];
-
-//  // layerSwitcher
-//  self.layerSwitcher = [self createToolbarButton: @"satellite-on-96x48.png"
-//                                           frame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
-//  [self.layerSwitcher addTarget: self
-//                         action: @selector(switchLayer)
-//               forControlEvents: UIControlEventTouchUpInside];
-
-  UIButton* layerSelector = [UIButton buttonWithType:UIButtonTypeCustom];
-  layerSelector.layer.borderWidth = 2;
-  layerSelector.layer.frame = CGRectMake(5, 5, 200, 48);
-
-//  layerSelector.titleLabel.textAlignment = NSTextAlignmentLeft;
-
-
-  [layerSelector setTitle:@"Layer..."
-                 forState:UIControlStateNormal];
-//  [layerSelector setBackgroundImage:[UIImage imageNamed: @"selector-background.png"]
-//                           forState:UIControlStateNormal];
-  [layerSelector setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
-  [layerSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
-  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
-  [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
-
-//  G3MUIDropDownMenu* layerMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"layerMenu"];
+//- (void) initToolbar
+//{
+//  self.toolbar = [[G3MToolbar alloc] init];
+//  [self.view addSubview: self.toolbar];
 //
-//  NSMutableArray *layerNames = [NSMutableArray arrayWithObjects:
-//                                @"OSM",
-//                                @"Bla",
-//                                nil];
+////  // layerSwitcher
+////  self.layerSwitcher = [self createToolbarButton: @"satellite-on-96x48.png"
+////                                           frame: CGRectMake(10.0, 10.0, 96.0, 48.0)];
+////  [self.layerSwitcher addTarget: self
+////                         action: @selector(switchLayer)
+////               forControlEvents: UIControlEventTouchUpInside];
 //
-//  layerMenu.delegate        = self;
-//  layerMenu.menuWidth       = 200;
-//  layerMenu.backgroundColor = [UIColor darkGrayColor];
-//  layerMenu.borderColor     = [UIColor blackColor];
-//  layerMenu.textColor       = [UIColor lightGrayColor];
-//  layerMenu.titleArray      = layerNames;
-//  layerMenu.valueArray      = layerNames;
-//  [layerMenu makeMenu: layerSelector
-//           targetView: self.view];
+//  UIButton* layerSelector = [UIButton buttonWithType:UIButtonTypeCustom];
+//  layerSelector.layer.borderWidth = 2;
+//  layerSelector.layer.frame = CGRectMake(5, 5, 200, 48);
 //
-//  self.layerMenu = layerMenu;
+////  layerSelector.titleLabel.textAlignment = NSTextAlignmentLeft;
 //
-//  self.layerSelector = layerSelector;
-}
+//
+//  [layerSelector setTitle:@"Layer..."
+//                 forState:UIControlStateNormal];
+////  [layerSelector setBackgroundImage:[UIImage imageNamed: @"selector-background.png"]
+////                           forState:UIControlStateNormal];
+//  [layerSelector setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
+//  [layerSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
+//  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
+//  [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
+//
+////  G3MUIDropDownMenu* layerMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"layerMenu"];
+////
+////  NSMutableArray *layerNames = [NSMutableArray arrayWithObjects:
+////                                @"OSM",
+////                                @"Bla",
+////                                nil];
+////
+////  layerMenu.delegate        = self;
+////  layerMenu.menuWidth       = 200;
+////  layerMenu.backgroundColor = [UIColor darkGrayColor];
+////  layerMenu.borderColor     = [UIColor blackColor];
+////  layerMenu.textColor       = [UIColor lightGrayColor];
+////  layerMenu.titleArray      = layerNames;
+////  layerMenu.valueArray      = layerNames;
+////  [layerMenu makeMenu: layerSelector
+////           targetView: self.view];
+////
+////  self.layerMenu = layerMenu;
+////
+////  self.layerSelector = layerSelector;
+//}
 
-- (void) updateToolbar: (NSString*) option
-{
-  [self.toolbar removeAllSubviews];
-  if ([option isEqual: @"Switch Layer"]) {
-    //[self.toolbar addSubview: self.layerSelector];
-    self.toolbar.visible = YES;
-  }
-  else {
-    self.toolbar.visible = NO;
-  }
-}
+//- (void) updateToolbar: (NSString*) option
+//{
+//  [self.toolbar removeAllSubviews];
+//  if ([option isEqual: @"Switch Layer"]) {
+//    //[self.toolbar addSubview: self.layerSelector];
+//    self.toolbar.visible = YES;
+//  }
+//  else {
+//    self.toolbar.visible = NO;
+//  }
+//}
 
-- (void) DropDownMenuDidChange: (NSString *) identifier
-                              : (NSString *) returnValue
-{
-  if ([identifier isEqual: @"demoMenu"]) {
-    //    [self resetWidget];
-    [self updateToolbar: returnValue];
-    [self.demoSelector setTitle: returnValue
-                       forState: nil];
-
-    if ([returnValue isEqual: @"Simple glob3"]) {
-      //      [self showSimpleGlob3];
-    }
-    else if ([returnValue isEqual: @"Switch Layer"]) {
-      //      [self switchLayer];
-    }
-    else if ([returnValue isEqual: @"Markers"]) {
-      //      [self showMarkersDemo];
-    }
-    else if ([returnValue isEqual: @"3D Model"]) {
-      //      [self showModelDemo];
-    }
-    else if ([returnValue isEqual: @"Point Mesh"]) {
-      //      [self showMeshDemo];
-    }
-    else if ([returnValue isEqualToString: @"Meteorite Impacts"]) {
-      //      [self showMeteoriteImpactsLayer];
-    }
-  }
-}
+//- (void) DropDownMenuDidChange: (NSString *) identifier
+//                              : (NSString *) returnValue
+//{
+//  if ([identifier isEqual: @"demoMenu"]) {
+//    //    [self resetWidget];
+//    [self updateToolbar: returnValue];
+//    [self.demoSelector setTitle: returnValue
+//                       forState: nil];
+//
+//    if ([returnValue isEqual: @"Simple glob3"]) {
+//      //      [self showSimpleGlob3];
+//    }
+//    else if ([returnValue isEqual: @"Switch Layer"]) {
+//      //      [self switchLayer];
+//    }
+//    else if ([returnValue isEqual: @"Markers"]) {
+//      //      [self showMarkersDemo];
+//    }
+//    else if ([returnValue isEqual: @"3D Model"]) {
+//      //      [self showModelDemo];
+//    }
+//    else if ([returnValue isEqual: @"Point Mesh"]) {
+//      //      [self showMeshDemo];
+//    }
+//    else if ([returnValue isEqualToString: @"Meteorite Impacts"]) {
+//      //      [self showMeteoriteImpactsLayer];
+//    }
+//  }
+//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue
                  sender:(id)sender {

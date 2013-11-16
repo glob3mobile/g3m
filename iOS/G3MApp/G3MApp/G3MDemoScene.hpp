@@ -12,15 +12,15 @@
 #include <string>
 
 class G3MDemoScene {
-private:
+protected:
   const std::string _name;
 
-public:
   G3MDemoScene(const std::string& name) :
   _name(name)
   {
   }
 
+public:
   const std::string getName() const {
     return _name;
   }
