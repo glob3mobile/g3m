@@ -9,8 +9,8 @@
 #include "G3MDemoModel.hpp"
 
 #include <G3MiOSSDK/ILogger.hpp>
-
 #include "G3MDemoScene.hpp"
+#include "G3MDemoListener.hpp"
 
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener) :
@@ -52,5 +52,9 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 
   if (scene != NULL) {
     ILogger::instance()->logInfo("Selected scene \"%s\"", scene->getName().c_str());
+
+    if (_listener != NULL) {
+      _listener->onChangedScene(scene);
+    }
   }
 }

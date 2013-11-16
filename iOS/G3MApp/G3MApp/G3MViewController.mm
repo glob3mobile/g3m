@@ -11,6 +11,7 @@
 #import <G3MiOSSDK/G3MWidget_iOS.h>
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
+#import <G3MiOSSDK/NSString_CppAdditions.h>
 //#import <G3MiOSSDK/GInitializationTask.hpp>
 //#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 //#import <G3MiOSSDK/LayerBuilder.hpp>
@@ -22,6 +23,7 @@
 //#import <G3MiOSSDK/MapQuestLayer.hpp>
 //#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 //#include <G3MiOSSDK/TimeInterval.hpp>
+
 #import "G3MToolbar.h"
 #import "G3MWebViewController.h"
 
@@ -29,6 +31,7 @@
 
 #include "G3MDemoBuilder_iOS.hpp"
 #include "G3MDemoModel.hpp"
+#include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
 
 @interface G3MViewController ()
@@ -39,10 +42,10 @@
 
 @synthesize g3mWidget     = _g3mWidget;
 @synthesize demoSelector  = _demoSelector;
-@synthesize demoMenu      = _demoMenu;
+//@synthesize demoMenu      = _demoMenu;
 @synthesize toolbar       = _toolbar;
-@synthesize layerSelector = _layerSelector;
-@synthesize layerMenu     = _layerMenu;
+//@synthesize layerSelector = _layerSelector;
+//@synthesize layerMenu     = _layerMenu;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil
                bundle:(NSBundle *)nibBundleOrNil
@@ -60,14 +63,31 @@
 }
 
 class DemoListener : public G3MDemoListener {
+private:
+  G3MViewController* _viewController;
 
+public:
+  DemoListener(G3MViewController* viewController) :
+  _viewController(viewController)
+  {
+  }
+
+  void onChangedScene(const G3MDemoScene* scene) {
+    [_viewController onChangedScene: scene];
+  }
 };
+
+-(void) onChangedScene:(const G3MDemoScene*) scene
+{
+  [self.demoSelector setTitle: [NSString stringWithCppString: scene->getName()]
+                     forState: UIControlStateNormal];
+}
 
 - (void)viewDidLoad
 {
   [super viewDidLoad];
 
-  G3MDemoListener* listener = new DemoListener();
+  G3MDemoListener* listener = new DemoListener(self);
 
   G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget),
                                  listener);
@@ -77,7 +97,7 @@ class DemoListener : public G3MDemoListener {
 
   //  [self showSimpleGlob3];
 
-  [self initDropDownMenu];
+//  [self initDropDownMenu];
   [self initToolbar];
 }
 
@@ -101,9 +121,9 @@ class DemoListener : public G3MDemoListener {
 {
   self.g3mWidget     = nil;
   self.toolbar       = nil;
-  self.layerSelector = nil;
+//  self.layerSelector = nil;
   self.demoSelector  = nil;
-  self.demoMenu      = nil;
+//  self.demoMenu      = nil;
 
   [super viewDidUnload];
 }
@@ -279,35 +299,35 @@ class DemoListener : public G3MDemoListener {
   }
 }
 
-- (void) initDropDownMenu
-{
-  // demoSelector: left align button text and style
-  [self.demoSelector setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
-  [self.demoSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
-  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
-  [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
-
-  self.demoMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"];
-
-  NSMutableArray *demoNames = [NSMutableArray arrayWithObjects:
-                               @"Simple glob3",
-                               @"Switch Layer",
-                               @"Markers",
-                               @"3D Model",
-                               @"Point Mesh",
-                               @"Meteorite Impacts",
-                               nil];
-
-  [self.demoMenu setDelegate: self];
-  [self.demoMenu setMenuWidth: 200];
-  [self.demoMenu setBackgroundColor: [UIColor darkGrayColor]];
-  [self.demoMenu setBorderColor: [UIColor blackColor]];
-  [self.demoMenu setTextColor: [UIColor lightGrayColor]];
-  [self.demoMenu setTitleArray: demoNames];
-  [self.demoMenu setValueArray: demoNames];
-  [self.demoMenu makeMenu: self.demoSelector
-               targetView: self.view];
-}
+//- (void) initDropDownMenu
+//{
+//  // demoSelector: left align button text and style
+//  [self.demoSelector setContentHorizontalAlignment: UIControlContentHorizontalAlignmentLeft];
+//  [self.demoSelector setContentEdgeInsets: UIEdgeInsetsMake(0, 10, 0, 0)];
+//  UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
+//  [self.demoSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
+//
+//  self.demoMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"demoMenu"];
+//
+//  NSMutableArray *demoNames = [NSMutableArray arrayWithObjects:
+//                               @"Simple glob3",
+//                               @"Switch Layer",
+//                               @"Markers",
+//                               @"3D Model",
+//                               @"Point Mesh",
+//                               @"Meteorite Impacts",
+//                               nil];
+//
+//  [self.demoMenu setDelegate: self];
+//  [self.demoMenu setMenuWidth: 200];
+//  [self.demoMenu setBackgroundColor: [UIColor darkGrayColor]];
+//  [self.demoMenu setBorderColor: [UIColor blackColor]];
+//  [self.demoMenu setTextColor: [UIColor lightGrayColor]];
+//  [self.demoMenu setTitleArray: demoNames];
+//  [self.demoMenu setValueArray: demoNames];
+//  [self.demoMenu makeMenu: self.demoSelector
+//               targetView: self.view];
+//}
 
 //- (UIButton*) createToolbarButton: (NSString*) imageName
 //                            frame: (CGRect) frame
@@ -351,34 +371,33 @@ class DemoListener : public G3MDemoListener {
   UIImage *demoSelectorBg = [UIImage imageNamed: @"selector-background.png"];
   [layerSelector setBackgroundImage: demoSelectorBg forState: UIControlStateNormal];
 
-  G3MUIDropDownMenu* layerMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"layerMenu"];
-
-  NSMutableArray *layerNames = [NSMutableArray arrayWithObjects:
-                                @"OSM",
-                                @"Bla",
-                                nil];
-
-  layerMenu.delegate        = self;
-  layerMenu.menuWidth       = 200;
-  layerMenu.backgroundColor = [UIColor darkGrayColor];
-  layerMenu.borderColor     = [UIColor blackColor];
-  layerMenu.textColor       = [UIColor lightGrayColor];
-  layerMenu.titleArray      = layerNames;
-  layerMenu.valueArray      = layerNames;
-  [layerMenu makeMenu: layerSelector
-           targetView: self.view];
-
-  self.layerMenu = layerMenu;
-
-  self.layerSelector = layerSelector;
+//  G3MUIDropDownMenu* layerMenu = [[G3MUIDropDownMenu alloc] initWithIdentifier: @"layerMenu"];
+//
+//  NSMutableArray *layerNames = [NSMutableArray arrayWithObjects:
+//                                @"OSM",
+//                                @"Bla",
+//                                nil];
+//
+//  layerMenu.delegate        = self;
+//  layerMenu.menuWidth       = 200;
+//  layerMenu.backgroundColor = [UIColor darkGrayColor];
+//  layerMenu.borderColor     = [UIColor blackColor];
+//  layerMenu.textColor       = [UIColor lightGrayColor];
+//  layerMenu.titleArray      = layerNames;
+//  layerMenu.valueArray      = layerNames;
+//  [layerMenu makeMenu: layerSelector
+//           targetView: self.view];
+//
+//  self.layerMenu = layerMenu;
+//
+//  self.layerSelector = layerSelector;
 }
 
 - (void) updateToolbar: (NSString*) option
 {
   [self.toolbar removeAllSubviews];
   if ([option isEqual: @"Switch Layer"]) {
-    //[self.toolbar addSubview: self.layerSwitcher];
-    [self.toolbar addSubview: self.layerSelector];
+    //[self.toolbar addSubview: self.layerSelector];
     self.toolbar.visible = YES;
   }
   else {

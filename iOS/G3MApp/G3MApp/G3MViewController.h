@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <vector>
 
-#import "G3MUIDropDownMenu.h"
+//#import "G3MUIDropDownMenu.h"
 
 @class G3MWidget_iOS;
 @class G3MToolbar;
 
 class G3MDemoModel;
+class G3MDemoScene;
 
-@interface G3MViewController : UIViewController <UIAlertViewDelegate, G3MUIDropDownMenuDelegate> {
+//@interface G3MViewController : UIViewController <UIAlertViewDelegate, G3MUIDropDownMenuDelegate> {
+@interface G3MViewController : UIViewController <UIAlertViewDelegate> {
   NSString* urlMarkString;
   std::vector<std::string> satelliteLayersNames;
 
@@ -25,9 +27,11 @@ class G3MDemoModel;
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
 @property (strong, nonatomic) IBOutlet UIButton*      demoSelector;
-@property (strong, nonatomic) G3MUIDropDownMenu*      demoMenu;
+//@property (strong, nonatomic) G3MUIDropDownMenu*      demoMenu;
 @property (strong, nonatomic) G3MToolbar*             toolbar;
-@property (strong, nonatomic) UIButton*               layerSelector;
-@property (strong, nonatomic) G3MUIDropDownMenu*      layerMenu;
+//@property (strong, nonatomic) UIButton*               layerSelector;
+//@property (strong, nonatomic) G3MUIDropDownMenu*      layerMenu;
+
+-(void) onChangedScene:(const G3MDemoScene*) scene;
 
 @end
