@@ -9,6 +9,7 @@
 #import "G3MChooseDemoViewController.h"
 
 #include "G3MDemoModel.hpp"
+#include "G3MDemoScene.hpp"
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 

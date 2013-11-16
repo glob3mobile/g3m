@@ -13,23 +13,7 @@
 #include <string>
 
 class G3MDemoListener;
-
-
-class G3MDemoScene {
-private:
-  const std::string _name;
-
-public:
-  G3MDemoScene(const std::string& name) :
-  _name(name)
-  {
-  }
-
-  const std::string getName() const {
-    return _name;
-  }
-};
-
+class G3MDemoScene;
 
 class G3MDemoModel {
 private:
@@ -49,8 +33,12 @@ public:
     return _scenes[index];
   }
 
+  G3MDemoScene* getSceneByName(const std::string& sceneName) const;
+
   void selectScene(const std::string& sceneName);
 
+  void selectScene(G3MDemoScene* scene);
+  
 };
 
 #endif
