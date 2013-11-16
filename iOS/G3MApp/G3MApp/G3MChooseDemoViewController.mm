@@ -81,12 +81,16 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   static NSString *CellIdentifier = @"Cell";
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier
-                                                          forIndexPath:indexPath];
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier
+                                                          forIndexPath: indexPath];
 
-  UIButton* button = (UIButton*) [cell viewWithTag:100];
 
-  button.titleLabel.text = [NSString stringWithCppString: _demoModel->getScene( indexPath.row )->getName()];
+  const std::string sceneName = _demoModel->getScene( indexPath.row )->getName();
+
+  UIButton* button = (UIButton*) [cell viewWithTag: 100];
+//  button.titleLabel.text = [NSString stringWithCppString: sceneName];
+  [button setTitle: [NSString stringWithCppString: sceneName]
+          forState: UIControlStateNormal];
 
   // Configure the cell...
 

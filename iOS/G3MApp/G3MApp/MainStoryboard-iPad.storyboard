@@ -68,20 +68,20 @@
             <objects>
                 <tableViewController id="esp-gn-RRS" customClass="G3MChooseDemoViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1yb-IB-Sk6">
-                        <rect key="frame" x="0.0" y="0.0" width="154" height="350"/>
+                        <rect key="frame" x="0.0" y="0.0" width="164" height="350"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="1ZR-Dl-Ttf">
-                                <rect key="frame" x="0.0" y="22" width="154" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="164" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ZR-Dl-Ttf" id="2cf-ZJ-VMD">
-                                    <rect key="frame" x="0.0" y="0.0" width="154" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="164" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ib9-9F-2Rh">
-                                            <rect key="frame" x="15" y="7" width="124" height="30"/>
+                                            <rect key="frame" x="5" y="7" width="154" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Demo Name">
+                                            <state key="normal" title="                                   ">
                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -92,7 +92,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Ib9-9F-2Rh" firstAttribute="centerX" secondItem="2cf-ZJ-VMD" secondAttribute="centerX" id="VF8-CV-HGw"/>
-                                        <constraint firstItem="Ib9-9F-2Rh" firstAttribute="leading" secondItem="2cf-ZJ-VMD" secondAttribute="leading" constant="15" id="arY-bd-pPo"/>
+                                        <constraint firstItem="Ib9-9F-2Rh" firstAttribute="leading" secondItem="2cf-ZJ-VMD" secondAttribute="leading" constant="5" id="arY-bd-pPo"/>
                                         <constraint firstItem="Ib9-9F-2Rh" firstAttribute="top" secondItem="2cf-ZJ-VMD" secondAttribute="top" constant="7" id="wT2-sm-Lmw"/>
                                     </constraints>
                                 </tableViewCellContentView>
