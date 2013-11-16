@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.mm */; };
+		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */; };
 		CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */; };
 		CF3F8FEA1835867D00589B4C /* G3MChooseDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.m */; };
+		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
@@ -93,11 +94,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder.mm; sourceTree = "<group>"; };
+		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoBuilder.cpp; sourceTree = "<group>"; };
 		CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoBuilder.hpp; sourceTree = "<group>"; };
 		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
 		CF3F8FE81835867D00589B4C /* G3MChooseDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MChooseDemoViewController.h; sourceTree = "<group>"; };
 		CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = G3MChooseDemoViewController.m; sourceTree = "<group>"; };
+		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
+		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; };
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -291,7 +294,9 @@
 				CF3F8FE81835867D00589B4C /* G3MChooseDemoViewController.h */,
 				CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.m */,
 				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
-				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.mm */,
+				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */,
+				CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */,
+				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
 				E7D1B80116D27DC600AF47C1 /* G3MToolbar.h */,
 				E7D1B80216D27DC600AF47C1 /* G3MToolbar.m */,
 				E7D1B80516D27DC600AF47C1 /* G3MUIDropDownMenu.h */,
@@ -505,10 +510,11 @@
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
-				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.mm in Sources */,
+				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CF3F8FEA1835867D00589B4C /* G3MChooseDemoViewController.m in Sources */,
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
 				E7D1B80816D27DC600AF47C1 /* G3MWebViewController.mm in Sources */,
+				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				E7D1B80916D27DC600AF47C1 /* G3MUIDropDownMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

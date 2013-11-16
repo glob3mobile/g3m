@@ -9,26 +9,21 @@
 #ifndef __G3MApp__G3MDemoBuilder__
 #define __G3MApp__G3MDemoBuilder__
 
-class G3MBuilder_iOS;
+class IG3MBuilder;
 class LayerSet;
 
 class G3MDemoBuilder {
 private:
-  G3MBuilder_iOS* _builder;
-
   LayerSet* createLayerSet();
 
-public:
-  G3MDemoBuilder(G3MBuilder_iOS* builder) :
-  _builder(builder)
-  {
-
-  }
+protected:
 
   void build();
 
+  virtual IG3MBuilder* getG3MBuilder() = 0;
 
-  ~G3MDemoBuilder();
+public:
+  virtual ~G3MDemoBuilder();
 
 };
 

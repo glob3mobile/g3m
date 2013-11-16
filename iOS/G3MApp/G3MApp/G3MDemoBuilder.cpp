@@ -8,7 +8,6 @@
 
 #include "G3MDemoBuilder.hpp"
 
-#include <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #include <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
@@ -19,10 +18,10 @@
 #include <G3MiOSSDK/OSMLayer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
+#include <G3MiOSSDK/IG3MBuilder.hpp>
 
 
 G3MDemoBuilder::~G3MDemoBuilder() {
-  delete _builder;
 }
 
 LayerSet* G3MDemoBuilder::createLayerSet() {
@@ -151,16 +150,18 @@ LayerSet* G3MDemoBuilder::createLayerSet() {
 }
 
 void G3MDemoBuilder::build() {
+  IG3MBuilder*  builder = getG3MBuilder();
+
   const float verticalExaggeration = 6.0f;
-  _builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
-  _builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  _builder->getPlanetRendererBuilder()->setLayerSet(createLayerSet());
+  builder->getPlanetRendererBuilder()->setLayerSet(createLayerSet());
 
   //  ShapesRenderer* shapeRenderer = new ShapesRenderer();
   //  shapeRenderer->setEnable(false);
@@ -189,7 +190,4 @@ void G3MDemoBuilder::build() {
   //  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
   //  builder.setUserData(userData);
 
-  // Initialize widget
-  _builder->initializeWidget();
-  
 }

@@ -27,7 +27,7 @@
 
 #import "G3MChooseDemoViewController.h"
 
-#include "G3MDemoBuilder.hpp"
+#include "G3MDemoBuilder_iOS.hpp"
 
 @interface G3MViewController ()
 
@@ -61,9 +61,8 @@
 {
   [super viewDidLoad];
 
-  G3MDemoBuilder demoBuilder(new G3MBuilder_iOS(self.g3mWidget));
-
-  demoBuilder.build();
+  G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget));
+  demoBuilder.initializeWidget();
 
   //  [self showSimpleGlob3];
 
