@@ -27,7 +27,7 @@
 #import "G3MToolbar.h"
 #import "G3MWebViewController.h"
 
-#import "G3MChooseDemoViewController.h"
+#import "G3MSelectDemoSceneViewController.h"
 
 #include "G3MDemoBuilder_iOS.hpp"
 #include "G3MDemoModel.hpp"
@@ -440,8 +440,8 @@ public:
 
   //NSLog(@"Prepare for segue: %@", [segue identifier]);
 
-  if ([segue.destinationViewController isKindOfClass:[G3MChooseDemoViewController class]]) {
-    G3MChooseDemoViewController* viewController = (G3MChooseDemoViewController*) segue.destinationViewController;
+  if ([segue.destinationViewController isKindOfClass:[G3MSelectDemoSceneViewController class]]) {
+    G3MSelectDemoSceneViewController* viewController = (G3MSelectDemoSceneViewController*) segue.destinationViewController;
     UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
     viewController.popoverController = popoverSegue.popoverController;
     viewController.demoModel = _demoModel;

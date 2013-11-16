@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */; };
 		CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */; };
-		CF3F8FEA1835867D00589B4C /* G3MChooseDemoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.mm */; };
+		CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -102,8 +102,8 @@
 		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
-		CF3F8FE81835867D00589B4C /* G3MChooseDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MChooseDemoViewController.h; sourceTree = "<group>"; };
-		CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MChooseDemoViewController.mm; sourceTree = "<group>"; };
+		CF3F8FE81835867D00589B4C /* G3MSelectDemoSceneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectDemoSceneViewController.h; sourceTree = "<group>"; };
+		CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectDemoSceneViewController.mm; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
 		CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MRasterLayersDemoScene.cpp; sourceTree = "<group>"; };
@@ -328,8 +328,8 @@
 				CF6920AD1837E7EE007409D8 /* DemoBuilder */,
 				E7D1B61716D2436700AF47C1 /* G3MAppDelegate.h */,
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
-				CF3F8FE81835867D00589B4C /* G3MChooseDemoViewController.h */,
-				CF3F8FE91835867D00589B4C /* G3MChooseDemoViewController.mm */,
+				CF3F8FE81835867D00589B4C /* G3MSelectDemoSceneViewController.h */,
+				CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */,
 				E7D1B80116D27DC600AF47C1 /* G3MToolbar.h */,
 				E7D1B80216D27DC600AF47C1 /* G3MToolbar.m */,
 				E7D1B80516D27DC600AF47C1 /* G3MUIDropDownMenu.h */,
@@ -546,7 +546,7 @@
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */,
-				CF3F8FEA1835867D00589B4C /* G3MChooseDemoViewController.mm in Sources */,
+				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
 				E7D1B80816D27DC600AF47C1 /* G3MWebViewController.mm in Sources */,
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,

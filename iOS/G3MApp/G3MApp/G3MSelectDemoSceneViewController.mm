@@ -1,23 +1,23 @@
 //
-//  G3MChooseDemoViewController.m
+//  G3MSelectDemoSceneViewController.m
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/14/13.
 //  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
-#import "G3MChooseDemoViewController.h"
+#import "G3MSelectDemoSceneViewController.h"
 
 #include "G3MDemoModel.hpp"
 #include "G3MDemoScene.hpp"
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
-@interface G3MChooseDemoViewController ()
+@interface G3MSelectDemoSceneViewController ()
 
 @end
 
-@implementation G3MChooseDemoViewController
+@implementation G3MSelectDemoSceneViewController
 
 @synthesize popoverController = _myPopoverController;
 
