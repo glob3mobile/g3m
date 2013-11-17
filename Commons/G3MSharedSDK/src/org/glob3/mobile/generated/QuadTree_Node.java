@@ -1,8 +1,6 @@
 package org.glob3.mobile.generated; 
 public class QuadTree_Node
 {
-  private final int _depth;
-  private final Sector _sector ;
   private java.util.ArrayList<QuadTree_Element> _elements = new java.util.ArrayList<QuadTree_Element>();
 
   private QuadTree_Node[] _children;
@@ -13,6 +11,9 @@ public class QuadTree_Node
      _depth = parent._depth + 1;
      _children = null;
   }
+
+  public final int _depth;
+  public final Sector _sector ;
 
   public QuadTree_Node(Sector sector)
   {

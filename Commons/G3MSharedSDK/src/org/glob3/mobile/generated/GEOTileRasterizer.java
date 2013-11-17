@@ -154,4 +154,9 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
     }
   }
 
+  public final void clear()
+  {
+    _quadTree.clear();
+  }
+
 }

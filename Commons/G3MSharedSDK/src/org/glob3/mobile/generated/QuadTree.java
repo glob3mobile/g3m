@@ -39,4 +39,13 @@ public class QuadTree
     return aborted;
   }
 
+  public final void clear()
+  {
+    Sector sector = _root._sector;
+  
+    if (_root != null)
+       _root.dispose();
+    _root = new QuadTree_Node(sector);
+  }
+
 }
