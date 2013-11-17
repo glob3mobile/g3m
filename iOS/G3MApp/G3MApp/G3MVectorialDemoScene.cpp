@@ -95,7 +95,7 @@ public:
     Mark* mark = new Mark(URL("file:///restaurant-48x48.png"),
                           Geodetic3D(geometry->getPosition(), 0),
                           RELATIVE_TO_GROUND,
-                          25000,
+                          15000,
                           NULL,
                           false,
                           NULL, // markListener,
