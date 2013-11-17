@@ -38,6 +38,11 @@ public:
   void selectScene(const std::string& sceneName);
 
   void selectScene(G3MDemoScene* scene);
+
+  bool isSelectedScene(const G3MDemoScene* scene) const {
+#warning Diego at work!
+    return scene == _scenes[0];
+  }
   
 };
 

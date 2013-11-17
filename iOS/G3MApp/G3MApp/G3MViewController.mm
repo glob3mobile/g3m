@@ -92,7 +92,7 @@ public:
   G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget),
                                  listener);
   demoBuilder.initializeWidget();
-
+  
   _demoModel = demoBuilder.getModel();
 
   //  [self showSimpleGlob3];

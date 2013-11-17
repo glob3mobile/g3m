@@ -18,6 +18,7 @@ class G3MDemoListener;
 class G3MDemoBuilder {
 private:
   G3MDemoModel* _model;
+  bool _initialized;
 
   LayerSet* createLayerSet();
 

@@ -24,6 +24,10 @@
 -(void)setDemoModel:(G3MDemoModel*) demoModel
 {
   _demoModel = demoModel;
+
+  CGRect frame = self.tableView.frame;
+  frame.size.height = 1000;
+  self.tableView.frame = frame;
 }
 
 - (void)viewDidLoad
@@ -37,24 +41,16 @@
   // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//  [super viewDidAppear:animated];
+//}
 
-////  CGRect frame = self.tableView.frame;
-////  frame.size.height = self.tableView.contentSize.height;
-////  self.tableView.frame = frame;
-//
-//  self.tableView.contentSize = CGSizeMake(self.tableView.contentSize.width, 100);
-}
-
-- (void)didReceiveMemoryWarning
-{
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
+//- (void)didReceiveMemoryWarning
+//{
+//  [super didReceiveMemoryWarning];
+//  // Dispose of any resources that can be recreated.
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -74,11 +70,15 @@
   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier
                                                           forIndexPath: indexPath];
 
-  const std::string sceneName = _demoModel->getScene( indexPath.row )->getName();
+  const G3MDemoScene* scene = _demoModel->getScene( indexPath.row );
+  const std::string sceneName = scene->getName();
 
   UIButton* button = (UIButton*) [cell viewWithTag: 100];
   [button setTitle: [NSString stringWithCppString: sceneName]
           forState: UIControlStateNormal];
+
+#warning Diego at work!
+  button.backgroundColor = _demoModel->isSelectedScene(scene) ? [UIColor lightGrayColor] : [UIColor whiteColor];
 
   return cell;
 }

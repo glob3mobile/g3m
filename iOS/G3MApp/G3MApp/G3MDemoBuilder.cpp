@@ -19,12 +19,14 @@
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/IG3MBuilder.hpp>
+#include <G3MiOSSDK/ErrorHandling.hpp>
 
 #include "G3MDemoModel.hpp"
 
 
 G3MDemoBuilder::G3MDemoBuilder(G3MDemoListener* listener) :
-_model( new G3MDemoModel(listener) )
+_model( new G3MDemoModel(listener) ),
+_initialized(false)
 {
 }
 
@@ -157,7 +159,11 @@ LayerSet* G3MDemoBuilder::createLayerSet() {
 }
 
 void G3MDemoBuilder::build() {
-  IG3MBuilder*  builder = getG3MBuilder();
+  if (_initialized) {
+    ERROR("G3MWidget already initialized.");
+  }
+
+  IG3MBuilder* builder = getG3MBuilder();
 
   const float verticalExaggeration = 6.0f;
   builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
@@ -197,8 +203,12 @@ void G3MDemoBuilder::build() {
   //  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
   //  builder.setUserData(userData);
 
+  _initialized = true;
 }
 
 G3MDemoModel* G3MDemoBuilder::getModel() {
+  if (!_initialized) {
+    ERROR("Model not yet created. Have to initialize the widget before getting the model.");
+  }
   return _model;
 }
