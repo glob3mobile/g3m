@@ -77,8 +77,12 @@
   [button setTitle: [NSString stringWithCppString: sceneName]
           forState: UIControlStateNormal];
 
-#warning Diego at work!
-  button.backgroundColor = _demoModel->isSelectedScene(scene) ? [UIColor lightGrayColor] : [UIColor whiteColor];
+  button.backgroundColor = _demoModel->isSelectedScene(scene) ? [UIColor lightGrayColor] : [UIColor clearColor];
+
+  button.clipsToBounds = YES;
+  button.layer.cornerRadius = 8;
+  //button.layer.borderColor = [UIColor darkGrayColor].CGColor;
+  //button.layer.borderWidth = 1;
 
   return cell;
 }

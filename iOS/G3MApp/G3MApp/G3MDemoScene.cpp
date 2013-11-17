@@ -7,3 +7,9 @@
 //
 
 #include "G3MDemoScene.hpp"
+
+#include "G3MDemoModel.hpp"
+
+void G3MDemoScene::deactivate() {
+  _model->reset();
+}

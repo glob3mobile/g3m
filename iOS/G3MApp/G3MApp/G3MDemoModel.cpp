@@ -8,24 +8,48 @@
 
 #include "G3MDemoModel.hpp"
 
+#include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/ILogger.hpp>
+#include <G3MiOSSDK/GEORenderer.hpp>
+#include <G3MiOSSDK/GEOTileRasterizer.hpp>
+#include <G3MiOSSDK/MarksRenderer.hpp>
+#include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/ShapesRenderer.hpp>
+
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
-
 #include "G3MRasterLayersDemoScene.hpp"
 #include "G3MVectorialDemoScene.hpp"
 
-G3MDemoModel::G3MDemoModel(G3MDemoListener* listener) :
-_listener(listener)
+
+G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
+                           LayerSet* layerSet,
+                           GEORenderer* geoRenderer) :
+_listener(listener),
+_layerSet(layerSet),
+_geoRenderer(geoRenderer),
+_selectedScene(NULL)
 {
-  _scenes.push_back( new G3MRasterLayersDemoScene() );
+  _scenes.push_back( new G3MRasterLayersDemoScene(this) );
 //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
-  _scenes.push_back( new G3MVectorialDemoScene() );
+  _scenes.push_back( new G3MVectorialDemoScene(this) );
 //  _scenes.push_back( new G3MDemoScene("Markers") );
 //  _scenes.push_back( new G3MDemoScene("3D Symbology") );
 //  _scenes.push_back( new G3MDemoScene("Point clouds") );
 //  _scenes.push_back( new G3MDemoScene("3D Model") );
 //  _scenes.push_back( new G3MDemoScene("Camera") );
+
+  selectScene(_scenes[0]);
+}
+
+void G3MDemoModel::reset() {
+  _layerSet->removeAllLayers(true);
+
+//  _geoRenderer->clear();
+  _geoRenderer->getGeoTileRasterizer()->clear();
+  _geoRenderer->getMarksRenderer()->removeAllMarks();
+  _geoRenderer->getMeshRenderer()->clearMeshes();
+  _geoRenderer->getShapesRenderer()->removeAllShapes(true);
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {
@@ -52,11 +76,20 @@ void G3MDemoModel::selectScene(const std::string& sceneName) {
 void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 #warning Diego at work!
 
-  if (scene != NULL) {
+  if ((scene != NULL) &&
+      (scene != _selectedScene)) {
+
+    if (_selectedScene != NULL) {
+      _selectedScene->deactivate();
+    }
+
     ILogger::instance()->logInfo("Selected scene \"%s\"", scene->getName().c_str());
 
+    _selectedScene = scene;
+    _selectedScene->activate();
+
     if (_listener != NULL) {
-      _listener->onChangedScene(scene);
+      _listener->onChangedScene(_selectedScene);
     }
   }
 }

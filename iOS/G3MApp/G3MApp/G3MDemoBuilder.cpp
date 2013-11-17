@@ -25,138 +25,139 @@
 
 
 G3MDemoBuilder::G3MDemoBuilder(G3MDemoListener* listener) :
-_model( new G3MDemoModel(listener) ),
-_initialized(false)
+_listener(listener),
+_initialized(false),
+_model(NULL)
 {
 }
 
 G3MDemoBuilder::~G3MDemoBuilder() {
 }
 
-LayerSet* G3MDemoBuilder::createLayerSet() {
-  LayerSet* layerSet = new LayerSet();
-
-
-  MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
-                                              TimeInterval::fromDays(30),
-                                              true,
-                                              2);
-  mboxOSMLayer->setTitle("Map Box OSM");
-  mboxOSMLayer->setEnable(true);
-  layerSet->addLayer(mboxOSMLayer);
-
-
-  MapQuestLayer* mqOSM = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
-  mqOSM->setEnable(false);
-  mqOSM->setTitle("MapQuest OSM");
-  layerSet->addLayer(mqOSM);
-
-
-  MapQuestLayer* mqlAerial = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
-  mqlAerial->setTitle("MapQuest Aerial");
-  mqlAerial->setEnable(false);
-  layerSet->addLayer(mqlAerial);
-
-
-  MapBoxLayer* mboxAerialLayer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                                 TimeInterval::fromDays(30),
-                                                 true,
-                                                 2);
-  mboxAerialLayer->setTitle("Map Box Aerial");
-  mboxAerialLayer->setEnable(false);
-  layerSet->addLayer(mboxAerialLayer);
-
-
-  MapBoxLayer* mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1",
-                                                  TimeInterval::fromDays(30),
-                                                  true,
-                                                  2);
-  mboxTerrainLayer->setTitle("Map Box Terrain");
-  mboxTerrainLayer->setEnable(false);
-  layerSet->addLayer(mboxTerrainLayer);
-
-
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      URL("http://www.nasa.network.com/wms?"),
-                                      WMS_1_1_0,
-                                      Sector::fullSphere(),
-                                      "image/jpeg",
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      new LevelTileCondition(0, 18),
-                                      TimeInterval::fromDays(30),
-                                      true);
-  blueMarble->setTitle("WMS Nasa Blue Marble");
-  blueMarble->setEnable(false);
-  layerSet->addLayer(blueMarble);
-
-
-  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-  osmLayer->setTitle("Open Street Map");
-  osmLayer->setEnable(false);
-  layerSet->addLayer(osmLayer);
-
-
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  bingMapsAerialLayer->setTitle("Bing Aerial");
-  bingMapsAerialLayer->setEnable(false);
-  layerSet->addLayer(bingMapsAerialLayer);
-
-
-  BingMapsLayer* bingMapsAerialWithLabels = new BingMapsLayer(BingMapType::AerialWithLabels(),
-                                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                              TimeInterval::fromDays(30));
-  bingMapsAerialWithLabels->setTitle("Bing Aerial With Labels");
-  bingMapsAerialWithLabels->setEnable(false);
-  layerSet->addLayer(bingMapsAerialWithLabels);
-
-  BingMapsLayer* bingMapsCollinsBart = new BingMapsLayer(BingMapType::CollinsBart(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  bingMapsCollinsBart->setTitle("MapQuest OSM");
-  bingMapsCollinsBart->setEnable(false);
-  layerSet->addLayer(bingMapsCollinsBart);
-
-
-  std::vector<std::string> subdomains;
-  subdomains.push_back("0.");
-  subdomains.push_back("1.");
-  subdomains.push_back("2.");
-  subdomains.push_back("3.");
-  MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("CartoDB-meteoritessize",
-                                                               "http://",
-                                                               "tiles.cartocdn.com/osm2/tiles/meteoritessize",
-                                                               subdomains,
-                                                               "png",
-                                                               TimeInterval::fromDays(90),
-                                                               false,
-                                                               Sector::fullSphere(),
-                                                               2,
-                                                               17,
-                                                               NULL);
-  meteoritesLayer->setTitle("CartoDB Meteorites");
-  meteoritesLayer->setEnable(false);
-  layerSet->addLayer(meteoritesLayer);
-
-
-  URLTemplateLayer* arcGISOverlayLayerTest = URLTemplateLayer::newMercator("http://www.fairfaxcounty.gov/gis/rest/services/DMV/DMV/MapServer/export?dpi=96&transparent=true&format=png8&bbox={west}%2C{south}%2C{east}%2C{north}&bboxSR=3857&imageSR=3857&size={width}%2C{height}&f=image",
-                                                                           Sector::fullSphere(),
-                                                                           true,
-                                                                           2,
-                                                                           18,
-                                                                           TimeInterval::fromDays(30),
-                                                                           true,
-                                                                           new LevelTileCondition(12, 18));
-  arcGISOverlayLayerTest->setTitle("ESRI ArcGis Online");
-  arcGISOverlayLayerTest->setEnable(false);
-  layerSet->addLayer(arcGISOverlayLayerTest);
-
-
-  return layerSet;
-}
+//LayerSet* G3MDemoBuilder::createLayerSet() {
+//  LayerSet* layerSet = new LayerSet();
+//
+//
+//  MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
+//                                              TimeInterval::fromDays(30),
+//                                              true,
+//                                              2);
+//  mboxOSMLayer->setTitle("Map Box OSM");
+//  mboxOSMLayer->setEnable(true);
+//  layerSet->addLayer(mboxOSMLayer);
+//
+//
+//  MapQuestLayer* mqOSM = MapQuestLayer::newOSM(TimeInterval::fromDays(30));
+//  mqOSM->setEnable(false);
+//  mqOSM->setTitle("MapQuest OSM");
+//  layerSet->addLayer(mqOSM);
+//
+//
+//  MapQuestLayer* mqlAerial = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
+//  mqlAerial->setTitle("MapQuest Aerial");
+//  mqlAerial->setEnable(false);
+//  layerSet->addLayer(mqlAerial);
+//
+//
+//  MapBoxLayer* mboxAerialLayer = new MapBoxLayer("examples.map-m0t0lrpu",
+//                                                 TimeInterval::fromDays(30),
+//                                                 true,
+//                                                 2);
+//  mboxAerialLayer->setTitle("Map Box Aerial");
+//  mboxAerialLayer->setEnable(false);
+//  layerSet->addLayer(mboxAerialLayer);
+//
+//
+//  MapBoxLayer* mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1",
+//                                                  TimeInterval::fromDays(30),
+//                                                  true,
+//                                                  2);
+//  mboxTerrainLayer->setTitle("Map Box Terrain");
+//  mboxTerrainLayer->setEnable(false);
+//  layerSet->addLayer(mboxTerrainLayer);
+//
+//
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      URL("http://www.nasa.network.com/wms?"),
+//                                      WMS_1_1_0,
+//                                      Sector::fullSphere(),
+//                                      "image/jpeg",
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      new LevelTileCondition(0, 18),
+//                                      TimeInterval::fromDays(30),
+//                                      true);
+//  blueMarble->setTitle("WMS Nasa Blue Marble");
+//  blueMarble->setEnable(false);
+//  layerSet->addLayer(blueMarble);
+//
+//
+//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+//  osmLayer->setTitle("Open Street Map");
+//  osmLayer->setEnable(false);
+//  layerSet->addLayer(osmLayer);
+//
+//
+//  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
+//                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+//                                                         TimeInterval::fromDays(30));
+//  bingMapsAerialLayer->setTitle("Bing Aerial");
+//  bingMapsAerialLayer->setEnable(false);
+//  layerSet->addLayer(bingMapsAerialLayer);
+//
+//
+//  BingMapsLayer* bingMapsAerialWithLabels = new BingMapsLayer(BingMapType::AerialWithLabels(),
+//                                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+//                                                              TimeInterval::fromDays(30));
+//  bingMapsAerialWithLabels->setTitle("Bing Aerial With Labels");
+//  bingMapsAerialWithLabels->setEnable(false);
+//  layerSet->addLayer(bingMapsAerialWithLabels);
+//
+//  BingMapsLayer* bingMapsCollinsBart = new BingMapsLayer(BingMapType::CollinsBart(),
+//                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+//                                                         TimeInterval::fromDays(30));
+//  bingMapsCollinsBart->setTitle("MapQuest OSM");
+//  bingMapsCollinsBart->setEnable(false);
+//  layerSet->addLayer(bingMapsCollinsBart);
+//
+//
+//  std::vector<std::string> subdomains;
+//  subdomains.push_back("0.");
+//  subdomains.push_back("1.");
+//  subdomains.push_back("2.");
+//  subdomains.push_back("3.");
+//  MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("CartoDB-meteoritessize",
+//                                                               "http://",
+//                                                               "tiles.cartocdn.com/osm2/tiles/meteoritessize",
+//                                                               subdomains,
+//                                                               "png",
+//                                                               TimeInterval::fromDays(90),
+//                                                               false,
+//                                                               Sector::fullSphere(),
+//                                                               2,
+//                                                               17,
+//                                                               NULL);
+//  meteoritesLayer->setTitle("CartoDB Meteorites");
+//  meteoritesLayer->setEnable(false);
+//  layerSet->addLayer(meteoritesLayer);
+//
+//
+//  URLTemplateLayer* arcGISOverlayLayerTest = URLTemplateLayer::newMercator("http://www.fairfaxcounty.gov/gis/rest/services/DMV/DMV/MapServer/export?dpi=96&transparent=true&format=png8&bbox={west}%2C{south}%2C{east}%2C{north}&bboxSR=3857&imageSR=3857&size={width}%2C{height}&f=image",
+//                                                                           Sector::fullSphere(),
+//                                                                           true,
+//                                                                           2,
+//                                                                           18,
+//                                                                           TimeInterval::fromDays(30),
+//                                                                           true,
+//                                                                           new LevelTileCondition(12, 18));
+//  arcGISOverlayLayerTest->setTitle("ESRI ArcGis Online");
+//  arcGISOverlayLayerTest->setEnable(false);
+//  layerSet->addLayer(arcGISOverlayLayerTest);
+//
+//
+//  return layerSet;
+//}
 
 void G3MDemoBuilder::build() {
   if (_initialized) {
@@ -165,7 +166,7 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-  const float verticalExaggeration = 6.0f;
+  const float verticalExaggeration = 1.0f;
   builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
@@ -174,7 +175,10 @@ void G3MDemoBuilder::build() {
   builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  builder->getPlanetRendererBuilder()->setLayerSet(createLayerSet());
+  LayerSet* layerSet = new LayerSet();
+  builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
+
+  GEORenderer* geoRenderer = builder->createGEORenderer(NULL);
 
   //  ShapesRenderer* shapeRenderer = new ShapesRenderer();
   //  shapeRenderer->setEnable(false);
@@ -204,10 +208,11 @@ void G3MDemoBuilder::build() {
   //  builder.setUserData(userData);
 
   _initialized = true;
+  _model = new G3MDemoModel(_listener, layerSet, geoRenderer);
 }
 
 G3MDemoModel* G3MDemoBuilder::getModel() {
-  if (!_initialized) {
+  if (!_initialized || _model == NULL) {
     ERROR("Model not yet created. Have to initialize the widget before getting the model.");
   }
   return _model;

@@ -14,16 +14,32 @@
 
 class G3MDemoListener;
 class G3MDemoScene;
+class LayerSet;
+class GEORenderer;
 
 class G3MDemoModel {
 private:
   G3MDemoListener* _listener;
 
+  LayerSet*    _layerSet;
+  GEORenderer* _geoRenderer;
+
+  G3MDemoScene* _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
 
 public:
 
-  G3MDemoModel(G3MDemoListener* listener);
+  G3MDemoModel(G3MDemoListener* listener,
+               LayerSet* layerSet,
+               GEORenderer* geoRenderer);
+
+  LayerSet* getLayerSet() const {
+    return _layerSet;
+  }
+
+  GEORenderer* getGEORenderer() const {
+    return _geoRenderer;
+  }
 
   int getScenesCount() const {
     return _scenes.size();
@@ -40,9 +56,10 @@ public:
   void selectScene(G3MDemoScene* scene);
 
   bool isSelectedScene(const G3MDemoScene* scene) const {
-#warning Diego at work!
-    return scene == _scenes[0];
+    return _selectedScene == scene;
   }
+
+  void reset();
   
 };
 

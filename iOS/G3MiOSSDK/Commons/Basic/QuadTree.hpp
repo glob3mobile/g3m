@@ -44,8 +44,6 @@ public:
 
 class QuadTree_Node {
 private:
-  const int     _depth;
-  const Sector  _sector;
   std::vector<QuadTree_Element*> _elements;
 
   QuadTree_Node** _children;
@@ -59,6 +57,9 @@ private:
   }
 
 public:
+  const int     _depth;
+  const Sector  _sector;
+
   QuadTree_Node(const Sector& sector) :
   _sector(sector),
   _depth(1),
@@ -111,7 +112,9 @@ public:
 
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
-  
+
+  void clear();
+
 };
 
 #endif

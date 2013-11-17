@@ -68,7 +68,7 @@
         <scene sceneID="4Bi-N0-hZL">
             <objects>
                 <tableViewController id="esp-gn-RRS" customClass="G3MSelectDemoSceneViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1yb-IB-Sk6">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1yb-IB-Sk6">
                         <rect key="frame" x="0.0" y="0.0" width="164" height="350"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <prototypes>
@@ -76,7 +76,7 @@
                                 <rect key="frame" x="0.0" y="22" width="164" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ZR-Dl-Ttf" id="2cf-ZJ-VMD">
-                                    <rect key="frame" x="0.0" y="0.0" width="164" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="164" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ib9-9F-2Rh">

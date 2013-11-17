@@ -14,10 +14,12 @@
 class G3MRasterLayersDemoScene : public G3MDemoScene {
 
 public:
-  G3MRasterLayersDemoScene() :
-  G3MDemoScene("Raster Layers")
+  G3MRasterLayersDemoScene(G3MDemoModel* model) :
+  G3MDemoScene("Raster Layers", model)
   {
   }
+
+  void activate();
 
 };
 

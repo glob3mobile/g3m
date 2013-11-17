@@ -14,6 +14,11 @@
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
 		CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B818392D51007409D8 /* G3MDemoContext.cpp */; };
+		CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C018394DB6007409D8 /* buildings_monaco.geojson */; };
+		CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C118394DB6007409D8 /* restaurants_monaco.geojson */; };
+		CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C218394DB6007409D8 /* roads_monaco.geojson */; };
+		CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C618394E44007409D8 /* restaurant-96x96.png */; };
+		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
@@ -113,6 +118,11 @@
 		CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MVectorialDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B818392D51007409D8 /* G3MDemoContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoContext.cpp; sourceTree = "<group>"; };
 		CF6920B918392D51007409D8 /* G3MDemoContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoContext.hpp; sourceTree = "<group>"; };
+		CF6920C018394DB6007409D8 /* buildings_monaco.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = buildings_monaco.geojson; sourceTree = "<group>"; };
+		CF6920C118394DB6007409D8 /* restaurants_monaco.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = restaurants_monaco.geojson; sourceTree = "<group>"; };
+		CF6920C218394DB6007409D8 /* roads_monaco.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = roads_monaco.geojson; sourceTree = "<group>"; };
+		CF6920C618394E44007409D8 /* restaurant-96x96.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-96x96.png"; sourceTree = "<group>"; };
+		CF6920C818394F56007409D8 /* restaurant-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-48x48.png"; sourceTree = "<group>"; };
 		CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoModel.cpp; sourceTree = "<group>"; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
@@ -228,6 +238,8 @@
 				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
 				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
 				CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */,
+				CF6920B818392D51007409D8 /* G3MDemoContext.cpp */,
+				CF6920B918392D51007409D8 /* G3MDemoContext.hpp */,
 				CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */,
 				CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */,
 				CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */,
@@ -238,8 +250,6 @@
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
 				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
-				CF6920B818392D51007409D8 /* G3MDemoContext.cpp */,
-				CF6920B918392D51007409D8 /* G3MDemoContext.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -390,6 +400,11 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF6920C818394F56007409D8 /* restaurant-48x48.png */,
+				CF6920C618394E44007409D8 /* restaurant-96x96.png */,
+				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
+				CF6920C118394DB6007409D8 /* restaurants_monaco.geojson */,
+				CF6920C218394DB6007409D8 /* roads_monaco.geojson */,
 				CFF64D5E1832A1A8006ABFF6 /* Shaders */,
 				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
@@ -501,7 +516,9 @@
 				E7D1B64016D2462B00AF47C1 /* Icon-72.png in Resources */,
 				CFF64D6F1832A1A8006ABFF6 /* Default.vsh in Resources */,
 				E7D1B64116D2462B00AF47C1 /* Icon-72@2x.png in Resources */,
+				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
+				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				CFF64D681832A1A8006ABFF6 /* TexturedMesh.fsh in Resources */,
 				CFF64D6C1832A1A8006ABFF6 /* FlatColorMesh.vsh in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,
@@ -528,8 +545,11 @@
 				CFF64D6B1832A1A8006ABFF6 /* FlatColorMesh.fsh in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				E780A3DA16D29FAA000F0395 /* A320.bson in Resources */,
+				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
+				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
+				CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */,
 				E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */,
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,

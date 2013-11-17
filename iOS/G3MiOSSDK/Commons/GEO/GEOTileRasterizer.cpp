@@ -22,6 +22,10 @@
 void GEOTileRasterizer::initialize(const G3MContext* context) {
 }
 
+void GEOTileRasterizer::clear() {
+  _quadTree.clear();
+}
+
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const Sector* sector = symbol->getSector();
 

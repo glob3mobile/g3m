@@ -7,3 +7,8 @@
 //
 
 #include "G3MRasterLayersDemoScene.hpp"
+
+
+void G3MRasterLayersDemoScene::activate() {
+#warning Diego at work!
+}

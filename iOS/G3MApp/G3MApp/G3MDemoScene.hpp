@@ -11,19 +11,39 @@
 
 #include <string>
 
+class G3MDemoModel;
+
 class G3MDemoScene {
+private:
+  G3MDemoModel* _model;
+
 protected:
   const std::string _name;
 
-  G3MDemoScene(const std::string& name) :
-  _name(name)
+  G3MDemoScene(const std::string& name,
+               G3MDemoModel* model) :
+  _name(name),
+  _model(model)
   {
   }
 
 public:
+
+  virtual ~G3MDemoScene() {
+  }
+
   const std::string getName() const {
     return _name;
   }
+
+  G3MDemoModel* getModel() const {
+    return _model;
+  }
+
+  virtual void activate() = 0;
+
+  virtual void deactivate();
+  
 };
 
 #endif

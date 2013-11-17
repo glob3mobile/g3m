@@ -17,10 +17,12 @@ class G3MDemoListener;
 
 class G3MDemoBuilder {
 private:
+  G3MDemoListener* _listener;
+
   G3MDemoModel* _model;
   bool _initialized;
 
-  LayerSet* createLayerSet();
+//  LayerSet* createLayerSet();
 
 protected:
   G3MDemoBuilder(G3MDemoListener* listener);

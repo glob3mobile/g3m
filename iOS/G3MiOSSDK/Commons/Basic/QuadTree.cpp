@@ -145,3 +145,10 @@ bool QuadTree::acceptVisitor(const Sector& sector,
   visitor.endVisit(aborted);
   return aborted;
 }
+
+void QuadTree::clear() {
+  Sector sector = _root->_sector;
+
+  delete _root;
+  _root = new QuadTree_Node(sector);
+}

@@ -13,10 +13,12 @@
 
 class G3MVectorialDemoScene : public G3MDemoScene {
 public:
-  G3MVectorialDemoScene() :
-  G3MDemoScene("Vectorial")
+  G3MVectorialDemoScene(G3MDemoModel* model) :
+  G3MDemoScene("Vectorial", model)
   {
   }
+
+  void activate();
 
 };
 
