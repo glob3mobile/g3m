@@ -22,8 +22,6 @@ private:
   G3MDemoModel* _model;
   bool _initialized;
 
-//  LayerSet* createLayerSet();
-
 protected:
   G3MDemoBuilder(G3MDemoListener* listener);
 

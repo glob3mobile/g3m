@@ -11,7 +11,11 @@
 
 #include "G3MDemoScene.hpp"
 
+class LayerSet;
+
 class G3MRasterLayersDemoScene : public G3MDemoScene {
+private:
+  void createLayerSet(LayerSet* layerSet);
 
 public:
   G3MRasterLayersDemoScene(G3MDemoModel* model) :

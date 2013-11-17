@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fcX-iZ-2H1">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fcX-iZ-2H1" userLabel="Main Toolbar View">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="58"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -47,12 +47,20 @@
                                     <constraint firstAttribute="height" constant="58" id="lqZ-gi-GfH"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O0Y-FE-gVc" userLabel="Secondary Toolbar View">
+                                <rect key="frame" x="0.0" y="966" width="768" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.5" alpha="0.5" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="fcX-iZ-2H1" firstAttribute="leading" secondItem="4Jv-Yl-n8N" secondAttribute="leading" id="5ch-DP-d7Y"/>
                             <constraint firstItem="fcX-iZ-2H1" firstAttribute="top" secondItem="4Jv-Yl-n8N" secondAttribute="top" id="Son-Cz-bUd"/>
+                            <constraint firstAttribute="trailing" secondItem="O0Y-FE-gVc" secondAttribute="trailing" id="bTR-Bw-6Wu"/>
                             <constraint firstAttribute="trailing" secondItem="fcX-iZ-2H1" secondAttribute="trailing" id="cGw-fa-mPc"/>
+                            <constraint firstItem="O0Y-FE-gVc" firstAttribute="leading" secondItem="4Jv-Yl-n8N" secondAttribute="leading" id="llF-Ow-n63"/>
+                            <constraint firstItem="k94-eN-oGw" firstAttribute="top" secondItem="O0Y-FE-gVc" secondAttribute="bottom" id="rdL-vE-Jl8"/>
                         </constraints>
                     </view>
                     <connections>
