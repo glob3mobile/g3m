@@ -23,7 +23,7 @@
 #include <G3MiOSSDK/GEOFeature.hpp>
 #include <G3MiOSSDK/Mark.hpp>
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
-
+#include <G3MiOSSDK/G3MWidget.hpp>
 
 
 class G3MVectorialDemoSymbolizer : public GEOSymbolizer {
@@ -62,12 +62,7 @@ private:
   }
 
   static GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) {
-//    const JSONObject* properties = geometry->getFeature()->getProperties();
-
-    // final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-    const int colorIndex = 5;
-    const Color color = Color::fromRGBA(0.7f, 0, 0, 0.5f).wheelStep(7, colorIndex).muchLighter().muchLighter();
-
+    const Color color = Color::fromRGBA(0.63f, 0.48f, 1.0f, 0.5f);
     float dashLengths[] = {};
     const int dashCount = 0;
 
@@ -83,11 +78,7 @@ private:
 
 
   static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) {
-//    const JSONObject* properties = geometry->getFeature()->getProperties();
-
-    // final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-    const int colorIndex = 10;
-    const Color color = Color::fromRGBA(0.7f, 0, 0, 0.5f).wheelStep(7, colorIndex);
+    const Color color = Color::fromRGBA(0.0f, 0.7f, 0.4f, 0.5f);
 
     return GEO2DSurfaceRasterStyle(color);
   }
@@ -104,7 +95,7 @@ public:
     Mark* mark = new Mark(URL("file:///restaurant-48x48.png"),
                           Geodetic3D(geometry->getPosition(), 0),
                           RELATIVE_TO_GROUND,
-                          5000,
+                          25000,
                           NULL,
                           false,
                           NULL, // markListener,
@@ -142,50 +133,29 @@ public:
 
 void G3MVectorialDemoScene::activate() {
 #warning Diego at work!
-  //  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-  //                                       TimeInterval::fromDays(30),
-  //                                       true,
-  //                                       12);
-
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-                                       TimeInterval::fromDays(30),
-                                       true);
 
   G3MDemoModel* model = getModel();
 
+  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       13);
   model->getLayerSet()->addLayer(layer);
-
 
   GEORenderer* geoRenderer = model->getGEORenderer();
   geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoSymbolizer());
   geoRenderer->loadJSON(URL("file:///roads_monaco.geojson"),       new G3MVectorialDemoSymbolizer());
   geoRenderer->loadJSON(URL("file:///restaurants_monaco.geojson"), new G3MVectorialDemoSymbolizer());
 
-  //  final Geodetic2D lower = new Geodetic2D( //
-  //                                          Angle.fromDegrees(43.69200778158779), //
-  //                                          Angle.fromDegrees(7.36351850323685));
-  //  final Geodetic2D upper = new Geodetic2D( //
-  //                                          Angle.fromDegrees(43.7885865186124), //
-  //                                          Angle.fromDegrees(7.48617349925817));
-  //
-  //  final Sector demSector = new Sector(lower, upper);
-  //
-  //
-  //  //NROWS          13
-  //  //NCOLS          16
+  const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
+                                               43.7885865186124,  7.48617349925817);
+
+  model->getG3MWidget()->setShownSector(demSector.shrinkedByPercent(0.1f));
+
   //  final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
   //                                                                        new Vector2I(16, 13), DELTA_HEIGHT);
   //
   //  builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
   //  builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
-  //
-  //
-  //  _vectorialRenderer = builder.createGEORenderer(Symbolizer);
-  //  _vectorialRenderer.loadJSON(new URL("file:///buildings_monaco.geojson"));
-  //  _vectorialRenderer.loadJSON(new URL("file:///roads_monaco.geojson"));
-  //  _vectorialRenderer.loadJSON(new URL("file:///restaurants_monaco.geojson"));
-  //
-  //
-  //  //The sector is shrinked to adjust the projection of
   
 }

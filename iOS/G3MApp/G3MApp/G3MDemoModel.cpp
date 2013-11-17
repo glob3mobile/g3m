@@ -15,6 +15,8 @@
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
+#include <G3MiOSSDK/ErrorHandling.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -26,6 +28,7 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
                            GEORenderer* geoRenderer) :
 _listener(listener),
+_g3mWidget(NULL),
 _layerSet(layerSet),
 _geoRenderer(geoRenderer),
 _selectedScene(NULL)
@@ -42,7 +45,16 @@ _selectedScene(NULL)
   selectScene(_scenes[0]);
 }
 
+void G3MDemoModel::setG3MWidget(G3MWidget* g3mWidget) {
+  if (_g3mWidget != NULL) {
+    ERROR("G3MWidget already set");
+  }
+  _g3mWidget = g3mWidget;
+}
+
 void G3MDemoModel::reset() {
+  _g3mWidget->setShownSector( Sector::fullSphere() );
+
   _layerSet->removeAllLayers(true);
 
 //  _geoRenderer->clear();

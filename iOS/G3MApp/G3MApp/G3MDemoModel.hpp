@@ -16,13 +16,17 @@ class G3MDemoListener;
 class G3MDemoScene;
 class LayerSet;
 class GEORenderer;
+class G3MWidget;
+
 
 class G3MDemoModel {
 private:
   G3MDemoListener* _listener;
 
-  LayerSet*    _layerSet;
-  GEORenderer* _geoRenderer;
+  G3MWidget* _g3mWidget;
+
+  LayerSet*       _layerSet;
+  GEORenderer*    _geoRenderer;
 
   G3MDemoScene* _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -32,6 +36,12 @@ public:
   G3MDemoModel(G3MDemoListener* listener,
                LayerSet* layerSet,
                GEORenderer* geoRenderer);
+
+  void setG3MWidget(G3MWidget* g3mWidget);
+
+  G3MWidget* getG3MWidget() const {
+    return _g3mWidget;
+  }
 
   LayerSet* getLayerSet() const {
     return _layerSet;
