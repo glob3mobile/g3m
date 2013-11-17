@@ -12,13 +12,18 @@
 #include "G3MDemoScene.hpp"
 
 class G3MVectorialDemoScene : public G3MDemoScene {
+protected:
+  void rawActivate();
+
+  void rawSelectOption(const std::string& option) {
+    // do nothing, no options
+  }
+
 public:
   G3MVectorialDemoScene(G3MDemoModel* model) :
   G3MDemoScene("Vectorial", model)
   {
   }
-
-  void activate();
 
 };
 

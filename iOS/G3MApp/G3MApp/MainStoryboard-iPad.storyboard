@@ -50,6 +50,23 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0Y-FE-gVc" userLabel="Secondary Toolbar View">
                                 <rect key="frame" x="0.0" y="966" width="768" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Czs-4F-pgG">
+                                        <rect key="frame" x="563" y="5" width="200" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="option 1" backgroundImage="selector-background.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="LPl-L5-MUv" kind="popover" identifier="changeOption" popoverAnchorView="Czs-4F-pgG" id="z7U-jt-yhi">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="0.5" alpha="0.5" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="58" id="43z-3F-ddP"/>
@@ -69,6 +86,7 @@
                     <connections>
                         <outlet property="demoSelector" destination="9zC-iw-ZAJ" id="ob2-A0-40Q"/>
                         <outlet property="g3mWidget" destination="4Jv-Yl-n8N" id="jcc-PX-zMk"/>
+                        <outlet property="optionSelector" destination="Czs-4F-pgG" id="KL6-mW-Pof"/>
                         <outlet property="secondaryToolbar" destination="O0Y-FE-gVc" id="Cby-ss-q34"/>
                     </connections>
                 </viewController>
@@ -121,6 +139,52 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j5W-U5-XF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="595" y="-503"/>
+        </scene>
+        <!--Select Option View Controller-->
+        <scene sceneID="Sox-JV-nHy">
+            <objects>
+                <tableViewController id="LPl-L5-MUv" customClass="G3MSelectOptionViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rU2-4z-r5h">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="wLk-1r-mmT">
+                                <rect key="frame" x="0.0" y="22" width="300" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wLk-1r-mmT" id="H0H-l3-WC6">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1dR-hE-jHq">
+                                            <rect key="frame" x="5" y="7" width="290" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="----------------">
+                                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="changeOption:" destination="LPl-L5-MUv" eventType="touchUpInside" id="KAz-Ji-bf0"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="leading" secondItem="H0H-l3-WC6" secondAttribute="leading" constant="5" id="97F-d8-2bQ"/>
+                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="top" secondItem="H0H-l3-WC6" secondAttribute="top" constant="7" id="DX4-GT-Orn"/>
+                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="centerX" secondItem="H0H-l3-WC6" secondAttribute="centerX" id="S4a-7k-Ih7"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="LPl-L5-MUv" id="COB-J4-cid"/>
+                            <outlet property="delegate" destination="LPl-L5-MUv" id="pKF-5T-OGJ"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2GO-RP-ZUa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="595" y="12"/>
         </scene>
     </scenes>
     <resources>

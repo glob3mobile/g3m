@@ -140,7 +140,12 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
 }
 
 
-void G3MRasterLayersDemoScene::activate() {
+void G3MRasterLayersDemoScene::rawActivate() {
 #warning Diego at work!
   createLayerSet( getModel()->getLayerSet() );
 }
+
+void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option) {
+#warning Diego at work!
+}
+

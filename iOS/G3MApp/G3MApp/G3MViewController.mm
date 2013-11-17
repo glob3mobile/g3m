@@ -24,10 +24,10 @@
 //#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 //#include <G3MiOSSDK/TimeInterval.hpp>
 
-#import "G3MToolbar.h"
+//#import "G3MToolbar.h"
 #import "G3MWebViewController.h"
-
 #import "G3MSelectDemoSceneViewController.h"
+#import "G3MSelectOptionViewController.h"
 
 #include "G3MDemoBuilder_iOS.hpp"
 #include "G3MDemoModel.hpp"
@@ -43,8 +43,10 @@
 @synthesize g3mWidget        = _g3mWidget;
 @synthesize demoSelector     = _demoSelector;
 @synthesize secondaryToolbar = _secondaryToolbar;
+@synthesize optionSelector   = _optionSelector;
 //@synthesize demoMenu      = _demoMenu;
 //@synthesize toolbar       = _toolbar;
+
 //@synthesize layerSelector = _layerSelector;
 //@synthesize layerMenu     = _layerMenu;
 
@@ -76,6 +78,14 @@ public:
   void onChangedScene(const G3MDemoScene* scene) {
     [_viewController onChangedScene: scene];
   }
+
+
+  void onChangeSceneOption(G3MDemoScene* scene,
+                           const std::string& option) {
+    [_viewController onChangedOption: option
+                             inScene: scene];
+  }
+
 };
 
 -(void) onChangedScene:(const G3MDemoScene*) scene
@@ -85,6 +95,14 @@ public:
 
 
   self.secondaryToolbar.hidden = (scene->getOptionsCount() == 0);
+}
+
+-(void) onChangedOption:(const std::string&) option
+                inScene:(const G3MDemoScene*) scene
+{
+  [self.optionSelector setTitle: [NSString stringWithCppString: option]
+                       forState: UIControlStateNormal];
+
 }
 
 - (void)viewDidLoad
@@ -449,6 +467,13 @@ public:
     UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
     viewController.popoverController = popoverSegue.popoverController;
     viewController.demoModel = _demoModel;
+  }
+
+  if ([segue.destinationViewController isKindOfClass:[G3MSelectOptionViewController class]]) {
+    G3MSelectOptionViewController* viewController = (G3MSelectOptionViewController*) segue.destinationViewController;
+    UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
+    viewController.popoverController = popoverSegue.popoverController;
+    viewController.scene = _demoModel->getSelectedScene();
   }
 
 //  if ( [[segue identifier] isEqualToString:@"showZones"] ) {

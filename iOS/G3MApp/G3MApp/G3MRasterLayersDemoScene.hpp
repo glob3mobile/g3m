@@ -17,6 +17,11 @@ class G3MRasterLayersDemoScene : public G3MDemoScene {
 private:
   void createLayerSet(LayerSet* layerSet);
 
+protected:
+  void rawActivate();
+
+  void rawSelectOption(const std::string& option);
+
 public:
   G3MRasterLayersDemoScene(G3MDemoModel* model) :
   G3MDemoScene("Raster Layers", model)
@@ -24,8 +29,6 @@ public:
     _options.push_back("MapBox OSM");
     _options.push_back("Open Street Map");
   }
-
-  void activate();
 
 };
 

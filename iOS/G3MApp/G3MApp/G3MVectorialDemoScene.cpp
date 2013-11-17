@@ -131,9 +131,7 @@ public:
 };
 
 
-void G3MVectorialDemoScene::activate() {
-#warning Diego at work!
-
+void G3MVectorialDemoScene::rawActivate() {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 

@@ -19,6 +19,7 @@
 		CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C218394DB6007409D8 /* roads_monaco.geojson */; };
 		CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C618394E44007409D8 /* restaurant-96x96.png */; };
 		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
+		CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
@@ -123,6 +124,8 @@
 		CF6920C218394DB6007409D8 /* roads_monaco.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = roads_monaco.geojson; sourceTree = "<group>"; };
 		CF6920C618394E44007409D8 /* restaurant-96x96.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-96x96.png"; sourceTree = "<group>"; };
 		CF6920C818394F56007409D8 /* restaurant-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-48x48.png"; sourceTree = "<group>"; };
+		CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectOptionViewController.h; sourceTree = "<group>"; };
+		CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectOptionViewController.mm; sourceTree = "<group>"; };
 		CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoModel.cpp; sourceTree = "<group>"; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
@@ -345,6 +348,8 @@
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
 				CF3F8FE81835867D00589B4C /* G3MSelectDemoSceneViewController.h */,
 				CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */,
+				CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */,
+				CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */,
 				E7D1B80116D27DC600AF47C1 /* G3MToolbar.h */,
 				E7D1B80216D27DC600AF47C1 /* G3MToolbar.m */,
 				E7D1B80516D27DC600AF47C1 /* G3MUIDropDownMenu.h */,
@@ -574,6 +579,7 @@
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
 				E7D1B80816D27DC600AF47C1 /* G3MWebViewController.mm in Sources */,
+				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */,

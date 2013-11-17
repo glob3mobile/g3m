@@ -33,7 +33,11 @@ class G3MDemoScene;
 //@property (strong, nonatomic) G3MUIDropDownMenu*      layerMenu;
 
 @property (weak, nonatomic) IBOutlet UIView* secondaryToolbar;
+@property (weak, nonatomic) IBOutlet UIButton* optionSelector;
 
 -(void) onChangedScene:(const G3MDemoScene*) scene;
+
+-(void) onChangedOption:(const std::string&) option
+                inScene:(const G3MDemoScene*) scene;
 
 @end

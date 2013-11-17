@@ -87,8 +87,6 @@ void G3MDemoModel::selectScene(const std::string& sceneName) {
 }
 
 void G3MDemoModel::selectScene(G3MDemoScene* scene) {
-#warning Diego at work!
-
   if ((scene != NULL) &&
       (scene != _selectedScene)) {
 
@@ -105,5 +103,16 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
       _listener->onChangedScene(_selectedScene);
     }
   }
-  
+
+}
+
+void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
+                                       const std::string& option) {
+#warning Diego at work!
+  ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"", option.c_str(), scene->getName().c_str());
+
+  if (_listener != NULL) {
+    _listener->onChangeSceneOption(scene, option);
+  }
+
 }

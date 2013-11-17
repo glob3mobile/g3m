@@ -17,6 +17,9 @@ class G3MDemoModel;
 class G3MDemoScene {
 private:
   G3MDemoModel* _model;
+  std::string   _selectedOption;
+
+  bool isValidOption(const std::string& option) const;
 
 protected:
   const std::string        _name;
@@ -28,6 +31,10 @@ protected:
   _model(model)
   {
   }
+
+  virtual void rawActivate() = 0;
+
+  virtual void rawSelectOption(const std::string& option) = 0;
 
 public:
 
@@ -46,7 +53,17 @@ public:
     return _options.size();
   }
 
-  virtual void activate() = 0;
+  const std::string getOption(int index) const {
+    return _options[index];
+  }
+
+  bool isSelectedOption(const std::string& option) const {
+    return _selectedOption == option;
+  }
+
+  void selectOption(const std::string& option);
+
+  void activate();
 
   virtual void deactivate();
   

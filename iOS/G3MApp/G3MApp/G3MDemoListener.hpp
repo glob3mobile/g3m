@@ -11,9 +11,14 @@
 
 class G3MDemoScene;
 
+#include <string>
+
 class G3MDemoListener {
 public:
   virtual void onChangedScene(const G3MDemoScene* scene) = 0;
+
+  virtual void onChangeSceneOption(G3MDemoScene* scene,
+                                   const std::string& option) = 0;
 
   virtual ~G3MDemoListener() {
 

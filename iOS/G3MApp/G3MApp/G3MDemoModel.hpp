@@ -69,7 +69,14 @@ public:
     return _selectedScene == scene;
   }
 
+  G3MDemoScene* getSelectedScene() const {
+    return _selectedScene;
+  }
+
   void reset();
+
+  void onChangeSceneOption(G3MDemoScene* scene,
+                           const std::string& option);
   
 };
 
