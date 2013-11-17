@@ -134,13 +134,18 @@ public:
 void G3MVectorialDemoScene::activate() {
 #warning Diego at work!
 
-  G3MDemoModel* model = getModel();
+  G3MDemoModel* model     = getModel();
+  G3MWidget*    g3mWidget = model->getG3MWidget();
+
+  g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
+
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
                                        TimeInterval::fromDays(30),
                                        true,
                                        13);
   model->getLayerSet()->addLayer(layer);
+
 
   GEORenderer* geoRenderer = model->getGEORenderer();
   geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoSymbolizer());
@@ -150,11 +155,7 @@ void G3MVectorialDemoScene::activate() {
   const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
                                                43.7885865186124,  7.48617349925817);
 
-  model->getG3MWidget()->setShownSector(demSector.shrinkedByPercent(0.1f));
-
-//  const Color bgColor = Color::fromRGBA255(185, 221, 209, 255).muchDarker();
-//  model->getG3MWidget()->setBackgroundColor(bgColor);
-  model->getG3MWidget()->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
+  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
 
 
   //  final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
