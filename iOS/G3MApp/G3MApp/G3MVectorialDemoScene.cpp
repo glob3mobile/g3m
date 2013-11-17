@@ -152,6 +152,11 @@ void G3MVectorialDemoScene::activate() {
 
   model->getG3MWidget()->setShownSector(demSector.shrinkedByPercent(0.1f));
 
+//  const Color bgColor = Color::fromRGBA255(185, 221, 209, 255).muchDarker();
+//  model->getG3MWidget()->setBackgroundColor(bgColor);
+  model->getG3MWidget()->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
+
+
   //  final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
   //                                                                        new Vector2I(16, 13), DELTA_HEIGHT);
   //

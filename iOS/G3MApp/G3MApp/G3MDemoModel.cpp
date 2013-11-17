@@ -53,11 +53,12 @@ void G3MDemoModel::setG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
+  _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
+
   _g3mWidget->setShownSector( Sector::fullSphere() );
 
   _layerSet->removeAllLayers(true);
 
-//  _geoRenderer->clear();
   _geoRenderer->getGeoTileRasterizer()->clear();
   _geoRenderer->getMarksRenderer()->removeAllMarks();
   _geoRenderer->getMeshRenderer()->clearMeshes();
