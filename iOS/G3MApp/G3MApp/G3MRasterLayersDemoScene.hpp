@@ -21,6 +21,8 @@ public:
   G3MRasterLayersDemoScene(G3MDemoModel* model) :
   G3MDemoScene("Raster Layers", model)
   {
+    _options.push_back("MapBox OSM");
+    _options.push_back("Open Street Map");
   }
 
   void activate();

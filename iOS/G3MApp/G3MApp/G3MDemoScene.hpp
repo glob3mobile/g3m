@@ -10,6 +10,7 @@
 #define __G3MApp__G3MDemoScene__
 
 #include <string>
+#include <vector>
 
 class G3MDemoModel;
 
@@ -18,7 +19,8 @@ private:
   G3MDemoModel* _model;
 
 protected:
-  const std::string _name;
+  const std::string        _name;
+  std::vector<std::string> _options;
 
   G3MDemoScene(const std::string& name,
                G3MDemoModel* model) :
@@ -38,6 +40,10 @@ public:
 
   G3MDemoModel* getModel() const {
     return _model;
+  }
+
+  const int getOptionsCount() const {
+    return _options.size();
   }
 
   virtual void activate() = 0;

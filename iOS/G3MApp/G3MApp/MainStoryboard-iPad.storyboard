@@ -69,6 +69,7 @@
                     <connections>
                         <outlet property="demoSelector" destination="9zC-iw-ZAJ" id="ob2-A0-40Q"/>
                         <outlet property="g3mWidget" destination="4Jv-Yl-n8N" id="jcc-PX-zMk"/>
+                        <outlet property="secondaryToolbar" destination="O0Y-FE-gVc" id="Cby-ss-q34"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EEo-iH-Gas" userLabel="First Responder" sceneMemberID="firstResponder"/>

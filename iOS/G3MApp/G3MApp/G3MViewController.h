@@ -32,6 +32,8 @@ class G3MDemoScene;
 //@property (strong, nonatomic) UIButton*               layerSelector;
 //@property (strong, nonatomic) G3MUIDropDownMenu*      layerMenu;
 
+@property (weak, nonatomic) IBOutlet UIView* secondaryToolbar;
+
 -(void) onChangedScene:(const G3MDemoScene*) scene;
 
 @end

@@ -34,13 +34,13 @@ _geoRenderer(geoRenderer),
 _selectedScene(NULL)
 {
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
-//  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
+  //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
-//  _scenes.push_back( new G3MDemoScene("Markers") );
-//  _scenes.push_back( new G3MDemoScene("3D Symbology") );
-//  _scenes.push_back( new G3MDemoScene("Point clouds") );
-//  _scenes.push_back( new G3MDemoScene("3D Model") );
-//  _scenes.push_back( new G3MDemoScene("Camera") );
+  //  _scenes.push_back( new G3MDemoScene("Markers") );
+  //  _scenes.push_back( new G3MDemoScene("3D Symbology") );
+  //  _scenes.push_back( new G3MDemoScene("Point clouds") );
+  //  _scenes.push_back( new G3MDemoScene("3D Model") );
+  //  _scenes.push_back( new G3MDemoScene("Camera") );
 
   selectScene(_scenes[0]);
 }
@@ -105,4 +105,5 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
       _listener->onChangedScene(_selectedScene);
     }
   }
+  
 }

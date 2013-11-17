@@ -40,8 +40,9 @@
 
 @implementation G3MViewController
 
-@synthesize g3mWidget    = _g3mWidget;
-@synthesize demoSelector = _demoSelector;
+@synthesize g3mWidget        = _g3mWidget;
+@synthesize demoSelector     = _demoSelector;
+@synthesize secondaryToolbar = _secondaryToolbar;
 //@synthesize demoMenu      = _demoMenu;
 //@synthesize toolbar       = _toolbar;
 //@synthesize layerSelector = _layerSelector;
@@ -81,6 +82,9 @@ public:
 {
   [self.demoSelector setTitle: [NSString stringWithCppString: scene->getName()]
                      forState: UIControlStateNormal];
+
+
+  self.secondaryToolbar.hidden = (scene->getOptionsCount() == 0);
 }
 
 - (void)viewDidLoad
