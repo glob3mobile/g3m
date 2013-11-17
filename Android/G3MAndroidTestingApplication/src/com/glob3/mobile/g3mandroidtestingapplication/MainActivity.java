@@ -5,7 +5,6 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -32,7 +31,7 @@ public class MainActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       //   builder.getPlanetRendererBuilder().setRenderDebug(true);
 
-      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      //final ShapesRenderer shapesRenderer = new ShapesRenderer();
       // builder.addRenderer(shapesRenderer);
 
       final MarksRenderer marksRenderer = new MarksRenderer(true);
