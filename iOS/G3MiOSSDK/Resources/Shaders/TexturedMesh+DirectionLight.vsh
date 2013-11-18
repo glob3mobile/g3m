@@ -21,7 +21,7 @@ varying float diffuseLightIntensity;
 uniform float uAmbientLight;
 uniform vec4 uDiffuseLightColor;
 
-varying vec4 lightColor;
+varying vec3 lightColor;
 
 void main() {
 
@@ -36,5 +36,8 @@ void main() {
 
   gl_PointSize = uPointSize;
 
-  lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uDiffuseLightColor * diffuseLightIntensity;
+  vec3 ambientLightColor = vec3(uAmbientLight, uAmbientLight, uAmbientLight);
+
+  //Computing Total Light in Vertex
+  lightColor = ambientLightColor + uDiffuseLightColor.rgb * diffuseLightIntensity;
 }

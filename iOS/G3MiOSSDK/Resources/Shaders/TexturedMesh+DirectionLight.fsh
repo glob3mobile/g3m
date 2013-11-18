@@ -10,8 +10,12 @@ varying mediump vec2 TextureCoordOut;
 
 uniform sampler2D Sampler;
 
-varying vec4 lightColor;
+varying vec3 lightColor;
 
 void main() {
-  gl_FragColor = texture2D(Sampler, TextureCoordOut) * lightColor;
+  vec4 texColor = texture2D(Sampler, TextureCoordOut);
+  gl_FragColor.r = texColor.r * lightColor.r;
+  gl_FragColor.g = texColor.g * lightColor.r;
+  gl_FragColor.b = texColor.b * lightColor.r;
+  gl_FragColor.a = texColor.a;
 }
