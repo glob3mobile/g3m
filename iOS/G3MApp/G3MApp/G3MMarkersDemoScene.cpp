@@ -10,7 +10,6 @@
 
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
 #include <G3MiOSSDK/IBufferDownloadListener.hpp>
@@ -22,6 +21,7 @@
 #include <G3MiOSSDK/Geodetic3D.hpp>
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -118,10 +118,15 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.9f, 0.21f, 0.21f, 1.0f));
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+
+//  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
+//                                       TimeInterval::fromDays(30),
+//                                       true,
+//                                       2);
+
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
   IDownloader* downloader = context->getDownloader();
@@ -132,6 +137,11 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
                                          false,
                                          new G3MMarkersDemoScene_BufferDownloadListener(this),
                                          true);
+
+  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
+                                       Angle::zero(), // heading
+                                       Angle::fromDegrees(30) // pitch
+                                       );
 }
 
 void G3MMarkersDemoScene::deactivate(const G3MContext* context) {
