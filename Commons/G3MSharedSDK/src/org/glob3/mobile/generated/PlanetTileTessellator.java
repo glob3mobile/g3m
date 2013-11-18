@@ -400,7 +400,8 @@ public class PlanetTileTessellator extends TileTessellator
     //Storing textCoords in Tile
     tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
   
-    int __Testing_Terrain_Normals;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Testing_Terrain_Normals;
     //  IFloatBuffer* verticesB = vertices.create();
     //  IShortBuffer* indicesB  = indices.create();
     //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
