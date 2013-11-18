@@ -76,7 +76,8 @@ public:
   void reset();
 
   void onChangeSceneOption(G3MDemoScene* scene,
-                           const std::string& option);
+                           const std::string& option,
+                           int optionIndex);
   
 };
 

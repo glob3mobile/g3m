@@ -22,25 +22,38 @@ void G3MDemoScene::activate() {
   }
 }
 
-bool G3MDemoScene::isValidOption(const std::string& option) const {
+int G3MDemoScene::getOptionIndex(const std::string& option) const {
   const int optionsSize = _options.size();
   for (int i = 0; i < optionsSize; i++) {
     if (_options[i] == option) {
-      return true;
+      return i;
     }
   }
 
-  return false;
+  return -1;
 }
 
 void G3MDemoScene::selectOption(const std::string& option) {
-  if (option != _selectedOption) {
-    if (isValidOption(option)) {
-      _selectedOption = option;
+//  if (option != _selectedOption) {
+//    const int optionIndex = getOptionIndex(option);
+//    if (optionIndex >= 0) {
+//      _selectedOption = option;
+//
+//      rawSelectOption(option, optionIndex);
+//
+//      _model->onChangeSceneOption(this, _selectedOption, optionIndex);
+//    }
+//  }
 
-      rawSelectOption(option);
+  const int optionIndex = getOptionIndex(option);
+  if (optionIndex != _selectedOptionIndex) {
+    if (optionIndex >= 0) {
+      _selectedOptionIndex = optionIndex;
 
-      _model->onChangeSceneOption(this, _selectedOption);
+      rawSelectOption(option, optionIndex);
+
+      _model->onChangeSceneOption(this, option, optionIndex);
     }
   }
+
 }

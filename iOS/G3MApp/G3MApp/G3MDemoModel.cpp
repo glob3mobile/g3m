@@ -107,11 +107,12 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 }
 
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
-                                       const std::string& option) {
+                                       const std::string& option,
+                                       int optionIndex) {
   ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"", option.c_str(), scene->getName().c_str());
 
   if (_listener != NULL) {
-    _listener->onChangeSceneOption(scene, option);
+    _listener->onChangeSceneOption(scene, option, optionIndex);
   }
 
 }

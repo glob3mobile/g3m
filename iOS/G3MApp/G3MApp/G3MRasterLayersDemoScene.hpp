@@ -20,7 +20,8 @@ private:
 protected:
   void rawActivate();
 
-  void rawSelectOption(const std::string& option);
+  void rawSelectOption(const std::string& option,
+                       int optionIndex);
 
 public:
   G3MRasterLayersDemoScene(G3MDemoModel* model) :

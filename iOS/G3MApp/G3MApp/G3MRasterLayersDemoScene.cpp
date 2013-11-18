@@ -144,6 +144,7 @@ void G3MRasterLayersDemoScene::rawActivate() {
   createLayerSet( getModel()->getLayerSet() );
 }
 
-void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option) {
+void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
+                                               int optionIndex) {
 #warning Diego at work!
 }

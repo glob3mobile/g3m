@@ -18,7 +18,8 @@ public:
   virtual void onChangedScene(const G3MDemoScene* scene) = 0;
 
   virtual void onChangeSceneOption(G3MDemoScene* scene,
-                                   const std::string& option) = 0;
+                                   const std::string& option,
+                                   int optionIndex) = 0;
 
   virtual ~G3MDemoListener() {
 
