@@ -161,4 +161,10 @@ public final class StringUtils_Android
       return Long.toString(value);
    }
 
+
+   @Override
+   public double parseDouble(final String str) {
+      return Double.parseDouble(str);
+   }
+
 }

@@ -16,7 +16,8 @@
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MWidget.hpp"
-#include "SimpleCameraConstrainer.hpp"
+//#include "SimpleCameraConstrainer.hpp"
+#include "SectorAndHeightCameraConstrainer.hpp"
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
@@ -501,7 +502,6 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool showStatistics = false;
   long long texturePriority = DownloadPriority::HIGHER;
 
-  int TODO_CHECK_MAPBOO_FULLSPHERE;
   const Sector renderedSector = Sector::fullSphere();
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
@@ -527,10 +527,15 @@ const Planet* MapBooBuilder::createPlanet() {
   return Planet::createSphericalEarth();
 }
 
-std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints() {
+std::vector<ICameraConstrainer*>* MapBooBuilder::createCameraConstraints(const Planet* planet,
+                                                                         PlanetRenderer* planetRenderer) {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
-  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  cameraConstraints->push_back(scc);
+  //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+
+  const Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Sector::fullSphere());
+
+  cameraConstraints->push_back( new RenderedSectorCameraConstrainer(planetRenderer,
+                                                                    initialCameraPosition._height * 1.2) );
 
   return cameraConstraints;
 }
@@ -1318,13 +1323,14 @@ G3MWidget* MapBooBuilder::create() {
 
 
   CompositeRenderer* mainRenderer = new CompositeRenderer();
+  const Planet* planet = createPlanet();
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
   mainRenderer->addRenderer(planetRenderer);
 
   mainRenderer->addRenderer(getMarksRenderer());
 
-  std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints();
+  std::vector<ICameraConstrainer*>* cameraConstraints = createCameraConstraints(planet, planetRenderer);
 
   GInitializationTask* initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
 
@@ -1332,9 +1338,6 @@ G3MWidget* MapBooBuilder::create() {
 
   ICameraActivityListener* cameraActivityListener = NULL;
 
-  const Planet* planet = createPlanet();
-  //  int TODO_VIEWPORT;
-  //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
@@ -1503,17 +1506,17 @@ void MapBooBuilder::changedCurrentScene() {
 
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
       if (cameraPosition != NULL) {
-        //if (cameraPosition->isAnimated()) {
-        _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
-                                              cameraPosition->getPosition(),
-                                              cameraPosition->getHeading(),
-                                              cameraPosition->getPitch());
-        //}
-        //else {
-        //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
-        //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
-        //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
-        //}
+        if (cameraPosition->isAnimated()) {
+          _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(3),
+                                                cameraPosition->getPosition(),
+                                                cameraPosition->getHeading(),
+                                                cameraPosition->getPitch());
+        }
+        else {
+          _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
+          _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
+          _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
+        }
       }
     }
   }

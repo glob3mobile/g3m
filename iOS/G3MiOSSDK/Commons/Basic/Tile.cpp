@@ -64,7 +64,6 @@ _boundingVolume(NULL),
 _lodTimer(NULL),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-_renderedVStileSectorRatio(getRenderedVSTileSectorsRatio(planetRenderer)),
 _cornerNE(NULL),
 _cornerNW(NULL),
 _cornerSE(NULL),
@@ -1029,19 +1028,6 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
-  const Sector* renderedSector = pr->getRenderedSector();
-  if (renderedSector != NULL){
-    if (!renderedSector->fullContains(_sector)) {
-      Sector meshSector = renderedSector->intersection(_sector);
-      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-      return Vector2D(rx,ry);
-    }
-  }
-  return Vector2D(1.0,1.0);
-}
-
 void Tile::prepareTestLODData(const Planet* planet){
 
   if (_cornerNW == NULL){
@@ -1102,3 +1088,4 @@ void Tile::computeTileCorners(const Planet* planet){
   _cornerSW = new Vector3D(planet->toCartesian( gSW ));
   _cornerSE = new Vector3D(planet->toCartesian( gSE ));
 }
+

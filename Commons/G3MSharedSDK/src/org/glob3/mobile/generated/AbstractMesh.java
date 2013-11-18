@@ -29,7 +29,7 @@ public abstract class AbstractMesh extends Mesh
   protected Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
   protected IFloatBuffer _vertices;
-  protected Color _flatColor;
+  protected final Color _flatColor;
   protected IFloatBuffer _colors;
   protected final float _colorsIntensity;
   protected final float _lineWidth;
@@ -198,9 +198,8 @@ public abstract class AbstractMesh extends Mesh
     return _flatColor.isTransparent();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
-  
     _glState.setParent(parentGLState);
     rawRender(rc);
   }

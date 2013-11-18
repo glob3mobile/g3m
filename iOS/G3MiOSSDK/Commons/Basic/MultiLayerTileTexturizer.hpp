@@ -21,7 +21,7 @@ class LeveledTexturedMesh;
 class IFloatBuffer;
 class TileRasterizer;
 class TextureIDReference;
-
+class G3MEventContext;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:

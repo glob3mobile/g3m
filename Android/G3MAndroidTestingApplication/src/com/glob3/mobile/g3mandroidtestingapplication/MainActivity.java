@@ -2,17 +2,10 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-import java.util.ArrayList;
-
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -37,13 +30,64 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      builder.getPlanetRendererBuilder().setRenderDebug(true);
+      //   builder.getPlanetRendererBuilder().setRenderDebug(true);
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
-      builder.addRenderer(shapesRenderer);
+      // builder.addRenderer(shapesRenderer);
 
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
+
+
+      final MeshRenderer meshRenderer = new MeshRenderer();
+      meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
+      builder.addRenderer(meshRenderer);
+
+
+      //      final ShapeLoadListener Plistener = new ShapeLoadListener() {
+      //         @Override
+      //         public void onBeforeAddShape(final SGShape shape) {
+      //            //  shape.setScale(2000);
+      //            //shape.setRoll(Angle.fromDegrees(-90));
+      //         }
+      //
+      //
+      //         @Override
+      //         public void onAfterAddShape(final SGShape shape) {
+      //
+      //
+      //            ILogger.instance().logInfo("Downloaded Building");
+      //
+      //            final double fromDistance = 10000;
+      //            final double toDistance = 1000;
+      //
+      //            final Angle fromAzimuth = Angle.fromDegrees(-90);
+      //            final Angle toAzimuth = Angle.fromDegrees(270);
+      //
+      //            final Angle fromAltitude = Angle.fromDegrees(90);
+      //            final Angle toAltitude = Angle.fromDegrees(15);
+      //
+      //            shape.orbitCamera(TimeInterval.fromSeconds(5), fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude,
+      //                     toAltitude);
+      //
+      //
+      //         }
+      //
+      //
+      //         @Override
+      //         public void dispose() {
+      //            // TODO Auto-generated method stub
+      //
+      //         }
+      //      };
+      //
+      //
+      //      shapesRenderer.loadBSONSceneJS(new URL("file:///target.bson"), "", false, new Geodetic3D(Angle.fromDegrees(35.6452500000),
+      //               Angle.fromDegrees(-97.214), 30), AltitudeMode.RELATIVE_TO_GROUND, Plistener);
+      //
+      //
+      //      builder.addRenderer(shapesRenderer);
+
 
       //      if (false) {
       //         shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"), URL.FILE_PROTOCOL + "textures-A320/", false,
@@ -84,47 +128,47 @@ public class MainActivity
       //
       //      }
 
-      if (true) { // Adding and deleting marks
-
-         final int time = 1; // SECS
-
-         final GTask markTask = new GTask() {
-            ArrayList<Mark> _marks = new ArrayList<Mark>();
-
-
-            int randomInt(final int max) {
-               return (int) (Math.random() * max);
-            }
-
-
-            @Override
-            public void run(final G3MContext context) {
-               final double lat = randomInt(180) - 90;
-               final double lon = randomInt(360) - 180;
-
-               final Mark m1 = new Mark("RANDOM MARK", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                        Geodetic3D.fromDegrees(lat, lon, 0), AltitudeMode.RELATIVE_TO_GROUND, 1e9);
-               marksRenderer.addMark(m1);
-
-               _marks.add(m1);
-               if (_marks.size() > 5) {
-
-                  marksRenderer.removeAllMarks();
-
-                  for (int i = 0; i < _marks.size(); i++) {
-                     _marks.get(i).dispose();
-                  }
-
-
-                  _marks.clear();
-
-               }
-
-            }
-         };
-
-         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), markTask));
-      }
+      //      if (false) { // Adding and deleting marks
+      //
+      //         final int time = 1; // SECS
+      //
+      //         final GTask markTask = new GTask() {
+      //            ArrayList<Mark> _marks = new ArrayList<Mark>();
+      //
+      //
+      //            int randomInt(final int max) {
+      //               return (int) (Math.random() * max);
+      //            }
+      //
+      //
+      //            @Override
+      //            public void run(final G3MContext context) {
+      //               final double lat = randomInt(180) - 90;
+      //               final double lon = randomInt(360) - 180;
+      //
+      //               final Mark m1 = new Mark("RANDOM MARK", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+      //                        Geodetic3D.fromDegrees(lat, lon, 0), AltitudeMode.RELATIVE_TO_GROUND, 1e9);
+      //               marksRenderer.addMark(m1);
+      //
+      //               _marks.add(m1);
+      //               if (_marks.size() > 5) {
+      //
+      //                  marksRenderer.removeAllMarks();
+      //
+      //                  for (int i = 0; i < _marks.size(); i++) {
+      //                     _marks.get(i).dispose();
+      //                  }
+      //
+      //
+      //                  _marks.clear();
+      //
+      //               }
+      //
+      //            }
+      //         };
+      //
+      //         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), markTask));
+      //      }
 
 
       //      if (false) {

@@ -43,7 +43,7 @@ AbstractMesh::AbstractMesh(const int primitive,
                            IFloatBuffer* vertices,
                            float lineWidth,
                            float pointSize,
-                           Color* flatColor,
+                           const Color* flatColor,
                            IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
@@ -178,8 +178,8 @@ void AbstractMesh::createGLState() {
 
 }
 
-void AbstractMesh::render(const G3MRenderContext* rc, const GLState* parentGLState) const{
-
+void AbstractMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc);
 }

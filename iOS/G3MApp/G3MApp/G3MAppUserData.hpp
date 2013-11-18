@@ -16,33 +16,56 @@ class MarksRenderer;
 class MeshRenderer;
 
 class G3MAppUserData : public WidgetUserData {
-  
 private:
-  LayerSet* _layerSet;
-  bool _satelliteLayerEnabled;
-  Shape* _plane;
+  LayerSet*       _layerSet;
+  bool            _satelliteLayerEnabled;
+  Shape*          _plane;
   ShapesRenderer* _shapeRenderer;
-  MarksRenderer* _markerRenderer;
-  MeshRenderer* _meshRenderer;
-  
+  MarksRenderer*  _marksRenderer;
+  MeshRenderer*   _meshRenderer;
+
 public:
-  G3MAppUserData() {}
+  G3MAppUserData(LayerSet*       layerSet,
+                 ShapesRenderer* shapeRenderer,
+                 MarksRenderer*  marksRenderer,
+                 MeshRenderer*   meshRenderer) :
+  _layerSet(layerSet),
+  _shapeRenderer(shapeRenderer),
+  _marksRenderer(marksRenderer),
+  _meshRenderer(meshRenderer)
+  {
+  }
+
+  LayerSet* getLayerSet() {
+    return _layerSet;
+  }
+
+  void setSatelliteLayerEnabled(bool satelliteLayerEnabled) {
+    _satelliteLayerEnabled = satelliteLayerEnabled;
+  }
+
+  bool getSatelliteLayerEnabled() const {
+    return _satelliteLayerEnabled;
+  }
+
+  void setPlane(Shape* plane) {
+    _plane = plane;
+  }
+
+  Shape* getPlane() const {
+    return _plane;
+  }
+
+  ShapesRenderer* getShapeRenderer() const {
+    return _shapeRenderer;
+  }
+
+  MarksRenderer* getMarksRenderer() const {
+    return _marksRenderer;
+  }
+
+  MeshRenderer* getMeshRenderer() const {
+    return _meshRenderer;
+  }
   
-  void setLayerSet(LayerSet* layerSet);
-  LayerSet* getLayerSet();
-  
-  void setSatelliteLayerEnabled(bool satelliteLayerEnabled);
-  bool getSatelliteLayerEnabled();
-  
-  void setPlane(Shape* plane);
-  Shape* getPlane();
-  
-  void setShapeRenderer(ShapesRenderer* shapeRenderer);
-  ShapesRenderer* getShapeRenderer();
-  
-  void setMarkerRenderer(MarksRenderer* markerRenderer);
-  MarksRenderer* getMarkerRenderer();
-  
-  void setMeshRenderer(MeshRenderer* meshRenderer);
-  MeshRenderer* getMeshRenderer();
 };

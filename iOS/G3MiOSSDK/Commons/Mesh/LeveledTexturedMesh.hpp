@@ -10,16 +10,11 @@
 #define __G3MiOSSDK__LeveledTexturedMesh__
 
 #include "Mesh.hpp"
-
 #include "TextureMapping.hpp"
-#include "IFloatBuffer.hpp"
-#include "ILogger.hpp"
-
+#include "IGLTextureId.hpp"
+#include "GLState.hpp"
 #include <vector>
 
-#include "IGLTextureId.hpp"
-
-#include "GLState.hpp"
 
 class LazyTextureMappingInitializer {
 public:
@@ -34,6 +29,7 @@ public:
 
   virtual IFloatBuffer* createTextCoords() const = 0;
 };
+
 
 class LazyTextureMapping : public TextureMapping {
 private:
@@ -58,10 +54,11 @@ private:
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
 
-  const bool _transparent;
 
 
 public:
+  const bool _transparent;
+
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      bool ownedTexCoords,
                      bool transparent) :
@@ -101,15 +98,8 @@ public:
     _glTextureId = glTextureId;
   }
 
-  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
-
-
   const TextureIDReference* getGLTextureId() const {
     return _glTextureId;
-  }
-
-  bool isTransparent() const {
-    return _transparent;
   }
 
   void modifyGLState(GLState& state) const;
@@ -159,8 +149,8 @@ public:
 
   bool isTransparent(const G3MRenderContext* rc) const;
 
-  void render(const G3MRenderContext* rc,
-              const GLState* parentGLState) const;
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
 
 };
 

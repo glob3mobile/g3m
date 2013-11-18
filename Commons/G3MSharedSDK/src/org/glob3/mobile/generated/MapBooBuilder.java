@@ -52,7 +52,6 @@ public abstract class MapBooBuilder
     final boolean showStatistics = false;
     long texturePriority = DownloadPriority.HIGHER;
   
-    int TODO_CHECK_MAPBOO_FULLSPHERE;
     final Sector renderedSector = Sector.fullSphere();
   
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
@@ -65,11 +64,14 @@ public abstract class MapBooBuilder
     return result;
   }
 
-  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints()
+  private java.util.ArrayList<ICameraConstrainer> createCameraConstraints(Planet planet, PlanetRenderer planetRenderer)
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
-    SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
-    cameraConstraints.add(scc);
+    //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  
+    final Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(Sector.fullSphere());
+  
+    cameraConstraints.add(new RenderedSectorCameraConstrainer(planetRenderer, initialCameraPosition._height * 1.2));
   
     return cameraConstraints;
   }
@@ -514,14 +516,16 @@ public abstract class MapBooBuilder
         final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
         if (cameraPosition != null)
         {
-          //if (cameraPosition->isAnimated()) {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
-          //}
-          //else {
-          //  _g3mWidget->setCameraPosition( cameraPosition->getPosition() );
-          //  _g3mWidget->setCameraHeading( cameraPosition->getHeading() );
-          //  _g3mWidget->setCameraPitch( cameraPosition->getPitch() );
-          //}
+          if (cameraPosition.isAnimated())
+          {
+            _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          }
+          else
+          {
+            _g3mWidget.setCameraPosition(cameraPosition.getPosition());
+            _g3mWidget.setCameraHeading(cameraPosition.getHeading());
+            _g3mWidget.setCameraPitch(cameraPosition.getPitch());
+          }
         }
       }
     }
@@ -898,13 +902,14 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+    final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
     mainRenderer.addRenderer(planetRenderer);
   
     mainRenderer.addRenderer(getMarksRenderer());
   
-    java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints();
+    java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints(planet, planetRenderer);
   
     GInitializationTask initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
   
@@ -912,9 +917,6 @@ public abstract class MapBooBuilder
   
     ICameraActivityListener cameraActivityListener = null;
   
-    final Planet planet = createPlanet();
-    //  int TODO_VIEWPORT;
-    //  Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Vector2I(1,1), Sector::fullSphere());
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   

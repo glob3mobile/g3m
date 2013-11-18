@@ -156,10 +156,10 @@ public class LeveledTexturedMesh extends Mesh
   
     LazyTextureMapping mapping = getCurrentTextureMapping();
   
-    return (mapping == null) ? false : mapping.isTransparent();
+    return (mapping == null) ? false : mapping._transparent;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentGLState)
+  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)

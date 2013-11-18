@@ -67,8 +67,6 @@ private:
   BoundingVolume* _boundingVolume;
 
   //LOD TEST DATA
-  const Vector2D _renderedVStileSectorRatio;
-
   Vector3D* _cornerNE;
   Vector3D* _cornerNW;
   Vector3D* _cornerSE;
@@ -170,8 +168,6 @@ private:
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
-
-  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
 
 public:
   const Sector    _sector;

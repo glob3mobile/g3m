@@ -27,9 +27,7 @@ public:
   
   virtual ~TextureMapping() {
   }
-  
-  virtual bool isTransparent() const = 0;
-  
+
   virtual void modifyGLState(GLState& state) const = 0;
 };
 
@@ -50,7 +48,7 @@ private:
   MutableVector2D _translation;
   MutableVector2D _scale;
 
-  const bool _isTransparent;
+  const bool _transparent;
 
   void releaseGLTextureId();
 
@@ -59,13 +57,13 @@ public:
   SimpleTextureMapping(const TextureIDReference* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
-                       bool isTransparent) :
+                       bool transparent) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
   _translation(0, 0),
   _scale(1, 1),
   _ownedTexCoords(ownedTexCoords),
-  _isTransparent(isTransparent)
+  _transparent(transparent)
   {
     
   }
@@ -85,17 +83,7 @@ public:
   IFloatBuffer* getTexCoords() const {
     return _texCoords;
   }
-  
-//  GLGlobalState* bind(const G3MRenderContext* rc, const GLGlobalState& parentState, GPUProgramState& progState) const;
-
-  bool isTransparent() const {
-    return _isTransparent;
-  }
-  
-//  void modifyGLGlobalState(GLGlobalState& GLGlobalState) const;
-//  
-//  void modifyGPUProgramState(GPUProgramState& progState) const;
-  
+    
   void modifyGLState(GLState& state) const;
 
 };
