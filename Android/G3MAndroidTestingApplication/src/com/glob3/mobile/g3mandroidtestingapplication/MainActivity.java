@@ -2,11 +2,17 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -29,19 +35,21 @@ public class MainActivity
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.activity_main);
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      //   builder.getPlanetRendererBuilder().setRenderDebug(true);
+      onCreateGolfTic();
 
-      final ShapesRenderer shapesRenderer = new ShapesRenderer();
-      // builder.addRenderer(shapesRenderer);
-
-      final MarksRenderer marksRenderer = new MarksRenderer(true);
-      builder.addRenderer(marksRenderer);
-
-
-      final MeshRenderer meshRenderer = new MeshRenderer();
-      meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
-      builder.addRenderer(meshRenderer);
+      //      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      //      //   builder.getPlanetRendererBuilder().setRenderDebug(true);
+      //
+      //      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      //      // builder.addRenderer(shapesRenderer);
+      //
+      //      final MarksRenderer marksRenderer = new MarksRenderer(true);
+      //      builder.addRenderer(marksRenderer);
+      //
+      //
+      //      final MeshRenderer meshRenderer = new MeshRenderer();
+      //      meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
+      //      builder.addRenderer(meshRenderer);
 
 
       //      final ShapeLoadListener Plistener = new ShapeLoadListener() {
@@ -236,10 +244,73 @@ public class MainActivity
       //      }
 
 
+      //      _g3mWidget = builder.createWidget();
+      //      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      //      _placeHolder.addView(_g3mWidget);
+
+   }
+
+
+   private void onCreateGolfTic() {
+      final float _VerticalExaggeration = 20f;
+      final double DELTA_HEIGHT = -700.905;
+      // final double DELTA_HEIGHT = 0;
+
+
+      final LayerSet layerSet = new LayerSet();
+
+
+      final GoogleLayer satelite = new GoogleLayer("http://khm1.googleapis.com/kh?v=141&hl=en-US", TimeInterval.fromDays(30));
+      layerSet.addLayer(satelite);
+
+
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      //  builder.setPlanet(Planet.createSphericalEarth());
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+
+      builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
+
+
+      final Geodetic2D lower = new Geodetic2D( //
+               Angle.fromDegrees(39.4167667), //
+               Angle.fromDegrees(-6.3833833));
+
+
+      final Geodetic2D upper = new Geodetic2D( //
+               Angle.fromDegrees(39.4292667), //
+               Angle.fromDegrees(-6.3737000));
+
+      final Sector golfSector = new Sector(lower, upper);
+
+      // NROWS          1335
+      // NCOLS          2516
+      //new Vector2I(2735, 1841)
+
+      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///campoGolf-1.bil", false),
+               golfSector, new Vector2I(1841, 2735), DELTA_HEIGHT);
+
+      final ElevationDataProvider demAux = new SingleBillElevationDataProvider(
+               new URL("file:///full-earth-2048x1024.bil", false), golfSector, new Vector2I(2048, 1024), DELTA_HEIGHT);
+
+      builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
+
+      //The sector is shrinked to adjust the projection of
+      builder.setShownSector(golfSector.shrinkedByPercent(0.1f));
+
       _g3mWidget = builder.createWidget();
+
+      // set the initial camera position to be into the valley
+      final Geodetic3D position = Geodetic3D.fromDegrees(39.423, -6.38, 5000);
+      final Angle heading = Angle.fromDegrees(51.146970);
+      final Angle pitch = Angle.fromDegrees(69.137225);
+      _g3mWidget.setCameraPosition(position);
+      _g3mWidget.setCameraHeading(Angle.zero());
+      _g3mWidget.setCameraPitch(Angle.zero());
+
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
-
    }
 
 
