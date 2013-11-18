@@ -18,7 +18,7 @@ varying vec2 TextureCoordOut;
 uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED
 varying float diffuseLightIntensity;
 
-uniform float uAmbientLight;
+uniform vec3 uAmbientLightColor;
 uniform vec3 uDiffuseLightColor;
 
 varying vec3 lightColor;
@@ -36,8 +36,6 @@ void main() {
 
   gl_PointSize = uPointSize;
 
-  vec3 ambientLightColor = vec3(uAmbientLight, uAmbientLight, uAmbientLight);
-
   //Computing Total Light in Vertex
-  lightColor = ambientLightColor + uDiffuseLightColor * diffuseLightIntensity;
+  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;
 }

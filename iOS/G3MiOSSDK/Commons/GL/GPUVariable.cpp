@@ -106,8 +106,8 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return  POINT_SIZE;
   }
 
-  if (name.compare("uAmbientLight") == 0) {
-    return AMBIENT_LIGHT;
+  if (name.compare("uAmbientLightColor") == 0) {
+    return AMBIENT_LIGHT_COLOR;
   }
 
   if (name.compare("uDiffuseLightDirection") == 0) {
@@ -132,10 +132,6 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
 
   if (name.compare("uBillboardPosition") == 0) {
     return  BILLBOARD_POSITION;
-  }
-
-  if (name.compare("uAmbientLightColor") == 0) {
-    return AMBIENT_LIGHT_COLOR;
   }
 
   return UNRECOGNIZED_UNIFORM;

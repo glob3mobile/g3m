@@ -19,7 +19,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   bool transformTC = GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
   GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS);
 
-  bool hasLight = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT);
+  bool hasLight = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT_COLOR);
 
   if (billboard) {
     return getProgram(gl, "Billboard");

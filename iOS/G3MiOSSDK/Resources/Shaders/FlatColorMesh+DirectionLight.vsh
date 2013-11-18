@@ -12,7 +12,7 @@ uniform mat4 uModel;
 
 uniform float uPointSize;
 
-uniform float uAmbientLight;
+uniform vec3 uAmbientLightColor;
 uniform vec3 uDiffuseLightColor;
 
 uniform vec3 uDiffuseLightDirection; //We must normalize
@@ -29,8 +29,6 @@ void main() {
 
   gl_PointSize = uPointSize;
 
-  vec3 ambientLightColor = vec3(uAmbientLight, uAmbientLight, uAmbientLight);
-
   //Computing Total Light in Vertex
-  lightColor = ambientLightColor + uDiffuseLightColor * diffuseLightIntensity;
+  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;
 }

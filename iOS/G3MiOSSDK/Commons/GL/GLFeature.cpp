@@ -221,8 +221,8 @@ DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDir
                                                  const Color& diffuseLightColor,
                                                  const Color& ambientLightColor):
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
-  _values.addUniformValue(AMBIENT_LIGHT,
-                          new GPUUniformValueFloat(ambientLightColor._red), false);
+  _values.addUniformValue(AMBIENT_LIGHT_COLOR,
+                          new GPUUniformValueVec3Float(ambientLightColor), false);
 
   Vector3D dirN = diffuseLightDirection.normalized();
 
