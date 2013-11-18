@@ -2583,6 +2583,54 @@ public:
         }
       }
 
+      if (true) { //Changing elevation
+
+        int time = 15; //SECS
+
+        class ElevationTask: public GTask{
+          G3MWidget_iOS* _iosWidget;
+
+          ElevationDataProvider* _elevationDataProvider1;
+
+          ElevationDataProvider* _elevationDataProvider2;
+          int _nExec;
+        public:
+          ElevationTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {
+
+            _nExec = 0;
+
+            _elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                        Sector::fullSphere(),
+                                                                        Vector2I(2048, 1024));
+
+            _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                                        Sector::fromDegrees(
+                                                                                            39.4642996294239623,
+                                                                                            -6.3829977122432933,
+                                                                                            39.4829891936013553,
+                                                                                            -6.3645288909498845
+                                                                                            ),
+                                                                        Vector2I(2008, 2032),
+                                                                        0);
+
+          }
+
+          void run(const G3MContext* context) {
+
+            if (_nExec > 2){
+
+            if (rand() % 2 == 0){
+              [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, true);
+            } else{
+              [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);
+            }
+            }
+            _nExec++;
+          }
+        };
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new ElevationTask(_iosWidget));
+      }
+
 
 
       if (false) { //Incomplete world
