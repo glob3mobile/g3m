@@ -32,6 +32,15 @@
 		CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */; };
 		CFE3B3D7183AD2CB0078C796 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3D6183AD2CB0078C796 /* A320.bson */; };
 		CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3D8183AD2D40078C796 /* textures-A320 */; };
+		CFE3B3DC183AD38D0078C796 /* G3MCameraDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3DA183AD38D0078C796 /* G3MCameraDemoScene.cpp */; };
+		CFE3B3DE183ADAA00078C796 /* sphinx.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3DD183ADAA00078C796 /* sphinx.bson */; };
+		CFE3B3E0183ADAAB0078C796 /* eifeltower.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3DF183ADAAB0078C796 /* eifeltower.bson */; };
+		CFE3B3E2183ADAB80078C796 /* arcdeTriomphe.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */; };
+		CFE3B3E5183ADAFF0078C796 /* arc in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E3183ADAFF0078C796 /* arc */; };
+		CFE3B3E6183ADAFF0078C796 /* eifel in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E4183ADAFF0078C796 /* eifel */; };
+		CFE3B3EA183ADB2D0078C796 /* texture0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E7183ADB2D0078C796 /* texture0.jpg */; };
+		CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E8183ADB2D0078C796 /* texture0.png */; };
+		CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
@@ -62,7 +71,6 @@
 		E780A3D016D29EA5000F0395 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3CA16D29EA5000F0395 /* play.png */; };
 		E780A3D116D29EA5000F0395 /* satellite-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3CB16D29EA5000F0395 /* satellite-on-96x48.png */; };
 		E780A3D216D29EA5000F0395 /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3CC16D29EA5000F0395 /* stop.png */; };
-		E780A3DA16D29FAA000F0395 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E780A3D416D29FAA000F0395 /* A320.bson */; };
 		E780A3DB16D29FAA000F0395 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = E780A3D516D29FAA000F0395 /* A320.json */; };
 		E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3D716D29FAA000F0395 /* A320-NWA.png */; };
 		E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3D816D29FAA000F0395 /* A321-House.png */; };
@@ -153,6 +161,16 @@
 		CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DModelDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3D6183AD2CB0078C796 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
 		CFE3B3D8183AD2D40078C796 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
+		CFE3B3DA183AD38D0078C796 /* G3MCameraDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCameraDemoScene.cpp; sourceTree = "<group>"; };
+		CFE3B3DB183AD38D0078C796 /* G3MCameraDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCameraDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3DD183ADAA00078C796 /* sphinx.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = sphinx.bson; sourceTree = "<group>"; };
+		CFE3B3DF183ADAAB0078C796 /* eifeltower.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = eifeltower.bson; sourceTree = "<group>"; };
+		CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = arcdeTriomphe.bson; sourceTree = "<group>"; };
+		CFE3B3E3183ADAFF0078C796 /* arc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = arc; sourceTree = "<group>"; };
+		CFE3B3E4183ADAFF0078C796 /* eifel */ = {isa = PBXFileReference; lastKnownFileType = folder; path = eifel; sourceTree = "<group>"; };
+		CFE3B3E7183ADB2D0078C796 /* texture0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = texture0.jpg; sourceTree = "<group>"; };
+		CFE3B3E8183ADB2D0078C796 /* texture0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture0.png; sourceTree = "<group>"; };
+		CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = planeDiffuse.png; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -261,6 +279,8 @@
 				CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */,
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
 				CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */,
+				CFE3B3DA183AD38D0078C796 /* G3MCameraDemoScene.cpp */,
+				CFE3B3DB183AD38D0078C796 /* G3MCameraDemoScene.hpp */,
 				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */,
 				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
 				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
@@ -433,19 +453,22 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CFE3B3D8183AD2D40078C796 /* textures-A320 */,
-				CFE3B3D6183AD2CB0078C796 /* A320.bson */,
+				CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */,
+				CFE3B3DF183ADAAB0078C796 /* eifeltower.bson */,
+				CFE3B3DD183ADAA00078C796 /* sphinx.bson */,
 				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
-				CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */,
+				E780A3D316D29FAA000F0395 /* 3DModels */,
+				CFE3B3D6183AD2CB0078C796 /* A320.bson */,
+				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
+				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
+				E7D1B7FC16D27C4300AF47C1 /* Images */,
 				CF6920C818394F56007409D8 /* restaurant-48x48.png */,
 				CF6920C618394E44007409D8 /* restaurant-96x96.png */,
-				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
 				CF6920C118394DB6007409D8 /* restaurants_monaco.geojson */,
 				CF6920C218394DB6007409D8 /* roads_monaco.geojson */,
 				CFF64D5E1832A1A8006ABFF6 /* Shaders */,
-				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
-				E780A3D316D29FAA000F0395 /* 3DModels */,
-				E7D1B7FC16D27C4300AF47C1 /* Images */,
+				CFE3B3D8183AD2D40078C796 /* textures-A320 */,
+				CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -453,6 +476,11 @@
 		E7D1B7FC16D27C4300AF47C1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CFE3B3E7183ADB2D0078C796 /* texture0.jpg */,
+				CFE3B3E8183ADB2D0078C796 /* texture0.png */,
+				CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */,
+				CFE3B3E3183ADAFF0078C796 /* arc */,
+				CFE3B3E4183ADAFF0078C796 /* eifel */,
 				E7D1B7FD16D27C4300AF47C1 /* g3m-48.png */,
 				E780A3C716D29EA5000F0395 /* map-on-96x48.png */,
 				E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */,
@@ -541,6 +569,8 @@
 				E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */,
 				CFF64D671832A1A8006ABFF6 /* ColorMesh.fsh in Resources */,
 				E7D1B62216D2436700AF47C1 /* MainStoryboard.storyboard in Resources */,
+				CFE3B3EA183ADB2D0078C796 /* texture0.jpg in Resources */,
+				CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */,
 				CFF64D701832A1A8006ABFF6 /* Default.fsh in Resources */,
 				CFF64D711832A1A8006ABFF6 /* Shader.fsh in Resources */,
 				CFF64D661832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.vsh in Resources */,
@@ -551,11 +581,14 @@
 				CFF64D721832A1A8006ABFF6 /* Shader.vsh in Resources */,
 				CFF64D621832A1A8006ABFF6 /* TexturedMesh+DirectionLight.vsh in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
+				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
+				CFE3B3DE183ADAA00078C796 /* sphinx.bson in Resources */,
 				E7D1B64016D2462B00AF47C1 /* Icon-72.png in Resources */,
 				CFF64D6F1832A1A8006ABFF6 /* Default.vsh in Resources */,
 				E7D1B64116D2462B00AF47C1 /* Icon-72@2x.png in Resources */,
 				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
+				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				CFF64D681832A1A8006ABFF6 /* TexturedMesh.fsh in Resources */,
@@ -565,13 +598,16 @@
 				CFF64D651832A1A8006ABFF6 /* TransformedTexCoorTexturedMesh.fsh in Resources */,
 				E7D1B64516D2462B00AF47C1 /* Icon-Small@2x.png in Resources */,
 				E7D1B64616D2462B00AF47C1 /* Icon.png in Resources */,
+				CFE3B3E5183ADAFF0078C796 /* arc in Resources */,
 				E7D1B64716D2462B00AF47C1 /* Icon@2x.png in Resources */,
 				E7D1B64816D2462B00AF47C1 /* iTunesArtwork in Resources */,
 				E7D1B64916D2462B00AF47C1 /* iTunesArtwork@2x in Resources */,
 				E7D1B7FF16D27C4300AF47C1 /* g3m-48.png in Resources */,
+				CFE3B3E0183ADAAB0078C796 /* eifeltower.bson in Resources */,
 				CFF64D641832A1A8006ABFF6 /* NoColorMesh.vsh in Resources */,
 				E7D1B80016D27C4300AF47C1 /* selector-background.png in Resources */,
 				CFF64D6E1832A1A8006ABFF6 /* Billboard.vsh in Resources */,
+				CFE3B3E2183ADAB80078C796 /* arcdeTriomphe.bson in Resources */,
 				E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */,
 				E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */,
 				CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */,
@@ -584,7 +620,6 @@
 				CFF64D6A1832A1A8006ABFF6 /* TexturedMesh.vsh in Resources */,
 				CFF64D6B1832A1A8006ABFF6 /* FlatColorMesh.fsh in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
-				E780A3DA16D29FAA000F0395 /* A320.bson in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
@@ -619,6 +654,7 @@
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
 				E7D1B80816D27DC600AF47C1 /* G3MWebViewController.mm in Sources */,
+				CFE3B3DC183AD38D0078C796 /* G3MCameraDemoScene.cpp in Sources */,
 				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
