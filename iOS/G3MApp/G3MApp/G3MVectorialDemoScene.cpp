@@ -131,7 +131,7 @@ public:
 };
 
 
-void G3MVectorialDemoScene::rawActivate() {
+void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 

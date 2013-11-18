@@ -17,7 +17,7 @@ class G3MDemoScene;
 class LayerSet;
 class GEORenderer;
 class G3MWidget;
-
+class G3MContext;
 
 class G3MDemoModel {
 private:
@@ -28,8 +28,10 @@ private:
   LayerSet*       _layerSet;
   GEORenderer*    _geoRenderer;
 
-  G3MDemoScene* _selectedScene;
+  G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
+
+  const G3MContext* _context;
 
 public:
 
@@ -37,7 +39,9 @@ public:
                LayerSet* layerSet,
                GEORenderer* geoRenderer);
 
-  void setG3MWidget(G3MWidget* g3mWidget);
+  void initializeG3MWidget(G3MWidget* g3mWidget);
+
+  void initializeG3MContext(const G3MContext* context);
 
   G3MWidget* getG3MWidget() const {
     return _g3mWidget;

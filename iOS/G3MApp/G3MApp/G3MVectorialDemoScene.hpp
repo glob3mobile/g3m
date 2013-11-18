@@ -13,7 +13,7 @@
 
 class G3MVectorialDemoScene : public G3MDemoScene {
 protected:
-  void rawActivate();
+  void rawActivate(const G3MContext* context);
 
   void rawSelectOption(const std::string& option,
                        int optionIndex) {

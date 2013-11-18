@@ -10,12 +10,12 @@
 
 #include "G3MDemoModel.hpp"
 
-void G3MDemoScene::deactivate() {
+void G3MDemoScene::deactivate(const G3MContext* context) {
   _model->reset();
 }
 
-void G3MDemoScene::activate() {
-  rawActivate();
+void G3MDemoScene::activate(const G3MContext* context) {
+  rawActivate(context);
 
   if (_options.size() > 0) {
     selectOption(_options[0]);

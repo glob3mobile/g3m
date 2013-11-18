@@ -14,7 +14,7 @@
 #include "G3MDemoModel.hpp"
 
 
-void G3MMarkersDemoScene::rawActivate() {
+void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 

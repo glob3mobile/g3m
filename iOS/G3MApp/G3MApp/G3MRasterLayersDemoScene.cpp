@@ -141,7 +141,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
 }
 
 
-void G3MRasterLayersDemoScene::rawActivate() {
+void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   createLayerSet( getModel()->getLayerSet() );
 }
 

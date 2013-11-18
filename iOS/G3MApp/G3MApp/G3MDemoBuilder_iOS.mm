@@ -24,5 +24,5 @@ void G3MDemoBuilder_iOS::initializeWidget() {
   build();
   _builder->initializeWidget();
 
-  getModel()->setG3MWidget( _builder->getNativeWidget().widget );
+  getModel()->initializeG3MWidget( _builder->getNativeWidget().widget );
 }

@@ -18,7 +18,7 @@ private:
   void createLayerSet(LayerSet* layerSet);
 
 protected:
-  void rawActivate();
+  void rawActivate(const G3MContext* context);
 
   void rawSelectOption(const std::string& option,
                        int optionIndex);

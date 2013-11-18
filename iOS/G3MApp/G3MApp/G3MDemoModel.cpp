@@ -31,7 +31,8 @@ _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
 _geoRenderer(geoRenderer),
-_selectedScene(NULL)
+_selectedScene(NULL),
+_context(NULL)
 {
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
@@ -41,13 +42,20 @@ _selectedScene(NULL)
   //  _scenes.push_back( new G3MDemoScene("Point clouds") );
   //  _scenes.push_back( new G3MDemoScene("3D Model") );
   //  _scenes.push_back( new G3MDemoScene("Camera") );
+}
+
+void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
+  if (_context != NULL) {
+    ERROR("G3MContext already initialized");
+  }
+  _context = context;
 
   selectScene(_scenes[0]);
 }
 
-void G3MDemoModel::setG3MWidget(G3MWidget* g3mWidget) {
+void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
   if (_g3mWidget != NULL) {
-    ERROR("G3MWidget already set");
+    ERROR("G3MWidget already initialized");
   }
   _g3mWidget = g3mWidget;
 }
@@ -87,17 +95,21 @@ void G3MDemoModel::selectScene(const std::string& sceneName) {
 }
 
 void G3MDemoModel::selectScene(G3MDemoScene* scene) {
+  if (_context == NULL) {
+    ERROR("G3MContext not initialized");
+  }
+
   if ((scene != NULL) &&
       (scene != _selectedScene)) {
 
     if (_selectedScene != NULL) {
-      _selectedScene->deactivate();
+      _selectedScene->deactivate(_context);
     }
 
     ILogger::instance()->logInfo("Selected scene \"%s\"", scene->getName().c_str());
 
     _selectedScene = scene;
-    _selectedScene->activate();
+    _selectedScene->activate(_context);
 
     if (_listener != NULL) {
       _listener->onChangedScene(_selectedScene);
@@ -114,5 +126,5 @@ void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
   if (_listener != NULL) {
     _listener->onChangeSceneOption(scene, option, optionIndex);
   }
-
+  
 }

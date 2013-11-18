@@ -13,6 +13,8 @@
 #include <vector>
 
 class G3MDemoModel;
+class G3MContext;
+
 
 class G3MDemoScene {
 private:
@@ -33,7 +35,7 @@ protected:
   {
   }
 
-  virtual void rawActivate() = 0;
+  virtual void rawActivate(const G3MContext* context) = 0;
 
   virtual void rawSelectOption(const std::string& option,
                                int optionIndex) = 0;
@@ -66,9 +68,9 @@ public:
 
   void selectOption(const std::string& option);
 
-  void activate();
+  void activate(const G3MContext* context);
 
-  virtual void deactivate();
+  virtual void deactivate(const G3MContext* context);
   
 };
 
