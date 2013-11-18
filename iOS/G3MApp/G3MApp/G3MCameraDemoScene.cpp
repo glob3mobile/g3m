@@ -13,6 +13,8 @@
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/SGShape.hpp>
+#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/LayerSet.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -76,7 +78,15 @@ public:
 };
 
 void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
-  ShapesRenderer* shapesRenderer = getModel()->getShapesRenderer();
+  G3MDemoModel*   model          = getModel();
+  ShapesRenderer* shapesRenderer = model->getShapesRenderer();
+
+  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       2);
+  model->getLayerSet()->addLayer(layer);
+
 
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///images/",
@@ -88,7 +98,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
                                   new ThePhynxShapeLoadListener(this));
 
   shapesRenderer->loadBSONSceneJS(URL("file:///eifeltower.bson"),
-                                  "file:///images/eifel/",
+                                  "file:///eifel/",
                                   true, // isTransparent
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 51, 29.06),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 40.48),
@@ -97,7 +107,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
                                   new TheEiffelTowerShapeLoadListener(this));
 
   shapesRenderer->loadBSONSceneJS(URL("file:///arcdeTriomphe.bson"),
-                                  "file:///images/arc/",
+                                  "file:///arc/",
                                   false,
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 52, 25.58),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 42.12),
