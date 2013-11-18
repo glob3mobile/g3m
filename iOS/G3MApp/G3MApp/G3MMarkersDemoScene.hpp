@@ -11,7 +11,12 @@
 
 #include "G3MDemoScene.hpp"
 
+class Mark;
+
 class G3MMarkersDemoScene : public G3MDemoScene {
+private:
+  long long _requestId;
+
 protected:
   void rawActivate(const G3MContext* context);
 
@@ -21,10 +26,16 @@ protected:
 public:
 
   G3MMarkersDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("Markers", model)
+  G3MDemoScene("Markers", model),
+  _requestId(-1)
   {
   }
-  
+
+  void deactivate(const G3MContext* context);
+
+
+  void addMark(Mark* mark);
+
 };
 
 #endif

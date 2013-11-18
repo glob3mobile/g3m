@@ -61,17 +61,36 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
+  _g3mWidget->stopCameraAnimation();
+
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 
   _g3mWidget->setShownSector( Sector::fullSphere() );
 
   _layerSet->removeAllLayers(true);
 
-  _geoRenderer->getGeoTileRasterizer()->clear();
-  _geoRenderer->getMarksRenderer()->removeAllMarks();
-  _geoRenderer->getMeshRenderer()->clearMeshes();
-  _geoRenderer->getShapesRenderer()->removeAllShapes(true);
+  getGEOTileRasterizer()->clear();
+  getMarksRenderer()->removeAllMarks();
+  getMeshRenderer()->clearMeshes();
+  getShapesRenderer()->removeAllShapes(true);
 }
+
+GEOTileRasterizer* G3MDemoModel::getGEOTileRasterizer() const {
+  return _geoRenderer->getGEOTileRasterizer();
+}
+
+MarksRenderer* G3MDemoModel::getMarksRenderer() const {
+  return _geoRenderer->getMarksRenderer();
+}
+
+MeshRenderer* G3MDemoModel::getMeshRenderer() const {
+  return _geoRenderer->getMeshRenderer();
+}
+
+ShapesRenderer* G3MDemoModel::getShapesRenderer() const {
+  return _geoRenderer->getShapesRenderer();
+}
+
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {
   const int scenesSize = _scenes.size();

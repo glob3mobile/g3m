@@ -18,6 +18,11 @@ class LayerSet;
 class GEORenderer;
 class G3MWidget;
 class G3MContext;
+class GEOTileRasterizer;
+class MarksRenderer;
+class MeshRenderer;
+class ShapesRenderer;
+
 
 class G3MDemoModel {
 private:
@@ -54,6 +59,15 @@ public:
   GEORenderer* getGEORenderer() const {
     return _geoRenderer;
   }
+
+  GEOTileRasterizer* getGEOTileRasterizer() const;
+
+  MarksRenderer* getMarksRenderer() const;
+
+  MeshRenderer* getMeshRenderer() const;
+
+  ShapesRenderer* getShapesRenderer() const;
+
 
   int getScenesCount() const {
     return _scenes.size();
