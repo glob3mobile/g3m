@@ -433,15 +433,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const double longestWidthSquared  = (northArcDistSquared > southArcDistSquared) ? northArcDistSquared : southArcDistSquared;
   const double longestHeightSquared = (westArcDistSquared  > eastArcDistSquared)  ? westArcDistSquared  : eastArcDistSquared;
 
-  _lastLodTest = ((longestWidthSquared  <= texWidthSquared) &&
-                  (longestHeightSquared <= texHeightSquared));
+  //Testing sides separately
+//  _lastLodTest = ((longestWidthSquared  <= texWidthSquared) &&
+//                  (longestHeightSquared <= texHeightSquared));
 
-//  if (_lastLodTest){
-//    printf("LD: %f, %f, %f, %f\n", sqrt(southLinearDistSquared),
-//           sqrt(eastLinearDistSquared),
-//           sqrt(northLinearDistSquared),
-//           sqrt(westLinearDistSquared));
-//  }
+  //Testing Area
+  _lastLodTest = ((longestWidthSquared * longestHeightSquared) <= (texHeightSquared*texWidthSquared));
 
   return _lastLodTest;
 }
