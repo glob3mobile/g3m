@@ -24,7 +24,7 @@
 #include "G3MVectorialDemoScene.hpp"
 #include "G3MMarkersDemoScene.hpp"
 #include "G3M3DSymbologyDemoScene.hpp"
-
+#include "G3MPointCloudDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
@@ -41,7 +41,7 @@ _context(NULL)
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarkersDemoScene(this) );
   _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
-  //  _scenes.push_back( new G3MDemoScene("Point clouds") );
+  _scenes.push_back( new G3MPointCloudDemoScene(this) );
   //  _scenes.push_back( new G3MDemoScene("3D Model") );
   //  _scenes.push_back( new G3MDemoScene("Camera") );
 }

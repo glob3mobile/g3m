@@ -27,6 +27,8 @@
 		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
 		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
+		CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */; };
+		CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
@@ -141,6 +143,9 @@
 		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DSymbologyDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uscitieslite.geojson; sourceTree = "<group>"; };
+		CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MPointCloudDemoScene.cpp; sourceTree = "<group>"; };
+		CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MPointCloudDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = 18STJ7435_2000_4326.bson; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -265,6 +270,8 @@
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
 				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
+				CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */,
+				CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -417,6 +424,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
 				CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */,
 				CF6920C818394F56007409D8 /* restaurant-48x48.png */,
 				CF6920C618394E44007409D8 /* restaurant-96x96.png */,
@@ -514,6 +522,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */,
 				CFF64D631832A1A8006ABFF6 /* NoColorMesh.fsh in Resources */,
 				E7D1B61316D2436700AF47C1 /* InfoPlist.strings in Resources */,
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
@@ -586,6 +595,7 @@
 			files = (
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */,
+				CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
