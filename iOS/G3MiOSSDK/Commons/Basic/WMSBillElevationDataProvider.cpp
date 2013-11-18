@@ -133,7 +133,7 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
   isb->addString(",");
   isb->addDouble(sector._upper._longitude._degrees);
 
-int TODO_WMS_1_1_1;
+#warning TODO_WMS_1_1_1;
 //  isb->addDouble(sector._lower._longitude._degrees);
 //  isb->addString(",");
 //  isb->addDouble(sector._lower._latitude._degrees);

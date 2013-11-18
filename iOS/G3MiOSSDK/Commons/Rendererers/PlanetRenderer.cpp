@@ -419,7 +419,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   }
   
   if (!_layerSet->isReady()) {
-    int __TODO_Layer_error;
+#warning __TODO_Layer_error;
     return RenderState::busy();
   }
   
