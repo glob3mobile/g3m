@@ -19,7 +19,7 @@ uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED
 varying float diffuseLightIntensity;
 
 uniform float uAmbientLight;
-uniform vec4 uDiffuseLightColor;
+uniform vec3 uDiffuseLightColor;
 
 varying vec3 lightColor;
 
@@ -39,5 +39,5 @@ void main() {
   vec3 ambientLightColor = vec3(uAmbientLight, uAmbientLight, uAmbientLight);
 
   //Computing Total Light in Vertex
-  lightColor = ambientLightColor + uDiffuseLightColor.rgb * diffuseLightIntensity;
+  lightColor = ambientLightColor + uDiffuseLightColor * diffuseLightIntensity;
 }

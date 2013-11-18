@@ -234,7 +234,7 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
                           _lightDirectionUniformValue,
                           false);
   _values.addUniformValue(DIFFUSE_LIGHT_COLOR,
-                          new GPUUniformValueVec4Float(diffuseLightColor),
+                          new GPUUniformValueVec3Float(diffuseLightColor),
                           false);
 
 }
