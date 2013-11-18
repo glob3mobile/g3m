@@ -506,6 +506,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
+                                              true,
                                               verticalExaggeration,
                                               texturizer,
                                               tileRasterizer,

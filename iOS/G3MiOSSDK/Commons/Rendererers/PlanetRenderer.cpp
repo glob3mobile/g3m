@@ -111,6 +111,7 @@ public:
 
 PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                ElevationDataProvider*       elevationDataProvider,
+                               bool                         ownsElevationDataProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                TileRasterizer*              tileRasterizer,
@@ -121,6 +122,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const Sector&                renderedSector) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
+_ownsElevationDataProvider(ownsElevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _tileRasterizer(tileRasterizer),
@@ -807,5 +809,22 @@ void PlanetRenderer::setRenderedSector(const Sector& sector) {
 
   _tessellator->setRenderedSector(sector);
 
+  changed();
+}
+
+void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned) {
+
+  if (_ownsElevationDataProvider){
+    delete _elevationDataProvider;
+  }
+
+  _ownsElevationDataProvider = owned;
+  _elevationDataProvider = elevationDataProvider;
+
+  changed();
+}
+
+void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration){
+  _verticalExaggeration = verticalExaggeration;
   changed();
 }

@@ -305,6 +305,7 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
 PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
+                                                      true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
                                                       getTileRasterizer(),
