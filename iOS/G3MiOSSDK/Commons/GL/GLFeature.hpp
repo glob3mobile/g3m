@@ -324,7 +324,7 @@ class DirectionLightGLFeature: public GLFeature {
   GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
 
 public:
-  DirectionLightGLFeature(const Vector3D& dir,
+  DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
                           const Color& diffuseLightColor,
                           const Color& ambientLightColor);
 

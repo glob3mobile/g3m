@@ -195,6 +195,14 @@ protected:
   float _x, _y, _z;
 public:
 
+  GPUUniformValueVec3Float(const Color& color) :
+  GPUUniformValue(GLType::glVec3Float()),
+  _x(color._red),
+  _y(color._green),
+  _z(color._blue)
+  {
+  }
+
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
 
