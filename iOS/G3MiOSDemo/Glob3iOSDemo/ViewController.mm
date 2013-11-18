@@ -2769,7 +2769,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
 //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2826,7 +2826,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
