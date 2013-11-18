@@ -11,6 +11,7 @@
 
 class GLState;
 class G3MRenderContext;
+#include "Color.hpp"
 
 class SceneLighting{
 public:
@@ -26,7 +27,15 @@ public:
 };
 
 class CameraFocusSceneLighting: public SceneLighting {
+
+  Color _ambientColor;
+  Color _diffuseColor;
+
 public:
+
+  CameraFocusSceneLighting(const Color& ambient, const Color& diffuse);
+
+  ~CameraFocusSceneLighting(){}
 
   void modifyGLState(GLState* glState, const G3MRenderContext* rc);
 

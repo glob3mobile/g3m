@@ -22,7 +22,7 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
                                                       Color::yellow(),
-                                                      (float)0.4),
+                                                      Color::white()),
                           false);
   }
   /* //Add this to obtain a rotating "sun"
@@ -44,6 +44,13 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
 
 }
 
+CameraFocusSceneLighting::CameraFocusSceneLighting(const Color& ambient, const Color& diffuse):
+_ambientColor(ambient),
+_diffuseColor(diffuse)
+{
+
+}
+
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
 
   const Vector3D cameraVector = rc->getCurrentCamera()->getViewDirection().times(-1);
@@ -57,8 +64,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
-                                                      Color::white(),
-                                                      (float)0.4),
+                                                      _diffuseColor,
+                                                      _ambientColor),
                           false);
   }
   else{
