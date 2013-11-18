@@ -69,10 +69,7 @@ public class Tile
 
   private BoundingVolume _boundingVolume;
 
-<<<<<<< HEAD
   //LOD TEST DATA
-  private final Vector2D _renderedVStileSectorRatio ;
-
   private Vector3D _cornerNE;
   private Vector3D _cornerNW;
   private Vector3D _cornerSE;
@@ -152,8 +149,6 @@ public class Tile
   }
   //////////////////////////////////////////
 
-=======
->>>>>>> purgatory
   private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
   
@@ -308,17 +303,12 @@ public class Tile
       _lodTimer.start();
     }
   
-<<<<<<< HEAD
     final Planet planet = rc.getPlanet();
   
     if ((_northArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {
       prepareTestLODData(planet);
     }
-=======
-    final int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
-    final int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
->>>>>>> purgatory
   
     final Camera camera = rc.getCurrentCamera();
     final Vector2F pnw = camera.point2Pixel(_cornerNW);
@@ -339,14 +329,12 @@ public class Tile
     final double longestWidthSquared = (northArcDistSquared > southArcDistSquared) ? northArcDistSquared : southArcDistSquared;
     final double longestHeightSquared = (westArcDistSquared > eastArcDistSquared) ? westArcDistSquared : eastArcDistSquared;
   
-    _lastLodTest = ((longestWidthSquared <= texWidthSquared) && (longestHeightSquared <= texHeightSquared));
+    //Testing sides separately
+  //  _lastLodTest = ((longestWidthSquared  <= texWidthSquared) &&
+  //                  (longestHeightSquared <= texHeightSquared));
   
-  //  if (_lastLodTest){
-  //    printf("LD: %f, %f, %f, %f\n", sqrt(southLinearDistSquared),
-  //           sqrt(eastLinearDistSquared),
-  //           sqrt(northLinearDistSquared),
-  //           sqrt(westLinearDistSquared));
-  //  }
+    //Testing Area
+    _lastLodTest = ((longestWidthSquared * longestHeightSquared) <= (texHeightSquared *texWidthSquared));
   
     return _lastLodTest;
   }
@@ -574,8 +562,6 @@ public class Tile
     return _boundingVolume;
   }
 
-//  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
-
   public final Sector _sector ;
   public final int _level;
   public final int _row;
@@ -611,8 +597,6 @@ public class Tile
      _lodTimer = null;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
-<<<<<<< HEAD
-     _renderedVStileSectorRatio = new Vector2D(getRenderedVSTileSectorsRatio(planetRenderer));
      _cornerNE = null;
      _cornerNW = null;
      _cornerSE = null;
@@ -621,8 +605,6 @@ public class Tile
      _eastArcSegmentRatioSquared = 0;
      _westArcSegmentRatioSquared = 0;
      _southArcSegmentRatioSquared = 0;
-=======
->>>>>>> purgatory
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -1182,15 +1164,3 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
 
-//const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
-//  const Sector* renderedSector = pr->getRenderedSector();
-//  if (renderedSector != NULL){
-//    if (!renderedSector->fullContains(_sector)) {
-//      Sector meshSector = renderedSector->intersection(_sector);
-//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-//      return Vector2D(rx,ry);
-//    }
-//  }
-//  return Vector2D(1.0,1.0);
-//}
