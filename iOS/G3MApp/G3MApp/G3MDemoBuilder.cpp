@@ -49,28 +49,6 @@ void G3MDemoBuilder::build() {
 
   GEORenderer* geoRenderer = builder->createGEORenderer(NULL);
 
-  //  ShapesRenderer* shapeRenderer = new ShapesRenderer();
-  //  shapeRenderer->setEnable(false);
-  //  builder.addRenderer(shapeRenderer);
-  //
-  //  MarksRenderer* marksRenderer = G3MMarksRenderer::createMarksRenderer(self);
-  //  marksRenderer->setEnable(false);
-  //  builder.addRenderer(marksRenderer);
-  //
-  //  MeshRenderer* meshRenderer = G3MMeshRenderer::createMeshRenderer(builder.getPlanet());
-  //  meshRenderer->setEnable(false);
-  //  builder.addRenderer(meshRenderer);
-  //
-  //  G3MAppUserData* userData = new G3MAppUserData(layerSet,
-  //                                                shapeRenderer,
-  //                                                marksRenderer,
-  //                                                meshRenderer);
-  //  userData->setSatelliteLayerEnabled(true);
-  //  userData->setLayerSet([self createLayerSet: userData->getSatelliteLayerEnabled()]);
-  //  userData->setMarksRenderer(marksRenderer);
-  //  userData->setShapeRenderer(shapeRenderer);
-  //  userData->setMeshRenderer(meshRenderer);
-
   // Setup the builder
   //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
   //  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);

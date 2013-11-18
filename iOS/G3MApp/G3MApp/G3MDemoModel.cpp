@@ -22,7 +22,7 @@
 #include "G3MDemoListener.hpp"
 #include "G3MRasterLayersDemoScene.hpp"
 #include "G3MVectorialDemoScene.hpp"
-
+#include "G3MMarkersDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
@@ -36,7 +36,7 @@ _selectedScene(NULL)
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
-  //  _scenes.push_back( new G3MDemoScene("Markers") );
+  _scenes.push_back( new G3MMarkersDemoScene(this) );
   //  _scenes.push_back( new G3MDemoScene("3D Symbology") );
   //  _scenes.push_back( new G3MDemoScene("Point clouds") );
   //  _scenes.push_back( new G3MDemoScene("3D Model") );
