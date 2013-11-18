@@ -13,15 +13,15 @@ uniform mat4 uModel;
 uniform float uPointSize;
 
 uniform float uAmbientLight;
-uniform vec4 uLightColor;
+uniform vec4 uDiffuseLightColor;
 
-uniform vec3 uLightDirection; //We must normalize
+uniform vec3 uDiffuseLightDirection; //We must normalize
 varying vec4 lightColor;
 
 void main() {
 
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
-  vec3 lightDirNormalized = normalize( uLightDirection );
+  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );
   
   float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);
 
@@ -30,5 +30,5 @@ void main() {
   gl_PointSize = uPointSize;
 
   //Computing Total Light in Vertex
-  lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uLightColor * diffuseLightIntensity;
+  lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uDiffuseLightColor * diffuseLightIntensity;
 }
