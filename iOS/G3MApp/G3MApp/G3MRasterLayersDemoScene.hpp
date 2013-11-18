@@ -29,6 +29,15 @@ public:
   {
     _options.push_back("MapBox OSM");
     _options.push_back("Open Street Map");
+    _options.push_back("MapBox Terrain");
+    _options.push_back("MapBox Aerial");
+    _options.push_back("CartoDB Meteorites");
+    _options.push_back("MapQuest Aerial");
+    _options.push_back("MapQuest OSM");
+    _options.push_back("WMS Nasa Blue Marble");
+//    _options.push_back("ESRI ArcGis Online");
+    _options.push_back("Bing Aerial");
+    _options.push_back("Bing Aerial with Labels");
   }
 
 };

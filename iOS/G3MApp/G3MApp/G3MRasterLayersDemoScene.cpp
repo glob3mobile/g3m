@@ -18,6 +18,7 @@
 #include <G3MiOSSDK/OSMLayer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
 
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
@@ -146,5 +147,50 @@ void G3MRasterLayersDemoScene::rawActivate() {
 
 void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
                                                int optionIndex) {
-#warning Diego at work!
+  LayerSet* layerSet = getModel()->getLayerSet();
+  layerSet->disableAllLayers();
+
+  if (option == "MapBox OSM") {
+    layerSet->getLayerByTitle("Map Box OSM")->setEnable(true);
+  }
+  else if (option == "Open Street Map") {
+    layerSet->getLayerByTitle("Open Street Map")->setEnable(true);
+  }
+  else if (option == "MapBox Terrain") {
+    layerSet->getLayerByTitle("Map Box Terrain")->setEnable(true);
+  }
+  else if (option == "MapBox Aerial") {
+    layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
+  }
+  else if (option == "CartoDB Meteorites") {
+    layerSet->getLayerByTitle("MapQuest OSM")->setEnable(true);
+    layerSet->getLayerByTitle("CartoDB Meteorites")->setEnable(true);
+  }
+  else if (option == "MapQuest Aerial") {
+    layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
+  }
+  else if (option == "MapQuest OSM") {
+    layerSet->getLayerByTitle("MapQuest OSM")->setEnable(true);
+  }
+  else if (option == "WMS Nasa Blue Marble") {
+    layerSet->getLayerByTitle("WMS Nasa Blue Marble")->setEnable(true);
+  }
+  else if (option == "ESRI ArcGis Online") {
+    layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
+    layerSet->getLayerByTitle("ESRI ArcGis Online")->setEnable(true);
+
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                          Geodetic3D::fromDegrees(38.6, -77.2, 30000),
+                                                          Angle::zero(),
+                                                          Angle::zero());
+  }
+  else if (option == "Bing Aerial") {
+    layerSet->getLayerByTitle("Bing Aerial")->setEnable(true);
+  }
+  else if (option == "Bing Aerial with Labels") {
+    layerSet->getLayerByTitle("Bing Aerial With Labels")->setEnable(true);
+  }
+  else {
+    ILogger::instance()->logError("option \"%s\" not supported", option.c_str());
+  }
 }
