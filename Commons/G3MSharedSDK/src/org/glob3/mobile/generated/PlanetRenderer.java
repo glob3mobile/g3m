@@ -567,7 +567,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (!_layerSet.isReady())
     {
-      int __TODO_Layer_error;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning __TODO_Layer_error;
       return RenderState.busy();
     }
   
