@@ -22,13 +22,22 @@ private:
   inline static Vector3F getVertex(const IFloatBuffer* vertices,
                                    short index);
 
+  inline static void addNormal(IFloatBuffer* normals,
+                               int index,
+                               const Vector3F& normal);
+
+  inline static Vector3F calculateNormal(const IFloatBuffer* vertices,
+                                         short index0,
+                                         short index1,
+                                         short index2);
+
 public:
 
   static IFloatBuffer* createTriangleSmoothNormals(const IFloatBuffer* vertices,
                                                    const IShortBuffer* indices);
 
-//  static IFloatBuffer* createTriangleStripSmoothNormals(const IFloatBuffer* vertices,
-//                                                        const IShortBuffer* indices);
+  static IFloatBuffer* createTriangleStripSmoothNormals(const IFloatBuffer* vertices,
+                                                        const IShortBuffer* indices);
 
 };
 

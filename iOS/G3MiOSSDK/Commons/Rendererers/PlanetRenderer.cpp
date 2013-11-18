@@ -586,6 +586,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
+#warning Testing_Terrain_Normals;
+  _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
